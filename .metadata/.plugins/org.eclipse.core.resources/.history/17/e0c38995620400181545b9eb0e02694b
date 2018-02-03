@@ -1,0 +1,54 @@
+/*
+ * Layer.cu
+ *
+ *  Created on: Jan 28, 2018
+ *      Author: joseph
+ */
+
+#ifndef LAYER_CU_
+#define LAYER_CU_
+
+#include "BlackCat_Tensors.h"
+#include "BlackCat_TensorFunctions.cu"
+
+using BC::Vector;
+using BC::Matrix;
+
+template<class derived>
+class Layer {
+
+	enum LayerType { LastLayer = 0, FeedForward = 1, Recurrent = 2, GRU = 3, LSTM = 4, Conv = 5};
+
+	LayerType next;
+	LayerType prev;
+	void* next;
+	void* prev;
+
+
+
+
+		  derived& asBase() 	  { return static_cast<	     derived&>(*this); }
+	const derived& asBase() const { return static_cast<const derived&>(*this); }
+
+	template<class AUTO> auto forwardPropagation		(AUTO param) 	   { return asBase().forwardPropagation(param); }
+	template<class AUTO> auto forwardPropagation_Express(AUTO param) const { return asBase().forwardPropagation(param); }
+
+	template<class AUTO> auto backPropagation			 (AUTO param) { return asBase().forwardPropagation(param); }
+	template<class AUTO> auto backPropagation_ThroughTime(AUTO param) { return asBase().forwardPropagation(param); }
+
+	void updateWeights()  const { asBase().updateWeights();  }
+	void clearBPStorage() const { asBase().clearBPStorage(); }
+
+
+
+
+
+};
+
+int main() {
+	return 0;
+}
+
+
+
+#endif /* LAYER_CU_ */

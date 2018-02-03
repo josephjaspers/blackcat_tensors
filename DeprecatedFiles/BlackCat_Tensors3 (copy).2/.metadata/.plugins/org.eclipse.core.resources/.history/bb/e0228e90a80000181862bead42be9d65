@@ -1,0 +1,179 @@
+/*
+ * Expression_Binary_Dotproduct_impl2.h
+ *
+ *  Created on: Jan 23, 2018
+ *      Author: joseph
+ */
+
+#ifndef EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
+#define EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
+
+namespace BC {
+
+template<class, class, class, class > class binary_expression_scalar_R;
+template<class, class, class, class > class binary_expression_scalar_L;
+template<class, class > class unary_expression_transpose;
+class mul;
+
+//conditional indicates whether or not the array needs to be evaluated
+
+template<class T, class enabler = void> struct evaluate;
+//{
+//	static constexpr bool conditional = true;
+//	static constexpr bool transpose = false;
+//	static constexpr bool scalar = false;
+//
+//	template<typename param> static auto getScalar(const param& p) {
+//		return 1;
+//	}
+//	template<typename param> static auto getArray(const param& p) {
+//		return p.data();
+//	}
+//
+//};
+
+
+template<class T, class deriv> struct evaluate<expression<T, deriv>> {
+	static constexpr bool conditional = true;
+	static constexpr bool transpose = false;
+	static constexpr bool scalar = false;
+
+	template<typename param> static T* getScalar(const param& p) {
+		return nullptr;
+	}
+	template<typename param> static auto getArray(const param& p) {
+		return p;
+	}
+};
+
+template<class T, template<class, class> class tensor, class U, class ml>
+struct evaluate<unary_expression_transpose<T, tensor<U, ml>>, typename std::enable_if<MTF::isPrimitive<U>::conditional>::type> {
+
+	static constexpr bool conditional = true;
+	static constexpr bool transpose = true;
+	static constexpr bool scalar = false;
+	template<typename param> static T* getScalar(const param& p) {
+		return nullptr;
+	}
+	template<typename param> static auto getArray(const param& p) {
+		return p.root.data();
+	}
+};
+
+template<class T> struct evaluate<T*> {
+	static constexpr bool conditional = false;
+	static constexpr bool transpose = false;
+	static constexpr bool scalar = false;
+
+	template<typename param> static T* getScalar(const param& p) {
+		return nullptr;
+	}
+	template<typename param> static auto getArray(const param& p) {
+		return p;
+	}
+};
+
+//simple l / r scalar
+template<class T, class lv, class rv> struct evaluate<
+		binary_expression_scalar_R<T, mul, lv*, rv*>> {
+	static constexpr bool conditional = false;
+	static constexpr bool transpose = false;
+	static constexpr bool scalar = true;
+
+	template<typename param> static auto getScalar(const param& p) {
+		return p.right;
+	}
+	template<typename param> static auto getArray(const param& p) {
+		return p.left;
+	}
+};
+//is a binary_expression (double already evaluated)
+template<class T, class lv, class rv> struct evaluate<
+		binary_expression_scalar_L<T, mul, lv*, rv*>> {
+	static constexpr bool conditional = false;
+	static constexpr bool transpose = false;
+	static constexpr bool scalar = true;
+
+	template<typename param> static auto getScalar(const param& p) {
+		return p.left;
+	}
+	template<typename param> static auto getArray(const param& p) {
+		return p.right;
+	}
+
+};
+
+//scalar R with unary transposition on inside
+template<class T, class U, class rv,
+		template<class, class > class tensor, class V, class ml>
+struct evaluate<
+		binary_expression_scalar_R<T, mul,
+				unary_expression_transpose<U, tensor<V, ml>>, rv*>> { //change tensor to enable only if primitive
+
+	static constexpr bool conditional = false;
+	static constexpr bool transpose = true;
+	static constexpr bool scalar = true;
+
+	template<typename param> static auto getScalar(const param& p) {
+		return p.right;
+	}
+	template<typename param> static auto getArray(const param& p) {
+		return p.left.root.data();
+	}
+
+};
+
+//scalar L with unary transposition on inside
+template<class T, class U, class lv,
+		template<class, class > class tensor, class V, class ml>
+struct evaluate<
+		binary_expression_scalar_L<T, mul, lv*,
+				unary_expression_transpose<U, tensor<V, ml>>>> { //change tensor to enable only if primitive
+
+	static constexpr bool conditional = false;
+	static constexpr bool transpose = true;
+	static constexpr bool scalar = true;
+
+	template<typename param> static auto getScalar(const param& p)  { return p.left; }
+	template<typename param> static auto getArray(const param& p)  { return p.right.root.data(); }
+
+};
+//is a binary_expression (double already evaluated)
+
+//transpose with inside scalar
+template<class T, class lv, class rv, template<class, class > class tensor,
+		class U, class ml>
+struct evaluate< unary_expression_transpose<binary_expression_scalar_R<T, mul, lv*, rv*>, tensor<U, ml>>,
+				typename std::enable_if<MTF::isPrimitive<U>::conditional>::type> {
+
+	static constexpr bool conditional = false;
+	static constexpr bool transpose = true;
+	static constexpr bool scalar = true;
+
+	template<typename param> static auto getScalar(const param& p)  { return p.root.right; }
+	template<typename param> static auto getArray(const param& p)  { return p.root.left.data(); }
+}; //is a binary_expression (expression by scalar)
+
+//transpose with outside scalar
+template<class T, class lv, class rv, template<class, class > class tensor,
+		class U, class ml>
+struct evaluate< unary_expression_transpose<binary_expression_scalar_L<T, mul, lv*, rv*>, tensor<U, ml>>,
+				typename std::enable_if<MTF::isPrimitive<U>::conditional>::type> {
+
+	static constexpr bool conditional = false;
+	static constexpr bool transpose = true;
+	static constexpr bool scalar = true;
+
+
+	template<typename param> static auto getScalar(const param& p)  { return p.root.left; }
+	template<typename param> static auto getArray(const param& p)  { return p.root.left.data(); }
+}; //is a binary_expression (scalar by expression)
+
+///may need these later ???
+////transpose with generic need evaluation type
+//template<class T, class lv, class rv> struct evaluate<binary_expression_scalar_R<T, mul, lv , rv*>> { static constexpr bool conditional = true; };		//is a binary_expression (expression by scalar)
+//template<class T, class lv, class rv> struct evaluate<binary_expression_scalar_L<T, mul, lv*, rv >> { static constexpr bool conditional = true; };		//is a binary_expression (scalar by expression)
+
+}
+
+#endif /* EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_ */

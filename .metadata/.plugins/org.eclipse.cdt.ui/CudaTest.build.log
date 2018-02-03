@@ -1,0 +1,6 @@
+01:29:58 **** Incremental Build of configuration Debug for project CudaTest ****
+make all 
+make: Nothing to be done for 'all'.
+
+01:29:58 Build Finished (took 112ms)
+

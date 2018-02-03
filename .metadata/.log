@@ -1,0 +1,1898 @@
+!SESSION 2018-02-03 16:40:13.326 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.8.0_151
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+This is a continuation of log file /home/joseph/BlackCat_Libraries/.metadata/.bak_0.log
+Created Time: 2018-02-03 16:57:01.107
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 16:57:01.107
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException: org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:253)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:106)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:86)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:517)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:609)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:100)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPTemplateTypeParameter.getDefaultValue(CompositeCPPTemplateTypeParameter.java:82)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameter(CPPTemplates.java:1457)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameters(CPPTemplates.java:1480)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createSpecialization(CPPTemplates.java:924)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.specializeMember(CompositeCPPClassSpecialization.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.specializeMembers(AbstractCPPClassSpecializationScope.java:217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.getDeclaredMethods(AbstractCPPClassSpecializationScope.java:312)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecializationScope.getDeclaredMethods(CompositeCPPClassSpecializationScope.java:122)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.getDeclaredMethods(CompositeCPPClassSpecialization.java:191)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getDeclaredMethods(ClassTypeHelper.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getDeclaredConversionOperators(SemanticUtil.java:131)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getConversionOperators(SemanticUtil.java:155)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.Conversions.initializationByConversionForDirectReference(Conversions.java:260)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.Conversions.checkImplicitConversionSequence(Conversions.java:146)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.costForFunctionCall(CPPSemantics.java:2807)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveFunction(CPPSemantics.java:2477)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveAmbiguities(CPPSemantics.java:2137)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveBinding(CPPSemantics.java:305)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor.createBinding(CPPVisitor.java:280)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName.createIntermediateBinding(CPPASTName.java:61)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNameBase.resolveBinding(CPPASTNameBase.java:107)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName.resolveBinding(CPPASTQualifiedName.java:105)
+	at org.eclipse.cdt.internal.ui.editor.SemanticToken.getBinding(SemanticToken.java:47)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightings$MacroReferenceHighlighting.consumes(SemanticHighlightings.java:1037)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler$PositionCollector.visitNode(SemanticHighlightingReconciler.java:185)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler$PositionCollector.visit(SemanticHighlightingReconciler.java:162)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName.accept(CPPASTQualifiedName.java:248)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression.accept(CPPASTIdExpression.java:79)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionCallExpression.accept(CPPASTFunctionCallExpression.java:188)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTEqualsInitializer.accept(ASTEqualsInitializer.java:59)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.postAccept(CPPASTDeclarator.java:214)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.accept(CPPASTDeclarator.java:204)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:105)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement.accept(CPPASTDeclarationStatement.java:75)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTWhileStatement.accept(CPPASTWhileStatement.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:202)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler.reconcilePositions(SemanticHighlightingReconciler.java:397)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler.reconciled(SemanticHighlightingReconciler.java:352)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:63)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:87)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.reconcile(CCompositeReconcilingStrategy.java:90)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:77)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.process(CReconciler.java:358)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:206)
+
+!ENTRY org.eclipse.cdt.codan.checkers 4 0 2018-02-03 16:57:11.140
+!MESSAGE org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+!STACK 0
+java.lang.ClassCastException: org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:423)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:259)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:106)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:86)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:517)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:609)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:100)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPTemplateTypeParameter.getDefaultValue(CompositeCPPTemplateTypeParameter.java:82)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameter(CPPTemplates.java:1457)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameters(CPPTemplates.java:1480)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createSpecialization(CPPTemplates.java:924)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.specializeMember(CompositeCPPClassSpecialization.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.specializeMembers(AbstractCPPClassSpecializationScope.java:217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.getDeclaredMethods(AbstractCPPClassSpecializationScope.java:312)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecializationScope.getDeclaredMethods(CompositeCPPClassSpecializationScope.java:122)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.getDeclaredMethods(CompositeCPPClassSpecialization.java:191)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getDeclaredMethods(ClassTypeHelper.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getDeclaredConversionOperators(SemanticUtil.java:131)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getConversionOperators(SemanticUtil.java:155)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.getClassConversionTypes(BuiltinOperators.java:675)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.binaryPromotedArithmetic(BuiltinOperators.java:376)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.create(BuiltinOperators.java:149)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.create(BuiltinOperators.java:68)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findOverloadedOperator(CPPSemantics.java:3523)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findOverloadedBinaryOperator(CPPSemantics.java:3090)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalBinary.computeOverload(EvalBinary.java:256)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalBinary.getOverload(EvalBinary.java:237)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalBinary.getTypeOrFunctionSet(EvalBinary.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findImplicitlyCalledConstructor(CPPSemantics.java:3217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findImplicitlyCalledConstructor(CPPSemantics.java:3194)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findImplicitlyCalledConstructor(CPPSemantics.java:3165)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.getImplicitNames(CPPASTDeclarator.java:282)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.accept(CPPASTDeclarator.java:193)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:105)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement.accept(CPPASTDeclarationStatement.java:75)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTForStatement.accept(CPPASTForStatement.java:143)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:202)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.codan.internal.checkers.ProblemBindingChecker.processAst(ProblemBindingChecker.java:78)
+	at org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker.processModel(AbstractIndexAstChecker.java:111)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.processResource(CodanRunner.java:88)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.runInEditor(CodanRunner.java:42)
+	at org.eclipse.cdt.codan.core.cxx.internal.model.CxxCodanReconciler.reconciledAst(CxxCodanReconciler.java:36)
+	at org.eclipse.cdt.codan.internal.ui.cxx.CodanCReconciler.reconciled(CodanCReconciler.java:57)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:63)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:87)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.reconcile(CCompositeReconcilingStrategy.java:90)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:77)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.process(CReconciler.java:358)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:206)
+
+!ENTRY org.eclipse.cdt.codan.core 4 1 2018-02-03 16:57:11.145
+!MESSAGE Internal Error
+!STACK 0
+java.lang.ClassCastException: org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:423)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:259)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:106)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:86)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:517)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:609)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:100)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPTemplateTypeParameter.getDefaultValue(CompositeCPPTemplateTypeParameter.java:82)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameter(CPPTemplates.java:1457)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameters(CPPTemplates.java:1480)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createSpecialization(CPPTemplates.java:924)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.specializeMember(CompositeCPPClassSpecialization.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.specializeMembers(AbstractCPPClassSpecializationScope.java:217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.getDeclaredMethods(AbstractCPPClassSpecializationScope.java:312)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecializationScope.getDeclaredMethods(CompositeCPPClassSpecializationScope.java:122)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.getDeclaredMethods(CompositeCPPClassSpecialization.java:191)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getDeclaredMethods(ClassTypeHelper.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getOwnMethods(ClassTypeHelper.java:352)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:264)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:256)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:256)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:256)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collect(SemanticQueries.java:199)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries.getPureVirtualMethods(SemanticQueries.java:101)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker$OnEachClass.reportProblemsIfAbstract(AbstractClassInstantiationChecker.java:194)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker$OnEachClass.checkClass(AbstractClassInstantiationChecker.java:124)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker$OnEachClass.visit(AbstractClassInstantiationChecker.java:93)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:94)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement.accept(CPPASTDeclarationStatement.java:75)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:202)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker.processAst(AbstractClassInstantiationChecker.java:68)
+	at org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker.processModel(AbstractIndexAstChecker.java:111)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.processResource(CodanRunner.java:88)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.runInEditor(CodanRunner.java:42)
+	at org.eclipse.cdt.codan.core.cxx.internal.model.CxxCodanReconciler.reconciledAst(CxxCodanReconciler.java:36)
+	at org.eclipse.cdt.codan.internal.ui.cxx.CodanCReconciler.reconciled(CodanCReconciler.java:57)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:63)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:87)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.reconcile(CCompositeReconcilingStrategy.java:90)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:77)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.process(CReconciler.java:358)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:206)
+
+!ENTRY org.eclipse.cdt.codan.checkers 4 0 2018-02-03 16:57:28.288
+!MESSAGE org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+!STACK 0
+java.lang.ClassCastException: org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:423)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:259)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:106)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:86)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:517)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:609)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:100)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPTemplateTypeParameter.getDefaultValue(CompositeCPPTemplateTypeParameter.java:82)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameter(CPPTemplates.java:1457)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameters(CPPTemplates.java:1480)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createSpecialization(CPPTemplates.java:924)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.specializeMember(CompositeCPPClassSpecialization.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.specializeMembers(AbstractCPPClassSpecializationScope.java:217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.getDeclaredMethods(AbstractCPPClassSpecializationScope.java:312)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecializationScope.getDeclaredMethods(CompositeCPPClassSpecializationScope.java:122)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.getDeclaredMethods(CompositeCPPClassSpecialization.java:191)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getDeclaredMethods(ClassTypeHelper.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getDeclaredConversionOperators(SemanticUtil.java:131)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getConversionOperators(SemanticUtil.java:155)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.getClassConversionTypes(BuiltinOperators.java:675)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.binaryPromotedArithmetic(BuiltinOperators.java:376)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.create(BuiltinOperators.java:149)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.create(BuiltinOperators.java:68)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findOverloadedOperator(CPPSemantics.java:3523)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findOverloadedBinaryOperator(CPPSemantics.java:3090)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalBinary.computeOverload(EvalBinary.java:256)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalBinary.getOverload(EvalBinary.java:237)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalBinary.getTypeOrFunctionSet(EvalBinary.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findImplicitlyCalledConstructor(CPPSemantics.java:3217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findImplicitlyCalledConstructor(CPPSemantics.java:3194)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findImplicitlyCalledConstructor(CPPSemantics.java:3165)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.getImplicitNames(CPPASTDeclarator.java:282)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.accept(CPPASTDeclarator.java:193)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:105)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement.accept(CPPASTDeclarationStatement.java:75)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTForStatement.accept(CPPASTForStatement.java:143)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:202)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.codan.internal.checkers.ProblemBindingChecker.processAst(ProblemBindingChecker.java:78)
+	at org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker.processModel(AbstractIndexAstChecker.java:111)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.processResource(CodanRunner.java:88)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.runInEditor(CodanRunner.java:42)
+	at org.eclipse.cdt.codan.core.cxx.internal.model.CxxCodanReconciler.reconciledAst(CxxCodanReconciler.java:36)
+	at org.eclipse.cdt.codan.internal.ui.cxx.CodanCReconciler.reconciled(CodanCReconciler.java:57)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:63)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:87)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.reconcile(CCompositeReconcilingStrategy.java:90)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:77)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.process(CReconciler.java:358)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:206)
+
+!ENTRY org.eclipse.cdt.codan.core 4 1 2018-02-03 16:57:28.292
+!MESSAGE Internal Error
+!STACK 0
+java.lang.ClassCastException: org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:423)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:259)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:106)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:86)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:517)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:609)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:100)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPTemplateTypeParameter.getDefaultValue(CompositeCPPTemplateTypeParameter.java:82)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameter(CPPTemplates.java:1457)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameters(CPPTemplates.java:1480)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createSpecialization(CPPTemplates.java:924)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.specializeMember(CompositeCPPClassSpecialization.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.specializeMembers(AbstractCPPClassSpecializationScope.java:217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.getDeclaredMethods(AbstractCPPClassSpecializationScope.java:312)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecializationScope.getDeclaredMethods(CompositeCPPClassSpecializationScope.java:122)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.getDeclaredMethods(CompositeCPPClassSpecialization.java:191)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getDeclaredMethods(ClassTypeHelper.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getOwnMethods(ClassTypeHelper.java:352)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:264)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:256)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:256)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:256)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collect(SemanticQueries.java:199)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries.getPureVirtualMethods(SemanticQueries.java:101)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker$OnEachClass.reportProblemsIfAbstract(AbstractClassInstantiationChecker.java:194)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker$OnEachClass.checkClass(AbstractClassInstantiationChecker.java:124)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker$OnEachClass.visit(AbstractClassInstantiationChecker.java:93)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:94)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement.accept(CPPASTDeclarationStatement.java:75)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:202)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker.processAst(AbstractClassInstantiationChecker.java:68)
+	at org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker.processModel(AbstractIndexAstChecker.java:111)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.processResource(CodanRunner.java:88)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.runInEditor(CodanRunner.java:42)
+	at org.eclipse.cdt.codan.core.cxx.internal.model.CxxCodanReconciler.reconciledAst(CxxCodanReconciler.java:36)
+	at org.eclipse.cdt.codan.internal.ui.cxx.CodanCReconciler.reconciled(CodanCReconciler.java:57)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:63)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:87)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.reconcile(CCompositeReconcilingStrategy.java:90)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:77)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.process(CReconciler.java:358)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:206)
+
+!ENTRY org.eclipse.cdt.codan.checkers 4 0 2018-02-03 16:57:29.410
+!MESSAGE org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+!STACK 0
+java.lang.ClassCastException: org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:423)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:259)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:106)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:86)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:517)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:609)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:100)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPTemplateTypeParameter.getDefaultValue(CompositeCPPTemplateTypeParameter.java:82)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameter(CPPTemplates.java:1457)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameters(CPPTemplates.java:1480)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createSpecialization(CPPTemplates.java:924)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.specializeMember(CompositeCPPClassSpecialization.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.specializeMembers(AbstractCPPClassSpecializationScope.java:217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.getDeclaredMethods(AbstractCPPClassSpecializationScope.java:312)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecializationScope.getDeclaredMethods(CompositeCPPClassSpecializationScope.java:122)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.getDeclaredMethods(CompositeCPPClassSpecialization.java:191)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getDeclaredMethods(ClassTypeHelper.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getDeclaredConversionOperators(SemanticUtil.java:131)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getConversionOperators(SemanticUtil.java:155)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.getClassConversionTypes(BuiltinOperators.java:675)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.binaryPromotedArithmetic(BuiltinOperators.java:376)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.create(BuiltinOperators.java:149)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.create(BuiltinOperators.java:68)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findOverloadedOperator(CPPSemantics.java:3523)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findOverloadedBinaryOperator(CPPSemantics.java:3090)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalBinary.computeOverload(EvalBinary.java:256)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalBinary.getOverload(EvalBinary.java:237)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalBinary.getTypeOrFunctionSet(EvalBinary.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findImplicitlyCalledConstructor(CPPSemantics.java:3217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findImplicitlyCalledConstructor(CPPSemantics.java:3194)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findImplicitlyCalledConstructor(CPPSemantics.java:3165)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.getImplicitNames(CPPASTDeclarator.java:282)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.accept(CPPASTDeclarator.java:193)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:105)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement.accept(CPPASTDeclarationStatement.java:75)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTForStatement.accept(CPPASTForStatement.java:143)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:202)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.codan.internal.checkers.ProblemBindingChecker.processAst(ProblemBindingChecker.java:78)
+	at org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker.processModel(AbstractIndexAstChecker.java:111)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.processResource(CodanRunner.java:88)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.runInEditor(CodanRunner.java:42)
+	at org.eclipse.cdt.codan.core.cxx.internal.model.CxxCodanReconciler.reconciledAst(CxxCodanReconciler.java:36)
+	at org.eclipse.cdt.codan.internal.ui.cxx.CodanCReconciler.reconciled(CodanCReconciler.java:57)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:63)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:87)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.reconcile(CCompositeReconcilingStrategy.java:90)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:77)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.process(CReconciler.java:358)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:206)
+
+!ENTRY org.eclipse.cdt.codan.core 4 1 2018-02-03 16:57:29.412
+!MESSAGE Internal Error
+!STACK 0
+java.lang.ClassCastException: org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:423)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:259)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:106)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:86)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:517)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:609)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:100)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPTemplateTypeParameter.getDefaultValue(CompositeCPPTemplateTypeParameter.java:82)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameter(CPPTemplates.java:1457)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameters(CPPTemplates.java:1480)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createSpecialization(CPPTemplates.java:924)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.specializeMember(CompositeCPPClassSpecialization.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.specializeMembers(AbstractCPPClassSpecializationScope.java:217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.getDeclaredMethods(AbstractCPPClassSpecializationScope.java:312)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecializationScope.getDeclaredMethods(CompositeCPPClassSpecializationScope.java:122)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.getDeclaredMethods(CompositeCPPClassSpecialization.java:191)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getDeclaredMethods(ClassTypeHelper.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getOwnMethods(ClassTypeHelper.java:352)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:264)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:256)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:256)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:256)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collect(SemanticQueries.java:199)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries.getPureVirtualMethods(SemanticQueries.java:101)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker$OnEachClass.reportProblemsIfAbstract(AbstractClassInstantiationChecker.java:194)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker$OnEachClass.checkClass(AbstractClassInstantiationChecker.java:124)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker$OnEachClass.visit(AbstractClassInstantiationChecker.java:93)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:94)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement.accept(CPPASTDeclarationStatement.java:75)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:202)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker.processAst(AbstractClassInstantiationChecker.java:68)
+	at org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker.processModel(AbstractIndexAstChecker.java:111)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.processResource(CodanRunner.java:88)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.runInEditor(CodanRunner.java:42)
+	at org.eclipse.cdt.codan.core.cxx.internal.model.CxxCodanReconciler.reconciledAst(CxxCodanReconciler.java:36)
+	at org.eclipse.cdt.codan.internal.ui.cxx.CodanCReconciler.reconciled(CodanCReconciler.java:57)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:63)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:87)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.reconcile(CCompositeReconcilingStrategy.java:90)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:77)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.process(CReconciler.java:358)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:206)
+
+!ENTRY org.eclipse.cdt.ui 4 4 2018-02-03 17:01:00.207
+!MESSAGE Internal error
+!STACK 0
+java.lang.IllegalStateException
+	at org.eclipse.cdt.internal.core.settings.model.CConfigurationDescription.getConfigurationData(CConfigurationDescription.java:222)
+	at org.eclipse.cdt.internal.core.settings.model.CConfigurationDescription.getBuildSetting(CConfigurationDescription.java:653)
+	at org.eclipse.cdt.ui.newui.ErrorParsTab.initMapParsers(ErrorParsTab.java:260)
+	at org.eclipse.cdt.ui.newui.ErrorParsTab.performApply(ErrorParsTab.java:544)
+	at org.eclipse.cdt.ui.newui.AbstractCPropertyTab.handleTabEvent(AbstractCPropertyTab.java:553)
+	at org.eclipse.cdt.ui.newui.AbstractPage.forEach(AbstractPage.java:1059)
+	at org.eclipse.cdt.ui.newui.AbstractPage$5.run(AbstractPage.java:673)
+	at org.eclipse.ui.actions.WorkspaceModifyDelegatingOperation.execute(WorkspaceModifyDelegatingOperation.java:69)
+	at org.eclipse.ui.actions.WorkspaceModifyOperation$1.run(WorkspaceModifyOperation.java:106)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.ui.actions.WorkspaceModifyOperation.run(WorkspaceModifyOperation.java:118)
+	at org.eclipse.jface.operation.ModalContext.runInCurrentThread(ModalContext.java:466)
+	at org.eclipse.jface.operation.ModalContext.run(ModalContext.java:374)
+	at org.eclipse.jface.dialogs.ProgressMonitorDialog.run(ProgressMonitorDialog.java:527)
+	at org.eclipse.ui.internal.progress.ProgressManager$RunnableWithStatus.run(ProgressManager.java:1380)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:70)
+	at org.eclipse.ui.internal.progress.ProgressManager$5.run(ProgressManager.java:1214)
+	at org.eclipse.swt.widgets.Synchronizer.syncExec(Synchronizer.java:187)
+	at org.eclipse.ui.internal.UISynchronizer.syncExec(UISynchronizer.java:156)
+	at org.eclipse.swt.widgets.Display.syncExec(Display.java:4590)
+	at org.eclipse.ui.internal.progress.ProgressManager.runInUI(ProgressManager.java:1211)
+	at org.eclipse.cdt.ui.newui.AbstractPage.performSave(AbstractPage.java:692)
+	at org.eclipse.cdt.ui.newui.AbstractPage.performApply(AbstractPage.java:545)
+	at org.eclipse.jface.preference.PreferencePage$2.widgetSelected(PreferencePage.java:284)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:248)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4454)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1388)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:3799)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3409)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:832)
+	at org.eclipse.jface.window.Window.open(Window.java:808)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.run(PropertyDialogAction.java:160)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:519)
+	at org.eclipse.jface.action.ActionContributionItem.handleWidgetSelection(ActionContributionItem.java:595)
+	at org.eclipse.jface.action.ActionContributionItem.access$2(ActionContributionItem.java:511)
+	at org.eclipse.jface.action.ActionContributionItem$5.handleEvent(ActionContributionItem.java:420)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4454)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1388)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:3799)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3409)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$9.run(PartRenderingEngine.java:1151)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1032)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:148)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:636)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:579)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:150)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:135)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:380)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:235)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:648)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:603)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1465)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1438)
+
+!ENTRY org.eclipse.cdt.ui 4 4 2018-02-03 17:01:03.583
+!MESSAGE Internal error
+!STACK 0
+java.lang.IllegalStateException
+	at org.eclipse.cdt.internal.core.settings.model.CConfigurationDescription.getConfigurationData(CConfigurationDescription.java:222)
+	at org.eclipse.cdt.internal.core.settings.model.CConfigurationDescription.getBuildSetting(CConfigurationDescription.java:653)
+	at org.eclipse.cdt.ui.newui.ErrorParsTab.initMapParsers(ErrorParsTab.java:260)
+	at org.eclipse.cdt.ui.newui.ErrorParsTab.performApply(ErrorParsTab.java:544)
+	at org.eclipse.cdt.ui.newui.AbstractCPropertyTab.handleTabEvent(AbstractCPropertyTab.java:553)
+	at org.eclipse.cdt.ui.newui.AbstractPage.forEach(AbstractPage.java:1059)
+	at org.eclipse.cdt.ui.newui.AbstractPage$5.run(AbstractPage.java:673)
+	at org.eclipse.ui.actions.WorkspaceModifyDelegatingOperation.execute(WorkspaceModifyDelegatingOperation.java:69)
+	at org.eclipse.ui.actions.WorkspaceModifyOperation$1.run(WorkspaceModifyOperation.java:106)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.ui.actions.WorkspaceModifyOperation.run(WorkspaceModifyOperation.java:118)
+	at org.eclipse.jface.operation.ModalContext.runInCurrentThread(ModalContext.java:466)
+	at org.eclipse.jface.operation.ModalContext.run(ModalContext.java:374)
+	at org.eclipse.jface.dialogs.ProgressMonitorDialog.run(ProgressMonitorDialog.java:527)
+	at org.eclipse.ui.internal.progress.ProgressManager$RunnableWithStatus.run(ProgressManager.java:1380)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:70)
+	at org.eclipse.ui.internal.progress.ProgressManager$5.run(ProgressManager.java:1214)
+	at org.eclipse.swt.widgets.Synchronizer.syncExec(Synchronizer.java:187)
+	at org.eclipse.ui.internal.UISynchronizer.syncExec(UISynchronizer.java:156)
+	at org.eclipse.swt.widgets.Display.syncExec(Display.java:4590)
+	at org.eclipse.ui.internal.progress.ProgressManager.runInUI(ProgressManager.java:1211)
+	at org.eclipse.cdt.ui.newui.AbstractPage.performSave(AbstractPage.java:692)
+	at org.eclipse.cdt.ui.newui.AbstractPage.performApply(AbstractPage.java:545)
+	at org.eclipse.jface.preference.PreferencePage$2.widgetSelected(PreferencePage.java:284)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:248)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4454)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1388)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:3799)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3409)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:832)
+	at org.eclipse.jface.window.Window.open(Window.java:808)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.run(PropertyDialogAction.java:160)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:519)
+	at org.eclipse.jface.action.ActionContributionItem.handleWidgetSelection(ActionContributionItem.java:595)
+	at org.eclipse.jface.action.ActionContributionItem.access$2(ActionContributionItem.java:511)
+	at org.eclipse.jface.action.ActionContributionItem$5.handleEvent(ActionContributionItem.java:420)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4454)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1388)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:3799)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3409)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$9.run(PartRenderingEngine.java:1151)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1032)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:148)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:636)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:579)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:150)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:135)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:380)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:235)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:648)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:603)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1465)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1438)
+
+!ENTRY org.eclipse.cdt.ui 4 4 2018-02-03 17:02:31.764
+!MESSAGE Internal error
+!STACK 0
+java.lang.IllegalStateException
+	at org.eclipse.cdt.internal.core.settings.model.CConfigurationDescription.getConfigurationData(CConfigurationDescription.java:222)
+	at org.eclipse.cdt.internal.core.settings.model.CConfigurationDescription.getBuildSetting(CConfigurationDescription.java:653)
+	at org.eclipse.cdt.ui.newui.ErrorParsTab.initMapParsers(ErrorParsTab.java:260)
+	at org.eclipse.cdt.ui.newui.ErrorParsTab.performApply(ErrorParsTab.java:544)
+	at org.eclipse.cdt.ui.newui.AbstractCPropertyTab.handleTabEvent(AbstractCPropertyTab.java:553)
+	at org.eclipse.cdt.ui.newui.AbstractPage.forEach(AbstractPage.java:1059)
+	at org.eclipse.cdt.ui.newui.AbstractPage$5.run(AbstractPage.java:673)
+	at org.eclipse.ui.actions.WorkspaceModifyDelegatingOperation.execute(WorkspaceModifyDelegatingOperation.java:69)
+	at org.eclipse.ui.actions.WorkspaceModifyOperation$1.run(WorkspaceModifyOperation.java:106)
+	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2313)
+	at org.eclipse.ui.actions.WorkspaceModifyOperation.run(WorkspaceModifyOperation.java:118)
+	at org.eclipse.jface.operation.ModalContext.runInCurrentThread(ModalContext.java:466)
+	at org.eclipse.jface.operation.ModalContext.run(ModalContext.java:374)
+	at org.eclipse.jface.dialogs.ProgressMonitorDialog.run(ProgressMonitorDialog.java:527)
+	at org.eclipse.ui.internal.progress.ProgressManager$RunnableWithStatus.run(ProgressManager.java:1380)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:70)
+	at org.eclipse.ui.internal.progress.ProgressManager$5.run(ProgressManager.java:1214)
+	at org.eclipse.swt.widgets.Synchronizer.syncExec(Synchronizer.java:187)
+	at org.eclipse.ui.internal.UISynchronizer.syncExec(UISynchronizer.java:156)
+	at org.eclipse.swt.widgets.Display.syncExec(Display.java:4590)
+	at org.eclipse.ui.internal.progress.ProgressManager.runInUI(ProgressManager.java:1211)
+	at org.eclipse.cdt.ui.newui.AbstractPage.performSave(AbstractPage.java:692)
+	at org.eclipse.cdt.ui.newui.AbstractPage.performApply(AbstractPage.java:545)
+	at org.eclipse.jface.preference.PreferencePage$2.widgetSelected(PreferencePage.java:284)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:248)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4454)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1388)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:3799)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3409)
+	at org.eclipse.jface.window.Window.runEventLoop(Window.java:832)
+	at org.eclipse.jface.window.Window.open(Window.java:808)
+	at org.eclipse.ui.dialogs.PropertyDialogAction.run(PropertyDialogAction.java:160)
+	at org.eclipse.jface.action.Action.runWithEvent(Action.java:519)
+	at org.eclipse.jface.action.ActionContributionItem.handleWidgetSelection(ActionContributionItem.java:595)
+	at org.eclipse.jface.action.ActionContributionItem.access$2(ActionContributionItem.java:511)
+	at org.eclipse.jface.action.ActionContributionItem$5.handleEvent(ActionContributionItem.java:420)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4454)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1388)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:3799)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3409)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$9.run(PartRenderingEngine.java:1151)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1032)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:148)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:636)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:579)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:150)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:135)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:380)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:235)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:648)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:603)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1465)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1438)
+
+!ENTRY org.eclipse.cdt.codan.checkers 4 0 2018-02-03 17:06:18.497
+!MESSAGE org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+!STACK 0
+java.lang.ClassCastException: org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:423)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:259)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:106)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:86)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:517)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:609)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:100)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPTemplateTypeParameter.getDefaultValue(CompositeCPPTemplateTypeParameter.java:82)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameter(CPPTemplates.java:1457)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameters(CPPTemplates.java:1480)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createSpecialization(CPPTemplates.java:924)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.specializeMember(CompositeCPPClassSpecialization.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.specializeMembers(AbstractCPPClassSpecializationScope.java:217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.getDeclaredMethods(AbstractCPPClassSpecializationScope.java:312)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecializationScope.getDeclaredMethods(CompositeCPPClassSpecializationScope.java:122)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.getDeclaredMethods(CompositeCPPClassSpecialization.java:191)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getDeclaredMethods(ClassTypeHelper.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getDeclaredConversionOperators(SemanticUtil.java:131)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getConversionOperators(SemanticUtil.java:155)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.getClassConversionTypes(BuiltinOperators.java:675)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.binaryPromotedArithmetic(BuiltinOperators.java:376)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.create(BuiltinOperators.java:149)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.create(BuiltinOperators.java:68)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findOverloadedOperator(CPPSemantics.java:3523)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findOverloadedBinaryOperator(CPPSemantics.java:3090)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalBinary.computeOverload(EvalBinary.java:256)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalBinary.getOverload(EvalBinary.java:237)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalBinary.getTypeOrFunctionSet(EvalBinary.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findImplicitlyCalledConstructor(CPPSemantics.java:3217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findImplicitlyCalledConstructor(CPPSemantics.java:3194)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findImplicitlyCalledConstructor(CPPSemantics.java:3165)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.getImplicitNames(CPPASTDeclarator.java:282)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.accept(CPPASTDeclarator.java:193)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:105)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement.accept(CPPASTDeclarationStatement.java:75)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTForStatement.accept(CPPASTForStatement.java:143)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:202)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.codan.internal.checkers.ProblemBindingChecker.processAst(ProblemBindingChecker.java:78)
+	at org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker.processModel(AbstractIndexAstChecker.java:111)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.processResource(CodanRunner.java:88)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.runInEditor(CodanRunner.java:42)
+	at org.eclipse.cdt.codan.core.cxx.internal.model.CxxCodanReconciler.reconciledAst(CxxCodanReconciler.java:36)
+	at org.eclipse.cdt.codan.internal.ui.cxx.CodanCReconciler.reconciled(CodanCReconciler.java:57)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.initialReconcile(CReconcilingStrategy.java:122)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.initialReconcile(CompositeReconcilingStrategy.java:117)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.initialReconcile(CCompositeReconcilingStrategy.java:108)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.initialProcess(MonoReconciler.java:105)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.initialProcess(CReconciler.java:347)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:173)
+
+!ENTRY org.eclipse.cdt.codan.core 4 1 2018-02-03 17:06:18.499
+!MESSAGE Internal Error
+!STACK 0
+java.lang.ClassCastException: org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:423)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:259)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:106)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:86)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:517)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:609)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:100)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPTemplateTypeParameter.getDefaultValue(CompositeCPPTemplateTypeParameter.java:82)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameter(CPPTemplates.java:1457)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameters(CPPTemplates.java:1480)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createSpecialization(CPPTemplates.java:924)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.specializeMember(CompositeCPPClassSpecialization.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.specializeMembers(AbstractCPPClassSpecializationScope.java:217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.getDeclaredMethods(AbstractCPPClassSpecializationScope.java:312)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecializationScope.getDeclaredMethods(CompositeCPPClassSpecializationScope.java:122)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.getDeclaredMethods(CompositeCPPClassSpecialization.java:191)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getDeclaredMethods(ClassTypeHelper.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getOwnMethods(ClassTypeHelper.java:352)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:264)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:256)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:256)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:256)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collect(SemanticQueries.java:199)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries.getPureVirtualMethods(SemanticQueries.java:101)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker$OnEachClass.reportProblemsIfAbstract(AbstractClassInstantiationChecker.java:194)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker$OnEachClass.checkClass(AbstractClassInstantiationChecker.java:124)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker$OnEachClass.visit(AbstractClassInstantiationChecker.java:93)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:94)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement.accept(CPPASTDeclarationStatement.java:75)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:202)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker.processAst(AbstractClassInstantiationChecker.java:68)
+	at org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker.processModel(AbstractIndexAstChecker.java:111)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.processResource(CodanRunner.java:88)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.runInEditor(CodanRunner.java:42)
+	at org.eclipse.cdt.codan.core.cxx.internal.model.CxxCodanReconciler.reconciledAst(CxxCodanReconciler.java:36)
+	at org.eclipse.cdt.codan.internal.ui.cxx.CodanCReconciler.reconciled(CodanCReconciler.java:57)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.initialReconcile(CReconcilingStrategy.java:122)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.initialReconcile(CompositeReconcilingStrategy.java:117)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.initialReconcile(CCompositeReconcilingStrategy.java:108)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.initialProcess(MonoReconciler.java:105)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.initialProcess(CReconciler.java:347)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:173)
+
+!ENTRY org.eclipse.cdt.codan.checkers 4 0 2018-02-03 17:06:25.464
+!MESSAGE org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+!STACK 0
+java.lang.ClassCastException: org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:423)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:259)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:106)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:86)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:517)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:609)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:100)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPTemplateTypeParameter.getDefaultValue(CompositeCPPTemplateTypeParameter.java:82)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameter(CPPTemplates.java:1457)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameters(CPPTemplates.java:1480)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createSpecialization(CPPTemplates.java:924)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.specializeMember(CompositeCPPClassSpecialization.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.specializeMembers(AbstractCPPClassSpecializationScope.java:217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.getDeclaredMethods(AbstractCPPClassSpecializationScope.java:312)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecializationScope.getDeclaredMethods(CompositeCPPClassSpecializationScope.java:122)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.getDeclaredMethods(CompositeCPPClassSpecialization.java:191)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getDeclaredMethods(ClassTypeHelper.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getDeclaredConversionOperators(SemanticUtil.java:131)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getConversionOperators(SemanticUtil.java:155)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.getClassConversionTypes(BuiltinOperators.java:675)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.binaryPromotedArithmetic(BuiltinOperators.java:376)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.create(BuiltinOperators.java:149)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.BuiltinOperators.create(BuiltinOperators.java:68)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findOverloadedOperator(CPPSemantics.java:3523)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findOverloadedBinaryOperator(CPPSemantics.java:3090)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalBinary.computeOverload(EvalBinary.java:256)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalBinary.getOverload(EvalBinary.java:237)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.EvalBinary.getTypeOrFunctionSet(EvalBinary.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findImplicitlyCalledConstructor(CPPSemantics.java:3217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findImplicitlyCalledConstructor(CPPSemantics.java:3194)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.findImplicitlyCalledConstructor(CPPSemantics.java:3165)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.getImplicitNames(CPPASTDeclarator.java:282)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.accept(CPPASTDeclarator.java:193)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:105)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement.accept(CPPASTDeclarationStatement.java:75)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTForStatement.accept(CPPASTForStatement.java:143)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:202)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.codan.internal.checkers.ProblemBindingChecker.processAst(ProblemBindingChecker.java:78)
+	at org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker.processModel(AbstractIndexAstChecker.java:111)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.processResource(CodanRunner.java:88)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.runInEditor(CodanRunner.java:42)
+	at org.eclipse.cdt.codan.core.cxx.internal.model.CxxCodanReconciler.reconciledAst(CxxCodanReconciler.java:36)
+	at org.eclipse.cdt.codan.internal.ui.cxx.CodanCReconciler.reconciled(CodanCReconciler.java:57)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.initialReconcile(CReconcilingStrategy.java:122)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.initialReconcile(CompositeReconcilingStrategy.java:117)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.initialReconcile(CCompositeReconcilingStrategy.java:108)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.initialProcess(MonoReconciler.java:105)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.initialProcess(CReconciler.java:347)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:173)
+
+!ENTRY org.eclipse.cdt.codan.core 4 1 2018-02-03 17:06:25.466
+!MESSAGE Internal Error
+!STACK 0
+java.lang.ClassCastException: org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:423)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:259)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:106)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:86)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:517)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:609)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:100)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPTemplateTypeParameter.getDefaultValue(CompositeCPPTemplateTypeParameter.java:82)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameter(CPPTemplates.java:1457)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameters(CPPTemplates.java:1480)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createSpecialization(CPPTemplates.java:924)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.specializeMember(CompositeCPPClassSpecialization.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.specializeMembers(AbstractCPPClassSpecializationScope.java:217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.getDeclaredMethods(AbstractCPPClassSpecializationScope.java:312)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecializationScope.getDeclaredMethods(CompositeCPPClassSpecializationScope.java:122)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.getDeclaredMethods(CompositeCPPClassSpecialization.java:191)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getDeclaredMethods(ClassTypeHelper.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getOwnMethods(ClassTypeHelper.java:352)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:264)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:256)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:256)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collectFinalOverriders(SemanticQueries.java:256)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries$PureVirtualMethodCollector.collect(SemanticQueries.java:199)
+	at org.eclipse.cdt.core.dom.ast.cpp.SemanticQueries.getPureVirtualMethods(SemanticQueries.java:101)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker$OnEachClass.reportProblemsIfAbstract(AbstractClassInstantiationChecker.java:194)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker$OnEachClass.checkClass(AbstractClassInstantiationChecker.java:124)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker$OnEachClass.visit(AbstractClassInstantiationChecker.java:93)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:94)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement.accept(CPPASTDeclarationStatement.java:75)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:202)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.codan.internal.checkers.AbstractClassInstantiationChecker.processAst(AbstractClassInstantiationChecker.java:68)
+	at org.eclipse.cdt.codan.core.cxx.model.AbstractIndexAstChecker.processModel(AbstractIndexAstChecker.java:111)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.processResource(CodanRunner.java:88)
+	at org.eclipse.cdt.codan.internal.core.CodanRunner.runInEditor(CodanRunner.java:42)
+	at org.eclipse.cdt.codan.core.cxx.internal.model.CxxCodanReconciler.reconciledAst(CxxCodanReconciler.java:36)
+	at org.eclipse.cdt.codan.internal.ui.cxx.CodanCReconciler.reconciled(CodanCReconciler.java:57)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.initialReconcile(CReconcilingStrategy.java:122)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.initialReconcile(CompositeReconcilingStrategy.java:117)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.initialReconcile(CCompositeReconcilingStrategy.java:108)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.initialProcess(MonoReconciler.java:105)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.initialProcess(CReconciler.java:347)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:173)
+
+!ENTRY org.eclipse.cdt.codan.checkers 4 0 2018-02-03 17:06:26.541
+!MESSAGE 
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.codan.core 4 1 2018-02-03 17:06:26.542
+!MESSAGE Internal Error
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.codan.checkers 4 0 2018-02-03 17:06:29.626
+!MESSAGE 
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.codan.core 4 1 2018-02-03 17:06:29.628
+!MESSAGE Internal Error
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:06:45.319
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException: org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:253)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:106)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:86)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:517)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:609)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:100)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPTemplateTypeParameter.getDefaultValue(CompositeCPPTemplateTypeParameter.java:82)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameter(CPPTemplates.java:1457)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameters(CPPTemplates.java:1480)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createSpecialization(CPPTemplates.java:924)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.specializeMember(CompositeCPPClassSpecialization.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.specializeMembers(AbstractCPPClassSpecializationScope.java:217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.getDeclaredMethods(AbstractCPPClassSpecializationScope.java:312)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecializationScope.getDeclaredMethods(CompositeCPPClassSpecializationScope.java:122)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.getDeclaredMethods(CompositeCPPClassSpecialization.java:191)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getDeclaredMethods(ClassTypeHelper.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getDeclaredConversionOperators(SemanticUtil.java:131)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getConversionOperators(SemanticUtil.java:155)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.Conversions.initializationByConversionForDirectReference(Conversions.java:260)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.Conversions.checkImplicitConversionSequence(Conversions.java:146)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.costForFunctionCall(CPPSemantics.java:2807)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveFunction(CPPSemantics.java:2477)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveAmbiguities(CPPSemantics.java:2137)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveBinding(CPPSemantics.java:305)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor.createBinding(CPPVisitor.java:280)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName.createIntermediateBinding(CPPASTName.java:61)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNameBase.resolveBinding(CPPASTNameBase.java:107)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName.resolveBinding(CPPASTQualifiedName.java:105)
+	at org.eclipse.cdt.internal.ui.editor.SemanticToken.getBinding(SemanticToken.java:47)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightings$MacroReferenceHighlighting.consumes(SemanticHighlightings.java:1037)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler$PositionCollector.visitNode(SemanticHighlightingReconciler.java:185)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler$PositionCollector.visit(SemanticHighlightingReconciler.java:162)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName.accept(CPPASTQualifiedName.java:248)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression.accept(CPPASTIdExpression.java:79)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionCallExpression.accept(CPPASTFunctionCallExpression.java:188)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTEqualsInitializer.accept(ASTEqualsInitializer.java:59)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.postAccept(CPPASTDeclarator.java:214)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.accept(CPPASTDeclarator.java:204)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:105)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement.accept(CPPASTDeclarationStatement.java:75)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTWhileStatement.accept(CPPASTWhileStatement.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:202)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler.reconcilePositions(SemanticHighlightingReconciler.java:397)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler.reconciled(SemanticHighlightingReconciler.java:352)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:63)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:87)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.reconcile(CCompositeReconcilingStrategy.java:90)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:77)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.process(CReconciler.java:358)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:206)
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:06:52.387
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException: org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:253)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:106)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:86)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:517)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:609)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:100)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPTemplateTypeParameter.getDefaultValue(CompositeCPPTemplateTypeParameter.java:82)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameter(CPPTemplates.java:1457)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameters(CPPTemplates.java:1480)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createSpecialization(CPPTemplates.java:924)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.specializeMember(CompositeCPPClassSpecialization.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.specializeMembers(AbstractCPPClassSpecializationScope.java:217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.getDeclaredMethods(AbstractCPPClassSpecializationScope.java:312)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecializationScope.getDeclaredMethods(CompositeCPPClassSpecializationScope.java:122)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.getDeclaredMethods(CompositeCPPClassSpecialization.java:191)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getDeclaredMethods(ClassTypeHelper.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getDeclaredConversionOperators(SemanticUtil.java:131)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getConversionOperators(SemanticUtil.java:155)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.Conversions.initializationByConversionForDirectReference(Conversions.java:260)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.Conversions.checkImplicitConversionSequence(Conversions.java:146)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.costForFunctionCall(CPPSemantics.java:2807)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveFunction(CPPSemantics.java:2477)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveAmbiguities(CPPSemantics.java:2137)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveBinding(CPPSemantics.java:305)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor.createBinding(CPPVisitor.java:280)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName.createIntermediateBinding(CPPASTName.java:61)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNameBase.resolveBinding(CPPASTNameBase.java:107)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName.resolveBinding(CPPASTQualifiedName.java:105)
+	at org.eclipse.cdt.internal.ui.editor.SemanticToken.getBinding(SemanticToken.java:47)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightings$MacroReferenceHighlighting.consumes(SemanticHighlightings.java:1037)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler$PositionCollector.visitNode(SemanticHighlightingReconciler.java:185)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler$PositionCollector.visit(SemanticHighlightingReconciler.java:162)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName.accept(CPPASTQualifiedName.java:248)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression.accept(CPPASTIdExpression.java:79)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionCallExpression.accept(CPPASTFunctionCallExpression.java:188)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTEqualsInitializer.accept(ASTEqualsInitializer.java:59)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.postAccept(CPPASTDeclarator.java:214)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.accept(CPPASTDeclarator.java:204)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:105)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement.accept(CPPASTDeclarationStatement.java:75)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTWhileStatement.accept(CPPASTWhileStatement.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:202)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler.reconcilePositions(SemanticHighlightingReconciler.java:397)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler.reconciled(SemanticHighlightingReconciler.java:352)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.initialReconcile(CReconcilingStrategy.java:122)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.initialReconcile(CompositeReconcilingStrategy.java:117)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.initialReconcile(CCompositeReconcilingStrategy.java:108)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.initialProcess(MonoReconciler.java:105)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.initialProcess(CReconciler.java:347)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:173)
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:06:53.421
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException: org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:253)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:106)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:86)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:517)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:609)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:100)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPTemplateTypeParameter.getDefaultValue(CompositeCPPTemplateTypeParameter.java:82)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameter(CPPTemplates.java:1457)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameters(CPPTemplates.java:1480)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createSpecialization(CPPTemplates.java:924)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.specializeMember(CompositeCPPClassSpecialization.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.specializeMembers(AbstractCPPClassSpecializationScope.java:217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.getDeclaredMethods(AbstractCPPClassSpecializationScope.java:312)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecializationScope.getDeclaredMethods(CompositeCPPClassSpecializationScope.java:122)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.getDeclaredMethods(CompositeCPPClassSpecialization.java:191)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getDeclaredMethods(ClassTypeHelper.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getDeclaredConversionOperators(SemanticUtil.java:131)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getConversionOperators(SemanticUtil.java:155)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.Conversions.initializationByConversionForDirectReference(Conversions.java:260)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.Conversions.checkImplicitConversionSequence(Conversions.java:146)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.costForFunctionCall(CPPSemantics.java:2807)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveFunction(CPPSemantics.java:2477)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveAmbiguities(CPPSemantics.java:2137)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveBinding(CPPSemantics.java:305)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor.createBinding(CPPVisitor.java:280)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName.createIntermediateBinding(CPPASTName.java:61)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNameBase.resolveBinding(CPPASTNameBase.java:107)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName.resolveBinding(CPPASTQualifiedName.java:105)
+	at org.eclipse.cdt.internal.ui.editor.SemanticToken.getBinding(SemanticToken.java:47)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightings$MacroReferenceHighlighting.consumes(SemanticHighlightings.java:1037)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler$PositionCollector.visitNode(SemanticHighlightingReconciler.java:185)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler$PositionCollector.visit(SemanticHighlightingReconciler.java:162)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName.accept(CPPASTQualifiedName.java:248)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression.accept(CPPASTIdExpression.java:79)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionCallExpression.accept(CPPASTFunctionCallExpression.java:188)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTEqualsInitializer.accept(ASTEqualsInitializer.java:59)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.postAccept(CPPASTDeclarator.java:214)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.accept(CPPASTDeclarator.java:204)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:105)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement.accept(CPPASTDeclarationStatement.java:75)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTWhileStatement.accept(CPPASTWhileStatement.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:202)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler.reconcilePositions(SemanticHighlightingReconciler.java:397)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler.reconciled(SemanticHighlightingReconciler.java:352)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:63)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:87)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.reconcile(CCompositeReconcilingStrategy.java:90)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:77)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.process(CReconciler.java:358)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:206)
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:07:07.727
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException: org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:253)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:106)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:86)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:517)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:609)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:100)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPTemplateTypeParameter.getDefaultValue(CompositeCPPTemplateTypeParameter.java:82)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameter(CPPTemplates.java:1457)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameters(CPPTemplates.java:1480)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createSpecialization(CPPTemplates.java:924)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.specializeMember(CompositeCPPClassSpecialization.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.specializeMembers(AbstractCPPClassSpecializationScope.java:217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.getDeclaredMethods(AbstractCPPClassSpecializationScope.java:312)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecializationScope.getDeclaredMethods(CompositeCPPClassSpecializationScope.java:122)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.getDeclaredMethods(CompositeCPPClassSpecialization.java:191)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getDeclaredMethods(ClassTypeHelper.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getDeclaredConversionOperators(SemanticUtil.java:131)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getConversionOperators(SemanticUtil.java:155)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.Conversions.initializationByConversionForDirectReference(Conversions.java:260)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.Conversions.checkImplicitConversionSequence(Conversions.java:146)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.costForFunctionCall(CPPSemantics.java:2807)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveFunction(CPPSemantics.java:2477)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveAmbiguities(CPPSemantics.java:2137)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveBinding(CPPSemantics.java:305)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor.createBinding(CPPVisitor.java:280)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName.createIntermediateBinding(CPPASTName.java:61)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNameBase.resolveBinding(CPPASTNameBase.java:107)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName.resolveBinding(CPPASTQualifiedName.java:105)
+	at org.eclipse.cdt.internal.ui.editor.SemanticToken.getBinding(SemanticToken.java:47)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightings$MacroReferenceHighlighting.consumes(SemanticHighlightings.java:1037)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler$PositionCollector.visitNode(SemanticHighlightingReconciler.java:185)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler$PositionCollector.visit(SemanticHighlightingReconciler.java:162)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName.accept(CPPASTQualifiedName.java:248)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression.accept(CPPASTIdExpression.java:79)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionCallExpression.accept(CPPASTFunctionCallExpression.java:188)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTEqualsInitializer.accept(ASTEqualsInitializer.java:59)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.postAccept(CPPASTDeclarator.java:214)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.accept(CPPASTDeclarator.java:204)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:105)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement.accept(CPPASTDeclarationStatement.java:75)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTWhileStatement.accept(CPPASTWhileStatement.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:202)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler.reconcilePositions(SemanticHighlightingReconciler.java:397)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler.reconciled(SemanticHighlightingReconciler.java:352)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.initialReconcile(CReconcilingStrategy.java:122)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.initialReconcile(CompositeReconcilingStrategy.java:117)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.initialReconcile(CCompositeReconcilingStrategy.java:108)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.initialProcess(MonoReconciler.java:105)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.initialProcess(CReconciler.java:347)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:173)
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:07:12.262
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException: org.eclipse.cdt.internal.core.dom.parser.ProblemBinding cannot be cast to org.eclipse.cdt.internal.core.index.IIndexFragmentBinding
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeEvaluation(CPPCompositesFactory.java:253)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:106)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:86)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:517)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeBinding(CPPCompositesFactory.java:609)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CPPCompositesFactory.getCompositeType(CPPCompositesFactory.java:150)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.TemplateInstanceUtil.convert(TemplateInstanceUtil.java:100)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPTemplateTypeParameter.getDefaultValue(CompositeCPPTemplateTypeParameter.java:82)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameter(CPPTemplates.java:1457)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.specializeTemplateParameters(CPPTemplates.java:1480)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createSpecialization(CPPTemplates.java:924)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.specializeMember(CompositeCPPClassSpecialization.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.specializeMembers(AbstractCPPClassSpecializationScope.java:217)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.AbstractCPPClassSpecializationScope.getDeclaredMethods(AbstractCPPClassSpecializationScope.java:312)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecializationScope.getDeclaredMethods(CompositeCPPClassSpecializationScope.java:122)
+	at org.eclipse.cdt.internal.core.index.composite.cpp.CompositeCPPClassSpecialization.getDeclaredMethods(CompositeCPPClassSpecialization.java:191)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getDeclaredMethods(ClassTypeHelper.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getDeclaredConversionOperators(SemanticUtil.java:131)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.SemanticUtil.getConversionOperators(SemanticUtil.java:155)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.Conversions.initializationByConversionForDirectReference(Conversions.java:260)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.Conversions.checkImplicitConversionSequence(Conversions.java:146)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.costForFunctionCall(CPPSemantics.java:2807)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveFunction(CPPSemantics.java:2477)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveAmbiguities(CPPSemantics.java:2137)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPSemantics.resolveBinding(CPPSemantics.java:305)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPVisitor.createBinding(CPPVisitor.java:280)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTName.createIntermediateBinding(CPPASTName.java:61)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNameBase.resolveBinding(CPPASTNameBase.java:107)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName.resolveBinding(CPPASTQualifiedName.java:105)
+	at org.eclipse.cdt.internal.ui.editor.SemanticToken.getBinding(SemanticToken.java:47)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightings$MacroReferenceHighlighting.consumes(SemanticHighlightings.java:1037)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler$PositionCollector.visitNode(SemanticHighlightingReconciler.java:185)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler$PositionCollector.visit(SemanticHighlightingReconciler.java:162)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTQualifiedName.accept(CPPASTQualifiedName.java:248)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTIdExpression.accept(CPPASTIdExpression.java:79)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionCallExpression.accept(CPPASTFunctionCallExpression.java:188)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTEqualsInitializer.accept(ASTEqualsInitializer.java:59)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.postAccept(CPPASTDeclarator.java:214)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.accept(CPPASTDeclarator.java:204)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:105)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarationStatement.accept(CPPASTDeclarationStatement.java:75)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTWhileStatement.accept(CPPASTWhileStatement.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompoundStatement.accept(CPPASTCompoundStatement.java:85)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:202)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler.reconcilePositions(SemanticHighlightingReconciler.java:397)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler.reconciled(SemanticHighlightingReconciler.java:352)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:63)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:87)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.reconcile(CCompositeReconcilingStrategy.java:90)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:77)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.process(CReconciler.java:358)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:206)
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:07:26.297
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:07:27.832
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:07:28.861
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:07:34.395
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:07:35.925
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:07:37.457
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:07:44.991
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:07:46.523
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:07:52.555
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:07:58.595
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:08:02.625
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:08:03.654
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:08:04.685
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:08:07.716
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:08:15.248
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:08:18.276
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:08:19.307
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:08:20.337
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:08:25.873
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:08:28.403
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:08:32.437
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:08:38.969
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:08:41.502
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:08:44.527
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:08:48.057
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:08:57.083
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:09:05.118
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:09:09.647
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:09:11.177
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:09:13.210
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:09:15.242
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:09:17.279
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:09:21.311
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:09:23.841
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:09:25.370
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:09:28.894
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:09:29.924
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:09:44.963
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:09:46.995
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:09:55.026
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:03.057
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:06.088
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:11.119
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:13.658
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:16.688
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:19.222
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:22.773
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:23.804
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:28.831
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:31.363
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:32.887
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:33.918
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:38.950
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:41.485
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:42.524
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:43.555
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:45.588
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:49.121
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:50.153
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:56.682
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:10:58.717
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:11:05.249
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:11:12.279
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:11:16.809
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:11:17.837
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:11:22.027
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:11:27.551
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.codan.checkers 4 0 2018-02-03 17:11:28.497
+!MESSAGE 
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.codan.core 4 1 2018-02-03 17:11:28.498
+!MESSAGE Internal Error
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:11:33.371
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:11:35.898
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:11:54.435
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:11:55.966
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:11:58.500
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:11:59.532
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:12:08.066
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:12:09.099
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:12:14.633
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:12:16.664
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:12:18.198
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:12:21.736
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:12:38.815
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:12:40.839
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:12:45.870
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:12:48.907
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:12:52.944
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:12:56.985
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:13:01.024
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:13:04.788
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:13:11.330
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:13:14.363
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:13:16.892
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:13:21.925
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:13:24.450
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:13:31.985
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:13:42.012
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:13:45.063
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:14:19.314
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:14:23.847
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:14:27.385
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:14:39.914
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:15:11.954
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:15:55.507
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:16:03.557
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:16:04.586
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:16:06.120
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:16:08.656
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:16:12.515
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:16:15.548
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:16:19.580
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.codan.checkers 4 0 2018-02-03 17:16:25.057
+!MESSAGE 
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.codan.core 4 1 2018-02-03 17:16:25.058
+!MESSAGE Internal Error
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:16:26.015
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.NullPointerException
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createParameterMap(CPPTemplates.java:2800)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createBinding(CPPTemplates.java:706)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateId.createIntermediateBinding(CPPASTTemplateId.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNameBase.resolveBinding(CPPASTNameBase.java:107)
+	at org.eclipse.cdt.internal.ui.editor.SemanticToken.getBinding(SemanticToken.java:47)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightings$MacroReferenceHighlighting.consumes(SemanticHighlightings.java:1037)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler$PositionCollector.visitNode(SemanticHighlightingReconciler.java:185)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler$PositionCollector.visit(SemanticHighlightingReconciler.java:162)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateId.accept(CPPASTTemplateId.java:174)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier.accept(CPPASTNamedTypeSpecifier.java:92)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTParameterDeclaration.accept(CPPASTParameterDeclaration.java:100)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDeclarator.postAccept(CPPASTFunctionDeclarator.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.accept(CPPASTDeclarator.java:204)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:193)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateDeclaration.accept(CPPASTTemplateDeclaration.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompositeTypeSpecifier.accept(CPPASTCompositeTypeSpecifier.java:200)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:102)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateDeclaration.accept(CPPASTTemplateDeclaration.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler.reconcilePositions(SemanticHighlightingReconciler.java:397)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler.reconciled(SemanticHighlightingReconciler.java:352)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:63)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:87)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.reconcile(CCompositeReconcilingStrategy.java:90)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:77)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.process(CReconciler.java:358)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:206)
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:16:27.028
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.NullPointerException
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createParameterMap(CPPTemplates.java:2800)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.semantics.CPPTemplates.createBinding(CPPTemplates.java:706)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateId.createIntermediateBinding(CPPASTTemplateId.java:124)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNameBase.resolveBinding(CPPASTNameBase.java:107)
+	at org.eclipse.cdt.internal.ui.editor.SemanticToken.getBinding(SemanticToken.java:47)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightings$MacroReferenceHighlighting.consumes(SemanticHighlightings.java:1037)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler$PositionCollector.visitNode(SemanticHighlightingReconciler.java:185)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler$PositionCollector.visit(SemanticHighlightingReconciler.java:162)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateId.accept(CPPASTTemplateId.java:174)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamedTypeSpecifier.accept(CPPASTNamedTypeSpecifier.java:92)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTParameterDeclaration.accept(CPPASTParameterDeclaration.java:100)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDeclarator.postAccept(CPPASTFunctionDeclarator.java:263)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTDeclarator.accept(CPPASTDeclarator.java:204)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTFunctionDefinition.accept(CPPASTFunctionDefinition.java:193)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTTemplateDeclaration.accept(CPPASTTemplateDeclaration.java:123)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTCompositeTypeSpecifier.accept(CPPASTCompositeTypeSpecifier.java:200)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTSimpleDeclaration.accept(CPPASTSimpleDeclaration.java:102)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPASTNamespaceDefinition.accept(CPPASTNamespaceDefinition.java:139)
+	at org.eclipse.cdt.internal.core.dom.parser.ASTTranslationUnit.accept(ASTTranslationUnit.java:265)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler.reconcilePositions(SemanticHighlightingReconciler.java:397)
+	at org.eclipse.cdt.internal.ui.editor.SemanticHighlightingReconciler.reconciled(SemanticHighlightingReconciler.java:352)
+	at org.eclipse.cdt.internal.ui.editor.CEditor.reconciled(CEditor.java:3015)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:99)
+	at org.eclipse.cdt.internal.ui.text.CReconcilingStrategy.reconcile(CReconcilingStrategy.java:63)
+	at org.eclipse.cdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:87)
+	at org.eclipse.cdt.internal.ui.text.CCompositeReconcilingStrategy.reconcile(CCompositeReconcilingStrategy.java:90)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:77)
+	at org.eclipse.cdt.internal.ui.text.CReconciler.process(CReconciler.java:358)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:206)
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:16:30.771
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:16:38.111
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:16:46.144
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:16:52.671
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:16:54.200
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:16:57.819
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:17:02.886
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:17:04.731
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:17:04.949
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:17:48.794
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:17:57.830
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:18:02.321
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:18:16.356
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:18:17.386
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-02-03 17:18:22.913
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException

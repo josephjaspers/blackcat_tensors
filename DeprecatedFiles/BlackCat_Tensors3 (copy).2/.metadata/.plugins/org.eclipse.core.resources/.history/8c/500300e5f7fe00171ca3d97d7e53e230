@@ -1,0 +1,79 @@
+/*
+ * Tensor_Base.h
+ *
+ *  Created on: Jan 6, 2018
+ *      Author: joseph
+ */
+
+#ifndef TENSOR_BASE_H_
+#define TENSOR_BASE_H_
+
+
+#include "Implementation_Core/Tensor_IdentityClasses.h"
+#include "Implementation_Core/Tensor_Operations.h"
+#include "Implementation_Core/Tensor_Utility.h"
+#include "Implementation_Core/Shape.h"
+
+//#include "../BC_MathLibraries/Mathematics_CPU.h"
+//#include "../BC_MathLibraries/Mathematics_GPU.cu"
+
+
+namespace BC {
+
+
+template<class T, class derived, class Mathlib >
+class Tensor_Base :
+				public Tensor_Math_Core<T, derived, Mathlib>,
+				public Tensor_Utility  <T, derived, Mathlib, MTF::isPrimitive<T>::conditional>,
+				public Shape<inner_shape, outer_shape>
+{
+
+protected:
+	struct DISABLE; //no definition (intentional)
+
+	using shape = Shape<inner_shape, outer_shape>;
+	const bool OWNERSHIP = Shape<inner_shape, outer_shape>::array_ownership;
+
+	using math_parent 	= Tensor_Math_Core<T, derived, Mathlib>;
+	using array_parent 	= Tensor_Math_Core<T, derived, Mathlib>;
+	using shape_parent =  Shape<inner_shape, outer_shape>;
+
+	using functor_type 	= typename Tensor_Math_Core<T, derived, Mathlib>::functor_type;
+	using subAccess_int = typename MTF::IF_ELSE<MTF::isPrimitive<T>::conditional, int, DISABLE>::type;
+	using force_evaluation_int = typename MTF::IF_NOT_ELSE<MTF::isPrimitive<T>::conditional, int, DISABLE>::type;
+
+
+
+public:
+
+	functor_type array;
+
+	auto operator [] (force_evaluation_int i) { return this->data()[i]; }
+
+
+	template<class... params> Tensor_Base(shape_packet exp, const params&... p) : shape(exp), array(p...) {}
+
+	Tensor_Base(const T* param) :  array(const_cast<T*>(param)) {}
+	Tensor_Base() {
+		if (this->rank() != 0) {
+			throw std::invalid_argument("Attempting to use default constructor on - non scalar type");
+		}
+	}
+
+	Tensor_Base(std::initializer_list<int> dimensions) : Shape<inner_shape, outer_shape>(dimensions) {
+		std::cout << " initializing " << std::endl;
+		Mathlib::initialize(this->asBase(), this->size());
+		std::cout << "done initializing " << std::endl;
+
+	}
+
+	template<class... params>
+	Tensor_Base(std::initializer_list<int> dimensions, const params&... p) : shape_parent(dimensions), array(p...) {
+		Mathlib::initialize(this->asBase(), this->size());
+	}
+
+};
+}
+
+#endif /* TENSOR_BASE_H_ */
+

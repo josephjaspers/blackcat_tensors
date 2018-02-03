@@ -1,0 +1,141 @@
+#include <iostream>
+#include "BlackCat_Tensors.h"
+#include "BC_Internals/BC_Core/Vector.h"
+using BC::Vector;
+using BC::Matrix;
+int VectorPointwise() {
+
+std::cout << "Vector test " <<std::endl;
+
+	Vector<double,5> a;
+	Vector<double,5> b;
+	Vector<double,5> c;
+
+	Vector<double, 10> g;
+	g.print();
+
+	b.randomize(-3, 5);
+	c.randomize(0, 5);
+
+	a.print();
+	b.print();
+	c.print();
+
+	c.subVector<3>(1).print();
+
+	a = b - c;
+
+	a.print();
+
+	b[0].print();
+	a = a + b[0];
+	a.print();
+
+	std::cout << " out" << std::endl;
+	return 0;
+
+
+}
+
+int MatrixPointwise() {
+
+std::cout << "Matrix test " <<std::endl;
+
+	Matrix<double, 5, 5> a;
+	Matrix<double, 5, 5> b;
+	Matrix<double, 5, 5> c;
+
+	b.randomize(-3, 5);
+	c.randomize(0, 5);
+
+	a.print();
+	b.print();
+	c.print();
+
+	a = b - c;
+
+	std::cout << " mu  " << std::endl;
+//	a = b * c;
+
+	a[0].print();
+	a[2].print();
+
+	std::cout << " out" << std::endl;
+	return 0;
+}
+
+int gpu() {
+
+//std::cout << "Vector test " <<std::endl;
+//
+//
+//	Vector<double, 0, BC::GPU> a(10);
+//	Vector<double, 0, BC::GPU> b(10);
+//	Vector<double, 0, BC::GPU> c(10);
+//
+//
+//	std::cout << "making  " << std::endl;
+//	b.randomize(0, 10);
+//	c.randomize(0, 10);
+//	std::cout << "random " << std::endl;
+//
+//	b.print();
+//	c.print();
+//
+//	a += b;
+//
+//
+//	a.print();
+//
+//	a = b + c % b;
+//
+////	a.print();
+//
+//
+//
+//	std::cout << " out" << std::endl;
+//	a.print();
+//
+//
+//	return 0;
+
+	typedef Matrix<float, 3, 3, BC::GPU> dMatrix;
+	typedef Vector<float, 3, BC::GPU> dVec;
+
+	dMatrix a;
+	dMatrix b;
+
+	dMatrix c;
+
+	dVec d;
+	dVec e;
+
+	a.randomize(0, 10);
+	b.randomize(0, 10);
+
+	c.print();
+	a.print();
+	b.print();
+
+//    c = a * b;
+ cudaDeviceSynchronize();
+	c.print();
+
+
+	return 0;
+}
+
+
+//
+//
+int main3() {
+	gpu();
+//	VectorPointwise();
+//	MatrixPointwise();
+}
+
+
+
+
+
+

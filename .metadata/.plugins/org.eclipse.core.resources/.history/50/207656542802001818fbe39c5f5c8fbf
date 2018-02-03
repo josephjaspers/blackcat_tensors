@@ -1,0 +1,40 @@
+/*
+ * Expression_Unary_Pointwise.cu
+ *
+ *  Created on: Jan 25, 2018
+ *      Author: joseph
+ */
+
+#ifndef EXPRESSION_UNARY_POINTWISE_CU_
+#define EXPRESSION_UNARY_POINTWISE_CU_
+
+#include "Expression_Base.h"
+
+template<class T, class operation, class lv, class rv>
+class unary_expression : public expression<T, binary_expression<T, operation, lv, rv>> {
+public:
+
+	using this_type = binary_expression<T, operation, lv, rv>;
+	operation oper;
+
+	lv left;
+	rv right;
+
+	template<class L, class R>
+	inline __attribute__((always_inline)) __BC_gcpu__ binary_expression(L l, R r) :
+			left(l), right(r) {
+	}
+	inline __attribute__((always_inline)) __BC_gcpu__
+			binary_expression(const binary_expression<T, operation, lv, rv>& expr)   : left(expr.left), right(expr.right) {}
+
+	inline __attribute__((always_inline)) __BC_gcpu__
+			binary_expression(const binary_expression<T, operation, lv, rv>&& expr)  :  left(expr.left), right(expr.right) {}
+
+	inline __attribute__((always_inline)) __BC_gcpu__ auto operator [](int index) const {
+		return oper(left[index], right[index]);
+	}
+};
+
+
+
+#endif /* EXPRESSION_UNARY_POINTWISE_CU_ */

@@ -1,0 +1,30 @@
+/*
+ * Constructors.h
+ *
+ *  Created on: Jan 29, 2018
+ *      Author: joseph
+ */
+
+#ifndef CONSTRUCTORS_H_
+#define CONSTRUCTORS_H_
+
+#include <type_traits>
+
+#include "../../BC_MetaTemplateFunctions/Simple.h"
+#include "../../BC_MetaTemplateFunctions/Adhoc.h"
+#include "../../BC_MetaTemplateFunctions/Complex.h"
+
+template<class T, class derived, class enabler = void>
+struct TensorBaseConstructors {
+
+};
+
+template<class T, class derived>
+struct TensorBaseConstructors<T, derived, typename std::enable_if_t<MTF::isPrimitive<T>::conditional>> {
+
+};
+
+
+
+
+#endif /* CONSTRUCTORS_H_ */

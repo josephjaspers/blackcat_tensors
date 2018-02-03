@@ -1,0 +1,119 @@
+#include "NeuralNetwork.cu"
+#include "Layer.cu"
+#include "FeedForward.cu"
+#include <fstream>
+#include <iostream>
+#include <string>
+
+using BC::vec;
+typedef std::vector<vec> data;
+
+namespace BC {
+
+typedef vec tensor;
+
+tensor expandOutput(int val, int total) {
+	//Convert a value to a 1-hot output vector
+	tensor out(total);
+	out.zero();
+	out.data()[val] = 1;
+	return out;
+}
+
+tensor&  normalize(tensor& tens, double max, double min) {
+	//generic feature scaling (range of [0,1])
+	tens -= Scalar<double>(min);
+	tens /= Scalar<double>(max - min);
+
+	return tens;
+}
+
+void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_data, unsigned MAXVALS) {
+	unsigned vals = 0;
+
+	input_data.emplace(input_data.begin(), MAXVALS);
+	output_data.emplace(output_data.begin(), MAXVALS);
+
+	while (read_data.good() && vals < MAXVALS) {
+		std::string output;
+		std::getline(read_data, output, ',');
+		int out = std::stoi(output);
+//
+		tensor input(784);
+		input.read(read_data, false);
+		output_data.push_back(expandOutput(out, 10));
+
+		normalize(input, 255, 0);
+		input_data.push_back(input);
+		++vals;
+	}
+	std::cout << " return -- finished creating data set " << std::endl;
+}
+
+int percept_MNIST() {
+
+	const int TRAINING_EXAMPLES = 400;
+	const int TESTING_EXAMPLES = 1000;
+
+	//Create layers
+	FeedForward f1(784, 250);
+	FeedForward f2(250, 10);
+
+	auto network = generateNetwork(f1, f2);
+
+	data inputs;
+	data outputs;
+
+	data testInputs;
+	data testOutputs;
+
+	//load data
+	std::cout << "loading data..." << std::endl << std::endl;
+	std::ifstream in_stream("///home/joseph///Downloads///train.csv");
+	std::string tmp; std::getline(in_stream, tmp, '\n'); //remove headers
+//	std::cout << tmp << std::endl;
+
+
+	//Load 40,000 training examples (taken from kaggle digit recognizer train.csv)
+	std::cout << " generating and loading data from csv to tensors" << std::endl;
+
+	generateAndLoad(inputs, outputs, in_stream, TRAINING_EXAMPLES);
+	//Load 1000 training exampels to be used as a test set
+
+
+	vec v(784);
+	normalize(v, 255, 0);
+	v.read(in_stream, false);
+
+	vec out(10);
+	out.zero();
+	out.data()[1] = 1;
+	std::cout << "fp " << std::endl;
+	normalize(v, 255, 0);
+	v.print();
+	for (int i = 0; i < 1000; ++i) {
+		for (int j = 0; j < TRAINING_EXAMPLES; ++j) {
+			vec a = network.forwardPropagation(v) - out;
+			network.backPropagation(a);
+			network.updateWeights();
+
+			network.clearBPStorage();
+		}
+	}
+
+	network.forwardPropagation(v).print();
+
+	std::cout << "data loaded " << std::endl;
+
+	return 0;
+}
+
+}
+int main() {
+
+	BC::percept_MNIST();
+	std::cout << "success" << std::endl;
+	//ConvMNIST();
+	//ADJConvMNIST();
+}
+

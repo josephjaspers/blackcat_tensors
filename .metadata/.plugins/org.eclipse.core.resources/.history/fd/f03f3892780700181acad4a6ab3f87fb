@@ -1,0 +1,70 @@
+/*
+ * Output.cu
+ *
+ *  Created on: Feb 1, 2018
+ *      Author: joseph
+ */
+
+#ifndef OUTPUT_CU_
+#define OUTPUT_CU_
+
+
+
+#include "Layer.cu"
+
+namespace BC {
+
+class FeedForward : Layer<FeedForward> {
+
+public:
+	mat w_gradientStorage;
+	vec b_gradientStorage;
+
+	mat w;
+
+	vec x;
+	vec y;
+	vec b;
+
+	vec dx;
+
+	//operator == is a delayed evaluation assignment operator
+	FeedForward(int inputs, int outputs) :
+			w_gradientStorage(outputs, inputs),
+			b_gradientStorage(outputs),
+			w(outputs, inputs),
+			b(outputs),
+			x(inputs),
+			y(outputs),
+			dx(inputs) {}
+
+
+	template<class T> auto forwardPropagation(vec_expr<T> in) {
+		return Vector<fp_type>(in);
+	}
+	template<class T> auto forwardPropagation_Express(vec_expr<T> x) const {
+		return y == g(w * x + b);
+	}
+
+	template<class T> auto backPropagation(vec_expr<T> dy) {
+		w_gradientStorage -= dy * x.t();
+		b_gradientStorage -= dy;
+
+		return dx == w.t() * dy ** gd(x);							//** is point_wise multiply
+	}
+
+	void updateWeights() {
+		w += w_gradientStorage * lr;
+		b += b_gradientStorage * lr;
+	}
+	void clearBPStorage() {
+		w_gradientStorage.zero();
+		b_gradientStorage.zero();
+	}
+
+};
+}
+
+
+
+#endif /* OUTPUT_CU_ */

@@ -1,0 +1,37 @@
+/*
+ * BlackCat_CompilerDefinitions.h
+ *
+ *  Created on: Jan 15, 2018
+ *      Author: joseph
+ */
+
+#ifndef BLACKCAT_COMPILERDEFINITIONS_H_
+#define BLACKCAT_COMPILERDEFINITIONS_H_
+
+#include "BlackCat_ForwardDecls.h"
+namespace BC {
+
+static constexpr bool PARENT = true;
+static constexpr bool CHILD  = false;
+static constexpr int DYNAMIC_ORDER = -1;
+static constexpr int BC_CPU_SINGLE_THREAD_THRESHOLD = 999;
+
+
+//#define DISABLE_BLACKCAT_DEBUG_CHECKS
+
+
+#ifdef __CUDACC__
+#define __BC_gcpu__ __host__ __device__
+static constexpr int CUDA_BASE_THREADS = 256;
+#define BLACKCAT_GPU_ENABLED
+#else
+#define __BC_gcpu__
+#endif
+
+
+#define template
+
+}
+//Ifndef __CUDACC__ add: -x c-header cu
+//to the compiler command line --> this converts all files that would normally be interperted by the NVCC to header.files
+#endif /* BLACKCAT_COMPILERDEFINITIONS_H_ */

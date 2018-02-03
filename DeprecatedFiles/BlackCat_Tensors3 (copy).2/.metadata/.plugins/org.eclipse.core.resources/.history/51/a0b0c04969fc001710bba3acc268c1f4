@@ -1,0 +1,78 @@
+/*
+ * Vector.h
+ *
+ *  Created on: Dec 30, 2017
+ *      Author: joseph
+ */
+
+#ifndef VECTOR_H_
+#define VECTOR_H_
+#include "../BlackCat_Internal_GlobalUnifier.h"
+#include "Scalar.h"
+#include "Tensor_Base.h"
+
+
+namespace BC {
+template<class T, class Mathlib, class shape>
+class Vector : public Tensor_Base<T, Vector<T, Mathlib, shape>, Mathlib, shape>
+{
+	using parent_class = Tensor_Base<T, Vector<T, Mathlib, shape>, Mathlib, shape>;
+	using _int = typename parent_class::subAccess_int;
+	using __int = typename parent_class::force_evaluation_int;
+	template<class,class, class>
+	friend class Vector;
+
+public:
+	using parent_class::operator=;
+	using parent_class::parent_class;
+
+	Vector(int dim) : parent_class({dim}) {} Vector(Vector<T, Mathlib, parent>&& vec) : parent_class(vec.expression_packet(), vec.data()) {}
+
+	template<class U, bool child> Vector(const Vector<U, Mathlib, child>& vec) : parent_class(vec.expression_packet()) { Mathlib::copy(this->data(), vec.data(), this->size()); }
+	template<bool child> Vector(const Vector<T, Mathlib, child>& vec) : parent_class(vec.expression_packet()) { Mathlib::copy(this->data(), vec.data(), this->size()); }
+
+
+	Scalar<T, Mathlib, false> operator[] (_int i) {
+		return (Scalar<T, Mathlib, false>(&this->array[i]));
+	}
+	const Scalar<T, Mathlib, false> operator[] (_int i) const {
+		return Scalar<T, Mathlib, false>(&this->array[i]);
+	}
+
+	auto operator [] (__int i) const {
+		return this->data()[i];
+	}
+
+	const Matrix<T, Mathlib, false> t() const {
+		return Matrix<T, Mathlib, false>({this->rows(), 1}, this->data());
+	}
+
+	Matrix<T, Mathlib, false> t() {
+		return Matrix<T, Mathlib, false>({this->rows(), 1}, this->data());
+	}
+
+	Vector<T, Mathlib, parent>& operator = (const Vector<T, Mathlib, parent>& vec) {
+		this->assert_same_size(vec);
+		Mathlib::copy(this->data(), vec.data(), this->size());
+		return this->asBase();
+	}
+	template<class U>
+	Vector<T, Mathlib, parent>& operator = (const Vector<U, Mathlib, parent>& vec) {
+		this->assert_same_size(vec);
+		Mathlib::copy(this->data(), vec.data(), this->size());
+		return this->asBase();
+	}
+
+
+
+	Vector<T, Mathlib, false> subVector(int index) {
+		return Vector<T, Mathlib, false>(&this->array[index]);
+	}
+	const Vector<T, Mathlib, false> subVector(int index) const {
+		return Vector<T, Mathlib, false>(&this->array[index]);
+	}
+};
+
+} //End Namespace BC
+
+#endif /* VECTOR_H_ */

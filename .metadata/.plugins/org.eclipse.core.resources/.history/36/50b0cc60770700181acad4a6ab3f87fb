@@ -1,0 +1,6 @@
+
+
+#include "BlackCat_Tensors.h"
+
+template<class T> auto value(T t) { return t;}
+template<class T> auto& reference(T& t) { return t;}

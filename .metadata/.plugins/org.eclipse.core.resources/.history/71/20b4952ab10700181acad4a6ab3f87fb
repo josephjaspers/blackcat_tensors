@@ -1,0 +1,170 @@
+
+#include "Layer.cu"
+#include "NeuralNetwork.cu"
+#include "FeedForward.cu"
+
+namespace BC {
+
+vec ff_one() {
+	return vec({0,0,1,0,0,
+				0,0,1,0,0,
+				0,0,1,0,0,
+				0,0,1,0,0,
+				0,1,1,1,0,
+	});
+}
+vec ff_two() {
+	return vec({0,0,1,0,0,
+				0,1,0,1,0,
+				0,0,0,1,0,
+				0,0,1,0,0,
+				0,1,1,1,0,
+	});
+}
+vec ff_three() {
+	return vec({0,0,1,1,0,
+				0,0,0,1,0,
+				0,0,1,1,0,
+				0,0,0,1,0,
+				0,0,1,1,0,
+	});
+}
+vec ff_four() {
+	return vec({0,1,0,1,0,
+				0,1,0,1,0,
+				0,1,1,1,0,
+				0,0,0,1,0,
+				0,0,0,1,0,
+	});
+}
+
+	vec one_1() {return  vec({ 0, 0, 1, 0, 0 }); }
+	vec one_2() {return  vec({ 0, 1, 1, 0, 0 }); }
+	vec one_3() {return  vec({ 0, 0, 1, 0, 0 }); }
+	vec one_4() {return  vec({ 0, 0, 1, 0, 0,}); }
+	vec one_5() {return  vec({ 0, 1, 1, 1, 0 }); }
+
+	vec two_1() {return  vec({ 0, 1, 1, 0, 0 }); }
+	vec two_2() {return  vec({ 0, 0, 0, 1, 0 }); }
+	vec two_3() {return  vec({ 0, 0, 1, 0, 0 }); }
+	vec two_4() {return  vec({ 0, 1, 0, 0, 0 }); }
+	vec two_5() {return  vec({ 0, 0, 1, 1, 0 }); }
+
+	vec three_1() {return  vec({ 0, 1, 1, 1, 0 }); }
+	vec three_2() {return  vec({ 0, 0, 0, 1, 0 }); }
+	vec three_3() {return  vec({ 0, 1, 1, 1, 0 }); }
+	vec three_4() {return  vec({ 0, 0, 0, 1, 0 }); }
+	vec three_5() {return  vec({ 0, 1, 1, 1, 0 }); }
+
+	mat one() {
+		mat m(5, 5);
+		m[0] = one_1();
+		m[1] = one_2();
+		m[2] = one_3();
+		m[3] = one_4();
+		m[4] = one_5();
+		return m;
+	}
+
+	mat two() {
+		mat m(5, 5);
+		m[0] = two_1();
+		m[1] = two_2();
+
+		m[2] = two_3();
+		m[3] = two_4();
+		m[4] = two_5();
+
+		return m;
+	}
+
+	mat three() {
+		mat m(5, 5);
+		m[0] = three_1();
+		m[1] = three_2();
+		m[2] = three_3();
+		m[3] = three_4();
+		m[4] = three_5();
+
+		return m;
+	}
+
+void XOR_Test() {
+
+//
+	std::cout << " main - NN test... " << std::endl;
+	vec d1 = { 0, 0 };
+	vec d2 = { 1, 1 };
+	vec d3 = { 1, 0 };
+	vec d4 = { 0, 1 };
+
+	vec o1 = { 1 };
+	vec o2 = { 1 };
+	vec o3 = { 0 };
+	vec o4 = { 0 };
+
+	FeedForward f1(2, 15);
+	FeedForward f3(15, 1);
+
+	NeuralNetwork<FeedForward,FeedForward> net(f1, f3);
+//
+//
+	vec output(1);
+	output.zero();
+std::cout << " training " << std::endl;
+	for (int i = 0; i < 1; ++i) {
+		output = net.forwardPropagation(d1);
+		vec res(1); res = output - o1;
+//
+//		std::cout << " hypothesis: "; output.print();
+//		std::cout << "\n output: "; o1.print();
+//		std::cout << " residual: "; res.print();
+
+		net.backPropagation(res);
+		net.updateWeights();
+		net.clearBPStorage();
+
+		output = net.forwardPropagation(d2);
+		res = output - o2;
+		net.backPropagation(res);
+		net.updateWeights();
+		net.clearBPStorage();
+
+		output = net.forwardPropagation(d3);
+		res = output - o3;
+		net.backPropagation(res);
+		net.updateWeights();
+		net.clearBPStorage();
+
+		output = net.forwardPropagation(d4);
+		res = output - o4;
+		net.backPropagation(res);
+		net.updateWeights();
+		net.clearBPStorage();
+	}
+std::cout << " post training " << std::endl;
+
+
+	vec o11 = net.forwardPropagation(d1); o11.print();
+	vec o22 = net.forwardPropagation(d2); o22.print();
+	vec o33 = net.forwardPropagation(d3); o33.print();
+	vec o44 = net.forwardPropagation(d4); o44.print();
+
+	std::cout << " success " << std::endl;
+//
+//
+	f1.w.print();
+	f3.w.print();
+}
+
+}
+
+int main() {
+//	BC::XOR_Test();
+	std::cout << "success " << std::endl;
+//	feedforward_numbTest();
+	//recurrent_numbTest();
+	return 0;
+
+
+}

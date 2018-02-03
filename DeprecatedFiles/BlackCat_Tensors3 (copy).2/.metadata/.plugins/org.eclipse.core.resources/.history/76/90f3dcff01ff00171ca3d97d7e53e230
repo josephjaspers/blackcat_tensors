@@ -1,0 +1,199 @@
+/*
+ * Shape.h
+ *
+ *  Created on: Jan 18, 2018
+ *      Author: joseph
+ */
+
+#ifndef SHAPE_H_
+#define SHAPE_H_
+
+//#include <type_traits>
+//#include "../../BlackCat_Internal_GlobalUnifier.h"
+namespace BC {
+//------------------------------------------------DEFAULT PARENT -----------------------------------------------------//
+//------------------------------------------------DEFAULT CHILD -----------------------------------------------------//
+
+template<int order>
+struct inner_shape {
+	static constexpr int ORDER = order;
+	const bool PARENT;
+	using param = inner_shape<order>;
+	using expr_packet = inner_shape<order>;
+	using access_packet = inner_shape<order-1>;
+	const int innerParent() { return PARENT; }
+
+	int sz;
+	int* IS; //inner shape
+
+	auto inner_expression_packet() const {
+		return inner_shape<order>(sz, IS);
+	}
+	auto inner_accessor_packet() const {
+		return inner_shape<order - 1>(sz / IS[order - 1], IS);
+	}
+
+//	inner_shape(inner_shape&& is) : sz(is.sz), IS(is.IS) {}
+	inner_shape(const inner_shape& is) : sz(is.sz), IS(is.IS), PARENT(true) {}
+	inner_shape(std::initializer_list<int> dimensions) : PARENT(true) {
+		IS = new int[order];
+
+		sz = 1;
+		for (int i = 0; i < order; ++i) {
+			IS[i] = dimensions.begin()[i];
+			sz *= dimensions.begin()[i];
+		}
+
+	}
+
+	inner_shape(int size, const int* sh) : sz(size), IS(const_cast<int*>(sh))  {}
+	int size() const { return sz; }
+	int rows() const { return order > 0  ? IS[0] : 1; }
+	int cols() const { return order > 1  ? IS[1] : 1; }
+	const auto InnerShape() const { return IS; }
+	void printDimensions() const { for (int i = 0; i < order; ++i) { std::cout << "[" << IS[i] << "]"; } std::cout << std::endl; }
+
+};
+template<int order> //assumes true
+struct outer_shape{
+	static constexpr bool PARENT = false;
+	using param = outer_shape<order>;
+	using expr_packet = outer_shape<order>;
+	using access_packet = outer_shape<order-1>;
+	using outer_sub_packet = outer_shape<order>;
+
+	int* IS; //inner shape
+
+	outer_shape(std::initializer_list<int> dimensions) {
+		IS = new int[order];
+		for (int i = 0; i < order; ++i) {
+			IS[i] = dimensions.begin()[i];
+		}
+
+	}
+
+	auto outer_expression_packet() const {
+			return outer_shape<order>(IS);
+	}
+	auto outer_accessor_packet() const {
+			return outer_shape<order - 1>(IS);
+	}
+
+	outer_shape(outer_shape&& is) : IS(is.IS) {}
+	outer_shape(const outer_shape& is) : IS(is.IS) {}
+
+	outer_shape(const int* sh) :  IS(const_cast<int*>(sh)) {}
+	int rows() const { return order > 0  ? IS[0] : 1; }
+	int cols() const { return order > 1  ? IS[1] : 1; }
+	const auto OuterShape() const { return IS; }
+
+};
+ //---------------------------------------------Scalar specializations -------------------------------------------------------------//
+
+static const int BC_ONE_VALUE = 1;
+
+template<>
+struct inner_shape<0> {
+	static constexpr int ORDER = 0;
+	static constexpr bool PARENT = false;
+	using param = inner_shape<0>;
+	using expr_packet = inner_shape<0>;
+	using access_packet = inner_shape<0>;
+
+	inner_shape() {}
+	int size() const { return 1; }
+	int rows() const { return 1; }
+	int cols() const { return 1; }
+	const auto InnerShape() const { return &BC_ONE_VALUE; }
+	void printDimensions() const { std::cout << "[0]" << std::endl; }
+
+};
+template<> //assumes true
+struct outer_shape<0> {
+	static constexpr bool PARENT = false;
+	using param = outer_shape<0>;
+	using expr_packet = outer_shape<0>;
+	using access_packet = outer_shape<0>;
+	using outer_sub_packet = outer_shape<0>;
+
+	outer_shape() = default;
+	int LD_rows() const { return 0; }
+	int LD_cols() const { return 0; }
+	const auto OuterShape() const { return &BC_ONE_VALUE; }
+};
+
+template<class INNER, class OUTER>
+struct Shape : public INNER, public OUTER {
+	const bool PARENT = innerParent() && innerParent();
+
+	using is = INNER;
+	using os = OUTER;
+
+	static constexpr int M() { return 0; }
+	static constexpr int N() { return 0; }
+	static constexpr int K() { return 0; }
+	static constexpr int LDA() { return 0; }
+	static constexpr int LDB() { return 0; }
+	static constexpr int LDC() { return 0; }
+
+	using param_init_i = typename INNER::param;
+	using param_init_o = typename OUTER::param;
+	using inner_expr = typename INNER::expr_packet;
+	using outer_expr = typename OUTER::expr_packet;
+	using inner_access = typename INNER::access_packet;
+	using outer_access = typename OUTER::access_packet;
+	struct DISABLER;
+	using unionized_param = typename MTF::IF_ELSE<MTF::same<param_init_i, param_init_o>::conditional, param_init_i, DISABLER>::type;
+
+
+
+	struct _expression_packet {
+		inner_expr ie;
+		outer_expr oe;
+
+		_expression_packet(inner_expr i, outer_expr o ) : ie(i), oe(o) {}
+	};
+
+	struct _access_packet {
+		inner_access ia;
+		outer_access oa;
+
+		_access_packet(inner_expr i, outer_expr o) : ia(i), oa(o) {}
+	};
+
+	struct _transpose_packet {
+		int rows_;
+		int cols_;
+
+		_transpose_packet(const Shape& sh) : rows_(this->rows()), cols_(sh.cols()) {}
+	};
+
+
+	typename Shape<inner_expr, outer_expr>::_expression_packet expression_packet() const { return typename Shape<inner_expr, outer_expr>::_expression_packet(this->inner_expression_packet(), this->outer_expression_packet()); }
+	typename Shape<inner_access, outer_access>::_access_packet accessor_packet()   const { return typename Shape<inner_access, outer_access>::_access_packet(this->inner_accessor_packet(), this->outer_accessor_packet()); }
+
+	std::initializer<int> transpose_packet(const Shape& sh) const {return std::initializer<int> {this->rows(), sh.cols()}; }
+
+
+	using EXPR_PACKET  = Shape<INNER, OUTER>::_expression_packet;
+	using ACCESS_PACKET  = Shape<INNER,OUTER>::_access_packet;
+
+	using ACCESSOR_SHAPE = Shape<typename INNER::access_packet, typename OUTER::access_packet>;
+	using EXPRESSION_SHAPE = Shape<typename INNER::expr_packet, typename OUTER::expr_packet>;
+
+	Shape() {}
+	Shape(_expression_packet packet) : is(packet.ie), os(packet.oe) {}
+	Shape(_access_packet packet) 	: is(packet.ia), os(packet.oa) {}
+	Shape(_transpose_packet packet) 	: is( { packet.rows_, packet.cols_}), os( { packet.rows_, packet.cols_ }) {}
+Shape(param_init_i pi, param_init_o po) : is(pi), os(po) {}
+	Shape(std::initializer_list<int> p) : is(p), os(p) {}
+
+	Shape(unionized_param p) : is(p), os(p) {}
+	const Shape& asShape() const { return *this; }
+
+	int order() const { return INNER::ORDER; }
+	static constexpr int ORDER() { return INNER::ORDER; }
+
+};
+}
+#endif /* SHAPE_H_ */

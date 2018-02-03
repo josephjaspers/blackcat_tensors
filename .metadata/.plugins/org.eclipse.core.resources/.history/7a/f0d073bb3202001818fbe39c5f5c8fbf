@@ -1,0 +1,27 @@
+/*
+ * Unary_Expression_Transpose_impl.cu
+ *
+ *  Created on: Jan 25, 2018
+ *      Author: joseph
+ */
+
+#ifndef UNARY_EXPRESSION_TRANSPOSE_IMPL_CU_
+#define UNARY_EXPRESSION_TRANSPOSE_IMPL_CU_
+
+
+#include "../BlackCat_Internal_Definitions.h" //__BC_gcpu__
+
+#include <iostream>
+namespace BC {
+		struct transpose {
+
+		template<class lv, class rv> __BC_gcpu__
+		inline __attribute__((always_inline)) auto operator ()(lv& l, rv r) const {
+			return (l = r);
+		}
+	};
+
+}
+
+
+#endif /* UNARY_EXPRESSION_TRANSPOSE_IMPL_CU_ */

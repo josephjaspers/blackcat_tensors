@@ -1,0 +1,86 @@
+/*
+ * NeuralNetwork.cu
+ *
+ *  Created on: Jan 28, 2018
+ *      Author: joseph
+ */
+
+#ifndef NEURALNETWORK_CU_
+#define NEURALNETWORK_CU_
+
+#include "Layer.cu"
+namespace BC {
+
+template<class Front, class... layers>
+struct NeuralNetwork;
+
+template<class Front, class... layers>
+struct NeuralNetwork : public Layer<NeuralNetwork<layers...>>, public NeuralNetwork<layers...> {
+
+	using parent_class = NeuralNetwork<layers...>;
+
+	Front& layer;
+
+	NeuralNetwork(Front& first, layers&... hiddens) : layer(first), NeuralNetwork<layers...>(hiddens...) {}
+
+	template<class T> vec forwardPropagation		(vec_expr<T> param) 	   { return parent_class::forwardPropagation(layer.forwardPropagation(param));  }
+	template<class T> vec forwardPropagation_Express(vec_expr<T>  param) const { return parent_class::forwardPropagation(layer.forwardPropagation(param));  }
+
+	template<class T> vec backPropagation			 (vec_expr<T>  param) { return parent_class::backPropagation(layer.backPropagation(param)); }
+	template<class T> vec backPropagation_ThroughTime(vec_expr<T> ) { return parent_class::backPropagation_ThroughTime(layer.backPropagation_ThroughTime(param));; }
+
+	void updateWeights()  { layer.updateWeights(); parent_class::updateWeight();  }
+	void clearBPStorage()  { layer.clearBPStorage(); parent_class::clearBPStorage();  }
+
+
+
+};
+
+template<class, class> class reverser;
+template<template<class...> class list1, template<class...> class list2, class... set1, class first, class... set2>
+class reverser<list1<set1...>, list2<first, set2...>> {
+	using type = typename reverser<list1<first, set1...>, list2<set2...>>::type;
+};
+template<template<class...> class list1, template<class...> class list2, class... set1>
+class reverser<list1<set1...>, list2<>> {
+	using type = list1<set1...>;
+};
+
+template<class> class reverse;
+template<template<class...>class list, class... set> class reverse<list<set...>> {
+	using type = typename reverse<list<>, list<set...>>::type;
+};
+template<class front, class... set> class reverse<front, set...> {
+	using T = typename reverse<set...>::type;
+};
+
+
+template<
+	template<class...> class reverse, class... layers>
+struct NeuralNetwork<reverse<layers...>, layers...> : public Layer<NeuralNetwork<reverse<layers...>>> {
+
+};
+
+
+template<>
+struct NeuralNetwork<>{
+
+		NeuralNetwork() = default;
+
+		template<class T> vec forwardPropagation		(vec_expr<T>  param) 	  {return param;} //{ return layer.forwardPropagation(param);  }
+		template<class T> vec forwardPropagation_Express(vec_expr<T>  param) const {return param;}//{ return layer.forwardPropagation(param);  }
+
+		template<class T> vec backPropagation			 (vec_expr<T>  param) {return param;}// { return layer.backPropagation(param); }
+		template<class T> vec backPropagation_ThroughTime(vec_expr<T>  param) {return param;}// { return layer.backPropagation_ThroughTime(param); }
+
+		void updateWeights()  {}
+		void clearBPStorage()  {}
+
+
+};
+
+}
+
+
+
+#endif /* NEURALNETWORK_CU_ */
