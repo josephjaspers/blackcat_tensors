@@ -31,9 +31,9 @@ struct NeuralNetwork {
 	LayerSet<layers...> network;
 	NeuralNetwork(layers... l) : network(std::make_tuple(l...)) {}
 
-	template<class T> vec forwardPropagation		(vec_expr<T,ml>  param) 	   { return fp  <0, length>(param); }
+	template<class T> vec forwardPropagation	(vec_expr<T,ml>  param) 	   { return fp  <0, length>(param); }
 	template<class T> vec forwardPropagation_express(vec_expr<T,ml>  param) 	   { return fpx <0, length>(param); }
-	template<class T> vec backPropagation			(vec_expr<T,ml>  param) 	   { return bp  <length, 0>(param); }
+	template<class T> vec backPropagation		(vec_expr<T,ml>  param) 	   { return bp  <length, 0>(param); }
 	template<class T> vec backPropagationThroughTime(vec_expr<T,ml>  param) 	   { return bptt<length, 0>(param); }
 
 
