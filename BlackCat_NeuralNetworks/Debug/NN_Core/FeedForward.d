@@ -220,9 +220,8 @@ NN_Core/FeedForward.o : ../NN_Core/FeedForward.cu \
     /usr/include/cblas.h \
     /usr/include/cblas_mangling.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_MathLibraries/Mathematics_GPU.cu \
-    /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/cuda.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_MathLibraries/../BlackCat_Internal_Definitions.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.cu \
+    /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/cuda.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/curand.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/curand_kernel.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/curand_discrete.h \
@@ -241,6 +240,7 @@ NN_Core/FeedForward.o : ../NN_Core/FeedForward.cu \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/curand_discrete2.h \
     /usr/include/c++/6/limits \
     /usr/include/c++/6/cstddef \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_MathLibraries/../BlackCat_Internal_Definitions.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/cublas_v2.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/cublas_api.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/cuComplex.h \
@@ -251,10 +251,6 @@ NN_Core/FeedForward.o : ../NN_Core/FeedForward.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_MathLibraries/Mathematics_mGPU.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Base.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/../BlackCat_Internal_Definitions.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Unary_Negation.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Binary_Functors.cu \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Binary_Pointwise.cu \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Simple.h \
@@ -279,6 +275,10 @@ NN_Core/FeedForward.o : ../NN_Core/FeedForward.cu \
     /usr/include/c++/6/bits/atomic_base.h \
     /usr/include/c++/6/backward/auto_ptr.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.cu \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Unary_Negation.cu \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Binary_Functors.cu \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.cu \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Binary_Pointwise.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_MetaTemplateFunctions/Simple.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_MetaTemplateFunctions/Complex.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_MetaTemplateFunctions/Adhoc.h \

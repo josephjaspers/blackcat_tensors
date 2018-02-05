@@ -15,7 +15,7 @@
 namespace BC {
 using namespace NN_Abreviated_Functions;
 
-static const Scalar<fp_type> lr = 0.03; //fp_type == floating point
+static const Scalar<fp_type> lr = 0.003; //fp_type == floating point
 
 
 template<class derived>

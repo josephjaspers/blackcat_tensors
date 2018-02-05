@@ -7,19 +7,19 @@ CU_SRCS += \
 ../NN_Core/Defaults.cu \
 ../NN_Core/FeedForward.cu \
 ../NN_Core/Layer.cu \
-../NN_Core/NeuralNetwork.cu 
+../NN_Core/OutputLayer.cu 
 
 OBJS += \
 ./NN_Core/Defaults.o \
 ./NN_Core/FeedForward.o \
 ./NN_Core/Layer.o \
-./NN_Core/NeuralNetwork.o 
+./NN_Core/OutputLayer.o 
 
 CU_DEPS += \
 ./NN_Core/Defaults.d \
 ./NN_Core/FeedForward.d \
 ./NN_Core/Layer.d \
-./NN_Core/NeuralNetwork.d 
+./NN_Core/OutputLayer.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

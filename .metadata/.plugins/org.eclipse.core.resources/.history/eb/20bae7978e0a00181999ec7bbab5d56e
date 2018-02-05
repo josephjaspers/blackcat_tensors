@@ -1,0 +1,59 @@
+/*
+ * main.cpp
+ *
+ *  Created on: Feb 5, 2018
+ *      Author: joseph
+ */
+
+#include "Tuple.h"
+#include <iostream>
+
+struct a { void print() { std::cout << " a " << std::endl; }};
+struct b { void print() { std::cout << " b " << std::endl; }};
+struct c { void print() { std::cout << " c " << std::endl; }};
+
+template<int N>
+struct as {
+	template <class T> static auto& Parent(T& t) { return as<N - 1>::Parent(static_cast<typename T::parent_class&>(t)); }
+};
+template<>
+struct as<0> {
+	template <class T> static T& Parent(T& t) { return t; }
+};
+
+template<class...> struct tuple_array;
+template<class T> struct tuple_array<T> {
+T data;
+tuple_array(T t) : data(t) {}
+template<int i> auto& get() { static_assert(i == 0, "index out of bounds tuple"); return data; }
+auto& access() { return data; }
+};
+
+template<class T, class... set> struct tuple_array<T, set...> : tuple_array<set...> {
+T data;
+using parent_class = tuple_array<set...>;
+tuple_array(T t, set... s) : data(t), tuple_array<set...>(s...) {}
+auto& access() { return data; }
+
+};
+
+template<class... set>
+class Tuple {
+public:
+tuple_array<set...> array;
+Tuple(set... s) : array(s...) {
+
+}
+template<int i >
+auto& get() {
+	return as<i>::Parent(array).access();
+}
+};
+
+
+int main() {
+
+	Tuple<a, b, c, a> sf(a(), b(), c(), a());
+	Tuple<a, b> some(a(), b());
+	a().print();
+}

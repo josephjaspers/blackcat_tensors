@@ -1,4 +1,6 @@
 #include "../BlackCat_NeuralNetworks.h"
+#include "BlackCat_Tensors.h"
+
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -14,14 +16,14 @@ tensor expandOutput(int val, int total) {
 	//Convert a value to a 1-hot output vector
 	tensor out(total);
 	out.zero();
-	out.data()[val] = 1;
+	out[val] = (fp_type)1.0;
 	return out;
 }
 
-tensor&  normalize(tensor& tens, double max, double min) {
+tensor&  normalize(tensor& tens, fp_type max, fp_type min) {
 	//generic feature scaling (range of [0,1])
-	tens -= Scalar<double>(min);
-	tens /= Scalar<double>(max - min);
+	tens -= Scalar<fp_type, BC::ml>(min);
+	tens /= Scalar<fp_type, BC::ml>(max - min);
 
 	return tens;
 }
@@ -48,12 +50,16 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 
 int percept_MNIST() {
 
-	const int TRAINING_EXAMPLES = 2000;
-	const int TRAINING_ITERATIONS = 10;
+	const int TRAINING_EXAMPLES = 40;
+	const int TRAINING_ITERATIONS = 100;
 
 	//Generate the layers (params are: inputs, outputs)
-	FeedForward f1(784, 250);
-	FeedForward f2(250, 10);
+	FeedForward f1(784, 400);
+	FeedForward f2(400, 10);
+	OutputLayer o3(10);
+
+
+//	tup.get<1>().forwardPropagation(vec(10));
 
 	//Create the neural network
 	auto network = generateNetwork(f1, f2);
@@ -80,8 +86,8 @@ int percept_MNIST() {
 	for (int i = 0; i < TRAINING_ITERATIONS; ++i) {
 		std::cout << " iteration =  " << i << std::endl;
 		for (int j = 0; j < inputs.size(); ++j) {
-			vec residual = network.forwardPropagation(inputs[j]) - outputs[j];
-			network.backPropagation(residual);
+			network.forwardPropagation(inputs[j]);
+			network.backPropagation(outputs[j]);
 
 			//this is just the batch size
 			if (j % 100 == 0) {
@@ -92,6 +98,7 @@ int percept_MNIST() {
 	}
 
 	std::cout << "\n \n \n " << std::endl;
+	std::cout << " testing... " << std::endl;
 
 	for (int i = 0; i < 10; ++i) {
 		std::cout << " output " << std::endl;
@@ -108,8 +115,10 @@ int percept_MNIST() {
 }
 }
 }
+
+//
 //int main() {
 //	BC::MNIST_Test::percept_MNIST();
 //	std::cout << "success" << std::endl;
 //}
-//
+

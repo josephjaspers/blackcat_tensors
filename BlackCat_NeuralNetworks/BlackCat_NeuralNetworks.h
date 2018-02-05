@@ -11,7 +11,8 @@
 #include "NN_Core/Defaults.cu"
 #include "NN_Core/FeedForward.cu"
 #include "NN_Core/Layer.cu"
-#include "NN_Core/NeuralNetwork.cu"
-
+#include "NN_Core/NeuralNetwork.h"
+#include "NN_Core/OutputLayer.cu"
+#include "BlackCat_Tensors.h"
 
 #endif /* BLACKCAT_NEURALNETWORKS_H_ */

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Unary_Negation.h&apos; to &apos;Expression_Unary_Negation.cu&apos;" description="Rename resource &apos;Expression_Unary_Negation.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="BC_Internals/BC_Expressions/Expression_Unary_Negation.h" name="Expression_Unary_Negation.cu" stamp="1517697866900" updateReferences="true"/>&#x0A;&#x0A;&#x0A;</session>

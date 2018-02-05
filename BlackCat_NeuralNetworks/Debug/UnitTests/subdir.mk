@@ -4,16 +4,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CU_SRCS += \
-../UnitTests/DumbTest.cu \
-../UnitTests/Main.cu 
+../UnitTests/MNIST_test.cu \
+../UnitTests/MNIST_test_WithReadWriteExample.cu \
+../UnitTests/XOR_test.cu 
 
 OBJS += \
-./UnitTests/DumbTest.o \
-./UnitTests/Main.o 
+./UnitTests/MNIST_test.o \
+./UnitTests/MNIST_test_WithReadWriteExample.o \
+./UnitTests/XOR_test.o 
 
 CU_DEPS += \
-./UnitTests/DumbTest.d \
-./UnitTests/Main.d 
+./UnitTests/MNIST_test.d \
+./UnitTests/MNIST_test_WithReadWriteExample.d \
+./UnitTests/XOR_test.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

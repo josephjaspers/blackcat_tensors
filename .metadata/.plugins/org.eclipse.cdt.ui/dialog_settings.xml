@@ -37,12 +37,17 @@
 		<item value="759" key="height"/>
 	</section>
 	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration.internal">
-		<item value="162" key="size.height"/>
+		<item value="150" key="size.height"/>
 		<item value="442" key="size.width"/>
 	</section>
 	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration">
 	</section>
 	<section name="PDOMSearchPage">
+		<item value="false" key="caseSensitive"/>
+		<item value="227191" key="searchFlags"/>
+		<list key="previousPatterns">
+			<item value="generic"/>
+		</list>
 	</section>
 	<section name="RenameInformationPopup">
 	</section>

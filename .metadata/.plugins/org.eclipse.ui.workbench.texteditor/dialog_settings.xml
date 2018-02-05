@@ -2,22 +2,24 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="same" key="selection"/>
+		<item value="operator =" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="same"/>
-			<item value="samr"/>
-			<item value="operator="/>
+			<item value="gen"/>
 			<item value="operator ="/>
-			<item value="operator  ="/>
-			<item value="="/>
-			<item value="initialize"/>
-			<item value="Vector&lt;d"/>
+			<item value="std::get"/>
+			<item value="tup"/>
+			<item value="print"/>
+			<item value="free"/>
+			<item value="BC_ONE"/>
+			<item value="B"/>
 		</list>
 		<list key="replacehistory">
+			<item value="network.get"/>
+			<item value="network."/>
 			<item value=""/>
 			<item value="outer_packet"/>
 			<item value="inner_packet"/>
@@ -27,8 +29,8 @@
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="287" key="DIALOG_WIDTH"/>
 		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
-		<item value="412" key="DIALOG_HEIGHT"/>
-		<item value="1522" key="DIALOG_X_ORIGIN"/>
-		<item value="607" key="DIALOG_Y_ORIGIN"/>
+		<item value="441" key="DIALOG_HEIGHT"/>
+		<item value="1504" key="DIALOG_X_ORIGIN"/>
+		<item value="418" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>
