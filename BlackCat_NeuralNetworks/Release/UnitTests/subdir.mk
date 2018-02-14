@@ -5,16 +5,19 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CU_SRCS += \
 ../UnitTests/MNIST_test.cu \
+../UnitTests/MNIST_test_WithMultiThreading.cu \
 ../UnitTests/MNIST_test_WithReadWriteExample.cu \
 ../UnitTests/XOR_test.cu 
 
 OBJS += \
 ./UnitTests/MNIST_test.o \
+./UnitTests/MNIST_test_WithMultiThreading.o \
 ./UnitTests/MNIST_test_WithReadWriteExample.o \
 ./UnitTests/XOR_test.o 
 
 CU_DEPS += \
 ./UnitTests/MNIST_test.d \
+./UnitTests/MNIST_test_WithMultiThreading.d \
 ./UnitTests/MNIST_test_WithReadWriteExample.d \
 ./UnitTests/XOR_test.d 
 

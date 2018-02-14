@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-
+#include <omp.h>
 using BC::vec;
 typedef std::vector<vec> data;
 
@@ -27,6 +27,27 @@ tensor&  normalize(tensor& tens, fp_type max, fp_type min) {
 
 	return tens;
 }
+bool correct(const vec& hypothesis, const vec& output) {
+	int h_id = 0;
+	int o_id = 0;
+
+	double h_max = hypothesis.data()[0];
+	double o_max = output.data()[0];
+
+	for (int i = 1; i < hypothesis.size(); ++i) {
+		if (hypothesis.data()[i] > h_max) {
+			h_max = hypothesis.data()[i];
+			h_id = i;
+		}
+		if (output.data()[i] > o_max) {
+			o_max = output.data()[i];
+			o_id = i;
+		}
+	}
+	return h_id == o_id;
+}
+
+
 
 void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_data, int MAXVALS) {
 	unsigned vals = 0;
@@ -50,19 +71,18 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 
 int percept_MNIST() {
 
-	const int TRAINING_EXAMPLES = 40;
-	const int TRAINING_ITERATIONS = 100;
+	const int TRAINING_EXAMPLES = 40000;
+	const int TRAINING_ITERATIONS = 10	;
+
 
 	//Generate the layers (params are: inputs, outputs)
-	FeedForward f1(784, 400);
-	FeedForward f2(400, 10);
+	FeedForward f1(784, 250);
+	FeedForward f2(250, 10);
 	OutputLayer o3(10);
-
-
-//	tup.get<1>().forwardPropagation(vec(10));
-
 	//Create the neural network
-	auto network = generateNetwork(f1, f2);
+	auto network = generateNetwork(f1, f2, o3);
+//
+
 
 	data inputs;
 	data outputs;
@@ -80,22 +100,46 @@ int percept_MNIST() {
 	generateAndLoad(inputs, outputs, in_stream, TRAINING_EXAMPLES);
 	in_stream.close();
 
+
+
 	//Train
+	float t;
+	t = omp_get_wtime();
+		printf("\n Calculating... BC_NN training time \n");
+
+
+
 	std::cout << " training..." << std::endl;
 
 	for (int i = 0; i < TRAINING_ITERATIONS; ++i) {
 		std::cout << " iteration =  " << i << std::endl;
 		for (int j = 0; j < inputs.size(); ++j) {
+//			std::cout << " j =  " << j << std::endl;
+
 			network.forwardPropagation(inputs[j]);
 			network.backPropagation(outputs[j]);
 
-			//this is just the batch size
+			//Every 100 for a batch size of 100
 			if (j % 100 == 0) {
 			network.updateWeights();
 			network.clearBPStorage();
 			}
 		}
 	}
+
+
+	t = omp_get_wtime() - t;
+	printf("It took me %f clicks (%f seconds).\n", t, ((float) t));
+	std::cout << "success " << std::endl;
+
+	float correct_ = 0;
+	for (int i = 0; i < inputs.size(); ++i) {
+		if (correct(network.forwardPropagation(inputs[i]), outputs[i])) {
+			++correct_;
+		}
+	}
+	std::cout << " correct: " << correct_/inputs.size()  <<std::endl;
+
 
 	std::cout << "\n \n \n " << std::endl;
 	std::cout << " testing... " << std::endl;
@@ -116,9 +160,33 @@ int percept_MNIST() {
 }
 }
 
-//
+
 //int main() {
 //	BC::MNIST_Test::percept_MNIST();
 //	std::cout << "success" << std::endl;
 //}
+
+
+//to see some pictures
+//	mat pic1(28, 28);
+//	mat pic2(28, 28);
+//	pic1 = inputs[3];
+//	pic2 = pic1.t();
+//	pic2.printSparse(4);
+//
+//	pic1 = inputs[4];
+//	pic2 = pic1.t();
+//	pic2.printSparse(4);
+//
+//	pic1 = inputs[5];
+//	pic2 = pic1.t();
+//	pic2.printSparse(4);
+
+
+//	//Generate the layers (params are: inputs, outputs)
+//	FeedForward f1(784, 10);
+//	OutputLayer o3(10);
+//	//Create the neural network
+//	auto network = generateNetwork(f1, o3);
+//
 

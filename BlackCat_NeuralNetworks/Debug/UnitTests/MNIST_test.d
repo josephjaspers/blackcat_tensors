@@ -249,11 +249,10 @@ UnitTests/MNIST_test.o : ../UnitTests/MNIST_test.cu \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/cuda_fp16.hpp \
     /usr/include/c++/6/utility \
     /usr/include/c++/6/bits/stl_relops.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_MathLibraries/Mathematics_mGPU.cu \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Base.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Base.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/../BlackCat_Internal_Definitions.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Simple.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h \
     /usr/include/c++/6/memory \
@@ -289,7 +288,7 @@ UnitTests/MNIST_test.o : ../UnitTests/MNIST_test.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Core/Implementation_Core/../../BC_Expressions/Expression_Unary_Pointwise.cu \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Core/Implementation_Core/../../BC_Expressions/Expression_Base.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Core/Implementation_Core/../../BC_Expressions/Expression_Base.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Core/Implementation_Core/Tensor_Utility.h \
     /usr/include/c++/6/fstream \
     /usr/include/c++/6/bits/codecvt.h \
@@ -310,4 +309,6 @@ UnitTests/MNIST_test.o : ../UnitTests/MNIST_test.cu \
     ../UnitTests/../NN_Core/FeedForward.cu \
     ../UnitTests/../NN_Core/Layer.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions/BlackCat_TensorFunctions.cu \
-    ../UnitTests/../NN_Core/NeuralNetwork.cu
+    ../UnitTests/../NN_Core/NeuralNetwork.h \
+    ../UnitTests/../NN_Core/BlackCat_Tuple.cu \
+    ../UnitTests/../NN_Core/OutputLayer.cu

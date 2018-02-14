@@ -1,6 +1,6 @@
-23:44:38 **** Build of configuration Debug for project BlackCat_Tensors_Functions ****
+16:16:29 **** Build of configuration Debug for project BlackCat_Tensors_Functions ****
 make all 
 make: Nothing to be done for 'all'.
 
-23:44:38 Build Finished (took 263ms)
+16:16:29 Build Finished (took 259ms)
 

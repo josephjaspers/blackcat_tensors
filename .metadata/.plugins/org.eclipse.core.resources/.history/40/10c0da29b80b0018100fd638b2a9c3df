@@ -1,0 +1,23 @@
+/*
+ * BC_PointwiseDotproduct.cu
+ *
+ *  Created on: Feb 6, 2018
+ *      Author: joseph
+ */
+
+#ifndef BC_POINTWISEDOTPRODUCT_CU_
+#define BC_POINTWISEDOTPRODUCT_CU_
+
+namespace BC {
+#ifdef __CUDACC__
+#define __BC_gcpu__ __host__ __device__
+#define BLACKCAT_GPU_ENABLED
+#else
+#define __BC_gcpu__
+#endif
+
+}
+
+
+#endif
+#endif /* BC_POINTWISEDOTPRODUCT_CU_ */

@@ -4,20 +4,26 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CU_SRCS += \
+../NN_Core/BlackCat_Tuple.cu \
 ../NN_Core/Defaults.cu \
 ../NN_Core/FeedForward.cu \
+../NN_Core/FeedForwardInstantEval.cu \
 ../NN_Core/Layer.cu \
 ../NN_Core/OutputLayer.cu 
 
 OBJS += \
+./NN_Core/BlackCat_Tuple.o \
 ./NN_Core/Defaults.o \
 ./NN_Core/FeedForward.o \
+./NN_Core/FeedForwardInstantEval.o \
 ./NN_Core/Layer.o \
 ./NN_Core/OutputLayer.o 
 
 CU_DEPS += \
+./NN_Core/BlackCat_Tuple.d \
 ./NN_Core/Defaults.d \
 ./NN_Core/FeedForward.d \
+./NN_Core/FeedForwardInstantEval.d \
 ./NN_Core/Layer.d \
 ./NN_Core/OutputLayer.d 
 

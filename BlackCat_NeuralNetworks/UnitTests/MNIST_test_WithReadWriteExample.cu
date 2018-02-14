@@ -148,8 +148,8 @@ int percept_MNIST() {
 }
 
 
-int main() {
-	BC::MNIST_Test_ReadWrite::percept_MNIST();
-	std::cout << "success" << std::endl;
-}
+//int main() {
+//	BC::MNIST_Test_ReadWrite::percept_MNIST();
+//	std::cout << "success" << std::endl;
+//}
 

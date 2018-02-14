@@ -986,12 +986,11 @@
 <definedSymbol symbol="="/>
 <definedSymbol symbol="__CUDA_RUNTIME_H__="/>
 <definedSymbol symbol="CUDA_DOUBLE_MATH_FUNCTIONS="/>
-<definedSymbol symbol="__CUDA_ARCH__=300"/>
+<definedSymbol symbol="__CUDA_ARCH__=520"/>
 <definedSymbol symbol="__CUDACC__="/>
 <definedSymbol symbol="__NVCC__="/>
 <definedSymbol symbol="__NVCC__=1"/>
 <definedSymbol symbol="__DRIVER_TYPES_H__="/>
-<definedSymbol symbol="__CUDACC_DEBUG__="/>
 <definedSymbol symbol="__STDC__=1"/>
 <definedSymbol symbol="__cplusplus=201402L"/>
 <definedSymbol symbol="__cplusplus=201103L"/>

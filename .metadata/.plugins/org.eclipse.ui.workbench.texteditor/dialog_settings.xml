@@ -2,22 +2,23 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="operator =" key="selection"/>
+		<item value="ITERATION" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="gen"/>
+			<item value="iteration"/>
 			<item value="operator ="/>
-			<item value="std::get"/>
-			<item value="tup"/>
+			<item value="operator="/>
 			<item value="print"/>
-			<item value="free"/>
-			<item value="BC_ONE"/>
-			<item value="B"/>
+			<item value="cop"/>
+			<item value="co"/>
+			<item value="copy"/>
+			<item value="asBase"/>
 		</list>
 		<list key="replacehistory">
+			<item value="NeuralNetwork"/>
 			<item value="network.get"/>
 			<item value="network."/>
 			<item value=""/>
@@ -30,7 +31,7 @@
 		<item value="287" key="DIALOG_WIDTH"/>
 		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 		<item value="441" key="DIALOG_HEIGHT"/>
-		<item value="1504" key="DIALOG_X_ORIGIN"/>
-		<item value="418" key="DIALOG_Y_ORIGIN"/>
+		<item value="1442" key="DIALOG_X_ORIGIN"/>
+		<item value="236" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

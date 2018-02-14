@@ -19,6 +19,13 @@
 		<item value="294" key="org.eclipse.cdt.internal.ui.text.COutlineInformationControlDIALOG_HEIGHT"/>
 		<item value="907" key="org.eclipse.cdt.internal.ui.text.COutlineInformationControlDIALOG_X_ORIGIN"/>
 	</section>
+	<section name="org.eclipse.cdt.ui.OPEN_ACTION_SELECTION_DIALOG_SECTION">
+		<item value="466" key="DIALOG_WIDTH"/>
+		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
+		<item value="504" key="DIALOG_HEIGHT"/>
+		<item value="738" key="DIALOG_X_ORIGIN"/>
+		<item value="220" key="DIALOG_Y_ORIGIN"/>
+	</section>
 	<section name="org.eclipse.cdt.internal.ui.browser.opentype.OpenTypeActionSettings">
 		<item value="true" key="show_enums"/>
 		<item value="true" key="show_unions"/>
@@ -52,14 +59,20 @@
 	<section name="RenameInformationPopup">
 	</section>
 	<section name="CRenameRefactoringInputPage">
+		<item value="3" key="scope"/>
+		<item value="" key="workingset"/>
+		<item value="false" key="references_inv"/>
+		<item value="false" key="comment"/>
+		<item value="false" key="exhausiveFileSearch"/>
+		<item value="false" key="macroDefinition"/>
 	</section>
 	<section name="completion_proposal_size">
 	</section>
 	<section name="org.eclipse.cdt.internal.ui.typehierarchy.QuickHierarchy">
-		<item value="394" key="org.eclipse.cdt.internal.ui.typehierarchy.THInformationControlDIALOG_WIDTH"/>
+		<item value="400" key="org.eclipse.cdt.internal.ui.typehierarchy.THInformationControlDIALOG_WIDTH"/>
 		<item value="true" key="org.eclipse.cdt.internal.ui.typehierarchy.THInformationControlDIALOG_USE_PERSISTED_SIZE"/>
 		<item value="true" key="org.eclipse.cdt.internal.ui.typehierarchy.THInformationControlDIALOG_USE_PERSISTED_LOCATION"/>
-		<item value="294" key="org.eclipse.cdt.internal.ui.typehierarchy.THInformationControlDIALOG_HEIGHT"/>
+		<item value="300" key="org.eclipse.cdt.internal.ui.typehierarchy.THInformationControlDIALOG_HEIGHT"/>
 		<item value="917" key="org.eclipse.cdt.internal.ui.typehierarchy.THInformationControlDIALOG_X_ORIGIN"/>
 		<item value="438" key="org.eclipse.cdt.internal.ui.typehierarchy.THInformationControlDIALOG_Y_ORIGIN"/>
 	</section>

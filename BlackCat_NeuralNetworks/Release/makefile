@@ -11,6 +11,7 @@ RM := rm -rf
 -include subdir.mk
 -include UnitTests/subdir.mk
 -include NN_Core/subdir.mk
+-include NN_Core/Deprecated/subdir.mk
 
 OS_SUFFIX := $(subst Linux,linux,$(subst Darwin/x86_64,darwin,$(shell uname -s)/$(shell uname -m)))
 

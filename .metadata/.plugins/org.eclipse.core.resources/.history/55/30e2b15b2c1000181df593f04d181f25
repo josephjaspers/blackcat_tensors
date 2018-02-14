@@ -1,0 +1,63 @@
+/*
+ * Layer.cu
+ *
+ *  Created on: Jan 28, 2018
+ *      Author: joseph
+ */
+
+#ifndef LAYER_CU_
+#define LAYER_CU_
+
+#include "BlackCat_Tensors.h"
+#include "BlackCat_TensorFunctions.cu"
+#include "Defaults.cu"
+
+namespace BC {
+using namespace NN_Abreviated_Functions;
+
+
+template<class derived, template<class, template<class> class...> class... layers>
+class Layer {
+
+public:
+
+
+	template<class AUTO> auto forwardPropagation		(AUTO param) 	   { return asBase().forwardPropagation(param); }
+	template<class AUTO> auto forwardPropagation_Express(AUTO param) const { return asBase().forwardPropagation(param); }
+
+	template<class AUTO> auto backPropagation			 (AUTO param) { return asBase().forwardPropagation(param); }
+	template<class AUTO> auto backPropagation_ThroughTime(AUTO param) { return asBase().forwardPropagation(param); }
+
+	void updateWeights()  { asBase().updateWeights();  }
+	void clearBPStorage() { asBase().clearBPStorage(); }
+
+	void read(std::ofstream& os) { asBase().read(os); }
+	void write(std::ifstream& is) { asBase().write(is); }
+
+};
+
+template<class derived, template<class, template<class> class...> class layer_f, template<class> class... layers>
+class Layer<derived, layer_f, layers...> : layer_f<Layer<derived, layer_f, layers...>, layers...> {
+
+	const auto& next () const { return static_cast<layer_f<layer_f<Layer<derived, layer_f, layers...>, layers...>>>(*this); }
+
+public:
+
+
+	template<class AUTO> auto forwardPropagation		(AUTO param) 	   { return asBase().forwardPropagation(param); }
+	template<class AUTO> auto forwardPropagation_Express(AUTO param) const { return asBase().forwardPropagation(param); }
+
+	template<class AUTO> auto backPropagation			 (AUTO param) { return asBase().forwardPropagation(param); }
+	template<class AUTO> auto backPropagation_ThroughTime(AUTO param) { return asBase().forwardPropagation(param); }
+
+	void updateWeights()  { asBase().updateWeights();  }
+	void clearBPStorage() { asBase().clearBPStorage(); }
+
+	void read(std::ofstream& os) { asBase().read(os); }
+	void write(std::ifstream& is) { asBase().write(is); }
+
+};
+
+}
+
+#endif /* LAYER_CU_ */

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;BlackCat_NeuralNetworks/NN_Core/GPU_Perceptroncu&apos; to &apos;GPU_Percept.cu&apos;" description="Rename resource &apos;GPU_Perceptroncu&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="NN_Core/GPU_Perceptroncu" name="GPU_Percept.cu" stamp="1518570653167" updateReferences="true"/>
+</session>

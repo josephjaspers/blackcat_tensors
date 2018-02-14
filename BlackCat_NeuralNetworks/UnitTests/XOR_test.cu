@@ -6,7 +6,7 @@ namespace BC {
 void XOR_Test() {
 
 	std::cout << " main - NN test... " << std::endl;
-	vec d1 = { 0, 0 };
+	vec d1(2); d1[0] = 0; d1[1] =1;
 	vec d2 = { 1, 1 };
 	vec d3 = { 1, 0 };
 	vec d4 = { 0, 1 };
@@ -17,38 +17,23 @@ void XOR_Test() {
 	vec o4 = { 1 };
 
 	FeedForward f1(2, 40);
-	FeedForward f3(40, 1);
+	FeedForward f2(40, 1);
+	OutputLayer o_(1);
 
 //	NeuralNetwork<FeedForward,FeedForward> net(f1, f3);
-	auto net = generateNetwork(f1, f3);
-	vec output(1);
+	auto net = generateNetwork(f1, f2, o_);
 std::cout << " training " << std::endl;
 	for (int i = 0; i < 1000; ++i) {
-		output = net.forwardPropagation(d1);
-		vec res = output - o1;
-
-		net.backPropagation(res);
+		net.forwardPropagation(d1);
+		net.backPropagation(o1);
 		net.updateWeights();
 		net.clearBPStorage();
 
-		output = net.forwardPropagation(d2);
-		res = output - o2;
-		net.backPropagation(res);
+		net.forwardPropagation(d1);
+		net.backPropagation(o1);
 		net.updateWeights();
 		net.clearBPStorage();
 
-
-		output = net.forwardPropagation(d3);
-		res = output - o3;
-		net.backPropagation(res);
-		net.updateWeights();
-		net.clearBPStorage();
-
-		output = net.forwardPropagation(d4);
-		res = output - o4;
-		net.backPropagation(res);
-		net.updateWeights();
-		net.clearBPStorage();
 
 	}
 std::cout << " post training " << std::endl;

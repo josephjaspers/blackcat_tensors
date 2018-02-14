@@ -1,0 +1,17 @@
+/*
+ * Tuple.h
+ *
+ *  Created on: Feb 12, 2018
+ *      Author: joseph
+ */
+
+#ifndef TUPLE_H_
+#define TUPLE_H_
+
+
+//class... tuple --> means some unknown number of types
+
+
+//Assume this tuple is a size_of 0
+template<class... list>
+class Tuple {};

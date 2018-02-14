@@ -27,4 +27,5 @@ C_DEPS :=
 SUBDIRS := \
 UnitTests \
 NN_Core \
+NN_Core/Deprecated \
 

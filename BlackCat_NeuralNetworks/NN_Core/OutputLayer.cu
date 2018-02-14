@@ -21,14 +21,14 @@ public:
 	OutputLayer(int inputs) : INPUTS(inputs), hypothesis(inputs) {
 	}
 
-	template<class T> auto forwardPropagation(vec_expr<T> in) {
+	template<class T> vec forwardPropagation(const vec_expr<T>& in) {
 		return hypothesis == in;
 	}
-	template<class T> auto forwardPropagation_Express(vec_expr<T> x) const {
+	template<class T> vec forwardPropagation_Express(const vec_expr<T>& x) const {
 		return x;
 	}
 
-	template<class T> auto backPropagation(const vec_expr<T> y) {
+	template<class T> vec backPropagation(const vec_expr<T>& y) {
 		return hypothesis - y;
 	}
 

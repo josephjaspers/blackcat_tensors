@@ -1,0 +1,13 @@
+1518375868879	Delete resource 'BlackCat_Tensors3.4'
+1518404212932	Delete 2 resources
+1518404243900	Delete 2 resources
+1518404247555	Delete resource 'BlackCatMTNN/UnitTests/XOR_test.cu'
+1518549808905	Delete resource 'BlackCatMTNN/NN_Core/InputLayer.h'
+1518557757821	Delete resource 'BlackCatMTNN/BCMTNN.h'
+1518557765652	Delete resource 'BlackCatMTNN/NN_Core/BlackCat_Tuple.cu'
+1518557770123	Delete resource 'BlackCatMTNN/NN_Core/NeuralNetwork.h'
+1518557799451	Delete resource 'BlackCatMTNN/NN_Core/Tuple.h'
+1518564382964	Delete resource 'BlackCatMTNN'
+1518571335124	Delete resource 'BlackCat_NeuralNetworks/UnitTests/Copy of MNIST_GPUPercept.cu'
+1518571340219	Delete resource 'BlackCat_NeuralNetworks/NN_Core/GPU_Percept.cu'
+1518578665539	Delete resource 'BlackCat_Tensors/BC_Internals/BC_Core/RowVector.h'

@@ -1,0 +1,94 @@
+/*
+ * Layer.cu
+ *
+ *  Created on: Jan 28, 2018
+ *      Author: joseph
+ */
+
+#ifndef LAYER_CU_
+#define LAYER_CU_
+
+#include "BlackCat_Tensors.h"
+#include "BlackCat_TensorFunctions.cu"
+#include "Defaults.cu"
+
+namespace BC {
+using namespace NN_Abreviated_Functions;
+
+
+//Tail of Network
+template<class derived, template<class, template<class> class...> class... layers>
+class Layer {
+
+	using child  = derived;
+	using me = Layer<derived>;
+
+	const auto& prev () const { return static_cast<const child&>(*this); }
+		  auto& prev () 	  { return static_cast<		 child&>(*this); }
+
+	const auto& tail() const { return prev().tail(); }
+		  auto& tail() 		 { return prev().tail(); }
+
+	const auto& head() const { return static_cast<const me&>(*this); }
+		  auto& head() 		 { return static_cast<	  me&>(*this); }
+
+
+
+};
+
+template<class derived, template<class, template<class> class...> class layer_f, template<class> class... layers>
+class Layer<derived, layer_f, layers...> : layer_f<Layer<derived, layer_f, layers...>, layers...> {
+
+	using parent = layer_f<Layer<derived, layer_f, layers...>, layers...>;
+	using child  = derived;
+
+	const auto& next () const { return static_cast<const parent&>(*this); }
+		  auto& next () 	  { return static_cast<		 parent&>(*this); }
+
+	const auto& prev () const { return static_cast<const child&>(*this); }
+		  auto& prev () 	  { return static_cast<		 child&>(*this); }
+
+	const auto& head () const { return prev().head(); };
+		  auto&	head () 	  { return prev().head(); };
+
+	const auto& tail () const { return next().tail(); };
+		  auto&	tail () 	  { return next().tail(); };
+};
+
+template<template<class, template<class> class...> class layer_f, template<class> class... layers>
+class Layer<base, layer_f, layers...> : layer_f<Layer<derived, layer_f, layers...>, layers...> {
+
+	using parent = layer_f<Layer<derived, layer_f, layers...>, layers...>;
+	using child  = derived;
+
+	const auto& next () const { return static_cast<const parent&>(*this); }
+		  auto& next () 	  { return static_cast<		 parent&>(*this); }
+
+	const auto& prev () const { return static_cast<const child&>(*this); }
+		  auto& prev () 	  { return static_cast<		 child&>(*this); }
+
+	const auto& head () const { return prev().head(); };
+		  auto&	head () 	  { return prev().head(); };
+
+	const auto& tail () const { return next().tail(); };
+		  auto&	tail () 	  { return next().tail(); };
+};
+
+
+}
+
+#endif /* LAYER_CU_ */
+
+
+
+//	template<class AUTO> auto forwardPropagation		(AUTO param) 	   { return asBase().forwardPropagation(param); }
+//	template<class AUTO> auto forwardPropagation_Express(AUTO param) const { return asBase().forwardPropagation(param); }
+//
+//	template<class AUTO> auto backPropagation			 (AUTO param) { return asBase().forwardPropagation(param); }
+//	template<class AUTO> auto backPropagation_ThroughTime(AUTO param) { return asBase().forwardPropagation(param); }
+//
+//	void updateWeights()  { asBase().updateWeights();  }
+//	void clearBPStorage() { asBase().clearBPStorage(); }
+//
+//	void read(std::ofstream& os) { asBase().read(os); }
+//	void write(std::ifstream& is) { asBase().write(is); }
