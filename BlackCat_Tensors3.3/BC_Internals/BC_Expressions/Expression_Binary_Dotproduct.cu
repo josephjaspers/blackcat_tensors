@@ -74,6 +74,8 @@ struct binary_expression_dotproduct : non_linear_expression<T, binary_expression
 	using l_eval_array = typename MTF::determine_scalar<lv>::type;
 	using r_eval_array = typename MTF::determine_scalar<rv>::type;
 
+	const int lv_size = M * K;
+	const int rv_size = N * K;
 	const int eval_size = M * N ;
 
 	int size() const { return eval_size;}
@@ -85,6 +87,7 @@ struct binary_expression_dotproduct : non_linear_expression<T, binary_expression
 		right.printDimensions();
 	}
 
+	bool parent = true;
 	std::shared_ptr<scalar_type> array;
 	scalar_type* array_ptr = array.get();
 
