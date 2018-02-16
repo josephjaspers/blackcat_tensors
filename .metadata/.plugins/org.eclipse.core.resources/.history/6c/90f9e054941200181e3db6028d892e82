@@ -1,0 +1,54 @@
+/*
+ * TensorBase.h
+ *
+ *  Created on: Feb 15, 2018
+ *      Author: joseph
+ */
+
+#ifndef TENSORBASE_H_
+#define TENSORBASE_H_
+
+namespace BC {
+
+
+	template<class scalar, int order, class ml>
+	struct TensorBase {
+
+
+		struct ScalarShape {
+
+		};
+		struct VectorShape {
+
+			int m;
+		};
+
+		scalar* array;
+
+		template<class... integers>
+		TensorBase() {
+
+		}
+
+
+
+
+
+
+	};
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+#endif /* TENSORBASE_H_ */

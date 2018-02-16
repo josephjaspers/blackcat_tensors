@@ -1,6 +1,8 @@
 PROBLEMS_FILTERS_MIGRATE=true
 TASKS_FILTERS_MIGRATE=true
+TerminalPrefInvertColors=true
 eclipse.preferences.version=1
+overriddenByCSS=,TerminalPrefInvertColors,
 platformState=1509762417772
 quickStart=false
 tipsAndTricks=true

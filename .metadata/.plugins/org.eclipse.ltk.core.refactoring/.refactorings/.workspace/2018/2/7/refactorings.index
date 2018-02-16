@@ -11,3 +11,10 @@
 1518571335124	Delete resource 'BlackCat_NeuralNetworks/UnitTests/Copy of MNIST_GPUPercept.cu'
 1518571340219	Delete resource 'BlackCat_NeuralNetworks/NN_Core/GPU_Percept.cu'
 1518578665539	Delete resource 'BlackCat_Tensors/BC_Internals/BC_Core/RowVector.h'
+1518731699172	Delete 3 resources
+1518739136995	Delete resource 'BlackCat_Tensors3.3/Core/ShapeDeterminer.h'
+1518741717147	Delete resource 'BlackCat_Tensors3.3/main.cpp'
+1518741746953	Delete resource 'BlackCat_Tensors3.3/Release'
+1518741776131	Delete resource 'BlackCat_Tensors3.3/Release_'
+1518744955979	Delete resource 'BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Unary_Negation.cu'
+1518755377216	Delete resource 'BlackCat_Tensors3.3/BC_Internals/BC_Core/Implementation_Core/Tensor_IdentityClasses.h'

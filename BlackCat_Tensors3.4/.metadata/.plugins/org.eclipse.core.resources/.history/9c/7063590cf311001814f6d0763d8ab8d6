@@ -1,0 +1,28 @@
+/*
+ * BC_Core.h
+ *
+ *  Created on: Feb 14, 2018
+ *      Author: joseph
+ */
+
+#ifndef BC_CORE_H_
+#define BC_CORE_H_
+
+namespace BC {
+
+	template<class derived, class T, class ml>
+	class TensorBase  {
+
+		operator const derived&() { return static_cast<derived&>(*this); }
+		operator 	   derived&() { return static_cast<derived&>(*this); }
+
+
+			  derived& deriv() { return *this; }
+		const derived& deriv() const { return *this; }
+
+	};
+
+}
+foo
+
+#endif /* BC_CORE_H_ */

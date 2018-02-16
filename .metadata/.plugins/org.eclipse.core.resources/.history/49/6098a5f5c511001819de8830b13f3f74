@@ -1,0 +1,69 @@
+/*
+ * TensorCore.h
+ *
+ *  Created on: Feb 14, 2018
+ *      Author: joseph
+ */
+
+#ifndef TENSORCORE_H_
+#define TENSORCORE_H_
+
+#include "TensorCore_impl.cu"
+
+namespace BC {
+
+template<class derived, class Scalar_Type, class ML>
+class TensorCore {
+	static constexpr int order = derived::RANK();
+	static constexpr bool ownership = MTF::isPrimitive<Scalar_Type>::conditional;
+	using functor_type = typename TensorCore_impl<Scalar_Type, order, ML, ownership>::type;
+
+	functor_type array;
+
+	template<class... params>
+	TensorCore(const params&... p) : array(p...) {}
+
+	const auto& data() const { return array; }
+		  auto& data() 	     { return array; }
+
+
+			__BC_gcpu__ int rank() const {
+		return order;
+	}
+	__BC_gcpu__ int size() const {
+		return 0;
+	}
+	__BC_gcpu__ int rows() const {
+		return 0;
+	}
+	__BC_gcpu__ int cols() const {
+		return 0;
+	}
+	__BC_gcpu__ int LD_rows() const {
+		return 0;
+	}
+	__BC_gcpu__ int LD_cols() const {
+		return 0;
+	}
+
+	__BC_gcpu__ int dim(int i) const {
+		return 0;
+	}
+	__BC_gcpu__ int LD_dim(int i) const {
+		return 0;
+	}
+	__BC_gcpu__ void printDimensions() const {
+		std::cout << "[0]" << std::endl;
+	}
+	__BC_gcpu__ void resetShape(int i = 0) {
+	}
+	;
+
+
+};
+
+}
+
+
+
+#endif /* TENSORCORE_H_ */

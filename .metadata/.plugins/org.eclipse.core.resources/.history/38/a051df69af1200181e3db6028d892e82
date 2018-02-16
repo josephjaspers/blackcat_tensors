@@ -1,0 +1,84 @@
+/*
+ * Tensor_Base.h
+ *
+ *  Created on: Jan 6, 2018
+ *      Author: joseph
+ */
+
+#ifndef TENSOR_BASE_H_
+#define TENSOR_BASE_H_
+
+
+#include "Implementation_Core/Tensor_IdentityClasses.h"
+#include "Implementation_Core/Tensor_Operations.h"
+#include "Implementation_Core/Tensor_Utility.h"
+#include "Implementation_Core/Shape.h"
+#include "../BC_MathLibraries/Mathematics_CPU.h"
+#include "../BC_MathLibraries/Mathematics_GPU.cu"
+
+
+namespace BC {
+
+template<class, class, class> struct shell;
+template<template<class, class> class tensor, class U, class ml, class V, class M> struct shell<tensor<U, ml>, V, M> { using type = tensor<V, M>; };
+
+//Expression specialization
+template<class T, class derived, class Mathlib, class voider = void>
+class TensorBase :
+				public Tensor_Operations<T, derived, Mathlib>,
+				public Tensor_Utility  <T, derived, Mathlib, MTF::isPrimitive<T>::conditional>
+
+{
+
+protected:
+	struct DISABLE;
+
+	using math_parent  = Tensor_Operations<T, derived, Mathlib>;
+//	using shape_parent = Shape;
+
+	using functor_type 			= typename Tensor_Operations<T, derived, Mathlib>::functor_type;
+	using subAccess_int 		= DISABLE;
+	using force_evaluation_int 	= int;
+
+
+	const Shape& shape;
+public:
+	void printDetails() const { shape.printDetails(); }
+	int rank() const { return shape.rank(); }
+	int size() const { return shape.size(); }
+	int rows() const { return shape.rows(); }
+	int cols() const { return shape.cols(); }
+	int dimension(int i) const { return shape.dimension(i); }
+	void printDimensions() const {  shape.printDimensions(); }
+	void printLDDimensions() const {  shape.printLDDimensions(); }
+
+	int LD_rows() const { return shape.LD_rows(); }
+	int LD_cols() const { return shape.LD_cols(); }
+
+	const int* InnerShape() const { return shape.InnerShape(); }
+	const Shape& expression_packet() const { return shape; }
+	auto shape_copy_packet() const 	{ return shape.shape_copy_packet(); }
+	auto accessor_packet() const    { return shape.accessor_packet(); }
+	Shape transpose_packet() const   { return shape.transpose_packet();}
+	Shape dotproduct_packet(int eval_order, const Shape& sh) const { return shape.dotproduct_packet(eval_order, sh); }
+	const Shape& asShape() const { return shape; }
+
+
+	operator  const derived&() const { return static_cast<const derived&>(*this); }
+	operator  derived&() { return static_cast<derived&>(*this); }
+
+	functor_type array;
+
+	template<class... params> TensorBase(const Shape& exp, const params&... p) : shape(exp), array(p...) {}
+    TensorBase(		 derived&& tensor) : shape(tensor.expression_packet()), array(tensor.data()){}
+	TensorBase(const derived& tensor) : shape(tensor.expression_packet()), array(tensor.data()){}
+
+
+
+};
+
+}
+
+
+#endif /* TENSOR_BASE_H_ */
+

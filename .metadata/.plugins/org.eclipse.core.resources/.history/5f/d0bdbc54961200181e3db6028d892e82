@@ -1,0 +1,30 @@
+/*
+ * Expression.h
+ *
+ *  Created on: Feb 15, 2018
+ *      Author: joseph
+ */
+
+#ifndef EXPRESSION_H_
+#define EXPRESSION_H_
+
+namespace BC {
+
+template<class derived>
+struct Expression {
+
+};
+
+template<class lv, class rv>
+struct binary_expression {
+
+
+
+};
+
+
+}
+
+
+
+#endif /* EXPRESSION_H_ */

@@ -1,0 +1,21 @@
+/*
+ * Expression.h
+ *
+ *  Created on: Feb 15, 2018
+ *      Author: joseph
+ */
+
+#ifndef EXPRESSION_H_
+#define EXPRESSION_H_
+
+namespace BC {
+struct Expression {
+
+};
+
+
+}
+
+
+
+#endif /* EXPRESSION_H_ */

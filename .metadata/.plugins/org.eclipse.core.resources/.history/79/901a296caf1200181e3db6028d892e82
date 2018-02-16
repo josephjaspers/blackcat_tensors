@@ -1,0 +1,24 @@
+
+
+
+/*
+ * Shape.h
+ *
+ *  Created on: Jan 18, 2018
+ *      Author: joseph
+ */
+
+#ifndef SHAPE_H_
+#define SHAPE_H_
+
+#include <vector>
+
+namespace BC {
+
+
+}
+
+#endif /* SHAPE_H_ */
+
+
+

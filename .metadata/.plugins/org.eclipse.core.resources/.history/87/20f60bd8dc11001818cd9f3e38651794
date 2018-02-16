@@ -1,0 +1,68 @@
+/*
+ * Tensor_Functor_impl.cu
+ *
+ *  Created on: Feb 14, 2018
+ *      Author: joseph
+ */
+
+#ifndef TENSOR_FUNCTOR_IMPL_CU_
+#define TENSOR_FUNCTOR_IMPL_CU_
+
+
+namespace BC {
+
+
+
+template<class scalar_type, class functor_type, class mathlib, int order>
+struct Tensor_Functor_impl {
+
+	struct DEFAULTER   { template<class... T> static void impl(const T&...) {} };
+	struct INITIALIZER { template<class  T>   static void impl(T*& param, int sz) { mathlib::initialize(param, sz); } };
+
+	template<bool, class a, class b = DEFAULTER>
+	struct function_if : a{};
+
+
+
+struct ScalarCore {
+
+	functor_type array;
+
+	template<class... params>
+	ScalarCore(const params&... p) : array(p...) {
+		function_if<sizeof...(params) == 0, INITIALIZER>::impl(array, 1);
+	}
+};
+
+struct MatrixCore {
+
+	int m;
+	int n;
+
+	functor_type array;
+
+	template<class... params>
+	MatrixCore(int m_, int n_, const params&... p) : array(p...), m(m_), n(n_) {
+		function_if<sizeof...(params) == 0, INITIALIZER>::impl(array, 1);
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+};
+
+
+
+
+}
+
+
+#endif /* TENSOR_FUNCTOR_IMPL_CU_ */

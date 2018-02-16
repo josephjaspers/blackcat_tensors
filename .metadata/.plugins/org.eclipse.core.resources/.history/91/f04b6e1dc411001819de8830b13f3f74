@@ -1,0 +1,34 @@
+/*
+ * TensorCore.h
+ *
+ *  Created on: Feb 14, 2018
+ *      Author: joseph
+ */
+
+#ifndef TENSORCORE_H_
+#define TENSORCORE_H_
+
+namespace BC {
+
+template<class derived, class Scalar_Type, class ML>
+class TensorCore {
+	static constexpr int order = derived::RANK();
+	static constexpr bool ownership = MTF::isPrimitive<Scalar_Type>::conditional;
+	using functor_type = typename TensorCore_impl<Scalar_Type, order, ML, ownership>::type;
+
+	functor_type array;
+
+	template<class... params>
+	TensorCore(const params&... p) : array(p...) {}
+
+	const auto& data() const { return array; }
+		  auto& data() 	     { return array; }
+
+};
+
+
+}
+
+
+
+#endif /* TENSORCORE_H_ */
