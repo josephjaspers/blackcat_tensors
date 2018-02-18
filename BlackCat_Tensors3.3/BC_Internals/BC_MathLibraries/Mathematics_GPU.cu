@@ -12,7 +12,6 @@
 
 #include "BC_PrintFunctions.h"
 
-#include "../BlackCat_Internal_Definitions.h"
 #include "BC_PrintFunctions.h"
 #include <cublas_v2.h>
 
@@ -36,6 +35,8 @@ static const float* const BC_ZERO = static_initialize(1, 1);
 
 class GPU {
 public:
+
+	static constexpr int CUDA_BASE_THREADS = 256;
 
 	static int blocks(int size) {
 		return (size + CUDA_BASE_THREADS - 1) / CUDA_BASE_THREADS;

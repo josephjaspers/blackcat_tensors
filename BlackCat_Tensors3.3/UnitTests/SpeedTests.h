@@ -40,7 +40,7 @@ int speedTestDelayedEval() {
 	t = omp_get_wtime();
 
 	for (int i = 0; i < reps; ++i) {
-		a = (e == b ** c + d).unExpr<x2>();
+		a = (b ** c + d);
 	}
 
 	t = omp_get_wtime() - t;

@@ -8,6 +8,67 @@ using BC::Scalar;
 template<class T>
 T copy(const T& t) { return t; }
 
+auto dp_test () {
+
+	Matrix<double> a(3, 2);
+	Matrix<double> b(2 ,3);
+	Matrix<double> d(2, 3);
+	Matrix<double> e(3, 2);
+	Matrix<double> c(2, 2);
+
+	for (int i = 0; i < 6; ++i)  {
+		b.data()[i] = i + 7;
+		a.data()[i] = i + 1;
+	}
+
+	std::cout << std::endl;
+
+
+
+
+
+	d = a.t();
+	e = b.t();
+
+
+	a.print();
+	b.print();
+	d.print();
+	e.print();
+
+
+	std::cout << " post print  " << std::endl;
+
+//	Scalar<double> C(2);
+
+//	Vector<double> D_(6);
+
+	std::cout << " simple dot product " << std::endl;
+//	D_ = a.t() + b.t();
+//	D_.print();
+	c = d * e;
+	c.print();
+	Scalar<double> A(2);
+	Scalar<double> B(2);
+
+	std::cout << " dot product " << std::endl;
+
+	c = a.t() * b.t();
+	std::cout << " dot product 222 " << std::endl;
+
+	c = a.t() * A * (b.t() * Scalar<double>(2));
+////
+	c.print();
+
+	std::cout << "done  copy " << std::endl;
+
+
+	std::cout << "successsasd " << std::endl;
+//	return 0;
+//	return c_copy;
+}
+
+
 int VectorPointwise() {
 
 std::cout << "Vector test " <<std::endl;
@@ -63,6 +124,8 @@ std::cout << "Vector test " <<std::endl;
 	a = b ** c;
 	a.print();
 
+
+	return 0;
 }
 
 int MatrixPointwise() {
@@ -110,23 +173,44 @@ std::cout << "Matrix test " <<std::endl;
 //d.printDetails();
 	e = (c * d);
 
-
-
-	z.print();
 	std::cout << " success " << std::endl;
 
 	return 0;
 }
 
+struct A {
+	int* alpha;
+
+	operator int*() { return alpha; }
+};
+
+template<class,class>
+struct same  { static constexpr bool value = false; };
+
+template<class t>
+struct same<t,t>  { static constexpr bool value = true; };
+
+
+
+
 
 int main() {
 
+	speedTestDelayedEval<128,     100000>();
+	speedTestDelayedEval<256,     100000>();
+	speedTestDelayedEval<512,     100000>();
+	speedTestDelayedEval<1024,    100000>();
+	speedTestDelayedEval<2048,    100000>();
+	speedTestDelayedEval<5096,    100000>();
+	speedTestDelayedEval<10000,   100000>();
+	speedTestDelayedEval<20000,   100000>();
+	speedTestDelayedEval<40000,   100000>();
+	speedTestDelayedEval<80000,   100000>();
+	speedTestDelayedEval<100000,  100000>();
 	MatrixPointwise();
-//	VectorPointwise();
-
-	//	dp_test();
-
-
+	VectorPointwise();
+//
+		dp_test();
 
 	std::cout << " success  main"<< std::endl;
 

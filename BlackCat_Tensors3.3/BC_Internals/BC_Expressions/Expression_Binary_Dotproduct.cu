@@ -8,12 +8,10 @@
 #ifndef EXPRESSION_BINARY_DOTPRODUCT_CU_
 #define EXPRESSION_BINARY_DOTPRODUCT_CU_
 
-
 #include "Expression_Binary_Dotproduct_impl.cu"
 #include "Expression_Base.cu"
-#include "../BlackCat_Internal_Definitions.h"
+#include "BlackCat_Internal_Definitions.h"
 #include "../BC_MetaTemplateFunctions/Adhoc.h"
-#include "../BC_Core/Implementation_Core/Tensor_Core.h"
 #include <iostream>
 #include <memory>
 
@@ -24,37 +22,10 @@ namespace BC {
  * b = K x N
  * c = M x N
  */
-
-//The evaluation of dot_products are tightly coupled with the unary expression - transpose, and binary expression scalar L and scalar R.T*
-//This is just because CUDA doesn't have constexpr_if support yet. Get on it guys.
-template<class T, class U>
-void assignDP(T* from, U to) {
-	throw std::invalid_argument("Illegal Assign");
-}
-template<class T, class lv, class rv>
-void assignDP(T*& from, binary_expression<T, assign, lv, rv>& bed) {
-	from = bed.left;
-}
-template<class T>
-void assignDP(T*& from, T* to) {
-	from = to;
-}
-
-
-template<class T, class lv, class rv, class Mathlibrary>
-struct binary_expression_dotproduct : non_linear_expression<T, binary_expression_dotproduct<T, lv, rv, Mathlibrary>> {
+//det_Eval
+template<class T, class lv, class rv, class Mathlib>
+struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
 	using scalar_type = typename MTF::determine_scalar<T>::type;
-
-	//this is the deleter for the shared ptr --> We use a shared pointer so that everytime you pass the extended function of a dot product
-	//the program does not recalculate the dot_product //Normally I hate shared pointers.
-	struct deleter {
-		void operator()(const scalar_type* t) {
-			Mathlibrary::destroy(t);
-		}
-	};
-
-	static constexpr int ALPHA_DEFAULT  = 1;
-	static constexpr int BETA_DEFAULT   = 0;
 
 	const lv& left;
 	const rv& right;
@@ -62,17 +33,16 @@ struct binary_expression_dotproduct : non_linear_expression<T, binary_expression
 	const int M = left.rows();
 	const int N = right.cols();
 	const int K = left.cols();
-	const int LDA = left.LD_rows();
-	const int LDB = right.LD_rows();
+	const int LDA;// = left.LD_rows();
+	const int LDB;// = right.LD_rows();
 	const int LDC = M;
 
-	static constexpr bool lv_needs_to_be_evaluated = evaluate<lv>::conditional;
-	static constexpr bool rv_needs_to_be_evaluated = evaluate<rv>::conditional;
-	static constexpr bool transA = evaluate<lv>::transpose;
-	static constexpr bool transB = evaluate<rv>::transpose;
-
-	using l_eval_array = typename MTF::determine_scalar<lv>::type;
-	using r_eval_array = typename MTF::determine_scalar<rv>::type;
+	static constexpr bool transA = det_eval<lv>::transposed;
+	static constexpr bool transB = det_eval<rv>::transposed;
+	static constexpr bool lv_scalar = det_eval<lv>::scalar;
+	static constexpr bool rv_scalar = det_eval<rv>::scalar;
+	static constexpr bool lv_eval = det_eval<lv>::evaluate;
+	static constexpr bool rv_eval = det_eval<rv>::evaluate;
 
 	const int lv_size = M * K;
 	const int rv_size = N * K;
@@ -81,83 +51,70 @@ struct binary_expression_dotproduct : non_linear_expression<T, binary_expression
 	int size() const { return eval_size;}
 	int rows() const { return M;}
 	int cols() const { return N;}
+
 	void printDimensions() const {
 		std::cout << "dotproduct dim: " << std::endl;
 		left.printDimensions();
 		right.printDimensions();
 	}
 
-	bool parent = true;
 	std::shared_ptr<scalar_type> array;
 	scalar_type* array_ptr = array.get();
 
 	__attribute__((always_inline))
 	binary_expression_dotproduct(const lv& left, const rv& right) :
-	left(left), right(right) {
+	left(left), right(right), LDA(left.LD_rows()), LDB(right.LD_rows()) {
 
+		Mathlib::initialize(array_ptr,eval_size);
+		array = std::shared_ptr<scalar_type>(array_ptr);
 		eval();
-		array_ptr = array.get();
 	}
 
 
 public:
 
 	void eval() {
-		auto A_unevaluated = evaluate<lv>::getArray(left);
-		auto B_unevaluated = evaluate<rv>::getArray(right);
-		scalar_type* scal_A = evaluate<lv>::getScalar(left);
-		scalar_type* scal_B = evaluate<rv>::getScalar(right);
 
-		T* A;
-		T* B;
+		T* A = nullptr;
+		T* B = nullptr;
+		T* alpha = nullptr;
+		T* alpha2 = nullptr;
 
-		if (lv_needs_to_be_evaluated) {
-			if (self_eval<lv>::conditional) {
-				Mathlibrary::eval(A_unevaluated, lv_size);
-				assignDP(A, A_unevaluated);
-			} else {
-			Mathlibrary::initialize(A, lv_size);
-			Mathlibrary::copy(A, A_unevaluated, lv_size);
-			}
-		}
-			else { assignDP(A, A_unevaluated); }
-
-		if (rv_needs_to_be_evaluated) {
-			if (self_eval<rv>::conditional) {
-				Mathlibrary::eval(B_unevaluated, rv_size);
-				assignDP(B, B_unevaluated);
-			} else {
-				Mathlibrary::initialize(B, rv_size);
-				Mathlibrary::copy(B, B_unevaluated, rv_size);
-			}
-		}
-			else { assignDP(B, B_unevaluated); }
-
-
-		scalar_type* tmp;
-		Mathlibrary::initialize(tmp, eval_size);
-		array = std::shared_ptr<scalar_type>(tmp, deleter());
-
-		//If both sides are multiplied by a scalar --- multiply the scalars
-		if (scal_A && scal_B) {
-			T* scalar;
-			Mathlibrary::initialize(scalar, 1);
-			Mathlibrary::scalarMul(scalar, scal_A, scal_B);
-			Mathlibrary::MatrixMul(transA, transB, A, B, array.get(), M, N, K, scalar, nullptr, LDA, LDB, LDC);
-			Mathlibrary::destroy(scalar);
-		} else if (scal_A) {
-		Mathlibrary::MatrixMul(transA, transB, A, B, array.get(), M, N, K, scal_A, nullptr, LDA, LDB, LDC);
-		} else if (scal_B){
-			scal_A = scal_B;
-			scal_B = nullptr;
-			Mathlibrary::MatrixMul(transA, transB, A, B, array.get(), M, N, K, scal_A, nullptr, LDA, LDB, LDC);
+		if (lv_eval) {
+			Mathlib::initialize(A, lv_size);
+			Mathlib::copy(A, left, lv_size);
 		} else {
-			Mathlibrary::MatrixMul(transA, transB, A, B, array.get(), M, N, K, nullptr, nullptr, LDA, LDB, LDC);
+			A = det_eval<lv>::getArray(left);
+		}
+		if (rv_eval) {
+			Mathlib::initialize(B, rv_size);
+			Mathlib::copy(B, right, rv_size);
+		} else {
+			B = det_eval<rv>::getArray(right);
+		}
+		if (lv_scalar) {
+			alpha = det_eval<lv>::getScalar(left);
+		}
+		if (rv_scalar) {
+			alpha2 = det_eval<rv>::getScalar(right);
 		}
 
+		if (lv_scalar && rv_scalar){
+			T* tmp;
+			Mathlib::initialize(tmp, 1);
+			Mathlib::scalarMul(tmp, alpha, alpha2);
+			Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M, N, K, tmp, nullptr, LDA, LDB, LDC);
+			Mathlib::destroy(tmp);
 
-		if (lv_needs_to_be_evaluated && !self_eval<lv>::conditional) { Mathlibrary::destroy(A); }
-		if (rv_needs_to_be_evaluated && !self_eval<rv>::conditional) { Mathlibrary::destroy(B); }
+		} else if (rv_scalar)
+			 Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M, N, K, alpha2, nullptr, LDA, LDB, LDC);
+		 else
+			 Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M, N, K, nullptr, nullptr, LDA, LDB, LDC);
+
+		if (!lv_eval)
+			Mathlib::destroy(A);
+		if (!rv_eval)
+			Mathlib::destroy(B);
 
 	}
 

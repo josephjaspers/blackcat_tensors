@@ -26,7 +26,7 @@
  *
  *
  */
-#include "BlackCat_Internal_Definitions.h"
+#include "BC_Expressions/BlackCat_Internal_Definitions.h"
 #include "BlackCat_ForwardDecls.h"
 //Math libraries
 #include "BC_MathLibraries/Mathematics_CPU.h"

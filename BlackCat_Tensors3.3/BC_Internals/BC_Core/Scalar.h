@@ -26,7 +26,7 @@ public:
 	Scalar(const Scalar&& t) : parent_class(t) 		{}
 	Scalar(		 Scalar&& t) : parent_class(t) 		{}
 	Scalar(const Scalar&  t) : parent_class(t) 		{}
-	template<class... params> Scalar(Tensor_Core<T, Mathlib> sh, const params&... p) : parent_class(sh, p...) {}
+	template<class... params> Scalar(Tensor_Core<T, Mathlib, Scalar<T, Mathlib>> sh, const params&... p) : parent_class(sh, p...) {}
 
 	Scalar& operator =(const Scalar&  t) { return parent_class::operator=(t); }
 	Scalar& operator =(const Scalar&& t) { return parent_class::operator=(t); }
@@ -36,8 +36,8 @@ public:
 	Scalar& operator =(T scalar) { Mathlib::DeviceToHost(this->data(), &scalar, 1); return *this; }
 
 	using _shape = std::vector<int>;
-	Scalar(T* param) : parent_class(Tensor_Core<T, Mathlib>(param)) {}
-	Scalar(T value) : parent_class(Tensor_Core<T, Mathlib>(_shape(1))) {
+	Scalar(T* param) : parent_class(Tensor_Core<T, Mathlib, Scalar<T, Mathlib>>(param)) {}
+	Scalar(T value) : parent_class(Tensor_Core<T, Mathlib, Scalar<T, Mathlib>>(_shape(1))) {
 		Mathlib::HostToDevice(this->data().ary(), &value, 1);
 	}
 };

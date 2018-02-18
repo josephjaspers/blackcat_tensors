@@ -1,5 +1,0 @@
-TerminalPrefInvertColors=true
-eclipse.preferences.version=1
-overriddenByCSS=,TerminalPrefInvertColors,
-properties/BlackCat_Tensors3.4.com.nvidia.cuda.ide.nine_zero.exe.1414627159/com.nvidia.cuda.ide.nine_zero.configuration.debug.1701844304=com.nvidia.host.assembler.213189364\=rebuildState\\\=true\\n\nnvcc.archiver.base.232867204\=rebuildState\\\=true\\n\ncom.nvidia.cuda.tools.toolchain.nine_zero.exe.debug.1576063987\=rebuildState\\\=true\\n\nnvcc.linker.base.1811870770\=rebuildState\\\=true\\n\nnvcc.compiler.base.1174126349\=rebuildState\\\=true\\n\n
-properties/BlackCat_Tensors3.4.com.nvidia.cuda.ide.nine_zero.exe.1414627159/com.nvidia.cuda.ide.nine_zero.configuration.release.357572967=nvcc.compiler.base.2086564210\=rebuildState\\\=true\\n\nnvcc.archiver.base.1675673200\=rebuildState\\\=true\\n\ncom.nvidia.host.assembler.959501677\=rebuildState\\\=true\\n\ncom.nvidia.cuda.ide.toolchain.nine_zero.exe.release.457622571\=rebuildState\\\=true\\n\nnvcc.linker.base.936215848\=rebuildState\\\=true\\n\n

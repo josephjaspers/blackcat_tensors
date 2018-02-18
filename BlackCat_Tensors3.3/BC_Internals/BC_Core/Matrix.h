@@ -30,7 +30,7 @@ public:
 	Matrix(const Matrix&  v) : parent_class(v) {}
 	Matrix(		 Matrix&& v) : parent_class(v) {}
 	Matrix(const Matrix&& v) : parent_class(v) {}
-	Matrix(int rows, int cols = 1) : parent_class(Tensor_Core<T, Mathlib>({rows, cols})) {}
+	Matrix(int rows, int cols = 1) : parent_class(Tensor_Core<T, Mathlib, Matrix<T, Mathlib>>({rows, cols})) {}
 
 	template<class U> 		  Matrix(const Matrix<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Matrix(	   Matrix<U, Mathlib>&& t) : parent_class(t) {}
@@ -42,7 +42,7 @@ public:
 	template<class U>
 	Matrix& operator = (const Matrix<U, Mathlib>& t) { return parent_class::operator=(t); }
 
-	Matrix(std::initializer_list<T> sh) : parent_class(Tensor_Core<T, Mathlib>({(int)sh.size()})) { Mathlib::HostToDevice(this->data(), sh.begin(), this->size()); }
+	Matrix(std::initializer_list<T> sh) : parent_class(Tensor_Core<T, Mathlib, Matrix<T, Mathlib>>({(int)sh.size()})) { Mathlib::HostToDevice(this->data(), sh.begin(), this->size()); }
 
 	Vector<T, Mathlib> operator[] (int i) {
 		return (Vector<T, Mathlib>(this->accessor_packet(), &this->array[i]));
@@ -51,7 +51,7 @@ public:
 		return Vector<T, Mathlib>(this->accessor_packet(), &this->array[i]);
 	}
 	const Matrix<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib> t() const {
-		return Matrix<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib>(this->transpose_packet());
+		return Matrix<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib>(this->data());
 	}
 
 

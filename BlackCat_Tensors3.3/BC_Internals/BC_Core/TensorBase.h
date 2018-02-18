@@ -18,23 +18,19 @@
 
 namespace BC {
 
-template<bool var, class a, class b>
-using ifte = typename std::conditional<var, a, b>::type; //ifte -- if than, else
-
-template<class T>
-static constexpr bool prim = MTF::isPrimitive<T>::conditional;
-
+using MTF::prim; //isPrimitive
+using MTF::ifte; //if then else
 
 template<class T, class derived, class Mathlib, class voider = void>
 class TensorBase :
-				public Tensor_Operations <T, ifte<prim<T>, Tensor_Core<T, Mathlib>, T>, derived, Mathlib>,
+				public Tensor_Operations <T, ifte<prim<T>, Tensor_Core<T, Mathlib, derived>, T>, derived, Mathlib>,
 				public Tensor_Utility    <T, derived, Mathlib, prim<T>>
 
 {
 
 protected:
-	using math_parent  = Tensor_Operations<T, ifte<prim<T>, Tensor_Core<T, Mathlib>, T>, derived, Mathlib>;
-	using functor_type 			=  ifte<prim<T>, Tensor_Core<T, Mathlib>, T>;
+	using math_parent  = Tensor_Operations<T, ifte<prim<T>, Tensor_Core<T, Mathlib, derived>, T>, derived, Mathlib>;
+	using functor_type =  ifte<prim<T>, Tensor_Core<T, Mathlib, derived>, T>;
 	functor_type black_cat_array;
 
 public:
@@ -60,13 +56,8 @@ public:
 	void printLDDimensions()	const { black_cat_array.printLDDimensions(); }
 
 	const int* InnerShape() const 			{ return black_cat_array.InnerShape(); }
-	auto accessor_packet(int index) const   { return black_cat_array.accessor_packet(index); }
-	auto transpose_packet() 		const   { return black_cat_array.transpose_packet();}
-
-	auto dotproduct_packet(int eval_order, const Tensor_Core<T, Mathlib>& sh) const
-											{ return black_cat_array.dotproduct_packet(eval_order, sh.black_cat_array); }
-
-	const functor_type& _data() const { return black_cat_array;  }
+	const int* OuterShape() const 			{ return black_cat_array.OuterShape(); }
+	const functor_type& _data() const { return black_cat_array; }
 		  functor_type& _data()		  { return black_cat_array; }
 };
 

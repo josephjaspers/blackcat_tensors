@@ -53,6 +53,8 @@
 		<item value="false" key="caseSensitive"/>
 		<item value="227191" key="searchFlags"/>
 		<list key="previousPatterns">
+			<item value="ifte"/>
+			<item value="Tensor_Core"/>
 			<item value="generic"/>
 		</list>
 	</section>

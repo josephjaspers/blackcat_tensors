@@ -7,7 +7,7 @@
 #ifdef  __CUDACC__
 #ifndef EXPRESSION_BINARY_FUNCTORS_H_
 #define EXPRESSION_BINARY_FUNCTORS_H_
-#include "../BlackCat_Internal_Definitions.h" //__BC_gcpu__
+#include "BlackCat_Internal_Definitions.h" //__BC_gcpu__
 
 #include <iostream>
 namespace BC {

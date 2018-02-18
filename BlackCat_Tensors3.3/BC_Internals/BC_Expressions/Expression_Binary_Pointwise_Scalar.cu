@@ -10,7 +10,7 @@
 #define EXPRESSION_BINARY_POINTWISE_SCALAR_H_
 
 #include "Expression_Base.cu"
-#include "../BlackCat_Internal_Definitions.h"
+#include "BlackCat_Internal_Definitions.h"
 
 namespace BC {
 
@@ -29,6 +29,7 @@ public:
 	int rows() const { return right.rows(); };
 	int cols() const { return right.cols(); };
 	int size() const { return right.size(); };
+	int LD_rows() const { return right.LD_rows(); }
 	void printDimensions() const { right.printDimensions(); }
 
 	inline __attribute__((always_inline))  __BC_gcpu__ binary_expression_scalar_L(const lv& l, const rv& r) : left(l), right(r) {}
@@ -48,6 +49,7 @@ public:
 	int rows() const { return left.rows(); };
 	int cols() const { return left.cols(); };
 	int size() const { return left.size(); };
+	int LD_rows() const { return left.LD_rows(); }
 	void printDimensions() const { left.printDimensions(); }
 
 
