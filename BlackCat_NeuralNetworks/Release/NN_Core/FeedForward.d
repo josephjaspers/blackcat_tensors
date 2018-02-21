@@ -134,6 +134,8 @@ NN_Core/FeedForward.o : ../NN_Core/FeedForward.cu \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/surface_indirect_functions.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/device_launch_parameters.h \
     ../NN_Core/Layer.cu \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions/BlackCat_TensorFunctions.cu \
+    ../NN_Core/Defaults.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BlackCat_Tensors.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BlackCat_Internal_GlobalUnifier.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BlackCat_Internal_Definitions.h \
@@ -314,6 +316,4 @@ NN_Core/FeedForward.o : ../NN_Core/FeedForward.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Core/../BC_MathLibraries/Mathematics_CPU.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Core/../BC_MathLibraries/Mathematics_GPU.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Core/Vector.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Core/Matrix.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions/BlackCat_TensorFunctions.cu \
-    ../NN_Core/Defaults.cu
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors/BC_Internals/BC_Core/Matrix.h

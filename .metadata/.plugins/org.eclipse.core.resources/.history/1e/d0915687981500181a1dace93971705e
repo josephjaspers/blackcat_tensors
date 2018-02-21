@@ -1,0 +1,15 @@
+/*
+ * Tensor_Core_Scalar.h
+ *
+ *  Created on: Feb 19, 2018
+ *      Author: joseph
+ */
+
+#ifndef TENSOR_CORE_SCALAR_H_
+#define TENSOR_CORE_SCALAR_H_
+
+
+
+
+
+#endif /* TENSOR_CORE_SCALAR_H_ */

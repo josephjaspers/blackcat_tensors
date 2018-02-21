@@ -5,10 +5,11 @@
 		<item value="150" key="DIALOG_Y_ORIGIN"/>
 	</section>
 	<section name="org.eclipse.ui.internal.QuickAccess">
-		<item value="657" key="dialogHeight"/>
-		<item value="1182" key="dialogWidth"/>
+		<item value="669" key="dialogHeight"/>
+		<item value="1194" key="dialogWidth"/>
 		<list key="textEntries">
-			<item value="1"/>
+			<item value="2"/>
+			<item value="2"/>
 			<item value="1"/>
 			<item value="1"/>
 			<item value="2"/>
@@ -16,20 +17,20 @@
 			<item value="1"/>
 			<item value="1"/>
 			<item value="1"/>
-			<item value="1"/>
 		</list>
 		<list key="orderedElements">
 			<item value="org.eclipse.ui.console.ConsoleView"/>
+			<item value="org.eclipse.debug.ui.DebugView"/>
 			<item value="org.eclipse.team.cvs.ui.replaceWithTag"/>
 			<item value="org.eclipse.team.ui.GenericHistoryView"/>
 			<item value="org.eclipse.ui.navigator.ProjectExplorer"/>
 			<item value="org.eclipse.ui.preferencePages.FileStates"/>
 			<item value="org.eclipse.egit.ui.RepositoriesViewImportProjects"/>
-			<item value="org.eclipse.debug.ui.DebugView"/>
 			<item value="org.eclipse.search.ui.views.SearchView"/>
 			<item value="org.eclipse.help.ui.HelpView"/>
 		</list>
 		<list key="orderedProviders">
+			<item value="org.eclipse.e4.ui.parts"/>
 			<item value="org.eclipse.e4.ui.parts"/>
 			<item value="org.eclipse.ui.commands"/>
 			<item value="org.eclipse.e4.ui.parts"/>
@@ -38,17 +39,18 @@
 			<item value="org.eclipse.ui.commands"/>
 			<item value="org.eclipse.e4.ui.parts"/>
 			<item value="org.eclipse.e4.ui.parts"/>
-			<item value="org.eclipse.e4.ui.parts"/>
 		</list>
 		<list key="textArray">
 			<item value="console"/>
+			<item value="consol"/>
+			<item value="debug"/>
+			<item value="deb"/>
 			<item value="repla"/>
 			<item value="history"/>
 			<item value="explor"/>
 			<item value="proj"/>
 			<item value="local history"/>
 			<item value="local"/>
-			<item value="debug"/>
 			<item value="search"/>
 			<item value="help"/>
 		</list>
@@ -60,7 +62,7 @@
 		</list>
 	</section>
 	<section name="NewWizardAction">
-		<item value="org.eclipse.cdt.ui.wizards.NewHeaderFileCreationWizard" key="NewWizardSelectionPage.STORE_SELECTED_ID"/>
+		<item value="org.eclipse.cdt.ui.wizards.NewCWizard1" key="NewWizardSelectionPage.STORE_SELECTED_ID"/>
 		<list key="NewWizardSelectionPage.STORE_EXPANDED_CATEGORIES_ID">
 			<item value="org.eclipse.cdt.ui.newCWizards"/>
 		</list>

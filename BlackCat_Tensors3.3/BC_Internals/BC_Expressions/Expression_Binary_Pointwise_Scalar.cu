@@ -31,6 +31,7 @@ public:
 	int size() const { return right.size(); };
 	int LD_rows() const { return right.LD_rows(); }
 	void printDimensions() const { right.printDimensions(); }
+	const auto addressOf(int offset) const { return binary_express_scalar_L(addressOf(left), addressOf(right, offset)); }
 
 	inline __attribute__((always_inline))  __BC_gcpu__ binary_expression_scalar_L(const lv& l, const rv& r) : left(l), right(r) {}
 	inline __attribute__((always_inline))  __BC_gcpu__ auto operator [](int index) const { return oper(left[0], right[index]); }
@@ -51,6 +52,7 @@ public:
 	int size() const { return left.size(); };
 	int LD_rows() const { return left.LD_rows(); }
 	void printDimensions() const { left.printDimensions(); }
+	const auto addressOf(int offset) const { return binary_express_scalar_L(addressOf(left, offset), addressOf(right)); }
 
 
 	inline __attribute__((always_inline))  __BC_gcpu__ binary_expression_scalar_R(const lv& l, const rv& r) : left(l), right(r) {}

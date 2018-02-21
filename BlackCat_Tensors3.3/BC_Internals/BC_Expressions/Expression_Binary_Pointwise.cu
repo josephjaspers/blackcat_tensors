@@ -26,8 +26,12 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 
 	int rows() const { return left.rows(); }
 	int cols() const { return left.cols(); }
+	int LD_rows() const { return left.LD_rows(); }
+
 	int size() const { return left.size(); }
 	void printDimensions() const {  left.printDimensions(); }
+	const int* InnerShape() const { return left.InnerShape(); }
+	const auto addressOf(int offset) const { return binary_expression(addressOf(left, offset), addressOf(right, offset)); }
 
 
 	template<class L, class R>

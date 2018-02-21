@@ -11,34 +11,50 @@
 
 #include "Implementation_Core/Tensor_Operations.h"
 #include "Implementation_Core/Tensor_Utility.h"
-#include "Implementation_Core/Tensor_Core.h"
+#include "Implementation_Core/Tensor_Core.cu"
 #include "../BC_MathLibraries/Mathematics_CPU.h"
 #include "../BC_MathLibraries/Mathematics_GPU.cu"
 
 
 namespace BC {
 
-using MTF::prim; //isPrimitive
-using MTF::ifte; //if then else
+using MTF::ifte;
+using MTF::prim;
 
-template<class T, class derived, class Mathlib, class voider = void>
+template<class> struct isCore { static constexpr bool conditional = false; };
+template<class a, class b, class c> struct isCore<Tensor_Core<a, b, c>>
+{ static constexpr bool conditional = true; };
+template<class T>
+using isCore_t = isCore<T>;
+
+template<class> struct internal;
+template<class t, class ml, template<class,class> class tensor> struct internal<tensor<t, ml>> {
+	template<class T, class ML>
+	using type = tensor<T, ML>;
+};
+
+
+template<class T, class derived, class Mathlib, class R>
 class TensorBase :
-				public Tensor_Operations <T, ifte<prim<T>, Tensor_Core<T, Mathlib, derived>, T>, derived, Mathlib>,
-				public Tensor_Utility    <T, derived, Mathlib, prim<T>>
+				public Tensor_Operations <T, ifte<prim<T>, Tensor_Core<T, Mathlib, R>, T>, derived, Mathlib>,
+				public Tensor_Utility    <T, derived, Mathlib, prim<T> | isCore_t<T>::conditional>
 
 {
 
 protected:
-	using math_parent  = Tensor_Operations<T, ifte<prim<T>, Tensor_Core<T, Mathlib, derived>, T>, derived, Mathlib>;
-	using functor_type =  ifte<prim<T>, Tensor_Core<T, Mathlib, derived>, T>;
+	struct DISABLED;
+	using accessor = ifte<prim<T>, typename Tensor_Core<T, Mathlib, R>::accessor, DISABLED>;
+	using math_parent  = Tensor_Operations<T, ifte<prim<T>, Tensor_Core<T, Mathlib, R>, T>, derived, Mathlib>;
+	using functor_type =  ifte<prim<T>, Tensor_Core<T, Mathlib, R>, T>;
+	using param_tc = Tensor_Core<T, Mathlib, R>;
 	functor_type black_cat_array;
 
 public:
+
 	template<class... params>
 	TensorBase(const params&... p) : black_cat_array(p...) {}
 	TensorBase(		 derived&& tensor) : black_cat_array(tensor.black_cat_array){}
 	TensorBase(const derived&  tensor) : black_cat_array(tensor.black_cat_array){}
-
 	using math_parent::operator=;
 
 	operator  const derived&() const { return static_cast<const derived&>(*this); }
@@ -50,10 +66,13 @@ public:
 	int cols() const { return black_cat_array.cols(); }
 	int LD_rows() const { return black_cat_array.LD_rows(); }
 	int LD_cols() const { return black_cat_array.LD_cols(); }
+	void resetShape(std::vector<int> sh) { black_cat_array.resetShape(sh); }
 
 	int dimension(int i)		const { return black_cat_array.dimension(i); }
 	void printDimensions() 		const { black_cat_array.printDimensions();   }
 	void printLDDimensions()	const { black_cat_array.printLDDimensions(); }
+
+	auto accessor_packet(int index) const { return black_cat_array.accessor_packet(index); }
 
 	const int* InnerShape() const 			{ return black_cat_array.InnerShape(); }
 	const int* OuterShape() const 			{ return black_cat_array.OuterShape(); }

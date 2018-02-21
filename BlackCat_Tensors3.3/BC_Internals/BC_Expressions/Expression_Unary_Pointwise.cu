@@ -16,7 +16,8 @@ public:
 
 	using this_type = unary_expression<T, operation, value>;
 	operation oper;
-
+	int size() const { return data.size(); }
+	void printDimensions() const { data.printDimensions(); }
 	const value& data;
 
 	inline __attribute__((always_inline)) __BC_gcpu__ unary_expression(const value& v) :

@@ -46,7 +46,7 @@ int speedTestDelayedEval() {
 	t = omp_get_wtime() - t;
 
 
-	std::cout << t << std::endl;
+	std::cout <<"sz = " << SIZE << "    " << t << std::endl;
 
 	return 0;
 }
@@ -96,7 +96,7 @@ int speedTestCombine() {
 	t = omp_get_wtime() - t;
 
 
-	std::cout << t << std::endl;
+	std::cout <<"sz = " << SIZE << t << std::endl;
 
 	return 0;
 }

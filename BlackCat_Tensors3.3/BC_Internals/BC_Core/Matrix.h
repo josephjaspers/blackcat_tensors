@@ -14,23 +14,24 @@
 
 namespace BC {
 template<class T, class Mathlib>
-class Matrix : public TensorBase<T, Matrix<T, Mathlib>, Mathlib> {
+class Matrix : public TensorBase<T, Matrix<T, Mathlib>, Mathlib, Rank<2>> {
 
 	template<class,class>
 	friend class Vector;
 
-	using parent_class = TensorBase<T, Matrix<T, Mathlib>, Mathlib>;
+	using parent_class = TensorBase<T, Matrix<T, Mathlib>, Mathlib, Rank<2>>;
 
 public:
 	using scalar = T;
 	using parent_class::operator=;
+	using accessor = typename parent_class::accessor;
 	static constexpr int RANK() { return 2; }
 
 	Matrix() {}
 	Matrix(const Matrix&  v) : parent_class(v) {}
 	Matrix(		 Matrix&& v) : parent_class(v) {}
 	Matrix(const Matrix&& v) : parent_class(v) {}
-	Matrix(int rows, int cols = 1) : parent_class(Tensor_Core<T, Mathlib, Matrix<T, Mathlib>>({rows, cols})) {}
+	Matrix(int rows, int cols = 1) : parent_class(std::vector<int> {rows, cols}) {}
 
 	template<class U> 		  Matrix(const Matrix<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Matrix(	   Matrix<U, Mathlib>&& t) : parent_class(t) {}
@@ -42,14 +43,9 @@ public:
 	template<class U>
 	Matrix& operator = (const Matrix<U, Mathlib>& t) { return parent_class::operator=(t); }
 
-	Matrix(std::initializer_list<T> sh) : parent_class(Tensor_Core<T, Mathlib, Matrix<T, Mathlib>>({(int)sh.size()})) { Mathlib::HostToDevice(this->data(), sh.begin(), this->size()); }
+	Vector<accessor, Mathlib> operator [] (int index) { return Vector<accessor, Mathlib>(this->accessor_packet(index)); }
+	const Vector<accessor, Mathlib> operator [] (int index) const { return Vector<accessor, Mathlib>(this->accessor_packet(index)); }
 
-	Vector<T, Mathlib> operator[] (int i) {
-		return (Vector<T, Mathlib>(this->accessor_packet(), &this->array[i]));
-	}
-	const Vector<T, Mathlib> operator[] (int i) const {
-		return Vector<T, Mathlib>(this->accessor_packet(), &this->array[i]);
-	}
 	const Matrix<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib> t() const {
 		return Matrix<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib>(this->data());
 	}

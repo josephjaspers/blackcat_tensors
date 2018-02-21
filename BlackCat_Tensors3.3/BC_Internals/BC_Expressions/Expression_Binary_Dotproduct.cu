@@ -33,8 +33,8 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	const int M = left.rows();
 	const int N = right.cols();
 	const int K = left.cols();
-	const int LDA;// = left.LD_rows();
-	const int LDB;// = right.LD_rows();
+	const int LDA = left.LD_rows();
+	const int LDB = right.LD_rows();
 	const int LDC = M;
 
 	static constexpr bool transA = det_eval<lv>::transposed;
@@ -59,7 +59,7 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	}
 
 	std::shared_ptr<scalar_type> array;
-	scalar_type* array_ptr = array.get();
+	scalar_type* array_ptr;
 
 	__attribute__((always_inline))
 	binary_expression_dotproduct(const lv& left, const rv& right) :
@@ -69,7 +69,12 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 		array = std::shared_ptr<scalar_type>(array_ptr);
 		eval();
 	}
+	binary_expression_dotproduct(const lv& left, const rv& right, const scalar_type* ary) :
+	left(left), right(right), LDA(left.LD_rows()), LDB(right.LD_rows()), array_ptr(ary) {}
 
+	const auto addressOf(int offset) const {
+		return binary_expression_dotproduct(addressOf(left, offset), addressOf(right, offset), addressOf(array_ptr, offset));
+	}
 
 public:
 
@@ -92,13 +97,11 @@ public:
 		} else {
 			B = det_eval<rv>::getArray(right);
 		}
-		if (lv_scalar) {
-			alpha = det_eval<lv>::getScalar(left);
-		}
-		if (rv_scalar) {
-			alpha2 = det_eval<rv>::getScalar(right);
-		}
+			alpha = det_eval<lv>::getScalar(left);		//nullptr if !lv_scalar
+			alpha2 = det_eval<rv>::getScalar(right);	//nullptr if !rv_scalar
 
+
+			//if scalars on both sides we need to convert them into a single scalar (for it to work with blas)
 		if (lv_scalar && rv_scalar){
 			T* tmp;
 			Mathlib::initialize(tmp, 1);
@@ -108,12 +111,14 @@ public:
 
 		} else if (rv_scalar)
 			 Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M, N, K, alpha2, nullptr, LDA, LDB, LDC);
+		 else if (lv_scalar)
+			 Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M, N, K, alpha, nullptr, LDA, LDB, LDC);
 		 else
 			 Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M, N, K, nullptr, nullptr, LDA, LDB, LDC);
 
-		if (!lv_eval)
+		if (lv_eval)
 			Mathlib::destroy(A);
-		if (!rv_eval)
+		if (rv_eval)
 			Mathlib::destroy(B);
 
 	}

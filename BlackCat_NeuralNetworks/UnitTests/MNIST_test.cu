@@ -1,5 +1,4 @@
 #include "../BlackCat_NeuralNetworks.h"
-#include "BlackCat_Tensors.h"
 
 #include <fstream>
 #include <iostream>
@@ -16,7 +15,7 @@ tensor expandOutput(int val, int total) {
 	//Convert a value to a 1-hot output vector
 	tensor out(total);
 	out.zero();
-	out[val] = (fp_type)1.0;
+	out[val] = Scalar<fp_type>(1);
 	return out;
 }
 
@@ -80,7 +79,7 @@ int percept_MNIST() {
 	FeedForward f2(250, 10);
 	OutputLayer o3(10);
 	//Create the neural network
-	auto network = generateNetwork(f1, f2, o3);
+	auto network = generateNetwork(f1, f2 , o3);
 //
 
 

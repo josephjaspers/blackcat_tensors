@@ -1,0 +1,64 @@
+///*
+// * TensorN.h
+// *
+// *  Created on: Feb 20, 2018
+// *      Author: joseph
+// */
+//
+//#ifndef TENSORN_H_
+//#define TENSORN_H_
+//
+//namespace BC {
+//
+//
+//namespace BC {
+//template<class T, class Mathlib>
+//class Tensor : public Tensor<T, Matrix<T, Mathlib>, Mathlib, Rank<2>> {
+//
+//	template<class,class>
+//	friend class Vector;
+//
+//	using parent_class = TensorBase<T, Matrix<T, Mathlib>, Mathlib, Rank<2>>;
+//
+//public:
+//	using scalar = T;
+//	using parent_class::operator=;
+//	using accessor = typename parent_class::accessor;
+//	static constexpr int RANK() { return 2; }
+//
+//	Tensor() {}
+//	Tensor(const Matrix&  v) : parent_class(v) {}
+//	Tensor(		 Matrix&& v) : parent_class(v) {}
+//	Tensor(const Matrix&& v) : parent_class(v) {}
+//	Tensor(int rows, int cols = 1) : parent_class(std::vector<int> {rows, cols}) {}
+//
+//	template<class U> 		  Tensor(const Tensor<U, Mathlib>&  t) : parent_class(t) {}
+//	template<class U> 		  Tensor(	   Tensor<U, Mathlib>&& t) : parent_class(t) {}
+//	template<class... params> Tensor(const params&... p) : parent_class(p...) {}
+//
+//	Tensor& operator =(const Matrix& t)  { return parent_class::operator=(t); }
+//	Tensor& operator =(const Matrix&& t) { return parent_class::operator=(t); }
+//	Tensor& operator =(	     Matrix&& t) { return parent_class::operator=(t); }
+//	template<class U>
+//	Tensor& operator = (const Matrix<U, Mathlib>& t) { return parent_class::operator=(t); }
+//
+//	Tensor(std::initializer_list<T> sh) : parent_class(Tensor_Core<T, Mathlib, Matrix<T, Mathlib>>({(int)sh.size()})) { Mathlib::HostToDevice(this->data(), sh.begin(), this->size()); }
+//
+//	Tensor<accessor, Mathlib> operator [] (int index) { return Vector<accessor, Mathlib>(this->accessor_packet(index)); }
+//	const Tensor<accessor, Mathlib> operator [] (int index) const { return Vector<accessor, Mathlib>(this->accessor_packet(index)); }
+//
+//	const Tensor<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib> t() const {
+//		return Tensor<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib>(this->data());
+//	}
+//
+//
+//
+//};
+//
+//
+//}
+//
+//
+//
+//
+//#endif /* TENSORN_H_ */

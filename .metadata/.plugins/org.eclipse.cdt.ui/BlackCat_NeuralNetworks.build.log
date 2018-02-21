@@ -1,6 +1,6 @@
-19:41:46 **** Incremental Build of configuration Release for project BlackCat_NeuralNetworks ****
+10:58:32 **** Incremental Build of configuration Release for project BlackCat_NeuralNetworks ****
 make all 
 make: Nothing to be done for 'all'.
 
-19:41:47 Build Finished (took 311ms)
+10:58:32 Build Finished (took 313ms)
 

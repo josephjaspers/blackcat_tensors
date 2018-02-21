@@ -65,8 +65,8 @@ struct det_eval<binary_expression_scalar_R<T, mul, Tensor_Core<T, ml, d1>, Tenso
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = true;
 
-	template<class param> static T* getScalar(const param& p) { return p.right.data(); }
-	template<class param> static T* getArray(const param& p) { return p.left.data(); }
+	template<class param> static T* getScalar(const param& p) { return cc(p.right.data()); }
+	template<class param> static T* getArray(const param& p) { return cc(p.left.data()); }
 };
 
 //IF A SCALAR BY TENSOR MUL OPERATION L
@@ -75,8 +75,8 @@ struct det_eval<binary_expression_scalar_L<T, mul, Tensor_Core<T, ml, d1>, Tenso
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = true;
-	template<class param> static T* getScalar(const param& p) { return p.left.data(); }
-	template<class param> static T* getArray(const param& p) { return p.right.data(); }
+	template<class param> static T* getScalar(const param& p) { return cc(p.left.data()); }
+	template<class param> static T* getArray(const param& p) { return cc(p.right.data()); }
 };
 
 //IF A SCALAR BY TENSOR MUL OPERATION R + TRANSPOSED

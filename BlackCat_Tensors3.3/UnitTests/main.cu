@@ -37,6 +37,7 @@ auto dp_test () {
 	e.print();
 
 
+
 	std::cout << " post print  " << std::endl;
 
 //	Scalar<double> C(2);
@@ -44,23 +45,38 @@ auto dp_test () {
 //	Vector<double> D_(6);
 
 	std::cout << " simple dot product " << std::endl;
-//	D_ = a.t() + b.t();
-//	D_.print();
 	c = d * e;
+	///all the permutations of optimized dotproduct
+	c = a.t() * b.t();
+	c = a.t() * e;
+	c = d * b.t();
+	c = d * Scalar<double>(2) * e;
+	c = Scalar<double>(2) * d * e;
+	c = d * e * Scalar<double>(2); ////This is the only version that is not accounted for (it is also the least common notation)
+	c = d * Scalar<double>(2) * e;
+
 	c.print();
+
+
 	Scalar<double> A(2);
 	Scalar<double> B(2);
 
 	std::cout << " dot product " << std::endl;
 
+	c[0].print();
+	c.print();
+
 	c = a.t() * b.t();
 	std::cout << " dot product 222 " << std::endl;
 
-	c = a.t() * A * (b.t() * Scalar<double>(2));
-////
+	A.print();
+
+	c = a.t() * A * (b.t() * A);
+
 	c.print();
 
-	std::cout << "done  copy " << std::endl;
+	std::cout << "done  copy " <<
+			std::endl;
 
 
 	std::cout << "successsasd " << std::endl;
@@ -73,10 +89,14 @@ int VectorPointwise() {
 
 std::cout << "Vector test " <<std::endl;
 
+
 	Vector<double> a = {5};
 	Vector<double> b = {5};
 	Vector<double> c = {5};
 
+
+	a[0];
+	a[0].print();
 	std::cout << " getting size" <<std::endl;
 
 
@@ -195,7 +215,7 @@ struct same<t,t>  { static constexpr bool value = true; };
 
 
 int main() {
-
+//
 	speedTestDelayedEval<128,     100000>();
 	speedTestDelayedEval<256,     100000>();
 	speedTestDelayedEval<512,     100000>();
@@ -207,10 +227,10 @@ int main() {
 	speedTestDelayedEval<40000,   100000>();
 	speedTestDelayedEval<80000,   100000>();
 	speedTestDelayedEval<100000,  100000>();
-	MatrixPointwise();
-	VectorPointwise();
+//	MatrixPointwise();
+//	VectorPointwise();
 //
-		dp_test();
+//		dp_test();
 
 	std::cout << " success  main"<< std::endl;
 

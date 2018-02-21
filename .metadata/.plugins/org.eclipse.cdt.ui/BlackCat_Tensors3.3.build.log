@@ -1,6 +1,6 @@
-12:24:41 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+00:39:06 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
 make all 
 make: Nothing to be done for 'all'.
 
-12:24:42 Build Finished (took 312ms)
+00:39:07 Build Finished (took 313ms)
 

@@ -9,7 +9,13 @@ RM := rm -rf
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir.mk
--include Core/subdir.mk
+-include UnitTests/subdir.mk
+-include BC_Internals/BC_MathLibraries/subdir.mk
+-include BC_Internals/BC_Expressions/dotproduct_Dep/subdir.mk
+-include BC_Internals/BC_Expressions/subdir.mk
+-include BC_Internals/BC_Core/Implementation_Core/tmp_tc_dep/subdir.mk
+-include BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Specializations/subdir.mk
+-include BC_Internals/BC_Core/Implementation_Core/subdir.mk
 
 OS_SUFFIX := $(subst Linux,linux,$(subst Darwin/x86_64,darwin,$(shell uname -s)/$(shell uname -m)))
 
@@ -58,7 +64,7 @@ all: BlackCat_Tensors3.3
 BlackCat_Tensors3.3: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: NVCC Linker'
-	/usr/local/cuda-9.1/bin/nvcc --cudart static --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3" $(OBJS) $(USER_OBJS) $(LIBS)
+	/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

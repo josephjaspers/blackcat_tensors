@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="dot pr" key="selection"/>
+		<item value="Host" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="dot pr"/>
-			<item value="det_eval&lt;un"/>
-			<item value="det_eval&lt;u"/>
-			<item value="det_eval&lt;"/>
-			<item value="det_eval"/>
-			<item value="dp"/>
-			<item value="tes"/>
-			<item value="TEn"/>
+			<item value="host"/>
+			<item value="BC_cpu"/>
+			<item value="Tensor&lt;"/>
+			<item value="accessor_"/>
+			<item value="Tensor_Core"/>
+			<item value="~"/>
+			<item value="sz"/>
+			<item value="rank - 1"/>
 		</list>
 		<list key="replacehistory">
 			<item value="NeuralNetwork"/>
@@ -31,7 +31,7 @@
 		<item value="287" key="DIALOG_WIDTH"/>
 		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 		<item value="441" key="DIALOG_HEIGHT"/>
-		<item value="1474" key="DIALOG_X_ORIGIN"/>
-		<item value="90" key="DIALOG_Y_ORIGIN"/>
+		<item value="1185" key="DIALOG_X_ORIGIN"/>
+		<item value="136" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

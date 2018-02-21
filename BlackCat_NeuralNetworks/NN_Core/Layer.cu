@@ -8,7 +8,7 @@
 #ifndef LAYER_CU_
 #define LAYER_CU_
 
-#include "BlackCat_Tensors.h"
+//#include "BlackCat_Tensors.h"
 #include "BlackCat_TensorFunctions.cu"
 #include "Defaults.cu"
 

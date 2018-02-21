@@ -25,5 +25,11 @@ C_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
-Core \
+UnitTests \
+BC_Internals/BC_MathLibraries \
+BC_Internals/BC_Expressions/dotproduct_Dep \
+BC_Internals/BC_Expressions \
+BC_Internals/BC_Core/Implementation_Core/tmp_tc_dep \
+BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Specializations \
+BC_Internals/BC_Core/Implementation_Core \
 

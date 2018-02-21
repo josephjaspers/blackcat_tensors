@@ -23,6 +23,13 @@ struct expression {
 		  derived& asDerived() 		 { return static_cast<	    derived&>(*this); }
 	const derived& asDerived() const { return static_cast<const derived&>(*this); }
 
+
+};
+
+template<class T>
+auto addressOf(const T& param, int offset) {
+	return param.addressOf(offset);
+}
 //	auto operator [] (int index) -> decltype(asDerived()[index]) { return asDerived()[index]; }
 //	auto operator [] (int index) const -> decltype(asDerived()[index]) { return asDerived()[index]; }
 
@@ -39,7 +46,6 @@ struct expression {
 //
 //	auto InnerShape()  const { return asDerived().InnerShape(); }
 //	auto OuterShape()  const { return asDerived().OuterShape(); }
-};
 }
 
 #endif /* EXPRESSION_BASE_H_ */

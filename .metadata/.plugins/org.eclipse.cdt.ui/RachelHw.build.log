@@ -1,0 +1,15 @@
+06:45:56 **** Incremental Build of configuration Debug for project RachelHw ****
+make all 
+Building file: ../f_01.cc
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"f_01.d" -MT"f_01.d" -o "f_01.o" "../f_01.cc"
+Finished building: ../f_01.cc
+ 
+Building target: RachelHw
+Invoking: GCC C++ Linker
+g++  -o "RachelHw"  ./f_01.o   
+Finished building target: RachelHw
+ 
+
+06:45:57 Build Finished (took 563ms)
+

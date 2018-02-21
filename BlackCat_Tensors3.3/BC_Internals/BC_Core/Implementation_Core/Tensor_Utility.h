@@ -102,8 +102,8 @@ struct Tensor_Utility<scalar_type, deriv, MATHLIB, true> {
 			std::cout << "File open error - returning " << std::endl;
 			return;
 		}
-
-		std::vector<scalar_type> data;
+		using scalar = typename  MTF::determine_scalar<scalar_type>::type;
+		std::vector<scalar> data;
 		unsigned read_values = 0;
 
 			std::string tmp;
@@ -128,11 +128,11 @@ struct Tensor_Utility<scalar_type, deriv, MATHLIB, true> {
 				dims[i] = data[i + 1];
 			}
 			if (overrideDimensions) {
-			asDerived().reset(dims);
+			asDerived().resetShape(dims);
 			}
-			MATHLIB::HostToDevice(asDerived().data(), &data[data[0] + 1], asDerived().size());
+			MATHLIB::HostToDevice(asDerived().data().ary(), &data[data[0] + 1], asDerived().size());
 		} else {
-			MATHLIB::HostToDevice(asDerived().data(), &data[0], asDerived().size());
+			MATHLIB::HostToDevice(asDerived().data().ary(), &data[0], asDerived().size());
 		}
 
 	}

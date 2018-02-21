@@ -13,6 +13,7 @@
 #include "../BC_MetaTemplateFunctions/Adhoc.h"
 #include "BlackCat_Internal_Definitions.h"
 
+
 namespace BC {
 template<class T, class functor_type>
 struct unary_expression_transpose : expression<T, unary_expression_transpose<T, functor_type>>
@@ -39,7 +40,7 @@ struct unary_expression_transpose : expression<T, unary_expression_transpose<T, 
 private:
 	template<class U> __BC_gcpu__
 	static int bc_floor(U number) {
-		return ((int)number) > number ? (int)(number - .5) : number; //if casting the number to an integer is greater (if it rounded up) subtract .5 and the round again
+		return (int)number;///if casting the number to an integer is greater (if it rounded up) subtract .5 and the round again
 	}
 
 public:
