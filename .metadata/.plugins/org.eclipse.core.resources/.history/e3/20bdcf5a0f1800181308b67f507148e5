@@ -1,0 +1,25 @@
+
+#ifndef BLACKCAT_TUPLE
+#define BLACKCAT_TUPLE
+
+namespace BC {
+
+template<class derived, template<class> class... layers>
+struct Network {
+
+	using P = derived;
+	auto prev() { return static_cast<P&>(*this); }
+
+};
+template<class derived, template<class> class front, template<class> class... layers>
+struct Network<derived, front, layers...> : Network<Network<derived, front, layers...>, layers...> {
+
+	using N = Network<Network<derived, front, layers...>, layers...>;
+	using P = derived;
+
+	auto prev() { return static_cast<P&>(*this); }
+	auto next() { return static_cast<N&>(*this); }
+
+};
+}
+#endif

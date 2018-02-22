@@ -29,6 +29,7 @@
 <definedSymbol symbol="__NVCC__="/>
 <definedSymbol symbol="__NVCC__=1"/>
 <definedSymbol symbol="__DRIVER_TYPES_H__="/>
+<definedSymbol symbol="__CUDACC_DEBUG__="/>
 <definedSymbol symbol="__STDC__=1"/>
 <definedSymbol symbol="__cplusplus=201402L"/>
 <definedSymbol symbol="__cplusplus=201103L"/>
@@ -353,6 +354,7 @@
 <definedSymbol symbol="__NVCC__="/>
 <definedSymbol symbol="__NVCC__=1"/>
 <definedSymbol symbol="__DRIVER_TYPES_H__="/>
+<definedSymbol symbol="__CUDACC_DEBUG__="/>
 <definedSymbol symbol="__STDC__=1"/>
 <definedSymbol symbol="__cplusplus=201402L"/>
 <definedSymbol symbol="__cplusplus=201103L"/>
@@ -677,6 +679,7 @@
 <definedSymbol symbol="__NVCC__="/>
 <definedSymbol symbol="__NVCC__=1"/>
 <definedSymbol symbol="__DRIVER_TYPES_H__="/>
+<definedSymbol symbol="__CUDACC_DEBUG__="/>
 <definedSymbol symbol="__STDC__=1"/>
 <definedSymbol symbol="__cplusplus=201402L"/>
 <definedSymbol symbol="__cplusplus=201103L"/>

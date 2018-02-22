@@ -1,1 +1,6 @@
 1518974920550	Delete resource 'BlackCat_Tensors3.3/Core'
+1519229087106	Delete resource 'BlackCat_Tensors_Functions/Functions/BC_PointwiseDotproduct.cu'
+1519240872622	Delete resource 'BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_GPU_Managed.h'
+1519330822360	Delete resource 'BlackCat_NeuralNetworks3.3/NN_Core/FeedForwardInstantEval.cu'
+1519335831436	Delete resource 'BlackCat_NeuralNetworks3.3/NN_Core/Defaults.cu'
+1519339964229	Delete 2 resources

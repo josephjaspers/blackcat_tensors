@@ -130,9 +130,9 @@ struct Tensor_Utility<scalar_type, deriv, MATHLIB, true> {
 			if (overrideDimensions) {
 			asDerived().resetShape(dims);
 			}
-			MATHLIB::HostToDevice(asDerived().data().ary(), &data[data[0] + 1], asDerived().size());
+			MATHLIB::copy(asDerived().data().array, &data[data[0] + 1], asDerived().size() > data.size() ? data.size() : asDerived().size());
 		} else {
-			MATHLIB::HostToDevice(asDerived().data().ary(), &data[0], asDerived().size());
+			MATHLIB::copy(asDerived().data().array, &data[0], asDerived().size() > data.size() ? data.size() : asDerived().size());
 		}
 
 	}

@@ -1,0 +1,64 @@
+
+#ifndef BLACKCAT_TUPLE
+#define BLACKCAT_TUPLE
+
+namespace BC {
+
+	template<class derived, template<class> class...>
+	struct LayerChain {
+
+		using p = derived;
+		auto& tail() const { return *this; }
+		auto& prev() const { return static_cast<p&>(*this); }
+
+
+	};
+
+	template<class derived, template<class> class front, template<class> class... lst>
+	struct LayerChain<derived, front, lst> : LayerChain<LayerChain<derived, front, lst>, lst...> {
+
+		using p = derived;
+		using n = typename LayerChain<LayerChain<derived, front, lst>, lst...>::type;
+		using me = LayerChain<derived, front, lst>;
+		using type = front<me>;
+
+		type data;
+
+		const auto& tail() const { return next().tail(); }
+		const auto& head() const { return prev().head(); }
+		auto& tail() { return next().tail(); }
+		auto& head() { return prev().head(); }
+
+		auto& prev()  { return static_cast<p&>(*this); }
+		const auto& prev() const { return static_cast<p&>(*this); }
+
+		auto& next()  { return static_cast<n&>(*this); }
+		const auto& next() const { return static_cast<n&>(*this); }
+	};
+
+	struct FRONT;
+
+	template<template<class> class front, template<class> class... lst>
+	struct LayerChain<FRONT, front, lst> : LayerChain<LayerChain<FRONT, front, lst>, lst...> {
+
+		using p = FRONT;
+		using n = typename LayerChain<LayerChain<FRONT, front, lst>, lst...>::type;
+		using me = LayerChain<FRONT, front, lst>;
+		using type = front<me>;
+
+		type data;
+
+		const auto& tail() const { return next().tail(); }
+		const auto& head() const { return prev().head(); }
+		auto& tail() { return next().tail(); }
+		auto& head() { return prev().head(); }
+
+		auto& prev()  { return static_cast<p&>(*this); }
+		const auto& prev() const { return static_cast<p&>(*this); }
+
+		auto& next()  { return static_cast<n&>(*this); }
+		const auto& next() const { return static_cast<n&>(*this); }
+	};
+
+}
+#endif

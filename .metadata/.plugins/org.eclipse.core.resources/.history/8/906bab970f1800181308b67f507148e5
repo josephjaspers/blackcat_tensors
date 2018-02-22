@@ -1,0 +1,14 @@
+
+#ifndef BLACKCAT_TUPLE
+#define BLACKCAT_TUPLE
+
+namespace BC {
+
+	template<class...>
+	struct Tuple {
+
+	};
+
+
+}
+#endif

@@ -21,13 +21,11 @@ public:
 	static constexpr int RANK() { return 0; }
 
 	using parent_class::operator=;
-	using param_tc = typename parent_class::param_tc;
 
 	Scalar() {}
 	Scalar(const Scalar&& t) : parent_class(t) 		{}
 	Scalar(		 Scalar&& t) : parent_class(t) 		{}
 	Scalar(const Scalar&  t) : parent_class(t) 		{}
-	template<class... params> Scalar(param_tc sh, const params&... p) : parent_class(sh, p...) {}
 
 	Scalar& operator =(const Scalar&  t) { return parent_class::operator=(t); }
 	Scalar& operator =(const Scalar&& t) { return parent_class::operator=(t); }

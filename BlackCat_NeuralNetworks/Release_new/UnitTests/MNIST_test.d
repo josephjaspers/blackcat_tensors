@@ -254,7 +254,6 @@ UnitTests/MNIST_test.o : ../UnitTests/MNIST_test.cu \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/cuda_fp16.hpp \
     /usr/include/c++/6/utility \
     /usr/include/c++/6/bits/stl_relops.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_GPU_Managed.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Base.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.cu \
@@ -280,11 +279,14 @@ UnitTests/MNIST_test.o : ../UnitTests/MNIST_test.cu \
     /usr/include/c++/6/bits/shared_ptr_atomic.h \
     /usr/include/c++/6/bits/atomic_base.h \
     /usr/include/c++/6/backward/auto_ptr.h \
+    /usr/include/c++/6/vector \
+    /usr/include/c++/6/bits/stl_vector.h \
+    /usr/include/c++/6/bits/stl_bvector.h \
+    /usr/include/c++/6/bits/vector.tcc \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Pointwise.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MetaTemplateFunctions/Simple.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MetaTemplateFunctions/Complex.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MetaTemplateFunctions/Adhoc.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Core/Scalar.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Core/TensorBase.h \
@@ -298,19 +300,11 @@ UnitTests/MNIST_test.o : ../UnitTests/MNIST_test.cu \
     /usr/include/x86_64-linux-gnu/c++/6/bits/basic_file.h \
     /usr/include/x86_64-linux-gnu/c++/6/bits/c++io.h \
     /usr/include/c++/6/bits/fstream.tcc \
-    /usr/include/c++/6/vector \
-    /usr/include/c++/6/bits/stl_vector.h \
-    /usr/include/c++/6/bits/stl_bvector.h \
-    /usr/include/c++/6/bits/vector.tcc \
     /usr/include/c++/6/sstream \
     /usr/include/c++/6/bits/sstream.tcc \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Core/Implementation_Core/../../BC_MetaTemplateFunctions/Adhoc.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Core/Implementation_Core/../../BC_Expressions/BlackCat_Internal_Definitions.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Specializations/Tensor_Core_Essentials.cu \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Specializations/../../../BC_MetaTemplateFunctions/Adhoc.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Specializations/../../../BC_Expressions/BlackCat_Internal_Definitions.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Specializations/Tensor_Core_Scalar.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Core/../BC_MathLibraries/Mathematics_CPU.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Core/../BC_MathLibraries/Mathematics_GPU.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Core/Vector.h \

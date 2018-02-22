@@ -14,6 +14,7 @@
 #include "../BC_MetaTemplateFunctions/Adhoc.h"
 #include <iostream>
 #include <memory>
+#include <vector>
 
 namespace BC {
 
@@ -23,6 +24,7 @@ namespace BC {
  * c = M x N
  */
 //det_Eval
+
 template<class T, class lv, class rv, class Mathlib>
 struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
 	using scalar_type = typename MTF::determine_scalar<T>::type;
@@ -37,26 +39,16 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	const int LDB = right.LD_rows();
 	const int LDC = M;
 
+	const int lv_size = M * K;
+	const int rv_size = N * K;
+	const int eval_size = M * N ;
+
 	static constexpr bool transA = det_eval<lv>::transposed;
 	static constexpr bool transB = det_eval<rv>::transposed;
 	static constexpr bool lv_scalar = det_eval<lv>::scalar;
 	static constexpr bool rv_scalar = det_eval<rv>::scalar;
 	static constexpr bool lv_eval = det_eval<lv>::evaluate;
 	static constexpr bool rv_eval = det_eval<rv>::evaluate;
-
-	const int lv_size = M * K;
-	const int rv_size = N * K;
-	const int eval_size = M * N ;
-
-	int size() const { return eval_size;}
-	int rows() const { return M;}
-	int cols() const { return N;}
-
-	void printDimensions() const {
-		std::cout << "dotproduct dim: " << std::endl;
-		left.printDimensions();
-		right.printDimensions();
-	}
 
 	std::shared_ptr<scalar_type> array;
 	scalar_type* array_ptr;
@@ -69,12 +61,20 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 		array = std::shared_ptr<scalar_type>(array_ptr);
 		eval();
 	}
-	binary_expression_dotproduct(const lv& left, const rv& right, const scalar_type* ary) :
-	left(left), right(right), LDA(left.LD_rows()), LDB(right.LD_rows()), array_ptr(ary) {}
 
-	const auto addressOf(int offset) const {
-		return binary_expression_dotproduct(addressOf(left, offset), addressOf(right, offset), addressOf(array_ptr, offset));
-	}
+	int size() const { return eval_size;}
+	int rows() const { return M;}
+	int cols() const { return N;}
+	int rank() const { return right.rank(); }
+	int LD_rows() const { return M; }
+	int LD_cols() const { return eval_size; }
+	int dimension(int i)		const {  return i== 0 ? M : i == 1 ? N : 1; }
+	void printDimensions() 		const { std::cout<<"[" << M << "][" <<N  <<"]" << std::endl; }
+	void printLDDimensions()	const {  std::cout<<"[" << M << "][" <<eval_size  <<"]" << std::endl; }
+//	const auto InnerShape() const 			{ std::cout << " inner shape - dotproduct " << std::endl; return _sh<std::vector<int>>({M, N}); }
+//	const auto OuterShape() const 			{ return _sh<std::vector<int>>({M, N * M}); }
+
+
 
 public:
 

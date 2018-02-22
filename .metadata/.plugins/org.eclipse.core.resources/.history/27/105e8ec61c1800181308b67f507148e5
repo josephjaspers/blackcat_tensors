@@ -1,0 +1,34 @@
+/*
+ * Defaults.h
+ *
+ *  Created on: Feb 22, 2018
+ *      Author: joseph
+ */
+
+#ifndef DEFAULTS_H_
+#define DEFAULTS_H_
+
+
+
+namespace BC {
+
+template<class> struct InputLayer;
+template<class> struct OutputLayer;
+
+struct BASE;
+
+using ml = CPU;
+
+using vec = Vector<double>;
+using mat = Matrix<double>;
+using fp_type = double;
+
+template<class T, class ML = ml> using mat_expr = Matrix<T, ML>;
+template<class T, class ML = ml> using vec_expr = Vector<T, ML>;
+
+
+
+
+}
+
+#endif /* DEFAULTS_H_ */

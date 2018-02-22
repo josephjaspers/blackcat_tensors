@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="Host" key="selection"/>
+		<item value="a + b" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="a + b"/>
+			<item value="size"/>
+			<item value="["/>
+			<item value="acc"/>
+			<item value="struct fr"/>
+			<item value="front"/>
 			<item value="host"/>
 			<item value="BC_cpu"/>
-			<item value="Tensor&lt;"/>
-			<item value="accessor_"/>
-			<item value="Tensor_Core"/>
-			<item value="~"/>
-			<item value="sz"/>
-			<item value="rank - 1"/>
 		</list>
 		<list key="replacehistory">
 			<item value="NeuralNetwork"/>

@@ -1,0 +1,18 @@
+
+#ifndef BLACKCAT_TUPLE
+#define BLACKCAT_TUPLE
+
+namespace BC {
+
+template<class derived, template<class> class... layers>
+struct Network {
+	//tail
+};
+template<template<class> class front, template<class> class... layers>
+struct Network<front, layers...> : Network<layers...> {
+};
+
+
+
+}
+#endif

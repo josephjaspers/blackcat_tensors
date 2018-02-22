@@ -152,15 +152,15 @@ public:
 
 	template<typename T, typename J>
 	static void copy(T& t, const J& j, int sz) {
-//		if (sz < 8192) {
+		if (sz < 8192) {
 			copy_single_thread(t, j, sz);
-//			return;
-//		}
-//#pragma omp parallel for
-//		for (int i = 0; i < sz; ++i) {
-//			t[i] = j[i];
-//		}
-//#pragma omp barrier
+			return;
+		}
+#pragma omp parallel for
+		for (int i = 0; i < sz; ++i) {
+			t[i] = j[i];
+		}
+#pragma omp barrier
 	}
 
 
@@ -169,16 +169,6 @@ public:
 		for (int i = 0; i < sz; ++i) {
 			t[i] = j[i];
 		}
-
-
-//		for (int i = 0; i < (sz - roll); i += roll) {
-//			aggressive_unroll<roll>::copy(t, j, i);
-//		}
-//
-//		for (int i = sz - roll > 0 ? sz - roll : 0; i < sz; ++i) {
-//			t[i] = j[i];
-//		}
-//#pragma omp barrier
 	}
 	template<typename T, typename J>
 	static void copyHostToDevice(T t, J j, int sz) {
@@ -250,19 +240,6 @@ public:
 
 		const double beta   =  scalarB ? *scalarB : 0.0;
 		const double alpha  =  scalarA ? *scalarA : 1.0;
-
-		//		std::cout << " beta = " << beta << " alpha = " << alpha << std::endl;
-		//		  std::cout << "m  n k " << m << n << k << std::endl;
-		//		  std::cout << "m  n k " << lda << ldb << ldc << std::endl;
-		//
-		//		  std::cout << "A " << std::endl;
-		//		  for (int i = 0; i < 6; ++i) {
-		//			  std::cout << A[i] << " ";
-		//		  }
-		//		  std::cout << std::endl;
-		//		  if (transA) {
-		//			   std::cout << " trans " << std::endl;
-		//		  }
 		cblas_dgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 	}
 };

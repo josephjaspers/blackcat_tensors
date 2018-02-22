@@ -12,16 +12,7 @@
 #include <type_traits>
 
 namespace BC {
-template<class,class> struct unary_expression_transpose;
-template<class,class,class,class> struct binary_expression_dotproduct;
 	namespace MTF {
-
-
-		template<class, int, int, class...> class Matrix;
-		template<class, int, class...> class Vector;
-
-		template<class...>
-		struct _list;
 
 		//EXPRESSION_TYPE----------------------------------------------------------------------------------------------
 		template<class, class>  struct expression_substitution;
@@ -39,8 +30,6 @@ template<class,class,class,class> struct binary_expression_dotproduct;
 		struct determine_scalar<tensor<T, set...>> {
 				using type = typename determine_scalar<T>::type;
 		};
-		//FUNCTOR_TYPE----------------------------------------------------------------------------------------------
-
 		//EVALUTION_TYPE----------------------------------------------------------------------------------------------
 		template<class tensor>
 		struct determine_evaluation;
@@ -56,19 +45,6 @@ template<class,class,class,class> struct binary_expression_dotproduct;
 									typename ref<tensor<T, ML>>::type,
 									tensor<typename determine_scalar<T>::type, ML>>::type;
 		};
-
-		//NONLINEAR EXPRESSION -------------------------------------------------------------
-
-
-		template<class T>  struct non_pwise_functor {static constexpr bool conditional = false; };
-		template<class T, class a, class b, class c>
-		struct non_pwise_functor<binary_expression_dotproduct<T, a, b, c>> {static constexpr bool conditional = true; };
-
-
-		template<class T, class a>
-		struct non_pwise_functor<unary_expression_transpose<T, a>> {static constexpr bool conditional = true; };
-
-
 	}
 }
 #endif /* ADHOC_H_ */

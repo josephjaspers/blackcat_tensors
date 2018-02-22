@@ -54,21 +54,4 @@ struct _TRAITS {
 
 }
 
-//template<class> struct shell;
-//template<template<class...> class body, class... innards> struct shell<body<innards...>> {
-//	template<class... types>
-//	using type = body<types...>;
-//};
-//
-//template<class> struct tensorTraits;
-//template<template<class,class>class tensor, class T, class ml>
-//struct tensorTraits<tensor<T, ml>> {
-//	using scalar = typename MTF::determine_scalar<T>::type;
-//	using functor = ifte<prim<T>, Tensor_Core<T, ml, tensor<T, ml>>, T>;
-//	using evaluation = ifte<same<functor, T>::conditional, typename shell<tensor<T, ml>>::type<scalar, ml>, tensor<T, ml>&>;
-//};
-
-
-
-
 #endif /* TENSOR_CORE_H_ */

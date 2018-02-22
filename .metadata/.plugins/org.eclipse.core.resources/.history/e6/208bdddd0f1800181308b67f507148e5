@@ -1,0 +1,29 @@
+
+#ifndef BLACKCAT_TUPLE
+#define BLACKCAT_TUPLE
+
+namespace BC {
+
+	template<class derived, class...>
+	struct tuple_array {
+
+		using p = derived;
+		auto& tail() const { return *this; }
+		auto& prev() const { return static_cast<p&>(*this); }
+
+
+	};
+
+	template<class derived, class front, class... lst>
+	struct tuple_array {
+
+		using p = derived;
+		auto& tail() const { return *this; }
+		auto& prev() const { return static_cast<p&>(*this); }
+
+
+	};
+
+
+}
+#endif

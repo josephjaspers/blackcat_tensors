@@ -31,7 +31,6 @@
 //Math libraries
 #include "BC_MathLibraries/Mathematics_CPU.h"
 #include "BC_MathLibraries/Mathematics_GPU.cu"
-#include "BC_MathLibraries/Mathematics_GPU_Managed.h"
 
 #include "BC_MathLibraries/Mathematics_GPU_impl.cu"
 #include "BlackCat_ForwardDecls.h"
@@ -45,7 +44,6 @@
 #include "BC_Expressions/Expression_Binary_Pointwise.cu"
 //Meta-templates Functions
 #include "BC_MetaTemplateFunctions/Simple.h"
-#include "BC_MetaTemplateFunctions/Complex.h"
 #include "BC_MetaTemplateFunctions/Adhoc.h"
 //BC_core
 #include "BC_Core/Scalar.h"

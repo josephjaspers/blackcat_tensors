@@ -1,0 +1,19 @@
+/*
+ * Defaults.h
+ *
+ *  Created on: Feb 22, 2018
+ *      Author: joseph
+ */
+
+#ifndef DEFAULTS_H_
+#define DEFAULTS_H_
+
+
+
+namespace BC {
+
+
+
+}
+
+#endif /* DEFAULTS_H_ */

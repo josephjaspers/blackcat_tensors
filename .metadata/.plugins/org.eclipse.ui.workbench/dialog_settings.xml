@@ -5,8 +5,8 @@
 		<item value="150" key="DIALOG_Y_ORIGIN"/>
 	</section>
 	<section name="org.eclipse.ui.internal.QuickAccess">
-		<item value="669" key="dialogHeight"/>
-		<item value="1194" key="dialogWidth"/>
+		<item value="657" key="dialogHeight"/>
+		<item value="1182" key="dialogWidth"/>
 		<list key="textEntries">
 			<item value="2"/>
 			<item value="2"/>
@@ -19,8 +19,8 @@
 			<item value="1"/>
 		</list>
 		<list key="orderedElements">
-			<item value="org.eclipse.ui.console.ConsoleView"/>
 			<item value="org.eclipse.debug.ui.DebugView"/>
+			<item value="org.eclipse.ui.console.ConsoleView"/>
 			<item value="org.eclipse.team.cvs.ui.replaceWithTag"/>
 			<item value="org.eclipse.team.ui.GenericHistoryView"/>
 			<item value="org.eclipse.ui.navigator.ProjectExplorer"/>
@@ -41,10 +41,10 @@
 			<item value="org.eclipse.e4.ui.parts"/>
 		</list>
 		<list key="textArray">
+			<item value="deb"/>
+			<item value="debug"/>
 			<item value="console"/>
 			<item value="consol"/>
-			<item value="debug"/>
-			<item value="deb"/>
 			<item value="repla"/>
 			<item value="history"/>
 			<item value="explor"/>

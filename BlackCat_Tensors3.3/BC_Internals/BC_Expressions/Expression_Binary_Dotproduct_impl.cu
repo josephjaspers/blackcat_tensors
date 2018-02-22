@@ -54,7 +54,7 @@ struct det_eval<unary_expression_transpose<T, Tensor_Core<T, ml, deriv>>> {
 	static constexpr bool scalar = false;
 
 	template<class param> static T* getScalar(const param& p) { return nullptr; }
-	template<class param> static T* getArray(const param& p) { return cc(p.data()); }
+	template<class param> static T* getArray(const param& p) { return cc(p.array); }
 };
 
 
@@ -87,7 +87,7 @@ struct det_eval<binary_expression_scalar_R<T, mul, unary_expression_transpose<T,
 	static constexpr bool scalar = true;
 
 	template<class param> static T* getScalar(const param& p) { return cc(p.right.data()); }
-	template<class param> static T* getArray(const param& p) { return cc(p.left.data()); }
+	template<class param> static T* getArray(const param& p) { return cc(p.left.array); }
 };
 
 //IF A SCALAR BY TENSOR MUL OPERATION L + TRANSPOSED
@@ -98,7 +98,7 @@ struct det_eval<binary_expression_scalar_L<T, mul, Tensor_Core<T, ml, d1>, unary
 	static constexpr bool scalar = true;
 
 	template<class param> static T* getScalar(const param& p) { return p.left.data(); }
-	template<class param> static T* getArray(const param& p) { return p.right.data(); }
+	template<class param> static T* getArray(const param& p) { return p.right.array; }
 };
 template<class value, class... list>
 struct is_one_of {

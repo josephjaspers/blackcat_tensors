@@ -22,6 +22,4 @@ static constexpr int CUDA_BASE_THREADS = 256;
 #define __BC_gcpu__
 #endif
 }
-//Ifndef __CUDACC__ add: -x c-header cu
-//to the compiler command line --> this converts all files that would normally be interperted by the NVCC to header.files
 #endif /* BLACKCAT_COMPILERDEFINITIONS_H_ */

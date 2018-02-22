@@ -24,7 +24,7 @@ class Matrix : public TensorBase<T, Matrix<T, Mathlib>, Mathlib, Rank<2>> {
 public:
 	using scalar = T;
 	using parent_class::operator=;
-	using accessor = typename parent_class::accessor;
+	using child = typename parent_class::child;
 	static constexpr int RANK() { return 2; }
 
 	Matrix() {}
@@ -43,8 +43,11 @@ public:
 	template<class U>
 	Matrix& operator = (const Matrix<U, Mathlib>& t) { return parent_class::operator=(t); }
 
-	Vector<accessor, Mathlib> operator [] (int index) { return Vector<accessor, Mathlib>(this->accessor_packet(index)); }
-	const Vector<accessor, Mathlib> operator [] (int index) const { return Vector<accessor, Mathlib>(this->accessor_packet(index)); }
+//	Vector<accessor, Mathlib> operator [] (int index) { return Vector<accessor, Mathlib>(this->accessor_packet(index)); }
+//	const Vector<accessor, Mathlib> operator [] (int index) const { return Vector<accessor, Mathlib>(this->accessor_packet(index)); }
+
+	auto& operator[] (int i) const { return this->data()[i];}
+	auto& operator[] (int i)  { return this->data()[i];}
 
 	const Matrix<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib> t() const {
 		return Matrix<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib>(this->data());

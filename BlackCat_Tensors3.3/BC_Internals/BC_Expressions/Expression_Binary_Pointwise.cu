@@ -24,27 +24,29 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 	const lv& left;
 	const rv& right;
 
-	int rows() const { return left.rows(); }
-	int cols() const { return left.cols(); }
-	int LD_rows() const { return left.LD_rows(); }
-
-	int size() const { return left.size(); }
-	void printDimensions() const {  left.printDimensions(); }
-	const int* InnerShape() const { return left.InnerShape(); }
-	const auto addressOf(int offset) const { return binary_expression(addressOf(left, offset), addressOf(right, offset)); }
-
-
 	template<class L, class R>
 	inline __attribute__((always_inline)) binary_expression(const L& l, const R& r) :
 			left(l), right(r) {
-
 	}
-
-
 
 	inline __attribute__((always_inline)) __BC_gcpu__ auto operator [](int index) const -> decltype(oper(left[index], right[index])) {
 		return oper(left[index], right[index]);
 	}
+
+	int rank() const { return right.rank(); }
+	int rows() const { return right.rows(); };
+	int cols() const { return right.cols(); };
+	int size() const { return right.size(); };
+	int LD_rows() const { return right.LD_rows(); }
+	int LD_cols() const { return right.LD_cols(); }
+	int dimension(int i)		const { return right.dimension(i); }
+	void printDimensions() 		const { right.printDimensions();   }
+	void printLDDimensions()	const { right.printLDDimensions(); }
+	auto accessor_packet(int index) const { return right.accessor_packet(index); }
+//	const auto InnerShape() const 			{   std::cout << " inner shape - binexpr " << std::endl; return right.InnerShape(); }
+//	const auto OuterShape() const 			{ return right.OuterShape(); }
+	const auto addressOf(int offset) const { return binary_expression(addressOf(left, offset), addressOf(right, offset)); }
+
 };
 
 

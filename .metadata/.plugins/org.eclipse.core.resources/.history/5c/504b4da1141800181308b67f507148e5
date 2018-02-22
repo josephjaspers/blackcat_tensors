@@ -1,0 +1,95 @@
+
+#ifndef BLACKCAT_TUPLE
+#define BLACKCAT_TUPLE
+
+namespace BC {
+
+template<class derived, template<class> class...> struct LayerChain;
+
+template<class>
+struct OUTPUT_LAYER;
+
+	//TAIL
+	template<class derived, template<class> class...>
+	struct LayerChain {
+
+		using p = derived;
+		const auto& tail() const { return prev().data(); }
+		auto& tail() { return prev().data(); }
+
+		const auto& head() const { return prev().head(); }
+			  auto& head()  { return prev().head(); }
+
+		const auto& prev() const { return static_cast<p&>(*this).data(); }
+			  auto& prev() { return static_cast<p&>(*this).data(); }
+	private:
+
+		const auto& data() const { return tail(); }
+			  auto& data()  { return tail(); }
+	};
+
+	//BODY
+	template<class derived, template<class> class front, template<class> class... lst>
+	struct LayerChain<derived, front, lst...> : LayerChain<LayerChain<derived, front, lst...>, lst...> {
+
+		using p = derived;
+		using parent = LayerChain<LayerChain<derived, front, lst...>, lst...>;
+		using n = typename LayerChain<LayerChain<derived, front, lst...>, lst...>::type;
+		using me = LayerChain<derived, front, lst...>;
+		using type = front<me>;
+
+		type data_;
+
+		template<class... integers> LayerChain<derived, front, lst...>(int a, int b, integers... dim) : data_(a, b), parent(b, dim...) {}
+
+
+		const auto& tail() const { return next().tail(); }
+		const auto& head() const { return prev().head(); }
+
+		auto& tail() { return next().tail(); }
+		auto& head() { return prev().head(); }
+
+		auto& prev()  { return static_cast<p&>(*this).data(); }
+		const auto& prev() const { return static_cast<p&>(*this).data(); }
+
+		auto& next()    { return static_cast<n&>(*this).data(); }
+		const auto& next() const { return static_cast<n&>(*this).data(); }
+	private:
+
+		const auto& data() const { return data_; }
+		 auto& data()  { return data_; }
+
+	};
+
+	struct InputLayer;
+	struct BASE;
+	//HEAD
+	template<template<class> class... lst>
+	struct LayerChain<BASE, InputLayer, lst...> : LayerChain<LayerChain<BASE, InputLayer, lst...>, lst...> {
+
+		using p = InputLayer;
+		using n = typename LayerChain<LayerChain<BASE, InputLayer, lst...>, lst...>::type;
+		using parent = LayerChain<LayerChain<BASE, InputLayer, lst...>, lst...>;
+		using me = LayerChain<BASE, InputLayer, lst...>;
+		using type = front<me>;
+
+		type data_;
+
+		template<class... integers> LayerChain<BASE, InputLayer, lst...>(int front, integers... dim) : data_(front), parent(front, dim...) {}
+
+
+		const auto& tail() const { return next().tail(); }
+		const auto& head() const { return data; }
+			  auto& tail() 		 { return next().tail(); }
+			  auto& head()  	 { return data; }
+
+			  auto& next()  	 { return static_cast<n&>(*this).data(); }
+		const auto& next() const { return static_cast<n&>(*this).data(); }
+
+	private:
+		const auto& data() const { return data_; }
+		 	  auto& data()  	 { return data_; }
+	};
+
+}
+#endif

@@ -34,19 +34,27 @@ int speedTestDelayedEval() {
 	d.randomize(0, 100);
 	e.randomize(0, 100);
 
-
 	float t;
 
 	t = omp_get_wtime();
 
 	for (int i = 0; i < reps; ++i) {
-		a = (b ** c + d);
+		a = ((e == b ** c) + d);
+	}
+	t = omp_get_wtime() - t;
+
+	std::cout <<"Lazy = " << SIZE << "    " << t << std::endl;
+
+	t = omp_get_wtime();
+
+	for (int i = 0; i < reps; ++i) {
+		a = ((e = b ** c) + d);
 	}
 
 	t = omp_get_wtime() - t;
 
 
-	std::cout <<"sz = " << SIZE << "    " << t << std::endl;
+	std::cout <<"Inst = " << SIZE << "    " << t  << "\n" << std::endl;
 
 	return 0;
 }
