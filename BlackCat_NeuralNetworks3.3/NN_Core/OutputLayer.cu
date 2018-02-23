@@ -8,7 +8,7 @@
 #ifndef OUTPUTas_CU
 #define OUTPUTas_CU
 
-#include "BlackCat_Tuple.cu"
+#include "LayerChain.cu"
 
 namespace BC {
 
@@ -46,16 +46,8 @@ public:
 		return prev().backPropagation(hypothesis - y);
 	}
 
-	void updateWeights() {
-		//empty
-	}
-	void clearBPStorage() {
-		//empty
-	}
-
-//	int getClass() {
-//		return LAYER_TYPE::Output_;
-//	}
+	void updateWeights() {}
+	void clearBPStorage() {}
 	void write(std::ofstream& is) {
 		is << INPUTS << ' ';
 		hypothesis.write(is);

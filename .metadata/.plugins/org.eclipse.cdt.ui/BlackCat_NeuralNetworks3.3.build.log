@@ -1,6 +1,34 @@
-17:58:39 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+21:28:07 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
 make all 
-make: Nothing to be done for 'all'.
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building file: ../NN_Core/FeedForward.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "NN_Core" -M -o "NN_Core/FeedForward.d" "../NN_Core/FeedForward.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "NN_Core/FeedForward.o" "../NN_Core/FeedForward.cu"
+Finished building: ../NN_Core/FeedForward.cu
+ 
+Building file: ../NN_Core/LayerChain.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "NN_Core" -M -o "NN_Core/LayerChain.d" "../NN_Core/LayerChain.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "NN_Core/LayerChain.o" "../NN_Core/LayerChain.cu"
+Finished building: ../NN_Core/LayerChain.cu
+ 
+Building file: ../NN_Core/OutputLayer.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "NN_Core" -M -o "NN_Core/OutputLayer.d" "../NN_Core/OutputLayer.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "NN_Core/OutputLayer.o" "../NN_Core/OutputLayer.cu"
+Finished building: ../NN_Core/OutputLayer.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/FeedForward.o ./NN_Core/LayerChain.o ./NN_Core/OutputLayer.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
 
-17:58:39 Build Finished (took 315ms)
+21:28:18 Build Finished (took 10s.731ms)
 

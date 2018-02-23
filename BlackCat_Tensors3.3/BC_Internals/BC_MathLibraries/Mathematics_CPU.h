@@ -19,67 +19,6 @@ namespace BC {
 
 static constexpr int MAX_UNROLLED = 256;
 static constexpr int DEFAULT_ROLL = 8;
-template<int sz>
-struct aggressive_unroll {
-
-//	template<class Func>
-//	static void impl(Func& f, int position) {
-//		aggressive_unroll<sz/2>::impl(f, position);
-//		agressive_unroll<sz/2>::impl(f, sz * 1.5 + position);
-//	}
-
-	template<class T, class U> __attribute__((always_inline)) inline
-	static void copy(T& t, const U& u, int position) {
-		aggressive_unroll<sz/4>::copy(t, u, position);
-		aggressive_unroll<sz/4>::copy(t, u, position + 2 * sz/3);
-		aggressive_unroll<sz/4>::copy(t, u, position + 3 * sz/4);
-		aggressive_unroll<sz/4>::copy(t, u, position +  4*sz/2);
-	}
-	template<class T, class U> __attribute__((always_inline)) inline
-	static void fill(T& t, U u, int position) {
-		aggressive_unroll<sz/2>::fill(t, u, position);
-		aggressive_unroll<sz/2>::fill(t, u, position + sz / 2);
-	}
-
-};
-template<>
-struct aggressive_unroll<8> {
-	template<class T, class U> __attribute__((always_inline)) inline
-	static void copy(T& t, const U& u, int pos) {
-		t[pos] = u[pos];
-		t[pos+1] = u[pos+1];
-		t[pos+2] = u[pos+2];
-		t[pos+3] = u[pos+3];
-		t[pos+4] = u[pos+4];
-		t[pos+5] = u[pos+5];
-		t[pos+6] = u[pos+6];
-		t[pos+7] = u[pos+7];
-	}
-	template<class T, class U> __attribute__((always_inline)) inline
-	static void fill(T& t, U u, int pos) {
-			t[pos] = u;
-			t[pos+1] = u;
-			t[pos+2] = u;
-			t[pos+3] = u;
-			t[pos+4] = u;
-			t[pos+5] = u;
-			t[pos+6] = u;
-			t[pos+7] = u;
-	}
-	template<class F> __attribute__((always_inline)) inline
-	static void impl(F& func, int pos) {
-			func(pos);
-			func(pos + 1);
-			func(pos + 2);
-			func(pos + 3);
-			func(pos + 4);
-			func(pos + 5);
-			func(pos + 6);
-			func(pos + 7);
-	}
-};
-
-
 
 class CPU {
 public:
@@ -117,13 +56,6 @@ public:
 		for (int i = 0; i < sz; ++i) {
 			t[i] = j;
 		}
-//		for (int i = 0; i < (sz - roll); i += roll) {
-//			aggressive_unroll<roll>::copy(t, j, i);
-//		}
-//
-//		for (int i = sz - roll > 0 ? sz - roll : 0; i < sz; ++i) {
-//			t[i] = j[i];
-//		}
 	}
 
 	template<typename T>
@@ -242,6 +174,46 @@ public:
 		const double alpha  =  scalarA ? *scalarA : 1.0;
 		cblas_dgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 	}
+
+
+
+//	template<class V, class T, class U>
+//	static void x_correlation(V& cor, const T& img, const U& krnl, int moves, int dims, int* img_dims, int* krnl_dims) {
+//
+//	}
+
+	template<class V, class T, class U>
+	static void x_correlation1d(V& cor, const T& img, const U& krnl, int img_l, int krnl_l) {
+		///1 dimensional cross correlation (automatically 0 padded)
+		const int N_POS = img_l + krnl_l - 1;
+		const int N_POS_WITHIN_BONDRIES  = img_l - krnl_l + 1;
+		const int KRNL_0_POSITIONS = krnl_l - 1;
+		const int KRNL_LAST =  krnl_l - 1;
+		const int IMG_LAST  = img_l - 1;
+		const int COR_LAST = N_POS  - 1;
+
+		//Handle the issues where the krnl would be outof bounds for the img ( upper bound )
+		for (int i = 0; i < KRNL_0_POSITIONS; ++i) {
+			for (int j = 0; j < i + 1; ++j){
+				cor[j] = krnl[KRNL_LAST - i + j] * img[j];
+			}
+		}
+
+		const int BASE  = KRNL_0_POSITIONS; //The base represents the offset of the
+		for (int i = 0; i < N_POS_WITHIN_BONDRIES; ++i) {
+			for (int j = 0; j < krnl_l; ++j) {
+				cor[BASE + i] = krnl[j] * img[i + j];
+			}
+		}
+
+		//Handle the issues where the krnl would be outof bounds for the img ( lower bound )
+		for (int i = 0; i < KRNL_0_POSITIONS; ++i) {
+			for (int j = 0; j < i + 1; ++j){
+				cor[COR_LAST - j] = krnl[j] * img[IMG_LAST - i + j];
+			}
+		}
+	}
+
 };
 
 }

@@ -13,14 +13,18 @@
 namespace BC {
 
 using namespace NN_Abreviated_Functions;
-
 struct BASE;
 
+#ifndef BC_USE_GPU ////NOT READY YET
 using ml = CPU;
-
-using vec = Vector<double>;
-using mat = Matrix<double>;
 using fp_type = double;
+#else
+using ml = GPU;
+using fp_type = float;
+#endif
+
+using vec = Vector<fp_type>;
+using mat = Matrix<fp_type>;
 
 template<class T, class ML = ml> using mat_expr = Matrix<T, ML>;
 template<class T, class ML = ml> using vec_expr = Vector<T, ML>;

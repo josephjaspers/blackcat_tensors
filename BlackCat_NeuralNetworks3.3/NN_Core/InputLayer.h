@@ -54,14 +54,16 @@ const int INPUTS;
 	}
 
 	void write(std::ofstream& is) {
+		next().write(is);
 	}
 	void read(std::ifstream& os) {
+		next().read(os);
 	}
 
 };
 }
 
-#include "BlackCat_Tuple.cu"
+#include "LayerChain.cu"
 
 
 

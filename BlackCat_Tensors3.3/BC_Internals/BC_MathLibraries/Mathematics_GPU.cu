@@ -39,7 +39,10 @@ public:
 	static constexpr int CUDA_BASE_THREADS = 256;
 
 	static int blocks(int size) {
-		return (size + CUDA_BASE_THREADS - 1) / CUDA_BASE_THREADS;
+
+		return std::ceil(size / 256);
+
+//		return (size + CUDA_BASE_THREADS - 1) / CUDA_BASE_THREADS;
 	}
 	static int threads() {
 		return CUDA_BASE_THREADS;

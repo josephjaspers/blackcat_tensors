@@ -14,7 +14,7 @@
 #include "Defaults.h"
 
 
-#include "BlackCat_Tuple.cu"
+#include "LayerChain.cu"
 
 
 namespace BC {

@@ -8,7 +8,7 @@
 #ifndef FEEDFORWARD_CU_
 #define FEEDFORWARD_CU_
 
-#include "BlackCat_Tuple.cu"
+#include "LayerChain.cu"
 namespace BC {
 
 template<class derived>
@@ -18,6 +18,13 @@ struct FeedForward  {
 		return static_cast<derived&>(*this).next();
 	}
 	auto& prev() {
+		return static_cast<derived&>(*this).prev();
+	}
+
+	const auto& next() const {
+		return static_cast<derived&>(*this).next();
+	}
+	const auto& prev() const {
 		return static_cast<derived&>(*this).prev();
 	}
 
