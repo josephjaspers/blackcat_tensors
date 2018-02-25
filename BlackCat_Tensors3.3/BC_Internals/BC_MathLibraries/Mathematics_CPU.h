@@ -175,12 +175,73 @@ public:
 		cblas_dgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 	}
 
+	template<class V, class T, class U>
+	static void x_correlation(V* cor, const T* img, const U* krnl, int imgRank, int* imgD, int* imgLD, int krnlRank, int* krnlD, int* krnlLD, int* corLD) {
+		//corLD rank will always by the same as the img rank
+
+		//if the dimensions of the img are greater than the dimensions of the
+		if (imgRank > krnlRank) {
+			int last = imgRank - 1;
+			for (int i = 0; i < imgD[last]; ++i) {
+				//we do not move the krnl as we are getting the "starting" indexes for each correlation --
+				//we choose this format of changing each correlation into 1d correlation to ensure cache efficiency
+				x_correlation(cor[corLD[last] * i], img[imgLD[last] * i], krnl, imgRank - 1, imgD, imgLD, krnlRank, krnlD, krnlLD);
+			}
+			return;
+		}
+
+		//imgRank and KrnlRank will be the same at this point
+		if (imgRank == 1) {
+			//convert to 1d correlation
+			return x_correlattion1d(cor, img, krnl, imgD[0], krnlD[0]);
+		}
+//------------------------------------------------------------------------------------------------------------------------------------
+		//possibly move to another method as imgRank now becomes obsolete (as it is the same as krnlRank)
+		//Handle correlation for dimensionality > 1
+		const int N_POS = imgD[imgRank] + krnlD[imgRank] - 1;
+		const int N_POS_WITHIN_BONDRIES  = imgD[imgRank] - krnlD[imgRank] + 1;
+		const int KRNL_0_POSITIONS = krnlD[imgRank] - 1;
+		const int KRNL_LAST =  krnlD[imgRank] - 1;
+		const int IMG_LAST  = imgD[imgRank] - 1;
+		const int COR_LAST = N_POS  - 1;
+		const int last = imgRank - 1;
 
 
-//	template<class V, class T, class U>
-//	static void x_correlation(V& cor, const T& img, const U& krnl, int moves, int dims, int* img_dims, int* krnl_dims) {
+
+
+		//////THIS CODE DOES NOT WORK YET (DID NOT FINISH WRITING))) ////////////////// ATTEMPT TO HARDCODE FOR SMALLER DIMENSIONS FIRST
+		//////THIS CODE
+
+		///automatically pad for upper bound
+		for (int i = 0; i < KRNL_0_POSITIONS; ++i) {
+			for (int j = 0; j < i + 1; ++j){
+				x_correlation(cor[corLD[last] * i], img[imgLD[last] * i], krnl[krnlLD[last] * i], last, imgD, imgLD, last, krnlD, krnlLD, corLD);
+			}
+		}
 //
-//	}
+//		const int BASE  = KRNL_0_POSITIONS; //The base represents the offset of the
+//		for (int i = 0; i < N_POS_WITHIN_BONDRIES; ++i) {
+//			for (int j = 0; j < krnl_l; ++j) {
+//				cor[BASE + i] = krnl[j] * img[i + j];
+//
+//				x_correlation(cor[corLD[last] * i], img[imgLD[last] * i], krnl[krnlLD[last] * i], last, imgD, imgLD, last, krnlD, krnlLD, corLD);
+//
+//
+//			}
+//		}
+//
+//		///automatically pad for upper bound
+//		for (int i = 0; i < KRNL_0_POSITIONS; ++i) {
+//			for (int j = 0; j < i + 1; ++j){
+//				cor[COR_LAST - j] = krnl[j] * img[IMG_LAST - i + j];
+//			}
+//		}
+
+
+
+
+
+	}
 
 	template<class V, class T, class U>
 	static void x_correlation1d(V& cor, const T& img, const U& krnl, int img_l, int krnl_l) {
@@ -195,21 +256,21 @@ public:
 		//Handle the issues where the krnl would be outof bounds for the img ( upper bound )
 		for (int i = 0; i < KRNL_0_POSITIONS; ++i) {
 			for (int j = 0; j < i + 1; ++j){
-				cor[j] = krnl[KRNL_LAST - i + j] * img[j];
+				cor[j] += krnl[KRNL_LAST - i + j] * img[j];
 			}
 		}
 
-		const int BASE  = KRNL_0_POSITIONS; //The base represents the offset of the
+		const int BASE  = KRNL_0_POSITIONS; //The base represents the offset for the output indexes (because we are interperting as padded)
 		for (int i = 0; i < N_POS_WITHIN_BONDRIES; ++i) {
 			for (int j = 0; j < krnl_l; ++j) {
-				cor[BASE + i] = krnl[j] * img[i + j];
+				cor[BASE + i] += krnl[j] * img[i + j];
 			}
 		}
 
 		//Handle the issues where the krnl would be outof bounds for the img ( lower bound )
 		for (int i = 0; i < KRNL_0_POSITIONS; ++i) {
 			for (int j = 0; j < i + 1; ++j){
-				cor[COR_LAST - j] = krnl[j] * img[IMG_LAST - i + j];
+				cor[COR_LAST - j] += krnl[j] * img[IMG_LAST - i + j];
 			}
 		}
 	}

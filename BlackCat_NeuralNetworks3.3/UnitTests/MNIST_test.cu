@@ -149,7 +149,7 @@ int percept_MNIST() {
 		std::cout << " output " << std::endl;
 		img = inputs[i];//outputs[i];//.print();
 		img_adj = img.t();
-		img_adj.printSparse();
+		img_adj.printSparse(3);
 
 
 		std::cout << "prediction " << std::endl;

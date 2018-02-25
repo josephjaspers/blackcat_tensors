@@ -26,8 +26,8 @@ public:
 	int dimension(int i)		const { return array.dimension(i); }
 	void printDimensions() 		const { array.printDimensions();   }
 	void printLDDimensions()	const { array.printLDDimensions(); }
-//	const auto InnerShape() const 			{ return array.InnerShape(); }
-//	const auto OuterShape() const 			{ return array.OuterShape(); }
+	const auto InnerShape() const 			{ return array.InnerShape(); }
+	const auto OuterShape() const 			{ return array.OuterShape(); }
 
 	inline __attribute__((always_inline)) __BC_gcpu__ unary_expression(const value& v) :
 		array(v) {

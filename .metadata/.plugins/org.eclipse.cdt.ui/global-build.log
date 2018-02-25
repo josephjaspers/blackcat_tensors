@@ -1,138 +1,821 @@
-21:01:49 **** Incremental Build of configuration Release for project BlackCat_NeuralNetworks3.3 ****
+19:10:00 **** Clean-only build of configuration Release for project BlackCat_NeuralNetworks3.3 ****
+make clean 
+rm -rf  ./UnitTests/MNIST_test.o  ./NN_Core/FeedForward.o ./NN_Core/LayerChain.o ./NN_Core/OutputLayer.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o  ./UnitTests/MNIST_test.d  ./NN_Core/FeedForward.d ./NN_Core/LayerChain.d ./NN_Core/OutputLayer.d  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.d  BlackCat_NeuralNetworks3.3
+ 
+19:10:00 **** Incremental Build of configuration Release for project BlackCat_NeuralNetworks3.3 ****
 make all 
 Building file: ../UnitTests/MNIST_test.cu
 Invoking: NVCC Compiler
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(203): warning: variable "KRNL_0_POSITIONS" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(207): warning: variable "last" was declared but never referenced
+
 Finished building: ../UnitTests/MNIST_test.cu
  
 Building file: ../NN_Core/FeedForward.cu
 Invoking: NVCC Compiler
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 -gencode arch=compute_52,code=sm_52  -odir "NN_Core" -M -o "NN_Core/FeedForward.d" "../NN_Core/FeedForward.cu"
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "NN_Core/FeedForward.o" "../NN_Core/FeedForward.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(203): warning: variable "KRNL_0_POSITIONS" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(207): warning: variable "last" was declared but never referenced
+
 Finished building: ../NN_Core/FeedForward.cu
  
 Building file: ../NN_Core/LayerChain.cu
 Invoking: NVCC Compiler
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 -gencode arch=compute_52,code=sm_52  -odir "NN_Core" -M -o "NN_Core/LayerChain.d" "../NN_Core/LayerChain.cu"
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "NN_Core/LayerChain.o" "../NN_Core/LayerChain.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(203): warning: variable "KRNL_0_POSITIONS" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(207): warning: variable "last" was declared but never referenced
+
 Finished building: ../NN_Core/LayerChain.cu
  
 Building file: ../NN_Core/OutputLayer.cu
 Invoking: NVCC Compiler
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 -gencode arch=compute_52,code=sm_52  -odir "NN_Core" -M -o "NN_Core/OutputLayer.d" "../NN_Core/OutputLayer.cu"
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "NN_Core/OutputLayer.o" "../NN_Core/OutputLayer.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(203): warning: variable "KRNL_0_POSITIONS" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(207): warning: variable "last" was declared but never referenced
+
 Finished building: ../NN_Core/OutputLayer.cu
+ 
+Building file: ../NN_Core/Deprecated/Copy of MNIST_alternatetest.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 -gencode arch=compute_52,code=sm_52  -odir "NN_Core/Deprecated" -M -o "NN_Core/Deprecated/Copy of MNIST_alternatetest.d" "../NN_Core/Deprecated/Copy of MNIST_alternatetest.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "NN_Core/Deprecated/Copy of MNIST_alternatetest.o" "../NN_Core/Deprecated/Copy of MNIST_alternatetest.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(203): warning: variable "KRNL_0_POSITIONS" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(207): warning: variable "last" was declared but never referenced
+
+Finished building: ../NN_Core/Deprecated/Copy of MNIST_alternatetest.cu
  
 Building target: BlackCat_NeuralNetworks3.3
 Invoking: NVCC Linker
 /usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/FeedForward.o ./NN_Core/LayerChain.o ./NN_Core/OutputLayer.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lgomp -lcblas -lf77blas -lcublas
 Finished building target: BlackCat_NeuralNetworks3.3
  
-21:02:02 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-Finished building: ../UnitTests/main.cu
- 
-Building target: BlackCat_Tensors3.3
-Invoking: NVCC Linker
-/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/main.o  ./BC_Internals/Dep/tmp_tc_dep/Tensor_Core.o  ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct.o ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct_impl.o  ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Essentials.o ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Scalar.o  ./BC_Internals/Dep/Tensor_Core_Accessor.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./BC_Internals/BC_Expressions/Expression_Base.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o ./BC_Internals/BC_Expressions/Expression_Binary_Functors.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.o ./BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o ./BC_Internals/BC_Expressions/Expression_Unary_Pointwise.o  ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o  ./BC_Extensions/BlackCat_TensorFunctions.o   -lcblas -lf77blas -lcublas -lgomp
-Finished building target: BlackCat_Tensors3.3
- 
-21:02:07 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+19:10:25 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
 make all 
 make: Nothing to be done for 'all'.
-21:02:09 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-make: Nothing to be done for 'all'.
-21:05:32 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-Finished building: ../UnitTests/main.cu
- 
-Building target: BlackCat_Tensors3.3
-Invoking: NVCC Linker
-/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/main.o  ./BC_Internals/Dep/tmp_tc_dep/Tensor_Core.o  ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct.o ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct_impl.o  ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Essentials.o ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Scalar.o  ./BC_Internals/Dep/Tensor_Core_Accessor.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./BC_Internals/BC_Expressions/Expression_Base.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o ./BC_Internals/BC_Expressions/Expression_Binary_Functors.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.o ./BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o ./BC_Internals/BC_Expressions/Expression_Unary_Pointwise.o  ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o  ./BC_Extensions/BlackCat_TensorFunctions.o   -lcblas -lf77blas -lcublas -lgomp
-Finished building target: BlackCat_Tensors3.3
- 
-21:22:07 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(182): error: identifier "img_n" is undefined
-
-../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(182): error: identifier "krnl_n" is undefined
-
-../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(188): error: identifier "img_m" is undefined
-
-../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(188): error: identifier "krnl_m" is undefined
-
-4 errors detected in the compilation of "/tmp/tmpxft_00002226_00000000-4_main.cpp4.ii".
-make: *** [UnitTests/main.o] Error 2
-UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
-21:22:21 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(182): error: identifier "img_n" is undefined
-
-../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(182): error: identifier "krnl_n" is undefined
-
-../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(188): error: identifier "img_m" is undefined
-
-../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(188): error: identifier "krnl_m" is undefined
-
-4 errors detected in the compilation of "/tmp/tmpxft_00002288_00000000-4_main.cpp4.ii".
-UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
-make: *** [UnitTests/main.o] Error 2
-21:27:29 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-Finished building: ../UnitTests/main.cu
- 
-Building target: BlackCat_Tensors3.3
-Invoking: NVCC Linker
-/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/main.o  ./BC_Internals/Dep/tmp_tc_dep/Tensor_Core.o  ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct.o ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct_impl.o  ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Essentials.o ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Scalar.o  ./BC_Internals/Dep/Tensor_Core_Accessor.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./BC_Internals/BC_Expressions/Expression_Base.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o ./BC_Internals/BC_Expressions/Expression_Binary_Functors.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.o ./BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o ./BC_Internals/BC_Expressions/Expression_Unary_Pointwise.o  ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o  ./BC_Extensions/BlackCat_TensorFunctions.o   -lcblas -lf77blas -lcublas -lgomp
-Finished building target: BlackCat_Tensors3.3
- 
-21:28:07 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+20:00:13 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
 make all 
 Building file: ../UnitTests/MNIST_test.cu
 Invoking: NVCC Compiler
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
 Finished building: ../UnitTests/MNIST_test.cu
  
 Building file: ../NN_Core/FeedForward.cu
 Invoking: NVCC Compiler
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "NN_Core" -M -o "NN_Core/FeedForward.d" "../NN_Core/FeedForward.cu"
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "NN_Core/FeedForward.o" "../NN_Core/FeedForward.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
 Finished building: ../NN_Core/FeedForward.cu
  
 Building file: ../NN_Core/LayerChain.cu
 Invoking: NVCC Compiler
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "NN_Core" -M -o "NN_Core/LayerChain.d" "../NN_Core/LayerChain.cu"
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "NN_Core/LayerChain.o" "../NN_Core/LayerChain.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
 Finished building: ../NN_Core/LayerChain.cu
  
 Building file: ../NN_Core/OutputLayer.cu
 Invoking: NVCC Compiler
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "NN_Core" -M -o "NN_Core/OutputLayer.d" "../NN_Core/OutputLayer.cu"
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "NN_Core/OutputLayer.o" "../NN_Core/OutputLayer.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
 Finished building: ../NN_Core/OutputLayer.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/FeedForward.o ./NN_Core/LayerChain.o ./NN_Core/OutputLayer.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+22:36:23 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+make all 
+Building file: ../UnitTests/main.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: identifier "isCore" is undefined
+
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: type name is not allowed
+
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: too few arguments for class template "BC::MTF::IF_ELSE"
+
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: expected an identifier
+
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: expected a ";"
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(174): error: this declaration has no storage class or type specifier
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(176): error: expected a ";"
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(247): warning: parsing restarts here after previous syntax error
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu(177): error: identifier "RANK_SLICE" is undefined
+
+../UnitTests/main.cu(38): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * BC::Matrix<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(40): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(41): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * BC::Matrix<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(42): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(43): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * BC::Scalar<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(44): error: no operator "*" matches these operands
+            operand types are: BC::Scalar<double, BC::DEFAULT_MATHLIB> * BC::Matrix<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(45): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * BC::Matrix<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(46): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * BC::Scalar<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(56): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(60): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * BC::Scalar<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(60): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * BC::Scalar<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>]" 
+../UnitTests/main.cu(28): here
+
+20 errors detected in the compilation of "/tmp/tmpxft_000053b4_00000000-6_main.cpp1.ii".
+make: *** [UnitTests/main.o] Error 1
+UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
+22:36:44 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+make all 
+Building file: ../UnitTests/main.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: identifier "isCore" is undefined
+
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: type name is not allowed
+
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: too few arguments for class template "BC::MTF::IF_ELSE"
+
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: expected an identifier
+
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: expected a ";"
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(174): error: this declaration has no storage class or type specifier
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(176): error: expected a ";"
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(247): warning: parsing restarts here after previous syntax error
+
+../UnitTests/main.cu(38): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * BC::Matrix<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(40): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(41): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * BC::Matrix<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(42): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(43): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * BC::Scalar<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(44): error: no operator "*" matches these operands
+            operand types are: BC::Scalar<double, BC::DEFAULT_MATHLIB> * BC::Matrix<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(45): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * BC::Matrix<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(46): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * BC::Scalar<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(56): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(60): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * BC::Scalar<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(60): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * BC::Scalar<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>]" 
+../UnitTests/main.cu(28): here
+
+19 errors detected in the compilation of "/tmp/tmpxft_00005412_00000000-6_main.cpp1.ii".
+make: *** [UnitTests/main.o] Error 1
+UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
+22:37:18 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+make all 
+Building file: ../UnitTests/main.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: identifier "isCore" is undefined
+
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: type name is not allowed
+
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: too few arguments for class template "BC::MTF::IF_ELSE"
+
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: expected a ";"
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(174): error: this declaration has no storage class or type specifier
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(176): error: expected a ";"
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(247): warning: parsing restarts here after previous syntax error
+
+../UnitTests/main.cu(38): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * BC::Matrix<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(40): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(41): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * BC::Matrix<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(42): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(43): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * BC::Scalar<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(44): error: no operator "*" matches these operands
+            operand types are: BC::Scalar<double, BC::DEFAULT_MATHLIB> * BC::Matrix<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(45): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * BC::Matrix<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(46): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * BC::Scalar<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(56): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(60): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * BC::Scalar<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(60): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * BC::Scalar<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>]" 
+../UnitTests/main.cu(28): here
+
+18 errors detected in the compilation of "/tmp/tmpxft_0000546c_00000000-6_main.cpp1.ii".
+make: *** [UnitTests/main.o] Error 1
+UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
+22:37:38 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+make all 
+Building file: ../UnitTests/main.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: identifier "isCore" is undefined
+
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: type name is not allowed
+
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: too few arguments for class template "BC::MTF::IF_ELSE"
+
+../UnitTests/../BC_Internals/BC_Expressions/../BC_MetaTemplateFunctions/Adhoc.h(44): error: expected a ";"
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(174): error: this declaration has no storage class or type specifier
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(176): error: expected a ";"
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(247): warning: parsing restarts here after previous syntax error
+
+../UnitTests/main.cu(38): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * BC::Matrix<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(40): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(41): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * BC::Matrix<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(42): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(43): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * BC::Scalar<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(44): error: no operator "*" matches these operands
+            operand types are: BC::Scalar<double, BC::DEFAULT_MATHLIB> * BC::Matrix<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(45): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * BC::Matrix<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(46): error: no operator "*" matches these operands
+            operand types are: BC::Matrix<double, BC::DEFAULT_MATHLIB> * BC::Scalar<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(56): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(60): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * BC::Scalar<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/main.cu(60): error: no operator "*" matches these operands
+            operand types are: const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB> * BC::Scalar<double, BC::DEFAULT_MATHLIB>
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>]" 
+../UnitTests/main.cu(28): here
+
+18 errors detected in the compilation of "/tmp/tmpxft_000054c2_00000000-6_main.cpp1.ii".
+make: *** [UnitTests/main.o] Error 1
+UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
+22:37:56 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+make all 
+Building file: ../UnitTests/main.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(174): error: this declaration has no storage class or type specifier
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(176): error: expected a ";"
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(247): warning: parsing restarts here after previous syntax error
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>]" 
+../UnitTests/main.cu(28): here
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::binary_expression_dotproduct<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(38): here
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>)
+UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(40): here
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(41): here
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::binary_expression_dotproduct<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(42): here
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(43): here
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_scalar_L<double, BC::mul, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_scalar_L<double, BC::mul, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_scalar_L<double, BC::mul, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_scalar_L<double, BC::mul, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(44): here
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_dotproduct<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_dotproduct<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_dotproduct<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_dotproduct<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>]" 
+../UnitTests/main.cu(45): here
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>>, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>>, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(60): here
+
+11 errors detected in the compilation of "/tmp/tmpxft_00005512_00000000-6_main.cpp1.ii".
+make: *** [UnitTests/main.o] Error 1
+22:38:05 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+make all 
+Building file: ../UnitTests/main.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(174): error: this declaration has no storage class or type specifier
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(176): error: expected a ";"
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(247): warning: parsing restarts here after previous syntax error
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>]" 
+../UnitTests/main.cu(28): here
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::binary_expression_dotproduct<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(38): here
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(40): here
+
+UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(41): here
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::binary_expression_dotproduct<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(42): here
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(43): here
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_scalar_L<double, BC::mul, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_scalar_L<double, BC::mul, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_scalar_L<double, BC::mul, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_scalar_L<double, BC::mul, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(44): here
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_dotproduct<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_dotproduct<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_dotproduct<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_dotproduct<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>, BC::DEFAULT_MATHLIB>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>]" 
+../UnitTests/main.cu(45): here
+
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(44): error: more than one instance of overloaded function "BC::TensorBase<T, derived, Mathlib, R>::operator= [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]" matches the argument list:
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const derived &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            function "BC::TensorBase<T, derived, Mathlib, R>::operator=(const BC::TensorBase<double, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>> &) [with T=double, derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, R=BC::Rank<2, 2, void>]"
+            argument types are: (const BC::Matrix<BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>>, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>)
+          detected during instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>>, BC::MTF::ifte<false, BC::Tensor_Core<BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::binary_expression_scalar_R<double, BC::mul, BC::MTF::ifte<false, BC::Tensor_Core<BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, BC::unary_expression_transpose<double, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<2, 2, void>>, double>>>, BC::MTF::ifte<true, BC::Tensor_Core<double, BC::DEFAULT_MATHLIB, BC::Rank<0, 0, void>>, double>>>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(60): here
+
+11 errors detected in the compilation of "/tmp/tmpxft_00005565_00000000-6_main.cpp1.ii".
+make: *** [UnitTests/main.o] Error 1
+22:38:11 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+make all 
+Building file: ../UnitTests/main.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
+Finished building: ../UnitTests/main.cu
+ 
+Building file: ../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_Expressions" -M -o "BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.d" "../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o" "../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu"
+Finished building: ../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu
+ 
+Building file: ../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_Expressions" -M -o "BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.d" "../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o" "../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.cu"
+Finished building: ../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.cu
+ 
+Building file: ../BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_Expressions" -M -o "BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.d" "../BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o" "../BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.cu"
+Finished building: ../BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.cu
+ 
+Building file: ../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_Core/Implementation_Core" -M -o "BC_Internals/BC_Core/Implementation_Core/Tensor_Core.d" "../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o" "../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu"
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu(32): warning: variable "BC::ONE" was declared but never referenced
+
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu(36): warning: function "BC::higher" was declared but never referenced
+
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu(37): warning: function "BC::lower" was declared but never referenced
+
+Finished building: ../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu
+ 
+Building file: ../BC_Internals/BC_Core/Implementation_Core/Tensor_Slice.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_Core/Implementation_Core" -M -o "BC_Internals/BC_Core/Implementation_Core/Tensor_Slice.d" "../BC_Internals/BC_Core/Implementation_Core/Tensor_Slice.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_Core/Implementation_Core/Tensor_Slice.o" "../BC_Internals/BC_Core/Implementation_Core/Tensor_Slice.cu"
+Finished building: ../BC_Internals/BC_Core/Implementation_Core/Tensor_Slice.cu
+ 
+Building target: BlackCat_Tensors3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/main.o  ./BC_Internals/Dep/tmp_tc_dep/Tensor_Core.o  ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct.o ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct_impl.o  ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Essentials.o ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Scalar.o  ./BC_Internals/Dep/Tensor_Core_Accessor.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./BC_Internals/BC_Expressions/Expression_Base.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o ./BC_Internals/BC_Expressions/Expression_Binary_Functors.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.o ./BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o ./BC_Internals/BC_Expressions/Expression_Unary_Pointwise.o  ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Slice.o  ./BC_Extensions/BlackCat_TensorFunctions.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_Tensors3.3
+ 
+22:40:18 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+make all 
+Building file: ../UnitTests/main.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
+Finished building: ../UnitTests/main.cu
+ 
+Building file: ../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_Core/Implementation_Core" -M -o "BC_Internals/BC_Core/Implementation_Core/Tensor_Core.d" "../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o" "../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu"
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu(32): warning: variable "BC::ONE" was declared but never referenced
+
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu(36): warning: function "BC::higher" was declared but never referenced
+
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu(37): warning: function "BC::lower" was declared but never referenced
+
+Finished building: ../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu
+ 
+Building target: BlackCat_Tensors3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/main.o  ./BC_Internals/Dep/tmp_tc_dep/Tensor_Core.o  ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct.o ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct_impl.o  ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Essentials.o ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Scalar.o  ./BC_Internals/Dep/Tensor_Core_Accessor.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./BC_Internals/BC_Expressions/Expression_Base.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o ./BC_Internals/BC_Expressions/Expression_Binary_Functors.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.o ./BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o ./BC_Internals/BC_Expressions/Expression_Unary_Pointwise.o  ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Slice.o  ./BC_Extensions/BlackCat_TensorFunctions.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_Tensors3.3
+ 
+22:48:17 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+make all 
+Building file: ../UnitTests/main.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
+Finished building: ../UnitTests/main.cu
+ 
+Building file: ../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_Core/Implementation_Core" -M -o "BC_Internals/BC_Core/Implementation_Core/Tensor_Core.d" "../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o" "../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu"
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu(32): warning: variable "BC::ONE" was declared but never referenced
+
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu(36): warning: function "BC::higher" was declared but never referenced
+
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu(37): warning: function "BC::lower" was declared but never referenced
+
+Finished building: ../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu
+ 
+Building target: BlackCat_Tensors3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/main.o  ./BC_Internals/Dep/tmp_tc_dep/Tensor_Core.o  ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct.o ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct_impl.o  ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Essentials.o ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Scalar.o  ./BC_Internals/Dep/Tensor_Core_Accessor.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./BC_Internals/BC_Expressions/Expression_Base.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o ./BC_Internals/BC_Expressions/Expression_Binary_Functors.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.o ./BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o ./BC_Internals/BC_Expressions/Expression_Unary_Pointwise.o  ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Slice.o  ./BC_Extensions/BlackCat_TensorFunctions.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_Tensors3.3
+ 
+22:48:25 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+make all 
+make: Nothing to be done for 'all'.
+22:51:33 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+make all 
+Building file: ../UnitTests/main.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
+Finished building: ../UnitTests/main.cu
+ 
+Building file: ../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_Core/Implementation_Core" -M -o "BC_Internals/BC_Core/Implementation_Core/Tensor_Core.d" "../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o" "../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu"
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu(32): warning: variable "BC::ONE" was declared but never referenced
+
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu(36): warning: function "BC::higher" was declared but never referenced
+
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu(37): warning: function "BC::lower" was declared but never referenced
+
+Finished building: ../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu
+ 
+Building target: BlackCat_Tensors3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/main.o  ./BC_Internals/Dep/tmp_tc_dep/Tensor_Core.o  ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct.o ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct_impl.o  ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Essentials.o ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Scalar.o  ./BC_Internals/Dep/Tensor_Core_Accessor.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./BC_Internals/BC_Expressions/Expression_Base.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o ./BC_Internals/BC_Expressions/Expression_Binary_Functors.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.o ./BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o ./BC_Internals/BC_Expressions/Expression_Unary_Pointwise.o  ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Slice.o  ./BC_Extensions/BlackCat_TensorFunctions.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_Tensors3.3
+ 
+18:52:00 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building file: ../NN_Core/FeedForward.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "NN_Core" -M -o "NN_Core/FeedForward.d" "../NN_Core/FeedForward.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "NN_Core/FeedForward.o" "../NN_Core/FeedForward.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
+Finished building: ../NN_Core/FeedForward.cu
+ 
+Building file: ../NN_Core/LayerChain.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "NN_Core" -M -o "NN_Core/LayerChain.d" "../NN_Core/LayerChain.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "NN_Core/LayerChain.o" "../NN_Core/LayerChain.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
+Finished building: ../NN_Core/LayerChain.cu
+ 
+Building file: ../NN_Core/OutputLayer.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "NN_Core" -M -o "NN_Core/OutputLayer.d" "../NN_Core/OutputLayer.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "NN_Core/OutputLayer.o" "../NN_Core/OutputLayer.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
+Finished building: ../NN_Core/OutputLayer.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/FeedForward.o ./NN_Core/LayerChain.o ./NN_Core/OutputLayer.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+18:56:01 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(202): warning: variable "N_POS_WITHIN_BONDRIES" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(204): warning: variable "KRNL_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(205): warning: variable "IMG_LAST" was declared but never referenced
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_CPU.h(206): warning: variable "COR_LAST" was declared but never referenced
+
+Finished building: ../UnitTests/MNIST_test.cu
  
 Building target: BlackCat_NeuralNetworks3.3
 Invoking: NVCC Linker

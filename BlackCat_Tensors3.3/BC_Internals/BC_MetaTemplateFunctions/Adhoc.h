@@ -38,13 +38,22 @@ namespace BC {
 		template<	   class T> struct if_AddRef<true, T> { using type = T&; };
 		template<class T> struct ref { using type = T&; };
 
+
+
+
+		template<class,class,class> struct Tensor_Core;
+
+		template<class > 					struct isCore 						{ static constexpr bool conditional = false; };
+		template<class a, class b, class c> struct isCore<Tensor_Core<a, b, c>> { static constexpr bool conditional = true;  };
+		template<class T> constexpr bool is_core = isCore<T>::conditional;
 		template<template<class, class> class tensor, class T, class ML>
 		struct determine_evaluation<tensor<T, ML>> {
 
-			using type = typename MTF::IF_ELSE<isPrimitive<T>::conditional,
-									typename ref<tensor<T, ML>>::type,
+			using type = typename MTF::IF_ELSE<isPrim<T> || isCore<T>::conditional, typename ref<tensor<T, ML>>::type,
 									tensor<typename determine_scalar<T>::type, ML>>::type;
 		};
+
+
 	}
 }
 #endif /* ADHOC_H_ */

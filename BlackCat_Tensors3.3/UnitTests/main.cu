@@ -4,11 +4,9 @@
 using BC::Vector;
 using BC::Matrix;
 using BC::Scalar;
+using BC::Cube;
 
-template<class T>
-T copy(const T& t) { return t; }
-
-auto dp_test () {
+auto test() {
 
 	Matrix<double> a(3, 2);
 	Matrix<double> b(2 ,3);
@@ -36,14 +34,6 @@ auto dp_test () {
 	d.print();
 	e.print();
 
-
-
-	std::cout << " post print  " << std::endl;
-
-//	Scalar<double> C(2);
-
-//	Vector<double> D_(6);
-
 	std::cout << " simple dot product " << std::endl;
 	c = d * e;
 	///all the permutations of optimized dotproduct
@@ -61,13 +51,9 @@ auto dp_test () {
 	Scalar<double> A(2);
 	Scalar<double> B(2);
 
-	std::cout << " dot product " << std::endl;
-
-//	c[0].print();
 	c.print();
 
 	c = a.t() * b.t();
-	std::cout << " dot product 222 " << std::endl;
 
 	A.print();
 
@@ -75,158 +61,13 @@ auto dp_test () {
 
 	c.print();
 
-	std::cout << "done  copy " <<
-			std::endl;
-
-
-	std::cout << "successsasd " << std::endl;
-//	return 0;
-//	return c_copy;
+	Cube<double> cu(2,3, 4);
+	cu.print();
 }
-
-
-template<class t> auto copy_(t val) { return val; }
-int VectorPointwise() {
-
-std::cout << "Vector test " <<std::endl;
-
-
-	Vector<double> a = {5};
-	Vector<double> b = {5};
-	Vector<double> c = {5};
-	a.randomize(-5,5);
-
-	a.print();
-	auto var = copy_(a);
-a.print();
-var.print();
-
-	a[0];
-//	a[0].print();
-	std::cout << " getting size" <<std::endl;
-
-
-	std::cout << b.size() << " getting size" <<std::endl;
-	b.printDimensions();
-	a.printDimensions();
-
-//	a.printDetails();
-
-
-////	b.print();
-	std::cout << "Randomizing " << std::endl;
-	b.randomize(-3, 5);
-	c.randomize(0, 5);
-//
-
-	std::cout << " B " << std::endl;
-	b.print();
-	std::cout << " C" << std::endl;
-	c.print();
-//
-//
-	std::cout << " c= b.t" << std::endl;
-//
-	c = b.t();
-	c.print();
-//
-	std::cout << " B + C" << std::endl;
-	a = b + c;
-	a.print();
-
-	Vector<double> sum(a + b);
-	a.print();
-	b.print();
-//	sum.print();
-	std::cout << "------------------------------------------" << std::endl;
-
-	a.data().array[0] = 3243;
-	a.print();
-//
-	std::cout << " a + a + a" << std::endl;
-	a = a + a + a;
-
-	a.print();
-
-	std::cout << " B ** C" << std::endl;
-	b.print();
-	c.print();
-
-	a = b ** c;
-	a.print();
-
-
-	return 0;
-}
-
-int MatrixPointwise() {
-
-std::cout << "Matrix test " <<std::endl;
-
-	Matrix<double> a(4,3);
-	Matrix<double> b(4,3);
-	Matrix<double> c(4,3);
-
-
-	Matrix<double> z(5,5 );
-	Vector<double> d(3);
-
-
-	*d;
-	Vector<double> e(4);
-
-	b.randomize(0, 10);
-	c.randomize(0, 10);
-
-	b.print();
-	c.print();
-
-	std::cout << " c= b.t" << std::endl;
-
-//	c = b.t();
-
-	std::cout << "A = b + c" << std::endl;
-	a = b + c;
-
-	Scalar<double> sc(10000);
-
-	a.print();
-
-	a = a + sc;
-	a.print();
-
-
-
-
-	std::cout << " adding array " << std::endl;
-
-//c.printDetails();
-//d.printDetails();
-	e = (c * d);
-
-	std::cout << " success " << std::endl;
-
-	return 0;
-}
-
-struct A {
-	int* alpha;
-
-	operator int*() { return alpha; }
-};
-
-template<class,class>
-struct same  { static constexpr bool value = false; };
-
-template<class t>
-struct same<t,t>  { static constexpr bool value = true; };
-
-
-
 
 
 int main() {
-////
+
 //	speedTestDelayedEval<128,     100000>();
 //	speedTestDelayedEval<256,     100000>();
 //	speedTestDelayedEval<512,     100000>();
@@ -239,9 +80,7 @@ int main() {
 //	speedTestDelayedEval<80000,   100000>();
 //	speedTestDelayedEval<100000,  100000>();
 //	MatrixPointwise();
-	VectorPointwise();
-//
-//		dp_test();
+	test();
 
 	std::cout << " success  main"<< std::endl;
 

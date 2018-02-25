@@ -9,19 +9,11 @@
 #ifdef  __CUDACC__
 #ifndef EXPRESSION_BASE_H_
 #define EXPRESSION_BASE_H_
-#include <cuda.h>
+
 #include "BlackCat_Internal_Definitions.h"
 #include <iostream>
+
 namespace BC {
-
-
-template<class list_type>
-struct _sh {
-	operator const list_type() const { return dims; }
-
-	_sh(const list_type d) : dims(d) {}
-	const list_type dims;
-};
 
 template<class T, class derived>
 struct expression {
@@ -48,14 +40,19 @@ public:
 	int dimension(int i)		const { return shadowFailure<int>("int dimension(int) const"); }
 	void printDimensions() 		const { shadowFailure<>("void printDimensions() const"); }
 	void printLDDimensions() 	const { shadowFailure<>("void printLDDimensions() const"); }
-	const int* InnerShape() const 			{ return shadowFailure<int*>("auto(const int*) InnerShape() const"); }
-	const int* OuterShape() const 			{ return shadowFailure<int*>("auto(const int*) OuterShape() const"); }
+	const int* InnerShape() const 			{ return shadowFailure<int*>("auto(const int*) InnerShape() const  MAY RETURN INT*, _sh<T>, or std::vector<int>, "); }
+	const int* OuterShape() const 			{ return shadowFailure<int*>("auto(const int*) OuterShape() const  MAY RETURN INT*, _sh<T>, or std::vector<int>, "); }
 };
 
-template<class T>
-auto addressOf(const T& param, int offset) {
-	return param.addressOf(offset);
-}
+template<class list_type>
+struct _sh {
+	operator const list_type() const { return dims; }
+
+	_sh(const list_type d) : dims(d) {}
+	const list_type dims;
+};
+
+
 }
 
 #endif /* EXPRESSION_BASE_H_ */

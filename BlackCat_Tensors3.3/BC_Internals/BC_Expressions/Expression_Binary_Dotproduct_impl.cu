@@ -10,23 +10,21 @@
 
 #include "../BC_MetaTemplateFunctions/Simple.h"
 #include "../BC_MetaTemplateFunctions/Adhoc.h"
-
 #include <iostream>
 #include <type_traits>
-#include "Expression_Binary_Functors.cu"
 
 namespace BC {
 
-template<class, class, class, class > class binary_expression_scalar_R;
-template<class, class, class, class > class binary_expression_scalar_L;
-template<class, class > class unary_expression_transpose;
-template<class, class, class, class> class binary_expression;
-template<class,class,class> class Tensor_Core;
-class mul;
+template<class, class, class, class> 	class binary_expression_scalar_R;
+template<class, class, class, class> 	class binary_expression_scalar_L;
+template<class, class 			   > 	class unary_expression_transpose;
+template<class, class, class, class> 	class binary_expression;
+template<class, class, class	   > 	class Tensor_Core;
+										class mul;
 
-template<class T> T& cc(const T& param) { return const_cast<T&>(param); }
+template<class T> T&  cc(const T&  param) { return const_cast<T&> (param); }
 template<class T> T&& cc(const T&& param) { return const_cast<T&&>(param); }
-template<class T> T* cc(const T* param) { return const_cast<T*>(param); }
+template<class T> T*  cc(const T*  param) { return const_cast<T*> (param); }
 
 //DEFAULT TYPE
 template<class> struct det_eval {

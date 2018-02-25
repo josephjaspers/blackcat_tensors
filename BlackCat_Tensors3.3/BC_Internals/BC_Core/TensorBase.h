@@ -8,63 +8,30 @@
 #ifndef TENSOR_BASE_H_
 #define TENSOR_BASE_H_
 
-
 #include "Implementation_Core/Tensor_Operations.h"
 #include "Implementation_Core/Tensor_Utility.h"
 #include "Implementation_Core/Tensor_Core.cu"
-#include "../BC_MathLibraries/Mathematics_CPU.h"
-#include "../BC_MathLibraries/Mathematics_GPU.cu"
-
 
 namespace BC {
 
-using MTF::ifte;
-using MTF::prim;
-
-template<class> struct isCore { static constexpr bool conditional = false; };
-template<class a, class b, class c> struct isCore<Tensor_Core<a, b, c>>
-{ static constexpr bool conditional = true; };
-template<class T>
-using isCore_t = isCore<T>;
-
-template<class> struct internal;
-template<class t, class ml, template<class,class> class tensor> struct internal<tensor<t, ml>> {
-	template<class T, class ML>
-	using type = tensor<T, ML>;
-};
-
-template<class T> struct shell_of {
-	template<class... ntraits>
-			using type = void;
-};
-template<template<class...> class param, class... ptraits>
-struct shell_of<param<ptraits...>> {
-		template<class... ntraits>
-		using type = param<ntraits...>;
-};
-
-template<class a, class b> struct same_shell{
-	static constexpr bool val = false;
-};
-template<template<class...> class T, class... a, class... b>
-struct same_shell<T<a...>, T<b...>> {
-	static constexpr bool val = true;
-
-};
+using MTF::ifte;		//if then else
+using MTF::isPrim;
+using MTF::shell_of;
+using MTF::isCore;
 
 template<class T, class derived, class Mathlib, class R>
 class TensorBase :
-				public Tensor_Operations <T, ifte<prim<T>, Tensor_Core<T, Mathlib, R>, T>, derived, Mathlib>,
-				public Tensor_Utility    <T, derived, Mathlib, prim<T> || isCore_t<T>::conditional>
+				public Tensor_Operations <T, ifte<isPrim<T>, Tensor_Core<T, Mathlib, R>, T>, derived, Mathlib>,
+				public Tensor_Utility    <T, derived, Mathlib, isPrim<T> || isCore<T>::conditional>
 
 {
 
 protected:
-	using math_parent  = Tensor_Operations<T, ifte<prim<T>, Tensor_Core<T, Mathlib, R>, T>, derived, Mathlib>;
-	using functor_type =  ifte<prim<T>, Tensor_Core<T, Mathlib, R>, T>;
+	using math_parent  = Tensor_Operations<T, ifte<isPrim<T>, Tensor_Core<T, Mathlib, R>, T>, derived, Mathlib>;
+	using functor_type =  ifte<isPrim<T>, Tensor_Core<T, Mathlib, R>, T>;
 	using child = typename Tensor_Core<T, Mathlib, R>::child;
 	template<class> struct DISABLED;
-	static constexpr bool GENUINE_TENSOR = prim<T> || isCore_t<T>::conditional;
+	static constexpr bool GENUINE_TENSOR = isPrim<T> || isCore<T>::conditional;
 	functor_type black_cat_array;
 
 public:

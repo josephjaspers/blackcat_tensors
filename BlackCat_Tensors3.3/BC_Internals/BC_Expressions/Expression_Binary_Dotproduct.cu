@@ -68,11 +68,11 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	int rank() const { return right.rank(); }
 	int LD_rows() const { return M; }
 	int LD_cols() const { return eval_size; }
-	int dimension(int i)		const {  return i== 0 ? M : i == 1 ? N : 1; }
+	int dimension(int i)		const { return i== 0 ? M : i == 1 ? N : 1; }
 	void printDimensions() 		const { std::cout<<"[" << M << "][" <<N  <<"]" << std::endl; }
-	void printLDDimensions()	const {  std::cout<<"[" << M << "][" <<eval_size  <<"]" << std::endl; }
-//	const auto InnerShape() const 			{ std::cout << " inner shape - dotproduct " << std::endl; return _sh<std::vector<int>>({M, N}); }
-//	const auto OuterShape() const 			{ return _sh<std::vector<int>>({M, N * M}); }
+	void printLDDimensions()	const { std::cout<<"[" << M << "][" <<eval_size  <<"]" << std::endl; }
+	const auto InnerShape() 	const { return _sh<std::vector<int>>({M, N}); }
+	const auto OuterShape() 	const { return _sh<std::vector<int>>({M, N * M}); }
 
 
 

@@ -43,8 +43,8 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 	void printDimensions() 		const { right.printDimensions();   }
 	void printLDDimensions()	const { right.printLDDimensions(); }
 	auto accessor_packet(int index) const { return right.accessor_packet(index); }
-//	const auto InnerShape() const 			{   std::cout << " inner shape - binexpr " << std::endl; return right.InnerShape(); }
-//	const auto OuterShape() const 			{ return right.OuterShape(); }
+	const auto InnerShape() const { return right.InnerShape(); }
+	const auto OuterShape() const { return right.OuterShape(); }
 	const auto addressOf(int offset) const { return binary_expression(addressOf(left, offset), addressOf(right, offset)); }
 
 };

@@ -12,10 +12,8 @@
 
 namespace BC {
 
-template<class,class,class> class Tensor_Core;
-using MTF::ifte;
-using MTF::prim;
-using MTF::same;
+using MTF::is_core;
+using MTF::isPrim;
 
 template<class scalar, class functor, class evaluation, class math_lib>
 struct _TRAITS {

@@ -21,15 +21,11 @@ template<class T, class Mathlib, class ranker> struct Tensor_Core;
 
 #define __BC_gcpu__ __host__ __device__
 
-using MTF::prim; //isPrimitive
-using MTF::ifte; //if then else
-
 template<int inner_rank_, int outer_rank_ = inner_rank_, class voider = void>
 struct Rank {
 	static constexpr int inner_rank = inner_rank_;
 	static constexpr int outer_rank = outer_rank_;
 };
-
 
 static constexpr int MAXDIM = 100;
 static constexpr int MINDIM = 0;
@@ -45,6 +41,8 @@ template<class T, class Mathlib, int inner, int outer>
 struct Tensor_Core<T, Mathlib, Rank<inner, outer>> : expression<T, Tensor_Core<T, Mathlib, Rank<inner, outer>>> {
 
 	template<class,class,class> friend class Tensor_Core;
+
+	using self = Tensor_Core<T, Mathlib, Rank<inner, outer>>;
 
 	friend class Tensor_Core<T, Mathlib, Rank<higher(inner), outer>>;
 	friend class Tensor_Core<T, Mathlib, Rank<lower(inner), outer>>;
@@ -174,6 +172,42 @@ struct Tensor_Core<T, Mathlib, Rank<inner, outer>> : expression<T, Tensor_Core<T
 			os[i] = os[i - 1] * is[i];
 		}
 	}
+	template<class PARENT>
+	class Tensor_Slice {
+		using self = Tensor_Slice<PARENT>;
+		using slice_type = Tensor_Slice<self>;
+		static constexpr int RANK = lower(PARENT::RANK);
+		static constexpr int LAST =  lower(PARENT::LAST);
+		static_assert (RANK < 0, "SLICE OF SCALAR NOT DEFINED");
+
+		__BC_gcpu__ int rank() const { return RANK; }
+		__BC_gcpu__ int size() const { return RANK > 0 ? os[LAST] : 1;    }
+		__BC_gcpu__ int rows() const { return RANK > 0 ? is[0] : 1; }
+		__BC_gcpu__ int cols() const { return RANK > 1 ? is[1] : 1; }
+		__BC_gcpu__ int dimension(int i) const { return RANK > i ? is[i] : 1; }
+
+		__BC_gcpu__ int LD_rows() const { return RANK > 0 ? os[0] : 1; }
+		__BC_gcpu__ int LD_cols() const { return RANK > 1 ? os[1] : 1; }
+		__BC_gcpu__ int LDdimension(int i) const { return RANK > i + 1 ? os[i] : 1; }
+
+		scalar* array_slice;
+		Tensor_Slice(scalar* array) : array_slice(array) {}
+
+		auto slice(int i) {
+			return Tensor_Slice<self>(&array_slice[os[LAST] * i]);
+		}
+		const auto slice(int i) const {
+			return Tensor_Slice<self>(&array_slice[os[LAST] * i]);
+		}
+		const auto& operator [] (int i) const { return array_slice[i]; }
+		 auto& operator [] (int i)  { return array_slice[i]; }
+
+	};
+
+	auto slice(int i) { return Tensor_Slice<self>(os[LAST] * i); }
+	const auto slice(int i) const { return Tensor_Slice<self>(os[LAST] * i); }
+
+	using slice_type = Tensor_Slice<self>;
 };
 }
 

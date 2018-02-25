@@ -14,12 +14,12 @@
 
 namespace BC {
 template<class T, class Mathlib>
-class Cube : public TensorBase<T, Cube<T, Mathlib>, Mathlib, Rank<2>> {
+class Cube : public TensorBase<T, Cube<T, Mathlib>, Mathlib, Rank<3>> {
 
 	template<class,class>
 	friend class Matrix;
 
-	using parent_class = TensorBase<T, Cube<T, Mathlib>, Mathlib, Rank<2>>;
+	using parent_class = TensorBase<T, Cube<T, Mathlib>, Mathlib, Rank<3>>;
 
 public:
 	using scalar = T;
@@ -30,7 +30,7 @@ public:
 	Cube(const Cube&  v) : parent_class(v) {}
 	Cube(		 Cube&& v) : parent_class(v) {}
 	Cube(const Cube&& v) : parent_class(v) {}
-	Cube(int rows, int cols = 1) : parent_class(std::vector<int> {rows, cols}) {}
+	Cube(int rows, int cols = 1, int pages = 1) : parent_class(std::vector<int> {rows, cols, pages}) {}
 
 	template<class U> 		  Cube(const Cube<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Cube(	   Cube<U, Mathlib>&& t) : parent_class(t) {}

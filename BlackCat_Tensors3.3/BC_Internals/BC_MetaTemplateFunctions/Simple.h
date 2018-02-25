@@ -61,8 +61,11 @@ namespace MTF {
 	using ifte = typename std::conditional<var, a, b>::type; //ifte -- if than, else
 
 	template<class T>
-	static constexpr bool prim = MTF::isPrimitive<T>::conditional;
+	static constexpr bool isPrim = MTF::isPrimitive<T>::conditional;
 
+	template<class> struct shell_of;
+	template<template<class ...> class param, class... ptraits>
+	struct shell_of<param<ptraits...>> { template<class... ntraits> using type = param<ntraits...>; };
 
 	}
 }

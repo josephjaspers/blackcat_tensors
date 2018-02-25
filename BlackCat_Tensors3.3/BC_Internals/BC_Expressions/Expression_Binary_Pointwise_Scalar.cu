@@ -36,7 +36,6 @@ public:
 	auto accessor_packet(int index) const { return right.accessor_packet(index); }
 	const auto InnerShape() const 			{  std::cout << " inner scalar L " << std::endl;  return right().InnerShape(); }
 	const auto OuterShape() const 			{ return right().OuterShape(); }
-	const auto addressOf(int offset) const { return binary_express_scalar_L(addressOf(left), addressOf(right, offset)); }
 
 	inline __attribute__((always_inline))  __BC_gcpu__ binary_expression_scalar_L(const lv& l, const rv& r) : left(l), right(r) {}
 	inline __attribute__((always_inline))  __BC_gcpu__ auto operator [](int index) const { return oper(left[0], right[index]); }

@@ -8,9 +8,9 @@
 #ifndef TENSOR_HEAD_H_
 #define TENSOR_HEAD_H_
 
-//#include "../../BC_MetaTemplateFunctions/Adhoc.h"
-//#include "BC_Expressions/Expression_Binary_Pointwise_Same.cu"
-//#include "BC_Expressions/Expression_Binary_Functors.cu"
+#include "../../BC_MetaTemplateFunctions/Simple.h"
+#include "../../BC_MetaTemplateFunctions/Adhoc.h"
+#include "../../BC_Expressions/Expression_Binary_Pointwise.cu"
 #include "../../BC_Expressions/Expression_Unary_Pointwise.cu"
 
 namespace BC {
@@ -139,59 +139,47 @@ struct Tensor_Operations_impl {
 	//if it is not an expression Return the tensor as a reference to itself else return the evaluation of the tensor
 	const evaluation_type eval() const;
 		  evaluation_type eval();
-
-	//dot_product type 1 -- cool thing there are two operator * overloads --> (if you add an arbitrary template param with a default, you can do in class specialization)
-	//This is the overload that handles point-wise multiplication between scalars and tensors
-
+	//Pointwise multiplication of Scalar and Tensor -- is auto-detected by expression templates when in conjunction to dotproduct
 	template<class pDeriv, class pTraits, class voider = typename std::enable_if<dp_impl<pDeriv,pTraits>::short_params || dp_impl<pDeriv,pTraits>::short_params>::type>
 	typename dp_impl<pDeriv, pTraits>::type operator *(const Tensor_Operations_impl<pDeriv, pTraits>& param) const {
 			return typename dp_impl<pDeriv, pTraits>::type(this->data(), param.data());
 	}
-
 	/*
 	 * a = M x K
 	 * b = K x N
 	 * c = M x N
 	 */
-	//Dot product
+	//Dot product implementation
 	template<class pDeriv, class pTraits,
 		class voider = typename std::enable_if<!dp_impl<pDeriv,pTraits>::short_params && !dp_impl<pDeriv,pTraits>::short_params>::type, int foo = 0>
 	typename dp_impl<pDeriv, pTraits>::type operator *(const Tensor_Operations_impl<pDeriv, pTraits>& param) const {
 		assert_same_ml(param);
 		return typename dp_impl<pDeriv, pTraits>::type(this->data(), param.data());
 	}
-
 	//This allows you to do the operator ** as a point-wise multiplication operation
 	const alternate_asterix_denoter<derived, TRAITS> operator * () const {
 		return alternate_asterix_denoter<derived, TRAITS>(this);
 	}
-	 alternate_asterix_denoter<derived, TRAITS> operator * ()  {
-		return alternate_asterix_denoter<derived, TRAITS>(*this);
-	}
-	//pointwise multiplication
+	//point-wise multiplication overload (represented by **)
 	template<class pDeriv, class pTraits>
 	typename impl<pDeriv, pTraits, mul>::type operator *(const alternate_asterix_denoter<pDeriv, pTraits>& param) const {
 		assert_same_size(param.get());
 		return typename impl<pDeriv, pTraits, mul>::type(this->data(), param.get().data());
 	}
+	//Delayed assignment operator
 	template<class pDeriv, class pTraits>
 	typename impl<pDeriv, pTraits, assign>::type operator ==(const Tensor_Operations_impl<pDeriv, pTraits>& param) {
 		assert_same_size(param);
 		return typename impl<pDeriv, pTraits, assign>::type(this->data(), param.data());
 	}
-
-	template<class pDeriv, class pTraits>	//creates an expression that allows you to chain together 2 pointwise operations (of the same size)
+	//combine expression, unify two same sized independent operations to be lazy evaluated
+	template<class pDeriv, class pTraits>
 	typename impl<pDeriv, pTraits, combine>::type operator &&(const Tensor_Operations_impl<pDeriv, pTraits>& param) {
 		assert_same_size(param);
 		return typename impl<pDeriv, pTraits, combine>::type(this->data(), param.data());
 	}
-	template<class pDeriv, class pTraits>
-	derived& operator =(const Tensor_Operations_impl<pDeriv, pTraits>& param) {
-		assert_same_size(param);
-		math_library::copy(asBase().data(), param.asBase().data(), this->asBase().size());
-		return static_cast<derived&>(*this);
-	}
 
+	//Standard pointwise expressions.
 	template<class pDeriv, class pTraits>
 	typename impl<pDeriv, pTraits, add>::type operator +(const Tensor_Operations_impl<pDeriv, pTraits>& param) const {
 		assert_same_size(param);
@@ -211,6 +199,13 @@ struct Tensor_Operations_impl {
 	typename impl<pDeriv, pTraits, mul>::type operator %(const Tensor_Operations_impl<pDeriv, pTraits>& param) const {
 		assert_same_size(param);
 		return typename impl<pDeriv, pTraits, mul>::type(this->data(), param.data());
+	}
+	//Assignment operators
+	template<class pDeriv, class pTraits>
+	derived& operator =(const Tensor_Operations_impl<pDeriv, pTraits>& param) {
+		assert_same_size(param);
+		math_library::copy(asBase().data(), param.asBase().data(), this->asBase().size());
+		return static_cast<derived&>(*this);
 	}
 	template<class pDeriv, class pTraits>
 	derived& operator +=(const Tensor_Operations_impl<pDeriv, pTraits>& param) {
@@ -232,7 +227,7 @@ struct Tensor_Operations_impl {
 		assert_same_size(param);
 		return *this = typename impl<pDeriv, pTraits, mul>::type(this->data(), param.data());
 	}
-	//Lets you create custom expressions
+	//Enables users to implement their own pointwise functions that can be lazy evaluated
 	template<class functor>
 	auto unExpr(functor f) const {
 		return typename impl<derived, TRAITS, functor>::unary_type(asBase().data());

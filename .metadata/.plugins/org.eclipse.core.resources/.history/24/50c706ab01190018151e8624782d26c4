@@ -1,0 +1,13 @@
+/*
+ * Tensor_Slice.h
+ *
+ *  Created on: Feb 23, 2018
+ *      Author: joseph
+ */
+
+#ifndef TENSOR_SLICE_H_
+#define TENSOR_SLICE_H_
+
+template<class T, class ml, class rank> struct Tensor_Slice;
+
+#endif /* TENSOR_SLICE_H_ */

@@ -22,6 +22,8 @@ using DEFAULT_MATHLIB = GPU
 template<class, class ML = DEFAULT_MATHLIB> class Vector;
 template<class, class ML = DEFAULT_MATHLIB> class RowVector;
 template<class, class ML = DEFAULT_MATHLIB> class Matrix;
+template<class, class ML = DEFAULT_MATHLIB> class Cube;
+
 template<class, class ML = DEFAULT_MATHLIB> class Scalar;
 }
 
