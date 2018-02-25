@@ -32,24 +32,49 @@ template<> struct base<1> { template<class t, class m> using type = Vector<t, m>
 template<> struct base<2> { template<class t, class m> using type = Matrix<t, m>; template<class t,class m> using slice = Vector<t, m>; };
 template<> struct base<3> { template<class t, class m> using type = Cube<t, m>;   template<class t,class m> using slice = Matrix<t, m>; };
 
+template<int,int, class> struct Rank;
+template<class> struct ranker;
+template<class a, class b> struct ranker<Scalar<a,b>> { static constexpr int value = 0; using type = Rank<value, value>; };
+template<class a, class b> struct ranker<Vector<a,b>> { static constexpr int value = 1; using type = Rank<value, value>;  };
+template<class a, class b> struct ranker<Matrix<a,b>> { static constexpr int value = 2; using type = Rank<value, value>;  };
+template<class a, class b> struct ranker<Cube<a,b>>   { static constexpr int value = 3; using type = Rank<value, value>;  };
 
-template<class T, class derived, class Mathlib, class R>
+template<class T> using _scalar = typename MTF::determine_scalar<T>::type;
+template<class T> using _mathlib = typename MTF::determine_mathlibrary<T>::type;
+template<class T> using _ranker  = typename ranker<T>::type;
+
+template<class> struct determine_functor;
+template<template<class...> class tensor, class functor, class... set>
+struct determine_functor<tensor<functor, set...>>{
+
+	using derived = tensor<functor,set...>;
+	using fscal = functor;
+	using type = ifte<MTF::isPrimitive<functor>::conditional, Tensor_Core<_scalar<derived>, _mathlib<derived>, _ranker<derived>>, functor>;
+};
+
+template<class T>
+using _functor = typename determine_functor<T>::type;
+template<class T> using _fscal = typename determine_functor<T>::fscal;
+
+template<class derived>
 class TensorBase :
-				public Tensor_Operations <T, ifte<isPrim<T>, Tensor_Core<T, Mathlib, R>, T>, derived, Mathlib>,
-				public Tensor_Utility    <T, derived, Mathlib, isPrim<T> || isCore<T>::conditional>
+				public Tensor_Operations <_scalar<derived>, _functor<derived>, derived,  _mathlib<derived>>,
+				public Tensor_Utility    <_scalar<derived>, derived, _mathlib<derived>, isPrim<_fscal<derived>> || isCore<_functor<derived>>::conditional>
 
 {
 
 protected:
-	static constexpr int RANK = R::inner_rank;
-	static constexpr int LD_RANK = R::outer_rank;
-	using self = TensorBase<T, derived, Mathlib, R>;
-	using math_parent  = Tensor_Operations<T, ifte<isPrim<T>, Tensor_Core<T, Mathlib, R>, T>, derived, Mathlib>;
-	using _functor_type = ifte<isPrim<T>, Tensor_Core<T, Mathlib, R>, T>;
-	using functor_type =  _functor_type;
+
+	static constexpr int RANK = ranker<derived>::type::inner_rank;
+	static constexpr int LD_RANK = ranker<derived>::type::outer_rank;
+	using Mathlib =  _mathlib<derived>;
+
+	using self = TensorBase<derived>;
+	using math_parent  = Tensor_Operations <_scalar<derived>, _functor<derived>, derived,  _mathlib<derived>>;
+	using functor_type = _functor<derived>;
 
 	template<class> struct DISABLED;
-	static constexpr bool GENUINE_TENSOR = isPrim<T> || isCore<T>::conditional;
+	static constexpr bool GENUINE_TENSOR =isPrim<_fscal<derived>> || isCore<_functor<derived>>::conditional;
 	functor_type black_cat_array;
 
 public:
