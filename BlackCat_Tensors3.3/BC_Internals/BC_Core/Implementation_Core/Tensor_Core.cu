@@ -10,36 +10,15 @@
 #ifndef SHAPE_H_
 #define SHAPE_H_
 
-#include <vector>
-#include "../../BC_MetaTemplateFunctions/Adhoc.h"
-#include "../../BC_Expressions/BlackCat_Internal_Definitions.h"
-#include "../../BC_Expressions/Expression_Base.cu"
+#include "Tensor_Core_Slice.cu"
 
-#include <iostream>
 namespace BC {
 template<class T, class Mathlib, class ranker> struct Tensor_Core;
 
-#define __BC_gcpu__ __host__ __device__
-
-template<int inner_rank_, int outer_rank_ = inner_rank_, class voider = void>
-struct Rank {
-	static constexpr int inner_rank = inner_rank_;
-	static constexpr int outer_rank = outer_rank_;
-};
-
-static constexpr int MAXDIM = 100;
-static constexpr int MINDIM = 0;
-static const int ONE = 1;
-
-static constexpr int max(int a, int b) { return a > b ? a : b; }
-static constexpr int min(int a, int b) { return a < b ? a : b; }
-static constexpr int higher(int a) { return max(MAXDIM, max(a + 1, MINDIM)); }
-static constexpr int lower(int a) { return min(MINDIM, min(a - 1, MAXDIM)); }
-
 
 template<class T, class Mathlib, int inner, int outer>
-struct Tensor_Core<T, Mathlib, Rank<inner, outer>> : expression<T, Tensor_Core<T, Mathlib, Rank<inner, outer>>> {
-
+class Tensor_Core<T, Mathlib, Rank<inner, outer>> : expression<T, Tensor_Core<T, Mathlib, Rank<inner, outer>>> {
+public:
 	template<class,class,class> friend class Tensor_Core;
 
 	using self = Tensor_Core<T, Mathlib, Rank<inner, outer>>;
@@ -59,10 +38,11 @@ struct Tensor_Core<T, Mathlib, Rank<inner, outer>> : expression<T, Tensor_Core<T
 	static constexpr int LAST = RANK - 1;
 
 	using shape = int[RANK];
-
 	scalar* array;
 	shape is;
 	shape os;
+
+public:
 
 		  scalar* ary() 	  { return array; }
 	const scalar* ary() const { return array; }
@@ -146,8 +126,8 @@ struct Tensor_Core<T, Mathlib, Rank<inner, outer>> : expression<T, Tensor_Core<T
 	const auto InnerShape() const { return RANK > 0 ? (int*)is : &ONE; }
 	const auto OuterShape() const { return RANK > 0 ? (int*)os : &ONE;}
 
-	__BC_gcpu__ const scalar* data() const { return array; }
-	__BC_gcpu__ scalar* data()  		   { return array; }
+	const scalar* core() const { return array; }
+		  scalar* core()  	   { return array; }
 
 	void print() const { Mathlib::print(array, InnerShape(),rank(), 4); }
 
@@ -172,42 +152,11 @@ struct Tensor_Core<T, Mathlib, Rank<inner, outer>> : expression<T, Tensor_Core<T
 			os[i] = os[i - 1] * is[i];
 		}
 	}
-	template<class PARENT>
-	class Tensor_Slice {
-		using self = Tensor_Slice<PARENT>;
-		using slice_type = Tensor_Slice<self>;
-		static constexpr int RANK = lower(PARENT::RANK);
-		static constexpr int LAST =  lower(PARENT::LAST);
-		static_assert (RANK < 0, "SLICE OF SCALAR NOT DEFINED");
 
-		__BC_gcpu__ int rank() const { return RANK; }
-		__BC_gcpu__ int size() const { return RANK > 0 ? os[LAST] : 1;    }
-		__BC_gcpu__ int rows() const { return RANK > 0 ? is[0] : 1; }
-		__BC_gcpu__ int cols() const { return RANK > 1 ? is[1] : 1; }
-		__BC_gcpu__ int dimension(int i) const { return RANK > i ? is[i] : 1; }
+public:
+		  auto slice(int i) { return Tensor_Slice<self>(&array[os[LAST - 1] * i], *this); }
+	const auto slice(int i) const { return Tensor_Slice<self>(&array[os[LAST - 1] * i], *this); }
 
-		__BC_gcpu__ int LD_rows() const { return RANK > 0 ? os[0] : 1; }
-		__BC_gcpu__ int LD_cols() const { return RANK > 1 ? os[1] : 1; }
-		__BC_gcpu__ int LDdimension(int i) const { return RANK > i + 1 ? os[i] : 1; }
-
-		scalar* array_slice;
-		Tensor_Slice(scalar* array) : array_slice(array) {}
-
-		auto slice(int i) {
-			return Tensor_Slice<self>(&array_slice[os[LAST] * i]);
-		}
-		const auto slice(int i) const {
-			return Tensor_Slice<self>(&array_slice[os[LAST] * i]);
-		}
-		const auto& operator [] (int i) const { return array_slice[i]; }
-		 auto& operator [] (int i)  { return array_slice[i]; }
-
-	};
-
-	auto slice(int i) { return Tensor_Slice<self>(os[LAST] * i); }
-	const auto slice(int i) const { return Tensor_Slice<self>(os[LAST] * i); }
-
-	using slice_type = Tensor_Slice<self>;
 };
 }
 

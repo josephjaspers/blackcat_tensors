@@ -10,7 +10,7 @@
 
 #include "Scalar.h"
 #include "TensorBase.h"
-
+#include <type_traits>
 
 namespace BC {
 template<class T, class Mathlib>
@@ -22,8 +22,9 @@ class Vector : public TensorBase<T, Vector<T, Mathlib>, Mathlib, Rank<1>> {
 public:
 
 	static constexpr int RANK() { return 1; }
-	using child = typename parent_class::child;
 	using parent_class::operator=;
+	using parent_class::operator[];
+	using parent_class::operator();
 
 	Vector() {}
 	Vector(const Vector&& t) : parent_class(t) 		{}
@@ -40,11 +41,6 @@ public:
 	Vector& operator =(	     Vector&& t) { return parent_class::operator=(t); }
 	template<class U>
 	Vector& operator = (const Vector<U, Mathlib>& t) { return parent_class::operator=(t); }
-
-//	Scalar<accessor, Mathlib> operator [] (int index) { return Scalar<accessor, Mathlib>(); }
-//	const Scalar<accessor, Mathlib> operator [] (int index) const { return Scalar<accessor, Mathlib>(); }
-	auto& operator[] (int i) const { return this->data()[i];}
-	auto& operator[] (int i)  { return this->data()[i];}
 
 	const Vector<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib> t() const {
 		return Vector<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib>

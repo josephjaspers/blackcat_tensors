@@ -1,0 +1,60 @@
+/*
+ * Scalar.h
+ *
+ *  Created on: Jan 6, 2018
+ *      Author: joseph
+ */
+
+#ifndef SCALAR_H_
+#define SCALAR_H_
+#include "TensorBase.h"
+#include "../BC_MetaTemplateFunctions/Simple.h"
+#include "../BC_MetaTemplateFunctions/Adhoc.h"
+#include <type_traits>
+
+namespace BC {
+
+template<class T, class Mathlib>
+class Scalar : public TensorBase<T, Scalar<T, Mathlib>, Mathlib, Rank<0>> {
+
+	using parent_class = TensorBase<T, Scalar<T, Mathlib>, Mathlib, Rank<0>>;
+	template<class, class> friend class Vector;
+
+public:
+	static constexpr int RANK() { return 0; }
+
+	using parent_class::operator=;
+
+	Scalar() {}
+	Scalar(const Scalar&& t) : parent_class(t) 		{}
+	Scalar(		 Scalar&& t) : parent_class(t) 		{}
+	Scalar(const Scalar&  t) : parent_class(t) 		{}
+
+	Scalar& operator =(const Scalar&  t) { return parent_class::operator=(t); }
+	Scalar& operator =(const Scalar&& t) { return parent_class::operator=(t); }
+	Scalar& operator =(	     Scalar&& t) { return parent_class::operator=(t); }
+	template<class U>
+	Scalar& operator =(const Scalar<U, Mathlib>& t) { return parent_class::operator=(t); }
+	Scalar& operator =(T scalar) { Mathlib::DeviceToHost(this->data(), &scalar, 1); return *this; }
+
+	using _shape = std::vector<int>;
+	template<bool var, class a, class b> using ifte = std::conditional_t<var, a, b>;
+	Scalar(T* param) {}
+
+
+	struct sendParam { template<class u>  static auto impl(const u& param) { return param; }};
+	struct sendNull { template<class u>  static auto impl(const u& param) { return _shape({1}); }};
+	struct htd { template<class... u>  static void impl(const u&... param) { Mathlib::HostToDevice(param...); }};
+	struct voider { template<class... u>  static void impl(const u&... parma) { }};
+
+	Scalar(T value) : parent_class(ifte<MTF::isPrimitive<T>::conditional, sendNull, sendParam>::impl(value)) {
+		ifte<MTF::isPrimitive<decltype(value)>::conditional, htd, voider>::impl(this->data().ary(), &value, 1);
+	}
+};
+
+
+}
+
+
+
+#endif /* SCALAR_H_ */

@@ -25,6 +25,7 @@ auto test() {
 
 
 
+
 	d = a.t();
 	e = b.t();
 
@@ -36,6 +37,7 @@ auto test() {
 
 	std::cout << " simple dot product " << std::endl;
 	c = d * e;
+	c.print();
 	///all the permutations of optimized dotproduct
 	c = a.t() * b.t();
 	c = a.t() * e;
@@ -46,7 +48,6 @@ auto test() {
 	c = d * Scalar<double>(2) * e;
 
 	c.print();
-
 
 	Scalar<double> A(2);
 	Scalar<double> B(2);
@@ -62,7 +63,22 @@ auto test() {
 	c.print();
 
 	Cube<double> cu(2,3, 4);
+	cu.zero();
 	cu.print();
+
+
+	std::cout << " sub vector test " << std::endl;
+
+	d.print();
+	std::cout << " adding d[1] = d[1] + d[1]" << std::endl;
+	d[1] = d[1] + d[1];
+	d.print();
+	std::cout << " adding d[1][1] = d[1][1] + d[1][1] " << std::endl;
+
+
+	d[1][1] = d[1][1] + d[1][1];
+	d.print();
+
 }
 
 
@@ -79,6 +95,17 @@ int main() {
 //	speedTestDelayedEval<40000,   100000>();
 //	speedTestDelayedEval<80000,   100000>();
 //	speedTestDelayedEval<100000,  100000>();
+		speedTestsScalarIteration<128,     100000>();
+		speedTestsScalarIteration<256,     100000>();
+		speedTestsScalarIteration<512,     100000>();
+		speedTestsScalarIteration<1024,    100000>();
+		speedTestsScalarIteration<2048,    100000>();
+		speedTestsScalarIteration<5096,    100000>();
+		speedTestsScalarIteration<10000,   100000>();
+		speedTestsScalarIteration<20000,   100000>();
+		speedTestsScalarIteration<40000,   100000>();
+		speedTestsScalarIteration<80000,   100000>();
+		speedTestsScalarIteration<100000,  100000>();
 //	MatrixPointwise();
 	test();
 

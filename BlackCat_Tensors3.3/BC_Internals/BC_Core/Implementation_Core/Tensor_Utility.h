@@ -25,7 +25,14 @@ private:
 	const deriv& asDerived() const {
 		return static_cast<const deriv&>(*this);
 	}
+
 public:
+	void print() const {
+		MATHLIB::print(asDerived().data(), asDerived().InnerShape(), asDerived().rank(), 8);
+	}
+	void print(int precision) const {
+		MATHLIB::print(asDerived().data(), asDerived().InnerShape(), asDerived().rank(), precision);
+	}
 };
 template<class scalar_type, class deriv, class MATHLIB>
 struct Tensor_Utility<scalar_type, deriv, MATHLIB, true> {
@@ -55,10 +62,10 @@ public:
 		MATHLIB::zero(asDerived().data(), asDerived().size());
 	}
 	void print() const {
-		MATHLIB::print(asDerived().data().ary(), asDerived().InnerShape(), asDerived().rank(), 8);
+		MATHLIB::print(asDerived().data(), asDerived().InnerShape(), asDerived().rank(), 8);
 	}
 	void print(int precision) const {
-		MATHLIB::print(asDerived().data().ary(), asDerived().InnerShape(), asDerived().rank(), precision);
+		MATHLIB::print(asDerived().data(), asDerived().InnerShape(), asDerived().rank(), precision);
 	}
 	void printSparse() const {
 		MATHLIB::printSparse(asDerived().data(), asDerived().InnerShape(), asDerived().rank(), 8);
@@ -115,9 +122,9 @@ public:
 			if (overrideDimensions) {
 			asDerived().resetShape(dims);
 			}
-			MATHLIB::copy(asDerived().data().array, &data[data[0] + 1], asDerived().size() > data.size() ? data.size() : asDerived().size());
+			MATHLIB::copy(asDerived().data(), &data[data[0] + 1], asDerived().size() > data.size() ? data.size() : asDerived().size());
 		} else {
-			MATHLIB::copy(asDerived().data().array, &data[0], asDerived().size() > data.size() ? data.size() : asDerived().size());
+			MATHLIB::copy(asDerived().data(), &data[0], asDerived().size() > data.size() ? data.size() : asDerived().size());
 		}
 
 	}

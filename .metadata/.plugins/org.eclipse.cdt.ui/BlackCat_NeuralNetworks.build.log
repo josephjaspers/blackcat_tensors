@@ -1,6 +1,6 @@
-20:43:23 **** Incremental Build of configuration Debug_new for project BlackCat_NeuralNetworks ****
+13:02:28 **** Incremental Build of configuration Debug_new for project BlackCat_NeuralNetworks ****
 make all 
 make: *** No rule to make target '/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Core/TensorN.h', needed by 'UnitTests/MNIST_test.o'.  Stop.
 
-20:43:23 Build Finished (took 322ms)
+13:02:29 Build Finished (took 411ms)
 

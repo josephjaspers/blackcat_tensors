@@ -7,6 +7,8 @@
 #include "BlackCat_TensorFunctions.cu"
 
 using BC::Vector;
+using BC::Matrix;
+
 using namespace BC::NN_Functions;
 
 
@@ -108,4 +110,44 @@ int speedTestCombine() {
 
 	return 0;
 }
+
+
+template<int SIZE, int repetitions>
+int speedTestsScalarIteration() {
+	const int reps = repetitions;
+
+	using vec = Vector<float>;
+	using mat = Matrix<float>;
+
+	vec b(SIZE);
+	mat a(1,SIZE);
+
+	a.randomize(0, 100);
+	b.randomize(0, 100);
+
+	float t;
+
+	t = omp_get_wtime();
+
+	for (int iter = 0; iter < reps; ++iter) {
+		a[iter];
+	}
+
+	t = omp_get_wtime() - t;
+
+	float t2;
+
+	t2 = omp_get_wtime();
+
+	for (int iter = 0; iter < reps; ++iter) {
+		a(iter);
+	}
+
+	t2 = omp_get_wtime() - t2;
+
+	std::cout <<"sz = " << SIZE << "time scalar: " << t << " time generic access: " << t2 << std::endl;
+
+	return 0;
+}
+
 

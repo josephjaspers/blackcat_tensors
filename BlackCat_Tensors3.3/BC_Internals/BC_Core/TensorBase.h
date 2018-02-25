@@ -19,6 +19,20 @@ using MTF::isPrim;
 using MTF::shell_of;
 using MTF::isCore;
 
+template<class,class> class DISABLED;
+template<class,class> class Scalar;
+template<class,class> class Vector;
+template<class,class> class Matrix;
+template<class,class> class Cube;
+
+template<int> struct base;
+
+template<> struct base<0> { template<class t, class m> using type = Scalar<t,m>;  template<class t, class m> using slice = DISABLED<t, m>; };
+template<> struct base<1> { template<class t, class m> using type = Vector<t, m>; template<class t,class m> using slice = Scalar<t, m>; };
+template<> struct base<2> { template<class t, class m> using type = Matrix<t, m>; template<class t,class m> using slice = Vector<t, m>; };
+template<> struct base<3> { template<class t, class m> using type = Cube<t, m>;   template<class t,class m> using slice = Matrix<t, m>; };
+
+
 template<class T, class derived, class Mathlib, class R>
 class TensorBase :
 				public Tensor_Operations <T, ifte<isPrim<T>, Tensor_Core<T, Mathlib, R>, T>, derived, Mathlib>,
@@ -27,9 +41,13 @@ class TensorBase :
 {
 
 protected:
+	static constexpr int RANK = R::inner_rank;
+	static constexpr int LD_RANK = R::outer_rank;
+	using self = TensorBase<T, derived, Mathlib, R>;
 	using math_parent  = Tensor_Operations<T, ifte<isPrim<T>, Tensor_Core<T, Mathlib, R>, T>, derived, Mathlib>;
-	using functor_type =  ifte<isPrim<T>, Tensor_Core<T, Mathlib, R>, T>;
-	using child = typename Tensor_Core<T, Mathlib, R>::child;
+	using _functor_type = ifte<isPrim<T>, Tensor_Core<T, Mathlib, R>, T>;
+	using functor_type =  _functor_type;
+
 	template<class> struct DISABLED;
 	static constexpr bool GENUINE_TENSOR = isPrim<T> || isCore<T>::conditional;
 	functor_type black_cat_array;
@@ -40,7 +58,7 @@ public:
 	operator  		derived&() 		 { return static_cast<	    derived&>(*this); }
 
 
-	template<class... params> TensorBase(const params&... p) : black_cat_array(p...) { }
+	template<class atLeastOneParam, class... params> TensorBase(const atLeastOneParam& alop, const params&... p) : black_cat_array(alop, p...) { }
 
 	template<class    U> using deriv   = typename shell_of<derived>::type<U, Mathlib>;
 	template<class... U> using functor = typename shell_of<functor_type>::type<U...>;
@@ -77,6 +95,8 @@ public:
 
 	const auto InnerShape() const 			{ return black_cat_array.InnerShape(); }
 	const auto OuterShape() const 			{ return black_cat_array.OuterShape(); }
+
+
 	const functor_type& _data() const { return black_cat_array; }
 		  functor_type& _data()		  { return black_cat_array; }
 
@@ -85,6 +105,17 @@ public:
 		Mathlib::copy(this->data(), tensor.data(), this->size());
 		return *this;
 	}
+
+
+	const auto slice(int i) const { return black_cat_array.slice(i); }
+		  auto slice(int i) 	  { return black_cat_array.slice(i); }
+
+		  auto operator [] (int i) 		 { return typename base<RANK>::slice<decltype(slice(0)), Mathlib>(slice(i)); }
+	const auto operator [] (int i) const { return typename base<RANK>::slice<decltype(slice(0)), Mathlib>(slice(i)); }
+
+	const auto& operator() (int i) const { return this->data()[i]; }
+		  auto& operator() (int i) 	     { return this->data()[i]; }
+
 };
 
 }

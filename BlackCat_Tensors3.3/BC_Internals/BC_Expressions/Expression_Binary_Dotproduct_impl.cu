@@ -42,7 +42,7 @@ template<class T, class ml, class deriv> struct det_eval<Tensor_Core<T, ml, deri
 	static constexpr bool scalar = false;
 
 	template<class param> static T* getScalar(const param& p) { return nullptr; }
-	template<class param> static T* getArray(const param& p) { return cc(p).data(); }
+	template<class param> static T* getArray(const param& p) { return cc(p); }
 };
 ////IF TRANSPOSE
 template<class T, class ml, class deriv>
@@ -63,8 +63,8 @@ struct det_eval<binary_expression_scalar_R<T, mul, Tensor_Core<T, ml, d1>, Tenso
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = true;
 
-	template<class param> static T* getScalar(const param& p) { return cc(p.right.data()); }
-	template<class param> static T* getArray(const param& p) { return cc(p.left.data()); }
+	template<class param> static T* getScalar(const param& p) { return cc(p.right); }
+	template<class param> static T* getArray(const param& p) { return cc(p.left); }
 };
 
 //IF A SCALAR BY TENSOR MUL OPERATION L
@@ -73,8 +73,8 @@ struct det_eval<binary_expression_scalar_L<T, mul, Tensor_Core<T, ml, d1>, Tenso
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = true;
-	template<class param> static T* getScalar(const param& p) { return cc(p.left.data()); }
-	template<class param> static T* getArray(const param& p) { return cc(p.right.data()); }
+	template<class param> static T* getScalar(const param& p) { return cc(p.left); }
+	template<class param> static T* getArray(const param& p) { return cc(p.right); }
 };
 
 //IF A SCALAR BY TENSOR MUL OPERATION R + TRANSPOSED
@@ -84,7 +84,7 @@ struct det_eval<binary_expression_scalar_R<T, mul, unary_expression_transpose<T,
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;
 
-	template<class param> static T* getScalar(const param& p) { return cc(p.right.data()); }
+	template<class param> static T* getScalar(const param& p) { return cc(p.right); }
 	template<class param> static T* getArray(const param& p) { return cc(p.left.array); }
 };
 

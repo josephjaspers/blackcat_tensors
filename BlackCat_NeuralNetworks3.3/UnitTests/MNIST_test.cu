@@ -15,7 +15,7 @@ tensor expandOutput(int val, int total) {
 	//Convert a value to a 1-hot output vector
 	tensor out(total);
 	out.zero();
-	out[val] = 1;
+	out(val) = 1;
 	return out;
 }
 

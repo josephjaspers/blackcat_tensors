@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;BlackCat_Tensors3.3/BC_Internals/BC_Core/Implementation_Core/Tensor_Slice.cu&apos; to &apos;Tensor_Core_Slice.cu&apos;" description="Rename resource &apos;Tensor_Slice.cu&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="BC_Internals/BC_Core/Implementation_Core/Tensor_Slice.cu" name="Tensor_Core_Slice.cu" stamp="1519585201726" updateReferences="true"/>
+</session>
