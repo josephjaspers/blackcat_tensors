@@ -23,7 +23,7 @@ template<class,class> class Scalar;
 template<class,class> class Vector;
 template<class,class> class Matrix;
 template<class,class> class Cube;
-template<class,class,class> struct Tensor_Core;
+template<class> struct Tensor_Core;
 
 template<int> struct base;
 
@@ -42,6 +42,7 @@ template<class a, class b> struct ranker<Cube<a,b>>   { static constexpr int val
 template<class T> using _scalar = typename MTF::determine_scalar<T>::type;
 template<class T> using _mathlib = typename MTF::determine_mathlib<T>::type;
 template<class T> using _ranker  = typename ranker<T>::type;
+template<class T> static constexpr int _rankOf  = ranker<T>::value;
 
 template<class> struct determine_functor;
 template<template<class...> class tensor, class functor, class... set>
@@ -49,7 +50,7 @@ struct determine_functor<tensor<functor, set...>>{
 
 	using derived = tensor<functor,set...>;
 	using fscal = functor;
-	using type = ifte<MTF::isPrimitive<functor>::conditional, Tensor_Core<_scalar<derived>, _mathlib<derived>, _ranker<derived>>, functor>;
+	using type = ifte<MTF::isPrimitive<functor>::conditional, Tensor_Core<derived>, functor>;
 };
 
 template<class T>
@@ -63,7 +64,7 @@ struct determine_evaluation<tensor<functor, set...>>{
 
 	using type = ifte<MTF::isPrimitive<functor>::conditional || isCore<functor>::conditional,
 			derived&,
-			tensor<Tensor_Core<_scalar<derived>, _mathlib<derived>, _ranker<derived>>>>;
+			tensor<Tensor_Core<derived>>>;
 };
 template<class T> using _evaluation = typename determine_evaluation<T>::type;
 

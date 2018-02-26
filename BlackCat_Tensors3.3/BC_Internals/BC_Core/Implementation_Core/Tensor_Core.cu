@@ -13,29 +13,22 @@
 #include "Tensor_Core_Slice.cu"
 #include "Determiners.h"
 namespace BC {
-template<class T, class _rank> struct Tensor_Core {
+template<class T> struct Tensor_Core {
 
-	static constexpr int inner = _rank::inner_rank;
-	static constexpr int outer = _rank::outer_rank;
-	using Mathlib = CPU;
+	static constexpr int inner = _rankOf<T>;
+	static constexpr int outer = _rankOf<T>;
+	using Mathlib = _mathlib<T>;
 
 public:
-	template<class,class,class> friend class Tensor_Core;
 
-	using self = Tensor_Core<T, Mathlib, _rank>;
-
-	friend class Tensor_Core<T, Mathlib, Rank<higher(inner), outer>>;
-	friend class Tensor_Core<T, Mathlib, Rank<lower (inner), outer>>;
-
-	using child = Tensor_Core<T, Mathlib, Rank<lower(inner), outer>>;
-	using parent = Tensor_Core<T, Mathlib, Rank<higher(inner), outer>>;
+	using self = Tensor_Core<T>;
 
 	using dimlist = std::vector<int>;
 	using scalar = _scalar<T>;
 
-	static constexpr int RANK = inner;
-	static constexpr int LD_RANK = outer;
-	static constexpr bool OWNERSHIP = RANK == LD_RANK;
+	static constexpr int RANK = _rankOf<T>;
+	static constexpr int LD_RANK = RANK;
+	static constexpr bool OWNERSHIP = true;
 	static constexpr int LAST = RANK - 1;
 
 	scalar* array;
@@ -98,8 +91,8 @@ public:
 		array = param.array;
 		param.array = nullptr;
 	}
-	template<class t, class m, class d >
-	Tensor_Core(const Tensor_Core<t, m,d >& param) {
+	template<class d >
+	Tensor_Core(const Tensor_Core<d>& param) {
 		static_assert(RANK == decltype(param)::RANK, "TENSORS MAY ONLY BE CONSTRUCTED OF SAME ORDER ");
 		Mathlib::copy(is, param.is, RANK);
 		Mathlib::copy(os, param.os, RANK);

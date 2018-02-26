@@ -10,6 +10,7 @@
 
 #include "../BC_MetaTemplateFunctions/Simple.h"
 #include "../BC_MetaTemplateFunctions/Adhoc.h"
+#include "../BC_Core/Implementation_Core/Determiners.h"
 #include <iostream>
 #include <type_traits>
 
@@ -19,7 +20,7 @@ template<class, class, class, class> 	class binary_expression_scalar_R;
 template<class, class, class, class> 	class binary_expression_scalar_L;
 template<class, class 			   > 	class unary_expression_transpose;
 template<class, class, class, class> 	class binary_expression;
-template<class, class, class	   > 	class Tensor_Core;
+template<class> 	class Tensor_Core;
 										class mul;
 
 template<class T> T&  cc(const T&  param) { return const_cast<T&> (param); }
@@ -36,17 +37,17 @@ template<class> struct det_eval {
 };
 
 //IF TENSOR CORE (NON EXPRESSION)
-template<class T, class ml, class deriv> struct det_eval<Tensor_Core<T, ml, deriv>> {
+template<class deriv> struct det_eval<Tensor_Core<deriv>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = false;
 
-	template<class param> static T* getScalar(const param& p) { return nullptr; }
-	template<class param> static T* getArray(const param& p) { return cc(p); }
+	template<class param> static _scalar<deriv>* getScalar(const param& p) { return nullptr; }
+	template<class param> static _scalar<deriv>* getArray(const param& p) { return cc(p); }
 };
 ////IF TRANSPOSE
-template<class T, class ml, class deriv>
-struct det_eval<unary_expression_transpose<T, Tensor_Core<T, ml, deriv>>> {
+template<class T, class deriv>
+struct det_eval<unary_expression_transpose<T, Tensor_Core<deriv>>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = false;
@@ -57,8 +58,8 @@ struct det_eval<unary_expression_transpose<T, Tensor_Core<T, ml, deriv>>> {
 
 
 //IF A SCALAR BY TENSOR MUL OPERATION R
-template<class T, class d1, class d2, class ml>
-struct det_eval<binary_expression_scalar_R<T, mul, Tensor_Core<T, ml, d1>, Tensor_Core<T, ml, d2>>> {
+template<class T, class d1, class d2>
+struct det_eval<binary_expression_scalar_R<T, mul, Tensor_Core<d1>, Tensor_Core<d2>>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = true;
@@ -68,8 +69,8 @@ struct det_eval<binary_expression_scalar_R<T, mul, Tensor_Core<T, ml, d1>, Tenso
 };
 
 //IF A SCALAR BY TENSOR MUL OPERATION L
-template<class T, class d1, class d2, class ml>
-struct det_eval<binary_expression_scalar_L<T, mul, Tensor_Core<T, ml, d1>, Tensor_Core<T, ml, d2>>> {
+template<class T, class d1, class d2>
+struct det_eval<binary_expression_scalar_L<T, mul, Tensor_Core<d1>, Tensor_Core<d2>>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = true;
@@ -78,8 +79,8 @@ struct det_eval<binary_expression_scalar_L<T, mul, Tensor_Core<T, ml, d1>, Tenso
 };
 
 //IF A SCALAR BY TENSOR MUL OPERATION R + TRANSPOSED
-template<class T, class d1, class d2, class ml>
-struct det_eval<binary_expression_scalar_R<T, mul, unary_expression_transpose<T, Tensor_Core<T, ml, d1>>, Tensor_Core<T, ml, d2>>> {
+template<class T, class d1, class d2>
+struct det_eval<binary_expression_scalar_R<T, mul, unary_expression_transpose<T, Tensor_Core<d1>>, Tensor_Core<d2>>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;
@@ -89,8 +90,8 @@ struct det_eval<binary_expression_scalar_R<T, mul, unary_expression_transpose<T,
 };
 
 //IF A SCALAR BY TENSOR MUL OPERATION L + TRANSPOSED
-template<class T, class d1, class d2, class ml>
-struct det_eval<binary_expression_scalar_L<T, mul, Tensor_Core<T, ml, d1>, unary_expression_transpose<T, Tensor_Core<T, ml, d2>>>> {
+template<class T, class d1, class d2>
+struct det_eval<binary_expression_scalar_L<T, mul, Tensor_Core<d1>, unary_expression_transpose<T, Tensor_Core<d2>>>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;
