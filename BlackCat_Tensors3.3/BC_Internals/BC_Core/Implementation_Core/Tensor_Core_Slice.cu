@@ -18,7 +18,7 @@ namespace BC {
 
 #define __BC_gcpu__ __host__ __device__
 
-template<int inner_rank_, int outer_rank_ = inner_rank_, class voider = void>
+template<int inner_rank_, int outer_rank_, class voider>
 struct Rank {
 	static constexpr int inner_rank = inner_rank_;
 	static constexpr int outer_rank = outer_rank_;

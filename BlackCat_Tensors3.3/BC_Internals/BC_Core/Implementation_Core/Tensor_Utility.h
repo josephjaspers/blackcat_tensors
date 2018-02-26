@@ -13,12 +13,15 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include "Determiners.h"
 
 namespace BC {
 
-template<class T, class deriv, class MATHLIB, bool Utility_Function_Supported>
+template< class deriv, class =void >
 struct Tensor_Utility {
 private:
+	using MATHLIB = _mathlib<deriv>;
+
 	deriv& asDerived() {
 		return static_cast<deriv&>(*this);
 	}
@@ -34,8 +37,11 @@ public:
 		MATHLIB::print(asDerived().data(), asDerived().InnerShape(), asDerived().rank(), precision);
 	}
 };
-template<class scalar_type, class deriv, class MATHLIB>
-struct Tensor_Utility<scalar_type, deriv, MATHLIB, true> {
+template<class deriv>
+struct Tensor_Utility<deriv, typename std::enable_if_t< isPrim<_fscal<deriv>> || isCore<_functor<deriv>>::conditional>> {
+
+		using scalar_type = _scalar<deriv>;
+		using MATHLIB = _mathlib<deriv>;
 
 /*
  *  Tensor_Base specialization (for primary tensors -- we enable these utility methods)

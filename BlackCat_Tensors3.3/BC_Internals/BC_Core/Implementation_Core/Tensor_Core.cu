@@ -11,20 +11,21 @@
 #define SHAPE_H_
 
 #include "Tensor_Core_Slice.cu"
-
+#include "Determiners.h"
 namespace BC {
-template<class T, class Mathlib, class ranker> struct Tensor_Core;
+template<class T, class Mathlib, class _rank> struct Tensor_Core {
 
 
-template<class T, class Mathlib, int inner, int outer>
-class Tensor_Core<T, Mathlib, Rank<inner, outer>> : expression<T, Tensor_Core<T, Mathlib, Rank<inner, outer>>> {
+	static constexpr int inner = _rank::inner_rank;
+	static constexpr int outer = _rank::outer_rank;
+
 public:
 	template<class,class,class> friend class Tensor_Core;
 
-	using self = Tensor_Core<T, Mathlib, Rank<inner, outer>>;
+	using self = Tensor_Core<T, Mathlib, _rank>;
 
 	friend class Tensor_Core<T, Mathlib, Rank<higher(inner), outer>>;
-	friend class Tensor_Core<T, Mathlib, Rank<lower(inner), outer>>;
+	friend class Tensor_Core<T, Mathlib, Rank<lower (inner), outer>>;
 
 	using child = Tensor_Core<T, Mathlib, Rank<lower(inner), outer>>;
 	using parent = Tensor_Core<T, Mathlib, Rank<higher(inner), outer>>;
@@ -98,8 +99,8 @@ public:
 		array = param.array;
 		param.array = nullptr;
 	}
-	template<class t, class m, class r>
-	Tensor_Core(const Tensor_Core<t, m, r>& param) {
+	template<class t, class m, class d >
+	Tensor_Core(const Tensor_Core<t, m,d >& param) {
 		static_assert(RANK == decltype(param)::RANK, "TENSORS MAY ONLY BE CONSTRUCTED OF SAME ORDER ");
 		Mathlib::copy(is, param.is, RANK);
 		Mathlib::copy(os, param.os, RANK);

@@ -47,12 +47,12 @@ namespace BC {
 			using type = typename determine_mathlib_impl<traits...>::type;
 		};
 		//EVALUTION_TYPE----------------------------------------------------------------------------------------------
-		template<class tensor>
-		struct determine_evaluation;
-
-		template<bool, class T> struct if_AddRef { using type = T; };
-		template<	   class T> struct if_AddRef<true, T> { using type = T&; };
-		template<class T> struct ref { using type = T&; };
+//		template<class tensor>
+//		struct determine_evaluation;
+//
+//		template<bool, class T> struct if_AddRef { using type = T; };
+//		template<	   class T> struct if_AddRef<true, T> { using type = T&; };
+//		template<class T> struct ref { using type = T&; };
 
 		//DETERMINE IF ITS A CORE_TYPE (DETERMINE IF THE METHOD SHOULD GAIN ACCESS TO UTILITY METHODS)-------------------------------------
 
@@ -68,14 +68,14 @@ namespace BC {
 		template<class T> constexpr bool is_core = isCore<T>::conditional;
 
 
-		//DETERMINE THE INSTANT EVALUATION TYPE --------------------------------------------------------------------------------------------
-		template<template<class, class> class tensor, class T, class ML>
-		struct determine_evaluation<tensor<T, ML>> {
-
-			using type = typename MTF::IF_ELSE<isPrim<T> || isCore<T>::conditional,
-								typename ref<tensor<T, ML>>::type,
-								tensor<typename determine_scalar<T>::type, ML>>::type;
-		};
+//		//DETERMINE THE INSTANT EVALUATION TYPE --------------------------------------------------------------------------------------------
+//		template<template<class, class> class tensor, class T, class ML>
+//		struct determine_evaluation<tensor<T, ML>> {
+//
+//			using type = typename MTF::IF_ELSE<isPrim<T> || isCore<T>::conditional,
+//								typename ref<tensor<T, ML>>::type,
+//								tensor<typename determine_scalar<T>::type, ML>>::type;
+//		};
 	}
 }
 #endif /* ADHOC_H_ */

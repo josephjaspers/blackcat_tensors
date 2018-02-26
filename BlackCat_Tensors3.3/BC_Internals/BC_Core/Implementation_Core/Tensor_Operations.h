@@ -9,6 +9,7 @@
 #define TENSOR_CORE_H_
 
 #include "Tensor_Operations_impl.h"
+#include "Determiners.h"
 
 namespace BC {
 
@@ -23,28 +24,28 @@ struct _TRAITS {
 		using math_library 		= math_lib;
 };
 
+//, , derived,
+	template <class derived>
+	struct Tensor_Operations :Tensor_Operations_impl<derived> {
+//			:
+//			  public Tensor_Operations_impl<
+//			  derived,
+//			  _TRAITS<
+//			  _scalar<derived>,
+//			  _functor<derived>,
+//			  _evaluation<derived>,
+//			  _mathlib<derived>>> {
+//
+//
+//			using parent_class = Tensor_Operations_impl<
+//					  derived,
+//					  _TRAITS<
+//					  _scalar<derived>,
+//					  _functor<derived>,
+//					  _evaluation<derived>,
+//					  _mathlib<derived>>>;
 
-	template <class T, class functor, class derived, class mathlibrary>
-	struct Tensor_Operations
-			:
-			  public Tensor_Operations_impl<
-			  derived,
-			  _TRAITS<
-			  	  typename MTF::determine_scalar<T>::type,
-			  	  functor,
-			  	  typename MTF::determine_evaluation<derived>::type,
-			  	  mathlibrary>> {
-
-
-			using parent_class = Tensor_Operations_impl<
-					  derived,
-
-					  _TRAITS<
-					  	  typename MTF::determine_scalar<T>::type,
-					  	  functor,
-					  	  typename MTF::determine_evaluation<derived>::type,
-					  	  mathlibrary>>;
-
+			using parent_class = Tensor_Operations_impl<derived>;
 			using functor_type = typename parent_class::functor_type;
 			using parent_class::operator=;
 

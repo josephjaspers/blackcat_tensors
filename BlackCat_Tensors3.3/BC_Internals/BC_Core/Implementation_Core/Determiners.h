@@ -8,28 +8,22 @@
 #ifndef DETERMINERS_H_
 #define DETERMINERS_H_
 
+#include "../../BC_MetaTemplateFunctions/Adhoc.h"
+#include "../../BC_MetaTemplateFunctions/Simple.h"
+
 namespace BC {
 
-//DETERMINE IF ITS A CORE_TYPE (DETERMINE IF THE METHOD SHOULD GAIN ACCESS TO UTILITY METHODS)-------------------------------------
-
-template<class,class,class> struct Tensor_Core;
-template<class> struct Tensor_Slice;
-
-template<class > 					struct isCore 						{ static constexpr bool conditional = false; };
-template<class a, class b, class c> struct isCore<Tensor_Core<a, b, c>> { static constexpr bool conditional = true;  };
-template<class a> struct isCore<Tensor_Slice<a>> { static constexpr bool conditional = true;  };
-
-template<class T> constexpr bool is_core = isCore<T>::conditional;
-
-
-
-
+using MTF::ifte;		//if then else
+using MTF::isPrim;
+using MTF::shell_of;
+using MTF::isCore;
 
 template<class,class> class DISABLED;
 template<class,class> class Scalar;
 template<class,class> class Vector;
 template<class,class> class Matrix;
 template<class,class> class Cube;
+template<class,class,class> struct Tensor_Core;
 
 template<int> struct base;
 
@@ -38,9 +32,9 @@ template<> struct base<1> { template<class t, class m> using type = Vector<t, m>
 template<> struct base<2> { template<class t, class m> using type = Matrix<t, m>; template<class t,class m> using slice = Vector<t, m>; };
 template<> struct base<3> { template<class t, class m> using type = Cube<t, m>;   template<class t,class m> using slice = Matrix<t, m>; };
 
-template<int,int, class> struct Rank;
+template<int a ,int b = a, class = void> struct Rank;
 template<class> struct ranker;
-template<class a, class b> struct ranker<Scalar<a,b>> { static constexpr int value = 0; using type = Rank<value, value>; };
+template<class a, class b> struct ranker<Scalar<a,b>> { static constexpr int value = 0; using type = Rank<value, value>;  };
 template<class a, class b> struct ranker<Vector<a,b>> { static constexpr int value = 1; using type = Rank<value, value>;  };
 template<class a, class b> struct ranker<Matrix<a,b>> { static constexpr int value = 2; using type = Rank<value, value>;  };
 template<class a, class b> struct ranker<Cube<a,b>>   { static constexpr int value = 3; using type = Rank<value, value>;  };
@@ -49,11 +43,29 @@ template<class T> using _scalar = typename MTF::determine_scalar<T>::type;
 template<class T> using _mathlib = typename MTF::determine_mathlibrary<T>::type;
 template<class T> using _ranker  = typename ranker<T>::type;
 
-template<class T, class voider>  struct determine_functor_type { using type = T; };		//non primitive (if class) functor = itself
-template<class T> struct determine_functor_type<T, std::enable_if_t<MTF::isPrimitive<T>::conditional>>
-{ using type = Tensor_Core<_scalar<T>, _mathlib<T>, _ranker<T>>; };	//if the class is a primitive type == convert the functor_type = TensorCore
+template<class> struct determine_functor;
+template<template<class...> class tensor, class functor, class... set>
+struct determine_functor<tensor<functor, set...>>{
 
+	using derived = tensor<functor,set...>;
+	using fscal = functor;
+	using type = ifte<MTF::isPrimitive<functor>::conditional, Tensor_Core<_scalar<derived>, _mathlib<derived>, _ranker<derived>>, functor>;
+};
 
+template<class T>
+using _functor = typename determine_functor<T>::type;
+template<class T> using _fscal = typename determine_functor<T>::fscal;
+
+template<class> struct determine_evaluation;
+template<template<class...> class tensor, class functor, class... set>
+struct determine_evaluation<tensor<functor, set...>>{
+	using derived = tensor<functor,set...>;
+
+	using type = ifte<MTF::isPrimitive<functor>::conditional || isCore<functor>::conditional,
+			derived&,
+			tensor<Tensor_Core<_scalar<derived>, _mathlib<derived>, _ranker<derived>>>>;
+};
+template<class T> using _evaluation = typename determine_evaluation<T>::type;
 
 }
 
