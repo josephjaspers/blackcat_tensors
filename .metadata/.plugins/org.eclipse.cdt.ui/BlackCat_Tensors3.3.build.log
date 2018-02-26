@@ -1,6 +1,61 @@
-22:26:10 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+18:34:35 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
 make all 
-make: Nothing to be done for 'all'.
+Building file: ../UnitTests/main.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.cu(58): warning: calling a __host__ function from a __host__ __device__ function is not allowed
+          detected during:
+            instantiation of "int BC::Tensor_Slice<PARENT>::size() const [with PARENT=BC::Tensor_Core<BC::_scalar<BC::Matrix<double, BC::DEFAULT_MATHLIB>>, BC::_mathlib<BC::Matrix<double, BC::DEFAULT_MATHLIB>>, BC::_ranker<BC::Matrix<double, BC::DEFAULT_MATHLIB>>>]" 
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(65): here
+            instantiation of "int BC::TensorBase<derived>::size() const [with derived=BC::Vector<BC::Tensor_Slice<BC::Tensor_Core<BC::_scalar<BC::Matrix<double, BC::DEFAULT_MATHLIB>>, BC::_mathlib<BC::Matrix<double, BC::DEFAULT_MATHLIB>>, BC::_ranker<BC::Matrix<double, BC::DEFAULT_MATHLIB>>>>, BC::_mathlib<BC::Matrix<double, BC::DEFAULT_MATHLIB>>>]" 
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h(116): here
+            instantiation of "void BC::Tensor_Operations<derived>::assert_same_size(const BC::Tensor_Operations<deriv> &) const [with derived=BC::Vector<BC::Tensor_Slice<BC::Tensor_Core<BC::_scalar<BC::Matrix<double, BC::DEFAULT_MATHLIB>>, BC::_mathlib<BC::Matrix<double, BC::DEFAULT_MATHLIB>>, BC::_ranker<BC::Matrix<double, BC::DEFAULT_MATHLIB>>>>, BC::_mathlib<BC::Matrix<double, BC::DEFAULT_MATHLIB>>>, deriv=BC::Vector<BC::Tensor_Slice<BC::Tensor_Core<BC::_scalar<BC::Matrix<double, BC::DEFAULT_MATHLIB>>, BC::_mathlib<BC::Matrix<double, BC::DEFAULT_MATHLIB>>, BC::_ranker<BC::Matrix<double, BC::DEFAULT_MATHLIB>>>>, BC::_mathlib<BC::Matrix<double, BC::DEFAULT_MATHLIB>>>]" 
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h(185): here
+            instantiation of "BC::Tensor_Operations<derived>::impl<pDeriv, BC::add>::type BC::Tensor_Operations<derived>::operator+(const BC::Tensor_Operations<pDeriv> &) const [with derived=BC::Vector<BC::Tensor_Slice<BC::Tensor_Core<BC::_scalar<BC::Matrix<double, BC::DEFAULT_MATHLIB>>, BC::_mathlib<BC::Matrix<double, BC::DEFAULT_MATHLIB>>, BC::_ranker<BC::Matrix<double, BC::DEFAULT_MATHLIB>>>>, BC::_mathlib<BC::Matrix<double, BC::DEFAULT_MATHLIB>>>, pDeriv=BC::Vector<BC::Tensor_Slice<BC::Tensor_Core<BC::_scalar<BC::Matrix<double, BC::DEFAULT_MATHLIB>>, BC::_mathlib<BC::Matrix<double, BC::DEFAULT_MATHLIB>>, BC::_ranker<BC::Matrix<double, BC::DEFAULT_MATHLIB>>>>, BC::_mathlib<BC::Matrix<double, BC::DEFAULT_MATHLIB>>>]" 
+../UnitTests/main.cu(74): here
 
-22:26:10 Build Finished (took 315ms)
+Finished building: ../UnitTests/main.cu
+ 
+Building file: ../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_Expressions" -M -o "BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.d" "../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o" "../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu"
+Finished building: ../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu
+ 
+Building file: ../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_Expressions" -M -o "BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.d" "../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o" "../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.cu"
+Finished building: ../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.cu
+ 
+Building file: ../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_Core/Implementation_Core" -M -o "BC_Internals/BC_Core/Implementation_Core/Tensor_Core.d" "../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o" "../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu"
+Finished building: ../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.cu
+ 
+Building file: ../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_Core/Implementation_Core" -M -o "BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.d" "../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.o" "../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.cu"
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.cu(30): warning: variable "BC::ONE" was declared but never referenced
+
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.cu(34): warning: function "BC::higher" was declared but never referenced
+
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.cu(35): warning: function "BC::lower" was declared but never referenced
+
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.cu(30): warning: variable "BC::ONE" was declared but never referenced
+
+../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.cu(34): warning: function "BC::higher" was declared but never referenced
+
+Finished building: ../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.cu
+ 
+Building target: BlackCat_Tensors3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/main.o  ./BC_Internals/Dep/tmp_tc_dep/Tensor_Core.o  ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct.o ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct_impl.o  ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Essentials.o ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Scalar.o  ./BC_Internals/Dep/Tensor_Core_Accessor.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./BC_Internals/BC_Expressions/Expression_Base.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o ./BC_Internals/BC_Expressions/Expression_Binary_Functors.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.o ./BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o ./BC_Internals/BC_Expressions/Expression_Unary_Pointwise.o  ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.o  ./BC_Extensions/BC_NonlinearityFunctions.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_Tensors3.3
+ 
+
+18:34:44 Build Finished (took 8s.876ms)
 

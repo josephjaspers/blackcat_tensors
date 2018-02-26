@@ -13,11 +13,11 @@
 #include "Tensor_Core_Slice.cu"
 #include "Determiners.h"
 namespace BC {
-template<class T, class Mathlib, class _rank> struct Tensor_Core {
-
+template<class T, class _rank> struct Tensor_Core {
 
 	static constexpr int inner = _rank::inner_rank;
 	static constexpr int outer = _rank::outer_rank;
+	using Mathlib = CPU;
 
 public:
 	template<class,class,class> friend class Tensor_Core;
@@ -31,17 +31,16 @@ public:
 	using parent = Tensor_Core<T, Mathlib, Rank<higher(inner), outer>>;
 
 	using dimlist = std::vector<int>;
-	using scalar = typename MTF::determine_scalar<T>::type;
+	using scalar = _scalar<T>;
 
 	static constexpr int RANK = inner;
 	static constexpr int LD_RANK = outer;
 	static constexpr bool OWNERSHIP = RANK == LD_RANK;
 	static constexpr int LAST = RANK - 1;
 
-	using shape = int[RANK];
 	scalar* array;
-	shape is;
-	shape os;
+	int is[RANK];
+	int os[RANK];
 
 public:
 
@@ -125,7 +124,7 @@ public:
 
 
 	const auto InnerShape() const { return RANK > 0 ? (int*)is : &ONE; }
-	const auto OuterShape() const { return RANK > 0 ? (int*)os : &ONE;}
+	const auto OuterShape() const { return RANK > 0 ? (int*)os : &ONE; }
 
 	const scalar* core() const { return array; }
 		  scalar* core()  	   { return array; }

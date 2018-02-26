@@ -2,36 +2,37 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="Pri" key="selection"/>
+		<item value="T" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="pri"/>
-			<item value="a + b"/>
-			<item value="size"/>
+			<item value="T"/>
+			<item value="Tensor_Operations_impl"/>
+			<item value=", class pTraits"/>
+			<item value=", pTraits"/>
+			<item value="Tensor_Core"/>
+			<item value="tensor_core"/>
 			<item value="["/>
-			<item value="acc"/>
-			<item value="struct fr"/>
-			<item value="front"/>
-			<item value="host"/>
+			<item value="slice"/>
 		</list>
 		<list key="replacehistory">
+			<item value="Tensor_Operations"/>
+			<item value="Ten"/>
+			<item value=""/>
 			<item value="NeuralNetwork"/>
 			<item value="network.get"/>
 			<item value="network."/>
-			<item value=""/>
 			<item value="outer_packet"/>
 			<item value="inner_packet"/>
-			<item value="asBase().passShape(),"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="287" key="DIALOG_WIDTH"/>
 		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 		<item value="441" key="DIALOG_HEIGHT"/>
-		<item value="1185" key="DIALOG_X_ORIGIN"/>
-		<item value="136" key="DIALOG_Y_ORIGIN"/>
+		<item value="1456" key="DIALOG_X_ORIGIN"/>
+		<item value="154" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>
