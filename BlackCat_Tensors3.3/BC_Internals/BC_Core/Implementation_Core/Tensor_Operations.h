@@ -13,6 +13,7 @@
 #include "../../BC_Expressions/Expression_Binary_Pointwise.cu"
 #include "../../BC_Expressions/Expression_Unary_Pointwise.cu"
 #include "Determiners.h"
+#include <type_traits>
 namespace BC {
 
 template<class, class> struct Scalar;
@@ -228,20 +229,26 @@ struct Tensor_Operations {
 		return *this = typename impl<pDeriv, mul>::type(this->data(), param.data());
 	}
 	//Enables users to implement their own pointwise functions that can be lazy evaluated
+
+
 	template<class functor>
 	auto unExpr(functor f) const {
 		return typename impl<derived, functor>::unary_type(asBase().data());
 	}
-	template<class d2, class functor>
+	template<class d2, bool assert_ = false, class functor>
 	auto binExpr(functor f, const Tensor_Operations<d2>& rv) {
+		if (assert_)
+			assert_same_size(rv);
 		return typename impl<d2, functor>::type(asBase().data(), rv.asBase().data());
 	}
 	template<class functor>
 	auto unExpr() const {
 		return typename impl<derived, functor>::unary_type(asBase().data());
 	}
-	template<class functor, class d2>
+	template<class functor, bool assert_ = false, class d2>
 	auto binExpr(const Tensor_Operations<d2>& rv) {
+		if (assert_)
+			assert_same_size(rv);
 		return typename impl<d2, functor>::type(asBase().data(), rv.asBase().data());
 	}
 };

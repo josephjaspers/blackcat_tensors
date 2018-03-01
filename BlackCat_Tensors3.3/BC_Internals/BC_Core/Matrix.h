@@ -29,7 +29,6 @@ public:
 
 	static constexpr int RANK() { return 2; }
 
-	Matrix() {}
 	Matrix(const Matrix&  v) : parent_class(v) {}
 	Matrix(		 Matrix&& v) : parent_class(v) {}
 	Matrix(const Matrix&& v) : parent_class(v) {}

@@ -13,6 +13,7 @@
 #include "Implementation_Core/Tensor_Core.cu"
 #include "Implementation_Core/Determiners.h"
 namespace BC {
+template<class,class> class Scalar;
 
 template<class derived>
 class TensorBase : public Tensor_Operations <derived>, public Tensor_Utility<derived> {
@@ -25,6 +26,7 @@ protected:
 	using math_parent  	= Tensor_Operations<derived>;
 	using functor_type 	= _functor<derived>;
 	using Mathlib 		= _mathlib<derived>;
+	using scal			= _scalar<derived>;
 
 	template<class    U> using deriv   = typename shell_of<derived>::type<U, Mathlib>;
 	template<class... U> using functor = typename shell_of<functor_type>::type<U...>;
@@ -73,8 +75,8 @@ public:
 	void printDimensions() 		const { black_cat_array.printDimensions();   }
 	void printLDDimensions()	const { black_cat_array.printLDDimensions(); }
 
-	const auto InnerShape() const 			{ return black_cat_array.InnerShape(); }
-	const auto OuterShape() const 			{ return black_cat_array.OuterShape(); }
+	const auto innerShape() const 			{ return black_cat_array.innerShape(); }
+	const auto outerShape() const 			{ return black_cat_array.outerShape(); }
 
 
 	const functor_type& _data() const { return black_cat_array; }
@@ -86,8 +88,17 @@ public:
 		  auto operator [] (int i) 		 { return typename base<RANK>::slice<decltype(slice(0)), Mathlib>(slice(i)); }
 	const auto operator [] (int i) const { return typename base<RANK>::slice<decltype(slice(0)), Mathlib>(slice(i)); }
 
-	const auto& operator() (int i) const { return this->data()[i]; }
-		  auto& operator() (int i) 	     { return this->data()[i]; }
+
+	const auto getScalar(int i) const {
+		return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(&this->data()[i], this->data());
+	}
+	auto getScalar(int i) {
+
+		return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(&this->data()[i], this->data());
+	}
+
+	const auto operator() (int i) const { return getScalar(i); }
+		  auto operator() (int i) 	    { return getScalar(i); }
 
 	template<class var>
 	static std::vector<int> shapeOf(const var& v) {

@@ -71,8 +71,8 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	int dimension(int i)		const { return i== 0 ? M : i == 1 ? N : 1; }
 	void printDimensions() 		const { std::cout<<"[" << M << "][" <<N  <<"]" << std::endl; }
 	void printLDDimensions()	const { std::cout<<"[" << M << "][" <<eval_size  <<"]" << std::endl; }
-	const auto InnerShape() 	const { return _sh<std::vector<int>>({M, N}); }
-	const auto OuterShape() 	const { return _sh<std::vector<int>>({M, N * M}); }
+	const auto innerShape() 	const { return _sh<std::vector<int>>({M, N}); }
+	const auto outerShape() 	const { return _sh<std::vector<int>>({M, N * M}); }
 
 
 

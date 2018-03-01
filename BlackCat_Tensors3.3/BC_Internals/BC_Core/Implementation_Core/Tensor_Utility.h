@@ -31,10 +31,10 @@ private:
 
 public:
 	void print() const {
-		MATHLIB::print(asDerived().data(), asDerived().InnerShape(), asDerived().rank(), 8);
+		MATHLIB::print(asDerived().data(), asDerived().innerShape(), asDerived().rank(), 8);
 	}
 	void print(int precision) const {
-		MATHLIB::print(asDerived().data(), asDerived().InnerShape(), asDerived().rank(), precision);
+		MATHLIB::print(asDerived().data(), asDerived().innerShape(), asDerived().rank(), precision);
 	}
 };
 template<class deriv>
@@ -68,16 +68,16 @@ public:
 		MATHLIB::zero(asDerived().data(), asDerived().size());
 	}
 	void print() const {
-		MATHLIB::print(asDerived().data(), asDerived().InnerShape(), asDerived().rank(), 8);
+		MATHLIB::print(asDerived().data().core(), asDerived().innerShape(), asDerived().rank(), 8);
 	}
 	void print(int precision) const {
-		MATHLIB::print(asDerived().data(), asDerived().InnerShape(), asDerived().rank(), precision);
+		MATHLIB::print(asDerived().data().core(), asDerived().innerShape(), asDerived().rank(), precision);
 	}
 	void printSparse() const {
-		MATHLIB::printSparse(asDerived().data(), asDerived().InnerShape(), asDerived().rank(), 8);
+		MATHLIB::printSparse(asDerived().data().core(), asDerived().innerShape(), asDerived().rank(), 8);
 	}
 	void printSparse(int precision) const {
-		MATHLIB::printSparse(asDerived().data(), asDerived().InnerShape(), asDerived().rank(), precision);
+		MATHLIB::printSparse(asDerived().data().core(), asDerived().innerShape(), asDerived().rank(), precision);
 	}
 
 	void write(std::ofstream& os) {

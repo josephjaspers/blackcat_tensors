@@ -37,11 +37,15 @@ public:
 	Scalar& operator =(	     Scalar&& t) { return parent_class::operator=(t); }
 	template<class U>
 	Scalar& operator =(const Scalar<U, Mathlib>& t) { return parent_class::operator=(t); }
-	Scalar& operator =(T scalar) { Mathlib::DeviceToHost(this->data(), &scalar, 1); return *this; }
+	Scalar& operator =(_scalar<T> scalar) { Mathlib::DeviceToHost(this->data().core(), &scalar, 1); return *this; }
 
 	using _shape = std::vector<int>;
-	template<bool var, class a, class b> using ifte = std::conditional_t<var, a, b>;
-	Scalar(T* param) {}
+
+	template<bool var, class a, class b>
+	using ifte = std::conditional_t<var, a, b>;
+
+
+	Scalar(_scalar<T>* param): parent_class(param) {}
 
 
 
@@ -54,13 +58,13 @@ public:
 	//we use this ifte to differentiate between primitive initializations (in the case we want to... Scalar<double>(2.0) //make a scalar with value 2
 	//and...... Scalar<double>(unary_Expression<of some types>); In the first instance we enable Tensor_Core to call its default constructor
 	//			in this second instance we initiate TensorBase's functor type with U.
-	Scalar(const T& value) : parent_class(ifte<MTF::isPrimitive<T>::conditional, sendNull, sendParam>::impl(value)) {
+	explicit Scalar(const T& value) : parent_class(ifte<MTF::isPrimitive<T>::conditional, sendNull, sendParam>::impl(value)) {
 		ifte<MTF::isPrimitive<T>::conditional, htd, voider>::impl(this->data().core(), &value, 1);
 	}
 //
 	//This is the same constructor as above (for non-genuine tensors) but we mandate 2 parameters so the compiler doesn't confuse it with the above constructor
 	template<class var1, class var2, class... params>
-		Scalar(const var1& v1, const var2& v2, const params&... p) : parent_class(v1, v2, p...) {}
+	explicit Scalar(const var1& v1, const var2& v2, const params&... p) : parent_class(v1, v2, p...) {}
 
 };
 

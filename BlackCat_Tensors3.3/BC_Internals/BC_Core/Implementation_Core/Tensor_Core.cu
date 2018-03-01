@@ -11,6 +11,7 @@
 #define SHAPE_H_
 
 #include "Tensor_Core_Slice.cu"
+
 #include "Determiners.h"
 namespace BC {
 template<class T> struct Tensor_Core {
@@ -37,11 +38,13 @@ public:
 
 public:
 
-		  scalar* ary() 	  { return array; }
-	const scalar* ary() const { return array; }
+		  scalar* asPtr() 	  { return array; }
+	const scalar* asPtr() const { return array; }
 
 	operator 	   scalar*()       { return array; }
 	operator const scalar*() const { return array; }
+
+
 
 	__BC_gcpu__	      scalar& operator [] (int index) 		{ return array[index]; };
 	__BC_gcpu__	const scalar& operator [] (int index) const { return array[index]; };
@@ -116,13 +119,13 @@ public:
 	__BC_gcpu__ int LDdimension(int i) const { return RANK > i + 1 ? os[i] : 1; }
 
 
-	const auto InnerShape() const { return RANK > 0 ? (int*)is : &ONE; }
-	const auto OuterShape() const { return RANK > 0 ? (int*)os : &ONE; }
+	const auto innerShape() const { return RANK > 0 ? (int*)is : &ONE; }
+	const auto outerShape() const { return RANK > 0 ? (int*)os : &ONE; }
 
 	const scalar* core() const { return array; }
 		  scalar* core()  	   { return array; }
 
-	void print() const { Mathlib::print(array, InnerShape(),rank(), 4); }
+	void print() const { Mathlib::print(array, innerShape(),rank(), 4); }
 
 	void printDimensions() const {
 		for (int i = 0; i < RANK; ++i) {

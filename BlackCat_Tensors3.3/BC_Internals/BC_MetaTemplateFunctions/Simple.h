@@ -11,6 +11,9 @@
 namespace BC {
 namespace MTF {
 
+		template<class T> struct isTrue { static constexpr bool conditional = true; };
+		template<> struct isTrue<std::false_type> { static constexpr bool conditional = false; };
+
 		//EQUIVALENT OF std::conditional
 		template<bool iff, class THEN, class ELSE>
 		struct IF_ELSE {

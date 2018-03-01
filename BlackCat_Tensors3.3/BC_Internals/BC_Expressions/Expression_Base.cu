@@ -40,8 +40,8 @@ public:
 	int dimension(int i)		const { return shadowFailure<int>("int dimension(int) const"); }
 	void printDimensions() 		const { shadowFailure<>("void printDimensions() const"); }
 	void printLDDimensions() 	const { shadowFailure<>("void printLDDimensions() const"); }
-	const int* InnerShape() const 			{ return shadowFailure<int*>("auto(const int*) InnerShape() const  MAY RETURN INT*, _sh<T>, or std::vector<int>, "); }
-	const int* OuterShape() const 			{ return shadowFailure<int*>("auto(const int*) OuterShape() const  MAY RETURN INT*, _sh<T>, or std::vector<int>, "); }
+	const int* innerShape() const 			{ return shadowFailure<int*>("auto(const int*) innerShape() const  MAY RETURN INT*, _sh<T>, or std::vector<int>, "); }
+	const int* outerShape() const 			{ return shadowFailure<int*>("auto(const int*) outerShape() const  MAY RETURN INT*, _sh<T>, or std::vector<int>, "); }
 	int slice(int i) const { return shadowFailure<>("const Tensor_Slice(int) const  => THIS METHOD SHOULD ONLY BE ENABLED FOR TENSOR_CORE"); }
 	int slice(int i) 	   {  return shadowFailure<>("Tensor_Slice(int)  => THIS METHOD SHOULD ONLY BE ENABLED FOR TENSOR_CORE"); }
 };

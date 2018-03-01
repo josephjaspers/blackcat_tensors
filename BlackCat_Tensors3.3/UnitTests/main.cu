@@ -82,7 +82,38 @@ auto test() {
 }
 
 
+#include "../BC_Extensions/BC_Correlation.h"
 int main() {
+
+
+	Matrix<double> krnl(2,2);
+	Matrix<double> img(3,3);
+	Matrix<double> out(4,4);
+	Matrix<double> out2(2, 2);
+
+	for (int i = 0; i < 4; ++i) {
+		krnl(i) = i + 1;
+	}
+	for (int i = 0; i < 9; ++i) {
+		img(i) = i +5;
+	}
+	out.zero();
+
+	BC::CPU::x_correlation(out.data(), krnl.data(), img.data(), krnl.rank(), krnl.innerShape(), img.size(), img.rows());
+
+
+	krnl.print();
+	img.print();
+	out.print();
+
+	BC::CPU::x_correlation_in(out2.data(), krnl.data(), img.data(), krnl.rank(), krnl.innerShape(), img.size(), img.rows());
+
+	out2.print();
+
+
+	out2.getScalar(1).print();
+
+//	x_corr(w, img);
 
 //	speedTestDelayedEval<128,     100000>();
 //	speedTestDelayedEval<256,     100000>();
@@ -95,22 +126,22 @@ int main() {
 //	speedTestDelayedEval<40000,   100000>();
 //	speedTestDelayedEval<80000,   100000>();
 //	speedTestDelayedEval<100000,  100000>();
-		speedTestsScalarIteration<128,     100000>();
-		speedTestsScalarIteration<256,     100000>();
-		speedTestsScalarIteration<512,     100000>();
-		speedTestsScalarIteration<1024,    100000>();
-		speedTestsScalarIteration<2048,    100000>();
-		speedTestsScalarIteration<5096,    100000>();
-		speedTestsScalarIteration<10000,   100000>();
-		speedTestsScalarIteration<20000,   100000>();
-		speedTestsScalarIteration<40000,   100000>();
-		speedTestsScalarIteration<80000,   100000>();
-		speedTestsScalarIteration<100000,  100000>();
-//	MatrixPointwise();
-	test();
+//
+//	speedTestsScalarIteration<128, 100000>();
+//	speedTestsScalarIteration<256, 100000>();
+//	speedTestsScalarIteration<512, 100000>();
+//	speedTestsScalarIteration<1024, 100000>();
+//	speedTestsScalarIteration<2048, 100000>();
+//	speedTestsScalarIteration<5096, 100000>();
+//	speedTestsScalarIteration<10000, 100000>();
+//	speedTestsScalarIteration<20000, 100000>();
+//	speedTestsScalarIteration<40000, 100000>();
+//	speedTestsScalarIteration<80000, 100000>();
+//	speedTestsScalarIteration<100000, 100000>();
+////	MatrixPointwise();
+//	test();
 
-	std::cout << " success  main"<< std::endl;
-
+	std::cout << " success  main" << std::endl;
 
 	return 0;
 }

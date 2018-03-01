@@ -1,6 +1,71 @@
-11:14:59 **** Incremental Build of configuration Release for project BlackCat_Tensors ****
+12:33:42 **** Incremental Build of configuration Release for project BlackCat_Tensors ****
 make all 
-make: Nothing to be done for 'all'.
+Building file: ../UnitTests/main.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(85): warning: expression has no effect
+          detected during:
+            instantiation of "void BC::CPU::eval(T, int) [with T=double *]" 
+../UnitTests/../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(109): here
+            instantiation of "void BC::binary_expression_dotproduct<T, lv, rv, Mathlibrary>::eval() [with T=double, lv=double *, rv=double *, Mathlibrary=BC::DEFAULT_MATHLIB]" 
+../UnitTests/../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(91): here
+            instantiation of "BC::binary_expression_dotproduct<T, lv, rv, Mathlibrary>::binary_expression_dotproduct(const lv &, const rv &, int, int, int, int, int, int) [with T=double, lv=double *, rv=double *, Mathlibrary=BC::DEFAULT_MATHLIB]" 
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(100): here
+            instantiation of "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type>::TensorBase(BC::Shape, const params &...) [with T=BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, derived=BC::Vector<BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, params=<double *, double *, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Vector.h(36): here
+            instantiation of "BC::Vector<T, Mathlib>::Vector(const params &...) [with T=BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, params=<BC::Shape, double *, double *, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(166): here
+            instantiation of "BC::Tensor_Operations_impl<derived, TRAITS>::dp_impl<pDeriv, pTraits>::type BC::Tensor_Operations_impl<derived, TRAITS>::operator*(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) const [with derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, TRAITS=BC::_TRAITS<double, double *, BC::Matrix<double, BC::DEFAULT_MATHLIB> &, BC::DEFAULT_MATHLIB>, pDeriv=BC::Vector<double, BC::DEFAULT_MATHLIB>, pTraits=BC::_TRAITS<double, double *, BC::Vector<double, BC::DEFAULT_MATHLIB> &, BC::DEFAULT_MATHLIB>, voider=void, foo=0]" 
+../UnitTests/main.cu(121): here
 
-11:15:00 Build Finished (took 314ms)
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.cu(59): warning: expression has no effect
+          detected during:
+            instantiation of "void BC::gpu_impl::eval(T, int) [with T=float *]" 
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu(80): here
+            instantiation of "void BC::GPU::eval(T, int) [with T=float *]" 
+../UnitTests/../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(109): here
+            instantiation of "void BC::binary_expression_dotproduct<T, lv, rv, Mathlibrary>::eval() [with T=float, lv=float *, rv=float *, Mathlibrary=BC::GPU]" 
+../UnitTests/../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(91): here
+            instantiation of "BC::binary_expression_dotproduct<T, lv, rv, Mathlibrary>::binary_expression_dotproduct(const lv &, const rv &, int, int, int, int, int, int) [with T=float, lv=float *, rv=float *, Mathlibrary=BC::GPU]" 
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(100): here
+            instantiation of "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type>::TensorBase(BC::Shape, const params &...) [with T=BC::binary_expression_dotproduct<float, float *, float *, BC::GPU>, derived=BC::Matrix<BC::binary_expression_dotproduct<float, float *, float *, BC::GPU>, BC::GPU>, Mathlib=BC::GPU, params=<float *, float *, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(39): here
+            instantiation of "BC::Matrix<T, Mathlib>::Matrix(const params &...) [with T=BC::binary_expression_dotproduct<float, float *, float *, BC::GPU>, Mathlib=BC::GPU, params=<BC::Shape, float *, float *, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(166): here
+            instantiation of "BC::Tensor_Operations_impl<derived, TRAITS>::dp_impl<pDeriv, pTraits>::type BC::Tensor_Operations_impl<derived, TRAITS>::operator*(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) const [with derived=BC::Matrix<float, BC::GPU>, TRAITS=BC::_TRAITS<float, float *, BC::Matrix<float, BC::GPU> &, BC::GPU>, pDeriv=BC::Matrix<float, BC::GPU>, pTraits=BC::_TRAITS<float, float *, BC::Matrix<float, BC::GPU> &, BC::GPU>, voider=void, foo=0]" 
+../UnitTests/main.cu(255): here
+
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h(85): warning: expression has no effect
+          detected during:
+            instantiation of "void BC::CPU::eval(T, int) [with T=float *]" 
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_GPU_Managed.h(65): here
+            instantiation of "void BC::GPUM::eval(T, int) [with T=float *]" 
+../UnitTests/../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(109): here
+            instantiation of "void BC::binary_expression_dotproduct<T, lv, rv, Mathlibrary>::eval() [with T=float, lv=float *, rv=float *, Mathlibrary=BC::GPUM]" 
+../UnitTests/../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(91): here
+            instantiation of "BC::binary_expression_dotproduct<T, lv, rv, Mathlibrary>::binary_expression_dotproduct(const lv &, const rv &, int, int, int, int, int, int) [with T=float, lv=float *, rv=float *, Mathlibrary=BC::GPUM]" 
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(100): here
+            instantiation of "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type>::TensorBase(BC::Shape, const params &...) [with T=BC::binary_expression_dotproduct<float, float *, float *, BC::GPUM>, derived=BC::Matrix<BC::binary_expression_dotproduct<float, float *, float *, BC::GPUM>, BC::GPUM>, Mathlib=BC::GPUM, params=<float *, float *, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(39): here
+            instantiation of "BC::Matrix<T, Mathlib>::Matrix(const params &...) [with T=BC::binary_expression_dotproduct<float, float *, float *, BC::GPUM>, Mathlib=BC::GPUM, params=<BC::Shape, float *, float *, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(166): here
+            instantiation of "BC::Tensor_Operations_impl<derived, TRAITS>::dp_impl<pDeriv, pTraits>::type BC::Tensor_Operations_impl<derived, TRAITS>::operator*(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) const [with derived=BC::Matrix<float, BC::GPUM>, TRAITS=BC::_TRAITS<float, float *, BC::Matrix<float, BC::GPUM> &, BC::GPUM>, pDeriv=BC::Matrix<float, BC::GPUM>, pTraits=BC::_TRAITS<float, float *, BC::Matrix<float, BC::GPUM> &, BC::GPUM>, voider=void, foo=0]" 
+../UnitTests/main.cu(327): here
+
+Finished building: ../UnitTests/main.cu
+ 
+Building file: ../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_Expressions" -M -o "BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.d" "../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o" "../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu"
+Finished building: ../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu
+ 
+Building target: BlackCat_Tensors
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors"  ./UnitTests/main.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./BC_Internals/BC_Expressions/Expression_Base.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o ./BC_Internals/BC_Expressions/Expression_Binary_Functors.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.o ./BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o ./BC_Internals/BC_Expressions/Expression_Unary_Negation.o ./BC_Internals/BC_Expressions/Expression_Unary_Pointwise.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_Tensors
+ 
+
+12:33:49 Build Finished (took 6s.471ms)
 

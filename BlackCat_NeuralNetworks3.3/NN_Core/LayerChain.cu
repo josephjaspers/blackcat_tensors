@@ -30,7 +30,7 @@ template<class> class InputLayer;
 		auto& tail() { return  *this; }
 
 		const auto& head() const { return prev().head(); }
-			  auto& head()  { return prev().head(); }
+			  auto& head()  	 { return prev().head(); }
 
 			  const auto& next() const { throw std::invalid_argument("no next end of chain"); }
 			  auto& next() { throw std::invalid_argument("no next end of chain"); }

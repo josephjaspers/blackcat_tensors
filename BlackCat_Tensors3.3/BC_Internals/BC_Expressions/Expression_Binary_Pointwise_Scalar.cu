@@ -34,8 +34,8 @@ public:
 	void printDimensions() 		const { right.printDimensions();   }
 	void printLDDimensions()	const { right.printLDDimensions(); }
 	auto accessor_packet(int index) const { return right.accessor_packet(index); }
-	const auto InnerShape() const 			{  std::cout << " inner scalar L " << std::endl;  return right().InnerShape(); }
-	const auto OuterShape() const 			{ return right().OuterShape(); }
+	const auto innerShape() const 			{  std::cout << " inner scalar L " << std::endl;  return right().innerShape(); }
+	const auto outerShape() const 			{ return right().outerShape(); }
 
 	inline __attribute__((always_inline))  __BC_gcpu__ binary_expression_scalar_L(const lv& l, const rv& r) : left(l), right(r) {}
 	inline __attribute__((always_inline))  __BC_gcpu__ auto operator [](int index) const { return oper(left[0], right[index]); }
@@ -61,8 +61,8 @@ public:
 	void printDimensions() 		const { left.printDimensions();   }
 	void printLDDimensions()	const { left.printLDDimensions(); }
 	auto accessor_packet(int index) const { return left.accessor_packet(index); }
-	const int* InnerShape() const 			{  std::cout << " inner shape - scalr " << std::endl;  return left().InnerShape(); }
-	const int* OuterShape() const 			{ return left().OuterShape(); }
+	const int* innerShape() const 			{  std::cout << " inner shape - scalr " << std::endl;  return left().innerShape(); }
+	const int* outerShape() const 			{ return left().outerShape(); }
 
 	inline __attribute__((always_inline))  __BC_gcpu__ binary_expression_scalar_R(const lv& l, const rv& r) : left(l), right(r) {}
 	inline __attribute__((always_inline))  __BC_gcpu__ auto operator [](int index) const { return oper(left[index], right[0]);}
@@ -85,8 +85,8 @@ public:
 		void printDimensions() 		const { left.printDimensions();   }
 		void printLDDimensions()	const { left.printLDDimensions(); }
 		auto accessor_packet(int index) const { return left.accessor_packet(index); }
-		const int* InnerShape() const 			{ return left().InnerShape(); }
-		const int* OuterShape() const 			{ return left().OuterShape(); }
+		const int* innerShape() const 			{ return left().innerShape(); }
+		const int* outerShape() const 			{ return left().outerShape(); }
 
 		inline __attribute__((always_inline))  __BC_gcpu__ binary_expression_scalar_LR(const lv& l, const rv& r) : left(l), right(r) {}
 		inline __attribute__((always_inline))  __BC_gcpu__ auto operator [](int index) const { return oper(left[0], right[0]); }

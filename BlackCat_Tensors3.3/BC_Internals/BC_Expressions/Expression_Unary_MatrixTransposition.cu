@@ -30,8 +30,8 @@ struct unary_expression_transpose : expression<T, unary_expression_transpose<T, 
 	__BC_gcpu__ int LD_rows() const { return array.LD_rows(); }
 	__BC_gcpu__ int LD_cols() const { return array.LD_cols(); }
 	__BC_gcpu__ int dimension(int i)	const { return array.dimension(i); }
-	const std::vector<int> InnerShape() const { array.InnerShape(); } //return std::vector<int> { rows(), cols() }; }
-	const auto OuterShape() const { return array.OuterShape(); }
+	auto innerShape() const { array.innerShape(); } //return std::vector<int> { rows(), cols() }; }
+	const auto outerShape() const { return array.outerShape(); }
 
 	void printDimensions() const {
 		std::cout << "[" << rows() << "]" << "[" << cols() << "]" << std::endl;

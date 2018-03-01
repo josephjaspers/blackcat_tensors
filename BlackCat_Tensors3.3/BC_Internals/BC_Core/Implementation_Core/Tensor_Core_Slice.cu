@@ -14,7 +14,7 @@
 #include "../../BC_Expressions/Expression_Base.cu"
 #include "Determiners.h"
 #include <iostream>
-
+#include "Tensor_Core_Scalar.cu"
 namespace BC {
 
 #define __BC_gcpu__ __host__ __device__
@@ -55,20 +55,20 @@ template<class PARENT>
 	Tensor_Slice(scalar* array, const PARENT& parent_) : array_slice(array), parent(parent_) {}
 
 	__BC_gcpu__ int rank() const { return RANK; }
-	__BC_gcpu__ int size() const { return RANK > 0 ? parent.OuterShape()[LAST] : 1;    }
-	__BC_gcpu__ int rows() const { return RANK > 0 ? parent.InnerShape()[0] : 1; }
-	__BC_gcpu__ int cols() const { return RANK > 1 ? parent.InnerShape()[1] : 1; }
-	__BC_gcpu__ int dimension(int i) const { return RANK > i ? parent.InnerShape()[i] : 1; }
+	__BC_gcpu__ int size() const { return RANK > 0 ? parent.outerShape()[LAST] : 1;    }
+	__BC_gcpu__ int rows() const { return RANK > 0 ? parent.innerShape()[0] : 1; }
+	__BC_gcpu__ int cols() const { return RANK > 1 ? parent.innerShape()[1] : 1; }
+	__BC_gcpu__ int dimension(int i) const { return RANK > i ? parent.innerShape()[i] : 1; }
 
-	__BC_gcpu__ int LD_rows() const { return RANK > 0 ? parent.OuterShape()[0] : 1; }
-	__BC_gcpu__ int LD_cols() const { return RANK > 1 ? parent.OuterShape()[1] : 1; }
-	__BC_gcpu__ int LDdimension(int i) const { return RANK > i + 1 ? parent.OuterShape()[i] : 1; }
+	__BC_gcpu__ int LD_rows() const { return RANK > 0 ? parent.outerShape()[0] : 1; }
+	__BC_gcpu__ int LD_cols() const { return RANK > 1 ? parent.outerShape()[1] : 1; }
+	__BC_gcpu__ int LDdimension(int i) const { return RANK > i + 1 ? parent.outerShape()[i] : 1; }
 
-	void printDimensions() const { parent.printDimensions(); }
-	void printLDDimensions() const { parent.printDimensions(); }
+	void printDimensions() 		const { parent.printDimensions(); }
+	void printLDDimensions()	const { parent.printDimensions(); }
 
-	const auto InnerShape() const 			{ return parent.InnerShape(); }
-	const auto OuterShape() const 			{ return parent.OuterShape(); }
+	const auto innerShape() const 			{ return parent.innerShape(); }
+	const auto outerShape() const 			{ return parent.outerShape(); }
 
 			  //the outer_shape is formatted as.... [ld_rows][ld_cols][ld_pages] etc... ergo if our current RANK  == 1 our LD_multiplier would be at index -1
 			  // all vectors (aside from row vectors which use a specialized class) have increment of 1 -- erho we choose "just i" as the index opposed to multiplying by the outer shape

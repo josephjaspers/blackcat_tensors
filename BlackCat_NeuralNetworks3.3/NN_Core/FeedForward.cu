@@ -9,30 +9,18 @@
 #define FEEDFORWARD_CU_
 
 #include "LayerChain.cu"
+#include "Layer.h"
 namespace BC {
 
 template<class derived>
-struct FeedForward  {
+struct FeedForward : public Layer<derived> {
 
-	auto& next() {
-		return static_cast<derived&>(*this).next();
-	}
-	auto& prev() {
-		return static_cast<derived&>(*this).prev();
-	}
-
-	const auto& next() const {
-		return static_cast<derived&>(*this).next();
-	}
-	const auto& prev() const {
-		return static_cast<derived&>(*this).prev();
-	}
 
 public:
 	int INPUTS;
 	int OUTPUTS;
 
-	 const Scalar<fp_type> lr = 0.03; //fp_type == floating point
+	 const scal lr = scal(0.03); //fp_type == floating point
 
 
 	mat w_gradientStorage;
@@ -71,29 +59,29 @@ public:
 
 	template<class T> auto forwardPropagation(const vec_expr<T>& in) {
 		auto x_ = x == in;
-		return next().forwardPropagation(g(w * x_ + b));
+		return this->next().forwardPropagation(g(w * x_ + b));
 	}
 	template<class T> auto forwardPropagation_Express(const vec_expr<T>& x) const {
-		return next().forwardPropagation_Express(g(w * x + b));
+		return this->next().forwardPropagation_Express(g(w * x + b));
 	}
 
 	template<class T> auto backPropagation(const vec_expr<T>& dy) {
 		w_gradientStorage -= dy * x.t();
 		b_gradientStorage -= dy;
 
-		return prev().backPropagation(dx == w.t() * dy % gd(x));						//** is point_wise multiply
+		return this->prev().backPropagation(dx == w.t() * dy % gd(x));						//** is point_wise multiply
 	}
 
 	void updateWeights() {
 		w += w_gradientStorage * lr;
 		b += b_gradientStorage * lr;
-		next().updateWeights();
+		this->next().updateWeights();
 	}
 
 	void clearBPStorage() {
 		w_gradientStorage.zero();
 		b_gradientStorage.zero();
-		next().clearBPStorage();
+		this->next().clearBPStorage();
 	}
 
 //	int getClass() {

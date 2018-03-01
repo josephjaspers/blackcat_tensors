@@ -1,0 +1,15 @@
+/*
+ * Tensor_Core_Scalar.cu
+ *
+ *  Created on: Mar 1, 2018
+ *      Author: joseph
+ */
+
+#ifndef TENSOR_CORE_SCALAR_CU_
+#define TENSOR_CORE_SCALAR_CU_
+
+
+
+
+
+#endif /* TENSOR_CORE_SCALAR_CU_ */
