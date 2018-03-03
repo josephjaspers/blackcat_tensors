@@ -1,8 +1,15 @@
 #include <cmath>
 namespace BC {
+template<class> class TensorBase;
 
 template<class V, class T, class U>
-	static void x_correlation(V& cor, const T& krnl, const U& img, int krnl_rank, const int* krnl_shape, int img_size, int img_rows) {
+	static void x_correlation(TensorBase<V>& cor, const TensorBase<T>& krnl, const TensorBase<U>& img) {
+
+
+		const int krnl_rank = krnl.rank();
+		const int* krnl_shape = krnl.innerShape;
+		const int img_size = img.size();
+		const int img_rows = img.rows();
 
 		int krnl_col_count = 1;
 		for (int i = 1; i < krnl_rank; ++i) {
@@ -17,7 +24,7 @@ template<class V, class T, class U>
 		for (int i = 0; i < base_; ++i){
 			for (int j = 0; j < krnl_col_count; ++j)
 				for (int k = 0; k > -1; --k) {
-					cor[i + (krnl_col_count - 1 - j) * cor_rows] += krnl[krnl_rows - k - 1 + j * krnl_rows] * img[i + k];
+					cor(i + (krnl_col_count - 1 - j) * cor_rows) += krnl(krnl_rows - k - 1 + j * krnl_rows) * img(i + k);
 			}
 		}
 
@@ -40,7 +47,7 @@ template<class V, class T, class U>
 								base_++;
 							}
 
-						cor[i+ j * cor_rows + base_] += krnl[k + (krnl_col_count - j - 1)  * krnl_rows] * img[i + k];
+						cor(i+ j * cor_rows + base_) += krnl(k + (krnl_col_count - j - 1)  * krnl_rows) * img(i + k);
 				}
 			}
 		}

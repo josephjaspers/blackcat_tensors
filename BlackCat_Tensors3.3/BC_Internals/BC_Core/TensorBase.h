@@ -33,7 +33,7 @@ protected:
 
 	static constexpr int RANK 		= ranker<derived>::type::inner_rank;
 	static constexpr int LD_RANK 	= ranker<derived>::type::outer_rank;
-	static constexpr bool GENUINE_TENSOR =isPrim<_fscal<derived>> || isCore<_functor<derived>>::conditional;
+	static constexpr bool GENUINE_TENSOR =isPrim<_scalar<derived>> || isCore<_functor<derived>>::conditional;
 
 	functor_type black_cat_array;
 
@@ -43,13 +43,11 @@ public:
 	operator  const derived&() const { return static_cast<const derived&>(*this); }
 	operator  		derived&() 		 { return static_cast<	    derived&>(*this); }
 
+	TensorBase(						 ) { if (RANK != 0) { throw std::invalid_argument("DEFAULT CONSTRUCTOR ONLY SUPPORTED FOR SCALARS"); } }
 	TensorBase(		 derived&& tensor) : black_cat_array(tensor.black_cat_array){}
 	TensorBase(const derived&  tensor) : black_cat_array(tensor.black_cat_array){}
 
-	template<class... U> TensorBase(const deriv<functor<U...>>& tensor)
-			: black_cat_array(tensor.black_cat_array) {}
-	template<class atLeastOneParam, class... params> TensorBase(const atLeastOneParam& alop, const params&... p)
-			: black_cat_array(alop, p...) { }
+
 
 	template<class U>
 	TensorBase(const deriv<U>& tensor) : black_cat_array(shapeOf(tensor)) {
@@ -57,9 +55,18 @@ public:
 		Mathlib::copy(this->black_cat_array, tensor.data(), this->size());
 	}
 
+	template<class param1, class... params>
+	TensorBase(const param1& p1, const params&... p) : black_cat_array(p1, p...) { }
+
+
 	derived& operator =(const derived& tensor) {
 		this->assert_same_size(tensor);
 		Mathlib::copy(this->data(), tensor.data(), this->size());
+		return *this;
+	}
+	derived& operator =(	  derived&& tensor) {
+		this->assert_same_size(tensor);
+		std::swap(this->black_cat_array, tensor.black_cat_array);
 		return *this;
 	}
 
@@ -99,6 +106,12 @@ public:
 
 	const auto operator() (int i) const { return getScalar(i); }
 		  auto operator() (int i) 	    { return getScalar(i); }
+
+	const auto operator() () const { return *this; }
+		  auto operator() () 	   { return *this; }
+
+	template<class... integers> const auto operator() (int i, integers... ints) const { return (*this)[i](ints...); }
+	template<class... integers> 	  auto operator() (int i, integers... ints) 	  { return (*this)[i](ints...); }
 
 	template<class var>
 	static std::vector<int> shapeOf(const var& v) {

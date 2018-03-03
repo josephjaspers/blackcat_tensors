@@ -27,10 +27,8 @@ static float* static_initialize(int sz, float value) {
 	cudaMemcpy(t, &value, sizeof(float), cudaMemcpyHostToDevice);
 	return t;
 }
-
 static const float* const BC_ONE = static_initialize(1, 1);
 static const float* const BC_ZERO = static_initialize(1, 1);
-
 }
 
 class GPU {
@@ -39,18 +37,32 @@ public:
 	static constexpr int CUDA_BASE_THREADS = 256;
 
 	static int blocks(int size) {
-
 		return std::ceil(size / 256);
-
-//		return (size + CUDA_BASE_THREADS - 1) / CUDA_BASE_THREADS;
 	}
-	static int threads() {
-		return CUDA_BASE_THREADS;
+	static int threads(int size = 0) {
+		return size == 0 ? CUDA_BASE_THREADS
+				: size < CUDA_BASE_THREADS ? size : CUDA_BASE_THREADS;
 	}
 
 	template<typename T>
 	static void initialize(T*& t, int sz) {
 		cudaMalloc((void**) &t, sizeof(T) * sz);
+	}
+	template<typename T>
+	static void unified_initialize(T*& t, int sz) {
+		cudaMallocManaged((void**) &t, sizeof(T) * sz);
+	}
+	template<typename T>
+	static T* initialize(int sz) {
+		T* t;
+		cudaMalloc((void**) &t, sizeof(T) * sz);
+		return t;
+	}
+	template<typename T>
+	static T* unified_initialize(int sz) {
+		T* t;
+		cudaMallocManaged((void**) &t, sizeof(T) * sz);
+		return t;
 	}
 
 	template<class T>
@@ -61,32 +73,21 @@ public:
 	static void DeviceToHost(T* t, const T* u, int size) {
 		cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyDeviceToHost);
 	}
-
-	template<typename T>
-	static void unified_initialize(T*& t, int sz) {
-		cudaMallocManaged((void**) &t, sizeof(T) * sz);
-	}
-
+//---------------------------------------gpu_impl begins---------------------------------//
 	template<class T, class U>
-	static void copy(T t, U u, int sz) {
-		gpu_impl::copy<<<blocks(sz),threads()>>>(t, u, sz);
-		cudaDeviceSynchronize();
-	}
-
-	template<class T, template<class...> class U, class... set>
-	static void copy(T t, U<set...> u, int sz) {
+	static void copy(T& t, const U& u, int sz) {
 		gpu_impl::copy<<<blocks(sz),threads()>>>(t, u, sz);
 		cudaDeviceSynchronize();
 	}
 
 	template<class T>
-	static void eval(T t, int sz) {
+	static void eval(T& t, int sz) {
 		gpu_impl::eval<<<blocks(sz),threads()>>>(t, sz);
 		cudaDeviceSynchronize();
 	}
 
 	template<class U, class T, class V>
-	static void scalarMul(U eval, T a, V b) {
+	static void scalarMul(U* eval, T* a, V* b) {
 		gpu_impl::scalarMul<<<1, 1>>>(eval, a, b);
 		cudaDeviceSynchronize();
 	}
@@ -104,7 +105,6 @@ public:
 		gpu_impl::fill<<<blocks(sz),threads()>>>(t, j, sz);
 		cudaDeviceSynchronize();
 	}
-
 	template<typename T, typename J>
 	static void fill(T& t, const J* j, int sz) {
 		gpu_impl::fill<<<blocks(sz),threads()>>>(t, j, sz);
@@ -117,7 +117,8 @@ public:
 	}
 
 	template<typename T, class J>
-	static void randomize(T t, J lower_bound, J upper_bound, int sz) {
+	static void randomize(T& t, J lower_bound, J upper_bound, int sz) {
+		std::cout << "randomizing" << std::endl;
 		gpu_impl::randomize<<<blocks(sz),threads()>>>(t, lower_bound, upper_bound, sz, rand());
 		cudaDeviceSynchronize();
 	}

@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="shell_of" key="selection"/>
+		<item value="copy" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="shell_of"/>
-			<item value="data()"/>
-			<item value="data"/>
-			<item value="T"/>
-			<item value="Tensor_Operations_impl"/>
-			<item value=", class pTraits"/>
-			<item value=", pTraits"/>
-			<item value="Tensor_Core"/>
+			<item value="copy\"/>
+			<item value="copy"/>
+			<item value="M"/>
+			<item value="Math"/>
+			<item value="param"/>
+			<item value="scalar"/>
+			<item value="isCore"/>
+			<item value="is_core"/>
 		</list>
 		<list key="replacehistory">
 			<item value="Tensor_Operations"/>

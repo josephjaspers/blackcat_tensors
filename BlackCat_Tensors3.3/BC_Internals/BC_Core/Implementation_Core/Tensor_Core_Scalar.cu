@@ -38,7 +38,7 @@ template<class PARENT>
 	Tensor_Scalar(scalar* array, const PARENT& parent_) : array_slice(array), parent(parent_) {}
 
 	__BC_gcpu__ int rank() const { return 0; }
-	__BC_gcpu__ int size() const { return 1;    }
+	__BC_gcpu__ int size() const { return 1; }
 	__BC_gcpu__ int rows() const { return 1; }
 	__BC_gcpu__ int cols() const { return 1; }
 	__BC_gcpu__ int dimension(int i) const { return 1; }
@@ -56,12 +56,9 @@ template<class PARENT>
 	const scalar* core() const { return array_slice; }
 		  scalar* core()  	   { return array_slice; }
 
-		__BC_gcpu__ const auto& operator [] (int i) const{ return array_slice[0]; }
-		__BC_gcpu__ auto& operator [] (int i)  	 { return array_slice[0]; }
-
+		__BC_gcpu__ const auto& operator [] (int i) const{ return array_slice[i]; }
+		__BC_gcpu__ auto& operator [] (int i)  	 { return array_slice[i]; }
 	};
-
-
 }
 
 

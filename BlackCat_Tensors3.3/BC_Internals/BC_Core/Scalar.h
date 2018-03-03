@@ -31,7 +31,6 @@ public:
 	Scalar(		 Scalar&& t) : parent_class(t) 		{}
 	Scalar(const Scalar&  t) : parent_class(t) 		{}
 
-
 	Scalar& operator =(const Scalar&  t) { return parent_class::operator=(t); }
 	Scalar& operator =(const Scalar&& t) { return parent_class::operator=(t); }
 	Scalar& operator =(	     Scalar&& t) { return parent_class::operator=(t); }
@@ -47,8 +46,6 @@ public:
 
 	Scalar(_scalar<T>* param): parent_class(param) {}
 
-
-
 	//this how to do constexpr if -esque things inside of an initialization list in a constructor
 	struct sendParam { template<class u>  	static auto impl(const u& param) { return param; }};
 	struct sendNull { template<class u>  	static auto impl(const u& param) { return _shape(); }};
@@ -58,8 +55,10 @@ public:
 	//we use this ifte to differentiate between primitive initializations (in the case we want to... Scalar<double>(2.0) //make a scalar with value 2
 	//and...... Scalar<double>(unary_Expression<of some types>); In the first instance we enable Tensor_Core to call its default constructor
 	//			in this second instance we initiate TensorBase's functor type with U.
-	explicit Scalar(const T& value) : parent_class(ifte<MTF::isPrimitive<T>::conditional, sendNull, sendParam>::impl(value)) {
-		ifte<MTF::isPrimitive<T>::conditional, htd, voider>::impl(this->data().core(), &value, 1);
+	struct DISABLE;
+	explicit Scalar(const ifte<MTF::isPrimitive<T>::conditional, DISABLE, const T&> value) : parent_class(value) {}
+	Scalar(_scalar<T> value) {
+		Mathlib::HostToDevice((_scalar<T>*)this->data(), &value, 1);
 	}
 //
 	//This is the same constructor as above (for non-genuine tensors) but we mandate 2 parameters so the compiler doesn't confuse it with the above constructor

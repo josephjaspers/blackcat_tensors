@@ -17,9 +17,6 @@
 
 namespace BC {
 
-static constexpr int MAX_UNROLLED = 256;
-static constexpr int DEFAULT_ROLL = 8;
-
 class CPU {
 public:
 	template<typename T>
@@ -27,18 +24,20 @@ public:
 		t = new T[sz];
 	}
 	template<typename T>
+	static T* initialize(int sz) {
+		T* t = new T[sz];
+		return t;
+	}
+	template<typename T>
 	static void unified_initialize(T*& t, int sz) {
 		t = new T[sz];
 	}
+	template<typename T>
+	static T* unified_initialize(int sz) {
+		T* t = new T[sz];
+		return t;
+	}
 	//The tensor library doesn't differentiate method calls between gpu and cpu libraries, ergo you must override certain methods.
-	template<class T, class U>
-	static void HostToDevice(T& t, U& u, int size) {
-		copy(t, u, size);
-	}
-	template<class T, class U>
-	static void DeviceToHost(T& t, U& u, int size) {
-		copy(t, u, size);
-	}
 	template<class T, class U>
 	static void HostToDevice(T* t, U* u, int size) {
 		copy(t, u, size);
@@ -51,13 +50,12 @@ public:
 	static void destroy(T* t) {
 		delete[] t;
 	}
-	template<typename T, typename J, int roll = DEFAULT_ROLL>
+	template<typename T, typename J>
 	static void fill(T& t, const J j, int sz) {
 		for (int i = 0; i < sz; ++i) {
 			t[i] = j;
 		}
 	}
-
 	template<typename T>
 	static void eval(T& t, int sz) {
 		for (int i = 0; i < sz; ++i) {
@@ -85,7 +83,9 @@ public:
 	template<typename T, typename J>
 	static void copy(T& t, const J& j, int sz) {
 		if (sz < 8192) {
-			copy_single_thread(t, j, sz);
+			for (int i = 0; i < sz; ++i) {
+				t[i] = j[i];
+			}
 			return;
 		}
 #pragma omp parallel for
@@ -96,21 +96,6 @@ public:
 	}
 
 
-	template<typename T, typename J, int roll = DEFAULT_ROLL>
-	static void copy_single_thread(T& t, const J& j, int sz) {
-		for (int i = 0; i < sz; ++i) {
-			t[i] = j[i];
-		}
-	}
-	template<typename T, typename J>
-	static void copyHostToDevice(T t, J j, int sz) {
-#pragma omp parallel for
-		for (int i = 0; i < sz; ++i) {
-			t[i] = j[i];
-		}
-#pragma omp barrier
-	}
-
 	template<typename T, typename J>
 	static void randomize(T& t, J lower_bound, J upper_bound, int sz) {
 #pragma omp parallel for
@@ -119,6 +104,8 @@ public:
 		}
 #pragma omp barrier
 	}
+
+
 	template<class T, class RANKS>
 	static void print(const T ary, const RANKS ranks, int order, int print_length) {
 		BC::print(ary, ranks, order, print_length);
@@ -184,14 +171,15 @@ public:
 			krnl_col_count *= krnl_shape[i];
 		}
 
-		const int krnl_rows = krnl_shape[0];
-		const int cor_rows = krnl_rows + img_rows - 1;
-		int base_ = krnl_rows - 1;
+		const int krnl_rows = krnl_shape[0];			//
+		const int cor_rows = krnl_rows + img_rows - 1;	//output image rows
+		int base_ = krnl_rows - 1;	//the base offset for handling the initial edge case
 
 		//handles the initial edge case
 		for (int i = 0; i < base_; ++i){
 			for (int j = 0; j < krnl_col_count; ++j)
-				for (int k = 0; k > -1; --k) {
+				for (int k = base_ - 1; k > -1; --k) {
+						//correlate the initial edge
 					cor[i + (krnl_col_count - 1 - j) * cor_rows] += krnl[krnl_rows - k - 1 + j * krnl_rows] * img[i + k];
 			}
 		}
@@ -199,7 +187,10 @@ public:
 
 		//handles the rest of the kernel
 		for (int i = 0; i < img_size; ++i) {
+			std::cout << " i = " << i  << std::endl;
 				bool incremented = false;
+				//do for the number of "valid" positions
+				//then
 					for (int j = 0; j < krnl_col_count; ++j) {
 
 						if (incremented) {
@@ -208,9 +199,10 @@ public:
 						}
 
 						for (int k = 0; k < krnl_rows; ++k) {
-
 						if (k != 0 && !incremented)
-							if (std::floor(i / img_rows) < std::floor((i + k)/ img_rows)) {
+							//checks if the kernel the edge of a column increment the output offset
+							if (std::floor((double)i / img_rows) < std::floor((double)(i + k)/ img_rows)) {
+								//we want to do this everytime the kernel starts to overflow, but only once each overflow
 								incremented = true;
 								base_++;
 							}
@@ -230,21 +222,21 @@ public:
 			}
 
 		const int krnl_rows = krnl_shape[0];
-		const int cor_rows =  img_rows - krnl_rows + 1;
 		const int positions = img_rows - krnl_rows + 1;
 		int cor_base = 0;
 		//handles the rest of the kernel
 		for (int i = 0; i < img_size; ++i) {
-			for (int j = 0; j < krnl_col_count; ++j)
-			for (int x = i; x < positions + i; ++x) {
+			for (int p = 0; p < positions; ++p, ++i)
+				for (int j = 0; j < krnl_col_count; ++j) {
 					for (int k = 0; k < krnl_rows; ++k) {
-						cor[cor_base + x + j * cor_rows] += krnl[k + j * krnl_rows] * img[x + k + j * img_rows];
+						cor[cor_base + i] += krnl[k + j * krnl_rows] * img[i + k + j * img_rows];
 					}
-			}
+				}
+		}
 //			i += krnl_rows;
 //			cor_base -= krnl_rows;
-		}
 	}
+
 
 };
 }

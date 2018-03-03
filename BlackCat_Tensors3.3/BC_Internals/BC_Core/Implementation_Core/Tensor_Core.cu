@@ -11,9 +11,11 @@
 #define SHAPE_H_
 
 #include "Tensor_Core_Slice.cu"
+#include "../../BC_MathLibraries/Mathematics_CPU.h"
 
 #include "Determiners.h"
 namespace BC {
+
 template<class T> struct Tensor_Core {
 
 	static constexpr int inner = _rankOf<T>;
@@ -38,7 +40,7 @@ public:
 
 public:
 
-		  scalar* asPtr() 	  { return array; }
+		  scalar* asPtr() 	    { return array; }
 	const scalar* asPtr() const { return array; }
 
 	operator 	   scalar*()       { return array; }
@@ -61,7 +63,18 @@ public:
 			throw std::invalid_argument("dimlist- rank != TENSOR_CORE::RANK");
 
 		if (RANK > 0) {
-			Mathlib::copy(is, &param[0], RANK);
+			CPU::copy(is, &param[0], RANK);
+
+			os[0] = is[0];
+			for (int i = 1; i < RANK; ++i) {
+				os[i] = os[i - 1] * is[i];
+			}
+		}
+		Mathlib::initialize(array, size());
+	}
+	Tensor_Core(int* param) {
+		if (RANK > 0) {
+			CPU::copy(is, &param[0], RANK);
 
 			os[0] = is[0];
 			for (int i = 1; i < RANK; ++i) {
@@ -75,33 +88,26 @@ public:
 		if (!OWNERSHIP)	//disable this later
 			throw std::invalid_argument("copy on non-ownership tensor");
 
-		Mathlib::copy(is, param.is, RANK);
-		Mathlib::copy(os, param.os, RANK);
+		CPU::copy(is, param.is, RANK);
+		CPU::copy(os, param.os, RANK);
 			os[0] = is[0];
 			for (int i = 1; i < RANK; ++i) {
 				os[i] = os[i - 1] * is[i];
 			}
 
 		Mathlib::initialize(array, size());
-		Mathlib::copy(array, param.array, size());
+		CPU::copy(array, param.array, size());
 	}
 	Tensor_Core(Tensor_Core&& param) {
 		if (!OWNERSHIP)	//disable this later
 			throw std::invalid_argument("copy on non-ownership tensor");
 
-		Mathlib::copy(is, param.is, RANK);
-		Mathlib::copy(os, param.os, RANK);
+		CPU::copy(is, param.is, RANK);
+		CPU::copy(os, param.os, RANK);
 		array = param.array;
 		param.array = nullptr;
 	}
-	template<class d >
-	Tensor_Core(const Tensor_Core<d>& param) {
-		static_assert(RANK == decltype(param)::RANK, "TENSORS MAY ONLY BE CONSTRUCTED OF SAME ORDER ");
-		Mathlib::copy(is, param.is, RANK);
-		Mathlib::copy(os, param.os, RANK);
-		Mathlib::initialize(array, size());
-		Mathlib::copy(array, param.array, size());
-	}
+
 	~Tensor_Core() {
 		if (OWNERSHIP)
 			if (array)
@@ -125,7 +131,7 @@ public:
 	const scalar* core() const { return array; }
 		  scalar* core()  	   { return array; }
 
-	void print() const { Mathlib::print(array, innerShape(),rank(), 4); }
+	void print() const { Mathlib::print(array, this->innerShape(),rank(), 4); }
 
 	void printDimensions() const {
 		for (int i = 0; i < RANK; ++i) {

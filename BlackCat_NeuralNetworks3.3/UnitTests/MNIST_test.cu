@@ -76,13 +76,14 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 int percept_MNIST() {
 
 	const int TRAINING_EXAMPLES = 2000;
-	const int TRAINING_ITERATIONS = 10	;
+	const int TRAINING_ITERATIONS = 10;
 
 
 	//Generate the layers (params are: inputs, outputs)
 
 	//Create the neural network
 	auto network = generateNetwork<FeedForward, FeedForward>(784, 250, 10);
+//	auto network = generateNetwork<FeedForward>(784, 10);
 
 	data inputs;
 	data outputs;
@@ -93,7 +94,7 @@ int percept_MNIST() {
 	//load data
 	std::cout << "loading data..." << std::endl << std::endl;
 	std::ifstream in_stream("///home/joseph///Downloads///train.csv");
-	std::string tmp; std::getline(in_stream, tmp, '\n'); //remove headers
+	std::string tmp; std::getline(in_stream, tmp, '\n');  	//remove headers
 
 	//Load training examples (taken from kaggle digit recognizer train.csv)
 	std::cout << " generating and loading data from csv to tensors" << std::endl;
