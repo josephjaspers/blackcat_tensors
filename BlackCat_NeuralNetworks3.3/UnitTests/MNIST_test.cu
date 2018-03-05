@@ -1,15 +1,16 @@
 #include "../BlackCat_NeuralNetworks.h"
-
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <omp.h>
 using BC::vec;
+using BC::scal;
+using BC::mat;
 typedef std::vector<vec> data;
+typedef vec tensor;
 
 namespace BC {
 namespace MNIST_Test {
-typedef vec tensor;
 
 tensor expandOutput(int val, int total) {
 	//Convert a value to a 1-hot output vector
@@ -21,8 +22,8 @@ tensor expandOutput(int val, int total) {
 
 tensor&  normalize(tensor& tens, fp_type max, fp_type min) {
 	//generic feature scaling (range of [0,1])
-	tens -= Scalar<fp_type, BC::ml>(min);
-	tens /= Scalar<fp_type, BC::ml>(max - min);
+	tens -= scal(min);
+	tens /= scal(max - min);
 
 	return tens;
 }
@@ -59,9 +60,7 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 		std::getline(read_data, output, ',');
 		int out = std::stoi(output);
 
-
 		tensor input(784);
-
 		input.read(read_data, false);
 		output_data.push_back(expandOutput(out, 10));
 		normalize(input, 255, 0);
@@ -78,12 +77,10 @@ int percept_MNIST() {
 	const int TRAINING_EXAMPLES = 2000;
 	const int TRAINING_ITERATIONS = 10;
 
-
 	//Generate the layers (params are: inputs, outputs)
 
 	//Create the neural network
-	auto network = generateNetwork<FeedForward, FeedForward>(784, 250, 10);
-//	auto network = generateNetwork<FeedForward>(784, 10);
+	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
 
 	data inputs;
 	data outputs;
@@ -101,44 +98,37 @@ int percept_MNIST() {
 	generateAndLoad(inputs, outputs, in_stream, TRAINING_EXAMPLES);
 	in_stream.close();
 
-
-
 	//Train
 	float t;
 	t = omp_get_wtime();
-		printf("\n Calculating... BC_NN training time \n");
-
-
-
+	printf("\n Calculating... BC_NN training time \n");
 
 	std::cout << " training..." << std::endl;
 
 	for (int i = 0; i < TRAINING_ITERATIONS; ++i) {
 		std::cout << " iteration =  " << i << std::endl;
 		for (int j = 0; j < inputs.size(); ++j) {
-			network.head().forwardPropagation(inputs[j]);
-			network.tail().backPropagation(outputs[j]);
+			network.forwardPropagation(inputs[j]);
+			network.backPropagation(outputs[j]);
 
 			if (j % 100 == 0) {
-			network.head().updateWeights();
-			network.head().clearBPStorage();
+			network.updateWeights();
+			network.clearBPStorage();
 			}
 		}
 	}
-//
-//
+
 	t = omp_get_wtime() - t;
 	printf("It took me %f clicks (%f seconds).\n", t, ((float) t));
 	std::cout << "success " << std::endl;
 
 	float correct_ = 0;
 	for (int i = 0; i < inputs.size(); ++i) {
-		if (correct(network.head().forwardPropagation(inputs[i]), outputs[i])) {
+		if (correct(network.forwardPropagation(inputs[i]), outputs[i])) {
 			++correct_;
 		}
 	}
 	std::cout << " correct: " << correct_/inputs.size()  <<std::endl;
-
 
 	std::cout << "\n \n \n " << std::endl;
 	std::cout << " testing... " << std::endl;
@@ -152,17 +142,14 @@ int percept_MNIST() {
 		img_adj = img.t();
 		img_adj.printSparse(3);
 
-
 		std::cout << "prediction " << std::endl;
-		network.head().forwardPropagation(inputs[i]).print();
+		network.forwardPropagation(inputs[i]).print();
 		std::cout << "-----------------------------------------------------------------------------------------------------------" <<std::endl;
 	}
-
 	return 0;
 }
 }
 }
-
 
 int main() {
 	BC::MNIST_Test::percept_MNIST();

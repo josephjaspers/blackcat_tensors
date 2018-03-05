@@ -10,10 +10,10 @@
 
 #include "NN_Core/Defaults.h"
 #include "NN_Core/Generator.h"
+#include "NN_Core/NeuralNetwork.h"
+#include "NN_Core/FeedForward.h"
 
-#include "NN_Core/FeedForward.cu"
-
-#include "NN_Core/OutputLayer.cu"
+#include "NN_Core/OutputLayer.h"
 #include "BlackCat_Tensors.h"
 
 #endif /* BLACKCAT_NEURALNETWORKS_H_ */

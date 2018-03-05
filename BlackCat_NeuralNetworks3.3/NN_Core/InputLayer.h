@@ -63,7 +63,7 @@ const int INPUTS;
 };
 }
 
-#include "LayerChain.cu"
+//#include "LayerChain.cu"
 
 
 

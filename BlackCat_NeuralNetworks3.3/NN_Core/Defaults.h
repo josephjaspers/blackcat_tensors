@@ -12,6 +12,12 @@
 #include "BlackCat_TensorFunctions.cu"
 namespace BC {
 
+/*
+ * This file defines the default types of tensors and which mathlibrary to use.
+ * Currently only CPU lib is supported
+ *
+ */
+
 using namespace NN_Abreviated_Functions;
 struct BASE;
 

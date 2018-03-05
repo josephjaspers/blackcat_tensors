@@ -39,8 +39,8 @@ public:
 		return 1;
 //		return std::ceil((size) / CUDA_BASE_THREADS);
 	}
-	static int threads(int sz = 0) {
-		return 256;
+	static int threads(int sz = CUDA_BASE_THREADS) {
+		return sz;
 //		return sz < CUDA_BASE_THREADS ? sz : CUDA_BASE_THREADS;
 	}
 

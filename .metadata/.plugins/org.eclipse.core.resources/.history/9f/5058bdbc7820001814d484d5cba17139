@@ -1,0 +1,22 @@
+/*
+ * NeuralNetwork.h
+ *
+ *  Created on: Mar 5, 2018
+ *      Author: joseph
+ */
+
+#ifndef NEURALNETWORK_H_
+#define NEURALNETWORK_H_
+
+namespace BC {
+
+
+
+
+
+
+
+
+}
+
+#endif /* NEURALNETWORK_H_ */

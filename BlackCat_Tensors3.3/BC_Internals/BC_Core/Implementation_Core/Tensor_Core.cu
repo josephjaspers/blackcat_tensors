@@ -26,7 +26,6 @@ template<class T> struct Tensor_Core {
 	using dimlist = std::vector<int>;
 	using scalar = _scalar<T>;
 	using Mathlib = _mathlib<T>;
-//	using ml_ = Mathlib;
 
 	scalar* array;
 	int* is = Mathlib::unified_initialize(is, RANK);
@@ -36,7 +35,7 @@ template<class T> struct Tensor_Core {
 	operator const scalar*() const { return array; }
 
 	Tensor_Core() {
-		static_assert(RANK == 0, "DEFAULT CONSTRUCTOR FOR TENSOR_CORE ONLY AVAILABLE FOR RANK == 0 (SCALAR)");
+//		static_assert(RANK == 0, "DEFAULT CONSTRUCTOR FOR TENSOR_CORE ONLY AVAILABLE FOR RANK == 0 (SCALAR)");
 		Mathlib::initialize(array, 1);
 	}
 

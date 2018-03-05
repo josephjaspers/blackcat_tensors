@@ -10,19 +10,16 @@
 
 
 #include "InputLayer.h"
-#include "OutputLayer.cu"
+#include "OutputLayer.h"
 #include "Defaults.h"
-
-
-#include "LayerChain.cu"
-
+#include "LayerChain.h"
+#include "NeuralNetwork.h"
 
 namespace BC {
 
 template<template<class> class... layers, class... integers>
 auto generateNetwork(integers... structure) {
-	auto net = LayerChain<BASE, InputLayer, layers..., OutputLayer>(structure...);
-	return net;
+	return NeuralNetwork<layers...>(structure...);
 }
 
 
