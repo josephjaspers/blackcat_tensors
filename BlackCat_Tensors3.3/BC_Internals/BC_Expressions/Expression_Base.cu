@@ -11,6 +11,7 @@
 #define EXPRESSION_BASE_H_
 
 #include "BlackCat_Internal_Definitions.h"
+#include "../BC_Core/Implementation_Core/Determiners.h"
 #include <iostream>
 
 namespace BC {
@@ -30,6 +31,8 @@ private:
 	const derived& asDerived() const { return static_cast<const derived&>(*this); }
 
 public:
+//	expression() { static_assert(std::is_trivially_copyable<derived>::value, "DERIVATIVES OF EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
+
 
 	int rank() const 	{ return shadowFailure<int>("int rank() const"); }
 	int size() const 	{ return shadowFailure<int>("int size() const"); }
@@ -45,15 +48,6 @@ public:
 	int slice(int i) const { return shadowFailure<>("const Tensor_Slice(int) const  => THIS METHOD SHOULD ONLY BE ENABLED FOR TENSOR_CORE"); }
 	int slice(int i) 	   {  return shadowFailure<>("Tensor_Slice(int)  => THIS METHOD SHOULD ONLY BE ENABLED FOR TENSOR_CORE"); }
 };
-
-template<class list_type>
-struct _sh {
-	operator const list_type() const { return dims; }
-
-	_sh(const list_type d) : dims(d) {}
-	const list_type dims;
-};
-
 
 }
 

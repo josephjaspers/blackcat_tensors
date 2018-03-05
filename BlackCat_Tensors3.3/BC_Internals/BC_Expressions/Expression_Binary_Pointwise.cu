@@ -21,11 +21,11 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 
 	operation oper;
 
-	const lv& left;
-	const rv& right;
+	lv left;
+	rv right;
 
 	template<class L, class R>
-	inline __attribute__((always_inline)) binary_expression(const L& l, const R& r) :
+	inline __attribute__((always_inline)) binary_expression(L l, R r) :
 			left(l), right(r) {
 	}
 

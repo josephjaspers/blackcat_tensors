@@ -72,8 +72,8 @@ template<class PARENT>
 
 			  //the outer_shape is formatted as.... [ld_rows][ld_cols][ld_pages] etc... ergo if our current RANK  == 1 our LD_multiplier would be at index -1
 			  // all vectors (aside from row vectors which use a specialized class) have increment of 1 -- erho we choose "just i" as the index opposed to multiplying by the outer shape
-		const auto slice(int i) const { return Tensor_Slice<self>(&array_slice[RANK == 1 ? i : (parent.os[LAST - 1] * i)], *this); }
-			  auto slice(int i) 	  { return Tensor_Slice<self>(&array_slice[RANK == 1 ? i : (parent.os[LAST - 1] * i)], *this); }
+		const auto slice(int i) const { return Tensor_Slice<self>(&array_slice[RANK == 1 ? i : (parent.outerShape()[LAST - 1] * i)], *this); }
+			  auto slice(int i) 	  { return Tensor_Slice<self>(&array_slice[RANK == 1 ? i : (parent.outerShape()[LAST - 1] * i)], *this); }
 
 				const scalar* core() const { return array_slice; }
 					  scalar* core()  	   { return array_slice; }

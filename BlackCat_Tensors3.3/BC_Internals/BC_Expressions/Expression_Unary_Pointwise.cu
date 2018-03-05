@@ -15,7 +15,7 @@ class unary_expression : public expression<T, unary_expression<T, operation, val
 public:
 
 	operation oper;
-	const value& array;
+	value array;
 
 	int rank() const { return array.rank(); }
 	int size() const { return array.size(); }
@@ -29,7 +29,7 @@ public:
 	const auto innerShape() const 			{ return array.innerShape(); }
 	const auto outerShape() const 			{ return array.outerShape(); }
 
-	inline __attribute__((always_inline)) __BC_gcpu__ unary_expression(const value& v) :
+	inline __attribute__((always_inline)) __BC_gcpu__ unary_expression(value v) :
 		array(v) {
 	}
 

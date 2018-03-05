@@ -14,9 +14,10 @@
 namespace BC {
 
 using MTF::ifte;		//if then else
-using MTF::isPrim;
-using MTF::shell_of;
-using MTF::isCore;
+using MTF::isPrim;		//is a primitive type
+using MTF::shell_of;	//get template type shell IE tensor<stuff...> -> tensor<//use your types here//>
+using MTF::isCore;		//is a Core or one of its derivatives
+using MTF::isCorePure;	//is a TensorCore<T> type (more restrictive than isCore)
 
 template<class,class> class DISABLED;
 template<class,class> class Scalar;
@@ -67,6 +68,7 @@ struct determine_evaluation<tensor<functor, set...>>{
 			tensor<Tensor_Core<derived>>>;
 };
 template<class T> using _evaluation = typename determine_evaluation<T>::type;
+
 
 }
 

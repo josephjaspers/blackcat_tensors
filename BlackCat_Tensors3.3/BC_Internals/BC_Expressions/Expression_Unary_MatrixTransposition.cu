@@ -18,10 +18,10 @@ namespace BC {
 template<class T, class functor_type>
 struct unary_expression_transpose : expression<T, unary_expression_transpose<T, functor_type>>
 {
-	const functor_type& array;
+	functor_type array;
 	const bool vector = rows() == 1 || cols() == 1;
 
-	unary_expression_transpose(const functor_type& p) : array(p) {}
+	unary_expression_transpose(functor_type p) : array(p) {}
 
 	__BC_gcpu__	int rank() const { return array.rank(); }
 	__BC_gcpu__ int rows() const { return array.cols(); }

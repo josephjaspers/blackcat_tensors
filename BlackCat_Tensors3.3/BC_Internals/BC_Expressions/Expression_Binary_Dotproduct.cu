@@ -29,8 +29,8 @@ template<class T, class lv, class rv, class Mathlib>
 struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
 	using scalar_type = typename MTF::determine_scalar<T>::type;
 
-	const lv& left;
-	const rv& right;
+	lv left;
+	rv right;
 
 	const int M = left.rows();
 	const int N = right.cols();
@@ -50,15 +50,22 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	static constexpr bool lv_eval = det_eval<lv>::evaluate;
 	static constexpr bool rv_eval = det_eval<rv>::evaluate;
 
+	struct deleter {
+		template<class param>
+		void operator () (param& p) {
+			Mathlib::destroy(p);
+		}
+	};
+
 	std::shared_ptr<scalar_type> array;
 	scalar_type* array_ptr;
 
 	__attribute__((always_inline))
-	binary_expression_dotproduct(const lv& left, const rv& right) :
+	binary_expression_dotproduct(lv left, rv right) :
 	left(left), right(right), LDA(left.LD_rows()), LDB(right.LD_rows()) {
 
 		Mathlib::initialize(array_ptr,eval_size);
-		array = std::shared_ptr<scalar_type>(array_ptr);
+		array = std::shared_ptr<scalar_type>(array_ptr, deleter());
 		eval();
 	}
 
@@ -71,8 +78,8 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	int dimension(int i)		const { return i== 0 ? M : i == 1 ? N : 1; }
 	void printDimensions() 		const { std::cout<<"[" << M << "][" <<N  <<"]" << std::endl; }
 	void printLDDimensions()	const { std::cout<<"[" << M << "][" <<eval_size  <<"]" << std::endl; }
-	const auto innerShape() 	const { return _sh<std::vector<int>>({M, N}); }
-	const auto outerShape() 	const { return _sh<std::vector<int>>({M, N * M}); }
+	const auto innerShape() 	const { return std::vector<int>({M, N}); }
+	const auto outerShape() 	const { return std::vector<int>({M, N * M}); }
 
 
 

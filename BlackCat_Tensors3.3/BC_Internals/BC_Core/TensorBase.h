@@ -10,13 +10,18 @@
 
 #include "Implementation_Core/Tensor_Operations.h"
 #include "Implementation_Core/Tensor_Utility.h"
-#include "Implementation_Core/Tensor_Core.cu"
+//#include "Implementation_Core/Tensor_Core.cu"
+#include "Implementation_Core/Tensor_Initializer.h"
 #include "Implementation_Core/Determiners.h"
 namespace BC {
 template<class,class> class Scalar;
 
 template<class derived>
-class TensorBase : public Tensor_Operations <derived>, public Tensor_Utility<derived> {
+class TensorBase :
+		public Tensor_Operations <derived>,
+		public Tensor_Utility<derived>,
+		public TensorInitializer<derived>
+{
 
 protected:
 
@@ -24,6 +29,7 @@ protected:
 
 	using self 			= TensorBase<derived>;
 	using math_parent  	= Tensor_Operations<derived>;
+	using initializer 	= TensorInitializer<derived>;
 	using functor_type 	= _functor<derived>;
 	using Mathlib 		= _mathlib<derived>;
 	using scal			= _scalar<derived>;
@@ -33,64 +39,59 @@ protected:
 
 	static constexpr int RANK 		= ranker<derived>::type::inner_rank;
 	static constexpr int LD_RANK 	= ranker<derived>::type::outer_rank;
-	static constexpr bool GENUINE_TENSOR =isPrim<_scalar<derived>> || isCore<_functor<derived>>::conditional;
+	static constexpr bool GENUINE_TENSOR =isPrim<_fscal<derived>> || isCore<_functor<derived>>::conditional;
 
-	functor_type black_cat_array;
+//	functor_type black_cat_array;
 
 public:
 	using math_parent::operator=;
+	template<class... params>
+	TensorBase(const params&... p) : initializer(p...) {}
 
-	operator  const derived&() const { return static_cast<const derived&>(*this); }
-	operator  		derived&() 		 { return static_cast<	    derived&>(*this); }
-
-	TensorBase(						 ) { if (RANK != 0) { throw std::invalid_argument("DEFAULT CONSTRUCTOR ONLY SUPPORTED FOR SCALARS"); } }
-	TensorBase(		 derived&& tensor) : black_cat_array(tensor.black_cat_array){}
-	TensorBase(const derived&  tensor) : black_cat_array(tensor.black_cat_array){}
-
-
-
-	template<class U>
-	TensorBase(const deriv<U>& tensor) : black_cat_array(shapeOf(tensor)) {
-		this->assert_same_size(tensor);
-		Mathlib::copy(this->black_cat_array, tensor.data(), this->size());
-	}
-
-	template<class param1, class... params>
-	TensorBase(const param1& p1, const params&... p) : black_cat_array(p1, p...) { }
-
+//
+//	TensorBase(		 derived&& tensor) : black_cat_array(tensor.black_cat_array){}
+//	TensorBase(const derived&  tensor) : black_cat_array(tensor.black_cat_array){}
+//
+//	template<class... U> TensorBase(const deriv<functor<U...>>& tensor)
+//			: black_cat_array(tensor.black_cat_array) {}
+//	template<class atLeastOneParam, class... params> TensorBase(const atLeastOneParam& alop, const params&... p)
+//			: black_cat_array(alop, p...) { }
+//
+//	TensorBase() { if (RANK != 0) { throw std::invalid_argument("DEFAULT CONSTRUCTOR ONLY SUPPORTED FOR SCALARS"); } }
+//
+//	template<class U>
+//	TensorBase(const deriv<U>& tensor) : black_cat_array(shapeOf(tensor)) {
+//		this->assert_same_size(tensor);
+//		Mathlib::copy(this->black_cat_array, tensor.data(), this->size());
+//	}
 
 	derived& operator =(const derived& tensor) {
 		this->assert_same_size(tensor);
 		Mathlib::copy(this->data(), tensor.data(), this->size());
 		return *this;
 	}
-	derived& operator =(	  derived&& tensor) {
-		this->assert_same_size(tensor);
-		std::swap(this->black_cat_array, tensor.black_cat_array);
-		return *this;
-	}
 
-	int rank() const { return black_cat_array.rank(); }
-	int size() const { return black_cat_array.size(); }
-	int rows() const { return black_cat_array.rows(); }
-	int cols() const { return black_cat_array.cols(); }
-	int LD_rows() const { return black_cat_array.LD_rows(); }
-	int LD_cols() const { return black_cat_array.LD_cols(); }
-	void resetShape(std::vector<int> sh) { black_cat_array.resetShape(sh); }
+	int rank() const { return this->black_cat_array.rank(); }
+	int size() const { return this->black_cat_array.size(); }
+	int rows() const { return this->black_cat_array.rows(); }
+	int cols() const { return this->black_cat_array.cols(); }
+	int LD_rows() const { return this->black_cat_array.LD_rows(); }
+	int LD_cols() const { return this->black_cat_array.LD_cols(); }
+	void resetShape(std::vector<int> sh) { this->black_cat_array.resetShape(sh); }
 
-	int dimension(int i)		const { return black_cat_array.dimension(i); }
-	void printDimensions() 		const { black_cat_array.printDimensions();   }
-	void printLDDimensions()	const { black_cat_array.printLDDimensions(); }
+	int dimension(int i)		const { return this->black_cat_array.dimension(i); }
+	void printDimensions() 		const { this->black_cat_array.printDimensions();   }
+	void printLDDimensions()	const { this->black_cat_array.printLDDimensions(); }
 
-	const auto innerShape() const 			{ return black_cat_array.innerShape(); }
-	const auto outerShape() const 			{ return black_cat_array.outerShape(); }
+	const auto innerShape() const 			{ return this->black_cat_array.innerShape(); }
+	const auto outerShape() const 			{ return this->black_cat_array.outerShape(); }
 
 
-	const functor_type& _data() const { return black_cat_array; }
-		  functor_type& _data()		  { return black_cat_array; }
+	const functor_type& _data() const { return this->black_cat_array; }
+		  functor_type& _data()		  { return this->black_cat_array; }
 
-	const auto slice(int i) const { return black_cat_array.slice(i); }
-		  auto slice(int i) 	  { return black_cat_array.slice(i); }
+	const auto slice(int i) const { return this->black_cat_array.slice(i); }
+		  auto slice(int i) 	  { return this->black_cat_array.slice(i); }
 
 		  auto operator [] (int i) 		 { return typename base<RANK>::slice<decltype(slice(0)), Mathlib>(slice(i)); }
 	const auto operator [] (int i) const { return typename base<RANK>::slice<decltype(slice(0)), Mathlib>(slice(i)); }

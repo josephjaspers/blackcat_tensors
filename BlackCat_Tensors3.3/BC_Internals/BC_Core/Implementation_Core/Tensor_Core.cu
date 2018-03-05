@@ -18,39 +18,22 @@ namespace BC {
 
 template<class T> struct Tensor_Core {
 
-	static constexpr int inner = _rankOf<T>;
-	static constexpr int outer = _rankOf<T>;
-	using Mathlib = _mathlib<T>;
-
-public:
-
-	using self = Tensor_Core<T>;
-
-	using dimlist = std::vector<int>;
-	using scalar = _scalar<T>;
-
 	static constexpr int RANK = _rankOf<T>;
 	static constexpr int LD_RANK = RANK;
-	static constexpr bool OWNERSHIP = true;
 	static constexpr int LAST = RANK - 1;
 
+	using self = Tensor_Core<T>;
+	using dimlist = std::vector<int>;
+	using scalar = _scalar<T>;
+	using Mathlib = _mathlib<T>;
+//	using ml_ = Mathlib;
+
 	scalar* array;
-	int is[RANK];
-	int os[RANK];
-
-public:
-
-		  scalar* asPtr() 	    { return array; }
-	const scalar* asPtr() const { return array; }
+	int* is = Mathlib::unified_initialize(is, RANK);
+	int* os = Mathlib::unified_initialize(os, RANK);
 
 	operator 	   scalar*()       { return array; }
 	operator const scalar*() const { return array; }
-
-
-
-	__BC_gcpu__	      scalar& operator [] (int index) 		{ return array[index]; };
-	__BC_gcpu__	const scalar& operator [] (int index) const { return array[index]; };
-
 
 	Tensor_Core() {
 		static_assert(RANK == 0, "DEFAULT CONSTRUCTOR FOR TENSOR_CORE ONLY AVAILABLE FOR RANK == 0 (SCALAR)");
@@ -58,12 +41,11 @@ public:
 	}
 
 	Tensor_Core(dimlist param) {
-
 		if (param.size() != RANK)
 			throw std::invalid_argument("dimlist- rank != TENSOR_CORE::RANK");
 
 		if (RANK > 0) {
-			CPU::copy(is, &param[0], RANK);
+			Mathlib::HostToDevice(is, &param[0], RANK);
 
 			os[0] = is[0];
 			for (int i = 1; i < RANK; ++i) {
@@ -72,9 +54,9 @@ public:
 		}
 		Mathlib::initialize(array, size());
 	}
-	Tensor_Core(int* param) {
+	Tensor_Core(const int* param) {
 		if (RANK > 0) {
-			CPU::copy(is, &param[0], RANK);
+			Mathlib	::HostToDevice(is, &param[0], RANK);
 
 			os[0] = is[0];
 			for (int i = 1; i < RANK; ++i) {
@@ -82,36 +64,6 @@ public:
 			}
 		}
 		Mathlib::initialize(array, size());
-	}
-
-	Tensor_Core(const Tensor_Core& param) {
-		if (!OWNERSHIP)	//disable this later
-			throw std::invalid_argument("copy on non-ownership tensor");
-
-		CPU::copy(is, param.is, RANK);
-		CPU::copy(os, param.os, RANK);
-			os[0] = is[0];
-			for (int i = 1; i < RANK; ++i) {
-				os[i] = os[i - 1] * is[i];
-			}
-
-		Mathlib::initialize(array, size());
-		CPU::copy(array, param.array, size());
-	}
-	Tensor_Core(Tensor_Core&& param) {
-		if (!OWNERSHIP)	//disable this later
-			throw std::invalid_argument("copy on non-ownership tensor");
-
-		CPU::copy(is, param.is, RANK);
-		CPU::copy(os, param.os, RANK);
-		array = param.array;
-		param.array = nullptr;
-	}
-
-	~Tensor_Core() {
-		if (OWNERSHIP)
-			if (array)
-		Mathlib::destroy(array);
 	}
 
 	__BC_gcpu__ int rank() const { return RANK; }
@@ -123,10 +75,14 @@ public:
 	__BC_gcpu__ int LD_rows() const { return RANK > 0 ? os[0] : 1; }
 	__BC_gcpu__ int LD_cols() const { return RANK > 1 ? os[1] : 1; }
 	__BC_gcpu__ int LDdimension(int i) const { return RANK > i + 1 ? os[i] : 1; }
-
+	__BC_gcpu__	      scalar& operator [] (int index) 		{ return array[index]; };
+	__BC_gcpu__	const scalar& operator [] (int index) const { return array[index]; };
 
 	const auto innerShape() const { return RANK > 0 ? (int*)is : &ONE; }
 	const auto outerShape() const { return RANK > 0 ? (int*)os : &ONE; }
+
+	const auto slice(int i) const { return Tensor_Slice<self>(&array[os[LAST - 1] * i], *this); }
+		  auto slice(int i) 	  { return Tensor_Slice<self>(&array[os[LAST - 1] * i], *this); }
 
 	const scalar* core() const { return array; }
 		  scalar* core()  	   { return array; }
@@ -154,11 +110,6 @@ public:
 			os[i] = os[i - 1] * is[i];
 		}
 	}
-
-public:
-		  auto slice(int i) { return Tensor_Slice<self>(&array[os[LAST - 1] * i], *this); }
-	const auto slice(int i) const { return Tensor_Slice<self>(&array[os[LAST - 1] * i], *this); }
-
 };
 }
 

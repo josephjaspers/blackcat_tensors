@@ -2,30 +2,30 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="copy" key="selection"/>
+		<item value="array()" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="copy\"/>
+			<item value="array"/>
+			<item value="os"/>
+			<item value="is"/>
+			<item value="innerShape()"/>
+			<item value="isinn"/>
 			<item value="copy"/>
+			<item value="copy\"/>
 			<item value="M"/>
-			<item value="Math"/>
-			<item value="param"/>
-			<item value="scalar"/>
-			<item value="isCore"/>
-			<item value="is_core"/>
 		</list>
 		<list key="replacehistory">
+			<item value="array()"/>
+			<item value="outerShape()"/>
+			<item value="innerShape()"/>
 			<item value="Tensor_Operations"/>
 			<item value="Ten"/>
 			<item value=""/>
 			<item value="NeuralNetwork"/>
 			<item value="network.get"/>
-			<item value="network."/>
-			<item value="outer_packet"/>
-			<item value="inner_packet"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
