@@ -40,7 +40,7 @@ public:
 	static void DeviceToHost(T* t, U* u, int size) {
 		copy(t, u, size);
 	}
-	template<typename T>
+	template<typename T> __BCinline__
 	static void destroy(T* t) {
 		delete[] t;
 	}

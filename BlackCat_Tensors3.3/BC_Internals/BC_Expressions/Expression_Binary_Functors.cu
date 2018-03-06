@@ -16,16 +16,14 @@ template<class T> struct rm_const<const T&> { using type = T&; };
 
 		struct assign {
 
-		template<class lv, class rv> __BC_gcpu__
-		inline __attribute__((always_inline)) auto& operator ()(lv& l, rv r) const {
+		template<class lv, class rv> __BCinline__  auto& operator ()(lv& l, rv r) const {
 			return (const_cast<typename rm_const<lv&>::type>(l) = r);
 		}
 	};
 
 	struct combine {
 
-		template<class lv, class rv> __BC_gcpu__
-		inline __attribute__((always_inline)) auto operator ()(lv l, rv r) const {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
 			return l;
 		}
 	};
@@ -33,57 +31,49 @@ template<class T> struct rm_const<const T&> { using type = T&; };
 
 	struct add {
 
-		template<class lv, class rv> __BC_gcpu__
-		inline __attribute__((always_inline)) auto operator ()(lv l, rv r) const {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
 			return l + r;
 		}
 	};
 
 	struct mul {
-		template<class lv, class rv> __BC_gcpu__
-		inline __attribute__((always_inline)) auto operator ()(lv l, rv r) const {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
 			return l * r;
 		}
 	};
 
 	struct sub {
-		template<class lv, class rv> __BC_gcpu__
-		inline __attribute__((always_inline)) auto operator ()(lv l, rv r) const {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
 			return l - r;
 		}
 	};
 
 	struct div {
-		template<class lv, class rv> __BC_gcpu__
-		inline __attribute__((always_inline)) auto operator ()(lv l, rv r) const {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
 			return l / r;
 		}
 	};
 	struct add_assign {
 
-		template<class lv, class rv> __BC_gcpu__
-		inline __attribute__((always_inline)) auto operator ()(lv& l, rv r) const {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return l += r;
 		}
 	};
 
 	struct mul_assign {
-		template<class lv, class rv> __BC_gcpu__
-		inline __attribute__((always_inline)) auto operator ()(lv& l, rv r) const {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return l *= r;
 		}
 	};
 
 	struct sub_assign {
-		template<class lv, class rv> __BC_gcpu__
-		inline __attribute__((always_inline)) auto operator ()(lv& l, rv r) const {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return l -= r;
 		}
 	};
 
 	struct div_assign {
-		template<class lv, class rv> __BC_gcpu__
-		inline __attribute__((always_inline)) auto operator ()(lv& l, rv r) const {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return l /= r;
 		}
 	};

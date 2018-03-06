@@ -65,23 +65,23 @@ template<class T> struct Tensor_Core {
 		Mathlib::initialize(array, size());
 	}
 
-	__BC_gcpu__ int rank() const { return RANK; }
-	__BC_gcpu__ int size() const { return RANK > 0 ? os[LAST] : 1;    }
-	__BC_gcpu__ int rows() const { return RANK > 0 ? is[0] : 1; }
-	__BC_gcpu__ int cols() const { return RANK > 1 ? is[1] : 1; }
-	__BC_gcpu__ int dimension(int i) const { return RANK > i ? is[i] : 1; }
+	__BCinline__ int rank() const { return RANK; }
+	__BCinline__ int size() const { return RANK > 0 ? os[LAST] : 1;    }
+	__BCinline__ int rows() const { return RANK > 0 ? is[0] : 1; }
+	__BCinline__ int cols() const { return RANK > 1 ? is[1] : 1; }
+	__BCinline__ int dimension(int i) const { return RANK > i ? is[i] : 1; }
 
-	__BC_gcpu__ int LD_rows() const { return RANK > 0 ? os[0] : 1; }
-	__BC_gcpu__ int LD_cols() const { return RANK > 1 ? os[1] : 1; }
-	__BC_gcpu__ int LDdimension(int i) const { return RANK > i + 1 ? os[i] : 1; }
-	__BC_gcpu__	      scalar& operator [] (int index) 		{ return array[index]; };
-	__BC_gcpu__	const scalar& operator [] (int index) const { return array[index]; };
+	__BCinline__ int LD_rows() const { return RANK > 0 ? os[0] : 1; }
+	__BCinline__ int LD_cols() const { return RANK > 1 ? os[1] : 1; }
+	__BCinline__ int LDdimension(int i) const { return RANK > i + 1 ? os[i] : 1; }
+	__BCinline__	      scalar& operator [] (int index) 		{ return array[index]; };
+	__BCinline__	const scalar& operator [] (int index) const { return array[index]; };
 
-	const auto innerShape() const { return RANK > 0 ? (int*)is : &ONE; }
-	const auto outerShape() const { return RANK > 0 ? (int*)os : &ONE; }
+	__BCinline__ const auto innerShape() const { return is; }
+	__BCinline__ const auto outerShape() const { return os; }
 
-	const auto slice(int i) const { return Tensor_Slice<self>(&array[os[LAST - 1] * i], *this); }
-		  auto slice(int i) 	  { return Tensor_Slice<self>(&array[os[LAST - 1] * i], *this); }
+	__BCinline__ const auto slice(int i) const { return Tensor_Slice<self>(&array[os[LAST - 1] * i], *this); }
+	__BCinline__	   auto slice(int i) 	  { return Tensor_Slice<self>(&array[os[LAST - 1] * i], *this); }
 
 	const scalar* core() const { return array; }
 		  scalar* core()  	   { return array; }

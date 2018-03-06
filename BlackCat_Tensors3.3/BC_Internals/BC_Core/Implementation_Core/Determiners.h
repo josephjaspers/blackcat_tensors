@@ -10,7 +10,7 @@
 
 #include "../../BC_MetaTemplateFunctions/Adhoc.h"
 #include "../../BC_MetaTemplateFunctions/Simple.h"
-
+#include "BlackCat_Internal_Definitions.h"
 namespace BC {
 
 using MTF::ifte;		//if then else

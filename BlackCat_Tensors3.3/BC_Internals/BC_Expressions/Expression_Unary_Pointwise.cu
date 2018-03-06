@@ -17,30 +17,28 @@ public:
 	operation oper;
 	value array;
 
-	int rank() const { return array.rank(); }
-	int size() const { return array.size(); }
-	int rows() const { return array.rows(); }
-	int cols() const { return array.cols(); }
-	int LD_rows() const { return array.LD_rows(); }
-	int LD_cols() const { return array.LD_cols(); }
-	int dimension(int i)		const { return array.dimension(i); }
+	__BCinline__  unary_expression(value v) : array(v) {}
+	__BCinline__  int rank() const { return array.rank(); }
+	__BCinline__  int size() const { return array.size(); }
+	__BCinline__  int rows() const { return array.rows(); }
+	__BCinline__  int cols() const { return array.cols(); }
+	__BCinline__  int LD_rows() const { return array.LD_rows(); }
+	__BCinline__  int LD_cols() const { return array.LD_cols(); }
+	__BCinline__  int dimension(int i)		const { return array.dimension(i); }
+	__BCinline__  const auto innerShape() const 			{ return array.innerShape(); }
+	__BCinline__  const auto outerShape() const 			{ return array.outerShape(); }
+
+	__BCinline__ auto operator [](int index) const -> decltype(oper(array[index])) {
+		return oper(array[index]);
+	}
+	__BCinline__ auto operator [](int index) -> decltype(oper(array[index])) {
+		return oper(array[index]);
+	}
+
 	void printDimensions() 		const { array.printDimensions();   }
 	void printLDDimensions()	const { array.printLDDimensions(); }
-	const auto innerShape() const 			{ return array.innerShape(); }
-	const auto outerShape() const 			{ return array.outerShape(); }
 
-	inline __attribute__((always_inline)) __BC_gcpu__ unary_expression(value v) :
-		array(v) {
-	}
 
-	inline __attribute__((always_inline)) __BC_gcpu__
-	auto operator [](int index) const -> decltype(oper(array[index])) {
-		return oper(array[index]);
-	}
-	inline __attribute__((always_inline)) __BC_gcpu__
-	auto operator [](int index) -> decltype(oper(array[index])) {
-		return oper(array[index]);
-	}
 };
 }
 #endif /* EXPRESSION_UNARY_POINTWISE_CU_ */

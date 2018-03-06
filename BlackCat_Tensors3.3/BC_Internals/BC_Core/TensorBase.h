@@ -48,22 +48,8 @@ public:
 	template<class... params>
 	TensorBase(const params&... p) : initializer(p...) {}
 
-//
-//	TensorBase(		 derived&& tensor) : black_cat_array(tensor.black_cat_array){}
-//	TensorBase(const derived&  tensor) : black_cat_array(tensor.black_cat_array){}
-//
-//	template<class... U> TensorBase(const deriv<functor<U...>>& tensor)
-//			: black_cat_array(tensor.black_cat_array) {}
-//	template<class atLeastOneParam, class... params> TensorBase(const atLeastOneParam& alop, const params&... p)
-//			: black_cat_array(alop, p...) { }
-//
-//	TensorBase() { if (RANK != 0) { throw std::invalid_argument("DEFAULT CONSTRUCTOR ONLY SUPPORTED FOR SCALARS"); } }
-//
-//	template<class U>
-//	TensorBase(const deriv<U>& tensor) : black_cat_array(shapeOf(tensor)) {
-//		this->assert_same_size(tensor);
-//		Mathlib::copy(this->black_cat_array, tensor.data(), this->size());
-//	}
+	operator const derived& () const { return static_cast<const derived&>(*this); }
+	operator	   derived& () 		 { return static_cast< derived&>(*this); }
 
 	derived& operator =(const derived& tensor) {
 		this->assert_same_size(tensor);

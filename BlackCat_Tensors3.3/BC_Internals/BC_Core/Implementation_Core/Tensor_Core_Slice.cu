@@ -17,24 +17,11 @@
 #include "Tensor_Core_Scalar.cu"
 namespace BC {
 
-#define __BC_gcpu__ __host__ __device__
-
 template<int inner_rank_, int outer_rank_, class voider>
 struct Rank {
 	static constexpr int inner_rank = inner_rank_;
 	static constexpr int outer_rank = outer_rank_;
 };
-
-static constexpr int MAXDIM = 100;
-static constexpr int MINDIM = 0;
-static const int ONE = 1;
-
-static constexpr int max(int a, int b) { return a > b ? a : b; }
-static constexpr int min(int a, int b) { return a < b ? a : b; }
-static constexpr int higher(int a) { return max(MAXDIM, max(a + 1, MINDIM)); }
-static constexpr int lower(int a) { return min(MAXDIM, min(a - 1, MAXDIM)); }
-
-
 
 template<class PARENT>
 	struct Tensor_Slice {
@@ -43,8 +30,8 @@ template<class PARENT>
 	using self = Tensor_Slice<PARENT>;
 	using slice_type = Tensor_Slice<self>;
 
-	static constexpr int RANK = lower(PARENT::RANK);
-	static constexpr int LAST =  lower(PARENT::LAST);
+	static constexpr int RANK =  ((PARENT::RANK - 1) > 0) ? (PARENT::RANK - 1) : 0;
+	static constexpr int LAST =  ((PARENT::LAST - 1) > 0) ? (PARENT::LAST - 1) : 0;
 
 	const PARENT& parent;
 	scalar* array_slice;
@@ -54,32 +41,30 @@ template<class PARENT>
 
 	Tensor_Slice(scalar* array, const PARENT& parent_) : array_slice(array), parent(parent_) {}
 
-	__BC_gcpu__ int rank() const { return RANK; }
-	__BC_gcpu__ int size() const { return RANK > 0 ? parent.outerShape()[LAST] : 1;    }
-	__BC_gcpu__ int rows() const { return RANK > 0 ? parent.innerShape()[0] : 1; }
-	__BC_gcpu__ int cols() const { return RANK > 1 ? parent.innerShape()[1] : 1; }
-	__BC_gcpu__ int dimension(int i) const { return RANK > i ? parent.innerShape()[i] : 1; }
-
-	__BC_gcpu__ int LD_rows() const { return RANK > 0 ? parent.outerShape()[0] : 1; }
-	__BC_gcpu__ int LD_cols() const { return RANK > 1 ? parent.outerShape()[1] : 1; }
-	__BC_gcpu__ int LDdimension(int i) const { return RANK > i + 1 ? parent.outerShape()[i] : 1; }
+	__BCinline__ int rank() const { return RANK; }
+	__BCinline__ int size() const { return RANK > 0 ? parent.outerShape()[LAST] : 1;    }
+	__BCinline__ int rows() const { return RANK > 0 ? parent.innerShape()[0] : 1; }
+	__BCinline__ int cols() const { return RANK > 1 ? parent.innerShape()[1] : 1; }
+	__BCinline__ int dimension(int i) const { return RANK > i ? parent.innerShape()[i] : 1; }
+	__BCinline__ int LD_rows() const { return RANK > 0 ? parent.outerShape()[0] : 1; }
+	__BCinline__ int LD_cols() const { return RANK > 1 ? parent.outerShape()[1] : 1; }
+	__BCinline__ int LDdimension(int i) const { return RANK > i + 1 ? parent.outerShape()[i] : 1; }
+	__BCinline__ const auto& operator [] (int i) const { return array_slice[i]; }
+	__BCinline__ auto& operator [] (int i)  	       { return array_slice[i]; }
 
 	void printDimensions() 		const { parent.printDimensions(); }
 	void printLDDimensions()	const { parent.printDimensions(); }
 
-	const auto innerShape() const 			{ return parent.innerShape(); }
-	const auto outerShape() const 			{ return parent.outerShape(); }
+	__BCinline__ const auto innerShape() const 			{ return parent.innerShape(); }
+	__BCinline__ const auto outerShape() const 			{ return parent.outerShape(); }
 
-			  //the outer_shape is formatted as.... [ld_rows][ld_cols][ld_pages] etc... ergo if our current RANK  == 1 our LD_multiplier would be at index -1
-			  // all vectors (aside from row vectors which use a specialized class) have increment of 1 -- erho we choose "just i" as the index opposed to multiplying by the outer shape
-		const auto slice(int i) const { return Tensor_Slice<self>(&array_slice[RANK == 1 ? i : (parent.outerShape()[LAST - 1] * i)], *this); }
-			  auto slice(int i) 	  { return Tensor_Slice<self>(&array_slice[RANK == 1 ? i : (parent.outerShape()[LAST - 1] * i)], *this); }
+	const auto slice(int i) const { return Tensor_Slice<self>(&array_slice[RANK == 1 ? i : (parent.outerShape()[LAST - 1] * i)], *this); }
+		  auto slice(int i) 	  { return Tensor_Slice<self>(&array_slice[RANK == 1 ? i : (parent.outerShape()[LAST - 1] * i)], *this); }
 
-				const scalar* core() const { return array_slice; }
-					  scalar* core()  	   { return array_slice; }
+	__BCinline__ const scalar* core() const { return array_slice; }
+	__BCinline__	   scalar* core()   	{ return array_slice; }
 
-		__BC_gcpu__ const auto& operator [] (int i) const{ return array_slice[i]; }
-		__BC_gcpu__ auto& operator [] (int i)  	 { return array_slice[i]; }
+
 
 	};
 

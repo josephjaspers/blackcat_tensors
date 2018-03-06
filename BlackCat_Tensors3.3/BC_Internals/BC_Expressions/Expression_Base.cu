@@ -49,6 +49,7 @@ public:
 	int slice(int i) 	   {  return shadowFailure<>("Tensor_Slice(int)  => THIS METHOD SHOULD ONLY BE ENABLED FOR TENSOR_CORE"); }
 };
 
+
 }
 
 #endif /* EXPRESSION_BASE_H_ */

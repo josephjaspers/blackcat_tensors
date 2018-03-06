@@ -25,26 +25,27 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 	rv right;
 
 	template<class L, class R>
-	inline __attribute__((always_inline)) binary_expression(L l, R r) :
+	__BCinline__  binary_expression(L l, R r) :
 			left(l), right(r) {
 	}
 
-	inline __attribute__((always_inline)) __BC_gcpu__ auto operator [](int index) const -> decltype(oper(left[index], right[index])) {
+	__BCinline__  auto operator [](int index) const -> decltype(oper(left[index], right[index])) {
 		return oper(left[index], right[index]);
 	}
 
-	int rank() const { return right.rank(); }
-	int rows() const { return right.rows(); };
-	int cols() const { return right.cols(); };
-	int size() const { return right.size(); };
-	int LD_rows() const { return right.LD_rows(); }
-	int LD_cols() const { return right.LD_cols(); }
-	int dimension(int i)		const { return right.dimension(i); }
+	__BCinline__  int rank() const { return right.rank(); }
+	__BCinline__  int rows() const { return right.rows(); };
+	__BCinline__  int cols() const { return right.cols(); };
+	__BCinline__  int size() const { return right.size(); };
+	__BCinline__  int LD_rows() const { return right.LD_rows(); }
+	__BCinline__ int LD_cols() const { return right.LD_cols(); }
+	__BCinline__ int dimension(int i)		const { return right.dimension(i); }
+	__BCinline__ const auto innerShape() const { return right.innerShape(); }
+	__BCinline__ const auto outerShape() const { return right.outerShape(); }
+
 	void printDimensions() 		const { right.printDimensions();   }
 	void printLDDimensions()	const { right.printLDDimensions(); }
-	auto accessor_packet(int index) const { return right.accessor_packet(index); }
-	const auto innerShape() const { return right.innerShape(); }
-	const auto outerShape() const { return right.outerShape(); }
+
 
 };
 

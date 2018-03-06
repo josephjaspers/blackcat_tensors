@@ -23,15 +23,15 @@ struct unary_expression_transpose : expression<T, unary_expression_transpose<T, 
 
 	unary_expression_transpose(functor_type p) : array(p) {}
 
-	__BC_gcpu__	int rank() const { return array.rank(); }
-	__BC_gcpu__ int rows() const { return array.cols(); }
-	__BC_gcpu__ int cols() const { return array.rows(); }
-	__BC_gcpu__ int size() const { return array.size(); }
-	__BC_gcpu__ int LD_rows() const { return array.LD_rows(); }
-	__BC_gcpu__ int LD_cols() const { return array.LD_cols(); }
-	__BC_gcpu__ int dimension(int i)	const { return array.dimension(i); }
-	auto innerShape() const { array.innerShape(); } //return std::vector<int> { rows(), cols() }; }
-	const auto outerShape() const { return array.outerShape(); }
+	__BCinline__	int rank() const { return array.rank(); }
+	__BCinline__ int rows() const { return array.cols(); }
+	__BCinline__ int cols() const { return array.rows(); }
+	__BCinline__ int size() const { return array.size(); }
+	__BCinline__ int LD_rows() const { return array.LD_rows(); }
+	__BCinline__ int LD_cols() const { return array.LD_cols(); }
+	__BCinline__ int dimension(int i)	const { return array.dimension(i); }
+	__BCinline__ auto innerShape() const { return array.innerShape(); } //return std::vector<int> { rows(), cols() }; }
+	__BCinline__ const auto outerShape() const { return array.outerShape(); }
 
 	void printDimensions() const {
 		std::cout << "[" << rows() << "]" << "[" << cols() << "]" << std::endl;
@@ -39,13 +39,13 @@ struct unary_expression_transpose : expression<T, unary_expression_transpose<T, 
 	void printLDDimensions()	const { array.printLDDimensions(); }
 
 
-	__attribute__((always_inline)) __BC_gcpu__  auto operator [](int index) -> decltype(array[index]) {
+	__BCinline__ auto operator [](int index) -> decltype(array[index]) {
 		if (vector)
 			return array[index];
 		else
 			return array[(int)(index / rows()) + (index % rows()) * LD_rows()];
 	}
-	__attribute__((always_inline))  __BC_gcpu__ auto operator[](int index) const  -> const decltype(array[index])  {
+	__BCinline__ auto operator[](int index) const  -> const decltype(array[index])  {
 		if (vector)
 			return array[index];
 		else

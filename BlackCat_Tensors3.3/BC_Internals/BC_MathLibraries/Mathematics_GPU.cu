@@ -52,11 +52,15 @@ public:
 
 	template<class T>
 	static void HostToDevice(T* t, const T* u, int size = 1) {
+		cudaDeviceSynchronize();
 		cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyHostToDevice);
+		cudaDeviceSynchronize();
 	}
 	template<class T>
 	static void DeviceToHost(T* t, const T* u, int size = 1) {
+		cudaDeviceSynchronize();
 		cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyDeviceToHost);
+		cudaDeviceSynchronize();
 	}
 
 	template<typename T>
@@ -94,7 +98,7 @@ public:
 		cudaDeviceSynchronize();
 	}
 
-	template<typename T>
+	template<typename T> __host__ __device__
 	static void destroy(T* t) {
 		cudaFree((void*)t);
 	}
@@ -174,7 +178,8 @@ public:
 		int sz = calc_size(ranks, order);
 		T* print = new T[sz];
 
-		cudaMemcpy(print, ary, sizeof(T) * sz, cudaMemcpyDeviceToHost);
+		DeviceToHost(print, ary, sz);
+//		cudaMemcpy(print, ary, sizeof(T) * sz, cudaMemcpyDeviceToHost);
 
 		BC::print(print, ranks, order, print_length);
 		delete[] print;
@@ -183,8 +188,9 @@ public:
 	static void printSparse(const T* ary, const RANKS ranks, int order, int print_length) {
 		int sz = calc_size(ranks, order);
 		T* print = new T[sz];
+		DeviceToHost(print, ary, sz);
 
-		cudaMemcpy(print, ary, sizeof(T) * sz, cudaMemcpyDeviceToHost);
+//		cudaMemcpy(print, ary, sizeof(T) * sz, cudaMemcpyDeviceToHost);
 
 		BC::print(print, ranks, order, print_length);
 		delete[] print;

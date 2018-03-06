@@ -26,6 +26,7 @@ struct NeuralNetwork {
 	auto updateWeights() { return network.head().updateWeights(); }
 	auto clearBPStorage() { return network.head().clearBPStorage(); }
 
+
 };
 
 

@@ -74,13 +74,14 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 
 int percept_MNIST() {
 
-	const int TRAINING_EXAMPLES = 2000;
+	const int TRAINING_EXAMPLES = 20;
 	const int TRAINING_ITERATIONS = 10;
 
 	//Generate the layers (params are: inputs, outputs)
 
 	//Create the neural network
 	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
+//	NeuralNetwork<FeedForward> network(784, 10);
 
 	data inputs;
 	data outputs;
@@ -104,6 +105,13 @@ int percept_MNIST() {
 	printf("\n Calculating... BC_NN training time \n");
 
 	std::cout << " training..." << std::endl;
+
+
+	 mat pic(28,28);
+	 pic = inputs[0];
+	 inputs[0].print();
+	 pic.print();
+
 
 	for (int i = 0; i < TRAINING_ITERATIONS; ++i) {
 		std::cout << " iteration =  " << i << std::endl;
@@ -153,5 +161,5 @@ int percept_MNIST() {
 
 int main() {
 	BC::MNIST_Test::percept_MNIST();
-	std::cout << "success" << std::endl;
+	std::cout << "success main" << std::endl;
 }

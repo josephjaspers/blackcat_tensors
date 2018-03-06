@@ -96,6 +96,21 @@ auto test() {
 
 	d[1][1] = d[1][1] + d[1][1];
 	d.print();
+
+	std::cout << " trying to write " <<std::endl;
+	std::ofstream os("save.txt");
+	d.write(os);
+	os.close();
+
+
+	std::cout << " trying to read" << std::endl;
+	std::ifstream is("save.txt");
+
+	Matrix<double> readM(d.size());
+	readM.read(is);
+	readM.print();
+	is.close();
+
 }
 
 

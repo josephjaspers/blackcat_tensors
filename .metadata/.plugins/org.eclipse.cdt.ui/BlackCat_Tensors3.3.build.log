@@ -1,20 +1,9 @@
-22:48:12 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
+16:04:37 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
 make all 
 Building file: ../UnitTests/main.cu
 Invoking: NVCC Compiler
 /usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
 /usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.cu(58): warning: calling a __host__ function from a __host__ __device__ function is not allowed
-          detected during:
-            instantiation of "int BC::Tensor_Slice<PARENT>::size() const [with PARENT=BC::Tensor_Core<BC::Matrix<float, ml>>]" 
-../UnitTests/../BC_Internals/BC_Core/TensorBase.h(75): here
-            instantiation of "int BC::TensorBase<derived>::size() const [with derived=BC::Vector<BC::Tensor_Slice<BC::Tensor_Core<BC::Matrix<float, ml>>>, BC::_mathlib<BC::Matrix<float, ml>>>]" 
-../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h(117): here
-            instantiation of "void BC::Tensor_Operations<derived>::assert_same_size(const BC::Tensor_Operations<deriv> &) const [with derived=BC::Vector<BC::Tensor_Slice<BC::Tensor_Core<BC::Matrix<float, ml>>>, BC::_mathlib<BC::Matrix<float, ml>>>, deriv=BC::Vector<BC::Tensor_Slice<BC::Tensor_Core<BC::Matrix<float, ml>>>, BC::_mathlib<BC::Matrix<float, ml>>>]" 
-../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h(186): here
-            instantiation of "BC::Tensor_Operations<derived>::impl<pDeriv, BC::add>::type BC::Tensor_Operations<derived>::operator+(const BC::Tensor_Operations<pDeriv> &) const [with derived=BC::Vector<BC::Tensor_Slice<BC::Tensor_Core<BC::Matrix<float, ml>>>, BC::_mathlib<BC::Matrix<float, ml>>>, pDeriv=BC::Vector<BC::Tensor_Slice<BC::Tensor_Core<BC::Matrix<float, ml>>>, BC::_mathlib<BC::Matrix<float, ml>>>]" 
-../UnitTests/main.cu(92): here
-
 Finished building: ../UnitTests/main.cu
  
 Building target: BlackCat_Tensors3.3
@@ -23,5 +12,5 @@ Invoking: NVCC Linker
 Finished building target: BlackCat_Tensors3.3
  
 
-22:48:16 Build Finished (took 3s.918ms)
+16:04:41 Build Finished (took 4s.167ms)
 

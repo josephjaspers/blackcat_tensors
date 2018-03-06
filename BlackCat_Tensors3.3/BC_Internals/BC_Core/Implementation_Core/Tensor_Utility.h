@@ -83,17 +83,20 @@ public:
 	void write(std::ofstream& os) {
 
 		scalar_type* data = new scalar_type[asDerived().size()];
-		MATHLIB::DeviceToHost(data, asDerived().data(), asDerived().size());
+		MATHLIB::DeviceToHost(data, asDerived().data().core(), asDerived().size());
+
 		os << asDerived().rank() << ',';
 		for (int i = 0; i < asDerived().rank(); ++i) {
 			os << asDerived().dimension(i) << ',';
 		}
 		for (int i = 0; i < asDerived().size() - 1; ++i) {
-			os << asDerived().data()[i] << ',';
+			os << data[i] << ',';
 		}
-		os << asDerived().data()[asDerived().size() - 1];
+		os << data[asDerived().size() - 1]; //back
 		os << '\n';
 
+
+		delete[] data;
 	}
 	void read(std::ifstream& is, bool read_dimensions = true, bool overrideDimensions = true) {
 		if (!is.good()) {
@@ -128,11 +131,10 @@ public:
 			if (overrideDimensions) {
 			asDerived().resetShape(dims);
 			}
-			MATHLIB::DeviceToHost(asDerived().data().core(), &data[data[0] + 1], asDerived().size() > data.size() ? data.size() : asDerived().size());
+			MATHLIB::HostToDevice(asDerived().data().core(), &data[data[0] + 1], asDerived().size() > data.size() ? data.size() : asDerived().size());
 		} else {
-			MATHLIB::DeviceToHost(asDerived().data().core(), &data[0], 			 asDerived().size() > data.size() ? data.size() : asDerived().size());
+			MATHLIB::HostToDevice(asDerived().data().core(), &data[0], 			 asDerived().size() > data.size() ? data.size() : asDerived().size());
 		}
-
 	}
 };
 
