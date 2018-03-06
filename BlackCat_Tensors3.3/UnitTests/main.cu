@@ -97,6 +97,7 @@ auto test() {
 	d[1][1] = d[1][1] + d[1][1];
 	d.print();
 
+
 	std::cout << " trying to write " <<std::endl;
 	std::ofstream os("save.txt");
 	d.write(os);

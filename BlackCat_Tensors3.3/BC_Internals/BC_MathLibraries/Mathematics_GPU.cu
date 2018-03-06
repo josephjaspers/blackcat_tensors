@@ -36,11 +36,11 @@ public:
 	static constexpr int CUDA_BASE_THREADS = 256;
 
 	static int blocks(int size) {
-		return 1;
+		return 1 + (int)(size / CUDA_BASE_THREADS);
 //		return std::ceil((size) / CUDA_BASE_THREADS);
 	}
 	static int threads(int sz = CUDA_BASE_THREADS) {
-		return sz;
+		return sz > CUDA_BASE_THREADS ? CUDA_BASE_THREADS : sz;
 //		return sz < CUDA_BASE_THREADS ? sz : CUDA_BASE_THREADS;
 	}
 
@@ -179,7 +179,6 @@ public:
 		T* print = new T[sz];
 
 		DeviceToHost(print, ary, sz);
-//		cudaMemcpy(print, ary, sizeof(T) * sz, cudaMemcpyDeviceToHost);
 
 		BC::print(print, ranks, order, print_length);
 		delete[] print;
@@ -190,9 +189,7 @@ public:
 		T* print = new T[sz];
 		DeviceToHost(print, ary, sz);
 
-//		cudaMemcpy(print, ary, sizeof(T) * sz, cudaMemcpyDeviceToHost);
-
-		BC::print(print, ranks, order, print_length);
+		BC::printSparse(print, ranks, order, print_length);
 		delete[] print;
 	}
 };

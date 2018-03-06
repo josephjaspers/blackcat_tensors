@@ -42,6 +42,8 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	const int lv_size = M * K;
 	const int rv_size = N * K;
 	const int eval_size = M * N ;
+	int is[2] = {M, N};
+	int os[2] = {M, N*M};
 
 	static constexpr bool transA = det_eval<lv>::transposed;
 	static constexpr bool transB = det_eval<rv>::transposed;
@@ -76,11 +78,18 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	__BCinline__ int LD_rows() const { return M; }
 	__BCinline__ int LD_cols() const { return eval_size; }
 	__BCinline__ int dimension(int i)		const { return i== 0 ? M : i == 1 ? N : 1; }
+	__BCinline__ const auto innerShape() 	const { return is; }
+	__BCinline__ const auto outerShape() 	const { return os; }
+
+	__BCinline__ const T operator [](int index) const {
+		return array_ptr[index];
+	}
+	__BCinline__ T operator [](int index) {
+		return array_ptr[index];
+	}
+
 	void printDimensions() 		const { std::cout<<"[" << M << "][" <<N  <<"]" << std::endl; }
 	void printLDDimensions()	const { std::cout<<"[" << M << "][" <<eval_size  <<"]" << std::endl; }
-//	__BCinline__ const auto innerShape() 	const { return std::vector<int>({M, N}); }
-//	__BCinline__ const auto outerShape() 	const { return std::vector<int>({M, N * M}); }
-
 
 
 public:
@@ -130,14 +139,7 @@ public:
 
 	}
 
-		__attribute__((always_inline))  __BC_gcpu__
-		 const T operator [](int index) const {
-			return array_ptr[index];
-		}
-		__attribute__((always_inline))  __BC_gcpu__
-			T operator [](int index) {
-			return array_ptr[index];
-		}
+
 	};
 }
 

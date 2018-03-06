@@ -70,8 +70,11 @@ public:
 
 	TensorInitializer() { static_assert(RANK == 0, "DEFAULT CONSTRUCTOR ONLY AVAILABLE TO SCALARS"); }
 
+	template<class T>
+	using derived_alt = typename shell_of<derived>::type<T, Mathlib>;
+
 	template<class U>
-	TensorInitializer(const typename shell_of<derived>::type<U>&  tensor) : black_cat_array(tensor.innerShape()) {
+	TensorInitializer(const derived_alt<U>&  tensor) : black_cat_array(tensor.innerShape()) {
 		Mathlib::copy(this->asBase().data(), tensor.data(), this->asBase().size());
 	}
 

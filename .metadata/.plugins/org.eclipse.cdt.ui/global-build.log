@@ -1,199 +1,32 @@
-15:53:06 **** Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+17:07:23 **** Incremental Build of configuration Release for project BlackCat_NeuralNetworks3.3 ****
+make all 
+make: Nothing to be done for 'all'.
+17:07:28 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+make all 
+make: Nothing to be done for 'all'.
+17:08:02 **** Incremental Build of configuration Release for project BlackCat_NeuralNetworks3.3 ****
+make all 
+make: Nothing to be done for 'all'.
+17:08:13 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+make all 
+make: Nothing to be done for 'all'.
+17:08:49 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
 make all 
 Building file: ../UnitTests/MNIST_test.cu
 Invoking: NVCC Compiler
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
 /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
-/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(135): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
 
-/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(72): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::unary_expression<float,  ::BC::NN_Functions::Sigmoid,  ::BC::binary_expression<float,  ::BC::add,  ::BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::unary_expression<float,  ::BC::NN_Functions::Sigmoid,  ::BC::binary_expression<float,  ::BC::add,  ::BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
 
-/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(135): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
 
-/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(135): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
 
-/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(135): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
 
-/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(72): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
-
-Finished building: ../UnitTests/MNIST_test.cu
- 
-Building file: ../NN_Core/Deprecated/Copy of MNIST_alternatetest.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "NN_Core/Deprecated" -M -o "NN_Core/Deprecated/Copy of MNIST_alternatetest.d" "../NN_Core/Deprecated/Copy of MNIST_alternatetest.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "NN_Core/Deprecated/Copy of MNIST_alternatetest.o" "../NN_Core/Deprecated/Copy of MNIST_alternatetest.cu"
-Finished building: ../NN_Core/Deprecated/Copy of MNIST_alternatetest.cu
- 
-Building target: BlackCat_NeuralNetworks3.3
-Invoking: NVCC Linker
-/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lcblas -lf77blas -lcublas -lgomp
-Finished building target: BlackCat_NeuralNetworks3.3
- 
-15:53:14 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
-make all 
-make: Nothing to be done for 'all'.
-15:57:26 **** Build of configuration Debug for project BlackCat_Tensors3.3 ****
-make all 
-make: Nothing to be done for 'all'.
-15:57:57 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-Finished building: ../UnitTests/main.cu
- 
-Building target: BlackCat_Tensors3.3
-Invoking: NVCC Linker
-/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/Correlation.o ./UnitTests/main.o  ./BC_Internals/Dep/tmp_tc_dep/Tensor_Core.o  ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct.o ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct_impl.o  ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Essentials.o ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Scalar.o  ./BC_Internals/Dep/Tensor_Core.o ./BC_Internals/Dep/Tensor_Core_Accessor.o  ./BC_Internals/BC_MathLibraries/TmpDep_GPU/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/TmpDep_GPU/Mathematics_GPU_impl.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./BC_Internals/BC_Expressions/Expression_Base.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o ./BC_Internals/BC_Expressions/Expression_Binary_Functors.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.o ./BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o ./BC_Internals/BC_Expressions/Expression_Unary_Pointwise.o  ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Scalar.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.o  ./BC_Extensions/BC_NonlinearityFunctions.o   -lcblas -lf77blas -lcublas -lgomp
-Finished building target: BlackCat_Tensors3.3
- 
-16:00:07 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-../UnitTests/main.cu(101): error: a reference of type "std::ofstream &" (not const-qualified) cannot be initialized with a value of type "std::ifstream"
-
-../UnitTests/main.cu(107): error: a reference of type "std::ifstream &" (not const-qualified) cannot be initialized with a value of type "std::ofstream"
-
-../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Utility.h(86): error: no instance of function template "BC::GPU::HostToDevice" matches the argument list
-            argument types are: (BC::_scalar<BC::Matrix<float, ml>> *, BC::_functor<BC::Matrix<float, ml>>, int)
-          detected during instantiation of "void BC::Tensor_Utility<deriv, std::enable_if_t<<expression>, void>>::write(std::ofstream &) [with deriv=BC::Matrix<float, ml>]" 
-../UnitTests/main.cu(101): here
-
-3 errors detected in the compilation of "/tmp/tmpxft_000009bf_00000000-6_main.cpp1.ii".
-UnitTests/subdir.mk:33: recipe for target 'UnitTests/main.o' failed
-make: *** [UnitTests/main.o] Error 1
-16:00:10 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-../UnitTests/main.cu(101): error: a reference of type "std::ofstream &" (not const-qualified) cannot be initialized with a value of type "std::ifstream"
-
-../UnitTests/main.cu(107): error: a reference of type "std::ifstream &" (not const-qualified) cannot be initialized with a value of type "std::ofstream"
-
-../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Utility.h(86): error: no instance of function template "BC::GPU::HostToDevice" matches the argument list
-            argument types are: (BC::_scalar<BC::Matrix<float, ml>> *, BC::_functor<BC::Matrix<float, ml>>, int)
-          detected during instantiation of "void BC::Tensor_Utility<deriv, std::enable_if_t<<expression>, void>>::write(std::ofstream &) [with deriv=BC::Matrix<float, ml>]" 
-../UnitTests/main.cu(101): here
-
-3 errors detected in the compilation of "/tmp/tmpxft_00000a13_00000000-6_main.cpp1.ii".
-make: *** [UnitTests/main.o] Error 1
-UnitTests/subdir.mk:33: recipe for target 'UnitTests/main.o' failed
-16:00:28 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-../UnitTests/main.cu(102): error: identifier "is" is undefined
-
-../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Utility.h(86): error: no instance of function template "BC::GPU::HostToDevice" matches the argument list
-            argument types are: (BC::_scalar<BC::Matrix<float, ml>> *, BC::_functor<BC::Matrix<float, ml>>, int)
-          detected during instantiation of "void BC::Tensor_Utility<deriv, std::enable_if_t<<expression>, void>>::write(std::ofstream &) [with deriv=BC::Matrix<float, ml>]" 
-../UnitTests/main.cu(101): here
-
-2 errors detected in the compilation of "/tmp/tmpxft_00000a75_00000000-6_main.cpp1.ii".
-make: *** [UnitTests/main.o] Error 1
-UnitTests/subdir.mk:33: recipe for target 'UnitTests/main.o' failed
-16:00:39 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Utility.h(86): error: no instance of function template "BC::GPU::HostToDevice" matches the argument list
-            argument types are: (BC::_scalar<BC::Matrix<float, ml>> *, BC::_functor<BC::Matrix<float, ml>>, int)
-          detected during instantiation of "void BC::Tensor_Utility<deriv, std::enable_if_t<<expression>, void>>::write(std::ofstream &) [with deriv=BC::Matrix<float, ml>]" 
-../UnitTests/main.cu(101): here
-
-1 error detected in the compilation of "/tmp/tmpxft_00000acc_00000000-6_main.cpp1.ii".
-make: *** [UnitTests/main.o] Error 1
-UnitTests/subdir.mk:33: recipe for target 'UnitTests/main.o' failed
-16:00:48 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Utility.h(86): error: no instance of function template "BC::GPU::HostToDevice" matches the argument list
-            argument types are: (BC::_scalar<BC::Matrix<float, ml>> *, BC::_functor<BC::Matrix<float, ml>>, int)
-          detected during instantiation of "void BC::Tensor_Utility<deriv, std::enable_if_t<<expression>, void>>::write(std::ofstream &) [with deriv=BC::Matrix<float, ml>]" 
-../UnitTests/main.cu(101): here
-
-1 error detected in the compilation of "/tmp/tmpxft_00000b24_00000000-6_main.cpp1.ii".
-UnitTests/subdir.mk:33: recipe for target 'UnitTests/main.o' failed
-make: *** [UnitTests/main.o] Error 1
-16:00:58 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-Finished building: ../UnitTests/main.cu
- 
-Building target: BlackCat_Tensors3.3
-Invoking: NVCC Linker
-/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/Correlation.o ./UnitTests/main.o  ./BC_Internals/Dep/tmp_tc_dep/Tensor_Core.o  ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct.o ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct_impl.o  ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Essentials.o ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Scalar.o  ./BC_Internals/Dep/Tensor_Core.o ./BC_Internals/Dep/Tensor_Core_Accessor.o  ./BC_Internals/BC_MathLibraries/TmpDep_GPU/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/TmpDep_GPU/Mathematics_GPU_impl.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./BC_Internals/BC_Expressions/Expression_Base.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o ./BC_Internals/BC_Expressions/Expression_Binary_Functors.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.o ./BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o ./BC_Internals/BC_Expressions/Expression_Unary_Pointwise.o  ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Scalar.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.o  ./BC_Extensions/BC_NonlinearityFunctions.o   -lcblas -lf77blas -lcublas -lgomp
-Finished building target: BlackCat_Tensors3.3
- 
-16:01:04 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
-make all 
-make: Nothing to be done for 'all'.
-16:01:32 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-Finished building: ../UnitTests/main.cu
- 
-Building target: BlackCat_Tensors3.3
-Invoking: NVCC Linker
-/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/Correlation.o ./UnitTests/main.o  ./BC_Internals/Dep/tmp_tc_dep/Tensor_Core.o  ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct.o ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct_impl.o  ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Essentials.o ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Scalar.o  ./BC_Internals/Dep/Tensor_Core.o ./BC_Internals/Dep/Tensor_Core_Accessor.o  ./BC_Internals/BC_MathLibraries/TmpDep_GPU/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/TmpDep_GPU/Mathematics_GPU_impl.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./BC_Internals/BC_Expressions/Expression_Base.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o ./BC_Internals/BC_Expressions/Expression_Binary_Functors.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.o ./BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o ./BC_Internals/BC_Expressions/Expression_Unary_Pointwise.o  ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Scalar.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.o  ./BC_Extensions/BC_NonlinearityFunctions.o   -lcblas -lf77blas -lcublas -lgomp
-Finished building target: BlackCat_Tensors3.3
- 
-16:02:20 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-Finished building: ../UnitTests/main.cu
- 
-Building target: BlackCat_Tensors3.3
-Invoking: NVCC Linker
-/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/Correlation.o ./UnitTests/main.o  ./BC_Internals/Dep/tmp_tc_dep/Tensor_Core.o  ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct.o ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct_impl.o  ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Essentials.o ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Scalar.o  ./BC_Internals/Dep/Tensor_Core.o ./BC_Internals/Dep/Tensor_Core_Accessor.o  ./BC_Internals/BC_MathLibraries/TmpDep_GPU/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/TmpDep_GPU/Mathematics_GPU_impl.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./BC_Internals/BC_Expressions/Expression_Base.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o ./BC_Internals/BC_Expressions/Expression_Binary_Functors.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.o ./BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o ./BC_Internals/BC_Expressions/Expression_Unary_Pointwise.o  ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Scalar.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.o  ./BC_Extensions/BC_NonlinearityFunctions.o   -lcblas -lf77blas -lcublas -lgomp
-Finished building target: BlackCat_Tensors3.3
- 
-16:02:26 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
-make all 
-make: Nothing to be done for 'all'.
-16:02:47 **** Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
-make all 
-Building file: ../UnitTests/MNIST_test.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
-../UnitTests/MNIST_test.cu(117): warning: loop is not reachable
-
-/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(135): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
-
-/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(72): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::unary_expression<float,  ::BC::NN_Functions::Sigmoid,  ::BC::binary_expression<float,  ::BC::add,  ::BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
-
-/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(135): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
-
-/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(135): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
-
-/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(135): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
-
-/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(72): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
-
-../UnitTests/MNIST_test.cu(117): warning: loop is not reachable
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
 
 Finished building: ../UnitTests/MNIST_test.cu
  
@@ -202,45 +35,413 @@ Invoking: NVCC Linker
 /usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lcblas -lf77blas -lcublas -lgomp
 Finished building target: BlackCat_NeuralNetworks3.3
  
-16:03:40 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
+17:09:10 **** Incremental Build of configuration Release for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lgomp -lcblas -lf77blas -lcublas
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+17:09:18 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
 make all 
 make: Nothing to be done for 'all'.
-16:03:47 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
-make all 
-make: Nothing to be done for 'all'.
-16:04:13 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
+17:10:56 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
 make all 
 Building file: ../UnitTests/main.cu
 Invoking: NVCC Compiler
 /usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
 /usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
 Finished building: ../UnitTests/main.cu
+ 
+Building file: ../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_MathLibraries" -M -o "BC_Internals/BC_MathLibraries/Mathematics_GPU.d" "../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_MathLibraries/Mathematics_GPU.o" "../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu"
+Finished building: ../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu
  
 Building target: BlackCat_Tensors3.3
 Invoking: NVCC Linker
 /usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/Correlation.o ./UnitTests/main.o  ./BC_Internals/Dep/tmp_tc_dep/Tensor_Core.o  ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct.o ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct_impl.o  ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Essentials.o ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Scalar.o  ./BC_Internals/Dep/Tensor_Core.o ./BC_Internals/Dep/Tensor_Core_Accessor.o  ./BC_Internals/BC_MathLibraries/TmpDep_GPU/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/TmpDep_GPU/Mathematics_GPU_impl.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./BC_Internals/BC_Expressions/Expression_Base.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o ./BC_Internals/BC_Expressions/Expression_Binary_Functors.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.o ./BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o ./BC_Internals/BC_Expressions/Expression_Unary_Pointwise.o  ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Scalar.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.o  ./BC_Extensions/BC_NonlinearityFunctions.o   -lcblas -lf77blas -lcublas -lgomp
 Finished building target: BlackCat_Tensors3.3
  
-16:04:26 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
+17:11:15 **** Incremental Build of configuration Release for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lgomp -lcblas -lf77blas -lcublas
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+17:11:23 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::unary_expression<float,  ::BC::NN_Functions::Sigmoid,  ::BC::binary_expression<float,  ::BC::add,  ::BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+17:12:53 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::unary_expression<float,  ::BC::NN_Functions::Sigmoid,  ::BC::binary_expression<float,  ::BC::add,  ::BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+17:15:37 **** Incremental Build of configuration Release for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lgomp -lcblas -lf77blas -lcublas
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+17:15:47 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+make all 
+make: Nothing to be done for 'all'.
+17:17:00 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
 make all 
 Building file: ../UnitTests/main.cu
 Invoking: NVCC Compiler
 /usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
 /usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
 Finished building: ../UnitTests/main.cu
+ 
+Building file: ../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_MathLibraries" -M -o "BC_Internals/BC_MathLibraries/Mathematics_GPU.d" "../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_MathLibraries/Mathematics_GPU.o" "../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu"
+Finished building: ../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu
  
 Building target: BlackCat_Tensors3.3
 Invoking: NVCC Linker
 /usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/Correlation.o ./UnitTests/main.o  ./BC_Internals/Dep/tmp_tc_dep/Tensor_Core.o  ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct.o ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct_impl.o  ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Essentials.o ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Scalar.o  ./BC_Internals/Dep/Tensor_Core.o ./BC_Internals/Dep/Tensor_Core_Accessor.o  ./BC_Internals/BC_MathLibraries/TmpDep_GPU/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/TmpDep_GPU/Mathematics_GPU_impl.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./BC_Internals/BC_Expressions/Expression_Base.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o ./BC_Internals/BC_Expressions/Expression_Binary_Functors.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.o ./BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o ./BC_Internals/BC_Expressions/Expression_Unary_Pointwise.o  ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Scalar.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.o  ./BC_Extensions/BC_NonlinearityFunctions.o   -lcblas -lf77blas -lcublas -lgomp
 Finished building target: BlackCat_Tensors3.3
  
-16:04:37 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
+17:17:08 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::unary_expression<float,  ::BC::NN_Functions::Sigmoid,  ::BC::binary_expression<float,  ::BC::add,  ::BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+17:20:06 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::unary_expression<float,  ::BC::NN_Functions::Sigmoid,  ::BC::binary_expression<float,  ::BC::add,  ::BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+17:20:55 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::unary_expression<float,  ::BC::NN_Functions::Sigmoid,  ::BC::binary_expression<float,  ::BC::add,  ::BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+17:21:31 **** Incremental Build of configuration Release for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lgomp -lcblas -lf77blas -lcublas
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+17:21:39 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+make all 
+make: Nothing to be done for 'all'.
+17:27:24 **** Incremental Build of configuration Release for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_GPU.cu(45): warning: statement is unreachable
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_GPU.cu(45): warning: statement is unreachable
+
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lgomp -lcblas -lf77blas -lcublas
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+17:27:32 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_GPU.cu(45): warning: statement is unreachable
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::unary_expression<float,  ::BC::NN_Functions::Sigmoid,  ::BC::binary_expression<float,  ::BC::add,  ::BC::binary_expression_dotproduct<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<float> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::binary_expression<float,  ::BC::mul,  ::BC::binary_expression_dotproduct<float,  ::BC::unary_expression_transpose<float,  ::BC::Tensor_Core< ::BC::Matrix<float,  ::BC::GPU> > > ,  ::BC::binary_expression<float,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > ,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > ,  ::BC::GPU> ,  ::BC::unary_expression<float,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<float,  ::BC::GPU> > > > > ,  ::BC::GPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_GPU.cu(45): warning: statement is unreachable
+
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+17:30:24 **** Incremental Build of configuration Release for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_GPU.cu(45): warning: statement is unreachable
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_GPU.cu(45): warning: statement is unreachable
+
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lgomp -lcblas -lf77blas -lcublas
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+17:30:40 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_GPU.cu(45): warning: statement is unreachable
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::unary_expression<double,  ::BC::NN_Functions::Sigmoid,  ::BC::binary_expression<double,  ::BC::add,  ::BC::binary_expression_dotproduct<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::binary_expression<double,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > > ,  ::BC::binary_expression<double,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::mul,  ::BC::binary_expression_dotproduct<double,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > > ,  ::BC::binary_expression<double,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ,  ::BC::unary_expression<double,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > > > ,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > > ,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::mul,  ::BC::binary_expression_dotproduct<double,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > > ,  ::BC::binary_expression<double,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ,  ::BC::unary_expression<double,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_GPU.cu(45): warning: statement is unreachable
+
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+17:31:31 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_GPU.cu(45): warning: statement is unreachable
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::unary_expression<double,  ::BC::NN_Functions::Sigmoid,  ::BC::binary_expression<double,  ::BC::add,  ::BC::binary_expression_dotproduct<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::binary_expression<double,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > > ,  ::BC::binary_expression<double,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::mul,  ::BC::binary_expression_dotproduct<double,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > > ,  ::BC::binary_expression<double,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ,  ::BC::unary_expression<double,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > > > ,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > > ,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::mul,  ::BC::binary_expression_dotproduct<double,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > > ,  ::BC::binary_expression<double,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ,  ::BC::unary_expression<double,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_GPU.cu(45): warning: statement is unreachable
+
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+17:32:02 **** Incremental Build of configuration Release for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_GPU.cu(45): warning: statement is unreachable
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_GPU.cu(45): warning: statement is unreachable
+
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lgomp -lcblas -lf77blas -lcublas
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+17:32:09 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+make all 
+make: Nothing to be done for 'all'.
+17:33:32 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
+make all 
+Building file: ../UnitTests/MNIST_test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_GPU.cu(45): warning: statement is unreachable
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::unary_expression<double,  ::BC::NN_Functions::Sigmoid,  ::BC::binary_expression<double,  ::BC::add,  ::BC::binary_expression_dotproduct<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::binary_expression<double,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > > ,  ::BC::binary_expression<double,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::mul,  ::BC::binary_expression_dotproduct<double,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > > ,  ::BC::binary_expression<double,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ,  ::BC::unary_expression<double,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > > > ,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(85): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > > ,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::mul,  ::BC::binary_expression_dotproduct<double,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > > ,  ::BC::binary_expression<double,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ,  ::BC::unary_expression<double,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Mathematics_GPU.cu(45): warning: statement is unreachable
+
+Finished building: ../UnitTests/MNIST_test.cu
+ 
+Building target: BlackCat_NeuralNetworks3.3
+Invoking: NVCC Linker
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_NeuralNetworks3.3
+ 
+17:36:13 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
 make all 
 Building file: ../UnitTests/main.cu
 Invoking: NVCC Compiler
 /usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
 /usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
 Finished building: ../UnitTests/main.cu
+ 
+Building file: ../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_MathLibraries" -M -o "BC_Internals/BC_MathLibraries/Mathematics_GPU.d" "../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_MathLibraries/Mathematics_GPU.o" "../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu"
+Finished building: ../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu
  
 Building target: BlackCat_Tensors3.3
 Invoking: NVCC Linker
