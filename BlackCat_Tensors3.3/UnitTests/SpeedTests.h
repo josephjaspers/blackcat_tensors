@@ -4,7 +4,6 @@
 #include "time.h"
 #include <omp.h>
 #include "../BlackCat_Tensors.h"
-#include "BlackCat_TensorFunctions.cu"
 
 using BC::Vector;
 using BC::Matrix;

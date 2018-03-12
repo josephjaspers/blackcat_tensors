@@ -12,7 +12,7 @@
 #define BLACKCAT_DEFAULT_LIBRARY_CPU
 
 #include "BC_Internals/BlackCat_Internal_GlobalUnifier.h"
-//Include this to gain access to the library
+#include "Extensions/NN_Functions.h"
 
 
 #endif /* BLACKCAT_TENSORS_H_ */
