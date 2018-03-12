@@ -1,6 +1,212 @@
-19:02:10 **** Incremental Build of configuration Release for project BlackCat_Tensors ****
+19:31:52 **** Incremental Build of configuration Release for project BlackCat_Tensors ****
 make all 
-make: Nothing to be done for 'all'.
+Building file: ../UnitTests/main.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
+../UnitTests/../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(33): error: identifier "__BCinline__" is undefined
 
-19:02:11 Build Finished (took 310ms)
+../UnitTests/../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(33): error: template parameter "T" may not be redeclared in this scope
+
+../UnitTests/../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(33): error: expected a ";"
+
+../UnitTests/../BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.cu(46): warning: parsing restarts here after previous syntax error
+
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(98): error: incomplete type is not allowed
+          detected during:
+            instantiation of class "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type> [with T=BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, derived=BC::Vector<BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB]" 
+../UnitTests/../BC_Internals/BC_Core/Vector.h(17): here
+            instantiation of class "BC::Vector<T, Mathlib> [with T=BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB]" 
+../UnitTests/main.cu(121): here
+
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(98): error: incomplete type is not allowed
+          detected during:
+            instantiation of class "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type> [with T=BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, double *, BC::DEFAULT_MATHLIB>, derived=BC::Matrix<BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, double *, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(17): here
+            instantiation of class "BC::Matrix<T, Mathlib> [with T=BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, double *, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB]" 
+../UnitTests/main.cu(130): here
+
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(98): error: incomplete type is not allowed
+          detected during:
+            instantiation of class "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type> [with T=BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, derived=BC::Matrix<BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(17): here
+            instantiation of class "BC::Matrix<T, Mathlib> [with T=BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB]" 
+../UnitTests/main.cu(184): here
+
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(98): error: incomplete type is not allowed
+          detected during:
+            instantiation of class "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type> [with T=BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::DEFAULT_MATHLIB>, derived=BC::Matrix<BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(17): here
+            instantiation of class "BC::Matrix<T, Mathlib> [with T=BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB]" 
+../UnitTests/main.cu(193): here
+
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(98): error: incomplete type is not allowed
+          detected during:
+            instantiation of class "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type> [with T=BC::binary_expression_dotproduct<float, float *, float *, BC::GPU>, derived=BC::Matrix<BC::binary_expression_dotproduct<float, float *, float *, BC::GPU>, BC::GPU>, Mathlib=BC::GPU]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(17): here
+            instantiation of class "BC::Matrix<T, Mathlib> [with T=BC::binary_expression_dotproduct<float, float *, float *, BC::GPU>, Mathlib=BC::GPU]" 
+../UnitTests/main.cu(255): here
+
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(98): error: incomplete type is not allowed
+          detected during:
+            instantiation of class "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type> [with T=BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPU>, derived=BC::Matrix<BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPU>, BC::GPU>, Mathlib=BC::GPU]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(17): here
+            instantiation of class "BC::Matrix<T, Mathlib> [with T=BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPU>, Mathlib=BC::GPU]" 
+../UnitTests/main.cu(264): here
+
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(98): error: incomplete type is not allowed
+          detected during:
+            instantiation of class "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type> [with T=BC::binary_expression_dotproduct<float, float *, float *, BC::GPUM>, derived=BC::Matrix<BC::binary_expression_dotproduct<float, float *, float *, BC::GPUM>, BC::GPUM>, Mathlib=BC::GPUM]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(17): here
+            instantiation of class "BC::Matrix<T, Mathlib> [with T=BC::binary_expression_dotproduct<float, float *, float *, BC::GPUM>, Mathlib=BC::GPUM]" 
+../UnitTests/main.cu(327): here
+
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(98): error: incomplete type is not allowed
+          detected during:
+            instantiation of class "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type> [with T=BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPUM>, derived=BC::Matrix<BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPUM>, BC::GPUM>, Mathlib=BC::GPUM]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(17): here
+            instantiation of class "BC::Matrix<T, Mathlib> [with T=BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPUM>, Mathlib=BC::GPUM]" 
+../UnitTests/main.cu(336): here
+
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(100): error: this pack expansion produced more than one expression, and a single expression is needed here
+          detected during:
+            instantiation of "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type>::TensorBase(BC::Shape, const params &...) [with T=BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, derived=BC::Vector<BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, params=<double *, double *, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Vector.h(36): here
+            instantiation of "BC::Vector<T, Mathlib>::Vector(const params &...) [with T=BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, params=<BC::Shape, double *, double *, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(166): here
+            instantiation of "BC::Tensor_Operations_impl<derived, TRAITS>::dp_impl<pDeriv, pTraits>::type BC::Tensor_Operations_impl<derived, TRAITS>::operator*(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) const [with derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, TRAITS=BC::_TRAITS<double, double *, BC::Matrix<double, BC::DEFAULT_MATHLIB> &, BC::DEFAULT_MATHLIB>, pDeriv=BC::Vector<double, BC::DEFAULT_MATHLIB>, pTraits=BC::_TRAITS<double, double *, BC::Vector<double, BC::DEFAULT_MATHLIB> &, BC::DEFAULT_MATHLIB>, voider=void, foo=0]" 
+../UnitTests/main.cu(121): here
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(196): error: no instance of function template "BC::CPU::copy" matches the argument list
+            argument types are: (double *, const BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, int)
+          detected during:
+            instantiation of "derived &BC::Tensor_Operations_impl<derived, TRAITS>::operator=(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) [with derived=BC::Vector<double, BC::DEFAULT_MATHLIB>, TRAITS=BC::_TRAITS<double, double *, BC::Vector<double, BC::DEFAULT_MATHLIB> &, BC::DEFAULT_MATHLIB>, pDeriv=BC::Vector<BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>, pTraits=BC::_TRAITS<double, BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, BC::Vector<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/../BC_Internals/BC_Core/Vector.h(42): here
+            instantiation of "BC::Vector<T, Mathlib> &BC::Vector<T, Mathlib>::operator=(const BC::Vector<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(121): here
+
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(100): error: this pack expansion produced more than one expression, and a single expression is needed here
+          detected during:
+            instantiation of "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type>::TensorBase(BC::Shape, const params &...) [with T=BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, double *, BC::DEFAULT_MATHLIB>, derived=BC::Matrix<BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, double *, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, params=<BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, double *, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(39): here
+            instantiation of "BC::Matrix<T, Mathlib>::Matrix(const params &...) [with T=BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, double *, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, params=<BC::Shape, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, double *, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(166): here
+            instantiation of "BC::Tensor_Operations_impl<derived, TRAITS>::dp_impl<pDeriv, pTraits>::type BC::Tensor_Operations_impl<derived, TRAITS>::operator*(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) const [with derived=BC::Matrix<BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::DEFAULT_MATHLIB>, TRAITS=BC::_TRAITS<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>, pDeriv=BC::Matrix<double, BC::DEFAULT_MATHLIB>, pTraits=BC::_TRAITS<double, double *, BC::Matrix<double, BC::DEFAULT_MATHLIB> &, BC::DEFAULT_MATHLIB>, voider=void, foo=0]" 
+../UnitTests/main.cu(130): here
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(196): error: no instance of function template "BC::CPU::copy" matches the argument list
+            argument types are: (double *, const BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, double *, BC::DEFAULT_MATHLIB>, int)
+          detected during:
+UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
+            instantiation of "derived &BC::Tensor_Operations_impl<derived, TRAITS>::operator=(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) [with derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, TRAITS=BC::_TRAITS<double, double *, BC::Matrix<double, BC::DEFAULT_MATHLIB> &, BC::DEFAULT_MATHLIB>, pDeriv=BC::Matrix<BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, double *, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>, pTraits=BC::_TRAITS<double, BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, double *, BC::DEFAULT_MATHLIB>, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(45): here
+            instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, double *, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(130): here
+
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(100): error: this pack expansion produced more than one expression, and a single expression is needed here
+          detected during:
+            instantiation of "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type>::TensorBase(BC::Shape, const params &...) [with T=BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, derived=BC::Matrix<BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, params=<double *, double *, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(39): here
+            instantiation of "BC::Matrix<T, Mathlib>::Matrix(const params &...) [with T=BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, params=<BC::Shape, double *, double *, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(166): here
+            instantiation of "BC::Tensor_Operations_impl<derived, TRAITS>::dp_impl<pDeriv, pTraits>::type BC::Tensor_Operations_impl<derived, TRAITS>::operator*(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) const [with derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, TRAITS=BC::_TRAITS<double, double *, BC::Matrix<double, BC::DEFAULT_MATHLIB> &, BC::DEFAULT_MATHLIB>, pDeriv=BC::Matrix<double, BC::DEFAULT_MATHLIB>, pTraits=BC::_TRAITS<double, double *, BC::Matrix<double, BC::DEFAULT_MATHLIB> &, BC::DEFAULT_MATHLIB>, voider=void, foo=0]" 
+../UnitTests/main.cu(184): here
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(196): error: no instance of function template "BC::CPU::copy" matches the argument list
+            argument types are: (double *, const BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, int)
+          detected during:
+            instantiation of "derived &BC::Tensor_Operations_impl<derived, TRAITS>::operator=(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) [with derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, TRAITS=BC::_TRAITS<double, double *, BC::Matrix<double, BC::DEFAULT_MATHLIB> &, BC::DEFAULT_MATHLIB>, pDeriv=BC::Matrix<BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>, pTraits=BC::_TRAITS<double, BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(45): here
+            instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, double *, double *, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(184): here
+
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(100): error: this pack expansion produced more than one expression, and a single expression is needed here
+          detected during:
+            instantiation of "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type>::TensorBase(BC::Shape, const params &...) [with T=BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::DEFAULT_MATHLIB>, derived=BC::Matrix<BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, params=<BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(39): here
+            instantiation of "BC::Matrix<T, Mathlib>::Matrix(const params &...) [with T=BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::DEFAULT_MATHLIB>, Mathlib=BC::DEFAULT_MATHLIB, params=<BC::Shape, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(166): here
+            instantiation of "BC::Tensor_Operations_impl<derived, TRAITS>::dp_impl<pDeriv, pTraits>::type BC::Tensor_Operations_impl<derived, TRAITS>::operator*(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) const [with derived=BC::Matrix<BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::DEFAULT_MATHLIB>, TRAITS=BC::_TRAITS<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>, pDeriv=BC::Matrix<BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::DEFAULT_MATHLIB>, pTraits=BC::_TRAITS<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>, voider=void, foo=0]" 
+../UnitTests/main.cu(193): here
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(196): error: no instance of function template "BC::CPU::copy" matches the argument list
+            argument types are: (double *, const BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::DEFAULT_MATHLIB>, int)
+          detected during:
+            instantiation of "derived &BC::Tensor_Operations_impl<derived, TRAITS>::operator=(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) [with derived=BC::Matrix<double, BC::DEFAULT_MATHLIB>, TRAITS=BC::_TRAITS<double, double *, BC::Matrix<double, BC::DEFAULT_MATHLIB> &, BC::DEFAULT_MATHLIB>, pDeriv=BC::Matrix<BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>, pTraits=BC::_TRAITS<double, BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::DEFAULT_MATHLIB>, BC::Matrix<double, BC::DEFAULT_MATHLIB>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(45): here
+            instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=double, Mathlib=BC::DEFAULT_MATHLIB, U=BC::binary_expression_dotproduct<double, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::binary_expression_scalar_R<double, BC::mul, BC::unary_expression_transpose<double, double *>, double *>, BC::DEFAULT_MATHLIB>]" 
+../UnitTests/main.cu(193): here
+
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(100): error: this pack expansion produced more than one expression, and a single expression is needed here
+          detected during:
+            instantiation of "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type>::TensorBase(BC::Shape, const params &...) [with T=BC::binary_expression_dotproduct<float, float *, float *, BC::GPU>, derived=BC::Matrix<BC::binary_expression_dotproduct<float, float *, float *, BC::GPU>, BC::GPU>, Mathlib=BC::GPU, params=<float *, float *, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(39): here
+            instantiation of "BC::Matrix<T, Mathlib>::Matrix(const params &...) [with T=BC::binary_expression_dotproduct<float, float *, float *, BC::GPU>, Mathlib=BC::GPU, params=<BC::Shape, float *, float *, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(166): here
+            instantiation of "BC::Tensor_Operations_impl<derived, TRAITS>::dp_impl<pDeriv, pTraits>::type BC::Tensor_Operations_impl<derived, TRAITS>::operator*(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) const [with derived=BC::Matrix<float, BC::GPU>, TRAITS=BC::_TRAITS<float, float *, BC::Matrix<float, BC::GPU> &, BC::GPU>, pDeriv=BC::Matrix<float, BC::GPU>, pTraits=BC::_TRAITS<float, float *, BC::Matrix<float, BC::GPU> &, BC::GPU>, voider=void, foo=0]" 
+../UnitTests/main.cu(255): here
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(196): error: no instance of overloaded function "BC::GPU::copy" matches the argument list
+            argument types are: (float *, const BC::binary_expression_dotproduct<float, float *, float *, BC::GPU>, int)
+          detected during:
+            instantiation of "derived &BC::Tensor_Operations_impl<derived, TRAITS>::operator=(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) [with derived=BC::Matrix<float, BC::GPU>, TRAITS=BC::_TRAITS<float, float *, BC::Matrix<float, BC::GPU> &, BC::GPU>, pDeriv=BC::Matrix<BC::binary_expression_dotproduct<float, float *, float *, BC::GPU>, BC::GPU>, pTraits=BC::_TRAITS<float, BC::binary_expression_dotproduct<float, float *, float *, BC::GPU>, BC::Matrix<float, BC::GPU>, BC::GPU>]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(45): here
+            instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=float, Mathlib=BC::GPU, U=BC::binary_expression_dotproduct<float, float *, float *, BC::GPU>]" 
+../UnitTests/main.cu(255): here
+
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(100): error: this pack expansion produced more than one expression, and a single expression is needed here
+          detected during:
+            instantiation of "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type>::TensorBase(BC::Shape, const params &...) [with T=BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPU>, derived=BC::Matrix<BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPU>, BC::GPU>, Mathlib=BC::GPU, params=<BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(39): here
+            instantiation of "BC::Matrix<T, Mathlib>::Matrix(const params &...) [with T=BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPU>, Mathlib=BC::GPU, params=<BC::Shape, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(166): here
+            instantiation of "BC::Tensor_Operations_impl<derived, TRAITS>::dp_impl<pDeriv, pTraits>::type BC::Tensor_Operations_impl<derived, TRAITS>::operator*(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) const [with derived=BC::Matrix<BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPU>, TRAITS=BC::_TRAITS<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::Matrix<float, BC::GPU>, BC::GPU>, pDeriv=BC::Matrix<BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPU>, pTraits=BC::_TRAITS<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::Matrix<float, BC::GPU>, BC::GPU>, voider=void, foo=0]" 
+../UnitTests/main.cu(264): here
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(196): error: no instance of overloaded function "BC::GPU::copy" matches the argument list
+            argument types are: (float *, const BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPU>, int)
+          detected during:
+            instantiation of "derived &BC::Tensor_Operations_impl<derived, TRAITS>::operator=(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) [with derived=BC::Matrix<float, BC::GPU>, TRAITS=BC::_TRAITS<float, float *, BC::Matrix<float, BC::GPU> &, BC::GPU>, pDeriv=BC::Matrix<BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPU>, BC::GPU>, pTraits=BC::_TRAITS<float, BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPU>, BC::Matrix<float, BC::GPU>, BC::GPU>]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(45): here
+            instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=float, Mathlib=BC::GPU, U=BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPU>]" 
+../UnitTests/main.cu(264): here
+
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(100): error: this pack expansion produced more than one expression, and a single expression is needed here
+          detected during:
+            instantiation of "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type>::TensorBase(BC::Shape, const params &...) [with T=BC::binary_expression_dotproduct<float, float *, float *, BC::GPUM>, derived=BC::Matrix<BC::binary_expression_dotproduct<float, float *, float *, BC::GPUM>, BC::GPUM>, Mathlib=BC::GPUM, params=<float *, float *, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(39): here
+            instantiation of "BC::Matrix<T, Mathlib>::Matrix(const params &...) [with T=BC::binary_expression_dotproduct<float, float *, float *, BC::GPUM>, Mathlib=BC::GPUM, params=<BC::Shape, float *, float *, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(166): here
+            instantiation of "BC::Tensor_Operations_impl<derived, TRAITS>::dp_impl<pDeriv, pTraits>::type BC::Tensor_Operations_impl<derived, TRAITS>::operator*(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) const [with derived=BC::Matrix<float, BC::GPUM>, TRAITS=BC::_TRAITS<float, float *, BC::Matrix<float, BC::GPUM> &, BC::GPUM>, pDeriv=BC::Matrix<float, BC::GPUM>, pTraits=BC::_TRAITS<float, float *, BC::Matrix<float, BC::GPUM> &, BC::GPUM>, voider=void, foo=0]" 
+../UnitTests/main.cu(327): here
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(196): error: no instance of overloaded function "BC::GPUM::copy" matches the argument list
+            argument types are: (float *, const BC::binary_expression_dotproduct<float, float *, float *, BC::GPUM>, int)
+          detected during:
+            instantiation of "derived &BC::Tensor_Operations_impl<derived, TRAITS>::operator=(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) [with derived=BC::Matrix<float, BC::GPUM>, TRAITS=BC::_TRAITS<float, float *, BC::Matrix<float, BC::GPUM> &, BC::GPUM>, pDeriv=BC::Matrix<BC::binary_expression_dotproduct<float, float *, float *, BC::GPUM>, BC::GPUM>, pTraits=BC::_TRAITS<float, BC::binary_expression_dotproduct<float, float *, float *, BC::GPUM>, BC::Matrix<float, BC::GPUM>, BC::GPUM>]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(45): here
+            instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=float, Mathlib=BC::GPUM, U=BC::binary_expression_dotproduct<float, float *, float *, BC::GPUM>]" 
+../UnitTests/main.cu(327): here
+
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h(100): error: this pack expansion produced more than one expression, and a single expression is needed here
+          detected during:
+            instantiation of "BC::TensorBase<T, derived, Mathlib, std::enable_if<BC::MTF::non_pwise_functor<T>::conditional, void>::type>::TensorBase(BC::Shape, const params &...) [with T=BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPUM>, derived=BC::Matrix<BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPUM>, BC::GPUM>, Mathlib=BC::GPUM, params=<BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(39): here
+            instantiation of "BC::Matrix<T, Mathlib>::Matrix(const params &...) [with T=BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPUM>, Mathlib=BC::GPUM, params=<BC::Shape, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, int, int, int, int, int, int>]" 
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(166): here
+            instantiation of "BC::Tensor_Operations_impl<derived, TRAITS>::dp_impl<pDeriv, pTraits>::type BC::Tensor_Operations_impl<derived, TRAITS>::operator*(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) const [with derived=BC::Matrix<BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPUM>, TRAITS=BC::_TRAITS<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::Matrix<float, BC::GPUM>, BC::GPUM>, pDeriv=BC::Matrix<BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPUM>, pTraits=BC::_TRAITS<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::Matrix<float, BC::GPUM>, BC::GPUM>, voider=void, foo=0]" 
+../UnitTests/main.cu(336): here
+
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h(196): error: no instance of overloaded function "BC::GPUM::copy" matches the argument list
+            argument types are: (float *, const BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPUM>, int)
+          detected during:
+            instantiation of "derived &BC::Tensor_Operations_impl<derived, TRAITS>::operator=(const BC::Tensor_Operations_impl<pDeriv, pTraits> &) [with derived=BC::Matrix<float, BC::GPUM>, TRAITS=BC::_TRAITS<float, float *, BC::Matrix<float, BC::GPUM> &, BC::GPUM>, pDeriv=BC::Matrix<BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPUM>, BC::GPUM>, pTraits=BC::_TRAITS<float, BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPUM>, BC::Matrix<float, BC::GPUM>, BC::GPUM>]" 
+../UnitTests/../BC_Internals/BC_Core/Matrix.h(45): here
+            instantiation of "BC::Matrix<T, Mathlib> &BC::Matrix<T, Mathlib>::operator=(const BC::Matrix<U, Mathlib> &) [with T=float, Mathlib=BC::GPUM, U=BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::binary_expression_scalar_R<float, BC::mul, float *, float *>, BC::GPUM>]" 
+../UnitTests/main.cu(336): here
+
+27 errors detected in the compilation of "/tmp/tmpxft_00005736_00000000-6_main.cpp1.ii".
+make: *** [UnitTests/main.o] Error 1
+
+19:31:53 Build Finished (took 1s.468ms)
 

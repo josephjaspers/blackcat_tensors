@@ -37,11 +37,9 @@ public:
 
 	static int blocks(int size) {
 		return 1 + (int)(size / CUDA_BASE_THREADS);
-//		return std::ceil((size) / CUDA_BASE_THREADS);
 	}
 	static int threads(int sz = CUDA_BASE_THREADS) {
 		return sz > CUDA_BASE_THREADS ? CUDA_BASE_THREADS : sz;
-//		return sz < CUDA_BASE_THREADS ? sz : CUDA_BASE_THREADS;
 	}
 
 	template<typename T>

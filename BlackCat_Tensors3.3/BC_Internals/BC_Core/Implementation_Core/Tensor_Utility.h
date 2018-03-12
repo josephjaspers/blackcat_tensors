@@ -30,6 +30,9 @@ private:
 	}
 
 public:
+	auto eval() const {
+		return typename MTF::shell_of<deriv>::type<_scalar<deriv>, _mathlib<deriv>>(this->asDerived());
+	}
 	void print() const {
 		MATHLIB::print(asDerived().data(), asDerived().innerShape(), asDerived().rank(), 8);
 	}
@@ -54,6 +57,7 @@ private:
 		return static_cast<const deriv&>(*this);
 	}
 public:
+	auto& eval() { return this->asDerived(); }
 
 	void randomize(scalar_type lb, scalar_type ub) {
 		MATHLIB::randomize(asDerived().data(), lb, ub, asDerived().size());

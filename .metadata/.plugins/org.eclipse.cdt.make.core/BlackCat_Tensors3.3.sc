@@ -2838,6 +2838,9 @@
 <includePath path="/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed"/>
 <includePath path="/usr/include/x86_64-linux-gnu"/>
 <includePath path="/usr/include"/>
+<includePath path="/usr/local/cuda-9.1/bin"/>
+<includePath path="/usr/local/cuda/include"/>
+<includePath path="/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions"/>
 <definedSymbol symbol="__CUDACC__="/>
 <definedSymbol symbol="__STDC__=1"/>
 <definedSymbol symbol="__cplusplus=201402L"/>
@@ -3146,6 +3149,9 @@
 <includePath path="/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed"/>
 <includePath path="/usr/include/x86_64-linux-gnu"/>
 <includePath path="/usr/include"/>
+<includePath path="/usr/local/cuda-9.1/bin"/>
+<includePath path="/usr/local/cuda/include"/>
+<includePath path="/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions"/>
 <definedSymbol symbol="__CUDACC__="/>
 <definedSymbol symbol="__STDC__=1"/>
 <definedSymbol symbol="__cplusplus=201402L"/>
@@ -3454,6 +3460,9 @@
 <includePath path="/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed"/>
 <includePath path="/usr/include/x86_64-linux-gnu"/>
 <includePath path="/usr/include"/>
+<includePath path="/usr/local/cuda-9.1/bin"/>
+<includePath path="/usr/local/cuda/include"/>
+<includePath path="/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions"/>
 <definedSymbol symbol="="/>
 <definedSymbol symbol="__CUDA_RUNTIME_H__="/>
 <definedSymbol symbol="CUDA_DOUBLE_MATH_FUNCTIONS="/>

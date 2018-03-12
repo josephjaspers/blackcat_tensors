@@ -10,8 +10,8 @@
 
 #include "../../BC_MetaTemplateFunctions/Simple.h"
 #include "../../BC_MetaTemplateFunctions/Adhoc.h"
-#include "../../BC_Expressions/Expression_Binary_Pointwise.cu"
-#include "../../BC_Expressions/Expression_Unary_Pointwise.cu"
+#include "../../BC_Expressions/Expression_Binary_Pointwise.h"
+#include "../../BC_Expressions/Expression_Unary_Pointwise.h"
 #include "Determiners.h"
 #include <type_traits>
 namespace BC {
@@ -109,7 +109,9 @@ struct Tensor_Operations {
 									>::type
 								>::type;
 
-		using expression_type = typename MTF::front<type>::type;
+//		using expression_type = typename MTF::front<type>::type;
+		using expression_type = type;
+
 	};
 
 	template<class deriv> void  assert_same_size(const Tensor_Operations<deriv>& tensor) const {
@@ -137,9 +139,7 @@ struct Tensor_Operations {
 	//Return expression or array of Tensor (both support iterating with bracket operator [])
 	const auto& data() const { return static_cast<const derived&>(*this)._data(); }
 		  auto& data()		 { return static_cast<		derived&>(*this)._data(); }
-	//if it is not an expression Return the tensor as a reference to itself else return the evaluation of the tensor
-	const evaluation_type eval() const;
-		  evaluation_type eval();
+
 	//Pointwise multiplication of Scalar and Tensor -- is auto-detected by expression templates when in conjunction to dotproduct
 	template<class pDeriv, class voider = typename std::enable_if<dp_impl<pDeriv>::short_params || dp_impl<pDeriv>::short_params>::type>
 	typename dp_impl<pDeriv>::type operator *(const Tensor_Operations<pDeriv>& param) const {

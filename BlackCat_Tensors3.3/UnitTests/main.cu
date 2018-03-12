@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../BlackCat_Tensors.h"
+#include <type_traits>
 #include "SpeedTests.h"
 using BC::Vector;
 using BC::Matrix;
@@ -22,6 +23,7 @@ auto test() {
 	mat e(3, 2);
 	mat c(2, 2);
 
+
 	std::cout << " param " << std::endl;
 
 
@@ -34,7 +36,6 @@ auto test() {
 
 	a.print();
 	b.print();
-
 
 	d = a.t();
 	e = b.t();
@@ -71,7 +72,7 @@ auto test() {
 	scal B(2);
 
 	c.print();
-
+	(c + c).eval();
 	c = a.t() * b.t();
 
 	A.print();
@@ -83,6 +84,7 @@ auto test() {
 	cube cu(2,3, 4);
 	cu.zero();
 	cu.print();
+
 
 
 	std::cout << " sub vector test " << std::endl;
@@ -114,8 +116,6 @@ auto test() {
 
 }
 
-
-#include "../BC_Extensions/BC_Correlation.h"
 int main() {
 
 //	speedTestDelayedEval<128,     100000>();
@@ -130,17 +130,21 @@ int main() {
 //	speedTestDelayedEval<80000,   100000>();
 //	speedTestDelayedEval<100000,  100000>();
 //
-//	speedTestsScalarIteration<128, 100000>();
-//	speedTestsScalarIteration<256, 100000>();
-//	speedTestsScalarIteration<512, 100000>();
-//	speedTestsScalarIteration<1024, 100000>();
-//	speedTestsScalarIteration<2048, 100000>();
-//	speedTestsScalarIteration<5096, 100000>();
-//	speedTestsScalarIteration<10000, 100000>();
-//	speedTestsScalarIteration<20000, 100000>();
-//	speedTestsScalarIteration<40000, 100000>();
-//	speedTestsScalarIteration<80000, 100000>();
-//	speedTestsScalarIteration<100000, 100000>();
+//	speedTestsScalarIteration<4, 100>();
+//	speedTestsScalarIteration<16, 100>();
+//	speedTestsScalarIteration<32, 100>();
+//	speedTestsScalarIteration<64, 100>();
+//	speedTestsScalarIteration<128, 100>();
+//	speedTestsScalarIteration<256, 100>();
+//	speedTestsScalarIteration<512, 100>();
+//	speedTestsScalarIteration<1024, 100>();
+//	speedTestsScalarIteration<2048, 100>();
+//	speedTestsScalarIteration<5096, 100>();
+//	speedTestsScalarIteration<10000, 100>();
+////	speedTestsScalarIteration<20000, 10000>();
+//	speedTestsScalarIteration<40000, 10000>();
+//	speedTestsScalarIteration<80000, 10000>();
+//	speedTestsScalarIteration<100000, 10000>();
 ////	MatrixPointwise();
 	test();
 

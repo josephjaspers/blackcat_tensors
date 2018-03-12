@@ -119,18 +119,22 @@ int speedTestsScalarIteration() {
 	using vec = Vector<float>;
 	using mat = Matrix<float>;
 
-	vec b(SIZE);
-	mat a(1,SIZE);
+	mat a(SIZE, SIZE);
+	mat b(SIZE, SIZE);
+	mat c(SIZE, SIZE);
+	mat d(SIZE, SIZE);
 
 	a.randomize(0, 100);
 	b.randomize(0, 100);
+	c.randomize(0, 100);
+	d.randomize(0, 100);
 
 	float t;
 
 	t = omp_get_wtime();
 
 	for (int iter = 0; iter < reps; ++iter) {
-		a[iter];
+		c = a.t() * b;
 	}
 
 	t = omp_get_wtime() - t;
@@ -140,7 +144,7 @@ int speedTestsScalarIteration() {
 	t2 = omp_get_wtime();
 
 	for (int iter = 0; iter < reps; ++iter) {
-		a(iter);
+		c = (c + a) * (d + b);
 	}
 
 	t2 = omp_get_wtime() - t2;

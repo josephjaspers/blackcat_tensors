@@ -9,22 +9,22 @@
 #define BLACKCAT_FORWARDSDECLS_H_
 
 namespace BC {
+
 class CPU;
 class GPU;
 
 #ifndef BLACKCAT_DEFAULT_MATHLIB_GPU
-
 using DEFAULT_MATHLIB = CPU;
+
 #else
 using DEFAULT_MATHLIB = GPU
+
 #endif
 
+template<class, class ML = DEFAULT_MATHLIB> class Scalar;
 template<class, class ML = DEFAULT_MATHLIB> class Vector;
-template<class, class ML = DEFAULT_MATHLIB> class RowVector;
 template<class, class ML = DEFAULT_MATHLIB> class Matrix;
 template<class, class ML = DEFAULT_MATHLIB> class Cube;
-
-template<class, class ML = DEFAULT_MATHLIB> class Scalar;
 }
 
 

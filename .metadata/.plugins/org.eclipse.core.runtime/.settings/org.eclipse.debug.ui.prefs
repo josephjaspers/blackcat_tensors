@@ -1,3 +1,4 @@
+com.nvidia.cuda.ide.debug.cudastate+null=true
 eclipse.preferences.version=1
 org.eclipse.debug.ui.MemoryHistoryKnownColor=235,235,235
 org.eclipse.debug.ui.MemoryHistoryUnknownColor=170,175,185

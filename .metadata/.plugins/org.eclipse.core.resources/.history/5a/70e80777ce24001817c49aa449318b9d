@@ -1,0 +1,52 @@
+#include <omp.h>
+#include <iostream>
+#include "cblas.h"
+
+
+#include <cmath>
+#include <iostream>
+#include <string>
+
+static void MatrixMul(bool transA, bool transB, const double* A, const double* B, double* C, int m, int n, int k, const double* scalarA = nullptr, const double* scalarB = nullptr,
+		int lda = 0, int ldb = 0, int ldc = 0) {
+
+	auto TRANS_A = transA ? CblasTrans : CblasNoTrans;
+	auto TRANS_B = transB ? CblasTrans : CblasNoTrans;
+
+	if (lda == 0)
+		lda = m;
+	if (ldb == 0)
+		ldb = n;
+	if (ldc == 0)
+		ldc = m;
+
+	const double beta = scalarB ? *scalarB : 0.0;
+	const double alpha = scalarA ? *scalarA : 1.0;
+	cblas_dgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+}
+
+void testSpeed(int size, int reps) {
+
+	double* a = new double[size * size];
+	double* b = new double[size * size];
+	double* c = new double[size * size];
+
+	float t;
+
+		t = omp_get_wtime();
+
+		for (int iter = 0; iter < reps; ++iter) {
+			MatrixMul(false, false, a, b, c, size, size, size);
+
+		}
+		t = omp_get_wtime() - t;
+
+		std::cout <<"sz = " << size << "time scalar: " << t << " time generic access: "  << std::endl;
+
+
+
+}
+
+int main() {
+
+}

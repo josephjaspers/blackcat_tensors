@@ -1,22 +1,16 @@
-17:36:13 **** Incremental Build of configuration Debug for project BlackCat_Tensors3.3 ****
+22:13:17 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
 make all 
 Building file: ../UnitTests/main.cu
 Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
 Finished building: ../UnitTests/main.cu
- 
-Building file: ../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_MathLibraries" -M -o "BC_Internals/BC_MathLibraries/Mathematics_GPU.d" "../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_MathLibraries/Mathematics_GPU.o" "../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu"
-Finished building: ../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu
  
 Building target: BlackCat_Tensors3.3
 Invoking: NVCC Linker
-/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/Correlation.o ./UnitTests/main.o  ./BC_Internals/Dep/tmp_tc_dep/Tensor_Core.o  ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct.o ./BC_Internals/Dep/dotproduct_Dep/Expression_Binary_Dotproduct_impl.o  ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Essentials.o ./BC_Internals/Dep/Tensor_Core_Specializations/Tensor_Core_Scalar.o  ./BC_Internals/Dep/Tensor_Core.o ./BC_Internals/Dep/Tensor_Core_Accessor.o  ./BC_Internals/BC_MathLibraries/TmpDep_GPU/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/TmpDep_GPU/Mathematics_GPU_impl.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./BC_Internals/BC_Expressions/Expression_Base.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.o ./BC_Internals/BC_Expressions/Expression_Binary_Dotproduct_impl.o ./BC_Internals/BC_Expressions/Expression_Binary_Functors.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise.o ./BC_Internals/BC_Expressions/Expression_Binary_Pointwise_Scalar.o ./BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.o ./BC_Internals/BC_Expressions/Expression_Unary_Pointwise.o  ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Scalar.o ./BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.o  ./BC_Extensions/BC_NonlinearityFunctions.o   -lcblas -lf77blas -lcublas -lgomp
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/main.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o   -lcblas -lf77blas -lcublas -lgomp
 Finished building target: BlackCat_Tensors3.3
  
 
-17:36:19 Build Finished (took 6s.277ms)
+22:13:21 Build Finished (took 4s.168ms)
 

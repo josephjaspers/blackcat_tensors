@@ -1,6 +1,16 @@
-13:42:25 **** Build of configuration Debug for project BlackCat_Tensors_Functions ****
+18:15:45 **** Incremental Build of configuration Debug for project BlackCat_Tensors_Functions ****
 make all 
-make: Nothing to be done for 'all'.
+Building file: ../Functions/BlackCat_TensorFunctions.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-9.1/bin/nvcc -G -g -O0 -gencode arch=compute_52,code=sm_52  -odir "Functions" -M -o "Functions/BlackCat_TensorFunctions.d" "../Functions/BlackCat_TensorFunctions.cu"
+/usr/local/cuda-9.1/bin/nvcc -G -g -O0 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "Functions/BlackCat_TensorFunctions.o" "../Functions/BlackCat_TensorFunctions.cu"
+Finished building: ../Functions/BlackCat_TensorFunctions.cu
+ 
+Building target: libBlackCat_Tensors_Functions.a
+Invoking: NVCC Archiver
+nvcc  -lib -o  "libBlackCat_Tensors_Functions.a"  ./Functions/BlackCat_TensorFunctions.o   
+Finished building target: libBlackCat_Tensors_Functions.a
+ 
 
-13:42:26 Build Finished (took 263ms)
+18:15:46 Build Finished (took 818ms)
 

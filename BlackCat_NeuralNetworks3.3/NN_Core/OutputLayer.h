@@ -44,6 +44,10 @@ public:
 		return prev().backPropagation(hypothesis - y);
 	}
 
+	template<class T> auto train(const vec_expr<T>& x, const vec& y) {
+		return x - y; //hypothesis - expected
+	}
+
 	void updateWeights() {}
 	void clearBPStorage() {}
 	void write(std::ofstream& is) {

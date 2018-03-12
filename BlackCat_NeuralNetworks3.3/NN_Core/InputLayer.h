@@ -38,12 +38,17 @@ const int INPUTS;
 	template<class T> vec forwardPropagation(const vec_expr<T>& x) {
 		return this->next().forwardPropagation(x);
 	}
+
 	template<class T> vec forwardPropagation_Express(const vec_expr<T>& x) const {
 		return this->next().forwardPropagation_Express(x);
 	}
 
 	template<class T> vec backPropagation(const vec_expr<T>& dy) {
 		return dy;
+	}
+
+	auto train(const vec& x, const vec& y) {
+		return this->next().train(x, y);
 	}
 
 	void updateWeights() {

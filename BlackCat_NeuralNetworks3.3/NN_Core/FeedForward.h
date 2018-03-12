@@ -70,6 +70,15 @@ public:
 
 		return this->prev().backPropagation(dx == w.t() * dy % gd(x));
 	}
+	template<class U, class V>
+		auto train(const vec_expr<U>& x, const vec_expr<V>& y) {
+
+		auto dy = this->next().train(g(w * x + b), y);
+		w_gradientStorage -= dy * x.t();
+		b_gradientStorage -= dy;
+
+		return (w.t() * dy % gd(x));
+	}
 
 	void updateWeights() {
 		w += w_gradientStorage * lr;

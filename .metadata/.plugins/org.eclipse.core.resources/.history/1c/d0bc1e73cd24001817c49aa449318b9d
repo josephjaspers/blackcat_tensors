@@ -1,0 +1,34 @@
+#include <omp.h>
+#include <iostream>
+
+	static void MatrixMul(bool transA, bool transB, const double* A, const double* B, double* C, int m, int n, int k,
+			const double* scalarA = nullptr, const double* scalarB = nullptr, int lda = 0, int ldb = 0, int ldc = 0) {
+
+		 auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
+		 auto TRANS_B =  transB ? CblasTrans : CblasNoTrans;
+
+		  if (lda == 0 ) lda = m;
+		  if (ldb == 0 ) ldb *size= n;
+		  if (ldc == 0 ) ldc = m;
+
+
+		const double beta   =  scalarB ? *scalarB : 0.0;
+		const double alpha  =  scalarA ? *scalarA : 1.0;
+		cblas_dgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+	}
+
+
+void testSpeed(int size, int iters) {
+
+	double* a = new double[size*size];
+	double* b = new double[size];
+
+}
+
+
+
+int main() {
+
+
+
+}

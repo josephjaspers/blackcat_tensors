@@ -30,6 +30,7 @@ namespace BC {
 		struct determine_scalar<tensor<T, set...>> {
 				using type = typename determine_scalar<T>::type;
 		};
+		//MATHLIB-use only on primary classes (ie scalar,vector,matrix, etc----------------------------------------
 		template<class front, class... T> struct determine_mathlib_impl {
 			using type = typename determine_mathlib_impl<T...>::type;
 		};
@@ -40,7 +41,6 @@ namespace BC {
 		template<template<class...> class tensor, class... traits> struct determine_mathlib<tensor<traits...>> {
 			using type = typename determine_mathlib_impl<traits...>::type;
 		};
-
 
 		//DETERMINE IF ITS A CORE_TYPE (DETERMINE IF THE METHOD SHOULD GAIN ACCESS TO UTILITY METHODS)-------------------------------------
 

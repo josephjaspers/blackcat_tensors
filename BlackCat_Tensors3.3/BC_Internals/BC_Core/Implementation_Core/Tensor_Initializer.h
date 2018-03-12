@@ -9,7 +9,7 @@
 #define TENSOR_INITIALIZER_H_
 
 #include "Determiners.h"
-#include "Tensor_Core.cu"
+#include "Tensor_Core.h"
 
 namespace BC {
 

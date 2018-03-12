@@ -1,0 +1,36 @@
+/*
+ * Expression_Binary_Dotproduct_Pure.cu
+ *
+ *  Created on: Mar 6, 2018
+ *      Author: joseph
+ */
+
+#ifndef EXPRESSION_BINARY_DOTPRODUCT_PURE_CU_
+#define EXPRESSION_BINARY_DOTPRODUCT_PURE_CU_
+
+namespace BC {
+
+template<class T, class lv, class rv>
+struct binary_expression_dotproduct_pure {
+
+	lv left;
+	rv right;
+
+	binary_expression_dotproduct_pure(lv left_, rv right_) : left(left_), right(right_) {}
+
+	T operator [] (int i) const {
+		int l_row = i % left.rows();
+		int r_col = (int)(i / left.rows());
+		int l_row = i % left.rows();
+		int r_row = r % right.rows();
+		int index = i % left.rows() + (int)(i / left.rows());
+
+	}
+};
+
+
+}
+
+
+
+#endif /* EXPRESSION_BINARY_DOTPRODUCT_PURE_CU_ */
