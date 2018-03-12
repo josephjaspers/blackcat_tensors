@@ -1,16 +1,15 @@
-22:13:17 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+09:14:03 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
 make all 
 Building file: ../UnitTests/main.cu
 Invoking: NVCC Compiler
 /usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-Finished building: ../UnitTests/main.cu
- 
-Building target: BlackCat_Tensors3.3
-Invoking: NVCC Linker
-/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/main.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o   -lcblas -lf77blas -lcublas -lgomp
-Finished building target: BlackCat_Tensors3.3
- 
+In file included from ../UnitTests/main.cu:4:0:
+../UnitTests/SpeedTests.h:7:39: fatal error: BlackCat_TensorFunctions.cu: No such file or directory
+UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
+ #include "BlackCat_TensorFunctions.cu"
+                                       ^
+compilation terminated.
+make: *** [UnitTests/main.o] Error 1
 
-22:13:21 Build Finished (took 4s.168ms)
+09:14:04 Build Finished (took 964ms)
 
