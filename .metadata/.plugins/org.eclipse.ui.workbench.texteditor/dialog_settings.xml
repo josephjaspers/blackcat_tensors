@@ -2,12 +2,13 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="is_one" key="selection"/>
+		<item value="__BCinline__" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="__BC_gcpu__"/>
 			<item value="is_oneof"/>
 			<item value="is_one"/>
 			<item value="s_one"/>
@@ -15,9 +16,9 @@
 			<item value="is_o"/>
 			<item value="is"/>
 			<item value="copy"/>
-			<item value="eval"/>
 		</list>
 		<list key="replacehistory">
+			<item value="__BCinline__"/>
 			<item value="array()"/>
 			<item value="outerShape()"/>
 			<item value="innerShape()"/>
@@ -25,7 +26,6 @@
 			<item value="Ten"/>
 			<item value=""/>
 			<item value="NeuralNetwork"/>
-			<item value="network.get"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

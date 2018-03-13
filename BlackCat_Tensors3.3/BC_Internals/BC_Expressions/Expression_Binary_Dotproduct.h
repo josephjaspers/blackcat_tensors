@@ -1,14 +1,11 @@
-#ifdef  __CUDACC__
 #ifndef EXPRESSION_BINARY_DOTPRODUCT_CU_
 #define EXPRESSION_BINARY_DOTPRODUCT_CU_
 
-#include "Expression_Binary_Dotproduct_impl.h"
+
 #include "Expression_Base.h"
+#include "Expression_Binary_Dotproduct_impl.h"
 #include "BlackCat_Internal_Definitions.h"
-#include "../BC_MetaTemplateFunctions/Adhoc.h"
-#include <iostream>
 #include <memory>
-#include <vector>
 
 namespace BC {
 
@@ -19,13 +16,10 @@ namespace BC {
  */
 //det_Eval
 
-
-
-
 template<class T, class lv, class rv, class Mathlib>
-struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
-	using scalar_type = typename MTF::determine_scalar<T>::type;
+struct binary_expression_dotproduct { //: expression<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
 
+	using scalar_type = T;
 	lv left;
 	rv right;
 
@@ -69,10 +63,10 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 		array = std::shared_ptr<scalar_type>(array_ptr, deleter());
 		eval();
 	}
-		__BCinline__ const T operator [](int index) const {
+		__BCinline__ const T& operator [](int index) const {
 			return array_ptr[index];
 		}
-		__BCinline__ T operator [](int index) {
+		__BCinline__ T& operator [](int index) {
 			return array_ptr[index];
 		}
 
@@ -142,4 +136,3 @@ public:
 }
 
 #endif /* EXPRESSION_BINARY_DOTPRODUCT_CU_ */
-#endif

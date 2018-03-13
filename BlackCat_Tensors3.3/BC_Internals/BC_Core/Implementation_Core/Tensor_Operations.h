@@ -12,6 +12,8 @@
 #include "../../BC_MetaTemplateFunctions/Adhoc.h"
 #include "../../BC_Expressions/Expression_Binary_Pointwise.h"
 #include "../../BC_Expressions/Expression_Unary_Pointwise.h"
+#include "../../BC_Expressions/Expression_Unary_MatrixTransposition.h"
+
 #include "Determiners.h"
 #include <type_traits>
 namespace BC {
@@ -19,7 +21,14 @@ namespace BC {
 template<class, class> struct Scalar;
 template<class, class> struct Vector;
 template<class, class> struct Matrix;
+class mul; class add; class sub; class div; class assign; class combine;
 
+template<class,class,class,class> class binary_expression;
+template<class,class,class,class> class binary_expression_scalar_L;
+template<class,class,class,class> class binary_expression_scalar_R;
+template<class,class,class,class> class binary_expression_scalar_LR;
+template<class,class,class,class> class binary_expression_dotproduct;
+template<class,class,class> class unary_expression;
 template<class>struct Tensor_Operations;
 
 template<class A>
@@ -109,7 +118,6 @@ struct Tensor_Operations {
 									>::type
 								>::type;
 
-//		using expression_type = typename MTF::front<type>::type;
 		using expression_type = type;
 
 	};

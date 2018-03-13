@@ -31,7 +31,7 @@ private:
 
 public:
 	auto eval() const {
-		return typename MTF::shell_of<deriv>::type<_scalar<deriv>, _mathlib<deriv>>(this->asDerived());
+		return typename MTF::shell_of<deriv>::template type<_scalar<deriv>, _mathlib<deriv>>(this->asDerived());
 	}
 	void print() const {
 		MATHLIB::print(asDerived().data(), asDerived().innerShape(), asDerived().rank(), 8);

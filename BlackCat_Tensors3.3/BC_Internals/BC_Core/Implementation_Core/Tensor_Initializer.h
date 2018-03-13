@@ -8,8 +8,12 @@
 #ifndef TENSOR_INITIALIZER_H_
 #define TENSOR_INITIALIZER_H_
 
-#include "Determiners.h"
 #include "Tensor_Core.h"
+#include "Tensor_Core_Slice.h"
+#include "Tensor_Core_Scalar.h"
+#include "Determiners.h"
+
+#include "../../BC_Expressions/Expression_Unary_MatrixTransposition.h"
 
 namespace BC {
 
@@ -29,16 +33,18 @@ public:
 
 	TensorInitializer(		 derived&& tensor) : black_cat_array(tensor.black_cat_array){}
 	TensorInitializer(const  derived&  tensor) : black_cat_array(tensor.black_cat_array){}
+
 	template<class... params>
 	TensorInitializer(const  params&... p) : black_cat_array(p...) {}
 };
 //-------------------------------------SPECIALIZATION FOR TENSORS THAT CONTROL / DELETE THEIR ARRAY-------------------------------------//
 template<template<class, class> class _tensor, class t, class ml>
-class TensorInitializer<_tensor<t, ml>, std::enable_if_t<MTF::isCorePure<t>::conditional>> {
+class TensorInitializer<_tensor<t, ml>, std::enable_if_t<MTF::isCorePure<t>::conditional || MTF::isPrimitive<t>::conditional>> {
+
 	using derived = _tensor<t, ml>;
 	static constexpr int RANK = derived::RANK();
 
-	using self 			= TensorInitializer<derived>;
+	using self 			= TensorInitializer<derived, std::enable_if_t<MTF::isCorePure<t>::conditional>>;
 
 	using functor_type 	= _functor<derived>;
 	using Mathlib 		= _mathlib<derived>;
@@ -52,8 +58,7 @@ private:
 
 public:
 
-	TensorInitializer(derived&& tensor)
-	{
+	TensorInitializer(derived&& tensor) {
 		black_cat_array.is = tensor.black_cat_array.is;
 		black_cat_array.os = tensor.black_cat_array.os;
 		black_cat_array.array = tensor.black_cat_array.array;
@@ -63,18 +68,19 @@ public:
 		tensor.black_cat_array.array 	= nullptr;
 	}
 
-	TensorInitializer(const derived& tensor) : black_cat_array(tensor.innerShape()){
+	TensorInitializer(const derived& tensor) : black_cat_array(tensor.innerShape()) {
 		Mathlib::copy(asBase().data(), tensor.data(), tensor.size());
 	}
-	TensorInitializer(_shape dimensions): black_cat_array(dimensions){}
 
+	TensorInitializer(_shape dimensions): black_cat_array(dimensions) {}
 	TensorInitializer() { static_assert(RANK == 0, "DEFAULT CONSTRUCTOR ONLY AVAILABLE TO SCALARS"); }
 
 	template<class T>
-	using derived_alt = typename shell_of<derived>::type<T, Mathlib>;
+	using derived_alt = typename shell_of<derived>::template  type<T, Mathlib>;
 
 	template<class U>
-	TensorInitializer(const derived_alt<U>&  tensor) : black_cat_array(tensor.innerShape()) {
+	TensorInitializer(const derived_alt<U>&  tensor)
+		: black_cat_array(tensor.innerShape()) {
 		Mathlib::copy(this->asBase().data(), tensor.data(), this->asBase().size());
 	}
 
@@ -87,6 +93,8 @@ public:
 			Mathlib::destroy (black_cat_array.os);
 	}
 };
+
+#include "../TensorBase.h"
 }
 
 

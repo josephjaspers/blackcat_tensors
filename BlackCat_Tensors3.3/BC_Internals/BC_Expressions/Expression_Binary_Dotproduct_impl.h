@@ -4,7 +4,6 @@
  *  Created on: Jan 23, 2018
  *      Author: joseph
  */
-#ifdef  __CUDACC__
 #ifndef EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
 #define EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
 
@@ -111,4 +110,3 @@ struct det_eval<binary_expression_scalar_L<T, mul, Tensor_Core<d1>, unary_expres
 }
 
 #endif /* EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_ */
-#endif

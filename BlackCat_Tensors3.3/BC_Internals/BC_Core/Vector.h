@@ -10,7 +10,6 @@
 
 #include "Scalar.h"
 #include "TensorBase.h"
-#include <type_traits>
 
 namespace BC {
 template<class T, class Mathlib>

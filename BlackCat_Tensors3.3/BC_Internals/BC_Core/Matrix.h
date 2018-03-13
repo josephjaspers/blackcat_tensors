@@ -11,7 +11,6 @@
 #include "Vector.h"
 #include "TensorBase.h"
 
-
 namespace BC {
 template<class T, class Mathlib>
 class Matrix : public TensorBase<Matrix<T, Mathlib>> {

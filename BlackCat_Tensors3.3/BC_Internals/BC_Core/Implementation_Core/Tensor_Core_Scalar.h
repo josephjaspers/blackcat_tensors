@@ -17,8 +17,6 @@
 
 namespace BC {
 
-#define __BC_gcpu__ __host__ __device__
-
 template<class PARENT>
 	struct Tensor_Scalar {
 

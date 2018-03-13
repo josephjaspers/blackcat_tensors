@@ -9,7 +9,6 @@
 #define DEFAULTS_H_
 
 #include "BlackCat_Tensors.h"
-#include "BlackCat_TensorFunctions.cu"
 namespace BC {
 
 /*

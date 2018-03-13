@@ -1,207 +1,47 @@
-22:10:25 **** Build of configuration Release for project BlackCat_Tensors3.3 ****
+21:24:07 **** Incremental Build of configuration Release for project BlackCat_NeuralNetworks3.3 ****
 make all 
-Building file: ../UnitTests/main.cu
+Building file: ../UnitTests/MNIST_test.cu
 Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-../UnitTests/main.cu: In function ‘auto test()’:
-../UnitTests/main.cu:39:1: error: ‘__T0’ has not been declared
-  decltype(a + b)::RANK();
- ^~~~
-UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
-make: *** [UnitTests/main.o] Error 1
-22:10:41 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-../UnitTests/main.cu: In function ‘auto test()’:
-../UnitTests/main.cu:40:1: error: ‘__T0’ has not been declared
-  decltype(a + b)::RANK();
- ^~~~
-make: *** [UnitTests/main.o] Error 1
-UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
-22:11:02 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-Finished building: ../UnitTests/main.cu
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+Finished building: ../UnitTests/MNIST_test.cu
  
-Building file: ../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu
+Building file: ../UnitTests/MNIST_testMT.cu
 Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_MathLibraries" -M -o "BC_Internals/BC_MathLibraries/Mathematics_GPU.d" "../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_MathLibraries/Mathematics_GPU.o" "../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu"
-Finished building: ../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_testMT.d" "../UnitTests/MNIST_testMT.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -include /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h -O3 -Xcompiler -ftemplate-depth=10000 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_testMT.o" "../UnitTests/MNIST_testMT.cu"
+Finished building: ../UnitTests/MNIST_testMT.cu
  
-Building file: ../BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_MathLibraries" -M -o "BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.d" "../BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o" "../BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.cu"
-Finished building: ../BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.cu
- 
-Building target: BlackCat_Tensors3.3
+Building target: BlackCat_NeuralNetworks3.3
 Invoking: NVCC Linker
-/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/main.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o   -lcblas -lf77blas -lcublas -lgomp
-Finished building target: BlackCat_Tensors3.3
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o ./UnitTests/MNIST_testMT.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lgomp -lcblas -lf77blas -lcublas
+Finished building target: BlackCat_NeuralNetworks3.3
  
-22:11:25 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+21:24:17 **** Incremental Build of configuration Debug for project BlackCat_NeuralNetworks3.3 ****
 make all 
-Building file: ../UnitTests/main.cu
+Building file: ../UnitTests/MNIST_test.cu
 Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-../UnitTests/../BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.h(22): error: expression preceding parentheses of apparent call must have (pointer-to-) function type
-          detected during:
-            instantiation of "int BC::unary_expression_transpose<T, functor_type>::RANK() [with T=float, functor_type=BC::_functor<BC::Matrix<float, ml>>]" 
-(24): here
-            instantiation of "BC::unary_expression_transpose<T, functor_type>::unary_expression_transpose(functor_type) [with T=float, functor_type=BC::_functor<BC::Matrix<float, ml>>]" 
-../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h(33): here
-            instantiation of "BC::TensorInitializer<derived, expression_tensor>::TensorInitializer(const params &...) [with derived=BC::Matrix<BC::unary_expression_transpose<float, BC::_functor<BC::Matrix<float, ml>>>, ml>, expression_tensor=void, params=<BC::_functor<BC::Matrix<float, ml>>>]" 
-../UnitTests/../BC_Internals/BC_Core/TensorBase.h(50): here
-            instantiation of "BC::TensorBase<derived>::TensorBase(const params &...) [with derived=BC::Matrix<BC::unary_expression_transpose<float, BC::_functor<BC::Matrix<float, ml>>>, ml>, params=<BC::_functor<BC::Matrix<float, ml>>>]" 
-../UnitTests/../BC_Internals/BC_Core/Matrix.h(39): here
-            instantiation of "BC::Matrix<T, Mathlib>::Matrix(const params &...) [with T=BC::unary_expression_transpose<float, BC::_functor<BC::Matrix<float, ml>>>, Mathlib=ml, params=<BC::_functor<BC::Matrix<float, ml>>>]" 
-../UnitTests/../BC_Internals/BC_Core/Matrix.h(48): here
-            instantiation of "const BC::Matrix<BC::unary_expression_transpose<BC::MTF::determine_scalar<T>::type, BC::TensorBase<BC::Matrix<T, Mathlib>>::functor_type>, Mathlib> BC::Matrix<T, Mathlib>::t() const [with T=float, Mathlib=ml]" 
-../UnitTests/main.cu(40): here
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/MNIST_test.d" "../UnitTests/MNIST_test.cu"
+/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -G -g -O0 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/MNIST_test.o" "../UnitTests/MNIST_test.cu"
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.h(73): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
 
-1 error detected in the compilation of "/tmp/tmpxft_0000303d_00000000-6_main.cpp1.ii".
-UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
-make: *** [UnitTests/main.o] Error 1
-22:12:02 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-../UnitTests/../BC_Internals/BC_Expressions/Expression_Unary_MatrixTransposition.h(25): error: expression preceding parentheses of apparent call must have (pointer-to-) function type
-          detected during:
-            instantiation of "int BC::unary_expression_transpose<T, functor_type>::RANK() [with T=float, functor_type=BC::_functor<BC::Matrix<float, ml>>]" 
-(27): here
-            instantiation of "BC::unary_expression_transpose<T, functor_type>::unary_expression_transpose(functor_type) [with T=float, functor_type=BC::_functor<BC::Matrix<float, ml>>]" 
-../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h(33): here
-            instantiation of "BC::TensorInitializer<derived, expression_tensor>::TensorInitializer(const params &...) [with derived=BC::Matrix<BC::unary_expression_transpose<float, BC::_functor<BC::Matrix<float, ml>>>, ml>, expression_tensor=void, params=<BC::_functor<BC::Matrix<float, ml>>>]" 
-../UnitTests/../BC_Internals/BC_Core/TensorBase.h(50): here
-            instantiation of "BC::TensorBase<derived>::TensorBase(const params &...) [with derived=BC::Matrix<BC::unary_expression_transpose<float, BC::_functor<BC::Matrix<float, ml>>>, ml>, params=<BC::_functor<BC::Matrix<float, ml>>>]" 
-../UnitTests/../BC_Internals/BC_Core/Matrix.h(39): here
-            instantiation of "BC::Matrix<T, Mathlib>::Matrix(const params &...) [with T=BC::unary_expression_transpose<float, BC::_functor<BC::Matrix<float, ml>>>, Mathlib=ml, params=<BC::_functor<BC::Matrix<float, ml>>>]" 
-../UnitTests/../BC_Internals/BC_Core/Matrix.h(48): here
-            instantiation of "const BC::Matrix<BC::unary_expression_transpose<BC::MTF::determine_scalar<T>::type, BC::TensorBase<BC::Matrix<T, Mathlib>>::functor_type>, Mathlib> BC::Matrix<T, Mathlib>::t() const [with T=float, Mathlib=ml]" 
-../UnitTests/main.cu(40): here
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.h(73): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::unary_expression<double,  ::BC::NN_Functions::Sigmoid,  ::BC::binary_expression<double,  ::BC::add,  ::BC::binary_expression_dotproduct<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
 
-1 error detected in the compilation of "/tmp/tmpxft_00003090_00000000-6_main.cpp1.ii".
-UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
-make: *** [UnitTests/main.o] Error 1
-22:12:14 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-Finished building: ../UnitTests/main.cu
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.h(73): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::binary_expression<double,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.h(73): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > > ,  ::BC::binary_expression<double,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.h(73): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::mul,  ::BC::binary_expression_dotproduct<double,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > > ,  ::BC::binary_expression<double,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ,  ::BC::unary_expression<double,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > > > ,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Dotproduct.h(73): warning: calling a __host__ function("std::shared_ptr<double> ::shared_ptr") from a __host__ __device__ function("BC::binary_expression_dotproduct<double,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > > ,  ::BC::binary_expression<double,  ::BC::assign,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::binary_expression<double,  ::BC::mul,  ::BC::binary_expression_dotproduct<double,  ::BC::unary_expression_transpose<double,  ::BC::Tensor_Core< ::BC::Matrix<double,  ::BC::CPU> > > ,  ::BC::binary_expression<double,  ::BC::sub,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > ,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > ,  ::BC::CPU> ,  ::BC::unary_expression<double,  ::BC::NN_Functions::CachedSigmoidDeriv,  ::BC::Tensor_Core< ::BC::Vector<double,  ::BC::CPU> > > > > ,  ::BC::CPU> ::binary_expression_dotproduct") is not allowed
+
+Finished building: ../UnitTests/MNIST_test.cu
  
-Building target: BlackCat_Tensors3.3
+Building target: BlackCat_NeuralNetworks3.3
 Invoking: NVCC Linker
-/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/main.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o   -lcblas -lf77blas -lcublas -lgomp
-Finished building target: BlackCat_Tensors3.3
+/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/local/cuda-9.1/bin -L/usr/local/cuda/include -L/usr/local/include/atlas-base --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3"  ./UnitTests/MNIST_test.o ./UnitTests/MNIST_testMT.o  ./NN_Core/Deprecated/Copy\ of\ MNIST_alternatetest.o   -lcblas -lf77blas -lcublas -lgomp
+Finished building target: BlackCat_NeuralNetworks3.3
  
-22:12:25 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-make: Nothing to be done for 'all'.
-22:13:17 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-Finished building: ../UnitTests/main.cu
- 
-Building target: BlackCat_Tensors3.3
-Invoking: NVCC Linker
-/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/main.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o   -lcblas -lf77blas -lcublas -lgomp
-Finished building target: BlackCat_Tensors3.3
- 
-09:02:21 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-Building target: BlackCat_Tensors3.3
-Invoking: NVCC Linker
-/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/main.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o   -lcblas -lf77blas -lcublas -lgomp
-Finished building target: BlackCat_Tensors3.3
- 
-09:14:00 **** Clean-only build of configuration Release for project BlackCat_Tensors3.3 ****
-make clean 
-rm -rf  ./UnitTests/main.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o  ./UnitTests/main.d  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.d ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.d  BlackCat_Tensors3.3
- 
-09:14:03 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-In file included from ../UnitTests/main.cu:4:0:
-../UnitTests/SpeedTests.h:7:39: fatal error: BlackCat_TensorFunctions.cu: No such file or directory
-UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
- #include "BlackCat_TensorFunctions.cu"
-                                       ^
-compilation terminated.
-make: *** [UnitTests/main.o] Error 1
-16:58:27 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-In file included from ../UnitTests/main.cu:4:0:
-../UnitTests/SpeedTests.h:7:39: fatal error: BlackCat_TensorFunctions.cu: No such file or directory
-UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
- #include "BlackCat_TensorFunctions.cu"
-                                       ^
-compilation terminated.
-make: *** [UnitTests/main.o] Error 1
-16:58:50 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-In file included from ../UnitTests/main.cu:2:0:
-../UnitTests/../BlackCat_Tensors.h:15:38: fatal error: Extensions/NN_Functions.cu: No such file or directory
- #include "Extensions/NN_Functions.cu"
-                                      ^
-compilation terminated.
-make: *** [UnitTests/main.o] Error 1
-UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
-16:58:54 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-Building file: ../UnitTests/main.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "UnitTests/main.d" "../UnitTests/main.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "UnitTests/main.o" "../UnitTests/main.cu"
-Finished building: ../UnitTests/main.cu
- 
-Building file: ../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_MathLibraries" -M -o "BC_Internals/BC_MathLibraries/Mathematics_GPU.d" "../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_MathLibraries/Mathematics_GPU.o" "../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu"
-Finished building: ../BC_Internals/BC_MathLibraries/Mathematics_GPU.cu
- 
-Building file: ../BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.cu
-Invoking: NVCC Compiler
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp -gencode arch=compute_52,code=sm_52  -odir "BC_Internals/BC_MathLibraries" -M -o "BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.d" "../BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.cu"
-/usr/local/cuda-9.1/bin/nvcc -I/usr/local/cuda-9.1/bin -I/usr/local/cuda/include -I/usr/local/include/atlas-base -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions -O3 -Xcompiler -fopenmp --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o" "../BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.cu"
-Finished building: ../BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.cu
- 
-Building target: BlackCat_Tensors3.3
-Invoking: NVCC Linker
-/usr/local/cuda-9.1/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/usr/local/cuda/include -L/usr/local/cuda-9.1/bin --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_Tensors3.3"  ./UnitTests/main.o  ./BC_Internals/BC_MathLibraries/Mathematics_GPU.o ./BC_Internals/BC_MathLibraries/Mathematics_GPU_impl.o   -lcblas -lf77blas -lcublas -lgomp
-Finished building target: BlackCat_Tensors3.3
- 
-16:59:03 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-make: Nothing to be done for 'all'.
-16:59:05 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
-make all 
-make: Nothing to be done for 'all'.
-16:59:11 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+21:24:39 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
 make all 
 make: Nothing to be done for 'all'.
