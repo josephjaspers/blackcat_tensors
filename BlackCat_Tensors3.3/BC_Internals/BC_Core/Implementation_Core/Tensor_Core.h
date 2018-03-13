@@ -10,6 +10,7 @@
 #ifndef SHAPE_H_
 #define SHAPE_H_
 
+#include "BC_Expressions/Expression_Base.h"
 #include "Tensor_Core_Slice.h"
 #include "../../BC_MathLibraries/Mathematics_CPU.h"
 

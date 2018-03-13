@@ -25,11 +25,10 @@ public:
 	using parent_class::operator[];
 	using parent_class::operator();
 
-	Vector() {}
 	Vector(const Vector&& t) : parent_class(t) 		{}
 	Vector(		 Vector&& t) : parent_class(t) 		{}
 	Vector(const Vector&  t) : parent_class(t) 		{}
-	Vector(int dim) 		 : parent_class(std::vector<int> {dim})  {}
+	explicit Vector(int dim) 		 : parent_class(std::vector<int> {dim})  {}
 
 	template<class U> 		  Vector(const Vector<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Vector(	   Vector<U, Mathlib>&& t) : parent_class(t) {}

@@ -15,10 +15,6 @@
 #include "Implementation_Core/Tensor_Initializer.h"
 #include "Implementation_Core/Determiners.h"
 
-#include "../BC_Expressions/Expression_Unary_MatrixTransposition.h"
-
-
-
 namespace BC {
 template<class,class> class Scalar;
 
@@ -45,14 +41,14 @@ protected:
 
 	static constexpr int RANK 		= ranker<derived>::type::inner_rank;
 	static constexpr int LD_RANK 	= ranker<derived>::type::outer_rank;
-	static constexpr bool GENUINE_TENSOR =isPrim<_fscal<derived>> || isCore<_functor<derived>>::conditional;
+	static constexpr bool GENUINE_TENSOR = isCore<_functor<derived>>::conditional;
 
 //	functor_type black_cat_array;
 
 public:
 	using math_parent::operator=;
 	template<class... params>
-	TensorBase(const params&... p) : initializer(p...) {}
+	explicit TensorBase(const params&... p) : initializer(p...) {}
 
 	operator const derived& () const { return static_cast<const derived&>(*this); }
 	operator	   derived& () 		 { return static_cast< derived&>(*this); }
@@ -60,6 +56,10 @@ public:
 	derived& operator =(const derived& tensor) {
 		this->assert_same_size(tensor);
 		Mathlib::copy(this->data(), tensor.data(), this->size());
+		return *this;
+	}
+	derived& operator =(_scalar<derived> scalar) {
+		this->fill(scalar);
 		return *this;
 	}
 
@@ -82,19 +82,24 @@ public:
 	const functor_type& _data() const { return this->black_cat_array; }
 		  functor_type& _data()		  { return this->black_cat_array; }
 
+private:
 	const auto slice(int i) const { return this->black_cat_array.slice(i); }
 		  auto slice(int i) 	  { return this->black_cat_array.slice(i); }
 
+	const auto scalar_bit(int i) const { return Tensor_Scalar<functor_type>(&this->data()[i], this->data()); }
+		  auto scalar_bit(int i)	   { return Tensor_Scalar<functor_type>(&this->data()[i], this->data()); }
+
+public:
 		  auto operator [] (int i) 		 { return typename base<RANK>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
 	const auto operator [] (int i) const { return typename base<RANK>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
 
 
 	const auto getScalar(int i) const {
-		return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(&this->data()[i], this->data());
+		return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar_bit(i));
 	}
-	auto getScalar(int i) {
 
-		return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(&this->data()[i], this->data());
+	auto getScalar(int i) {
+		return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar_bit(i));
 	}
 
 	const auto operator() (int i) const { return getScalar(i); }

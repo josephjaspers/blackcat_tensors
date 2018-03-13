@@ -31,7 +31,7 @@ public:
 	Matrix(const Matrix&  v) : parent_class(v) {}
 	Matrix(		 Matrix&& v) : parent_class(v) {}
 	Matrix(const Matrix&& v) : parent_class(v) {}
-	Matrix(int rows, int cols = 1) : parent_class(std::vector<int> {rows, cols}) {}
+	explicit Matrix(int rows, int cols = 1) : parent_class(std::vector<int> {rows, cols}) {}
 
 	template<class U> 		  Matrix(const Matrix<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Matrix(	   Matrix<U, Mathlib>&& t) : parent_class(t) {}

@@ -13,7 +13,10 @@
 #include "Tensor_Core_Scalar.h"
 #include "Determiners.h"
 
-#include "../../BC_Expressions/Expression_Unary_MatrixTransposition.h"
+#include "BC_Expressions/Expression_Binary_Dotproduct.h"
+#include "BC_Expressions/Expression_Unary_MatrixTransposition.h"
+#include "BC_Expressions/Expression_Binary_Pointwise.h"
+#include "BC_Expressions/Expression_Binary_Pointwise_Scalar.h"
 
 namespace BC {
 
@@ -35,7 +38,7 @@ public:
 	TensorInitializer(const  derived&  tensor) : black_cat_array(tensor.black_cat_array){}
 
 	template<class... params>
-	TensorInitializer(const  params&... p) : black_cat_array(p...) {}
+	explicit TensorInitializer(const  params&... p) : black_cat_array(p...) {}
 };
 //-------------------------------------SPECIALIZATION FOR TENSORS THAT CONTROL / DELETE THEIR ARRAY-------------------------------------//
 template<template<class, class> class _tensor, class t, class ml>

@@ -10,9 +10,9 @@
 
 #include "../../BC_MetaTemplateFunctions/Simple.h"
 #include "../../BC_MetaTemplateFunctions/Adhoc.h"
-#include "../../BC_Expressions/Expression_Binary_Pointwise.h"
-#include "../../BC_Expressions/Expression_Unary_Pointwise.h"
-#include "../../BC_Expressions/Expression_Unary_MatrixTransposition.h"
+#include "BC_Expressions/Expression_Binary_Pointwise.h"
+#include "BC_Expressions/Expression_Unary_Pointwise.h"
+#include "BC_Expressions/Expression_Unary_MatrixTransposition.h"
 
 #include "Determiners.h"
 #include <type_traits>

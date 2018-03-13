@@ -26,7 +26,7 @@
  *
  *
  */
-#include "BC_Expressions/BlackCat_Internal_Definitions.h"
+//#include "BC_Expressions/BlackCat_Internal_Definitions.h"
 #include "BlackCat_ForwardDecls.h"
 //Math libraries
 #include "BC_MathLibraries/Mathematics_CPU.h"
@@ -35,13 +35,13 @@
 #include "BC_MathLibraries/Mathematics_GPU_impl.cu"
 #include "BlackCat_ForwardDecls.h"
 //Expressions
-#include "BC_Expressions/Expression_Base.h"
-#include "BC_Expressions/Expression_Binary_Dotproduct.h"
-#include "BC_Expressions/Expression_Binary_Dotproduct_impl.h"
-#include "BC_Expressions/Expression_Unary_MatrixTransposition.h"
-#include "BC_Expressions/Expression_Binary_Functors.h"
-#include "BC_Expressions/Expression_Binary_Pointwise_Scalar.h"
-#include "BC_Expressions/Expression_Binary_Pointwise.h"
+//#include "BC_Expressions/Expression_Base.h"
+//#include "BC_Expressions/Expression_Binary_Dotproduct.h"
+//#include "BC_Expressions/Expression_Binary_Dotproduct_impl.h"
+//#include "BC_Expressions/Expression_Unary_MatrixTransposition.h"
+//#include "BC_Expressions/Expression_Binary_Functors.h"
+//#include "BC_Expressions/Expression_Binary_Pointwise_Scalar.h"
+//#include "BC_Expressions/Expression_Binary_Pointwise.h"
 //Meta-templates Functions
 #include "BC_MetaTemplateFunctions/Simple.h"
 #include "BC_MetaTemplateFunctions/Adhoc.h"

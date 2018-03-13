@@ -8,10 +8,7 @@
 #ifndef TENSOR_SLICE_CU_
 #define TENSOR_SLICE_CU_
 
-#include <vector>
-#include "../../BC_MetaTemplateFunctions/Adhoc.h"
-#include "../../BC_Expressions/BlackCat_Internal_Definitions.h"
-#include "../../BC_Expressions/Expression_Base.h"
+#include "BC_Expressions/Expression_Base.h"
 #include "Determiners.h"
 #include <iostream>
 #include "Tensor_Core_Scalar.h"

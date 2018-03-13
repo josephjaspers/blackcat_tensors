@@ -41,7 +41,7 @@ public:
 	}
 };
 template<class deriv>
-struct Tensor_Utility<deriv, typename std::enable_if_t< isPrim<_fscal<deriv>> || isCore<_functor<deriv>>::conditional>> {
+struct Tensor_Utility<deriv, typename std::enable_if_t<isCore<_functor<deriv>>::conditional>> {
 
 		using scalar_type = _scalar<deriv>;
 		using MATHLIB = _mathlib<deriv>;
