@@ -1,6 +1,8 @@
 Last Updated: March 15, 2018
 Author: Joseph Jaspers
 
+**Linewrap may obscure format, (use README.txt link if viewing in browser)**
+
 BlackCat_Tensors (BCT) is a highly optimized Matrix library designed for NeuralNetworks.
 
 
