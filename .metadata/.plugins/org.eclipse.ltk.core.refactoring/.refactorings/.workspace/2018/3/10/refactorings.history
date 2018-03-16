@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Delete resource &apos;BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Iterator.h&apos;" deleteContents="false" description="Delete resource &apos;BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Iterator.h&apos;" element1="/BlackCat_Tensors3.3/BC_Internals/BC_Expressions/Expression_Binary_Iterator.h" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1520210389359"/>
-</session>

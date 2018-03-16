@@ -1,6 +1,0 @@
-14:07:46 **** Build of configuration Debug_new for project BlackCat_NeuralNetworks ****
-make all 
-make: *** No rule to make target '/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Core/Implementation_Core/Tensor_Operations_impl.h', needed by 'UnitTests/MNIST_test.o'.  Stop.
-
-14:07:46 Build Finished (took 493ms)
-

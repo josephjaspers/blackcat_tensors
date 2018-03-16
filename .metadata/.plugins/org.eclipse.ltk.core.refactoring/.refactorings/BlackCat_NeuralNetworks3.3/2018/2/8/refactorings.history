@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;BlackCat_NeuralNetworks3.3/NN_Core/BlackCat_Tuple.cu&apos; to &apos;LayerChain.cu&apos;" description="Rename resource &apos;BlackCat_Tuple.cu&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="NN_Core/BlackCat_Tuple.cu" name="LayerChain.cu" stamp="1519341398797" updateReferences="true"/>
-</session>
