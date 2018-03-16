@@ -9,7 +9,7 @@ Current Work:
 	Focused on adding convolution/correlation kernel for ConvNets. 
 
 Intallation/Setup:
-	BCT is a header only library that supports compilation with the NVCC and G++ (stable with G++ 6 and 7)
+	BCT is a header only library that supports compilation with the NVCC and G++ (stable with G++ 6 and 7 || and NVCC CUDA 9)
 	Setting simply requires adding the BlackCat_Tensors3.3 folder to your path and including "BlackCat_Tensors.h"
 
 	The namespace used is 'BC'
@@ -81,34 +81,31 @@ SIZE = [512][512]    Reps = 100         BLACKCAT_TENSORS_TIME:  0.058634        
 
 BENCHMARKING - 03 OPTIMIZATIONS, WITH OPENMP
 Benchmarking: a = b + c * 3 * d - e 
-SIZE = [4][4]        Reps = 100000      BLACKCAT_TENSORS_TIME:  0.031624        EIGEN TIME: 0.016736                    Eigen better by 0.014888
-SIZE = [8][8]        Reps = 100000      BLACKCAT_TENSORS_TIME:  0.050092        EIGEN TIME: 0.040403                    Eigen better by 0.009689
-SIZE = [16][16]      Reps = 10000       BLACKCAT_TENSORS_TIME:  0.020177        EIGEN TIME: 0.017348                    Eigen better by 0.002829
-SIZE = [64][64]      Reps = 10000       BLACKCAT_TENSORS_TIME:  0.541889        EIGEN TIME: 0.343337                    Eigen better by 0.198552
-SIZE = [128][128]    Reps = 1000        BLACKCAT_TENSORS_TIME:  0.418615        EIGEN TIME: 0.281595                    Eigen better by 0.137019
-SIZE = [256][256]    Reps = 1000        BLACKCAT_TENSORS_TIME:  2.927418        EIGEN TIME: 2.181689                    Eigen better by 0.745729
-SIZE = [512][512]    Reps = 100         BLACKCAT_TENSORS_TIME:  2.141044        EIGEN TIME: 1.550337                    Eigen better by 0.590707
+SIZE = [4][4]        Reps = 100000      BLACKCAT_TENSORS_TIME:  0.031624	EIGEN TIME: 0.016736	Eigen better by 0.014888
+SIZE = [8][8]        Reps = 100000      BLACKCAT_TENSORS_TIME:  0.050092	EIGEN TIME: 0.040403	Eigen better by 0.009689
+SIZE = [16][16]      Reps = 10000       BLACKCAT_TENSORS_TIME:  0.020177	EIGEN TIME: 0.017348	Eigen better by 0.002829
+SIZE = [64][64]      Reps = 10000       BLACKCAT_TENSORS_TIME:  0.541889	EIGEN TIME: 0.343337	Eigen better by 0.198552
+SIZE = [128][128]    Reps = 1000        BLACKCAT_TENSORS_TIME:  0.418615	EIGEN TIME: 0.281595	Eigen better by 0.137019
+SIZE = [256][256]    Reps = 1000        BLACKCAT_TENSORS_TIME:  2.927418	EIGEN TIME: 2.181689	Eigen better by 0.745729
+SIZE = [512][512]    Reps = 100         BLACKCAT_TENSORS_TIME:  2.141044	EIGEN TIME: 1.550337	Eigen better by 0.590707
 Benchmarking: a = b + c + d + e
-SIZE = [4][4]        Reps = 100000      BLACKCAT_TENSORS_TIME:  0.005111        EIGEN TIME: 0.002886                    Eigen better by 0.002226
-SIZE = [8][8]        Reps = 100000      BLACKCAT_TENSORS_TIME:  0.005168        EIGEN TIME: 0.000525                    Eigen better by 0.004643
-SIZE = [16][16]      Reps = 10000       BLACKCAT_TENSORS_TIME:  -0.000004       EIGEN TIME: -0.001399                   Eigen better by 0.001395
-SIZE = [64][64]      Reps = 10000       BLACKCAT_TENSORS_TIME:  0.022954        EIGEN TIME: 0.027806                    Blackcat_Tensors better_by 0.004852
-SIZE = [128][128]    Reps = 1000        BLACKCAT_TENSORS_TIME:  0.005003        EIGEN TIME: 0.012548                    Blackcat_Tensors better_by 0.007545
-SIZE = [256][256]    Reps = 1000        BLACKCAT_TENSORS_TIME:  0.036842        EIGEN TIME: 0.063661                    Blackcat_Tensors better_by 0.026819
-SIZE = [512][512]    Reps = 100         BLACKCAT_TENSORS_TIME:  0.050181        EIGEN TIME: 0.063029                    Blackcat_Tensors better_by 0.012848
+SIZE = [4][4]        Reps = 100000      BLACKCAT_TENSORS_TIME:  0.005111	EIGEN TIME: 0.002886	Eigen better by 0.002226
+SIZE = [8][8]        Reps = 100000      BLACKCAT_TENSORS_TIME:  0.005168	EIGEN TIME: 0.000525	Eigen better by 0.004643
+SIZE = [16][16]      Reps = 10000       BLACKCAT_TENSORS_TIME:  -0.000004	EIGEN TIME: -0.001399	Eigen better by 0.001395
+SIZE = [64][64]      Reps = 10000       BLACKCAT_TENSORS_TIME:  0.022954	EIGEN TIME: 0.027806	Blackcat_Tensors better_by 0.004852
+SIZE = [128][128]    Reps = 1000        BLACKCAT_TENSORS_TIME:  0.005003	EIGEN TIME: 0.012548	Blackcat_Tensors better_by 0.007545
+SIZE = [256][256]    Reps = 1000        BLACKCAT_TENSORS_TIME:  0.036842    EIGEN TIME: 0.063661	Blackcat_Tensors better_by 0.026819
+SIZE = [512][512]    Reps = 100         BLACKCAT_TENSORS_TIME:  0.050181	EIGEN TIME: 0.063029	Blackcat_Tensors better_by 0.012848
  success  main
 
-** shortcomings of Benchmark2 //Standard non-multithreaded cblas_dgemm was used for BC_Tensors (multithreaded benchmark), benchmark withopen BLAS later
-
+Notes:
+	Benchmark 2 used ATLAS dgemm (no multithreading) performance should be comparable or better with apropriate benchmark
+	Benchmark to be added in future 
+	If these benchmarks seem misleading/incorrect please post an issue, and I will review accordingly.
 -------------------------------------------------------------------------------------------------------
-***IF THESE BENCHMARKS SEEM INADEQUATE OR MISLEADING PLEASE OPEN AN ISSUE ON GITHUB WITH SPECIFIC INFORMATION ON HOW (and I will attempt to adjust accordingly)***
 
+Methods:
 
-
--------------------------------------------------------------------------------------------------------
-Methods-Methods-Methods-Methods-Methods-Methods-Methods-Methods-Methods-Methods-Methods-Methods-Methods
--------------------------------------------------------------------------------------------------------
-	
 DEFINED IN BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h
 
 	_tensor_& operator =  (const _tensor_&) 		//copy
