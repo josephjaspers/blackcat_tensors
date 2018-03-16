@@ -1,0 +1,91 @@
+#ifndef BC_EIGEN_BENCH
+#define BC_EIGEN_BENCH
+
+#include <Eigen/Dense>
+#include "../../BlackCat_Tensors.h"
+#include <iostream>
+#include <omp.h>
+#include "time.h"
+#include <omp.h>
+#include <vector>
+
+//using BC::Matrix;
+//using Eigen::MatrixXd;
+
+template<int SIZE, int repetitions>
+float BC_vs_Eigen_Pointiwse() {
+	const int reps = repetitions;
+
+
+	BC::Matrix<double> bc_a(SIZE,SIZE);
+	BC::Matrix<double> bc_b(SIZE,SIZE);
+	BC::Matrix<double> bc_c(SIZE,SIZE);
+	BC::Matrix<double> bc_d(SIZE,SIZE);
+	BC::Matrix<double> bc_e(SIZE,SIZE);
+
+	Eigen::MatrixXd eg_a(SIZE,SIZE);
+	Eigen::MatrixXd eg_b(SIZE,SIZE);
+	Eigen::MatrixXd eg_c(SIZE,SIZE);
+	Eigen::MatrixXd eg_d(SIZE,SIZE);
+	Eigen::MatrixXd eg_e(SIZE,SIZE);
+
+	bc_a.randomize(0, 1000);
+	bc_b.randomize(0, 1000);
+	bc_c.randomize(0, 1000);
+	bc_d.randomize(0, 1000);
+	bc_e.randomize(0, 1000);
+
+	//copy to ensure same parameters
+	for (int i = 0; i < SIZE * SIZE; ++i) {
+		eg_a(i) = bc_a.data().core()[i];
+		eg_b(i) = bc_b.data().core()[i];
+		eg_c(i) = bc_c.data().core()[i];
+		eg_d(i) = bc_d.data().core()[i];
+		eg_e(i) = bc_e.data().core()[i];
+	}
+
+	float eigen_time = omp_get_wtime();
+
+		for (int i = 0; i < reps; ++i) {
+			eg_a = eg_b - eg_c * eg_d - eg_e;
+		}
+
+		eigen_time = omp_get_wtime() - eigen_time;
+
+
+	float blackcat_time = omp_get_wtime();
+
+	for (int i = 0; i < reps; ++i) {
+		bc_a = bc_b + bc_c * bc_d - bc_e;
+	}
+	blackcat_time = omp_get_wtime() - blackcat_time;
+
+
+
+	float time_dif = (blackcat_time - eigen_time);
+	std::string winner = time_dif < 0 ? "Blackcat_Tensors better_by " : "Eigen better by ";
+	time_dif *= time_dif < 0 ? -1 : 1;
+
+	std::string info = "SIZE = " + std::to_string(SIZE*SIZE) + " Reps = " + std::to_string(repetitions);
+	std::string bc_time = "BLACKCAT_TENSORS_TIME:  " + std::to_string(blackcat_time);
+	std::string eg_time = "EIGEN TIME: " + std::to_string(eigen_time);
+
+	struct padder {
+		static void pad_string(int sz, std::string& str) {
+			if (str.length() < sz) {
+				str += std::string(sz - str.length(), ' ');
+			}
+		}
+	};
+
+	padder::pad_string(40, info);
+	padder::pad_string(40, bc_time);
+	padder::pad_string(40, eg_time);
+
+	std::cout << info << bc_time << eg_time << std::endl;
+
+
+	return 0;
+}
+#endif
+

@@ -1,0 +1,116 @@
+
+
+#include <Eigen/Dense>
+#include "../../BlackCat_Tensors.h"
+#include <iostream>
+#include <omp.h>
+#include "time.h"
+#include <omp.h>
+#include <vector>
+
+//using BC::Matrix;
+//using Eigen::MatrixXd;
+
+using namespace BC::NN_Functions;
+
+
+template<int SIZE, int repetitions>
+float PointwiseFunctionTiming() {
+	const int reps = repetitions;
+
+	using vec = Vector<float>;
+
+	BC::Matrix bc_a(SIZE);
+	BC::Matrix bc_b(SIZE);
+	BC::Matrix bc_c(SIZE);
+	BC::Matrix bc_d(SIZE);
+	BC::Matrix bc_e(SIZE);
+
+	Eigen::MatrixXd eg_a(SIZE);
+	Eigen::Matrix eg_b(SIZE);
+	Eigen::Matrix eg_c(SIZE);
+	Eigen::Matrix eg_d(SIZE);
+	Eigen::Matrix eg_e(SIZE);
+
+	bc_a.randomize(0, 100);
+	bc_b.randomize(0, 100);
+	bc_c.randomize(0, 100);
+	bc_d.randomize(0, 100);
+	bc_e.randomize(0, 100);
+
+	float t;
+
+	t = omp_get_wtime();
+
+	for (int i = 0; i < reps; ++i) {
+		a = ((e == b ** c) + d);
+	}
+	t = omp_get_wtime() - t;
+
+	std::cout <<"Lazy = " << SIZE << "    " << t << std::endl;
+
+	t = omp_get_wtime();
+
+	for (int i = 0; i < reps; ++i) {
+		a = ((e = b ** c) + d);
+	}
+
+	t = omp_get_wtime() - t;
+
+
+	std::cout <<"Inst = " << SIZE << "    " << t  << "\n" << std::endl;
+
+	return 0;
+}
+
+
+template<int SIZE, int repetitions>
+int speedTestCombine() {
+	const int reps = repetitions;
+
+	using vec = Vector<float>;
+
+	vec x(SIZE);
+	vec y(SIZE);
+	vec z(SIZE);
+
+
+	vec a(SIZE);
+	vec b(SIZE);
+	vec c(SIZE);
+	vec d(SIZE);
+	vec e(SIZE);
+	vec f(SIZE);
+	vec g(SIZE);
+	vec h(SIZE);
+	vec i(SIZE);
+
+	a.randomize(0, 100);
+	b.randomize(0, 100);
+	c.randomize(0, 100);
+	d.randomize(0, 100);
+	e.randomize(0, 100);
+	f.randomize(0, 100);
+
+	g.randomize(0, 100);
+	h.randomize(0, 100);
+	i.randomize(0, 100);
+
+	float t;
+
+	t = omp_get_wtime();
+
+	for (int iter = 0; iter < reps; ++iter) {
+		x = a + b;
+		y = e;
+	}
+
+	t = omp_get_wtime() - t;
+
+
+	std::cout <<"sz = " << SIZE << t << std::endl;
+
+	return 0;
+}
+
+

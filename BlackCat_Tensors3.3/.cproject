@@ -24,18 +24,17 @@
 							<builder buildPath="${workspace_loc:/BlackCat_Tensors}/Release" errorParsers="org.eclipse.cdt.core.GmakeErrorParser" id="com.nvidia.cuda.ide.builder.1945882457" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CUDA Toolkit 9.1 Builder" superClass="com.nvidia.cuda.ide.builder">
 								<outputEntries>
 									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Release"/>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="SLib_Debug"/>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="SLib_Release"/>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="ReleaseGCC"/>
+									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Debug"/>
 								</outputEntries>
 							</builder>
-							<tool command="nvcc -fopenmp --std=c++17 -expt-relaxed-constexpr" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX} ${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.VCErrorParser;nvcc.errorParser;org.eclipse.cdt.core.GCCErrorParser" id="nvcc.compiler.base.1648345951" name="NVCC Compiler" superClass="nvcc.compiler.base">
+							<tool command="nvcc -fopenmp --std=c++17 -expt-relaxed-constexpr -sse2f" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX} ${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.VCErrorParser;nvcc.errorParser;org.eclipse.cdt.core.GCCErrorParser" id="nvcc.compiler.base.1648345951" name="NVCC Compiler" superClass="nvcc.compiler.base">
 								<option id="nvcc.compiler.deviceDebug.799277987" name="Generate device debug information (-G)" superClass="nvcc.compiler.deviceDebug"/>
 								<option id="nvcc.compiler.option.level.1086813497" name="Generate host debug information (-g)" superClass="nvcc.compiler.option.level"/>
 								<option defaultValue="nvcc.compiler.optimization.level.most" id="nvcc.compiler.optimization.level.1338148511" name="Optimization Level" superClass="nvcc.compiler.optimization.level" valueType="enumerated"/>
 								<option id="nvcc.compiler.pic.1605214261" name="Position Independent Code (-fPIC)" superClass="nvcc.compiler.pic"/>
 								<option id="nvcc.compiler.include.paths.1330050315" name="Include paths (-I)" superClass="nvcc.compiler.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/usr/local/cuda-9.1/bin"/>
+									<listOptionValue builtIn="false" value="/home/joseph/Eigen_Source/"/>
 									<listOptionValue builtIn="false" value="/usr/local/cuda/include"/>
 									<listOptionValue builtIn="false" value="/usr/local/include/atlas-base"/>
 									<listOptionValue builtIn="false" value="/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions"/>
@@ -77,7 +76,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="BC_Internals|Header_v" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="BC_Internals|Benchmarks|Header_v" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry excluding="BC_Expressions/Header_v" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="BC_Internals"/>
 					</sourceEntries>
 				</configuration>
@@ -126,6 +125,7 @@
 								<option id="nvcc.compiler.pic.1846720565" name="Position Independent Code (-fPIC)" superClass="nvcc.compiler.pic"/>
 								<option id="nvcc.compiler.include.paths.929930117" name="Include paths (-I)" superClass="nvcc.compiler.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/usr/local/cuda-9.1/bin"/>
+									<listOptionValue builtIn="false" value="/home/joseph/Eigen_Source/Eigen/"/>
 									<listOptionValue builtIn="false" value="/usr/local/cuda/include"/>
 									<listOptionValue builtIn="false" value="/usr/local/include/atlas-base"/>
 									<listOptionValue builtIn="false" value="/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions"/>
@@ -165,8 +165,9 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="BC_Internals|Header_v" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="UnitTests/Benchmarks|Benchmarks|BC_Internals|Header_v" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry excluding="BC_Expressions/Header_v" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="BC_Internals"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="UnitTests/Benchmarks"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -185,10 +186,10 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
-		<configuration configurationName="Debug">
+		<configuration configurationName="Release">
 			<resource resourceType="PROJECT" workspacePath="/BlackCat_Tensors3.3"/>
 		</configuration>
-		<configuration configurationName="Release">
+		<configuration configurationName="Debug">
 			<resource resourceType="PROJECT" workspacePath="/BlackCat_Tensors3.3"/>
 		</configuration>
 	</storageModule>
@@ -207,10 +208,19 @@
 		<scannerConfigBuildInfo instanceId="com.nvidia.cuda.ide.nine_zero.configuration.debug.1844769558;com.nvidia.cuda.ide.nine_zero.configuration.debug.1844769558.;nvcc.compiler.base.394597320;nvcc.compiler.input.cu.350030794">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.nvidia.cuda.ide.build.NVCCPerProjectProfile"/>
 		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.nvidia.cuda.ide.nine_zero.configuration.release.923443752.847124239;com.nvidia.cuda.ide.nine_zero.configuration.release.923443752.847124239.;nvcc.compiler.base.1648345951;nvcc.compiler.input.c.66856890">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.nvidia.cuda.ide.build.NVCCPerProjectProfile"/>
+		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="com.nvidia.cuda.ide.nine_zero.configuration.release.923443752.743935826;com.nvidia.cuda.ide.nine_zero.configuration.release.923443752.743935826.;nvcc.compiler.base.133562446;nvcc.compiler.input.cu.1541840916">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.nvidia.cuda.ide.build.NVCCPerProjectProfile"/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="com.nvidia.cuda.ide.nine_zero.configuration.release.923443752.743935826;com.nvidia.cuda.ide.nine_zero.configuration.release.923443752.743935826.;nvcc.compiler.base.133562446;nvcc.compiler.input.cpp.853721611">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.nvidia.cuda.ide.build.NVCCPerProjectProfile"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.nvidia.cuda.ide.nine_zero.configuration.release.923443752.847124239;com.nvidia.cuda.ide.nine_zero.configuration.release.923443752.847124239.;nvcc.compiler.base.1648345951;nvcc.compiler.input.cu.239005022">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.nvidia.cuda.ide.build.NVCCPerProjectProfile"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.nvidia.cuda.ide.nine_zero.configuration.release.923443752.847124239;com.nvidia.cuda.ide.nine_zero.configuration.release.923443752.847124239.;nvcc.compiler.base.1648345951;nvcc.compiler.input.cpp.2118431259">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.nvidia.cuda.ide.build.NVCCPerProjectProfile"/>
 		</scannerConfigBuildInfo>
 	</storageModule>

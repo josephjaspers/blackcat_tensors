@@ -10,16 +10,14 @@
 
 #include "BC_Expressions/Expression_Base.h"
 #include "Determiners.h"
-#include <iostream>
 
 namespace BC {
 
 template<class PARENT>
-	struct Tensor_Scalar {
+struct Tensor_Scalar {
 
 	using scalar = _scalar<PARENT>;
 	using self = Tensor_Scalar<PARENT>;
-	using slice_type = Tensor_Scalar<self>;
 
 	static constexpr int RANK = lower(PARENT::RANK);
 	static constexpr int LAST =  lower(PARENT::LAST);

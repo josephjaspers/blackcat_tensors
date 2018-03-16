@@ -1,0 +1,62 @@
+/*
+ * DP_test.h
+ *
+ *  Created on: Mar 14, 2018
+ *      Author: joseph
+ */
+
+#ifndef DP_TEST_H_
+#define DP_TEST_H_
+
+#include "../BlackCat_Tensors.h"
+
+	using BC::Matrix;
+	using BC::TensorBase;
+	using BC::mul;
+
+
+struct summation_to {
+		template<class lv, class rv>
+		__BCinline__
+		auto operator () (const lv& left, const rv right) {
+			return left += right;
+		}
+	};
+
+
+namespace asdf {
+struct summation_to {
+		template<class lv, class rv>
+		__BCinline__
+		auto operator () (const lv& left, const rv right) {
+			return left += right;
+		}
+	};
+}
+
+
+template<class T, class U>
+auto axpy(const TensorBase<T>& to, const TensorBase<T>& A, const TensorBase<U>& B) {
+	return to.binExpr<mul>(A + B);
+}
+
+
+template<class T, class functor>
+auto dotproduct_impl(const Matrix<T>& out, const Matrix<T> m1, const Matrix<T> m2, int o, int r, int c) {
+
+	if (c + 1 < m2.cols()) {
+		return axpy(out(o), m1.row(r), m2[c]) && tp_helper(out, m1, m2, o + 1, r, c + 1);
+	} else {
+		return  tp_helper(out, m1, m2, o + 1, r + 1, 0);
+	}
+}
+
+template<class T>
+auto dotproduct(const BC::Matrix<T> m1, const BC::Matrix<T> m2) {
+	Matrix<T> eval(m1.rows(), m2.cols());
+
+
+}
+
+
+#endif /* DP_TEST_H_ */

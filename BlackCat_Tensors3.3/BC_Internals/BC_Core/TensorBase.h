@@ -27,23 +27,13 @@ class TensorBase :
 
 protected:
 
-	template<class> struct DISABLED;
-
 	using self 			= TensorBase<derived>;
 	using math_parent  	= Tensor_Operations<derived>;
 	using initializer 	= TensorInitializer<derived>;
 	using functor_type 	= _functor<derived>;
 	using Mathlib 		= _mathlib<derived>;
-	using scal			= _scalar<derived>;
-
-	template<class    U> using deriv   = typename shell_of<derived>::template type<U, Mathlib>;
-	template<class... U> using functor = typename shell_of<functor_type>::template type<U...>;
 
 	static constexpr int RANK 		= ranker<derived>::type::inner_rank;
-	static constexpr int LD_RANK 	= ranker<derived>::type::outer_rank;
-	static constexpr bool GENUINE_TENSOR = isCore<_functor<derived>>::conditional;
-
-//	functor_type black_cat_array;
 
 public:
 	using math_parent::operator=;
@@ -79,28 +69,38 @@ public:
 	const auto outerShape() const 			{ return this->black_cat_array.outerShape(); }
 
 
-	const functor_type& _data() const { return this->black_cat_array; }
-		  functor_type& _data()		  { return this->black_cat_array; }
+	__BCinline__ const functor_type& _data() const { return this->black_cat_array; }
+	__BCinline__ 	   functor_type& _data()		  { return this->black_cat_array; }
 
 private:
 	const auto slice(int i) const { return this->black_cat_array.slice(i); }
 		  auto slice(int i) 	  { return this->black_cat_array.slice(i); }
 
-	const auto scalar_bit(int i) const { return Tensor_Scalar<functor_type>(&this->data()[i], this->data()); }
-		  auto scalar_bit(int i)	   { return Tensor_Scalar<functor_type>(&this->data()[i], this->data()); }
+	const auto scalar(int i) const { return this->black_cat_array.scalar(i); }
+		  auto scalar(int i)	   { return this->black_cat_array.scalar(i); }
+
+	const auto row_(int i) const { return this->black_cat_array.row(i); }
+		  auto row_(int i)	     { return this->black_cat_array.row(i); }
 
 public:
-		  auto operator [] (int i) 		 { return typename base<RANK>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
-	const auto operator [] (int i) const { return typename base<RANK>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
+		  auto operator [] (int i) 		 { return getSlice(i); }
+	const auto operator [] (int i) const { return getSlice(i); }
 
+	const auto getScalar(int i) const { return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar(i)); }
+		  auto getScalar(int i) { return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar(i)); }
 
-	const auto getScalar(int i) const {
-		return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar_bit(i));
+	const auto getSlice(int i) const { return typename base<RANK>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
+		  auto getSlice(int i) { return typename base<RANK>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
+
+	const auto row(int i) const {
+			static_assert(RANK == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+			return typename base<1>::template type<decltype(row_(0)), Mathlib>(row_(i));
+	}
+		  auto row(int i) {
+			static_assert(RANK == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		  	return typename base<1>::template type<decltype(row_(0)), Mathlib>(row_(i));
 	}
 
-	auto getScalar(int i) {
-		return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar_bit(i));
-	}
 
 	const auto operator() (int i) const { return getScalar(i); }
 		  auto operator() (int i) 	    { return getScalar(i); }

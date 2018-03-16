@@ -12,6 +12,8 @@
 
 #include "BC_Expressions/Expression_Base.h"
 #include "Tensor_Core_Slice.h"
+#include "Tensor_Core_Scalar.h"
+#include "Tensor_Core_RowVector.h"
 #include "../../BC_MathLibraries/Mathematics_CPU.h"
 
 #include "Determiners.h"
@@ -25,15 +27,15 @@ template<class T> struct Tensor_Core {
 
 	using self = Tensor_Core<T>;
 	using dimlist = std::vector<int>;
-	using scalar = _scalar<T>;
+	using scalar_type = _scalar<T>;
 	using Mathlib = _mathlib<T>;
 
-	scalar* array;
+	scalar_type* array;
 	int* is = Mathlib::unified_initialize(is, RANK);
 	int* os = Mathlib::unified_initialize(os, RANK);
 
-	operator 	   scalar*()       { return array; }
-	operator const scalar*() const { return array; }
+	operator 	   scalar_type*()       { return array; }
+	operator const scalar_type*() const { return array; }
 
 	Tensor_Core() {
 		static_assert(RANK == 0, "DEFAULT CONSTRUCTOR FOR TENSOR_CORE ONLY AVAILABLE FOR RANK == 0 (SCALAR)");
@@ -75,8 +77,8 @@ template<class T> struct Tensor_Core {
 	__BCinline__ int LD_rows() const { return RANK > 0 ? os[0] : 1; }
 	__BCinline__ int LD_cols() const { return RANK > 1 ? os[1] : 1; }
 	__BCinline__ int LDdimension(int i) const { return RANK > i + 1 ? os[i] : 1; }
-	__BCinline__	      scalar& operator [] (int index) 		{ return RANK == 0 ? array[0] : array[index]; };
-	__BCinline__	const scalar& operator [] (int index) const { return RANK == 0 ? array[0] : array[index]; };
+	__BCinline__	   scalar_type& operator [] (int index) 	  { return RANK == 0 ? array[0] : array[index]; };
+	__BCinline__ const scalar_type& operator [] (int index) const { return RANK == 0 ? array[0] : array[index]; };
 
 	__BCinline__ const auto innerShape() const { return is; }
 	__BCinline__ const auto outerShape() const { return os; }
@@ -84,8 +86,14 @@ template<class T> struct Tensor_Core {
 	__BCinline__ const auto slice(int i) const { return Tensor_Slice<self>(&array[os[LAST - 1] * i], *this); }
 	__BCinline__	   auto slice(int i) 	  { return Tensor_Slice<self>(&array[os[LAST - 1] * i], *this); }
 
-	const scalar* core() const { return array; }
-		  scalar* core()  	   { return array; }
+	__BCinline__ const auto scalar(int i) const { return Tensor_Scalar<self>(&array[i], *this); }
+	__BCinline__	   auto scalar(int i) 	    { return Tensor_Scalar<self>(&array[i], *this); }
+
+	__BCinline__ const auto row(int i) const { return Tensor_Row<self>(&array[i], *this); }
+	__BCinline__	   auto row(int i) 	     { return Tensor_Row<self>(&array[i], *this); }
+
+	const scalar_type* core() const { return array; }
+		  scalar_type* core()  	    { return array; }
 
 	void print() const { Mathlib::print(array, this->innerShape(),rank(), 4); }
 

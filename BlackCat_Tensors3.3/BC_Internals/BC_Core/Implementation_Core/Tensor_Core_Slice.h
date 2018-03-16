@@ -12,6 +12,7 @@
 #include "Determiners.h"
 #include <iostream>
 #include "Tensor_Core_Scalar.h"
+#include "Tensor_Core_RowVector.h"
 namespace BC {
 
 template<int inner_rank_, int outer_rank_, class voider>
@@ -23,7 +24,7 @@ struct Rank {
 template<class PARENT>
 	struct Tensor_Slice {
 
-	using scalar = _scalar<PARENT>;
+	using scalar_type = _scalar<PARENT>;
 	using self = Tensor_Slice<PARENT>;
 	using slice_type = Tensor_Slice<self>;
 
@@ -31,12 +32,12 @@ template<class PARENT>
 	static constexpr int LAST =  ((PARENT::LAST - 1) > 0) ? (PARENT::LAST - 1) : 0;
 
 	const PARENT& parent;
-	scalar* array_slice;
+	scalar_type* array_slice;
 
-	operator 	   scalar*()       { return array_slice; }
-	operator const scalar*() const { return array_slice; }
+	operator 	   scalar_type*()       { return array_slice; }
+	operator const scalar_type*() const { return array_slice; }
 
-	Tensor_Slice(scalar* array, const PARENT& parent_) : array_slice(array), parent(parent_) {}
+	Tensor_Slice(scalar_type* array, const PARENT& parent_) : array_slice(array), parent(parent_) {}
 
 	__BCinline__ int rank() const { return RANK; }
 	__BCinline__ int size() const { return RANK > 0 ? parent.outerShape()[LAST] : 1;    }
@@ -58,8 +59,14 @@ template<class PARENT>
 	const auto slice(int i) const { return Tensor_Slice<self>(&array_slice[RANK == 1 ? i : (parent.outerShape()[LAST - 1] * i)], *this); }
 		  auto slice(int i) 	  { return Tensor_Slice<self>(&array_slice[RANK == 1 ? i : (parent.outerShape()[LAST - 1] * i)], *this); }
 
-	__BCinline__ const scalar* core() const { return array_slice; }
-	__BCinline__	   scalar* core()   	{ return array_slice; }
+	__BCinline__ const auto scalar(int i) const { return Tensor_Scalar<self>(&array_slice[i], *this); }
+	__BCinline__ auto scalar(int i) { return Tensor_Scalar<self>(&array_slice[i], *this); }
+
+	__BCinline__ const auto row(int i) const { return Tensor_Row<self>(&array_slice[i], *this); }
+	__BCinline__ auto row(int i) { return Tensor_Row<self>(&array_slice[i], *this); }
+
+	__BCinline__ const scalar_type* core() const { return array_slice; }
+	__BCinline__	   scalar_type* core()   	{ return array_slice; }
 
 
 

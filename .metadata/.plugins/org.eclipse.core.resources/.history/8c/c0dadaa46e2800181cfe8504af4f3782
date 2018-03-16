@@ -1,0 +1,72 @@
+/*
+ * DP_test.h
+ *
+ *  Created on: Mar 14, 2018
+ *      Author: joseph
+ */
+
+#ifndef DP_TEST_H_
+#define DP_TEST_H_
+
+#include "../BlackCat_Tensors.h"
+
+	using BC::Matrix;
+	using BC::TensorBase;
+	using BC::mul;
+
+
+struct summation_to {
+		template<class lv, class rv>
+		__BCinline__
+		auto operator () (const lv& left, const rv right) {
+			return left += right;
+		}
+	};
+
+
+namespace asdf {
+struct summation_to {
+		template<class lv, class rv>
+		__BCinline__
+		auto operator () (const lv& left, const rv right) {
+			return left += right;
+		}
+	};
+}
+
+
+template<class T, class U>
+auto axpy(const TensorBase<T>& to, const TensorBase<T>& A, const TensorBase<U>& B) {
+	return to.binExpr(summation_to(), A + B);
+}
+
+
+template<class functor, class out_tensor, class expr1, class exrp2>
+auto dotproduct_impl(functor f,out_tensor& out, const expr1& m1, const exrp2& m2, int o = 0, int r = 0, int c = 0) {
+
+	if (c + 1 != m2.cols() && r + 1 != m1.rows()) {
+		return axpy(out(o), m1.row(c + 1 != m2.cols() ? ++r : r), m2[c])
+				&& dotproduct_impl(out, m1, m2, o + 1, r, (c + 1) % m2.cols());
+	} else {
+//		throw std::invalid_argument("123");
+		return axpy(out(o), m1.row(r), m2[c]);
+	}
+}
+
+template<class T>
+auto dotproduct_impl(Matrix<T>& out, const Matrix<T>& m1, const Matrix<T>& m2) {
+
+		auto functor = axpy(out(0), m1.row(0), m2[0]);
+		auto functor_to_evaluate =  dotproduct_impl(functor, out, m1, m2, 1, 0, 1 % m2.cols());
+}
+
+template<class T>
+auto dotproduct(const Matrix<T>& m1, const Matrix<T>& m2) {
+	Matrix<T> eval(m1.rows(), m2.cols());
+
+
+	dotproduct_impl(eval, m1, m2);
+}
+
+
+#endif /* DP_TEST_H_ */

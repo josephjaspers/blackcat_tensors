@@ -63,7 +63,7 @@ public:
 	static void zero(T& t, int sz) {
 		fill(t, 0, sz);
 	}
-	template<typename T, typename J>
+	template<typename T, typename J> __attribute__((always_inline)) inline
 	static void copy(T& t, const J& j, int sz) {
 		if (sz < SINGLE_THREAD_THRESHOLD) {
 			for (int i = 0; i < sz; ++i) {
@@ -131,7 +131,16 @@ public:
 	      const float beta   =  scalarB ? *scalarB : 0;
 		  const float alpha  =  scalarA ? *scalarA : 1;
 
+
+#pragma omp parallel sections
+	{
+#pragma omp section
+
+
 		cblas_sgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+	}
+#pragma omp barrier
+
 	}
 	static void MatrixMul(bool transA, bool transB, const double* A, const double* B, double* C, int m, int n, int k,
 			const double* scalarA = nullptr, const double* scalarB = nullptr, int lda = 0, int ldb = 0, int ldc = 0) {

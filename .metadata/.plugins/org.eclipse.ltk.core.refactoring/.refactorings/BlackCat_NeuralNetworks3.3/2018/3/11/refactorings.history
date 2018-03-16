@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;BlackCat_NeuralNetworks3.3/UnitTests/MNIST_test.cu&apos; to &apos;MNIST_test.cpp&apos;" description="Rename resource &apos;MNIST_test.cu&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="UnitTests/MNIST_test.cu" name="MNIST_test.cpp" stamp="1520947554432" updateReferences="true"/>
+</session>

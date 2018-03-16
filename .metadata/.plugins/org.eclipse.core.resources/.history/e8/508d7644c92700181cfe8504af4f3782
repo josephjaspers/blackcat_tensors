@@ -1,0 +1,15 @@
+/*
+ * Tensor_Core_RowVector.h
+ *
+ *  Created on: Mar 14, 2018
+ *      Author: joseph
+ */
+
+#ifndef TENSOR_CORE_ROWVECTOR_H_
+#define TENSOR_CORE_ROWVECTOR_H_
+
+
+
+
+
+#endif /* TENSOR_CORE_ROWVECTOR_H_ */
