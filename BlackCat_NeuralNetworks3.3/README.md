@@ -56,6 +56,6 @@ How To Use:
 
 ![BlacksTurn](https://user-images.githubusercontent.com/20384345/35011918-e1b28360-fad5-11e7-94f3-ffe79572ca1c.png)
 
-![TestClassOutputs](https://user-images.githubusercontent.com/20384345/37546694-62f0f262-2944-11e8-99f4-ff48a92210dc.png)
-![TestClassOutput1](https://user-images.githubusercontent.com/20384345/37546693-62e67ea4-2944-11e8-9c21-a129d2d8d94f.png)
-![TestClassOutput2](https://user-images.githubusercontent.com/20384345/37546693-62e67ea4-2944-11e8-9c21-a129d2d8d94f.png)
+![TestClassOutputs](https://user-images.githubusercontent.com/20384345/37546694-62f0f262-2944-11e8-99f4-ff48a92210dc.png  "TestClassOutput1")
+![TestClassOutput1](https://user-images.githubusercontent.com/20384345/37546693-62e67ea4-2944-11e8-9c21-a129d2d8d94f.png  "TestClassOutput2")
+![TestClassOutput2](https://user-images.githubusercontent.com/20384345/37546693-62e67ea4-2944-11e8-9c21-a129d2d8d94f.png  "TestClassOutput1")
