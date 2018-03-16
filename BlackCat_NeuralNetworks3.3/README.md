@@ -1,19 +1,10 @@
-Last Updated: March 15, 2018
+Last Updated: March 16, 2018
 Author: Joseph Jaspers
 
-***Stil in early stages of development
-***for more fleshed out implementation (with more features)
-***go to: https://github.com/josephjaspers/UNMAINTAINED-BlackCat_NeuralNetworks-Version-2/tree/master/BC_NeuralNetwork_Headers
-
-
-Formatting may be obscured, go to: 
-https://github.com/josephjaspers/BlackCat_Libraries/blob/master/BlackCat_NeuralNetworks3.3/README.txt
-
 BlackCat_NeuralNetworks (BCNN) a library built on BlackCat_Tensors built for efficiency and user simplicty.
-Empirically Fast (will add benchmarks soon)
-
 
 Current Work:
+
 	Add layer_type CNN
 	Add layer_type Recurrent
 	Add layer_type LSTM
@@ -24,6 +15,7 @@ Current Work:
 	
 
 Installation/Setup:
+
 	BCT is a header only library that supports compilation with the NVCC and G++ (stable with G++ 6 and 7 and NVCC CUDA 9)
 	Simply add BlackCat_Tensors3.3 and BlackCat_NeuralNetworks to path and include "BlackCat_NeuralNetworks.h"
 
@@ -32,6 +24,7 @@ FAQ Fast Explanation:
 	How to choose GPU/CPU?	Go to NN_Core/Defaults.h, change fp_tye to float, and Mathlib to GPU. (Apropriate changes already written, simply comment and uncomment the 'using' declerations fields commented)
 
 Supports:
+
 	GPU Multithreading (via CUDA)
 	CPU Multithreading (via openMP) 
 
