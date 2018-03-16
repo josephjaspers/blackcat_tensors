@@ -17,7 +17,8 @@ Past implementations of CNN, RNN, LSTM, and GRU can be found here:
 
 Installation/Setup:
 
-	BCT is a header only library that supports compilation with the NVCC and G++ (stable with G++ 6 and 7 and NVCC CUDA 9)
+	BCT is a header only library that supports compilation with the NVCC and G++ 
+	(stable with G++ 6 and 7 and NVCC CUDA 9)
 	Simply add BlackCat_Tensors3.3 and BlackCat_NeuralNetworks to path and include "BlackCat_NeuralNetworks.h"
 
 FAQ Fast Explanation:
