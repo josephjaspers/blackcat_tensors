@@ -1,7 +1,0 @@
-
-
-#include <Eigen/Dense>
-#include "../../BlackCat_Tensors.h"
-
-
-using Eigen::MatrixXd;

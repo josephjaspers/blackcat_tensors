@@ -2,16 +2,3 @@
 ENABLED_DECORATORS=com.nvidia.cuda.ide.decorator\:true,org.eclipse.cdt.ui.indexedFiles\:false,org.eclipse.cdt.managedbuilder.ui.excludedFile\:true,org.eclipse.cdt.managedbuilder.ui.includeFolder\:true,org.eclipse.cdt.internal.ui.CustomBuildSettingsDecorator\:true,org.eclipse.egit.ui.internal.decorators.GitLightweightDecorator\:true,org.eclipse.ptp.rdt.sync.ui.decorator\:true,org.eclipse.rse.core.virtualobject.decorator\:true,org.eclipse.rse.core.binary.executable.decorator\:true,org.eclipse.rse.core.script.executable.decorator\:true,org.eclipse.rse.core.java.executable.decorator\:true,org.eclipse.rse.core.library.decorator\:true,org.eclipse.rse.core.link.decorator\:true,org.eclipse.rse.subsystems.error.decorator\:true,org.eclipse.team.cvs.ui.decorator\:true,org.eclipse.ui.LinkedResourceDecorator\:true,org.eclipse.ui.SymlinkDecorator\:true,org.eclipse.ui.VirtualResourceDecorator\:true,org.eclipse.ui.ContentTypeDecorator\:true,org.eclipse.ui.ResourceFilterDecorator\:false,
 RUN_IN_BACKGROUND=true
 eclipse.preferences.version=1
-org.eclipse.egit.ui.DiffAddBackgroundColor=11,121,90
-org.eclipse.egit.ui.DiffAddForegroundColor=216,254,245
-org.eclipse.egit.ui.DiffHeadlineBackgroundColor=71,71,71
-org.eclipse.egit.ui.DiffHeadlineForegroundColor=242,242,242
-org.eclipse.egit.ui.DiffHunkBackgroundColor=53,97,113
-org.eclipse.egit.ui.DiffHunkForegroundColor=233,242,254
-org.eclipse.egit.ui.DiffRemoveBackgroundColor=117,2,36
-org.eclipse.egit.ui.DiffRemoveForegroundColor=255,232,237
-org.eclipse.egit.ui.IgnoredResourceBackgroundColor=42,42,42
-org.eclipse.egit.ui.IgnoredResourceForegroundColor=120,120,120
-org.eclipse.egit.ui.UncommittedChangeBackgroundColor=42,42,42
-org.eclipse.egit.ui.UncommittedChangeForegroundColor=114,157,186
-overriddenByCSS=,org.eclipse.egit.ui.DiffAddBackgroundColor,org.eclipse.egit.ui.DiffAddForegroundColor,org.eclipse.egit.ui.DiffHeadlineBackgroundColor,org.eclipse.egit.ui.DiffHeadlineForegroundColor,org.eclipse.egit.ui.DiffHunkBackgroundColor,org.eclipse.egit.ui.DiffHunkForegroundColor,org.eclipse.egit.ui.DiffRemoveBackgroundColor,org.eclipse.egit.ui.DiffRemoveForegroundColor,org.eclipse.egit.ui.IgnoredResourceBackgroundColor,org.eclipse.egit.ui.IgnoredResourceForegroundColor,org.eclipse.egit.ui.UncommittedChangeBackgroundColor,org.eclipse.egit.ui.UncommittedChangeForegroundColor,

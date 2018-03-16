@@ -3641,3 +3641,38 @@ java.lang.StringIndexOutOfBoundsException: String index out of range: -7
 	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1039)
 	at org.eclipse.debug.internal.ui.DebugUIPlugin$8.run(DebugUIPlugin.java:1256)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-03-16 14:35:49.752
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-03-16 14:35:52.453
+!MESSAGE Error while parsing /BlackCat_Tensors3.3/UnitTests/main.cpp.
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-03-16 14:35:52.520
+!MESSAGE Error while parsing /BlackCat_Tensors3.3/UnitTests/main.cpp.
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-03-16 14:35:53.280
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-03-16 14:35:55.208
+!MESSAGE Error while parsing /BlackCat_Tensors3.3/UnitTests/main.cpp.
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.core 4 0 2018-03-16 14:35:55.256
+!MESSAGE Error while parsing /BlackCat_Tensors3.3/UnitTests/main.cpp.
+!STACK 0
+java.lang.ClassCastException
+
+!ENTRY org.eclipse.cdt.ui 4 0 2018-03-16 14:35:58.310
+!MESSAGE Error in CDT UI during reconcile
+!STACK 0
+java.lang.ClassCastException

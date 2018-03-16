@@ -118,14 +118,7 @@ auto test() {
 
 #include "Benchmarks/BenchmarkEigen.h"
 
-bool zeros() {
-	return true;
-}
 
-template<class... chars>
-bool zeros(char x, chars... lst) {
-	return x == '0' && zeros(lst...);
-}
 
 int main() {
 

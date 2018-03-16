@@ -1,14 +1,14 @@
 #include <iostream>
-#include "BlackCat_Tensors.h"
+#include "../BlackCat_Tensors.h"
 #include <type_traits>
-#include "UnitTests/SpeedTests.h"
+#include "SpeedTests.h"
 using BC::Vector;
 using BC::Matrix;
 using BC::Scalar;
 using BC::Cube;
 
-//using ml = BC::CPU;
-using ml = BC::GPU;
+using ml = BC::CPU;
+//using ml = BC::GPU;
 
 using vec = Vector<float, ml>;
 using mat = Matrix<float, ml>;
@@ -116,37 +116,42 @@ auto test() {
 
 }
 
+#include "Benchmarks/BenchmarkEigen.h"
+
+bool zeros() {
+	return true;
+}
+
+template<class... chars>
+bool zeros(char x, chars... lst) {
+	return x == '0' && zeros(lst...);
+}
+
 int main() {
 
-//	speedTestDelayedEval<128,     100000>();
-//	speedTestDelayedEval<256,     100000>();
-//	speedTestDelayedEval<512,     100000>();
-//	speedTestDelayedEval<1024,    100000>();
-//	speedTestDelayedEval<2048,    100000>();
-//	speedTestDelayedEval<5096,    100000>();
-//	speedTestDelayedEval<10000,   100000>();
-//	speedTestDelayedEval<20000,   100000>();
-//	speedTestDelayedEval<40000,   100000>();
-//	speedTestDelayedEval<80000,   100000>();
-//	speedTestDelayedEval<100000,  100000>();
-//
-//	speedTestsScalarIteration<4, 100>();
-//	speedTestsScalarIteration<16, 100>();
-//	speedTestsScalarIteration<32, 100>();
-//	speedTestsScalarIteration<64, 100>();
-//	speedTestsScalarIteration<128, 100>();
-//	speedTestsScalarIteration<256, 100>();
-//	speedTestsScalarIteration<512, 100>();
-//	speedTestsScalarIteration<1024, 100>();
-//	speedTestsScalarIteration<2048, 100>();
-//	speedTestsScalarIteration<5096, 100>();
-//	speedTestsScalarIteration<10000, 100>();
-////	speedTestsScalarIteration<20000, 10000>();
-//	speedTestsScalarIteration<40000, 10000>();
-//	speedTestsScalarIteration<80000, 10000>();
-//	speedTestsScalarIteration<100000, 10000>();
-////	MatrixPointwise();
-	test();
+	if (zeros('0', '0', '0'))
+		std::cout << " is true " << std::endl;
+
+	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
+	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
+//	omp_set_num_threads(2);
+	BC_EIGEN_BENCHMARK::benchmark1<4,     100000>();
+	BC_EIGEN_BENCHMARK::benchmark1<8,     100000>();
+	BC_EIGEN_BENCHMARK::benchmark1<16,    10000>();
+	BC_EIGEN_BENCHMARK::benchmark1<64,    10000>();
+	BC_EIGEN_BENCHMARK::benchmark1<128,   1000>();
+	BC_EIGEN_BENCHMARK::benchmark1<256,   1000>();
+	BC_EIGEN_BENCHMARK::benchmark1<512,   100>();
+
+	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark2_str() << std::endl;
+
+	BC_EIGEN_BENCHMARK::benchmark2<4,     100000>();
+	BC_EIGEN_BENCHMARK::benchmark2<8,     100000>();
+	BC_EIGEN_BENCHMARK::benchmark2<16,    10000>();
+	BC_EIGEN_BENCHMARK::benchmark2<64,    10000>();
+	BC_EIGEN_BENCHMARK::benchmark2<128,   1000>();
+	BC_EIGEN_BENCHMARK::benchmark2<256,   1000>();
+	BC_EIGEN_BENCHMARK::benchmark2<512,   100>();
 
 	std::cout << " success  main" << std::endl;
 
