@@ -1,4 +1,4 @@
-18:58:00 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
+22:10:42 **** Incremental Build of configuration Release for project BlackCat_Tensors3.3 ****
 make all 
 Building file: ../UnitTests/main.cpp
 Invoking: NVCC Compiler
@@ -12,5 +12,5 @@ Invoking: NVCC Linker
 Finished building target: BlackCat_Tensors3.3
  
 
-18:58:05 Build Finished (took 4s.671ms)
+22:10:46 Build Finished (took 4s.771ms)
 

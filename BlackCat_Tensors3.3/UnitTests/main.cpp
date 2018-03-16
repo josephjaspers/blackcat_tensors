@@ -118,7 +118,19 @@ auto test() {
 
 #include "Benchmarks/BenchmarkEigen.h"
 
+bool zeros() {
+	return true;
+}
+
+template<class... chars>
+bool zeros(char x, chars... lst) {
+	return x == '0' && zeros(lst...);
+}
+
 int main() {
+
+	if (zeros('0', '0', '0'))
+		std::cout << " is true " << std::endl;
 
 	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
 	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
