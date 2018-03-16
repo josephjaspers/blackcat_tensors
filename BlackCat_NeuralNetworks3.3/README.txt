@@ -54,7 +54,7 @@ How To Use:
 	Example main (for MNIST dataset) go to:
 	https://github.com/josephjaspers/BlackCat_Libraries/blob/master/BlackCat_NeuralNetworks3.3/UnitTests/MNIST_test.cpp
 
-TestClass Outputs
-https://user-images.githubusercontent.com/20384345/37546694-62f0f262-2944-11e8-99f4-ff48a92210dc.png
-https://user-images.githubusercontent.com/20384345/37546693-62e67ea4-2944-11e8-9c21-a129d2d8d94f.png
-https://user-images.githubusercontent.com/20384345/37546693-62e67ea4-2944-11e8-9c21-a129d2d8d94f.png
+
+![TestClass Outputs](https://user-images.githubusercontent.com/20384345/37546694-62f0f262-2944-11e8-99f4-ff48a92210dc.png)
+![TestClass Output1](https://user-images.githubusercontent.com/20384345/37546693-62e67ea4-2944-11e8-9c21-a129d2d8d94f.png)
+![TestClass Output2](https://user-images.githubusercontent.com/20384345/37546693-62e67ea4-2944-11e8-9c21-a129d2d8d94f.png)
