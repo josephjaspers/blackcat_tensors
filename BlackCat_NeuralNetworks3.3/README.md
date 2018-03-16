@@ -37,16 +37,16 @@ Supports:
 
 How To Use:
 
-	Add BlackCat_Tensor3.3 to path (found: https://github.com/josephjaspers/BlackCat_Libraries)
-	Add BlackCat_NeuralNetworks3.3 to path
+	//Add BlackCat_Tensor3.3 to path (found: https://github.com/josephjaspers/BlackCat_Libraries)
+	//Add BlackCat_NeuralNetworks3.3 to path
 
 	#include "BlackCat_NeuralNetworks.h"
 	
 	BC::NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10); //creates a 3 layer neural network
 	
-	network.forwardPropagation(BC::Vector<float>); 			//forward pass through network
-	network.forwardPropagation_Expression(BC::Vector<float>); 	//forward pass, do not store data for backward pass
-	network.backPropagation(BC::Vector<float> output)		//backward pass, calculates error byitself
+	network.forwardPropagation(BC::Vector<float>(784)); 			//forward pass through network
+	network.forwardPropagation_Expression(BC::Vector<float>(784)); 	//forward pass, do not store data for backward pass
+	network.backPropagation(BC::Vector<float> output(10))		//backward pass, calculates error byitself
 	network.updateWeights();					//updates neural network weights, gradients are stored during backProapgation.
 	network.clearBCStorage();					//clear the stored gradients
 
@@ -56,5 +56,5 @@ How To Use:
 
 
 ![TestClassOutputs](https://user-images.githubusercontent.com/20384345/37546694-62f0f262-2944-11e8-99f4-ff48a92210dc.png  "TestClassOutput1")
-![TestClassOutput1](https://user-images.githubusercontent.com/20384345/37546693-62e67ea4-2944-11e8-9c21-a129d2d8d94f.png  "TestClassOutput2")
+![TestClassOutput1](https://user-images.githubusercontent.com/20384345/37546692-62dce43e-2944-11e8-9d3d-236ee151ebfa.png  "TestClassOutput2")
 ![TestClassOutput2](https://user-images.githubusercontent.com/20384345/37546693-62e67ea4-2944-11e8-9c21-a129d2d8d94f.png  "TestClassOutput1")
