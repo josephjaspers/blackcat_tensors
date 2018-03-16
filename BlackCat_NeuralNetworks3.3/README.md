@@ -25,8 +25,9 @@ FAQ Fast Explanation:
 
 	How to choose GPU/CPU?	
 	-Go to NN_Core/Defaults.h
-	-change fp_tye to float, and Mathlib to GPU. 
-
+	- using ml = CPU;             // Change to using ml = GPU;
+	- using fp_type = double;     // Change to using fp_type = float;
+	
 Supports:
 
 	GPU Multithreading (via CUDA)
@@ -41,16 +42,18 @@ How To Use:
 	
 	BC::NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10); //creates a 3 layer neural network
 	
-	network.forwardPropagation(BC::Vector<float>(784)); 			//forward pass through network
+	network.forwardPropagation(BC::Vector<float>(784)); 		//forward pass through network
 	network.forwardPropagation_Expression(BC::Vector<float>(784)); 	//forward pass, do not store data for backward pass
 	network.backPropagation(BC::Vector<float> output(10))		//backward pass, calculates error byitself
 	network.updateWeights();					//updates neural network weights, gradients are stored during backProapgation.
 	network.clearBCStorage();					//clear the stored gradients
 
 
-	Example main (for MNIST dataset) go to:
+Example main (for MNIST dataset) go to:
 	https://github.com/josephjaspers/BlackCat_Libraries/blob/master/BlackCat_NeuralNetworks3.3/UnitTests/MNIST_test.cpp
 
+
+TestClass outputs 
 
 ![TestClassOutputs](https://user-images.githubusercontent.com/20384345/37546694-62f0f262-2944-11e8-99f4-ff48a92210dc.png  "TestClassOutput1")
 ![TestClassOutput1](https://user-images.githubusercontent.com/20384345/37546692-62dce43e-2944-11e8-9d3d-236ee151ebfa.png  "TestClassOutput2")
