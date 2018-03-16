@@ -10,7 +10,7 @@ Current Work:
 	Add layer_type LSTM
 	Add layer_type GRU
 
-	Past implementations of CNN, RNN, LSTM, and GRU can be found here: 
+Past implementations of CNN, RNN, LSTM, and GRU can be found here: 
 	https://github.com/josephjaspers/UNMAINTAINED-BlackCat_NeuralNetworks-Version-2/tree/master/BC_NeuralNetwork_Headers
 	
 
