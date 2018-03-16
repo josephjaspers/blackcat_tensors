@@ -23,7 +23,9 @@ Installation/Setup:
 
 FAQ Fast Explanation:
 
-	How to choose GPU/CPU?	Go to NN_Core/Defaults.h, change fp_tye to float, and Mathlib to GPU. (Apropriate changes already written, simply comment and uncomment the 'using' declerations fields commented)
+	How to choose GPU/CPU?	
+	-Go to NN_Core/Defaults.h
+	-change fp_tye to float, and Mathlib to GPU. 
 
 Supports:
 
