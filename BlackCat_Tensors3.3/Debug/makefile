@@ -10,15 +10,7 @@ RM := rm -rf
 -include sources.mk
 -include subdir.mk
 -include UnitTests/subdir.mk
--include BC_Internals/Dep/tmp_tc_dep/subdir.mk
--include BC_Internals/Dep/dotproduct_Dep/subdir.mk
--include BC_Internals/Dep/Tensor_Core_Specializations/subdir.mk
--include BC_Internals/Dep/subdir.mk
--include BC_Internals/BC_MathLibraries/TmpDep_GPU/subdir.mk
 -include BC_Internals/BC_MathLibraries/subdir.mk
--include BC_Internals/BC_Expressions/subdir.mk
--include BC_Internals/BC_Core/Implementation_Core/subdir.mk
--include BC_Extensions/subdir.mk
 
 OS_SUFFIX := $(subst Linux,linux,$(subst Darwin/x86_64,darwin,$(shell uname -s)/$(shell uname -m)))
 

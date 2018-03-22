@@ -61,9 +61,9 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	__BCinline__ const auto innerShape() 	const { return generateDimList(rows(), cols()); }
 	__BCinline__ const auto outerShape() 	const { return generateDimList(rows(), size()); }
 
-	__BCinline__ const int M() const { return left.rows(); }
-	__BCinline__ const int N() const { return right.cols(); }
-	__BCinline__ const int K() const { return left.cols(); }
+	__BCinline__ int M() const { return left.rows(); }
+	__BCinline__ int N() const { return right.cols(); }
+	__BCinline__ int K() const { return left.cols(); }
 
 	void printDimensions() 		const { std::cout<<"[" << M() << "][" <<N()  <<"]" << std::endl; }
 	void printLDDimensions()	const { std::cout<<"[" << M() << "][" << size()  <<"]" << std::endl; }
