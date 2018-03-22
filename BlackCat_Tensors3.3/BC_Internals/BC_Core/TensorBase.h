@@ -89,8 +89,13 @@ public:
 	const auto getScalar(int i) const { return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar(i)); }
 		  auto getScalar(int i) { return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar(i)); }
 
-	const auto getSlice(int i) const { return typename base<RANK>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
-		  auto getSlice(int i) { return typename base<RANK>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
+	const auto getSlice(int i) const {
+		static_assert(derived::RANK() > 0, "SCALAR SLICE IS NOT DEFINED");
+		return typename base<RANK>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
+		  auto getSlice(int i) 		 {
+				static_assert(derived::RANK() > 0, "SCALAR SLICE IS NOT DEFINED");
+
+			  return typename base<RANK>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
 
 	const auto row(int i) const {
 		static_assert(RANK == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");

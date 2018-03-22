@@ -15,21 +15,15 @@
 #include "Tensor_Core_RowVector.h"
 namespace BC {
 
-//template<int inner_rank_, int outer_rank_, class voider>
-//struct Rank {
-//	static constexpr int inner_rank = inner_rank_;
-//	static constexpr int outer_rank = outer_rank_;
-//};
-
 template<class PARENT>
 	struct Tensor_Slice : expression<_scalar<PARENT>, Tensor_Slice<PARENT>> {
 
 	using scalar_type = _scalar<PARENT>;
 	using self = Tensor_Slice<PARENT>;
-	using slice_type = Tensor_Slice<self>;
 
 	static constexpr int RANK() { return  ((PARENT::RANK() - 1) > 0) ? (PARENT::RANK() - 1) : 0; };
 	static constexpr int LAST()  { return  ((PARENT::LAST() - 1) > 0) ? (PARENT::LAST() - 1) : 0; }
+	using slice_type = std::conditional_t<RANK() <= 1, Tensor_Scalar<self>,Tensor_Slice<self>>;
 
 	const PARENT parent;
 	scalar_type* array_slice;
@@ -47,8 +41,8 @@ template<class PARENT>
 	__BCinline__ int LD_rows() const { return RANK() > 0 ? parent.outerShape()[0] : 1; }
 	__BCinline__ int LD_cols() const { return RANK() > 1 ? parent.outerShape()[1] : 1; }
 	__BCinline__ int LDdimension(int i) const { return RANK() > i + 1 ? parent.outerShape()[i] : 1; }
-	__BCinline__ const auto& operator [] (int i) const { return array_slice[i]; }
-	__BCinline__ auto& operator [] (int i)  	       { return array_slice[i]; }
+	__BCinline__ const auto& operator [] (int i) const { return RANK() == 0 ? array_slice[0] : array_slice[i]; }
+	__BCinline__ auto& operator [] (int i)  	       { return RANK() == 0 ? array_slice[0] : array_slice[i]; }
 
 	void printDimensions() 		const { parent.printDimensions(); }
 	void printLDDimensions()	const { parent.printDimensions(); }

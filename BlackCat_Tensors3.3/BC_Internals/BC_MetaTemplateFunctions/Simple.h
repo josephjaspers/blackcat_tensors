@@ -15,14 +15,12 @@ namespace MTF {
 	template<> 		  struct isTrue<std::false_type> { static constexpr bool conditional = false; };
 
 		//EQUIVALENT OF std::conditional
-		template<bool iff, class THEN, class ELSE>
-		struct IF_ELSE {
-			using type = THEN;
-		};
-		template<class THEN, class ELSE>
-		struct IF_ELSE<false, THEN, ELSE> {
-			using type = ELSE;
-		};
+		template<bool iff, class THEN, class ELSE> struct IF_ELSE { using type = THEN; };
+		template<class THEN, class ELSE> 		   struct IF_ELSE<false, THEN, ELSE> { using type = ELSE;};
+		//shorthand
+		template<bool var, class a, class b>
+		using ifte = typename std::conditional<var, a, b>::type; //ifte -- if than, else
+
 
 
 	template<class> struct isPrimitive 					{ static constexpr bool conditional = false; };
@@ -48,8 +46,38 @@ namespace MTF {
 	template<class, class> struct same  { static constexpr bool conditional = false; };
 	template<class T> struct same<T, T> { static constexpr bool conditional = true; };
 
-	template<bool var, class a, class b>
-	using ifte = typename std::conditional<var, a, b>::type; //ifte -- if than, else
+	template<class, class> 	struct same_shell  	   	{ static constexpr bool conditional = false; };
+	template<class T>  		struct same_shell<T, T> { static constexpr bool conditional = true;  };
+	template<template <class...> class T, class... p1, class... p2>
+	struct same_shell<T<p1...>, T<p2...>> { static constexpr bool conditional = true;  };
+
+
+
+	template<template<class...> class, 	 template<class...> class  > struct same_empty_shell 	  { static constexpr bool conditional = false; };
+	template<template<class...> class T> struct same_empty_shell<T,T> { static constexpr bool conditional = true; };
+
+	template<template<class...> class T, template<class...> class U>
+	static constexpr bool same_empty_shell_b = same_empty_shell<T, U>::conditional;
+
+
+	template<class> struct front;
+	template<template<class... > class set, class T, class... s>
+	struct front<set<T, s...>> {
+		using type = T;
+	};
+
+	template<class> struct second;
+	template<template<class... > class set, class T, class U, class... s>
+	struct second<set<T, U, s...>> {
+		using type = U;
+	};
+
+
+	template<class T>
+	using front_t = typename front<T>::type;
+
+	template<class T>
+	using second_t = typename second<T>::type;
 
 	template<class> struct shell_of;
 	template<template<class ...> class param, class... ptraits>

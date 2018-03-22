@@ -34,10 +34,10 @@ public:
 		return typename MTF::shell_of<deriv>::template type<_scalar<deriv>, _mathlib<deriv>>(this->asDerived());
 	}
 	void print() const {
-		MATHLIB::print(asDerived().data().core(), asDerived().innerShape(), asDerived().rank(), 8);
+		MATHLIB::print(eval().data().core(), asDerived().innerShape(), asDerived().rank(), 8);
 	}
 	void print(int precision) const {
-		MATHLIB::print(asDerived().data().core(), asDerived().innerShape(), asDerived().rank(), precision);
+		MATHLIB::print(eval().data().core(), asDerived().innerShape(), asDerived().rank(), precision);
 	}
 };
 template<class deriv>

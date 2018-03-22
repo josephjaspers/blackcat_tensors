@@ -29,6 +29,7 @@ struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 	using dimlist = std::vector<int>;
 	using scalar_type = _scalar<T>;
 	using Mathlib = _mathlib<T>;
+//	using slice_type = std::conditional_t<(RANK() == 1), Tensor_Scalar<self>, std::conditional_t<(RANK() == 0), self, Tensor_Slice<self>>>;
 	using slice_type = std::conditional_t<(RANK() <= 1), Tensor_Scalar<self>, Tensor_Slice<self>>;
 
 	scalar_type* array;
@@ -84,15 +85,11 @@ struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 	__BCinline__ const auto innerShape() const { return is; }
 	__BCinline__ const auto outerShape() const { return os; }
 
-	__BCinline__ const auto slice(int i) const { static_assert (RANK() != 0, "SLICE OF SCALAR NOT DEFINED");
-													return slice_type(&array[RANK() == 1 ? i : (os[LAST() - 1] * i)], *this); }
-
-	__BCinline__	   auto slice(int i) 	   { static_assert (RANK() != 0, "SLICE OF SCALAR NOT DEFINED");
-													return slice_type(&array[RANK() == 1 ? i : (os[LAST() - 1] * i)], *this); }
+	__BCinline__ const auto slice(int i) const {  return slice_type(&array[RANK() == 1 ? i : (os[LAST() - 1] * i)], *this); }
+	__BCinline__	   auto slice(int i) 	   {  return slice_type(&array[RANK() == 1 ? i : (os[LAST() - 1] * i)], *this); }
 
 	__BCinline__ const auto scalar(int i) const { static_assert (RANK() != 0, "SCALAR OF SCALAR NOT DEFINED"); return Tensor_Scalar<self>(&array[i], *this); }
 	__BCinline__	   auto scalar(int i) 	    { static_assert (RANK() != 0, "SCALAR OF SCALAR NOT DEFINED"); return Tensor_Scalar<self>(&array[i], *this); }
-
 	__BCinline__ const auto row(int i) const { static_assert (RANK() != 2, "ROW OF NON-MATRIX NOT DEFINED"); return Tensor_Row<self>(&array[i], *this); }
 	__BCinline__	   auto row(int i) 	     { static_assert (RANK() != 2, "ROW OF NON-MATRIX NOT DEFINED"); return Tensor_Row<self>(&array[i], *this); }
 	__BCinline__ const auto col(int i) const { static_assert (RANK() != 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
@@ -128,4 +125,20 @@ struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 }
 
 #endif /* SHAPE_H_ */
+
+
+//COMPILE TIME CHECKS MOVED TO TENSOR_BASE ->>>> ENABLES FUNCTIONAL PASSING // EASIER PROGRAMMING FOR HANDLING EXPRESSION SLICES/ROW/COLS
+//__BCinline__ const auto slice(int i) const { static_assert (RANK() != 0, "SLICE OF SCALAR NOT DEFINED");
+//													return slice_type(&array[RANK() == 1 ? i : (os[LAST() - 1] * i)], *this); }
+//
+//__BCinline__	   auto slice(int i) 	   { static_assert (RANK() != 0, "SLICE OF SCALAR NOT DEFINED");
+//													return slice_type(&array[RANK() == 1 ? i : (os[LAST() - 1] * i)], *this); }
+//
+//__BCinline__ const auto scalar(int i) const { static_assert (RANK() != 0, "SCALAR OF SCALAR NOT DEFINED"); return Tensor_Scalar<self>(&array[i], *this); }
+//__BCinline__	   auto scalar(int i) 	    { static_assert (RANK() != 0, "SCALAR OF SCALAR NOT DEFINED"); return Tensor_Scalar<self>(&array[i], *this); }
+//__BCinline__ const auto row(int i) const { static_assert (RANK() != 2, "ROW OF NON-MATRIX NOT DEFINED"); return Tensor_Row<self>(&array[i], *this); }
+//__BCinline__	   auto row(int i) 	     { static_assert (RANK() != 2, "ROW OF NON-MATRIX NOT DEFINED"); return Tensor_Row<self>(&array[i], *this); }
+//__BCinline__ const auto col(int i) const { static_assert (RANK() != 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
+//__BCinline__	   auto col(int i) 	     { static_assert (RANK() != 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
+
 

@@ -60,7 +60,7 @@ float benchmark1() {
 	float blackcat_time = omp_get_wtime();
 
 	for (int i = 0; i < repetitions; ++i) {
-		bc_a = bc_b + bc_c * scal * bc_d - bc_e;
+//		bc_a = bc_b + bc_c * scal * bc_d - bc_e;
 	}
 	blackcat_time = omp_get_wtime() - blackcat_time;
 

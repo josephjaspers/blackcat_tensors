@@ -16,7 +16,6 @@
 #include "BC_Expressions/Expression_Binary_Dotproduct.h"
 #include "BC_Expressions/Expression_Unary_MatrixTransposition.h"
 #include "BC_Expressions/Expression_Binary_Pointwise.h"
-#include "BC_Expressions/Expression_Binary_Pointwise_Scalar.h"
 
 namespace BC {
 

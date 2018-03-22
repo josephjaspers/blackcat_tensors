@@ -133,7 +133,7 @@ int speedTestsScalarIteration() {
 	t = omp_get_wtime();
 
 	for (int iter = 0; iter < reps; ++iter) {
-		c = a.t() * b;
+//		c = a.t() * b;
 	}
 
 	t = omp_get_wtime() - t;
@@ -143,7 +143,7 @@ int speedTestsScalarIteration() {
 	t2 = omp_get_wtime();
 
 	for (int iter = 0; iter < reps; ++iter) {
-		c = (c + a) * (d + b);
+//		c = (c + a) * (d + b);
 	}
 
 	t2 = omp_get_wtime() - t2;

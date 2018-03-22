@@ -19,8 +19,8 @@ struct Tensor_Scalar : expression<_scalar<PARENT>, Tensor_Scalar<PARENT>> {
 	using scalar = _scalar<PARENT>;
 	using self = Tensor_Scalar<PARENT>;
 
-	static constexpr int RANK = lower(PARENT::RANK);
-	static constexpr int LAST =  lower(PARENT::LAST);
+
+	static constexpr int RANK() { return 0; }
 
 	const PARENT parent;
 	scalar* array_slice;

@@ -23,7 +23,7 @@ auto test() {
 	mat d(2, 3);
 	mat e(3, 2);
 	mat c(2, 2);
-
+	scal ALPHAS(2);
 
 	std::cout << " param " << std::endl;
 
@@ -48,7 +48,8 @@ auto test() {
 	e.print();
 	std::cout << " a.print()" << std::endl;
 	a.print();
-	(a + e)[0].eval().print();
+	(a[0][0] + a).print();
+	(a[0][0] + a + e + a[0][0] + ALPHAS)[0].print(); //Only the first column is calculated (the beauty of delayed evaluation)
 
 	std::cout << " simple dot product [following should all have same value]" << std::endl;
 	c = d * e;
@@ -62,32 +63,51 @@ auto test() {
 	std::cout << " dot product -- regular, transpose" << std::endl;
 	c = d * b.t();
 	c.print();
-	std::cout << " dot product -- regular scalar, regular" << std::endl;
+	std::cout << " dot product -- scalar, regular" << std::endl;
 	c = d * scal(2) * e;
 	c.print();
-	std::cout << " dot product -- scalar regular, regular" << std::endl;
+	std::cout << " dot product -- scalar, regular" << std::endl;
 	c = scal(2) * d * e;
 	c.print();
+	std::cout << " dot product -- regular,  scalar " << std::endl;
+
 	c = d * e * scal(2); ////This is the only version that is not accounted for (it is also the least common notation)
 	c.print();
+	std::cout << " dot product -- scalar, regular " << std::endl;
 	c = d * scal(2) * e;
-	c.print();
-
 	c.print();
 
 	scal A(2);
 	scal B(2);
 
-	c.print();
-	(c + c).eval();
+	std::cout << " dot product -- trans, trans " << std::endl;
 	c = a.t() * b.t();
-
-	A.print();
-
-	c = a.t() * A * (b.t() * A);
-
 	c.print();
 
+	std::cout << " dot product -- trans scalar, trans " << std::endl;
+	A.print();
+	c = a.t() * A * b.t();
+	c.print();
+
+	std::cout << " dot product -- scalar trans, trans " << std::endl;
+	A.print();
+	c = A * a.t() * b.t();
+	c.print();
+
+	std::cout << " dot product -- trans, trans scalar " << std::endl;
+	A.print();
+	c = a.t() * (b.t() * A);
+	c.print();
+
+	std::cout << " dot product -- trans scalar, trans scalar " << std::endl;
+	A.print();
+	c = a.t() * A * (b.t() * A);
+	c.print();
+
+
+
+
+	std::cout << " PRINTING CUBE EXAMPLE FORMAT " << std::endl;
 	cube cu(2,3, 4);
 	cu.zero();
 	cu.print();
@@ -121,8 +141,6 @@ auto test() {
 	readM.print();
 	is.close();
 
-
-//	dotproduct(c, d);
 }
 
 #include "Benchmarks/BenchmarkEigen.h"

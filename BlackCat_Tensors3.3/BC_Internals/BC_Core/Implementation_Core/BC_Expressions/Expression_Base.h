@@ -33,8 +33,7 @@ private:
 public:
 
 	static constexpr int RANK() { return derived::RANK(); }
-
-//	expression() { static_assert(std::is_trivially_copyable<derived>::value, "DERIVATI VES OF EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
+//	expression() { static_assert(std::is_trivially_copyable<derived>::value, "DERIVED VES OF EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
 
 	__BCinline__ int rank() const 	{ return shadowFailure<int>("int rank() const"); }
 	__BCinline__ int size() const 	{ return shadowFailure<int>("int size() const"); }
@@ -59,6 +58,8 @@ public:
 };
 
 //-----------------------------helper structs--------------------------------//
+
+//returns the class with the higher_order rank
 template<class lv, class rv, class left = void>
 struct dominant_type {
 	__BCinline__ static const auto& shape(const lv& l, const rv& r) {
@@ -66,7 +67,36 @@ struct dominant_type {
 	}
 };
 template<class lv, class rv>
-struct dominant_type<lv, rv, std::enable_if_t<(lv::RANK < rv::RANK)>> {
+struct dominant_type<lv, rv, std::enable_if_t<(lv::RANK() < rv::RANK())>> {
+
+	__BCinline__ static const auto& shape(const lv& l, const rv& r) {
+		return r;
+	}
+};
+template<class lv, class rv>
+struct dominant_type<lv, rv, std::enable_if_t<(lv::RANK() == rv::RANK())>> {
+
+	__BCinline__ static const auto& shape(const lv& l, const rv& r) {
+		return r;
+	}
+};
+//returns the class with the lower order rank
+template<class lv, class rv, class left = void>
+struct inferior_type {
+	__BCinline__ static const auto& shape(const lv& l, const rv& r) {
+		return l;
+	}
+};
+template<class lv, class rv>
+struct inferior_type<lv, rv, std::enable_if_t<(lv::RANK() > rv::RANK())>> {
+
+	__BCinline__ static const auto& shape(const lv& l, const rv& r) {
+		return r;
+	}
+};
+
+template<class lv, class rv>
+struct inferior_type<lv, rv, std::enable_if_t<(lv::RANK() == rv::RANK())>> {
 
 	__BCinline__ static const auto& shape(const lv& l, const rv& r) {
 		return r;
