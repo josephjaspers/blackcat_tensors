@@ -65,6 +65,7 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 };
 
 
+//class specifically for matrix multiplication
 template<class T, class lv, class rv>
 struct binary_expression_scalar_mul : expression<T, binary_expression_scalar_mul<T, lv, rv>> {
 

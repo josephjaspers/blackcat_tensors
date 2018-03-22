@@ -148,27 +148,27 @@ auto test() {
 
 
 int main() {
-test();
-//	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
-//	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
-////	omp_set_num_threads(2);
-//	BC_EIGEN_BENCHMARK::benchmark1<4,     100000>();
-//	BC_EIGEN_BENCHMARK::benchmark1<8,     100000>();
-//	BC_EIGEN_BENCHMARK::benchmark1<16,    10000>();
-//	BC_EIGEN_BENCHMARK::benchmark1<64,    10000>();
-//	BC_EIGEN_BENCHMARK::benchmark1<128,   1000>();
-//	BC_EIGEN_BENCHMARK::benchmark1<256,   1000>();
-//	BC_EIGEN_BENCHMARK::benchmark1<512,   100>();
-//
-//	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark2_str() << std::endl;
-//
-//	BC_EIGEN_BENCHMARK::benchmark2<4,     100000>();
-//	BC_EIGEN_BENCHMARK::benchmark2<8,     100000>();
-//	BC_EIGEN_BENCHMARK::benchmark2<16,    10000>();
-//	BC_EIGEN_BENCHMARK::benchmark2<64,    10000>();
-//	BC_EIGEN_BENCHMARK::benchmark2<128,   1000>();
-//	BC_EIGEN_BENCHMARK::benchmark2<256,   1000>();
-//	BC_EIGEN_BENCHMARK::benchmark2<512,   100>();
+//test();
+	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
+	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
+//	omp_set_num_threads(2);
+	BC_EIGEN_BENCHMARK::benchmark1<4,     100000>();
+	BC_EIGEN_BENCHMARK::benchmark1<8,     100000>();
+	BC_EIGEN_BENCHMARK::benchmark1<16,    10000>();
+	BC_EIGEN_BENCHMARK::benchmark1<64,    10000>();
+	BC_EIGEN_BENCHMARK::benchmark1<128,   1000>();
+	BC_EIGEN_BENCHMARK::benchmark1<256,   1000>();
+	BC_EIGEN_BENCHMARK::benchmark1<512,   100>();
+
+	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark2_str() << std::endl;
+
+	BC_EIGEN_BENCHMARK::benchmark2<4,     100000>();
+	BC_EIGEN_BENCHMARK::benchmark2<8,     100000>();
+	BC_EIGEN_BENCHMARK::benchmark2<16,    10000>();
+	BC_EIGEN_BENCHMARK::benchmark2<64,    10000>();
+	BC_EIGEN_BENCHMARK::benchmark2<128,   1000>();
+	BC_EIGEN_BENCHMARK::benchmark2<256,   1000>();
+	BC_EIGEN_BENCHMARK::benchmark2<512,   100>();
 ////
 	std::cout << " success  main" << std::endl;
 //

@@ -207,3 +207,67 @@ auto dotproduct(const Matrix<T>& mat1, const Matrix<T>& mat2) {
 //};
 //}
 //#endif
+
+
+
+//	template<class param_deriv>
+//	struct dp_impl {
+//		//Determines the return type dotproducts (including pointwise scalar operations)
+//		using param_functor_type = typename Tensor_Operations<param_deriv>::functor_type;
+//		static constexpr bool lv_scalar = derived::RANK() == 0;
+//		static constexpr bool rv_scalar = param_deriv::RANK() == 0;
+//		static constexpr bool scalar_mul = lv_scalar || rv_scalar;
+//
+//		static constexpr bool evaluate_to_vector = derived::RANK() == 2 && param_deriv::RANK() == 1;
+//		static constexpr bool evaluate_to_matrix = derived::RANK() == 2 && param_deriv::RANK() == 2;
+//		static constexpr bool evaluate_to_mat_vv = derived::RANK() == 1 && param_deriv::RANK() == 1;
+//		static constexpr bool evaluate_to_dominant = derived::RANK() == 0 || param_deriv::RANK() == 0;
+//
+//		static constexpr bool short_params = lv_scalar || rv_scalar;
+//
+//		using mulType      =   typename MTF::IF_ELSE<lv_scalar || rv_scalar,
+//									typename MTF::IF_ELSE<lv_scalar,
+//										typename MTF::expression_substitution<binary_expression_scalar_L<scalar_type, mul, functor_type, param_functor_type>, param_deriv>::type,
+//										typename MTF::expression_substitution<binary_expression_scalar_R<scalar_type, mul, functor_type, param_functor_type>, derived	 >::type
+//									>::type,
+//								void>::type;
+//		using vecType = typename MTF::expression_substitution<binary_expression_dotproduct<scalar_type, functor_type, param_functor_type, math_library>,param_deriv>::type;
+//		using matType = typename MTF::expression_substitution<binary_expression_dotproduct<scalar_type, functor_type, param_functor_type, math_library>,param_deriv>::type;
+//		using outerType = typename MTF::expression_substitution<binary_expression_dotproduct<scalar_type, functor_type, param_functor_type, math_library>,
+//									Matrix<functor_type, math_library>>::type;
+//
+//		using type 			= 	typename MTF::IF_ELSE<evaluate_to_vector, vecType,
+//									typename MTF::IF_ELSE<evaluate_to_matrix, matType,
+//										typename MTF::IF_ELSE<evaluate_to_mat_vv, outerType,
+//											mulType
+//										>::type
+//									>::type
+//								>::type;
+//
+//		using expression_type = type;
+//
+//	};
+
+
+//	//Pointwise multiplication of Scalar and Tensor -- is auto-detected by expression templates when in conjunction to dotproduct
+//	template<class pDeriv, class voider = typename std::enable_if<dp_impl<pDeriv>::short_params || dp_impl<pDeriv>::short_params>::type>
+//	typename dp_impl<pDeriv>::type operator *(const Tensor_Operations<pDeriv>& param) const {
+//			return typename dp_impl<pDeriv>::type(this->data(), param.data());
+//	}
+	/*
+	 * a = M x K
+	 * b = K x N
+	 * c = M x N
+	 */
+	//Dot product implementation
+//	template<class pDeriv,
+//		class voider = typename std::enable_if<!dp_impl<pDeriv>::short_params && !dp_impl<pDeriv>::short_params>::type, int foo = 0>
+//	typename dp_impl<pDeriv>::type operator *(const Tensor_Operations<pDeriv>& param) const {
+//		assert_same_ml(param);
+//		return typename dp_impl<pDeriv>::type(this->data(), param.data());
+//	}
+	//This allows you to do the operator ** as a point-wise multiplication operation
+
+	//point-wise multiplication overload (represented by **)
+
+
