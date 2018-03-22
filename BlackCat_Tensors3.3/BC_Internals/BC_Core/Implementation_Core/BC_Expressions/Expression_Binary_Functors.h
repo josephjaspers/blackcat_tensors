@@ -14,23 +14,10 @@ namespace BC {
 template<class T> struct rm_const { using type = T; };
 template<class T> struct rm_const<const T&> { using type = T&; };
 
-		struct assign {
 
-		template<class lv, class rv> __BCinline__  auto& operator ()(lv& l, rv r) const {
-			return (const_cast<typename rm_const<lv&>::type>(l) = r);
-		}
-	};
-
-	struct combine {
-
-		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
-			return l;
-		}
-	};
 
 
 	struct add {
-
 		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
 			return l + r;
 		}
@@ -53,8 +40,18 @@ template<class T> struct rm_const<const T&> { using type = T&; };
 			return l / r;
 		}
 	};
-	struct add_assign {
+	struct assign {
+		template<class lv, class rv> __BCinline__ auto& operator ()(lv& l, rv r) const {
+			return (const_cast<typename rm_const<lv&>::type>(l) = r);
+		}
+	};
 
+	struct combine {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
+			return l;
+		}
+	};
+	struct add_assign {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return l += r;
 		}

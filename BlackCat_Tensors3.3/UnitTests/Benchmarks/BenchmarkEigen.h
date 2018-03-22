@@ -19,8 +19,6 @@ std::string benchmark1_str() {
 
 template<int SIZE, int repetitions>
 float benchmark1() {
-	const int reps = repetitions;
-
 
 	BC::Matrix<double> bc_a(SIZE,SIZE);
 	BC::Matrix<double> bc_b(SIZE,SIZE);
@@ -35,11 +33,11 @@ float benchmark1() {
 	Eigen::MatrixXd eg_d(SIZE,SIZE);
 	Eigen::MatrixXd eg_e(SIZE,SIZE);
 
-	bc_a.randomize(0, 1000);
-	bc_b.randomize(0, 1000);
-	bc_c.randomize(0, 1000);
-	bc_d.randomize(0, 1000);
-	bc_e.randomize(0, 1000);
+	bc_a.randomize(0, 10000);
+	bc_b.randomize(0, 10000);
+	bc_c.randomize(0, 10000);
+	bc_d.randomize(0, 10000);
+	bc_e.randomize(0, 10000);
 
 	//copy to ensure same parameters
 	for (int i = 0; i < SIZE * SIZE; ++i) {
@@ -52,8 +50,8 @@ float benchmark1() {
 
 	float eigen_time = omp_get_wtime();
 
-		for (int i = 0; i < reps; ++i) {
-			eg_a = eg_b - eg_c * 3 * eg_d - eg_e;
+		for (int i = 0; i < repetitions; ++i) {
+			eg_a = eg_b - eg_c * 3 * (eg_d - eg_e);
 		}
 
 		eigen_time = omp_get_wtime() - eigen_time;
@@ -61,7 +59,7 @@ float benchmark1() {
 
 	float blackcat_time = omp_get_wtime();
 
-	for (int i = 0; i < reps; ++i) {
+	for (int i = 0; i < repetitions; ++i) {
 		bc_a = bc_b + bc_c * scal * bc_d - bc_e;
 	}
 	blackcat_time = omp_get_wtime() - blackcat_time;
@@ -120,11 +118,11 @@ float benchmark2() {
 	Eigen::MatrixXd eg_d(SIZE,SIZE);
 	Eigen::MatrixXd eg_e(SIZE,SIZE);
 
-	bc_a.randomize(0, 1000);
-	bc_b.randomize(0, 1000);
-	bc_c.randomize(0, 1000);
-	bc_d.randomize(0, 1000);
-	bc_e.randomize(0, 1000);
+	bc_a.randomize(0, 10000);
+	bc_b.randomize(0, 10000);
+	bc_c.randomize(0, 10000);
+	bc_d.randomize(0, 10000);
+	bc_e.randomize(0, 10000);
 
 	//copy to ensure same parameters
 	for (int i = 0; i < SIZE * SIZE; ++i) {

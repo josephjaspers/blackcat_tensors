@@ -53,10 +53,10 @@ template<> struct base<3> { template<class t, class m> using type = Cube<t, m>; 
 
 template<int a ,int b = a, class = void> struct Rank;
 template<class> struct ranker;
-template<class a, class b> struct ranker<Scalar<a,b>> { static constexpr int value = 0; using type = Rank<value, value>;  };
-template<class a, class b> struct ranker<Vector<a,b>> { static constexpr int value = 1; using type = Rank<value, value>;  };
-template<class a, class b> struct ranker<Matrix<a,b>> { static constexpr int value = 2; using type = Rank<value, value>;  };
-template<class a, class b> struct ranker<Cube<a,b>>   { static constexpr int value = 3; using type = Rank<value, value>;  };
+template<class a, class b> struct ranker<Scalar<a,b>> { static constexpr int value = 0; };
+template<class a, class b> struct ranker<Vector<a,b>> { static constexpr int value = 1; };
+template<class a, class b> struct ranker<Matrix<a,b>> { static constexpr int value = 2; };
+template<class a, class b> struct ranker<Cube<a,b>>   { static constexpr int value = 3; };
 
 template<class T> struct lst {
 	using front = T;

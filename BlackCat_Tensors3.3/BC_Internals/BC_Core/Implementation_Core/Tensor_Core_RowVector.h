@@ -15,13 +15,16 @@
 namespace BC {
 
 template<class PARENT>
-struct Tensor_Row {
+struct Tensor_Row : expression<_scalar<PARENT>, Tensor_Row<PARENT>>  {
 
 	using scalar = _scalar<PARENT>;
 	using self = Tensor_Row<PARENT>;
 	using slice_type = Tensor_Scalar<self>;
 
-	const PARENT& parent;
+	static constexpr int RANK() { return 1; }
+	static_assert(PARENT::RANK() == 2 || PARENT::RANK() == 1, "TENSOR_ROW CAN ONLY BE GENERATED FROM ANOTHER VECTOR, ROW_VECTOR, OR MATRIX");
+
+	const PARENT parent;
 	scalar* array_slice;
 
 	operator 	   scalar*()       { return array_slice; }

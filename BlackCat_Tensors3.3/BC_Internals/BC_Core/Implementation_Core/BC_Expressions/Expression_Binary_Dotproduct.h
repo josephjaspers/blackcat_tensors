@@ -39,10 +39,10 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 
 	static constexpr bool transA = det_eval<lv>::transposed;
 	static constexpr bool transB = det_eval<rv>::transposed;
-	static constexpr bool lv_scalar = det_eval<lv>::scalar;
-	static constexpr bool rv_scalar = det_eval<rv>::scalar;
-	static constexpr bool lv_eval = det_eval<lv>::evaluate;
-	static constexpr bool rv_eval = det_eval<rv>::evaluate;
+	static constexpr bool lv_scalar = false;//det_eval<lv>::scalar;
+	static constexpr bool rv_scalar = false;//det_eval<rv>::scalar;
+	static constexpr bool lv_eval = true;//det_eval<lv>::evaluate;
+	static constexpr bool rv_eval = true;//det_eval<rv>::evaluate;
 
 	struct deleter {
 		template<class param>

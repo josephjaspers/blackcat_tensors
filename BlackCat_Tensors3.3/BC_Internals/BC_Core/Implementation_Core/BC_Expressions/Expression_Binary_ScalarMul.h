@@ -1,24 +1,61 @@
 /*
- * BC_Expression_Binary.h
+ * Expression_Binary_ScalarMul.h
  *
- *  Created on: Dec 1, 2017
+ *  Created on: Mar 20, 2018
  *      Author: joseph
  */
-#ifndef EXPRESSION_BINARY_POINTWISE_SAME_H_
-#define EXPRESSION_BINARY_POINTWISE_SAME_H_
+
+#ifndef EXPRESSION_BINARY_SCALARMUL_H_
+#define EXPRESSION_BINARY_SCALARMUL_H_
 
 #include "Expression_Base.h"
 #include "Expression_Binary_Functors.h"
 #include <type_traits>
 namespace BC {
 
-template<class T, class operation, class lv, class rv>
-struct binary_expression : public expression<T, binary_expression<T, operation, lv, rv>> {
+template<class lv, class rv, class left = void>
+struct dominant_type {
+	__BCinline__ static const auto& shape(const lv& l, const rv& r) {
+		return l;
+	}
+};
+template<class lv, class rv>
+struct dominant_type<lv, rv, std::enable_if_t<(lv::RANK < rv::RANK)>> {
 
-	operation oper;
+	__BCinline__ static const auto& shape(const lv& l, const rv& r) {
+		return r;
+	}
+};
+
+template<class lv, class rv, class left = void>
+struct inferior_type {
+	__BCinline__ static const auto& shape(const lv& l, const rv& r) {
+		return l;
+	}
+};
+template<class lv, class rv>
+struct inferior_type<lv, rv, std::enable_if_t<(lv::RANK > rv::RANK)>> {
+
+	__BCinline__ static const auto& shape(const lv& l, const rv& r) {
+		return r;
+	}
+};
+
+
+template<class T, class lv, class rv>
+struct binary_expression_scalarMul : public expression<T, binary_expression_scalarMul<T, operation, lv, rv>> {
+
+	mul oper;
 
 	lv left;
 	rv right;
+
+	auto getScalar() {
+		return inferior_type<lv, rv>::shape(left,right);
+	}
+	auto getArray() {
+		return dominant_type<lv, rv>::shape(left, right);
+	}
 
 	static constexpr int RANK() { return lv::RANK() > rv::RANK() ? lv::RANK() : rv::RANK();}
 	static constexpr bool lv_dom = (lv::RANK() > rv::RANK());
@@ -28,7 +65,7 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 	}
 
 	template<class L, class R>
-	__BCinline__  binary_expression(L l, R r) :
+	__BCinline__  binary_expression_scalarMul(L l, R r) :
 			left(l), right(r) {
 	}
 
@@ -46,18 +83,6 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 	__BCinline__ const auto innerShape() const { return shape().innerShape(); }
 	__BCinline__ const auto outerShape() const { return shape().outerShape(); }
 
-
-	using sliceL = decltype(left.slice(0));
-	using sliceR = decltype(right.slice(0));
-
-	__BCinline__ const auto slice(int i) const {
-		return binary_expression<T, operation, sliceL, sliceR>(left.slice(i), right.slice(i)); }
-	__BCinline__ const auto row(int i) const {
-		return binary_expression<T, operation, decltype(left.row(0)), decltype(right.row(0))>(left.row(i), right.row(i)); }
-	__BCinline__ const auto col(int i) const {
-		return binary_expression<T, operation,  decltype(left.col(0)), decltype(right.col(0))>(left.col(i), right.col(i)); }
-
-
 	void printDimensions() 		const { shape().printDimensions();   }
 	void printLDDimensions()	const { shape().printLDDimensions(); }
 
@@ -67,5 +92,5 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 
 }
 
-#endif /* EXPRESSION_BINARY_POINTWISE_SAME_H_ */
 
+#endif /* EXPRESSION_BINARY_SCALARMUL_H_ */

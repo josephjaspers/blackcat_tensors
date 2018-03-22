@@ -2,6 +2,7 @@
 #include "../BlackCat_Tensors.h"
 #include <type_traits>
 #include "SpeedTests.h"
+#include "dotproduct_scratch.h"
 using BC::Vector;
 using BC::Matrix;
 using BC::Scalar;
@@ -42,6 +43,12 @@ auto test() {
 
 	d.print();
 	e.print();
+
+	std::cout << " E" << std::endl;
+	e.print();
+	std::cout << " a.print()" << std::endl;
+	a.print();
+	(a + e)[0].eval().print();
 
 	std::cout << " simple dot product [following should all have same value]" << std::endl;
 	c = d * e;
@@ -114,6 +121,8 @@ auto test() {
 	readM.print();
 	is.close();
 
+
+//	dotproduct(c, d);
 }
 
 #include "Benchmarks/BenchmarkEigen.h"
@@ -121,32 +130,29 @@ auto test() {
 
 
 int main() {
-
-	if (zeros('0', '0', '0'))
-		std::cout << " is true " << std::endl;
-
-	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
-	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
-//	omp_set_num_threads(2);
-	BC_EIGEN_BENCHMARK::benchmark1<4,     100000>();
-	BC_EIGEN_BENCHMARK::benchmark1<8,     100000>();
-	BC_EIGEN_BENCHMARK::benchmark1<16,    10000>();
-	BC_EIGEN_BENCHMARK::benchmark1<64,    10000>();
-	BC_EIGEN_BENCHMARK::benchmark1<128,   1000>();
-	BC_EIGEN_BENCHMARK::benchmark1<256,   1000>();
-	BC_EIGEN_BENCHMARK::benchmark1<512,   100>();
-
-	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark2_str() << std::endl;
-
-	BC_EIGEN_BENCHMARK::benchmark2<4,     100000>();
-	BC_EIGEN_BENCHMARK::benchmark2<8,     100000>();
-	BC_EIGEN_BENCHMARK::benchmark2<16,    10000>();
-	BC_EIGEN_BENCHMARK::benchmark2<64,    10000>();
-	BC_EIGEN_BENCHMARK::benchmark2<128,   1000>();
-	BC_EIGEN_BENCHMARK::benchmark2<256,   1000>();
-	BC_EIGEN_BENCHMARK::benchmark2<512,   100>();
-
+test();
+//	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
+//	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
+////	omp_set_num_threads(2);
+//	BC_EIGEN_BENCHMARK::benchmark1<4,     100000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<8,     100000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<16,    10000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<64,    10000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<128,   1000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<256,   1000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<512,   100>();
+//
+//	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark2_str() << std::endl;
+//
+//	BC_EIGEN_BENCHMARK::benchmark2<4,     100000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<8,     100000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<16,    10000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<64,    10000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<128,   1000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<256,   1000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<512,   100>();
+////
 	std::cout << " success  main" << std::endl;
-
-	return 0;
+//
+//	return 0;
 }

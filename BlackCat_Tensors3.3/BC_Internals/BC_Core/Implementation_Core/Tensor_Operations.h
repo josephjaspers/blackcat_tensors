@@ -37,31 +37,16 @@ struct Tensor_Operations {
 
 	using evaluation_type 	= _evaluation<derived>;	//The type returned when instant evaluation is required
 	using functor_type 		= _functor<derived>; //typename TRAITS::functor_type;		//The data-type passed to expressions
-	using scalar_type 		= _scalar<derived>; //typename TRAITS::scalar_type;			//The array_type of GenuineTensors and the Evaluation Type for ExpressionTensors
+	using scalar_type 		= _scalar<derived>;  //typename TRAITS::scalar_type;			//The array_type of GenuineTensors and the Evaluation Type for ExpressionTensors
 	using math_library 		= _mathlib<derived>; //typename TRAITS::math_library;
 
 	using this_type = derived;
 
 	template<class param_deriv, class functor>
 	struct impl {
-		//Determines the return type of pointwise operations
-		static constexpr int SCALAR = 0;
-
 		using param_functor_type = typename Tensor_Operations<param_deriv>::functor_type;
-
-		using type =
-				typename MTF::IF_ELSE<derived::RANK() != SCALAR && param_deriv::RANK() != SCALAR, //Neither are scalar
-					typename MTF::expression_substitution<binary_expression<scalar_type, functor, functor_type, param_functor_type>, derived>::type,
-					typename MTF::IF_ELSE<derived::RANK() == SCALAR && param_deriv::RANK() == SCALAR, //both are scalar
-						typename MTF::expression_substitution<binary_expression_scalar_LR<scalar_type, functor, functor_type, param_functor_type>, derived>::type,
-						typename MTF::IF_ELSE<derived::RANK() == SCALAR,  //if left is scalar else right is scalar
-							typename MTF::expression_substitution<binary_expression_scalar_L<scalar_type, functor, functor_type, param_functor_type>, param_deriv    >::type,
-							typename MTF::expression_substitution<binary_expression_scalar_R<scalar_type, functor, functor_type, param_functor_type>, derived>::type
-						>::type
-					>::type
-				>::type;
-
-		using unary_type = typename MTF::expression_substitution<unary_expression<scalar_type, functor, functor_type>, derived>::type;
+		using type = 	   typename MTF::expression_substitution<binary_expression<scalar_type, functor, functor_type ,param_functor_type>, derived>::type;
+		using unary_type = typename MTF::expression_substitution<unary_expression <scalar_type, functor, functor_type>, 					derived>::type;
 	};
 
 	template<class param_deriv>
@@ -71,10 +56,6 @@ struct Tensor_Operations {
 		static constexpr bool lv_scalar = derived::RANK() == 0;
 		static constexpr bool rv_scalar = param_deriv::RANK() == 0;
 		static constexpr bool scalar_mul = lv_scalar || rv_scalar;
-		using greater_type = typename MTF::IF_ELSE<(derived::RANK() > param_deriv::RANK()), derived, param_deriv>::type;
-		using lesser_type = typename MTF::IF_ELSE<(derived::RANK() < param_deriv::RANK()), derived, param_deriv>::type;
-
-		static constexpr int ORDER = scalar_mul ? greater_type::RANK() : derived::RANK() == 1 && param_deriv::RANK() == 1 ? 2 : lesser_type::RANK();
 
 		static constexpr bool evaluate_to_vector = derived::RANK() == 2 && param_deriv::RANK() == 1;
 		static constexpr bool evaluate_to_matrix = derived::RANK() == 2 && param_deriv::RANK() == 2;
@@ -89,22 +70,15 @@ struct Tensor_Operations {
 										typename MTF::expression_substitution<binary_expression_scalar_R<scalar_type, mul, functor_type, param_functor_type>, derived	 >::type
 									>::type,
 								void>::type;
-
-		using vecType 		= 	typename MTF::IF_ELSE<evaluate_to_vector,
-								typename MTF::expression_substitution<binary_expression_dotproduct<scalar_type, functor_type, param_functor_type, math_library>,param_deriv>::type, void>::type;
-
-		using matType 		= 	typename MTF::IF_ELSE<evaluate_to_matrix,
-								typename MTF::expression_substitution<binary_expression_dotproduct<scalar_type, functor_type, param_functor_type, math_library>,param_deriv>::type, void>::type;
-
-		using outerType 	= 	typename MTF::IF_ELSE<evaluate_to_mat_vv,
-								typename MTF::expression_substitution<binary_expression_dotproduct<scalar_type, functor_type, param_functor_type, math_library>,
-								Matrix<functor_type, math_library>>::type, void>::type;
+		using vecType = typename MTF::expression_substitution<binary_expression_dotproduct<scalar_type, functor_type, param_functor_type, math_library>,param_deriv>::type;
+		using matType = typename MTF::expression_substitution<binary_expression_dotproduct<scalar_type, functor_type, param_functor_type, math_library>,param_deriv>::type;
+		using outerType = typename MTF::expression_substitution<binary_expression_dotproduct<scalar_type, functor_type, param_functor_type, math_library>,
+									Matrix<functor_type, math_library>>::type;
 
 		using type 			= 	typename MTF::IF_ELSE<evaluate_to_vector, vecType,
 									typename MTF::IF_ELSE<evaluate_to_matrix, matType,
 										typename MTF::IF_ELSE<evaluate_to_mat_vv, outerType,
-											typename MTF::IF_ELSE<evaluate_to_dominant, mulType, void
-											>::type
+											mulType
 										>::type
 									>::type
 								>::type;
@@ -115,6 +89,8 @@ struct Tensor_Operations {
 
 	template<class deriv> void  assert_same_size(const Tensor_Operations<deriv>& tensor) const {
 #ifdef	BLACKCAT_TENSORS_ASSERT_VALID
+
+		if (derived::RANK() != 0 && deriv::RANK() != 0)
 		if ((asBase().size() != tensor.asBase().size()) && (this->asBase().RANK() != 0 && tensor.asBase().RANK() != 0)) {
 			std::cout << "this_dims "; asBase().printDimensions();
 			std::cout << "\n param_dims "; tensor.asBase().printDimensions();
@@ -166,18 +142,6 @@ struct Tensor_Operations {
 		assert_same_size(param.get());
 		return typename impl<pDeriv, mul>::type(this->data(), param.get().data());
 	}
-	//Delayed assignment operator
-	template<class pDeriv>
-	typename impl<pDeriv, assign>::type operator ==(const Tensor_Operations<pDeriv>& param) {
-		assert_same_size(param);
-		return typename impl<pDeriv, assign>::type(this->data(), param.data());
-	}
-	//combine expression, unify two same sized independent operations to be lazy evaluated
-	template<class pDeriv>
-	typename impl<pDeriv, combine>::type operator &&(const Tensor_Operations<pDeriv>& param) {
-		assert_same_size(param);
-		return typename impl<pDeriv, combine>::type(this->data(), param.data());
-	}
 
 	//Standard pointwise expressions.
 	template<class pDeriv>
@@ -227,9 +191,41 @@ struct Tensor_Operations {
 		assert_same_size(param);
 		return *this = typename impl<pDeriv, mul>::type(this->data(), param.data());
 	}
-	//Enables users to implement their own pointwise functions that can be lazy evaluated
 
 
+	//-------------------------------------------COMBINE AND DELAYED ASSIGNMENT OPERATORS---------------------------------------------//
+	//Delayed assignment operator
+	template<class pDeriv>
+	typename impl<pDeriv, assign>::type operator ==(const Tensor_Operations<pDeriv>& param) {
+		assert_same_size(param);
+		return typename impl<pDeriv, assign>::type(this->data(), param.data());
+	}
+	//combine expression, unify two same sized independent operations to be lazy evaluated
+	template<class pDeriv>
+	typename impl<pDeriv, combine>::type operator &&(const Tensor_Operations<pDeriv>& param) {
+		assert_same_size(param);
+		return typename impl<pDeriv, combine>::type(this->data(), param.data());
+	}
+	template<class pDeriv>
+	typename impl<pDeriv, mul>::type operator +=(const alternate_asterix_denoter<pDeriv>& param) const {
+		assert_same_size(param.get());
+		return typename impl<pDeriv, add>::type(this->data(), param.get().data());
+	}
+	template<class pDeriv>
+	typename impl<pDeriv, mul>::type operator -=(const alternate_asterix_denoter<pDeriv>& param) const {
+		assert_same_size(param.get());
+		return typename impl<pDeriv, sub>::type(this->data(), param.get().data());
+	}
+	template<class pDeriv>
+	typename impl<pDeriv, mul>::type operator %=(const alternate_asterix_denoter<pDeriv>& param) const {
+		assert_same_size(param.get());
+		return typename impl<pDeriv, mul>::type(this->data(), param.get().data());
+	}
+	template<class pDeriv>
+	typename impl<pDeriv, div>::type operator /=(const alternate_asterix_denoter<pDeriv>& param) const {
+		assert_same_size(param.get());
+		return typename impl<pDeriv, add>::type(this->data(), param.get().data());
+	}
 	template<class functor>
 	auto unExpr(functor f) const {
 		return typename impl<derived, functor>::unary_type(asBase().data());
@@ -239,7 +235,6 @@ struct Tensor_Operations {
 			assert_same_size(rv);
 		return typename impl<d2, functor>::type(asBase().data(), rv.asBase().data());
 	}
-
 	template<class functor>
 	auto unExpr() const {
 		return typename impl<derived, functor>::unary_type(asBase().data());

@@ -39,9 +39,7 @@
 									<listOptionValue builtIn="false" value="/usr/local/include/atlas-base"/>
 									<listOptionValue builtIn="false" value="/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions"/>
 								</option>
-								<option id="nvcc.compiler.compileroptions.285166584" name="Preprocessor options (-Xcompiler)" superClass="nvcc.compiler.compileroptions" valueType="stringList">
-									<listOptionValue builtIn="false" value="-fopenmp"/>
-								</option>
+								<option id="nvcc.compiler.compileroptions.285166584" name="Preprocessor options (-Xcompiler)" superClass="nvcc.compiler.compileroptions" valueType="stringList"/>
 								<inputType id="nvcc.compiler.input.cu.239005022" superClass="nvcc.compiler.input.cu"/>
 								<inputType id="nvcc.compiler.input.cpp.2118431259" superClass="nvcc.compiler.input.cpp"/>
 								<inputType id="nvcc.compiler.input.c.66856890" superClass="nvcc.compiler.input.c"/>

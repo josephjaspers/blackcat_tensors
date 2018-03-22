@@ -36,6 +36,15 @@ public:
 		return oper(array[index]);
 	}
 
+	__BCinline__ const auto slice(int i) const {
+		return unary_expression<T, operation, decltype(array.slice(0))>(array.slice(i)); }
+	__BCinline__ const auto row(int i) const {
+		return unary_expression<T, operation, decltype(array.row(0))>(array.row(i)); }
+	__BCinline__ const auto col(int i) const {
+		return unary_expression<T, operation, decltype(array.col(0))>(array.col(i)); }
+
+
+
 	void printDimensions() 		const { array.printDimensions();   }
 	void printLDDimensions()	const { array.printLDDimensions(); }
 

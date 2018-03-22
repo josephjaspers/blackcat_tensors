@@ -14,7 +14,7 @@
 namespace BC {
 
 template<class PARENT>
-struct Tensor_Scalar {
+struct Tensor_Scalar : expression<_scalar<PARENT>, Tensor_Scalar<PARENT>> {
 
 	using scalar = _scalar<PARENT>;
 	using self = Tensor_Scalar<PARENT>;
@@ -22,7 +22,7 @@ struct Tensor_Scalar {
 	static constexpr int RANK = lower(PARENT::RANK);
 	static constexpr int LAST =  lower(PARENT::LAST);
 
-	const PARENT& parent;
+	const PARENT parent;
 	scalar* array_slice;
 
 	operator 	   scalar*()       { return array_slice; }

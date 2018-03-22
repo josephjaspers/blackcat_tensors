@@ -33,7 +33,7 @@ protected:
 	using functor_type 	= _functor<derived>;
 	using Mathlib 		= _mathlib<derived>;
 
-	static constexpr int RANK 		= ranker<derived>::type::inner_rank;
+	static constexpr int RANK 		= ranker<derived>::value;
 
 public:
 	using math_parent::operator=;
@@ -93,14 +93,21 @@ public:
 		  auto getSlice(int i) { return typename base<RANK>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
 
 	const auto row(int i) const {
-			static_assert(RANK == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
-			return typename base<1>::template type<decltype(row_(0)), Mathlib>(row_(i));
+		static_assert(RANK == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		return typename base<1>::template type<decltype(row_(0)), Mathlib>(row_(i));
 	}
-		  auto row(int i) {
-			static_assert(RANK == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
-		  	return typename base<1>::template type<decltype(row_(0)), Mathlib>(row_(i));
+	auto row(int i) {
+		static_assert(RANK == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		return typename base<1>::template type<decltype(row_(0)), Mathlib>(row_(i));
 	}
-
+	const auto col(int i) const {
+		static_assert(RANK == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		return (*this)[i];
+	}
+	auto col(int i) {
+		static_assert(RANK == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		return (*this)[i];
+	}
 
 	const auto operator() (int i) const { return getScalar(i); }
 		  auto operator() (int i) 	    { return getScalar(i); }
