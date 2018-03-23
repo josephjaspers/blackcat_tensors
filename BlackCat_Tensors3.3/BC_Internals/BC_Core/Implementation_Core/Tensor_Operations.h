@@ -14,6 +14,7 @@
 #include "BC_Expressions/Expression_Unary_Pointwise.h"
 #include "BC_Expressions/Expression_Binary_Dotproduct.h"
 #include "BC_Expressions/Expression_Unary_MatrixTransposition.h"
+#include "BC_Expressions/Expression_Binary_Correlation.h"
 
 #include "Determiners.h"
 #include <type_traits>
@@ -220,6 +221,15 @@ struct Tensor_Operations {
 	//------------------------------------alternate asterix denoter----------------------------------//
 	__BCinline__ const alternate_asterix_denoter<derived> operator * () const {
 		return alternate_asterix_denoter<derived>(this);
+	}
+
+//	------------------------------------higher order functions----------------------------------//
+	template<class pDeriv> __BCinline__
+	auto x_corr(const Tensor_Operations<pDeriv>& param) const {
+		assert_same_ml(param);
+		return typename MTF::expression_substitution<
+					binary_expression_correlation<scalar_type, functor_type ,_functor<pDeriv>>, derived
+						>::type(this->data(), param.data());
 	}
 };
 }

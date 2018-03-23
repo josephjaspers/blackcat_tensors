@@ -54,32 +54,69 @@ struct inferior_type<lv, rv, std::enable_if_t<(lv::RANK() == rv::RANK())>> {
 	}
 };
 
-template<int size>
-struct stack_list : stack_list<size - 1> {
+template<class T, int size>
+struct stack_array : stack_array<T, size - 1> {
+
 	template<class... values>
-	stack_list(int val, values... integers) : stack_list<size - 1>(integers...), dim(val) {}
+	stack_array(T val, values... integers) : stack_array<T, size - 1>(integers...), dim(val) {}
+	stack_array() = default;
 
-	int dim;
+	T dim = 0;
 	operator int() const { return dim; }
-	auto& next() const { return static_cast<const stack_list<size - 1>&>(*this); }
+	operator const int*() const { return &dim; }
 
-	int operator [] (int i) const {
+	auto& next() const { return static_cast<const stack_array<T, size - 1>& >(*this); }
+
+	const T& operator [] (int i) const {
+		return (&dim)[-i];
+	}
+	T& operator [] (int i) {
 		return (&dim)[-i];
 	}
 };
 
-template<>
-struct stack_list<0> {	int operator [] (int i) const {
-	std::cout << " out of bounds " << std::endl;
-	return 0;
-}};
-template<class... integers>
-auto generateDimList(integers... values) {
+template<class T>
+struct stack_array<T, 0> {
+	T operator [](int i) const {
+		std::cout << " out of bounds " << std::endl;
+		return 0;
+	}
+};
 
-	return stack_list<sizeof...(values)>(values...);
+template<class ref>
+struct reference_array {
+	ref value;
+
+	reference_array(ref a_) :
+			value(a_) {
+	}
+
+	const auto operator [](int i) const {
+		return value.dimension(i);
+	}
+	auto operator [](int i) {
+		return value.dimension(i);
+	}
+};
+
+
+template<class T, class... vals>
+auto array(T front, vals... values) {
+	return stack_array<T, sizeof...(values) + 1>(front, values...);
+}
+
+template<class T>
+auto ref_array(T data) {
+	return reference_array<T>(data);
 }
 
 
+template<bool b>
+struct trueFalse {
+	using type = std::conditional<b, std::true_type, std::false_type>;
+};
+template<bool b>
+using tf = typename trueFalse<b>::type;
 
 
 

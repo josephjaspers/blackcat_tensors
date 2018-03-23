@@ -32,7 +32,7 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 			left(l), right(r) {
 	}
 
-	__BCinline__  auto operator [](int index) const -> decltype(oper(left[index], right[index])) {
+	__BCinline__  auto operator [](int index) const {
 		return oper(left[index], right[index]);
 	}
 

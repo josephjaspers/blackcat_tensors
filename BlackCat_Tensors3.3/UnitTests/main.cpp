@@ -49,7 +49,7 @@ auto test() {
 	std::cout << " a.print()" << std::endl;
 	a.print();
 	(a[0][0] + a).print();
-	(a[0][0] + a + e + a[0][0] + ALPHAS)[0].print(); //Only the first column is calculated (the beauty of delayed evaluation)
+	(a[0][0] + a + e  + ALPHAS)[0].print(); //Only the first column is calculated (the beauty of delayed evaluation)
 
 	std::cout << " simple dot product [following should all have same value]" << std::endl;
 	c = d * e;
@@ -143,32 +143,60 @@ auto test() {
 
 }
 
+void testCorrelation() {
+
+	mat a(3,3);
+	mat b(2,2);
+
+
+	mat c(2,2);
+	c.zero();
+	for (int i = 0; i < a.size();++i) {
+		a(i) = i;
+	}
+	for (int u = 0; u < b.size(); ++u) {
+		b(u) = u;
+	}
+a.print();
+b.print();
+	b.x_corr(a);
+//
+	(b.x_corr(a)).printDimensions();
+c = b.x_corr(a);
+
+	c.print();
+
+	c = b.x_corr(a);
+}
+
 #include "Benchmarks/BenchmarkEigen.h"
 
 
 
 int main() {
 //test();
-	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
-	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
-//	omp_set_num_threads(2);
-	BC_EIGEN_BENCHMARK::benchmark1<4,     100000>();
-	BC_EIGEN_BENCHMARK::benchmark1<8,     100000>();
-	BC_EIGEN_BENCHMARK::benchmark1<16,    10000>();
-	BC_EIGEN_BENCHMARK::benchmark1<64,    10000>();
-	BC_EIGEN_BENCHMARK::benchmark1<128,   1000>();
-	BC_EIGEN_BENCHMARK::benchmark1<256,   1000>();
-	BC_EIGEN_BENCHMARK::benchmark1<512,   100>();
-
-	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark2_str() << std::endl;
-
-	BC_EIGEN_BENCHMARK::benchmark2<4,     100000>();
-	BC_EIGEN_BENCHMARK::benchmark2<8,     100000>();
-	BC_EIGEN_BENCHMARK::benchmark2<16,    10000>();
-	BC_EIGEN_BENCHMARK::benchmark2<64,    10000>();
-	BC_EIGEN_BENCHMARK::benchmark2<128,   1000>();
-	BC_EIGEN_BENCHMARK::benchmark2<256,   1000>();
-	BC_EIGEN_BENCHMARK::benchmark2<512,   100>();
+	testCorrelation();
+//
+//	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
+//	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
+////	omp_set_num_threads(2);
+//	BC_EIGEN_BENCHMARK::benchmark1<4,     100000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<8,     100000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<16,    10000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<64,    10000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<128,   1000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<256,   1000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<512,   100>();
+//
+//	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark2_str() << std::endl;
+//
+//	BC_EIGEN_BENCHMARK::benchmark2<4,     100000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<8,     100000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<16,    10000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<64,    10000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<128,   1000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<256,   1000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<512,   100>();
 ////
 	std::cout << " success  main" << std::endl;
 //
