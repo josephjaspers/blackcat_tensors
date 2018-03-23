@@ -71,7 +71,7 @@ struct Tensor_Operations {
 	};
 
 
-	template<class deriv>  __BCinline__
+	template<class deriv>
 	void  assert_same_size(const Tensor_Operations<deriv>& tensor) const {
 #ifdef	BLACKCAT_TENSORS_ASSERT_VALID
 
@@ -102,59 +102,59 @@ struct Tensor_Operations {
 
 	//-------------------------------------dotproduct-----------------------------------------//
 
-	template<class pDeriv> __BCinline__
-	typename dp_impl<pDeriv>::type operator *(const Tensor_Operations<pDeriv>& param) const {
+	template<class pDeriv>
+	auto operator *(const Tensor_Operations<pDeriv>& param) const {
 		 return typename dp_impl<pDeriv>::type(this->data(), param.data());
 	}
 	//--------------------------------------pointwise operators-------------------------------//
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	typename impl<pDeriv, add>::type operator +(const Tensor_Operations<pDeriv>& param) const {
 		assert_same_size(param);
 		return typename impl<pDeriv, add>::type(this->data(), param.data());
 	}
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	typename impl<pDeriv, sub>::type operator -(const Tensor_Operations<pDeriv>& param) const {
 		assert_same_size(param);
 		return typename impl<pDeriv, sub>::type(this->data(), param.data());
 	}
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	typename impl<pDeriv, div>::type operator /(const Tensor_Operations<pDeriv>& param) const {
 		assert_same_size(param);
 		return typename impl<pDeriv, div>::type(this->data(), param.data());
 	}
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	typename impl<pDeriv, mul>::type operator %(const Tensor_Operations<pDeriv>& param) const {			//overloaded for pointwise multiply
 		assert_same_size(param);
 		return typename impl<pDeriv, mul>::type(this->data(), param.data());
 	}
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	typename impl<pDeriv, mul>::type operator *(const alternate_asterix_denoter<pDeriv>& param) const { //alternative for pointwise multiply
 		assert_same_size(param.get());
 		return typename impl<pDeriv, mul>::type(this->data(), param.get().data());
 	}
 	//--------------------------------------assignment operators-----------------------------------------------//
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	derived& operator =(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
 		math_library::copy(asBase().data(), param.asBase().data(), this->asBase().size());
 		return static_cast<derived&>(*this);
 	}
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	derived& operator +=(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
 		return *this = typename impl<pDeriv, add>::type(this->data(), param.data());
 	}
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	derived& operator -=(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
 		return *this = typename impl<pDeriv, sub>::type(this->data(), param.data());
 	}
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	derived& operator /=(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
 		return *this = typename impl<pDeriv, div>::type(this->data(), param.data());
 	}
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	derived& operator %=(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
 		return *this = typename impl<pDeriv, mul>::type(this->data(), param.data());
@@ -162,75 +162,67 @@ struct Tensor_Operations {
 
 
 	//-------------------------------------------DELAYED ASSIGNMENT OPERATORS---------------------------------------------//
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	typename impl<pDeriv, assign>::type operator ==(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
 		return typename impl<pDeriv, assign>::type(this->data(), param.data());
 	}
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	typename impl<pDeriv, assign>::type operator =(const alternate_asterix_denoter<pDeriv>& param) {
 		assert_same_size(param);
 		return typename impl<pDeriv, assign>::type(this->data(), param.data());
 	}
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	typename impl<pDeriv, mul>::type operator +=(const alternate_asterix_denoter<pDeriv>& param) const {
 		assert_same_size(param.get());
 		return typename impl<pDeriv, add>::type(this->data(), param.get().data());
 	}
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	typename impl<pDeriv, mul>::type operator -=(const alternate_asterix_denoter<pDeriv>& param) const {
 		assert_same_size(param.get());
 		return typename impl<pDeriv, sub>::type(this->data(), param.get().data());
 	}
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	typename impl<pDeriv, mul>::type operator %=(const alternate_asterix_denoter<pDeriv>& param) const {
 		assert_same_size(param.get());
 		return typename impl<pDeriv, mul>::type(this->data(), param.get().data());
 	}
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	typename impl<pDeriv, div>::type operator /=(const alternate_asterix_denoter<pDeriv>& param) const {
 		assert_same_size(param.get());
 		return typename impl<pDeriv, add>::type(this->data(), param.get().data());
 	}
 
 	//-----------------------------------COMBINE EXPRESSION-------------------------------------------------//
-	template<class pDeriv> __BCinline__
+	template<class pDeriv>
 	typename impl<pDeriv, combine>::type operator &&(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
 		return typename impl<pDeriv, combine>::type(this->data(), param.data());
 	}
 
 	//-----------------------------------custom expressions--------------------------------------------------//
-	template<class functor> __BCinline__
+	template<class functor>
 	auto unExpr(functor f) const {
 		return typename impl<derived, functor>::unary_type(asBase().data());
 	}
-	template<class d2, class functor> __BCinline__
+	template<class d2, class functor>
 	auto binExpr(functor f, const Tensor_Operations<d2>& rv) {
 			assert_same_size(rv);
 		return typename impl<d2, functor>::type(asBase().data(), rv.asBase().data());
 	}
-	template<class functor> __BCinline__
+	template<class functor>
 	auto unExpr() const {
 		return typename impl<derived, functor>::unary_type(asBase().data());
 	}
-	template<class functor, class d2> __BCinline__
+	template<class functor, class d2>
 	auto binExpr(const Tensor_Operations<d2>& rv) {
 		return typename impl<d2, functor>::type(asBase().data(), rv.asBase().data());
 	}
 	//------------------------------------alternate asterix denoter----------------------------------//
-	__BCinline__ const alternate_asterix_denoter<derived> operator * () const {
+	 const alternate_asterix_denoter<derived> operator * () const {
 		return alternate_asterix_denoter<derived>(this);
 	}
 
-//	------------------------------------higher order functions----------------------------------//
-	template<class pDeriv> __BCinline__
-	auto x_corr(const Tensor_Operations<pDeriv>& param) const {
-		assert_same_ml(param);
-		return typename MTF::expression_substitution<
-					binary_expression_correlation<scalar_type, functor_type ,_functor<pDeriv>>, derived
-						>::type(this->data(), param.data());
-	}
 };
 }
 #endif /* TENSOR_CORE_H_ */

@@ -43,7 +43,7 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	lifetime_reaper array;
 	scalar_type* array_ptr;
 
-	__BCinline__ binary_expression_dotproduct(lv left, rv right) : left(left), right(right) {
+	 binary_expression_dotproduct(lv left, rv right) : left(left), right(right) {
 		Mathlib::initialize(array_ptr,size());
 		array = lifetime_reaper(array_ptr, deleter());
 		eval();

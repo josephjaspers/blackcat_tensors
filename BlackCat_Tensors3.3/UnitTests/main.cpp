@@ -50,7 +50,7 @@ auto test() {
 	a.print();
 	(a[0][0] + a).print();
 	(a[0][0] + a + e  + ALPHAS)[0].print(); //Only the first column is calculated (the beauty of delayed evaluation)
-
+//
 	std::cout << " simple dot product [following should all have same value]" << std::endl;
 	c = d * e;
 	c.print();
@@ -159,14 +159,14 @@ void testCorrelation() {
 	}
 a.print();
 b.print();
-	b.x_corr(a);
+//	b.x_corr(a);
+////
+//	(b.x_corr(a)).printDimensions();
+//c = b.x_corr(a);
 //
-	(b.x_corr(a)).printDimensions();
-c = b.x_corr(a);
-
-	c.print();
-
-	c = b.x_corr(a);
+//	c.print();
+//
+//	c = b.x_corr(a);
 }
 
 #include "Benchmarks/BenchmarkEigen.h"
@@ -174,8 +174,8 @@ c = b.x_corr(a);
 
 
 int main() {
-//test();
-	testCorrelation();
+test();
+//	testCorrelation();
 //
 //	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
 //	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
