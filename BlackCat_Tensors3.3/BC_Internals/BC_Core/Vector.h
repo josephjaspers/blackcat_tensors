@@ -49,3 +49,4 @@ public:
 } //End Namespace BCw
 
 #endif /* VECTOR_H_ */
+
