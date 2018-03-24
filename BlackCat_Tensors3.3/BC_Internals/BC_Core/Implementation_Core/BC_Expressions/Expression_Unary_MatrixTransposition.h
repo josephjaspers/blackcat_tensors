@@ -14,7 +14,7 @@ template<class T, class functor_type>
 struct unary_expression_transpose : expression<T, unary_expression_transpose<T, functor_type>>
 {
 	functor_type array;
-	static constexpr int RANK() { return functor_type::RANK(); }
+	static constexpr int DIMS() { return functor_type::DIMS(); }
 
 	const bool vector = rows() == 1 || cols() == 1;
 
@@ -22,7 +22,7 @@ struct unary_expression_transpose : expression<T, unary_expression_transpose<T, 
 
 	unary_expression_transpose(functor_type p) : array(p) {}
 
-	__BCinline__	int rank() const { return array.rank(); }
+	__BCinline__	int dims() const { return array.dims(); }
 	__BCinline__ int rows() const { return array.cols(); }
 	__BCinline__ int cols() const { return array.rows(); }
 	__BCinline__ int size() const { return array.size(); }

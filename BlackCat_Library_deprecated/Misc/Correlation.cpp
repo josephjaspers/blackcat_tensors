@@ -6,7 +6,7 @@ template<class V, class T, class U>
 	static void x_correlation(TensorBase<V>& cor, const TensorBase<T>& krnl, const TensorBase<U>& img) {
 
 
-		const int krnl_rank = krnl.rank();
+		const int krnl_rank = krnl.dims();
 		const int* krnl_shape = krnl.innerShape;
 		const int img_size = img.size();
 		const int img_rows = img.rows();

@@ -21,8 +21,8 @@ struct Tensor_Row : expression<_scalar<PARENT>, Tensor_Row<PARENT>>  {
 	using self = Tensor_Row<PARENT>;
 	using slice_type = Tensor_Scalar<self>;
 
-	static constexpr int RANK() { return 1; }
-	static_assert(PARENT::RANK() == 2 || PARENT::RANK() == 1, "TENSOR_ROW CAN ONLY BE GENERATED FROM ANOTHER VECTOR, ROW_VECTOR, OR MATRIX");
+	static constexpr int DIMS() { return 1; }
+	static_assert(PARENT::DIMS() == 2 || PARENT::DIMS() == 1, "TENSOR_ROW CAN ONLY BE GENERATED FROM ANOTHER VECTOR, ROW_VECTOR, OR MATRIX");
 
 	const PARENT parent;
 	scalar* array_slice;
@@ -32,7 +32,7 @@ struct Tensor_Row : expression<_scalar<PARENT>, Tensor_Row<PARENT>>  {
 
 	Tensor_Row(scalar* array, const PARENT& parent_) : array_slice(array), parent(parent_) {}
 	__BCinline__ int increment() const { return parent.LD_rows(); }
-	__BCinline__ int rank() const { return 1; }
+	__BCinline__ int dims() const { return 1; }
 	__BCinline__ int size() const { return parent.cols(); }
 	__BCinline__ int rows() const { return parent.cols(); }
 	__BCinline__ int cols() const { return 1; }

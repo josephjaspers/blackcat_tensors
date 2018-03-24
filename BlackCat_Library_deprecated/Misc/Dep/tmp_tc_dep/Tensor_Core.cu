@@ -71,7 +71,7 @@
 //	Tensor_Core(scalar* ary)
 //		: array(ary), array_ownership(false), order(0), sz(1), is(0), os(0) {}
 //
-//	__BC_gcpu__ int rank() const { return order; }
+//	__BC_gcpu__ int dims() const { return order; }
 //	__BC_gcpu__ int size() const { return sz;    }
 //	__BC_gcpu__ int rows() const { return order > 0 ? is[0] : 1; }
 //	__BC_gcpu__ int cols() const { return order > 1 ? is[1] : 1; }
@@ -85,7 +85,7 @@
 //
 //	__BC_gcpu__ const int* InnerShape() const { return &is[0]; }
 //	__BC_gcpu__ const int* OuterShape() const { return &os[0]; }
-//	void print() const { Mathlib::print(array, InnerShape(),rank(), 4); }
+//	void print() const { Mathlib::print(array, InnerShape(),dims(), 4); }
 //
 //	__BC_gcpu__ const scalar* data() const { return array; }
 //	__BC_gcpu__ scalar* data()  		   { return array; }

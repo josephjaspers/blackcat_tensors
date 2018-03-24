@@ -34,10 +34,10 @@ public:
 		return typename MTF::shell_of<deriv>::template type<_scalar<deriv>, _mathlib<deriv>>(this->asDerived());
 	}
 	void print() const {
-		MATHLIB::print(eval().data().core(), asDerived().innerShape(), asDerived().rank(), 8);
+		MATHLIB::print(eval().data().core(), asDerived().innerShape(), asDerived().dims(), 8);
 	}
 	void print(int precision) const {
-		MATHLIB::print(eval().data().core(), asDerived().innerShape(), asDerived().rank(), precision);
+		MATHLIB::print(eval().data().core(), asDerived().innerShape(), asDerived().dims(), precision);
 	}
 };
 template<class deriv>
@@ -72,16 +72,16 @@ public:
 		MATHLIB::zero(asDerived().data(), asDerived().size());
 	}
 	void print() const {
-		MATHLIB::print(asDerived().data().core(), asDerived().innerShape(), asDerived().rank(), 8);
+		MATHLIB::print(asDerived().data().core(), asDerived().innerShape(), asDerived().dims(), 8);
 	}
 	void print(int precision) const {
-		MATHLIB::print(asDerived().data().core(), asDerived().innerShape(), asDerived().rank(), precision);
+		MATHLIB::print(asDerived().data().core(), asDerived().innerShape(), asDerived().dims(), precision);
 	}
 	void printSparse() const {
-		MATHLIB::printSparse(asDerived().data().core(), asDerived().innerShape(), asDerived().rank(), 8);
+		MATHLIB::printSparse(asDerived().data().core(), asDerived().innerShape(), asDerived().dims(), 8);
 	}
 	void printSparse(int precision) const {
-		MATHLIB::printSparse(asDerived().data().core(), asDerived().innerShape(), asDerived().rank(), precision);
+		MATHLIB::printSparse(asDerived().data().core(), asDerived().innerShape(), asDerived().dims(), precision);
 	}
 
 	void write(std::ofstream& os) const {
@@ -89,8 +89,8 @@ public:
 		scalar_type* data = new scalar_type[asDerived().size()];
 		MATHLIB::DeviceToHost(data, asDerived().data().core(), asDerived().size());
 
-		os << asDerived().rank() << ',';
-		for (int i = 0; i < asDerived().rank(); ++i) {
+		os << asDerived().dims() << ',';
+		for (int i = 0; i < asDerived().dims(); ++i) {
 			os << asDerived().dimension(i) << ',';
 		}
 		for (int i = 0; i < asDerived().size() - 1; ++i) {

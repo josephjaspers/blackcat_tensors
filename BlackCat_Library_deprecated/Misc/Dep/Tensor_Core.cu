@@ -46,7 +46,7 @@
 //		int* is;
 //		int* os;
 //
-//		__BC_gcpu__ int rank() const { return RANK; }
+//		__BC_gcpu__ int dims() const { return RANK; }
 //		__BC_gcpu__ int size() const { return RANK > 0 ? os[LAST] : 1;    }
 //		__BC_gcpu__ int rows() const { return RANK > 0 ? is[0] : 1; }
 //		__BC_gcpu__ int cols() const { return RANK > 1 ? is[1] : 1; }
@@ -120,7 +120,7 @@
 ////		param.array = nullptr;
 ////	}
 //
-//	__BC_gcpu__ int rank() const { return RANK; }
+//	__BC_gcpu__ int dims() const { return RANK; }
 //	__BC_gcpu__ int size() const { return RANK > 0 ? os[LAST] : 1;    }
 //	__BC_gcpu__ int rows() const { return RANK > 0 ? is[0] : 1; }
 //	__BC_gcpu__ int cols() const { return RANK > 1 ? is[1] : 1; }
@@ -136,7 +136,7 @@
 //	const scalar* core() const { return array; }
 //		  scalar* core()  	   { return array; }
 //
-//	void print() const { Mathlib::print(array, this->innerShape(),rank(), 4); }
+//	void print() const { Mathlib::print(array, this->innerShape(),dims(), 4); }
 //
 //	void printDimensions() const {
 //		for (int i = 0; i < RANK; ++i) {

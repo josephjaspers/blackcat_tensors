@@ -50,17 +50,17 @@ struct Tensor_Operations {
 
 	template<class param_deriv, class functor>
 	struct impl {
-		using greater_rank_type = std::conditional_t<(derived::RANK() > param_deriv::RANK()), derived, param_deriv>;
+		using greater_rank_type = std::conditional_t<(derived::DIMS() > param_deriv::DIMS()), derived, param_deriv>;
 		using param_functor_type = typename Tensor_Operations<param_deriv>::functor_type;
 		using type = 	   typename MTF::expression_substitution<binary_expression<scalar_type, functor, functor_type ,param_functor_type>, greater_rank_type>::type;
 		using unary_type = typename MTF::expression_substitution<unary_expression <scalar_type, functor, functor_type>, 					greater_rank_type>::type;
 	};
 	template<class param_deriv>
 	struct dp_impl {
-		static constexpr bool SCALAR_MUL = derived::RANK() == 0 || param_deriv::RANK() == 0;
+		static constexpr bool SCALAR_MUL = derived::DIMS() == 0 || param_deriv::DIMS() == 0;
 		using param_functor_type 	= typename Tensor_Operations<param_deriv>::functor_type;
-		using greater_rank_type 	= std::conditional_t<(derived::RANK() > param_deriv::RANK()), derived, param_deriv>;
-		using lesser_rank_type 		= std::conditional_t<(derived::RANK() < param_deriv::RANK()), derived, param_deriv>;
+		using greater_rank_type 	= std::conditional_t<(derived::DIMS() > param_deriv::DIMS()), derived, param_deriv>;
+		using lesser_rank_type 		= std::conditional_t<(derived::DIMS() < param_deriv::DIMS()), derived, param_deriv>;
 
 		using dot_type 				= binary_expression_dotproduct<scalar_type, _functor<derived>, _functor<param_deriv>, math_library>;
 		using scalmul_type 			= binary_expression_scalar_mul<scalar_type, functor_type ,param_functor_type>;
@@ -75,10 +75,10 @@ struct Tensor_Operations {
 	void  assert_same_size(const Tensor_Operations<deriv>& tensor) const {
 #ifdef	BLACKCAT_TENSORS_ASSERT_VALID
 
-		if (derived::RANK() != 0 && deriv::RANK() != 0)
-		if ((asBase().size() != tensor.asBase().size()) && (this->asBase().RANK() != 0 && tensor.asBase().RANK() != 0)) {
-			std::cout << "this->RANK() = "<< derived::RANK() << " this->size() = " << asBase().size() << " this_dims "; asBase().printDimensions();
-			std::cout << "this->RANK() = "<< deriv::RANK()   << " param.size() = " << tensor.asBase().size() << " param_dims "; tensor.asBase().printDimensions();
+		if (derived::DIMS() != 0 && deriv::DIMS() != 0)
+		if ((asBase().size() != tensor.asBase().size()) && (this->asBase().DIMS() != 0 && tensor.asBase().DIMS() != 0)) {
+			std::cout << "this->DIMS() = "<< derived::DIMS() << " this->size() = " << asBase().size() << " this_dims "; asBase().printDimensions();
+			std::cout << "this->DIMS() = "<< deriv::DIMS()   << " param.size() = " << tensor.asBase().size() << " param_dims "; tensor.asBase().printDimensions();
 			std::cout << "\n";
 			throw std::invalid_argument("Tensor by Tensor operation - size mismatch - ");
 		}

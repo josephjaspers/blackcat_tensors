@@ -22,7 +22,7 @@ class Scalar : public TensorBase<Scalar<T, Mathlib>> {
 
 public:
 	struct DISABLE;
-	static constexpr int RANK() { return 0; }
+	static constexpr int DIMS() { return 0; }
 
 	template<bool var, class a, class b>
 	using ifte = std::conditional_t<var, a, b>;

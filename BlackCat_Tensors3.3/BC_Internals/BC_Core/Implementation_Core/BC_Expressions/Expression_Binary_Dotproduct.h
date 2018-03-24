@@ -29,7 +29,7 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	using scalar_type = T;
 	using lifetime_reaper = std::shared_ptr<scalar_type>;
 
-	static constexpr int RANK() { return rv::RANK(); }
+	static constexpr int DIMS() { return rv::DIMS(); }
 	static constexpr bool transA = det_eval<lv>::transposed;
 	static constexpr bool transB = det_eval<rv>::transposed;
 	static constexpr bool lv_scalar = det_eval<lv>::scalar;
@@ -54,7 +54,7 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	__BCinline__ int size() const { return left.rows() * right.cols();}
 	__BCinline__ int rows() const { return left.rows(); }
 	__BCinline__ int cols() const { return right.cols(); }
-	__BCinline__ int rank() const { return right.rank(); }
+	__BCinline__ int dims() const { return right.dims(); }
 	__BCinline__ int LD_rows() const { return rows(); }
 	__BCinline__ int LD_cols() const { return size(); }
 	__BCinline__ int dimension(int i)		const { return i== 0 ? rows(): i == 1 ? cols() : 1; }
@@ -90,6 +90,7 @@ public:
 		} else {
 			B = det_eval<rv>::getArray(right);
 		}
+
 			alpha = det_eval<lv>::getScalar(left);
 			alpha2 = det_eval<rv>::getScalar(right);
 

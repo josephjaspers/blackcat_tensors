@@ -36,7 +36,7 @@ template<class PARENT, class KERNEL>
 
 	Tensor_Piece(scalar_type* array, const PARENT& parent_) : array_piece(array), parent(parent_) {}
 
-	__BCinline__ int rank() const { return RANK(); }
+	__BCinline__ int dims() const { return RANK(); }
 	__BCinline__ int size() const { return kernel.size();    }
 	__BCinline__ int rows() const { return kernel.rows();	}
 	__BCinline__ int cols() const { return kernel.cols();  }

@@ -41,7 +41,7 @@
 //
 //	Tensor_Core(scalar* array, int* is, int* os) : array(array), is(is), os(os) {}
 //
-//	__BC_gcpu__ int rank() const { return RANK; }
+//	__BC_gcpu__ int dims() const { return RANK; }
 //	__BC_gcpu__ int size() const { return os[BACK];    }
 //	__BC_gcpu__ int rows() const { return RANK > 0 ? is[0] : 1; }
 //	__BC_gcpu__ int cols() const { return RANK > 1 ? is[1] : 1; }
@@ -54,7 +54,7 @@
 //
 //	__BC_gcpu__ const int* InnerShape() const { return is; }
 //	__BC_gcpu__ const int* OuterShape() const { return os; }
-//	void print() const { Mathlib::print(array, InnerShape(),rank(), 4); }
+//	void print() const { Mathlib::print(array, InnerShape(),dims(), 4); }
 //
 //	__BC_gcpu__ const scalar* data() const { return array; }
 //	__BC_gcpu__ scalar* data()  		   { return array; }

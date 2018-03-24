@@ -18,14 +18,14 @@ struct dominant_type {
 	}
 };
 template<class lv, class rv>
-struct dominant_type<lv, rv, std::enable_if_t<(lv::RANK() < rv::RANK())>> {
+struct dominant_type<lv, rv, std::enable_if_t<(lv::DIMS() < rv::DIMS())>> {
 
 	__BCinline__ static const auto& shape(const lv& l, const rv& r) {
 		return r;
 	}
 };
 template<class lv, class rv>
-struct dominant_type<lv, rv, std::enable_if_t<(lv::RANK() == rv::RANK())>> {
+struct dominant_type<lv, rv, std::enable_if_t<(lv::DIMS() == rv::DIMS())>> {
 
 	__BCinline__ static const auto& shape(const lv& l, const rv& r) {
 		return r;
@@ -39,7 +39,7 @@ struct inferior_type {
 	}
 };
 template<class lv, class rv>
-struct inferior_type<lv, rv, std::enable_if_t<(lv::RANK() > rv::RANK())>> {
+struct inferior_type<lv, rv, std::enable_if_t<(lv::DIMS() > rv::DIMS())>> {
 
 	__BCinline__ static const auto& shape(const lv& l, const rv& r) {
 		return r;
@@ -47,7 +47,7 @@ struct inferior_type<lv, rv, std::enable_if_t<(lv::RANK() > rv::RANK())>> {
 };
 
 template<class lv, class rv>
-struct inferior_type<lv, rv, std::enable_if_t<(lv::RANK() == rv::RANK())>> {
+struct inferior_type<lv, rv, std::enable_if_t<(lv::DIMS() == rv::DIMS())>> {
 
 	__BCinline__ static const auto& shape(const lv& l, const rv& r) {
 		return r;

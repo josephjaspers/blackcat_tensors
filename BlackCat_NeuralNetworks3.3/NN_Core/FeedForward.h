@@ -57,8 +57,8 @@ public:
 	}
 
 	template<class T> auto forwardPropagation(const vec_expr<T>& in) {
-		auto x_ = x == in;
-		return this->next().forwardPropagation(g(w * x_ + b));
+		auto x_t = x == in;
+		return this->next().forwardPropagation(g(w * x_t + b));
 	}
 	template<class T> auto forwardPropagation_Express(const vec_expr<T>& x) const {
 		return this->next().forwardPropagation_Express(g(w * x + b));
@@ -68,7 +68,7 @@ public:
 		w_gradientStorage -= dy * x.t();
 		b_gradientStorage -= dy;
 
-		return this->prev().backPropagation(dx == w.t() * dy % gd(x));
+		return this->prev().backPropagation(dx = w.t() * dy % gd(x));
 	}
 	template<class U, class V>
 		auto train(const vec_expr<U>& x, const vec_expr<V>& y) {

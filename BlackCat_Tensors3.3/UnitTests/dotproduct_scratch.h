@@ -145,7 +145,7 @@ auto dotproduct(const Matrix<T>& mat1, const Matrix<T>& mat2) {
 //		__BCinline__ int size() const { return eval_size;}
 //		__BCinline__ int rows() const { return left.rows();}
 //		__BCinline__ int cols() const { return right.cols();}
-//		__BCinline__ int rank() const { return right.rank(); }
+//		__BCinline__ int dims() const { return right.dims(); }
 //		__BCinline__ int LD_rows() const { return rows(); }
 //		__BCinline__ int LD_cols() const { return eval_size; }
 //		__BCinline__ int dimension(int i)		const { return i == 0 ? rows() : i == 1 ? cols(): 1; }

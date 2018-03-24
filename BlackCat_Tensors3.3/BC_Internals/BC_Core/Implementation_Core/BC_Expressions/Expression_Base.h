@@ -33,10 +33,10 @@ private:
 
 public:
 
-	static constexpr int RANK() { return derived::RANK(); }
+	static constexpr int DIMS() { return derived::DIMS(); }
 //	expression() { static_assert(std::is_trivially_copyable<derived>::value, "DERIVED VES OF EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
 
-	__BCinline__ int rank() const 	{ return shadowFailure<int>("int rank() const"); }
+	__BCinline__ int dims() const 	{ return shadowFailure<int>("int dims() const"); }
 	__BCinline__ int size() const 	{ return shadowFailure<int>("int size() const"); }
 	__BCinline__ int rows() const 	{ return shadowFailure<int>("int rows() const"); }
 	__BCinline__ int cols() const 	{ return shadowFailure<int>("int cols() const"); }

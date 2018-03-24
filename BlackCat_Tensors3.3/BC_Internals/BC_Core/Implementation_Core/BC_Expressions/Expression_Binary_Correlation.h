@@ -39,7 +39,7 @@
 //	}
 //
 //	__BCinline__  T operator [] (int i) const {
-//		return axpy(i, left, right, rank());
+//		return axpy(i, left, right, dims());
 //	}
 //
 //	int size() const {
@@ -51,7 +51,7 @@
 //
 //
 //
-//	__BCinline__ int rank() const { return RANK(); }
+//	__BCinline__ int dims() const { return RANK(); }
 //	__BCinline__ int rows() const { return right.rows() - left.rows() + 1; };
 //	__BCinline__ int cols() const { return right.rows() - left.rows() + 1; };
 //

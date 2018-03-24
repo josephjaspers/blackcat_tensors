@@ -26,7 +26,7 @@ public:
 	using parent_class::operator[];
 	using parent_class::operator();
 
-	static constexpr int RANK() { return 2; }
+	static constexpr int DIMS() { return 2; }
 
 	Matrix(const Matrix&  v) : parent_class(v) {}
 	Matrix(		 Matrix&& v) : parent_class(v) {}

@@ -159,7 +159,7 @@ Methods:
 
 **DEFINED IN BC_Internals/BC_Core/TensorBase.h
 
-	int rank() const				//returns rank 
+	int dims() const				//returns rank 
 	int size() const				//returns size
 	int rows() const				//returns rows 
 	int dimension(int i) const 			//returns the dimension at a given index

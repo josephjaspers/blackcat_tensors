@@ -16,10 +16,10 @@ public:
 	operation oper;
 	value array;
 
-	static constexpr int RANK() { return value::RANK(); }
+	static constexpr int DIMS() { return value::DIMS(); }
 
 	__BCinline__  unary_expression(value v) : array(v) {}
-	__BCinline__  int rank() const { return array.rank(); }
+	__BCinline__  int dims() const { return array.dims(); }
 	__BCinline__  int size() const { return array.size(); }
 	__BCinline__  int rows() const { return array.rows(); }
 	__BCinline__  int cols() const { return array.cols(); }

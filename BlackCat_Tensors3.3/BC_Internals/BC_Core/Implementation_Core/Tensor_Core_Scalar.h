@@ -20,7 +20,7 @@ struct Tensor_Scalar : expression<_scalar<PARENT>, Tensor_Scalar<PARENT>> {
 	using self = Tensor_Scalar<PARENT>;
 
 
-	static constexpr int RANK() { return 0; }
+	static constexpr int DIMS() { return 0; }
 
 	const PARENT parent;
 	scalar* array_slice;
@@ -30,7 +30,7 @@ struct Tensor_Scalar : expression<_scalar<PARENT>, Tensor_Scalar<PARENT>> {
 
 	Tensor_Scalar(scalar* array, const PARENT& parent_) : array_slice(array), parent(parent_) {}
 
-	__BCinline__ int rank() const { return 0; }
+	__BCinline__ int dims() const { return 0; }
 	__BCinline__ int size() const { return 1; }
 	__BCinline__ int rows() const { return 1; }
 	__BCinline__ int cols() const { return 1; }

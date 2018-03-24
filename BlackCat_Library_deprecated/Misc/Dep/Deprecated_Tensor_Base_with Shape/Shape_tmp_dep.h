@@ -33,7 +33,7 @@
 //	int sz = 1;
 //	int *is = &sz;
 //	int order = 0 ;
-//	int rank() const { return order; }
+//	int dims() const { return order; }
 //	int size() const { return sz; }
 //	int rows() const { return order > 0  ? is[0] : 1; }
 //	int cols() const { return order > 1  ? is[1] : 1; }
@@ -218,8 +218,8 @@
 //	using OS = OUTER;
 //
 //	auto expression_packet() const  { return shape_packet<_expression>(getInner(), getOuter()); }
-//	auto shape_copy_packet()		const 	{ _shape sh(this->rank());
-//	for (int i = 0; i < this->rank(); ++i) {
+//	auto shape_copy_packet()		const 	{ _shape sh(this->dims());
+//	for (int i = 0; i < this->dims(); ++i) {
 //		sh[i] = this->InnerShape()[i];  }
 //	 return shape_packet<_generic>(sh);
 //	}
@@ -336,7 +336,7 @@ public:
 	static constexpr int COMPILE_TIME_COLS() { return 0; }
 
 
-	int rank() const { return order; }
+	int dims() const { return order; }
 	int size() const { return sz;    }
 	int rows() const { return order > 0 ? is[0] : 1; }
 	int cols() const { return order > 1 ? is[1] : 1; }
@@ -423,7 +423,7 @@ public:
 //	int sz = 1;
 //	int *is = &sz;
 //	int order = 0 ;
-//	int rank() const { return order; }
+//	int dims() const { return order; }
 //	int size() const { return sz; }
 //	int rows() const { return order > 0  ? is[0] : 1; }
 //	int cols() const { return order > 1  ? is[1] : 1; }
@@ -616,7 +616,7 @@ public:
 //	int sz;
 //	int order;
 //
-//	int rank() const { return order; }
+//	int dims() const { return order; }
 //	int size() const { return sz;    }
 //	int rows() const { return order > 0 ? is[0] : 1; }
 //	int cols() const { return order > 1 ? is[1] : 1; }
@@ -734,7 +734,7 @@ public:
 ////	int sz = 1;
 ////	int *is = &sz;
 ////	int order = 0 ;
-////	int rank() const { return order; }
+////	int dims() const { return order; }
 ////	int size() const { return sz; }
 ////	int rows() const { return order > 0  ? is[0] : 1; }
 ////	int cols() const { return order > 1  ? is[1] : 1; }
@@ -927,7 +927,7 @@ public:
 //	int sz;
 //	int order;
 //
-//	int rank() const { return order; }
+//	int dims() const { return order; }
 //	int size() const { return sz;    }
 //	int rows() const { return order > 0 ? is[0] : 1; }
 //	int cols() const { return order > 1 ? is[1] : 1; }

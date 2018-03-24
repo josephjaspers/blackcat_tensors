@@ -27,12 +27,12 @@ class front<param<first, set...>> {
 };
 
 //DEFAULT TYPE
-template<class> struct det_eval {
+template<class T> struct det_eval {
 	static constexpr bool evaluate = true;
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = false;
-	template<class param> static auto getScalar(const param& p) { return nullptr; }
-	template<class param> static auto getArray(const param& p)  { throw std::invalid_argument("Attempting to use an array from an unevaluated context"); }
+	template<class param> static _scalar<param>* getScalar(const param& p) { return nullptr; }
+	template<class param> static _scalar<param>* getArray(const param& p)  { throw std::invalid_argument("Attempting to use an array from an unevaluated context"); }
 };
 //
 //IF TENSOR CORE (NON EXPRESSION)
@@ -65,8 +65,8 @@ struct det_eval<binary_expression_scalar_mul<T, Tensor_Core<d1>, Tensor_Core<d2>
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = true;
 
-	static constexpr bool left_scal = d1::RANK() == 0;
-	static constexpr bool right_scal = d2::RANK() == 0;
+	static constexpr bool left_scal = d1::DIMS() == 0;
+	static constexpr bool right_scal = d2::DIMS() == 0;
 	struct DISABLE;
 
 	using left_scal_t  = std::conditional_t<left_scal,  self, DISABLE>;

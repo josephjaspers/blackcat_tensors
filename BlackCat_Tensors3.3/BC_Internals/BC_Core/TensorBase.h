@@ -33,7 +33,7 @@ protected:
 	using functor_type 	= _functor<derived>;
 	using Mathlib 		= _mathlib<derived>;
 
-	static constexpr int RANK 		= ranker<derived>::value;
+	static constexpr int DIMS 		= ranker<derived>::value;
 
 public:
 	using math_parent::operator=;
@@ -53,7 +53,7 @@ public:
 		return *this;
 	}
 
-	int rank() const { return this->black_cat_array.rank(); }
+	int dims() const { return this->black_cat_array.dims(); }
 	int size() const { return this->black_cat_array.size(); }
 	int rows() const { return this->black_cat_array.rows(); }
 	int cols() const { return this->black_cat_array.cols(); }
@@ -90,27 +90,27 @@ public:
 		  auto getScalar(int i) { return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar(i)); }
 
 	const auto getSlice(int i) const {
-		static_assert(derived::RANK() > 0, "SCALAR SLICE IS NOT DEFINED");
-		return typename base<RANK>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
+		static_assert(derived::DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");
+		return typename base<DIMS>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
 		  auto getSlice(int i) 		 {
-				static_assert(derived::RANK() > 0, "SCALAR SLICE IS NOT DEFINED");
+				static_assert(derived::DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");
 
-			  return typename base<RANK>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
+			  return typename base<DIMS>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
 
 	const auto row(int i) const {
-		static_assert(RANK == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		static_assert(DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return typename base<1>::template type<decltype(row_(0)), Mathlib>(row_(i));
 	}
 	auto row(int i) {
-		static_assert(RANK == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		static_assert(DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return typename base<1>::template type<decltype(row_(0)), Mathlib>(row_(i));
 	}
 	const auto col(int i) const {
-		static_assert(RANK == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		static_assert(DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return (*this)[i];
 	}
 	auto col(int i) {
-		static_assert(RANK == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		static_assert(DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return (*this)[i];
 	}
 
@@ -125,8 +125,8 @@ public:
 
 	template<class var>
 	static std::vector<int> shapeOf(const var& v) {
-		std::vector<int> sh(v.rank());
-		for (int i = 0; i < v.rank(); ++i) {
+		std::vector<int> sh(v.dims());
+		for (int i = 0; i < v.dims(); ++i) {
 			sh[i] = v.dimension(i);
 		}
 		return sh;

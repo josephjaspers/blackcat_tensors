@@ -44,7 +44,7 @@ template<template<class, class> class _tensor, class t, class ml>
 class TensorInitializer<_tensor<t, ml>, std::enable_if_t<MTF::isCorePure<t>::conditional || MTF::isPrimitive<t>::conditional>> {
 
 	using derived = _tensor<t, ml>;
-	static constexpr int RANK = derived::RANK();
+	static constexpr int DIMS = derived::DIMS();
 
 	using self 			= TensorInitializer<derived, std::enable_if_t<MTF::isCorePure<t>::conditional>>;
 
@@ -75,7 +75,7 @@ public:
 	}
 
 	TensorInitializer(_shape dimensions): black_cat_array(dimensions) {}
-	TensorInitializer() { static_assert(RANK == 0, "DEFAULT CONSTRUCTOR ONLY AVAILABLE TO SCALARS"); }
+	TensorInitializer() { static_assert(DIMS == 0, "DEFAULT CONSTRUCTOR ONLY AVAILABLE TO SCALARS"); }
 
 	template<class T>
 	using derived_alt = typename shell_of<derived>::template  type<T, Mathlib>;

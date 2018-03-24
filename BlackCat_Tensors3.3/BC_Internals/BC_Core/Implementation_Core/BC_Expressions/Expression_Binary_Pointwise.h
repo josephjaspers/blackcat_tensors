@@ -20,8 +20,8 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 	lv left;
 	rv right;
 
-	static constexpr int RANK() { return lv::RANK() > rv::RANK() ? lv::RANK() : rv::RANK();}
-	static constexpr bool lv_dom = (lv::RANK() > rv::RANK());
+	static constexpr int DIMS() { return lv::DIMS() > rv::DIMS() ? lv::DIMS() : rv::DIMS();}
+	static constexpr bool lv_dom = (lv::DIMS() > rv::DIMS());
 
 	__BCinline__ const auto& shape() const {
 		return dominant_type<lv, rv>::shape(left, right);
@@ -36,7 +36,7 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 		return oper(left[index], right[index]);
 	}
 
-	__BCinline__ int rank() const { return shape().rank(); }
+	__BCinline__ int dims() const { return shape().dims(); }
 	__BCinline__ int rows() const { return shape().rows(); };
 	__BCinline__ int cols() const { return shape().cols(); };
 	__BCinline__ int size() const { return shape().size(); };
@@ -48,7 +48,7 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 
 
 	template<class v, class alt>
-	using expr_type = std::conditional_t<v::RANK() == 0, v, alt>;
+	using expr_type = std::conditional_t<v::DIMS() == 0, v, alt>;
 
 	__BCinline__ const auto slice(int i) const {
 		return binary_expression<T, operation, decltype(left.slice(0)), decltype(right.slice(0))>(left.slice(i), right.slice(i));
@@ -74,8 +74,8 @@ struct binary_expression_scalar_mul : expression<T, binary_expression_scalar_mul
 	lv left;
 	rv right;
 
-	static constexpr int RANK() { return lv::RANK() > rv::RANK() ? lv::RANK() : rv::RANK();}
-	static constexpr bool lv_dom = (lv::RANK() > rv::RANK());
+	static constexpr int DIMS() { return lv::DIMS() > rv::DIMS() ? lv::DIMS() : rv::DIMS();}
+	static constexpr bool lv_dom = (lv::DIMS() > rv::DIMS());
 
 	__BCinline__ const auto& shape() const {
 		return dominant_type<lv, rv>::shape(left, right);
@@ -89,7 +89,7 @@ struct binary_expression_scalar_mul : expression<T, binary_expression_scalar_mul
 		return oper(left[index], right[index]);
 	}
 
-	__BCinline__  int rank() const { return shape().rank(); }
+	__BCinline__  int dims() const { return shape().dims(); }
 	__BCinline__  int rows() const { return shape().rows(); };
 	__BCinline__  int cols() const { return shape().cols(); };
 	__BCinline__  int size() const { return shape().size(); };
@@ -101,7 +101,7 @@ struct binary_expression_scalar_mul : expression<T, binary_expression_scalar_mul
 
 
 	template<class v, class alt>
-	using expr_type = std::conditional_t<v::RANK() == 0, v, alt>;
+	using expr_type = std::conditional_t<v::DIMS() == 0, v, alt>;
 
 	__BCinline__ const auto slice(int i) const {
 		return binary_expression<T, mul, decltype(left.slice(0)), decltype(right.slice(0))>(left.slice(i), right.slice(i));

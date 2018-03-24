@@ -51,7 +51,7 @@
 //
 //	Tensor_Core(scalar* ary, int* = nullptr, int* = nullptr) : array(ary)  { }
 //
-//	__BC_gcpu__ int rank() const { return RANK; }
+//	__BC_gcpu__ int dims() const { return RANK; }
 //	__BC_gcpu__ int size() const { return 1;    }
 //	__BC_gcpu__ int rows() const { return 1; }
 //	__BC_gcpu__ int cols() const { return 1; }
@@ -64,7 +64,7 @@
 //
 //	__BC_gcpu__ const int* InnerShape() const { return &ONE_SCALAR; }
 //	__BC_gcpu__ const int* OuterShape() const { return &ONE_SCALAR; }
-//	void print() const { Mathlib::print(array, InnerShape(),rank(), 4); }
+//	void print() const { Mathlib::print(array, InnerShape(),dims(), 4); }
 //
 //	__BC_gcpu__ const scalar* data() const { return array; }
 //	__BC_gcpu__ scalar* data()  		   { return array; }
@@ -114,7 +114,7 @@
 //
 //	Tensor_Core(scalar* ary, int* = nullptr, int* = nullptr) : array(ary)  { }
 //
-//	__BC_gcpu__ int rank() const { return RANK; }
+//	__BC_gcpu__ int dims() const { return RANK; }
 //	__BC_gcpu__ int size() const { return 1;    }
 //	__BC_gcpu__ int rows() const { return 1; }
 //	__BC_gcpu__ int cols() const { return 1; }
@@ -127,7 +127,7 @@
 //
 //	__BC_gcpu__ const int* InnerShape() const { return &ONE_SCALAR; }
 //	__BC_gcpu__ const int* OuterShape() const { return &ONE_SCALAR; }
-//	void print() const { Mathlib::print(array, InnerShape(),rank(), 4); }
+//	void print() const { Mathlib::print(array, InnerShape(),dims(), 4); }
 //
 //	__BC_gcpu__ const scalar* data() const { return array; }
 //	__BC_gcpu__ scalar* data()  		   { return array; }

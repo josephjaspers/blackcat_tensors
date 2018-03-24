@@ -69,7 +69,7 @@
 //	__BCinline__ int size() const { return M() * N();}
 //	__BCinline__ int rows() const { return M();}
 //	__BCinline__ int cols() const { return N();}
-//	__BCinline__ int rank() const { return right.rank(); }
+//	__BCinline__ int dims() const { return right.dims(); }
 //	__BCinline__ int LD_rows() const { return M(); }
 //	__BCinline__ int LD_cols() const { return size(); }
 //	__BCinline__ int dimension(int i)		const { return i== 0 ? M() : i == 1 ? N() : 1; }

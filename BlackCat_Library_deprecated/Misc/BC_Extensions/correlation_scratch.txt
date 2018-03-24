@@ -36,22 +36,22 @@ class correlation {
 	template<class T, class ml, class d0, class d1, class d2>
 	void x_corr(const TensorBase<d0>& out, const TensorBase<d1>& krnl, const TensorBase<d2>& img, std::true_type padded_type = true) {
 		//CODE FOR PADDED CORRELATION //
-		assert(img.rank() <= movements);
+		assert(img.dims() <= movements);
 
 	}
 	template<class T, class ml, class d0, class d1, class d2>
 	void x_corr(const TensorBase<d0>& out, const TensorBase<d1>& krnl, const TensorBase<d2>& img, std::false_type padded_type = false) {
 		//CODE FOR NON PADDED CORRELATION//
-		assert(img.rank() <= movements);
+		assert(img.dims() <= movements);
 
 		//if movements are greater than krnl rank we "align" the output and krnl
-		if (movements > krnl.rank()) {
-			for (int i = 0; i < img.rank(); ++i) {
+		if (movements > krnl.dims()) {
+			for (int i = 0; i < img.dims(); ++i) {
 				x_corr(out[i], krnl, img[i], padded_type);
 				return;
 			}
 			//else
-			const int IMG_RANK_LAST = img.rank() - 1;
+			const int IMG_RANK_LAST = img.dims() - 1;
 			for (int i = 0; i < img.dimension(IMG_RANK_LAST); ++i) {
 				x_corr(out[i], img[i], krnl[i], padded_type);
 			}
@@ -66,20 +66,20 @@ class correlation<1> {
 	template<class T, class ml, class d0, class d1, class d2>
 	void x_corr(const TensorBase<d0>& out, const TensorBase<d1>& krnl, const TensorBase<d2>& img, std::true_type padded_type = true) {
 		//CODE FOR PADDED CORRELATION //
-		assert(img.rank() <= movements);
+		assert(img.dims() <= movements);
 	}
 	template<class T, class ml, class d0, class d1, class d2>
 	void x_corr(const TensorBase<d0>& out, const TensorBase<d1>& krnl, const TensorBase<d2>& img, std::false_type padded_type = false) {
 		//CODE FOR NON PADDED CORRELATION//
-		assert(img.rank() <= movements);
+		assert(img.dims() <= movements);
 		//if movements are greater than krnl rank we "align" the output and krnl
-		if (movements > krnl.rank()) {
-			for (int i = 0; i < img.rank(); ++i) {
+		if (movements > krnl.dims()) {
+			for (int i = 0; i < img.dims(); ++i) {
 				x_corr(out[i], krnl, img[i], padded_type);
 				return;
 			}
 			//else
-			const int IMG_RANK_LAST = img.rank() - 1;
+			const int IMG_RANK_LAST = img.dims() - 1;
 			for (int i = 0; i < img.dimension(IMG_RANK_LAST); ++i) {
 				x_corr(out[i], img[i], krnl[i], padded_type);
 			}
@@ -134,17 +134,17 @@ class correlation {
 	template<class T, class ml, class d0, class d1, class d2>
 	void x_corr(const TensorBase<d0>& out, const TensorBase<d1>& krnl, const TensorBase<d2>& img) {
 		//CODE FOR NON PADDED CORRELATION//
-		assert(img.rank() <= movements);
+		assert(img.dims() <= movements);
 
 		//if movements are greater than krnl rank we "align" the output and krnl
-		if (movements > krnl.rank()) {
-			for (int i = 0; i < img.rank(); ++i) {
+		if (movements > krnl.dims()) {
+			for (int i = 0; i < img.dims(); ++i) {
 				x_corr(out[i], krnl[i], img[i]);
 				return;
 			}
 		}
 		//move along the axies
-		const int positions = img.dimension(img.rank() - 1) - krnl.dimension(img.rank() - 1) + 1;
+		const int positions = img.dimension(img.dims() - 1) - krnl.dimension(img.dims() - 1) + 1;
 		for (int i = 0; i < positions; ++i) {
 			x_corr<movements - 1>(out[i], img[i], krnl[i]);
 		}
@@ -157,17 +157,17 @@ class correlation<1, false> {
 	template<class T, class ml, class d0, class d1, class d2>
 	void x_corr(const TensorBase<d0>& out, const TensorBase<d1>& krnl, const TensorBase<d2>& img) {
 		//CODE FOR NON PADDED CORRELATION//
-		assert(img.rank() <= movements);
+		assert(img.dims() <= movements);
 
 		//if movements are greater than krnl rank we "align" the output and krnl
-		if (movements > img.rank()) {
-			for (int i = 0; i < img.rank(); ++i) {
+		if (movements > img.dims()) {
+			for (int i = 0; i < img.dims(); ++i) {
 				x_corr(out[i], krnl[i], img[i]);
 				return;
 			}
 		}
 		//move along the axies
-		const int positions = img.dimension(img.rank() - 1) - krnl.dimension(img.rank() - 1) + 1;
+		const int positions = img.dimension(img.dims() - 1) - krnl.dimension(img.dims() - 1) + 1;
 		for (int i = 0; i < positions; ++i) {
 
 		}

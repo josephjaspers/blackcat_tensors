@@ -20,7 +20,7 @@ class Vector : public TensorBase<Vector<T, Mathlib>> {
 
 public:
 
-	static constexpr int RANK() { return 1; }
+	static constexpr int DIMS() { return 1; }
 	using parent_class::operator=;
 	using parent_class::operator[];
 	using parent_class::operator();
