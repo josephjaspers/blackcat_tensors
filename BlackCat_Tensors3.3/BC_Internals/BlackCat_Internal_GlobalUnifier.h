@@ -43,12 +43,13 @@
 //#include "BC_Expressions/Expression_Binary_Pointwise_Scalar.h"
 //#include "BC_Expressions/Expression_Binary_Pointwise.h"
 //Meta-templates Functions
-#include "BC_MetaTemplateFunctions/Simple.h"
-#include "BC_MetaTemplateFunctions/Adhoc.h"
+//#include "MetaTemplateFunctions.h"
+//#include "BC_MetaTemplateFunctions/Adhoc.h"
 //BC_core
 #include "BC_Core/Scalar.h"
 #include "BC_Core/Vector.h"
 #include "BC_Core/Matrix.h"
 #include "BC_Core/Cube.h"
+#include "BC_Core/TensorN.h"
 
 #endif /* BLACKCAT_INTERNAL_GLOBALUNIFIER_H_ */

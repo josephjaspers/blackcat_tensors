@@ -107,8 +107,7 @@ public:
 			std::cout << "File open error - returning " << std::endl;
 			return;
 		}
-		using scalar = typename  MTF::determine_scalar<scalar_type>::type;
-		std::vector<scalar> data;
+		std::vector<scalar_type> data;
 		unsigned read_values = 0;
 
 			std::string tmp;

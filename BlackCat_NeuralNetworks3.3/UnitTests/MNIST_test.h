@@ -77,11 +77,11 @@ int percept_MNIST() {
 	const int TRAINING_EXAMPLES =  2000;
 	const int TRAINING_ITERATIONS = 10;
 
-	//Generate the layers (params are: inputs, outputs)
+//	Generate the layers (params are: inputs, outputs)
 
 	//Create the neural network
-	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
-//	NeuralNetwork<FeedForward> network(784, 10);
+//	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
+	NeuralNetwork<FeedForward> network(784, 10);
 
 	data inputs;
 	data outputs;
@@ -109,9 +109,9 @@ int percept_MNIST() {
 	for (int i = 0; i < TRAINING_ITERATIONS; ++i) {
 		std::cout << " iteration =  " << i << std::endl;
 		for (int j = 0; j < inputs.size(); ++j) {
-//			network.train(inputs[j], outputs[j]);
-			network.forwardPropagation(inputs[j]);
-			network.backPropagation(outputs[j]);
+			network.train(inputs[j], outputs[j]);
+//			network.forwardPropagation(inputs[j]);
+//			network.backPropagation(outputs[j]);
 
 			if (j % 100 == 0) {
 			network.updateWeights();
@@ -151,9 +151,4 @@ int percept_MNIST() {
 	return 0;
 }
 }
-}
-
-int main() {
-	BC::MNIST_Test::percept_MNIST();
-	std::cout << "success main" << std::endl;
 }

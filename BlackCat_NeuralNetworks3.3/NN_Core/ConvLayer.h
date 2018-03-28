@@ -1,40 +1,30 @@
 /*
- * FeedForward.cu
+ * ConvLayer.h
  *
- *  Created on: Jan 28, 2018
+ *  Created on: Mar 27, 2018
  *      Author: joseph
  */
 
-#ifndef FEEDFORWARD_CU_
-#define FEEDFORWARD_CU_
+#ifndef CONVLAYER_H_
+#define CONVLAYER_H_
 
 #include "Layer.h"
 
 namespace BC {
 
 template<class derived>
-struct FeedForward : public Layer<derived> {
+struct Conv : public Layer<derived> {
 
 
 public:
-
-	int INPUTS;
-	int OUTPUTS;
-
 	 const scal lr = scal(0.03); //fp_type == floating point
 
+	cube w_gradientStorage;
+	cube w;
 
-	mat w_gradientStorage;
-	vec b_gradientStorage;
-
-	mat w;
-
-	vec x;
-	vec y;
-	vec b;
-
-	vec dx;
-
+	cube img;
+	cube y;
+	cube x;
 	/*
 	 * *Note: the operator == represents a delayed evaluation assignment operator.
 	 * 	It is mathematically equivalent to the operator= (copy operator) however it does not get evaluated until an
@@ -42,20 +32,15 @@ public:
 	 * 	It also allows for passing an expression with an assignment and delaying the operation for more optimizations
 	 *
 	 */
-	FeedForward(int inputs, int outputs) :
-			INPUTS(inputs), OUTPUTS(outputs),
-			w_gradientStorage(outputs, inputs),
-			b_gradientStorage(outputs),
+	Conv(int row, int cols, int z) :
+			x(row, cols, z),
+			w_gradientStorage(3, 3, 10),
 			w(outputs, inputs),
-			b(outputs),
-			x(inputs),
-			y(outputs),
+			y(),
 			dx(inputs) {
 
-		w.randomize(-4, 4);
-		b.randomize(-4, 4);
+		w.randomize(-1, 1);
 		w_gradientStorage.zero();
-		b_gradientStorage.zero();
 	}
 
 	template<class T> auto forwardPropagation(const vec_expr<T>& in) {
@@ -119,9 +104,8 @@ public:
 		b_gradientStorage.read(os);
 
 	}
-};
 }
+};
 
 
-
-#endif /* FEEDFORWARD_CU_ */
+#endif /* CONVLAYER_H_ */

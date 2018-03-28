@@ -45,7 +45,7 @@ public:
 	}
 
 	template<class T> auto train(const vec_expr<T>& x, const vec& y) {
-		return x - y; //hypothesis - expected
+		return x - y;
 	}
 
 	void updateWeights() {}

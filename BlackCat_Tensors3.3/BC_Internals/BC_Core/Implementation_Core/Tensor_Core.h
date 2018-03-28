@@ -29,8 +29,7 @@ struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 	using dimlist = std::vector<int>;
 	using scalar_type = _scalar<T>;
 	using Mathlib = _mathlib<T>;
-//	using slice_type = std::conditional_t<(DIMS() == 1), Tensor_Scalar<self>, std::conditional_t<(DIMS() == 0), self, Tensor_Slice<self>>>;
-	using slice_type = std::conditional_t<(DIMS() <= 1), Tensor_Scalar<self>, Tensor_Slice<self>>;
+	using slice_type = std::conditional_t<(DIMS() == 0), self&, Tensor_Slice<self>>;
 
 	scalar_type* array;
 	int* is = Mathlib::unified_initialize(is, DIMS());
@@ -85,8 +84,15 @@ struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 	__BCinline__ const auto innerShape() const { return is; }
 	__BCinline__ const auto outerShape() const { return os; }
 
-	__BCinline__ const auto slice(int i) const {  return slice_type(&array[DIMS() == 1 ? i : (os[LAST() - 1] * i)], *this); }
-	__BCinline__	   auto slice(int i) 	   {  return slice_type(&array[DIMS() == 1 ? i : (os[LAST() - 1] * i)], *this); }
+	struct slice_type_ref   { 	static 		 auto& foo(		 Tensor_Core& tc, int i) { return tc; };
+								static const auto& foo(const Tensor_Core& tc, int i) { return tc; }};
+	struct slice_type_slice { 	static 		 auto  foo(		 Tensor_Core& tc, int i) { return slice_type(&tc.array[DIMS() == 1 ? i : (tc.os[LAST() - 1] * i)], tc); };
+							 	static const auto  foo(const Tensor_Core& tc, int i) { return slice_type(&tc.array[DIMS() == 1 ? i : (tc.os[LAST() - 1] * i)], tc); }};
+
+	using slice_return = std::conditional_t<(DIMS() == 0), slice_type_ref, slice_type_slice>;
+
+	__BCinline__ const auto slice(int i) const { return slice_return::foo(*this, i); }
+	__BCinline__	   auto slice(int i) 	   { return slice_return::foo(*this, i); }
 
 	__BCinline__ const auto scalar(int i) const { static_assert (DIMS() != 0, "SCALAR OF SCALAR NOT DEFINED"); return Tensor_Scalar<self>(&array[i], *this); }
 	__BCinline__	   auto scalar(int i) 	    { static_assert (DIMS() != 0, "SCALAR OF SCALAR NOT DEFINED"); return Tensor_Scalar<self>(&array[i], *this); }

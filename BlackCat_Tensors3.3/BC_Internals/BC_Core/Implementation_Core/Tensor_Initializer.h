@@ -13,9 +13,9 @@
 #include "Tensor_Core_Scalar.h"
 #include "Determiners.h"
 
-#include "BC_Expressions/Expression_Binary_Dotproduct.h"
-#include "BC_Expressions/Expression_Unary_MatrixTransposition.h"
-#include "BC_Expressions/Expression_Binary_Pointwise.h"
+//#include "BC_Expressions/Expression_Binary_Dotproduct.h"
+//#include "BC_Expressions/Expression_Unary_MatrixTransposition.h"
+//#include "BC_Expressions/Expression_Binary_Pointwise.h"
 
 namespace BC {
 
@@ -41,12 +41,12 @@ public:
 };
 //-------------------------------------SPECIALIZATION FOR TENSORS THAT CONTROL / DELETE THEIR ARRAY-------------------------------------//
 template<template<class, class> class _tensor, class t, class ml>
-class TensorInitializer<_tensor<t, ml>, std::enable_if_t<MTF::isCorePure<t>::conditional || MTF::isPrimitive<t>::conditional>> {
+class TensorInitializer<_tensor<t, ml>, std::enable_if_t<MTF::isPrimitive<t>::conditional>> {
 
 	using derived = _tensor<t, ml>;
 	static constexpr int DIMS = derived::DIMS();
 
-	using self 			= TensorInitializer<derived, std::enable_if_t<MTF::isCorePure<t>::conditional>>;
+	using self 			= TensorInitializer<derived, std::enable_if_t<MTF::isPrimitive<t>::conditional>>;
 
 	using functor_type 	= _functor<derived>;
 	using Mathlib 		= _mathlib<derived>;
@@ -78,7 +78,7 @@ public:
 	TensorInitializer() { static_assert(DIMS == 0, "DEFAULT CONSTRUCTOR ONLY AVAILABLE TO SCALARS"); }
 
 	template<class T>
-	using derived_alt = typename shell_of<derived>::template  type<T, Mathlib>;
+	using derived_alt = typename MTF::shell_of<derived>::template  type<T, Mathlib>;
 
 	template<class U>
 	TensorInitializer(const derived_alt<U>&  tensor)

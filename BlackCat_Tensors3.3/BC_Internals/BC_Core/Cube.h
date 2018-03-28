@@ -35,7 +35,7 @@ public:
 	explicit Cube(int rows, int cols = 1, int pages = 1) : parent_class(std::vector<int> {rows, cols, pages}) {}
 
 	template<class U> 		  Cube(const Cube<U, Mathlib>&  t) : parent_class(t) {}
-	template<class U> 		  Cube(	   Cube<U, Mathlib>&& t) : parent_class(t) {}
+	template<class U> 		  Cube(	     Cube<U, Mathlib>&& t) : parent_class(t) {}
 	template<class... params> Cube(const params&... p) : parent_class(p...) {}
 
 	Cube& operator =(const Cube& t)  { return parent_class::operator=(t); }

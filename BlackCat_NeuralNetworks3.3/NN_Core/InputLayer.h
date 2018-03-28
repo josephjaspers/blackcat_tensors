@@ -47,8 +47,8 @@ const int INPUTS;
 		return dy;
 	}
 
-	auto train(const vec& x, const vec& y) {
-		return this->next().train(x, y);
+	void train(const vec& x, const vec& y) {
+		this->next().train(x, y);
 	}
 
 	void updateWeights() {

@@ -172,14 +172,62 @@ b.print();
 #include "Benchmarks/BenchmarkEigen.h"
 
 
+template<int> struct X { template<class T> struct v {}; };
 
+template<class> struct chk;
+template<> struct chk<X<3>::template v<int>> {};
 int main() {
 test();
+
+//	auto var = BC::Tensor<float>(1,2,3,4);
+
+//	var.print();
+mat alpha(2,2);
+mat zeta(4,4);
+
+for (int i = 0; i < alpha.size(); ++i ){
+	alpha(i) = i;
+}
+for (int i = 0; i < zeta.size(); ++i ){
+	zeta(i) = i;
+}
+
+alpha.print();
+zeta.print();
+mat output(3,3);
+////cube output_padded(5,5, 5);
+//
+//output = alpha.x_corr(zeta);
+output.print();
+//output_padded = alpha.x_corr_padded(zeta);
+//output = alpha.x_corr(zeta);
+//	vec alpha(2);
+//	vec zeta(4);
+//
+//	for (int i = 0; i < alpha.size(); ++i ){
+//		alpha(i) = i;
+//	}
+//	for (int i = 0; i < zeta.size(); ++i ){
+//		zeta(i) = i;
+//	}
+
+//	alpha.print();
+//	zeta.print();
+//	vec output(3);
+//	vec output_padded(5);
+//
+//	output_padded = alpha.x_corr_padded(zeta);
+//	output = alpha.x_corr(zeta);
+//output.print();
+////
+////output_padded.zero();
+//output_padded.print();
+
 //	testCorrelation();
 //
 //	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
-//	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
-////	omp_set_num_threads(2);
+////	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
+//////	omp_set_num_threads(2);
 //	BC_EIGEN_BENCHMARK::benchmark1<4,     100000>();
 //	BC_EIGEN_BENCHMARK::benchmark1<8,     100000>();
 //	BC_EIGEN_BENCHMARK::benchmark1<16,    10000>();
@@ -197,7 +245,7 @@ test();
 //	BC_EIGEN_BENCHMARK::benchmark2<128,   1000>();
 //	BC_EIGEN_BENCHMARK::benchmark2<256,   1000>();
 //	BC_EIGEN_BENCHMARK::benchmark2<512,   100>();
-////
+//////
 	std::cout << " success  main" << std::endl;
 //
 //	return 0;

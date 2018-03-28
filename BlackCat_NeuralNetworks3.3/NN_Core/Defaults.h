@@ -28,6 +28,7 @@ using fp_type = float;
 
 using vec = Vector<fp_type, ml>;
 using mat = Matrix<fp_type, ml>;
+using cube = Cube<fp_type, ml>;
 using scal = Scalar<fp_type, ml>;
 template<class T, class ML = ml> using mat_expr = Matrix<T, ML>;
 template<class T, class ML = ml> using vec_expr = Vector<T, ML>;

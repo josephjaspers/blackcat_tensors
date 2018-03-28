@@ -8,15 +8,16 @@
 #ifndef TENSOR_HEAD_H_
 #define TENSOR_HEAD_H_
 
-#include "../../BC_MetaTemplateFunctions/Simple.h"
-#include "../../BC_MetaTemplateFunctions/Adhoc.h"
+#include "MetaTemplateFunctions.h"
+#include "Determiners.h"
+
 #include "BC_Expressions/Expression_Binary_Pointwise.h"
 #include "BC_Expressions/Expression_Unary_Pointwise.h"
 #include "BC_Expressions/Expression_Binary_Dotproduct.h"
 #include "BC_Expressions/Expression_Unary_MatrixTransposition.h"
 #include "BC_Expressions/Expression_Binary_Correlation.h"
+#include "BC_Expressions/Expression_Binary_Correlation_Padded.h"
 
-#include "Determiners.h"
 #include <type_traits>
 namespace BC {
 
@@ -45,15 +46,16 @@ struct Tensor_Operations {
 	using functor_type 		= _functor<derived>;
 	using scalar_type 		= _scalar<derived>;
 	using math_library 		= _mathlib<derived>;
-
 	using this_type = derived;
+	template<class T, class shell>
+	using expr_sub = typename MTF::shell_of<shell>::template type<T>;
 
 	template<class param_deriv, class functor>
 	struct impl {
 		using greater_rank_type = std::conditional_t<(derived::DIMS() > param_deriv::DIMS()), derived, param_deriv>;
 		using param_functor_type = typename Tensor_Operations<param_deriv>::functor_type;
-		using type = 	   typename MTF::expression_substitution<binary_expression<scalar_type, functor, functor_type ,param_functor_type>, greater_rank_type>::type;
-		using unary_type = typename MTF::expression_substitution<unary_expression <scalar_type, functor, functor_type>, 					greater_rank_type>::type;
+		using type = 	   expr_sub<binary_expression<scalar_type, functor, functor_type ,param_functor_type>, greater_rank_type>;
+		using unary_type = expr_sub<unary_expression <scalar_type, functor, functor_type>, 					   greater_rank_type>;
 	};
 	template<class param_deriv>
 	struct dp_impl {
@@ -66,8 +68,8 @@ struct Tensor_Operations {
 		using scalmul_type 			= binary_expression_scalar_mul<scalar_type, functor_type ,param_functor_type>;
 
 		using type = std::conditional_t<!SCALAR_MUL,
-						typename MTF::expression_substitution<dot_type, lesser_rank_type>::type,
-						typename MTF::expression_substitution<scalmul_type, greater_rank_type>::type>;
+						expr_sub<dot_type, lesser_rank_type>,
+						expr_sub<scalmul_type, greater_rank_type>>;
 	};
 
 
@@ -222,6 +224,19 @@ struct Tensor_Operations {
 	 const alternate_asterix_denoter<derived> operator * () const {
 		return alternate_asterix_denoter<derived>(this);
 	}
+	 template<class deriv>
+	auto x_corr(const Tensor_Operations<deriv>& rv) {
+
+		 return expr_sub<
+				 binary_expression_correlation<scalar_type, typename Tensor_Operations<deriv>::functor_type, functor_type>, deriv>(asBase().data(), rv.asBase().data());
+	 }
+
+	 template<class deriv>
+		auto x_corr_padded(const Tensor_Operations<deriv>& rv) {
+
+			 return expr_sub<
+					 binary_expression_correlation_padded<scalar_type, typename Tensor_Operations<deriv>::functor_type, functor_type>, deriv>(asBase().data(), rv.asBase().data());
+		 }
 
 };
 }

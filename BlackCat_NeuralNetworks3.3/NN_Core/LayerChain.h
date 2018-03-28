@@ -23,24 +23,23 @@ template<class> class InputLayer;
 		using type = OutputLayer<LayerChain<derived, OutputLayer>>;
 
 		LayerChain(int x) : type(x) {}
-
 		bool hasNext() const { return false; }
 
 		const auto& tail() const { return *this; }
-		auto& tail() { return  *this; }
+			  auto& tail() 		 { return *this; }
 
 		const auto& head() const { return prev().head(); }
 			  auto& head()  	 { return prev().head(); }
 
-			  const auto& next() const { throw std::invalid_argument("no next end of chain"); }
-			  auto& next() { throw std::invalid_argument("no next end of chain"); }
+		const auto& next() const { throw std::invalid_argument("no next end of chain"); }
+			  auto& next() 		 { throw std::invalid_argument("no next end of chain"); }
 
 		const auto& prev() const { return static_cast<p&>(*this).data(); }
-			  auto& prev() { return static_cast<p&>(*this).data(); }
+			  auto& prev() 		 { return static_cast<p&>(*this).data(); }
 
 
 		const auto& data() const { return static_cast<const type&>(*this); }
-			auto& data()  	 { return static_cast<		type&>(*this); }
+			  auto& data()  	 { return static_cast<		type&>(*this); }
 	};
 
 	//BODY
@@ -53,13 +52,10 @@ template<class> class InputLayer;
 		using me = LayerChain<derived, front, lst...>;
 		using type = front<LayerChain<derived, front, lst...>>;
 
-//		type* data_;
-
 		bool hasNext() const { return true; }
 
 		template<class... integers>
 		LayerChain(int x, int y, integers... dims) : type(x, y), parent(y, dims...) {}
-
 
 		const auto& tail() const { return next().tail(); }
 		const auto& head() const { return prev().head(); }
@@ -67,22 +63,21 @@ template<class> class InputLayer;
 		auto& tail() { return static_cast<parent&>(*this).tail(); }
 		auto& head() { return prev().head(); }
 
-		auto& prev()  { return static_cast<p&>(*this).data(); }
+			  auto& prev()  	 { return static_cast<p&>(*this).data(); }
 		const auto& prev() const { return static_cast<p&>(*this).data(); }
 
-		auto& next()    { return static_cast<parent&>(*this).data(); }
+			  auto& next()    	 { return static_cast<parent&>(*this).data(); }
 		const auto& next() const { return static_cast<parent&>(*this).data(); }
 
 		const auto& data() const { return static_cast<const type&>(*this); }
 		 	  auto& data()  	 { return static_cast<		type&>(*this); }
-
 	};
-
 
 	//HEAD
 	template<template<class> class... lst>
 	struct LayerChain<BASE, InputLayer, lst...>
-	: LayerChain<LayerChain<BASE, InputLayer, lst...>, lst...>, public InputLayer<LayerChain<BASE, InputLayer, lst...>> {
+		: public LayerChain<LayerChain<BASE, InputLayer, lst...>, lst...>,
+		  public InputLayer<LayerChain<BASE, InputLayer, lst...>> {
 
 		using n = typename LayerChain<LayerChain<BASE, InputLayer, lst...>, lst...>::type;
 		using parent = LayerChain<LayerChain<BASE, InputLayer, lst...>, lst...>;
@@ -94,17 +89,15 @@ template<class> class InputLayer;
 		LayerChain(int x, integers... dims) : type(x), parent(x, dims...) {}
 
 		bool hasNext() const { return true; }
+		const auto& data() const { return static_cast<const type&>(*this); }
+			  auto& data()  	 { return static_cast<		type&>(*this); }
 
 		const auto& tail() const { return next().tail(); }
-		const auto& head() const { return *this; }
 			  auto& tail() 		 { return static_cast<parent&>(*this).tail(); }
+		const auto& head() const { return data(); }
 			  auto& head()  	 { return data(); }
-
-			  auto& next()  	 { return static_cast<parent&>(*this).data(); }
 		const auto& next() const { return static_cast<parent&>(*this).data(); }
-
-		const auto& data() const { return static_cast<const type&>(*this); }
-		 	  auto& data()  	 { return static_cast<		type&>(*this); }
+			  auto& next()  	 { return static_cast<parent&>(*this).data(); }
 	};
 
 

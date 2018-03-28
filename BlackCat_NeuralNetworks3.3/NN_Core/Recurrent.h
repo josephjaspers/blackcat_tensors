@@ -5,19 +5,17 @@
  *      Author: joseph
  */
 
-#ifndef FEEDFORWARD_CU_
-#define FEEDFORWARD_CU_
+#ifndef RECURRENT_CU_
+#define RECURRENT_CU_
 
 #include "Layer.h"
-
 namespace BC {
 
 template<class derived>
-struct FeedForward : public Layer<derived> {
+struct Recurrent : public Layer<derived> {
 
 
 public:
-
 	int INPUTS;
 	int OUTPUTS;
 
@@ -25,9 +23,11 @@ public:
 
 
 	mat w_gradientStorage;
+	mat r_gradientStorage;
 	vec b_gradientStorage;
 
 	mat w;
+	mat r;
 
 	vec x;
 	vec y;
@@ -42,40 +42,47 @@ public:
 	 * 	It also allows for passing an expression with an assignment and delaying the operation for more optimizations
 	 *
 	 */
-	FeedForward(int inputs, int outputs) :
+	Recurrent(int inputs, int outputs) :
 			INPUTS(inputs), OUTPUTS(outputs),
 			w_gradientStorage(outputs, inputs),
+			r_gradientStorage(outputs, outputs),
 			b_gradientStorage(outputs),
 			w(outputs, inputs),
+			r(outputs. outputs),
 			b(outputs),
 			x(inputs),
 			y(outputs),
 			dx(inputs) {
 
 		w.randomize(-4, 4);
+		r.randomize(-4, 4);
 		b.randomize(-4, 4);
 		w_gradientStorage.zero();
+		r_gradientStorage.zero();
 		b_gradientStorage.zero();
 	}
 
 	template<class T> auto forwardPropagation(const vec_expr<T>& in) {
-		auto x_t = x == in;
-		return this->next().forwardPropagation(g(w * x_t + b));
+		auto x_ = x == in;
+		auto y_ = y == g(w * x_ + r * y + b);
+		return this->next().forwardPropagation(y_);
 	}
-	template<class T> auto forwardPropagation_Express(const vec_expr<T>& x) const {
-		return this->next().forwardPropagation_Express(g(w * x + b));
-	}
+	template<class T> auto forwardPropagation(const vec_expr<T>& in) {
+			auto function = y == g(w * x + r * y + b);
+			return this->next().forwardPropagation(function);
+		}
 
 	template<class T> auto backPropagation(const vec_expr<T>& dy) {
 		w_gradientStorage -= dy * x.t();
+		r_gradiantStorage -= dy * y.t();
 		b_gradientStorage -= dy;
 
-		return this->prev().backPropagation(dx = w.t() * dy % gd(x));
+		return this->prev().backPropagation(dx = w.t() * dy % gd(x) + r.t() * dy % gd(y));
 	}
 	template<class U, class V>
 		auto train(const vec_expr<U>& x, const vec_expr<V>& y) {
-		auto dy = this->next().train(g(w * x + b), y);
 
+		auto dy = this->next().train(g(w * x + b), y);
 		w_gradientStorage -= dy * x.t();
 		b_gradientStorage -= dy;
 
@@ -119,6 +126,17 @@ public:
 		b_gradientStorage.read(os);
 
 	}
+
+	//multithreading stuff -----------------------------
+	void updateWeights(const FeedForward& ff) {
+		w += ff.w_gradientStorage * lr;
+		b += ff.b_gradientStorage * lr;
+	}
+	void fastCopy(const FeedForward& ff) {
+		w = ff.w;
+		b = ff.b;
+	}
+
 };
 }
 

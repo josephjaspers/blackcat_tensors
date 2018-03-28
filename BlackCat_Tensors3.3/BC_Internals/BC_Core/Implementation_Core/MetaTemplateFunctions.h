@@ -21,6 +21,9 @@ namespace MTF {
 		template<bool var, class a, class b>
 		using ifte = typename std::conditional<var, a, b>::type; //ifte -- if than, else
 
+		template<class var, class... lst			 > struct isOneOf 					{ static constexpr bool conditional = false; };
+		template<class var, class... lst			 > struct isOneOf<var,var,lst...> 	{ static constexpr bool conditional = true; };
+		template<class var, class front, class... lst> struct isOneOf<var,front,lst...> { static constexpr bool conditional = isOneOf<var, lst...>::conditional; };
 
 
 	template<class> struct isPrimitive 					{ static constexpr bool conditional = false; };
@@ -42,6 +45,34 @@ namespace MTF {
 
 	template<class T>
 	static constexpr bool isPrim = MTF::isPrimitive<T>::conditional;
+
+	template<int...> struct isIntList { static constexpr bool conditional = true; };
+	template<class...> struct isTypeList { static constexpr bool conditional = false; };
+
+
+	template<class> struct lst;
+
+	template<class T> struct lst {
+		using front = T;
+		using last = T;
+	};
+	template<template<class...> class LIST, class T, class... V>
+	struct lst<LIST<T, V...>>  {
+		using front = T;
+		using last = T;
+	};
+	template<template<class...> class LIST, class T, class V>
+	struct lst<LIST<T, V>>  {
+		using front = T;
+		using last = V;
+	};
+
+	template<template<class...> class LIST, class T, class n, class... V>
+	struct lst<LIST<T, n, V...>> {
+		using front = T;
+		using last = typename lst<LIST<n,V...>>::last;
+	};
+
 
 	template<class, class> struct same  { static constexpr bool conditional = false; };
 	template<class T> struct same<T, T> { static constexpr bool conditional = true; };
@@ -72,6 +103,11 @@ namespace MTF {
 		using type = U;
 	};
 
+	template<class T>
+	using head = typename lst<T>::front;
+
+	template<class T>
+	using tail = typename lst<T>::last;
 
 	template<class T>
 	using front_t = typename front<T>::type;

@@ -7,10 +7,8 @@
 
 #ifndef SCALAR_H_
 #define SCALAR_H_
-#include "TensorBase.h"
-#include "../BC_MetaTemplateFunctions/Simple.h"
-#include "../BC_MetaTemplateFunctions/Adhoc.h"
 #include <type_traits>
+#include "TensorBase.h"
 
 namespace BC {
 
