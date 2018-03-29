@@ -50,6 +50,7 @@
 #include "BC_Core/Vector.h"
 #include "BC_Core/Matrix.h"
 #include "BC_Core/Cube.h"
-#include "BC_Core/TensorN.h"
+#include "BC_Core/Tensor4.h"
+#include "BC_Core/Tensor5.h"
 
 #endif /* BLACKCAT_INTERNAL_GLOBALUNIFIER_H_ */

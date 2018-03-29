@@ -7,9 +7,6 @@
 
 #ifndef DETERMINERS_H_
 #define DETERMINERS_H_
-
-#include "BC_Expressions/BlackCat_Internal_Definitions.h"
-#include "../TensorN.h"
 #include <type_traits>
 namespace BC {
 
@@ -23,28 +20,30 @@ template<class,class> class Scalar;
 template<class,class> class Vector;
 template<class,class> class Matrix;
 template<class,class> class Cube;
+template<class,class> class Tensor4;
+template<class,class> class Tensor5;
 
 template<class T> struct isCore { static constexpr bool conditional = MTF::isPrimitive<T>::conditional; };
 template<template<class> class T, class U> struct isCore<T<U>>
 { static constexpr bool conditional = MTF::isOneOf<T<U>,Tensor_Core<U>, Tensor_Slice<U>, Tensor_Scalar<U>>::conditional; };
 
 
-
-
+template<class> struct ranker;
 template<int> struct base;
-
+template<int x> struct base { template<class t, class m> using type = DISABLED<t,m>;  template<class t, class m> using slice = DISABLED<t, m>; };
 template<> struct base<0> { template<class t, class m> using type = Scalar<t,m>;  template<class t, class m> using slice = DISABLED<t, m>; };
 template<> struct base<1> { template<class t, class m> using type = Vector<t, m>; template<class t,class m> using slice = Scalar<t, m>; };
 template<> struct base<2> { template<class t, class m> using type = Matrix<t, m>; template<class t,class m> using slice = Vector<t, m>; };
 template<> struct base<3> { template<class t, class m> using type = Cube<t, m>;   template<class t,class m> using slice = Matrix<t, m>; };
+template<> struct base<4> { template<class t, class m> using type = Tensor4<t, m>;   template<class t,class m> using slice = Cube<t, m>; };
+template<> struct base<5> { template<class t, class m> using type = Tensor5<t, m>;   template<class t,class m> using slice = Tensor4<t, m>; };
 
-
-template<int a ,int b = a, class = void> struct Rank;
-template<class> struct ranker;
 template<class a, class b> struct ranker<Scalar<a,b>> { static constexpr int value = 0; };
 template<class a, class b> struct ranker<Vector<a,b>> { static constexpr int value = 1; };
 template<class a, class b> struct ranker<Matrix<a,b>> { static constexpr int value = 2; };
 template<class a, class b> struct ranker<Cube<a,b>>   { static constexpr int value = 3; };
+template<class a, class b> struct ranker<Tensor4<a,b>>   { static constexpr int value = 4; };
+template<class a, class b> struct ranker<Tensor5<a,b>>   { static constexpr int value = 5; };
 
 template<class> struct determine_functor;
 template<class> struct determine_evaluation;
@@ -72,7 +71,7 @@ struct determine_evaluation<tensor<functor, set...>>{
 
 	using type = ifte<MTF::isPrimitive<functor>::conditional || isCore<functor>::conditional,
 			derived&,
-			tensor<Tensor_Core<derived>>>;
+			tensor<_scalar<derived>, _mathlib<derived>>>;
 };
 
 //SCALAR_TYPE----------------------------------------------------------------------------------------------

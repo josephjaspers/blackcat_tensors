@@ -47,8 +47,17 @@
 								<inputType id="nvcc.compiler.input.c.66856890" superClass="nvcc.compiler.input.c"/>
 							</tool>
 							<tool command="nvcc -fopenmp -Xcompiler -fopenmp " commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX} ${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser;nvcc.errorParser" id="nvcc.linker.base.1529584491" name="NVCC Linker" superClass="nvcc.linker.base">
-								<option id="nvcc.linker.option.libs.1068754870" name="Libraries (-l)" superClass="nvcc.linker.option.libs" valueType="libs"/>
-								<option id="nvcc.linker.option.paths.1499036613" name="Library search path (-L)" superClass="nvcc.linker.option.paths" valueType="libPaths"/>
+								<option id="nvcc.linker.option.libs.1068754870" name="Libraries (-l)" superClass="nvcc.linker.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="cblas"/>
+									<listOptionValue builtIn="false" value="f77blas"/>
+									<listOptionValue builtIn="false" value="cublas"/>
+									<listOptionValue builtIn="false" value="gomp"/>
+								</option>
+								<option id="nvcc.linker.option.paths.1499036613" name="Library search path (-L)" superClass="nvcc.linker.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="/usr/lib/atlas-base"/>
+									<listOptionValue builtIn="false" value="/usr/local/cuda/include"/>
+									<listOptionValue builtIn="false" value="/usr/local/cuda-9.1/bin"/>
+								</option>
 								<inputType id="nvcc.linker.input.1471522669" superClass="nvcc.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>

@@ -80,8 +80,8 @@ int percept_MNIST() {
 //	Generate the layers (params are: inputs, outputs)
 
 	//Create the neural network
-//	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
-	NeuralNetwork<FeedForward> network(784, 10);
+	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
+//	NeuralNetwork<FeedForward> network(784, 10);
 
 	data inputs;
 	data outputs;

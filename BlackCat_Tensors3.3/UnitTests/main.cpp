@@ -3,6 +3,7 @@
 #include <type_traits>
 #include "SpeedTests.h"
 #include "dotproduct_scratch.h"
+#include <omp.h>
 using BC::Vector;
 using BC::Matrix;
 using BC::Scalar;
@@ -143,44 +144,39 @@ auto test() {
 
 }
 
-void testCorrelation() {
-
-	mat a(3,3);
-	mat b(2,2);
-
-
-	mat c(2,2);
-	c.zero();
-	for (int i = 0; i < a.size();++i) {
-		a(i) = i;
-	}
-	for (int u = 0; u < b.size(); ++u) {
-		b(u) = u;
-	}
-a.print();
-b.print();
-//	b.x_corr(a);
-////
-//	(b.x_corr(a)).printDimensions();
-//c = b.x_corr(a);
-//
-//	c.print();
-//
-//	c = b.x_corr(a);
-}
-
 #include "Benchmarks/BenchmarkEigen.h"
 
+template<int a> struct X {
+	template<int> struct Y {
 
-template<int> struct X { template<class T> struct v {}; };
+	};
 
-template<class> struct chk;
-template<> struct chk<X<3>::template v<int>> {};
+	Y<a> getY();
+};
+
+template<class> struct Base;
+template<int x>
+template<int y>
+struct Base<typename X<x>::template Y<y>> {
+	static void foo() {
+		std::cout << "special " << std::endl;
+	}
+};
+template<int a, int b>
+	using type = typename X<a>::template Y<b>;
 int main() {
+
+//	Base<type<0,0>>::foo();
+//	Base<typename X<0>::template Y<0>>::foo();
+
 test();
 
-//	auto var = BC::Tensor<float>(1,2,3,4);
+//BC::Dimension<4>::Tensor<double, BC::CPU> meh(std::vector<int>{1,2,3,4});
+//meh.print();
+//chk<2, X<2>>::foo();
 
+	BC::Tensor4<float, BC::CPU> t4(1,2,3,4);
+	t4.print();
 //	var.print();
 mat alpha(2,2);
 mat zeta(4,4);
@@ -199,31 +195,7 @@ mat output(3,3);
 //
 //output = alpha.x_corr(zeta);
 output.print();
-//output_padded = alpha.x_corr_padded(zeta);
-//output = alpha.x_corr(zeta);
-//	vec alpha(2);
-//	vec zeta(4);
-//
-//	for (int i = 0; i < alpha.size(); ++i ){
-//		alpha(i) = i;
-//	}
-//	for (int i = 0; i < zeta.size(); ++i ){
-//		zeta(i) = i;
-//	}
-
-//	alpha.print();
-//	zeta.print();
-//	vec output(3);
-//	vec output_padded(5);
-//
-//	output_padded = alpha.x_corr_padded(zeta);
-//	output = alpha.x_corr(zeta);
-//output.print();
-////
-////output_padded.zero();
-//output_padded.print();
-
-//	testCorrelation();
+//BC::Tensor<4, double> tens = {1,2,3,4,5};
 //
 //	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
 ////	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;

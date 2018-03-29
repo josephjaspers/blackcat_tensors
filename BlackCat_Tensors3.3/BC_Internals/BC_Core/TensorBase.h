@@ -16,7 +16,6 @@
 #include "Implementation_Core/Determiners.h"
 
 namespace BC {
-template<class,class> class Scalar;
 
 template<class derived>
 class TensorBase :
