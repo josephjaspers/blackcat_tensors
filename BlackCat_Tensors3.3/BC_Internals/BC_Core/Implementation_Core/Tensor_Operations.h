@@ -254,8 +254,7 @@ struct Tensor_Operations {
 	}
 	template<int search_space = 3>
 	auto max_pooling() {
-
-		return expr_sub<unary_expression_maxpooling<scalar_type, functor_type, search_space>, derived>(asBase().data());
+		return expr_sub<derived, unary_expression_maxpooling<scalar_type, functor_type, search_space>, math_library>(asBase().data());
 	}
 
 };

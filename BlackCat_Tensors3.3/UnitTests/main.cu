@@ -157,12 +157,12 @@ zeta.print();
 mat output(2,2);
 output.zero();
 
-//output = alpha.x_corr<2>(zeta);
+output = alpha.x_corr<2>(zeta);
 output.print();
 
-//mat output2(4,4);
-//output2 = alpha.x_corr_padded<2>(zeta);
-//output2.print();
+mat output2(4,4);
+output2 = alpha.x_corr_padded<2>(zeta);
+output2.print();
 
 mat mp(2,2);
 //mp = output2.max_pooling<3>();

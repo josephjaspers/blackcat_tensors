@@ -13,7 +13,7 @@ namespace BC {
 template<class T, class ary,  int search_space = 3>
 struct unary_expression_maxpooling : expression<T, unary_expression_maxpooling<T, ary, search_space>> {
 
-	static constexpr int DIMS() { return ary::DIMS(); }
+	__BCinline__ static constexpr int DIMS() { return ary::DIMS(); }
 
 	stack_array<int, DIMS()> positions;
 	stack_array<int, DIMS()> os = init_outerShape();
@@ -25,60 +25,41 @@ struct unary_expression_maxpooling : expression<T, unary_expression_maxpooling<T
 		}
 	}
 
-	template<int mv, class I>
-	T max_pool_search(int index, const I& img) const {
-		static constexpr int ORDER = search_space - 1;
+	template<int mv, class I> __BCinline__
+		T maxp(int index, const I& img) const {
 
-		if (mv == 0) {
-			std::cout << " mv == 0 " << std::endl;
-			if (ORDER == 0) {
-				std::cout << " order == 0 " << std::endl;
+			static constexpr int ORDER = I::DIMS() - 1;
 
-				T max = img[index];
-//				for (int i = 1; i < search_space; ++i)
-//					if (img[index + i] > max)
-//						max = img[index + i];
+			T sum = 0;
 
-				return max;
-
-			} else {
-				std::cout << " mv = " << mv <<std::endl;
-				std::cout << " order = " << ORDER <<std::endl;
-
-				int offset = (int) (index / LD_dimension(ORDER));
-				int index_ = index % LD_dimension(ORDER);
-				T max = 0;
-				max = max_pool_search<0>(index_, img.slice(offset));
 //
-//				for (int i = 1; i < search_space; ++i) {
-//					auto tmp_max = max_pool_search<0>(index_, img.slice(i + offset));
-//					if (tmp_max > max)
-//						max = tmp_max;
+//			if (mv == 0) {
+//				if (ORDER == 0)
+//					for (int i = 0; i < value.rows(); ++i) {
+//						sum += img[index + i];
+//					}
+//				else {
+//					int offset = (int)(index / LD_dimension(ORDER));
+//					int index_ = index % LD_dimension(ORDER);
+//					for (int i = 0; i < value.dimension(ORDER); ++i) {
+//						sum += maxp<0>(index_, img.slice(i + offset));
+//					}
 //				}
-
-				return max;
-			}
-		} else {
-
-			int offset = (int) (index / positions[ORDER]);
-			int index_ = index % positions[ORDER];
-			T max = max_pool_search<(((mv - 1) < 0) ? 0 : (mv - 1))>(index_, img.slice(offset));
-
-//			for (int i = 1; i < search_space; ++i) {
-//				auto tmp = max_pool_search<(((mv - 1) < 0) ? 0 : (mv - 1))>(index_, img.slice(i + offset));
+//			} else {
+//				int offset = (int)(index / positions[ORDER]);
+//				int index_ = index % positions[ORDER];
 //
-//				if (tmp > max)
-//					max = tmp;
+//				for (int i = 0; i < value.dimension(ORDER); ++i) {
+//						sum += maxp<(((mv - 1) < 0) ? 0 : (mv - 1))>(index, img.slice(i + offset));
+//				}
 //			}
-			return max;
-		}
-	}
 
-	__BCinline__  T operator [] (int i) const {
-		std::cout << "max pool --------" << i << std::endl;
-		return 0;
-//		return max_pool_search<search_space - 1>(i, value);
-	}
+			return sum;
+		}
+
+		__BCinline__  T operator [] (int i) const {
+			return 0;//maxp<search_space - 1>(i, value);
+		}
 
 	__BCinline__ int size() const {
 		int sz = 1;
