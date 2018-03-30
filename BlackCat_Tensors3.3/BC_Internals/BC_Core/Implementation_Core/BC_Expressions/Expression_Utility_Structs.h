@@ -58,26 +58,26 @@ template<class T, int size>
 struct stack_array : stack_array<T, size - 1> {
 
 	template<class... values>
-	stack_array(T val, values... integers) : stack_array<T, size - 1>(integers...), dim(val) {}
-	stack_array() = default;
+	__BCinline__ stack_array(T val, values... integers) : stack_array<T, size - 1>(integers...), dim(val) {}
+	__BCinline__ stack_array() {}
 
 	T dim = 0;
-	operator int() const { return dim; }
-	operator const int*() const { return &dim; }
+	__BCinline__ operator int() const { return dim; }
+	__BCinline__ operator const int*() const { return &dim; }
 
-	auto& next() const { return static_cast<const stack_array<T, size - 1>& >(*this); }
+	__BCinline__ auto& next() const { return static_cast<const stack_array<T, size - 1>& >(*this); }
 
-	const T& operator [] (int i) const {
+	__BCinline__ const T& operator [] (int i) const {
 		return (&dim)[-i];
 	}
-	T& operator [] (int i) {
+	__BCinline__ T& operator [] (int i) {
 		return (&dim)[-i];
 	}
 };
 
 template<class T>
 struct stack_array<T, 0> {
-	T operator [](int i) const {
+	__BCinline__ T operator [](int i) const {
 		std::cout << " out of bounds " << std::endl;
 		return 0;
 	}
@@ -87,14 +87,14 @@ template<class ref>
 struct reference_array {
 	ref value;
 
-	reference_array(ref a_) :
+	__BCinline__ reference_array(ref a_) :
 			value(a_) {
 	}
 
-	const auto operator [](int i) const {
+	__BCinline__ const auto operator [](int i) const {
 		return value.dimension(i);
 	}
-	auto operator [](int i) {
+	__BCinline__ auto operator [](int i) {
 		return value.dimension(i);
 	}
 };

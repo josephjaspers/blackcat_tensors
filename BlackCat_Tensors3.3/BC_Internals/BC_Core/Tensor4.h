@@ -24,7 +24,7 @@ public:
 	using parent_class::operator[];
 	using parent_class::operator();
 
-	static constexpr int DIMS() { return 4; }
+	__BCinline__ static constexpr int DIMS() { return 4; }
 
 	Tensor4(const Tensor4&  v) : parent_class(v) {}
 	Tensor4(		 Tensor4&& v) : parent_class(v) {}

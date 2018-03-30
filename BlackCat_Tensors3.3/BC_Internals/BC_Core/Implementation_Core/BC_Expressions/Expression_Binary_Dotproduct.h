@@ -29,7 +29,7 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	using scalar_type = T;
 	using lifetime_reaper = std::shared_ptr<scalar_type>;
 
-	static constexpr int DIMS() { return rv::DIMS(); }
+	__BCinline__ static constexpr int DIMS() { return rv::DIMS(); }
 	static constexpr bool transA = det_eval<lv>::transposed;
 	static constexpr bool transB = det_eval<rv>::transposed;
 	static constexpr bool lv_scalar = det_eval<lv>::scalar;
@@ -46,6 +46,20 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	 binary_expression_dotproduct(lv left, rv right) : left(left), right(right) {
 		Mathlib::initialize(array_ptr,size());
 		array = lifetime_reaper(array_ptr, deleter());
+
+//		if (transA)
+//		std::cout << "A is transposed" << transA << std::endl;
+//		if (transB)
+//		std::cout <<"B is transposed" << transB << std::endl;
+//		if (lv_scalar)
+//		std::cout << "A has scalar " <<lv_scalar << std::endl;
+//		if (rv_scalar)
+//		std::cout <<"B has scalar" << rv_scalar << std::endl;
+//		if (lv_eval)
+//		std::cout << "A instant eval" <<lv_eval << std::endl;
+//		if(rv_eval)
+//		std::cout <<"B instant eval " << rv_eval << std::endl;
+
 		eval();
 	}
 

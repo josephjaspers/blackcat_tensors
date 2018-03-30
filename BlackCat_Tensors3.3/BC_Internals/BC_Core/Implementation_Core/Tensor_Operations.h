@@ -15,6 +15,7 @@
 #include "BC_Expressions/Expression_Unary_Pointwise.h"
 #include "BC_Expressions/Expression_Binary_Dotproduct.h"
 #include "BC_Expressions/Expression_Unary_MatrixTransposition.h"
+#include "BC_Expressions/Expression_Unary_MaxPooling.h"
 #include "BC_Expressions/Expression_Binary_Correlation.h"
 #include "BC_Expressions/Expression_Binary_Correlation_Padded.h"
 
@@ -47,15 +48,14 @@ struct Tensor_Operations {
 	using scalar_type 		= _scalar<derived>;
 	using math_library 		= _mathlib<derived>;
 	using this_type = derived;
-	template<class T, class shell>
-	using expr_sub = typename MTF::shell_of<shell>::template type<T>;
+	template<class shell, class... T> using expr_sub = typename MTF::shell_of<shell>::template type<T...>;
 
 	template<class param_deriv, class functor>
 	struct impl {
 		using greater_rank_type = std::conditional_t<(derived::DIMS() > param_deriv::DIMS()), derived, param_deriv>;
 		using param_functor_type = typename Tensor_Operations<param_deriv>::functor_type;
-		using type = 	   expr_sub<binary_expression<scalar_type, functor, functor_type ,param_functor_type>, greater_rank_type>;
-		using unary_type = expr_sub<unary_expression <scalar_type, functor, functor_type>, 					   greater_rank_type>;
+		using type = 	   expr_sub<greater_rank_type, binary_expression<scalar_type, functor, functor_type ,param_functor_type>, math_library>;
+		using unary_type = expr_sub<greater_rank_type, unary_expression <scalar_type, functor, functor_type>, math_library>;
 	};
 	template<class param_deriv>
 	struct dp_impl {
@@ -65,11 +65,11 @@ struct Tensor_Operations {
 		using lesser_rank_type 		= std::conditional_t<(derived::DIMS() < param_deriv::DIMS()), derived, param_deriv>;
 
 		using dot_type 				= binary_expression_dotproduct<scalar_type, _functor<derived>, _functor<param_deriv>, math_library>;
-		using scalmul_type 			= binary_expression_scalar_mul<scalar_type, functor_type ,param_functor_type>;
+		using scalmul_type 			= binary_expression_scalar_mul<scalar_type, functor_type , param_functor_type>;
 
 		using type = std::conditional_t<!SCALAR_MUL,
-						expr_sub<dot_type, lesser_rank_type>,
-						expr_sub<scalmul_type, greater_rank_type>>;
+						expr_sub<lesser_rank_type, dot_type, math_library>,
+						expr_sub<greater_rank_type, scalmul_type, math_library>>;
 	};
 
 
@@ -91,7 +91,7 @@ struct Tensor_Operations {
 	template<class deriv> __BCinline__
 	void assert_same_ml(const Tensor_Operations<deriv>& tensor) const {
 #ifdef BLACKCAT_TENSORS_ASSERT_VALID
-		static_assert(MTF::same<math_library, typename Tensor_Operations<deriv>::math_library>::conditional, "math_library must be identical");
+		static_assert(MTF::same<_mathlib<derived>, _mathlib<deriv>>::conditional, "math_library must be identical");
 #endif
 	}
 
@@ -224,19 +224,39 @@ struct Tensor_Operations {
 	 const alternate_asterix_denoter<derived> operator * () const {
 		return alternate_asterix_denoter<derived>(this);
 	}
-	 template<class deriv>
+
+	 //--------------------------------HIGHER ORDER OPERATIONS------------------------------//
+		template<class deriv>
+		auto corr(const Tensor_Operations<deriv>& rv) {
+			assert_same_size(rv);
+			return
+						typename base<0>::template type<
+							binary_expression_correlation<scalar_type, _functor<deriv>, functor_type, 0>, math_library>
+			(asBase().data(), rv.asBase().data());
+		}
+
+	template<int mv = 2, class deriv>
 	auto x_corr(const Tensor_Operations<deriv>& rv) {
 
-		 return expr_sub<
-				 binary_expression_correlation<scalar_type, typename Tensor_Operations<deriv>::functor_type, functor_type>, deriv>(asBase().data(), rv.asBase().data());
-	 }
+		return
+				typename base<mv>::template type<
+					binary_expression_correlation<scalar_type, _functor<deriv>, functor_type, mv>, math_library
+				>(asBase().data(), rv.asBase().data());
+	}
 
-	 template<class deriv>
-		auto x_corr_padded(const Tensor_Operations<deriv>& rv) {
+	template<int mv = 2, class deriv>
+	auto x_corr_padded(const Tensor_Operations<deriv>& rv) {
 
-			 return expr_sub<
-					 binary_expression_correlation_padded<scalar_type, typename Tensor_Operations<deriv>::functor_type, functor_type>, deriv>(asBase().data(), rv.asBase().data());
-		 }
+		return
+				typename base<mv>::template type<
+				binary_expression_correlation_padded<scalar_type, _functor<deriv>, functor_type, mv>, math_library>
+					(asBase().data(), rv.asBase().data());
+	}
+	template<int search_space = 3>
+	auto max_pooling() {
+
+		return expr_sub<unary_expression_maxpooling<scalar_type, functor_type, search_space>, derived>(asBase().data());
+	}
 
 };
 }

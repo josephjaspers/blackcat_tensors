@@ -22,14 +22,14 @@ namespace BC {
 template<class T>
 struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 
-	static constexpr int DIMS() { return _rankOf<T>; }
-	static constexpr int LAST() { return DIMS() - 1;}
+	__BCinline__ static constexpr int DIMS() { return _rankOf<T>; }
+	__BCinline__ static constexpr int LAST() { return DIMS() - 1;}
 
 	using self = Tensor_Core<T>;
 	using dimlist = std::vector<int>;
 	using scalar_type = _scalar<T>;
 	using Mathlib = _mathlib<T>;
-	using slice_type = std::conditional_t<(DIMS() == 0), self&, Tensor_Slice<self>>;
+	using slice_type = std::conditional_t<(DIMS() == 0), self, Tensor_Slice<self>>;
 
 	scalar_type* array;
 	int* is = Mathlib::unified_initialize(is, DIMS());
@@ -84,10 +84,12 @@ struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 	__BCinline__ const auto innerShape() const { return is; }
 	__BCinline__ const auto outerShape() const { return os; }
 
-	struct slice_type_ref   { 	static 		 auto& foo(		 Tensor_Core& tc, int i) { return tc; };
-								static const auto& foo(const Tensor_Core& tc, int i) { return tc; }};
-	struct slice_type_slice { 	static 		 auto  foo(		 Tensor_Core& tc, int i) { return slice_type(&tc.array[DIMS() == 1 ? i : (tc.os[LAST() - 1] * i)], tc); };
-							 	static const auto  foo(const Tensor_Core& tc, int i) { return slice_type(&tc.array[DIMS() == 1 ? i : (tc.os[LAST() - 1] * i)], tc); }};
+	struct slice_type_ref   {
+	__BCinline__ static 		 auto foo(		 Tensor_Core& tc, int i) { return tc; };
+	__BCinline__ static const auto foo(const Tensor_Core& tc, int i) { return tc; }};
+	struct slice_type_slice {
+	__BCinline__ static 		 auto foo(		 Tensor_Core& tc, int i) { return slice_type(&tc.array[DIMS() == 1 ? i : (tc.os[LAST() - 1] * i)], tc); };
+	__BCinline__ static const auto foo(const Tensor_Core& tc, int i) { return slice_type(&tc.array[DIMS() == 1 ? i : (tc.os[LAST() - 1] * i)], tc); }};
 
 	using slice_return = std::conditional_t<(DIMS() == 0), slice_type_ref, slice_type_slice>;
 

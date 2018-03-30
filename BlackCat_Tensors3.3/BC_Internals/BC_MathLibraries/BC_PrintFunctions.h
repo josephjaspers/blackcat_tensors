@@ -27,7 +27,6 @@ static void printHelper(const T& ary, const int_ranks ranks, int order, std::str
 
 		auto gap = std::to_string(order);
 		auto str = std::string(" ", gap.length());
-		std::cout << indent << "--- --- --- --- --- " << order << " --- --- --- --- ---" << std::endl;
 
 	} else if (order == 1) {
 		std::cout << indent << "--- --- --- --- --- " << order << " --- --- --- --- ---" << std::endl;

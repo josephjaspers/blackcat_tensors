@@ -47,11 +47,7 @@ auto test() {
 
 	std::cout << " E" << std::endl;
 	e.print();
-	std::cout << " a.print()" << std::endl;
-	a.print();
-	(a[0][0] + a).print();
-	(a[0][0] + a + e  + ALPHAS)[0].print(); //Only the first column is calculated (the beauty of delayed evaluation)
-//
+
 	std::cout << " simple dot product [following should all have same value]" << std::endl;
 	c = d * e;
 	c.print();
@@ -73,9 +69,6 @@ auto test() {
 	std::cout << " dot product -- regular,  scalar " << std::endl;
 
 	c = d * e * scal(2); ////This is the only version that is not accounted for (it is also the least common notation)
-	c.print();
-	std::cout << " dot product -- scalar, regular " << std::endl;
-	c = d * scal(2) * e;
 	c.print();
 
 	scal A(2);
@@ -137,7 +130,7 @@ auto test() {
 	std::cout << " trying to read" << std::endl;
 	std::ifstream is("save.txt");
 
-	Matrix<double> readM(d.size());
+	Matrix<double, BC::CPU> readM(d.size());
 	readM.read(is);
 	readM.print();
 	is.close();
@@ -146,40 +139,11 @@ auto test() {
 
 #include "Benchmarks/BenchmarkEigen.h"
 
-template<int a> struct X {
-	template<int> struct Y {
-
-	};
-
-	Y<a> getY();
-};
-
-template<class> struct Base;
-template<int x>
-template<int y>
-struct Base<typename X<x>::template Y<y>> {
-	static void foo() {
-		std::cout << "special " << std::endl;
-	}
-};
-template<int a, int b>
-	using type = typename X<a>::template Y<b>;
 int main() {
-
-//	Base<type<0,0>>::foo();
-//	Base<typename X<0>::template Y<0>>::foo();
-
 test();
 
-//BC::Dimension<4>::Tensor<double, BC::CPU> meh(std::vector<int>{1,2,3,4});
-//meh.print();
-//chk<2, X<2>>::foo();
-
-	BC::Tensor4<float, BC::CPU> t4(1,2,3,4);
-	t4.print();
-//	var.print();
 mat alpha(2,2);
-mat zeta(4,4);
+mat zeta(3,3);
 
 for (int i = 0; i < alpha.size(); ++i ){
 	alpha(i) = i;
@@ -190,11 +154,20 @@ for (int i = 0; i < zeta.size(); ++i ){
 
 alpha.print();
 zeta.print();
-mat output(3,3);
-////cube output_padded(5,5, 5);
-//
-//output = alpha.x_corr(zeta);
+mat output(2,2);
+output.zero();
+
+//output = alpha.x_corr<2>(zeta);
 output.print();
+
+//mat output2(4,4);
+//output2 = alpha.x_corr_padded<2>(zeta);
+//output2.print();
+
+mat mp(2,2);
+//mp = output2.max_pooling<3>();
+
+mp.print();
 //BC::Tensor<4, double> tens = {1,2,3,4,5};
 //
 //	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;

@@ -21,10 +21,10 @@ using DEFAULT_MATHLIB = GPU
 
 #endif
 
-template<class, class ML = DEFAULT_MATHLIB> class Scalar;
-template<class, class ML = DEFAULT_MATHLIB> class Vector;
-template<class, class ML = DEFAULT_MATHLIB> class Matrix;
-template<class, class ML = DEFAULT_MATHLIB> class Cube;
+//template<class, class ML = DEFAULT_MATHLIB> class Scalar;
+//template<class, class ML = DEFAULT_MATHLIB> class Vector;
+//template<class, class ML = DEFAULT_MATHLIB> class Matrix;
+//template<class, class ML = DEFAULT_MATHLIB> class Cube;
 }
 
 

@@ -21,9 +21,9 @@ template<class PARENT>
 	using scalar_type = _scalar<PARENT>;
 	using self = Tensor_Slice<PARENT>;
 
-	static constexpr int DIMS() { return  ((PARENT::DIMS() - 1) > 0) ? (PARENT::DIMS() - 1) : 0; };
-	static constexpr int LAST()  { return  ((PARENT::LAST() - 1) > 0) ? (PARENT::LAST() - 1) : 0; }
-	using slice_type = std::conditional_t<DIMS() == 0, self&,Tensor_Slice<self>>;
+	__BCinline__ static constexpr int DIMS() { return  PARENT::DIMS() - 1; };
+	__BCinline__ static constexpr int LAST()  { return  PARENT::LAST() - 1; }
+	using slice_type = std::conditional_t<DIMS() == 0, self, Tensor_Slice<self>>;
 
 	const PARENT parent;
 	scalar_type* array_slice;
@@ -31,7 +31,7 @@ template<class PARENT>
 	operator 	   scalar_type*()       { return array_slice; }
 	operator const scalar_type*() const { return array_slice; }
 
-	Tensor_Slice(scalar_type* array, const PARENT& parent_) : array_slice(array), parent(parent_) {}
+	__BCinline__ Tensor_Slice(scalar_type* array, const PARENT& parent_) : array_slice(array), parent(parent_) {}
 
 	__BCinline__ int dims() const { return DIMS(); }
 	__BCinline__ int size() const { return DIMS() > 0 ? parent.outerShape()[LAST()] : 1;    }
@@ -51,10 +51,10 @@ template<class PARENT>
 	__BCinline__ const auto outerShape() const 			{ return parent.outerShape(); }
 
 
-	struct slice_type_ref   { 	static 		 auto& foo(		 Tensor_Slice& tc, int i) { return tc; };
-									static const auto& foo(const Tensor_Slice& tc, int i) { return tc; }};
-		struct slice_type_slice { 	static 		 auto  foo(		 Tensor_Slice& tc, int i) { return slice_type(&tc.array_slice[DIMS() == 1 ? i : (tc.outerShape()[LAST() - 1] * i)], tc); };
-								 	static const auto  foo(const Tensor_Slice& tc, int i) { return slice_type(&tc.array_slice[DIMS() == 1 ? i : (tc.outerShape()[LAST() - 1] * i)], tc); }};
+		struct slice_type_ref   { 	__BCinline__ static 		 auto foo(		 Tensor_Slice& tc, int i) { return tc; };
+		__BCinline__ static const auto foo(const Tensor_Slice& tc, int i) { return tc; }};
+		struct slice_type_slice { 	__BCinline__ static 		 auto foo(		 Tensor_Slice& tc, int i) { return slice_type(&tc.array_slice[DIMS() == 1 ? i : (tc.outerShape()[LAST() - 1] * i)], tc); };
+		__BCinline__ static const auto foo(const Tensor_Slice& tc, int i) { return slice_type(&tc.array_slice[DIMS() == 1 ? i : (tc.outerShape()[LAST() - 1] * i)], tc); }};
 
 		using slice_return = std::conditional_t<(DIMS() == 0), slice_type_ref, slice_type_slice>;
 

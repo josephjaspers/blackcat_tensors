@@ -27,7 +27,7 @@ public:
 	using parent_class::operator[];
 	using parent_class::operator();
 
-	static constexpr int DIMS() { return 3; }
+	__BCinline__ static constexpr int DIMS() { return 3; }
 
 	Cube(const Cube&  v) : parent_class(v) {}
 	Cube(	   Cube&& v) : parent_class(v) {}

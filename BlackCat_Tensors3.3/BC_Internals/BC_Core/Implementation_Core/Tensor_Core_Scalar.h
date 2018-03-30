@@ -28,7 +28,7 @@ struct Tensor_Scalar : expression<_scalar<PARENT>, Tensor_Scalar<PARENT>> {
 	operator 	   scalar*()       { return array_slice; }
 	operator const scalar*() const { return array_slice; }
 
-	Tensor_Scalar(scalar* array, const PARENT& parent_) : array_slice(array), parent(parent_) {}
+	__BCinline__ Tensor_Scalar(scalar* array, const PARENT& parent_) : array_slice(array), parent(parent_) {}
 
 	__BCinline__ int dims() const { return 0; }
 	__BCinline__ int size() const { return 1; }

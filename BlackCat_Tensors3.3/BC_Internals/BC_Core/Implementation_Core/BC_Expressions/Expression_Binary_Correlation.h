@@ -8,36 +8,17 @@
 #ifndef EXPRESSIONS_BINARY_CORRELATION_H_
 #define EXPRESSIONS_BINARY_CORRELATION_H_
 
-template<class, int> struct axpy_krnl;
-
-//template<class T>
-//struct axpy_krnl<T, 0> {
-//
-//	template<class K, class I>
-//	static T impl(const K& krnl, const I& img, int base_index) {
-//		static_assert(K::DIMS() != 0 && I::DIMS() != 0, "meh");
-//		T sum = 0;
-//		if (K::DIMS() == 1 && I::DIMS() == 1) {
-//			for (int i = 0; i < krnl.rows(); ++i)
-//				sum += krnl[i] * img[i + base_index];
-//			return sum;
-//		} else if (K::DIMS() >  ) {
-//
-//		}
-//	}
-//};
-
-
 #include "Expression_Base.h"
 namespace BC {
-template<class T, class lv, class rv>
-struct binary_expression_correlation : expression<T, binary_expression_correlation<T, lv, rv>> {
+template<class T, class lv, class rv, int corr_dimension = 2>
+struct binary_expression_correlation : expression<T, binary_expression_correlation<T, lv, rv, corr_dimension>> {
 
 	static_assert(lv::DIMS() == rv::DIMS(), "CORRELATION CURRENTLY ONLY SUPPORTED FOR SAME ORDER TENSORS");
-	static constexpr int DIMS() { return lv::DIMS(); }
+	__BCinline__ static constexpr int DIMS() { return lv::DIMS(); }
 
 	stack_array<int, DIMS()> positions;
 	stack_array<int, DIMS()> os = init_outerShape();
+
 	lv left;  //krnl
 	rv right; //img
 
@@ -47,23 +28,33 @@ struct binary_expression_correlation : expression<T, binary_expression_correlati
 		}
 	}
 
-	template<class K, class I> __BCinline__
+	template<int mv, class K, class I> __BCinline__
 	T axpy(int index, const K& krnl, const I& img) const {
 
 		static_assert(K::DIMS() == I::DIMS(), "Krnl/Img DIMS() must be equal");
 		static constexpr int ORDER = K::DIMS() - 1;
 
 		T sum = 0;
-		if (ORDER == 0)
-			for (int i = 0; i < left.rows(); ++i) {
-				sum += krnl[i] * img[index + i];
+
+
+		if (mv == 0) {
+			if (ORDER == 0)
+				for (int i = 0; i < left.rows(); ++i) {
+					sum += krnl[i] * img[index + i];
+				}
+			else {
+				int offset = (int)(index / LD_dimension(ORDER));
+				int index_ = index % LD_dimension(ORDER);
+				for (int i = 0; i < krnl.dimension(ORDER); ++i) {
+					sum += axpy<0>(index_, krnl.slice(i), img.slice(i + offset));
+				}
 			}
-		else {
-			int offset = (int)(index / LD_dimension(ORDER));
-			int index_ = index % LD_dimension(ORDER);
+		} else {
+			int offset = (int)(index / positions[ORDER]);
+			int index_ = index % positions[ORDER];
 
 			for (int i = 0; i < krnl.dimension(ORDER); ++i) {
-					sum += axpy(index_, krnl.slice(i), img.slice(i + offset));
+					sum += axpy<(((mv - 1) < 0) ? 0 : (mv - 1))>(index_, krnl.slice(i), img.slice(i + offset));
 			}
 		}
 
@@ -71,7 +62,7 @@ struct binary_expression_correlation : expression<T, binary_expression_correlati
 	}
 
 	__BCinline__  T operator [] (int i) const {
-		return axpy(i, left, right);
+		return axpy<corr_dimension - 1>(i, left, right);
 	}
 
 	__BCinline__ int size() const {
@@ -97,7 +88,7 @@ struct binary_expression_correlation : expression<T, binary_expression_correlati
 		return ref_array(*this);
 	}
 
-	__BCinline__ const auto init_outerShape() const {
+	const auto init_outerShape() const {
 		stack_array<int, DIMS()> ary;
 		ary[0] = rows();
 		for (int i = 1; i < DIMS(); ++i) {
