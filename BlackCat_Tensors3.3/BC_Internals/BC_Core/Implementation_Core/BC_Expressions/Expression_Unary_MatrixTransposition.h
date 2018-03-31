@@ -14,7 +14,7 @@ template<class T, class functor_type>
 struct unary_expression_transpose : expression<T, unary_expression_transpose<T, functor_type>>
 {
 	functor_type array;
-	static constexpr int DIMS() { return functor_type::DIMS(); }
+	__BCinline__ static constexpr int DIMS() { return functor_type::DIMS(); }
 
 	const bool vector = rows() == 1 || cols() == 1;
 

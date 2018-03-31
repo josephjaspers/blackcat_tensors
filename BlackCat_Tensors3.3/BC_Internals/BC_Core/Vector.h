@@ -20,7 +20,7 @@ class Vector : public TensorBase<Vector<T, Mathlib>> {
 
 public:
 
-	static constexpr int DIMS() { return 1; }
+	__BCinline__ static constexpr int DIMS() { return 1; }
 	using parent_class::operator=;
 	using parent_class::operator[];
 	using parent_class::operator();
@@ -30,6 +30,11 @@ public:
 	Vector(const Vector&  t) : parent_class(t) 		{}
 	explicit Vector(int dim) 		 : parent_class(std::vector<int> {dim})  {}
 
+
+	template<class deriv>
+	Vector(const TensorBase<deriv>& tensor) : parent_class({tensor.size()}) {
+		Mathlib::copy(this->data(), tensor.data(), this->size());
+	}
 	template<class U> 		  Vector(const Vector<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Vector(	   Vector<U, Mathlib>&& t) : parent_class(t) {}
 	template<class... params> Vector(const params&... p) : parent_class(p...) {}

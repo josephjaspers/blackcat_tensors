@@ -21,17 +21,18 @@ template<class PARENT>
 	using scalar_type = _scalar<PARENT>;
 	using self = Tensor_Slice<PARENT>;
 
-	__BCinline__ static constexpr int DIMS() { return  PARENT::DIMS() - 1; };
+	__BCinline__ static constexpr int DIMS() { return PARENT::DIMS() - 1 > 0 ? PARENT::DIMS() - 1 : 0; };
 	__BCinline__ static constexpr int LAST()  { return  PARENT::LAST() - 1; }
 	using slice_type = std::conditional_t<DIMS() == 0, self, Tensor_Slice<self>>;
 
 	const PARENT parent;
 	scalar_type* array_slice;
 
+	operator const PARENT	   () const	{ return parent;	  }
 	operator 	   scalar_type*()       { return array_slice; }
 	operator const scalar_type*() const { return array_slice; }
 
-	__BCinline__ Tensor_Slice(scalar_type* array, const PARENT& parent_) : array_slice(array), parent(parent_) {}
+	__BCinline__ Tensor_Slice(scalar_type* array, PARENT parent_) : array_slice(array), parent(parent_) {}
 
 	__BCinline__ int dims() const { return DIMS(); }
 	__BCinline__ int size() const { return DIMS() > 0 ? parent.outerShape()[LAST()] : 1;    }
@@ -50,16 +51,17 @@ template<class PARENT>
 	__BCinline__ const auto innerShape() const 			{ return parent.innerShape(); }
 	__BCinline__ const auto outerShape() const 			{ return parent.outerShape(); }
 
-
-		struct slice_type_ref   { 	__BCinline__ static 		 auto foo(		 Tensor_Slice& tc, int i) { return tc; };
-		__BCinline__ static const auto foo(const Tensor_Slice& tc, int i) { return tc; }};
-		struct slice_type_slice { 	__BCinline__ static 		 auto foo(		 Tensor_Slice& tc, int i) { return slice_type(&tc.array_slice[DIMS() == 1 ? i : (tc.outerShape()[LAST() - 1] * i)], tc); };
-		__BCinline__ static const auto foo(const Tensor_Slice& tc, int i) { return slice_type(&tc.array_slice[DIMS() == 1 ? i : (tc.outerShape()[LAST() - 1] * i)], tc); }};
-
-		using slice_return = std::conditional_t<(DIMS() == 0), slice_type_ref, slice_type_slice>;
-
-		__BCinline__ const auto slice(int i) const { return slice_return::foo(*this, i); }
-		__BCinline__	   auto slice(int i) 	   { return slice_return::foo(*this, i); }
+	__BCinline__
+	int slice_index(int i) const {
+		if (DIMS() == 0)
+			return 0;
+		else if (DIMS() == 1)
+			return i;
+		else
+			return outerShape()[LAST() - 1] * i;
+	}
+	__BCinline__ const auto slice(int i) const { return slice_type(&array_slice[slice_index(i)],*this); }
+	__BCinline__	   auto slice(int i) 	   { return slice_type(&array_slice[slice_index(i)],*this); }
 
 	__BCinline__ const auto scalar(int i) const { return Tensor_Scalar<self>(&array_slice[i], *this); }
 	__BCinline__ auto scalar(int i) { return Tensor_Scalar<self>(&array_slice[i], *this); }

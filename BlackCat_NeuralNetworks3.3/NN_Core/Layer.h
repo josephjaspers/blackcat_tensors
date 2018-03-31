@@ -9,29 +9,89 @@
 #define LAYER_H_
 
 #include <forward_list>
-
+#include "Defaults.h"
 namespace BC {
 template<class derived>
 class Layer {
 
 public:
 
-	template<class T>
-	using bp_list = std::forward_list<const T&>;
+	const int INPUTS;
+	const int OUTPUTS = next().INPUTS;
+
+	Layer(int inputs) : INPUTS(inputs) {}
+	scal lr = scal(.03);
 
 	auto& next() {
-		return static_cast<derived&>(*this).next();
+				return static_cast<derived&>(*this).next();
+
+//		return *this;
 	}
 	auto& prev() {
 		return static_cast<derived&>(*this).prev();
+
+//		return *this;
 	}
 
 	const auto& next() const {
-		return static_cast<derived&>(*this).next();
+				return static_cast<derived&>(*this).next();
+
+//		return *this;
 	}
 	const auto& prev() const {
 		return static_cast<derived&>(*this).prev();
+
+//		return *this;
 	}
+
+//private:
+//	auto& next_() {
+//		return static_cast<derived&>(*this).next();
+//	}
+//	auto& prev_() {
+//		return static_cast<derived&>(*this).prev();
+//	}
+//
+//	const auto& next_() const {
+//		return static_cast<derived&>(*this).next();
+//	}
+//	const auto& prev_() const {
+//		return static_cast<derived&>(*this).prev();
+//	}
+//public:
+//	template<class T> auto forwardPropagation(const T& x) {
+//		return this->next_().forwardPropagation(x);
+//	}
+//
+//	template<class T> auto forwardPropagation_Express(const T& x) const {
+//		return this->next_().forwardPropagation_Express(x);
+//	}
+//
+//	template<class T> auto backPropagation(const T& dy) {
+//		return this->prev_().backPropagation(dy);
+//	}
+//
+//	auto train(const vec& x, const vec& y) {
+//		return this->next_().train(x, y);
+//	}
+//
+//	void updateWeights() {
+//		this->next_().updateWeights();
+//	}
+//	void clearBPStorage() {
+//		this->next_().clearBPStorage();
+//	}
+//
+//	void write(std::ofstream& is) const {
+//		this->next().write(is);
+//	}
+//	void read(std::ifstream& os) const {
+//		this->next_().read(os);
+//	}
+//	void setLearningRate(fp_type learning_rate) {
+//		this->next_().setLearningRate(learning_rate);
+//	}
+
 };
 
 }

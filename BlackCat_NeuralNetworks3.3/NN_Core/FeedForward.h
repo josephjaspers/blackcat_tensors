@@ -18,10 +18,7 @@ struct FeedForward : public Layer<derived> {
 
 public:
 
-	int INPUTS;
-	int OUTPUTS;
-
-	 const scal lr = scal(0.03); //fp_type == floating point
+	 scal lr = scal(0.03); //fp_type == floating point
 
 
 	mat w_gradientStorage;
@@ -42,15 +39,16 @@ public:
 	 * 	It also allows for passing an expression with an assignment and delaying the operation for more optimizations
 	 *
 	 */
-	FeedForward(int inputs, int outputs) :
-			INPUTS(inputs), OUTPUTS(outputs),
-			w_gradientStorage(outputs, inputs),
-			b_gradientStorage(outputs),
-			w(outputs, inputs),
-			b(outputs),
+	FeedForward(int inputs) :
+			Layer<derived>(inputs),
+			w_gradientStorage(this->OUTPUTS, inputs),
+			b_gradientStorage(this->OUTPUTS),
+			w(this->OUTPUTS, inputs),
+			b(this->OUTPUTS),
 			x(inputs),
-			y(outputs),
-			dx(inputs) {
+			y(this->OUTPUTS),
+			dx(inputs)
+			{
 
 		w.randomize(-4, 4);
 		b.randomize(-4, 4);
@@ -58,15 +56,18 @@ public:
 		b_gradientStorage.zero();
 	}
 
-	template<class T> auto forwardPropagation(const vec_expr<T>& in) {
+	template<class T>
+	auto forwardPropagation(const _vec<T> in) {
 		auto x_t = x == in;
 		return this->next().forwardPropagation(g(w * x_t + b));
 	}
-	template<class T> auto forwardPropagation_Express(const vec_expr<T>& x) const {
+	template<class T>
+	auto forwardPropagation_Express(_vec<T> x) const {
 		return this->next().forwardPropagation_Express(g(w * x + b));
 	}
 
-	template<class T> auto backPropagation(const vec_expr<T>& dy) {
+	template<class T>
+	auto backPropagation(const _vec<T> dy) {
 		w_gradientStorage -= dy * x.t();
 		b_gradientStorage -= dy;
 
@@ -95,8 +96,8 @@ public:
 	}
 
 	void write(std::ofstream& is) {
-		is << INPUTS << ' ';
-		is << OUTPUTS << ' ';
+		is << this->INPUTS << ' ';
+		is << this->OUTPUTS << ' ';
 		w.write(is);
 		b.write(is);
 		x.write(is);
@@ -107,8 +108,8 @@ public:
 
 	}
 	void read(std::ifstream& os) {
-		os >> INPUTS;
-		os >> OUTPUTS;
+		os >> this->INPUTS;
+		os >> this->OUTPUTS;
 
 		w.read(os);
 		b.read(os);
@@ -118,6 +119,10 @@ public:
 		w_gradientStorage.read(os);
 		b_gradientStorage.read(os);
 
+	}
+	void setLearningRate(fp_type learning_rate) {
+		lr = learning_rate;
+		this->next().setLearningRate(learning_rate);
 	}
 };
 }

@@ -80,14 +80,16 @@ int percept_MNIST() {
 //	Generate the layers (params are: inputs, outputs)
 
 	//Create the neural network
-	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
-//	NeuralNetwork<FeedForward> network(784, 10);
-
+//	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
+	NeuralNetwork<FeedForward> network(784, 10);
+//	NeuralNetwork<Conv, FeedForward> network(std::make_tuple(28,28,1,3), 2700, 10);
+	network.setLearningRate(.03);
 	data inputs;
 	data outputs;
 
 	data testInputs;
 	data testOutputs;
+
 
 	//load data
 	std::cout << "loading data..." << std::endl << std::endl;
@@ -106,12 +108,14 @@ int percept_MNIST() {
 
 	std::cout << " training..." << std::endl;
 
+	network.forwardPropagation(inputs[0]);
+
+//
 	for (int i = 0; i < TRAINING_ITERATIONS; ++i) {
 		std::cout << " iteration =  " << i << std::endl;
 		for (int j = 0; j < inputs.size(); ++j) {
-			network.train(inputs[j], outputs[j]);
-//			network.forwardPropagation(inputs[j]);
-//			network.backPropagation(outputs[j]);
+			network.forwardPropagation(inputs[j]);
+			network.backPropagation(outputs[j]);
 
 			if (j % 100 == 0) {
 			network.updateWeights();
@@ -119,6 +123,8 @@ int percept_MNIST() {
 			}
 		}
 	}
+
+
 
 	t = omp_get_wtime() - t;
 	printf("It took me %f clicks (%f seconds).\n", t, ((float) t));

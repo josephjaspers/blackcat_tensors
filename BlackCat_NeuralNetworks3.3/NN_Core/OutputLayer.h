@@ -13,14 +13,8 @@ namespace BC {
 template<class derived>
 struct OutputLayer {
 
-	auto& next() {
-		return static_cast<derived&>(*this).next();
-	}
 	auto& prev() {
 		return static_cast<derived&>(*this).prev();
-	}
-	const auto& next() const {
-		return static_cast<derived&>(*this).next();
 	}
 	const auto& prev() const {
 		return static_cast<derived&>(*this).prev();
@@ -28,19 +22,23 @@ struct OutputLayer {
 
 public:
 	int INPUTS;
+	int OUTPUTS = INPUTS;
 	vec hypothesis;
 
 	OutputLayer(int inputs) : INPUTS(inputs), hypothesis(inputs) {
 	}
 
-	template<class T> vec forwardPropagation(const vec_expr<T>& in) {
+//	template<class T>
+	vec forwardPropagation(const vec& in) {
 		return hypothesis == in;
 	}
-	template<class T> vec forwardPropagation_Express(const vec_expr<T>& x) const {
+//	template<class T>
+	vec forwardPropagation_Express(const vec& x) const {
 		return x;
 	}
 
-	template<class T> vec backPropagation(const vec_expr<T>& y) {
+	template<class T>
+	vec backPropagation(const vec_expr<T>& y) {
 		return prev().backPropagation(hypothesis - y);
 	}
 
@@ -58,6 +56,9 @@ public:
 	void read(std::ifstream& os) {
 		os >> INPUTS;
 		hypothesis.read(os);
+	}
+	void setLearningRate(fp_type learning_rate) {
+		return;
 	}
 
 };

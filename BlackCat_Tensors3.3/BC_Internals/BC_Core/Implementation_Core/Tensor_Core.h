@@ -26,10 +26,9 @@ struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 	__BCinline__ static constexpr int LAST() { return DIMS() - 1;}
 
 	using self = Tensor_Core<T>;
-	using dimlist = std::vector<int>;
 	using scalar_type = _scalar<T>;
 	using Mathlib = _mathlib<T>;
-	using slice_type = std::conditional_t<(DIMS() == 0), self, Tensor_Slice<self>>;
+	using slice_type = Tensor_Slice<self>;
 
 	scalar_type* array;
 	int* is = Mathlib::unified_initialize(is, DIMS());
@@ -42,16 +41,15 @@ struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 		static_assert(DIMS() == 0, "DEFAULT CONSTRUCTOR FOR TENSOR_CORE ONLY AVAILABLE FOR RANK == 0 (SCALAR)");
 		Mathlib::initialize(array, 1);
 	}
+	Tensor_Core(std::true_type) {/*This says "we are doing movement semantics via tensor initializer*/}
 
-	Tensor_Core(dimlist param) {
-		if (param.size() != DIMS())
-			throw std::invalid_argument("dimlist- rank != TENSOR_CORE::RANK");
+	Tensor_Core(std::vector<int> param) {
 
 		if (DIMS() > 0) {
-			Mathlib::HostToDevice(is, &param[0], DIMS());
-
+			is[0] = param[0];
 			os[0] = is[0];
 			for (int i = 1; i < DIMS(); ++i) {
+				is[i] = param[i];
 				os[i] = os[i - 1] * is[i];
 			}
 		}
@@ -84,17 +82,17 @@ struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 	__BCinline__ const auto innerShape() const { return is; }
 	__BCinline__ const auto outerShape() const { return os; }
 
-	struct slice_type_ref   {
-	__BCinline__ static 		 auto foo(		 Tensor_Core& tc, int i) { return tc; };
-	__BCinline__ static const auto foo(const Tensor_Core& tc, int i) { return tc; }};
-	struct slice_type_slice {
-	__BCinline__ static 		 auto foo(		 Tensor_Core& tc, int i) { return slice_type(&tc.array[DIMS() == 1 ? i : (tc.os[LAST() - 1] * i)], tc); };
-	__BCinline__ static const auto foo(const Tensor_Core& tc, int i) { return slice_type(&tc.array[DIMS() == 1 ? i : (tc.os[LAST() - 1] * i)], tc); }};
-
-	using slice_return = std::conditional_t<(DIMS() == 0), slice_type_ref, slice_type_slice>;
-
-	__BCinline__ const auto slice(int i) const { return slice_return::foo(*this, i); }
-	__BCinline__	   auto slice(int i) 	   { return slice_return::foo(*this, i); }
+	__BCinline__
+	int slice_index(int i) const {
+		if (DIMS() == 0)
+			return 0;
+		else if (DIMS() == 1)
+			return i;
+		else
+			return outerShape()[LAST() - 1] * i;
+	}
+	__BCinline__ const auto slice(int i) const { return slice_type(&array[slice_index(i)],*this); }
+	__BCinline__	   auto slice(int i) 	   { return slice_type(&array[slice_index(i)],*this); }
 
 	__BCinline__ const auto scalar(int i) const { static_assert (DIMS() != 0, "SCALAR OF SCALAR NOT DEFINED"); return Tensor_Scalar<self>(&array[i], *this); }
 	__BCinline__	   auto scalar(int i) 	    { static_assert (DIMS() != 0, "SCALAR OF SCALAR NOT DEFINED"); return Tensor_Scalar<self>(&array[i], *this); }
@@ -120,8 +118,7 @@ struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 		}
 		std::cout << std::endl;
 	}
-
-	void resetShape(dimlist sh)  {
+	void resetShape(std::vector<int> sh)  {
 		os[0] = sh[0];
 		is[0] = sh[0];
 		for (int i = 1; i < DIMS(); ++i) {

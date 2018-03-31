@@ -88,7 +88,7 @@ struct Tensor_Operations {
 #endif
 	}
 
-	template<class deriv> __BCinline__
+	template<class deriv>
 	void assert_same_ml(const Tensor_Operations<deriv>& tensor) const {
 #ifdef BLACKCAT_TENSORS_ASSERT_VALID
 		static_assert(MTF::same<_mathlib<derived>, _mathlib<deriv>>::conditional, "math_library must be identical");
@@ -96,11 +96,11 @@ struct Tensor_Operations {
 	}
 
 	//Returns the class returned as its most derived member
-	__BCinline__ const derived& asBase() const { return static_cast<const derived&>(*this); }
-	__BCinline__ 	   derived& asBase() 	  { return static_cast<	     derived&>(*this); }
+	 const derived& asBase() const { return static_cast<const derived&>(*this); }
+	 	   derived& asBase() 	  { return static_cast<	     derived&>(*this); }
 	//Return expression or array of Tensor (both support iterating with bracket operator [])
-		  __BCinline__  const auto& data() const { return static_cast<const derived&>(*this)._data(); }
-		  __BCinline__  auto& data()		 { return static_cast<		derived&>(*this)._data(); }
+		    const auto& data() const { return static_cast<const derived&>(*this)._data(); }
+		    auto& data()		 { return static_cast<		derived&>(*this)._data(); }
 
 	//-------------------------------------dotproduct-----------------------------------------//
 
@@ -240,7 +240,7 @@ struct Tensor_Operations {
 
 		return
 				typename base<mv>::template type<
-					binary_expression_correlation<scalar_type, _functor<deriv>, functor_type, mv>, math_library
+					binary_expression_correlation<scalar_type, functor_type,  _functor<deriv>, mv>, math_library
 				>(asBase().data(), rv.asBase().data());
 	}
 
@@ -249,7 +249,7 @@ struct Tensor_Operations {
 
 		return
 				typename base<mv>::template type<
-				binary_expression_correlation_padded<scalar_type, _functor<deriv>, functor_type, mv>, math_library>
+				binary_expression_correlation_padded<scalar_type, functor_type, _functor<deriv>, mv>, math_library>
 					(asBase().data(), rv.asBase().data());
 	}
 	template<int search_space = 3>

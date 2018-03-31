@@ -33,7 +33,7 @@ private:
 
 public:
 
-	static constexpr int DIMS() { return derived::DIMS(); }
+	__BCinline__ static constexpr int DIMS() { return derived::DIMS(); }
 //	expression() { static_assert(std::is_trivially_copyable<derived>::value, "DERIVED VES OF EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
 
 	__BCinline__ int dims() const 	{ return shadowFailure<int>("int dims() const"); }

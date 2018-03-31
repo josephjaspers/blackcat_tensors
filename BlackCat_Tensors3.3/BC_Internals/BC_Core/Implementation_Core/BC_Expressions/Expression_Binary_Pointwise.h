@@ -20,7 +20,7 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 	lv left;
 	rv right;
 
-	static constexpr int DIMS() { return lv::DIMS() > rv::DIMS() ? lv::DIMS() : rv::DIMS();}
+	__BCinline__ static constexpr int DIMS() { return lv::DIMS() > rv::DIMS() ? lv::DIMS() : rv::DIMS();}
 	static constexpr bool lv_dom = (lv::DIMS() > rv::DIMS());
 
 	__BCinline__ const auto& shape() const {

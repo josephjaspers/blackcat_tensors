@@ -25,12 +25,20 @@ struct unary_expression_maxpooling : expression<T, unary_expression_maxpooling<T
 		}
 	}
 
-	template<int mv, class I> __BCinline__
+	template<int mv, class I>
 		T maxp(int index, const I& img) const {
 
-			static constexpr int ORDER = I::DIMS() - 1;
+//			static constexpr int ORDER = I::DIMS() - 1;
 
 			T sum = 0;
+//
+//			std::cout << "ORDER = " << ORDER <<  std::endl;
+//			if (ORDER == 0) {
+//				return 5;
+//			} else {
+//				return maxp(0, img.slice(0));
+//			}
+
 
 //
 //			if (mv == 0) {

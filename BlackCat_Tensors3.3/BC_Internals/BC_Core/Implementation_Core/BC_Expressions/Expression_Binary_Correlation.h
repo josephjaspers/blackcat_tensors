@@ -14,7 +14,7 @@ template<class T, class lv, class rv, int corr_dimension = 2>
 struct binary_expression_correlation : expression<T, binary_expression_correlation<T, lv, rv, corr_dimension>> {
 
 	static_assert(lv::DIMS() == rv::DIMS(), "CORRELATION CURRENTLY ONLY SUPPORTED FOR SAME ORDER TENSORS");
-	__BCinline__ static constexpr int DIMS() { return lv::DIMS(); }
+	__BCinline__ static constexpr int DIMS() { return corr_dimension; }
 
 	stack_array<int, DIMS()> positions;
 	stack_array<int, DIMS()> os = init_outerShape();
@@ -23,7 +23,7 @@ struct binary_expression_correlation : expression<T, binary_expression_correlati
 	rv right; //img
 
 	binary_expression_correlation(lv l_, rv r_) :left(l_), right(r_) {
-		for (int i = 0; i < DIMS(); ++i) {
+		for (int i = 0; i < lv::DIMS(); ++i) {
 			positions[i] = right.dimension(i) - left.dimension(i) + 1;
 		}
 	}
@@ -67,7 +67,7 @@ struct binary_expression_correlation : expression<T, binary_expression_correlati
 
 	__BCinline__ int size() const {
 		int sz = 1;
-		for (int i = 0; i < DIMS() + 1; ++i)
+		for (int i = DIMS() - corr_dimension; i < DIMS(); ++i)
 			sz *= dimension(i);
 		return sz;
 	}

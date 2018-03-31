@@ -9,6 +9,7 @@
 #define EXPRESSION_UTILITY_STRUCTS_H_
 
 #include "BlackCat_Internal_Definitions.h"
+#include <iostream>
 
 //returns the class with the higher_order rank
 template<class lv, class rv, class left = void>
@@ -62,9 +63,6 @@ struct stack_array : stack_array<T, size - 1> {
 	__BCinline__ stack_array() {}
 
 	T dim = 0;
-	__BCinline__ operator int() const { return dim; }
-	__BCinline__ operator const int*() const { return &dim; }
-
 	__BCinline__ auto& next() const { return static_cast<const stack_array<T, size - 1>& >(*this); }
 
 	__BCinline__ const T& operator [] (int i) const {

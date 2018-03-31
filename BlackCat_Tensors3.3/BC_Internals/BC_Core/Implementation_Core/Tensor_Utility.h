@@ -132,7 +132,7 @@ public:
 				dims[i] = data[i + 1];
 			}
 			if (overrideDimensions) {
-			asDerived().resetShape(dims);
+			asDerived().reshape(dims);
 			}
 			MATHLIB::HostToDevice(asDerived().data().core(), &data[data[0] + 1], asDerived().size() > data.size() ? data.size() : asDerived().size());
 		} else {

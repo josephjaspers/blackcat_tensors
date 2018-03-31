@@ -9,8 +9,8 @@ using BC::Matrix;
 using BC::Scalar;
 using BC::Cube;
 
-using ml = BC::CPU;
-//using ml = BC::GPU;
+//using ml = BC::CPU;
+using ml = BC::GPU;
 
 using vec = Vector<float, ml>;
 using mat = Matrix<float, ml>;
@@ -140,10 +140,11 @@ auto test() {
 #include "Benchmarks/BenchmarkEigen.h"
 
 int main() {
+
 test();
 
-mat alpha(2,2);
-mat zeta(3,3);
+cube alpha(2, 2,2);
+cube zeta(3,3,2);
 
 for (int i = 0; i < alpha.size(); ++i ){
 	alpha(i) = i;
@@ -151,23 +152,19 @@ for (int i = 0; i < alpha.size(); ++i ){
 for (int i = 0; i < zeta.size(); ++i ){
 	zeta(i) = i;
 }
+alpha[0].print();
+zeta[0].print();
 
-alpha.print();
-zeta.print();
-mat output(2,2);
-output.zero();
+//mat output(2,2);
+//output.zero();
+//output = alpha[0].x_corr<2>(zeta[0]);
+//output.print();
 
-output = alpha.x_corr<2>(zeta);
-output.print();
+//mat output2(4,4);
+//output2 = alpha.x_corr_padded<2>(zeta);
+//output2.print();
 
-mat output2(4,4);
-output2 = alpha.x_corr_padded<2>(zeta);
-output2.print();
 
-mat mp(2,2);
-//mp = output2.max_pooling<3>();
-
-mp.print();
 //BC::Tensor<4, double> tens = {1,2,3,4,5};
 //
 //	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;

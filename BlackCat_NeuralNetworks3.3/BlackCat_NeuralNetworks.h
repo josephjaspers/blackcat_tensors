@@ -13,6 +13,7 @@
 #include "NN_Core/NeuralNetwork.h"
 #include "NN_Core/FeedForward.h"
 
+#include  "NN_Core/ConvLayer.h"
 #include "NN_Core/OutputLayer.h"
 #include "BlackCat_Tensors.h"
 

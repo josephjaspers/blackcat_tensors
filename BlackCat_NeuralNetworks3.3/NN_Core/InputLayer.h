@@ -9,41 +9,23 @@
 #define OUTPUT_CU
 
 #include "Defaults.h"
+#include "Layer.h"
 namespace BC {
 
 template<class derived>
-struct InputLayer {
+struct InputLayer : Layer<derived> {
 
+	InputLayer() : Layer<derived>(0) {}
 
-	auto& next() {
-		return static_cast<derived&>(*this).next();
-	}
-	auto& prev() {
-		return static_cast<derived&>(*this).prev();
-	}
-	const auto& next() const {
-		return static_cast<derived&>(*this).next();
-	}
-	const auto& prev() const {
-		return static_cast<derived&>(*this).prev();
-	}
-
-
-public:
-const int INPUTS;
-
-	InputLayer(int inputs) : INPUTS(inputs) {
-	}
-
-	template<class T> vec forwardPropagation(const vec_expr<T>& x) {
+	template<class T> auto forwardPropagation(const T& x) {
 		return this->next().forwardPropagation(x);
 	}
 
-	template<class T> vec forwardPropagation_Express(const vec_expr<T>& x) const {
+	template<class T> auto forwardPropagation_Express(const T& x) const {
 		return this->next().forwardPropagation_Express(x);
 	}
 
-	template<class T> vec backPropagation(const vec_expr<T>& dy) {
+	template<class T> auto backPropagation(const T& dy) {
 		return dy;
 	}
 
@@ -52,23 +34,25 @@ const int INPUTS;
 	}
 
 	void updateWeights() {
-		next().updateWeights();
+		this->next().updateWeights();
 	}
 	void clearBPStorage() {
-		next().clearBPStorage();
+		this->next().clearBPStorage();
 	}
 
 	void write(std::ofstream& is) {
-		next().write(is);
+		this->next().write(is);
 	}
 	void read(std::ifstream& os) {
-		next().read(os);
+		this->next().read(os);
+	}
+	void setLearningRate(fp_type learning_rate) {
+		this->next().setLearningRate(learning_rate);
 	}
 
 };
 }
 
-//#include "LayerChain.cu"
 
 
 

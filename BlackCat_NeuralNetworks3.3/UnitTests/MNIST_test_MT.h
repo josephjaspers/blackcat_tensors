@@ -118,7 +118,7 @@ int percept_MNIST() {
 			int numb_instances = j + BATCH_SIZE < inputs.size() ? j + BATCH_SIZE : inputs.size();
 #pragma omp parallel for
 			for (int k = j; k < numb_instances; ++k) {
-				network.train(inputs[k], outputs[k]);
+//				network.train(inputs[k], outputs[k]);
 //				network.forwardPropagation(inputs[k]);
 //				network.backPropagation(outputs[k]);
 

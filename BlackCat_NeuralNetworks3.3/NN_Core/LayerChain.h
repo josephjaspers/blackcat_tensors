@@ -54,8 +54,8 @@ template<class> class InputLayer;
 
 		bool hasNext() const { return true; }
 
-		template<class... integers>
-		LayerChain(int x, int y, integers... dims) : type(x, y), parent(y, dims...) {}
+		template<class param, class... integers>
+		LayerChain(param x, integers... dims) : type(x), parent(dims...) {}
 
 		const auto& tail() const { return next().tail(); }
 		const auto& head() const { return prev().head(); }
@@ -85,8 +85,8 @@ template<class> class InputLayer;
 		using type = InputLayer<LayerChain<BASE, InputLayer, lst...>>;
 
 
-		template<class... integers>
-		LayerChain(int x, integers... dims) : type(x), parent(x, dims...) {}
+		template<class param, class... integers>
+		LayerChain(param x, integers... dims) : parent(x, dims...) {}
 
 		bool hasNext() const { return true; }
 		const auto& data() const { return static_cast<const type&>(*this); }

@@ -14,7 +14,7 @@ template<class T, class lv, class rv, int corr_dimension = 2>
 struct binary_expression_correlation_padded : expression<T, binary_expression_correlation_padded<T, lv, rv, corr_dimension>> {
 
 	static_assert(lv::DIMS() == rv::DIMS(), "CORRELATION CURRENTLY ONLY SUPPORTED FOR SAME ORDER TENSORS");
-	__BCinline__  static constexpr int DIMS() { return lv::DIMS(); }
+	__BCinline__  static constexpr int DIMS() { return corr_dimension; }
 
 	stack_array<int, DIMS()> positions;
 	stack_array<int, DIMS()> os = init_outerShape();
@@ -22,7 +22,7 @@ struct binary_expression_correlation_padded : expression<T, binary_expression_co
 	rv right; //img
 
 	binary_expression_correlation_padded(lv l_, rv r_) :left(l_), right(r_) {
-		for (int i = 0; i < DIMS(); ++i) {
+		for (int i = 0; i < lv::DIMS(); ++i) {
 			positions[i] = right.dimension(i) + left.dimension(i) - 1;
 		}
 	}
@@ -47,12 +47,9 @@ struct binary_expression_correlation_padded : expression<T, binary_expression_co
 						sum += krnl[i] * img[img_index];
 				}
 			else {
-				int offset = (int)(index / LD_dimension(ORDER)) - krnl.dimension(ORDER) + 1;
+				int offset = ((int)(index / LD_dimension(ORDER))) - krnl.dimension(ORDER) + 1;
 				int index_ = index % LD_dimension(ORDER);
 				for (int i = 0; i < krnl.dimension(ORDER); ++i) {
-					int img_index = i + offset;
-
-					if (img_index > -1 && img_index < img.dimension(i))
 					sum += axpy<0>(index_, krnl.slice(i), img.slice(i + offset));
 				}
 			}
@@ -61,10 +58,7 @@ struct binary_expression_correlation_padded : expression<T, binary_expression_co
 			int index_ = index % positions[ORDER];
 
 			for (int i = 0; i < krnl.dimension(ORDER); ++i) {
-				int img_index = i + offset;
-
-				if (img_index > -1 && img_index < img.dimension(i))
-					sum += axpy<(((mv - 1) < 0) ? 0 : (mv - 1))>(index_, krnl.slice(i), img.slice(i + offset));
+				sum += axpy<(((mv - 1) < 0) ? 0 : (mv - 1))>(index_, krnl.slice(i), img.slice(i + offset));
 			}
 		}
 
@@ -77,7 +71,7 @@ struct binary_expression_correlation_padded : expression<T, binary_expression_co
 
 	__BCinline__ int size() const {
 		int sz = 1;
-		for (int i = 0; i < DIMS() + 1; ++i)
+		for (int i = lv::DIMS() - corr_dimension; i < lv::DIMS(); ++i)
 			sz *= dimension(i);
 		return sz;
 	}

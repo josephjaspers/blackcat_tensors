@@ -28,6 +28,7 @@
  */
 //#include "BC_Expressions/BlackCat_Internal_Definitions.h"
 #include "BlackCat_ForwardDecls.h"
+#include "StaticUtility.h"
 //Math libraries
 #include "BC_MathLibraries/Mathematics_CPU.h"
 #include "BC_MathLibraries/Mathematics_GPU.cu"
