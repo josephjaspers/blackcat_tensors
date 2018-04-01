@@ -23,25 +23,17 @@ public:
 	scal lr = scal(.03);
 
 	auto& next() {
-				return static_cast<derived&>(*this).next();
-
-//		return *this;
+		return static_cast<derived&>(*this).next();
 	}
 	auto& prev() {
 		return static_cast<derived&>(*this).prev();
-
-//		return *this;
 	}
 
 	const auto& next() const {
-				return static_cast<derived&>(*this).next();
-
-//		return *this;
+		return static_cast<derived&>(*this).next();
 	}
 	const auto& prev() const {
 		return static_cast<derived&>(*this).prev();
-
-//		return *this;
 	}
 
 //private:

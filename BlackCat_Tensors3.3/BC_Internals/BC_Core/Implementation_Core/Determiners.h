@@ -15,6 +15,8 @@ template<bool cond, class a, class b> using ifte = typename std::conditional<con
 template<class> class Tensor_Core;
 template<class> class Tensor_Slice;
 template<class> class Tensor_Scalar;
+template<class, int> class Tensor_Reshape;
+
 template<class,class> class DISABLED;
 template<class,class> class Scalar;
 template<class,class> class Vector;
@@ -25,7 +27,10 @@ template<class,class> class Tensor5;
 
 template<class T> struct isCore { static constexpr bool conditional = MTF::isPrimitive<T>::conditional; };
 template<template<class> class T, class U> struct isCore<T<U>>
-{ static constexpr bool conditional = MTF::isOneOf<T<U>,Tensor_Core<U>, Tensor_Slice<U>, Tensor_Scalar<U>>::conditional; };
+{ static constexpr bool conditional = MTF::isOneOf<T<U>,Tensor_Core<U>, Tensor_Slice<U>, Tensor_Scalar<U>,
+	Tensor_Reshape<U,0>,Tensor_Reshape<U,1>,Tensor_Reshape<U,2>,Tensor_Reshape<U,3>,Tensor_Reshape<U,4>,Tensor_Reshape<U,5>>::conditional; };
+
+
 
 
 template<class> struct ranker;
@@ -38,12 +43,17 @@ template<> struct base<3> { template<class t, class m> using type = Cube<t, m>; 
 template<> struct base<4> { template<class t, class m> using type = Tensor4<t, m>;   template<class t,class m> using slice = Cube<t, m>; };
 template<> struct base<5> { template<class t, class m> using type = Tensor5<t, m>;   template<class t,class m> using slice = Tensor4<t, m>; };
 
+template<int x, class a, class b> using rank2class = typename base<x>::template type<a,b>;
+
 template<class a, class b> struct ranker<Scalar<a,b>> { static constexpr int value = 0; };
 template<class a, class b> struct ranker<Vector<a,b>> { static constexpr int value = 1; };
 template<class a, class b> struct ranker<Matrix<a,b>> { static constexpr int value = 2; };
 template<class a, class b> struct ranker<Cube<a,b>>   { static constexpr int value = 3; };
 template<class a, class b> struct ranker<Tensor4<a,b>>   { static constexpr int value = 4; };
 template<class a, class b> struct ranker<Tensor5<a,b>>   { static constexpr int value = 5; };
+
+template<class T> static constexpr int class2rank = ranker<T>::value;
+
 
 template<class> struct determine_functor;
 template<class> struct determine_evaluation;

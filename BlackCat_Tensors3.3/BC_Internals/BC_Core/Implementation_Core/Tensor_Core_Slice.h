@@ -20,7 +20,7 @@ template<class PARENT>
 
 	using scalar_type = _scalar<PARENT>;
 	using self = Tensor_Slice<PARENT>;
-
+	using Mathlib = typename  PARENT::Mathlib;
 	__BCinline__ static constexpr int DIMS() { return PARENT::DIMS() - 1 > 0 ? PARENT::DIMS() - 1 : 0; };
 	__BCinline__ static constexpr int LAST()  { return  PARENT::LAST() - 1; }
 	using slice_type = std::conditional_t<DIMS() == 0, self, Tensor_Slice<self>>;

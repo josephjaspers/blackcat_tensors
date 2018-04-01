@@ -28,7 +28,7 @@ struct binary_expression_correlation : expression<T, binary_expression_correlati
 		}
 	}
 
-	template<int mv, class K, class I> __BCinline__
+	template<int mv, class K, class I> //__BCinline__
 	T axpy(int index, const K& krnl, const I& img) const {
 
 		static_assert(K::DIMS() == I::DIMS(), "Krnl/Img DIMS() must be equal");

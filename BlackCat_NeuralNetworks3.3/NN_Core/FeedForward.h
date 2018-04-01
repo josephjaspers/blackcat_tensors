@@ -70,7 +70,6 @@ public:
 	auto backPropagation(const _vec<T> dy) {
 		w_gradientStorage -= dy * x.t();
 		b_gradientStorage -= dy;
-
 		return this->prev().backPropagation(dx = w.t() * dy % gd(x));
 	}
 	template<class U, class V>

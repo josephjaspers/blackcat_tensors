@@ -18,6 +18,7 @@ struct Tensor_Scalar : expression<_scalar<PARENT>, Tensor_Scalar<PARENT>> {
 
 	using scalar = _scalar<PARENT>;
 	using self = Tensor_Scalar<PARENT>;
+	using Mathlib = typename  PARENT::Mathlib;
 
 
 	static constexpr int DIMS() { return 0; }

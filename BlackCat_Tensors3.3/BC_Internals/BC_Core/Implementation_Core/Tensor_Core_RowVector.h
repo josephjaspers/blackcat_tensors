@@ -20,6 +20,7 @@ struct Tensor_Row : expression<_scalar<PARENT>, Tensor_Row<PARENT>>  {
 	using scalar = _scalar<PARENT>;
 	using self = Tensor_Row<PARENT>;
 	using slice_type = Tensor_Scalar<self>;
+	using Mathlib = typename  PARENT::Mathlib;
 
 	static constexpr int DIMS() { return 1; }
 	static_assert(PARENT::DIMS() == 2 || PARENT::DIMS() == 1, "TENSOR_ROW CAN ONLY BE GENERATED FROM ANOTHER VECTOR, ROW_VECTOR, OR MATRIX");

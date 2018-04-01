@@ -32,6 +32,9 @@ public:
 	cube x;
 	cube dx;
 
+	vec flat;
+
+
 	static constexpr int KRNL_DIM = 3;
 
 	//rows,cols,channels, numbe_filters,
@@ -49,9 +52,10 @@ public:
 
 			dx(row, col, channels),
 			dy(row + KRNL_DIM - 1, col + KRNL_DIM - 1, filters),
-			Layer<derived>(row * col * channels)
-	{
+			Layer<derived>(row * col * channels),
 
+			flat(0)
+	{
 		w.randomize(0, 2);
 		w_gradientStorage.zero();
 	}
@@ -64,41 +68,39 @@ public:
 		for (int f = 0; f < filters; ++f) {
 			for (int c = 0; c < channels; ++c) {
 				y[f] = w[c][f].x_corr_padded(x[c]);
+				y[f].print();
+
 			}
 		}
-		vec flat(this->OUTPUTS);
+		y.print();
 		flat = y;
+		std::cout << "--------------------------------------" << std::endl;
 		return this->next().forwardPropagation(flat);
 	}
 	template<class T>
 	auto forwardPropagation_Express(const _vec<T>& x_) const {
 		x = x_;
 
-			for (int f = 0; f < filters; ++f) {
-				for (int c = 0; c < channels; ++c) {
-					y[f] = w[c][f].x_corr(x[c]);
-				}
+		for (int f = 0; f < filters; ++f) {
+			for (int c = 0; c < channels; ++c) {
+				y[f] = w[c][f].x_corr_padded(x[c]);
 			}
-
-		return this->next().forwardPropagation(vec(y));
+		}
+		return this->next().forwardPropagation(flat);
 	}
 
-	template<class T> auto backPropagation(const _vec<T>& dy_) {
-//		std::cout << "Bp " << std::endl;
-//		dy_.print();
-//		dy = dy_;
-//		dx.zero();
-//		for (int f = 0; f < filters; ++f) {
-//			for (int c = 0; c < channels; ++c) {
-//				w_gradientStorage[c][f] -= x[c].x_corr(dy[f]);
-//				dx[c] += w[c][f].x_corr(dy[f]);
-//
-//			}
-//		}
+	template<class T>
+	auto backPropagation(const _vec<T>& dy_) {
+		dy = dy_;
+		for (int f = 0; f < filters; ++f) {
+			for (int c = 0; c < channels; ++c) {
+				w_gradientStorage[c][f] -= x[c].x_corr(dy[f]);
+				dx[c] += w[c][f].x_corr(dy[f]);
 
-		vec flat(this->INPUTS);
-//		flat = dx;
+			}
+		}
 
+		flat = dx;
 		return this->prev().backPropagation(flat);
 
 	}

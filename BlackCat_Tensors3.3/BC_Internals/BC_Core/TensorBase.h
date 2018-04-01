@@ -53,13 +53,13 @@ public:
 		return this;
 	}
 
-//	template<class T>
-//	std::enable_if_t<MTF::isPrimitive<T>::conditional, derived&> operator = (TensorBase<T>&& tensor) {
-//		//Only enabled for Tensor_Core types
-//		this->assert_same_size(tensor);
-//		std::swap(this->black_cat_array.array, tensor.black_cat_array.array);
-//		return *this;
-//	}
+	template<class T>
+	std::enable_if_t<MTF::isPrimitive<T>::conditional, derived&> operator = (TensorBase<T>&& tensor) {
+		//Only enabled for Tensor_Core types
+		this->assert_same_size(tensor);
+		std::swap(this->black_cat_array.array, tensor.black_cat_array.array);
+		return *this;
+	}
 
 	derived& operator =(const derived& tensor) {
 		this->assert_same_size(tensor);
@@ -140,48 +140,25 @@ public:
 	template<class... integers> const auto operator() (int i, integers... ints) const { return (*this)[i](ints...); }
 	template<class... integers> 	  auto operator() (int i, integers... ints) 	  { return (*this)[i](ints...); }
 
-	void reshape(std::vector<int> sh) {
-		if (sh.size() > derived::DIMS()){
-			throw std::invalid_argument("can only reshape to tensors of dimensionality <= DIMS()");
-		}
-		if (sh.size () < derived::DIMS()) {
-			for (int i = sh.size(); i < derived::DIMS(); ++i) {
-				sh.push_back(1);
-			}
-		}
 
-		this->black_cat_array.resetShape(sh);
+	template<class... integers>
+	void resetShape(integers... ints) {
+		this->black_cat_array.resetShape(ints...);
 	}
+	template<class... integers>
+	auto reshape(integers... ints) {
+//		return this->black_cat_array.reshape(ints...);
+		std::cout << " CALING RESHAPE  " << std::endl;
+		using type = typename base<sizeof...(integers)>::template type<Tensor_Reshape<functor_type, sizeof...(integers)>, Mathlib>;
+		return type(this->black_cat_array.reshape(ints...));
 
-//	template<class var>
-//	static auto shapeOf(const var& v) {
-//		return reference_array<const var&>(v);
-//	}
-//
-//		template<class d> static std::enable_if_t<d::DIMS() <= 1, 	    d&> flatten(	  TensorBase<d>& tensor) { return tensor; }
-//		template<class d> static std::enable_if_t<d::DIMS() <= 1, const d&> flatten(const TensorBase<d>& tensor) { return tensor; }
-//
-//		template<class d> static std::enable_if_t<(d::DIMS() > 1),
-//				typename base<1>::template type <_scalar<d>, _mathlib<d>>
-//				>  flatten(TensorBase<d>& tensor) {
-//
-//				 Vector<Tensor_Core<Vector<_scalar<d>, _mathlib<d>>>, _mathlib<d>> flat(std::true_type());
-//				 flat.black_cat_array.array = tensor.black_cat_array.array;
-//				 flat.black_cat_array.is = &(tensor.black_cat_array.os[d::DIMS() - 1]);
-//				 flat.black_cat_array.os = &(tensor.black_cat_array.os[d::DIMS() - 1]);
-//
-//		}
-//
-//		template<class d> static std::enable_if_t<(d::DIMS() > 1),
-//				const typename base<1>::template type <_scalar<d>, _mathlib<d>>
-//				>  flatten(const TensorBase<d>& tensor) {
-//
-//				 Vector<Tensor_Core<Vector<_scalar<d>, _mathlib<d>>>, _mathlib<d>> flat(std::true_type());
-//				 flat.black_cat_array.array = tensor.black_cat_array.array;
-//				 flat.black_cat_array.is = &(tensor.black_cat_array.os[d::DIMS() - 1]);
-//				 flat.black_cat_array.os = &(tensor.black_cat_array.os[d::DIMS() - 1]);
-//
-//		}
+//		static_assert(sizeof...(integers) != 0, "CANNOT RESHAPE TO SCALA");
+//		return rank2class<
+//					sizeof...(integers),
+//					decltype(this->black_cat_array.reshape(ints...)),
+//					Mathlib
+//				>(this->black_cat_array.reshape(ints...));
+	}
 
 };
 

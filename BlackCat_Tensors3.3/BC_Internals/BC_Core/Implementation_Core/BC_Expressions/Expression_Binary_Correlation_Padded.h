@@ -29,7 +29,7 @@ struct binary_expression_correlation_padded : expression<T, binary_expression_co
 
 
 
-	template<int mv, class K, class I> __BCinline__
+	template<int mv, class K, class I> //__BCinline__
 	T axpy(int index, const K& krnl, const I& img) const {
 
 		static_assert(K::DIMS() == I::DIMS(), "Krnl/Img DIMS() must be equal");
@@ -50,6 +50,7 @@ struct binary_expression_correlation_padded : expression<T, binary_expression_co
 				int offset = ((int)(index / LD_dimension(ORDER))) - krnl.dimension(ORDER) + 1;
 				int index_ = index % LD_dimension(ORDER);
 				for (int i = 0; i < krnl.dimension(ORDER); ++i) {
+					if (i + offset < img.dimension(ORDER))
 					sum += axpy<0>(index_, krnl.slice(i), img.slice(i + offset));
 				}
 			}
@@ -58,6 +59,7 @@ struct binary_expression_correlation_padded : expression<T, binary_expression_co
 			int index_ = index % positions[ORDER];
 
 			for (int i = 0; i < krnl.dimension(ORDER); ++i) {
+				if (i + offset < img.dimension(ORDER))
 				sum += axpy<(((mv - 1) < 0) ? 0 : (mv - 1))>(index_, krnl.slice(i), img.slice(i + offset));
 			}
 		}

@@ -26,47 +26,45 @@ struct unary_expression_maxpooling : expression<T, unary_expression_maxpooling<T
 	}
 
 	template<int mv, class I>
-		T maxp(int index, const I& img) const {
+	T maxp(int index, const I& img) const {
 
-//			static constexpr int ORDER = I::DIMS() - 1;
+		static constexpr int ORDER = I::DIMS() - 1;
+		if (mv == 0) {
+			if (ORDER == 0) {
+				T max = img[index];
+				for (int i = 1; i < search_space; ++i) {
+					if (max < img[index + i])
+						max = img[index + i];
+				}
+				return max;
+			}
+			else {
+				int offset = (int) (index / LD_dimension(ORDER));
+				int index_ = index % LD_dimension(ORDER);
+				T max = maxp<0>(index_, img.slice(offset));
+				for (int i = 1; i < search_space; ++i) {
+					 T tmp =maxp<0>(index_, img.slice(i + offset));
+					 if (max < tmp)
+						 max = tmp;
+				}
+				return max;
+			}
+		} else {
+			int offset = (int) (index / positions[ORDER]);
+			int index_ = index % positions[ORDER];
 
-			T sum = 0;
-//
-//			std::cout << "ORDER = " << ORDER <<  std::endl;
-//			if (ORDER == 0) {
-//				return 5;
-//			} else {
-//				return maxp(0, img.slice(0));
-//			}
-
-
-//
-//			if (mv == 0) {
-//				if (ORDER == 0)
-//					for (int i = 0; i < value.rows(); ++i) {
-//						sum += img[index + i];
-//					}
-//				else {
-//					int offset = (int)(index / LD_dimension(ORDER));
-//					int index_ = index % LD_dimension(ORDER);
-//					for (int i = 0; i < value.dimension(ORDER); ++i) {
-//						sum += maxp<0>(index_, img.slice(i + offset));
-//					}
-//				}
-//			} else {
-//				int offset = (int)(index / positions[ORDER]);
-//				int index_ = index % positions[ORDER];
-//
-//				for (int i = 0; i < value.dimension(ORDER); ++i) {
-//						sum += maxp<(((mv - 1) < 0) ? 0 : (mv - 1))>(index, img.slice(i + offset));
-//				}
-//			}
-
-			return sum;
+			T max  =maxp<(((mv - 1) < 0) ? 0 : (mv - 1))>(index, img.slice(offset));
+			for (int i = 1; i < search_space; ++i) {
+				T tmp = maxp<(((mv - 1) < 0) ? 0 : (mv - 1))>(index, img.slice(i + offset));
+				if (max < tmp)
+					max = tmp;
+			}
+			return max;
 		}
+	}
 
 		__BCinline__  T operator [] (int i) const {
-			return 0;//maxp<search_space - 1>(i, value);
+			return maxp<DIMS() - 1>(i, value);
 		}
 
 	__BCinline__ int size() const {
