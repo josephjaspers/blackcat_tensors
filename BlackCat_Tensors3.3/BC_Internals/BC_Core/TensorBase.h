@@ -53,12 +53,13 @@ public:
 		return this;
 	}
 
-	template<class T>
-	std::enable_if_t<MTF::isPrimitive<T>::conditional, derived&> operator = (TensorBase<T>&& tensor) {
-		//Only enabled for Tensor_Core types
-		this->assert_same_size(tensor);
-		std::swap(this->black_cat_array.array, tensor.black_cat_array.array);
-	}
+//	template<class T>
+//	std::enable_if_t<MTF::isPrimitive<T>::conditional, derived&> operator = (TensorBase<T>&& tensor) {
+//		//Only enabled for Tensor_Core types
+//		this->assert_same_size(tensor);
+//		std::swap(this->black_cat_array.array, tensor.black_cat_array.array);
+//		return *this;
+//	}
 
 	derived& operator =(const derived& tensor) {
 		this->assert_same_size(tensor);

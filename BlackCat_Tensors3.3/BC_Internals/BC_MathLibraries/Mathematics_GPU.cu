@@ -171,20 +171,20 @@ public:
 		return sz;
 	}
 
-	template<class T, class RANKS>
-	static void print(const T* ary, const RANKS ranks, int order, int print_length) {
+	template<class RANKS>
+	static void print(const float* ary, const RANKS ranks, int order, int print_length) {
 		int sz = calc_size(ranks, order);
-		T* print = new T[sz];
+		float* print = new float[sz];
 
 		DeviceToHost(print, ary, sz);
 
 		BC::print(print, ranks, order, print_length);
 		delete[] print;
 	}
-	template<class T, class RANKS>
-	static void printSparse(const T* ary, const RANKS ranks, int order, int print_length) {
+	template<class RANKS>
+	static void printSparse(const float* ary, const RANKS ranks, int order, int print_length) {
 		int sz = calc_size(ranks, order);
-		T* print = new T[sz];
+		float* print = new float[sz];
 		DeviceToHost(print, ary, sz);
 
 		BC::printSparse(print, ranks, order, print_length);

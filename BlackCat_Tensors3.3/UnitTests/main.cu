@@ -130,7 +130,7 @@ auto test() {
 	std::cout << " trying to read" << std::endl;
 	std::ifstream is("save.txt");
 
-	Matrix<double, BC::CPU> readM(d.size());
+	Matrix<float, BC::GPU> readM(d.size());
 	readM.read(is);
 	readM.print();
 	is.close();

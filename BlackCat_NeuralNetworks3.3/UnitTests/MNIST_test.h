@@ -31,16 +31,16 @@ bool correct(const vec& hypothesis, const vec& output) {
 	int h_id = 0;
 	int o_id = 0;
 
-	double h_max = hypothesis.data()[0];
-	double o_max = output.data()[0];
+	double h_max = hypothesis(0);
+	double o_max = output(0);
 
 	for (int i = 1; i < hypothesis.size(); ++i) {
-		if (hypothesis.data()[i] > h_max) {
-			h_max = hypothesis.data()[i];
+		if (h_max < hypothesis(i)) {
+			h_max = hypothesis(i);
 			h_id = i;
 		}
-		if (output.data()[i] > o_max) {
-			o_max = output.data()[i];
+		if (o_max < output(i)) {
+			o_max = output(i);
 			o_id = i;
 		}
 	}
@@ -74,16 +74,16 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 
 int percept_MNIST() {
 
-	const int TRAINING_EXAMPLES =  2000;
+	const int TRAINING_EXAMPLES =  20;
 	const int TRAINING_ITERATIONS = 10;
 
 //	Generate the layers (params are: inputs, outputs)
 
 	//Create the neural network
 //	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
-	NeuralNetwork<FeedForward> network(784, 10);
-//	NeuralNetwork<Conv, FeedForward> network(std::make_tuple(28,28,1,3), 2700, 10);
-	network.setLearningRate(.03);
+//	NeuralNetwork<FeedForward> network(784, 10);
+	NeuralNetwork<Conv, FeedForward> network(std::make_tuple(28,28,1,3), 2700, 10);
+	network.setLearningRate(.33);
 	data inputs;
 	data outputs;
 
@@ -100,6 +100,7 @@ int percept_MNIST() {
 	std::cout << " generating and loading data from csv to tensors" << std::endl;
 	generateAndLoad(inputs, outputs, in_stream, TRAINING_EXAMPLES);
 	in_stream.close();
+
 
 	//Train
 	float t;

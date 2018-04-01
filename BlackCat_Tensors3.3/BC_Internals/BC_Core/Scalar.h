@@ -33,7 +33,7 @@ public:
 	Scalar(		 Scalar&& t) : parent_class(t) 		{}
 	Scalar(const Scalar&  t) : parent_class(t) 		{}
 
-	operator _scalar<T>() const { _scalar<T> value = 0; Mathlib::DeviceToHost(&value, this->data().core(), 1); }
+	operator _scalar<T>() const { _scalar<T> value = 0; Mathlib::DeviceToHost(&value, this->data().core(), 1); return value; }
 
 	Scalar& operator =(const Scalar&  t) { return parent_class::operator=(t); }
 	Scalar& operator =(const Scalar&& t) { return parent_class::operator=(t); }

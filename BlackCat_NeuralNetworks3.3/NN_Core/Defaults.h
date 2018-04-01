@@ -18,12 +18,13 @@ namespace BC {
 
 using namespace NN_Abreviated_Functions;
 struct BASE;
-//using ml = CPU;
-//using fp_type = float;
+using ml = CPU;
+using fp_type = double;
 //
 //does not work
-using ml = GPU;
-using fp_type = float;
+//CURRENTLY BROKEN
+//using ml = GPU;
+//using fp_type = float;
 //
 using scal = Scalar<fp_type, ml>;
 using vec = Vector<fp_type, ml>;

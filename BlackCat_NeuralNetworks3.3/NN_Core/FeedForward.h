@@ -74,7 +74,7 @@ public:
 		return this->prev().backPropagation(dx = w.t() * dy % gd(x));
 	}
 	template<class U, class V>
-		auto train(const vec_expr<U>& x, const vec_expr<V>& y) {
+		auto train(const _vec<U>& x, const _vec<V>& y) {
 		auto dy = this->next().train(g(w * x + b), y);
 
 		w_gradientStorage -= dy * x.t();
