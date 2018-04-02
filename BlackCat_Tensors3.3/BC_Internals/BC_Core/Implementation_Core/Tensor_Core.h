@@ -15,13 +15,14 @@
 #include "Tensor_Core_Scalar.h"
 #include "Tensor_Core_RowVector.h"
 #include "Tensor_Core_Reshape.h"
+#include "Tensor_Core_Interface.h"
 #include "../../BC_MathLibraries/Mathematics_CPU.h"
 #include "Tensor_Core_Piece.h"
 #include "Determiners.h"
 namespace BC {
 
 template<class T>
-struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
+struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 
 	__BCinline__ static constexpr int DIMS() { return _rankOf<T>; }
 	__BCinline__ static constexpr int LAST() { return DIMS() - 1;}
@@ -38,13 +39,9 @@ struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 	operator 	   scalar_type*()       { return array; }
 	operator const scalar_type*() const { return array; }
 
-	Tensor_Core() {
-		if (DIMS() != 0) {
-			throw std::invalid_argument("DEFAULT CONSTRUCTOR ONLY AVAILABLE TO SCALAR (DIM == 0)");
-		}
-		Mathlib::initialize(array, 1);
-	}
-	Tensor_Core(std::true_type) {/*This says "we are doing movement semantics via tensor initializer*/}
+	Tensor_Core() = default;
+	Tensor_Core(const Tensor_Core&) = default;
+	Tensor_Core(Tensor_Core&&) = default;
 
 	Tensor_Core(std::vector<int> param) {
 
@@ -56,19 +53,21 @@ struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 				os[i] = os[i - 1] * is[i];
 			}
 		}
-		Mathlib::initialize(array, size());
+		Mathlib::initialize(array, this->size());
 	}
 	Tensor_Core(const int* param) {
 		if (DIMS() > 0) {
-			Mathlib	::HostToDevice(is, &param[0], DIMS());
+			Mathlib::HostToDevice(is, &param[0], DIMS());
 
 			os[0] = is[0];
 			for (int i = 1; i < DIMS(); ++i) {
 				os[i] = os[i - 1] * is[i];
 			}
 		}
-		Mathlib::initialize(array, size());
+		Mathlib::initialize(array, this->size());
 	}
+	__BCinline__	   scalar_type& operator [] (int index) 	  { return DIMS() == 0 ? array[0] : array[index]; };
+	__BCinline__ const scalar_type& operator [] (int index) const { return DIMS() == 0 ? array[0] : array[index]; };
 
 	__BCinline__ int dims() const { return DIMS(); }
 	__BCinline__ int size() const { return DIMS() > 0 ? os[LAST()] : 1;    }
@@ -79,21 +78,11 @@ struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 	__BCinline__ int LD_rows() const { return DIMS() > 0 ? os[0] : 1; }
 	__BCinline__ int LD_cols() const { return DIMS() > 1 ? os[1] : 1; }
 	__BCinline__ int LD_dimension(int i) const { return DIMS() > i + 1 ? os[i] : 1; }
-	__BCinline__	   scalar_type& operator [] (int index) 	  { return DIMS() == 0 ? array[0] : array[index]; };
-	__BCinline__ const scalar_type& operator [] (int index) const { return DIMS() == 0 ? array[0] : array[index]; };
 
 	__BCinline__ const auto innerShape() const { return is; }
 	__BCinline__ const auto outerShape() const { return os; }
 
 	__BCinline__
-	int slice_index(int i) const {
-		if (DIMS() == 0)
-			return 0;
-		else if (DIMS() == 1)
-			return i;
-		else
-			return outerShape()[LAST() - 1] * i;
-	}
 	__BCinline__ const auto slice(int i) const { return slice_type(&array[slice_index(i)],*this); }
 	__BCinline__	   auto slice(int i) 	   { return slice_type(&array[slice_index(i)],*this); }
 
@@ -103,18 +92,23 @@ struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 	__BCinline__	   auto row(int i) 	     { static_assert (DIMS() != 2, "ROW OF NON-MATRIX NOT DEFINED"); return Tensor_Row<self>(&array[i], *this); }
 	__BCinline__ const auto col(int i) const { static_assert (DIMS() != 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
 	__BCinline__	   auto col(int i) 	     { static_assert (DIMS() != 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
-	template<class... integers>  const auto reshape(integers... ints) const {
-		std::cout << " reshape " << std::endl;
 
+	template<class... integers>  const auto reshape(integers... ints) const {
 		return Tensor_Reshape<const self, sizeof...(integers)>(*this, ints...); }
 	template<class... integers>   	   auto reshape(integers... ints)  		{
-		std::cout << " reshape " << std::endl;
 		return Tensor_Reshape<self, sizeof...(integers)>(*this, ints...); }
 
-	const scalar_type* core() const { return array; }
-		  scalar_type* core()  	    { return array; }
+	const scalar_type* getIterator() const { return array; }
+		  scalar_type* getIterator()  	    { return array; }
 
-	void print() const { Mathlib::print(array, this->innerShape(),dims(), 4); }
+
+	template<class... integers, int dim = 0>
+	void resetShape(integers... ints)  {
+		this->init<0>(ints...);
+		Mathlib::destroy(array);
+		Mathlib::initialize(array, this->size());
+	}
+
 
 	void printDimensions() const {
 		for (int i = 0; i < DIMS(); ++i) {
@@ -127,6 +121,16 @@ struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 			std::cout << "[" << os[i] << "]";
 		}
 		std::cout << std::endl;
+	}
+
+
+	int slice_index(int i) const {
+		if (DIMS() == 0)
+			return 0;
+		else if (DIMS() == 1)
+			return i;
+		else
+			return outerShape()[LAST() - 1] * i;
 	}
 
 
@@ -146,12 +150,8 @@ struct Tensor_Core : expression<_scalar<T>, Tensor_Core<T>>{
 		}
 	}
 
-	template<class... integers, int dim = 0>
-	void resetShape(integers... ints)  {
-		this->init<0>(ints...);
-		Mathlib::destroy(array);
-		Mathlib::initialize(array, this->size());
-	}
+
+
 };
 }
 

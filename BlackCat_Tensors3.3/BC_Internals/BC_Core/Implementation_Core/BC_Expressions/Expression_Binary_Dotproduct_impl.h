@@ -97,8 +97,8 @@ struct det_eval<binary_expression_scalar_mul<T, Tensor_Core<d1>, unary_expressio
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;
 
-	template<class param> static T* getScalar(const param& p) { return cc(p.left.core()); }
-	template<class param> static T* getArray(const param& p) { return cc(p.right.array.core()); }
+	template<class param> static T* getScalar(const param& p) { return cc(p.left.getIterator()); }
+	template<class param> static T* getArray(const param& p) { return cc(p.right.array.getIterator()); }
 };
 }
 

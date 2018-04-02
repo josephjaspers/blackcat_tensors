@@ -54,8 +54,8 @@ struct Tensor_Row : expression<_scalar<PARENT>, Tensor_Row<PARENT>>  {
 		  auto slice(int i) 	  { return Tensor_Scalar<self>(&array_slice[i * increment()], *this); }
 
 
-	const scalar* core() const { return array_slice; }
-		  scalar* core()  	   { return array_slice; }
+	const scalar* getIterator() const { return array_slice; }
+		  scalar* getIterator()  	   { return array_slice; }
 
 };
 

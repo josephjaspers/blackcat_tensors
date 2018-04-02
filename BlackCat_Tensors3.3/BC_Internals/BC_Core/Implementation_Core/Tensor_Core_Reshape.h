@@ -39,7 +39,6 @@ struct Tensor_Reshape : expression<_scalar<PARENT>, Tensor_Reshape<PARENT, NEW_D
 
 	template<int dim, class... integers>
 	void init(int front, integers... ints) {
-		std::cout << " init dim == " << dim << std::endl;
 		is[dim] = front;
 		if (dim > 0)
 			os[dim] = front * os[dim - 1];
@@ -83,8 +82,8 @@ struct Tensor_Reshape : expression<_scalar<PARENT>, Tensor_Reshape<PARENT, NEW_D
 
 	}
 
-	__BCinline__ const auto innerShape() const 			{ return is; }
-	__BCinline__ const auto outerShape() const 			{ return os; }
+	__BCinline__ const auto innerShape() const 	{ return is; }
+	__BCinline__ const auto outerShape() const 	{ return os; }
 
 	__BCinline__
 	int slice_index(int i) const {
@@ -104,8 +103,8 @@ struct Tensor_Reshape : expression<_scalar<PARENT>, Tensor_Reshape<PARENT, NEW_D
 	__BCinline__ const auto row(int i) const { return Tensor_Row<self>(&parent[i], *this); }
 	__BCinline__ auto row(int i) { return Tensor_Row<self>(&parent[i], *this); }
 
-	__BCinline__ const scalar_type* core() const { return parent.core(); }
-	__BCinline__	   scalar_type* core()   	 { return parent.core(); }
+	__BCinline__ const scalar_type* getIterator() const { return parent.getIterator(); }
+	__BCinline__	   scalar_type* getIterator()   	 { return parent.getIterator(); }
 
 
 

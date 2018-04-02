@@ -28,7 +28,7 @@ public:
 	using parent_class::operator=;
 	using parent_class::operator();
 
-	Scalar() {}
+	Scalar() : parent_class(std::vector<int>{1}) {}
 	Scalar(const Scalar&& t) : parent_class(t) 		{}
 	Scalar(		 Scalar&& t) : parent_class(t) 		{}
 	Scalar(const Scalar&  t) : parent_class(t) 		{}
@@ -40,7 +40,7 @@ public:
 	Scalar& operator =(	     Scalar&& t) { return parent_class::operator=(t); }
 	template<class U>
 	Scalar& operator =(const Scalar<U, Mathlib>& t) { return parent_class::operator=(t); }
-	Scalar& operator =(_scalar<T> scalar) { Mathlib::HostToDevice(this->data().core(), &scalar, 1); return *this; }
+	Scalar& operator =(_scalar<T> scalar) { Mathlib::HostToDevice(this->data().getIterator(), &scalar, 1); return *this; }
 
 	Scalar(_scalar<T>* param): parent_class(param) {}
 
@@ -51,7 +51,7 @@ public:
 	struct voider 		{ template<class... u>  static void impl(const u&... parma) {}};
 
 	explicit Scalar(const ifte<MTF::isPrimitive<T>::conditional, DISABLE, const T&> value) : parent_class(value) {}
-	Scalar(_scalar<T> value) {
+	Scalar(_scalar<T> value) : parent_class(std::vector<int>{1}) {
 		Mathlib::HostToDevice((_scalar<T>*)this->data(), &value, 1);
 	}
 

@@ -147,17 +147,9 @@ public:
 	}
 	template<class... integers>
 	auto reshape(integers... ints) {
-//		return this->black_cat_array.reshape(ints...);
-		std::cout << " CALING RESHAPE  " << std::endl;
 		using type = typename base<sizeof...(integers)>::template type<Tensor_Reshape<functor_type, sizeof...(integers)>, Mathlib>;
 		return type(this->black_cat_array.reshape(ints...));
 
-//		static_assert(sizeof...(integers) != 0, "CANNOT RESHAPE TO SCALA");
-//		return rank2class<
-//					sizeof...(integers),
-//					decltype(this->black_cat_array.reshape(ints...)),
-//					Mathlib
-//				>(this->black_cat_array.reshape(ints...));
 	}
 
 };

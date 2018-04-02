@@ -48,8 +48,8 @@ struct Tensor_Scalar : expression<_scalar<PARENT>, Tensor_Scalar<PARENT>> {
 	void printDimensions() 		const { parent.printDimensions(); }
 	void printLDDimensions()	const { parent.printDimensions(); }
 
-	const scalar* core() const { return array_slice; }
-		  scalar* core()  	   { return array_slice; }
+	const scalar* getIterator() const { return array_slice; }
+		  scalar* getIterator()  	   { return array_slice; }
 
 
 	};

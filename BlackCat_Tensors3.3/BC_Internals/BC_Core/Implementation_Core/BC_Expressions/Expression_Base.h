@@ -33,6 +33,9 @@ private:
 
 public:
 
+	__BCinline__ auto operator [] (int index) 	  	{ return shadowFailure<int>("operator [] (int index)"); };
+	__BCinline__ auto operator [] (int index) const { return shadowFailure<int>("operator [] (int index) const"); };
+
 	__BCinline__ static constexpr int DIMS() { return derived::DIMS(); }
 //	expression() { static_assert(std::is_trivially_copyable<derived>::value, "DERIVED VES OF EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
 
@@ -40,21 +43,27 @@ public:
 	__BCinline__ int size() const 	{ return shadowFailure<int>("int size() const"); }
 	__BCinline__ int rows() const 	{ return shadowFailure<int>("int rows() const"); }
 	__BCinline__ int cols() const 	{ return shadowFailure<int>("int cols() const"); }
+	__BCinline__ int dimension(int i)		const { return shadowFailure<int>("int dimension(int) const"); }
+
 	__BCinline__ int LD_rows() const { return shadowFailure<int>("int LD_rows() const"); }
 	__BCinline__ int LD_cols() const { return shadowFailure<int>("int LD_cols() const");}
-	__BCinline__ int dimension(int i)		const { return shadowFailure<int>("int dimension(int) const"); }
-	 void printDimensions() 		const { shadowFailure<>("void printDimensions() const"); }
-	 void printLDDimensions() 	const { shadowFailure<>("void printLDDimensions() const"); }
-	__BCinline__ const int* innerShape() const 			{ return shadowFailure<int*>("auto(const int*) innerShape() const  MAY RETURN INT*, _sh<T>, or std::vector<int>, "); }
-	__BCinline__ const int* outerShape() const 			{ return shadowFailure<int*>("auto(const int*) outerShape() const  MAY RETURN INT*, _sh<T>, or std::vector<int>, "); }
+	__BCinline__ int LD_dimension(int i)const { return shadowFailure<int>("int LD_dimension(int) const"); }
+
+	__BCinline__ const int* innerShape() const 	{ return shadowFailure<int*>("auto(const int*) innerShape() const  MAY RETURN INT*, _sh<T>, or std::vector<int>, "); }
+	__BCinline__ const int* outerShape() const 	{ return shadowFailure<int*>("auto(const int*) outerShape() const  MAY RETURN INT*, _sh<T>, or std::vector<int>, "); }
+
 	__BCinline__ int slice(int i) const { return shadowFailure<>("const Tensor_Slice(int) const  => THIS METHOD SHOULD ONLY BE ENABLED FOR TENSOR_CORE"); }
 	__BCinline__ int slice(int i) 	   {  return shadowFailure<>("Tensor_Slice(int)  => THIS METHOD SHOULD ONLY BE ENABLED FOR TENSOR_CORE"); }
-	__BCinline__ auto operator [] (int index) 	  	{ return shadowFailure<int>("operator [] (int index)"); };
-	__BCinline__ auto operator [] (int index) const { return shadowFailure<int>("operator [] (int index) const"); };
 	__BCinline__ int row(int i) const 	{ return shadowFailure<>("auto row(int i) const "); }
 	__BCinline__ int row(int i) 	   	{ return shadowFailure<>("auto row(int i)"); }
 	__BCinline__ int col(int i) const 	{ return shadowFailure<>("auto col(int i) const"); }
 	__BCinline__ int col(int i) 	   	{ return shadowFailure<>("auto col(int i)"); }
+	template<class... integers>
+	__BCinline__ auto reshape(integers...) { return shadowFailure<>("auto reshape"); };
+
+	 void printDimensions() 		const { shadowFailure<>("void printDimensions() const"); }
+	 void printLDDimensions() 	const { shadowFailure<>("void printLDDimensions() const"); }
+
 
 };
 

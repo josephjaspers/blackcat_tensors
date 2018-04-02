@@ -17,42 +17,12 @@
 
 namespace BC {
 
-//template< class deriv, class =void >
-//struct Tensor_Utility {
-//private:
-//	using MATHLIB = _mathlib<deriv>;
-//
-//	deriv& asDerived() {
-//		return static_cast<deriv&>(*this);
-//	}
-//	const deriv& asDerived() const {
-//		return static_cast<const deriv&>(*this);
-//	}
-//
-//public:
-//	auto eval() const {
-//		return typename MTF::shell_of<deriv>::template type<_scalar<deriv>, _mathlib<deriv>>(this->asDerived());
-//	}
-//	void print() const {
-//		MATHLIB::print(eval().data().core(), asDerived().innerShape(), asDerived().dims(), 8);
-//	}
-//	void print(int precision) const {
-//		MATHLIB::print(eval().data().core(), asDerived().innerShape(), asDerived().dims(), precision);
-//	}
-//};
-//template<class deriv>
-//struct Tensor_Utility<deriv, typename std::enable_if_t<isCore<_functor<deriv>>::conditional>> {
-
-
 template<class deriv>
 struct Tensor_Utility {
 
 		using scalar_type = _scalar<deriv>;
 		using MATHLIB = _mathlib<deriv>;
 
-/*
- *  Tensor_Base specialization (for primary tensors -- we enable these utility methods)
- */
 private:
 	deriv& asDerived() {
 		return static_cast<deriv&>(*this);
@@ -62,6 +32,7 @@ private:
 	}
 public:
 	auto& eval() { return this->asDerived(); }
+	const auto& eval() const { return this->asDerived(); }
 
 	void randomize(scalar_type lb, scalar_type ub) {
 		MATHLIB::randomize(asDerived().data(), lb, ub, asDerived().size());
@@ -76,22 +47,22 @@ public:
 		MATHLIB::zero(asDerived().data(), asDerived().size());
 	}
 	void print() const {
-		MATHLIB::print(asDerived().data().core(), asDerived().innerShape(), asDerived().dims(), 8);
+		MATHLIB::print(asDerived().data().getIterator(), asDerived().innerShape(), asDerived().dims(), 8);
 	}
 	void print(int precision) const {
-		MATHLIB::print(asDerived().data().core(), asDerived().innerShape(), asDerived().dims(), precision);
+		MATHLIB::print(asDerived().data().getIterator(), asDerived().innerShape(), asDerived().dims(), precision);
 	}
 	void printSparse() const {
-		MATHLIB::printSparse(asDerived().data().core(), asDerived().innerShape(), asDerived().dims(), 8);
+		MATHLIB::printSparse(asDerived().data().getIterator(), asDerived().innerShape(), asDerived().dims(), 8);
 	}
 	void printSparse(int precision) const {
-		MATHLIB::printSparse(asDerived().data().core(), asDerived().innerShape(), asDerived().dims(), precision);
+		MATHLIB::printSparse(asDerived().data().getIterator(), asDerived().innerShape(), asDerived().dims(), precision);
 	}
 
 	void write(std::ofstream& os) const {
 
 		scalar_type* data = new scalar_type[asDerived().size()];
-		MATHLIB::DeviceToHost(data, asDerived().data().core(), asDerived().size());
+		MATHLIB::DeviceToHost(data, asDerived().data().getIterator(), asDerived().size());
 
 		os << asDerived().dims() << ',';
 		for (int i = 0; i < asDerived().dims(); ++i) {
@@ -106,9 +77,6 @@ public:
 
 		delete[] data;
 	}
-
-
-public:
 
 	void read(std::ifstream& is, bool read_dimensions = true, bool overrideDimensions = true) {
 		if (!is.good()) {
@@ -152,15 +120,14 @@ public:
 				default: throw std::invalid_argument("MAX DIMENSIONS READ == 5 ");
 				}
 			}
-			MATHLIB::HostToDevice(asDerived().data().core(), &data[data[0] + 1], asDerived().size() > data.size() ? data.size() : asDerived().size());
+			MATHLIB::HostToDevice(asDerived().data().getIterator(), &data[data[0] + 1], asDerived().size() > data.size() ? data.size() : asDerived().size());
 		} else {
-			MATHLIB::HostToDevice(asDerived().data().core(), &data[0], 			 asDerived().size() > data.size() ? data.size() : asDerived().size());
+			MATHLIB::HostToDevice(asDerived().data().getIterator(), &data[0], 			 asDerived().size() > data.size() ? data.size() : asDerived().size());
 		}
 	}
 };
 
 }
-
 
 
 #endif /* TENSOR_LV2_CORE_IMPL_H_ */

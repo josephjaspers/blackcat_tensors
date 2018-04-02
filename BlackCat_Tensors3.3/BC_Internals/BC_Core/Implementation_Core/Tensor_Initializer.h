@@ -60,7 +60,7 @@ private:
 
 public:
 
-	TensorInitializer(derived&& tensor) : black_cat_array(std::true_type()) {
+	TensorInitializer(derived&& tensor) {
 		black_cat_array.is = tensor.black_cat_array.is;
 		black_cat_array.os = tensor.black_cat_array.os;
 		black_cat_array.array = tensor.black_cat_array.array;
@@ -73,9 +73,7 @@ public:
 	TensorInitializer(const derived& tensor) : black_cat_array(tensor.innerShape()) {
 		Mathlib::copy(asBase().data(), tensor.data(), tensor.size());
 	}
-
 	TensorInitializer(_shape dimensions): black_cat_array(dimensions) {}
-	TensorInitializer() { static_assert(DIMS == 0, "DEFAULT CONSTRUCTOR ONLY AVAILABLE TO SCALARS"); }
 
 	template<class T>
 	using derived_alt = typename MTF::shell_of<derived>::template  type<T, Mathlib>;
@@ -96,7 +94,6 @@ public:
 	}
 };
 
-#include "../TensorBase.h"
 }
 
 

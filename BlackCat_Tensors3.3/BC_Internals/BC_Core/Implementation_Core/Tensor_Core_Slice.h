@@ -69,8 +69,8 @@ template<class PARENT>
 	__BCinline__ const auto row(int i) const { return Tensor_Row<self>(&array_slice[i], *this); }
 	__BCinline__ auto row(int i) { return Tensor_Row<self>(&array_slice[i], *this); }
 
-	__BCinline__ const scalar_type* core() const { return array_slice; }
-	__BCinline__	   scalar_type* core()   	{ return array_slice; }
+	__BCinline__ const scalar_type* getIterator() const { return array_slice; }
+	__BCinline__	   scalar_type* getIterator()   	{ return array_slice; }
 
 
 
