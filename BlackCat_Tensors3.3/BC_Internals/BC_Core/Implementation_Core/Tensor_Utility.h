@@ -122,7 +122,7 @@ public:
 			}
 			MATHLIB::HostToDevice(asDerived().data().getIterator(), &data[data[0] + 1], asDerived().size() > data.size() ? data.size() : asDerived().size());
 		} else {
-			MATHLIB::HostToDevice(asDerived().data().getIterator(), &data[0], 			 asDerived().size() > data.size() ? data.size() : asDerived().size());
+			MATHLIB::HostToDevice(asDerived().data().getIterator(), &data[0], 			asDerived().size() > data.size() ? data.size() : asDerived().size());
 		}
 	}
 };

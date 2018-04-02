@@ -39,7 +39,7 @@ public:
 	template<class... params>
 	explicit TensorInitializer(const  params&... p) : black_cat_array(p...) {}
 };
-//-------------------------------------SPECIALIZATION FOR TENSORS THAT CONTROL / DELETE THEIR ARRAY-------------------------------------//
+//-------------------------------------SPECIALIZATION FOR Tensor_Core-------------------------------------//
 template<template<class, class> class _tensor, class t, class ml>
 class TensorInitializer<_tensor<t, ml>, std::enable_if_t<MTF::isPrimitive<t>::conditional>> {
 
@@ -60,26 +60,14 @@ private:
 
 public:
 
-	TensorInitializer(derived&& tensor) {
-		black_cat_array.is = tensor.black_cat_array.is;
-		black_cat_array.os = tensor.black_cat_array.os;
-		black_cat_array.array = tensor.black_cat_array.array;
+	TensorInitializer(		derived&& tensor) : black_cat_array(tensor.black_cat_array) {}
+	TensorInitializer(const derived&  tensor) : black_cat_array(tensor.black_cat_array) {}
+	TensorInitializer(_shape dimensions)	  : black_cat_array(dimensions) {}
 
-		tensor.black_cat_array.is 		= nullptr;
-		tensor.black_cat_array.os 		= nullptr;
-		tensor.black_cat_array.array 	= nullptr;
-	}
-
-	TensorInitializer(const derived& tensor) : black_cat_array(tensor.innerShape()) {
-		Mathlib::copy(asBase().data(), tensor.data(), tensor.size());
-	}
-	TensorInitializer(_shape dimensions): black_cat_array(dimensions) {}
-
-	template<class T>
-	using derived_alt = typename MTF::shell_of<derived>::template  type<T, Mathlib>;
+	template<class T> using deriv = typename MTF::shell_of<derived>::template  type<T, Mathlib>;
 
 	template<class U>
-	TensorInitializer(const derived_alt<U>&  tensor)
+	TensorInitializer(const deriv<U>&  tensor)
 		: black_cat_array(tensor.innerShape()) {
 		Mathlib::copy(this->asBase().data(), tensor.data(), this->asBase().size());
 	}

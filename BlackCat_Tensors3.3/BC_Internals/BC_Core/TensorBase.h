@@ -12,6 +12,13 @@
 #include "Implementation_Core/Tensor_Operations.h"
 #include "Implementation_Core/Tensor_Utility.h"
 #include "Implementation_Core/Tensor_Core.h"
+#include "Implementation_Core/Tensor_Core_Scalar.h"
+#include "Implementation_Core/Tensor_Core_Slice.h"
+#include "Implementation_Core/Tensor_Core_Reshape.h"
+#include "Implementation_Core/Tensor_Core_RowVector.h"
+#include "Implementation_Core/Tensor_Core.h"
+
+
 #include "Implementation_Core/Tensor_Initializer.h"
 #include "Implementation_Core/Determiners.h"
 
@@ -33,7 +40,7 @@ protected:
 	using scalar_type	= _scalar<derived>;
 	using Mathlib 		= _mathlib<derived>;
 
-	static constexpr int DIMS 		= ranker<derived>::value;
+	static constexpr int DIMS = ranker<derived>::value;
 
 public:
 	template<class>
@@ -55,7 +62,6 @@ public:
 
 	template<class T>
 	std::enable_if_t<MTF::isPrimitive<T>::conditional, derived&> operator = (TensorBase<T>&& tensor) {
-		//Only enabled for Tensor_Core types
 		this->assert_same_size(tensor);
 		std::swap(this->black_cat_array.array, tensor.black_cat_array.array);
 		return *this;

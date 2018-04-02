@@ -10,7 +10,6 @@
 
 #include "BC_Expressions/Expression_Base.h"
 #include "Determiners.h"
-#include "Tensor_Core_Scalar.h"
 
 namespace BC {
 
@@ -28,9 +27,6 @@ struct Tensor_Row : expression<_scalar<PARENT>, Tensor_Row<PARENT>>  {
 	const PARENT parent;
 	scalar* array_slice;
 
-	operator 	   scalar*()       { return array_slice; }
-	operator const scalar*() const { return array_slice; }
-
 	Tensor_Row(scalar* array, const PARENT& parent_) : array_slice(array), parent(parent_) {}
 	__BCinline__ int increment() const { return parent.LD_rows(); }
 	__BCinline__ int dims() const { return 1; }
@@ -45,7 +41,9 @@ struct Tensor_Row : expression<_scalar<PARENT>, Tensor_Row<PARENT>>  {
 	__BCinline__ const auto outerShape() const 			{ return parent.outerShape(); }
 
 	__BCinline__ const auto& operator [] (int i) const { return array_slice[i * increment()]; }
-	__BCinline__ 	   auto& operator [] (int i)  	   { return array_slice[i * increment()]; }
+	__BCinline__ 	   auto& operator [] (int i)  	   {
+		std::cout << " row index " << std::endl;
+		return array_slice[i * increment()]; }
 
 	void printDimensions() 		const { parent.printDimensions(); }
 	void printLDDimensions()	const { parent.printDimensions(); }
@@ -54,8 +52,8 @@ struct Tensor_Row : expression<_scalar<PARENT>, Tensor_Row<PARENT>>  {
 		  auto slice(int i) 	  { return Tensor_Scalar<self>(&array_slice[i * increment()], *this); }
 
 
-	const scalar* getIterator() const { return array_slice; }
-		  scalar* getIterator()  	   { return array_slice; }
+	const auto getIterator() const { return *this; }
+		  auto getIterator()  	   { return *this; }
 
 };
 

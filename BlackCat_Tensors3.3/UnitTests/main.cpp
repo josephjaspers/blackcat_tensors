@@ -123,6 +123,12 @@ auto test() {
 	d.print();
 
 
+	d.row(0).print();
+
+	std::cout << "d print " << d.row(0).size() << std::endl;
+
+	d.col(1).print();
+
 	std::cout << " trying to write " <<std::endl;
 	std::ofstream os("save.txt");
 	d.write(os);

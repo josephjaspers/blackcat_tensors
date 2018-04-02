@@ -59,7 +59,7 @@ public:
 	__BCinline__ int col(int i) const 	{ return shadowFailure<>("auto col(int i) const"); }
 	__BCinline__ int col(int i) 	   	{ return shadowFailure<>("auto col(int i)"); }
 	template<class... integers>
-	__BCinline__ auto reshape(integers...) { return shadowFailure<>("auto reshape"); };
+	__BCinline__ auto reshape(integers...) { return shadowFailure<>("auto reshape"); }
 
 	 void printDimensions() 		const { shadowFailure<>("void printDimensions() const"); }
 	 void printLDDimensions() 	const { shadowFailure<>("void printLDDimensions() const"); }
