@@ -30,9 +30,15 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 	using Mathlib = _mathlib<T>;
 	using slice_type = Tensor_Slice<self>;
 
+<<<<<<< HEAD
 	scalar_type* array = nullptr;
 	int* is = nullptr;
 	int* os = nullptr;
+=======
+	scalar_type* array;
+	int* is = Mathlib::unified_initialize(is, DIMS());
+	int* os = Mathlib::unified_initialize(os, DIMS());
+>>>>>>> HEAD@{1}
 
 	Tensor_Core() = default;
 
@@ -86,7 +92,10 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 		}
 		Mathlib::initialize(array, this->size());
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> HEAD@{1}
 	__BCinline__ const auto innerShape() const { return is; }
 	__BCinline__ const auto outerShape() const { return os; }
 
@@ -94,11 +103,16 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 	__BCinline__ const auto slice(int i) const { return slice_type(&array[slice_index(i)],*this); }
 	__BCinline__	   auto slice(int i) 	   { return slice_type(&array[slice_index(i)],*this); }
 
+<<<<<<< HEAD
 	__BCinline__ const scalar_type* getIterator() const { return array; }
 	__BCinline__ 	   scalar_type* getIterator()  	    { return array; }
 
 
 
+=======
+	const scalar_type* getIterator() const { return array; }
+		  scalar_type* getIterator()  	   { return array; }
+>>>>>>> HEAD@{1}
 
 	template<class... integers, int dim = 0>
 	void resetShape(integers... ints)  {
@@ -107,7 +121,10 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 		Mathlib::initialize(array, this->size());
 	}
 
+<<<<<<< HEAD
 	//----------------------------------implementation for slice------------------------------------//
+=======
+>>>>>>> HEAD@{1}
 	int slice_index(int i) const {
 		if (DIMS() == 0)
 			return 0;
