@@ -16,6 +16,7 @@
 #include "Tensor_Core_RowVector.h"
 #include "Tensor_Core_Reshape.h"
 #include "Tensor_Core_Interface.h"
+#include "../../BC_MathLibraries/Mathematics_CPU.h"
 #include "Determiners.h"
 namespace BC {
 
@@ -30,43 +31,15 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 	using Mathlib = _mathlib<T>;
 	using slice_type = Tensor_Slice<self>;
 
-<<<<<<< HEAD
-	scalar_type* array = nullptr;
-	int* is = nullptr;
-	int* os = nullptr;
-=======
 	scalar_type* array;
 	int* is = Mathlib::unified_initialize(is, DIMS());
 	int* os = Mathlib::unified_initialize(os, DIMS());
->>>>>>> HEAD@{1}
 
 	Tensor_Core() = default;
-
-	Tensor_Core(const Tensor_Core& cpy) {
-		Mathlib::unified_initialize(is, DIMS());
-		Mathlib::unified_initialize(os, DIMS());
-
-		for (int i  = 0; i < DIMS(); ++i) {
-			is[i] = cpy.is[i];
-			os[i] = cpy.os[i];
-		}
-
-		Mathlib::initialize(array, this->size());
-		Mathlib::copy(array, cpy.array, this->size());
-	}
-	Tensor_Core(Tensor_Core&& cpy) {
-		is = cpy.is;
-		os = cpy.os;
-		array = cpy.array;
-
-		cpy.is = nullptr;
-		cpy.os = nullptr;
-		cpy.array = nullptr;
-	}
+	Tensor_Core(const Tensor_Core&) = default;
+	Tensor_Core(Tensor_Core&&) = default;
 
 	Tensor_Core(std::vector<int> param) {
-		Mathlib::unified_initialize(is, DIMS());
-		Mathlib::unified_initialize(os, DIMS());
 
 		if (DIMS() > 0) {
 			is[0] = param[0];
@@ -79,9 +52,6 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 		Mathlib::initialize(array, this->size());
 	}
 	Tensor_Core(const int* param) {
-		Mathlib::unified_initialize(is, DIMS());
-		Mathlib::unified_initialize(os, DIMS());
-
 		if (DIMS() > 0) {
 			Mathlib::HostToDevice(is, &param[0], DIMS());
 
@@ -92,27 +62,15 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 		}
 		Mathlib::initialize(array, this->size());
 	}
-<<<<<<< HEAD
-
-=======
->>>>>>> HEAD@{1}
 	__BCinline__ const auto innerShape() const { return is; }
 	__BCinline__ const auto outerShape() const { return os; }
 
-	//this needs to be overridden in tensor core (tensor_core can't return itself, doesn't have a "PARENT" memeber)
+	__BCinline__
 	__BCinline__ const auto slice(int i) const { return slice_type(&array[slice_index(i)],*this); }
 	__BCinline__	   auto slice(int i) 	   { return slice_type(&array[slice_index(i)],*this); }
 
-<<<<<<< HEAD
-	__BCinline__ const scalar_type* getIterator() const { return array; }
-	__BCinline__ 	   scalar_type* getIterator()  	    { return array; }
-
-
-
-=======
 	const scalar_type* getIterator() const { return array; }
 		  scalar_type* getIterator()  	   { return array; }
->>>>>>> HEAD@{1}
 
 	template<class... integers, int dim = 0>
 	void resetShape(integers... ints)  {
@@ -121,10 +79,6 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 		Mathlib::initialize(array, this->size());
 	}
 
-<<<<<<< HEAD
-	//----------------------------------implementation for slice------------------------------------//
-=======
->>>>>>> HEAD@{1}
 	int slice_index(int i) const {
 		if (DIMS() == 0)
 			return 0;
@@ -135,7 +89,6 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 	}
 
 
-	//---------------------------------implementation for reset shape-------------------------------------//
 	template<int d>
 	void init() {/*I AM FRIEND I HELP COMPILE DONT DELETE ME */}
 
