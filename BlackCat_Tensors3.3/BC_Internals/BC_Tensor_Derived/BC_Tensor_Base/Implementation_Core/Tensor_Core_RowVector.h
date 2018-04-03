@@ -8,15 +8,14 @@
 #ifndef TENSOR_CORE_ROWVECTOR_H_
 #define TENSOR_CORE_ROWVECTOR_H_
 
-#include "BC_Expressions/Expression_Base.h"
-#include "Determiners.h"
+#include "Tensor_Core_Interface.h"
 
 namespace BC {
 
 template<class PARENT>
-struct Tensor_Row : expression<_scalar<PARENT>, Tensor_Row<PARENT>>  {
+struct Tensor_Row : Tensor_Core_Base<Tensor_Row<PARENT>, 1>  {
 
-	using scalar = _scalar<PARENT>;
+	using array = _iterator<PARENT>;
 	using self = Tensor_Row<PARENT>;
 	using slice_type = Tensor_Scalar<self>;
 	using Mathlib = typename  PARENT::Mathlib;
@@ -25,9 +24,9 @@ struct Tensor_Row : expression<_scalar<PARENT>, Tensor_Row<PARENT>>  {
 	static_assert(PARENT::DIMS() == 2 || PARENT::DIMS() == 1, "TENSOR_ROW CAN ONLY BE GENERATED FROM ANOTHER VECTOR, ROW_VECTOR, OR MATRIX");
 
 	const PARENT parent;
-	scalar* array_slice;
+	array array_slice;
 
-	Tensor_Row(scalar* array, const PARENT& parent_) : array_slice(array), parent(parent_) {}
+	Tensor_Row(array array, PARENT parent_) : array_slice(array), parent(parent_) {}
 	__BCinline__ int increment() const { return parent.LD_rows(); }
 	__BCinline__ int dims() const { return 1; }
 	__BCinline__ int size() const { return parent.cols(); }
@@ -41,9 +40,7 @@ struct Tensor_Row : expression<_scalar<PARENT>, Tensor_Row<PARENT>>  {
 	__BCinline__ const auto outerShape() const 			{ return parent.outerShape(); }
 
 	__BCinline__ const auto& operator [] (int i) const { return array_slice[i * increment()]; }
-	__BCinline__ 	   auto& operator [] (int i)  	   {
-		std::cout << " row index " << std::endl;
-		return array_slice[i * increment()]; }
+	__BCinline__ 	   auto& operator [] (int i)  	   { return array_slice[i * increment()]; }
 
 	void printDimensions() 		const { parent.printDimensions(); }
 	void printLDDimensions()	const { parent.printDimensions(); }

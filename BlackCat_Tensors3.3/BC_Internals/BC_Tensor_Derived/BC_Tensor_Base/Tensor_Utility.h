@@ -13,7 +13,9 @@
 #include <vector>
 #include <string>
 #include <sstream>
+
 #include "Determiners.h"
+#include "MetaTemplateFunctions.h"
 
 namespace BC {
 

@@ -9,7 +9,7 @@
 #define VECTOR_H_
 
 #include "Scalar.h"
-#include "TensorBase.h"
+#include "BC_Tensor_Base/TensorBase.h"
 
 namespace BC {
 template<class T, class Mathlib>

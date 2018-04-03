@@ -28,8 +28,8 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 	}
 
 	template<class L, class R>
-	__BCinline__  binary_expression(L l, R r) :
-			left(l), right(r) {
+	__BCinline__  binary_expression(L l, R r, operation oper_ = operation()) :
+			left(l), right(r), oper(oper_) {
 	}
 
 	__BCinline__  auto operator [](int index) const {

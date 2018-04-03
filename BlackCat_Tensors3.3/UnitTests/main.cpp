@@ -2,7 +2,6 @@
 #include "../BlackCat_Tensors.h"
 #include <type_traits>
 #include "SpeedTests.h"
-#include "dotproduct_scratch.h"
 #include <omp.h>
 using BC::Vector;
 using BC::Matrix;
@@ -149,6 +148,7 @@ auto test() {
 
 int main() {
 
+
 test();
 
 tensor4 alpha(3, 3,2);
@@ -164,6 +164,8 @@ alpha[0][0].print();
 zeta[0].print();
 
 mat output(3,3);
+
+output.unExpr([](float x) { return x * 2;});
 output.zero();
 output = alpha[0][0].x_corr<2>(zeta[0]);
 output.print();

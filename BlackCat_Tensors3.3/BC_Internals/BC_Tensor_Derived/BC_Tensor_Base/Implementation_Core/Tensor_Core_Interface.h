@@ -9,7 +9,6 @@
 #define TENSOR_CORE_INTERFACE_H_
 
 #include "BlackCat_Internal_Definitions.h"
-#include "Determiners.h"
 
 namespace BC {
 
@@ -35,7 +34,8 @@ struct Tensor_Core_Base {
 	using me   = Tensor_Core_Base<derived, DIMENSION>;
 	using self = derived;
 	using slice_type = std::conditional_t<DIMS() == 0, self, _Tensor_Slice<self>>;
-	using scalar_type = _scalar<self>;
+	using const_slice_type = std::conditional_t<DIMS() == 0, const self, _Tensor_Slice<const self>>;
+
 private:
 	const derived& base() const { return static_cast<const derived&>(*this); }
 		  derived& base() 		{ return static_cast<	   derived&>(*this); }
@@ -44,8 +44,8 @@ private:
 	__BCinline__	   auto array() 	  { return base().getIterator(); };
 
 public:
-	operator 	   scalar_type*()       { return array(); }
-	operator const scalar_type*() const { return array(); }
+	operator 	   auto()       { return array(); }
+	operator const auto() const { return array(); }
 
 
 	__BCinline__ 	   auto& operator [] (int index) 	   { return DIMS() == 0 ? array()[0] : array()[index]; };

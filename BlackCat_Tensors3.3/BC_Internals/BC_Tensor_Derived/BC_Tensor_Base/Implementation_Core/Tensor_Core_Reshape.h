@@ -7,11 +7,9 @@
 
 #ifndef TENSOR_RESHAPE_H_
 #define TENSOR_RESHAPE_H_
-#include "BC_Expressions/Expression_Base.h"
-#include "Determiners.h"
-#include <iostream>
-#include "Tensor_Core_Scalar.h"
-#include "Tensor_Core_RowVector.h"
+
+#include "Tensor_Core_Interface.h"
+
 namespace BC {
 
 template<class PARENT, int NEW_DIM>

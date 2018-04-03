@@ -18,7 +18,7 @@ public:
 
 	static constexpr int DIMS() { return value::DIMS(); }
 
-	__BCinline__  unary_expression(value v) : array(v) {}
+	__BCinline__  unary_expression(value v, operation op = operation()) : array(v), oper(op) {}
 	__BCinline__  int dims() const { return array.dims(); }
 	__BCinline__  int size() const { return array.size(); }
 	__BCinline__  int rows() const { return array.rows(); }

@@ -15,12 +15,12 @@ class GPU;
 
 #ifndef BLACKCAT_DEFAULT_MATHLIB_GPU
 using DEFAULT_MATHLIB = CPU;
-
 #else
 using DEFAULT_MATHLIB = GPU
-
 #endif
 
+//Uncomment this upon release,
+//this is to ensure the backend-code mandates the correct Mathlibs
 //template<class, class ML = DEFAULT_MATHLIB> class Scalar;
 //template<class, class ML = DEFAULT_MATHLIB> class Vector;
 //template<class, class ML = DEFAULT_MATHLIB> class Matrix;

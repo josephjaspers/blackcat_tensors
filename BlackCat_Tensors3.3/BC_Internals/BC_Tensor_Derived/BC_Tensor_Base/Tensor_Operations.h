@@ -205,7 +205,7 @@ struct Tensor_Operations {
 	//-----------------------------------custom expressions--------------------------------------------------//
 	template<class functor>
 	auto unExpr(functor f) const {
-		return typename impl<derived, functor>::unary_type(asBase().data());
+		return typename impl<derived, functor>::unary_type(asBase().data(), f);
 	}
 	template<class d2, class functor>
 	auto binExpr(functor f, const Tensor_Operations<d2>& rv) {

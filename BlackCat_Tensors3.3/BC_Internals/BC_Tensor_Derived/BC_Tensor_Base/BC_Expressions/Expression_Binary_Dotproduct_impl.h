@@ -7,8 +7,6 @@
 #ifndef EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
 #define EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
 
-#include "../Determiners.h"
-
 namespace BC {
 //Required forward decs
 template<class, class, class > class binary_expression_scalar_mul;

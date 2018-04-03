@@ -8,7 +8,7 @@
 #ifndef BC_TENSOR_N5_H
 #define BC_TENSOR_N5_H
 
-#include "TensorBase.h"
+#include "BC_Tensor_Base/TensorBase.h"
 
 namespace BC {
 
@@ -31,12 +31,12 @@ public:
 	explicit Tensor5(int a = 1,int b = 1,int c = 1, int d = 1, int e = 1) : parent_class(std::vector<int>{a,b,c,d,e}) {}
 
 	template<class U> 		  Tensor5(const Tensor5<U, Mathlib>&  t) : parent_class(t) {}
-	template<class U> 		  Tensor5(	   Tensor5<U, Mathlib>&& t) : parent_class(t) {}
+	template<class U> 		  Tensor5(	    Tensor5<U, Mathlib>&& t) : parent_class(t) {}
 	template<class... params> Tensor5(const params&... p) : parent_class(p...) {}
 
 	Tensor5& operator =(const Tensor5& t)  { return parent_class::operator=(t); }
 	Tensor5& operator =(const Tensor5&& t) { return parent_class::operator=(t); }
-	Tensor5& operator =(	     Tensor5&& t) { return parent_class::operator=(t); }
+	Tensor5& operator =(	  Tensor5&& t) { return parent_class::operator=(t); }
 	template<class U>
 	Tensor5& operator = (const Tensor5<U, Mathlib>& t) { return parent_class::operator=(t); }
 };

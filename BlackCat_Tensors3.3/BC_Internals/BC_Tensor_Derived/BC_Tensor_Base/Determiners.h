@@ -7,6 +7,7 @@
 
 #ifndef DETERMINERS_H_
 #define DETERMINERS_H_
+#include "MetaTemplateFunctions.h"
 #include <type_traits>
 namespace BC {
 
@@ -29,6 +30,10 @@ template<class T> struct isCore { static constexpr bool conditional = MTF::isPri
 template<template<class> class T, class U> struct isCore<T<U>>
 { static constexpr bool conditional = MTF::isOneOf<T<U>,Tensor_Core<U>, Tensor_Slice<U>, Tensor_Scalar<U>,
 	Tensor_Reshape<U,0>,Tensor_Reshape<U,1>,Tensor_Reshape<U,2>,Tensor_Reshape<U,3>,Tensor_Reshape<U,4>,Tensor_Reshape<U,5>>::conditional; };
+
+template<class T> struct isPrimaryCore { static constexpr bool conditional = MTF::isPrimitive<T>::conditional; };
+template<template<class> class T, class U> struct isPrimaryCore<T<U>>
+{ static constexpr bool conditional = MTF::same<T<U>,Tensor_Core<U>>::conditional; };
 
 
 
@@ -58,6 +63,7 @@ template<class T> static constexpr int class2rank = ranker<T>::value;
 template<class> struct determine_functor;
 template<class> struct determine_evaluation;
 template<class> struct determine_scalar;
+template<class> struct determine_iterator;
 
 template<class T> using _scalar = typename determine_scalar<T>::type;
 template<class T> using _mathlib = typename MTF::tail<T>;
@@ -65,7 +71,14 @@ template<class T> using _ranker  = typename ranker<T>::type;
 template<class T> using _functor = typename determine_functor<T>::type;
 template<class T> using _evaluation = typename determine_evaluation<T>::type;
 template<class T> static constexpr int _rankOf  = ranker<T>::value;
+template<class T> using _iterator = typename determine_iterator<T>::type;
 
+//remove constness --
+namespace rm {
+template<class T> struct _const { using type = T; };
+template<class T> struct _const<const T> { using type = typename _const<T>::type; };
+}
+template<class T> using remove_const = typename rm::_const<T>::type;
 ///DET FUNCTOR
 template<template<class...> class tensor, class functor, class... set>
 struct determine_functor<tensor<functor, set...>>{
@@ -92,6 +105,12 @@ struct determine_scalar {
 template<template<class...> class tensor, class T, class... set>
 struct determine_scalar<tensor<T, set...>> {
 		using type = typename determine_scalar<T>::type;
+};
+
+///DETERMINE_ITERATOR---------------------------------------------------------------------------------------
+template<class T>
+struct determine_iterator {
+	using type = decltype(std::declval<T>().getIterator());
 };
 
 }

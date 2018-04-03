@@ -8,7 +8,7 @@
 #ifndef SCALAR_H_
 #define SCALAR_H_
 #include <type_traits>
-#include "TensorBase.h"
+#include "BC_Tensor_Base/TensorBase.h"
 
 namespace BC {
 
@@ -32,6 +32,8 @@ public:
 	Scalar(const Scalar&& t) : parent_class(t) 		{}
 	Scalar(		 Scalar&& t) : parent_class(t) 		{}
 	Scalar(const Scalar&  t) : parent_class(t) 		{}
+	template<class var1, class var2, class... params>
+	explicit Scalar(const var1& v1, const var2& v2, const params&... p) : parent_class(v1, v2, p...) {}
 
 	operator _scalar<T>() const { _scalar<T> value = 0; Mathlib::DeviceToHost(&value, this->data().getIterator(), 1); return value; }
 
@@ -55,8 +57,6 @@ public:
 		Mathlib::HostToDevice((_scalar<T>*)this->data(), &value, 1);
 	}
 
-	template<class var1, class var2, class... params>
-	explicit Scalar(const var1& v1, const var2& v2, const params&... p) : parent_class(v1, v2, p...) {}
 
 };
 

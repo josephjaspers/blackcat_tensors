@@ -8,9 +8,7 @@
 #ifndef TENSOR_Scalar_CU_
 #define TENSOR_Scalar_CU_
 
-#include "BC_Expressions/Expression_Base.h"
 #include "Tensor_Core_Interface.h"
-#include "Determiners.h"
 
 namespace BC {
 

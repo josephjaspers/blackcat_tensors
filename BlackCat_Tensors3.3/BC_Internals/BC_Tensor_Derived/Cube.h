@@ -8,8 +8,7 @@
 #ifndef BC_Cube_H
 #define BC_Cube_H
 
-#include "Vector.h"
-#include "TensorBase.h"
+#include "BC_Tensor_Base/TensorBase.h"
 
 
 namespace BC {

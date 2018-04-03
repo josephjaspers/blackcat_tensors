@@ -9,14 +9,11 @@
 #define BC_MATRIX_H
 
 #include "Vector.h"
-#include "TensorBase.h"
+#include "BC_Tensor_Base/TensorBase.h"
 
 namespace BC {
 template<class T, class Mathlib>
 class Matrix : public TensorBase<Matrix<T, Mathlib>> {
-
-	template<class,class>
-	friend class Vector;
 
 	using parent_class = TensorBase<Matrix<T, Mathlib>>;
 

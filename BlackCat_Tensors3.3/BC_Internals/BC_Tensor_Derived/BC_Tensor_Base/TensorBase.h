@@ -9,18 +9,12 @@
 #ifndef TENSOR_BASE_H_
 #define TENSOR_BASE_H_
 
-#include "Implementation_Core/Tensor_Operations.h"
-#include "Implementation_Core/Tensor_Utility.h"
-#include "Implementation_Core/Tensor_Core.h"
-#include "Implementation_Core/Tensor_Core_Scalar.h"
-#include "Implementation_Core/Tensor_Core_Slice.h"
-#include "Implementation_Core/Tensor_Core_Reshape.h"
-#include "Implementation_Core/Tensor_Core_RowVector.h"
-#include "Implementation_Core/Tensor_Core.h"
 
-
-#include "Implementation_Core/Tensor_Initializer.h"
-#include "Implementation_Core/Determiners.h"
+#include "Determiners.h"
+#include "MetaTemplateFunctions.h"
+#include "Tensor_Operations.h"
+#include "Tensor_Utility.h"
+#include "Tensor_Initializer.h"
 
 namespace BC {
 
@@ -51,6 +45,10 @@ public:
 	template<class... params>
 	explicit TensorBase(const params&... p) : initializer(p...) {}
 
+//	template<class U,  std::enable_if_t<isPrimaryCore<_functor<U>>::conditional>>
+//	TensorBase(const TensorBase<U>& tensor) : initializer(tensor) {
+//
+//	}
 	operator const derived& () const { return static_cast<const derived&>(*this); }
 	operator	   derived& () 		 { return static_cast< derived&>(*this); }
 
