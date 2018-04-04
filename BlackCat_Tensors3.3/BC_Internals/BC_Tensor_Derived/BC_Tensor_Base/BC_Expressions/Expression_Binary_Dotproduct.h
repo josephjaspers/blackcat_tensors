@@ -44,7 +44,7 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	scalar_type* array_ptr;
 
 	 binary_expression_dotproduct(lv left, rv right) : left(left), right(right) {
-		Mathlib::initialize(array_ptr,size());
+		Mathlib::initialize(array_ptr, this->size());
 		array = lifetime_reaper(array_ptr, deleter());
 
 //		if (transA)
@@ -72,15 +72,15 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	__BCinline__ int LD_rows() const { return rows(); }
 	__BCinline__ int LD_cols() const { return size(); }
 	__BCinline__ int dimension(int i)		const { return i== 0 ? rows(): i == 1 ? cols() : 1; }
-	__BCinline__ const auto innerShape() 	const { return generateDimList(rows(), cols()); }
-	__BCinline__ const auto outerShape() 	const { return generateDimList(rows(), size()); }
+	__BCinline__ const auto innerShape() 	const { return l_array([=](int i) { return i == 0 ? this->rows() : i == 1 ? this->cols() : 1; }); }
+	__BCinline__ const auto outerShape() 	const { return l_array([=](int i) { return i == 0 ? this->rows() : i == 1 ? this->size() : 1; }); }
 
 	__BCinline__ int M() const { return left.rows(); }
 	__BCinline__ int N() const { return right.cols(); }
 	__BCinline__ int K() const { return left.cols(); }
 
-	void printDimensions() 		const { std::cout<<"[" << M() << "][" <<N()  <<"]" << std::endl; }
-	void printLDDimensions()	const { std::cout<<"[" << M() << "][" << size()  <<"]" << std::endl; }
+	void printDimensions() 		const { std::cout<<"[" << M() << "][" << N()  <<"]" << std::endl; }
+	void printLDDimensions()	const { std::cout<<"[" << M() << "][" << this->size()  <<"]" << std::endl; }
 
 
 public:
@@ -113,15 +113,15 @@ public:
 			T* tmp;
 			Mathlib::initialize(tmp, 1);
 			Mathlib::scalarMul(tmp, alpha, alpha2);
-			Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M(), N(), K(), tmp, nullptr, left.LD_rows(), right.LD_rows(), rows());
+			Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M(), N(), K(), tmp, nullptr, left.LD_rows(), right.LD_rows(), this->rows());
 			Mathlib::destroy(tmp);
 
 		} else if (rv_scalar)
-			 Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M(), N(), K(), alpha2, nullptr, left.LD_rows(), right.LD_rows(), rows());
+			 Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M(), N(), K(), alpha2, nullptr, left.LD_rows(), right.LD_rows(), this->rows());
 		 else if (lv_scalar)
-			 Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M(), N(), K(), alpha, nullptr, left.LD_rows(), right.LD_rows(), rows());
+			 Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M(), N(), K(), alpha, nullptr, left.LD_rows(), right.LD_rows(), this->rows());
 		 else
-			 Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M(), N(), K(), nullptr, nullptr, left.LD_rows(), right.LD_rows(),rows());
+			 Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M(), N(), K(), nullptr, nullptr, left.LD_rows(), right.LD_rows(), this->rows());
 
 		if (lv_eval)
 			Mathlib::destroy(A);

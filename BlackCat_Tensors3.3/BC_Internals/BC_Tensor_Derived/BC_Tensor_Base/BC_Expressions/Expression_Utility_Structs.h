@@ -82,32 +82,31 @@ struct stack_array<T, 0> {
 };
 
 template<class ref>
-struct reference_array {
+struct  lamda_array{
 	ref value;
 
-	__BCinline__ reference_array(ref a_) :
-			value(a_) {
+	__BCinline__ lamda_array(ref a) :
+			value(a) {
 	}
 
 	__BCinline__ const auto operator [](int i) const {
-		return value.dimension(i);
+		return value(i);
 	}
 	__BCinline__ auto operator [](int i) {
-		return value.dimension(i);
+		return value(i);
 	}
 };
+
+template<class T>
+auto l_array(T data) {
+	return lamda_array<T>(data);
+}
 
 
 template<class T, class... vals>
 auto array(T front, vals... values) {
 	return stack_array<T, sizeof...(values) + 1>(front, values...);
 }
-
-template<class T>
-auto ref_array(T data) {
-	return reference_array<T>(data);
-}
-
 
 template<bool b>
 struct trueFalse {

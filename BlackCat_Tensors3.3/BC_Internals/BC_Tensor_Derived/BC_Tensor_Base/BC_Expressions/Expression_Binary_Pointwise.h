@@ -36,13 +36,6 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 		return oper(left[index], right[index]);
 	}
 
-	__BCinline__ int dims() const { return shape().dims(); }
-	__BCinline__ int rows() const { return shape().rows(); };
-	__BCinline__ int cols() const { return shape().cols(); };
-	__BCinline__ int size() const { return shape().size(); };
-	__BCinline__ int LD_rows() const { return shape().LD_rows(); }
-	__BCinline__ int LD_cols() const { return shape().LD_cols(); }
-	__BCinline__ int dimension(int i)		const { return shape().dimension(i); }
 	__BCinline__ const auto innerShape() const { return shape().innerShape(); }
 	__BCinline__ const auto outerShape() const { return shape().outerShape(); }
 
@@ -89,13 +82,6 @@ struct binary_expression_scalar_mul : expression<T, binary_expression_scalar_mul
 		return oper(left[index], right[index]);
 	}
 
-	__BCinline__  int dims() const { return shape().dims(); }
-	__BCinline__  int rows() const { return shape().rows(); };
-	__BCinline__  int cols() const { return shape().cols(); };
-	__BCinline__  int size() const { return shape().size(); };
-	__BCinline__  int LD_rows() const { return shape().LD_rows(); }
-	__BCinline__ int LD_cols() const { return shape().LD_cols(); }
-	__BCinline__ int dimension(int i)		const { return shape().dimension(i); }
 	__BCinline__ const auto innerShape() const { return shape().innerShape(); }
 	__BCinline__ const auto outerShape() const { return shape().outerShape(); }
 

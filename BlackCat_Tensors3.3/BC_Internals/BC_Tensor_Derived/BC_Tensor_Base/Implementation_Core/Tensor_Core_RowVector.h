@@ -49,8 +49,8 @@ struct Tensor_Row : Tensor_Core_Base<Tensor_Row<PARENT>, 1>  {
 		  auto slice(int i) 	  { return Tensor_Scalar<self>(&array_slice[i * increment()], *this); }
 
 
-	const auto getIterator() const { return *this; }
-		  auto getIterator()  	   { return *this; }
+	const auto& getIterator() const { return *this; }
+		  auto& getIterator()  	    { return *this; }
 
 };
 
