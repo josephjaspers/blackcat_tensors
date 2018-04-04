@@ -62,7 +62,7 @@ auto test() {
 	c = d * b.t();
 	c.print();
 	std::cout << " dot product -- scalar, regular" << std::endl;
-	c = d * scal(2) * e;
+	c = d * scal(2) * e + c;
 	c.print();
 	std::cout << " dot product -- scalar, regular" << std::endl;
 	c = scal(2) * d * e;

@@ -73,7 +73,7 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	__BCinline__ int LD_cols() const { return size(); }
 	__BCinline__ int dimension(int i)		const { return i== 0 ? rows(): i == 1 ? cols() : 1; }
 	__BCinline__ const auto innerShape() 	const { return l_array([=](int i) { return i == 0 ? this->rows() : i == 1 ? this->cols() : 1; }); }
-	__BCinline__ const auto outerShape() 	const { return l_array([=](int i) { return i == 0 ? this->rows() : i == 1 ? this->size() : 1; }); }
+	__BCinline__ const auto outerShape() 	const { return l_array([=](int i) { return i == 0 ? this->rows() : i == 1 ? left.rows() * right.cols() : 1; }); }
 
 	__BCinline__ int M() const { return left.rows(); }
 	__BCinline__ int N() const { return right.cols(); }
