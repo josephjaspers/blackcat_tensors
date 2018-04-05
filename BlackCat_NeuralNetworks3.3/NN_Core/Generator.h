@@ -8,11 +8,6 @@
 #ifndef GENERATOR_H_
 #define GENERATOR_H_
 
-
-#include "InputLayer.h"
-#include "OutputLayer.h"
-#include "Defaults.h"
-#include "LayerChain.h"
 #include "NeuralNetwork.h"
 
 namespace BC {

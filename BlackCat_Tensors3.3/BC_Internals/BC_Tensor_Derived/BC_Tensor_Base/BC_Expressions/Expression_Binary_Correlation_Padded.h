@@ -16,15 +16,15 @@ struct binary_expression_correlation_padded : expression<T, binary_expression_co
 	static_assert(lv::DIMS() == rv::DIMS(), "CORRELATION CURRENTLY ONLY SUPPORTED FOR SAME ORDER TENSORS");
 	__BCinline__  static constexpr int DIMS() { return corr_dimension; }
 
-	stack_array<int, DIMS()> positions;
+//	stack_array<int, DIMS()> positions;
 	stack_array<int, DIMS()> os = init_outerShape();
 	lv left;  //krnl
 	rv right; //img
 
 	binary_expression_correlation_padded(lv l_, rv r_) :left(l_), right(r_) {
-		for (int i = 0; i < lv::DIMS(); ++i) {
-			positions[i] = right.dimension(i) + left.dimension(i) - 1;
-		}
+//		for (int i = 0; i < lv::DIMS(); ++i) {
+//			positions[i] = right.dimension(i) + left.dimension(i) - 1;
+//		}
 	}
 
 
@@ -55,8 +55,8 @@ struct binary_expression_correlation_padded : expression<T, binary_expression_co
 				}
 			}
 		} else {
-			int offset = (int)(index / positions[ORDER]) - krnl.dimension(ORDER) + 1;
-			int index_ = index % positions[ORDER];
+			int offset = (int)(index / innerShape()[ORDER]) - krnl.dimension(ORDER) + 1;
+			int index_ = index % innerShape()[ORDER];
 
 			for (int i = 0; i < krnl.dimension(ORDER); ++i) {
 				if (i + offset < img.dimension(ORDER))
@@ -86,15 +86,19 @@ struct binary_expression_correlation_padded : expression<T, binary_expression_co
 
 	__BCinline__ int LD_rows() const { return rows(); }
 	__BCinline__ int LD_cols() const { return size(); }
-	__BCinline__ int dimension(int i) const { return (right.dimension(i) + left.dimension(i) - 1); }
+	__BCinline__ int dimension(int i) const { return innerShape()[i]; }
 	__BCinline__ int LD_dimension(int i) const { return os[i]; }
 
-
 	__BCinline__ const auto innerShape() const {
-		return ref_array(*this);
+		return l_array([=](int i) {return right.dimension(i) + left.dimension(i) - 1;} );
 	}
 
-	__BCinline__ const auto init_outerShape() const {
+
+	__BCinline__ const auto outerShape() const {
+		return l_array([=](int i) {return i == 0 ? this->rows() : this->dimension(i) * this->dimension(i - 1);} );
+
+
+	}__BCinline__ const auto init_outerShape() const {
 		stack_array<int, DIMS()> ary;
 		ary[0] = rows();
 		for (int i = 1; i < DIMS(); ++i) {

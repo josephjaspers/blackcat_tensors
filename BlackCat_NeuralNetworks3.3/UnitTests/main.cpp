@@ -7,7 +7,7 @@
 
 int main() {
 
-	BC::MNIST_Test::percept_MNIST();
-//	BC::MNIST_Test_MT::percept_MNIST();
+//	BC::MNIST_Test::percept_MNIST();
+	BC::MNIST_Test_MT::percept_MNIST();
 
 }

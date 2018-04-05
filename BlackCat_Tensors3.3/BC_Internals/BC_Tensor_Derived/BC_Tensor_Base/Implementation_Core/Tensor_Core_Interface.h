@@ -74,10 +74,10 @@ public:
 	__BCinline__ const auto col(int i) const { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
 	__BCinline__	   auto col(int i) 	     { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
 
-	template<class ... integers> __BCinline__
+	template<class ... integers>
 	const auto reshape(integers ... ints) const { return Tensor_Reshape<const self, sizeof...(integers)>(base(), ints...); }
 
-	template<class... integers> __BCinline__
+	template<class... integers>
 		  auto reshape(integers... ints) 		{ return Tensor_Reshape<	  self, sizeof...(integers)>(base(), ints...); }
 
 	__BCinline__

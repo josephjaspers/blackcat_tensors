@@ -19,13 +19,6 @@ namespace BC {
 template<class T, class lv, class rv, class Mathlib>
 struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
 
-	struct deleter {
-		template<class param>
-		void operator () (param& p) {
-			Mathlib::destroy(p);
-		}
-	};
-
 	using scalar_type = T;
 	using lifetime_reaper = std::shared_ptr<scalar_type>;
 
@@ -46,42 +39,18 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	 binary_expression_dotproduct(lv left, rv right) : left(left), right(right) {
 		Mathlib::initialize(array_ptr, this->size());
 		array = lifetime_reaper(array_ptr, deleter());
-
-//		if (transA)
-//		std::cout << "A is transposed" << transA << std::endl;
-//		if (transB)
-//		std::cout <<"B is transposed" << transB << std::endl;
-//		if (lv_scalar)
-//		std::cout << "A has scalar " <<lv_scalar << std::endl;
-//		if (rv_scalar)
-//		std::cout <<"B has scalar" << rv_scalar << std::endl;
-//		if (lv_eval)
-//		std::cout << "A instant eval" <<lv_eval << std::endl;
-//		if(rv_eval)
-//		std::cout <<"B instant eval " << rv_eval << std::endl;
-
 		eval();
 	}
 
 	__BCinline__ const T& operator [](int index) const  { return array_ptr[index]; }
 	__BCinline__ 	   T& operator [](int index) 		{ return array_ptr[index]; }
-	__BCinline__ int size() const { return left.rows() * right.cols();}
-	__BCinline__ int rows() const { return left.rows(); }
-	__BCinline__ int cols() const { return right.cols(); }
-	__BCinline__ int dims() const { return right.dims(); }
-	__BCinline__ int LD_rows() const { return rows(); }
-	__BCinline__ int LD_cols() const { return size(); }
-	__BCinline__ int dimension(int i)		const { return i== 0 ? rows(): i == 1 ? cols() : 1; }
-	__BCinline__ const auto innerShape() 	const { return l_array([=](int i) { return i == 0 ? this->rows() : i == 1 ? this->cols() : 1; }); }
-	__BCinline__ const auto outerShape() 	const { return l_array([=](int i) { return i == 0 ? this->rows() : i == 1 ? left.rows() * right.cols() : 1; }); }
+
+	__BCinline__ const auto innerShape() 	const { return l_array([=](int i) { return i == 0 ? left.rows() : i == 1 ? right.cols() : 1; }); }
+	__BCinline__ const auto outerShape() 	const { return l_array([=](int i) { return i == 0 ? left.rows() : i == 1 ? left.rows() * right.cols() : 1; }); }
 
 	__BCinline__ int M() const { return left.rows(); }
 	__BCinline__ int N() const { return right.cols(); }
 	__BCinline__ int K() const { return left.cols(); }
-
-	void printDimensions() 		const { std::cout<<"[" << M() << "][" << N()  <<"]" << std::endl; }
-	void printLDDimensions()	const { std::cout<<"[" << M() << "][" << this->size()  <<"]" << std::endl; }
-
 
 public:
 
@@ -129,7 +98,30 @@ public:
 			Mathlib::destroy(B);
 
 	}
+
+	struct deleter {
+		template<class param>
+		void operator ()(param& p) {
+			Mathlib::destroy(p);
+		}
 	};
+};
+
 }
+
+
+//		if (transA)
+//		std::cout << "A is transposed" << transA << std::endl;
+//		if (transB)
+//		std::cout <<"B is transposed" << transB << std::endl;
+//		if (lv_scalar)
+//		std::cout << "A has scalar " <<lv_scalar << std::endl;
+//		if (rv_scalar)
+//		std::cout <<"B has scalar" << rv_scalar << std::endl;
+//		if (lv_eval)
+//		std::cout << "A instant eval" <<lv_eval << std::endl;
+//		if(rv_eval)
+//		std::cout <<"B instant eval " << rv_eval << std::endl;
+
 
 #endif /* EXPRESSION_BINARY_DOTPRODUCT_CU_ */

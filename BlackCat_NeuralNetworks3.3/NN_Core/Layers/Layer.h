@@ -8,8 +8,6 @@
 #ifndef LAYER_H_
 #define LAYER_H_
 
-#include <forward_list>
-#include "Defaults.h"
 namespace BC {
 template<class derived>
 class Layer {

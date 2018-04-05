@@ -9,6 +9,7 @@
 #define FEEDFORWARD_CU_
 
 #include "Layer.h"
+#include <mutex>
 
 namespace BC {
 
@@ -19,7 +20,7 @@ struct FeedForward : public Layer<derived> {
 public:
 
 	 scal lr = scal(0.03); //fp_type == floating point
-
+	 std::mutex locker;
 
 	mat w_gradientStorage;
 	vec b_gradientStorage;
@@ -77,21 +78,27 @@ public:
 		auto train(const _vec<U>& x, const _vec<V>& y) {
 		auto dy = this->next().train(g(w * x + b), y);
 
+		locker.lock();
 		w_gradientStorage -= dy * x.t();
 		b_gradientStorage -= dy;
+		locker.unlock();
 
 		return (w.t() * dy % gd(x));
 	}
 
 	void updateWeights() {
+		locker.lock();
 		w += w_gradientStorage * lr;
 		b += b_gradientStorage * lr;
+		locker.unlock();
 		this->next().updateWeights();
 	}
 
 	void clearBPStorage() {
+		locker.lock();
 		w_gradientStorage.zero();
 		b_gradientStorage.zero();
+		locker.unlock();
 		this->next().clearBPStorage();
 	}
 

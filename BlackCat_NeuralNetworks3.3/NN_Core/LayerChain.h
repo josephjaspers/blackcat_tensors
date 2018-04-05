@@ -3,8 +3,8 @@
 #define BLACKCAT_TUPLE
 
 #include "Defaults.h"
-#include "InputLayer.h"
-#include "OutputLayer.h"
+#include "Layers/InputLayer.h"
+#include "Layers/OutputLayer.h"
 namespace BC {
 using namespace NN_Abreviated_Functions;
 

@@ -29,7 +29,7 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 	using Mathlib = _mathlib<T>;
 	using slice_type = Tensor_Slice<self>;
 
-	scalar_type* array;
+	scalar_type* array = nullptr;
 	int* is = Mathlib::unified_initialize(is, DIMS());
 	int* os = Mathlib::unified_initialize(os, DIMS());
 
@@ -67,8 +67,8 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 	__BCinline__ const auto slice(int i) const { return slice_type(&array[slice_index(i)],*this); }
 	__BCinline__	   auto slice(int i) 	   { return slice_type(&array[slice_index(i)],*this); }
 
-	const scalar_type* getIterator() const { return array; }
-		  scalar_type* getIterator()  	   { return array; }
+	__BCinline__ const scalar_type* getIterator() const { return array; }
+	__BCinline__	   scalar_type* getIterator()  	    { return array; }
 
 	template<class... integers, int dim = 0>
 	void resetShape(integers... ints)  {
@@ -87,7 +87,7 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 	}
 
 
-	template<int d>
+	template<int d> __BCinline__
 	void init() {/*I AM FRIEND I HELP COMPILE DONT DELETE ME */}
 
 	template<int dim, class... integers> __BCinline__

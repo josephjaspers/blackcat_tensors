@@ -8,7 +8,6 @@
 #ifndef OUTPUT_CU
 #define OUTPUT_CU
 
-#include "Defaults.h"
 #include "Layer.h"
 namespace BC {
 

@@ -14,9 +14,6 @@ namespace BC {
 template<class T> struct rm_const { using type = T; };
 template<class T> struct rm_const<const T&> { using type = T&; };
 
-
-
-
 	struct add {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
 			return l + r;

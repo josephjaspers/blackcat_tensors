@@ -178,13 +178,25 @@ output2.print();
 mat output3(5,5);
 
 
-std::cout << (output2).max_pooling<3>().size() << std::endl;
-output3 = (output2).max_pooling<3>();
+output3 =output2.max_pooling<3>();
+
 output3.print();
-auto v = output3.reshape(5,5,1);
-v.print();
-output3 += v;
-output3.print();
+
+
+
+auto f = [](auto list, auto lamda) {
+	decltype(lamda(list[0])) new_list(0);
+	for (auto var : list) {
+		new_list.push_back(lamda(var));
+	}
+};
+
+//output3 = (output2).max_pooling<3>();
+//output3.print();
+//auto v = output3.reshape(5,5,1);
+//v.print();
+//output3 += v;
+//output3.print();
 
 
 //v.print();

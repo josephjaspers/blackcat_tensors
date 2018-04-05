@@ -29,6 +29,7 @@ struct Tensor_Reshape : Tensor_Core_Base<Tensor_Reshape<PARENT, NEW_DIM>, NEW_DI
 
 	template<int dim> void init() {/*DONT DELETE I HELP COMPILE*/ }
 
+
 	template<int dim, class... integers>
 	void init(int front, integers... ints) {
 		is[dim] = front;

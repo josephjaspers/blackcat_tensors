@@ -97,13 +97,13 @@ struct  lamda_array{
 	}
 };
 
-template<class T>
+template<class T> __BCinline__
 auto l_array(T data) {
 	return lamda_array<T>(data);
 }
 
 
-template<class T, class... vals>
+template<class T, class... vals> __BCinline__
 auto array(T front, vals... values) {
 	return stack_array<T, sizeof...(values) + 1>(front, values...);
 }

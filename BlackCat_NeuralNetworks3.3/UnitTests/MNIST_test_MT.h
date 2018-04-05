@@ -85,11 +85,12 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 int percept_MNIST() {
 
 	const int TRAINING_EXAMPLES =  2000;
-	const int TRAINING_ITERATIONS = 10;
-	const int BATCH_SIZE = 100;
+	const int TRAINING_ITERATIONS = 1;
+	const int BATCH_SIZE = 10;
 	//Create the neural network
-//	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
-	NeuralNetwork<FeedForward> network(784, 10);
+	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
+//	NeuralNetwork<FeedForward> network(784, 10);
+
 
 	data inputs;
 	data outputs;
@@ -114,14 +115,12 @@ int percept_MNIST() {
 
 	std::cout << " training..." << std::endl;
 	for (int i = 0; i < TRAINING_ITERATIONS; ++i) {
+		std::cout << " iter = " << i << std::endl;
 		for (int j = 0; j < inputs.size(); ++j) {
 			int numb_instances = j + BATCH_SIZE < inputs.size() ? j + BATCH_SIZE : inputs.size();
 #pragma omp parallel for
 			for (int k = j; k < numb_instances; ++k) {
-//				network.train(inputs[k], outputs[k]);
-//				network.forwardPropagation(inputs[k]);
-//				network.backPropagation(outputs[k]);
-
+				network.train(inputs[k], outputs[k]);
 			}
 #pragma omp barrier
 			j += BATCH_SIZE;
@@ -129,6 +128,7 @@ int percept_MNIST() {
 			network.clearBPStorage();
 		}
 	}
+
 
 	t = omp_get_wtime() - t;
 	printf("It took me %f clicks (%f seconds).\n", t, ((float) t));

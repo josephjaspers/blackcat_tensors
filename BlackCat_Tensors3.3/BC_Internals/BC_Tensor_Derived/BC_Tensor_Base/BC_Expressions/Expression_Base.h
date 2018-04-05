@@ -11,35 +11,33 @@
 
 #include "BlackCat_Internal_Definitions.h"
 #include "Expression_Utility_Structs.h"
-//#include "../Determiners.h"
 #include <iostream>
 
 namespace BC {
 
 template<class T, class derived>
 struct expression {
-	using type = derived;
-	using scalar_type = T;
 private:
 
 	template<class ret = int>
 	static ret shadowFailure(std::string method) {
 		std::cout << "SHADOW METHOD FAILURE OF REQUIRED METHOD - ENLIGHTENED METHOD: " << method << " -- OVERRIDE THIS METHOD" << std::endl;
 		throw std::invalid_argument("MANDATORY METHOD - NOT SHADOWED POTENTIAL INCORRECT CAST BUG");
+		return ret();
 	}
 
 	const derived& base() const { return static_cast<const derived&>(*this); }
 		  derived& base() 		{ return static_cast<	   derived&>(*this); }
 
+
 public:
+	//  un_comment this once we remove the shared_pointer from dotproduct
+	//	expression() { static_assert(std::is_trivially_copyable<derived>::value, "DERIVED VES OF EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
 
-	__BCinline__ auto operator [] (int index) 	  	{ return shadowFailure<int>("operator [] (int index)"); };
-	__BCinline__ auto operator [] (int index) const { return shadowFailure<int>("operator [] (int index) const"); };
 
-	__BCinline__ static constexpr int DIMS() { return derived::DIMS(); }
+	__BCinline__ static constexpr int DIMS() { return derived::DIMS();    }
 	__BCinline__ static constexpr int LAST() { return derived::DIMS() -1; }
 
-	//	expression() { static_assert(std::is_trivially_copyable<derived>::value, "DERIVED VES OF EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
 	__BCinline__ const auto IS() const { return base().innerShape(); }
 	__BCinline__ const auto OS() const { return base().outerShape(); }
 
@@ -72,6 +70,9 @@ public:
 	}
 
 
+	//---------------------------------------------------METHODS THAT NEED TO BE SHADOWED------------------------------------------------------------//
+	__BCinline__ auto operator [] (int index) 	  	{ return shadowFailure<int>("operator [] (int index)"); };
+	__BCinline__ auto operator [] (int index) const { return shadowFailure<int>("operator [] (int index) const"); };
 	__BCinline__ int slice(int i) const { return shadowFailure<>("const Tensor_Slice(int) const => NOT ENABLED FOR ALL EXPRESSIONS"); }
 	__BCinline__ int slice(int i) 	    {  return shadowFailure<>("Tensor_Slice(int)  =>  NOT ENABLED FOR ALL EXPRESSIONS"); }
 	__BCinline__ int row(int i) const 	{ return shadowFailure<>("auto row(int i) const "); }
