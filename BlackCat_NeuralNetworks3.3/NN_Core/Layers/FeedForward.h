@@ -79,7 +79,7 @@ public:
 		auto dy = this->next().train(g(w * x + b), y);
 
 		locker.lock();
-		w_gradientStorage -= w_gradientStorage;
+		w_gradientStorage -= dy * x.t();
 		b_gradientStorage -= dy;
 		locker.unlock();
 

@@ -5,7 +5,6 @@
 #include "Expression_Base.h"
 #include "Expression_Binary_Dotproduct_impl.h"
 #include "BlackCat_Internal_Definitions.h"
-#include <memory>
 
 namespace BC {
 
@@ -20,7 +19,6 @@ template<class T, class lv, class rv, class Mathlib>
 struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
 
 	using scalar_type = T;
-	using lifetime_reaper = std::shared_ptr<scalar_type>;
 
 	__BCinline__ static constexpr int DIMS() { return rv::DIMS(); }
 	static constexpr bool transA = det_eval<lv>::transposed;
@@ -33,12 +31,10 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	lv left;
 	rv right;
 
-	lifetime_reaper array;
 	scalar_type* array_ptr;
 
 	 binary_expression_dotproduct(lv left, rv right) : left(left), right(right) {
 		Mathlib::initialize(array_ptr, this->size());
-		array = lifetime_reaper(array_ptr, deleter());
 		eval();
 	}
 
@@ -51,6 +47,10 @@ struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct
 	__BCinline__ int M() const { return left.rows(); }
 	__BCinline__ int N() const { return right.cols(); }
 	__BCinline__ int K() const { return left.cols(); }
+
+	void destroy() {
+		Mathlib::destroy(array_ptr);
+	}
 
 public:
 

@@ -31,8 +31,8 @@ private:
 
 
 public:
-	//  un_comment this once we remove the shared_pointer from dotproduct
-	//	expression() { static_assert(std::is_trivially_copyable<derived>::value, "DERIVED VES OF EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
+	expression() { static_assert(std::is_trivially_copyable<derived>::value,
+			"EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
 
 
 	__BCinline__ static constexpr int DIMS() { return derived::DIMS();    }
@@ -70,6 +70,8 @@ public:
 	}
 
 
+	//---------------------------------------------------METHODS THAT MAY NEED TO BE SHADOWED------------------------------------------------------------//
+	void destroy() {}
 	//---------------------------------------------------METHODS THAT NEED TO BE SHADOWED------------------------------------------------------------//
 	__BCinline__ auto operator [] (int index) 	  	{ return shadowFailure<int>("operator [] (int index)"); };
 	__BCinline__ auto operator [] (int index) const { return shadowFailure<int>("operator [] (int index) const"); };

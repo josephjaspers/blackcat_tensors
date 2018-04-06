@@ -71,11 +71,11 @@ public:
 			}
 			return;
 		}
-#pragma omp parallel for
+//#pragma omp parallel for
 		for (int i = 0; i < sz; ++i) {
 			t[i] = j[i];
 		}
-#pragma omp barrier
+//#pragma omp barrier
 	}
 	template<typename T, typename J>
 	static void randomize(T& t, J lower_bound, J upper_bound, int sz) {
@@ -85,11 +85,11 @@ public:
 			}
 			return;
 		}
-#pragma omp parallel for
+//#pragma omp parallel for
 		for (int i = 0; i < sz; ++i) {
 			t[i] = ((double) (rand() / ((double) RAND_MAX + 1)) * (upper_bound - lower_bound)) + lower_bound;
 		}
-#pragma omp barrier
+//#pragma omp barrier
 	}
 
 
@@ -132,14 +132,14 @@ public:
 		  const float alpha  =  scalarA ? *scalarA : 1;
 
 
-#pragma omp parallel sections
+//#pragma omp parallel sections
 	{
-#pragma omp section
+//#pragma omp section
 
 
 		cblas_sgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 	}
-#pragma omp barrier
+//#pragma omp barrier
 
 	}
 	static void MatrixMul(bool transA, bool transB, const double* A, const double* B, double* C, int m, int n, int k,

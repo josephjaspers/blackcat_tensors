@@ -38,6 +38,9 @@ public:
 
 	template<class... params>
 	explicit TensorInitializer(const  params&... p) : black_cat_array(p...) {}
+	~TensorInitializer() {
+		black_cat_array.destroy();
+	}
 };
 //-------------------------------------SPECIALIZATION FOR TENSORS THAT CONTROL / DELETE THEIR ARRAY-------------------------------------//
 template<template<class, class> class _tensor, class t, class ml>

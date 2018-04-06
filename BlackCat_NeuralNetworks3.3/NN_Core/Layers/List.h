@@ -8,6 +8,8 @@
 #ifndef LIST_H_
 #define LIST_H_
 
+namespace BC {
+
 template<class... params>
 struct data_list {
 	int  data() {
@@ -48,9 +50,12 @@ struct data_list<first, params...> : data_list<params...> {
 	}
 };
 
+template<class... params>
+auto list(const params&... p) {
+	return data_list<params...>(p...);
+}
 
-
-
+}
 
 
 #endif /* LIST_H_ */
