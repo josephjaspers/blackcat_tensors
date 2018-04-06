@@ -121,7 +121,9 @@
 									<listOptionValue builtIn="false" value="/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions"/>
 								</option>
 								<option id="nvcc.compiler.cpp11option.579489477" name="Enable C++11 support (-std=c++11)" superClass="nvcc.compiler.cpp11option" value="false" valueType="boolean"/>
-								<option id="nvcc.compiler.compileroptions.1030494321" name="Preprocessor options (-Xcompiler)" superClass="nvcc.compiler.compileroptions" valueType="stringList"/>
+								<option id="nvcc.compiler.compileroptions.1030494321" name="Preprocessor options (-Xcompiler)" superClass="nvcc.compiler.compileroptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-fopenmp"/>
+								</option>
 								<option id="nvcc.compiler.include.files.858119493" name="Include files (-include)" superClass="nvcc.compiler.include.files" valueType="includeFiles">
 									<listOptionValue builtIn="false" value="/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h"/>
 								</option>

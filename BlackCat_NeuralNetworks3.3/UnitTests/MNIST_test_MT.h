@@ -71,6 +71,7 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 		int out = std::stoi(output);
 
 		tensor input(784);
+
 		input.read(read_data, false);
 		output_data.push_back(expandOutput(out, 10));
 		normalize(input, 255, 0);
@@ -85,7 +86,7 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 int percept_MNIST() {
 
 	const int TRAINING_EXAMPLES =  2000;
-	const int TRAINING_ITERATIONS = 1;
+	const int TRAINING_ITERATIONS = 10;
 	const int BATCH_SIZE = 10;
 	//Create the neural network
 	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);

@@ -1,44 +1,44 @@
-///*
-// * Expression_Binary_Dotproduct_Pure.cu
-// *
-// *  Created on: Mar 6, 2018
-// *      Author: joseph
-// */
-//
-//#ifndef EXPRESSION_BINARY_DOTPRODUCT_PURE_CU_
-//#define EXPRESSION_BINARY_DOTPRODUCT_PURE_CU_
-//
-//namespace BC {
-//
-//template<class T, class lv, class rv>
-//struct binary_expression_dotproduct_pure {
-//
-//	lv left;
-//	rv right;
-//
-//	binary_expression_dotproduct_pure(lv left_, rv right_) : left(left_), right(right_) {}
-//
-//	T operator [] (int i) const {
-//		int l_row = i % left.rows();
-//		int l_base = l_row;
-//
-//		int r_col = (int)(i / left.rows());
-//		int r_base = r_col * right.LD_rows();
-//
-//		T sum = 0;
-//		for (int i = 0; i < left.cols(); ++i) {
-//			sum += left[l_base + i * left.LD_rows()] * right[r_base + i];
-//		}
-//		return sum;
-//	}
-//};
-//
-//
-//}
-//
-//
-//
-//#endif /* EXPRESSION_BINARY_DOTPRODUCT_PURE_CU_ */
+
+ /* Expression_Binary_Dotproduct_Pure.cu
+ *
+ *  Created on: Mar 6, 2018
+ */      Author: joseph
+
+
+#ifndef EXPRESSION_BINARY_DOTPRODUCT_PURE_CU_
+#define EXPRESSION_BINARY_DOTPRODUCT_PURE_CU_
+
+namespace BC {
+
+template<class T, class lv, class rv>
+struct binary_expression_dotproduct_pure {
+
+	lv left;
+	rv right;
+
+	binary_expression_dotproduct_pure(lv left_, rv right_) : left(left_), right(right_) {}
+
+	T operator [] (int i) const {
+		int l_row = i % left.rows();
+		int l_base = l_row;
+
+		int r_col = (int)(i / left.rows());
+		int r_base = r_col * right.LD_rows();
+
+		T sum = 0;
+		for (int i = 0; i < left.cols(); ++i) {
+			sum += left[l_base + i * left.LD_rows()] * right[r_base + i];
+		}
+		return sum;
+	}
+};
+
+
+}
+
+
+
+#endif /* EXPRESSION_BINARY_DOTPRODUCT_PURE_CU_ */
 
 
 /*
@@ -49,40 +49,40 @@
  */
 
 
-//
-//template<class T, class lv, class rv, class ml>
-//struct binary_expression_dotproduct {
-//
-//	lv left;
-//	rv right;
-//
-//	binary_expression_dotproduct(lv left_, rv right_) : left(left_), right(right_) {}
-//
-//	__BCinline__ T operator [] (int i) const {
-//		int l_row = i % left.rows();
-//		int l_base = l_row;
-//
-//		int r_col = (int)(i / left.rows());
-//		int r_base = r_col * right.LD_rows();
-//
-//		T sum = 0;
-//		for (int i = 0; i < left.cols(); ++i) {
-//			sum += left[l_base + i * left.LD_rows()] * right[r_base + i];
-//		}
-//		return sum;
-//	}
-//		__BCinline__ int size() const { return left.rows() * right.cols();}
-//		__BCinline__ int rows() const { return left.rows();}
-//		__BCinline__ int cols() const { return right.cols();}
-//		__BCinline__ int dims() const { return right.dims(); }
-//		__BCinline__ int LD_rows() const { return left.rows(); }
-//		__BCinline__ int LD_cols() const { return right.cols(); }
-//		__BCinline__ int dimension(int i)		const { return i== 0 ? left.rows() : i == 1 ? right.cols() : 1; }
-//		void printDimensions() const {}
-//		void printLDDimensions() const {}
-////		__BCinline__ const auto innerShape() 	const { return is; }
-////		__BCinline__ const auto outerShape() 	const { return os; }
-//};
+
+template<class T, class lv, class rv, class ml>
+struct binary_expression_dotproduct {
+
+	lv left;
+	rv right;
+
+	binary_expression_dotproduct(lv left_, rv right_) : left(left_), right(right_) {}
+
+	__BCinline__ T operator [] (int i) const {
+		int l_row = i % left.rows();
+		int l_base = l_row;
+
+		int r_col = (int)(i / left.rows());
+		int r_base = r_col * right.LD_rows();
+
+		T sum = 0;
+		for (int i = 0; i < left.cols(); ++i) {
+			sum += left[l_base + i * left.LD_rows()] * right[r_base + i];
+		}
+		return sum;
+	}
+		__BCinline__ int size() const { return left.rows() * right.cols();}
+		__BCinline__ int rows() const { return left.rows();}
+		__BCinline__ int cols() const { return right.cols();}
+		__BCinline__ int dims() const { return right.dims(); }
+		__BCinline__ int LD_rows() const { return left.rows(); }
+		__BCinline__ int LD_cols() const { return right.cols(); }
+		__BCinline__ int dimension(int i)		const { return i== 0 ? left.rows() : i == 1 ? right.cols() : 1; }
+		void printDimensions() const {}
+		void printLDDimensions() const {}
+		__BCinline__ const auto innerShape() 	const { return is; }
+		__BCinline__ const auto outerShape() 	const { return os; }
+};
 
 //				Some printouts for debugging
 //
@@ -116,6 +116,6 @@
 //				if (scal_A && scal_B)
 //				std::cout << "scalars = " << *scal_A <<  " " << *scal_B << std::endl;
 //				std::cout << " --------------------------------------------------------------------------" << std::endl;
-
-
-
+//
+//
+//				{
