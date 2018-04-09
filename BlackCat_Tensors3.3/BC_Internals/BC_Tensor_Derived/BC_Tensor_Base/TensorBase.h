@@ -9,9 +9,6 @@
 #ifndef TENSOR_BASE_H_
 #define TENSOR_BASE_H_
 
-
-#include "Determiners.h"
-#include "MetaTemplateFunctions.h"
 #include "Tensor_Operations.h"
 #include "Tensor_Utility.h"
 #include "Tensor_Initializer.h"

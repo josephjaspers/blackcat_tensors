@@ -14,7 +14,7 @@
 #include "Tensor_Core_Scalar.h"
 #include "Tensor_Core_RowVector.h"
 #include "Tensor_Core_Reshape.h"
-#include "Tensor_Core_Interface.h"
+#include "BlackCat_Internal_TypeCore.h"
 
 namespace BC {
 

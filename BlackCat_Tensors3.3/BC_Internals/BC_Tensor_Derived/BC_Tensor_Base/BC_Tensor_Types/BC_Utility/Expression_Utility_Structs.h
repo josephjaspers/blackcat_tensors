@@ -8,7 +8,7 @@
 #ifndef EXPRESSION_UTILITY_STRUCTS_H_
 #define EXPRESSION_UTILITY_STRUCTS_H_
 
-#include "BlackCat_Internal_Definitions.h"
+//#include "BlackCat_Internal_Definitions.h"
 #include <iostream>
 
 //returns the class with the higher_order rank
@@ -97,7 +97,7 @@ struct  lamda_array{
 	}
 };
 
-template<class T> __BCinline__
+template<class T> __BChd__
 auto l_array(T data) {
 	return lamda_array<T>(data);
 }

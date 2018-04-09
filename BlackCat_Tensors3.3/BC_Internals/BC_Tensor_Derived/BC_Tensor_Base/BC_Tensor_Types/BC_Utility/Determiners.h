@@ -38,18 +38,16 @@ template<template<class> class T, class U> struct isPrimaryCore<T<U>>
 
 
 
-template<class> struct ranker;
-template<int> struct base;
-template<int x> struct base { template<class t, class m> using type = DISABLED<t,m>;  template<class t, class m> using slice = DISABLED<t, m>; };
-template<> struct base<0> { template<class t, class m> using type = Scalar<t,m>;  template<class t, class m> using slice = DISABLED<t, m>; };
-template<> struct base<1> { template<class t, class m> using type = Vector<t, m>; template<class t,class m> using slice = Scalar<t, m>; };
-template<> struct base<2> { template<class t, class m> using type = Matrix<t, m>; template<class t,class m> using slice = Vector<t, m>; };
-template<> struct base<3> { template<class t, class m> using type = Cube<t, m>;   template<class t,class m> using slice = Matrix<t, m>; };
-template<> struct base<4> { template<class t, class m> using type = Tensor4<t, m>;   template<class t,class m> using slice = Cube<t, m>; };
-template<> struct base<5> { template<class t, class m> using type = Tensor5<t, m>;   template<class t,class m> using slice = Tensor4<t, m>; };
+template<int> struct base { template<class t, class m> using type = DISABLED<t,m>;	template<class t, class m> using slice = DISABLED<t, m>; };
+template<> struct base<0> { template<class t, class m> using type = Scalar<t,m>;  	template<class t, class m> using slice = DISABLED<t, m>; };
+template<> struct base<1> { template<class t, class m> using type = Vector<t, m>; 	template<class t,class m> using slice = Scalar<t, m>; };
+template<> struct base<2> { template<class t, class m> using type = Matrix<t, m>; 	template<class t,class m> using slice = Vector<t, m>; };
+template<> struct base<3> { template<class t, class m> using type = Cube<t, m>;   	template<class t,class m> using slice = Matrix<t, m>; };
+template<> struct base<4> { template<class t, class m> using type = Tensor4<t, m>;  template<class t,class m> using slice = Cube<t, m>; };
+template<> struct base<5> { template<class t, class m> using type = Tensor5<t, m>;  template<class t,class m> using slice = Tensor4<t, m>; };
 
 template<int x, class a, class b> using rank2class = typename base<x>::template type<a,b>;
-
+template<class> struct ranker;
 template<class a, class b> struct ranker<Scalar<a,b>> { static constexpr int value = 0; };
 template<class a, class b> struct ranker<Vector<a,b>> { static constexpr int value = 1; };
 template<class a, class b> struct ranker<Matrix<a,b>> { static constexpr int value = 2; };

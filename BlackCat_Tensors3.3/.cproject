@@ -39,7 +39,7 @@
 									<listOptionValue builtIn="false" value="/usr/local/include/atlas-base"/>
 									<listOptionValue builtIn="false" value="/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions"/>
 								</option>
-								<option id="nvcc.compiler.compileroptions.285166584" name="Preprocessor options (-Xcompiler)" superClass="nvcc.compiler.compileroptions" valueType="stringList"/>
+								<option id="nvcc.compiler.compileroptions.285166584" name="Preprocessor options (-Xcompiler)" superClass="nvcc.compiler.compileroptions"/>
 								<inputType id="nvcc.compiler.input.cu.239005022" superClass="nvcc.compiler.input.cu"/>
 								<inputType id="nvcc.compiler.input.cpp.2118431259" superClass="nvcc.compiler.input.cpp"/>
 								<inputType id="nvcc.compiler.input.c.66856890" superClass="nvcc.compiler.input.c"/>
@@ -75,8 +75,8 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Static_Utility|BC_Internals|BC_Utility|Benchmarks|Header_v" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry excluding="BC_Core/Static_Utility|BC_Expressions/Header_v" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="BC_Internals"/>
+						<entry excluding="Static_Utility|BC_Internals|BC_Utility|Utility|BC_Tensor_Types|Benchmarks|Header_v" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="BC_Tensor_Derived/BC_Tensor_Base/BC_Tensor_Types/Utility|BC_Core/Static_Utility|BC_Expressions/Header_v" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="BC_Internals"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -164,8 +164,8 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Static_Utility|UnitTests/Benchmarks|BC_Internals|BC_Utility|Benchmarks|Header_v" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry excluding="BC_Core/Static_Utility|BC_Expressions/Header_v" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="BC_Internals"/>
+						<entry excluding="Utility|Static_Utility|UnitTests/Benchmarks|BC_Internals|BC_Utility|BC_Tensor_Types|Benchmarks|Header_v" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="BC_Tensor_Derived/BC_Tensor_Base/BC_Tensor_Types/Utility|BC_Core/Static_Utility|BC_Expressions/Header_v" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="BC_Internals"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="UnitTests/Benchmarks"/>
 					</sourceEntries>
 				</configuration>

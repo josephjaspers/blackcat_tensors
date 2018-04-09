@@ -8,14 +8,11 @@
 #ifndef TENSOR_INITIALIZER_H_
 #define TENSOR_INITIALIZER_H_
 
-#include "Determiners.h"
-#include "MetaTemplateFunctions.h"
-
-#include "Implementation_Core/Tensor_Core.h"
-#include "Implementation_Core/Tensor_Core_Scalar.h"
-#include "Implementation_Core/Tensor_Core_Slice.h"
-#include "Implementation_Core/Tensor_Core_Reshape.h"
-#include "Implementation_Core/Tensor_Core_RowVector.h"
+#include "BC_Tensor_Types/Tensor_Core.h"
+#include "BC_Tensor_Types/Tensor_Core_Scalar.h"
+#include "BC_Tensor_Types/Tensor_Core_Slice.h"
+#include "BC_Tensor_Types/Tensor_Core_Reshape.h"
+#include "BC_Tensor_Types/Tensor_Core_RowVector.h"
 
 namespace BC {
 

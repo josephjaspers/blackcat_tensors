@@ -8,16 +8,13 @@
 #ifndef TENSOR_HEAD_H_
 #define TENSOR_HEAD_H_
 
-#include "MetaTemplateFunctions.h"
-#include "Determiners.h"
-
-#include "BC_Expressions/Expression_Binary_Pointwise.h"
-#include "BC_Expressions/Expression_Unary_Pointwise.h"
-#include "BC_Expressions/Expression_Binary_Dotproduct.h"
-#include "BC_Expressions/Expression_Unary_MatrixTransposition.h"
-#include "BC_Expressions/Expression_Unary_MaxPooling.h"
-#include "BC_Expressions/Expression_Binary_Correlation.h"
-#include "BC_Expressions/Expression_Binary_Correlation_Padded.h"
+#include "BC_Tensor_Types/Expression_Binary_Pointwise.h"
+#include "BC_Tensor_Types/Expression_Unary_Pointwise.h"
+#include "BC_Tensor_Types/Expression_Binary_Dotproduct.h"
+#include "BC_Tensor_Types/Expression_Unary_MatrixTransposition.h"
+#include "BC_Tensor_Types/Expression_Unary_MaxPooling.h"
+#include "BC_Tensor_Types/Expression_Binary_Correlation.h"
+#include "BC_Tensor_Types/Expression_Binary_Correlation_Padded.h"
 
 #include <type_traits>
 namespace BC {

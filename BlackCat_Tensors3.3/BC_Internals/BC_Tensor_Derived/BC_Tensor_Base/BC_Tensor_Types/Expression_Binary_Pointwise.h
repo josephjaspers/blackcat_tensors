@@ -7,13 +7,13 @@
 #ifndef EXPRESSION_BINARY_POINTWISE_SAME_H_
 #define EXPRESSION_BINARY_POINTWISE_SAME_H_
 
-#include "Expression_Base.h"
+#include "BlackCat_Internal_TypeBase.h"
 #include "Expression_Binary_Functors.h"
 #include <type_traits>
 namespace BC {
 
 template<class T, class operation, class lv, class rv>
-struct binary_expression : public expression<T, binary_expression<T, operation, lv, rv>> {
+struct binary_expression : public Expression_Core_Base<T, binary_expression<T, operation, lv, rv>> {
 
 	operation oper;
 
@@ -48,7 +48,7 @@ struct binary_expression : public expression<T, binary_expression<T, operation, 
 
 //class specifically for matrix multiplication
 template<class T, class lv, class rv>
-struct binary_expression_scalar_mul : expression<T, binary_expression_scalar_mul<T, lv, rv>> {
+struct binary_expression_scalar_mul : Expression_Core_Base<T, binary_expression_scalar_mul<T, lv, rv>> {
 
 	mul oper;
 

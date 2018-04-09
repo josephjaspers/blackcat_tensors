@@ -8,7 +8,7 @@
 #ifndef TENSOR_Scalar_CU_
 #define TENSOR_Scalar_CU_
 
-#include "Tensor_Core_Interface.h"
+#include "BlackCat_Internal_TypeCore.h"
 
 namespace BC {
 

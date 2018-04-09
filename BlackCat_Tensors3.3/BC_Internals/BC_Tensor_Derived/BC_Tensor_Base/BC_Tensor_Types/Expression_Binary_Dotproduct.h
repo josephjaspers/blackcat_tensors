@@ -2,7 +2,7 @@
 #ifndef EXPRESSION_BINARY_DOTPRODUCT_CU_
 #define EXPRESSION_BINARY_DOTPRODUCT_CU_
 
-#include "Expression_Base.h"
+#include "BlackCat_Internal_TypeBase.h"
 #include "Expression_Binary_Dotproduct_impl.h"
 #include "BlackCat_Internal_Definitions.h"
 
@@ -16,7 +16,7 @@ namespace BC {
 //det_Eval
 
 template<class T, class lv, class rv, class Mathlib>
-struct binary_expression_dotproduct : expression<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
+struct binary_expression_dotproduct : Expression_Core_Base<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
 
 	using scalar_type = T;
 

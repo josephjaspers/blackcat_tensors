@@ -8,10 +8,10 @@
 #ifndef EXPRESSIONS_BINARY_CORRELATION_PADDED_H_
 #define EXPRESSIONS_BINARY_CORRELATION_PADDED_H_
 
-#include "Expression_Base.h"
+#include "BlackCat_Internal_TypeBase.h"
 namespace BC {
 template<class T, class lv, class rv, int corr_dimension = 2>
-struct binary_expression_correlation_padded : expression<T, binary_expression_correlation_padded<T, lv, rv, corr_dimension>> {
+struct binary_expression_correlation_padded : Expression_Core_Base<T, binary_expression_correlation_padded<T, lv, rv, corr_dimension>> {
 
 	static_assert(lv::DIMS() == rv::DIMS(), "CORRELATION CURRENTLY ONLY SUPPORTED FOR SAME ORDER TENSORS");
 	__BCinline__  static constexpr int DIMS() { return corr_dimension; }

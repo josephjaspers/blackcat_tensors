@@ -6,12 +6,12 @@
  */
 #ifndef EXPRESSION_UNARY_MATRIXTRANSPOSITION_H_
 #define EXPRESSION_UNARY_MATRIXTRANSPOSITION_H_
-#include "Expression_Base.h"
+#include "BlackCat_Internal_TypeBase.h"
 #include <vector>
 
 namespace BC {
 template<class T, class functor_type>
-struct unary_expression_transpose : expression<T, unary_expression_transpose<T, functor_type>>
+struct unary_expression_transpose : Expression_Core_Base<T, unary_expression_transpose<T, functor_type>>
 {
 	functor_type array;
 

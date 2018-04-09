@@ -7,10 +7,10 @@
 #ifndef EXPRESSION_UNARY_POINTWISE_CU_
 #define EXPRESSION_UNARY_POINTWISE_CU_
 
-#include "Expression_Base.h"
+#include "BlackCat_Internal_TypeBase.h"
 namespace BC {
 template<class T, class operation, class value>
-class unary_expression : public expression<T, unary_expression<T, operation, value>> {
+class unary_expression : public Expression_Core_Base<T, unary_expression<T, operation, value>> {
 public:
 
 	operation oper;

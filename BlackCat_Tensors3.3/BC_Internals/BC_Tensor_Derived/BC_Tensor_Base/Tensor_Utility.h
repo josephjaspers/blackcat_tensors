@@ -14,9 +14,6 @@
 #include <string>
 #include <sstream>
 
-#include "Determiners.h"
-#include "MetaTemplateFunctions.h"
-
 namespace BC {
 
 template<class deriv>

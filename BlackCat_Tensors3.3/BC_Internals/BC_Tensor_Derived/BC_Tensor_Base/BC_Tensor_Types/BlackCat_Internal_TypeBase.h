@@ -10,13 +10,12 @@
 #define EXPRESSION_BASE_H_
 
 #include "BlackCat_Internal_Definitions.h"
-#include "Expression_Utility_Structs.h"
 #include <iostream>
 
 namespace BC {
 
 template<class T, class derived>
-struct expression {
+struct Expression_Core_Base {
 private:
 
 	template<class ret = int>
@@ -35,13 +34,11 @@ public:
 //	expression() { static_assert(std::is_trivially_copyable<derived>::value,
 //			"EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
 
-
 	__BCinline__ static constexpr int DIMS() { return derived::DIMS();    }
 	__BCinline__ static constexpr int LAST() { return derived::DIMS() -1; }
 
 	__BCinline__ const auto IS() const { return base().innerShape(); }
 	__BCinline__ const auto OS() const { return base().outerShape(); }
-
 
 	__BCinline__ int dims() const { return DIMS(); }
 	__BCinline__ int size() const { return DIMS() > 0 ? OS()[LAST()] : 1;    }
@@ -59,13 +56,13 @@ public:
 
 	void printDimensions() const {
 		for (int i = 0; i < DIMS(); ++i) {
-			std::cout << "[" << innerShape()[i] << "]";
+			std::cout << "[" << IS()[i] << "]";
 		}
 		std::cout << std::endl;
 	}
 	void printLDDimensions() const {
 		for (int i = 0; i < DIMS(); ++i) {
-			std::cout << "[" << outerShape()[i] << "]";
+			std::cout << "[" << OS()[i] << "]";
 		}
 		std::cout << std::endl;
 	}
