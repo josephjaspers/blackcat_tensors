@@ -40,8 +40,6 @@ public:
 	using math_parent::operator=;
 
 	template<class... params> explicit TensorBase(const params&... p) : initializer(p...) {}
-	template<class d> TensorBase(const TensorBase<d>&  tensor) = delete;
-	template<class d> TensorBase( 	   TensorBase<d>&& tensor) = delete;
 
 	TensorBase(const TensorBase&  tensor) : initializer(tensor) {}
 	TensorBase( 	 TensorBase&& tensor) : initializer(tensor) {}
@@ -99,7 +97,6 @@ private:
 
 	const auto row_(int i) const { return this->black_cat_array.row(i); }
 		  auto row_(int i)	     { return this->black_cat_array.row(i); }
-
 public:
 		  auto operator [] (int i) 		 { return getSlice(i); }
 	const auto operator [] (int i) const { return getSlice(i); }
@@ -138,16 +135,24 @@ public:
 	const auto operator() () const { return *this; }
 		  auto operator() () 	   { return *this; }
 
-	template<class... integers> const auto operator() (int i, integers... ints) const { return (*this)[i](ints...); }
-	template<class... integers> 	  auto operator() (int i, integers... ints) 	  { return (*this)[i](ints...); }
+	template<class... integers> const auto operator() (int i, integers... ints) const  {
+		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
+		return (*this)[i](ints...);
+	}
 
+	template<class... integers> 	  auto operator() (int i, integers... ints) {
+		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
+		return (*this)[i](ints...);
+	}
 
 	template<class... integers>
 	void resetShape(integers... ints) {
+		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
 		this->black_cat_array.resetShape(ints...);
 	}
 	template<class... integers>
 	auto reshape(integers... ints) {
+		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
 		using type = typename base<sizeof...(integers)>::template type<Tensor_Reshape<functor_type, sizeof...(integers)>, Mathlib>;
 		return type(this->black_cat_array.reshape(ints...));
 

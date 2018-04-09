@@ -44,8 +44,6 @@ template<template<class, class> class _tensor, class t, class ml>
 class TensorInitializer<_tensor<t, ml>, std::enable_if_t<MTF::isPrimitive<t>::conditional>> {
 
 	using derived = _tensor<t, ml>;
-	static constexpr int DIMS = derived::DIMS();
-
 	using self 			= TensorInitializer<derived, std::enable_if_t<MTF::isPrimitive<t>::conditional>>;
 
 	using functor_type 	= _functor<derived>;
@@ -76,8 +74,15 @@ public:
 	}
 	TensorInitializer(_shape dimensions): black_cat_array(dimensions) {}
 
+
 	template<class T>
 	using derived_alt = typename MTF::shell_of<derived>::template  type<T, Mathlib>;
+
+
+	template<class... integers>
+	TensorInitializer(integers... ints) : black_cat_array(ints...) {
+		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
+	}
 
 	template<class U>
 	TensorInitializer(const derived_alt<U>&  tensor)

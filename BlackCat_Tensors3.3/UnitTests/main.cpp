@@ -26,10 +26,6 @@ auto test() {
 	mat e(3, 2);
 	mat c(2, 2);
 
-	vec A_(4);
-	vec B_(4);
-
-	scal ALPHAS();
 
 	std::cout << " param " << std::endl;
 

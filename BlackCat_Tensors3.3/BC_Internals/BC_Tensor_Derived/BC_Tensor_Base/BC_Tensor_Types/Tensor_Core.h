@@ -72,6 +72,7 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 
 	template<class... integers, int dim = 0>
 	void resetShape(integers... ints)  {
+		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
 		this->init<0>(ints...);
 		Mathlib::destroy(array);
 		Mathlib::initialize(array, this->size());
@@ -92,6 +93,8 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 
 	template<int dim, class... integers> __BCinline__
 	void init(int front, integers... ints) {
+		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
+
 		is[dim] = front;
 		if (dim > 0)
 			os[dim] = front * os[dim - 1];

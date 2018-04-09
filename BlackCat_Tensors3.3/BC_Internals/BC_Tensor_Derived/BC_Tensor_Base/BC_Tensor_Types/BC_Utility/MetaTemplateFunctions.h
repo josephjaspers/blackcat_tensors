@@ -48,9 +48,20 @@ namespace MTF {
 	template<class T>
 	static constexpr bool isPrim = MTF::isPrimitive<T>::conditional;
 
-	template<int...> struct isIntList { static constexpr bool conditional = true; };
-	template<class...> struct isTypeList { static constexpr bool conditional = false; };
+	template<class... T> struct isIntList {
+		static constexpr bool conditional = true;
+	};
+	template<class T, class... Ts> struct isIntList<T,Ts...> {
+		static constexpr bool conditional = false;
+	};
+	template<class... Ts> struct isIntList<int,Ts...> {
+		static constexpr bool conditional = true && isIntList<Ts...>::conditional;
+	};
 
+	template<class... ts>
+	static constexpr bool is_integer_sequence = isIntList<ts...>::conditional;
+
+	template<class...> struct isTypeList { static constexpr bool conditional = false; };
 
 	template<class> struct lst;
 
