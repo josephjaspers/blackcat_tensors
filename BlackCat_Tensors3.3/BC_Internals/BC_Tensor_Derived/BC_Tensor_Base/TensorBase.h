@@ -42,15 +42,15 @@ public:
 
 	using math_parent::operator=;
 
-	template<class... params>
-	explicit TensorBase(const params&... p) : initializer(p...) {}
+	template<class... params> explicit TensorBase(const params&... p) : initializer(p...) {}
+	template<class d> TensorBase(const TensorBase<d>&  tensor) = delete;
+	template<class d> TensorBase( 	   TensorBase<d>&& tensor) = delete;
 
-//	template<class U,  std::enable_if_t<isPrimaryCore<_functor<U>>::conditional>>
-//	TensorBase(const TensorBase<U>& tensor) : initializer(tensor) {
-//
-//	}
+	TensorBase(const TensorBase&  tensor) : initializer(tensor) {}
+	TensorBase( 	 TensorBase&& tensor) : initializer(tensor) {}
+
 	operator const derived& () const { return static_cast<const derived&>(*this); }
-	operator	   derived& () 		 { return static_cast< derived&>(*this); }
+	operator	   derived& () 		 { return static_cast< 		derived&>(*this); }
 
 	derived& operator =(derived&& tensor) {
 		this->assert_same_size(tensor);
@@ -90,8 +90,8 @@ public:
 	const auto outerShape() const 			{ return this->black_cat_array.outerShape(); }
 
 
-	__BCinline__ const functor_type& _data() const { return this->black_cat_array; }
-	__BCinline__ 	   functor_type& _data()		  { return this->black_cat_array; }
+	 const functor_type& _data() const { return this->black_cat_array; }
+	 	   functor_type& _data()		  { return this->black_cat_array; }
 
 private:
 	const auto slice(int i) const { return this->black_cat_array.slice(i); }
@@ -108,7 +108,7 @@ public:
 	const auto operator [] (int i) const { return getSlice(i); }
 
 	const auto getScalar(int i) const { return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar(i)); }
-		  auto getScalar(int i) { return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar(i)); }
+		  auto getScalar(int i) 	  { return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar(i)); }
 
 	const auto getSlice(int i) const {
 		static_assert(derived::DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");

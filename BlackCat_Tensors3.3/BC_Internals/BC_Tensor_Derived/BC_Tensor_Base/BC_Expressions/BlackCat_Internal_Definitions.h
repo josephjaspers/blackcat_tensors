@@ -22,7 +22,7 @@ static constexpr int CUDA_BASE_THREADS = 256;
 #define __BC_gcpu__
 #endif
 
-#define __BCinline__ __BC_gcpu__ __attribute__((always_inline))
+#define __BCinline__ __BC_gcpu__ __attribute__((always_inline)) __attribute__((hot))
 
 }
 #endif /* BLACKCAT_COMPILERDEFINITIONS_H_ */

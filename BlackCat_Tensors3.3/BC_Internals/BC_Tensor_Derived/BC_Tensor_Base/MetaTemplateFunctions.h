@@ -14,6 +14,8 @@ namespace MTF {
 	template<class T> struct isTrue 				 { static constexpr bool conditional = true; };
 	template<> 		  struct isTrue<std::false_type> { static constexpr bool conditional = false; };
 
+	template<class T> auto& cc(const T& var) { return const_cast<T&>(var); }
+
 		//EQUIVALENT OF std::conditional
 		template<bool iff, class THEN, class ELSE> struct IF_ELSE { using type = THEN; };
 		template<class THEN, class ELSE> 		   struct IF_ELSE<false, THEN, ELSE> { using type = ELSE;};

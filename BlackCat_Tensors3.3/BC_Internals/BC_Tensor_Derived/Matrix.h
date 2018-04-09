@@ -7,28 +7,26 @@
 
 #ifndef BC_MATRIX_H
 #define BC_MATRIX_H
-
-#include "Vector.h"
 #include "BC_Tensor_Base/TensorBase.h"
 
 namespace BC {
+
 template<class T, class Mathlib>
 class Matrix : public TensorBase<Matrix<T, Mathlib>> {
 
 	using parent_class = TensorBase<Matrix<T, Mathlib>>;
 
 public:
-	using scalar = T;
+	__BCinline__ static constexpr int DIMS() { return 2; }
+
 	using parent_class::operator=;
 	using parent_class::operator[];
 	using parent_class::operator();
 
-	__BCinline__ static constexpr int DIMS() { return 2; }
-
+	explicit Matrix(int rows, int cols = 1) : parent_class(std::vector<int> {rows, cols}) {}
 	Matrix(const Matrix&  v) : parent_class(v) {}
 	Matrix(		 Matrix&& v) : parent_class(v) {}
 	Matrix(const Matrix&& v) : parent_class(v) {}
-	explicit Matrix(int rows, int cols = 1) : parent_class(std::vector<int> {rows, cols}) {}
 
 	template<class U> 		  Matrix(const Matrix<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Matrix(	   Matrix<U, Mathlib>&& t) : parent_class(t) {}

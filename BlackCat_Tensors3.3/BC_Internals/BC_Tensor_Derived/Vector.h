@@ -33,6 +33,7 @@ public:
 
 	template<class deriv>
 	Vector(const TensorBase<deriv>& tensor) : parent_class({tensor.size()}) {
+		std::cout << " constructor me " <<std::endl;
 		Mathlib::copy(this->data(), tensor.data(), this->size());
 	}
 	template<class U> 		  Vector(const Vector<U, Mathlib>&  t) : parent_class(t) {}

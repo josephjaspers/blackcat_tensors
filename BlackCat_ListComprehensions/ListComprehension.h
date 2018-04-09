@@ -11,13 +11,22 @@ struct default_conditional {
 	template<class T>
 	auto operator () (const T& asd) { return true; }
 };
-static constexpr default_conditional dc;
 
-template<class L, class F, class C = default_conditional>
-static auto lc(std::vector<L> list, F lamda, C conditional = default_conditional()) {
+template<class...> struct shell;
+
+template<template<class...> class shell_, class head, class... tail>
+struct shell<shell_<head, tail...>> {
+
+	template<class T>
+	using type = shell<T, tail...>;
+
+};
 
 
-	std::vector<decltype(lamda(list[0]))> new_list(0);
+template<class T, class F, class C = default_conditional>
+static auto lc(std::vector<T>& list, F lamda, C conditional = default_conditional()) {
+
+	std::vector<decltype(lamda(list[0]))> new_list;
 
 		for (std::size_t i = 0; i < list.size(); ++i) {
 			if (conditional(list[i]))

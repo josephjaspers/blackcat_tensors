@@ -98,13 +98,6 @@ public:
 			Mathlib::destroy(B);
 
 	}
-
-	struct deleter {
-		template<class param>
-		void operator ()(param& p) {
-			Mathlib::destroy(p);
-		}
-	};
 };
 
 }

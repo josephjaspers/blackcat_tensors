@@ -7,24 +7,19 @@
 
 #ifndef SCALAR_H_
 #define SCALAR_H_
-#include <type_traits>
 #include "BC_Tensor_Base/TensorBase.h"
 
 namespace BC {
 
 template<class T, class Mathlib>
 class Scalar : public TensorBase<Scalar<T, Mathlib>> {
-
+	struct DISABLE;
 	using parent_class = TensorBase<Scalar<T, Mathlib>>;
-	template<class, class> friend class Vector;
 
 public:
-	struct DISABLE;
 	__BCinline__ static constexpr int DIMS() { return 0; }
+	operator _scalar<T>() const { _scalar<T> value = 0; Mathlib::DeviceToHost(&value, this->data().getIterator(), 1); return value; }
 
-	template<bool var, class a, class b>
-	using ifte = std::conditional_t<var, a, b>;
-	using _shape = std::vector<int>;
 	using parent_class::operator=;
 	using parent_class::operator();
 
@@ -32,10 +27,10 @@ public:
 	Scalar(const Scalar&& t) : parent_class(t) 		{}
 	Scalar(		 Scalar&& t) : parent_class(t) 		{}
 	Scalar(const Scalar&  t) : parent_class(t) 		{}
-	template<class var1, class var2, class... params>
-	explicit Scalar(const var1& v1, const var2& v2, const params&... p) : parent_class(v1, v2, p...) {}
 
-	operator _scalar<T>() const { _scalar<T> value = 0; Mathlib::DeviceToHost(&value, this->data().getIterator(), 1); return value; }
+	template<class U> 		  Scalar(const Scalar<U, Mathlib>&  t) : parent_class(t) {}
+	template<class U> 		  Scalar(	   Scalar<U, Mathlib>&& t) : parent_class(t) {}
+	template<class... params> Scalar(const params&... p) : parent_class( p...) {}
 
 	Scalar& operator =(const Scalar&  t) { return parent_class::operator=(t); }
 	Scalar& operator =(const Scalar&& t) { return parent_class::operator=(t); }
@@ -44,17 +39,14 @@ public:
 	Scalar& operator =(const Scalar<U, Mathlib>& t) { return parent_class::operator=(t); }
 	Scalar& operator =(_scalar<T> scalar) { Mathlib::HostToDevice(this->data().getIterator(), &scalar, 1); return *this; }
 
-	Scalar(_scalar<T>* param): parent_class(param) {}
 
-	//this how to do constexpr if -esque things inside of an initialization list in a constructor
-	struct sendParam 	{ template<class u>  	static auto impl(const u& param) 	{ return param; }};
-	struct sendNull 	{ template<class u>  	static auto impl(const u& param) 	{ return _shape(); }};
-	struct htd 			{ template<class... u>  static void impl(const u&... param) { Mathlib::HostToDevice(param...); }};
-	struct voider 		{ template<class... u>  static void impl(const u&... parma) {}};
-
-	explicit Scalar(const ifte<MTF::isPrimitive<T>::conditional, DISABLE, const T&> value) : parent_class(value) {}
 	Scalar(_scalar<T> value) : parent_class(std::vector<int>{1}) {
 		Mathlib::HostToDevice((_scalar<T>*)this->data(), &value, 1);
+	}
+
+	template<class U>	//Constructor that automatically cast primitive types to the scalar_type, IE if scalar<float> but user supplies a double
+	Scalar(std::conditional_t<MTF::isPrimitive<U>::conditional && MTF::isPrimitive<T>::conditional, U, DISABLE> value) : parent_class(std::vector<int>{1}) {
+		Mathlib::HostToDevice((_scalar<T>*)this->data(), &(T)value, 1);
 	}
 
 
@@ -62,7 +54,5 @@ public:
 
 
 }
-
-
 
 #endif /* SCALAR_H_ */

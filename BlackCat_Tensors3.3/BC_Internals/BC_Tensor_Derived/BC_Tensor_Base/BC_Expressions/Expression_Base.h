@@ -31,8 +31,9 @@ private:
 
 
 public:
-	expression() { static_assert(std::is_trivially_copyable<derived>::value,
-			"EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
+//fails with nvcc 9.1 but succeeds with GCC and G++ 6 and 7
+//	expression() { static_assert(std::is_trivially_copyable<derived>::value,
+//			"EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
 
 
 	__BCinline__ static constexpr int DIMS() { return derived::DIMS();    }

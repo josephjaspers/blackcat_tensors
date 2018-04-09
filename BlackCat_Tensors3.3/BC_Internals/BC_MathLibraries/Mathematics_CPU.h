@@ -131,15 +131,9 @@ public:
 	      const float beta   =  scalarB ? *scalarB : 0;
 		  const float alpha  =  scalarA ? *scalarA : 1;
 
-
-//#pragma omp parallel sections
 	{
-//#pragma omp section
-
-
 		cblas_sgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 	}
-//#pragma omp barrier
 
 	}
 	static void MatrixMul(bool transA, bool transB, const double* A, const double* B, double* C, int m, int n, int k,

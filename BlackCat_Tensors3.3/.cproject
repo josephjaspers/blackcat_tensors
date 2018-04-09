@@ -27,7 +27,7 @@
 									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Debug"/>
 								</outputEntries>
 							</builder>
-							<tool command="nvcc -fopenmp --std=c++17 -expt-relaxed-constexpr -sse2f -w" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX} ${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.VCErrorParser;nvcc.errorParser;org.eclipse.cdt.core.GCCErrorParser" id="nvcc.compiler.base.1648345951" name="NVCC Compiler" superClass="nvcc.compiler.base">
+							<tool command="nvcc  --std=c++17 -expt-relaxed-constexpr -sse2f -w" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX} ${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.VCErrorParser;nvcc.errorParser;org.eclipse.cdt.core.GCCErrorParser" id="nvcc.compiler.base.1648345951" name="NVCC Compiler" superClass="nvcc.compiler.base">
 								<option id="nvcc.compiler.deviceDebug.799277987" name="Generate device debug information (-G)" superClass="nvcc.compiler.deviceDebug"/>
 								<option id="nvcc.compiler.option.level.1086813497" name="Generate host debug information (-g)" superClass="nvcc.compiler.option.level"/>
 								<option defaultValue="nvcc.compiler.optimization.level.most" id="nvcc.compiler.optimization.level.1338148511" name="Optimization Level" superClass="nvcc.compiler.optimization.level" valueType="enumerated"/>
@@ -39,14 +39,12 @@
 									<listOptionValue builtIn="false" value="/usr/local/include/atlas-base"/>
 									<listOptionValue builtIn="false" value="/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.2/BlackCat_Tensors_Functions/Functions"/>
 								</option>
-								<option id="nvcc.compiler.compileroptions.285166584" name="Preprocessor options (-Xcompiler)" superClass="nvcc.compiler.compileroptions" valueType="stringList">
-									<listOptionValue builtIn="false" value="-fopenmp"/>
-								</option>
+								<option id="nvcc.compiler.compileroptions.285166584" name="Preprocessor options (-Xcompiler)" superClass="nvcc.compiler.compileroptions" valueType="stringList"/>
 								<inputType id="nvcc.compiler.input.cu.239005022" superClass="nvcc.compiler.input.cu"/>
 								<inputType id="nvcc.compiler.input.cpp.2118431259" superClass="nvcc.compiler.input.cpp"/>
 								<inputType id="nvcc.compiler.input.c.66856890" superClass="nvcc.compiler.input.c"/>
 							</tool>
-							<tool command="nvcc -fopenmp -Xcompiler -fopenmp " commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX} ${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser;nvcc.errorParser" id="nvcc.linker.base.1529584491" name="NVCC Linker" superClass="nvcc.linker.base">
+							<tool command="nvcc  -Xcompiler -fopenmp " commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX} ${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser;nvcc.errorParser" id="nvcc.linker.base.1529584491" name="NVCC Linker" superClass="nvcc.linker.base">
 								<option id="nvcc.linker.option.libs.1068754870" name="Libraries (-l)" superClass="nvcc.linker.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="cblas"/>
 									<listOptionValue builtIn="false" value="f77blas"/>

@@ -27,7 +27,7 @@
 									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Release"/>
 								</outputEntries>
 							</builder>
-							<tool command="nvcc -fopenmp -std=c++17 " commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX} ${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.VCErrorParser;nvcc.errorParser;org.eclipse.cdt.core.GCCErrorParser" id="nvcc.compiler.base.1912386783" name="NVCC Compiler" superClass="nvcc.compiler.base">
+							<tool command="nvcc -fopenmp -std=c++17 -Wattributes -w" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX} ${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.VCErrorParser;nvcc.errorParser;org.eclipse.cdt.core.GCCErrorParser" id="nvcc.compiler.base.1912386783" name="NVCC Compiler" superClass="nvcc.compiler.base">
 								<option id="nvcc.compiler.deviceDebug.1668913438" name="Generate device debug information (-G)" superClass="nvcc.compiler.deviceDebug" value="false" valueType="boolean"/>
 								<option id="nvcc.compiler.option.level.1452562172" name="Generate host debug information (-g)" superClass="nvcc.compiler.option.level" value="false" valueType="boolean"/>
 								<option defaultValue="nvcc.compiler.optimization.level.none" id="nvcc.compiler.optimization.level.580890155" name="Optimization Level" superClass="nvcc.compiler.optimization.level" value="nvcc.compiler.optimization.level.most" valueType="enumerated"/>
@@ -39,8 +39,10 @@
 								<option id="nvcc.compiler.cpp11option.608992192" name="Enable C++11 support (-std=c++11)" superClass="nvcc.compiler.cpp11option" value="false" valueType="boolean"/>
 								<option id="nvcc.compiler.compileroptions.952666805" name="Preprocessor options (-Xcompiler)" superClass="nvcc.compiler.compileroptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-fopenmp"/>
+									<listOptionValue builtIn="false" value="-Wattributes"/>
+									<listOptionValue builtIn="false" value="-w"/>
 								</option>
-								<option id="nvcc.compiler.include.files.541691859" superClass="nvcc.compiler.include.files" valueType="includeFiles">
+								<option id="nvcc.compiler.include.files.541691859" name="Include files (-include)" superClass="nvcc.compiler.include.files" valueType="includeFiles">
 									<listOptionValue builtIn="false" value="/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h"/>
 								</option>
 								<inputType id="nvcc.compiler.input.cu.145643436" superClass="nvcc.compiler.input.cu"/>
@@ -66,7 +68,7 @@
 							</tool>
 							<tool command="nvcc -fopenmp" id="nvcc.archiver.base.228628743" name="NVCC Archiver" superClass="nvcc.archiver.base"/>
 							<tool command="as" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser" id="com.nvidia.host.assembler.742424639" name="Host Assembler" superClass="com.nvidia.host.assembler">
-								<option id="gnu.both.asm.option.include.paths.513556680" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath"/>
+								<option id="gnu.both.asm.option.include.paths.513556680" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths"/>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1298093144" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 						</toolChain>
@@ -113,7 +115,7 @@
 						<toolChain errorParsers="" id="com.nvidia.cuda.ide.toolchain.nine_zero.exe.release.1504187827" name="CUDA Toolkit 9.1" superClass="com.nvidia.cuda.ide.toolchain.nine_zero.exe.release">
 							<targetPlatform archList="all" binaryParser="com.nvidia.cuda.ide.elf;com.nvidia.cuda.ide.macho;com.nvidia.cuda.ide.cubin" id="com.nvidia.cuda.ide.targetPlatform.1291396111" isAbstract="false" name="Debug Platform" osList="linux,macosx" superClass="com.nvidia.cuda.ide.targetPlatform"/>
 							<builder buildPath="${workspace_loc:/BlackCat_NeuralNetworks}/Release" errorParsers="org.eclipse.cdt.core.GmakeErrorParser" id="com.nvidia.cuda.ide.builder.557231169" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CUDA Toolkit 9.1 Builder" superClass="com.nvidia.cuda.ide.builder"/>
-							<tool command="nvcc -fopenmp -std=c++17 -ftemplate-depth=100" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX} ${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.VCErrorParser;nvcc.errorParser;org.eclipse.cdt.core.GCCErrorParser" id="nvcc.compiler.base.1670446501" name="NVCC Compiler" superClass="nvcc.compiler.base">
+							<tool command="nvcc -fopenmp -std=c++17 -ftemplate-depth=100 -Wattributes -w" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX} ${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.VCErrorParser;nvcc.errorParser;org.eclipse.cdt.core.GCCErrorParser" id="nvcc.compiler.base.1670446501" name="NVCC Compiler" superClass="nvcc.compiler.base">
 								<option id="nvcc.compiler.deviceDebug.1493909204" name="Generate device debug information (-G)" superClass="nvcc.compiler.deviceDebug"/>
 								<option id="nvcc.compiler.option.level.1032148584" name="Generate host debug information (-g)" superClass="nvcc.compiler.option.level"/>
 								<option defaultValue="nvcc.compiler.optimization.level.most" id="nvcc.compiler.optimization.level.867951786" name="Optimization Level" superClass="nvcc.compiler.optimization.level" valueType="enumerated"/>
@@ -125,6 +127,8 @@
 								<option id="nvcc.compiler.cpp11option.579489477" name="Enable C++11 support (-std=c++11)" superClass="nvcc.compiler.cpp11option" value="false" valueType="boolean"/>
 								<option id="nvcc.compiler.compileroptions.1030494321" name="Preprocessor options (-Xcompiler)" superClass="nvcc.compiler.compileroptions" valueType="stringList">
 									<listOptionValue builtIn="false" value="-fopenmp"/>
+									<listOptionValue builtIn="false" value="-Wattributes"/>
+									<listOptionValue builtIn="false" value="-w"/>
 								</option>
 								<option id="nvcc.compiler.include.files.858119493" name="Include files (-include)" superClass="nvcc.compiler.include.files" valueType="includeFiles">
 									<listOptionValue builtIn="false" value="/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h"/>

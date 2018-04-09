@@ -76,10 +76,11 @@ public:
 	}
 	template<class U, class V>
 		auto train(const _vec<U>& x, const _vec<V>& y) {
-		auto dy = this->next().train(g(w * x + b), y);
+		vec x_  = x;									//FIXME must copy, can't reuse x, causes deletion/segfaults
+		auto dy = this->next().train(g(w * x + b), y);	//Copy mandatory for multi-threaded implementation
 
 		locker.lock();
-		w_gradientStorage -= dy * x.t();
+		w_gradientStorage -= dy * x_.t();
 		b_gradientStorage -= dy;
 		locker.unlock();
 

@@ -25,7 +25,11 @@ auto test() {
 	mat d(2, 3);
 	mat e(3, 2);
 	mat c(2, 2);
-	scal ALPHAS(2);
+
+	vec A_(4);
+	vec B_(4);
+
+	scal ALPHAS();
 
 	std::cout << " param " << std::endl;
 
@@ -62,18 +66,18 @@ auto test() {
 	c = d * b.t();
 	c.print();
 	std::cout << " dot product -- scalar, regular" << std::endl;
-	c = d * scal(2) * e + c;
+	c = d * scal(2.0f) * e + c;
 	c.print();
 	std::cout << " dot product -- scalar, regular" << std::endl;
-	c = scal(2) * d * e;
+	c = scal(2.0f) * d * e;
 	c.print();
 	std::cout << " dot product -- regular,  scalar " << std::endl;
 
-	c = d * e * scal(2); ////This is the only version that is not accounted for (it is also the least common notation)
+	c = d * e * scal(2.0f); ////This is the only version that is not accounted for (it is also the least common notation)
 	c.print();
 
-	scal A(2);
-	scal B(2);
+	scal A(2.0f);
+	scal B(2.0f);
 
 	std::cout << " dot product -- trans, trans " << std::endl;
 	c = a.t() * b.t();
@@ -100,8 +104,6 @@ auto test() {
 	c.print();
 
 
-
-
 	std::cout << " PRINTING CUBE EXAMPLE FORMAT " << std::endl;
 	cube cu(2,3, 4);
 	cu.zero();
@@ -122,7 +124,7 @@ auto test() {
 	d.print();
 
 
-	d.row(0).print();
+//	d.row(0).print();
 
 	std::cout << "d print " << d.row(0).size() << std::endl;
 
@@ -150,7 +152,7 @@ int main() {
 
 
 test();
-
+//
 tensor4 alpha(3, 3,2);
 cube zeta(5,5,2);
 
@@ -176,20 +178,13 @@ output2.zero();
 output2 = alpha[0][0].x_corr_padded<2>(zeta[0]);
 output2.print();
 mat output3(5,5);
-
-
-output3 =output2.max_pooling<3>();
-
-output3.print();
-
-
-
-auto f = [](auto list, auto lamda) {
-	decltype(lamda(list[0])) new_list(0);
-	for (auto var : list) {
-		new_list.push_back(lamda(var));
-	}
-};
+//
+//
+//output3 =output2.max_pooling<3>();
+//
+//output3.print();
+//
+//
 
 //output3 = (output2).max_pooling<3>();
 //output3.print();
@@ -202,9 +197,9 @@ auto f = [](auto list, auto lamda) {
 //v.print();
 //BC::Tensor<4, double> tens = {1,2,3,4,5};
 //
-//	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
-////	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
-//////	omp_set_num_threads(2);
+	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
+//	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
+////	omp_set_num_threads(2);
 //	BC_EIGEN_BENCHMARK::benchmark1<4,     100000>();
 //	BC_EIGEN_BENCHMARK::benchmark1<8,     100000>();
 //	BC_EIGEN_BENCHMARK::benchmark1<16,    10000>();
@@ -214,7 +209,7 @@ auto f = [](auto list, auto lamda) {
 //	BC_EIGEN_BENCHMARK::benchmark1<512,   100>();
 //
 //	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark2_str() << std::endl;
-//
+////
 //	BC_EIGEN_BENCHMARK::benchmark2<4,     100000>();
 //	BC_EIGEN_BENCHMARK::benchmark2<8,     100000>();
 //	BC_EIGEN_BENCHMARK::benchmark2<16,    10000>();
@@ -222,7 +217,9 @@ auto f = [](auto list, auto lamda) {
 //	BC_EIGEN_BENCHMARK::benchmark2<128,   1000>();
 //	BC_EIGEN_BENCHMARK::benchmark2<256,   1000>();
 //	BC_EIGEN_BENCHMARK::benchmark2<512,   100>();
-//////
+//	BC_EIGEN_BENCHMARK::benchmark2<1024,   100>();
+
+	//////
 	std::cout << " success  main" << std::endl;
 //
 //	return 0;
