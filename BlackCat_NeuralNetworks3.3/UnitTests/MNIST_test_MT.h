@@ -14,6 +14,8 @@
 #include <string>
 #include <omp.h>
 #include <pthread.h>
+
+
 using BC::vec;
 using BC::scal;
 using BC::mat;
@@ -86,14 +88,19 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 
 int percept_MNIST() {
 
-	const int TRAINING_EXAMPLES =  20000;
+	const int TRAINING_EXAMPLES =  4000;
 	const int TRAINING_ITERATIONS = 10;
-	const int BATCH_SIZE = 1000;
+	const int BATCH_SIZE = 4;
 	//Create the neural network
-//	NeuralNetwork<FeedForward, FeedForward> network(784, 100, 10);
-	NeuralNetwork<FeedForward> network(784, 10);
-	network.setLearningRate(.003);
-	network.init_threads(8);
+	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
+	network.setLearningRate(.03);
+	network.init_threads(4);
+
+	/*
+	 * 	MULTITHREADED NEURAL NETWORK IS STILL IN BETA
+	 *	BATCH_SIZE MUST EQUAL THREAD NUMBERS, ---->
+	 *	THIS WILL BE CHANGED IN FUTURE
+	 */
 
 	data inputs;
 	data outputs;
@@ -117,6 +124,8 @@ int percept_MNIST() {
 	printf("\n Calculating... BC_NN training time \n");
 
 	std::cout << " training..." << std::endl;
+
+	omp_set_num_threads(4);
 	for (int i = 0; i < TRAINING_ITERATIONS; ++i) {
 		std::cout << " iter = " << i << std::endl;
 		for (int j = 0; j < inputs.size(); ++j) {

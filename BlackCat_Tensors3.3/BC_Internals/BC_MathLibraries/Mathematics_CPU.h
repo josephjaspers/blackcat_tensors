@@ -13,7 +13,7 @@
 #include <string>
 
 #include "BC_PrintFunctions.h"
-#include "cblas.h"
+#include <cblas.h>
 
 namespace BC {
 
