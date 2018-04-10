@@ -90,9 +90,10 @@ int percept_MNIST() {
 	const int TRAINING_ITERATIONS = 10;
 	const int BATCH_SIZE = 100;
 	//Create the neural network
-	NeuralNetwork<FeedForward, FeedForward> network(784, 800, 10);
-//	NeuralNetwork<FeedForward> network(784, 10);
+//	NeuralNetwork<FeedForward, FeedForward> network(784, 100, 10);
+	NeuralNetwork<FeedForward> network(784, 10);
 	network.setLearningRate(.003);
+	network.init_threads(8);
 
 	data inputs;
 	data outputs;
@@ -122,7 +123,8 @@ int percept_MNIST() {
 			int numb_instances = j + BATCH_SIZE < inputs.size() ? j + BATCH_SIZE : inputs.size();
 #pragma omp parallel for
 			for (int k = j; k < numb_instances; ++k) {
-				network.train(inputs[k], outputs[k]);
+				network.forwardPropagation(inputs[k]);
+				network.backPropagation(outputs[k]);
 			}
 #pragma omp barrier
 			j += BATCH_SIZE;

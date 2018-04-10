@@ -22,8 +22,8 @@ public:
 	 scal lr = scal(0.03); //fp_type == floating point
 	 std::mutex locker;
 
-	mat w_gradientStorage;
-	vec b_gradientStorage;
+	 gradient_list<mat> w_gradientStorage = gradient_list<mat>(1);
+	 gradient_list<vec> b_gradientStorage = gradient_list<vec>(1);
 
 	bp_list<vec> xs = bp_list<vec>(8);
 
@@ -44,8 +44,6 @@ public:
 	 */
 	FeedForward(int inputs) :
 			Layer<derived>(inputs),
-			w_gradientStorage(this->OUTPUTS, inputs),
-			b_gradientStorage(this->OUTPUTS),
 			w(this->OUTPUTS, inputs),
 			b(this->OUTPUTS),
 			x(inputs),
@@ -55,36 +53,27 @@ public:
 
 		w.randomize(-4, 4);
 		b.randomize(-4, 4);
-		w_gradientStorage.zero();
-		b_gradientStorage.zero();
+		w_gradientStorage.for_each([&](auto& var) { var = mat(this->OUTPUTS, this->INPUTS); });
+		b_gradientStorage.for_each([&](auto& var) { var = vec(this->OUTPUTS);			   });
 	}
 
+
 	template<class T>
-	auto forwardPropagation(const _vec<T> in) {
-		auto x_t = x == in;
-		return this->next().forwardPropagation(g(w * x_t + b));
+	auto forwardPropagation(const _vec<T>& x_) {
+		xs().push_front(std::move(vec(x_)));	//store the inputs
+		auto& x = xs().front();					//load what we just stored
+
+		return this->next().forwardPropagation(g(w * x + b));
 	}
 	template<class T>
-	auto backPropagation(const _vec<T> dy) {
+	auto backPropagation(const _vec<T> dy_) {
+		vec dy = dy_;
+		vec x = xs().pop_front();				//load the last input
 
-		w_gradientStorage -= dy * x.t();
-		b_gradientStorage -= dy;
+		w_gradientStorage() -= dy * x.t();
+		b_gradientStorage() -= dy;
 		return this->prev().backPropagation(dx = w.t() * dy % gd(x));
 	}
-//	template<class T>
-//	auto forwardPropagation(const _vec<T>& in) {
-//		xs().push_front(std::move(vec(in)));
-//
-//		return this->next().forwardPropagation(g(w * xs().front() + b));
-//	}
-//	template<class T>
-//	auto backPropagation(const _vec<T> dy) {
-//		vec x = xs().pop_front();
-//
-//		w_gradientStorage -= dy * x.t();
-//		b_gradientStorage -= dy;
-//		return this->prev().backPropagation(dx = w.t() * dy % gd(x));
-//	}
 	template<class T>
 	auto forwardPropagation_Express(_vec<T>& x) const {
 		return this->next().forwardPropagation_Express(g(w * x + b));
@@ -94,32 +83,33 @@ public:
 		vec x_  = x;									//FIXME must copy, can't reuse x, causes deletion/segfaults
 		auto dy = this->next().train(g(w * x + b), y);	//Copy mandatory for multi-threaded implementation
 
-		locker.lock();
-		w_gradientStorage -= dy * x_.t();
-		b_gradientStorage -= dy;
-		locker.unlock();
+		w_gradientStorage() -= dy * x_.t();
+		b_gradientStorage() -= dy;
 
 		return (w.t() * dy % gd(x));
 	}
 
 	void updateWeights() {
 		xs.clear();
-
-		locker.lock();
-		w += w_gradientStorage * lr;
-		b += b_gradientStorage * lr;
-		locker.unlock();
+		w_gradientStorage.for_each([&](auto& var) { w += var * lr; });
+		b_gradientStorage.for_each([&](auto& var) { b += var * lr; });
 		this->next().updateWeights();
 	}
 
 	void clearBPStorage() {
 		xs.clear();
-
-		locker.lock();
-		w_gradientStorage.zero();
-		b_gradientStorage.zero();
-		locker.unlock();
+		w_gradientStorage.for_each([&](auto& var) { var = mat(this->OUTPUTS, this->INPUTS); var.zero(); });
+		b_gradientStorage.for_each([&](auto& var) { var = vec(this->OUTPUTS);			    var.zero(); });
 		this->next().clearBPStorage();
+	}
+	void init_threads(int i) {
+		xs.resize(i);
+		w_gradientStorage.resize(i);
+		b_gradientStorage.resize(i);
+
+		w_gradientStorage.for_each([&](auto& var) { var = mat(this->OUTPUTS, this->INPUTS); var.zero(); });
+		b_gradientStorage.for_each([&](auto& var) { var = vec(this->OUTPUTS);			    var.zero(); });
+		this->next().init_threads(i);
 	}
 
 	void write(std::ofstream& is) {
@@ -130,9 +120,6 @@ public:
 		x.write(is);
 		y.write(is);
 		dx.write(is);
-		w_gradientStorage.write(is);
-		b_gradientStorage.write(is);
-
 	}
 	void read(std::ifstream& os) {
 		os >> this->INPUTS;
@@ -143,9 +130,6 @@ public:
 		x.read(os);
 		y.read(os);
 		dx.read(os);
-		w_gradientStorage.read(os);
-		b_gradientStorage.read(os);
-
 	}
 	void setLearningRate(fp_type learning_rate) {
 		lr = learning_rate;
@@ -153,7 +137,17 @@ public:
 	}
 };
 }
-
-
+//	template<class T>
+//	auto forwardPropagation(const _vec<T> in) {
+//		auto x_t = x == in;
+//		return this->next().forwardPropagation(g(w * x_t + b));
+//	}
+//	template<class T>
+//	auto backPropagation(const _vec<T> dy) {
+//
+//		w_gradientStorage -= dy * x.t();
+//		b_gradientStorage -= dy;
+//		return this->prev().backPropagation(dx = w.t() * dy % gd(x));
+//	}
 
 #endif /* FEEDFORWARD_CU_ */

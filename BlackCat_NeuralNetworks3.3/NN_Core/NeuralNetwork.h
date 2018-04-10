@@ -28,6 +28,7 @@ struct NeuralNetwork {
 	auto updateWeights() { return network.head().updateWeights(); }
 	auto clearBPStorage() { return network.head().clearBPStorage(); }
 	void setLearningRate(fp_type learning_rate) { network.head().setLearningRate(learning_rate); }
+	void init_threads(int i) { network.head().init_threads(i); }
 
 
 };

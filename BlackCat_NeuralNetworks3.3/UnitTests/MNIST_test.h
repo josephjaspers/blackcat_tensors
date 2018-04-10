@@ -74,7 +74,7 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 
 int percept_MNIST() {
 
-	const int TRAINING_EXAMPLES =  40000;
+	const int TRAINING_EXAMPLES =  2000;
 	const int TRAINING_ITERATIONS = 10;
 
 //	Generate the layers (params are: inputs, outputs)

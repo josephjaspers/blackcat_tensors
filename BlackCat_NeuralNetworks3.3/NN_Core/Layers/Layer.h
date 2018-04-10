@@ -15,7 +15,10 @@
 namespace BC {
 using BC::Structure::forward_list;
 using BC::Structure::thread_map;
+
+
 template<class T> using bp_list = thread_map<forward_list<T>>;
+template<class T> using gradient_list = thread_map<T>;
 
 template<class derived>
 class Layer {
@@ -28,6 +31,10 @@ public:
 
 	Layer(int inputs) : INPUTS(inputs) {}
 	scal lr = scal(.03);
+
+	void init_threads(int i) {
+		next().init_threads(i);
+	}
 
 	auto& next() {
 		return static_cast<derived&>(*this).next();

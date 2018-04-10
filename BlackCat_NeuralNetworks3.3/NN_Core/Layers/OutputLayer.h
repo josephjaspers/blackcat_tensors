@@ -47,6 +47,8 @@ public:
 		return x - y;
 	}
 
+	void init_threads(int i) {}
+
 	void updateWeights() {}
 	void clearBPStorage() {}
 	void write(std::ofstream& is) {
