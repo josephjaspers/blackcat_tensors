@@ -33,13 +33,20 @@ public:
 
 	template<class U> 		  Tensor4(const Tensor4<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Tensor4(	    Tensor4<U, Mathlib>&& t) : parent_class(t) {}
-	template<class... params> Tensor4(const params&... p) : parent_class(p...) {}
 
 	Tensor4& operator =(const Tensor4& t)  { return parent_class::operator=(t); }
 	Tensor4& operator =(const Tensor4&& t) { return parent_class::operator=(t); }
 	Tensor4& operator =(	  Tensor4&& t) { return parent_class::operator=(t); }
 	template<class U>
 	Tensor4& operator = (const Tensor4<U, Mathlib>& t) { return parent_class::operator=(t); }
+
+private:
+
+	template<class U> friend class TensorBase;
+	template<class U> friend class Tensor_Operations;
+	template<class... params> Tensor4(const params&... p) : parent_class(p...) {}
+
+
 };
 
 } //End Namespace BC

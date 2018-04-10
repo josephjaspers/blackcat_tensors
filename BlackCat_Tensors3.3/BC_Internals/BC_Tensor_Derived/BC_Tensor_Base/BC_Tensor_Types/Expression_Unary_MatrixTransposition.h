@@ -6,7 +6,7 @@
  */
 #ifndef EXPRESSION_UNARY_MATRIXTRANSPOSITION_H_
 #define EXPRESSION_UNARY_MATRIXTRANSPOSITION_H_
-#include "BlackCat_Internal_TypeBase.h"
+#include "BlackCat_Internal_Type_ExpressionBase.h"
 #include <vector>
 
 namespace BC {

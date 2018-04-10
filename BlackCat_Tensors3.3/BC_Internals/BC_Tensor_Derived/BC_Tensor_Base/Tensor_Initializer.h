@@ -59,7 +59,7 @@ private:
 
 public:
 
-	TensorInitializer(derived&& tensor) {
+	TensorInitializer(derived&& tensor) : black_cat_array() {
 		black_cat_array.is = tensor.black_cat_array.is;
 		black_cat_array.os = tensor.black_cat_array.os;
 		black_cat_array.array = tensor.black_cat_array.array;

@@ -7,7 +7,7 @@
 #ifndef EXPRESSION_BINARY_POINTWISE_SAME_H_
 #define EXPRESSION_BINARY_POINTWISE_SAME_H_
 
-#include "BlackCat_Internal_TypeBase.h"
+#include "BlackCat_Internal_Type_ExpressionBase.h"
 #include "Expression_Binary_Functors.h"
 #include <type_traits>
 namespace BC {

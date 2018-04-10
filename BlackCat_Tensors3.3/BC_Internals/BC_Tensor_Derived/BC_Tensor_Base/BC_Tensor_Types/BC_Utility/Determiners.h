@@ -35,7 +35,8 @@ template<class T> struct isPrimaryCore { static constexpr bool conditional = MTF
 template<template<class> class T, class U> struct isPrimaryCore<T<U>>
 { static constexpr bool conditional = MTF::same<T<U>,Tensor_Core<U>>::conditional; };
 
-
+template<class T>
+static constexpr bool pCore_b = isPrimaryCore<T>::conditional;
 
 
 template<int> struct base { template<class t, class m> using type = DISABLED<t,m>;	template<class t, class m> using slice = DISABLED<t, m>; };

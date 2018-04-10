@@ -7,11 +7,11 @@
 
 #ifndef LAYER_H_
 #define LAYER_H_
+#include <list>
 
 namespace BC {
 template<class derived>
 class Layer {
-
 public:
 
 	const int INPUTS;
@@ -33,6 +33,9 @@ public:
 	const auto& prev() const {
 		return static_cast<derived&>(*this).prev();
 	}
+
+	template<class T> using list = std::list<T>;
+
 };
 
 }

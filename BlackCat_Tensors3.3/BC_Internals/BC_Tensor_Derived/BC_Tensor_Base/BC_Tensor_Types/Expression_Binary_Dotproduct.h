@@ -2,7 +2,7 @@
 #ifndef EXPRESSION_BINARY_DOTPRODUCT_CU_
 #define EXPRESSION_BINARY_DOTPRODUCT_CU_
 
-#include "BlackCat_Internal_TypeBase.h"
+#include "BlackCat_Internal_Type_ExpressionBase.h"
 #include "Expression_Binary_Dotproduct_impl.h"
 #include "BlackCat_Internal_Definitions.h"
 

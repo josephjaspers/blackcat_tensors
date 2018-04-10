@@ -30,6 +30,7 @@ struct Tensor_Core_Base : Expression_Core_Base<_scalar<derived>, Tensor_Core_Bas
 
 	__BCinline__ static constexpr int DIMS() { return DIMENSION; }
 	__BCinline__ static constexpr int LAST() { return DIMENSION - 1; }
+	__BCinline__ static constexpr int PRIORITY() { return 0; }
 
 	using self = derived;
 	using slice_type = std::conditional_t<DIMS() == 0, self, _Tensor_Slice<self>>;
@@ -41,7 +42,6 @@ private:
 public:
 	operator 	   auto()       { return base().getIterator(); }
 	operator const auto() const { return base().getIterator(); }
-
 
 	__BCinline__ 	   auto& operator [] (int index) 	   { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[index]; };
 	__BCinline__ const auto& operator [] (int index) const { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[index]; };
@@ -60,10 +60,16 @@ public:
 	__BCinline__	   auto col(int i) 	     { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
 
 	template<class ... integers>
-	const auto reshape(integers ... ints) const { return Tensor_Reshape<const self, sizeof...(integers)>(base(), ints...); }
+	const auto reshape(integers ... ints) const {
+		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
+		return Tensor_Reshape<const self, sizeof...(integers)>(base(), ints...);
+	}
 
 	template<class... integers>
-		  auto reshape(integers... ints) 		{ return Tensor_Reshape<	  self, sizeof...(integers)>(base(), ints...); }
+	auto reshape(integers... ints) {
+		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
+		return Tensor_Reshape< self, sizeof...(integers)>(base(), ints...);
+	}
 
 	__BCinline__
 	int slice_index(int i) const {

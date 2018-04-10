@@ -14,6 +14,7 @@
 
 namespace BC {
 
+
 template<class T, class derived>
 struct Expression_Core_Base {
 private:
@@ -22,17 +23,15 @@ private:
 	static ret shadowFailure(std::string method) {
 		std::cout << "SHADOW METHOD FAILURE OF REQUIRED METHOD - ENLIGHTENED METHOD: " << method << " -- OVERRIDE THIS METHOD" << std::endl;
 		throw std::invalid_argument("MANDATORY METHOD - NOT SHADOWED POTENTIAL INCORRECT CAST BUG");
-		return ret();
 	}
 
-	const derived& base() const { return static_cast<const derived&>(*this); }
-		  derived& base() 		{ return static_cast<	   derived&>(*this); }
-
+	__BCinline__ const derived& base() const { return static_cast<const derived&>(*this); }
+	__BCinline__	   derived& base() 		 { return static_cast<	    derived&>(*this); }
 
 public:
-//fails with nvcc 9.1 but succeeds with GCC and G++ 6 and 7
-//	expression() { static_assert(std::is_trivially_copyable<derived>::value,
-//			"EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
+	operator 	   auto&()       { return base(); }
+	operator const auto&() const { return base(); }
+//	Expression_Core_Base() { static_assert(std::is_trivially_copyable<derived>::value, "EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
 
 	__BCinline__ static constexpr int DIMS() { return derived::DIMS();    }
 	__BCinline__ static constexpr int LAST() { return derived::DIMS() -1; }
@@ -44,7 +43,7 @@ public:
 	__BCinline__ int size() const { return DIMS() > 0 ? OS()[LAST()] : 1;    }
 	__BCinline__ int rows() const { return DIMS() > 0 ? IS()[0] : 1; }
 	__BCinline__ int cols() const { return DIMS() > 1 ? IS()[1] : 1; }
-	__BCinline__ int dimension(int i) const { return DIMS() > i ? base().IS()[i] : 1; }
+	__BCinline__ int dimension(int i) const { return DIMS() > i ? IS()[i] : 1; }
 
 	__BCinline__ int LD_rows() const { return DIMS() > 0 ? OS()[0] : 1; }
 	__BCinline__ int LD_cols() const { return DIMS() > 1 ? OS()[1] : 1; }

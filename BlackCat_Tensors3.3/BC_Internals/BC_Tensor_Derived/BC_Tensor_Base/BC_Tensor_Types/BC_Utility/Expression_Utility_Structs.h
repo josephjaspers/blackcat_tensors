@@ -103,7 +103,7 @@ auto l_array(T data) {
 }
 
 
-template<class T, class... vals> __BCinline__
+template<class T, class... vals> __BChd__
 auto array(T front, vals... values) {
 	return stack_array<T, sizeof...(values) + 1>(front, values...);
 }

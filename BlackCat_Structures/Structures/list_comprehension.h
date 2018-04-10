@@ -4,7 +4,7 @@
 #include <vector>
 
 namespace BC {
-namespace LC {
+namespace Structures {
 
 //take a parameter always return true
 struct default_conditional {
@@ -33,9 +33,12 @@ static auto lc(std::vector<T>& list, F lamda, C conditional = default_conditiona
 				new_list.push_back(lamda(list[i]));
 		}
 		return new_list;
-	};
+	}
+
+template<class T, class F, class C = default_conditional>
+static auto list_comprehension(std::vector<T>& list, F lamda, C conditional = default_conditional()) {
+	return lc(list, lamda, conditional);
 }
 }
-
-
+}
 #endif

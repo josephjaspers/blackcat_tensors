@@ -8,7 +8,7 @@
 #ifndef EXPRESSION_UNARY_MAXPOOLING
 #define EXPRESSION_UNARY_MAXPOOLING
 
-#include "BlackCat_Internal_TypeBase.h"
+#include "BlackCat_Internal_Type_ExpressionBase.h"
 namespace BC {
 template<class T, class ary,  int search_space = 3>
 struct unary_expression_maxpooling : Expression_Core_Base<T, unary_expression_maxpooling<T, ary, search_space>> {

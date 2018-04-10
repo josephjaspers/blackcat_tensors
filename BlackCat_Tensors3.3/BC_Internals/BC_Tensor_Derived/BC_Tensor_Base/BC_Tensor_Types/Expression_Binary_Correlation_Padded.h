@@ -8,7 +8,7 @@
 #ifndef EXPRESSIONS_BINARY_CORRELATION_PADDED_H_
 #define EXPRESSIONS_BINARY_CORRELATION_PADDED_H_
 
-#include "BlackCat_Internal_TypeBase.h"
+#include "BlackCat_Internal_Type_ExpressionBase.h"
 namespace BC {
 template<class T, class lv, class rv, int corr_dimension = 2>
 struct binary_expression_correlation_padded : Expression_Core_Base<T, binary_expression_correlation_padded<T, lv, rv, corr_dimension>> {
@@ -21,15 +21,11 @@ struct binary_expression_correlation_padded : Expression_Core_Base<T, binary_exp
 	lv left;  //krnl
 	rv right; //img
 
-	binary_expression_correlation_padded(lv l_, rv r_) :left(l_), right(r_) {
-//		for (int i = 0; i < lv::DIMS(); ++i) {
-//			positions[i] = right.dimension(i) + left.dimension(i) - 1;
-//		}
-	}
+	binary_expression_correlation_padded(lv l_, rv r_) :left(l_), right(r_) {}
 
 
 
-	template<int mv, class K, class I> //__BCinline__
+	template<int mv, class K, class I> __BCinline__
 	T axpy(int index, const K& krnl, const I& img) const {
 
 		static_assert(K::DIMS() == I::DIMS(), "Krnl/Img DIMS() must be equal");

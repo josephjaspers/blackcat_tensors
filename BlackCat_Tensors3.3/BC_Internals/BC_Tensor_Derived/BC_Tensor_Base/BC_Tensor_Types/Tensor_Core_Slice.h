@@ -8,7 +8,7 @@
 #ifndef TENSOR_SLICE_CU_
 #define TENSOR_SLICE_CU_
 
-#include "BlackCat_Internal_TypeCore.h"
+#include "BlackCat_Internal_Type_CoreBase.h"
 
 namespace BC {
 
@@ -26,17 +26,7 @@ template<class PARENT>
 
 	operator const PARENT	   () const	{ return parent; }
 
-	__BCinline__ Tensor_Slice(const scalar_type* array, PARENT parent_)
-						: array_slice(const_cast<scalar_type*>(array)), parent(parent_) {
-//		if (MTF::same<scalar_type*, array_type>::conditional) {
-//			std::cout << "same esef" << std::endl;
-//		} else {
-//			std::cout << " not " << std::endl;
-//		}
-//		std::cout << (std::string)(typeid(scalar_type*()).name()) << std::endl;
-//		std::cout << (typeid(array_type())) << std::endl;
-
-	}
+	__BCinline__ Tensor_Slice(const scalar_type* array, PARENT parent_) : array_slice(const_cast<scalar_type*>(array)), parent(parent_) {}
 	__BCinline__ const auto innerShape() const 			{ return parent.innerShape(); }
 	__BCinline__ const auto outerShape() const 			{ return parent.outerShape(); }
 

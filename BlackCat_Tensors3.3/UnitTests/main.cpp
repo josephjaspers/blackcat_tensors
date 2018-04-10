@@ -25,10 +25,13 @@ auto test() {
 	mat d(2, 3);
 	mat e(3, 2);
 	mat c(2, 2);
+	mat abs(10,10);
 
+//	 a[1] = abs[1];
+
+	abs.printDimensions();
 
 	std::cout << " param " << std::endl;
-
 
 	a.printDimensions();
 
@@ -72,7 +75,7 @@ auto test() {
 	c = d * e * scal(2.0f); ////This is the only version that is not accounted for (it is also the least common notation)
 	c.print();
 
-	scal A(2.0f);
+	scal A(2);
 	scal B(2.0f);
 
 	std::cout << " dot product -- trans, trans " << std::endl;
@@ -141,41 +144,40 @@ auto test() {
 	is.close();
 
 }
-
 #include "Benchmarks/BenchmarkEigen.h"
 
 int main() {
 
 
 test();
+////
+//tensor4 alpha(3, 3,2);
+//cube zeta(5,5,2);
 //
-tensor4 alpha(3, 3,2);
-cube zeta(5,5,2);
-
-for (int i = 0; i < alpha.size(); ++i ){
-	alpha(i) = i;
-}
-for (int i = 0; i < zeta.size(); ++i ){
-	zeta(i) = i;
-}
-alpha[0][0].print();
-zeta[0].print();
-
-mat output(3,3);
-
-output.unExpr([](float x) { return x * 2;});
-output.zero();
-output = alpha[0][0].x_corr<2>(zeta[0]);
-output.print();
-
-
-mat output2(7,7);
-output2.zero();
-output2 = alpha[0][0].x_corr_padded<2>(zeta[0]);
-output2.print();
-mat output3(5,5);
+//for (int i = 0; i < alpha.size(); ++i ){
+//	alpha(i) = i;
+//}
+//for (int i = 0; i < zeta.size(); ++i ){
+//	zeta(i) = i;
+//}
+//alpha[0][0].print();
+//zeta[0].print();
+//
+//mat output(3,3);
+//
+//output.unExpr([](float x) { return x * 2;});
+//output.zero();
+//output = alpha[0][0].x_corr<2>(zeta[0]);
+//output.print();
 //
 //
+//mat output2(7,7);
+//output2.zero();
+//output2 = alpha[0][0].x_corr_padded<2>(zeta[0]);
+//output2.print();
+//mat output3(5,5);
+////
+////
 //output3 =output2.max_pooling<3>();
 //
 //output3.print();

@@ -8,7 +8,7 @@
 #ifndef EXPRESSIONS_BINARY_CORRELATION_H_
 #define EXPRESSIONS_BINARY_CORRELATION_H_
 
-#include "BlackCat_Internal_TypeBase.h"
+#include "BlackCat_Internal_Type_ExpressionBase.h"
 namespace BC {
 template<class T, class lv, class rv, int corr_dimension = 2>
 struct binary_expression_correlation : Expression_Core_Base<T, binary_expression_correlation<T, lv, rv, corr_dimension>> {

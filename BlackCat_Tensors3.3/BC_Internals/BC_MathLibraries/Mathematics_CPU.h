@@ -49,15 +49,27 @@ public:
 	}
 	template<typename T, typename J>
 	static void fill(T& t, const J j, int sz) {
+#ifndef BC_NO_OPENMP
+#pragma omp parallel for
+#endif
 		for (int i = 0; i < sz; ++i) {
 			t[i] = j;
 		}
+#ifndef BC_NO_OPENMP
+#pragma omp barrier
+#endif
 	}
 	template<typename T>
 	static void eval(T& t, int sz) {
+#ifndef BC_NO_OPENMP
+#pragma omp parallel for
+#endif
 		for (int i = 0; i < sz; ++i) {
 			t[i];
 		}
+#ifndef BC_NO_OPENMP
+#pragma omp barrier
+#endif
 	}
 	template<typename T>
 	static void zero(T& t, int sz) {
@@ -71,11 +83,15 @@ public:
 			}
 			return;
 		}
-//#pragma omp parallel for
+#ifndef BC_NO_OPENMP
+#pragma omp parallel for
+#endif
 		for (int i = 0; i < sz; ++i) {
 			t[i] = j[i];
 		}
-//#pragma omp barrier
+#ifndef BC_NO_OPENMP
+#pragma omp barrier
+#endif
 	}
 	template<typename T, typename J>
 	static void randomize(T& t, J lower_bound, J upper_bound, int sz) {
@@ -85,11 +101,15 @@ public:
 			}
 			return;
 		}
-//#pragma omp parallel for
+#ifndef BC_NO_OPENMP
+#pragma omp parallel for
+#endif
 		for (int i = 0; i < sz; ++i) {
 			t[i] = ((double) (rand() / ((double) RAND_MAX + 1)) * (upper_bound - lower_bound)) + lower_bound;
 		}
-//#pragma omp barrier
+#ifndef BC_NO_OPENMP
+#pragma omp barrier
+#endif
 	}
 
 

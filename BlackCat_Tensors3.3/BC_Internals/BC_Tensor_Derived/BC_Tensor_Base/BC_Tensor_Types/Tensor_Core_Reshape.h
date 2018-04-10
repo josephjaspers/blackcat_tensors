@@ -8,7 +8,7 @@
 #ifndef TENSOR_RESHAPE_H_
 #define TENSOR_RESHAPE_H_
 
-#include "BlackCat_Internal_TypeCore.h"
+#include "BlackCat_Internal_Type_CoreBase.h"
 
 namespace BC {
 
@@ -20,7 +20,6 @@ struct Tensor_Reshape : Tensor_Core_Base<Tensor_Reshape<PARENT, NEW_DIM>, NEW_DI
 	__BCinline__ static constexpr int DIMS() { return NEW_DIM; };
 	static_assert(NEW_DIM > -1, "DIMENSIONALITY OF TENSOR MUST BE >= 0");
 
-
 	PARENT parent;
 	int* is = Mathlib::unified_initialize(is, DIMS());
 	int* os = Mathlib::unified_initialize(os, DIMS());
@@ -28,8 +27,6 @@ struct Tensor_Reshape : Tensor_Core_Base<Tensor_Reshape<PARENT, NEW_DIM>, NEW_DI
 	operator const PARENT	   () const	{ return parent; }
 
 	template<int dim> void init() {/*DONT DELETE I HELP COMPILE*/ }
-
-
 	template<int dim, class... integers>
 	void init(int front, integers... ints) {
 		is[dim] = front;

@@ -1,5 +1,3 @@
-
-
 /*
  * Shape.h
  *
@@ -14,7 +12,7 @@
 #include "Tensor_Core_Scalar.h"
 #include "Tensor_Core_RowVector.h"
 #include "Tensor_Core_Reshape.h"
-#include "BlackCat_Internal_TypeCore.h"
+#include "BlackCat_Internal_Type_CoreBase.h"
 
 namespace BC {
 
@@ -30,14 +28,18 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 	using slice_type = Tensor_Slice<self>;
 
 	scalar_type* array = nullptr;
-	int* is = Mathlib::unified_initialize(is, DIMS());
-	int* os = Mathlib::unified_initialize(os, DIMS());
+	int* is = nullptr;
+	int* os = nullptr;
 
 	Tensor_Core() = default;
 	Tensor_Core(const Tensor_Core&) = default;
 	Tensor_Core(Tensor_Core&&) = default;
+	Tensor_Core& operator = (const Tensor_Core& ) = default;
+	Tensor_Core& operator = (	   Tensor_Core&&) = default;
 
 	Tensor_Core(std::vector<int> param) {
+		Mathlib::unified_initialize(is, DIMS());
+		Mathlib::unified_initialize(os, DIMS());
 
 		if (DIMS() > 0) {
 			is[0] = param[0];
@@ -50,8 +52,11 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 		Mathlib::initialize(array, this->size());
 	}
 	Tensor_Core(const int* param) {
+		Mathlib::unified_initialize(is, DIMS());
+		Mathlib::unified_initialize(os, DIMS());
+
 		if (DIMS() > 0) {
-			Mathlib::HostToDevice(is, &param[0], DIMS());
+			Mathlib::copy(is, &param[0], DIMS());
 
 			os[0] = is[0];
 			for (int i = 1; i < DIMS(); ++i) {
@@ -60,6 +65,21 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 		}
 		Mathlib::initialize(array, this->size());
 	}
+//	template<class dimList>
+//	Tensor_Core(dimList param) {
+//		Mathlib::unified_initialize(is, DIMS());
+//		Mathlib::unified_initialize(os, DIMS());
+//
+//		if (DIMS() > 0) {
+//			is[0] = param[0];
+//			os[0] = is[0];
+//			for (int i = 1; i < DIMS(); ++i) {
+//				is[i] = param[i];
+//				os[i] = os[i - 1] * is[i];
+//			}
+//		}
+//		Mathlib::initialize(array, this->size());
+//	}
 	__BCinline__ const auto innerShape() const { return is; }
 	__BCinline__ const auto outerShape() const { return os; }
 
@@ -78,6 +98,8 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 		Mathlib::initialize(array, this->size());
 	}
 
+
+	__BCinline__
 	int slice_index(int i) const {
 		if (DIMS() == 0)
 			return 0;
@@ -89,13 +111,17 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 
 
 	template<int d> __BCinline__
-	void init() {/*I AM FRIEND I HELP COMPILE DONT DELETE ME */}
+	void init() {}
 
 	template<int dim, class... integers> __BCinline__
 	void init(int front, integers... ints) {
-		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
+
+		//NVCC gives warning if you convert the static_assert into a one-liner
+		static constexpr bool intList = MTF::is_integer_sequence<integers...>;
+		static_assert(intList, "MUST BE INTEGER LIST");
 
 		is[dim] = front;
+
 		if (dim > 0)
 			os[dim] = front * os[dim - 1];
 		else

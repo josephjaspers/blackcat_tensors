@@ -30,33 +30,29 @@ protected:
 	using functor_type 	= _functor<derived>;
 	using scalar_type	= _scalar<derived>;
 	using Mathlib 		= _mathlib<derived>;
+	struct DISABLED;
 
 	static constexpr int DIMS = ranker<derived>::value;
+	template<class> friend class TensorBase;
 
 public:
-	template<class>
-	friend class TensorBase;
 
 	using math_parent::operator=;
 
 	template<class... params> explicit TensorBase(const params&... p) : initializer(p...) {}
 
-	TensorBase(const TensorBase&  tensor) : initializer(tensor) {}
-	TensorBase( 	 TensorBase&& tensor) : initializer(tensor) {}
-
 	operator const derived& () const { return static_cast<const derived&>(*this); }
 	operator	   derived& () 		 { return static_cast< 		derived&>(*this); }
 
-	derived& operator =(derived&& tensor) {
-		this->assert_same_size(tensor);
-		std::swap(this->black_cat_array, tensor.black_cat_array);
-		return this;
-	}
 
-	template<class T>
-	std::enable_if_t<MTF::isPrimitive<T>::conditional, derived&> operator = (TensorBase<T>&& tensor) {
-		this->assert_same_size(tensor);
-		std::swap(this->black_cat_array.array, tensor.black_cat_array.array);
+	//move operator is only defined for Tensor_Core
+	using move_parameter = std::conditional_t<pCore_b<functor_type>, derived&&, DISABLED>;
+
+	derived& operator =(move_parameter tensor) {
+		auto tmp = this->black_cat_array;
+		this->black_cat_array = tensor.black_cat_array;
+		tensor.black_cat_array = tmp;
+
 		return *this;
 	}
 
