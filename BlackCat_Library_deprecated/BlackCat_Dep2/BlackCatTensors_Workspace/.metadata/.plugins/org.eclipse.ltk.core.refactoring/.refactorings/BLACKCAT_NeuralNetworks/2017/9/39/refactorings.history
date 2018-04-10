@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;BLACKCAT_NeuralNetworks/BC_NN_tests/main.cpp&apos; to &apos;deprecated Tests.cpp&apos;" description="Rename resource &apos;main.cpp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="BC_NN_tests/main.cpp" name="deprecated Tests.cpp" stamp="1506380933898" updateReferences="true"/>
-</session>

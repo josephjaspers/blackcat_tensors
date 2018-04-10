@@ -1,7 +1,0 @@
-
-
-
-
-void g(Tensor<double,CPU>& x) {
-
-}

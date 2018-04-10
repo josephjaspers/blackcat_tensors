@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;BlackCat_Tensors/BC_Tensor_impl/Tensor_DotProducts.cpp&apos; to &apos;Tensor_AdvancedOperations.cpp&apos;" description="Rename resource &apos;Tensor_DotProducts.cpp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="BC_Tensor_impl/Tensor_DotProducts.cpp" name="Tensor_AdvancedOperations.cpp" stamp="1504570768532" updateReferences="true"/>
-</session>

@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;BlackCat_Tensors_depfiles/BC_LAR_impl/LAR_transposeDeprecated&apos; to &apos;LAR_transposeDeprecated_&apos;" description="Rename resource &apos;LAR_transposeDeprecated&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="BC_LAR_impl/LAR_transposeDeprecated" name="LAR_transposeDeprecated_" stamp="1503348375562" updateReferences="true"/>
-</session>

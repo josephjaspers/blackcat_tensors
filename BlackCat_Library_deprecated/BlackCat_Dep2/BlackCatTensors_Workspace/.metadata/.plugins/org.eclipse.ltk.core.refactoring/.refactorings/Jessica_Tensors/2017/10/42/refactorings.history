@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;Jessica_Tensors/OperationBuffers.h&apos; to &apos;OperationBuffer.h&apos;" description="Rename resource &apos;OperationBuffers.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="OperationBuffers.h" name="OperationBuffer.h" stamp="1508372068107" updateReferences="true"/>
-</session>

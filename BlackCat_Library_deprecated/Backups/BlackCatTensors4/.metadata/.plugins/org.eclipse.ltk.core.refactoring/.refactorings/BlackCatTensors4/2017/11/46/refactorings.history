@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;BlackCatTensors4/BC_Tensor_Super_Queen&apos; to &apos;BC_Tensor_Super_Queen.h&apos;" description="Rename resource &apos;BC_Tensor_Super_Queen&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="BC_Tensor_Super_Queen" name="BC_Tensor_Super_Queen.h" stamp="1511045257604" updateReferences="true"/>
-</session>

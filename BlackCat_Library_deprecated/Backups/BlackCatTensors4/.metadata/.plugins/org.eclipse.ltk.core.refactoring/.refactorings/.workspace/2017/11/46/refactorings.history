@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Delete resource &apos;BlackCatTensors4/BC_Tensor_Super_Queen.h&apos;" deleteContents="false" description="Delete resource &apos;BlackCatTensors4/BC_Tensor_Super_Queen.h&apos;" element1="/BlackCatTensors4/BC_Tensor_Super_Queen.h" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1511045279924"/>
-</session>

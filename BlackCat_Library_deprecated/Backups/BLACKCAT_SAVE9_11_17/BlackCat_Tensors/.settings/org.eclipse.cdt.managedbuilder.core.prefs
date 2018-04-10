@@ -1,9 +1,0 @@
-eclipse.preferences.version=1
-environment/buildEnvironmentInclude/com.nvidia.cuda.ide.eight_zero.configuration.lib.release.1144034874/CPATH/delimiter=\:
-environment/buildEnvironmentInclude/com.nvidia.cuda.ide.eight_zero.configuration.lib.release.1144034874/CPATH/operation=remove
-environment/buildEnvironmentInclude/com.nvidia.cuda.ide.eight_zero.configuration.lib.release.1144034874/CPLUS_INCLUDE_PATH/delimiter=\:
-environment/buildEnvironmentInclude/com.nvidia.cuda.ide.eight_zero.configuration.lib.release.1144034874/CPLUS_INCLUDE_PATH/operation=remove
-environment/buildEnvironmentInclude/com.nvidia.cuda.ide.eight_zero.configuration.lib.release.1144034874/C_INCLUDE_PATH/delimiter=\:
-environment/buildEnvironmentInclude/com.nvidia.cuda.ide.eight_zero.configuration.lib.release.1144034874/C_INCLUDE_PATH/operation=remove
-environment/buildEnvironmentInclude/com.nvidia.cuda.ide.eight_zero.configuration.lib.release.1144034874/append=true
-environment/buildEnvironmentInclude/com.nvidia.cuda.ide.eight_zero.configuration.lib.release.1144034874/appendContributed=true
