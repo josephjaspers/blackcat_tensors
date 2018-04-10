@@ -1,0 +1,209 @@
+﻿  stdafx.cpp
+  FeedForward.cpp
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(63): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(72): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(83): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(96): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(104): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(116): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(130): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(145): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(158): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(174): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(176): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(189): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(199): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(200): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(217): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(237): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(251): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(259): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(267): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(275): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(283): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(293): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(302): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(310): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(318): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(326): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(335): warning C4018: '<': signed/unsigned mismatch
+  FF_norec.cpp
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(63): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(72): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(83): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(96): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(104): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(116): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(130): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(145): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(158): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(174): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(176): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(189): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(199): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(200): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(217): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(237): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(251): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(259): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(267): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(275): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(283): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(293): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(302): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(310): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(318): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(326): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(335): warning C4018: '<': signed/unsigned mismatch
+  CNN.cpp
+  GRU.cpp
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(63): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(72): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(83): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(96): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(104): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(116): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(130): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(145): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(158): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(174): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(176): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(189): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(199): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(200): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(217): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(237): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(251): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(259): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(267): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(275): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(283): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(293): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(302): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(310): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(318): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(326): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(335): warning C4018: '<': signed/unsigned mismatch
+  LSTM.cpp
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(63): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(72): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(83): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(96): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(104): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(116): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(130): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(145): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(158): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(174): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(176): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(189): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(199): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(200): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(217): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(237): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(251): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(259): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(267): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(275): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(283): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(293): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(302): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(310): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(318): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(326): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(335): warning C4018: '<': signed/unsigned mismatch
+  main.cpp
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(63): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(72): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(83): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(96): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(104): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(116): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(130): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(145): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(158): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(174): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(176): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(189): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(199): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(200): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(217): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(237): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(251): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(259): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(267): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(275): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(283): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(293): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(302): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(310): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(318): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(326): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(335): warning C4018: '<': signed/unsigned mismatch
+  NeuralNetwork.cpp
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(63): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(72): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(83): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(96): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(104): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(116): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(130): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(145): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(158): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(174): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(176): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(189): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(199): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(200): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(217): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(237): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(251): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(259): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(267): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(275): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(283): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(293): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(302): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(310): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(318): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(326): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(335): warning C4018: '<': signed/unsigned mismatch
+NeuralNetwork.cpp(138): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  RecurrentUnit.cpp
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(63): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(72): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(83): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(96): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(104): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(116): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(130): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(145): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(158): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(174): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(176): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(189): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(199): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(200): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(217): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(237): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(251): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(259): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(267): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(275): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(283): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(293): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(302): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(310): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(318): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(326): warning C4018: '<': signed/unsigned mismatch
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\jas_matrices\jas_matrices\Matrix_Operations.h(335): warning C4018: '<': signed/unsigned mismatch
+  Generating code
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\neuralnetworks\neuralnetworks\nonlinearityfunction.h(90): warning C4715: 'nonLinearityFunct::operator()': not all control paths return a value
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\neuralnetworks\neuralnetworks\neuralnetwork.cpp(85): warning C4715: 'NeuralNetwork::backwardPropagation_ThroughTime': not all control paths return a value
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\neuralnetworks\neuralnetworks\neuralnetwork.cpp(38): warning C4715: 'NeuralNetwork::forwardPropagation_express': not all control paths return a value
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\neuralnetworks\neuralnetworks\nonlinearityfunction.h(109): warning C4715: 'nonLinearityFunct::d': not all control paths return a value
+c:\users\joeyj\onedrive\documents\visual studio 2015\projects\neuralnetworks\neuralnetworks\neuralnetwork.cpp(73): warning C4715: 'NeuralNetwork::backwardPropagation': not all control paths return a value
+  All 453 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  NeuralNetworks.vcxproj -> C:\Users\joeyj\OneDrive\Documents\Visual Studio 2015\Projects\NeuralNetworks\x64\Release_new\NeuralNetworks.exe
+  NeuralNetworks.vcxproj -> C:\Users\joeyj\OneDrive\Documents\Visual Studio 2015\Projects\NeuralNetworks\x64\Release_new\NeuralNetworks.pdb (Full PDB)

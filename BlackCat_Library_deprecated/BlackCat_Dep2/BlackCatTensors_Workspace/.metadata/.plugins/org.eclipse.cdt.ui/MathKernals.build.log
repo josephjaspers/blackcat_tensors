@@ -1,0 +1,6 @@
+16:42:51 **** Incremental Build of configuration Debug for project MathKernals ****
+make all 
+make: Nothing to be done for 'all'.
+
+16:42:51 Build Finished (took 69ms)
+

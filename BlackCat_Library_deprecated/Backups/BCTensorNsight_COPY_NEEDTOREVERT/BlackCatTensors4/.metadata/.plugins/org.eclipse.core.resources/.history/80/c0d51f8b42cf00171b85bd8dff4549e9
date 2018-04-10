@@ -1,0 +1,59 @@
+/*
+ * BC_Expression.h
+ *
+ *  Created on: Nov 20, 2017
+ *      Author: joseph
+ */
+
+#ifndef BC_EXPRESSION__BINARY_H_
+#define BC_EXPRESSION__BINARY_H_
+
+#include "BC_Tensor_Super_King.h"
+
+template<class operation, class ml, class lv, class rv, int... dimensions>
+class binary_expression : public Tensor_King<binary_expression<operation, ml, lv, rv, dimensions...>, ml, dimensions...> {
+public:
+	//, ml, dimensions...
+
+	using this_type = binary_expression<operation,ml, lv, rv, dimensions...>;
+	operation oper;
+
+	lv left;
+	rv right;
+
+	binary_expression(lv l, rv r) :
+			left(l), right(r) {
+	}
+
+	auto operator [] (int index) {
+		return oper(left[index], right[index]);
+	}
+};
+
+template<class o, class rv, class ml, class lo, class llv, class lrv, int... dimensions>
+class binary_expression<o, ml, binary_expression<lo, ml, llv, lrv, dimensions...>, rv, dimensions...> {
+	//, ml, dimensions...
+	typedef binary_expression<lo, ml, llv, lrv, dimensions...> lv;
+	using this_type = binary_expression<o,ml, binary_expression<lo, ml, llv, lrv, dimensions...>, rv, dimensions...>;
+	o oper;
+
+	lv left;
+	rv right;
+
+	binary_expression(lv l, rv r) :
+			left(l), right(r) {
+	}
+
+	auto operator [] (int index) {
+		return oper(left.[index], right[index]);
+	}
+};
+
+template<class o, class rv, class ml, class lo, class llv, class lrv, int... dimensions>
+class binary_expression<o, ml, rv, binary_expression<lo, ml, llv, lrv, dimensions...>, dimensions...> : binary_expression<lo, ml, llv, lrv, dimensions...> {
+
+};
+
+
+
+#endif /* BC_EXPRESSION__BINARY_H_ */

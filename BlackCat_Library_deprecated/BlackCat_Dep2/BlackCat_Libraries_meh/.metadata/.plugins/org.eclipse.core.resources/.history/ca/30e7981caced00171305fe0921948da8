@@ -1,0 +1,37 @@
+/*
+ * Tensor_IdentityClasses.h
+ *
+ *  Created on: Dec 30, 2017
+ *      Author: joseph
+ */
+
+#ifndef TENSOR_IDENTITYCLASSES_H_
+#define TENSOR_IDENTITYCLASSES_H_
+
+namespace {
+
+template<class core>
+struct TENSOR_CORE {
+		core& convert() {
+			return static_cast<core&>(*this);
+		}
+		const core& convert() const {
+			return static_cast<core&>(*this);
+		}
+}
+
+template<class core> struct SCALAR {
+
+		static constexpr int RANK = 0;
+		using type = core;
+
+
+};
+template<class core> struct VECTOR {};
+template<class core> struct MATRIX {};
+template<class core> struct CUBE   {};
+template<class core> struct TENSOR {};
+}
+
+
+#endif /* TENSOR_IDENTITYCLASSES_H_ */

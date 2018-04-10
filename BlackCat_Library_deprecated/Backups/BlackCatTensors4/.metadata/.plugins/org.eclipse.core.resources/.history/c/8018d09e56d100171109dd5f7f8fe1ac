@@ -1,0 +1,120 @@
+/*
+ * BC_Math_ParseBinaryOperations.h
+ *
+ *  Created on: Nov 23, 2017
+ *      Author: joseph
+ */
+
+#ifndef BC_EXPRESSION_BINARY_PARSER_H_
+#define BC_EXPRESSION_BINARY_PARSER_H_
+
+#include "BC_Expression_Binary.h"
+#include <string>
+//
+//class BinaryExpressionPermutationGenerator {
+//
+//
+//	template<class... params, int... shape>
+//	class binary_expression;
+//
+////	typedef binary_expression be<params, shape> be;
+//
+//	constexpr std::string operations[] = {
+//		"add",
+//		"sub",
+//		"mul",
+//		"div"
+//	};
+//	constexpr std::string operators[] = {
+//			"+",
+//			"-",
+//			"*",
+//			"/"
+//	};
+//	constexpr std::string template_decleration[] = {
+//			"template<class ",
+//			", class ml, class, lv, class rv, int... dimensions>"
+//	};
+//
+//	constexpr std::string class_definition[]  = {
+//			"class binary_expression<",
+//			", ml, lv, rv, dimensions...> : public",
+//	};
+//
+//
+//	void gen();
+//
+//
+//	BinaryExpressionPermutationGenerator();
+//};
+
+//Forward Declarations
+template<class, class, class, class, int...>
+class binary_expression;
+
+struct add;
+struct sub;
+struct div;
+struct mul;
+
+template<class >
+struct is {
+	static constexpr bool expr = false;
+};
+template<class o, class ml, class lv, class rv, int ... dims>
+struct is<binary_expression<o, ml, lv, rv, dims...>> {
+	static constexpr bool expr = true;
+};
+
+template<class c>
+struct expand_binExpr {
+	using op = void;
+	using ml = void;
+	using lv = c;
+	using rv = c;
+};
+
+template<class oper, class math_lib, class left, class right, int ... dimensions>
+struct expand_binExpr<binary_expression<oper, math_lib, left, right, dimensions...>> {
+	using op = oper;
+	using ml = math_lib;
+	using lv = left;
+	using rv = right;
+};
+
+template<class oper, class left, class right>
+struct evaluator {
+
+	/*
+	 * When you call this functor it checks if l or r are binary_expression
+	 * if either are it typedefs lv/rv to the function of evaluator OR to the natural type (meaning it is a unary functor or an array)
+	 *
+	 * if type is functor the return function of functor (functor = this method) is a nested function that recursively expands...
+	 * the usage of templates means this expansion of this should be done at COMPILE TIME
+	 *
+	 *
+	 *
+	 */
+
+	template<class eval_to>
+	static constexpr auto functor() {
+
+		//If left is expression, typedef lv to functor of type, else typedef lv to left.
+	//	typedef std::conditional<is<left>::expr, evaluator<expand_binExpr<left>::op, expand_binExpr<left>::lv, expand_binExpr<left>::rv>::functor>, left>::type lv;
+		//typedef std::conditional<is<right>::expr, evaluator<expand_binExpr<right>::op, expand_binExpr<right>::lv, expand_binExpr<right>::rv>::functor>, right>::type rv;
+
+		typedef typename std::conditional<is<left>::expr, evaluator<expand_binExpr<left>::op, expand_binExpr<left>::lv, expand_binExpr<left>::rv>::functor>, right>::type lv;
+
+//		//if both sides are functions
+//		return is<lv>::expr && is<rv>::expr ? [=](int i) {to[i] = lv(l.left, l.right)(i) + rv(r.left, r.right)(i);} :
+//		//if left is function
+//				is<lv>::expr ? [=](int i) {to[i] = lv(l.left, l.right)(i) + r[i];} :
+//				//if right is a function
+//				is<rv>::expr ? [=](int i) {to[i] = l[i] + rv(r.left, r.right)(i);} :
+//				//if neither are functions
+//				[=](int i) {to[i] = l[i] + r[i];};
+	}
+
+};
+
+#endif /* BC_EXPRESSION_BINARY_PARSER_H_ */

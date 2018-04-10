@@ -1,0 +1,33 @@
+/*
+ * BC_Tensor_Primary_Scalar.h
+ *
+ *  Created on: Nov 27, 2017
+ *      Author: joseph
+ */
+
+#ifndef BC_TENSOR_PRIMARY_IDSCALAR_H_
+#define BC_TENSOR_PRIMARY_IDSCALAR_H_
+
+#include "BC_Tensor_Super_Jack.h"
+
+template<class T, class ml>
+class ID_Scalar : public Tensor_Jack<T, ml, 1> {
+
+	ID_Scalar<T, ml>(T* scalar) {
+		this->array = scalar;
+	}
+
+	ID_Scalar<T, ml>& operator =(T value) {
+		ml::set(this->array, value);
+		return *this;
+	}
+
+	template<class U>
+	ID_Scalar<T, ml>& operator =(const ID_Scalar<U, ml>& scal) {
+		ml::set(this->array, scal.array);
+		return *this;
+	}
+
+};
+
+#endif /* BC_TENSOR_PRIMARY_IDSCALAR_H_ */

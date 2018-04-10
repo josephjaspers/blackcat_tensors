@@ -20,7 +20,6 @@ struct FeedForward : public Layer<derived> {
 public:
 
 	 scal lr = scal(0.03); //fp_type == floating point
-	 std::mutex locker;
 
 	 gradient_list<mat> w_gradientStorage = gradient_list<mat>(1);
 	 gradient_list<vec> b_gradientStorage = gradient_list<vec>(1);
@@ -57,36 +56,22 @@ public:
 		b_gradientStorage.for_each([&](auto& var) { var = vec(this->OUTPUTS);			   });
 	}
 
-
-	template<class T>
-	auto forwardPropagation(const _vec<T>& x_) {
+	vec forwardPropagation(const vec& x_) {
 		xs().push_front(std::move(vec(x_)));	//store the inputs
 		auto& x = xs().front();					//load what we just stored
 
 		return this->next().forwardPropagation(g(w * x + b));
 	}
-	template<class T>
-	auto backPropagation(const _vec<T> dy_) {
+	vec backPropagation(const vec& dy_) {
 		vec dy = dy_;
 		vec x = xs().pop_front();				//load the last input
 
-		w_gradientStorage() -= dy * x.t();
+		w_gradientStorage() -= dy * x.t();		//does work
 		b_gradientStorage() -= dy;
 		return this->prev().backPropagation(dx = w.t() * dy % gd(x));
 	}
-	template<class T>
-	auto forwardPropagation_Express(_vec<T>& x) const {
+	auto forwardPropagation_Express(const vec& x) const {
 		return this->next().forwardPropagation_Express(g(w * x + b));
-	}
-	template<class U, class V>
-		auto train(const _vec<U>& x, const _vec<V>& y) {
-		vec x_  = x;									//FIXME must copy, can't reuse x, causes deletion/segfaults
-		auto dy = this->next().train(g(w * x + b), y);	//Copy mandatory for multi-threaded implementation
-
-		w_gradientStorage() -= dy * x_.t();
-		b_gradientStorage() -= dy;
-
-		return (w.t() * dy % gd(x));
 	}
 
 	void updateWeights() {

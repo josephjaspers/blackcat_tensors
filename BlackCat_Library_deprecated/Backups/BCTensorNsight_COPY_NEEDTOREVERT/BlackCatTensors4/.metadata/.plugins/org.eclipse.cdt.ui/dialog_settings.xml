@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="f77blas" key="org.eclipse.cdt.utils.ui.controls.FileListControl"/>
+	<item value="Default C++ source template" key="LastUsedSourceTemplate"/>
+	<item value="Default C++ header template" key="LastUsedHeaderTemplate"/>
+	<section name="org.eclipse.cdt.internal.ui.browser.opentype.OpenTypeActionSettings">
+		<item value="true" key="show_enums"/>
+		<item value="true" key="show_unions"/>
+		<item value="true" key="show_macros"/>
+		<item value="true" key="show_classes"/>
+		<item value="true" key="show_functions"/>
+		<item value="true" key="show_lowlevel"/>
+		<item value="true" key="show_namespaces"/>
+		<item value="true" key="show_enumerators"/>
+		<item value="true" key="show_structs"/>
+		<item value="647" key="x"/>
+		<item value="629" key="width"/>
+		<item value="65" key="y"/>
+		<item value="true" key="show_typedefs"/>
+		<item value="true" key="show_variables"/>
+		<item value="760" key="height"/>
+	</section>
+	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration">
+	</section>
+	<section name="PDOMSearchPage">
+		<item value="false" key="caseSensitive"/>
+		<item value="227191" key="searchFlags"/>
+		<list key="previousPatterns">
+			<item value="div"/>
+		</list>
+	</section>
+	<section name="RenameInformationPopup">
+	</section>
+	<section name="OptionalMessageDialog.hide.">
+		<item value="0" key="askReindex.detail"/>
+	</section>
+	<section name="CRenameRefactoringInputPage">
+	</section>
+	<section name="completion_proposal_size">
+	</section>
+</section>

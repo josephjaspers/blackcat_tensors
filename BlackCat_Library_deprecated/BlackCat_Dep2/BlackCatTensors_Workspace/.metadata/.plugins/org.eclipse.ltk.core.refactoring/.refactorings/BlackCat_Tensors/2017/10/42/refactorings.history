@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;BlackCat_Tensors/BC_Tensor_impl/AdjustCorrelationTensor_impl&apos; to &apos;AdjustCorrelationTensor_impl.cpp&apos;" description="Rename resource &apos;AdjustCorrelationTensor_impl&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="BC_Tensor_impl/AdjustCorrelationTensor_impl" name="AdjustCorrelationTensor_impl.cpp" stamp="1508437855920" updateReferences="true"/>
+</session>

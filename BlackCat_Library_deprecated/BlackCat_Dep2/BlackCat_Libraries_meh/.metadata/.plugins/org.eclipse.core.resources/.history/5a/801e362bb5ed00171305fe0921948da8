@@ -1,0 +1,23 @@
+/*
+ * BC_MetaTemplate_EssentialMethods.h
+ *
+ *  Created on: Dec 11, 2017
+ *      Author: joseph
+ */
+
+#ifndef ADHOC_H_
+#define ADHOC_H_
+
+#include "../BlackCat_Internal_GlobalUnifier.h"
+
+namespace BC {
+	namespace MTF {
+		template<class, class>  struct expression_substitution;
+		template<class sub, template<class...> class derived, class scalar_type, class... modifiers>
+		struct expression_substitution<sub, derived<scalar_type, modifiers...>>{
+				using type = derived<sub, modifiers...>;
+		};
+	}
+}
+
+#endif /* ADHOC_H_ */

@@ -1,0 +1,12 @@
+18:01:32 **** Incremental Build of configuration Debug for project CudaSample ****
+make all 
+Building file: ../src/convolutionFFT2D.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-8.0/bin/nvcc -G -g -O0 -gencode arch=compute_52,code=sm_52  -odir "src" -M -o "src/convolutionFFT2D.d" "../src/convolutionFFT2D.cu"
+../src/convolutionFFT2D.cu:17:25: fatal error: helper_cuda.h: No such file or directory
+compilation terminated.
+src/subdir.mk:31: recipe for target 'src/convolutionFFT2D.o' failed
+make: *** [src/convolutionFFT2D.o] Error 1
+
+18:01:32 Build Finished (took 112ms)
+

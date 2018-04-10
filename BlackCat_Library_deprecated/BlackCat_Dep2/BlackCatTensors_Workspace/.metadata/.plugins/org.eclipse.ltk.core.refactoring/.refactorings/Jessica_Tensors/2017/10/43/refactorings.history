@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Jessica_Tensors/Operations.h&apos; to &apos;PointwiseOperations.h&apos;" description="Rename resource &apos;Operations.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Operations.h" name="PointwiseOperations.h" stamp="1509115682027" updateReferences="true"/>
+</session>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;BlackCat_Tensors/BC_Tensor_InheritLv3_King.h&apos; to &apos;.hBC_Tensor_InheritLv3_BasicOperands.h&apos;" description="Rename resource &apos;BC_Tensor_InheritLv3_King.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="BC_Tensor_InheritLv3_King.h" name=".hBC_Tensor_InheritLv3_BasicOperands.h" stamp="1513109820892" updateReferences="true"/>
+</session>

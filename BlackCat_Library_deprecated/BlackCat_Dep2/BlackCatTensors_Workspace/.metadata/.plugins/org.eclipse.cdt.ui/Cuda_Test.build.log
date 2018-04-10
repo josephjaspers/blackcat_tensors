@@ -1,0 +1,31 @@
+19:47:45 **** Incremental Build of configuration Debug for project Cuda_Test ****
+make all 
+Building file: ../test.cpp
+Invoking: NVCC Compiler
+/usr/local/cuda-8.0/bin/nvcc -G -g -O0 -gencode arch=compute_52,code=sm_52  -odir "." -M -o "test.d" "../test.cpp"
+/usr/local/cuda-8.0/bin/nvcc -G -g -O0 --compile  -x c++ -o  "test.o" "../test.cpp"
+nvcc warning : The 'compute_20', 'sm_20', and 'sm_21' architectures are deprecated, and may be removed in a future release (Use -Wno-deprecated-gpu-targets to suppress warning).
+Finished building: ../test.cpp
+ 
+Building target: Cuda_Test
+Invoking: NVCC Linker
+/usr/local/cuda-8.0/bin/nvcc --cudart static --relocatable-device-code=false -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "Cuda_Test"  ./test.o   
+./test.o: In function `main':
+/home/joseph/cuda-workspace/Cuda_Test/Debug/../test.cpp:48: undefined reference to `cuInit'
+makefile:58: recipe for target 'Cuda_Test' failed
+/home/joseph/cuda-workspace/Cuda_Test/Debug/../test.cpp:49: undefined reference to `cuDeviceGetCount'
+/home/joseph/cuda-workspace/Cuda_Test/Debug/../test.cpp:54: undefined reference to `cuDeviceGet'
+/home/joseph/cuda-workspace/Cuda_Test/Debug/../test.cpp:55: undefined reference to `cuCtxCreate_v2'
+/home/joseph/cuda-workspace/Cuda_Test/Debug/../test.cpp:57: undefined reference to `cuModuleLoad'
+/home/joseph/cuda-workspace/Cuda_Test/Debug/../test.cpp:58: undefined reference to `cuModuleGetFunction'
+/home/joseph/cuda-workspace/Cuda_Test/Debug/../test.cpp:60: undefined reference to `cuMemAlloc_v2'
+/home/joseph/cuda-workspace/Cuda_Test/Debug/../test.cpp:61: undefined reference to `cuMemcpyHtoD_v2'
+/home/joseph/cuda-workspace/Cuda_Test/Debug/../test.cpp:64: undefined reference to `cuLaunchKernel'
+/home/joseph/cuda-workspace/Cuda_Test/Debug/../test.cpp:67: undefined reference to `cuMemcpyDtoH_v2'
+/home/joseph/cuda-workspace/Cuda_Test/Debug/../test.cpp:74: undefined reference to `cuMemFree_v2'
+/home/joseph/cuda-workspace/Cuda_Test/Debug/../test.cpp:75: undefined reference to `cuCtxDestroy_v2'
+collect2: error: ld returned 1 exit status
+make: *** [Cuda_Test] Error 1
+
+19:47:45 Build Finished (took 168ms)
+

@@ -1,0 +1,32 @@
+22:38:04 **** Incremental Build of configuration Debug for project Copy of BlackCat_Tensors_std ****
+make all 
+Building file: ../BC_Vector_impl/Vector_Constructors.cpp
+Invoking: NVCC Compiler
+/usr/local/cuda-8.0/bin/nvcc -I/home/joseph/cuda-workspace/BlackCat_Tensors/BC_Headers -G -g -O0 -std=c++11 -gencode arch=compute_37,code=sm_37 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_52,code=sm_52 -gencode arch=compute_53,code=sm_53 -gencode arch=compute_60,code=sm_60  -odir "BC_Vector_impl" -M -o "BC_Vector_impl/Vector_Constructors.d" "../BC_Vector_impl/Vector_Constructors.cpp"
+/usr/local/cuda-8.0/bin/nvcc -I/home/joseph/cuda-workspace/BlackCat_Tensors/BC_Headers -G -g -O0 -std=c++11 --compile  -x c++ -o  "BC_Vector_impl/Vector_Constructors.o" "../BC_Vector_impl/Vector_Constructors.cpp"
+nvcc warning : The 'compute_20', 'sm_20', and 'sm_21' architectures are deprecated, and may be removed in a future release (Use -Wno-deprecated-gpu-targets to suppress warning).
+../BC_Vector_impl/Vector_Constructors.cpp: In constructor ‘Vector<number_type>::Vector(const std::initializer_list<_Tp>&)’:
+../BC_Vector_impl/Vector_Constructors.cpp:6:81: error: class ‘Vector<number_type>’ does not have any field named ‘Tensor’
+ Vector<number_type>::Vector(const std::initializer_list<number_type>& vector) : Tensor<number_type>(vector.size()) {
+                                                                                 ^
+../BC_Vector_impl/Vector_Constructors.cpp:6:87: error: expected ‘(’ before ‘<’ token
+ Vector<number_type>::Vector(const std::initializer_list<number_type>& vector) : Tensor<number_type>(vector.size()) {
+                                                                                       ^
+../BC_Vector_impl/Vector_Constructors.cpp:6:87: error: expected ‘{’ before ‘<’ token
+../BC_Vector_impl/Vector_Constructors.cpp: At global scope:
+../BC_Vector_impl/Vector_Constructors.cpp:6:87: error: expected unqualified-id before ‘<’ token
+../BC_Vector_impl/Vector_Constructors.cpp: In copy constructor ‘Vector<number_type>::Vector(const Vector<number_type>&)’:
+../BC_Vector_impl/Vector_Constructors.cpp:11:63: error: class ‘Vector<number_type>’ does not have any field named ‘Tensor’
+ Vector<number_type>::Vector(const Vector<number_type>& vec) : Tensor<number_type>(vec.size()) {
+                                                               ^
+../BC_Vector_impl/Vector_Constructors.cpp:11:69: error: expected ‘(’ before ‘<’ token
+ Vector<number_type>::Vector(const Vector<number_type>& vec) : Tensor<number_type>(vec.size()) {
+                                                                     ^
+../BC_Vector_impl/Vector_Constructors.cpp:11:69: error: expected ‘{’ before ‘<’ token
+../BC_Vector_impl/Vector_Constructors.cpp: At global scope:
+../BC_Vector_impl/Vector_Constructors.cpp:11:69: error: expected unqualified-id before ‘<’ token
+BC_Vector_impl/subdir.mk:30: recipe for target 'BC_Vector_impl/Vector_Constructors.o' failed
+make: *** [BC_Vector_impl/Vector_Constructors.o] Error 1
+
+22:38:04 Build Finished (took 370ms)
+

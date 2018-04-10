@@ -1,0 +1,3 @@
+eclipse.preferences.version=1
+rulerContributions=org.eclipse.cdt.dsf.ui.disassemblyColumn.functionOffsets\u0000org.eclipse.cdt.dsf.ui.disassemblyColumn.opcodes
+useAnnotationsPrefPage=true

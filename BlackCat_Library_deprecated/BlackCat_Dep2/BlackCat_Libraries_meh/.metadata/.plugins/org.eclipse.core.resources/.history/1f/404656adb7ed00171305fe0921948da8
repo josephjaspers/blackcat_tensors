@@ -1,0 +1,16 @@
+#include <iostream>
+#include "BlackCat_Tensors.h"
+#include "BC_Internals/BC_Core/Tensor_Core.h"
+#include "BC_Internals/BC_Core/Vector.h"
+
+template<int sz>
+struct sizer {
+		static constexpr int size = sz;
+};
+
+int main() {
+
+
+	Vector<double, sizer<5>> alpha;
+	std::cout << " out" <<std::endl;
+}

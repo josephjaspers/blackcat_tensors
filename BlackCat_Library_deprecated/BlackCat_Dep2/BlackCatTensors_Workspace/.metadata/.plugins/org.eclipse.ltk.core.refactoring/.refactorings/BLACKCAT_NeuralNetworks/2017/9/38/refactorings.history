@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;BLACKCAT_NeuralNetworks/BC_NeuralNetwork_Headers/CNNSingleFilt&apos; to &apos;CNNSingleFilt.h&apos;" description="Rename resource &apos;CNNSingleFilt&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="BC_NeuralNetwork_Headers/CNNSingleFilt" name="CNNSingleFilt.h" stamp="1506201641197" updateReferences="true"/>
+</session>

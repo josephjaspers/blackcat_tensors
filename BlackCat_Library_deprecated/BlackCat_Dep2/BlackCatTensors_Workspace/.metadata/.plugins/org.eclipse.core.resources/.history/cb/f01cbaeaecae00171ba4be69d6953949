@@ -1,0 +1,58 @@
+class CPU {
+
+	//buffer buffer tensor
+	//tensor bugger
+	//buffer tensor
+
+
+	template<typename T, typename lv, typename rv>
+	class Pointwise_Operation_Buffer {
+
+		rv* curr;
+		lv* next;
+
+		unsigned sz;
+
+
+		virtual void math(T* assign_to, unsigned index) {
+			assign_to[index] = curr[index] + next[index];
+		}
+		virtual T& operator + (lv, rv) {
+			return lv + rv;
+		}
+	};
+
+	template<typename T>
+	class mul : Pointwise_Operation_Buffer<T> {
+
+
+		void math(T* assign_to, unsigned index) {
+			assign_to[index] = lv[index] + rv[index];
+		}
+	};
+	template<typename T>
+	class div : Pointwise_Operation_Buffer<T> {
+	};
+	template<typename T>
+	class add : Pointwise_Operation_Buffer<T> {
+	};
+	template<typename T>
+	class sub : Pointwise_Operation_Buffer<T> {
+	};
+	template<typename T>
+	class dot : Pointwise_Operation_Buffer<T> {
+	};
+
+	template<typename T>
+	class mul_scal : Pointwise_Operation_Buffer<T> {
+	};
+	template<typename T>
+	class div_scal : Pointwise_Operation_Buffer<T> {
+	};
+	template<typename T>
+	class add_scal : Pointwise_Operation_Buffer<T> {
+	};
+	template<typename T>
+	class sub_scal : Pointwise_Operation_Buffer<T> {
+	};
+};

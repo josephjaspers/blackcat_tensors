@@ -1,0 +1,24 @@
+/*
+ * BC_Tensor_BaseClass_Lv2_Matrix.h
+ *
+ *  Created on: Dec 1, 2017
+ *      Author: joseph
+ */
+
+#ifndef BC_TENSOR_BASECLASS_LV2_MATRIX_H_
+#define BC_TENSOR_BASECLASS_LV2_MATRIX_H_
+
+#include "BC_Tensor_BaseClass_Lv1_Vector.h"
+
+template<class T, class ml, int... dimensions>
+class Matrix : Tensor_Queen<T, ml, dimensions...> {
+
+};
+
+template<class T, class ml, int rows, int cols>
+class Matrix<T, ml, rows, cols> : Tensor_Queen<T, ml, rows, cols> {
+
+};
+
+
+#endif /* BC_TENSOR_BASECLASS_LV2_MATRIX_H_ */

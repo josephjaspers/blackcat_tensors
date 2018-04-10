@@ -1,0 +1,19 @@
+11:41:20 **** Build of configuration Debug for project Snake ****
+make all 
+Building file: ../src/Snake.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-8.0/bin/nvcc -G -g -O0 -gencode arch=compute_52,code=sm_52  -odir "src" -M -o "src/Snake.d" "../src/Snake.cu"
+/usr/local/cuda-8.0/bin/nvcc -G -g -O0 --compile --relocatable-device-code=false -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "src/Snake.o" "../src/Snake.cu"
+Finished building: ../src/Snake.cu
+ 
+Building target: Snake
+Invoking: NVCC Linker
+/usr/local/cuda-8.0/bin/nvcc --cudart static --relocatable-device-code=false -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "Snake"  ./src/Snake.o   
+/usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu/crt1.o: In function `_start':
+(.text+0x20): undefined reference to `main'
+makefile:59: recipe for target 'Snake' failed
+collect2: error: ld returned 1 exit status
+make: *** [Snake] Error 1
+
+11:41:24 Build Finished (took 3s.328ms)
+

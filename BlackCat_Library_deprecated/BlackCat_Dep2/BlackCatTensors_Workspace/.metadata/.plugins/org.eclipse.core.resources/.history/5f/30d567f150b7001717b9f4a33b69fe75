@@ -1,0 +1,58 @@
+/*
+ * BC_NN_Functions.h
+ *
+ *  Created on: Oct 7, 2017
+ *      Author: joseph
+ */
+
+#ifndef BC_NN_FUNCTIONS_H_
+#define BC_NN_FUNCTIONS_H_
+
+namespace nonLin {
+
+	void sigmoid(Tensor<double, CPU>& x) {
+		for (int i = 0; i < x.size(); ++i) {
+			x.data()[i] = 1 / (1 + pow(2.71828, -x.data()[i]));
+		}
+	}
+
+	void sigmoid_deriv(Tensor<double, CPU>& x) {
+		for (int i = 0; i < x.size(); ++i) {
+			x.data()[i] *= (1 - x.data()[i]);
+		}
+	}
+
+	std::pair<Tensor<double, CPU>, Tensor<unsigned, CPU>> max_pooling(Tensor<double, CPU>& x, unsigned stride) {
+		Tensor<double> max_cpy = x.getShape();
+		max_cpy.zeros();
+		std::pair<Tensor<double, CPU>, Tensor<unsigned, CPU>> data;
+		Tensor<uubu
+		data.first = max_value;
+		data.second = index;
+
+		return data;
+	}
+
+	//converts from max pool <value, Tensor<unsigned, unsigned> to the delta tensor of the prior layer
+	Tensor<double, CPU> max_filling(Tensor<double, CPU>& x, Tensor<unsigned> id, unsigned stride) {
+
+		Tensor<double> maximums = { x.rows() * stride, x.cols() * stride, x.rank(2) };
+		maximums = 0;
+		for (unsigned z = 0; z < x.rank(2); ++z) {
+			for (unsigned r = 0; r < x.rows(); r++) {
+				for (unsigned c = 0; c < x.cols(); c++) {
+					unsigned row = id[z][r][c](0).get();
+					unsigned col = id[z][r][c](1).get();
+
+					maximums[z][r * stride + row][c * stride + col] = x[z][r](c);
+
+				}
+			}
+		}
+
+		return maximums;
+	}
+}
+;
+
+#endif /* BC_NN_FUNCTIONS_H_ */

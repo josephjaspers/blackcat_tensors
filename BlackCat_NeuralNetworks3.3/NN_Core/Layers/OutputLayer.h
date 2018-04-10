@@ -28,23 +28,14 @@ public:
 	OutputLayer(int inputs) : INPUTS(inputs), hypothesis(inputs) {
 	}
 
-	template<class T>
-	vec forwardPropagation(const _vec<T>& in) {
+	vec forwardPropagation(const vec& in) {
 		return hypothesis == in;
 	}
-	template<class T>
-	vec forwardPropagation_Express(const _vec<T>& x) const {
+	vec forwardPropagation_Express(const vec& x) const {
 		return x;
 	}
-
-	template<class T>
-	vec backPropagation(const _vec<T>& y) {
+	vec backPropagation(const vec& y) {
 		return prev().backPropagation(hypothesis - y);
-	}
-
-	template<class T>
-	auto train(const vec_expr<T>& x, const vec& y) {
-		return x - y;
 	}
 
 	void init_threads(int i) {}

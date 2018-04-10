@@ -1,0 +1,6 @@
+12:46:45 **** Incremental Build of configuration Debug for project BlackCat_Tensor_CUDA ****
+make all 
+make: Nothing to be done for 'all'.
+
+12:46:45 Build Finished (took 65ms)
+

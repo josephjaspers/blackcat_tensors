@@ -1,0 +1,31 @@
+/*
+ * Tensor_IdentityClasses.h
+ *
+ *  Created on: Dec 30, 2017
+ *      Author: joseph
+ */
+
+#ifndef TENSOR_IDENTITYCLASSES_H_
+#define TENSOR_IDENTITYCLASSES_H_
+
+namespace {
+
+template<class core>
+struct IDENTITY_BASE {
+		core& convert() {
+			return static_cast<core&>(*this);
+		}
+		const core& convert() const {
+			return static_cast<core&>(*this);
+		}
+};
+
+template<class core> struct SCALAR : IDENTITY_BASE<core> { static constexpr int RANK = 0; };
+template<class core> struct VECTOR : IDENTITY_BASE<core> { static constexpr int RANK = 1; };
+template<class core> struct MATRIX : IDENTITY_BASE<core> { static constexpr int RANK = 2; };
+template<class core> struct CUBE   : IDENTITY_BASE<core> { static constexpr int RANK = 3; };
+template<class core> struct TENSOR : IDENTITY_BASE<core> { static constexpr int RANK = -1; };
+}
+
+
+#endif /* TENSOR_IDENTITYCLASSES_H_ */

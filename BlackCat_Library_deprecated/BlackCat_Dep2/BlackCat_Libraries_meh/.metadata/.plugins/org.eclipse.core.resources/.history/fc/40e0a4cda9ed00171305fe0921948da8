@@ -1,0 +1,6 @@
+#include <iostream>
+#include "BlackCat_Tensors.h"
+int main() {
+
+	std::cout << " out" <<std::endl;
+}

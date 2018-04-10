@@ -1,0 +1,78 @@
+16:20:59 **** Incremental Build of configuration Debug for project BlackCat_Tensors5 ****
+make all 
+Building file: ../SpeedTests.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"SpeedTests.d" -MT"SpeedTests.o" -o "SpeedTests.o" "../SpeedTests.cpp"
+In file included from ../BC_Internals/BlackCat_Internal_GlobalUnifier.h:44:0,
+                 from ../BC_Internals/BlackCat_Internal_ForwardDecls.h:86,
+                 from ../BlackCat_Tensors.h:12,
+                 from ../SpeedTests.cpp:7:
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:48:0: warning: ignoring #pragma omp parallel [-Wunknown-pragmas]
+ #pragma omp parallel for
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:52:0: warning: ignoring #pragma omp barrier [-Wunknown-pragmas]
+ #pragma omp barrier
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:65:0: warning: ignoring #pragma omp parallel [-Wunknown-pragmas]
+ #pragma omp parallel for
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:69:0: warning: ignoring #pragma omp barrier [-Wunknown-pragmas]
+ #pragma omp barrier
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:74:0: warning: ignoring #pragma omp parallel [-Wunknown-pragmas]
+ #pragma omp parallel for
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:78:0: warning: ignoring #pragma omp barrier [-Wunknown-pragmas]
+ #pragma omp barrier
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:82:0: warning: ignoring #pragma omp parallel [-Wunknown-pragmas]
+ #pragma omp parallel for
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:86:0: warning: ignoring #pragma omp barrier [-Wunknown-pragmas]
+ #pragma omp barrier
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:132:0: warning: ignoring #pragma omp parallel [-Wunknown-pragmas]
+ #pragma omp parallel for
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:136:0: warning: ignoring #pragma omp barrier [-Wunknown-pragmas]
+ #pragma omp barrier
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:140:0: warning: ignoring #pragma omp parallel [-Wunknown-pragmas]
+ #pragma omp parallel for
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:144:0: warning: ignoring #pragma omp barrier [-Wunknown-pragmas]
+ #pragma omp barrier
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:148:0: warning: ignoring #pragma omp parallel [-Wunknown-pragmas]
+ #pragma omp parallel for
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:153:0: warning: ignoring #pragma omp barrier [-Wunknown-pragmas]
+ #pragma omp barrier
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:157:0: warning: ignoring #pragma omp parallel [-Wunknown-pragmas]
+ #pragma omp parallel for
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:161:0: warning: ignoring #pragma omp barrier [-Wunknown-pragmas]
+ #pragma omp barrier
+subdir.mk:21: recipe for target 'SpeedTests.o' failed
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:289:0: warning: ignoring #pragma omp parallel [-Wunknown-pragmas]
+ #pragma omp parallel for
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:298:0: warning: ignoring #pragma omp barrier [-Wunknown-pragmas]
+ #pragma omp barrier
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:304:0: warning: ignoring #pragma omp parallel [-Wunknown-pragmas]
+ #pragma omp parallel for
+ 
+../BC_Internals/BC_Mathematics_CPU/Mathematics_CPU.h:313:0: warning: ignoring #pragma omp barrier [-Wunknown-pragmas]
+ #pragma omp barrier
+ 
+../SpeedTests.cpp:8:10: fatal error: Eigen/Dense: No such file or directory
+ #include <Eigen/Dense>
+          ^~~~~~~~~~~~~
+compilation terminated.
+make: *** [SpeedTests.o] Error 1
+
+16:20:59 Build Finished (took 126ms)
+

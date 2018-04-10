@@ -1,0 +1,77 @@
+19:13:00 **** Incremental Build of configuration Debug for project BlackCat_Tensors_Cuda ****
+make all 
+Building file: ../BC_Vector_impl/Vector_AssignmentOperators.cpp
+Invoking: NVCC Compiler
+/usr/local/cuda-8.0/bin/nvcc -I/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_Headers -I/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl -G -g -O0 -std=c++11 -gencode arch=compute_52,code=sm_52  -odir "BC_Vector_impl" -M -o "BC_Vector_impl/Vector_AssignmentOperators.d" "../BC_Vector_impl/Vector_AssignmentOperators.cpp"
+/usr/local/cuda-8.0/bin/nvcc -I/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_Headers -I/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl -G -g -O0 -std=c++11 --compile  -x c++ -o  "BC_Vector_impl/Vector_AssignmentOperators.o" "../BC_Vector_impl/Vector_AssignmentOperators.cpp"
+nvcc warning : The 'compute_20', 'sm_20', and 'sm_21' architectures are deprecated, and may be removed in a future release (Use -Wno-deprecated-gpu-targets to suppress warning).
+In file included from /home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_Headers/BLACKCAT_EXPLICIT_INSTANTIATION.h:63:0,
+                 from ../BC_Vector_impl/Vector_AssignmentOperators.cpp:2:
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu: In function ‘void GPU_MATHEMATICS::multiply(number_type*, const unsigned int*, unsigned int, const unsigned int*, const number_type*, const unsigned int*, const number_type*, const unsigned int*)’:
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:60:14: error: expected primary-expression before ‘<’ token
+    multiply<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, &m2[m2_LD[order - 1] * i], m2_LD);
+              ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:60:24: error: expected primary-expression before ‘>’ token
+    multiply<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, &m2[m2_LD[order - 1] * i], m2_LD);
+                        ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu: In function ‘void GPU_MATHEMATICS::divide(number_type*, const unsigned int*, unsigned int, const unsigned int*, const number_type*, const unsigned int*, const number_type*, const unsigned int*)’:
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:74:12: error: expected primary-expression before ‘<’ token
+    divide<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, &m2[m2_LD[order - 1] * i], m2_LD);
+            ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:74:22: error: expected primary-expression before ‘>’ token
+    divide<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, &m2[m2_LD[order - 1] * i], m2_LD);
+                      ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu: In function ‘void GPU_MATHEMATICS::add(number_type*, const unsigned int*, unsigned int, const unsigned int*, const number_type*, const unsigned int*, const number_type*, const unsigned int*)’:
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:88:9: error: expected primary-expression before ‘<’ token
+    add<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, &m2[m2_LD[order - 1] * i], m2_LD);
+         ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:88:19: error: expected primary-expression before ‘>’ token
+    add<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, &m2[m2_LD[order - 1] * i], m2_LD);
+                   ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu: In function ‘void GPU_MATHEMATICS::subtract(number_type*, const unsigned int*, unsigned int, const unsigned int*, const number_type*, const unsigned int*, const number_type*, const unsigned int*)’:
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:103:14: error: expected primary-expression before ‘<’ token
+    subtract<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, &m2[m2_LD[order - 1] * i], m2_LD);
+              ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:103:24: error: expected primary-expression before ‘>’ token
+    subtract<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, &m2[m2_LD[order - 1] * i], m2_LD);
+                        ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu: In function ‘void GPU_MATHEMATICS::power(number_type*, const unsigned int*, unsigned int, const unsigned int*, const number_type*, const unsigned int*, number_type)’:
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:118:11: error: expected primary-expression before ‘<’ token
+    power<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, scal);
+           ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:118:21: error: expected primary-expression before ‘>’ token
+    power<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, scal);
+                     ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu: In function ‘void GPU_MATHEMATICS::multiply(number_type*, const unsigned int*, unsigned int, const unsigned int*, const number_type*, const unsigned int*, number_type)’:
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:131:14: error: expected primary-expression before ‘<’ token
+    multiply<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, scal);
+              ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:131:24: error: expected primary-expression before ‘>’ token
+    multiply<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, scal);
+                        ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu: In function ‘void GPU_MATHEMATICS::divide(number_type*, const unsigned int*, unsigned int, const unsigned int*, const number_type*, const unsigned int*, number_type)’:
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:144:12: error: expected primary-expression before ‘<’ token
+    divide<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, scal);
+            ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:144:22: error: expected primary-expression before ‘>’ token
+    divide<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, scal);
+                      ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu: In function ‘void GPU_MATHEMATICS::add(number_type*, const unsigned int*, unsigned int, const unsigned int*, const number_type*, const unsigned int*, number_type)’:
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:157:9: error: expected primary-expression before ‘<’ token
+    add<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, scal);
+         ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:157:19: error: expected primary-expression before ‘>’ token
+    add<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, scal);
+                   ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu: In function ‘void GPU_MATHEMATICS::subtract(number_type*, const unsigned int*, unsigned int, const unsigned int*, const number_type*, const unsigned int*, number_type)’:
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:170:14: error: expected primary-expression before ‘<’ token
+    subtract<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, scal);
+              ^
+/home/joseph/cuda-workspace/BlackCat_Tensors_Cuda/BC_GPU_impl/LAR_PointwiseHighDegree_CUDA.cu:170:24: error: expected primary-expression before ‘>’ token
+    subtract<<<256,256>>>(&s[s_LD[order - 1] * i], s_ranks, order - 1, s_LD, &m1[m1_LD[order - 1] * i], m1_LD, scal);
+                        ^
+make: *** [BC_Vector_impl/Vector_AssignmentOperators.o] Error 1
+BC_Vector_impl/subdir.mk:24: recipe for target 'BC_Vector_impl/Vector_AssignmentOperators.o' failed
+
+19:13:01 Build Finished (took 563ms)
+

@@ -1,0 +1,1 @@
+LazyInst.o: ../LazyInst.cpp

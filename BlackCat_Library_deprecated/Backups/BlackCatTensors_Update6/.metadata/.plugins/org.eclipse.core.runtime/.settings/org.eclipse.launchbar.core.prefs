@@ -1,0 +1,17 @@
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/arch=x86_64
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/os=linux
+configDescList=org.eclipse.launchbar.core.descriptorType.default\:BlackCat_Tensors6,org.eclipse.launchbar.core.descriptorType.default\:BlackCat_Tensors
+eclipse.preferences.version=1
+org.eclipse.launchbar.core.descriptorType.default\:BlackCatTensors4/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:BlackCatTensors4/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
+org.eclipse.launchbar.core.descriptorType.default\:BlackCat_Tensors\ Release/activeLaunchMode=debug
+org.eclipse.launchbar.core.descriptorType.default\:BlackCat_Tensors/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:BlackCat_Tensors/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
+org.eclipse.launchbar.core.descriptorType.default\:BlackCat_Tensors_RunTimeTest/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:BlackCat_Tensors_RunTimeTest/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
+org.eclipse.launchbar.core.descriptorType.default\:New_configuration/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:New_configuration/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
+org.eclipse.launchbar.core.descriptorType.default\:test\ (1)/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:test\ (1)/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
+org.eclipse.launchbar.core.descriptorType.default\:test\ (2)/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:test/activeLaunchMode=run

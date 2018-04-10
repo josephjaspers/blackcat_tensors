@@ -1,0 +1,12 @@
+14:42:29 **** Incremental Build of configuration Debug for project BlackCat_Tensors_needsRedone ****
+make all 
+Building file: ../LAR_impl/LAR_DotProducts.cpp
+Invoking: NVCC Compiler
+/usr/local/cuda-8.0/bin/nvcc -I/home/joseph/cuda-workspace/BlackCat_Tensors/BC_Headers -G -g -O0 -std=c++11 -gencode arch=compute_37,code=sm_37 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_52,code=sm_52 -gencode arch=compute_53,code=sm_53 -gencode arch=compute_60,code=sm_60  -odir "LAR_impl" -M -o "LAR_impl/LAR_DotProducts.d" "../LAR_impl/LAR_DotProducts.cpp"
+../LAR_impl/LAR_DotProducts.cpp:1:35: fatal error: LinearAlgebraRoutines.h: No such file or directory
+LAR_impl/subdir.mk:42: recipe for target 'LAR_impl/LAR_DotProducts.o' failed
+compilation terminated.
+make: *** [LAR_impl/LAR_DotProducts.o] Error 1
+
+14:42:29 Build Finished (took 62ms)
+

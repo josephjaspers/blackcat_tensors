@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="WorkbenchPreferenceDialogSettings">
+		<item value="621" key="DIALOG_X_ORIGIN"/>
+		<item value="22" key="DIALOG_Y_ORIGIN"/>
+	</section>
+	<section name="org.eclipse.ui.preferences.keysPreferencePage">
+	</section>
+	<section name="org.eclipse.ui.internal.QuickAccess">
+		<item value="675" key="dialogHeight"/>
+		<item value="1200" key="dialogWidth"/>
+		<list key="textEntries">
+			<item value="3"/>
+			<item value="3"/>
+			<item value="1"/>
+			<item value="1"/>
+			<item value="1"/>
+			<item value="1"/>
+			<item value="2"/>
+		</list>
+		<list key="orderedElements">
+			<item value="org.eclipse.ui.console.ConsoleView"/>
+			<item value="org.eclipse.team.ui.GenericHistoryView"/>
+			<item value="org.eclipse.ui.navigator.ProjectExplorer"/>
+			<item value="org.eclipse.cdt.dsf.debug.ui.preferences"/>
+			<item value="org.eclipse.ui.window.preferences(preferencePageId=org.eclipse.cdt.debug.ui.DebuggerTypesPreferencePage)"/>
+			<item value="org.eclipse.help.ui.HelpView"/>
+			<item value="org.eclipse.search.ui.views.SearchView"/>
+		</list>
+		<list key="orderedProviders">
+			<item value="org.eclipse.e4.ui.parts"/>
+			<item value="org.eclipse.e4.ui.parts"/>
+			<item value="org.eclipse.e4.ui.parts"/>
+			<item value="org.eclipse.ui.preferences"/>
+			<item value="org.eclipse.ui.commands"/>
+			<item value="org.eclipse.e4.ui.parts"/>
+			<item value="org.eclipse.e4.ui.parts"/>
+		</list>
+		<list key="textArray">
+			<item value="conso"/>
+			<item value="con"/>
+			<item value="console"/>
+			<item value="hist"/>
+			<item value="histo"/>
+			<item value="history"/>
+			<item value="projec"/>
+			<item value="performan"/>
+			<item value="debugg"/>
+			<item value="help"/>
+			<item value="search"/>
+			<item value="se"/>
+		</list>
+	</section>
+	<section name="PreferencesImportWizard">
+		<item value="/home/joseph/Downloads/theme-4.epf" key=""/>
+		<list key="WizardPreferencesExportPage1.STORE_DESTINATION_NAMES_ID">
+			<item value="/home/joseph/Downloads/theme-4.epf"/>
+			<item value="/home/joseph/Downloads/theme-39607.epf"/>
+			<item value="/home/joseph/Downloads/theme-1794.epf"/>
+			<item value="/home/joseph/Downloads/theme-1115.epf"/>
+			<item value="/home/joseph/Downloads/theme-66.epf"/>
+		</list>
+	</section>
+	<section name="NewWizardAction">
+		<item value="com.nvidia.cuda.ide.newcuproject" key="NewWizardSelectionPage.STORE_SELECTED_ID"/>
+		<list key="NewWizardSelectionPage.STORE_EXPANDED_CATEGORIES_ID">
+			<item value="org.eclipse.ui.Basic"/>
+			<item value="org.eclipse.cdt.ui.newCWizards"/>
+		</list>
+	</section>
+	<section name="ImportExportAction">
+		<item value="org.eclipse.ui.wizards.export.Preferences" key="ImportExportPage.STORE_SELECTED_EXPORT_WIZARD_ID"/>
+		<item value="org.eclipse.ui.wizards.import.ExternalProject" key="ImportExportPage.STORE_SELECTED_IMPORT_WIZARD_ID"/>
+		<list key="ImportExportPage.STORE_EXPANDED_IMPORT_CATEGORIES">
+			<item value="org.eclipse.ui.Basic"/>
+			<item value="org.eclipse.cdt.ui.importWizardCategory"/>
+			<item value="com.nvidia.viper.importdata"/>
+		</list>
+		<list key="ImportExportPage.STORE_EXPANDED_EXPORT_CATEGORIES">
+			<item value="org.eclipse.ui.Basic"/>
+			<item value="org.eclipse.cdt.ui.exportWizardCategory"/>
+		</list>
+	</section>
+	<section name="PreferencesExportWizard">
+		<item value="JosephJaspersNsightPreferences.epf" key=""/>
+		<item value="JosephJaspersNsightPreferences.epf" key=""/>
+		<item value="true" key="WizardPreferencesExportPage1.STORE_OVERWRITE_EXISTING_FILES_ID"/>
+		<item value="false" key="WizardPreferencesExportPage1.EXPORT_ALL_PREFERENCES_ID"/>
+		<list key="WizardPreferencesExportPage1.STORE_DESTINATION_NAMES_ID">
+			<item value="JosephJaspersNsightPreferences.epf"/>
+		</list>
+		<list key="WizardPreferencesExportPage1.TRANSFER_PREFERENCES_NAMES_ID">
+			<item value="org.eclipse.cdt.ui.transfer.code_style"/>
+			<item value="org.eclipse.cdt.ui.transfer.editor.appearance"/>
+			<item value="org.eclipse.cdt.ui.transfer.editor.behavior"/>
+		</list>
+	</section>
+	<section name="FileSystemImportWizard">
+		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_CREATE_CONTAINER_STRUCTURE_ID"/>
+		<item value="PROJECT_LOC" key="WizardFileSystemResourceImportPage1.STORE_PATH_VARIABLE_NAME_ID"/>
+		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_OVERWRITE_EXISTING_RESOURCES_ID"/>
+		<item value="true" key="WizardFileSystemResourceImportPage1.STORE_CREATE_VIRTUAL_FOLDERS_ID"/>
+		<item value="false" key="WizardFileSystemResourceImportPage1.STORE_CREATE_LINKS_IN_WORKSPACE_ID"/>
+		<item value="true" key="WizardFileSystemResourceImportPage1.STORE_PATH_VARIABLE_SELECTED_ID"/>
+		<list key="WizardFileSystemResourceImportPage1.STORE_SOURCE_NAMES_ID">
+			<item value="/home/joseph/cuda-workspace/BlackCat_Tensors"/>
+			<item value="/home/joseph/cuda-workspace/NeuralNetworks-master/NeuralNetworks"/>
+			<item value="/media/joseph/USB20FD/BC_SuperFolder/BLACCAT_TENSOR_FINISHED/BC_LAR_impl"/>
+			<item value="/home/joseph/cuda-workspace/BlackCat_Matrices/Tensor_impl"/>
+			<item value="/home/joseph/cuda-workspace/blackcat_files"/>
+		</list>
+	</section>
+</section>

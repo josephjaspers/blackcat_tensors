@@ -1,0 +1,4 @@
+#Tue Oct 03 10:37:36 EDT 2017
+__DEFAULT__=false
+org.eclipse.help.ui.localSearch.master=true
+expression=add library

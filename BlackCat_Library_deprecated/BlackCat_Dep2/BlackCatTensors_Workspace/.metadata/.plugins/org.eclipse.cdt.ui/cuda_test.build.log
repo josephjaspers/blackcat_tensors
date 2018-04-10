@@ -1,0 +1,20 @@
+20:00:06 **** Build of configuration Debug for project cuda_test ****
+make all 
+Building file: ../test.cu
+Invoking: NVCC Compiler
+/usr/local/cuda-8.0/bin/nvcc -G -g -O0 -gencode arch=compute_52,code=sm_52  -odir "." -M -o "test.d" "../test.cu"
+/usr/local/cuda-8.0/bin/nvcc -G -g -O0 --compile --relocatable-device-code=false -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "test.o" "../test.cu"
+../test.cu(94): error: expected a ")"
+
+../test.cu(95): error: expected a ")"
+
+../test.cu(96): error: expected a ")"
+
+../test.cu(90): warning: variable "n" was declared but never referenced
+
+3 errors detected in the compilation of "/tmp/tmpxft_000032a5_00000000-7_test.cpp1.ii".
+make: *** [test.o] Error 2
+subdir.mk:18: recipe for target 'test.o' failed
+
+20:00:06 Build Finished (took 367ms)
+

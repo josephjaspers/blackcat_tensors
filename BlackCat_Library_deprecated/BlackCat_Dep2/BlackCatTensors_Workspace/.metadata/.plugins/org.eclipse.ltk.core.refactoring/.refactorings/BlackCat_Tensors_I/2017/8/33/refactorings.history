@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;BlackCat_Tensors_I/Headers/Tensor_Super_impl&apos; to &apos;Tensor_Super_impl.h&apos;" description="Rename resource &apos;Tensor_Super_impl&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Headers/Tensor_Super_impl" name="Tensor_Super_impl.h" stamp="1502775134679" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;BlackCat_Tensors_I/Headers/Id_Tensor&apos; to &apos;Id_Tensor.h&apos;" description="Rename resource &apos;Id_Tensor&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Headers/Id_Tensor" name="Id_Tensor.h" stamp="1502775290289" updateReferences="true"/>
+</session>

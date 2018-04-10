@@ -1,0 +1,494 @@
+17:17:22 **** Incremental Build of configuration Debug for project BlackCat_LibraryCPU ****
+make all 
+Building file: ../UnitTests/main.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"UnitTests/main.d" -MT"UnitTests/main.o" -o "UnitTests/main.o" "../UnitTests/main.cpp"
+In file included from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:32:0,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h:74:0: warning: ignoring #pragma omp parallel [-Wunknown-pragmas]
+ #pragma omp parallel for
+ 
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h:78:0: warning: ignoring #pragma omp barrier [-Wunknown-pragmas]
+ #pragma omp barrier
+ 
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h:88:0: warning: ignoring #pragma omp parallel [-Wunknown-pragmas]
+ #pragma omp parallel for
+ 
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h:92:0: warning: ignoring #pragma omp barrier [-Wunknown-pragmas]
+ #pragma omp barrier
+ 
+In file included from ../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.h:17:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.h:13,
+                 from ../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:12,
+                 from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:15,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Scalar.h:22:0: warning: "__BCinline__" redefined
+ #define __BCinline__
+ 
+In file included from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:29:0,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Expressions/BlackCat_Internal_Definitions.h:25:0: note: this is the location of the previous definition
+ #define __BCinline__ __BC_gcpu__ __attribute__((always_inline))
+ 
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:15:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:77:20: error: ISO C++ forbids declaration of ‘parameter’ with no type [-fpermissive]
+  TensorInitializer(const template derived_alt<U>&  tensor) : black_cat_array(tensor.innerShape()) {
+                    ^~~~~
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:77:26: error: expected ‘,’ or ‘...’ before ‘template’
+  TensorInitializer(const template derived_alt<U>&  tensor) : black_cat_array(tensor.innerShape()) {
+                          ^~~~~~~~
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h: In constructor ‘BC::TensorInitializer<_tensor<t, ml>, typename std::enable_if<BC::MTF::isCorePure<t>::conditional, void>::type>::TensorInitializer(int)’:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:77:78: error: ‘tensor’ was not declared in this scope
+  TensorInitializer(const template derived_alt<U>&  tensor) : black_cat_array(tensor.innerShape()) {
+                                                                              ^~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10:0,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h: At global scope:
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:38:71: error: expected ‘;’ before ‘<’ token
+  template<class    U> using deriv   = typename shell_of<derived>::type<U, Mathlib>;
+                                                                       ^
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:39:76: error: expected ‘;’ before ‘<’ token
+  template<class... U> using functor = typename shell_of<functor_type>::type<U...>;
+                                                                            ^
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h: In member function ‘auto BC::TensorBase<derived>::operator[](int)’:
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:83:68: error: expected ‘(’ before ‘<’ token
+     auto operator [] (int i)    { return typename base<RANK>::slice<decltype(slice(0)), Mathlib>(slice(i)); }
+                                                                    ^
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:83:69: error: expected primary-expression before ‘decltype’
+     auto operator [] (int i)    { return typename base<RANK>::slice<decltype(slice(0)), Mathlib>(slice(i)); }
+                                                                     ^~~~~~~~
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:83:69: error: expected ‘;’ before ‘decltype’
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:83:87: error: expected unqualified-id before ‘,’ token
+     auto operator [] (int i)    { return typename base<RANK>::slice<decltype(slice(0)), Mathlib>(slice(i)); }
+                                                                                       ^
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:83:96: error: expected initializer before ‘>’ token
+     auto operator [] (int i)    { return typename base<RANK>::slice<decltype(slice(0)), Mathlib>(slice(i)); }
+                                                                                                ^
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h: In member function ‘const auto BC::TensorBase<derived>::operator[](int) const’:
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:84:74: error: expected ‘(’ before ‘<’ token
+  const auto operator [] (int i) const { return typename base<RANK>::slice<decltype(slice(0)), Mathlib>(slice(i)); }
+                                                                          ^
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:84:75: error: expected primary-expression before ‘decltype’
+  const auto operator [] (int i) const { return typename base<RANK>::slice<decltype(slice(0)), Mathlib>(slice(i)); }
+                                                                           ^~~~~~~~
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:84:75: error: expected ‘;’ before ‘decltype’
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:84:93: error: expected unqualified-id before ‘,’ token
+  const auto operator [] (int i) const { return typename base<RANK>::slice<decltype(slice(0)), Mathlib>(slice(i)); }
+                                                                                             ^
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:84:102: error: expected initializer before ‘>’ token
+  const auto operator [] (int i) const { return typename base<RANK>::slice<decltype(slice(0)), Mathlib>(slice(i)); }
+                                                                                                      ^
+In file included from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:50:0,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Vector.h: At global scope:
+../UnitTests/../BC_Internals/BC_Core/Vector.h:45:15: error: ‘unary_expression_transpose’ was not declared in this scope
+  const Vector<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib> t() const {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../UnitTests/../BC_Internals/BC_Core/Vector.h:45:118: error: template argument 1 is invalid
+  const Vector<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib> t() const {
+                                                                                                                      ^
+../UnitTests/../BC_Internals/BC_Core/Vector.h:45:119: error: expected unqualified-id before ‘,’ token
+  const Vector<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib> t() const {
+                                                                                                                       ^
+In file included from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:51:0,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Matrix.h:47:15: error: ‘unary_expression_transpose’ was not declared in this scope
+  const Matrix<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib> t() const {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../UnitTests/../BC_Internals/BC_Core/Matrix.h:47:118: error: template argument 1 is invalid
+  const Matrix<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib> t() const {
+                                                                                                                      ^
+../UnitTests/../BC_Internals/BC_Core/Matrix.h:47:119: error: expected unqualified-id before ‘,’ token
+  const Matrix<unary_expression_transpose<typename MTF::determine_scalar<T>::type, typename parent_class::functor_type>, Mathlib> t() const {
+                                                                                                                       ^
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:15:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h: In instantiation of ‘class BC::TensorInitializer<BC::Vector<BC::binary_expression<float, BC::mul, BC::Tensor_Core<BC::Vector<float> >, BC::Tensor_Core<BC::Vector<float> > >, BC::CPU>, void>’:
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:21:7:   required from ‘class BC::TensorBase<BC::Vector<BC::binary_expression<float, BC::mul, BC::Tensor_Core<BC::Vector<float> >, BC::Tensor_Core<BC::Vector<float> > >, BC::CPU> >’
+../UnitTests/../BC_Internals/BC_Core/Vector.h:17:7:   required from ‘class BC::Vector<BC::binary_expression<float, BC::mul, BC::Tensor_Core<BC::Vector<float> >, BC::Tensor_Core<BC::Vector<float> > >, BC::CPU>’
+../UnitTests/SpeedTests.h:43:19:   required from here
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:28:15: error: ‘BC::TensorInitializer<derived, expression_tensor>::black_cat_array’ has incomplete type
+  functor_type black_cat_array;
+               ^~~~~~~~~~~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:12:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h:26:41: note: declaration of ‘using functor_type = BC::_functor<BC::Vector<BC::binary_expression<float, BC::mul, BC::Tensor_Core<BC::Vector<float> >, BC::Tensor_Core<BC::Vector<float> > >, BC::CPU> > {aka class BC::binary_expression<float, BC::mul, BC::Tensor_Core<BC::Vector<float> >, BC::Tensor_Core<BC::Vector<float> > >}’
+ template<class,class,class,class> class binary_expression;
+                                         ^~~~~~~~~~~~~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:15:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h: In instantiation of ‘class BC::TensorInitializer<BC::Vector<BC::binary_expression<float, BC::assign, BC::Tensor_Core<BC::Vector<float> >, BC::binary_expression<float, BC::mul, BC::Tensor_Core<BC::Vector<float> >, BC::Tensor_Core<BC::Vector<float> > > >, BC::CPU>, void>’:
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:21:7:   required from ‘class BC::TensorBase<BC::Vector<BC::binary_expression<float, BC::assign, BC::Tensor_Core<BC::Vector<float> >, BC::binary_expression<float, BC::mul, BC::Tensor_Core<BC::Vector<float> >, BC::Tensor_Core<BC::Vector<float> > > >, BC::CPU> >’
+../UnitTests/../BC_Internals/BC_Core/Vector.h:17:7:   required from ‘class BC::Vector<BC::binary_expression<float, BC::assign, BC::Tensor_Core<BC::Vector<float> >, BC::binary_expression<float, BC::mul, BC::Tensor_Core<BC::Vector<float> >, BC::Tensor_Core<BC::Vector<float> > > >, BC::CPU>’
+../UnitTests/SpeedTests.h:43:24:   required from here
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:28:15: error: ‘BC::TensorInitializer<derived, expression_tensor>::black_cat_array’ has incomplete type
+  functor_type black_cat_array;
+               ^~~~~~~~~~~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:12:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h:26:41: note: declaration of ‘using functor_type = BC::_functor<BC::Vector<BC::binary_expression<float, BC::assign, BC::Tensor_Core<BC::Vector<float> >, BC::binary_expression<float, BC::mul, BC::Tensor_Core<BC::Vector<float> >, BC::Tensor_Core<BC::Vector<float> > > >, BC::CPU> > {aka class BC::binary_expression<float, BC::assign, BC::Tensor_Core<BC::Vector<float> >, BC::binary_expression<float, BC::mul, BC::Tensor_Core<BC::Vector<float> >, BC::Tensor_Core<BC::Vector<float> > > >}’
+ template<class,class,class,class> class binary_expression;
+                                         ^~~~~~~~~~~~~~~~~
+In file included from ../UnitTests/main.cpp:4:0:
+../UnitTests/SpeedTests.h: In function ‘int speedTestsScalarIteration()’:
+../UnitTests/SpeedTests.h:136:9: error: ‘using mat = class BC::Matrix<float> {aka class BC::Matrix<float>}’ has no member named ‘t’
+   c = a.t() * b;
+         ^
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:15:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h: In instantiation of ‘class BC::TensorInitializer<BC::Matrix<BC::binary_expression<float, BC::add, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::CPU>, void>’:
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:21:7:   required from ‘class BC::TensorBase<BC::Matrix<BC::binary_expression<float, BC::add, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::CPU> >’
+../UnitTests/../BC_Internals/BC_Core/Matrix.h:17:7:   required from ‘class BC::Matrix<BC::binary_expression<float, BC::add, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::CPU>’
+../UnitTests/SpeedTests.h:146:23:   required from here
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:28:15: error: ‘BC::TensorInitializer<derived, expression_tensor>::black_cat_array’ has incomplete type
+  functor_type black_cat_array;
+               ^~~~~~~~~~~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:12:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h:26:41: note: declaration of ‘using functor_type = BC::_functor<BC::Matrix<BC::binary_expression<float, BC::add, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::CPU> > {aka class BC::binary_expression<float, BC::add, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> > >}’
+ template<class,class,class,class> class binary_expression;
+                                         ^~~~~~~~~~~~~~~~~
+../UnitTests/main.cpp: In function ‘auto test()’:
+../UnitTests/main.cpp:40:8: error: ‘using mat = class BC::Matrix<float> {aka class BC::Matrix<float>}’ has no member named ‘t’
+  d = a.t();
+        ^
+../UnitTests/main.cpp:41:8: error: ‘using mat = class BC::Matrix<float> {aka class BC::Matrix<float>}’ has no member named ‘t’
+  e = b.t();
+        ^
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:15:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h: In instantiation of ‘class BC::TensorInitializer<BC::Matrix<BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::CPU>, void>’:
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:21:7:   required from ‘class BC::TensorBase<BC::Matrix<BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::CPU> >’
+../UnitTests/../BC_Internals/BC_Core/Matrix.h:17:7:   required from ‘class BC::Matrix<BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::CPU>’
+../UnitTests/main.cpp:47:10:   required from here
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:28:15: error: ‘BC::TensorInitializer<derived, expression_tensor>::black_cat_array’ has incomplete type
+  functor_type black_cat_array;
+               ^~~~~~~~~~~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:12:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h:29:41: note: declaration of ‘using functor_type = BC::_functor<BC::Matrix<BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::CPU> > {aka class BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>}’
+ template<class,class,class,class> class binary_expression_dotproduct;
+                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../UnitTests/main.cpp:50:8: error: ‘using mat = class BC::Matrix<float> {aka class BC::Matrix<float>}’ has no member named ‘t’
+  c = a.t() * b.t();
+        ^
+../UnitTests/main.cpp:50:16: error: ‘using mat = class BC::Matrix<float> {aka class BC::Matrix<float>}’ has no member named ‘t’
+  c = a.t() * b.t();
+                ^
+../UnitTests/main.cpp:53:8: error: ‘using mat = class BC::Matrix<float> {aka class BC::Matrix<float>}’ has no member named ‘t’
+  c = a.t() * e;
+        ^
+../UnitTests/main.cpp:56:12: error: ‘using mat = class BC::Matrix<float> {aka class BC::Matrix<float>}’ has no member named ‘t’
+  c = d * b.t();
+            ^
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:15:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h: In instantiation of ‘class BC::TensorInitializer<BC::Matrix<BC::binary_expression_scalar_R<float, BC::mul, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::CPU>, void>’:
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:21:7:   required from ‘class BC::TensorBase<BC::Matrix<BC::binary_expression_scalar_R<float, BC::mul, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::CPU> >’
+../UnitTests/../BC_Internals/BC_Core/Matrix.h:17:7:   required from ‘class BC::Matrix<BC::binary_expression_scalar_R<float, BC::mul, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::CPU>’
+../UnitTests/main.cpp:59:16:   required from here
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:28:15: error: ‘BC::TensorInitializer<derived, expression_tensor>::black_cat_array’ has incomplete type
+  functor_type black_cat_array;
+               ^~~~~~~~~~~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:12:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h:28:41: note: declaration of ‘using functor_type = BC::_functor<BC::Matrix<BC::binary_expression_scalar_R<float, BC::mul, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::CPU> > {aka class BC::binary_expression_scalar_R<float, BC::mul, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >}’
+ template<class,class,class,class> class binary_expression_scalar_R;
+                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:15:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h: In instantiation of ‘class BC::TensorInitializer<BC::Matrix<BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::CPU>, void>’:
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:21:7:   required from ‘class BC::TensorBase<BC::Matrix<BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::CPU> >’
+../UnitTests/../BC_Internals/BC_Core/Matrix.h:17:7:   required from ‘class BC::Matrix<BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::CPU>’
+../UnitTests/main.cpp:59:20:   required from here
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:28:15: error: ‘BC::TensorInitializer<derived, expression_tensor>::black_cat_array’ has incomplete type
+  functor_type black_cat_array;
+               ^~~~~~~~~~~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:12:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h:29:41: note: declaration of ‘using functor_type = BC::_functor<BC::Matrix<BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::CPU> > {aka class BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>}’
+ template<class,class,class,class> class binary_expression_dotproduct;
+                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:15:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h: In instantiation of ‘class BC::TensorInitializer<BC::Matrix<BC::binary_expression_scalar_L<float, BC::mul, BC::Tensor_Core<BC::Scalar<float, BC::CPU> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::CPU>, void>’:
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:21:7:   required from ‘class BC::TensorBase<BC::Matrix<BC::binary_expression_scalar_L<float, BC::mul, BC::Tensor_Core<BC::Scalar<float, BC::CPU> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::CPU> >’
+../UnitTests/../BC_Internals/BC_Core/Matrix.h:17:7:   required from ‘class BC::Matrix<BC::binary_expression_scalar_L<float, BC::mul, BC::Tensor_Core<BC::Scalar<float, BC::CPU> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::CPU>’
+../UnitTests/main.cpp:62:16:   required from here
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:28:15: error: ‘BC::TensorInitializer<derived, expression_tensor>::black_cat_array’ has incomplete type
+  functor_type black_cat_array;
+               ^~~~~~~~~~~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:12:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h:27:41: note: declaration of ‘using functor_type = BC::_functor<BC::Matrix<BC::binary_expression_scalar_L<float, BC::mul, BC::Tensor_Core<BC::Scalar<float, BC::CPU> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::CPU> > {aka class BC::binary_expression_scalar_L<float, BC::mul, BC::Tensor_Core<BC::Scalar<float, BC::CPU> >, BC::Tensor_Core<BC::Matrix<float> > >}’
+ template<class,class,class,class> class binary_expression_scalar_L;
+                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:15:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h: In instantiation of ‘class BC::TensorInitializer<BC::Matrix<BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_L<float, BC::mul, BC::Tensor_Core<BC::Scalar<float, BC::CPU> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::CPU>, void>’:
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:21:7:   required from ‘class BC::TensorBase<BC::Matrix<BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_L<float, BC::mul, BC::Tensor_Core<BC::Scalar<float, BC::CPU> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::CPU> >’
+../UnitTests/../BC_Internals/BC_Core/Matrix.h:17:7:   required from ‘class BC::Matrix<BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_L<float, BC::mul, BC::Tensor_Core<BC::Scalar<float, BC::CPU> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::CPU>’
+../UnitTests/main.cpp:62:20:   required from here
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:28:15: error: ‘BC::TensorInitializer<derived, expression_tensor>::black_cat_array’ has incomplete type
+  functor_type black_cat_array;
+               ^~~~~~~~~~~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:12:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h:29:41: note: declaration of ‘using functor_type = BC::_functor<BC::Matrix<BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_L<float, BC::mul, BC::Tensor_Core<BC::Scalar<float, BC::CPU> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::CPU> > {aka class BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_L<float, BC::mul, BC::Tensor_Core<BC::Scalar<float, BC::CPU> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>}’
+ template<class,class,class,class> class binary_expression_dotproduct;
+                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:15:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h: In instantiation of ‘class BC::TensorInitializer<BC::Matrix<BC::binary_expression_scalar_R<float, BC::mul, BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::CPU>, void>’:
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:21:7:   required from ‘class BC::TensorBase<BC::Matrix<BC::binary_expression_scalar_R<float, BC::mul, BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::CPU> >’
+../UnitTests/../BC_Internals/BC_Core/Matrix.h:17:7:   required from ‘class BC::Matrix<BC::binary_expression_scalar_R<float, BC::mul, BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::CPU>’
+../UnitTests/main.cpp:64:20:   required from here
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:28:15: error: ‘BC::TensorInitializer<derived, expression_tensor>::black_cat_array’ has incomplete type
+  functor_type black_cat_array;
+               ^~~~~~~~~~~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:12:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h:28:41: note: declaration of ‘using functor_type = BC::_functor<BC::Matrix<BC::binary_expression_scalar_R<float, BC::mul, BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::CPU> > {aka class BC::binary_expression_scalar_R<float, BC::mul, BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >}’
+ template<class,class,class,class> class binary_expression_scalar_R;
+                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../UnitTests/main.cpp:76:8: error: ‘using mat = class BC::Matrix<float> {aka class BC::Matrix<float>}’ has no member named ‘t’
+  c = a.t() * b.t();
+        ^
+../UnitTests/main.cpp:76:16: error: ‘using mat = class BC::Matrix<float> {aka class BC::Matrix<float>}’ has no member named ‘t’
+  c = a.t() * b.t();
+                ^
+../UnitTests/main.cpp:80:8: error: ‘using mat = class BC::Matrix<float> {aka class BC::Matrix<float>}’ has no member named ‘t’
+  c = a.t() * A * (b.t() * A);
+        ^
+../UnitTests/main.cpp:80:21: error: ‘using mat = class BC::Matrix<float> {aka class BC::Matrix<float>}’ has no member named ‘t’
+  c = a.t() * A * (b.t() * A);
+                     ^
+../UnitTests/main.cpp:94:14: error: invalid operands of types ‘void’ and ‘void’ to binary ‘operator+’
+  d[1] = d[1] + d[1];
+         ~~~~~^~~~~~
+../UnitTests/main.cpp:99:8: error: invalid types ‘void[int]’ for array subscript
+  d[1][1] = d[1][1] + d[1][1];
+        ^
+../UnitTests/main.cpp:99:18: error: invalid types ‘void[int]’ for array subscript
+  d[1][1] = d[1][1] + d[1][1];
+                  ^
+../UnitTests/main.cpp:99:28: error: invalid types ‘void[int]’ for array subscript
+  d[1][1] = d[1][1] + d[1][1];
+                            ^
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:13:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Utility.h: In instantiation of ‘void BC::Tensor_Utility<deriv, typename std::enable_if<(isPrim<typename BC::determine_functor< <template-parameter-1-1> >::fscal> || BC::MTF::isCore<typename BC::determine_functor< <template-parameter-1-1> >::type>::conditional), void>::type>::read(std::ifstream&, bool, bool) [with deriv = BC::Matrix<double>; typename std::enable_if<(isPrim<typename BC::determine_functor< <template-parameter-1-1> >::fscal> || BC::MTF::isCore<typename BC::determine_functor< <template-parameter-1-1> >::type>::conditional), void>::type = void; std::ifstream = std::basic_ifstream<char>]’:
+../UnitTests/main.cpp:113:15:   required from here
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Utility.h:132:22: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+    for (int i = 0; i < dims.size(); ++i) {
+                    ~~^~~~~~~~~~~~~
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Utility.h:138:92: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+    MATHLIB::HostToDevice(asDerived().data().core(), &data[data[0] + 1], asDerived().size() > data.size() ? data.size() : asDerived().size());
+                                                                                             
+In file included from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:13:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Utility.h:140:86: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+    MATHLIB::HostToDevice(asDerived().data().core(), &data[0],     asDerived().size() > data.size() ? data.size() : asDerived().size());
+                                                                                       
+In file included from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:32:0,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h: In instantiation of ‘static void BC::CPU::copy(T&, const J&, int) [with T = BC::Tensor_Core<BC::Matrix<float> >; J = BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>]’:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h:218:21:   required from ‘derived& BC::Tensor_Operations< <template-parameter-1-1> >::operator=(const BC::Tensor_Operations<param_deriv>&) [with pDeriv = BC::Matrix<BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::CPU>; derived = BC::Matrix<float>]’
+../UnitTests/../BC_Internals/BC_Core/Matrix.h:45:83:   required from ‘BC::Matrix< <template-parameter-1-1>, ML>& BC::Matrix< <template-parameter-1-1>, ML>::operator=(const BC::Matrix<U, Mathlib>&) [with U = BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>; T = float; Mathlib = BC::CPU]’
+../UnitTests/main.cpp:47:10:   required from here
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h:70:13: error: no match for ‘operator[]’ (operand types are ‘const BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>’ and ‘int’)
+     t[i] = j[i];
+            ~^
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h:76:12: error: no match for ‘operator[]’ (operand types are ‘const BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>’ and ‘int’)
+    t[i] = j[i];
+           ~^
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h: In instantiation of ‘static void BC::CPU::copy(T&, const J&, int) [with T = BC::Tensor_Core<BC::Matrix<float> >; J = BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>]’:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h:218:21:   required from ‘derived& BC::Tensor_Operations< <template-parameter-1-1> >::operator=(const BC::Tensor_Operations<param_deriv>&) [with pDeriv = BC::Matrix<BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::CPU>; derived = BC::Matrix<float>]’
+../UnitTests/../BC_Internals/BC_Core/Matrix.h:45:83:   required from ‘BC::Matrix< <template-parameter-1-1>, ML>& BC::Matrix< <template-parameter-1-1>, ML>::operator=(const BC::Matrix<U, Mathlib>&) [with U = BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>; T = float; Mathlib = BC::CPU]’
+../UnitTests/main.cpp:59:20:   required from here
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h:70:13: error: no match for ‘operator[]’ (operand types are ‘const BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>’ and ‘int’)
+     t[i] = j[i];
+            ~^
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h:76:12: error: no match for ‘operator[]’ (operand types are ‘const BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_R<float, BC::mul, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>’ and ‘int’)
+    t[i] = j[i];
+           ~^
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h: In instantiation of ‘static void BC::CPU::copy(T&, const J&, int) [with T = BC::Tensor_Core<BC::Matrix<float> >; J = BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_L<float, BC::mul, BC::Tensor_Core<BC::Scalar<float, BC::CPU> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>]’:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h:218:21:   required from ‘derived& BC::Tensor_Operations< <template-parameter-1-1> >::operator=(const BC::Tensor_Operations<param_deriv>&) [with pDeriv = BC::Matrix<BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_L<float, BC::mul, BC::Tensor_Core<BC::Scalar<float, BC::CPU> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::CPU>; derived = BC::Matrix<float>]’
+../UnitTests/../BC_Internals/BC_Core/Matrix.h:45:83:   required from ‘BC::Matrix< <template-parameter-1-1>, ML>& BC::Matrix< <template-parameter-1-1>, ML>::operator=(const BC::Matrix<U, Mathlib>&) [with U = BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_L<float, BC::mul, BC::Tensor_Core<BC::Scalar<float, BC::CPU> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>; T = float; Mathlib = BC::CPU]’
+../UnitTests/main.cpp:62:20:   required from here
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h:70:13: error: no match for ‘operator[]’ (operand types are ‘const BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_L<float, BC::mul, BC::Tensor_Core<BC::Scalar<float, BC::CPU> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>’ and ‘int’)
+     t[i] = j[i];
+            ~^
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h:76:12: error: no match for ‘operator[]’ (operand types are ‘const BC::binary_expression_dotproduct<float, BC::binary_expression_scalar_L<float, BC::mul, BC::Tensor_Core<BC::Scalar<float, BC::CPU> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>’ and ‘int’)
+    t[i] = j[i];
+           ~^
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h: In instantiation of ‘static void BC::CPU::copy(T&, const J&, int) [with T = BC::Tensor_Core<BC::Matrix<float> >; J = BC::binary_expression_scalar_R<float, BC::mul, BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >]’:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h:218:21:   required from ‘derived& BC::Tensor_Operations< <template-parameter-1-1> >::operator=(const BC::Tensor_Operations<param_deriv>&) [with pDeriv = BC::Matrix<BC::binary_expression_scalar_R<float, BC::mul, BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >, BC::CPU>; derived = BC::Matrix<float>]’
+../UnitTests/../BC_Internals/BC_Core/Matrix.h:45:83:   required from ‘BC::Matrix< <template-parameter-1-1>, ML>& BC::Matrix< <template-parameter-1-1>, ML>::operator=(const BC::Matrix<U, Mathlib>&) [with U = BC::binary_expression_scalar_R<float, BC::mul, BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >; T = float; Mathlib = BC::CPU]’
+../UnitTests/main.cpp:64:20:   required from here
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h:70:13: error: no match for ‘operator[]’ (operand types are ‘const BC::binary_expression_scalar_R<float, BC::mul, BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >’ and ‘int’)
+     t[i] = j[i];
+            ~^
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h:76:12: error: no match for ‘operator[]’ (operand types are ‘const BC::binary_expression_scalar_R<float, BC::mul, BC::binary_expression_dotproduct<float, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> >, BC::CPU>, BC::Tensor_Core<BC::Scalar<float, BC::CPU> > >’ and ‘int’)
+    t[i] = j[i];
+           ~^
+In file included from ../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Slice.h:17:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.h:13,
+                 from ../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:12,
+                 from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:15,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Scalar.h: In instantiation of ‘BC::Tensor_Scalar<PARENT>::Tensor_Scalar(BC::Tensor_Scalar<PARENT>::scalar*, const PARENT&) [with PARENT = BC::Tensor_Core<BC::Matrix<float> >; BC::Tensor_Scalar<PARENT>::scalar = float]’:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:33:63:   required from ‘BC::TensorInitializer<derived, expression_tensor>::TensorInitializer(const params& ...) [with params = {float*, BC::Tensor_Core<BC::Matrix<float, BC::CPU> >}; derived = BC::Scalar<BC::Tensor_Scalar<BC::Tensor_Core<BC::Matrix<float> > >, BC::CPU>; expression_tensor = void]’
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:50:51:   required from ‘BC::TensorBase<derived>::TensorBase(const params& ...) [with params = {float*, BC::Tensor_Core<BC::Matrix<float, BC::CPU> >}; derived = BC::Scalar<BC::Tensor_Scalar<BC::Tensor_Core<BC::Matrix<float> > >, BC::CPU>]’
+../UnitTests/../BC_Internals/BC_Core/Scalar.h:61:97:   required from ‘BC::Scalar< <template-parameter-1-1>, ML>::Scalar(const var1&, const var2&, const params& ...) [with var1 = float*; var2 = BC::Tensor_Core<BC::Matrix<float> >; params = {}; T = BC::Tensor_Scalar<BC::Tensor_Core<BC::Matrix<float> > >; Mathlib = BC::CPU]’
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:92:19:   required from ‘auto BC::TensorBase<derived>::getScalar(int) [with derived = BC::Matrix<float>]’
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:96:52:   required from ‘auto BC::TensorBase<derived>::operator()(int) [with derived = BC::Matrix<float>]’
+../UnitTests/main.cpp:33:6:   required from here
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Scalar.h:36:10: warning: ‘BC::Tensor_Scalar<BC::Tensor_Core<BC::Matrix<float> > >::array_slice’ will be initialized after [-Wreorder]
+  scalar* array_slice;
+          ^~~~~~~~~~~
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Scalar.h:35:16: warning:   ‘const BC::Tensor_Core<BC::Matrix<float> >& BC::Tensor_Scalar<BC::Tensor_Core<BC::Matrix<float> > >::parent’ [-Wreorder]
+  const PARENT& parent;
+                ^~~~~~
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Core_Scalar.h:41:2: warning:   when initialized here [-Wreorder]
+  Tensor_Scalar(scalar* array, const PARENT& parent_) : array_slice(array), parent(parent_) {}
+  ^~~~~~~~~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h:15:0,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:32,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_MathLibraries/BC_PrintFunctions.h: In instantiation of ‘void BC::printHelper(const T&, int_ranks, int, std::__cxx11::string, int) [with T = const float*; int_ranks = int*; std::__cxx11::string = std::__cxx11::basic_string<char>]’:
+../UnitTests/../BC_Internals/BC_MathLibraries/BC_PrintFunctions.h:102:13:   required from ‘void BC::print(const T&, RANKS, int, int) [with T = const float*; RANKS = int*]’
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h:98:12:   required from ‘static void BC::CPU::print(T, RANKS, int, int) [with T = const float*; RANKS = int*]’
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Utility.h:75:17:   required from ‘void BC::Tensor_Utility<deriv, typename std::enable_if<(isPrim<typename BC::determine_functor< <template-parameter-1-1> >::fscal> || BC::MTF::isCore<typename BC::determine_functor< <template-parameter-1-1> >::type>::conditional), void>::type>::print() const [with deriv = BC::Matrix<float>; typename std::enable_if<(isPrim<typename BC::determine_functor< <template-parameter-1-1> >::fscal> || BC::MTF::isCore<typename BC::determine_functor< <template-parameter-1-1> >::type>::conditional), void>::type = void]’
+../UnitTests/main.cpp:37:10:   required from here
+../UnitTests/../BC_Internals/BC_MathLibraries/BC_PrintFunctions.h:43:38: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     str = str.substr(0, str.length() < printSpace ? str.length() : printSpace);
+                                       
+../UnitTests/../BC_Internals/BC_MathLibraries/BC_PrintFunctions.h:46:22: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     if (str.length() < printSpace)
+                       
+../UnitTests/../BC_Internals/BC_MathLibraries/BC_PrintFunctions.h:67:37: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+    str = str.substr(0, str.length() < printSpace ? str.length() : printSpace);
+                                      
+../UnitTests/../BC_Internals/BC_MathLibraries/BC_PrintFunctions.h:70:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+    if (str.length() < printSpace)
+                      
+In file included from ../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:12:0,
+                 from ../UnitTests/../BC_Internals/BC_Core/TensorBase.h:15,
+                 from ../UnitTests/../BC_Internals/BC_Core/Scalar.h:10,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:49,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.h: In instantiation of ‘BC::Tensor_Core< <template-parameter-1-1> >::Tensor_Core() [with T = BC::Matrix<float>]’:
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Initializer.h:56:2:   required from ‘BC::TensorInitializer<_tensor<t, ml>, typename std::enable_if<BC::MTF::isCorePure<t>::conditional, void>::type>::TensorInitializer(BC::TensorInitializer<_tensor<t, ml>, typename std::enable_if<BC::MTF::isCorePure<t>::conditional, void>::type>::derived&&) [with _tensor = BC::Matrix; t = float; ml = BC::CPU; typename std::enable_if<BC::MTF::isCorePure<t>::conditional, void>::type = void; BC::TensorInitializer<_tensor<t, ml>, typename std::enable_if<BC::MTF::isCorePure<t>::conditional, void>::type>::derived = BC::Matrix<float>]’
+../UnitTests/../BC_Internals/BC_Core/TensorBase.h:50:51:   required from ‘BC::TensorBase<derived>::TensorBase(const params& ...) [with params = {BC::Matrix<BC::binary_expression<float, BC::add, BC::Tensor_Core<BC::Matrix<float, BC::CPU> >, BC::Tensor_Core<BC::Matrix<float, BC::CPU> > >, BC::CPU>}; derived = BC::Matrix<float>]’
+../UnitTests/../BC_Internals/BC_Core/Matrix.h:37:77:   required from ‘BC::Matrix< <template-parameter-1-1>, ML>::Matrix(const BC::Matrix<U, Mathlib>&) [with U = BC::binary_expression<float, BC::add, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> > >; T = float; Mathlib = BC::CPU]’
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Utility.h:34:50:   required from ‘auto BC::Tensor_Utility<deriv, <template-parameter-1-2> >::eval() const [with deriv = BC::Matrix<BC::binary_expression<float, BC::add, BC::Tensor_Core<BC::Matrix<float> >, BC::Tensor_Core<BC::Matrix<float> > >, BC::CPU>; <template-parameter-1-2> = void]’
+../UnitTests/main.cpp:75:15:   required from here
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Core.h:38:3: error: static assertion failed: DEFAULT CONSTRUCTOR FOR TENSOR_CORE ONLY AVAILABLE FOR RANK == 0 (SCALAR)
+   static_assert(RANK == 0, "DEFAULT CONSTRUCTOR FOR TENSOR_CORE ONLY AVAILABLE FOR RANK == 0 (SCALAR)");
+   ^~~~~~~~~~~~~
+In file included from ../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h:15:0,
+                 from ../UnitTests/../BC_Internals/BlackCat_Internal_GlobalUnifier.h:32,
+                 from ../UnitTests/../BlackCat_Tensors.h:14,
+                 from ../UnitTests/main.cpp:2:
+../UnitTests/../BC_Internals/BC_MathLibraries/BC_PrintFunctions.h: In instantiation of ‘void BC::printHelper(const T&, int_ranks, int, std::__cxx11::string, int) [with T = const double*; int_ranks = int*; std::__cxx11::string = std::__cxx11::basic_string<char>]’:
+../UnitTests/../BC_Internals/BC_MathLibraries/BC_PrintFunctions.h:102:13:   required from ‘void BC::print(const T&, RANKS, int, int) [with T = const double*; RANKS = int*]’
+../UnitTests/../BC_Internals/BC_MathLibraries/Mathematics_CPU.h:98:12:   required from ‘static void BC::CPU::print(T, RANKS, int, int) [with T = const double*; RANKS = int*]’
+../UnitTests/../BC_Internals/BC_Core/Implementation_Core/Tensor_Utility.h:75:17:   required from ‘void BC::Tensor_Utility<deriv, typename std::enable_if<(isPrim<typename BC::determine_functor< <template-parameter-1-1> >::fscal> || BC::MTF::isCore<typename BC::determine_functor< <template-parameter-1-1> >::type>::conditional), void>::type>::print() const [with deriv = BC::Matrix<double>; typename std::enable_if<(isPrim<typename BC::determine_functor< <template-parameter-1-1> >::fscal> || BC::MTF::isCore<typename BC::determine_functor< <template-parameter-1-1> >::type>::conditional), void>::type = void]’
+../UnitTests/main.cpp:114:14:   required from here
+../UnitTests/../BC_Internals/BC_MathLibraries/BC_PrintFunctions.h:43:38: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     str = str.substr(0, str.length() < printSpace ? str.length() : printSpace);
+                                       
+../UnitTests/../BC_Internals/BC_MathLibraries/BC_PrintFunctions.h:46:22: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     if (str.length() < printSpace)
+                       
+../UnitTests/../BC_Internals/BC_MathLibraries/BC_PrintFunctions.h:67:37: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+    str = str.substr(0, str.length() < printSpace ? str.length() : printSpace);
+                                      
+../UnitTests/../BC_Internals/BC_MathLibraries/BC_PrintFunctions.h:70:21: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+    if (str.length() < printSpace)
+                      
+UnitTests/subdir.mk:18: recipe for target 'UnitTests/main.o' failed
+make: *** [UnitTests/main.o] Error 1
+
+17:17:23 Build Finished (took 666ms)
+

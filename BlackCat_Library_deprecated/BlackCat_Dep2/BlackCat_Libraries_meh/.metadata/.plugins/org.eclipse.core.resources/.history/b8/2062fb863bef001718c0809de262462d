@@ -1,0 +1,28 @@
+#include <iostream>
+#include "BlackCat_Tensors.h"
+#include "BC_Internals/BC_Core/Vector.h"
+
+using BC::Vector;
+
+
+int main() {
+
+	Vector<double> a(5);
+	Vector<double> b(5);
+//	Vector<double> c(5);
+
+//	std::cout << " ps " << std::endl;
+//	b.inc();
+//	c.inc();
+//
+//	b.print();
+//
+//	a = b;
+//	a.print();
+//
+//	a = b + c;
+//
+//	a.print();
+//
+	std::cout << " out" <<std::endl;
+}

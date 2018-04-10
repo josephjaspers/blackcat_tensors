@@ -1,0 +1,7 @@
+#include <iostream>
+#include "BlackCat_Tensors.h"
+#include "BC_Internals/BC_Core/Tensor_Core.h"
+int main() {
+
+	std::cout << " out" <<std::endl;
+}

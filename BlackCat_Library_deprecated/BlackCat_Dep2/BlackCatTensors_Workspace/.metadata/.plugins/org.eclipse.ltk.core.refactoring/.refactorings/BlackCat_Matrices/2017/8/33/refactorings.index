@@ -1,0 +1,7 @@
+1502730546497	Rename resource 'Tensor_impl'
+1502731343222	Rename resource 'Tensor_impl_BasicAccessors'
+1502731395222	Rename resource 'Tensor_impl_BasicAccessors'
+1502732308068	Rename resource 'Tensor_impl_MiscMethods'
+1502735203183	Move 3 resources to 'BlackCat_Matrices'
+1502735234883	Move 'BC_TransposeTensor_impl' to 'BlackCat_Matrices'
+1502735375744	Move 'Tensor_PointwiseOperators_TransposeB.cpp' to 'BlackCat_Matrices'

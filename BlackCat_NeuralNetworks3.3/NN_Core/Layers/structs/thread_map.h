@@ -10,6 +10,7 @@
 
 #include <unordered_map>
 #include <pthread.h>
+#include <omp.h>
 
 /*
  *
@@ -95,18 +96,7 @@ struct thread_map {
 	}
 
 	T& operator ()() {
-		auto set = contains(pthread_self());
-
-		//in contains
-		if (set)
-			return set->data;
-
-		else
-			set = insert(pthread_self());
-		//if insertion
-			if (set) {
-				return set->data;
-			}
+		return pool[omp_get_thread_num()].data;
 		std::cout << " returning null - operator() thread_map" << std::endl;
 		std::cout << " number of threads exceeds current size" << std::endl;
 

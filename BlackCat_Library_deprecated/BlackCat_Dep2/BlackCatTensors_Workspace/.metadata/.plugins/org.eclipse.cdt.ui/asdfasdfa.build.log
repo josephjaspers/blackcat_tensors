@@ -1,0 +1,17 @@
+20:13:04 **** Build of configuration Debug for project asdfasdfa ****
+make all 
+Building file: ../src/asdfasdfa.cpp
+Invoking: Cross G++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/asdfasdfa.d" -MT"src/asdfasdfa.d" -o "src/asdfasdfa.o" "../src/asdfasdfa.cpp"
+Finished building: ../src/asdfasdfa.cpp
+ 
+Building file: ../src/dfsadf.cpp
+Invoking: Cross G++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/dfsadf.d" -MT"src/dfsadf.d" -o "src/dfsadf.o" "../src/dfsadf.cpp"
+../src/dfsadf.cpp:14:18: fatal error: cuda.h: No such file or directory
+compilation terminated.
+src/subdir.mk:21: recipe for target 'src/dfsadf.o' failed
+make: *** [src/dfsadf.o] Error 1
+
+20:13:04 Build Finished (took 75ms)
+

@@ -1,0 +1,17 @@
+19:06:14 **** Incremental Build of configuration Debug for project BC_NeuralNetworks ****
+make all 
+Building file: ../main.cpp
+Invoking: NVCC Compiler
+/usr/local/cuda-8.0/bin/nvcc -I/home/joseph/cuda-workspace/BlackCat_Tensors/BC_Headers -I/usr/include/atlas -G -g -O0 -std=c++11 -gencode arch=compute_52,code=sm_52  -odir "." -M -o "main.d" "../main.cpp"
+/usr/local/cuda-8.0/bin/nvcc -I/home/joseph/cuda-workspace/BlackCat_Tensors/BC_Headers -I/usr/include/atlas -G -g -O0 -std=c++11 --compile  -x c++ -o  "main.o" "../main.cpp"
+nvcc warning : The 'compute_20', 'sm_20', and 'sm_21' architectures are deprecated, and may be removed in a future release (Use -Wno-deprecated-gpu-targets to suppress warning).
+Finished building: ../main.cpp
+ 
+Building target: BC_NeuralNetworks
+Invoking: NVCC Linker
+/usr/local/cuda-8.0/bin/nvcc --cudart static -L/usr/lib/atlas-base -L/home/joseph/cuda-workspace/BlackCat_Tensors/Debug --relocatable-device-code=false -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BC_NeuralNetworks"  ./CNN.o ./FF_norec.o ./FeedForward.o ./GRU.o ./LSTM.o ./NeuralNetwork.o ./RecurrentUnit.o ./main.o   -lf77blas -lcblas -latlas -lBlackCat_Tensors
+Finished building target: BC_NeuralNetworks
+ 
+
+19:06:14 Build Finished (took 620ms)
+

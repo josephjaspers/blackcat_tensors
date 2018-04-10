@@ -1,0 +1,46 @@
+/*
+ * Dynamic_List.h
+ *
+ *  Created on: Dec 28, 2017
+ *      Author: joseph
+ */
+
+#ifndef BC_INTERNALS_BC_SHAPE_DYNAMICINTLIST_H_
+#define BC_INTERNALS_BC_SHAPE_DYNAMICINTLIST_H_
+
+
+namespace BC {
+
+	template<class... set>
+	auto GenerateDynamicIntList(set... integers) {
+	}
+
+	template<class...>
+	struct first;
+
+	template<class f, class... set>
+	struct first<f, set...> {
+		using type = f;
+	};
+
+	//Head and Body
+	template<class first, class... IntList>
+	struct DynamicIntList{
+		static constexpr size = first;
+		int data = first;
+		DynamicIntList<IntList...> next;
+	};
+	//Tail
+	template<class first>
+	struct DynamicIntList<first> {
+		int data = first;
+	};
+
+
+
+
+
+}
+
+
+#endif /* BC_INTERNALS_BC_SHAPE_DYNAMICINTLIST_H_ */

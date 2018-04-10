@@ -1,0 +1,10 @@
+﻿Matrix.lib(Matrix.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in FeedForward.obj
+Matrix.lib(Matrix.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in FeedForward.obj
+Matrix.lib(Vector.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '2' doesn't match value '0' in FeedForward.obj
+Matrix.lib(Vector.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MD_DynamicRelease' in FeedForward.obj
+LINK : warning LNK4098: defaultlib 'MSVCRTD' conflicts with use of other libs; use /NODEFAULTLIB:library
+Matrix.lib(Matrix.obj) : error LNK2019: unresolved external symbol __imp___invalid_parameter referenced in function "public: double & __thiscall std::vector<double,class std::allocator<double> >::operator[](unsigned int)" (??A?$vector@NV?$allocator@N@std@@@std@@QAEAANI@Z)
+Matrix.lib(Vector.obj) : error LNK2001: unresolved external symbol __imp___invalid_parameter
+Matrix.lib(Matrix.obj) : error LNK2019: unresolved external symbol __imp___CrtDbgReportW referenced in function "public: double & __thiscall std::vector<double,class std::allocator<double> >::operator[](unsigned int)" (??A?$vector@NV?$allocator@N@std@@@std@@QAEAANI@Z)
+Matrix.lib(Vector.obj) : error LNK2001: unresolved external symbol __imp___CrtDbgReportW
+C:\Users\joeyj\OneDrive\Documents\Visual Studio 2015\Projects\NeuralNetworks\Debug(Replace)\NeuralNetworks.exe : fatal error LNK1120: 2 unresolved externals

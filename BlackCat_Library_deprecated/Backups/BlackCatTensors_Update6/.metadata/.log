@@ -1,0 +1,154 @@
+!SESSION 2017-12-28 15:43:24.447 -----------------------------------------------
+eclipse.buildId=4.7.1.M20171009-0410
+java.version=1.8.0_151
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.cpp.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.cpp.product
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-12-28 15:45:19.523
+!MESSAGE Indexed 'BlackCat_Tensors6' (0 sources, 0 headers) in 0.001 sec: 0 declarations; 0 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 4 0 2017-12-28 15:46:16.292
+!MESSAGE Error:  is not a member of remove_from
+!STACK 0
+java.lang.IllegalArgumentException:  is not a member of remove_from
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPClassType.getVisibility(PDOMCPPClassType.java:451)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPClassTemplate.getVisibility(PDOMCPPClassTemplate.java:1)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getVisibility(ClassTypeHelper.java:1072)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPClassTemplate.getVisibility(CPPClassTemplate.java:268)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.getVisibility(PDOMCPPLinkage.java:859)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.addChild(PDOMCPPLinkage.java:870)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.createBinding(PDOMCPPLinkage.java:821)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.addBinding(PDOMCPPLinkage.java:645)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.adaptOrAddBinding(PDOMCPPLinkage.java:1226)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.adaptOrAddParent(PDOMCPPLinkage.java:1221)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.addBinding(PDOMCPPLinkage.java:637)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.addBinding(PDOMCPPLinkage.java:588)
+	at org.eclipse.cdt.internal.core.pdom.dom.PDOMFile.createPDOMName(PDOMFile.java:515)
+	at org.eclipse.cdt.internal.core.pdom.dom.PDOMFile.addNames(PDOMFile.java:482)
+	at org.eclipse.cdt.internal.core.pdom.WritablePDOM.addFileContent(WritablePDOM.java:154)
+	at org.eclipse.cdt.internal.core.index.WritableCIndex.setFileContent(WritableCIndex.java:86)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.storeFileInIndex(PDOMWriter.java:662)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.storeSymbolsInIndex(PDOMWriter.java:324)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:283)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+!SESSION 2017-12-28 15:50:47.847 -----------------------------------------------
+eclipse.buildId=4.7.1.M20171009-0410
+java.version=1.8.0_151
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.cpp.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.cpp.product
+
+!ENTRY org.eclipse.cdt.core 4 0 2017-12-28 15:57:11.898
+!MESSAGE Error:  is not a member of remove_from
+!STACK 0
+java.lang.IllegalArgumentException:  is not a member of remove_from
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPClassType.getVisibility(PDOMCPPClassType.java:451)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPClassTemplate.getVisibility(PDOMCPPClassTemplate.java:1)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getVisibility(ClassTypeHelper.java:1072)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPClassTemplate.getVisibility(CPPClassTemplate.java:268)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.getVisibility(PDOMCPPLinkage.java:859)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.addChild(PDOMCPPLinkage.java:870)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.createBinding(PDOMCPPLinkage.java:821)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.addBinding(PDOMCPPLinkage.java:645)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.adaptOrAddBinding(PDOMCPPLinkage.java:1226)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.adaptOrAddParent(PDOMCPPLinkage.java:1221)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.addBinding(PDOMCPPLinkage.java:637)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.addBinding(PDOMCPPLinkage.java:588)
+	at org.eclipse.cdt.internal.core.pdom.dom.PDOMFile.createPDOMName(PDOMFile.java:515)
+	at org.eclipse.cdt.internal.core.pdom.dom.PDOMFile.addNames(PDOMFile.java:482)
+	at org.eclipse.cdt.internal.core.pdom.WritablePDOM.addFileContent(WritablePDOM.java:154)
+	at org.eclipse.cdt.internal.core.index.WritableCIndex.setFileContent(WritableCIndex.java:86)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.storeFileInIndex(PDOMWriter.java:662)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.storeSymbolsInIndex(PDOMWriter.java:324)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:283)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:897)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMRebuildTask.run(PDOMRebuildTask.java:90)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-12-28 15:57:12.309
+!MESSAGE Indexed 'BlackCat_Tensors5' (2 sources, 226 headers) in 4.13 sec: 19,532 declarations; 31,225 references; 9 unresolved inclusions; 1 syntax errors; 460 unresolved names (0.9%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-12-28 15:57:28.264
+!MESSAGE Indexed 'BlackCat_Tensors6' (0 sources, 0 headers) in 0 sec: 0 declarations; 0 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 4 0 2017-12-28 15:58:38.249
+!MESSAGE Error:  is not a member of remove_from
+!STACK 0
+java.lang.IllegalArgumentException:  is not a member of remove_from
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPClassType.getVisibility(PDOMCPPClassType.java:451)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPClassTemplate.getVisibility(PDOMCPPClassTemplate.java:1)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getVisibility(ClassTypeHelper.java:1072)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPClassTemplate.getVisibility(CPPClassTemplate.java:268)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.getVisibility(PDOMCPPLinkage.java:859)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.addChild(PDOMCPPLinkage.java:870)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.createBinding(PDOMCPPLinkage.java:821)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.addBinding(PDOMCPPLinkage.java:645)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.adaptOrAddBinding(PDOMCPPLinkage.java:1226)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.adaptOrAddParent(PDOMCPPLinkage.java:1221)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.addBinding(PDOMCPPLinkage.java:637)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.addBinding(PDOMCPPLinkage.java:588)
+	at org.eclipse.cdt.internal.core.pdom.dom.PDOMFile.createPDOMName(PDOMFile.java:515)
+	at org.eclipse.cdt.internal.core.pdom.dom.PDOMFile.addNames(PDOMFile.java:482)
+	at org.eclipse.cdt.internal.core.pdom.WritablePDOM.addFileContent(WritablePDOM.java:154)
+	at org.eclipse.cdt.internal.core.index.WritableCIndex.setFileContent(WritableCIndex.java:86)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.storeFileInIndex(PDOMWriter.java:662)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.storeSymbolsInIndex(PDOMWriter.java:324)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:283)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:931)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.cdt.core 4 0 2017-12-28 15:59:32.594
+!MESSAGE Error:  is not a member of remove_from
+!STACK 0
+java.lang.IllegalArgumentException:  is not a member of remove_from
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPClassType.getVisibility(PDOMCPPClassType.java:451)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPClassTemplate.getVisibility(PDOMCPPClassTemplate.java:1)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.ClassTypeHelper.getVisibility(ClassTypeHelper.java:1072)
+	at org.eclipse.cdt.internal.core.dom.parser.cpp.CPPClassTemplate.getVisibility(CPPClassTemplate.java:268)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.getVisibility(PDOMCPPLinkage.java:859)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.addChild(PDOMCPPLinkage.java:870)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.createBinding(PDOMCPPLinkage.java:821)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.addBinding(PDOMCPPLinkage.java:645)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.adaptOrAddBinding(PDOMCPPLinkage.java:1226)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.adaptOrAddParent(PDOMCPPLinkage.java:1221)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.addBinding(PDOMCPPLinkage.java:637)
+	at org.eclipse.cdt.internal.core.pdom.dom.cpp.PDOMCPPLinkage.addBinding(PDOMCPPLinkage.java:588)
+	at org.eclipse.cdt.internal.core.pdom.dom.PDOMFile.createPDOMName(PDOMFile.java:515)
+	at org.eclipse.cdt.internal.core.pdom.dom.PDOMFile.addNames(PDOMFile.java:482)
+	at org.eclipse.cdt.internal.core.pdom.WritablePDOM.addFileContent(WritablePDOM.java:154)
+	at org.eclipse.cdt.internal.core.index.WritableCIndex.setFileContent(WritableCIndex.java:86)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.storeFileInIndex(PDOMWriter.java:662)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.storeSymbolsInIndex(PDOMWriter.java:324)
+	at org.eclipse.cdt.internal.core.pdom.PDOMWriter.addSymbols(PDOMWriter.java:283)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.writeToIndex(AbstractIndexerTask.java:1288)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseFile(AbstractIndexerTask.java:1098)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.parseLinkage(AbstractIndexerTask.java:931)
+	at org.eclipse.cdt.internal.core.pdom.AbstractIndexerTask.runTask(AbstractIndexerTask.java:558)
+	at org.eclipse.cdt.internal.core.pdom.indexer.PDOMIndexerTask.run(PDOMIndexerTask.java:161)
+	at org.eclipse.cdt.internal.core.pdom.PDOMIndexerJob.run(PDOMIndexerJob.java:155)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:56)
+
+!ENTRY org.eclipse.launchbar.core 2 0 2017-12-28 16:20:42.486
+!MESSAGE Enablement expression is missing for descriptor type org.eclipse.cdt.debug.core.coreBuildDescriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2017-12-28 16:20:42.487
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.debug.core.coreBuildDescriptorType
