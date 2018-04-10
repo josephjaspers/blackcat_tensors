@@ -21,11 +21,14 @@ struct BASE;
 using ml = CPU;
 using fp_type = double;
 //
-//does not work
+//does not work with example classes but does work
 //CURRENTLY BROKEN
 //using ml = GPU;
 //using fp_type = float;
 //
+
+static constexpr int NUMB_THREADS = 8;
+
 using scal = Scalar<fp_type, ml>;
 using vec = Vector<fp_type, ml>;
 using mat = Matrix<fp_type, ml>;

@@ -36,17 +36,19 @@ protected:
 	template<class> friend class TensorBase;
 
 public:
-
 	using math_parent::operator=;
-
-	template<class... params> explicit TensorBase(const params&... p) : initializer(p...) {}
 
 	operator const derived& () const { return static_cast<const derived&>(*this); }
 	operator	   derived& () 		 { return static_cast< 		derived&>(*this); }
 
 
-	//move operator is only defined for Tensor_Core
+	template<class... params> explicit TensorBase(const params&... p) : initializer(p...) {}
+
+	//move only defined for Tensor_Core's
 	using move_parameter = std::conditional_t<pCore_b<functor_type>, derived&&, DISABLED>;
+	TensorBase(		 move_parameter tensor) : initializer(std::move(tensor)) {}
+	TensorBase(const TensorBase& 	tensor) : initializer(tensor) {}
+
 
 	derived& operator =(move_parameter tensor) {
 		auto tmp = this->black_cat_array;
@@ -128,8 +130,8 @@ public:
 	const auto operator() (int i) const { return getScalar(i); }
 		  auto operator() (int i) 	    { return getScalar(i); }
 
-	const auto operator() () const { return *this; }
-		  auto operator() () 	   { return *this; }
+	const auto& operator() () const { return *this; }
+		  auto& operator() () 	    { return *this; }
 
 	template<class... integers> const auto operator() (int i, integers... ints) const  {
 		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");

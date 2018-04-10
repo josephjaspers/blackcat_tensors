@@ -74,14 +74,14 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 
 int percept_MNIST() {
 
-	const int TRAINING_EXAMPLES =  2000;
+	const int TRAINING_EXAMPLES =  40000;
 	const int TRAINING_ITERATIONS = 10;
 
 //	Generate the layers (params are: inputs, outputs)
 
 	//Create the neural network
-	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
-//	NeuralNetwork<FeedForward> network(784, 10);
+//	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
+	NeuralNetwork<FeedForward> network(784, 10);
 //	NeuralNetwork<Conv, FeedForward> network(std::make_tuple(28,28,1,3), 2700, 10);
 	network.setLearningRate(.03);
 	data inputs;

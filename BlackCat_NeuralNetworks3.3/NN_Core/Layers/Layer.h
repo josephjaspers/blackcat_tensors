@@ -9,9 +9,18 @@
 #define LAYER_H_
 #include <list>
 
+#include "structs/forward_list.h"
+#include "structs/thread_map.h"
+
 namespace BC {
+using BC::Structure::forward_list;
+using BC::Structure::thread_map;
+template<class T> using bp_list = thread_map<forward_list<T>>;
+
 template<class derived>
 class Layer {
+
+
 public:
 
 	const int INPUTS;
@@ -39,6 +48,7 @@ public:
 };
 
 }
+
 
 
 #endif /* LAYER_H_ */

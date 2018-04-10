@@ -13,6 +13,7 @@
 #include <iostream>
 #include <string>
 #include <omp.h>
+#include <pthread.h>
 using BC::vec;
 using BC::scal;
 using BC::mat;

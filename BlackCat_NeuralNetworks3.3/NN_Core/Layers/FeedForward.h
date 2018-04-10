@@ -25,6 +25,8 @@ public:
 	mat w_gradientStorage;
 	vec b_gradientStorage;
 
+	bp_list<vec> xs = bp_list<vec>(8);
+
 	mat w;
 
 	vec x;
@@ -63,16 +65,29 @@ public:
 		return this->next().forwardPropagation(g(w * x_t + b));
 	}
 	template<class T>
-	auto forwardPropagation_Express(_vec<T> x) const {
-		return this->next().forwardPropagation_Express(g(w * x + b));
-	}
-
-	template<class T>
 	auto backPropagation(const _vec<T> dy) {
 
 		w_gradientStorage -= dy * x.t();
 		b_gradientStorage -= dy;
 		return this->prev().backPropagation(dx = w.t() * dy % gd(x));
+	}
+//	template<class T>
+//	auto forwardPropagation(const _vec<T>& in) {
+//		xs().push_front(std::move(vec(in)));
+//
+//		return this->next().forwardPropagation(g(w * xs().front() + b));
+//	}
+//	template<class T>
+//	auto backPropagation(const _vec<T> dy) {
+//		vec x = xs().pop_front();
+//
+//		w_gradientStorage -= dy * x.t();
+//		b_gradientStorage -= dy;
+//		return this->prev().backPropagation(dx = w.t() * dy % gd(x));
+//	}
+	template<class T>
+	auto forwardPropagation_Express(_vec<T>& x) const {
+		return this->next().forwardPropagation_Express(g(w * x + b));
 	}
 	template<class U, class V>
 		auto train(const _vec<U>& x, const _vec<V>& y) {
@@ -88,6 +103,8 @@ public:
 	}
 
 	void updateWeights() {
+		xs.clear();
+
 		locker.lock();
 		w += w_gradientStorage * lr;
 		b += b_gradientStorage * lr;
@@ -96,6 +113,8 @@ public:
 	}
 
 	void clearBPStorage() {
+		xs.clear();
+
 		locker.lock();
 		w_gradientStorage.zero();
 		b_gradientStorage.zero();

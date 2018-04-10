@@ -3,6 +3,7 @@
 #include <type_traits>
 #include "SpeedTests.h"
 #include <omp.h>
+
 using BC::Vector;
 using BC::Matrix;
 using BC::Scalar;
@@ -26,8 +27,6 @@ auto test() {
 	mat e(3, 2);
 	mat c(2, 2);
 	mat abs(10,10);
-
-//	 a[1] = abs[1];
 
 	abs.printDimensions();
 

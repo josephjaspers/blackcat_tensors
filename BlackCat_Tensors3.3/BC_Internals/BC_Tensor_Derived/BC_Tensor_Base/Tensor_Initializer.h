@@ -72,8 +72,8 @@ public:
 	TensorInitializer(const derived& tensor) : black_cat_array(tensor.innerShape()) {
 		Mathlib::copy(asBase().data(), tensor.data(), tensor.size());
 	}
-	TensorInitializer(_shape dimensions): black_cat_array(dimensions) {}
-
+	TensorInitializer(_shape dimensions): black_cat_array(dimensions) {
+	}
 
 	template<class T>
 	using derived_alt = typename MTF::shell_of<derived>::template  type<T, Mathlib>;
@@ -91,12 +91,7 @@ public:
 	}
 
 	~TensorInitializer() {
-		if (black_cat_array.array)
-			Mathlib::destroy (black_cat_array.array);
-		if (black_cat_array.is)
-			Mathlib::destroy (black_cat_array.is);
-		if (black_cat_array.os)
-			Mathlib::destroy (black_cat_array.os);
+		black_cat_array.destroy();
 	}
 };
 
