@@ -88,13 +88,17 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 
 int percept_MNIST() {
 
-	const int TRAINING_EXAMPLES =  4000;
+	const int TRAINING_EXAMPLES =  2000;
 	const int TRAINING_ITERATIONS = 10;
-	const int BATCH_SIZE = 4;
+	const int NUMB_THREADS = 4;
+	const int BATCH_SIZE = 32;
 	//Create the neural network
 	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
 	network.setLearningRate(.03);
 	network.init_threads(4);
+
+	omp_set_num_threads(NUMB_THREADS);
+
 
 	/*
 	 * 	MULTITHREADED NEURAL NETWORK IS STILL IN BETA
@@ -125,18 +129,16 @@ int percept_MNIST() {
 
 	std::cout << " training..." << std::endl;
 
-	omp_set_num_threads(4);
 	for (int i = 0; i < TRAINING_ITERATIONS; ++i) {
 		std::cout << " iter = " << i << std::endl;
-		for (int j = 0; j < inputs.size(); ++j) {
+		for (int j = 0; j < inputs.size(); j += BATCH_SIZE) {
 			int numb_instances = j + BATCH_SIZE < inputs.size() ? j + BATCH_SIZE : inputs.size();
-#pragma omp parallel for
+#pragma omp parallel for schedule(static)
 			for (int k = j; k < numb_instances; ++k) {
-				network.forwardPropagation(inputs[k]);
-				network.backPropagation(outputs[k]);
+				network.forwardPropagation(inputs[j]);
+				network.backPropagation(outputs[j]);
 			}
 #pragma omp barrier
-			j += BATCH_SIZE;
 			network.updateWeights();
 			network.clearBPStorage();
 		}

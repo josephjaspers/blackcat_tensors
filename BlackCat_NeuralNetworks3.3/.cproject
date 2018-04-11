@@ -129,7 +129,7 @@
 									<listOptionValue builtIn="false" value="-Wattributes"/>
 									<listOptionValue builtIn="false" value="-w"/>
 								</option>
-								<option id="nvcc.compiler.include.files.858119493" name="Include files (-include)" superClass="nvcc.compiler.include.files" valueType="includeFiles"/>
+								<option id="nvcc.compiler.include.files.858119493" name="Include files (-include)" superClass="nvcc.compiler.include.files"/>
 								<inputType id="nvcc.compiler.input.cu.344424401" superClass="nvcc.compiler.input.cu"/>
 								<inputType id="nvcc.compiler.input.cpp.1889012191" superClass="nvcc.compiler.input.cpp"/>
 								<inputType id="nvcc.compiler.input.c.847909102" superClass="nvcc.compiler.input.c"/>
