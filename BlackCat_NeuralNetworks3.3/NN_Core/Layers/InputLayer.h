@@ -16,6 +16,9 @@ struct InputLayer : Layer<derived> {
 
 	InputLayer() : Layer<derived>(0) {}
 
+	bp_list<vec> ys = bp_list<vec>(8);
+
+
 	template<class T> auto forwardPropagation(const T& x) {
 		return this->next().forwardPropagation(x);
 	}

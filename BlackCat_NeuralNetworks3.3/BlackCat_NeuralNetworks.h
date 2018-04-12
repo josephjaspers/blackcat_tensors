@@ -10,11 +10,11 @@
 
 
 #include "NN_Core/Defaults.h"
-#include "NN_Core/Generator.h"
 #include "NN_Core/NeuralNetwork.h"
 #include "NN_Core/Layers/Layer.h"
 
 #include "NN_Core/Layers/FeedForward.h"
+#include "NN_Core/Layers/Recurrent.h"
 
 #include  "NN_Core/Layers/ConvLayer.h"
 #include "NN_Core/Layers/OutputLayer.h"

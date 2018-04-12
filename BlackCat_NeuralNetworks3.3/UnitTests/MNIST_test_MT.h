@@ -21,6 +21,7 @@ using BC::scal;
 using BC::mat;
 typedef std::vector<vec> data;
 typedef vec tensor;
+export int OMP_STACKSIZE;
 
 namespace BC {
 namespace MNIST_Test_MT {
@@ -91,13 +92,14 @@ int percept_MNIST() {
 	const int TRAINING_EXAMPLES =  2000;
 	const int TRAINING_ITERATIONS = 10;
 	const int NUMB_THREADS = 4;
-	const int BATCH_SIZE = 32;
+	const int BATCH_SIZE = 8;
 	//Create the neural network
 	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
 	network.setLearningRate(.03);
 	network.init_threads(4);
 
 	omp_set_num_threads(NUMB_THREADS);
+	OMP_STACKSIZE *= 2;
 
 
 	/*

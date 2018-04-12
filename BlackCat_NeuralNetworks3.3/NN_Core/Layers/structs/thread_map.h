@@ -47,7 +47,7 @@ struct thread_map {
 	deleter destroy;
 	set* pool;
 
-	thread_map(int size) :
+	thread_map(int size=1) :
 			sz(size) {
 		pool = new set[size];
 	}

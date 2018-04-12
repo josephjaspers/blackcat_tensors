@@ -5,26 +5,33 @@
  *      Author: joseph
  */
 
-#ifndef RECURRENT_CU_
-#define RECURRENT_CU_
+#ifndef Recurrent_Unit
+#define Recurrent_Unit
 
 #include "Layer.h"
+#include <mutex>
+
 namespace BC {
 
 template<class derived>
 struct Recurrent : public Layer<derived> {
 
+	/*
+	 * THIS CLASS HAS NOT BEEN TESTED PELASE TEST ME
+	 * 	REMOVE WHEN VALIDATED
+	 */
 
 public:
-	int INPUTS;
-	int OUTPUTS;
 
-	 const scal lr = scal(0.03); //fp_type == floating point
+	scal lr = scal(0.03); //fp_type == floating point
 
+	gradient_list<mat> w_gradientStorage; 		//gradient storage weights
+	gradient_list<mat> r_gradientStorage;		//gradient storage recurrent weights
+	gradient_list<vec> b_gradientStorage;		//gradienst storage bias
+	gradient_list<vec> dc;
 
-	mat w_gradientStorage;
-	mat r_gradientStorage;
-	vec b_gradientStorage;
+	bp_list<vec> ys;							//storage for outputs
+	auto& xs() { return this->prev().ys(); }	//get the storage for inputs
 
 	mat w;
 	mat r;
@@ -33,113 +40,116 @@ public:
 	vec y;
 	vec b;
 
-	vec dx;
-
-	/*
-	 * *Note: the operator == represents a delayed evaluation assignment operator.
-	 * 	It is mathematically equivalent to the operator= (copy operator) however it does not get evaluated until an
-	 * 	actual operator=, this allows for chaining together multiple complex assignment expressions.
-	 * 	It also allows for passing an expression with an assignment and delaying the operation for more optimizations
-	 *
-	 */
-	Recurrent(int inputs, int outputs) :
-			INPUTS(inputs), OUTPUTS(outputs),
-			w_gradientStorage(outputs, inputs),
-			r_gradientStorage(outputs, outputs),
-			b_gradientStorage(outputs),
-			w(outputs, inputs),
-			r(outputs. outputs),
-			b(outputs),
-			x(inputs),
-			y(outputs),
-			dx(inputs) {
-
+	Recurrent(int inputs) :
+			Layer<derived>(inputs),
+			w(this->OUTPUTS, this->INPUTS),
+			r(this->OUTPUTS, this->OUTPUTS),
+			b(this->OUTPUTS),
+			x(this->INPUTS),
+			y(this->OUTPUTS)
+		{
+		r.randomize(-4, 0);
 		w.randomize(-4, 4);
-		r.randomize(-4, 4);
 		b.randomize(-4, 4);
-		w_gradientStorage.zero();
-		r_gradientStorage.zero();
-		b_gradientStorage.zero();
+		init_storages();
+
 	}
 
-	template<class T> auto forwardPropagation(const vec_expr<T>& in) {
-		auto x_ = x == in;
-		auto y_ = y == g(w * x_ + r * y + b);
-		return this->next().forwardPropagation(y_);
-	}
-	template<class T> auto forwardPropagation(const vec_expr<T>& in) {
-			auto function = y == g(w * x + r * y + b);
-			return this->next().forwardPropagation(function);
+
+	vec forwardPropagation(const vec& x) {
+		xs().push_front(x);	//store the inputs
+
+		if (ys().isEmpty())
+			return this->next().forwardPropagation(g(w * x + b));
+		else {
+			vec& y = ys().front();
+			return this->next().forwardPropagation(g(w * x + r * y + b));
 		}
 
-	template<class T> auto backPropagation(const vec_expr<T>& dy) {
-		w_gradientStorage -= dy * x.t();
-		r_gradiantStorage -= dy * y.t();
-		b_gradientStorage -= dy;
-
-		return this->prev().backPropagation(dx = w.t() * dy % gd(x) + r.t() * dy % gd(y));
 	}
-	template<class U, class V>
-		auto train(const vec_expr<U>& x, const vec_expr<V>& y) {
+	vec backPropagation(const vec& dy) {
+		vec& x = xs().front();				//load the last input
+		vec  y = ys().pop_front();			//load last and remove
 
-		auto dy = this->next().train(g(w * x + b), y);
-		w_gradientStorage -= dy * x.t();
-		b_gradientStorage -= dy;
+		w_gradientStorage() -= dy   * x.t();
+		r_gradientStorage() -= dc() * y.t();		//dc() is a function call as each thread has its own
+		b_gradientStorage() -= dy;					//cell state error
 
-		return (w.t() * dy % gd(x));
+		dc() += dy;
+
+		return this->prev().backPropagation(w.t() * dy % gd(x));
+	}
+	auto forwardPropagation_Express(const vec& x) const {
+		if (ys().isEmpty())
+			return this->next().forwardPropagation(g(w * x + b));
+		else {
+			auto& y = ys().front();
+			return this->next().forwardPropagation(g(w * x + r * y + b));
+		}
 	}
 
 	void updateWeights() {
-		w += w_gradientStorage * lr;
-		b += b_gradientStorage * lr;
+		//sum all the gradients
+		w_gradientStorage.for_each([&](auto& var) { w += var * lr; });
+		r_gradientStorage.for_each([&](auto& var) { r += var * lr; });
+		b_gradientStorage.for_each([&](auto& var) { b += var * lr; });
+
 		this->next().updateWeights();
 	}
 
 	void clearBPStorage() {
-		w_gradientStorage.zero();
-		b_gradientStorage.zero();
+		w_gradientStorage.for_each([](auto& var) { var.zero(); });	//gradient list
+		r_gradientStorage.for_each([](auto& var) { var.zero(); });	//gradient list
+		b_gradientStorage.for_each([](auto& var) { var.zero(); });	//gradient list
+
+		dc.for_each([](auto& var) { var.zero(); }); 	//gradient list
+		ys.for_each([](auto& var) { var.clear();});		//bp_list
+
 		this->next().clearBPStorage();
+	}
+	void init_threads(int i) {
+		ys.resize(i);
+		dc.resize(i);
+		w_gradientStorage.resize(i);
+		b_gradientStorage.resize(i);
+
+		init_storages();
 	}
 
 	void write(std::ofstream& is) {
-		is << INPUTS << ' ';
-		is << OUTPUTS << ' ';
+		is << this->INPUTS << ' ';
+		is << this->OUTPUTS << ' ';
 		w.write(is);
+		r.write(is);
 		b.write(is);
 		x.write(is);
 		y.write(is);
-		dx.write(is);
-		w_gradientStorage.write(is);
-		b_gradientStorage.write(is);
-
 	}
 	void read(std::ifstream& os) {
-		os >> INPUTS;
-		os >> OUTPUTS;
+		os >> this->INPUTS;
+		os >> this->OUTPUTS;
 
 		w.read(os);
+		r.read(os);
 		b.read(os);
 		x.read(os);
 		y.read(os);
-		dx.read(os);
-		w_gradientStorage.read(os);
-		b_gradientStorage.read(os);
-
 	}
-
-	//multithreading stuff -----------------------------
-	void updateWeights(const FeedForward& ff) {
-		w += ff.w_gradientStorage * lr;
-		b += ff.b_gradientStorage * lr;
+	void setLearningRate(fp_type learning_rate) {
+		lr = learning_rate;
+		this->next().setLearningRate(learning_rate);
 	}
-	void fastCopy(const FeedForward& ff) {
-		w = ff.w;
-		b = ff.b;
-	}
+	void init_storages() {
+		//for each matrix/vector gradient storage initialize to correct dims
+		w_gradientStorage.for_each([&](auto& var) { var = mat(this->OUTPUTS, this->INPUTS);  var.zero(); });
+		r_gradientStorage.for_each([&](auto& var) { var = mat(this->OUTPUTS, this->OUTPUTS); var.zero(); });
+		b_gradientStorage.for_each([&](auto& var) { var = vec(this->OUTPUTS);			     var.zero(); });
 
+		//for each cell-state error initialize to 0
+		dc.for_each([&](auto& var) { var = vec(this->OUTPUTS); var.zero(); });
+	}
 };
 }
-
 
 
 #endif /* FEEDFORWARD_CU_ */
