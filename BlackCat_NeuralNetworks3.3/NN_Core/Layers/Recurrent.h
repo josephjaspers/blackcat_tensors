@@ -23,7 +23,10 @@ struct Recurrent : public Layer<derived> {
 
 public:
 
-	scal lr = scal(0.03); //fp_type == floating point
+	using Layer<derived>::sum_gradients;
+	using Layer<derived>::zero;
+
+	using Layer<derived>::lr;
 
 	gradient_list<mat> w_gradientStorage; 		//gradient storage weights
 	gradient_list<mat> r_gradientStorage;		//gradient storage recurrent weights
@@ -90,17 +93,17 @@ public:
 
 	void updateWeights() {
 		//sum all the gradients
-		w_gradientStorage.for_each([&](auto& var) { w += var * lr; });
-		r_gradientStorage.for_each([&](auto& var) { r += var * lr; });
-		b_gradientStorage.for_each([&](auto& var) { b += var * lr; });
+		w_gradientStorage.for_each(sum_gradients(w, lr));
+		r_gradientStorage.for_each(sum_gradients(w, lr));
+		b_gradientStorage.for_each(sum_gradients(w, lr));
 
 		this->next().updateWeights();
 	}
 
 	void clearBPStorage() {
-		w_gradientStorage.for_each([](auto& var) { var.zero(); });	//gradient list
-		r_gradientStorage.for_each([](auto& var) { var.zero(); });	//gradient list
-		b_gradientStorage.for_each([](auto& var) { var.zero(); });	//gradient list
+		w_gradientStorage.for_each(zero);	//gradient list
+		r_gradientStorage.for_each(zero);	//gradient list
+		b_gradientStorage.for_each(zero);	//gradient list
 
 		dc.for_each([](auto& var) { var.zero(); }); 	//gradient list
 		ys.for_each([](auto& var) { var.clear();});		//bp_list

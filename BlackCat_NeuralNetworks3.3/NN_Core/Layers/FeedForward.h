@@ -19,7 +19,9 @@ struct FeedForward : public Layer<derived> {
 
 public:
 
-	using PARAMTER_TYPE = vec;
+	using Layer<derived>::sum_gradients;
+	using Layer<derived>::zero;
+
 	 scal lr = scal(0.03); //fp_type == floating point
 
 	gradient_list<mat> w_gradientStorage;
@@ -66,15 +68,15 @@ public:
 
 	void updateWeights() {
 		ys.clear();
-		w_gradientStorage.for_each([&](auto& var) { w += var * lr; });
-		b_gradientStorage.for_each([&](auto& var) { b += var * lr; });
+		w_gradientStorage.for_each(sum_gradients(w, lr));
+		b_gradientStorage.for_each(sum_gradients(b,lr));
 
 		this->next().updateWeights();
 	}
 
 	void clearBPStorage() {
-		w_gradientStorage.for_each([](auto& var) { var.zero(); });	//gradient lists
-		b_gradientStorage.for_each([](auto& var) { var.zero(); });	//gradient list
+		w_gradientStorage.for_each(zero);	//gradient lists
+		b_gradientStorage.for_each(zero);	//gradient list
 		ys               .for_each([](auto& var) { var.clear();});	//bp_list
 
 		this->next().clearBPStorage();

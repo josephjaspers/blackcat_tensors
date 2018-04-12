@@ -25,12 +25,29 @@ class Layer {
 
 
 public:
+	scal lr = scal(.03);
+
+	struct Sum_Gradients {
+		auto operator () (auto& weights, auto& lr) const {
+			return [&](auto& gradients) { return weights += gradients * lr; };
+		}
+	};
+	struct Zero_Tensors {
+		void operator () (auto& var) const {
+			var.zero();
+		}
+	};
+	static constexpr Sum_Gradients sum_gradients = Sum_Gradients();
+	static constexpr Zero_Tensors zero = Zero_Tensors();
+
+
+
+
 
 	const int INPUTS;
 	const int OUTPUTS = next().INPUTS;
 
 	Layer(int inputs) : INPUTS(inputs) {}
-	scal lr = scal(.03);
 
 	void init_threads(int i) {
 		next().init_threads(i);
