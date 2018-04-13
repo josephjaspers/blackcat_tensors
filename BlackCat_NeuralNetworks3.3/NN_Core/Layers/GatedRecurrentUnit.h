@@ -78,7 +78,7 @@ public:
 		vec f = g(wf * x + rf * c() + bf);
 		vec i = g(wi * x + ri * c() + bi);
 
-		c() *=* (f + i);
+		c() = c() ** (f + i);
 
 		fs().store(x);				//store f
 		is().store(i);				//store i
@@ -99,7 +99,7 @@ public:
 		df = dc() ** ct ** gd(f);
 		di = dc() ** gd(i);
 
-		dc() = dc() *=* f;				//update cell-state error
+		dc() = dc() ** f;				//update cell-state error
 
 		//store gradients
 		wi_gradientStorage() -= di() * i.t();
