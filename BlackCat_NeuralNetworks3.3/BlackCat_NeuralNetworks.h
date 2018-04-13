@@ -15,6 +15,7 @@
 
 #include "NN_Core/Layers/FeedForward.h"
 #include "NN_Core/Layers/Recurrent.h"
+#include "NN_Core/Layers/GatedRecurrentUnit.h"
 
 #include  "NN_Core/Layers/ConvLayer.h"
 #include "NN_Core/Layers/OutputLayer.h"

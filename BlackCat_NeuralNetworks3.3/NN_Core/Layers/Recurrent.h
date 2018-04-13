@@ -38,18 +38,13 @@ public:
 
 	mat w;
 	mat r;
-
-	vec x;
-	vec y;
 	vec b;
 
 	Recurrent(int inputs) :
 			Layer<derived>(inputs),
 			w(this->OUTPUTS, this->INPUTS),
 			r(this->OUTPUTS, this->OUTPUTS),
-			b(this->OUTPUTS),
-			x(this->INPUTS),
-			y(this->OUTPUTS)
+			b(this->OUTPUTS)
 		{
 		r.randomize(-4, 0);
 		w.randomize(-4, 4);
@@ -75,8 +70,8 @@ public:
 		vec  y = ys().pop_front();			//load last and remove
 
 		w_gradientStorage() -= dy   * x.t();
-		r_gradientStorage() -= dc() * y.t();		//dc() is a function call as each thread has its own
-		b_gradientStorage() -= dy;					//cell state error
+		r_gradientStorage() -= dc() * y.t();		//dc() is a function call as each thread has its own cell state error
+		b_gradientStorage() -= dy;
 
 		dc() += dy;
 
@@ -125,8 +120,6 @@ public:
 		w.write(is);
 		r.write(is);
 		b.write(is);
-		x.write(is);
-		y.write(is);
 	}
 	void read(std::ifstream& os) {
 		os >> this->INPUTS;
@@ -135,8 +128,6 @@ public:
 		w.read(os);
 		r.read(os);
 		b.read(os);
-		x.read(os);
-		y.read(os);
 	}
 	void setLearningRate(fp_type learning_rate) {
 		lr = learning_rate;

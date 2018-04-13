@@ -39,9 +39,18 @@ public:
 			var.zero();
 		}
 	};
+	struct ClearBPLists {
+		template<class T>
+		void operator () (T& var) const {
+			var.clear();
+		}
+	};
+
 	static constexpr Sum_Gradients sum_gradients = Sum_Gradients();
 	static constexpr Zero_Tensors zero = Zero_Tensors();
+	static constexpr ClearBPLists clear	= ClearBPLists();
 
+	auto& xs() { return this->prev().ys(); }
 
 
 
