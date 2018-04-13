@@ -7,7 +7,10 @@
 
 #ifndef SCALAR_H_
 #define SCALAR_H_
+
+#include <vector>
 #include "BC_Tensor_Base/TensorBase.h"
+class VOID_;
 
 namespace BC {
 
@@ -21,15 +24,20 @@ public:
 	__BCinline__ static constexpr int DIMS() { return 0; }
 
 	using parent_class::operator=;
-	using parent_class::operator();
+	using primitive_scalar = std::conditional_t<MTF::isPrimitive<T>::conditional, T, VOID_>();
 
 	Scalar() : parent_class(std::vector<int>{1}) {}
-	Scalar(const Scalar&& t) : parent_class(t) 		{}
-	Scalar(		 Scalar&& t) : parent_class(t) 		{}
-	Scalar(const Scalar&  t) : parent_class(t) 		{}
+	Scalar(const Scalar&& t) : parent_class(t) {}
+	Scalar(		 Scalar&& t) : parent_class(t) {}
+	Scalar(const Scalar&  t) : parent_class(t) {}
 
 	template<class U> Scalar(const Scalar<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> Scalar(	   Scalar<U, Mathlib>&& t) : parent_class(t) {}
+
+
+	Scalar(_scalar<T> val) : parent_class(std::vector<int>{1}) {
+		 Mathlib::HostToDevice(this->data().getIterator(), &val, 1);
+	}
 
 	Scalar& operator =(const Scalar&  t) { return parent_class::operator=(t); }
 	Scalar& operator =(const Scalar&& t) { return parent_class::operator=(t); }
@@ -37,11 +45,6 @@ public:
 	template<class U>
 	Scalar& operator =(const Scalar<U, Mathlib>& t) { return parent_class::operator=(t); }
 	Scalar& operator =(_scalar<T> scalar) { Mathlib::HostToDevice(this->data().getIterator(), &scalar, 1); return *this; }
-
-	Scalar(double   value) : parent_class(std::vector<int>{1}) { this->fill(value);}
-	Scalar(int      value) : parent_class(std::vector<int>{1}) { this->fill(value);}
-	Scalar(float    value) : parent_class(std::vector<int>{1}) { this->fill(value);}
-	Scalar(unsigned value) : parent_class(std::vector<int>{1}) { this->fill(value);}
 
 	operator _scalar<T>() const {
 		_scalar<T> value = 0;

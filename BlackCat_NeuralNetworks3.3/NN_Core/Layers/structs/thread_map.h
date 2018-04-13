@@ -97,10 +97,11 @@ struct thread_map {
 
 	T& operator ()() {
 		return pool[omp_get_thread_num()].data;
-		std::cout << " returning null - operator() thread_map" << std::endl;
-		std::cout << " number of threads exceeds current size" << std::endl;
-
 	}
+	const T& operator ()() const {
+		return pool[omp_get_thread_num()].data;
+	}
+
 
 	template<class functor>
 	void for_each(functor function) {

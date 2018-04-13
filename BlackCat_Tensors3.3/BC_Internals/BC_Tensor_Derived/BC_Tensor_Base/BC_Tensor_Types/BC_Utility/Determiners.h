@@ -17,7 +17,6 @@ template<class> class Tensor_Core;
 template<class> class Tensor_Slice;
 template<class> class Tensor_Scalar;
 template<class, int> class Tensor_Reshape;
-
 template<class,class> class DISABLED;
 template<class,class> class Scalar;
 template<class,class> class Vector;

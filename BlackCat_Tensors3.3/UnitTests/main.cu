@@ -9,8 +9,8 @@ using BC::Matrix;
 using BC::Scalar;
 using BC::Cube;
 
-using ml = BC::CPU;
-//using ml = BC::GPU;
+//using ml = BC::CPU;
+using ml = BC::GPU;
 
 using vec = Vector<float, ml>;
 using mat = Matrix<float, ml>;
@@ -74,7 +74,7 @@ auto test() {
 	c = d * e * scal(2.0f); ////This is the only version that is not accounted for (it is also the least common notation)
 	c.print();
 
-	scal A(2);
+	scal A(2.0f);
 	scal B(2.0f);
 
 	std::cout << " dot product -- trans, trans " << std::endl;

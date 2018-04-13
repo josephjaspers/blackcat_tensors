@@ -53,7 +53,7 @@ public:
 		return sz == 0;
 	}
 	int size() const {
-		 return size;
+		 return sz;
 	}
 	void rm_front() {
 		node* h = head;

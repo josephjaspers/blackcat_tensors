@@ -21,7 +21,6 @@ using BC::scal;
 using BC::mat;
 typedef std::vector<vec> data;
 typedef vec tensor;
-export int OMP_STACKSIZE;
 
 namespace BC {
 namespace MNIST_Test_MT {
@@ -99,7 +98,6 @@ int percept_MNIST() {
 	network.init_threads(4);
 
 	omp_set_num_threads(NUMB_THREADS);
-	OMP_STACKSIZE *= 2;
 
 
 	/*

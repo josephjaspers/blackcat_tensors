@@ -28,12 +28,14 @@ public:
 	scal lr = scal(.03);
 
 	struct Sum_Gradients {
-		auto operator () (auto& weights, auto& lr) const {
+		template<class T, class S>
+		auto operator () (T& weights, S& lr) const {
 			return [&](auto& gradients) { return weights += gradients * lr; };
 		}
 	};
 	struct Zero_Tensors {
-		void operator () (auto& var) const {
+		template<class T>
+		void operator () (T& var) const {
 			var.zero();
 		}
 	};

@@ -8,7 +8,6 @@
 #ifndef VECTOR_H_
 #define VECTOR_H_
 
-#include "Scalar.h"
 #include "BC_Tensor_Base/TensorBase.h"
 
 namespace BC {
