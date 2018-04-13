@@ -21,7 +21,7 @@ struct GRU : public Layer<derived> {
 /*
  * 	Note:
  * 		** = point-wise multiply
- * 		%  = point-wise multiply
+ * 		*=*  = point-wise multiply and assign
  * 		*  = dot-product
  *
  */
@@ -78,7 +78,7 @@ public:
 		vec f = g(wf * x + rf * c() + bf);
 		vec i = g(wi * x + ri * c() + bi);
 
-		c() = c() ** (f + i);
+		c() *=* (f + i);
 
 		fs().store(x);				//store f
 		is().store(i);				//store i
@@ -99,7 +99,7 @@ public:
 		df = dc() ** ct ** gd(f);
 		di = dc() ** gd(i);
 
-		dc() = dc() ** f;				//update cell-state error
+		dc() = dc() *=* f;				//update cell-state error
 
 		//store gradients
 		wi_gradientStorage() -= di() * i.t();
@@ -110,7 +110,8 @@ public:
 		rf_gradientStorage() -= df() * c.t();
 		bf_gradientStorage() -= df();
 
-		return this->prev().backPropagation(wi.t() * dy % gd(x));
+		vec dx = (wi.t() * di() ** gd(x)) + (wf.t() * df() ** gd(x));
+		return this->prev().backPropagation(dx);
 	}
 
 	void updateWeights() {
@@ -140,20 +141,20 @@ public:
 		bf_gradientStorage.for_each(zero);	//gradient list
 
 
-		dc.for_each([](auto& var) { var.zero(); }); 	//gradient list
-		df.for_each([](auto& var) { var.zero(); }); 	//gradient list
-		di.for_each([](auto& var) { var.zero(); }); 	//gradient list
+		dc.for_each(zero);
+		df.for_each(zero);
+		di.for_each(zero);
 
 		this->next().clearBPStorage();
 	}
 	void init_threads(int i) {
-		wi_gradientStorage.resize(i);	//gradient list
-		ri_gradientStorage.resize(i);	//gradient list
-		bi_gradientStorage.resize(i);	//gradient list
+		wi_gradientStorage.resize(i);
+		ri_gradientStorage.resize(i);
+		bi_gradientStorage.resize(i);
 
-		wf_gradientStorage.resize(i);	//gradient list
-		rf_gradientStorage.resize(i);	//gradient list
-		bf_gradientStorage.resize(i);	//gradient list
+		wf_gradientStorage.resize(i);
+		rf_gradientStorage.resize(i);
+		bf_gradientStorage.resize(i);
 
 		dc.resize(i);
 		df.resize(i);
@@ -174,18 +175,18 @@ public:
 	}
 	void init_storages() {
 		//for each matrix/vector gradient storage initialize to correct dims
-		wi_gradientStorage.for_each([&](auto& var) { var = mat(this->OUTPUTS, this->INPUTS);  var.zero(); });
-		ri_gradientStorage.for_each([&](auto& var) { var = mat(this->OUTPUTS, this->OUTPUTS); var.zero(); });
-		bi_gradientStorage.for_each([&](auto& var) { var = vec(this->OUTPUTS);			      var.zero(); });
+		wi_gradientStorage.for_each(zero);
+		ri_gradientStorage.for_each(zero);
+		bi_gradientStorage.for_each(zero);
 
-		wf_gradientStorage.for_each([&](auto& var) { var = mat(this->OUTPUTS, this->INPUTS);  var.zero(); });
-		rf_gradientStorage.for_each([&](auto& var) { var = mat(this->OUTPUTS, this->OUTPUTS); var.zero(); });
-		bf_gradientStorage.for_each([&](auto& var) { var = vec(this->OUTPUTS);			      var.zero(); });
+		wf_gradientStorage.for_each(zero);
+		rf_gradientStorage.for_each(zero);
+		bf_gradientStorage.for_each(zero);
 
 		//for each cell-state error initialize to 0
-		dc.for_each([&](auto& var) { var = vec(this->OUTPUTS); var.zero(); });
-		df.for_each([&](auto& var) { var = vec(this->OUTPUTS); var.zero(); });
-		di.for_each([&](auto& var) { var = vec(this->OUTPUTS); var.zero(); });
+		dc.for_each(zero);
+		df.for_each(zero);
+		di.for_each(zero);
 
 	}
 };

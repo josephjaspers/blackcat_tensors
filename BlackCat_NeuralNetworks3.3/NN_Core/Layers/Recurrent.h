@@ -89,8 +89,8 @@ public:
 	void updateWeights() {
 		//sum all the gradients
 		w_gradientStorage.for_each(sum_gradients(w, lr));
-		r_gradientStorage.for_each(sum_gradients(w, lr));
-		b_gradientStorage.for_each(sum_gradients(w, lr));
+		r_gradientStorage.for_each(sum_gradients(r, lr));
+		b_gradientStorage.for_each(sum_gradients(b, lr));
 
 		this->next().updateWeights();
 	}

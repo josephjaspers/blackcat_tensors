@@ -28,7 +28,7 @@ struct alternate_asterix_denoter {
 	const Tensor_Operations<A>& operator() () const { return ref; }
 	const Tensor_Operations<A>& get () const { return ref; }
 
-	alternate_asterix_denoter(Tensor_Operations<A>& r) : ref(r) {}
+	alternate_asterix_denoter(const Tensor_Operations<A>& r) : ref(const_cast<Tensor_Operations<A>&>(r)) {}
 };
 
 /*
@@ -187,6 +187,11 @@ struct Tensor_Operations {
 		return typename impl<pDeriv, mul>::type(this->data(), param.get().data());
 	}
 	template<class pDeriv>
+	typename impl<pDeriv, mul>::type operator *=(const alternate_asterix_denoter<pDeriv>& param) const {
+		assert_same_size(param.get());
+		return typename impl<pDeriv, mul>::type(this->data(), param.get().data());
+	}
+	template<class pDeriv>
 	typename impl<pDeriv, div>::type operator /=(const alternate_asterix_denoter<pDeriv>& param) const {
 		assert_same_size(param.get());
 		return typename impl<pDeriv, add>::type(this->data(), param.get().data());
@@ -219,7 +224,7 @@ struct Tensor_Operations {
 	}
 	//------------------------------------alternate asterix denoter----------------------------------//
 	 const alternate_asterix_denoter<derived> operator * () const {
-		return alternate_asterix_denoter<derived>(this);
+		return alternate_asterix_denoter<derived>(*this);
 	}
 
 	 //--------------------------------HIGHER ORDER OPERATIONS------------------------------//

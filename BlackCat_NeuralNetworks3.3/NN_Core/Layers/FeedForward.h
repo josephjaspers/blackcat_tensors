@@ -19,19 +19,19 @@ struct FeedForward : public Layer<derived> {
 
 public:
 
-	using Layer<derived>::sum_gradients;
-	using Layer<derived>::zero;
-	using Layer<derived>::xs;
+	using Layer<derived>::sum_gradients;		//a function that stores all the gradients within a thread pool
+	using Layer<derived>::zero;					//a function that zeros all tensor-parameters
+	using Layer<derived>::clear;				//a function that clears back_propagation_lists
+	using Layer<derived>::lr;					//the learning rate
+	using Layer<derived>::xs;					//the input back_propagation_list (from previous layer)
 
-	 scal lr = scal(0.03); //fp_type == floating point
+	gradient_list<mat> w_gradientStorage;		//weight gradient storage
+	gradient_list<vec> b_gradientStorage;		//bias gradient storage
 
-	gradient_list<mat> w_gradientStorage;
-	gradient_list<vec> b_gradientStorage;
+	bp_list<vec> ys;							//outputs
 
-	bp_list<vec> ys;
-
-	mat w;
-	vec b;
+	mat w;										//weights
+	vec b;										//biases
 
 	FeedForward(int inputs) :
 			Layer<derived>(inputs),
@@ -45,8 +45,7 @@ public:
 	}
 
 	vec forwardPropagation(const vec& x) {
-		xs().push_front(x);			//store the inputs
-
+		xs().push_front(x);
 		return this->next().forwardPropagation(g(w * x + b));
 	}
 	vec backPropagation(const vec& dy) {
@@ -54,7 +53,7 @@ public:
 
 		w_gradientStorage() -= dy * x.t();
 		b_gradientStorage() -= dy;
-		return this->prev().backPropagation(w.t() * dy % gd(x));
+		return this->prev().backPropagation(w.t() * dy ** gd(x));
 	}
 	auto forwardPropagation_Express(const vec& x) const {
 		return this->next().forwardPropagation_Express(g(w * x + b));
@@ -62,7 +61,7 @@ public:
 
 	void updateWeights() {
 		w_gradientStorage.for_each(sum_gradients(w, lr));
-		b_gradientStorage.for_each(sum_gradients(b,lr));
+		b_gradientStorage.for_each(sum_gradients(b, lr));
 
 		this->next().updateWeights();
 	}
@@ -70,7 +69,7 @@ public:
 	void clearBPStorage() {
 		w_gradientStorage.for_each(zero);	//gradient lists
 		b_gradientStorage.for_each(zero);	//gradient list
-		ys               .for_each([](auto& var) { var.clear();});	//bp_list
+		ys.for_each(clear);					//bp_list
 
 		this->next().clearBPStorage();
 	}
