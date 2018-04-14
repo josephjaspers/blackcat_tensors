@@ -11,45 +11,37 @@
 namespace BC {
 
 template<class derived>
-struct OutputLayer {
+struct OutputLayer : Layer<derived> {
 
-	auto& prev() {
-		return static_cast<derived&>(*this).prev();
-	}
-	const auto& prev() const {
-		return static_cast<derived&>(*this).prev();
-	}
+	using Layer<derived>::xs;
 
 public:
-	int INPUTS;
-	int OUTPUTS = INPUTS;
-	vec hypothesis;
 
-	OutputLayer(int inputs) : INPUTS(inputs), hypothesis(inputs) {
+	OutputLayer(int inputs) : Layer<derived>(inputs) {
 	}
 
-	vec forwardPropagation(const vec& in) {
-		return hypothesis == in;
+	vec& forwardPropagation(const vec& x) {
+		xs().push(x);
+		return xs().first();
 	}
 	vec forwardPropagation_Express(const vec& x) const {
 		return x;
 	}
 	vec backPropagation(const vec& y) {
-		return prev().backPropagation(hypothesis - y);
+		vec& x = xs().first();
+		return this->prev().backPropagation(x - y);
 	}
 
-	void init_threads(int i) {}
+	void init_threads(int i) {
+	}
 
 	void updateWeights() {}
-	void clearBPStorage() {}
+	void clearBPStorage() {
+//		xs.for_each([](auto& var) { var.clear();});		//bp_list
+	}
 	void write(std::ofstream& is) {
-		is << INPUTS << ' ';
-		hypothesis.write(is);
-
 	}
 	void read(std::ifstream& os) {
-		os >> INPUTS;
-		hypothesis.read(os);
 	}
 	void setLearningRate(fp_type learning_rate) {
 		return;

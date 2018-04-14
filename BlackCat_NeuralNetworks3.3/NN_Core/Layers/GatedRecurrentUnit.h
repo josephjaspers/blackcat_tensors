@@ -34,17 +34,17 @@ public:
 	using Layer<derived>::lr;					//the learning rate
 	using Layer<derived>::xs;					//the input back_propagation_list (from previous layer)
 
-	gradient_list<mat> wi_gradientStorage; 		//gradient storage input weights
-	gradient_list<vec> bi_gradientStorage;		//gradient storage input bias
-	gradient_list<mat> ri_gradientStorage;		//gradient storage recurrent input weights
+	omp_unique<mat> wi_gradientStorage; 		//gradient storage input weights
+	omp_unique<vec> bi_gradientStorage;		//gradient storage input bias
+	omp_unique<mat> ri_gradientStorage;		//gradient storage recurrent input weights
 
-	gradient_list<mat> wf_gradientStorage; 		//gradient storage forget weights
-	gradient_list<vec> bf_gradientStorage;		//gradient storage forget bias
-	gradient_list<mat> rf_gradientStorage;		//gradient storage recurrent forget weights
+	omp_unique<mat> wf_gradientStorage; 		//gradient storage forget weights
+	omp_unique<vec> bf_gradientStorage;		//gradient storage forget bias
+	omp_unique<mat> rf_gradientStorage;		//gradient storage recurrent forget weights
 
-	gradient_list<vec> dc;						//cell  state error
-	gradient_list<vec> df;						//forget gate error
-	gradient_list<vec> di;						//input  gate error
+	omp_unique<vec> dc;						//cell  state error
+	omp_unique<vec> df;						//forget gate error
+	omp_unique<vec> di;						//input  gate error
 
 	bp_list<vec> cs;							//storage for cell-states
 	bp_list<vec> is;							//storage for inputs gate activation

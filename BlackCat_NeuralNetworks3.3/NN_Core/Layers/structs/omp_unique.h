@@ -13,7 +13,12 @@
 #include <omp.h>
 
 /*
- * Lightweight structures that creates a set of object and returns based upon the pthread.
+ * Lightweight structure that returns a reference to type T with the overloaded function operator().
+ * This emulates creating openmp-private variables that will live outside of the scope of parallel section
+ *
+ * This class only works on openmp spawned threads as it utilizes omp_get_thread_num() for indexing.
+ * Past implementations used linear probing and hashing of pthreads, though openmp makes the code much easier
+ * possibly will revert to pthread implementation.
  */
 
 namespace BC {
@@ -27,14 +32,14 @@ struct default_deleter {
 };
 
 template<class T, class deleter = default_deleter>
-struct thread_map {
+struct omp_unique {
 
 	static constexpr deleter destroy = deleter();
 
 	int sz;
 	T* pool;
 
-	thread_map(int size = 1) {
+	omp_unique(int size = 1) {
 		sz = size;
 		pool = new T[size];
 	}
@@ -81,7 +86,7 @@ struct thread_map {
 		}
 	}
 
-	~thread_map() {
+	~omp_unique() {
 		for_each(destroy);
 		delete[] pool;
 	}

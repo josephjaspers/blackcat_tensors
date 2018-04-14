@@ -34,7 +34,7 @@ namespace Structure {
 
 
 	template<class T, class deleter = default_deleter>
-	struct thread_map {
+	struct omp_unique {
 
 		struct set {
 			bool initialized = true;
@@ -48,7 +48,7 @@ namespace Structure {
 		deleter destroy;
 		set* pool;
 
-		thread_map(int size) : sz(size) {
+		omp_unique(int size) : sz(size) {
 			pool = new set[size];
 		}
 
@@ -107,7 +107,7 @@ namespace Structure {
 			}
 		}
 
-		~thread_map() {
+		~omp_unique() {
 			for_each(destroy);
 			delete[] pool;
 		}

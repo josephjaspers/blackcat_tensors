@@ -39,7 +39,7 @@ public:
 		}
 		sz++;
 	}
-	void push_front(T data) {
+	void push(T data) {
 		if (head) {
 			node* new_head = new node(data);
 			new_head->next = head;

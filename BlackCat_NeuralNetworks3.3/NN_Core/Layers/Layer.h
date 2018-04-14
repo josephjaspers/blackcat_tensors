@@ -10,15 +10,14 @@
 #include <list>
 
 #include "structs/forward_list.h"
-#include "structs/thread_map.h"
+#include "structs/omp_unique.h"
 
 namespace BC {
 using BC::Structure::forward_list;
-using BC::Structure::thread_map;
+using BC::Structure::omp_unique;
 
 
-template<class T> using bp_list = thread_map<forward_list<T>>;
-template<class T> using gradient_list = thread_map<T>;
+template<class T> using bp_list = omp_unique<forward_list<T>>;
 
 template<class derived>
 class Layer {
@@ -56,7 +55,7 @@ public:
 
 
 	const int INPUTS;
-	const int OUTPUTS = next().INPUTS;
+	const int OUTPUTS = static_cast<derived&>(*this).hasNext() ? this->next().INPUTS : INPUTS;
 
 	Layer(int inputs) : INPUTS(inputs) {}
 

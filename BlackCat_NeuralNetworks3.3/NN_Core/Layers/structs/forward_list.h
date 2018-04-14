@@ -11,6 +11,10 @@
 namespace BC {
 namespace Structure {
 
+/*
+ * Single linked list, lightweight
+ */
+
 template<class T>
 class forward_list {
 
@@ -39,7 +43,7 @@ public:
 		}
 		sz++;
 	}
-	void push_front(T data) {
+	void push(T data) {
 		if (head) {
 			node* h = new node(data, head);
 			head = h;
@@ -56,6 +60,9 @@ public:
 		 return sz;
 	}
 	void rm_front() {
+		if (!head)
+			return;
+
 		node* h = head;
 		head = head->next;
 		--sz;
@@ -65,18 +72,25 @@ public:
 
 		delete h;
 	}
-	T pop_front() {
+	T pop() {
 		T data = std::move(head->data);
 		rm_front();
 		return std::move(data);
 	}
 
-	T& front() {
+	T& first() {
 		return head->data();
 	}
-	const T& front() const {
+	const T& first() const {
 		return head->data();
 	}
+	T& second() {
+			return head->next->data;
+		}
+		const T& seonc() const {
+			return head->next->data;
+		}
+
 
 	void clear() {
 		node* ref = head;

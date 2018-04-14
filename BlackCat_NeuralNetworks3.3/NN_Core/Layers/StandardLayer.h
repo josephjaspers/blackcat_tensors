@@ -14,11 +14,11 @@
 
 namespace BC {
 using BC::Structure::forward_list;
-using BC::Structure::thread_map;
+using BC::Structure::omp_unique;
 
 
-template<class T> using bp_list = thread_map<forward_list<T>>;
-template<class T> using gradient_list = thread_map<T>;
+template<class T> using bp_list = omp_unique<forward_list<T>>;
+template<class T> using gradient_list = omp_unique<T>;
 
 template<class derived>
 class BasicLayer {

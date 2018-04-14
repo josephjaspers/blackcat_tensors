@@ -25,8 +25,8 @@ public:
 	using Layer<derived>::lr;					//the learning rate
 	using Layer<derived>::xs;					//the input back_propagation_list (from previous layer)
 
-	gradient_list<mat> w_gradientStorage;		//weight gradient storage
-	gradient_list<vec> b_gradientStorage;		//bias gradient storage
+	omp_unique<mat> w_gradientStorage;		//weight gradient storage
+	omp_unique<vec> b_gradientStorage;		//bias gradient storage
 
 	bp_list<vec> ys;							//outputs
 
@@ -45,11 +45,12 @@ public:
 	}
 
 	vec forwardPropagation(const vec& x) {
-		xs().push_front(x);
+		xs().push(x);
 		return this->next().forwardPropagation(g(w * x + b));
 	}
 	vec backPropagation(const vec& dy) {
-		vec x = xs().pop_front();				//load the last input
+		ys().rm_front();
+		vec& x = xs().first();				//load the last input
 
 		w_gradientStorage() -= dy * x.t();
 		b_gradientStorage() -= dy;
