@@ -37,11 +37,14 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 	Tensor_Core& operator = (const Tensor_Core& ) = default;
 	Tensor_Core& operator = (	   Tensor_Core&&) = default;
 
-	Tensor_Core(std::vector<int> param) {
+	template<class U>
+	Tensor_Core(const U& param) {
+		static_assert(is_shape<U>, "NON_SHAPE DETECTED AS INITIALIZATION OF TENSOR SHAPE");
 		Mathlib::unified_initialize(is, DIMS());
 		Mathlib::unified_initialize(os, DIMS());
 
 		if (DIMS() > 0) {
+
 			is[0] = param[0];
 			os[0] = is[0];
 			for (int i = 1; i < DIMS(); ++i) {
@@ -51,35 +54,7 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 		}
 		Mathlib::initialize(array, this->size());
 	}
-	Tensor_Core(const int* param) {
-		Mathlib::unified_initialize(is, DIMS());
-		Mathlib::unified_initialize(os, DIMS());
 
-		if (DIMS() > 0) {
-			Mathlib::copy(is, &param[0], DIMS());
-
-			os[0] = is[0];
-			for (int i = 1; i < DIMS(); ++i) {
-				os[i] = os[i - 1] * is[i];
-			}
-		}
-		Mathlib::initialize(array, this->size());
-	}
-//	template<class dimList>
-//	Tensor_Core(dimList param) {
-//		Mathlib::unified_initialize(is, DIMS());
-//		Mathlib::unified_initialize(os, DIMS());
-//
-//		if (DIMS() > 0) {
-//			is[0] = param[0];
-//			os[0] = is[0];
-//			for (int i = 1; i < DIMS(); ++i) {
-//				is[i] = param[i];
-//				os[i] = os[i - 1] * is[i];
-//			}
-//		}
-//		Mathlib::initialize(array, this->size());
-//	}
 	__BCinline__ const auto innerShape() const { return is; }
 	__BCinline__ const auto outerShape() const { return os; }
 
@@ -133,12 +108,12 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 	}
 
 	void destroy() {
-		if (array)
 			Mathlib::destroy(array);
-		if (is)
 			Mathlib::destroy(is);
-		if (os)
 			Mathlib::destroy(os);
+			array = nullptr;
+			is = nullptr;
+			os = nullptr;
 	}
 
 };

@@ -23,7 +23,7 @@ struct Tensor_Row : Tensor_Core_Base<Tensor_Row<PARENT>, 1>  {
 	static constexpr int DIMS() { return 1; }
 	static_assert(PARENT::DIMS() == 2 || PARENT::DIMS() == 1, "TENSOR_ROW CAN ONLY BE GENERATED FROM ANOTHER VECTOR, ROW_VECTOR, OR MATRIX");
 
-	const PARENT parent;
+	PARENT parent;
 	array array_slice;
 
 	Tensor_Row(array array, PARENT parent_) : array_slice(array), parent(parent_) {}

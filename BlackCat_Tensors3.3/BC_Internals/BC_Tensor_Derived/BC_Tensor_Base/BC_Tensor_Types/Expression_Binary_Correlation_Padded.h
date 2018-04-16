@@ -10,11 +10,13 @@
 
 #include "BlackCat_Internal_Type_ExpressionBase.h"
 namespace BC {
-template<class T, class lv, class rv, int corr_dimension = 2>
-struct binary_expression_correlation_padded : Expression_Core_Base<T, binary_expression_correlation_padded<T, lv, rv, corr_dimension>> {
+template<class lv, class rv, int corr_dimension = 2>
+struct binary_expression_correlation_padded : Expression_Core_Base<binary_expression_correlation_padded<lv, rv, corr_dimension>> {
 
 	static_assert(lv::DIMS() == rv::DIMS(), "CORRELATION CURRENTLY ONLY SUPPORTED FOR SAME ORDER TENSORS");
 	__BCinline__  static constexpr int DIMS() { return corr_dimension; }
+
+	using T = _scalar<lv>;
 
 //	stack_array<int, DIMS()> positions;
 	stack_array<int, DIMS()> os = init_outerShape();
@@ -26,7 +28,7 @@ struct binary_expression_correlation_padded : Expression_Core_Base<T, binary_exp
 
 
 	template<int mv, class K, class I> __BCinline__
-	T axpy(int index, const K& krnl, const I& img) const {
+	auto axpy(int index, const K& krnl, const I& img) const {
 
 		static_assert(K::DIMS() == I::DIMS(), "Krnl/Img DIMS() must be equal");
 		static constexpr int ORDER = K::DIMS() - 1;
@@ -63,7 +65,7 @@ struct binary_expression_correlation_padded : Expression_Core_Base<T, binary_exp
 		return sum;
 	}
 
-	__BCinline__  T operator [] (int i) const {
+	__BCinline__  auto operator [] (int i) const {
 		return axpy<corr_dimension - 1>(i, left, right);
 	}
 

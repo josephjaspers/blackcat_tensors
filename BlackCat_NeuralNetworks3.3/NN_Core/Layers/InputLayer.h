@@ -10,9 +10,13 @@
 
 #include "Layer.h"
 namespace BC {
+namespace NN {
+
 
 template<class derived>
 struct InputLayer : Layer<derived> {
+
+	using Layer<derived>::clear;
 
 	InputLayer() : Layer<derived>(0) {}
 
@@ -27,7 +31,7 @@ struct InputLayer : Layer<derived> {
 		return this->next().forwardPropagation_Express(x);
 	}
 
-	template<class T> auto backPropagation(const T& dy) {
+	template<class T> vec backPropagation(const T&& dy) {
 		return dy;
 	}
 
@@ -39,6 +43,7 @@ struct InputLayer : Layer<derived> {
 		this->next().updateWeights();
 	}
 	void clearBPStorage() {
+		ys.for_each(clear);
 		this->next().clearBPStorage();
 	}
 
@@ -53,6 +58,8 @@ struct InputLayer : Layer<derived> {
 	}
 
 };
+
+}
 }
 
 

@@ -26,7 +26,7 @@ template<class,int> class 	_Tensor_Reshape = Tensor_Reshape,
 template<class> 	class 	_Tensor_Slice 	= Tensor_Slice,
 template<class> 	class 	_Tensor_Row 	= Tensor_Row,
 template<class> 	class 	_Tensor_Scalar 	= Tensor_Scalar>
-struct Tensor_Core_Base : Expression_Core_Base<_scalar<derived>, Tensor_Core_Base<derived,DIMENSION>> {
+struct Tensor_Core_Base : Expression_Core_Base<Tensor_Core_Base<derived,DIMENSION>> {
 
 	__BCinline__ static constexpr int DIMS() { return DIMENSION; }
 	__BCinline__ static constexpr int LAST() { return DIMENSION - 1; }

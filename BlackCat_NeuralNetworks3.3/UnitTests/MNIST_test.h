@@ -3,13 +3,14 @@
 #include <iostream>
 #include <string>
 #include <omp.h>
-using BC::vec;
-using BC::scal;
-using BC::mat;
+using BC::NN::vec;
+using BC::NN::scal;
+using BC::NN::mat;
 typedef std::vector<vec> data;
 typedef vec tensor;
 
 namespace BC {
+namespace NN {
 namespace MNIST_Test {
 
 tensor expandOutput(int val, int total) {
@@ -74,14 +75,14 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 
 int percept_MNIST() {
 
-	const int TRAINING_EXAMPLES =  1000;
-	const int TRAINING_ITERATIONS = 10;
+	const int TRAINING_EXAMPLES =  2000;
+	const int TRAINING_ITERATIONS = 100;
 
 //	Generate the layers (params are: inputs, outputs)
 
 	//Create the neural network
-	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
-//	NeuralNetwork<FeedForward> network(784, 10);
+//	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
+	NeuralNetwork<FeedForward> network(784, 10);
 //	NeuralNetwork<Conv, FeedForward> network(std::make_tuple(28,28,1,3), 2700, 10);
 	network.setLearningRate(.03);
 	data inputs;
@@ -153,6 +154,8 @@ int percept_MNIST() {
 		std::cout << "-----------------------------------------------------------------------------------------------------------" <<std::endl;
 	}
 	return 0;
+}
+
 }
 }
 }

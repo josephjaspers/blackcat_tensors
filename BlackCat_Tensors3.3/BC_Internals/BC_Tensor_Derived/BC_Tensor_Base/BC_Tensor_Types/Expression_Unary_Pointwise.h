@@ -8,9 +8,10 @@
 #define EXPRESSION_UNARY_POINTWISE_CU_
 
 #include "BlackCat_Internal_Type_ExpressionBase.h"
+
 namespace BC {
-template<class T, class operation, class value>
-class unary_expression : public Expression_Core_Base<T, unary_expression<T, operation, value>> {
+template<class value, class operation>
+class unary_expression : public Expression_Core_Base<unary_expression<value, operation>> {
 public:
 
 	operation oper;
@@ -31,11 +32,11 @@ public:
 	}
 
 	__BCinline__ const auto slice(int i) const {
-		return unary_expression<T, operation, decltype(array.slice(0))>(array.slice(i)); }
+		return unary_expression<decltype(array.slice(0)), operation>(array.slice(i)); }
 	__BCinline__ const auto row(int i) const {
-		return unary_expression<T, operation, decltype(array.row(0))>(array.row(i)); }
+		return unary_expression<decltype(array.row(0)),operation>(array.row(i)); }
 	__BCinline__ const auto col(int i) const {
-		return unary_expression<T, operation, decltype(array.col(0))>(array.col(i)); }
+		return unary_expression<decltype(array.col(0)),operation>(array.col(i)); }
 };
 }
 #endif /* EXPRESSION_UNARY_POINTWISE_CU_ */

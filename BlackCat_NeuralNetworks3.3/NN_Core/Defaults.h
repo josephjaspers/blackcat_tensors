@@ -10,13 +10,13 @@
 
 #include "BlackCat_Tensors.h"
 namespace BC {
+namespace NN {
 
 /*
  * This file defines the default types of tensors and which mathlibrary to use.
  * Currently only CPU lib is supported
  */
 
-using namespace NN_Abreviated_Functions;
 struct BASE;
 using ml = CPU;
 using fp_type = double;
@@ -43,7 +43,7 @@ template<class T> using _cube = Cube<T, ml>;
 template<class T> using _tensor4 = Tensor4<T, ml>;
 template<class T> using _tensor5 = Tensor5<T, ml>;
 
-
+}
 }
 
 #endif /* DEFAULTS_H_ */

@@ -113,35 +113,35 @@ namespace BC {
 	namespace NN_Abreviated_Functions {
 		using namespace NN_Functions;
 		template<template<class,class> class tensor, class T, class ml>
-		auto g(tensor<T, ml>& x) {
-			return x.unExpr(SigmoidAssign());
-		}
-		template<template<class,class> class tensor, class T, class ml>
-		auto g(tensor<T, ml>&& x) {
+		auto g(const tensor<T, ml>& x) {
 			return x.unExpr(Sigmoid());
 		}
 		template<template<class,class> class tensor, class T, class ml>
-		auto gd(tensor<float, ml>& x) {
-			return x.unExpr(CachedSigmoidDerivAssign());
+		auto g(const tensor<T, ml>&& x) {
+			return x.unExpr(Sigmoid());
 		}
 		template<template<class,class> class tensor, class T, class ml>
-		auto gd(tensor<T, ml> x) {
+		auto gd(const tensor<float, ml>& x) {
 			return x.unExpr(CachedSigmoidDeriv());
 		}
 		template<template<class,class> class tensor, class T, class ml>
-		auto h(tensor<T, ml>& x) {
-			return x.unExpr(TanhAssign());
+		auto gd(const tensor<T, ml> x) {
+			return x.unExpr(CachedSigmoidDeriv());
 		}
 		template<template<class,class> class tensor, class T, class ml>
-		auto h(tensor<T, ml>&& x) {
+		auto h(const tensor<T, ml>& x) {
 			return x.unExpr(Tanh());
 		}
 		template<template<class,class> class tensor, class T, class ml>
-		auto hd(tensor<T, ml>& x) {
-			return x.unExpr(CachedTanhDerivAssign());
+		auto h(const tensor<T, ml>&& x) {
+			return x.unExpr(Tanh());
 		}
 		template<template<class,class> class tensor, class T, class ml>
-		auto hd(tensor<T, ml>&& x) {
+		auto hd(const tensor<T, ml>& x) {
+			return x.unExpr(CachedTanhDeriv());
+		}
+		template<template<class,class> class tensor, class T, class ml>
+		auto hd(const tensor<T, ml>&& x) {
 			return x.unExpr(CachedTanhDeriv());
 		}
 

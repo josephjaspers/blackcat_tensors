@@ -36,8 +36,8 @@ public:
 	template<class U>
 	Vector& operator = (const Vector<U, Mathlib>& t) { return parent_class::operator=(t); }
 
-	const Vector<unary_expression_transpose<_scalar<T>, typename parent_class::functor_type>, Mathlib> t() const {
-		return Vector<unary_expression_transpose<_scalar<T>, typename parent_class::functor_type>, Mathlib>(this->data());
+	const Vector<unary_expression_transpose<typename parent_class::functor_type>, Mathlib> t() const {
+		return Vector<unary_expression_transpose<typename parent_class::functor_type>, Mathlib>(this->data());
 	}
 
 private:

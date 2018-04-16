@@ -7,14 +7,20 @@
 
 #ifndef LAYER_H_
 #define LAYER_H_
-#include <list>
 
 #include "structs/forward_list.h"
 #include "structs/omp_unique.h"
 
 namespace BC {
-using BC::Structure::forward_list;
-using BC::Structure::omp_unique;
+namespace NN {
+
+using Structure::forward_list;
+using Structure::omp_unique;
+
+using NN_Abreviated_Functions::g; //sigmoid
+using NN_Abreviated_Functions::h;
+using NN_Abreviated_Functions::gd;
+using NN_Abreviated_Functions::hd;
 
 
 template<class T> using bp_list = omp_unique<forward_list<T>>;
@@ -25,6 +31,21 @@ class Layer {
 
 public:
 	scal lr = scal(.03);
+
+//	template<class tensor>
+//	auto g(const tensor& t) {
+//		return this->override_nonlin()(t);
+//	}
+//	template<class tensor>
+//	auto gd(const tensor& t) {
+//		return prev().override_nonlin_deriv()(t);
+//	}
+//	auto override_nonlin_deriv() {
+//		return [](const auto& tensor) { return nonLinFunctions::gd(tensor); };
+//	}
+//	auto override_nonlin() {
+//		return [](const auto& tensor) { return nonLinFunctions::g(tensor); };
+//	}
 
 	struct Sum_Gradients {
 		template<class T, class S>
@@ -58,29 +79,21 @@ public:
 	const int OUTPUTS = static_cast<derived&>(*this).hasNext() ? this->next().INPUTS : INPUTS;
 
 	Layer(int inputs) : INPUTS(inputs) {}
-
-	void init_threads(int i) {
-		next().init_threads(i);
+	void set_omp_threads(int i) {
+		next().set_omp_threads(i);
 	}
+	auto& next() { return static_cast<derived&>(*this).next(); }
+	auto& prev() { return static_cast<derived&>(*this).prev(); }
+	const auto& next() const { return static_cast<derived&>(*this).next(); }
+	const auto& prev() const { return static_cast<derived&>(*this).prev(); }
 
-	auto& next() {
-		return static_cast<derived&>(*this).next();
+	void setLearningRate(fp_type learning_rate) {
+		lr = learning_rate;
+		this->next().setLearningRate(learning_rate);
 	}
-	auto& prev() {
-		return static_cast<derived&>(*this).prev();
-	}
-
-	const auto& next() const {
-		return static_cast<derived&>(*this).next();
-	}
-	const auto& prev() const {
-		return static_cast<derived&>(*this).prev();
-	}
-
-	template<class T> using list = std::list<T>;
-
 };
 
+}
 }
 
 

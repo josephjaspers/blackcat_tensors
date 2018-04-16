@@ -7,11 +7,12 @@
 #ifndef EXPRESSION_UNARY_MATRIXTRANSPOSITION_H_
 #define EXPRESSION_UNARY_MATRIXTRANSPOSITION_H_
 #include "BlackCat_Internal_Type_ExpressionBase.h"
+#include "Expression_Binary_Functors.h"
 #include <vector>
 
 namespace BC {
-template<class T, class functor_type>
-struct unary_expression_transpose : Expression_Core_Base<T, unary_expression_transpose<T, functor_type>>
+template<class functor_type>
+struct unary_expression_transpose : Expression_Core_Base<unary_expression_transpose<functor_type>>
 {
 	functor_type array;
 
@@ -32,10 +33,3 @@ struct unary_expression_transpose : Expression_Core_Base<T, unary_expression_tra
 };
 }
 #endif /* EXPRESSION_UNARY_MATRIXTRANSPOSITION_H_ */
-
-//This class may return the "correct" dims
-//OR you must override these methods as such:
-//	__BCinline__ int rows() const { return array.cols(); }
-//	__BCinline__ int cols() const { return array.rows(); }
-
-//--- tentatively deciding the implementation still

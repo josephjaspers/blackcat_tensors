@@ -2,7 +2,9 @@
 #ifndef EXPRESSION_BINARY_DOTPRODUCT_CU_
 #define EXPRESSION_BINARY_DOTPRODUCT_CU_
 
-#include "BlackCat_Internal_Type_ExpressionBase.h"
+#include "BlackCat_Internal_Type_ExpressionBase.h" 	//Expression_Core_Base<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
+#include "BlackCat_Internal_Type_CoreBase.h" 	//Expression_Core_Base<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
+
 #include "Expression_Binary_Dotproduct_impl.h"
 #include "BlackCat_Internal_Definitions.h"
 
@@ -15,10 +17,11 @@ namespace BC {
  */
 //det_Eval
 
-template<class T, class lv, class rv, class Mathlib>
-struct binary_expression_dotproduct : Expression_Core_Base<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
+template<class lv, class rv, class Mathlib>
+struct binary_expression_dotproduct : Tensor_Core_Base<binary_expression_dotproduct<lv, rv, Mathlib>, rv::DIMS()> {
 
-	using scalar_type = T;
+	using scalar_type = _scalar<lv>;
+
 
 	__BCinline__ static constexpr int DIMS() { return rv::DIMS(); }
 	static constexpr bool transA = det_eval<lv>::transposed;
@@ -32,34 +35,40 @@ struct binary_expression_dotproduct : Expression_Core_Base<T, binary_expression_
 	rv right;
 
 	scalar_type* array_ptr;
+	int is[2] { left.rows(), right.cols() };
+	int os[2] { left.rows(), left.rows() * right.cols() };
 
 	 binary_expression_dotproduct(lv left, rv right) : left(left), right(right) {
 		Mathlib::initialize(array_ptr, this->size());
 		eval();
 	}
 
-	__BCinline__ const T& operator [](int index) const  { return array_ptr[index]; }
-	__BCinline__ 	   T& operator [](int index) 		{ return array_ptr[index]; }
+	__BCinline__ const auto& operator [](int index) const  { return array_ptr[index]; }
+	__BCinline__ 	   auto& operator [](int index) 		{ return array_ptr[index]; }
 
-	__BCinline__ const auto innerShape() 	const { return l_array([=](int i) { return i == 0 ? left.rows() : i == 1 ? right.cols() : 1; }); }
-	__BCinline__ const auto outerShape() 	const { return l_array([=](int i) { return i == 0 ? left.rows() : i == 1 ? left.rows() * right.cols() : 1; }); }
+	__BCinline__ const auto innerShape() const { return is; }
+	__BCinline__ const auto outerShape() const { return os; }
 
-	__BCinline__ int M() const { return left.rows(); }
+	__BCinline__ int M() const { return left.rows();  }
 	__BCinline__ int N() const { return right.cols(); }
-	__BCinline__ int K() const { return left.cols(); }
+	__BCinline__ int K() const { return left.cols();  }
 
 	void destroy() {
 		Mathlib::destroy(array_ptr);
 	}
 
+	scalar_type* getIterator() { return array_ptr; }
+	const scalar_type* getIterator() const { return array_ptr; }
+
+
 public:
 
 	void eval() {
 
-		T* A = nullptr;
-		T* B = nullptr;
-		T* alpha = nullptr;
-		T* alpha2 = nullptr;
+		scalar_type* A = nullptr;
+		scalar_type* B = nullptr;
+		scalar_type* alpha = nullptr;
+		scalar_type* alpha2 = nullptr;
 
 		if (lv_eval) {
 			Mathlib::initialize(A, left.size());
@@ -79,7 +88,7 @@ public:
 
 
 		if (lv_scalar && rv_scalar){
-			T* tmp;
+			scalar_type* tmp;
 			Mathlib::initialize(tmp, 1);
 			Mathlib::scalarMul(tmp, alpha, alpha2);
 			Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M(), N(), K(), tmp, nullptr, left.LD_rows(), right.LD_rows(), this->rows());

@@ -5,14 +5,14 @@
 #include "Defaults.h"
 #include "Layers/InputLayer.h"
 #include "Layers/OutputLayer.h"
+#include "Layers/Layer.h"
 namespace BC {
-using namespace NN_Abreviated_Functions;
-
-
+namespace NN {
 template<class derived, template<class> class...> struct LayerChain;
 template<class> class OutputLayer;
 template<class> class InputLayer;
 
+	//Layer chain - a tuple that inherits from each of its types and has an internal two iteration technique
 
 	//TAIL
 	template<class derived>
@@ -44,11 +44,12 @@ template<class> class InputLayer;
 
 	//BODY
 	template<class derived, template<class> class front, template<class> class... lst>
-	struct LayerChain<derived, front, lst...> : LayerChain<LayerChain<derived, front, lst...>, lst...>, public front<LayerChain<derived, front, lst...>> {
+	struct LayerChain<derived, front, lst...> : LayerChain<LayerChain<derived, front, lst...>, lst...>,
+												public front<LayerChain<derived, front, lst...>> {
 
 		using p = derived;
-		using parent = LayerChain<LayerChain<derived, front, lst...>, lst...>;
 		using n = typename LayerChain<LayerChain<derived, front, lst...>, lst...>::type;
+		using parent = LayerChain<LayerChain<derived, front, lst...>, lst...>;
 		using me = LayerChain<derived, front, lst...>;
 		using type = front<LayerChain<derived, front, lst...>>;
 
@@ -100,6 +101,6 @@ template<class> class InputLayer;
 			  auto& next()  	 { return static_cast<parent&>(*this).data(); }
 	};
 
-
+}
 }
 #endif

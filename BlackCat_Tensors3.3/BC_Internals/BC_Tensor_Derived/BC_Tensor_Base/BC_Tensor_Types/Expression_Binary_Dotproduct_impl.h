@@ -7,10 +7,12 @@
 #ifndef EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
 #define EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
 
+#include "BC_Utility/Determiners.h"
+
 namespace BC {
 //Required forward decs
-template<class, class, class > class binary_expression_scalar_mul;
-template<class, class > class unary_expression_transpose;
+template<class, class > class binary_expression_scalar_mul;
+template<class > class unary_expression_transpose;
 template<class > class Tensor_Core;
 class mul;
 
@@ -43,21 +45,21 @@ template<class deriv> struct det_eval<Tensor_Core<deriv>> {
 	template<class param> static _scalar<deriv>* getArray(const param& p) { return cc(p); }
 };
 ////IF TRANSPOSE
-template<class T, class deriv>
-struct det_eval<unary_expression_transpose<T, Tensor_Core<deriv>>> {
+template<class deriv>
+struct det_eval<unary_expression_transpose<Tensor_Core<deriv>>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = false;
 
-	template<class param> static T* getScalar(const param& p) { return nullptr; }
-	template<class param> static T* getArray(const param& p) { return cc(p.array); }
+	template<class param> static _scalar<param>* getScalar(const param& p) { return nullptr; }
+	template<class param> static _scalar<param>* getArray(const param& p) { return cc(p.array); }
 };
 
 //
 ////IF A SCALAR BY TENSOR MUL OPERATION
-template<class T, class d1, class d2>
-struct det_eval<binary_expression_scalar_mul<T, Tensor_Core<d1>, Tensor_Core<d2>>> {
-	using self = binary_expression_scalar_mul<T, Tensor_Core<d1>, Tensor_Core<d2>>;
+template<class d1, class d2>
+struct det_eval<binary_expression_scalar_mul<Tensor_Core<d1>, Tensor_Core<d2>>> {
+	using self = binary_expression_scalar_mul<Tensor_Core<d1>, Tensor_Core<d2>>;
 
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = false;
@@ -70,33 +72,33 @@ struct det_eval<binary_expression_scalar_mul<T, Tensor_Core<d1>, Tensor_Core<d2>
 	using left_scal_t  = std::conditional_t<left_scal,  self, DISABLE>;
 	using right_scal_t = std::conditional_t<right_scal, self, DISABLE>;
 
-	static T* getArray(const left_scal_t& p) { return cc(p.right); }
-	static T* getArray(const right_scal_t& p) { return cc(p.left);   }
-	static T* getScalar(const left_scal_t& p) { return cc(p.left); }
-	static T* getScalar(const right_scal_t& p) { return cc(p.right); }
+	static _scalar<self>*  getArray(const left_scal_t& p) { return cc(p.right); }
+	static _scalar<self>* getArray(const right_scal_t& p) { return cc(p.left);   }
+	static _scalar<self>*  getScalar(const left_scal_t& p) { return cc(p.left); }
+	static _scalar<self>* getScalar(const right_scal_t& p) { return cc(p.right); }
 
 };
 //
 //IF A SCALAR BY TENSOR MUL OPERATION R + TRANSPOSED
-template<class T, class d1, class d2>
-struct det_eval<binary_expression_scalar_mul<T, unary_expression_transpose<T, Tensor_Core<d1>>, Tensor_Core<d2>>> {
+template<class d1, class d2>
+struct det_eval<binary_expression_scalar_mul<unary_expression_transpose<Tensor_Core<d1>>, Tensor_Core<d2>>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;
 
-	template<class param> static T* getScalar(const param& p) { return cc(p.right); }
-	template<class param> static T* getArray(const param& p) { return cc(p.left.array); }
+	template<class param> static _scalar<param>* getScalar(const param& p) { return cc(p.right); }
+	template<class param> static _scalar<param>* getArray(const param& p) { return cc(p.left.array); }
 };
 
 //IF A SCALAR BY TENSOR MUL OPERATION L + TRANSPOSED
-template<class T, class d1, class d2>
-struct det_eval<binary_expression_scalar_mul<T, Tensor_Core<d1>, unary_expression_transpose<T, Tensor_Core<d2>>>> {
+template<class d1, class d2>
+struct det_eval<binary_expression_scalar_mul<Tensor_Core<d1>, unary_expression_transpose<Tensor_Core<d2>>>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;
 
-	template<class param> static T* getScalar(const param& p) { return cc(p.left.getIterator()); }
-	template<class param> static T* getArray(const param& p) { return cc(p.right.array.getIterator()); }
+	template<class param> static _scalar<param>* getScalar(const param& p) { return cc(p.left.getIterator()); }
+	template<class param> static _scalar<param>* getArray(const param& p) { return cc(p.right.array.getIterator()); }
 };
 }
 

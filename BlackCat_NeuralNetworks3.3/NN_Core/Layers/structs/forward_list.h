@@ -9,11 +9,8 @@
 #define FRWD_LIST_H_
 
 namespace BC {
+namespace NN {
 namespace Structure {
-
-/*
- * Single linked list, lightweight
- */
 
 template<class T>
 class forward_list {
@@ -29,27 +26,15 @@ class forward_list {
 
 
 	node* head = nullptr;
-	node* tail = nullptr;
 	int sz = 0;
 public:
 
-	void push_back(T data) {
-		if (head) {
-			tail->next = new node(data);
-			tail = tail->next;
-		} else {
-			head = new node(data);
-			tail = head;
-		}
-		sz++;
-	}
 	void push(T data) {
 		if (head) {
 			node* h = new node(data, head);
 			head = h;
 		} else {
 			head = new node(data);
-			tail = head;
 		}
 		sz++;
 	}
@@ -67,29 +52,26 @@ public:
 		head = head->next;
 		--sz;
 
-		if (sz == 0)
-			tail = nullptr;
-
 		delete h;
 	}
 	T pop() {
-		T data = std::move(head->data);
+		T data = (head->data);
 		rm_front();
-		return std::move(data);
+		return (data);
 	}
 
 	T& first() {
-		return head->data();
+		return head->data;
 	}
 	const T& first() const {
-		return head->data();
+		return head->data;
 	}
 	T& second() {
-			return head->next->data;
-		}
-		const T& seonc() const {
-			return head->next->data;
-		}
+		return head->next->data;
+	}
+	const T& second() const {
+		return head->next->data;
+	}
 
 
 	void clear() {
@@ -100,7 +82,6 @@ public:
 			delete del;
 		}
 		head = nullptr;
-		tail = nullptr;
 		sz = 0;
 	}
 
@@ -109,6 +90,7 @@ public:
 	}
 };
 
+}
 }
 }
 

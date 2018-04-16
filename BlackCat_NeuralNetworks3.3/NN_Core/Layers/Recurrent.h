@@ -12,7 +12,7 @@
 #include <mutex>
 
 namespace BC {
-
+namespace NN {
 template<class derived>
 struct Recurrent : public Layer<derived> {
 
@@ -26,6 +26,8 @@ public:
 	using Layer<derived>::zero;
 	using Layer<derived>::xs;
 	using Layer<derived>::lr;
+	using Layer<derived>::g;
+	using Layer<derived>::gd;
 
 	omp_unique<mat> w_gradientStorage; 		//gradient storage weights
 	omp_unique<mat> r_gradientStorage;		//gradient storage recurrent weights
@@ -54,7 +56,7 @@ public:
 	}
 
 
-	vec forwardPropagation(const vec& x) {
+	auto forwardPropagation(const vec& x) {
 		xs().push(x);
 
 		//ensure theres valid inital cell state to train on
@@ -64,7 +66,7 @@ public:
 		c() = g(w * x + r * c() + b);
 		return this->next().forwardPropagation(c());
 	}
-	vec backPropagation(const vec& dy) {
+	auto backPropagation(const vec& dy) {
 		vec& x = xs().first();				//load the last input
 		vec& y = ys().second();				//load last and remove
 		ys().pop();							//update
@@ -98,9 +100,10 @@ public:
 
 		dc.for_each([](auto& var) { var.zero(); }); 	//gradient list
 		ys.for_each([](auto& var) { var.clear();});		//bp_list
+
 		this->next().clearBPStorage();
 	}
-	void init_threads(int i) {
+	void set_omp_threads(int i) {
 		ys.resize(i);
 		dc.resize(i);
 		c.resize(i);
@@ -109,15 +112,12 @@ public:
 		r_gradientStorage.resize(i);
 
 		init_storages();
+		this->next().set_omp_threads(i);
 	}
 
 	void write(std::ofstream& is) {
 	}
 	void read(std::ifstream& os) {
-	}
-	void setLearningRate(fp_type learning_rate) {
-		lr = learning_rate;
-		this->next().setLearningRate(learning_rate);
 	}
 	void init_storages() {
 		//for each matrix/vector gradient storage initialize to correct dims
@@ -131,6 +131,8 @@ public:
 
 	}
 };
+
+}
 }
 
 

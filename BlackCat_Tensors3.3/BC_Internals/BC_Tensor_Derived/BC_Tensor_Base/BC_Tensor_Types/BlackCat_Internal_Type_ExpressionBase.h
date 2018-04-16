@@ -15,7 +15,7 @@
 namespace BC {
 
 
-template<class T, class derived>
+template<class derived>
 struct Expression_Core_Base {
 private:
 

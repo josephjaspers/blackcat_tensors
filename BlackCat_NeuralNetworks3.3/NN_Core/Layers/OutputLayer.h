@@ -8,7 +8,10 @@
 #ifndef OUTPUTas_CU
 #define OUTPUTas_CU
 
+#include "Layer.h"
+
 namespace BC {
+namespace NN {
 
 template<class derived>
 struct OutputLayer : Layer<derived> {
@@ -32,13 +35,11 @@ public:
 		return this->prev().backPropagation(x - y);
 	}
 
-	void init_threads(int i) {
+	void set_omp_threads(int i) {
 	}
 
 	void updateWeights() {}
-	void clearBPStorage() {
-//		xs.for_each([](auto& var) { var.clear();});		//bp_list
-	}
+	void clearBPStorage() {}
 	void write(std::ofstream& is) {
 	}
 	void read(std::ifstream& os) {
@@ -48,6 +49,8 @@ public:
 	}
 
 };
+
+}
 }
 
 

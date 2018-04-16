@@ -26,10 +26,10 @@ template<class PARENT>
 
 	operator const PARENT	   () const	{ return parent; }
 
-	__BCinline__ Tensor_Slice(const scalar_type* array, PARENT parent_) : array_slice(const_cast<scalar_type*>(array)), parent(parent_) {}
+	__BCinline__ Tensor_Slice(const scalar_type* array, PARENT parent_)
+		: array_slice(const_cast<scalar_type*>(array)), parent(parent_) {}
 	__BCinline__ const auto innerShape() const 			{ return parent.innerShape(); }
 	__BCinline__ const auto outerShape() const 			{ return parent.outerShape(); }
-
 	__BCinline__ const scalar_type* getIterator() const { return array_slice; }
 	__BCinline__	   scalar_type* getIterator()   	{ return array_slice; }
 

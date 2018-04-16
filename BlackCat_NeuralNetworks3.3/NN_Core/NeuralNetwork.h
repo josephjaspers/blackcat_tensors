@@ -11,7 +11,7 @@
 #include "LayerChain.h"
 #include "Defaults.h"
 namespace BC {
-
+namespace NN {
 template<template<class> class... layers>
 struct NeuralNetwork {
 
@@ -28,15 +28,12 @@ struct NeuralNetwork {
 	auto updateWeights() { return network.head().updateWeights(); }
 	auto clearBPStorage() { return network.head().clearBPStorage(); }
 	void setLearningRate(fp_type learning_rate) { network.head().setLearningRate(learning_rate); }
-	void init_threads(int i) { network.head().init_threads(i); }
+	void set_omp_threads(int i) { network.head().set_omp_threads(i); }
 
 
 };
 
-
-
-
-
+}
 }
 
 #endif /* NEURALNETWORK_H_ */

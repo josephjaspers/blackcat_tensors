@@ -22,6 +22,7 @@
  */
 
 namespace BC {
+namespace NN {
 namespace Structure {
 
 struct default_deleter {
@@ -93,7 +94,7 @@ struct omp_unique {
 };
 
 }
-
+}
 }
 
 #endif /* THREAD_MAP_H_ */

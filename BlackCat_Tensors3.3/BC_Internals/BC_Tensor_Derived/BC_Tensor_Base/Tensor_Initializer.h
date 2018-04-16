@@ -35,6 +35,7 @@ public:
 
 	template<class... params>
 	explicit TensorInitializer(const  params&... p) : black_cat_array(p...) {}
+//
 	~TensorInitializer() {
 		black_cat_array.destroy();
 	}
@@ -72,17 +73,16 @@ public:
 	TensorInitializer(const derived& tensor) : black_cat_array(tensor.innerShape()) {
 		Mathlib::copy(asBase().data(), tensor.data(), tensor.size());
 	}
-	TensorInitializer(_shape dimensions): black_cat_array(dimensions) {
-	}
+	TensorInitializer(_shape dimensions): black_cat_array(dimensions) {}
 
 	template<class T>
 	using derived_alt = typename MTF::shell_of<derived>::template  type<T, Mathlib>;
 
 
-	template<class... integers>
-	TensorInitializer(integers... ints) : black_cat_array(ints...) {
-		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
-	}
+//	template<class... integers>
+//	TensorInitializer(integers... ints) : black_cat_array(ints...) {
+//		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
+//	}
 
 	template<class U>
 	TensorInitializer(const derived_alt<U>&  tensor)

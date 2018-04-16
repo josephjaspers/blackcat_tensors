@@ -3,13 +3,14 @@
 #include <iostream>
 #include <string>
 #include <omp.h>
-using BC::vec;
-using BC::scal;
-using BC::mat;
+using BC::NN::vec;
+using BC::NN::scal;
+using BC::NN::mat;
 typedef std::vector<vec> data;
 typedef vec tensor;
 
 namespace BC {
+namespace NN {
 namespace Word_Test {
 
 std::string alphabet = { "abcdefghijklmnopqrstuvwxyz" };
@@ -46,7 +47,7 @@ int test() {
 	std::string words[7] = { "wort", "tore", "sort", "hurt", "lore", "store", "galore" };
 
 	//Create a Neural Network
-	NeuralNetwork<FeedForward, Recurrent, FeedForward> network(26, 30, 30, 26);
+	NeuralNetwork<FeedForward, GRU, FeedForward> network(26, 30, 30, 26);
 	network.setLearningRate(.03);
 
 
@@ -85,5 +86,6 @@ int test() {
 			}
 		}
 
+}
 }
 }

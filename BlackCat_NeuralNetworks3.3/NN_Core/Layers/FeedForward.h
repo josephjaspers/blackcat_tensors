@@ -12,10 +12,11 @@
 #include <mutex>
 
 namespace BC {
+namespace NN {
+
 
 template<class derived>
 struct FeedForward : public Layer<derived> {
-
 
 public:
 
@@ -24,6 +25,8 @@ public:
 	using Layer<derived>::clear;				//a function that clears back_propagation_lists
 	using Layer<derived>::lr;					//the learning rate
 	using Layer<derived>::xs;					//the input back_propagation_list (from previous layer)
+//	using Layer<derived>::g;
+//	using Layer<derived>::gd;
 
 	omp_unique<mat> w_gradientStorage;		//weight gradient storage
 	omp_unique<vec> b_gradientStorage;		//bias gradient storage
@@ -44,16 +47,17 @@ public:
 		init_storages();
 	}
 
-	vec forwardPropagation(const vec& x) {
+	auto forwardPropagation(const vec& x) {
 		xs().push(x);
 		return this->next().forwardPropagation(g(w * x + b));
 	}
-	vec backPropagation(const vec& dy) {
+	auto backPropagation(const vec& dy) {
 		ys().rm_front();
 		vec& x = xs().first();				//load the last input
 
 		w_gradientStorage() -= dy * x.t();
 		b_gradientStorage() -= dy;
+
 		return this->prev().backPropagation(w.t() * dy ** gd(x));
 	}
 	auto forwardPropagation_Express(const vec& x) const {
@@ -74,14 +78,14 @@ public:
 
 		this->next().clearBPStorage();
 	}
-	void init_threads(int i) {
+	void set_omp_threads(int i) {
 		ys.resize(i);
 		w_gradientStorage.resize(i);
 		b_gradientStorage.resize(i);
 
 		init_storages();
 
-		this->next().init_threads(i);
+		this->next().set_omp_threads(i);
 	}
 
 	void write(std::ofstream& is) {
@@ -96,18 +100,14 @@ public:
 		w.read(os);
 		b.read(os);
 	}
-	void setLearningRate(fp_type learning_rate) {
-		lr = learning_rate;
-		this->next().setLearningRate(learning_rate);
-	}
 
 	void init_storages() {
 		w_gradientStorage.for_each([&](auto& var) { var = mat(this->OUTPUTS, this->INPUTS); var.zero(); });
 		b_gradientStorage.for_each([&](auto& var) { var = vec(this->OUTPUTS);			    var.zero(); });
-
 	}
 
 };
+}
 }
 
 #endif /* FEEDFORWARD_CU_ */

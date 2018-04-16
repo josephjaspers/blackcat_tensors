@@ -44,7 +44,7 @@ auto test() {
 
 	d = a.t();
 	e = b.t();
-
+//
 	d.print();
 	e.print();
 
@@ -66,11 +66,11 @@ auto test() {
 	std::cout << " dot product -- scalar, regular" << std::endl;
 	c = d * scal(2.0f) * e + c;
 	c.print();
-	std::cout << " dot product -- scalar, regular" << std::endl;
+//	std::cout << " dot product -- scalar, regular" << std::endl;
 	c = scal(2.0f) * d * e;
 	c.print();
 	std::cout << " dot product -- regular,  scalar " << std::endl;
-
+//
 	c = d * e * scal(2.0f); ////This is the only version that is not accounted for (it is also the least common notation)
 	c.print();
 
@@ -85,7 +85,7 @@ auto test() {
 	A.print();
 	c = a.t() * A * b.t();
 	c.print();
-
+//
 	std::cout << " dot product -- scalar trans, trans " << std::endl;
 	A.print();
 	c = A * a.t() * b.t();
@@ -107,12 +107,13 @@ auto test() {
 	cu.zero();
 	cu.print();
 
-
-
+//
+//
 	std::cout << " sub vector test " << std::endl;
-
+//
 	d.print();
 	std::cout << " adding d[1] = d[1] + d[1]" << std::endl;
+	d + d;
 	d[1] = d[1] + d[1];
 	d.print();
 	std::cout << " adding d[1][1] = d[1][1] + d[1][1] " << std::endl;

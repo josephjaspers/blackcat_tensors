@@ -16,13 +16,14 @@
 #include <pthread.h>
 
 
-using BC::vec;
-using BC::scal;
-using BC::mat;
+using BC::NN::vec;
+using BC::NN::scal;
+using BC::NN::mat;
 typedef std::vector<vec> data;
 typedef vec tensor;
 
 namespace BC {
+namespace NN {
 namespace MNIST_Test_MT {
 
 tensor expandOutput(int val, int total) {
@@ -95,7 +96,7 @@ int percept_MNIST() {
 	//Create the neural network
 	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
 	network.setLearningRate(.03);
-	network.init_threads(4);
+	network.set_omp_threads(4);
 
 	omp_set_num_threads(NUMB_THREADS);
 
@@ -175,9 +176,10 @@ int percept_MNIST() {
 	}
 	return 0;
 }
-}
-}
 
+}
+}
+}
 
 
 #endif /* MNIST_TEST_MT_CPP_ */

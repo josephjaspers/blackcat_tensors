@@ -10,23 +10,24 @@
 
 #include "BlackCat_Internal_Type_ExpressionBase.h"
 namespace BC {
-template<class T, class ary,  int search_space = 3>
-struct unary_expression_maxpooling : Expression_Core_Base<T, unary_expression_maxpooling<T, ary, search_space>> {
+template<class ary,  int search_space = 3>
+struct unary_expression_maxpooling : Expression_Core_Base<unary_expression_maxpooling<ary, search_space>> {
 
 	__BCinline__ static constexpr int DIMS() { return ary::DIMS(); }
 
 	stack_array<int, DIMS()> positions;
 	stack_array<int, DIMS()> os = init_outerShape();
-	ary value;
+	using T = _scalar<ary>;
+	ary array;
 
-	unary_expression_maxpooling(ary value_) : value(value_) {
+	unary_expression_maxpooling(ary array_) : array(array_) {
 		for (int i = 0; i < DIMS(); ++i) {
-			positions[i] = value.dimension(i) - search_space + 1;
+			positions[i] = array.dimension(i) - search_space + 1;
 		}
 	}
 
 	template<int mv, class I>
-	T maxp(int index, const I& img) const {
+	auto maxp(int index, const I& img) const {
 
 		static constexpr int ORDER = I::DIMS() - 1;
 		if (mv == 0) {
@@ -63,8 +64,8 @@ struct unary_expression_maxpooling : Expression_Core_Base<T, unary_expression_ma
 		}
 	}
 
-		__BCinline__  T operator [] (int i) const {
-			return maxp<DIMS() - 1>(i, value);
+		__BCinline__  auto operator [] (int i) const {
+			return maxp<DIMS() - 1>(i, array);
 		}
 
 	__BCinline__ int size() const {
@@ -78,12 +79,12 @@ struct unary_expression_maxpooling : Expression_Core_Base<T, unary_expression_ma
 
 
 	__BCinline__ int dims() const { return DIMS(); }
-	__BCinline__ int rows() const { return value.rows() - search_space + 1; };
-	__BCinline__ int cols() const { return value.rows() - search_space + 1; };
+	__BCinline__ int rows() const { return array.rows() - search_space + 1; };
+	__BCinline__ int cols() const { return array.rows() - search_space + 1; };
 
 	__BCinline__ int LD_rows() const { return rows(); }
 	__BCinline__ int LD_cols() const { return size(); }
-	__BCinline__ int dimension(int i) const { return (value.dimension(i) - search_space + 1); }
+	__BCinline__ int dimension(int i) const { return (array.dimension(i) - search_space + 1); }
 	__BCinline__ int LD_dimension(int i) const { return os[i]; }
 
 
