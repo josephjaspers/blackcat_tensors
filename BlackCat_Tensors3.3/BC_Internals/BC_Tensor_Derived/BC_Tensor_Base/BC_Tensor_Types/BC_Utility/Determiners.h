@@ -82,10 +82,10 @@ template<class T> using remove_const = typename rm::_const<T>::type;
 template<template<class...> class tensor, class functor, class... set>
 struct determine_functor<tensor<functor, set...>>{
 
-//	std::enable_if_t<!std::is_base_of<BC_Type,t>::value>>
-
 	using derived = tensor<functor,set...>;
 	using type = ifte<!std::is_base_of<BC_Type,functor>::value, Tensor_Core<derived>, functor>;
+//	using type = ifte<MTF::isPrimitive<functor>::conditional, Tensor_Core<derived>, functor>;
+
 };
 
 ///DET EVALUATION

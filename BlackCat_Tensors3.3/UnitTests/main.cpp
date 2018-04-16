@@ -148,54 +148,31 @@ auto test() {
 
 
 int main() {
-//
-//
+
 test();
 
-//tensor4 alpha(3, 3,2);
-//cube zeta(5,5,2);
-//
-//for (int i = 0; i < alpha.size(); ++i ){
-//	alpha(i) = i;
-//}
-//for (int i = 0; i < zeta.size(); ++i ){
-//	zeta(i) = i;
-//}
-//alpha[0][0].print();
-//zeta[0].print();
-////
-//mat output(3,3);
-////
-//output.unExpr([](float x) { return x * 2;});
-//output.zero();
-//output = alpha[0][0].x_corr<2>(zeta[0]);
-//output.print();
-//
-//
-//mat output2(7,7);
-//output2.zero();
-//output2 = alpha[0][0].x_corr_padded<2>(zeta[0]);
-//output2.print();
-//mat output3(5,5);
-////
-//
-//output3 =output2.max_pooling<3>();
-//
-//output3.print();
-//
-//
-//
-//output3 = (output2).max_pooling<3>();
-//output3.print();
-//auto v = output3.reshape(5,5,1);
-//v.print();
-//output3 += v;
-//output3.print();
-//
+mat krnl(2,2);
+krnl.zero();
+krnl[0][0] = 1;
+krnl[1][1] = 1;
 
-//v.print();
-//BC::Tensor<4, double> tens = {1,2,3,4,5};
-//
+mat img(8,8); img.zero();
+for (int m = 0; m < img.rows(); ++m) {
+	for (int n = 0; n < img.cols(); ++n)
+		if (m ==n)
+			img[m][n] = 1;
+}
+
+krnl.print();
+img.print();
+
+//mat m = krnl.x_corr<2>(krnl.x_corr<2>(krnl.x_corr<2>(img)));
+
+auto cor = krnl.x_corr<2>(img);
+auto cor2 = krnl.x_corr<2>(cor);
+mat m = cor2;
+m.print();
+
 	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
 //	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
 ////	omp_set_num_threads(2);

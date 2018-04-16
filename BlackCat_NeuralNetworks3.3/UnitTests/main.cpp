@@ -1,6 +1,6 @@
 #include "MNIST_test.h"
 #include "MNIST_test_MT.h"
-#include "misspelledWords.h"
+#include "CharacterPrediction.h"
 
 #define BC_DISABLE_OPENMP
 

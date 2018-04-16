@@ -29,8 +29,9 @@ template<class> 	class 	_Tensor_Scalar 	= Tensor_Scalar>
 struct Tensor_Core_Base : Expression_Core_Base<Tensor_Core_Base<derived,DIMENSION>> {
 
 	__BCinline__ static constexpr int DIMS() { return DIMENSION; }
+	__BCinline__ static constexpr bool CONTINUOUS() { return true; }
+
 	__BCinline__ static constexpr int LAST() { return DIMENSION - 1; }
-	__BCinline__ static constexpr int PRIORITY() { return 0; }
 
 	using self = derived;
 	using slice_type = std::conditional_t<DIMS() == 0, self, _Tensor_Slice<self>>;

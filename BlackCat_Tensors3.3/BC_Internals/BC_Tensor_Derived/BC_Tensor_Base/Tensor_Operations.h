@@ -238,7 +238,7 @@ struct Tensor_Operations {
 			assert_same_size(rv);
 			return
 						typename base<0>::template type<
-							binary_expression_correlation<_functor<deriv>, functor_type, 0>, math_library>
+							binary_expression_correlation<functor_type, _functor<deriv>, 0>, math_library>
 			(asBase().data(), rv.asBase().data());
 		}
 

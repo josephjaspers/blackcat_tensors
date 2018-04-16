@@ -15,8 +15,11 @@
 
 namespace BC {
 
+struct TensorType {};
+
 template<class derived>
 class TensorBase :
+		public TensorType,
 		public Tensor_Operations <derived>,
 		public Tensor_Utility<derived>,
 		public TensorInitializer<derived>

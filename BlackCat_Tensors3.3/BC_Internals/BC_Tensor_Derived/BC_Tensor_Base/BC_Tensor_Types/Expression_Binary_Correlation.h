@@ -31,37 +31,15 @@ struct binary_expression_correlation : Expression_Core_Base<binary_expression_co
 		return l_array([=](int i) {return i == 0 ? this->rows() : this->dimension(i) * this->dimension(i - 1);} );
 	}
 
-
-	template<int mv, class K, class I> __BCinline__
+	template<int mv, class K, class I>
 	T axpy(int index, const K& krnl, const I& img) const {
-
-		static_assert(K::DIMS() == I::DIMS(), "Krnl/Img DIMS() must be equal");
-		static constexpr int ORDER = K::DIMS() - 1;
-
+		index %= img.rows();
 		T sum = 0;
-
-
-		if (mv == 0) {
-			if (ORDER == 0)
-				for (int i = 0; i < left.rows(); ++i) {
-					sum += krnl[i] * img[index + i];
-				}
-			else {
-				int offset = (int)(index / this->LD_dimension(ORDER));
-				int index_ = index % this->LD_dimension(ORDER);
-				for (int i = 0; i < krnl.dimension(ORDER); ++i) {
-					sum += axpy<0>(index_, krnl.slice(i), img.slice(i + offset));
-				}
-			}
-		} else {
-			int offset = (int)(index / this->innerShape()[ORDER]);
-			int index_ = index % this->innerShape()[ORDER];
-
-			for (int i = 0; i < krnl.dimension(ORDER); ++i) {
-					sum += axpy<(((mv - 1) < 0) ? 0 : (mv - 1))>(index_, krnl.slice(i), img.slice(i + offset));
+		for (int m = 0; m < krnl.rows(); ++m) {
+			for (int n = 0; n < krnl.cols(); ++n) {
+				sum += krnl[m * krnl.LD_rows() + n] * img[m * img.LD_rows() + n + index];
 			}
 		}
-
 		return sum;
 	}
 
