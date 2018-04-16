@@ -26,7 +26,7 @@ struct unary_expression_maxpooling : Expression_Core_Base<unary_expression_maxpo
 		}
 	}
 
-	template<int mv, class I>
+	template<int mv, class I> __BCinline__
 	auto maxp(int index, const I& img) const {
 
 		static constexpr int ORDER = I::DIMS() - 1;

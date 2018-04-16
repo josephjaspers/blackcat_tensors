@@ -29,7 +29,7 @@ public:
 	Tensor4(const Tensor4&  v) : parent_class(v) {}
 	Tensor4(	  Tensor4&& v) : parent_class(v) {}
 	Tensor4(const Tensor4&& v) : parent_class(v) {}
-	explicit Tensor4(int a = 1,int b = 1,int c = 1, int d = 1) : parent_class(std::vector<int>{a,b,c,d}) {}
+	explicit Tensor4(int a = 1,int b = 1,int c = 1, int d = 1) : parent_class(array(a,b,c,d)) {}
 
 	template<class U> 		  Tensor4(const Tensor4<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Tensor4(	    Tensor4<U, Mathlib>&& t) : parent_class(t) {}

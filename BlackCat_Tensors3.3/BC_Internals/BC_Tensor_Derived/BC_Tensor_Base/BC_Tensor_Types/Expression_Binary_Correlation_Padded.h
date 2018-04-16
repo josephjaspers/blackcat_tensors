@@ -18,17 +18,21 @@ struct binary_expression_correlation_padded : Expression_Core_Base<binary_expres
 
 	using T = _scalar<lv>;
 
-//	stack_array<int, DIMS()> positions;
-	stack_array<int, DIMS()> os = init_outerShape();
 	lv left;  //krnl
 	rv right; //img
 
 	binary_expression_correlation_padded(lv l_, rv r_) :left(l_), right(r_) {}
 
+	__BCinline__ const auto innerShape() const {
+		return l_array([=](int i) {return right.dimension(i) + left.dimension(i) - 1;} );
+	}
 
+	__BCinline__ const auto outerShape() const {
+		return l_array([=](int i) {return i == 0 ? this->rows() : this->dimension(i) * this->dimension(i - 1);} );
+	}
 
 	template<int mv, class K, class I> __BCinline__
-	auto axpy(int index, const K& krnl, const I& img) const {
+	T axpy(int index, const K& krnl, const I& img) const {
 
 		static_assert(K::DIMS() == I::DIMS(), "Krnl/Img DIMS() must be equal");
 		static constexpr int ORDER = K::DIMS() - 1;
@@ -45,8 +49,8 @@ struct binary_expression_correlation_padded : Expression_Core_Base<binary_expres
 						sum += krnl[i] * img[img_index];
 				}
 			else {
-				int offset = ((int)(index / LD_dimension(ORDER))) - krnl.dimension(ORDER) + 1;
-				int index_ = index % LD_dimension(ORDER);
+				int offset = ((int)(index / this->LD_dimension(ORDER))) - krnl.dimension(ORDER) + 1;
+				int index_ = index % this->LD_dimension(ORDER);
 				for (int i = 0; i < krnl.dimension(ORDER); ++i) {
 					if (i + offset < img.dimension(ORDER))
 					sum += axpy<0>(index_, krnl.slice(i), img.slice(i + offset));
@@ -69,48 +73,7 @@ struct binary_expression_correlation_padded : Expression_Core_Base<binary_expres
 		return axpy<corr_dimension - 1>(i, left, right);
 	}
 
-	__BCinline__ int size() const {
-		int sz = 1;
-		for (int i = lv::DIMS() - corr_dimension; i < lv::DIMS(); ++i)
-			sz *= dimension(i);
-		return sz;
-	}
 
-
-
-	__BCinline__ int dims() const { return DIMS(); }
-	__BCinline__ int rows() const { return right.rows() + left.rows() - 1; };
-	__BCinline__ int cols() const { return right.rows() + left.rows() - 1; };
-
-	__BCinline__ int LD_rows() const { return rows(); }
-	__BCinline__ int LD_cols() const { return size(); }
-	__BCinline__ int dimension(int i) const { return innerShape()[i]; }
-	__BCinline__ int LD_dimension(int i) const { return os[i]; }
-
-	__BCinline__ const auto innerShape() const {
-		return l_array([=](int i) {return right.dimension(i) + left.dimension(i) - 1;} );
-	}
-
-
-	__BCinline__ const auto outerShape() const {
-		return l_array([=](int i) {return i == 0 ? this->rows() : this->dimension(i) * this->dimension(i - 1);} );
-
-
-	}__BCinline__ const auto init_outerShape() const {
-		stack_array<int, DIMS()> ary;
-		ary[0] = rows();
-		for (int i = 1; i < DIMS(); ++i) {
-			ary[i] = dimension(i) * ary[i - 1];
-		}
-		return ary;
-	}
-
-	void printDimensions()const  {
-		for (int i = 0; i < DIMS(); ++i) {
-			std::cout << "[" << dimension(i) << "]";
-		}
-		std::cout << std::endl;
-	}
 };
 
 

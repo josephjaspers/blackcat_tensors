@@ -132,6 +132,19 @@ namespace MTF {
 	template<template<class ...> class param, class... ptraits>
 	struct shell_of<param<ptraits...>> { template<class... ntraits> using type = param<ntraits...>; };
 
+	template<class from, class to, class voider = void>
+	struct castable {
+		static constexpr bool conditional= false;
+	};
+	template<class from, class to>
+	struct castable<from, to,  decltype(static_cast<to>(std::declval<from>()))> {
+		static constexpr bool conditional= true;
+	};
+
+	template<class F, class T>
+	static constexpr bool castable_b = castable<F, T>::conditional;
+
+
 	}
 }
 #endif /* SIMPLE_H_ */

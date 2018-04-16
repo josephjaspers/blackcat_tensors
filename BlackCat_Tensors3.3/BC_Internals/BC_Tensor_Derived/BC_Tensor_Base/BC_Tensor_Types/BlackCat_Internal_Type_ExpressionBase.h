@@ -15,8 +15,10 @@
 namespace BC {
 
 
+struct BC_Type {};
+
 template<class derived>
-struct Expression_Core_Base {
+struct Expression_Core_Base : BC_Type {
 private:
 
 	template<class ret = int>

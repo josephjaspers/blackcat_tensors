@@ -35,7 +35,7 @@ public:
 	template<class U> Scalar(	   Scalar<U, Mathlib>&& t) : parent_class(t) {}
 
 
-	Scalar(_scalar<T> val) : parent_class(std::vector<int>{1}) {
+	Scalar(_scalar<T> val) : parent_class(array(1)) {
 		 Mathlib::HostToDevice(this->data().getIterator(), &val, 1);
 	}
 
@@ -44,7 +44,8 @@ public:
 	Scalar& operator =(	     Scalar&& t) { return parent_class::operator=(t); }
 	template<class U>
 	Scalar& operator =(const Scalar<U, Mathlib>& t) { return parent_class::operator=(t); }
-	Scalar& operator =(_scalar<T> scalar) { Mathlib::HostToDevice(this->data().getIterator(), &scalar, 1); return *this; }
+//	Scalar& operator =(_scalar<T> scalar) { Mathlib::HostToDevice(this->data().getIterator(), &scalar, 1); return *this; }
+	Scalar& operator =(_scalar<T> scalar) { this->fill(scalar); return *this; }
 
 	operator _scalar<T>() const {
 		_scalar<T> value = 0;

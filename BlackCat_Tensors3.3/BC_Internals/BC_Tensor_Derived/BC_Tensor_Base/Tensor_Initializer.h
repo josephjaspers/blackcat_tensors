@@ -41,11 +41,13 @@ public:
 	}
 };
 //-------------------------------------SPECIALIZATION FOR TENSORS THAT CONTROL / DELETE THEIR ARRAY-------------------------------------//
+
+
 template<template<class, class> class _tensor, class t, class ml>
-class TensorInitializer<_tensor<t, ml>, std::enable_if_t<MTF::isPrimitive<t>::conditional>> {
+class TensorInitializer<_tensor<t, ml>, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>> {
 
 	using derived = _tensor<t, ml>;
-	using self 			= TensorInitializer<derived, std::enable_if_t<MTF::isPrimitive<t>::conditional>>;
+	using self 			= TensorInitializer<derived, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>>;
 
 	using functor_type 	= _functor<derived>;
 	using Mathlib 		= _mathlib<derived>;
@@ -73,7 +75,8 @@ public:
 	TensorInitializer(const derived& tensor) : black_cat_array(tensor.innerShape()) {
 		Mathlib::copy(asBase().data(), tensor.data(), tensor.size());
 	}
-	TensorInitializer(_shape dimensions): black_cat_array(dimensions) {}
+	template<class T>
+	TensorInitializer(T dimensions): black_cat_array(dimensions) {}
 
 	template<class T>
 	using derived_alt = typename MTF::shell_of<derived>::template  type<T, Mathlib>;

@@ -108,12 +108,12 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 	}
 
 	void destroy() {
-			Mathlib::destroy(array);
-			Mathlib::destroy(is);
-			Mathlib::destroy(os);
-			array = nullptr;
-			is = nullptr;
-			os = nullptr;
+		Mathlib::destroy(array);
+		Mathlib::destroy(is);
+		Mathlib::destroy(os);
+		array = nullptr;
+		is = nullptr;
+		os = nullptr;
 	}
 
 };

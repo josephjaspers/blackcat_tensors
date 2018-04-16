@@ -26,7 +26,7 @@ public:
 	Vector(const Vector&& t) : parent_class(std::move(t)) {}
 	Vector(		 Vector&& t) : parent_class(std::move(t)) {}
 	Vector(const Vector&  t) : parent_class(t) 	{}
-	explicit Vector(int dim = 1) : parent_class(std::vector<int> {dim})  {}
+	explicit Vector(int dim = 1) : parent_class(array(dim))  {}
 	template<class U> 		  Vector(const Vector<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Vector(	   Vector<U, Mathlib>&& t) : parent_class(t) {}
 

@@ -9,8 +9,8 @@ using BC::Matrix;
 using BC::Scalar;
 using BC::Cube;
 
-//using ml = BC::CPU;
-using ml = BC::GPU;
+using ml = BC::CPU;
+//using ml = BC::GPU;
 
 using vec = Vector<float, ml>;
 using mat = Matrix<float, ml>;
@@ -146,11 +146,12 @@ auto test() {
 }
 #include "Benchmarks/BenchmarkEigen.h"
 
+
 int main() {
-
-
+//
+//
 test();
-////
+
 //tensor4 alpha(3, 3,2);
 //cube zeta(5,5,2);
 //
@@ -162,9 +163,9 @@ test();
 //}
 //alpha[0][0].print();
 //zeta[0].print();
-//
+////
 //mat output(3,3);
-//
+////
 //output.unExpr([](float x) { return x * 2;});
 //output.zero();
 //output = alpha[0][0].x_corr<2>(zeta[0]);
@@ -177,20 +178,20 @@ test();
 //output2.print();
 //mat output3(5,5);
 ////
-////
+//
 //output3 =output2.max_pooling<3>();
 //
 //output3.print();
 //
 //
-
+//
 //output3 = (output2).max_pooling<3>();
 //output3.print();
 //auto v = output3.reshape(5,5,1);
 //v.print();
 //output3 += v;
 //output3.print();
-
+//
 
 //v.print();
 //BC::Tensor<4, double> tens = {1,2,3,4,5};

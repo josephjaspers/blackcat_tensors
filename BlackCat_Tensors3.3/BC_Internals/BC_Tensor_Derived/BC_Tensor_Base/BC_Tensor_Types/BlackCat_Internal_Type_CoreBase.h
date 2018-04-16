@@ -49,8 +49,8 @@ public:
 	__BCinline__ const auto innerShape() const { return base().innerShape(); }
 	__BCinline__ const auto outerShape() const { return base().outerShape(); }
 
-	__BCinline__ const auto slice(int i) const { return slice_type(&base().getIterator()[slice_index(i)],base()); }
-	__BCinline__	   auto slice(int i) 	   { return slice_type(&base().getIterator()[slice_index(i)],base()); }
+	__BCinline__ const auto slice(int i) const { return slice_type(&(base().getIterator()[slice_index(i)]),base()); }
+	__BCinline__	   auto slice(int i) 	   { return slice_type(&(base().getIterator()[slice_index(i)]),base()); }
 
 	__BCinline__ const auto scalar(int i) const { static_assert (DIMS() != 0, "SCALAR OF SCALAR NOT DEFINED"); return _Tensor_Scalar<self>(&base().getIterator()[i], base()); }
 	__BCinline__	   auto scalar(int i) 	    { static_assert (DIMS() != 0, "SCALAR OF SCALAR NOT DEFINED"); return _Tensor_Scalar<self>(&base().getIterator()[i], base()); }

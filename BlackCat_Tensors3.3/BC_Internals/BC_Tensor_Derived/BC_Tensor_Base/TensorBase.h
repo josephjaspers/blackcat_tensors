@@ -63,7 +63,7 @@ public:
 		Mathlib::copy(this->data(), tensor.data(), this->size());
 		return *this;
 	}
-	derived& operator =(_scalar<derived> scalar) {
+	derived& operator =(scalar_type scalar) {
 		this->fill(scalar);
 		return *this;
 	}

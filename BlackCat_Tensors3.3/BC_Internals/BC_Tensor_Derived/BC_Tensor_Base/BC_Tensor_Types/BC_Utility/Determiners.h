@@ -24,6 +24,7 @@ template<class,class> class Matrix;
 template<class,class> class Cube;
 template<class,class> class Tensor4;
 template<class,class> class Tensor5;
+class BC_Type;
 
 template<class T> struct isCore { static constexpr bool conditional = MTF::isPrimitive<T>::conditional; };
 template<template<class> class T, class U> struct isCore<T<U>>
@@ -81,8 +82,10 @@ template<class T> using remove_const = typename rm::_const<T>::type;
 template<template<class...> class tensor, class functor, class... set>
 struct determine_functor<tensor<functor, set...>>{
 
+//	std::enable_if_t<!std::is_base_of<BC_Type,t>::value>>
+
 	using derived = tensor<functor,set...>;
-	using type = ifte<MTF::isPrimitive<functor>::conditional, Tensor_Core<derived>, functor>;
+	using type = ifte<!std::is_base_of<BC_Type,functor>::value, Tensor_Core<derived>, functor>;
 };
 
 ///DET EVALUATION

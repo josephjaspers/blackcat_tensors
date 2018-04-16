@@ -26,7 +26,7 @@ struct Tensor_Row : Tensor_Core_Base<Tensor_Row<PARENT>, 1>  {
 	PARENT parent;
 	array array_slice;
 
-	Tensor_Row(array array, PARENT parent_) : array_slice(array), parent(parent_) {}
+	__BCinline__ Tensor_Row(array array, PARENT parent_) : array_slice(array), parent(parent_) {}
 	__BCinline__ int increment() const { return parent.LD_rows(); }
 	__BCinline__ int dims() const { return 1; }
 	__BCinline__ int size() const { return parent.cols(); }
@@ -45,12 +45,12 @@ struct Tensor_Row : Tensor_Core_Base<Tensor_Row<PARENT>, 1>  {
 	void printDimensions() 		const { parent.printDimensions(); }
 	void printLDDimensions()	const { parent.printDimensions(); }
 
-	const auto slice(int i) const { return Tensor_Scalar<self>(&array_slice[i * increment()], *this); }
-		  auto slice(int i) 	  { return Tensor_Scalar<self>(&array_slice[i * increment()], *this); }
+	__BCinline__ const auto slice(int i) const { return Tensor_Scalar<self>(&array_slice[i * increment()], *this); }
+	__BCinline__	   auto slice(int i) 	   { return Tensor_Scalar<self>(&array_slice[i * increment()], *this); }
 
 
-	const auto& getIterator() const { return *this; }
-		  auto& getIterator()  	    { return *this; }
+	__BCinline__ const auto& getIterator() const { return *this; }
+	__BCinline__	   auto& getIterator()  	 { return *this; }
 
 };
 
