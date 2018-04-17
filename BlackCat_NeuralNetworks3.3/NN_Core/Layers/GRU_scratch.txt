@@ -48,31 +48,34 @@ public:
 			r(this->OUTPUTS, this->OUTPUTS),
 			b(this->OUTPUTS)
 		{
-		r.randomize(-1, 1);
-		w.randomize(-1, 1);
-		b.randomize(-1, 1);
+		r.randomize(-4, 0);
+		w.randomize(-4, 4);
+		b.randomize(-4, 4);
 		init_storages();
 
 	}
 
 
 	auto forwardPropagation(const vec& x) {
+		xs().push(x);
+
+		//ensure theres valid inital cell state to train on
 		if (ys().isEmpty())
 			ys().push(c());
 
 		c() = g(w * x + r * c() + b);
-
-		ys().push(c());
 		return this->next().forwardPropagation(c());
 	}
 	auto backPropagation(const vec& dy) {
 		vec& x = xs().first();				//load the last input
-		vec& c = ys().second(); ys().pop();				//load last and remove
+		vec& y = ys().second();				//load last and remove
+		ys().pop();							//update
+
+		w_gradientStorage() -= dy   * x.t();
+		r_gradientStorage() -= dc() * y.t();
+		b_gradientStorage() -= dy;
 
 		dc() += dy;							//add the error
-		w_gradientStorage() -= dy   * x.t();
-		r_gradientStorage() -= dc() * c.t();
-		b_gradientStorage() -= dy;
 
 		return this->prev().backPropagation(w.t() * dy % gd(x));
 	}

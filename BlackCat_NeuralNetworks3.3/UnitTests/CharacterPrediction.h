@@ -46,15 +46,15 @@ char vec_to_char(const vec& v) {
 
 int test() {
 
-	const int ITERATIONS = 1000;
-	const int NUMB_WORDS = 7;
+	const int ITERATIONS = 3000;
+	const int NUMB_WORDS = 8;
 
 	//Here are some words
-	std::string words[NUMB_WORDS] = { "wort", "tore", "sort", "hurt", "lore", "store", "galore" };
+	std::string words[NUMB_WORDS] = { "wartorn", "wort", "thecork", "fork", "baatorp", "asdgfd", "money", "galore" };
 
 	//Create a Neural Network
 	NeuralNetwork<FeedForward, GRU, FeedForward> network(26, 30, 30, 26);
-
+	network.setLearningRate(.03);
 	//Train 4k iterations
 	for (int i = 0; i < ITERATIONS; ++i) {
 		for (int j = 0; j < NUMB_WORDS; ++j) {
@@ -76,21 +76,17 @@ int test() {
 
 
 	//print out/test the predictions
-	for (int j = 0; j < 7; ++j) {
+	for (int j = 0; j < NUMB_WORDS; ++j) {
 		std::cout << words[j] << " | ";
 		std::cout << words[j][0];
-				for (int x = 0; x < words[j].length() - 1; ++x) {
-					auto out = network.forwardPropagation_Express(char_to_vec(words[j][x]));
-					 vec_to_char(out);
-				}
-
-				std::cout << std::endl;
-				if (j % 100 == 0) {
-				network.updateWeights();
-				network.clearBPStorage();
-				}
-			}
+		for (int x = 0; x < words[j].length() - 1; ++x) {
+			auto out = network.forwardPropagation_Express(char_to_vec(words[j][x]));
+			vec_to_char(out);
 		}
+		std::cout << std::endl;
+	}
+	return 0;
+}
 
 }
 }

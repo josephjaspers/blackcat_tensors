@@ -23,9 +23,8 @@ public:
 	OutputLayer(int inputs) : Layer<derived>(inputs) {
 	}
 
-	vec& forwardPropagation(const vec& x) {
-		xs().push(x);
-		return xs().first();
+	auto forwardPropagation(const vec& x) {
+		return x;
 	}
 	vec forwardPropagation_Express(const vec& x) const {
 		return x;

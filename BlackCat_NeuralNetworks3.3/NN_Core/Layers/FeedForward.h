@@ -25,8 +25,6 @@ public:
 	using Layer<derived>::clear;				//a function that clears back_propagation_lists
 	using Layer<derived>::lr;					//the learning rate
 	using Layer<derived>::xs;					//the input back_propagation_list (from previous layer)
-//	using Layer<derived>::g;
-//	using Layer<derived>::gd;
 
 	omp_unique<mat> w_gradientStorage;		//weight gradient storage
 	omp_unique<vec> b_gradientStorage;		//bias gradient storage
@@ -42,14 +40,16 @@ public:
 			b(this->OUTPUTS)
 	{
 
-		w.randomize(-4, 4);
-		b.randomize(-4, 4);
+		w.randomize(-1, 1);
+		b.randomize(-1, 1);
 		init_storages();
 	}
 
 	auto forwardPropagation(const vec& x) {
-		xs().push(x);
-		return this->next().forwardPropagation(g(w * x + b));
+		vec y = g(w * x + b);
+
+		ys().push(std::move(y));
+		return this->next().forwardPropagation(ys().first());
 	}
 	auto backPropagation(const vec& dy) {
 		ys().rm_front();

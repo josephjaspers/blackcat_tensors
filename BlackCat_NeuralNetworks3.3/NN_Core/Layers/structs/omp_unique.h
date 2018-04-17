@@ -76,8 +76,8 @@ struct omp_unique {
 		return pool[thread_index()];
 	}
 
-	operator 	   T& ()  	   { return *this(); }
-	operator const T& () const { return *this(); }
+	operator 	   T& ()  	   { return (*this)(); }
+	operator const T& () const { return (*this)(); }
 
 
 	template<class functor>

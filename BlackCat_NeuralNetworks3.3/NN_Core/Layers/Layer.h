@@ -30,22 +30,7 @@ class Layer {
 
 
 public:
-	scal lr = scal(.03);
-
-//	template<class tensor>
-//	auto g(const tensor& t) {
-//		return this->override_nonlin()(t);
-//	}
-//	template<class tensor>
-//	auto gd(const tensor& t) {
-//		return prev().override_nonlin_deriv()(t);
-//	}
-//	auto override_nonlin_deriv() {
-//		return [](const auto& tensor) { return nonLinFunctions::gd(tensor); };
-//	}
-//	auto override_nonlin() {
-//		return [](const auto& tensor) { return nonLinFunctions::g(tensor); };
-//	}
+	scal lr;
 
 	struct Sum_Gradients {
 		template<class T, class S>
@@ -78,7 +63,9 @@ public:
 	const int INPUTS;
 	const int OUTPUTS = static_cast<derived&>(*this).hasNext() ? this->next().INPUTS : INPUTS;
 
-	Layer(int inputs) : INPUTS(inputs) {}
+	Layer(int inputs) : INPUTS(inputs) {
+		lr = .03;
+	}
 	void set_omp_threads(int i) {
 		next().set_omp_threads(i);
 	}

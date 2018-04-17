@@ -20,10 +20,11 @@ struct InputLayer : Layer<derived> {
 
 	InputLayer() : Layer<derived>(0) {}
 
-	bp_list<vec> ys = bp_list<vec>(8);
+	bp_list<vec> ys;
 
 
 	template<class T> auto forwardPropagation(const T& x) {
+		ys().push(x);
 		return this->next().forwardPropagation(x);
 	}
 
@@ -32,13 +33,9 @@ struct InputLayer : Layer<derived> {
 	}
 
 	template<class T> vec backPropagation(const T&& dy) {
+		ys().pop();
 		return dy;
 	}
-
-	void train(const vec& x, const vec& y) {
-		this->next().train(x, y);
-	}
-
 	void updateWeights() {
 		this->next().updateWeights();
 	}
