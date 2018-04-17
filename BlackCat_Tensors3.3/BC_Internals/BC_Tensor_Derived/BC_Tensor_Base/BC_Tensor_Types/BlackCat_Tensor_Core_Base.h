@@ -29,7 +29,7 @@ template<class> 	class 	_Tensor_Scalar 	= Tensor_Scalar>
 struct Tensor_Core_Base : Expression_Core_Base<Tensor_Core_Base<derived,DIMENSION>> {
 
 	__BCinline__ static constexpr int DIMS() { return DIMENSION; }
-	__BCinline__ static constexpr bool CONTINUOUS() { return true; }
+	__BCinline__ static constexpr int CONTINUOUS() { return 0; }
 
 	__BCinline__ static constexpr int LAST() { return DIMENSION - 1; }
 
@@ -46,6 +46,13 @@ public:
 
 	__BCinline__ 	   auto& operator [] (int index) 	   { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[index]; };
 	__BCinline__ const auto& operator [] (int index) const { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[index]; };
+
+	__BCinline__ int scal_index(int x)   const { return x; }
+	template<class... integers> __BCinline__ int scal_index(int x, integers... ints) const { return this->LD_dimension(sizeof...(ints) - 1) * x + scal_index(ints...); }
+
+	template<class... integers> __BCinline__ 	   auto& operator () (integers... ints) 	  { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[scal_index(ints...)]; }
+	template<class... integers> __BCinline__ const auto& operator () (integers... ints) const { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[scal_index(ints...)]; }
+
 
 	__BCinline__ const auto innerShape() const { return base().innerShape(); }
 	__BCinline__ const auto outerShape() const { return base().outerShape(); }

@@ -8,11 +8,7 @@
 #ifndef SHAPE_H_
 #define SHAPE_H_
 
-#include "Tensor_Core_Slice.h"
-#include "Tensor_Core_Scalar.h"
-#include "Tensor_Core_RowVector.h"
-#include "Tensor_Core_Reshape.h"
-#include "BlackCat_Internal_Type_CoreBase.h"
+#include "BlackCat_Tensor_Core_Base.h"
 
 namespace BC {
 

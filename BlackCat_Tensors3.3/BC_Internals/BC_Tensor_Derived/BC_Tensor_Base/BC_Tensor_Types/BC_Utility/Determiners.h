@@ -13,6 +13,9 @@ namespace BC {
 
 template<bool cond, class a, class b> using ifte = typename std::conditional<cond, a, b>::type;
 
+
+
+
 template<class> class Tensor_Core;
 template<class> class Tensor_Slice;
 template<class> class Tensor_Scalar;
@@ -105,6 +108,10 @@ struct determine_scalar {
 };
 template<template<class...> class tensor, class T, class... set>
 struct determine_scalar<tensor<T, set...>> {
+		using type = typename determine_scalar<T>::type;
+};
+template<template<class...> class tensor, class T, class... set>
+struct determine_scalar<const tensor<T, set...>> {
 		using type = typename determine_scalar<T>::type;
 };
 

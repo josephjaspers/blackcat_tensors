@@ -2,8 +2,8 @@
 #ifndef EXPRESSION_BINARY_DOTPRODUCT_CU_
 #define EXPRESSION_BINARY_DOTPRODUCT_CU_
 
-#include "BlackCat_Internal_Type_ExpressionBase.h" 	//Expression_Core_Base<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
-#include "BlackCat_Internal_Type_CoreBase.h" 	//Expression_Core_Base<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
+#include "BlackCat_Expression_Base.h" 	//Expression_Core_Base<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
+#include "BlackCat_Tensor_Core_Base.h" 	//Expression_Core_Base<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
 
 #include "Expression_Binary_Dotproduct_impl.h"
 #include "BlackCat_Internal_Definitions.h"
@@ -24,6 +24,8 @@ struct binary_expression_dotproduct : Tensor_Core_Base<binary_expression_dotprod
 
 
 	__BCinline__ static constexpr int DIMS() { return rv::DIMS(); }
+	__BCinline__ static constexpr int CONTINUOUS() { return 0; }
+
 	static constexpr bool transA = det_eval<lv>::transposed;
 	static constexpr bool transB = det_eval<rv>::transposed;
 	static constexpr bool lv_scalar = det_eval<lv>::scalar;
@@ -44,7 +46,11 @@ struct binary_expression_dotproduct : Tensor_Core_Base<binary_expression_dotprod
 	}
 
 	__BCinline__ const auto& operator [](int index) const  { return array_ptr[index]; }
-	__BCinline__ 	   auto& operator [](int index) 		{ return array_ptr[index]; }
+	__BCinline__ 	   auto& operator [](int index) 	   { return array_ptr[index]; }
+
+	__BCinline__ const auto& operator [](index_array<int[2]> index) const  { return array_ptr[index[0] + index[1] * this->LD_rows()]; }
+	__BCinline__ 	   auto& operator [](index_array<int[2]> index)	   	   { return array_ptr[index[0] + index[1] * this->LD_rows()]; }
+
 
 	__BCinline__ const auto innerShape() const { return is; }
 	__BCinline__ const auto outerShape() const { return os; }

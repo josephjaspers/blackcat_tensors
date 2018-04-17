@@ -179,6 +179,144 @@
 //
 //	return 0;
 //}
+//
+//std::string benchmark3_str() {
+//	return "a = b.convolve(c.convolve(d))";
+//}
+//
+//template<int SIZE, int repetitions>
+//float benchmark3() {
+//	const int reps = repetitions;
+//
+//
+//	BC::Matrix<double, BC::CPU> bc_a(SIZE-4,SIZE-4);
+//	BC::Matrix<double, BC::CPU> bc_b(3,3);
+//	BC::Matrix<double, BC::CPU> bc_c(SIZE,SIZE);
+//	BC::Matrix<double, BC::CPU> bc_d(SIZE-2,SIZE-2);
+//
+//	bc_a.randomize(0, 10000);
+//	bc_b.randomize(0, 10000);
+//	bc_c.randomize(0, 10000);
+//	bc_d.randomize(0, 10000);
+//
+//
+//	float NAIVE_TIME = omp_get_wtime();
+//
+//		for (int i = 0; i < reps; ++i) {
+//			bc_d = bc_b.x_corr<2>(bc_c);
+//			bc_a = bc_b.x_corr<2>(bc_d);
+//		}
+//
+//		NAIVE_TIME = omp_get_wtime() - NAIVE_TIME;
+//
+//
+//	float NESTED_TIME = omp_get_wtime();
+//
+//	for (int i = 0; i < reps; ++i) {
+//		bc_a = bc_b.x_corr<2>(bc_b.x_corr<2>(bc_c));
+//	}
+//	NESTED_TIME = omp_get_wtime() - NESTED_TIME;
+//
+//
+//
+//	float time_dif = (NESTED_TIME - NAIVE_TIME);
+//	std::string winner = time_dif > 0 ? ("Blackcat_Tensors Naive better_by " + std::to_string(time_dif * -1))
+//											: ("BlackCat Nested better by " + std::to_string(time_dif));
+//
+//	std::string info1 = "SIZE = [" + std::to_string(SIZE) + "][" + std::to_string(SIZE) + "]";
+//	std::string info2 = " Reps = " + std::to_string(repetitions);
+//	std::string bc_time = "BLACKCAT_Naive Conv:  " + std::to_string(NAIVE_TIME);
+//	std::string eg_time = "BLACKCAT_Nested Conv: " + std::to_string(NESTED_TIME);
+//
+//
+//	struct padder {
+//		static void pad_string(int sz, std::string& str) {
+//			if (str.length() < sz) {
+//				str += std::string(sz - str.length(), ' ');
+//			}
+//		}
+//	};
+//
+//	padder::pad_string(20, info1);
+//	padder::pad_string(20, info2);
+//	padder::pad_string(40, bc_time);
+//	padder::pad_string(40, eg_time);
+//
+//
+//	std::cout<<  info1 << info2 << bc_time << eg_time << winner << std::endl;
+//
+//
+//	return 0;
+//}
+//
+//
+//template<int SIZE, int repetitions, int krnl_size =3>
+//float benchmark4() {
+//
+//	const int reps = repetitions;
+//	const int K = krnl_size - 1;
+//
+//
+//	BC::Matrix<double, BC::CPU> bc_a(SIZE - K * 3,SIZE  - K * 3);
+//	BC::Matrix<double, BC::CPU> bc_b(krnl_size,krnl_size);
+//	BC::Matrix<double, BC::CPU> bc_c(SIZE,SIZE);
+//	BC::Matrix<double, BC::CPU> bc_d(SIZE - K * 2,SIZE - K * 2);
+//	BC::Matrix<double, BC::CPU> bc_e(SIZE-  K, SIZE- K);
+//
+//	bc_a.randomize(0, 10000);
+//	bc_b.randomize(0, 10000);
+//	bc_c.randomize(0, 10000);
+//	bc_d.randomize(0, 10000);
+//
+//
+//	float NAIVE_TIME = omp_get_wtime();
+//
+//		for (int i = 0; i < reps; ++i) {
+//			bc_e = bc_b.x_corr<2>(bc_c);
+//			bc_d = bc_b.x_corr<2>(bc_e);
+//			bc_a = bc_b.x_corr<2>(bc_d);
+//		}
+//
+//		NAIVE_TIME = omp_get_wtime() - NAIVE_TIME;
+//
+//
+//	float NESTED_TIME = omp_get_wtime();
+//
+//	for (int i = 0; i < reps; ++i) {
+//		bc_a = bc_b.x_corr<2>(bc_b.x_corr<2>(bc_b.x_corr(bc_c)));
+//	}
+//	NESTED_TIME = omp_get_wtime() - NESTED_TIME;
+//
+//
+//
+//	float time_dif = (NESTED_TIME - NAIVE_TIME);
+//	std::string winner = time_dif > 0 ? ("Blackcat_Tensors Naive better_by " + std::to_string(time_dif * -1))
+//											: ("BlackCat Nested better by " + std::to_string(time_dif));
+//
+//	std::string info1 = "SIZE = [" + std::to_string(SIZE) + "][" + std::to_string(SIZE) + "]";
+//	std::string info2 = " Reps = " + std::to_string(repetitions);
+//	std::string bc_time = "BLACKCAT_Naive Conv:  " + std::to_string(NAIVE_TIME);
+//	std::string eg_time = "BLACKCAT_Nested Conv: " + std::to_string(NESTED_TIME);
+//
+//	struct padder {
+//		static void pad_string(int sz, std::string& str) {
+//			if (str.length() < sz) {
+//				str += std::string(sz - str.length(), ' ');
+//			}
+//		}
+//	};
+//
+//	padder::pad_string(20, info1);
+//	padder::pad_string(20, info2);
+//	padder::pad_string(40, bc_time);
+//	padder::pad_string(40, eg_time);
+//
+//
+//	std::cout<<  info1 << info2 << bc_time << eg_time << winner << std::endl;
+//
+//
+//	return 0;
+//}
 //}
 //#endif
 ////

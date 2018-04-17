@@ -96,7 +96,7 @@ int percept_MNIST() {
 	//Create the neural network
 	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
 	network.setLearningRate(.03);
-	network.set_omp_threads(4);
+	network.set_omp_threads(NUMB_THREADS);
 
 	omp_set_num_threads(NUMB_THREADS);
 

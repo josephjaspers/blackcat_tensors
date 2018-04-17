@@ -7,7 +7,7 @@
 #ifndef EXPRESSION_BINARY_POINTWISE_SAME_H_
 #define EXPRESSION_BINARY_POINTWISE_SAME_H_
 
-#include "BlackCat_Internal_Type_ExpressionBase.h"
+#include "BlackCat_Expression_Base.h"
 
 namespace BC {
 
@@ -20,9 +20,12 @@ struct binary_expression : public Expression_Core_Base<binary_expression<lv, rv,
 	rv right;
 
 	__BCinline__ static constexpr int DIMS() { return lv::DIMS() > rv::DIMS() ? lv::DIMS() : rv::DIMS();}
+	__BCinline__ static constexpr int CONTINUOUS() { return max(lv::CONTINUOUS(), rv::CONTINUOUS()); }
+
 	__BCinline__  binary_expression(lv l, rv r, operation oper_ = operation()) : left(l), right(r), oper(oper_) {}
 
 	__BCinline__  auto  operator [](int index) const { return oper(left[index], right[index]); }
+	template<class... integers> __BCinline__  auto  operator ()(integers... ints) const { return oper(left(ints...), right(ints...)); }
 
 	__BCinline__ const auto& shape() const { return dominant_type<lv, rv>::shape(left, right); }
 	__BCinline__ const auto  innerShape() const { return shape().innerShape(); }

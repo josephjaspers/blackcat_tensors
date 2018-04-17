@@ -8,7 +8,7 @@
 #ifndef TENSOR_SLICE_CU_
 #define TENSOR_SLICE_CU_
 
-#include "BlackCat_Internal_Type_CoreBase.h"
+#include "BlackCat_Tensor_Core_Base.h"
 
 namespace BC {
 
@@ -20,9 +20,11 @@ template<class PARENT>
 
 	using scalar_type = _scalar<PARENT>;
 	using array_type  = _iterator<PARENT>;
-
+	using super = Tensor_Core_Base<Tensor_Slice<PARENT>, oneLess<PARENT::DIMS()>>;
+	static constexpr int dim = oneLess<PARENT::DIMS()>;
 	const PARENT parent;
 	scalar_type* array_slice;
+	__BCinline__ static constexpr int CONTINUOUS() { return oneLess<PARENT::CONTINUOUS()>; }
 
 	__BCinline__ operator const PARENT	   () const	{ return parent; }
 

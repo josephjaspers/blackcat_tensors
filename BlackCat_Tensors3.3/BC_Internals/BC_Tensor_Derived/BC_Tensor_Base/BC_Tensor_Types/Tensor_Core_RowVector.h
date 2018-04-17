@@ -8,7 +8,7 @@
 #ifndef TENSOR_CORE_ROWVECTOR_H_
 #define TENSOR_CORE_ROWVECTOR_H_
 
-#include "BlackCat_Internal_Type_CoreBase.h"
+#include "BlackCat_Tensor_Core_Base.h"
 
 namespace BC {
 

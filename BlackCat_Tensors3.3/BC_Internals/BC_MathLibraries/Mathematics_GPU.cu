@@ -72,6 +72,24 @@ public:
 		gpu_impl::copy<<<blocks(sz),threads()>>>(t, u, sz);
 		cudaDeviceSynchronize();
 	}
+	template<class T, class U>
+	static void copy1d(T t, const U u) {
+		gpu_impl::copy<<<blocks(t.size()),threads()>>>(t, u, t.size());
+		cudaDeviceSynchronize();
+	}
+	template<typename T, typename J> __attribute__((always_inline)) inline static void copy2d(T t, const J j) {
+		gpu_impl::copy2d<<<blocks(t.size()),threads()>>>(t, j);
+		cudaDeviceSynchronize();
+	}
+	template<typename T, typename J> __attribute__((always_inline)) inline static void copy3d(T t, const J j) {
+		gpu_impl::copy3d<<<blocks(t.size()),threads()>>>(t, j);
+		cudaDeviceSynchronize();
+	}
+	template<typename T, typename J> __attribute__((always_inline)) inline static void copy4d(T t, const J j) {
+		gpu_impl::copy4d<<<blocks(t.size()),threads()>>>(t, j);
+		cudaDeviceSynchronize();
+	}
+
 
 	template<class T, template<class...> class U, class... set>
 	static void copy(T t, U<set...> u, int sz) {

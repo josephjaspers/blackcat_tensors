@@ -36,6 +36,7 @@ protected:
 	struct DISABLED;
 
 	static constexpr int DIMS = ranker<derived>::value;
+	static constexpr int CONTINUOUS() { return functor_type::CONTINUOUS(); }
 	template<class> friend class TensorBase;
 
 public:

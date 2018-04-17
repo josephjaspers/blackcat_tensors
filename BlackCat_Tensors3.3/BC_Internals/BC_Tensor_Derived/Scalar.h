@@ -39,13 +39,13 @@ public:
 		 Mathlib::HostToDevice(this->data().getIterator(), &val, 1);
 	}
 
+	template<class U>
+	Scalar& operator =(const Scalar<U, Mathlib>& t) { return parent_class::operator=(t); }
 	Scalar& operator =(const Scalar&  t) { return parent_class::operator=(t); }
 	Scalar& operator =(const Scalar&& t) { return parent_class::operator=(t); }
 	Scalar& operator =(	     Scalar&& t) { return parent_class::operator=(t); }
-	template<class U>
-	Scalar& operator =(const Scalar<U, Mathlib>& t) { return parent_class::operator=(t); }
-//	Scalar& operator =(_scalar<T> scalar) { Mathlib::HostToDevice(this->data().getIterator(), &scalar, 1); return *this; }
-	Scalar& operator =(_scalar<T> scalar) { this->fill(scalar); return *this; }
+	Scalar& operator =(_scalar<T> scalar) { Mathlib::HostToDevice(this->data().getIterator(), &scalar, 1); return *this; }
+//	Scalar& operator =(_scalar<T> scalar) { this->fill(scalar); return *this; } //THIS CAUSES CUDA TO FAIL COMPILATION
 
 	operator _scalar<T>() const {
 		_scalar<T> value = 0;

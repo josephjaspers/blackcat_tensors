@@ -137,12 +137,35 @@ struct Tensor_Operations {
 		return typename impl<pDeriv, mul>::type(this->data(), param.get().data());
 	}
 	//--------------------------------------assignment operators-----------------------------------------------//
+
+	//dimensional copy (this is more optimized for certain functions)
+	struct copy1d { template<class... params> static void foo(params&... p) { math_library::copy1d(p...); } };
+	struct copy2d { template<class... params> static void foo(params&... p) { math_library::copy2d(p...); } };
+	struct copy3d { template<class... params> static void foo(params&... p) { math_library::copy3d(p...); } };
+	struct copy4d { template<class... params> static void foo(params&... p) { math_library::copy4d(p...); } };
+
+	template<class pDeriv>
+	using copy_func =			//this defaults to copy1d, as this library all tensors can utilized 1d copying, though it maybe slower
+			std::conditional_t<_functor<pDeriv>::CONTINUOUS() == 0 && functor_type::CONTINUOUS() == 0, copy1d,
+				std::conditional_t<_functor<pDeriv>::CONTINUOUS() == 2 && functor_type::CONTINUOUS() == 2, copy2d,
+					std::conditional_t<_functor<pDeriv>::CONTINUOUS() == 3 && functor_type::CONTINUOUS() == 3, copy3d,
+						std::conditional_t<_functor<pDeriv>::CONTINUOUS() == 4 && functor_type::CONTINUOUS() == 4, copy4d, copy1d>
+					>
+				>
+			>;
+
 	template<class pDeriv>
 	derived& operator =(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
-		math_library::copy(asBase().data(), param.asBase().data(), this->asBase().size());
+		if (_functor<pDeriv>::CONTINUOUS() == 0 && _functor<derived>::CONTINUOUS() == 0)
+			math_library::copy(asBase().data(), param.asBase().data(), this->asBase().size());
+		else {
+			copy_func<pDeriv>::foo(asBase().data(), param.asBase().data());
+			std::cout << "CHOOSING DIMENSIONAL COPY" << std::endl;
+		}
 		return static_cast<derived&>(*this);
 	}
+
 	template<class pDeriv>
 	derived& operator +=(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);

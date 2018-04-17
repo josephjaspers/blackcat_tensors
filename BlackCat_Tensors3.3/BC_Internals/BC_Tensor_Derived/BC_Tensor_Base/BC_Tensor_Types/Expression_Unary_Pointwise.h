@@ -7,7 +7,7 @@
 #ifndef EXPRESSION_UNARY_POINTWISE_CU_
 #define EXPRESSION_UNARY_POINTWISE_CU_
 
-#include "BlackCat_Internal_Type_ExpressionBase.h"
+#include "BlackCat_Expression_Base.h"
 
 namespace BC {
 template<class value, class operation>
@@ -18,6 +18,7 @@ public:
 	value array;
 
 	__BCinline__ static constexpr int DIMS() { return value::DIMS(); }
+	__BCinline__ static constexpr int CONTINUOUS() { return value::CONTINUOUS(); }
 
 	__BCinline__  unary_expression(value v, operation op = operation()) : array(v), oper(op) {}
 
@@ -30,6 +31,13 @@ public:
 	__BCinline__ auto operator [](int index) -> decltype(oper(array[index])) {
 		return oper(array[index]);
 	}
+	template<class... integers>__BCinline__ auto operator ()(integers... index) const -> decltype(oper(array(index...))) {
+		return oper(array(index...));
+	}
+	template<class... integers>	__BCinline__ auto operator ()(integers... index) -> decltype(oper(array(index...))) {
+		return oper(array(index...));
+	}
+
 
 	__BCinline__ const auto slice(int i) const {
 		return unary_expression<decltype(array.slice(0)), operation>(array.slice(i)); }

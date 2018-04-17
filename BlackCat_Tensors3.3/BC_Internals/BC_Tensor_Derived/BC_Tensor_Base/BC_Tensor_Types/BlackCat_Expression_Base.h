@@ -10,6 +10,7 @@
 #define EXPRESSION_BASE_H_
 
 #include "BlackCat_Internal_Definitions.h"
+#include "BC_Utility/Internal_Shapes.h"
 #include <iostream>
 
 namespace BC {
@@ -30,6 +31,7 @@ private:
 	__BCinline__ const derived& base() const { return static_cast<const derived&>(*this); }
 	__BCinline__	   derived& base() 		 { return static_cast<	    derived&>(*this); }
 
+
 public:
 	operator 	   auto&()       { return base(); }
 	operator const auto&() const { return base(); }
@@ -37,7 +39,6 @@ public:
 
 	__BCinline__ static constexpr int DIMS() { return derived::DIMS();    }
 	__BCinline__ static constexpr int LAST() { return derived::DIMS() -1; }
-
 	__BCinline__ const auto IS() const { return base().innerShape(); }
 	__BCinline__ const auto OS() const { return base().outerShape(); }
 

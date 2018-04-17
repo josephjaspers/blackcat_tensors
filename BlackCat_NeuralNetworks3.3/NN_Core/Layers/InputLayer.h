@@ -36,6 +36,10 @@ struct InputLayer : Layer<derived> {
 		ys().pop();
 		return dy;
 	}
+	void set_omp_threads(int i) {
+		ys.resize(i);
+		this->next().set_omp_threads(i);
+	}
 	void updateWeights() {
 		this->next().updateWeights();
 	}

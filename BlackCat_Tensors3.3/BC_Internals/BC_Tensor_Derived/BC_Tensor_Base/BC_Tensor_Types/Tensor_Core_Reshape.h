@@ -9,7 +9,7 @@
 #ifndef TENSOR_RESHAPE_H_
 #define TENSOR_RESHAPE_H_
 
-#include "BlackCat_Internal_Type_CoreBase.h"
+#include "BlackCat_Tensor_Core_Base.h"
 
 namespace BC {
 
@@ -19,6 +19,9 @@ struct Tensor_Reshape : Tensor_Core_Base<Tensor_Reshape<PARENT, NEW_DIM>, NEW_DI
 	using Mathlib = typename  PARENT::Mathlib;
 
 	__BCinline__ static constexpr int DIMS() { return NEW_DIM; };
+	__BCinline__ static constexpr int CONTINUOUS() { return 0; }
+	static_assert(PARENT::CONTINUOUS() == 0, "Tensor_Reshape may only reshape continuous tensors, you may attempt to copy instead");
+
 	static_assert(NEW_DIM > -1, "DIMENSIONALITY OF TENSOR MUST BE >= 0");
 
 	PARENT parent;
