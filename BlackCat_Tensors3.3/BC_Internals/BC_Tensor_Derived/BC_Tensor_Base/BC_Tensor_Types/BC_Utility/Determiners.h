@@ -13,9 +13,6 @@ namespace BC {
 
 template<bool cond, class a, class b> using ifte = typename std::conditional<cond, a, b>::type;
 
-
-
-
 template<class> class Tensor_Core;
 template<class> class Tensor_Slice;
 template<class> class Tensor_Scalar;
@@ -38,8 +35,7 @@ template<class T> struct isPrimaryCore { static constexpr bool conditional = MTF
 template<template<class> class T, class U> struct isPrimaryCore<T<U>>
 { static constexpr bool conditional = MTF::same<T<U>,Tensor_Core<U>>::conditional; };
 
-template<class T>
-static constexpr bool pCore_b = isPrimaryCore<T>::conditional;
+template<class T> static constexpr bool pCore_b = isPrimaryCore<T>::conditional;
 
 
 template<int> struct base { template<class t, class m> using type = DISABLED<t,m>;	template<class t, class m> using slice = DISABLED<t, m>; };
@@ -49,8 +45,8 @@ template<> struct base<2> { template<class t, class m> using type = Matrix<t, m>
 template<> struct base<3> { template<class t, class m> using type = Cube<t, m>;   	template<class t,class m> using slice = Matrix<t, m>; };
 template<> struct base<4> { template<class t, class m> using type = Tensor4<t, m>;  template<class t,class m> using slice = Cube<t, m>; };
 template<> struct base<5> { template<class t, class m> using type = Tensor5<t, m>;  template<class t,class m> using slice = Tensor4<t, m>; };
-
 template<int x, class a, class b> using rank2class = typename base<x>::template type<a,b>;
+
 template<class> struct ranker;
 template<class a, class b> struct ranker<Scalar<a,b>> { static constexpr int value = 0; };
 template<class a, class b> struct ranker<Vector<a,b>> { static constexpr int value = 1; };
@@ -58,9 +54,15 @@ template<class a, class b> struct ranker<Matrix<a,b>> { static constexpr int val
 template<class a, class b> struct ranker<Cube<a,b>>   { static constexpr int value = 3; };
 template<class a, class b> struct ranker<Tensor4<a,b>>   { static constexpr int value = 4; };
 template<class a, class b> struct ranker<Tensor5<a,b>>   { static constexpr int value = 5; };
-
 template<class T> static constexpr int class2rank = ranker<T>::value;
 
+template<class> struct isTensor {static constexpr bool conditional = false; };
+template<class a, class b> struct isTensor<Scalar<a,b>> { static constexpr bool conditional = true; };
+template<class a, class b> struct isTensor<Vector<a,b>> { static constexpr bool conditional = true; };
+template<class a, class b> struct isTensor<Matrix<a,b>> { static constexpr bool conditional = true; };
+template<class a, class b> struct isTensor<Cube<a,b>>   { static constexpr bool conditional = true; };
+template<class a, class b> struct isTensor<Tensor4<a,b>>   { static constexpr bool conditional = true; };
+template<class a, class b> struct isTensor<Tensor5<a,b>>   { static constexpr bool conditional = true; };
 
 template<class> struct determine_functor;
 template<class> struct determine_evaluation;
@@ -75,23 +77,22 @@ template<class T> using _evaluation = typename determine_evaluation<T>::type;
 template<class T> static constexpr int _rankOf  = ranker<T>::value;
 template<class T> using _iterator = typename determine_iterator<T>::type;
 
-//remove constness --
+//remove constness -----------------------------------------------------------------------------------------
 namespace rm {
 template<class T> struct _const { using type = T; };
 template<class T> struct _const<const T> { using type = typename _const<T>::type; };
 }
 template<class T> using remove_const = typename rm::_const<T>::type;
-///DET FUNCTOR
+///DET FUNCTOR----------------------------------------------------------------------------------------------
 template<template<class...> class tensor, class functor, class... set>
 struct determine_functor<tensor<functor, set...>>{
 
 	using derived = tensor<functor,set...>;
-	using type = ifte<!std::is_base_of<BC_Type,functor>::value, Tensor_Core<derived>, functor>;
-//	using type = ifte<MTF::isPrimitive<functor>::conditional, Tensor_Core<derived>, functor>;
-
+	using type = ifte<!std::is_base_of<BC_Type,functor>::value,
+			std::conditional_t<MTF::isPrimitive<functor>::conditional, Tensor_Core<derived>, functor>, functor>;
 };
 
-///DET EVALUATION
+///DET EVALUATION----------------------------------------------------------------------------------------------
 template<template<class...> class tensor, class functor, class... set>
 struct determine_evaluation<tensor<functor, set...>>{
 	using derived = tensor<functor,set...>;
@@ -120,6 +121,18 @@ template<class T>
 struct determine_iterator {
 	using type = decltype(std::declval<T>().getIterator());
 };
+///DETERMINE_ITERATOR---------------------------------------------------------------------------------------
+template<class T, class v=  void>
+struct determine_priority {
+	static  constexpr int value = 0;
+};
+template<class T>
+struct determine_priority<T, decltype(T::PRIORITY())> {
+	static  constexpr int value = T::PRIORITY();
+};
+
+template<class T>
+static constexpr int _priority = determine_priority<T>::value;
 
 }
 

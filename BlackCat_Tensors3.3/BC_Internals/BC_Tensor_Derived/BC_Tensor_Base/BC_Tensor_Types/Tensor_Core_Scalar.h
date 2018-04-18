@@ -8,7 +8,7 @@
 #ifndef TENSOR_Scalar_CU_
 #define TENSOR_Scalar_CU_
 
-#include "BlackCat_Tensor_Core_Base.h"
+#include "Tensor_Core_Base.h"
 
 namespace BC {
 
@@ -17,9 +17,12 @@ struct Tensor_Scalar : Tensor_Core_Base<Tensor_Scalar<PARENT>, 0> {
 
 	using scalar = _scalar<PARENT>;
 
+	__BCinline__ static constexpr int PARENT_DIMS() { return PARENT::PARENT_DIMS(); }
+	__BCinline__ static constexpr int CONTINUOUS() { return 0; }
+
 	const PARENT parent;
 	scalar* array_slice;
-	__BCinline__ static constexpr int CONTINUOUS() { return 0; }
+
 	__BCinline__ Tensor_Scalar(const scalar* array, const PARENT& parent_)
 		: array_slice(const_cast<scalar*>(array)), parent(parent_) {}
 

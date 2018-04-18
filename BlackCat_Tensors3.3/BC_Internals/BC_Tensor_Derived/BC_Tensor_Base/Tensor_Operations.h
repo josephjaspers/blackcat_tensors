@@ -9,7 +9,6 @@
 #define TENSOR_HEAD_H_
 
 #include "BC_Tensor_Types/Expression_Binary_Pointwise.h"
-#include "BC_Tensor_Types/Expression_Binary_Pointwise_ScalarMul.h"
 #include "BC_Tensor_Types/Expression_Binary_Functors.h"
 #include "BC_Tensor_Types/Expression_Unary_Pointwise.h"
 #include "BC_Tensor_Types/Expression_Binary_Dotproduct.h"
@@ -65,8 +64,8 @@ struct Tensor_Operations {
 		using greater_rank_type 	= std::conditional_t<(derived::DIMS() > param_deriv::DIMS()), derived, param_deriv>;
 		using lesser_rank_type 		= std::conditional_t<(derived::DIMS() < param_deriv::DIMS()), derived, param_deriv>;
 
-		using dot_type 				= binary_expression_dotproduct<_functor<derived>, _functor<param_deriv>, math_library>;
-		using scalmul_type 			= binary_expression_scalar_mul< functor_type , param_functor_type>;
+		using dot_type 				= binary_expression<_functor<derived>, _functor<param_deriv>, dotproduct<math_library>>;
+		using scalmul_type 			= binary_expression<functor_type , param_functor_type, scalar_mul>;
 
 		using type = std::conditional_t<!SCALAR_MUL,
 						expr_sub<lesser_rank_type, dot_type, math_library>,

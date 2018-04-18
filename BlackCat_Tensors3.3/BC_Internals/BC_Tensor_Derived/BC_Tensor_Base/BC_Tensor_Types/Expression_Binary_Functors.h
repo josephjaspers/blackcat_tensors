@@ -14,6 +14,23 @@ namespace BC {
 template<class T> struct rm_const { using type = T; };
 template<class T> struct rm_const<const T&> { using type = T&; };
 
+/*
+ * 0 = a Tensor (base case)
+ * 1 = function
+ * 2 = Multiplication/division
+ * 3 = addition/subtraction
+ * 4 = assignments
+ *
+ */
+
+	struct scalar_mul {
+		//this is just a flag for dotproduct, it is the same as multiplication though
+		template<class lv, class rv> __BCinline__ auto operator ()(lv l, rv r) const {
+			return l * r;
+		}
+	};
+
+
 	struct add {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
 			return l + r;
@@ -49,24 +66,28 @@ template<class T> struct rm_const<const T&> { using type = T&; };
 		}
 	};
 	struct add_assign {
+		static constexpr int PRIORITY() { return 4; }
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return l += r;
 		}
 	};
 
 	struct mul_assign {
+		static constexpr int PRIORITY() { return 4; }
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return l *= r;
 		}
 	};
 
 	struct sub_assign {
+		static constexpr int PRIORITY() { return 4; }
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return l -= r;
 		}
 	};
 
 	struct div_assign {
+		static constexpr int PRIORITY() { return 4; }
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return l /= r;
 		}

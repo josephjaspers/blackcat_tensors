@@ -2,8 +2,8 @@
 #ifndef EXPRESSION_BINARY_DOTPRODUCT_CU_
 #define EXPRESSION_BINARY_DOTPRODUCT_CU_
 
-#include "BlackCat_Expression_Base.h" 	//Expression_Core_Base<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
-#include "BlackCat_Tensor_Core_Base.h" 	//Expression_Core_Base<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
+#include "Expression_Base.h" 	//Expression_Core_Base<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
+#include "Tensor_Core_Base.h" 	//Expression_Core_Base<T, binary_expression_dotproduct<T, lv, rv, Mathlib>> {
 
 #include "Expression_Binary_Dotproduct_impl.h"
 #include "BlackCat_Internal_Definitions.h"
@@ -17,8 +17,10 @@ namespace BC {
  */
 //det_Eval
 
+template<class ml> class dotproduct;
+
 template<class lv, class rv, class Mathlib>
-struct binary_expression_dotproduct : Tensor_Core_Base<binary_expression_dotproduct<lv, rv, Mathlib>, rv::DIMS()> {
+struct binary_expression<lv, rv, dotproduct<Mathlib>> : expression_base<binary_expression<lv, rv, dotproduct<Mathlib>>> {
 
 	using scalar_type = _scalar<lv>;
 
@@ -40,7 +42,7 @@ struct binary_expression_dotproduct : Tensor_Core_Base<binary_expression_dotprod
 	int is[2] { left.rows(), right.cols() };
 	int os[2] { left.rows(), left.rows() * right.cols() };
 
-	 binary_expression_dotproduct(lv left, rv right) : left(left), right(right) {
+	 binary_expression(lv left, rv right) : left(left), right(right) {
 		Mathlib::initialize(array_ptr, this->size());
 		eval();
 	}

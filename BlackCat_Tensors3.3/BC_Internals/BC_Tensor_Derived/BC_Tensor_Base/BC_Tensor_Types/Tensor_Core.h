@@ -8,7 +8,7 @@
 #ifndef SHAPE_H_
 #define SHAPE_H_
 
-#include "BlackCat_Tensor_Core_Base.h"
+#include "Expression_Base.h"
 
 namespace BC {
 
@@ -16,6 +16,7 @@ template<class T>
 struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 
 	__BCinline__ static constexpr int DIMS() { return _rankOf<T>; }
+	__BCinline__ static constexpr int PARENT_DIMS() { return _rankOf<T>; }
 	__BCinline__ static constexpr int LAST() { return DIMS() - 1;}
 
 	using self = Tensor_Core<T>;

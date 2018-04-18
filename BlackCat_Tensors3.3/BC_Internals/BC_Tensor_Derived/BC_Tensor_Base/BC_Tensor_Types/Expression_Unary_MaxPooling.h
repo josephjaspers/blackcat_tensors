@@ -8,10 +8,10 @@
 #ifndef EXPRESSION_UNARY_MAXPOOLING
 #define EXPRESSION_UNARY_MAXPOOLING
 
-#include "BlackCat_Expression_Base.h"
+#include "Expression_Base.h"
 namespace BC {
 template<class ary,  int search_space = 3>
-struct unary_expression_maxpooling : Expression_Core_Base<unary_expression_maxpooling<ary, search_space>> {
+struct unary_expression_maxpooling : expression_base<unary_expression_maxpooling<ary, search_space>> {
 
 	__BCinline__ static constexpr int DIMS() { return ary::DIMS(); }
 	__BCinline__ static constexpr int CONTINUOUS() { return ary::CONTINUOUS(); }

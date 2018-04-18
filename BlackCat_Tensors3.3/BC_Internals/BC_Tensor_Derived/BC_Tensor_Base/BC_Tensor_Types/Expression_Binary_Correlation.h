@@ -8,10 +8,11 @@
 #ifndef EXPRESSIONS_BINARY_CORRELATION_H_
 #define EXPRESSIONS_BINARY_CORRELATION_H_
 
-#include "BlackCat_Expression_Base.h"
+#include "Expression_Base.h"
+#include <functional>
 namespace BC {
 template<class lv, class rv, int corr_dimension = 2>
-struct binary_expression_correlation : Expression_Core_Base<binary_expression_correlation<lv, rv, corr_dimension>> {
+struct binary_expression_correlation : expression_base<binary_expression_correlation<lv, rv, corr_dimension>> {
 
 	__BCinline__ static constexpr int DIMS() { return corr_dimension; }
 	__BCinline__ static constexpr int CONTINUOUS() { return corr_dimension; }
@@ -65,6 +66,49 @@ struct binary_expression_correlation : Expression_Core_Base<binary_expression_co
 
 	__BCinline__  T operator [] (int i) const {
 		return axpy<corr_dimension>(i, left, right);
+	}
+
+	template<int krnl_dims>
+	T krnl_corr(int rv_index) {
+		T sum = 0;
+		int lv_index = 0;
+
+		auto Func = [&](int D) {
+			if (D == 1) {
+				for (int m = 0; m < left.rows(); ++m) {
+					sum += left[lv_index + m] * right[m + rv_index];
+				}
+			} else {
+				for (int m = 0; m < left.dimension(D - 1); ++m) {
+					lv_index += left.dimension(D - 1);
+				}
+			}
+		};
+
+	}
+
+	T corr(int x, int y, int z) const {
+		static constexpr int imglast = rv::DIMS() - 1;
+
+		for (int k = 0; k < right.dimension(imglast); ++k) {
+			for (int n = 0; n < right.dimension(imglast - 1); ++n){
+				int rv_index = right.dimension(imglast-1) * right.LD_dimension(imglast-1);
+				for (int m = 0; m < right.dimension(imglast - 2); ++m){
+					int rv_i;
+					if (rv::DIMS() - 2 <= 0)
+						rv_i = rv_index + m;
+					else
+						rv_i = rv_index + m*right.LD_dimension(imglast - 2);
+				}
+			}
+		}
+	}
+
+
+	template<class... integers> __BCinline__
+	  T operator () (integers... ints) const {
+		static_assert(sizeof...(integers) == corr_dimension, "INTEGER/TENSOR-DIM MISMATCH");
+//
 	}
 
 };

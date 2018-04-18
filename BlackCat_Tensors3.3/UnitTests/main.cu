@@ -9,8 +9,8 @@ using BC::Matrix;
 using BC::Scalar;
 using BC::Cube;
 
-//using ml = BC::CPU;
-using ml = BC::GPU;
+using ml = BC::CPU;
+//using ml = BC::GPU;
 
 using vec = Vector<float, ml>;
 using mat = Matrix<float, ml>;
@@ -38,6 +38,7 @@ auto test() {
 		a(i) = i + 7;
 		b(i) = i + 1;
 	}
+
 
 	a.print();
 	b.print();

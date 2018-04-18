@@ -38,8 +38,8 @@ public:
 	template<class U>
 	Matrix& operator = (const Matrix<U, Mathlib>& t) { return parent_class::operator=(t); }
 
-	const Matrix<unary_expression_transpose<typename parent_class::functor_type>, Mathlib> t() const {
-		return Matrix<unary_expression_transpose<typename parent_class::functor_type>, Mathlib>(this->data());
+	const Matrix<unary_expression<typename parent_class::functor_type, transpose>, Mathlib> t() const {
+		return Matrix<unary_expression<typename parent_class::functor_type, transpose>, Mathlib>(this->data());
 	}
 
 private:

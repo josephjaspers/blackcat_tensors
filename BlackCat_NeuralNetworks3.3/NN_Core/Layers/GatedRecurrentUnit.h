@@ -152,6 +152,8 @@ public:
 		rf_gradientStorage.resize(i);
 
 		ys.resize(i);
+		fs.resize(i);
+		zs.resize(i);
 
 		init_storages();
 		this->next().set_omp_threads(i);

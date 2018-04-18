@@ -26,15 +26,19 @@ template<class,int> class 	_Tensor_Reshape = Tensor_Reshape,
 template<class> 	class 	_Tensor_Slice 	= Tensor_Slice,
 template<class> 	class 	_Tensor_Row 	= Tensor_Row,
 template<class> 	class 	_Tensor_Scalar 	= Tensor_Scalar>
-struct Tensor_Core_Base : Expression_Core_Base<Tensor_Core_Base<derived,DIMENSION>> {
+struct Tensor_Core_Base : expression_base<Tensor_Core_Base<derived,DIMENSION>> {
 
 	__BCinline__ static constexpr int DIMS() { return DIMENSION; }
-	__BCinline__ static constexpr int CONTINUOUS() { return 0; }
+	__BCinline__ static constexpr int PARENT_DIMS() { return DIMS(); }
 
+	__BCinline__ static constexpr int CONTINUOUS() { return 0; }
 	__BCinline__ static constexpr int LAST() { return DIMENSION - 1; }
 
 	using self = derived;
+
 	using slice_type = std::conditional_t<DIMS() == 0, self, _Tensor_Slice<self>>;
+	using row_type = std::conditional_t<DIMS() == 0, self, _Tensor_Row<self>>;
+	using scalar_type = std::conditional_t<DIMS() == 0, self, _Tensor_Scalar<self>>;
 
 private:
 	__BCinline__ const derived& base() const { return static_cast<const derived&>(*this); }
@@ -60,10 +64,10 @@ public:
 	__BCinline__ const auto slice(int i) const { return slice_type(&(base().getIterator()[slice_index(i)]),base()); }
 	__BCinline__	   auto slice(int i) 	   { return slice_type(&(base().getIterator()[slice_index(i)]),base()); }
 
-	__BCinline__ const auto scalar(int i) const { static_assert (DIMS() != 0, "SCALAR OF SCALAR NOT DEFINED"); return _Tensor_Scalar<self>(&base().getIterator()[i], base()); }
-	__BCinline__	   auto scalar(int i) 	    { static_assert (DIMS() != 0, "SCALAR OF SCALAR NOT DEFINED"); return _Tensor_Scalar<self>(&base().getIterator()[i], base()); }
-	__BCinline__ const auto row(int i) const { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED"); return _Tensor_Row<self>(&base().getIterator()[i], base()); }
-	__BCinline__	   auto row(int i) 	     { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED"); return _Tensor_Row<self>(&base().getIterator()[i], base()); }
+	__BCinline__ const auto scalar(int i) const { return scalar_type(&base().getIterator()[i], base()); }
+	__BCinline__	   auto scalar(int i) 	    { return scalar_type(&base().getIterator()[i], base()); }
+	__BCinline__ const auto row(int i) const { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED"); return row_type(&base().getIterator()[i], base()); }
+	__BCinline__	   auto row(int i) 	     { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED"); return row_type(&base().getIterator()[i], base()); }
 	__BCinline__ const auto col(int i) const { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
 	__BCinline__	   auto col(int i) 	     { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
 

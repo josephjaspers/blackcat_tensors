@@ -8,7 +8,7 @@
 #ifndef TENSOR_CORE_ROWVECTOR_H_
 #define TENSOR_CORE_ROWVECTOR_H_
 
-#include "BlackCat_Tensor_Core_Base.h"
+#include "Tensor_Core_Base.h"
 
 namespace BC {
 
@@ -20,7 +20,8 @@ struct Tensor_Row : Tensor_Core_Base<Tensor_Row<PARENT>, 1>  {
 	using slice_type = Tensor_Scalar<self>;
 	using Mathlib = typename  PARENT::Mathlib;
 
-	static constexpr int DIMS() { return 1; }
+	__BCinline__ static constexpr int PARENT_DIMS() { return PARENT::PARENT_DIMS(); }
+	__BCinline__ static constexpr int DIMS() { return 1; }
 	static_assert(PARENT::DIMS() == 2 || PARENT::DIMS() == 1, "TENSOR_ROW CAN ONLY BE GENERATED FROM ANOTHER VECTOR, ROW_VECTOR, OR MATRIX");
 
 	PARENT parent;

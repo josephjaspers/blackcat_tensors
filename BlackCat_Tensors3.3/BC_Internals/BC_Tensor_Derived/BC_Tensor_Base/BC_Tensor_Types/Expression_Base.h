@@ -19,7 +19,7 @@ namespace BC {
 struct BC_Type {};
 
 template<class derived>
-struct Expression_Core_Base : BC_Type {
+struct expression_base : BC_Type {
 private:
 
 	template<class ret = int>
@@ -38,6 +38,8 @@ public:
 //	Expression_Core_Base() { static_assert(std::is_trivially_copyable<derived>::value, "EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
 
 	__BCinline__ static constexpr int DIMS() { return derived::DIMS();    }
+	__BCinline__ static constexpr int PARENT_DIMS() { return derived::DIMS();    }
+
 	__BCinline__ static constexpr int LAST() { return derived::DIMS() -1; }
 	__BCinline__ const auto IS() const { return base().innerShape(); }
 	__BCinline__ const auto OS() const { return base().outerShape(); }
@@ -54,7 +56,6 @@ public:
 
 	__BCinline__ const auto innerShape() const 	{ return shadowFailure<int*>("auto(const int*) innerShape() const  MAY RETURN INT*, _sh<T>, or std::vector<int>, "); }
 	__BCinline__ const auto outerShape() const 	{ return shadowFailure<int*>("auto(const int*) outerShape() const  MAY RETURN INT*, _sh<T>, or std::vector<int>, "); }
-
 
 	void printDimensions() const {
 		for (int i = 0; i < DIMS(); ++i) {
@@ -89,3 +90,9 @@ public:
 }
 
 #endif /* EXPRESSION_BASE_H_ */
+//
+//template<class rv> __BCinline__ auto operator + (const pbase<rv>& tensor) const { return binary_expression<lv, rv, add>(base(), tensor.base()); }
+//template<class rv> __BCinline__ auto operator - (const pbase<rv>& tensor) const { return binary_expression<lv, rv, sub>(base(), tensor.base()); }
+//template<class rv> __BCinline__ auto operator / (const pbase<rv>& tensor) const { return binary_expression<lv, rv, div>(base(), tensor.base()); }
+//template<class rv> __BCinline__ auto operator * (const pbase<rv>& tensor) const { return binary_expression<lv, rv, mul>(base(), tensor.base()); }
+////asterix is multiplication in this context

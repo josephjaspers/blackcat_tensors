@@ -7,11 +7,11 @@
 #ifndef EXPRESSION_UNARY_POINTWISE_CU_
 #define EXPRESSION_UNARY_POINTWISE_CU_
 
-#include "BlackCat_Expression_Base.h"
+#include "Expression_Base.h"
 
 namespace BC {
 template<class value, class operation>
-class unary_expression : public Expression_Core_Base<unary_expression<value, operation>> {
+class unary_expression : public expression_base<unary_expression<value, operation>> {
 public:
 
 	operation oper;
@@ -37,14 +37,14 @@ public:
 	template<class... integers>	__BCinline__ auto operator ()(integers... index) -> decltype(oper(array(index...))) {
 		return oper(array(index...));
 	}
-
-
 	__BCinline__ const auto slice(int i) const {
 		return unary_expression<decltype(array.slice(0)), operation>(array.slice(i)); }
 	__BCinline__ const auto row(int i) const {
 		return unary_expression<decltype(array.row(0)),operation>(array.row(i)); }
 	__BCinline__ const auto col(int i) const {
 		return unary_expression<decltype(array.col(0)),operation>(array.col(i)); }
+	__BCinline__ const auto scalar(int i) const {
+		return unary_expression<decltype(array.scalar(0)),operation>(array.scalar(i)); }
 };
 }
 #endif /* EXPRESSION_UNARY_POINTWISE_CU_ */

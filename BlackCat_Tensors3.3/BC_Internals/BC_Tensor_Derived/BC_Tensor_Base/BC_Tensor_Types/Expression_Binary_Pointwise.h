@@ -7,12 +7,12 @@
 #ifndef EXPRESSION_BINARY_POINTWISE_SAME_H_
 #define EXPRESSION_BINARY_POINTWISE_SAME_H_
 
-#include "BlackCat_Expression_Base.h"
+#include "Expression_Base.h"
 
 namespace BC {
 
 template<class lv, class rv, class operation>
-struct binary_expression : public Expression_Core_Base<binary_expression<lv, rv, operation>> {
+struct binary_expression : public expression_base<binary_expression<lv, rv, operation>> {
 
 	operation oper;
 
@@ -32,17 +32,15 @@ struct binary_expression : public Expression_Core_Base<binary_expression<lv, rv,
 	__BCinline__ const auto  outerShape() const { return shape().outerShape(); }
 
 
-	template<class v, class alt>
-	using expr_type = std::conditional_t<v::DIMS() == 0, v, alt>;
-
 	__BCinline__ const auto slice(int i) const {
-		return binary_expression<decltype(left.slice(0)), decltype(right.slice(0)), operation>(left.slice(i), right.slice(i));
-	}
+		return binary_expression<decltype(left.slice(0)), decltype(right.slice(0)), operation>(left.slice(i), right.slice(i));}
 	__BCinline__ const auto row(int i) const {
-		return binary_expression<expr_type<lv, decltype(left.row(0))>, expr_type<rv, decltype(right.row(0))>, operation>(left.row(i), right.row(i)); }
-
+		return binary_expression<decltype(left.row(0)), decltype(right.row(0)), operation>(left.row(i), right.row(i)); }
 	__BCinline__ const auto col(int i) const {
-		return binary_expression<expr_type<lv, decltype(left.col(0))>, expr_type<rv, decltype(right.col(0))>, operation>(left.col(i), right.col(i)); }
+		return binary_expression<decltype(left.col(0)), decltype(right.col(0)), operation>(left.col(i), right.col(i)); }
+	__BCinline__ const auto scalar(int i) const {
+		return binary_expression<decltype(left.scalar(0)), decltype(right.scalar(0)), operation>(left.col(i), right.col(i)); }
+
 };
 
 }

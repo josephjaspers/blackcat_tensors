@@ -11,10 +11,12 @@
 
 namespace BC {
 //Required forward decs
-template<class, class > class binary_expression_scalar_mul;
-template<class > class unary_expression_transpose;
-template<class > class Tensor_Core;
+
+template<class, class> class unary_expression;
+template<class> class Tensor_Core;
 class mul;
+class transpose;
+class scalar_mul;
 
 template<class T> T&  cc(const T&  param) { return const_cast<T&> (param); }
 template<class T> T&& cc(const T&& param) { return const_cast<T&&>(param); }
@@ -46,7 +48,7 @@ template<class deriv> struct det_eval<Tensor_Core<deriv>> {
 };
 ////IF TRANSPOSE
 template<class deriv>
-struct det_eval<unary_expression_transpose<Tensor_Core<deriv>>> {
+struct det_eval<unary_expression<Tensor_Core<deriv>, transpose>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = false;
@@ -58,8 +60,8 @@ struct det_eval<unary_expression_transpose<Tensor_Core<deriv>>> {
 //
 ////IF A SCALAR BY TENSOR MUL OPERATION
 template<class d1, class d2>
-struct det_eval<binary_expression_scalar_mul<Tensor_Core<d1>, Tensor_Core<d2>>> {
-	using self = binary_expression_scalar_mul<Tensor_Core<d1>, Tensor_Core<d2>>;
+struct det_eval<binary_expression<Tensor_Core<d1>, Tensor_Core<d2>, scalar_mul>> {
+	using self = binary_expression<Tensor_Core<d1>, Tensor_Core<d2>, scalar_mul>;
 
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = false;
@@ -81,7 +83,7 @@ struct det_eval<binary_expression_scalar_mul<Tensor_Core<d1>, Tensor_Core<d2>>> 
 //
 //IF A SCALAR BY TENSOR MUL OPERATION R + TRANSPOSED
 template<class d1, class d2>
-struct det_eval<binary_expression_scalar_mul<unary_expression_transpose<Tensor_Core<d1>>, Tensor_Core<d2>>> {
+struct det_eval<binary_expression<unary_expression<Tensor_Core<d1>, transpose>, Tensor_Core<d2>, scalar_mul>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;
@@ -92,7 +94,7 @@ struct det_eval<binary_expression_scalar_mul<unary_expression_transpose<Tensor_C
 
 //IF A SCALAR BY TENSOR MUL OPERATION L + TRANSPOSED
 template<class d1, class d2>
-struct det_eval<binary_expression_scalar_mul<Tensor_Core<d1>, unary_expression_transpose<Tensor_Core<d2>>>> {
+struct det_eval<binary_expression<Tensor_Core<d1>, unary_expression<Tensor_Core<d2>, transpose>, scalar_mul>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;
