@@ -11,7 +11,7 @@
 namespace BC {
 namespace NN {
 namespace Structure {
-
+//Taken from BC_Structures
 template<class T>
 class forward_list {
 

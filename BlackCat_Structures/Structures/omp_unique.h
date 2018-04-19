@@ -22,21 +22,14 @@
  */
 //Taken from BC_Structures
 
+#include "BC_Collections.h"
+
 namespace BC {
-namespace NN {
 namespace Structure {
 
-struct default_deleter {
-	template<class T>
-	void operator()(T& t) const {
-		return;
-	}
-};
 
-template<class T, class deleter = default_deleter>
+template<class T>
 struct omp_unique {
-
-	static constexpr deleter destroy = deleter();
 
 	int sz;
 	T* pool;
@@ -53,7 +46,7 @@ struct omp_unique {
 	void resize(int size) {
 		sz = size;
 
-		for_each(destroy);
+		for_each(this->destroy);
 		delete[] pool;
 		pool = new T[size];
 	}
@@ -89,12 +82,11 @@ struct omp_unique {
 	}
 
 	~omp_unique() {
-		for_each(destroy);
+		for_each(this->destroy);
 		delete[] pool;
 	}
 };
 
-}
 }
 }
 

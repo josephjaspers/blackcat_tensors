@@ -11,8 +11,8 @@
 namespace BC {
 namespace Structure {
 
-template<class T>
-class forward_list {
+template<class T, class deleter = default_deleter>
+class forward_list : Collection<T, deleter> {
 
 	struct node {
 
@@ -25,61 +25,133 @@ class forward_list {
 
 
 	node* head = nullptr;
-	node* tail = nullptr;
 	int sz = 0;
+
 public:
 
-	void push_back(T data) {
+	forward_list() = default;
+	forward_list(const forward_list& cpy) {
+		node* ref = cpy.head;
+
+		while (ref) {
+			this->add(cpy.head);
+			ref = ref->next;
+		}
+	}
+	forward_list(forward_list&& cpy) {
+		this->head = cpy.head;
+		this->sz = cpy.sz;
+		cpy.head = nullptr;
+		cpy.sz = 0;
+	}
+	forward_list& operator = (const forward_list& cpy) {
+		this->clear();
+		node* ref = cpy.head;
+
+		while (ref) {
+			this->add(cpy.head);
+			ref = ref->next;
+		}
+		return *this;
+	}
+	forward_list& operator = (forward_list&& cpy) {
+		this->clear();
+		this->head = cpy.head;
+		this->sz = cpy.sz;
+		cpy.head = nullptr;
+		cpy.sz = 0;
+		return *this;
+	}
+
+	bool push(T data) {
 		if (head) {
-			tail->next = new node(data);
-			tail = tail->next;
+			node* h = new node(data, head);
+			head = h;
 		} else {
 			head = new node(data);
-			tail = head;
 		}
 		sz++;
+		return true;
 	}
-	void push(T data) {
-		if (head) {
-			node* new_head = new node(data);
-			new_head->next = head;
-			head = new_head;
-		} else {
-			head = new node(data);
-			tail = head;
+	bool contains(const T& data) const  {
+		node* ref = head;
+		while(ref) {
+			if (ref->data == data)
+				return true;
+			ref = ref->next;
 		}
-		sz++;
 	}
-	bool isEmpty() const {
+	T* get(const T& data) {
+		node* ref = head;
+		while (ref) {
+			if (ref->data == data)
+				return &(ref->data);
+			ref = ref->next;
+		}
+		return nullptr;
+	}
+
+	bool add(T data) override {
+		return push(data);
+	}
+	bool empty() const override {
 		return sz == 0;
 	}
-	int size() const {
-		 return size;
+	int size() const override {
+		 return sz;
 	}
-	void rm_front() {
+	//decapitate
+	void remove_head() {
+		if (!head)
+			return;
+
 		node* h = head;
 		head = head->next;
 		--sz;
 
-		if (sz == 0)
-			tail = nullptr;
-
 		delete h;
 	}
-	T pop_front() {
-		T data = std::move(head->data);
-		rm_front();
-		return std::move(data);
+	T pop() {
+		T data = (head->data);
+		remove_head();
+		return (data);
 	}
 
+	T& first() {
+		return head->data;
+	}
+	//same as first
 	T& front() {
 		return head->data;
 	}
-	const T& front() const {
+	const T& first() const {
 		return head->data;
 	}
+	T& second() {
+		return head->next->data;
+	}
+	const T& second() const {
+		return head->next->data;
+	}
 
-	void clear() {
+	template<class functor>
+	void for_each(functor f) const {
+		node* ref = head;
+		while(ref) {
+			f(ref->data);
+			ref = ref->next;
+		}
+	}
+	template<class functor>
+	void for_each(functor f) {
+		node* ref = head;
+		while(ref) {
+			f(ref->data);
+			ref = ref->next;
+		}
+	}
+
+	void clear() override {
 		node* ref = head;
 		while(ref) {
 			node* del = ref;
@@ -87,7 +159,6 @@ public:
 			delete del;
 		}
 		head = nullptr;
-		tail = nullptr;
 		sz = 0;
 	}
 

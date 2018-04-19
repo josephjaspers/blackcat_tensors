@@ -2,30 +2,45 @@
 #include <vector>
 #include <iostream>
 #include "../Structures/list_comprehension.h"
-#include "../Structures/thread_map.h"
+#include "../Structures/omp_unique.h"
+#include "../Structures/binary_tree.h"
+#include "../Structures/forward_list.h"
+#include "../Structures/hash_map.h"
 #include <pthread.h>
-template<class T>
-using List = std::vector<T>;
-using Str = std::string;
-using BC::Structures::lc;
+
+struct hasher{
+	int operator()(int i)  const {
+		return i % 7;
+	}
+};
+
 int main() {
 
+	BC::Structure::binary_tree<int> tree;
 
-	List<Str> list = { "12", "13", "23", "44",  };
+	tree.add(5);
+	tree.add(4);
+	tree.add(7);
+	tree.add(2);
+	tree.add(10);
+	tree.add(2);
+	tree.print();
 
-	auto l2 = lc(
-			list,									//source
-			[](auto x) { return x.substr(1,2); },	//modifier
-			[](auto x) { return x[0] == '1'; }		//conditional
-	);
-
-
-	for (int i = 0; i < l2.size(); ++i) {
-		std::cout << l2[i] << std::endl;
-	}
+	std::cout << std::endl;
+	tree.remove(4);
+	tree.print();
+	tree.clear();
+	tree.print();
 
 
 
-	std::cout << pthread_self() << std::endl;
 
+	BC::Structure::hash_map<int, int, hasher> hmap;
+	hmap[9] = 4;
+//	hmap[2] = 1;
+
+//	std::cout << hmap[2] << std::endl;
+
+
+	std::cout << " success " << std::endl;
 }
