@@ -222,15 +222,15 @@ test();
 //	BC_EIGEN_BENCHMARK::benchmark2<512,   100>();
 //	BC_EIGEN_BENCHMARK::benchmark2<1024,   100>();
 
-//		BC_EIGEN_BENCHMARK::benchmark3<4,     100000>();
-//		BC_EIGEN_BENCHMARK::benchmark3<8,     100000>();
-//		BC_EIGEN_BENCHMARK::benchmark3<16,    10000>();
-//		BC_EIGEN_BENCHMARK::benchmark3<64,    10000>();
-//		BC_EIGEN_BENCHMARK::benchmark3<128,   1000>();
-//		BC_EIGEN_BENCHMARK::benchmark3<256,   1000>();
-//		BC_EIGEN_BENCHMARK::benchmark3<512,   100>();
-//		BC_EIGEN_BENCHMARK::benchmark3<1024,   100>();
-//
+		BC_EIGEN_BENCHMARK::benchmark3<4,     100000>();
+		BC_EIGEN_BENCHMARK::benchmark3<8,     100000>();
+		BC_EIGEN_BENCHMARK::benchmark3<16,    10000>();
+		BC_EIGEN_BENCHMARK::benchmark3<64,    10000>();
+		BC_EIGEN_BENCHMARK::benchmark3<128,   1000>();
+		BC_EIGEN_BENCHMARK::benchmark3<256,   1000>();
+		BC_EIGEN_BENCHMARK::benchmark3<512,   100>();
+		BC_EIGEN_BENCHMARK::benchmark3<1024,   100>();
+
 //		BC_EIGEN_BENCHMARK::benchmark4<8,     100, 4>();
 //		BC_EIGEN_BENCHMARK::benchmark4<16,    100, 4>();
 //		BC_EIGEN_BENCHMARK::benchmark4<64,    100, 4>();

@@ -50,8 +50,8 @@ struct binary_expression<lv, rv, dotproduct<Mathlib>> : expression_base<binary_e
 	__BCinline__ const auto& operator [](int index) const  { return array_ptr[index]; }
 	__BCinline__ 	   auto& operator [](int index) 	   { return array_ptr[index]; }
 
-	__BCinline__ const auto& operator [](index_array<int[2]> index) const  { return array_ptr[index[0] + index[1] * this->LD_rows()]; }
-	__BCinline__ 	   auto& operator [](index_array<int[2]> index)	   	   { return array_ptr[index[0] + index[1] * this->LD_rows()]; }
+	__BCinline__ const auto& operator ()(int m_, int n_) const  { return array_ptr[m_ + n_ * this->rows()]; }
+	__BCinline__ 	   auto& operator ()(int m_, int n_)	   	{ return array_ptr[m_ + n_ * this->cols()]; }
 
 
 	__BCinline__ const auto innerShape() const { return is; }

@@ -160,7 +160,6 @@ struct Tensor_Operations {
 			math_library::copy(asBase().data(), param.asBase().data(), this->asBase().size());
 		else {
 			copy_func<pDeriv>::foo(asBase().data(), param.asBase().data());
-			std::cout << "CHOOSING DIMENSIONAL COPY" << std::endl;
 		}
 		return static_cast<derived&>(*this);
 	}

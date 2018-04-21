@@ -35,9 +35,9 @@ int main() {
 
 
 
-	BC::Structure::hash_map<int, int, hasher> hmap;
-	hmap[9] = 4;
-//	hmap[2] = 1;
+//	BC::Structure::hash_map<int, int, hasher> hmap;
+//	hmap[9] = 4;
+////	hmap[2] = 1;
 
 //	std::cout << hmap[2] << std::endl;
 
