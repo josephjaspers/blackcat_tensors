@@ -21,7 +21,7 @@
 					<folderInfo id="com.nvidia.cuda.ide.nine_zero.configuration.release.923443752.847124239." name="/" resourcePath="">
 						<toolChain errorParsers="" id="com.nvidia.cuda.ide.toolchain.nine_zero.exe.release.1924265089" name="CUDA Toolkit 9.1" superClass="com.nvidia.cuda.ide.toolchain.nine_zero.exe.release">
 							<targetPlatform archList="all" binaryParser="com.nvidia.cuda.ide.elf;com.nvidia.cuda.ide.macho;com.nvidia.cuda.ide.cubin" id="com.nvidia.cuda.ide.targetPlatform.1145512994" isAbstract="false" name="Debug Platform" osList="linux,macosx" superClass="com.nvidia.cuda.ide.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/BlackCat_Tensors}/Release" errorParsers="org.eclipse.cdt.core.GmakeErrorParser" id="com.nvidia.cuda.ide.builder.1945882457" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CUDA Toolkit 9.1 Builder" superClass="com.nvidia.cuda.ide.builder">
+							<builder buildPath="${workspace_loc:/BlackCat_Tensors}/Release" errorParsers="org.eclipse.cdt.core.GmakeErrorParser" id="com.nvidia.cuda.ide.builder.1945882457" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CUDA Toolkit 9.1 Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.nvidia.cuda.ide.builder">
 								<outputEntries>
 									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Release"/>
 									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Debug"/>
@@ -38,7 +38,8 @@
 									<listOptionValue builtIn="false" value="/home/joseph/Library_Sources/Eigen_Source/"/>
 									<listOptionValue builtIn="false" value="/usr/local/cuda/include"/>
 								</option>
-								<option id="nvcc.compiler.compileroptions.285166584" name="Preprocessor options (-Xcompiler)" superClass="nvcc.compiler.compileroptions" valueType="stringList"/>
+								<option id="nvcc.compiler.compileroptions.285166584" name="Preprocessor options (-Xcompiler)" superClass="nvcc.compiler.compileroptions"/>
+								<option id="nvcc.compiler.cpp11option.835938660" superClass="nvcc.compiler.cpp11option" value="false" valueType="boolean"/>
 								<inputType id="nvcc.compiler.input.cu.239005022" superClass="nvcc.compiler.input.cu"/>
 								<inputType id="nvcc.compiler.input.cpp.2118431259" superClass="nvcc.compiler.input.cpp"/>
 								<inputType id="nvcc.compiler.input.c.66856890" superClass="nvcc.compiler.input.c"/>
@@ -80,7 +81,7 @@
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="com.nvidia.cuda.ide.build.project.ICudaProjectConfiguration">
-				<executable devicelink="true">
+				<executable devicelink="false">
 					<sass major="5" minor="2"/>
 					<ptx major="5" minor="2"/>
 				</executable>

@@ -90,7 +90,8 @@ public:
 	template<class U>
 	TensorInitializer(const derived_alt<U>&  tensor)
 		: black_cat_array(tensor.innerShape()) {
-		Mathlib::copy(this->asBase().data(), tensor.data(), this->asBase().size());
+//		Mathlib::copy(this->asBase().data(), tensor.data(), this->asBase().size());
+		this->asBase() = tensor; //switch to using operator= to ensure dimensional copies
 	}
 
 	~TensorInitializer() {

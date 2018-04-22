@@ -9,8 +9,8 @@ using BC::Matrix;
 using BC::Scalar;
 using BC::Cube;
 
-using ml = BC::CPU;
-//using ml = BC::GPU;
+//using ml = BC::CPU;
+using ml = BC::GPU;
 
 using vec = Vector<float, ml>;
 using mat = Matrix<float, ml>;
@@ -144,57 +144,40 @@ auto test() {
 	readM.print();
 	is.close();
 
+	std::cout << readM.data()(1,1) << std::endl;
+
+	std::cout << " general test fin " << std::endl;
+
 }
 #include "Benchmarks/BenchmarkEigen.h"
 
-struct array {
-	int x,y,z;
-//	array(int,int,int) {
-//		x = 1;
-//		y = 2;
-//		z = 3;
-//	};
-
-	template<class... integers>
-	array(integers... ints) {
-		x = 1;
-		y = 2;
-		z = 3;
-	}
-};
-
-struct test_ {
-	int operator [] (array a) {
-			return 0;
-	}
-};
-
-
 int main() {
 
-	auto ob = test_();
-	ob[{1,2,3}];
-
-
 test();
-//
-//mat krnl(2,2);
-//krnl.zero();
-//krnl[0][0] = 1;
-//krnl[1][1] = 1;
-//
-//mat img(8,8); img.zero();
-//for (int m = 0; m < img.rows(); ++m) {
-//	for (int n = 0; n < img.cols(); ++n)
-//		if (m ==n)
-//			img[m][n] = 1;
-//}
-//
-//krnl.print();
-//img.print();
-//
-////mat m = krnl.x_corr<2>(krnl.x_corr<2>(krnl.x_corr<2>(img)));
-//
+std::cout << " post test" << std::endl;
+
+mat krnl(2,2);
+krnl.zero();
+krnl[0][0] = 1;
+krnl[1][1] = 1;
+
+mat img(5,5); img.zero();
+for (int m = 0; m < img.rows(); ++m) {
+	for (int n = 0; n < img.cols(); ++n)
+		if (m ==n)
+			img[m][n] = 1;
+}
+
+krnl.print();
+img.print();
+
+mat m = krnl.x_corr<2>(krnl.x_corr<2>(krnl.x_corr<2>(img)));
+m.print();
+
+
+mat m2 = krnl.x_corr_padded(img);
+m2.print();
+
 //auto cor = krnl.x_corr<2>(img);
 //auto cor2 = krnl.x_corr<2>(cor);
 //mat m = cor2;
@@ -222,14 +205,14 @@ test();
 //	BC_EIGEN_BENCHMARK::benchmark2<512,   100>();
 //	BC_EIGEN_BENCHMARK::benchmark2<1024,   100>();
 
-		BC_EIGEN_BENCHMARK::benchmark3<4,     100000>();
-		BC_EIGEN_BENCHMARK::benchmark3<8,     100000>();
-		BC_EIGEN_BENCHMARK::benchmark3<16,    10000>();
-		BC_EIGEN_BENCHMARK::benchmark3<64,    10000>();
-		BC_EIGEN_BENCHMARK::benchmark3<128,   1000>();
-		BC_EIGEN_BENCHMARK::benchmark3<256,   1000>();
-		BC_EIGEN_BENCHMARK::benchmark3<512,   100>();
-		BC_EIGEN_BENCHMARK::benchmark3<1024,   100>();
+//		BC_EIGEN_BENCHMARK::benchmark3<4,     100000>();
+//		BC_EIGEN_BENCHMARK::benchmark3<8,     100000>();
+//		BC_EIGEN_BENCHMARK::benchmark3<16,    10000>();
+//		BC_EIGEN_BENCHMARK::benchmark3<64,    10000>();
+//		BC_EIGEN_BENCHMARK::benchmark3<128,   1000>();
+//		BC_EIGEN_BENCHMARK::benchmark3<256,   1000>();
+//		BC_EIGEN_BENCHMARK::benchmark3<512,   100>();
+//		BC_EIGEN_BENCHMARK::benchmark3<1024,   100>();
 
 //		BC_EIGEN_BENCHMARK::benchmark4<8,     100, 4>();
 //		BC_EIGEN_BENCHMARK::benchmark4<16,    100, 4>();

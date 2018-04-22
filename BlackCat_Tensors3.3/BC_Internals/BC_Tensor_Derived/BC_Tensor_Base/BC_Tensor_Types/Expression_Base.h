@@ -44,6 +44,11 @@ public:
 	__BCinline__ const auto IS() const { return base().innerShape(); }
 	__BCinline__ const auto OS() const { return base().outerShape(); }
 
+	template<class... integers>
+	__BCinline__ const auto operator()(integers... ints) const { return base()[scal_index(ints...)]; }
+	template<class... integers>
+	__BCinline__ auto operator()(integers... ints) { return base()[scal_index(ints...)]; }
+
 	__BCinline__ int dims() const { return DIMS(); }
 	__BCinline__ int size() const { return DIMS() > 0 ? OS()[LAST()] : 1;    }
 	__BCinline__ int rows() const { return DIMS() > 0 ? IS()[0] : 1; }
@@ -70,6 +75,26 @@ public:
 		std::cout << std::endl;
 	}
 
+
+	//---------------------------------------------------UTILITY/IMPLEMENTATION METHODS------------------------------------------------------------//
+
+	//base case
+	template<int dim = 0> __BCinline__
+	int scal_index(int curr) const {
+		if (dim == 0)
+			return curr;
+		else
+			return curr * this->dimension(dim - 1);
+	}
+
+	template<int dim = 0, class ... integers> __BCinline__
+	int scal_index(int curr, integers ... ints) const {
+		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
+		if (dim == 0)
+			return curr + scal_index<dim + 1>(ints...);
+		else
+			return curr * this->dimension(dim - 1) + scal_index<dim + 1>(ints...);
+	}
 
 	//---------------------------------------------------METHODS THAT MAY NEED TO BE SHADOWED------------------------------------------------------------//
 	void destroy() {}

@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <initializer_list>
+#include <iostream>
 
 namespace BC {
 __BCinline__ static constexpr int max(int x) { return x;}

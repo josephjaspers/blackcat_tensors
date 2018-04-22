@@ -72,6 +72,29 @@ public:
 		gpu_impl::copy<<<blocks(sz),threads()>>>(t, u, sz);
 		cudaDeviceSynchronize();
 	}
+
+
+	template<int d>
+	struct dimension {
+
+		struct n1 { template<class T, class F> static void copy(T to, F from) {	gpu_impl::copy<<<blocks(to.size()),threads()>>>(to, from, to.size()); } };
+		struct n2 { template<class T, class F> static void copy(T to, F from) {	gpu_impl::copy2d<<<blocks(to.size()),threads()>>>(to, from); } };
+		struct n3 { template<class T, class F> static void copy(T to, F from) {	gpu_impl::copy3d<<<blocks(to.size()),threads()>>>(to, from); } };
+		struct n4 { template<class T, class F> static void copy(T to, F from) {	gpu_impl::copy4d<<<blocks(to.size()),threads()>>>(to, from); } };
+		struct n5 { template<class T, class F> static void copy(T to, F from) {	gpu_impl::copy5d<<<blocks(to.size()),threads()>>>(to, from); } };
+
+		using run = std::conditional_t<(d <= 1), n1,
+						std::conditional_t< d ==2, n2,
+							std::conditional_t< d == 3, n3,
+								std::conditional_t< d == 4, n4, n5>>>>;
+
+		template<class T, class F>
+		static void copy(T to, F from) {
+			run::copy(to, from);
+			cudaDeviceSynchronize();
+		}
+	};
+
 	template<class T, class U>
 	static void copy1d(T t, const U u) {
 		gpu_impl::copy<<<blocks(t.size()),threads()>>>(t, u, t.size());

@@ -145,24 +145,32 @@ struct Tensor_Operations {
 
 	template<class pDeriv>
 	using copy_func =			//this defaults to copy1d, as this library all tensors can utilized 1d copying, though it maybe slower
-			std::conditional_t<_functor<pDeriv>::CONTINUOUS() == 0 && functor_type::CONTINUOUS() == 0, copy1d,
-				std::conditional_t<_functor<pDeriv>::CONTINUOUS() == 2 && functor_type::CONTINUOUS() == 2, copy2d,
-					std::conditional_t<_functor<pDeriv>::CONTINUOUS() == 3 && functor_type::CONTINUOUS() == 3, copy3d,
-						std::conditional_t<_functor<pDeriv>::CONTINUOUS() == 4 && functor_type::CONTINUOUS() == 4, copy4d, copy1d>
+			std::conditional_t<_functor<pDeriv>::CONTINUOUS() == 0, copy1d,
+				std::conditional_t<_functor<pDeriv>::CONTINUOUS() == 2, copy2d,
+					std::conditional_t<_functor<pDeriv>::CONTINUOUS() == 3, copy3d,
+						std::conditional_t<_functor<pDeriv>::CONTINUOUS() == 4, copy4d, void>
 					>
 				>
 			>;
 
 	template<class pDeriv>
-	derived& operator =(const Tensor_Operations<pDeriv>& param) {
+	std::enable_if_t<(_functor<pDeriv>::CONTINUOUS() != 0 || _functor<derived>::CONTINUOUS() != 0), derived&>
+	operator =(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
-		if (_functor<pDeriv>::CONTINUOUS() == 0 && _functor<derived>::CONTINUOUS() == 0)
-			math_library::copy(asBase().data(), param.asBase().data(), this->asBase().size());
-		else {
-			copy_func<pDeriv>::foo(asBase().data(), param.asBase().data());
-		}
+		static constexpr int iter_dim = max(_functor<pDeriv>::CONTINUOUS(), _functor<derived>::CONTINUOUS());
+		math_library::template dimension<iter_dim>::copy(asBase().data(), param.asBase().data());
+
 		return static_cast<derived&>(*this);
 	}
+
+	template<class pDeriv>
+	std::enable_if_t<(_functor<pDeriv>::CONTINUOUS() == 0 && _functor<derived>::CONTINUOUS() == 0), derived&>
+		operator =(const Tensor_Operations<pDeriv>& param) {
+		assert_same_size(param);
+		math_library::copy(asBase().data(), param.asBase().data(), this->asBase().size());
+		return static_cast<derived&>(*this);
+	}
+
 
 	template<class pDeriv>
 	derived& operator +=(const Tensor_Operations<pDeriv>& param) {
@@ -259,7 +267,7 @@ struct Tensor_Operations {
 			assert_same_size(rv);
 			return
 						typename base<0>::template type<
-							binary_expression_correlation<functor_type, _functor<deriv>, 0>, math_library>
+							binary_expression<functor_type, _functor<deriv>, _x_corr<1>>, math_library>
 			(asBase().data(), rv.asBase().data());
 		}
 
@@ -268,18 +276,19 @@ struct Tensor_Operations {
 
 		return
 				typename base<mv>::template type<
-					binary_expression_correlation<functor_type,  _functor<deriv>, mv>, math_library
+					binary_expression<functor_type,  _functor<deriv>, _x_corr<mv>>, math_library
 				>(asBase().data(), rv.asBase().data());
 	}
-
 	template<int mv = 2, class deriv>
 	auto x_corr_padded(const Tensor_Operations<deriv>& rv) {
 
 		return
 				typename base<mv>::template type<
-				binary_expression_correlation_padded<functor_type, _functor<deriv>, mv>, math_library>
-					(asBase().data(), rv.asBase().data());
+					binary_expression<functor_type,  _functor<deriv>, _x_corr_padded<mv>>, math_library
+				>(asBase().data(), rv.asBase().data());
 	}
+
+
 	template<int search_space = 3>
 	auto max_pooling() {
 		return expr_sub<derived, unary_expression_maxpooling<functor_type, search_space>, math_library>(asBase().data());

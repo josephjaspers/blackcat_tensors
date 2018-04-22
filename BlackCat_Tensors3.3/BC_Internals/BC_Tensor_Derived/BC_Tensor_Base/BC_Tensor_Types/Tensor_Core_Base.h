@@ -48,15 +48,10 @@ public:
 	operator 	   auto()       { return base().getIterator(); }
 	operator const auto() const { return base().getIterator(); }
 
-	__BCinline__ 	   auto& operator [] (int index) 	   { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[index]; };
-	__BCinline__ const auto& operator [] (int index) const { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[index]; };
-
-	__BCinline__ int scal_index(int x)   const { return x; }
-	template<class... integers> __BCinline__ int scal_index(int x, integers... ints) const { return this->LD_dimension(sizeof...(ints) - 1) * x + scal_index(ints...); }
-
-	template<class... integers> __BCinline__ 	   auto& operator () (integers... ints) 	  { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[scal_index(ints...)]; }
-	template<class... integers> __BCinline__ const auto& operator () (integers... ints) const { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[scal_index(ints...)]; }
-
+	__BCinline__ 	   auto& operator [] (int index) 	   { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[index]; }
+	__BCinline__ const auto& operator [] (int index) const { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[index]; }
+	template<class... integers> __BCinline__ 	   auto& operator () (integers... ints) 	  { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[this->scal_index(ints...)]; }
+	template<class... integers> __BCinline__ const auto& operator () (integers... ints) const { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[this->scal_index(ints...)]; }
 
 	__BCinline__ const auto innerShape() const { return base().innerShape(); }
 	__BCinline__ const auto outerShape() const { return base().outerShape(); }
@@ -71,17 +66,20 @@ public:
 	__BCinline__ const auto col(int i) const { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
 	__BCinline__	   auto col(int i) 	     { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
 
-	template<class ... integers>
+	template<class ... integers> __BCinline__
 	const auto reshape(integers ... ints) const {
 		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
 		return Tensor_Reshape<const self, sizeof...(integers)>(base(), ints...);
 	}
 
-	template<class... integers>
+	template<class... integers> __BCinline__
 	auto reshape(integers... ints) {
 		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
 		return Tensor_Reshape< self, sizeof...(integers)>(base(), ints...);
 	}
+
+
+	//------------------------------------------Implementation Details---------------------------------------//
 
 	__BCinline__
 	int slice_index(int i) const {
@@ -92,6 +90,8 @@ public:
 		else
 			return base().outerShape()[LAST() - 1] * i;
 	}
+
+
 };
 
 }
