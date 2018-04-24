@@ -91,48 +91,48 @@ public:
 	 	   functor_type& _data()		  { return this->black_cat_array; }
 
 private:
-	const auto slice(int i) const { return this->black_cat_array.slice(i); }
-		  auto slice(int i) 	  { return this->black_cat_array.slice(i); }
+	const auto slice_impl(int i) const { return this->black_cat_array.slice(i); }
+		  auto slice_impl(int i) 	  { return this->black_cat_array.slice(i); }
 
-	const auto scalar(int i) const { return this->black_cat_array.scalar(i); }
-		  auto scalar(int i)	   { return this->black_cat_array.scalar(i); }
+	const auto scalar_impl(int i) const { return this->black_cat_array.scalar(i); }
+		  auto scalar_impl(int i)	   { return this->black_cat_array.scalar(i); }
 
-	const auto row_(int i) const { return this->black_cat_array.row(i); }
-		  auto row_(int i)	     { return this->black_cat_array.row(i); }
+	const auto row_impl(int i) const { return this->black_cat_array.row(i); }
+		  auto row_impl(int i)	     { return this->black_cat_array.row(i); }
 public:
-		  auto operator [] (int i) 		 { return getSlice(i); }
-	const auto operator [] (int i) const { return getSlice(i); }
+	const auto operator [] (int i) const { return slice(i); }
+		  auto operator [] (int i) 		 { return slice(i); }
 
-	const auto getScalar(int i) const { return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar(i)); }
-		  auto getScalar(int i) 	  { return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar(i)); }
+	const auto scalar(int i) const { return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar_impl(i)); }
+		  auto scalar(int i) 	   { return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar_impl(i)); }
 
-	const auto getSlice(int i) const {
+	const auto slice(int i) const {
 		static_assert(derived::DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");
-		return typename base<DIMS>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
-		  auto getSlice(int i) 		 {
-				static_assert(derived::DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");
+		return typename base<DIMS>::template slice<decltype(slice_impl(0)), Mathlib>(slice_impl(i)); }
 
-			  return typename base<DIMS>::template slice<decltype(slice(0)), Mathlib>(slice(i)); }
+		auto slice(int i) 		  {
+		static_assert(derived::DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");
+		return typename base<DIMS>::template slice<decltype(slice_impl(0)), Mathlib>(slice_impl(i)); }
 
 	const auto row(int i) const {
 		static_assert(DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
-		return typename base<1>::template type<decltype(row_(0)), Mathlib>(row_(i));
+		return typename base<1>::template type<decltype(row_impl(0)), Mathlib>(row_impl(i));
 	}
-	auto row(int i) {
+		  auto row(int i) 		{
 		static_assert(DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
-		return typename base<1>::template type<decltype(row_(0)), Mathlib>(row_(i));
+		return typename base<1>::template type<decltype(row_impl(0)), Mathlib>(row_impl(i));
 	}
 	const auto col(int i) const {
 		static_assert(DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return (*this)[i];
 	}
-	auto col(int i) {
+		 auto col(int i) {
 		static_assert(DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return (*this)[i];
 	}
 
-	const auto operator() (int i) const { return getScalar(i); }
-		  auto operator() (int i) 	    { return getScalar(i); }
+	const auto operator() (int i) const { return scalar(i); }
+		  auto operator() (int i) 	    { return scalar(i); }
 
 	const auto& operator() () const { return *this; }
 		  auto& operator() () 	    { return *this; }
