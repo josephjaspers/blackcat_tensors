@@ -137,14 +137,14 @@ auto test() {
 
 
 	std::cout << " trying to read" << std::endl;
-	std::ifstream is("save.txt");
-
-	mat readM(d.size());
-	readM.read(is);
-	readM.print();
-	is.close();
-
-	std::cout << readM.data()(1,1) << std::endl;
+//	std::ifstream is("save.txt");
+//
+//	mat readM(d.size());
+//	readM.read(is);
+//	readM.print();
+//	is.close();
+//
+//	std::cout << readM.data()(1,1) << std::endl;
 
 	std::cout << " general test fin " << std::endl;
 
@@ -171,12 +171,16 @@ for (int m = 0; m < img.rows(); ++m) {
 krnl.print();
 img.print();
 
-mat m = krnl.x_corr<2>(krnl.x_corr<2>(krnl.x_corr<2>(img)));
+mat m = krnl.x_corr<2,BC::inner>(krnl.x_corr<2,BC::inner>(img));
 m.print();
 
+//m[0].print();
 
-mat m2 = krnl.x_corr_padded(img);
-m2.print();
+//mat m2 = krnl.x_corr_padded<2>(img);
+//m2.print();
+
+//img.print();
+//m2.print();
 
 //auto cor = krnl.x_corr<2>(img);
 //auto cor2 = krnl.x_corr<2>(cor);

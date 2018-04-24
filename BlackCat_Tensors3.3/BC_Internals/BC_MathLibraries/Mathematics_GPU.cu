@@ -43,7 +43,7 @@ public:
 	}
 
 	template<typename T>
-	static T*& initialize(T*& t, int sz) {
+	static T*& initialize(T*& t, int sz=1) {
 		cudaMalloc((void**) &t, sizeof(T) * sz);
 		return t;
 	}
@@ -61,6 +61,14 @@ public:
 		cudaDeviceSynchronize();
 	}
 
+	template<class T>
+	static T* structPtr(const T& data) {
+		T* gpu_data;
+		initialize(gpu_data);
+		HostToDevice(gpu_data, &data, 1);
+		return gpu_data;
+	}
+
 	template<typename T>
 	static T*& unified_initialize(T*& t, int sz) {
 		cudaMallocManaged((void**) &t, sizeof(T) * sz);
@@ -74,14 +82,16 @@ public:
 	}
 
 
+
+
 	template<int d>
 	struct dimension {
 
-		struct n1 { template<class T, class F> static void copy(T to, F from) {	gpu_impl::copy<<<blocks(to.size()),threads()>>>(to, from, to.size()); } };
-		struct n2 { template<class T, class F> static void copy(T to, F from) {	gpu_impl::copy2d<<<blocks(to.size()),threads()>>>(to, from); } };
-		struct n3 { template<class T, class F> static void copy(T to, F from) {	gpu_impl::copy3d<<<blocks(to.size()),threads()>>>(to, from); } };
-		struct n4 { template<class T, class F> static void copy(T to, F from) {	gpu_impl::copy4d<<<blocks(to.size()),threads()>>>(to, from); } };
-		struct n5 { template<class T, class F> static void copy(T to, F from) {	gpu_impl::copy5d<<<blocks(to.size()),threads()>>>(to, from); } };
+		struct n1 { template<class T, class F> static void copy(T to, const F from, int sz) {	gpu_impl::copy<<<blocks(sz),threads()>>>(to, from, sz); } };
+		struct n2 { template<class T, class F> static void copy(T to, const F from, int sz) {	gpu_impl::copy2d<<<blocks(sz),threads()>>>(to, from); } };
+		struct n3 { template<class T, class F> static void copy(T to, const F from, int sz) {	gpu_impl::copy3d<<<blocks(sz),threads()>>>(to, from); } };
+		struct n4 { template<class T, class F> static void copy(T to, const F from, int sz) {	gpu_impl::copy4d<<<blocks(sz),threads()>>>(to, from); } };
+		struct n5 { template<class T, class F> static void copy(T to, const F from, int sz) {	gpu_impl::copy5d<<<blocks(sz),threads()>>>(to, from); } };
 
 		using run = std::conditional_t<(d <= 1), n1,
 						std::conditional_t< d ==2, n2,
@@ -89,31 +99,31 @@ public:
 								std::conditional_t< d == 4, n4, n5>>>>;
 
 		template<class T, class F>
-		static void copy(T to, F from) {
-			run::copy(to, from);
+		static void copy(T to, const F from) {
+			run::copy(to,from, to.size());
+//			T* to_gpu = structPtr(to);
+//			F* from_gpu = structPtr(from);
+//
+//			run::copy(*to_gpu, *from_gpu, to.size());
+			cudaDeviceSynchronize();
+//
+//			cudaFree(to_gpu);
+//			cudaFree(from_gpu);
+		}
+
+		template<class T, template<class...> class F, class... set>
+		static void copy(T to, F<set...> from) {
+			run::copy(to,from, to.size());
+			cudaDeviceSynchronize();
+		}
+		template<template<class...> class T, template<class...> class F, class... ts, class... fs>
+		static void copy(T<ts...> to, F<fs...> from) {
+			run::copy(to,from, to.size());
 			cudaDeviceSynchronize();
 		}
 	};
 
-	template<class T, class U>
-	static void copy1d(T t, const U u) {
-		gpu_impl::copy<<<blocks(t.size()),threads()>>>(t, u, t.size());
-		cudaDeviceSynchronize();
-	}
-	template<typename T, typename J> __attribute__((always_inline)) inline static void copy2d(T t, const J j) {
-		gpu_impl::copy2d<<<blocks(t.size()),threads()>>>(t, j);
-		cudaDeviceSynchronize();
-	}
-	template<typename T, typename J> __attribute__((always_inline)) inline static void copy3d(T t, const J j) {
-		gpu_impl::copy3d<<<blocks(t.size()),threads()>>>(t, j);
-		cudaDeviceSynchronize();
-	}
-	template<typename T, typename J> __attribute__((always_inline)) inline static void copy4d(T t, const J j) {
-		gpu_impl::copy4d<<<blocks(t.size()),threads()>>>(t, j);
-		cudaDeviceSynchronize();
-	}
-
-
+// THIS IS MANDATORY WITH CUDA COMPILATION FOR 9.1 --- THIS IS A BUG IN THE NVCC
 	template<class T, template<class...> class U, class... set>
 	static void copy(T t, U<set...> u, int sz) {
 		gpu_impl::copy<<<blocks(sz),threads()>>>(t, u, sz);
@@ -124,6 +134,8 @@ public:
 		gpu_impl::copy<<<blocks(sz),threads()>>>(t, u, sz);
 		cudaDeviceSynchronize();
 	}
+//END OF MANDATORY SPECIALIZATIONS
+
 
 	template<class T>
 	static void eval(T t, int sz) {
@@ -175,9 +187,6 @@ public:
 
 	// Multiply the arrays A and B on GPU and save the result in C
 	// C(m,n) = A(m,k) * B(k,n)
-//A ld = m
-//B ld = k
-//C ld = m
 
 	static void MatrixMul(bool transA, bool transB, const float *A, const float *B, float *C, const int m, const int n, const int k, const float* scalarA = nullptr, const float* scalarB = nullptr, int lda = 0, int ldb = 0, int ldc = 0) {
 		auto TRANS_A = transA ? CUBLAS_OP_T : CUBLAS_OP_N;

@@ -137,22 +137,7 @@ struct Tensor_Operations {
 	}
 	//--------------------------------------assignment operators-----------------------------------------------//
 
-	//dimensional copy (this is more optimized for certain functions)
-	struct copy1d { template<class... params> static void foo(params&... p) { math_library::copy1d(p...); } };
-	struct copy2d { template<class... params> static void foo(params&... p) { math_library::copy2d(p...); } };
-	struct copy3d { template<class... params> static void foo(params&... p) { math_library::copy3d(p...); } };
-	struct copy4d { template<class... params> static void foo(params&... p) { math_library::copy4d(p...); } };
-
-	template<class pDeriv>
-	using copy_func =			//this defaults to copy1d, as this library all tensors can utilized 1d copying, though it maybe slower
-			std::conditional_t<_functor<pDeriv>::CONTINUOUS() == 0, copy1d,
-				std::conditional_t<_functor<pDeriv>::CONTINUOUS() == 2, copy2d,
-					std::conditional_t<_functor<pDeriv>::CONTINUOUS() == 3, copy3d,
-						std::conditional_t<_functor<pDeriv>::CONTINUOUS() == 4, copy4d, void>
-					>
-				>
-			>;
-
+	//non continuous copy
 	template<class pDeriv>
 	std::enable_if_t<(_functor<pDeriv>::CONTINUOUS() != 0 || _functor<derived>::CONTINUOUS() != 0), derived&>
 	operator =(const Tensor_Operations<pDeriv>& param) {
@@ -162,7 +147,7 @@ struct Tensor_Operations {
 
 		return static_cast<derived&>(*this);
 	}
-
+	//continuous copy
 	template<class pDeriv>
 	std::enable_if_t<(_functor<pDeriv>::CONTINUOUS() == 0 && _functor<derived>::CONTINUOUS() == 0), derived&>
 		operator =(const Tensor_Operations<pDeriv>& param) {
@@ -267,26 +252,26 @@ struct Tensor_Operations {
 			assert_same_size(rv);
 			return
 						typename base<0>::template type<
-							binary_expression<functor_type, _functor<deriv>, _x_corr<1>>, math_library>
+							binary_expression<functor_type, _functor<deriv>, _x_corr<1, inner>>, math_library>
 			(asBase().data(), rv.asBase().data());
 		}
 
-	template<int mv = 2, class deriv>
+	template<int mv, class type = inner, class deriv>
 	auto x_corr(const Tensor_Operations<deriv>& rv) {
 
-		return
-				typename base<mv>::template type<
-					binary_expression<functor_type,  _functor<deriv>, _x_corr<mv>>, math_library
-				>(asBase().data(), rv.asBase().data());
+		return typename base<mv>::template type<binary_expression<functor_type, _functor<deriv>, _x_corr<mv,type>>, math_library>(asBase().data(), rv.asBase().data());
 	}
-	template<int mv = 2, class deriv>
-	auto x_corr_padded(const Tensor_Operations<deriv>& rv) {
 
-		return
-				typename base<mv>::template type<
-					binary_expression<functor_type,  _functor<deriv>, _x_corr_padded<mv>>, math_library
-				>(asBase().data(), rv.asBase().data());
-	}
+//	template<class deriv>
+//	auto x_corr2(const Tensor_Operations<deriv>& rv) {
+//
+//		return typename base<2>::template type<binary_expression<functor_type, _functor<deriv>, _x_corr2>, math_library>(asBase().data(), rv.asBase().data());
+//	}
+//	template<int mv, class deriv>
+//	auto x_corr_padded(const Tensor_Operations<deriv>& rv) {
+//
+//		return typename base<mv>::template type<binary_expression<functor_type, _functor<deriv>, _x_corr<mv,padded>>, math_library>(asBase().data(), rv.asBase().data());
+//	}
 
 
 	template<int search_space = 3>
