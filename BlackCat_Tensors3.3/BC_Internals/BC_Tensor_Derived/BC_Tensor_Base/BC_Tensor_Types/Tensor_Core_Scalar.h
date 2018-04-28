@@ -12,6 +12,10 @@
 
 namespace BC {
 
+/*
+ * Represents a single_scalar value from a tensor
+ */
+
 template<class PARENT>
 struct Tensor_Scalar : Tensor_Core_Base<Tensor_Scalar<PARENT>, 0> {
 

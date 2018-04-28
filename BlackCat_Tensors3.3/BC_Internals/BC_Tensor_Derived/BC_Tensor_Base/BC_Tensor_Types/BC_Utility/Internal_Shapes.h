@@ -39,6 +39,9 @@ __BCinline__ static constexpr int max(int x, integers... ints) { return x > max 
 		__BCinline__ T& operator [] (int i) {
 			return (&dim)[-i];
 		}
+		__BCinline__ static constexpr int length() {
+			return size;
+		}
 	};
 
 	template<class T>

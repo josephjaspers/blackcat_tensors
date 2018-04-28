@@ -174,6 +174,12 @@ img.print();
 mat m = krnl.x_corr<2,BC::inner>(krnl.x_corr<2,BC::inner>(img));
 m.print();
 
+m.reshape(9).reshape(3,3).print();
+m.reshape(9) += m.reshape(9);
+m.print();
+m[0].reshape(1,1,3).print();
+m.reshape(3,1,3)[0].print();
+
 //m[0].print();
 
 //mat m2 = krnl.x_corr_padded<2>(img);

@@ -89,7 +89,8 @@ public:
 
 	template<int dim = 0, class ... integers> __BCinline__
 	int scal_index(int curr, integers ... ints) const {
-		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
+		static constexpr bool int_sequence = MTF::is_integer_sequence<integers...>;
+		static_assert(int_sequence, "MUST BE INTEGER LIST");
 		if (dim == 0)
 			return curr + scal_index<dim + 1>(ints...);
 		else

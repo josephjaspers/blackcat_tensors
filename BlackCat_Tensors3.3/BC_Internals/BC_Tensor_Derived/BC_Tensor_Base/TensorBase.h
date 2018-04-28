@@ -155,7 +155,8 @@ public:
 	template<class... integers>
 	auto reshape(integers... ints) {
 		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
-		using type = typename base<sizeof...(integers)>::template type<Tensor_Reshape<functor_type, sizeof...(integers)>, Mathlib>;
+		using internal = decltype(this->black_cat_array.reshape(ints...));
+		using type = typename base<sizeof...(integers)>::template type<internal, Mathlib>;
 		return type(this->black_cat_array.reshape(ints...));
 
 	}

@@ -16,7 +16,7 @@ template<bool cond, class a, class b> using ifte = typename std::conditional<con
 template<class> class Tensor_Core;
 template<class> class Tensor_Slice;
 template<class> class Tensor_Scalar;
-template<class, int> class Tensor_Reshape;
+template<class> class Tensor_Reshape;
 template<class,class> class DISABLED;
 template<class,class> class Scalar;
 template<class,class> class Vector;
@@ -29,7 +29,7 @@ class BC_Type;
 template<class T> struct isCore { static constexpr bool conditional = MTF::isPrimitive<T>::conditional; };
 template<template<class> class T, class U> struct isCore<T<U>>
 { static constexpr bool conditional = MTF::isOneOf<T<U>,Tensor_Core<U>, Tensor_Slice<U>, Tensor_Scalar<U>,
-	Tensor_Reshape<U,0>,Tensor_Reshape<U,1>,Tensor_Reshape<U,2>,Tensor_Reshape<U,3>,Tensor_Reshape<U,4>,Tensor_Reshape<U,5>>::conditional; };
+	Tensor_Reshape<U>>::conditional; };
 
 template<class T> struct isPrimaryCore { static constexpr bool conditional = MTF::isPrimitive<T>::conditional; };
 template<template<class> class T, class U> struct isPrimaryCore<T<U>>
@@ -48,12 +48,17 @@ template<> struct base<5> { template<class t, class m> using type = Tensor5<t, m
 template<int x, class a, class b> using rank2class = typename base<x>::template type<a,b>;
 
 template<class> struct ranker;
-template<class a, class b> struct ranker<Scalar<a,b>> { static constexpr int value = 0; };
-template<class a, class b> struct ranker<Vector<a,b>> { static constexpr int value = 1; };
-template<class a, class b> struct ranker<Matrix<a,b>> { static constexpr int value = 2; };
-template<class a, class b> struct ranker<Cube<a,b>>   { static constexpr int value = 3; };
-template<class a, class b> struct ranker<Tensor4<a,b>>   { static constexpr int value = 4; };
-template<class a, class b> struct ranker<Tensor5<a,b>>   { static constexpr int value = 5; };
+template<class a, class b> struct ranker<Scalar<a,b>> { static constexpr int value = 0; using ml = b;};
+template<class a, class b> struct ranker<Vector<a,b>> { static constexpr int value = 1; using ml = b;};
+template<class a, class b> struct ranker<Matrix<a,b>> { static constexpr int value = 2; using ml = b;};
+template<class a, class b> struct ranker<Cube<a,b>>   { static constexpr int value = 3; using ml = b;};
+template<class a, class b> struct ranker<Tensor4<a,b>>   { static constexpr int value = 4; using ml = b;};
+template<class a, class b> struct ranker<Tensor5<a,b>>   { static constexpr int value = 5; using ml = b;};
+//
+//template<template<class...> class Core, class tensor, class... params> struct ranker<Core<tensor, params...>> {
+//	static constexpr int value = ranker<tensor>::value;
+//};
+
 template<class T> static constexpr int class2rank = ranker<T>::value;
 
 template<class> struct isTensor {static constexpr bool conditional = false; };
@@ -63,14 +68,17 @@ template<class a, class b> struct isTensor<Matrix<a,b>> { static constexpr bool 
 template<class a, class b> struct isTensor<Cube<a,b>>   { static constexpr bool conditional = true; };
 template<class a, class b> struct isTensor<Tensor4<a,b>>   { static constexpr bool conditional = true; };
 template<class a, class b> struct isTensor<Tensor5<a,b>>   { static constexpr bool conditional = true; };
+template<class T> static constexpr bool isTensor_b = isTensor<T>::conditional;
 
 template<class> struct determine_functor;
 template<class> struct determine_evaluation;
 template<class> struct determine_scalar;
 template<class> struct determine_iterator;
+template<class> struct determine_mathlibrary;
+
 
 template<class T> using _scalar = typename determine_scalar<T>::type;
-template<class T> using _mathlib = typename MTF::tail<T>;
+template<class T> using _mathlib = typename determine_mathlibrary<T>::type;
 template<class T> using _ranker  = typename ranker<T>::type;
 template<class T> using _functor = typename determine_functor<T>::type;
 template<class T> using _evaluation = typename determine_evaluation<T>::type;
@@ -133,6 +141,11 @@ struct determine_priority<T, decltype(T::PRIORITY())> {
 
 template<class T>
 static constexpr int _priority = determine_priority<T>::value;
+///DETERMINE_MATHLIB
+template<class T>
+struct determine_mathlibrary {
+	using type = std::conditional_t<isTensor_b<T>, MTF::tail<T>, determine_mathlibrary<MTF::head<T>>>;
+};
 
 }
 

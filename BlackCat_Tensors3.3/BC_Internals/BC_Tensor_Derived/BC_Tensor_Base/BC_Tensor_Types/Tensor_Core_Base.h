@@ -16,16 +16,16 @@ namespace BC {
  * Tensor_Core_Interface is a common interface amongst all tensor_core subclasses,
  */
 
-template<class, int> class Tensor_Reshape;
+template<class> class Tensor_Reshape;
 template<class> class Tensor_Slice;
 template<class> class Tensor_Scalar;
 template<class> class Tensor_Row;
 
 template<class derived, int DIMENSION,
-template<class,int> class 	_Tensor_Reshape = Tensor_Reshape,
-template<class> 	class 	_Tensor_Slice 	= Tensor_Slice,
-template<class> 	class 	_Tensor_Row 	= Tensor_Row,
-template<class> 	class 	_Tensor_Scalar 	= Tensor_Scalar>
+template<class> class 	_Tensor_Reshape = Tensor_Reshape,
+template<class> class 	_Tensor_Slice 	= Tensor_Slice,
+template<class> class 	_Tensor_Row 	= Tensor_Row,
+template<class> class 	_Tensor_Scalar 	= Tensor_Scalar>
 struct Tensor_Core_Base : expression_base<Tensor_Core_Base<derived,DIMENSION>> {
 
 	__BCinline__ static constexpr int DIMS() { return DIMENSION; }
@@ -69,13 +69,17 @@ public:
 	template<class ... integers> __BCinline__
 	const auto reshape(integers ... ints) const {
 		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
-		return Tensor_Reshape<const self, sizeof...(integers)>(base(), ints...);
+		using tensor_type = rank2class<sizeof...(integers), self, _mathlib<derived>>;
+		return Tensor_Reshape<tensor_type>(base(), ints...);
 	}
 
 	template<class... integers> __BCinline__
 	auto reshape(integers... ints) {
-		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
-		return Tensor_Reshape< self, sizeof...(integers)>(base(), ints...);
+		static constexpr bool int_seq = MTF::is_integer_sequence<integers...>;
+		static_assert(int_seq, "MUST BE INTEGER LIST");
+
+		using tensor_type = rank2class<sizeof...(integers), self, _mathlib<derived>>;
+		return Tensor_Reshape<tensor_type>(base(), ints...);
 	}
 
 
