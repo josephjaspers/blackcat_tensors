@@ -11,6 +11,7 @@
 #include <vector>
 #include <initializer_list>
 #include <iostream>
+#include "../BlackCat_Internal_Definitions.h"
 
 namespace BC {
 __BCinline__ static constexpr int max(int x) { return x;}

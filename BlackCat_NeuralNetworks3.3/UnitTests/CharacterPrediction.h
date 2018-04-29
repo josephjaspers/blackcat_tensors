@@ -43,7 +43,7 @@ char vec_to_char(const vec& v) {
 
 int test() {
 
-	const int ITERATIONS = 1000;
+	const int ITERATIONS = 100;
 
 	std::vector<std::string> words = { "have", "a", "new", "fear", "when", "it", "comes", "to", "their", "care", "the", "obama", "they", "might", "win", "the", "trump", "could",
 			"to", "no", "the", "the", "suit", "which", "the", "to", "spend", "of", "on", "for", "and", "house", "a", "big", "on", "but", "a", "loss", "of", "the", "could", "cause",
@@ -64,13 +64,13 @@ int test() {
 
 	//Create a Neural Network
 	NeuralNetwork<FeedForward, GRU, FeedForward> network(27, 240, 120, 27);
-	network.setLearningRate(.003);
+	network.setLearningRate(.0003);
 	network.set_omp_threads(8);
 	omp_set_num_threads(8);
 	//Train 4k iterations
 	const int batch = 16;
 	for (int i = 0; i < ITERATIONS; ++i) {
-//		std::cout << " iteartion = " << i << std::endl;
+		std::cout << " iteartion = " << i << std::endl;
 		for (int j = 0; j < NUMB_WORDS - batch; j += batch) {
 #pragma omp parallel for
 			for (int k = j; k < j + batch; ++k) {

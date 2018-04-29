@@ -17,10 +17,12 @@ template<class derived>
 struct OutputLayer : Layer<derived> {
 
 	using Layer<derived>::xs;
+	vec zero = vec(this->OUTPUTS);
 
 public:
 
 	OutputLayer(int inputs) : Layer<derived>(inputs) {
+		zero.zero();
 	}
 
 	auto forwardPropagation(const vec& x) {
@@ -33,6 +35,10 @@ public:
 		vec& x = xs().first();
 		return this->prev().backPropagation(x - y);
 	}
+	vec backPropagation_throughtime() {
+		return this->prev().backPropagation(zero);
+	}
+
 
 	void set_omp_threads(int i) {
 	}

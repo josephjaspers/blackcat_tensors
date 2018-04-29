@@ -23,6 +23,8 @@ struct NeuralNetwork {
 	auto forwardPropagation(const vec& x) { return network.head().forwardPropagation(x); }
 	auto forwardPropagation_Express(const vec& x) { return network.head().forwardPropagation(x); }
 	auto backPropagation(const vec& y) { return network.tail().backPropagation(y); }
+	auto backPropagation_throughtime() { return network.tail().backPropagation_throughtime(); }
+
 	auto train(const vec& x, const vec& y) { return network.head().train(x, y); }
 
 	auto updateWeights() { return network.head().updateWeights(); }

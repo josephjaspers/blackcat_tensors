@@ -6,11 +6,11 @@
 
 int main() {
 
-	BC::NN::MNIST_Test::percept_MNIST();
+//	BC::NN::MNIST_Test::percept_MNIST();
 ////
 //	BC::NN::MNIST_Test_MT::percept_MNIST();
 
-//	BC::NN::Word_Test::test();
+	BC::NN::Word_Test::test();
 
 	std::cout << "terminate success "<< std::endl;
 
