@@ -19,19 +19,14 @@ typedef std::vector<mat> data;
 mat fixed_sin_set(int n) {
 	mat sins(1, n);
 
-//	std::cout << " length = " << n << std::endl;
-
 	float seed = rand();
 	while (seed > 100)
 		seed /= 10;
 
 	for (int i = 0; i < n; ++i) {
-//		std::cout << " seed = " << seed << " sin = " << std::sin(seed) << std::endl;
 		seed += 3.14 / 8;
 		sins(i) = (std::sin(seed) + 1) / 2;
 	}
-
-//	sins.print();
 	return sins;
 }
 
@@ -40,9 +35,9 @@ mat fixed_sin_set(int n) {
 int test() {
 
 	const int TRAINING_ITERATIONS = 10;
-	const int NUMB_EXAMPLES = 1000;
+	const int NUMB_EXAMPLES = 100;
 	const int TESTS  = 10;
-	NeuralNetwork<FeedForward, GRU, FeedForward> network(1, 100, 40, 1);
+	NeuralNetwork<FeedForward, GRU, FeedForward> network(1, 125, 40, 1);
 	network.setLearningRate(.003);
 
 	data inputs(NUMB_EXAMPLES);
@@ -78,9 +73,17 @@ int test() {
 	for (int i = 0; i < 15; ++i) {
 		std::cout << std::endl << std::endl;
 		std::cout << " set ------------------" << std::endl;
-		for (int j = 0; j < inputs[i].cols(); ++j) {
+		for (int j = 0; j < 2; ++j) {
 			vec x = inputs[i][j + 1] - network.forwardPropagation_Express(inputs[i][j]);
 			std::cout << " error = "; x.print();
+		}
+		vec out = network.forwardPropagation_Express(inputs[i][2]);
+		for (int j = 3; j < inputs[i].cols() - 1; ++j) {
+
+			//feeding its own output
+			out = network.forwardPropagation_Express(out);
+			vec x = out - inputs[i][j + 1];
+			std::cout << " predicting into future---Hypothesis/Output = " << out(0) << "|" << inputs[i][j + 1](0) << "error = "; x.print();
 		}
 	}
 
