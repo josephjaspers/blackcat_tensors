@@ -12,6 +12,10 @@ namespace BC {
 namespace Structure {
 struct  HEAD;
 template<class derived, class...> struct bidirectional_tuple;
+/*
+ * Abstract
+ *
+ */
 
 
 template<class... Ts>
@@ -28,8 +32,13 @@ struct Tuple {
 
 	auto& head() { return data.head(); }
 	auto& tail() { return data.tail(); }
+	auto& next() { return head().next(); }
+
 	const auto& head() const { return data.head(); }
 	const auto& tail() const { return data.tail(); }
+	const auto& next() const { return head().next(); }
+	bool prev() const { return false; }
+
 
 	template<class functor>
 	void for_each(functor f) {
@@ -67,7 +76,6 @@ struct Tuple {
 
 
 
-	//Layer chain - a tuple that inherits from each of its types and has an internal two iteration technique
 
 	//TAIL
 	template<class derived, class T>

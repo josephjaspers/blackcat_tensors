@@ -1,7 +1,7 @@
 #include "MNIST_test.h"
 #include "MNIST_test_MT.h"
 #include "CharacterPrediction.h"
-
+#include "ReccurrentFunctionMatcher.h"
 #define BC_DISABLE_OPENMP
 
 int main() {
@@ -10,7 +10,8 @@ int main() {
 ////
 //	BC::NN::MNIST_Test_MT::percept_MNIST();
 
-	BC::NN::Word_Test::test();
+//	BC::NN::Word_Test::test();
+	BC::NN::FunctionMatcher::test();
 
 	std::cout << "terminate success "<< std::endl;
 
