@@ -66,9 +66,6 @@ public:
 	Layer(int inputs) : INPUTS(inputs) {
 		lr = .03;
 	}
-//	void set_omp_threads(int i) {
-//		next().set_omp_threads(i);
-//	}
 	auto& next() { return static_cast<derived&>(*this).next(); }
 	auto& prev() { return static_cast<derived&>(*this).prev(); }
 	const auto& next() const { return static_cast<derived&>(*this).next(); }

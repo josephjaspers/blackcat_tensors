@@ -88,17 +88,18 @@ public:
 		this->next().set_omp_threads(i);
 	}
 
-	void write(std::ofstream& is) {
-		is << this->INPUTS << ' ';
-		is << this->OUTPUTS << ' ';
-		w.write(is);
-		b.write(is);
+	void write(std::ofstream& os) {
+		w.write(os);
+		b.write(os);
+
+		this->next().write(os);
 	}
-	void read(std::ifstream& os) {
-		os >> this->INPUTS;
-		os >> this->OUTPUTS;
-		w.read(os);
-		b.read(os);
+	void read(std::ifstream& is) {
+		std::string tmp;
+		w.read(is);
+		b.read(is);
+
+		this->next().read(is);
 	}
 
 	void init_storages() {

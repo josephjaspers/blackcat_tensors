@@ -48,11 +48,11 @@ struct InputLayer : Layer<derived> {
 		this->next().clearBPStorage();
 	}
 
-	void write(std::ofstream& is) {
-		this->next().write(is);
+	void write(std::ofstream& os) {
+		this->next().write(os);
 	}
-	void read(std::ifstream& os) {
-		this->next().read(os);
+	void read(std::ifstream& is) {
+		this->next().read(is);
 	}
 	void setLearningRate(fp_type learning_rate) {
 		this->next().setLearningRate(learning_rate);

@@ -39,7 +39,7 @@ mat fixed_sin_set(int n) {
 
 int test() {
 
-	const int TRAINING_ITERATIONS = 100;
+	const int TRAINING_ITERATIONS = 10;
 	const int NUMB_EXAMPLES = 1000;
 	const int TESTS  = 10;
 	NeuralNetwork<FeedForward, GRU, FeedForward> network(1, 100, 40, 1);
@@ -50,6 +50,9 @@ int test() {
 		int length = (rand() % 10) + 3;
 		inputs[i] = fixed_sin_set(length);
 	}
+
+//	std::ifstream is("NN_adj_sin.bc");
+//	network.read(is);
 
 	//Train
 	float t;
@@ -63,37 +66,27 @@ int test() {
 		for (int j = 0; j < inputs.size(); ++j) {
 			for (int l = 0; l < inputs[j].cols()-1; ++l)
 				network.forwardPropagation(inputs[j][l]);
-//
+
 			for (int l = inputs[j].cols()-1; l > 0; --l)
-			network.backPropagation(inputs[j][l]);
-//
+				network.backPropagation(inputs[j][l]);
+
 			network.updateWeights();
 			network.clearBPStorage();
 		}
 	}
 
-//	data test_vars(TESTS);
-//	for (int i = 0; i < TESTS; ++i){
-//		int length = rand() * 10;
-//		test_vars[i] = fixed_sin_set(length);
-//	}
-//
-//
 	for (int i = 0; i < 15; ++i) {
 		std::cout << std::endl << std::endl;
 		std::cout << " set ------------------" << std::endl;
 		for (int j = 0; j < inputs[i].cols(); ++j) {
-//			std::cout << "input : ";
-//			inputs[i][j].print();
-
-//			std::cout << "  exp : ";
-//			inputs[i][j + 1].print();
-//
-//			std::cout << "  out : ";
 			vec x = inputs[i][j + 1] - network.forwardPropagation_Express(inputs[i][j]);
 			std::cout << " error = "; x.print();
 		}
 	}
+
+
+//	std::ofstream os("NN_adj_sin.bc");
+//	network.write(os);
 }
 
 

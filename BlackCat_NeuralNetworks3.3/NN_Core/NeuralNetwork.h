@@ -25,6 +25,9 @@ struct NeuralNetwork {
 	auto backPropagation(const vec& y) { return network.tail().backPropagation(y); }
 	auto backPropagation_throughtime() { return network.tail().backPropagation_throughtime(); }
 
+	void write(std::ofstream& os) { network.head().write(os); }
+	void read(std::ifstream& is) { network.head().read(is); }
+
 	auto train(const vec& x, const vec& y) { return network.head().train(x, y); }
 
 	auto updateWeights() { return network.head().updateWeights(); }

@@ -112,9 +112,19 @@ public:
 		this->next().set_omp_threads(i);
 	}
 
-	void write(std::ofstream& is) {
+	void write(std::ofstream& os) {
+		w.write(os);
+		r.write(os);
+		b.write(os);
+
+		this->next().write(os);
 	}
-	void read(std::ifstream& os) {
+	void read(std::ifstream& is) {
+		w.read(is);
+		r.read(is);
+		b.read(is);
+
+		this->next().write(is);
 	}
 	void init_storages() {
 		//for each matrix/vector gradient storage initialize to correct dims

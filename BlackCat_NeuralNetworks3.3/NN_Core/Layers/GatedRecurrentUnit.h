@@ -159,9 +159,29 @@ public:
 		this->next().set_omp_threads(i);
 	}
 
-	void write(std::ofstream& is) {
+	void write(std::ofstream& os) {
+//		os << this->INPUTS << ' ';
+//		os << this->OUTPUTS << ' ';
+		wz.write(os);
+		wf.write(os);
+		rz.write(os);
+		rf.write(os);
+		bz.write(os);
+		bf.write(os);
+
+		this->next().write(os);
 	}
-	void read(std::ifstream& os) {
+	void read(std::ifstream& is) {
+//		is >> this->INPUTS;
+//		is >> this->OUTPUTS;
+		wz.read(is);
+		wf.read(is);
+		rz.read(is);
+		rf.read(is);
+		bz.read(is);
+		bf.read(is);
+
+		this->next().read(is);
 	}
 	void init_storages() {
 		//for each matrix/vector gradient storage initialize to correct dims
