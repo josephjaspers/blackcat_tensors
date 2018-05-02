@@ -11,6 +11,7 @@
 #include "CSV_Parser.h"
 #include "../bidirectional_tuple.h"
 #include <vector>
+#include <algorithm>
 
 namespace BC {
 namespace CSV {
@@ -19,6 +20,10 @@ template<class T> T BC_from_string(std::string str);
 template<> int BC_from_string<int>(std::string str) { return stoi(str); }
 template<> float BC_from_string<float>(std::string str) { return stof(str); }
 template<> double BC_from_string<double>(std::string str) { return stod(str); }
+template<> long BC_from_string<long>(std::string str) { return stol(str); }
+template<> unsigned BC_from_string<unsigned>(std::string str) { return stoi(str); }
+template<> char BC_from_string<char>(std::string str) { return (str[0]); }
+
 template<> std::string BC_from_string<std::string>(std::string str) { return (str); }
 
 template<class... Ts>
@@ -35,6 +40,14 @@ class DataFrame {
 public:
 
 
+	template<class comp>
+	void ORDER_BY(comp c) {
+		std::sort(dataframe.begin(), dataframe.end(), [&](auto& x, auto& y) { return c(x) > c(y); });
+	}
+
+	auto& getGrid() {
+		return dataframe;
+	}
 
 	template<class Node>
 	void generateRowData(Node& n, std::vector<std::string> row_data, int i) const {

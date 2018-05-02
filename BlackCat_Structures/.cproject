@@ -23,7 +23,7 @@
 							<tool command="g++ -std=c++17" id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.388021995" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug">
 								<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.2009272176" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.750166423" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.147724605" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols"/>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.147724605" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.236631981" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1736000327" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">

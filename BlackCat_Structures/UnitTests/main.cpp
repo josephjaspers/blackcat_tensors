@@ -36,9 +36,9 @@ int main() {
 //	parser.add_skip_cols(1);
 
 	parser.parse("///home/joseph///Downloads///parse_test.csv");
-	parser.print();
 
 	BC::CSV::DataFrame<int, std::string, std::string, float> df(parser);
+	df.ORDER_BY([](auto& x) { return x.head().data(); });
 
 
 	std::cout << std::endl << " now printing out df" << std::endl;

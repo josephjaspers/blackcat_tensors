@@ -12,14 +12,15 @@ namespace BC {
 namespace NN {
 namespace Word_Test {
 std::string alphabet = { "abcdefghijklmnopqrstuvwxyz " };
+int alpha_length = alphabet.length();
 
 //convert a char to a 1-hot vector (index = the index in the alphbet)
 vec char_to_vec(char value) {
 
-	vec out(27);
+	vec out(alpha_length);
 	out.zero();
 
-	for (int i = 0; i < 27; ++i)
+	for (int i = 0; i < alpha_length; ++i)
 		if (value == alphabet[i])
 			out(i) = 1;
 
@@ -29,9 +30,9 @@ vec char_to_vec(char value) {
 //convert a 1-hot vector to a character (for the output)
 char vec_to_char(const vec& v) {
 	float max = 0;
-	int index = -1;
+	int index = - 1;
 
-	for (int i = 0; i < 27; ++i)
+	for (int i = 0; i < alpha_length; ++i)
 		if (max < v(i)) {
 			max = v(i);
 			index = i;
@@ -41,73 +42,101 @@ char vec_to_char(const vec& v) {
 	return alphabet[index];
 }
 
-int test() {
+
+
+#include "Data/fixed_TheRaven.h"
+#include "Data/fixed_BlackCat.h"
+#include "Data/fixed_ThePit.h"
+
+template<class T>
+int test(T& words) {
 
 	const int ITERATIONS = 100;
-
-	std::vector<std::string> words = { "have", "a", "new", "fear", "when", "it", "comes", "to", "their", "care", "the", "obama", "they", "might", "win", "the", "trump", "could",
-			"to", "no", "the", "the", "suit", "which", "the", "to", "spend", "of", "on", "for", "and", "house", "a", "big", "on", "but", "a", "loss", "of", "the", "could", "cause",
-			"the", "care", "to", "of", "to", "have", "a", "that", "could", "lead", "to", "chaos", "in", "the", "and", "spur", "a", "just", "as", "gain", "full", "of", "the", "to",
-			"stave", "off", "that", "could", "find", "in", "the", "of", "huge", "sums", "to", "prop", "up", "the", "obama", "care", "law", "who", "have", "been", "an", "end", "to",
-			"the", "law", "for", "years", "in", "twist", "j", "about", "could", "to", "fight", "its", "in", "the", "house", "on", "some", "in", "the", "eager", "to", "avoid", "an",
-
-						"ugly", "on", "hill", "and", "the", "trump", "team", "are", "out", "how", "to", "the", "which", "after", "the", "has", "been", "put", "in", "limbo", "until", "at",
-			"least", "late", "by", "the", "court", "of", "for", "the", "of", "they", "are", "not", "yet", "ready", "to", "their", "given", "that", "this", "the", "obama", "and",
-			"it", "would", "be", "to", "said", "j", "a", "for", "the", "trump", "upon", "the", "trump", "will", "this", "case", "and", "all", "of", "the", "care", "act", "in", "a",
-			"in", "judge", "m", "ruled", "that", "house", "had", "the", "to", "sue", "the", "over", "a", "and", "that", "the", "obama", "had", "been", "the", "in", "of", "the",
-			"from", "the", "that", "judge", "would", "be", "and", "the", "have", "in", "place", "the", "in", "a", "halt", "in", "the", "after", "mr", "trump", "won", "house",
-			"last", "month", "told", "the", "court", "that", "they", "and", "the", "s", "team", "are", "for", "of", "this", "to", "take", "after", "the", "s", "on", "jan", "the",
-			"of", "the", "case", "house", "said", "will", "the", "and", "his", "time", "to", "to", "or", "to", "this", "in", "the", "house", "the", "of", "if", "the", "which",
-			"have", "an", "are", "that", "the", "in", "for", };
-
 	const int NUMB_WORDS = words.size();
 
+
 	//Create a Neural Network
-	NeuralNetwork<FeedForward, GRU, FeedForward> network(27, 240, 120, 27);
-	network.setLearningRate(.0003);
-	network.set_omp_threads(8);
-	omp_set_num_threads(8);
+	NeuralNetwork<FeedForward, GRU, FeedForward> network(alpha_length, 128, 64, alpha_length);
+
+	std::ifstream is("EdgarAllenNetworkfin.bc");
+	network.read(is);
+
+
+
+	network.setLearningRate(.001);
 	//Train 4k iterations
-	const int batch = 16;
 	for (int i = 0; i < ITERATIONS; ++i) {
-		std::cout << " iteartion = " << i << std::endl;
-		for (int j = 0; j < NUMB_WORDS - batch; j += batch) {
-#pragma omp parallel for
-			for (int k = j; k < j + batch; ++k) {
-			for (int x = 0; x < words[j].length() - 1; ++x) {
+		std::cout << " i = " << i<< std::endl;
+//		if (i% 10 == 0) {
+//			std::cout << " iteration = " << i << std::endl;
+//			std::ofstream os("EdgarAllenNetwork" + std::to_string(i) + ".bc");
+//			network.write(os);
+//			os.close();
+//		}
+		for (int j = 0; j < NUMB_WORDS; ++j) {
+//			std::cout << " curr word = " << j << " outof " << NUMB_WORDS << std::endl;
+			for (int x = 0; x < words[j].length(); ++x) {
 				vec input = char_to_vec(words[j][x]);	//convert current char to 1-hot
 				network.forwardPropagation(input);		//propagate
-
 			}
-			vec input = char_to_vec(' ');	//convert current char to 1-hot
-			network.forwardPropagation(input);		//propagate
+			vec input (char_to_vec(' '));
 			network.backPropagation(input);
-
 			//iterate backwards through the word
-			for (int x = words[j].length() - 1; x > 0; --x) {
+			for (int x = words[j].length()-1; x > 0; --x){
 				vec output = char_to_vec(words[j][x]);	//back propagate backwards thru word
 				network.backPropagation(output);
 			}
-			}
-#pragma omp barrier
 			//update and stuff
 			network.updateWeights();
 			network.clearBPStorage();
 		}
 	}
 
+
+	std::ofstream os(std::string("EdgarAllenNetwork") + std::string("fin") + std::string(".bc"));
+	network.write(os);
+	os.close();
+
+
+	int helper_count = 1;
 	//print out/test the predictions
 	for (int j = 0; j < NUMB_WORDS; ++j) {
-		std::cout << "{\'" << words[j] << "\', \'";
-		std::cout << words[j][0];
-		for (int x = 0; x < words[j].length() - 1; ++x) {
-			auto out = network.forwardPropagation_Express(char_to_vec(words[j][x]));
-			vec_to_char(out);
+		std::string wrd = "";
+		std::cout << words[j] << " | ";
+//		std::cout << words[j][0];
+
+		//give it the first three characters of a word
+		vec input;
+		for (int x = 0; x < helper_count; ++x) {
+			if (x >=  words[j].length())
+				break;
+
+			wrd += words[j][x];
+			input = char_to_vec(words[j][x]);
+			input = network.forwardPropagation_Express(input);
+			vec_to_char(input);
 		}
-		std::cout << "\' }," << std::endl;
+		//let it predict the rest
+		if (helper_count < words[j].length()) {
+			std::cout << words[j][helper_count];
+		for (int x = helper_count; x < words[j].length() - 1; ++x) {
+			input = network.forwardPropagation_Express(input);
+			if (vec_to_char(input) == ' ') {
+//				if (x == words[j].length() - 2) {
+					std::cout << " || ";
+//				}
+				break;
+			}
+		}
+		}
+		std::cout << std::endl;
+
 	}
+
+
 	return 0;
 }
+
 
 }
 }

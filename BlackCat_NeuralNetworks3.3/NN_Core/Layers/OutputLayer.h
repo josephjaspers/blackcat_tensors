@@ -17,6 +17,8 @@ template<class derived>
 struct OutputLayer : Layer<derived> {
 
 	using Layer<derived>::xs;
+	using Layer<derived>::sum_gradients;
+
 	vec zero = vec(this->OUTPUTS);
 
 public:

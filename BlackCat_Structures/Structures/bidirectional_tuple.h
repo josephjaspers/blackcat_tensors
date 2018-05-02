@@ -174,9 +174,6 @@ struct Tuple {
 			  auto& next()  	 { return static_cast<next_&>(*this); }
 		const bool prev() const { return false; }
 			  bool prev()  	 	{ return false; }
-
-
-
 	};
 
 }
