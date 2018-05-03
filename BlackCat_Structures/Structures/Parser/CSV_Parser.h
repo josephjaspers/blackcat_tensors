@@ -1,8 +1,8 @@
 /*
- * CSV_Parser.h
- *
- *  Created on: Apr 28, 2018
- *      Author: joseph
+ * Converts a CSV into a 2d vector of strings.
+ * 			-> Trivial implementation,
+ * 			   Supports column/row ignoring
+ * 			   Meant to specifically work with DataFrame object
  */
 
 #ifndef CSV_PARSER_H_

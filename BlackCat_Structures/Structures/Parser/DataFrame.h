@@ -1,8 +1,14 @@
 /*
- * DataFrame.h
+ * Wednesday May 2nd
  *
- *  Created on: Apr 28, 2018
- *      Author: joseph
+ * DataFrame objects accepts a parsed CSV file (from CSV_Parser.h)
+ * and converts it into a 2d matrix of (rows by columns) in which the columns
+ * of the data match the given type.
+ *
+ * Current work: involves adding the ability to override the default parsing of a string -> type
+ * 				 This is to enable users to parse data into a dataframe aside from the given BC_from_string
+ *
+ *
  */
 
 #ifndef DATAFRAME_H_

@@ -11,6 +11,8 @@
 
 #include "BlackCat_Internal_Definitions.h"
 #include "BC_Utility/Internal_Shapes.h"
+#include "BC_Utility/Utility.h"
+
 #include <iostream>
 
 namespace BC {
@@ -95,6 +97,16 @@ public:
 			return curr + scal_index<dim + 1>(ints...);
 		else
 			return curr * this->dimension(dim - 1) + scal_index<dim + 1>(ints...);
+	}
+
+	template<class... integers>
+	int point_index(integers... ints) const {
+		auto var = array(ints...);
+		int index = this->rows();
+		for (int i = 1; i < var.size(); ++i) {
+			index += var[i] * this->dimension(i);
+		}
+		return index;
 	}
 
 	//---------------------------------------------------METHODS THAT MAY NEED TO BE SHADOWED------------------------------------------------------------//

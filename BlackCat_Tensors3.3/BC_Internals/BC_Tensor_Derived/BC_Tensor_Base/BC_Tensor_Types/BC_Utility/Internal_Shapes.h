@@ -24,15 +24,15 @@ __BCinline__ static constexpr int max(int x, integers... ints) { return x > max 
 
 	template<class T, class F> static constexpr bool castable_b = castable<T,F>::conditional;
 
-	template<class T, int size>
-	struct stack_array : stack_array<T, size - 1> {
+	template<class T, int size_>
+	struct stack_array : stack_array<T, size_ - 1> {
 
 		template<class... values>
-		__BCinline__ stack_array(T val, values... integers) : stack_array<T, size - 1>(integers...), dim(val) {}
+		__BCinline__ stack_array(T val, values... integers) : stack_array<T, size_ - 1>(integers...), dim(val) {}
 		__BCinline__ stack_array() {}
 
 		T dim = 0;
-		__BCinline__ auto& next() const { return static_cast<const stack_array<T, size - 1>& >(*this); }
+		__BCinline__ auto& next() const { return static_cast<const stack_array<T, size_ - 1>& >(*this); }
 
 		__BCinline__ const T& operator [] (int i) const {
 			return (&dim)[-i];
@@ -40,8 +40,8 @@ __BCinline__ static constexpr int max(int x, integers... ints) { return x > max 
 		__BCinline__ T& operator [] (int i) {
 			return (&dim)[-i];
 		}
-		__BCinline__ static constexpr int length() {
-			return size;
+		__BCinline__ static constexpr int size() {
+			return size_;
 		}
 	};
 

@@ -14,6 +14,7 @@
 #include "BC_Tensor_Types/Expression_Binary_Dotproduct.h"
 #include "BC_Tensor_Types/Expression_Unary_MatrixTransposition.h"
 #include "BC_Tensor_Types/Expression_Unary_MaxPooling.h"
+#include "BC_Tensor_Types/Expression_Unary_Cacher.h"
 #include "BC_Tensor_Types/Expression_Binary_Correlation.h"
 #include "BC_Tensor_Types/Expression_Binary_Correlation_Padded.h"
 
@@ -186,10 +187,16 @@ struct Tensor_Operations {
 		return typename impl<pDeriv, assign>::type(this->data(), param.data());
 	}
 	template<class pDeriv>
+	typename impl<pDeriv, _cache>::type operator ==(const alternate_asterix_denoter<pDeriv>& param) {
+		assert_same_size(param);
+		return typename impl<pDeriv, _cache>::type(this->data(), param.data());
+	}
+	template<class pDeriv>
 	typename impl<pDeriv, assign>::type operator =(const alternate_asterix_denoter<pDeriv>& param) {
 		assert_same_size(param);
 		return typename impl<pDeriv, assign>::type(this->data(), param.data());
 	}
+
 	template<class pDeriv>
 	typename impl<pDeriv, mul>::type operator +=(const alternate_asterix_denoter<pDeriv>& param) const {
 		assert_same_size(param.get());
