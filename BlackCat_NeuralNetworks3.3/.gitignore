@@ -1,4 +1,6 @@
 /Debug/
 /Release/
 /Release_OpenBlas/
-/*/
+/.cproject/
+/.project/
+/.*/

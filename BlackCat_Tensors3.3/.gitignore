@@ -4,4 +4,6 @@
 /Release_Multithreaded/
 /Release_SingleThreaded/
 /Debug_Check/
+/.cproject/
+/.project/
 /*/
