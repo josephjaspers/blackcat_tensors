@@ -6,3 +6,7 @@
 /BlackCat_Tensors3.3/Release_/
 /BlackCat_Tensors3.3/Debug/
 /BlackCat_Library_deprecated/*
+/BlackCat_MetaTemplate_Functions/.*
+/BlackCat_Tensors3.3/.*
+/BlackCat_Structures/.*
+/BlackCat_NeuralNetworks3.3/.*
