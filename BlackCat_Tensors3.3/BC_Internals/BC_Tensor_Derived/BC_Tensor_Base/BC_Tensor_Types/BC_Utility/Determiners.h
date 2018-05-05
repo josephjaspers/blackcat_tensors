@@ -75,6 +75,7 @@ template<class> struct determine_evaluation;
 template<class> struct determine_scalar;
 template<class> struct determine_iterator;
 template<class> struct determine_mathlibrary;
+template<class> struct determine_tensor_scalar;
 
 
 template<class T> using _scalar = typename determine_scalar<T>::type;
@@ -84,6 +85,7 @@ template<class T> using _functor = typename determine_functor<T>::type;
 template<class T> using _evaluation = typename determine_evaluation<T>::type;
 template<class T> static constexpr int _rankOf  = ranker<T>::value;
 template<class T> using _iterator = typename determine_iterator<T>::type;
+template<class T> using _tensor_scalar = typename determine_tensor_scalar<T>::type;
 
 //remove constness -----------------------------------------------------------------------------------------
 namespace rm {
@@ -96,8 +98,7 @@ template<template<class...> class tensor, class functor, class... set>
 struct determine_functor<tensor<functor, set...>>{
 
 	using derived = tensor<functor,set...>;
-	using type = ifte<!std::is_base_of<BC_Type,functor>::value,
-			std::conditional_t<MTF::isPrimitive<functor>::conditional, Tensor_Core<derived>, functor>, functor>;
+	using type = ifte<std::is_base_of<BC_Type,functor>::value, functor, Tensor_Core<derived>>;
 };
 
 ///DET EVALUATION----------------------------------------------------------------------------------------------
@@ -111,16 +112,34 @@ struct determine_evaluation<tensor<functor, set...>>{
 };
 
 //SCALAR_TYPE----------------------------------------------------------------------------------------------
+template<class> struct determine_tensor_scalar;
+
+
 template<class T>
 struct determine_scalar {
-		using type = T;
+	static constexpr bool nested_core_type = false;
+	using type = T;
 };
 template<template<class...> class tensor, class T, class... set>
-struct determine_scalar<tensor<T, set...>> {
-		using type = typename determine_scalar<T>::type;
+struct determine_scalar<Tensor_Core<tensor<T, set...>>> {
+	static constexpr bool nested_core_type = true;
+	using type = typename determine_scalar<T>::type;
 };
+
+template<template<class...> class expression, class T, class... set>
+struct determine_scalar<expression<T, set...>> {
+	static constexpr bool nested_core_type = determine_scalar<T>::nested_core_type;
+	using type = std::conditional_t<nested_core_type, typename determine_scalar<T>::type,
+
+			std::conditional_t<isTensor_b<expression<T, set...>>, T,
+
+			expression<T, set...>>>;
+};
+
+///-----
+
 template<template<class...> class tensor, class T, class... set>
-struct determine_scalar<const tensor<T, set...>> {
+struct determine_tensor_scalar<tensor<T, set...>> {
 		using type = typename determine_scalar<T>::type;
 };
 

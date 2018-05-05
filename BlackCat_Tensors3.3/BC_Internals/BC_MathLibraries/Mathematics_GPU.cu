@@ -1,8 +1,8 @@
 #ifdef __CUDACC__
 #ifndef MATHEMATICS_GPU_H_
 #define MATHEMATICS_GPU_H_
-#include "Mathematics_GPU_impl.cu"
 
+#include "Mathematics_GPU_impl.cu"
 #include <cmath>
 #include <iostream>
 #include <string>
