@@ -44,10 +44,6 @@ char vec_to_char(const vec& v) {
 
 
 
-#include "Data/fixed_TheRaven.h"
-#include "Data/fixed_BlackCat.h"
-#include "Data/fixed_ThePit.h"
-
 template<class T>
 int test(T& words) {
 

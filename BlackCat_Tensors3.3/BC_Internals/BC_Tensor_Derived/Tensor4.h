@@ -14,12 +14,11 @@ namespace BC {
 
 
 template<class T, class Mathlib>
-class Tensor4 : public TensorBase<Tensor4<T, Mathlib>> {
+class Tensor4 : public Tensor<Tensor4<T, Mathlib>> {
 
-	using parent_class = TensorBase<Tensor4<T, Mathlib>>;
+	using parent_class = Tensor<Tensor4<T, Mathlib>>;
 
 public:
-	using scalar = T;
 	using parent_class::operator=;
 	using parent_class::operator[];
 	using parent_class::operator();
@@ -42,7 +41,7 @@ public:
 
 private:
 
-	template<class U> friend class TensorBase;
+	template<class U> friend class Tensor;
 	template<class U> friend class Tensor_Operations;
 	template<class... params> Tensor4(const params&... p) : parent_class(p...) {}
 

@@ -12,9 +12,9 @@
 
 namespace BC {
 template<class T, class Mathlib>
-class Vector : public TensorBase<Vector<T, Mathlib>> {
+class Vector : public Tensor<Vector<T, Mathlib>> {
 
-	using parent_class = TensorBase<Vector<T, Mathlib>>;
+	using parent_class = Tensor<Vector<T, Mathlib>>;
 
 public:
 
@@ -43,13 +43,12 @@ public:
 private:
 
 	template<class,class> friend class Vector;
-	template<class> friend class TensorBase;
+	template<class> friend class Tensor;
 	template<class> friend class Tensor_Operations;
 	template<class... params> Vector(const params&... p) : parent_class(p...) {}
 
 };
-
-} //End Namespace BCw
+}
 
 #endif /* VECTOR_H_ */
 

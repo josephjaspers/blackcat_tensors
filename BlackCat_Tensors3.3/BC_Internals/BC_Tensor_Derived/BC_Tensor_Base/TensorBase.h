@@ -15,43 +15,43 @@
 
 namespace BC {
 
-struct TensorType {};
 
 template<class derived>
-class TensorBase :
-		public TensorType,
-		public Tensor_Operations <derived>,
+class Tensor :
+		public Tensor_Operations<derived>,
 		public Tensor_Utility<derived>,
-		public TensorInitializer<derived>
+		public Tensor_Initializer<derived>
 {
 
 protected:
 
-	using self 			= TensorBase<derived>;
-	using math_parent  	= Tensor_Operations<derived>;
-	using initializer 	= TensorInitializer<derived>;
+	using self 			= Tensor<derived>;
+	using operations  	= Tensor_Operations<derived>;
+	using initializer 	= Tensor_Initializer<derived>;
+	using utility		= Tensor_Utility<derived>;
+
 	using functor_type 	= _functor<derived>;
 	using scalar_type	= _scalar<derived>;
-	using Mathlib 		= _mathlib<derived>;
+	using mathlib_type 	= _mathlib<derived>;
 	struct DISABLED;
 
-	static constexpr int DIMS = ranker<derived>::value;
+	static constexpr int DIMS() { return ranker<derived>::value; }
 	static constexpr int CONTINUOUS() { return functor_type::CONTINUOUS(); }
-	template<class> friend class TensorBase;
+	template<class> friend class Tensor;
 
 public:
-	using math_parent::operator=;
+	using operations::operator=;
 
 	operator const derived& () const { return static_cast<const derived&>(*this); }
 	operator	   derived& () 		 { return static_cast< 		derived&>(*this); }
 
 
-	template<class... params> explicit TensorBase(const params&... p) : initializer(p...) {}
+	template<class... params> explicit Tensor(const params&... p) : initializer(p...) {}
 
-	//move only defined for Tensor_Core's
+	//move only defined for Core's
 	using move_parameter = std::conditional_t<pCore_b<functor_type>, derived&&, DISABLED>;
-	TensorBase(		 move_parameter tensor) : initializer(std::move(tensor)) {}
-	TensorBase(const TensorBase& 	tensor) : initializer(tensor) {}
+	Tensor(		 move_parameter tensor) : initializer(std::move(tensor)) {}
+	Tensor(const Tensor& 	tensor) : initializer(tensor) {}
 
 
 	derived& operator =(move_parameter tensor) {
@@ -64,7 +64,7 @@ public:
 
 	derived& operator =(const derived& tensor) {
 		this->assert_same_size(tensor);
-		Mathlib::copy(this->data(), tensor.data(), this->size());
+		mathlib_type::copy(this->data(), tensor.data(), this->size());
 		return *this;
 	}
 	derived& operator =(scalar_type scalar) {
@@ -86,9 +86,8 @@ public:
 	const auto innerShape() const 			{ return this->black_cat_array.innerShape(); }
 	const auto outerShape() const 			{ return this->black_cat_array.outerShape(); }
 
-
-	 const functor_type& _data() const { return this->black_cat_array; }
-	 	   functor_type& _data()		  { return this->black_cat_array; }
+	 const functor_type& data() const { return this->black_cat_array; }
+	 	   functor_type& data()		  { return this->black_cat_array; }
 
 private:
 	const auto slice_impl(int i) const { return this->black_cat_array.slice(i); }
@@ -103,31 +102,31 @@ public:
 	const auto operator [] (int i) const { return slice(i); }
 		  auto operator [] (int i) 		 { return slice(i); }
 
-	const auto scalar(int i) const { return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar_impl(i)); }
-		  auto scalar(int i) 	   { return base<0>::type<Tensor_Scalar<functor_type>, Mathlib>(scalar_impl(i)); }
+	const auto scalar(int i) const { return base<0>::type<Tensor_Scalar<functor_type>, mathlib_type>(scalar_impl(i)); }
+		  auto scalar(int i) 	   { return base<0>::type<Tensor_Scalar<functor_type>, mathlib_type>(scalar_impl(i)); }
 
 	const auto slice(int i) const {
-		static_assert(derived::DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");
-		return typename base<DIMS>::template slice<decltype(slice_impl(0)), Mathlib>(slice_impl(i)); }
+		static_assert(DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");
+		return typename base<DIMS()>::template slice<decltype(slice_impl(0)), mathlib_type>(slice_impl(i)); }
 
 		auto slice(int i) 		  {
 		static_assert(derived::DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");
-		return typename base<DIMS>::template slice<decltype(slice_impl(0)), Mathlib>(slice_impl(i)); }
+		return typename base<DIMS()>::template slice<decltype(slice_impl(0)), mathlib_type>(slice_impl(i)); }
 
 	const auto row(int i) const {
-		static_assert(DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
-		return typename base<1>::template type<decltype(row_impl(0)), Mathlib>(row_impl(i));
+		static_assert(DIMS() == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		return typename base<1>::template type<decltype(row_impl(0)), mathlib_type>(row_impl(i));
 	}
 		  auto row(int i) 		{
-		static_assert(DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
-		return typename base<1>::template type<decltype(row_impl(0)), Mathlib>(row_impl(i));
+		static_assert(DIMS() == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		return typename base<1>::template type<decltype(row_impl(0)), mathlib_type>(row_impl(i));
 	}
 	const auto col(int i) const {
-		static_assert(DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		static_assert(DIMS() == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return (*this)[i];
 	}
 		 auto col(int i) {
-		static_assert(DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		static_assert(DIMS() == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return (*this)[i];
 	}
 
@@ -148,15 +147,17 @@ public:
 	}
 
 	template<class... integers>
-	void resetShape(integers... ints) {
+	void resize(integers... ints) {
 		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
+		//fix_me need to fix the "write" method in Tensor_Utility
+//		static_assert(sizeof...(integers) == derived::DIMS(), "RESIZE MUST MAINTAIN SAME DIMENSIONALITY");
 		this->black_cat_array.resetShape(ints...);
 	}
 	template<class... integers>
 	auto reshape(integers... ints) {
 		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
 		using internal = decltype(this->black_cat_array.reshape(ints...));
-		using type = typename base<sizeof...(integers)>::template type<internal, Mathlib>;
+		using type = typename base<sizeof...(integers)>::template type<internal, mathlib_type>;
 		return type(this->black_cat_array.reshape(ints...));
 
 	}

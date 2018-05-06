@@ -8,19 +8,19 @@
 #ifndef TENSOR_INITIALIZER_H_
 #define TENSOR_INITIALIZER_H_
 
-#include "BC_Tensor_Types/Tensor_Core.h"
-#include "BC_Tensor_Types/Tensor_Core_Scalar.h"
-#include "BC_Tensor_Types/Tensor_Core_Slice.h"
-#include "BC_Tensor_Types/Tensor_Core_Reshape.h"
-#include "BC_Tensor_Types/Tensor_Core_RowVector.h"
+#include "BC_Tensor_Types/Core.h"
+#include "BC_Tensor_Types/Core_Scalar.h"
+#include "BC_Tensor_Types/Core_Slice.h"
+#include "BC_Tensor_Types/Core_Reshape.h"
+#include "BC_Tensor_Types/Core_RowVector.h"
 
 namespace BC {
 
 //-------------------------------------SPECIALIZATION FOR EXPRESSION TENSORS OR TENSORS OF NON_OWNERSHIP/CREATION-------------------------------------//
 template<class derived, class expression_tensor = void>
-class TensorInitializer {
+class Tensor_Initializer {
 
-	using self 			= TensorInitializer<derived>;
+	using self 			= Tensor_Initializer<derived>;
 
 	using functor_type 	= _functor<derived>;
 	using Mathlib 		= _mathlib<derived>;
@@ -30,13 +30,13 @@ public:
 
 	functor_type black_cat_array;
 
-	TensorInitializer(		 derived&& tensor) : black_cat_array(tensor.black_cat_array){}
-	TensorInitializer(const  derived&  tensor) : black_cat_array(tensor.black_cat_array){}
+	Tensor_Initializer(		 derived&& tensor) : black_cat_array(tensor.black_cat_array){}
+	Tensor_Initializer(const  derived&  tensor) : black_cat_array(tensor.black_cat_array){}
 
 	template<class... params>
-	explicit TensorInitializer(const  params&... p) : black_cat_array(p...) {}
+	explicit Tensor_Initializer(const  params&... p) : black_cat_array(p...) {}
 //
-	~TensorInitializer() {
+	~Tensor_Initializer() {
 		black_cat_array.destroy();
 	}
 };
@@ -44,10 +44,10 @@ public:
 
 
 template<template<class, class> class _tensor, class t, class ml>
-class TensorInitializer<_tensor<t, ml>, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>> {
+class Tensor_Initializer<_tensor<t, ml>, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>> {
 
 	using derived = _tensor<t, ml>;
-	using self 			= TensorInitializer<derived, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>>;
+	using self 			= Tensor_Initializer<derived, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>>;
 
 	using functor_type 	= _functor<derived>;
 	using Mathlib 		= _mathlib<derived>;
@@ -62,7 +62,7 @@ private:
 
 public:
 
-	TensorInitializer(derived&& tensor) : black_cat_array() {
+	Tensor_Initializer(derived&& tensor) : black_cat_array() {
 		black_cat_array.is = tensor.black_cat_array.is;
 		black_cat_array.os = tensor.black_cat_array.os;
 		black_cat_array.array = tensor.black_cat_array.array;
@@ -72,11 +72,11 @@ public:
 		tensor.black_cat_array.array 	= nullptr;
 	}
 
-	TensorInitializer(const derived& tensor) : black_cat_array(tensor.innerShape()) {
+	Tensor_Initializer(const derived& tensor) : black_cat_array(tensor.innerShape()) {
 		Mathlib::copy(asBase().data(), tensor.data(), tensor.size());
 	}
 	template<class T>
-	TensorInitializer(T dimensions): black_cat_array(dimensions) {}
+	Tensor_Initializer(T dimensions): black_cat_array(dimensions) {}
 
 	template<class T>
 	using derived_alt = typename MTF::shell_of<derived>::template  type<T, Mathlib>;
@@ -88,13 +88,13 @@ public:
 //	}
 
 	template<class U>
-	TensorInitializer(const derived_alt<U>&  tensor)
+	Tensor_Initializer(const derived_alt<U>&  tensor)
 		: black_cat_array(tensor.innerShape()) {
 //		Mathlib::copy(this->asBase().data(), tensor.data(), this->asBase().size());
 		this->asBase() = tensor; //switch to using operator= to ensure dimensional copies
 	}
 
-	~TensorInitializer() {
+	~Tensor_Initializer() {
 		black_cat_array.destroy();
 	}
 };

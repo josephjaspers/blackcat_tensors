@@ -12,9 +12,9 @@
 namespace BC {
 
 template<class T, class Mathlib>
-class Matrix : public TensorBase<Matrix<T, Mathlib>> {
+class Matrix : public Tensor<Matrix<T, Mathlib>> {
 
-	using parent_class = TensorBase<Matrix<T, Mathlib>>;
+	using parent_class = Tensor<Matrix<T, Mathlib>>;
 
 public:
 
@@ -44,7 +44,7 @@ public:
 
 private:
 
-	template<class> friend class TensorBase;
+	template<class> friend class Tensor;
 	template<class> friend class Tensor_Operations;
 	template<class,class> friend class Matrix;
 	template<class... params> Matrix(const params&... p) : parent_class(p...) {}

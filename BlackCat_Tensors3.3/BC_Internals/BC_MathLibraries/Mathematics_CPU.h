@@ -27,14 +27,11 @@ public:
 		t = new T[sz];
 		return t;
 	}
-
 	template<typename T>
 	static T*& unified_initialize(T*& t, int sz) {
 		t = new T[sz];
 		return t;
 	}
-
-	//The tensor classes mandate these methods differentiate method calls between gpu and cpu libraries, ergo you must override certain methods.
 	template<class T, class U>
 	static void HostToDevice(T* t, U* u, int size) {
 		copy(t, u, size);

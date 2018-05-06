@@ -8,7 +8,7 @@
 #ifndef TENSOR_SLICE_CU_
 #define TENSOR_SLICE_CU_
 
-#include "Tensor_Core_Base.h"
+#include "Core_Base.h"
 
 namespace BC {
 
@@ -16,7 +16,7 @@ template<int i>
 static constexpr int oneLess = i - 1 > 0 ? i - 1 : 0;
 
 template<class PARENT>
-	struct Tensor_Slice : Tensor_Core_Base<Tensor_Slice<PARENT>, oneLess<PARENT::DIMS()>> {
+	struct Tensor_Slice : Core_Base<Tensor_Slice<PARENT>, oneLess<PARENT::DIMS()>> {
 
 	using scalar_type = _scalar<PARENT>;
 

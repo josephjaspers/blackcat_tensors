@@ -41,6 +41,7 @@ public:
 
 	__BCinline__ static constexpr int DIMS() { return derived::DIMS();    }
 	__BCinline__ static constexpr int PARENT_DIMS() { return derived::DIMS();    }
+	__BCinline__ static constexpr bool ASSIGNABLE() { return false; }
 
 	__BCinline__ static constexpr int LAST() { return derived::DIMS() -1; }
 	__BCinline__ const auto IS() const { return base().innerShape(); }

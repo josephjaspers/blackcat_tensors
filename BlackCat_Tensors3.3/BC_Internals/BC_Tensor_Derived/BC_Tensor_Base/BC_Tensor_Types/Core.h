@@ -13,13 +13,13 @@
 namespace BC {
 
 template<class T>
-struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
+struct Core : Core_Base<Core<T>, _rankOf<T>>{
 
 	__BCinline__ static constexpr int DIMS() { return _rankOf<T>; }
 	__BCinline__ static constexpr int PARENT_DIMS() { return _rankOf<T>; }
 	__BCinline__ static constexpr int LAST() { return DIMS() - 1;}
 
-	using self = Tensor_Core<T>;
+	using self = Core<T>;
 	using scalar_type = _scalar<T>;
 	using Mathlib = _mathlib<T>;
 	using slice_type = Tensor_Slice<self>;
@@ -28,14 +28,14 @@ struct Tensor_Core : Tensor_Core_Base<Tensor_Core<T>, _rankOf<T>>{
 	int* is = nullptr;
 	int* os = nullptr;
 
-	Tensor_Core() = default;
-	Tensor_Core(const Tensor_Core&) = default;
-	Tensor_Core(Tensor_Core&&) = default;
-	Tensor_Core& operator = (const Tensor_Core& ) = default;
-	Tensor_Core& operator = (	   Tensor_Core&&) = default;
+	Core() = default;
+	Core(const Core&) = default;
+	Core(Core&&) = default;
+	Core& operator = (const Core& ) = default;
+	Core& operator = (	   Core&&) = default;
 
 	template<class U>
-	Tensor_Core(const U& param) {
+	Core(const U& param) {
 		static_assert(is_shape<U>, "NON_SHAPE DETECTED AS INITIALIZATION OF TENSOR SHAPE");
 		Mathlib::unified_initialize(is, DIMS());
 		Mathlib::unified_initialize(os, DIMS());

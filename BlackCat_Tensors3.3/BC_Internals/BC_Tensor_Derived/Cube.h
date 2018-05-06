@@ -1,4 +1,5 @@
 /*
+
  * Cube.h
  *
  *  Created on: Dec 30, 2017
@@ -13,9 +14,9 @@
 
 namespace BC {
 template<class T, class Mathlib>
-class Cube : public TensorBase<Cube<T, Mathlib>> {
+class Cube : public Tensor<Cube<T, Mathlib>> {
 
-	using parent_class = TensorBase<Cube<T, Mathlib>>;
+	using parent_class = Tensor<Cube<T, Mathlib>>;
 
 public:
 	using scalar = T;
@@ -41,7 +42,7 @@ public:
 
 private:
 
-	template<class> friend class TensorBase;
+	template<class> friend class Tensor;
 	template<class> friend class Tensor_Operations;
 	template<class... params> Cube(const params&... p) : parent_class(p...) {}
 

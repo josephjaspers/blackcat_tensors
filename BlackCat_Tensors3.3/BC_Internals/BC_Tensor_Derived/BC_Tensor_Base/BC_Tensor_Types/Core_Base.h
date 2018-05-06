@@ -1,5 +1,5 @@
 /*
- * Tensor_Core_Interface.h
+ * Core_Interface.h
  *
  *  Created on: Apr 1, 2018
  *      Author: joseph
@@ -13,21 +13,24 @@
 namespace BC {
 
 /*
- * Tensor_Core_Interface is a common interface amongst all tensor_core subclasses,
+ * Core_Interface is a common interface amongst all tensor_core subclasses,
  */
 
 template<class> class Tensor_Reshape;
 template<class> class Tensor_Slice;
 template<class> class Tensor_Scalar;
 template<class> class Tensor_Row;
+template<class> class Tensor_Chunk;
 
 template<class derived, int DIMENSION,
 template<class> class 	_Tensor_Reshape = Tensor_Reshape,
 template<class> class 	_Tensor_Slice 	= Tensor_Slice,
 template<class> class 	_Tensor_Row 	= Tensor_Row,
-template<class> class 	_Tensor_Scalar 	= Tensor_Scalar>
-struct Tensor_Core_Base : expression_base<Tensor_Core_Base<derived,DIMENSION>> {
+template<class> class 	_Tensor_Scalar 	= Tensor_Scalar,
+template<class> class   _Tensor_Chunk	= Tensor_Chunk>
+struct Core_Base : expression_base<Core_Base<derived,DIMENSION>> {
 
+	__BCinline__ static constexpr bool ASSIGNABLE() { return true; }
 	__BCinline__ static constexpr int DIMS() { return DIMENSION; }
 	__BCinline__ static constexpr int PARENT_DIMS() { return DIMS(); }
 
@@ -65,6 +68,14 @@ public:
 	__BCinline__	   auto row(int i) 	     { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED"); return row_type(&base().getIterator()[i], base()); }
 	__BCinline__ const auto col(int i) const { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
 	__BCinline__	   auto col(int i) 	     { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
+
+	template<class ... integers> __BCinline__ auto chunk(integers ... ints) {
+		return _Tensor_Chunk<derived>(base(), ints...);
+	}
+
+	template<class ... integers> __BCinline__ const auto chunk(integers ... ints) const {
+		return _Tensor_Chunk<derived>(base(), ints...);
+	}
 
 	template<class ... integers> __BCinline__
 	const auto reshape(integers ... ints) const {

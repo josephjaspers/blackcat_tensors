@@ -3,7 +3,7 @@
 #define EXPRESSION_BINARY_DOTPRODUCT_CU_
 
 #include "Expression_Base.h"
-#include "Tensor_Core_Base.h"
+#include "Core_Base.h"
 
 #include "Expression_Binary_Dotproduct_impl.h"
 #include "BlackCat_Internal_Definitions.h"

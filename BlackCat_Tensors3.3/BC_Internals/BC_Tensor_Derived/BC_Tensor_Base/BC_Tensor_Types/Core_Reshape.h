@@ -9,7 +9,7 @@
 #ifndef TENSOR_RESHAPE_H_
 #define TENSOR_RESHAPE_H_
 
-#include "Tensor_Core_Base.h"
+#include "Core_Base.h"
 
 namespace BC {
 
@@ -19,16 +19,16 @@ struct Tensor_Reshape;
 /*
  * Accepts an a tensor_core type wrapped in the new_tensor
  *
- * IE if you have a Vector<Tensor_Core<Vector<float, ml>, ml>  and wish to Reshape to a Matrix
- * The resulting reshape will be-- Matrix<Tensor_Reshape<Matrix<Tensor_Core<Vector<float, ml>,ml>>>>
+ * IE if you have a Vector<Core<Vector<float, ml>, ml>  and wish to Reshape to a Matrix
+ * The resulting reshape will be-- Matrix<Tensor_Reshape<Matrix<Core<Vector<float, ml>,ml>>>>
  *
- * This is somewhat awkward and atypical of the other Tensor_Core traits, but it is essential to be able to pass
+ * This is somewhat awkward and atypical of the other Core traits, but it is essential to be able to pass
  * the constexpr int DIMS in some form. The choice to utilize this method opposed to expanding the number of template arguments
  * was to ensure consistency across the determiners.h which are imperative to the template-metaprogramming.
  */
 
 template<template<class...> class TENSOR, class PARENT, class math_lib>
-struct Tensor_Reshape<TENSOR<PARENT, math_lib>> : Tensor_Core_Base<Tensor_Reshape<TENSOR<PARENT, math_lib>>, TENSOR<PARENT, math_lib>::DIMS()> {
+struct Tensor_Reshape<TENSOR<PARENT, math_lib>> : Core_Base<Tensor_Reshape<TENSOR<PARENT, math_lib>>, TENSOR<PARENT, math_lib>::DIMS()> {
 
 	__BCinline__ static constexpr int PARENT_DIMS() { return PARENT::PARENT_DIMS(); }
 	__BCinline__ static constexpr int DIMS() { return class2rank<TENSOR<PARENT, math_lib>>; };

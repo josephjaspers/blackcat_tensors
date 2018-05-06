@@ -9,7 +9,7 @@
 #ifndef TENSOR_CHUNK
 #define TENSOR_CHUNK
 
-#include "Tensor_Core_Base.h"
+#include "Core_Base.h"
 
 /*
  * I HAVE NOT BEEN TESTED YET, TEST ME
@@ -20,7 +20,7 @@
 namespace BC {
 
 template<class PARENT, int NEW_DIM>
-struct Tensor_Chunk : Tensor_Core_Base<Tensor_Chunk<PARENT, NEW_DIM>, NEW_DIM> {
+struct Tensor_Chunk : Core_Base<Tensor_Chunk<PARENT, NEW_DIM>, NEW_DIM> {
 
 	using Mathlib = typename  PARENT::Mathlib;
 

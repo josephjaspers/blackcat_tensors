@@ -1,5 +1,5 @@
 /*
- * Tensor_Core_RowVector.h
+ * Core_RowVector.h
  *
  *  Created on: Mar 14, 2018
  *      Author: joseph
@@ -8,7 +8,7 @@
 #ifndef TENSOR_CORE_ROWVECTOR_H_
 #define TENSOR_CORE_ROWVECTOR_H_
 
-#include "Tensor_Core_Base.h"
+#include "Core_Base.h"
 
 namespace BC {
 
@@ -17,7 +17,7 @@ namespace BC {
  */
 
 template<class PARENT>
-struct Tensor_Row : Tensor_Core_Base<Tensor_Row<PARENT>, 1>  {
+struct Tensor_Row : Core_Base<Tensor_Row<PARENT>, 1>  {
 
 	using array = _iterator<PARENT>;
 	using self = Tensor_Row<PARENT>;

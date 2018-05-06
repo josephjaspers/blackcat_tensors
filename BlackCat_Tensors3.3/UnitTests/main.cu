@@ -162,6 +162,7 @@ krnl[0][0] = 1;
 krnl[1][1] = 1;
 
 mat img(5,5); img.zero();
+
 for (int m = 0; m < img.rows(); ++m) {
 	for (int n = 0; n < img.cols(); ++n)
 		if (m ==n)

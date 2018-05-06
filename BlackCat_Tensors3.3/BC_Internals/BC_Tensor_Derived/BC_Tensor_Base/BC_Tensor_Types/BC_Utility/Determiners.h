@@ -13,7 +13,7 @@ namespace BC {
 
 template<bool cond, class a, class b> using ifte = typename std::conditional<cond, a, b>::type;
 
-template<class> class Tensor_Core;
+template<class> class Core;
 template<class> class Tensor_Slice;
 template<class> class Tensor_Scalar;
 template<class> class Tensor_Reshape;
@@ -28,12 +28,12 @@ class BC_Type;
 
 template<class T> struct isCore { static constexpr bool conditional = MTF::isPrimitive<T>::conditional; };
 template<template<class> class T, class U> struct isCore<T<U>>
-{ static constexpr bool conditional = MTF::isOneOf<T<U>,Tensor_Core<U>, Tensor_Slice<U>, Tensor_Scalar<U>,
+{ static constexpr bool conditional = MTF::isOneOf<T<U>,Core<U>, Tensor_Slice<U>, Tensor_Scalar<U>,
 	Tensor_Reshape<U>>::conditional; };
 
 template<class T> struct isPrimaryCore { static constexpr bool conditional = MTF::isPrimitive<T>::conditional; };
 template<template<class> class T, class U> struct isPrimaryCore<T<U>>
-{ static constexpr bool conditional = MTF::same<T<U>,Tensor_Core<U>>::conditional; };
+{ static constexpr bool conditional = MTF::same<T<U>,Core<U>>::conditional; };
 
 template<class T> static constexpr bool pCore_b = isPrimaryCore<T>::conditional;
 
@@ -98,7 +98,7 @@ template<template<class...> class tensor, class functor, class... set>
 struct determine_functor<tensor<functor, set...>>{
 
 	using derived = tensor<functor,set...>;
-	using type = ifte<std::is_base_of<BC_Type,functor>::value, functor, Tensor_Core<derived>>;
+	using type = ifte<std::is_base_of<BC_Type,functor>::value, functor, Core<derived>>;
 };
 
 ///DET EVALUATION----------------------------------------------------------------------------------------------
@@ -121,7 +121,7 @@ struct determine_scalar {
 	using type = T;
 };
 template<template<class...> class tensor, class T, class... set>
-struct determine_scalar<Tensor_Core<tensor<T, set...>>> {
+struct determine_scalar<Core<tensor<T, set...>>> {
 	static constexpr bool nested_core_type = true;
 	using type = typename determine_scalar<T>::type;
 };

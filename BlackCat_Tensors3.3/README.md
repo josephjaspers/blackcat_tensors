@@ -172,8 +172,8 @@ Methods:
 	const auto innerShape() const			//returns some_array_type which holds inner shape (type depedent on context)
 	const auto outerShape() const			//returns some_array_type which holds outer shape (type depedent on context)
 
-	const auto data() const				//returns internal iterator IE expression_functor or Tensor_Core/Tensor_Slice/Tensor/Scalar
-	      auto data()				//returns internal iterator IE expression_functor or Tensor_Core/Tensor_Slice/Tensor/Scalar
+	const auto data() const				//returns internal iterator IE expression_functor or Core/Tensor_Slice/Tensor/Scalar
+	      auto data()				//returns internal iterator IE expression_functor or Core/Tensor_Slice/Tensor/Scalar
 
 	const operator[] (int i) const 			//returns "slice" of tensor at index (IE Cube returns Matrix, Matrix returns Vector, Vector returns Scalar)
    	      operator[] (int i)			//returns "slice" of tensor at index (IE Cube returns Matrix, Matrix returns Vector, Vector returns Scalar)
