@@ -8,7 +8,7 @@
 #ifndef EXPRESSION_UTILITY_STRUCTS_H_
 #define EXPRESSION_UTILITY_STRUCTS_H_
 
-#include "Internal_Shapes.h"
+#include "Shape_Array_Types.h"
 #include <iostream>
 
 //returns the class with the higher_order rank
@@ -54,5 +54,7 @@ struct inferior_type<lv, rv, std::enable_if_t<(lv::DIMS() == rv::DIMS())>> {
 		return r;
 	}
 };
+
+
 
 #endif /* EXPRESSION_UTILITY_STRUCTS_H_ */

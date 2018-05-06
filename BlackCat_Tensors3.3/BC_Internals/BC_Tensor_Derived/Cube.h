@@ -9,14 +9,14 @@
 #ifndef BC_Cube_H
 #define BC_Cube_H
 
-#include "BC_Tensor_Base/TensorBase.h"
+#include "BC_Tensor_Base/Tensor_Base.h"
 
 
 namespace BC {
 template<class T, class Mathlib>
-class Cube : public Tensor<Cube<T, Mathlib>> {
+class Cube : public Tensor_Base<Cube<T, Mathlib>> {
 
-	using parent_class = Tensor<Cube<T, Mathlib>>;
+	using parent_class = Tensor_Base<Cube<T, Mathlib>>;
 
 public:
 	using scalar = T;
@@ -42,12 +42,10 @@ public:
 
 private:
 
-	template<class> friend class Tensor;
+	template<class> friend class Tensor_Base;
 	template<class> friend class Tensor_Operations;
 	template<class... params> Cube(const params&... p) : parent_class(p...) {}
 
 };
-
-} //End Namespace BC
-
+}
 #endif /* Cube_H */

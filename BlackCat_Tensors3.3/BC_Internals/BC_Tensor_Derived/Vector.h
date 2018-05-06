@@ -8,13 +8,13 @@
 #ifndef VECTOR_H_
 #define VECTOR_H_
 
-#include "BC_Tensor_Base/TensorBase.h"
+#include "BC_Tensor_Base/Tensor_Base.h"
 
 namespace BC {
 template<class T, class Mathlib>
-class Vector : public Tensor<Vector<T, Mathlib>> {
+class Vector : public Tensor_Base<Vector<T, Mathlib>> {
 
-	using parent_class = Tensor<Vector<T, Mathlib>>;
+	using parent_class = Tensor_Base<Vector<T, Mathlib>>;
 
 public:
 
@@ -41,12 +41,10 @@ public:
 	}
 
 private:
-
 	template<class,class> friend class Vector;
-	template<class> friend class Tensor;
+	template<class> friend class Tensor_Base;
 	template<class> friend class Tensor_Operations;
 	template<class... params> Vector(const params&... p) : parent_class(p...) {}
-
 };
 }
 

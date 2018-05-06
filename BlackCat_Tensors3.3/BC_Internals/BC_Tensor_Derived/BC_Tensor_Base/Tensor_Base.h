@@ -17,7 +17,7 @@ namespace BC {
 
 
 template<class derived>
-class Tensor :
+class Tensor_Base :
 		public Tensor_Operations<derived>,
 		public Tensor_Utility<derived>,
 		public Tensor_Initializer<derived>
@@ -25,7 +25,7 @@ class Tensor :
 
 protected:
 
-	using self 			= Tensor<derived>;
+	using self 			= Tensor_Base<derived>;
 	using operations  	= Tensor_Operations<derived>;
 	using initializer 	= Tensor_Initializer<derived>;
 	using utility		= Tensor_Utility<derived>;
@@ -37,7 +37,7 @@ protected:
 
 	static constexpr int DIMS() { return ranker<derived>::value; }
 	static constexpr int CONTINUOUS() { return functor_type::CONTINUOUS(); }
-	template<class> friend class Tensor;
+	template<class> friend class Tensor_Base;
 
 public:
 	using operations::operator=;
@@ -46,12 +46,12 @@ public:
 	operator	   derived& () 		 { return static_cast< 		derived&>(*this); }
 
 
-	template<class... params> explicit Tensor(const params&... p) : initializer(p...) {}
+	template<class... params> explicit Tensor_Base(const params&... p) : initializer(p...) {}
 
 	//move only defined for Core's
 	using move_parameter = std::conditional_t<pCore_b<functor_type>, derived&&, DISABLED>;
-	Tensor(		 move_parameter tensor) : initializer(std::move(tensor)) {}
-	Tensor(const Tensor& 	tensor) : initializer(tensor) {}
+	Tensor_Base(		 move_parameter tensor) : initializer(std::move(tensor)) {}
+	Tensor_Base(const Tensor_Base& 	tensor) : initializer(tensor) {}
 
 
 	derived& operator =(move_parameter tensor) {

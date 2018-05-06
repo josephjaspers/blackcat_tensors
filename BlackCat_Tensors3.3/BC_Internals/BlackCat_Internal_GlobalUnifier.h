@@ -8,9 +8,8 @@
 #ifndef BLACKCAT_INTERNAL_GLOBALUNIFIER_H_
 #define BLACKCAT_INTERNAL_GLOBALUNIFIER_H_
 
-#include "BC_MathLibraries/Mathematics_CPU.h"
-#include "BC_MathLibraries/Mathematics_GPU.cu"
-#include "BC_MathLibraries/Mathematics_GPU_impl.cu"
+#include "BC_MathLibraries/CPU.h"
+#include "BC_MathLibraries/GPU.cu"
 
 #include "BlackCat_ForwardDecls.h"
 

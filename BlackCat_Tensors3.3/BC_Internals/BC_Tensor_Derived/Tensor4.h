@@ -8,15 +8,15 @@
 #ifndef BC_TENSOR_N_H
 #define BC_TENSOR_N_H
 
-#include "BC_Tensor_Base/TensorBase.h"
+#include "BC_Tensor_Base/Tensor_Base.h"
 
 namespace BC {
 
 
 template<class T, class Mathlib>
-class Tensor4 : public Tensor<Tensor4<T, Mathlib>> {
+class Tensor4 : public Tensor_Base<Tensor4<T, Mathlib>> {
 
-	using parent_class = Tensor<Tensor4<T, Mathlib>>;
+	using parent_class = Tensor_Base<Tensor4<T, Mathlib>>;
 
 public:
 	using parent_class::operator=;
@@ -41,7 +41,7 @@ public:
 
 private:
 
-	template<class U> friend class Tensor;
+	template<class U> friend class Tensor_Base;
 	template<class U> friend class Tensor_Operations;
 	template<class... params> Tensor4(const params&... p) : parent_class(p...) {}
 

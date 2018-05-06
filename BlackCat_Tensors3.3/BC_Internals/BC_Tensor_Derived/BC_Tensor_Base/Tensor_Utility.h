@@ -16,6 +16,10 @@
 
 namespace BC {
 
+/*
+ * Defines standard utility methods related to I/O
+ */
+
 template<class deriv>
 struct Tensor_Utility {
 

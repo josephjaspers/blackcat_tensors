@@ -8,8 +8,16 @@
 #ifndef SIMPLE_H_
 #define SIMPLE_H_
 #include <type_traits>
+#include "../BlackCat_Internal_Definitions.h"
 namespace BC {
+__BCinline__ static constexpr int max(int x) { return x;}
+template<class... integers>
+__BCinline__ static constexpr int max(int x, integers... ints) { return x > max (ints...) ? x : max(ints...); }
+
+
 namespace MTF {
+
+
 
 	template<class T> struct isTrue 				 { static constexpr bool conditional = true; };
 	template<> 		  struct isTrue<std::false_type> { static constexpr bool conditional = false; };

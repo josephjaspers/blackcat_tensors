@@ -10,9 +10,6 @@
 #define EXPRESSION_BASE_H_
 
 #include "BlackCat_Internal_Definitions.h"
-#include "BC_Utility/Internal_Shapes.h"
-#include "BC_Utility/Utility.h"
-
 #include <iostream>
 
 namespace BC {
@@ -129,9 +126,3 @@ public:
 }
 
 #endif /* EXPRESSION_BASE_H_ */
-//
-//template<class rv> __BCinline__ auto operator + (const pbase<rv>& tensor) const { return binary_expression<lv, rv, add>(base(), tensor.base()); }
-//template<class rv> __BCinline__ auto operator - (const pbase<rv>& tensor) const { return binary_expression<lv, rv, sub>(base(), tensor.base()); }
-//template<class rv> __BCinline__ auto operator / (const pbase<rv>& tensor) const { return binary_expression<lv, rv, div>(base(), tensor.base()); }
-//template<class rv> __BCinline__ auto operator * (const pbase<rv>& tensor) const { return binary_expression<lv, rv, mul>(base(), tensor.base()); }
-////asterix is multiplication in this context

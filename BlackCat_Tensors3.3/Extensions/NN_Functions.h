@@ -1,5 +1,8 @@
 #ifndef BLACKCAT_TENSOR_FUNCTIONS
 #define BLACKCAT_TENSOR_FUNCTIONS
+
+#include <cmath>
+
 namespace BC {
 
 	namespace NN_Functions {

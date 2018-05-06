@@ -7,14 +7,14 @@
 
 #ifndef BC_MATRIX_H
 #define BC_MATRIX_H
-#include "BC_Tensor_Base/TensorBase.h"
+#include "BC_Tensor_Base/Tensor_Base.h"
 
 namespace BC {
 
 template<class T, class Mathlib>
-class Matrix : public Tensor<Matrix<T, Mathlib>> {
+class Matrix : public Tensor_Base<Matrix<T, Mathlib>> {
 
-	using parent_class = Tensor<Matrix<T, Mathlib>>;
+	using parent_class = Tensor_Base<Matrix<T, Mathlib>>;
 
 public:
 
@@ -44,7 +44,7 @@ public:
 
 private:
 
-	template<class> friend class Tensor;
+	template<class> friend class Tensor_Base;
 	template<class> friend class Tensor_Operations;
 	template<class,class> friend class Matrix;
 	template<class... params> Matrix(const params&... p) : parent_class(p...) {}

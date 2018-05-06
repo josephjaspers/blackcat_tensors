@@ -9,15 +9,15 @@
 #define SCALAR_H_
 
 #include <vector>
-#include "BC_Tensor_Base/TensorBase.h"
+#include "BC_Tensor_Base/Tensor_Base.h"
 class VOID_;
 
 namespace BC {
 
 template<class T, class Mathlib>
-class Scalar : public Tensor<Scalar<T, Mathlib>> {
+class Scalar : public Tensor_Base<Scalar<T, Mathlib>> {
 
-	using parent_class = Tensor<Scalar<T, Mathlib>>;
+	using parent_class = Tensor_Base<Scalar<T, Mathlib>>;
 
 public:
 
@@ -50,7 +50,7 @@ public:
 
 private:
 
-	template<class U> friend class Tensor;
+	template<class U> friend class Tensor_Base;
 	template<class U> friend class Tensor_Operations;
 	template<class... params> Scalar(const params&... p) : parent_class( p...) {}
 

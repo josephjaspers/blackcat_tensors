@@ -8,7 +8,6 @@
 #ifndef BLACKCAT_COMPILERDEFINITIONS_H_
 #define BLACKCAT_COMPILERDEFINITIONS_H_
 
-
 namespace BC {
 
 static constexpr int BC_CPU_SINGLE_THREAD_THRESHOLD = 999;
@@ -30,6 +29,6 @@ static constexpr int CUDA_BASE_THREADS = 256;
 
 #include "BC_Utility/Determiners.h"
 #include "BC_Utility/MetaTemplateFunctions.h"
-#include "BC_Utility/Expression_Utility_Structs.h" //DEPENDENT UPON __BCinline__
+#include "BC_Utility/Shape_Utility.h" //DEPENDENT UPON __BCinline__
 
 #endif /* BLACKCAT_COMPILERDEFINITIONS_H_ */

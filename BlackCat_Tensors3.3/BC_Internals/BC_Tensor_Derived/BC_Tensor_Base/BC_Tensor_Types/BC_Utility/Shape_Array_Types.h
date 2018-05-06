@@ -14,15 +14,6 @@
 #include "../BlackCat_Internal_Definitions.h"
 
 namespace BC {
-__BCinline__ static constexpr int max(int x) { return x;}
-template<class... integers>
-__BCinline__ static constexpr int max(int x, integers... ints) { return x > max (ints...) ? x : max(ints...); }
-
-
-	template<class T, class F, class v = void> struct castable { static constexpr bool conditional = false; };
-	template<class T, class F> struct castable<T, F, decltype(static_cast<F>(std::declval<T>()))> { static constexpr bool conditional = true; };
-
-	template<class T, class F> static constexpr bool castable_b = castable<T,F>::conditional;
 
 	template<class T, int size_>
 	struct stack_array : stack_array<T, size_ - 1> {
@@ -73,33 +64,6 @@ __BCinline__ static constexpr int max(int x, integers... ints) { return x > max 
 	auto l_array(T data) {
 		return lamda_array<T>(data);
 	}
-
-	template<class T>
-		struct index_array;
-
-	template<class T, int x>
-	struct index_array<T[x]> {
-		T data[x];
-
-		void init(int value) {
-			data[x - 1] = value;
-		}
-		template<class... integers> __BCinline__
-		void init(int value, integers... ints) {
-			data[x - sizeof...(integers) - 1] = value;
-			init (ints...);
-		}
-
-		template<class... integers> __BCinline__ index_array(integers... ints) { init(ints...); }
-		template<class... integers> __BCinline__ index_array(std::initializer_list<int> ints) {
-			for (int i = 0; i < x; ++i) {
-				data[i] = ints.begin()[i];
-			}
-		}
-
-		auto operator[] (int i) -> decltype(data[i]) { return data[i]; }
-		auto operator[] (int i) const -> decltype(data[i]) { return data[i]; }
-	};
 
 	template<class T, class... vals> __BChd__
 	auto array(T front, vals... values) {

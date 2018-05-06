@@ -20,10 +20,6 @@ struct alternate_asterix_denoter {
 
 	alternate_asterix_denoter(const Tensor_Operations<A>& r) : ref(const_cast<Tensor_Operations<A>&>(r)) {}
 };
-
-
 }
-
-
 
 #endif /* ALTERNATEASTERIXDENOTER_H_ */

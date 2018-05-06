@@ -99,15 +99,15 @@ public:
 			scalar_type* tmp;
 			Mathlib::initialize(tmp, 1);
 			Mathlib::scalarMul(tmp, alpha, alpha2);
-			Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M(), N(), K(), tmp, nullptr, left.LD_rows(), right.LD_rows(), this->rows());
+			Mathlib::gemm(transA, transB, A, B, array_ptr, M(), N(), K(), tmp, nullptr, left.LD_rows(), right.LD_rows(), this->rows());
 			Mathlib::destroy(tmp);
 
 		} else if (rv_scalar)
-			 Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M(), N(), K(), alpha2, nullptr, left.LD_rows(), right.LD_rows(), this->rows());
+			 Mathlib::gemm(transA, transB, A, B, array_ptr, M(), N(), K(), alpha2, nullptr, left.LD_rows(), right.LD_rows(), this->rows());
 		 else if (lv_scalar)
-			 Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M(), N(), K(), alpha, nullptr, left.LD_rows(), right.LD_rows(), this->rows());
+			 Mathlib::gemm(transA, transB, A, B, array_ptr, M(), N(), K(), alpha, nullptr, left.LD_rows(), right.LD_rows(), this->rows());
 		 else
-			 Mathlib::MatrixMul(transA, transB, A, B, array_ptr, M(), N(), K(), nullptr, nullptr, left.LD_rows(), right.LD_rows(), this->rows());
+			 Mathlib::gemm(transA, transB, A, B, array_ptr, M(), N(), K(), nullptr, nullptr, left.LD_rows(), right.LD_rows(), this->rows());
 
 		if (lv_eval)
 			Mathlib::destroy(A);
