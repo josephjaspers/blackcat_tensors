@@ -15,9 +15,10 @@
 
 namespace BC {
 
+	//This class is more or less a homogenous tuple
 	template<class T, int size_>
 	struct stack_array : stack_array<T, size_ - 1> {
-
+		static constexpr int SIZE() { return size; }
 		template<class... values>
 		__BCinline__ stack_array(T val, values... integers) : stack_array<T, size_ - 1>(integers...), dim(val) {}
 		__BCinline__ stack_array() {}

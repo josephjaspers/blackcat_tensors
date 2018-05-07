@@ -53,8 +53,12 @@ public:
 
 	__BCinline__ 	   auto& operator [] (int index) 	   { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[index]; }
 	__BCinline__ const auto& operator [] (int index) const { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[index]; }
-	template<class... integers> __BCinline__ 	   auto& operator () (integers... ints) 	  { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[this->scal_index(ints...)]; }
-	template<class... integers> __BCinline__ const auto& operator () (integers... ints) const { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[this->scal_index(ints...)]; }
+	template<class... integers> __BCinline__ 	   auto& operator () (integers... ints) 	  {
+		static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
+		return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[this->scal_index(ints...)]; }
+	template<class... integers> __BCinline__ const auto& operator () (integers... ints) const {
+		static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
+		return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[this->scal_index(ints...)]; }
 
 	__BCinline__ const auto innerShape() const { return base().innerShape(); }
 	__BCinline__ const auto outerShape() const { return base().outerShape(); }

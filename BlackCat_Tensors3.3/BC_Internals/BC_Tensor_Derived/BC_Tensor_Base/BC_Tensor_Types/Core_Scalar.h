@@ -34,8 +34,7 @@ struct Tensor_Scalar : Core_Base<Tensor_Scalar<PARENT>, 0> {
 	__BCinline__ const auto outerShape() const 	{ return parent.outerShape(); }
 
 	__BCinline__ const scalar* getIterator() const { return array_slice; }
-	__BCinline__	   scalar* getIterator()  	  { return array_slice; }
-
+	__BCinline__	   scalar* getIterator()  	  { return array_slice;  }
 	};
 }
 

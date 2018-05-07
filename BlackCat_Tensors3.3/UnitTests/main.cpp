@@ -161,6 +161,7 @@ krnl.zero();
 krnl[0][0] = 1;
 krnl[1][1] = 1;
 
+
 mat img(5,5); img.zero();
 
 for (int m = 0; m < img.rows(); ++m) {
@@ -172,28 +173,34 @@ for (int m = 0; m < img.rows(); ++m) {
 krnl.print();
 img.print();
 
-//mat m = krnl.x_corr<2,BC::inner>(krnl.x_corr<2,BC::inner>(img).cacher());
 
-//m.print();
-//
-//m.reshape(9).reshape(3,3).print();
-//m.reshape(9) += m.reshape(9);
-//m.print();
-//m[0].reshape(1,1,3).print();
-//m.reshape(3,1,3)[0].print();
+mat m = krnl.x_corr<2,BC::inner>(krnl.x_corr<2,BC::inner>(img));
+m.print();
 
-//m[0].print();
+cube krnl2(2,2,3);
+krnl2.zero();
+//krnl2[0][0][0] = 1;
+//krnl2[0][1][1] = 1;
+//krnl2[1][0][0] = 1;
+//krnl2[1][1][1] = 1;
+//krnl2[2][0][0] = 1;
+//krnl2[2][1][1] = 1;
 
-//mat m2 = krnl.x_corr_padded<2>(img);
-//m2.print();
+//krnl2[1][0][1] = 1;
 
-//img.print();
-//m2.print();
+for (int i = 0; i < krnl2.size(); ++i) {
+	krnl2(i) =i ;
+}
+for (int i = 0; i < img.size(); ++i) {
+	img(i) =i ;
+}
 
-//auto cor = krnl.x_corr<2>(img);
-//auto cor2 = krnl.x_corr<2>(cor);
-//mat m = cor2;
-//m.print();
+krnl2.print();
+img.print();
+cube m2(4,4, 3);
+m2.zero();
+m2 = krnl2.x_corr_stack<2>(img);
+m2.print();
 
 	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
 //	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;

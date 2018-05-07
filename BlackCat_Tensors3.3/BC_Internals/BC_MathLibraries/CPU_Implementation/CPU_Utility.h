@@ -39,14 +39,14 @@ struct CPU_Utility {
 	static void destroy(T* t) {
 		delete[] t;
 	}
-	template<class T, class RANKS>
-	static void print(const T ary, const RANKS ranks, int order, int print_length) {
-		BC::print(ary, ranks, order, print_length);
+	template<class T, class is, class os>
+	static void print(const T ary, const is inner, const os outer, int order, int print_length) {
+		BC::print(ary, inner, outer, order, print_length);
 	}
 
-	template<class T, class RANKS>
-	static void printSparse(const T ary, const RANKS ranks, int order, int print_length) {
-		BC::printSparse(ary, ranks, order, print_length);
+	template<class T, class is, class os>
+	static void printSparse(const T ary, const is inner, os outer, int order, int print_length) {
+		BC::printSparse(ary, inner, outer, order, print_length);
 	}
 };
 }

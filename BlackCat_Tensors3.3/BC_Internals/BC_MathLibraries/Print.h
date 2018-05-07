@@ -15,8 +15,8 @@ namespace BC {
 
 
 
-template<typename T, class int_ranks>
-static void printHelper(const T& ary, const int_ranks ranks, int order, std::string indent, int printSpace) {
+template<typename T, class int_ranks, class os>
+static void printHelper(const T& ary, const int_ranks ranks, const os outer, int order, std::string indent, int printSpace) {
 
 
 	--order;
@@ -26,7 +26,7 @@ static void printHelper(const T& ary, const int_ranks ranks, int order, std::str
 		auto adj_indent = indent + "    "; //add a tab to the index
 
 		for (int i = 0; i < ranks[order]; ++i) {
-			printHelper(&ary[i * ranks[order - 1]], ranks, order, adj_indent, printSpace);
+			printHelper(&ary[i * outer[order - 1]], ranks, outer, order, adj_indent, printSpace);
 		}
 
 		auto gap = std::to_string(order);
@@ -40,7 +40,7 @@ static void printHelper(const T& ary, const int_ranks ranks, int order, std::str
 
 			for (int i = 0; i < ranks[order]; ++i) {
 				//convert to string --- seems to not be working with long/ints?
-				auto str = std::to_string(ary[i * ranks[order - 1] + j]);
+				auto str = std::to_string(ary[i * outer[order - 1] + j]);
 
 				//if the string is longer than the printspace truncate it
 				str = str.substr(0, str.length() < printSpace ? str.length() : printSpace);
@@ -84,8 +84,8 @@ static void printHelper(const T& ary, const int_ranks ranks, int order, std::str
 	}
 }
 
-template<typename T, class RANKS>
-static void print(const T& ary, const RANKS ranks, int order, int print_length) {
+template<typename T, class RANKS, class os>
+static void print(const T& ary, const RANKS ranks, const os outer, int order, int print_length) {
 	if (order == 0) {
 		std::cout << "[" << ary[0]  << "]" << std::endl;
 		return;
@@ -102,7 +102,7 @@ static void print(const T& ary, const RANKS ranks, int order, int print_length) 
 	}
 
 	std::string indent = "";
-	printHelper(ary, ranks, order, indent, print_length);
+	printHelper(ary, ranks, outer, order, indent, print_length);
 	std::cout << std::endl;
 }
 template<typename T>
@@ -128,8 +128,8 @@ static void print(const T& ary, int size) {
 
 
 
-template<typename T, class int_ranks>
-static void printHelperSparse(const T& ary, const int_ranks ranks, int order, std::string indent, int printSpace) {
+template<typename T, class int_ranks, class os>
+static void printHelperSparse(const T& ary, const int_ranks ranks, const os outer, int order, std::string indent, int printSpace) {
 	--order;
 
 	if (order > 1) {
@@ -137,7 +137,7 @@ static void printHelperSparse(const T& ary, const int_ranks ranks, int order, st
 		auto adj_indent = indent + "    "; //add a tab to the index
 
 		for (int i = 0; i < ranks[order]; ++i) {
-			printHelperSparse(&ary[i * ranks[order - 1]], ranks, order, adj_indent, printSpace);
+			printHelperSparse(&ary[i * outer[order - 1]], ranks, order, adj_indent, printSpace);
 		}
 
 		auto gap = std::to_string(order);
@@ -152,7 +152,7 @@ static void printHelperSparse(const T& ary, const int_ranks ranks, int order, st
 
 			for (int i = 0; i < ranks[order]; ++i) {
 				//convert to string --- seems to not be working with long/ints?
-				auto str = std::to_string(ary[i * ranks[order - 1] + j]);
+				auto str = std::to_string(ary[i * outer[order - 1] + j]);
 
 				//if the string is longer than the printspace truncate it
 				str = str.substr(0, str.length() < printSpace ? str.length() : printSpace);
@@ -162,7 +162,7 @@ static void printHelperSparse(const T& ary, const int_ranks ranks, int order, st
 					str += std::string(" ", printSpace - str.length());
 
 				//print the string
-				if (ary[i * ranks[order - 1] + j] < .0001) {
+				if (ary[i * outer[order - 1] + j] < .0001) {
 					for (int x= 0; x < str.length(); ++x) {
 						std::cout << " ";
 					}
@@ -207,8 +207,8 @@ static void printHelperSparse(const T& ary, const int_ranks ranks, int order, st
 	}
 }
 
-template<typename T, class RANKS>
-static void printSparse(const T& ary, const RANKS ranks, int order, int print_length) {
+template<typename T, class RANKS, class os>
+static void printSparse(const T& ary, const RANKS ranks, const os outer, int order, int print_length) {
 	if (order == 0) {
 		std::cout << "[" << ary[0]  << "]" << std::endl;
 		return;
@@ -229,7 +229,7 @@ static void printSparse(const T& ary, const RANKS ranks, int order, int print_le
 	}
 
 	std::string indent = "";
-	printHelperSparse(ary, ranks, order, indent, print_length);
+	printHelperSparse(ary, ranks, outer, order, indent, print_length);
 	std::cout << std::endl;
 }
 template<typename T>

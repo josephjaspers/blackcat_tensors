@@ -21,10 +21,11 @@ struct binary_expression<lv, rv, _x_corr<corr_dimension,inner>> : expression_bas
 
 	__BCinline__ static constexpr int DIMS() { return corr_dimension; }
 	__BCinline__ static constexpr int CONTINUOUS() { return corr_dimension; }
+
 	using scalar = _scalar<lv>;
 
-//	static_assert(lv::DIMS() == rv::DIMS(), "CORRELATION CURRENTLY ONLY SUPPORTED FOR SAME ORDER TENSORS");
-//	static_assert(DIMS() <= 3, "CORRELATION MOST MOVEMENT IS LIMITED TO 3D");
+	static_assert(lv::DIMS() == rv::DIMS(), "CORRELATION CURRENTLY ONLY SUPPORTED FOR SAME ORDER TENSORS");
+	static_assert(DIMS() <= 3, "CORRELATION MOST MOVEMENT IS LIMITED TO 3D");
 
 
 	lv left;  //krnl
@@ -32,8 +33,8 @@ struct binary_expression<lv, rv, _x_corr<corr_dimension,inner>> : expression_bas
 
 	binary_expression(lv l_, rv r_) :left(l_), right(r_) {}
 
-	__BCinline__ const auto innerShape() const { return l_array([=](int i) {return right.dimension(i) - left.dimension(i) + 1;} ); }
-	__BCinline__ const auto outerShape() const { return l_array([=](int i) {return i == 0 ? this->rows() : this->dimension(i) * this->dimension(i - 1);} );}
+	__BCinline__ const auto innerShape() const { return l_array([&](int i) {return right.dimension(i) - left.dimension(i) + 1;} ); }
+	__BCinline__ const auto outerShape() const { return l_array([&](int i) {return i == 0 ? this->rows() : this->dimension(i) * this->dimension(i - 1);} );}
 
 	struct DISABLED;
 	template<int x>
@@ -75,43 +76,6 @@ struct binary_expression<lv, rv, _x_corr<corr_dimension,inner>> : expression_bas
 		return axpy(ints...);
 	}
 };
-
-struct _x_corr2 {};
-
-
-template<class lv, class rv>
-struct binary_expression<lv, rv, _x_corr2> : public expression_base<binary_expression<lv, rv, _x_corr2>> {
-
-	lv left;
-	rv right;
-
-	__BCinline__ static constexpr int DIMS() { return 2; }
-	__BCinline__ static constexpr int CONTINUOUS() { return 2; }
-
-	__BCinline__  binary_expression(lv l, rv r) : left(l), right(r) {}
-
-//	__BCinline__  auto  operator [](int index) const { return left[index] +right[index]; }
-	template<class... integers> __BCinline__  auto  operator ()(integers... ints) const { return axpy(ints...); }
-
-	__BCinline__ const auto& shape() const { return dominant_type<lv, rv>::shape(left, right); }
-	__BCinline__ const auto innerShape() const { return l_array([=](int i) {return right.dimension(i) - left.dimension(i) + 1;} ); }
-		__BCinline__ const auto outerShape() const { return l_array([=](int i) {return i == 0 ? this->rows() : this->dimension(i) * this->dimension(i - 1);} );}
-
-	template<class... ints> __BCinline__
-	double axpy (int x, int y, ints... indexes) const {
-		double sum = 0;
-		for (int n = 0; n < left.cols(); ++n) {
-			for (int m = 0 ; m < left.rows(); ++m) {
-				sum += left(m, n) * right(m + x, n + y, indexes...);
-			}
-		}
-		return sum;
-	}
-
-};
-
-
-
 }
 
 

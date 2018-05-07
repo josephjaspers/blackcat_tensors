@@ -23,12 +23,14 @@ static constexpr int CUDA_BASE_THREADS = 256;
 #endif
 
 #define __BCinline__ __BChd__  __attribute__((always_inline)) __attribute__((hot))
-#define __inline__ inline __attribute__((always_inline)) __attribute__((hot))
+#define __BC_host_inline__ inline __attribute__((always_inline)) __attribute__((hot))
 }
 
 
 #include "BC_Utility/Determiners.h"
 #include "BC_Utility/MetaTemplateFunctions.h"
+#include "BC_Utility/ParameterPackModifiers.h"
+
 #include "BC_Utility/Shape_Utility.h" //DEPENDENT UPON __BCinline__
 
 #endif /* BLACKCAT_COMPILERDEFINITIONS_H_ */

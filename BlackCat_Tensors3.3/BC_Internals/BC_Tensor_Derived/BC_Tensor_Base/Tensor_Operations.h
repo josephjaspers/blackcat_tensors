@@ -17,6 +17,8 @@
 #include "BC_Tensor_Types/Expression_Unary_Cacher.h"
 #include "BC_Tensor_Types/Expression_Binary_Correlation.h"
 #include "BC_Tensor_Types/Expression_Binary_Correlation_Padded.h"
+#include "BC_Tensor_Types/Expression_Binary_Correlation_Stack.h"
+
 #include "Operations_Utility/AlternateAsterixDenoter.h"
 #include "Operations_Utility/Expression_Determiner.h"
 #include <type_traits>
@@ -204,6 +206,14 @@ public:
 		return typename base<mv>::template type<
 			binary_expression<functor_type, _functor<deriv>, _x_corr<mv, type>>, mathlib_type>(asDerived().data(),rv.asDerived().data());
 	}
+	template<int mv, class type = inner, class deriv>
+	auto x_corr_stack(const Tensor_Operations<deriv>& rv) {
+
+		return typename base<mv + 1>::template type<
+			binary_expression<functor_type, _functor<deriv>, _x_corr_stack<mv, type>>, mathlib_type>(asDerived().data(),rv.asDerived().data());
+	}
+
+
 
 	 //--------------------------------ASSERTIONS------------------------------//
 

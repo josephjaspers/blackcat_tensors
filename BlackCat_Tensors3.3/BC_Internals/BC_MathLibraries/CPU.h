@@ -25,10 +25,11 @@ class CPU
 		  public CPU_Misc<CPU>,
 		  public CPU_BLAS<CPU>	{
 
+public:
+
 	static constexpr int SINGLE_THREAD_THRESHOLD = 8192;
 
 
-public:
 
 	template<typename T, typename J> __attribute__((always_inline)) inline
 	static void copy(T& t, const J& j, int sz) {

@@ -45,9 +45,13 @@ public:
 	__BCinline__ const auto OS() const { return base().outerShape(); }
 
 	template<class... integers>
-	__BCinline__ const auto operator()(integers... ints) const { return base()[scal_index(ints...)]; }
+	__BCinline__ const auto operator()(integers... ints) const {
+		static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
+		return base()[scal_index(ints...)]; }
 	template<class... integers>
-	__BCinline__ auto operator()(integers... ints) { return base()[scal_index(ints...)]; }
+	__BCinline__ auto operator()(integers... ints) {
+		static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
+		return base()[scal_index(ints...)]; }
 
 	__BCinline__ int dims() const { return DIMS(); }
 	__BCinline__ int size() const { return DIMS() > 0 ? OS()[LAST()] : 1;    }
@@ -78,31 +82,31 @@ public:
 
 	//---------------------------------------------------UTILITY/IMPLEMENTATION METHODS------------------------------------------------------------//
 
-	//base case
-	template<int dim = 0> __BCinline__
-	int scal_index(int curr) const {
-		if (dim == 0)
-			return curr;
-		else
-			return curr * this->dimension(dim - 1);
-	}
-
-	template<int dim = 0, class ... integers> __BCinline__
-	int scal_index(int curr, integers ... ints) const {
-		static constexpr bool int_sequence = MTF::is_integer_sequence<integers...>;
-		static_assert(int_sequence, "MUST BE INTEGER LIST");
-		if (dim == 0)
-			return curr + scal_index<dim + 1>(ints...);
-		else
-			return curr * this->dimension(dim - 1) + scal_index<dim + 1>(ints...);
-	}
+//	base case
+//	template<int dim = 0> __BCinline__
+//	int scal_index(int curr) const {
+//		if (dim == 0)
+//			return curr;
+//		else
+//			return curr * this->dimension(dim - 1);
+//	}
+//
+//	template<int dim = 0, class ... integers> __BCinline__
+//	int scal_index(int curr, integers ... ints) const {
+//		static constexpr bool int_sequence = MTF::is_integer_sequence<integers...>;
+//		static_assert(int_sequence, "MUST BE INTEGER LIST");
+//		if (dim == 0)
+//			return curr + scal_index<dim + 1>(ints...);
+//		else
+//			return curr * this->dimension(dim - 1) + scal_index<dim + 1>(ints...);
+//	}
 
 	template<class... integers>
-	int point_index(integers... ints) const {
+	int scal_index(integers... ints) const {
 		auto var = array(ints...);
-		int index = this->rows();
+		int index = var[0];
 		for (int i = 1; i < var.size(); ++i) {
-			index += var[i] * this->dimension(i);
+			index += var[i] * this->LD_dimension(i - 1);
 		}
 		return index;
 	}

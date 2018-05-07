@@ -50,7 +50,7 @@ struct Tensor_Reshape<TENSOR<PARENT, math_lib>> : Core_Base<Tensor_Reshape<TENSO
 
 		is[0] = vars[0];
 		os[0] = vars[0];
-		for (int i = 1; i < vars.length(); ++i) {
+		for (int i = 1; i < vars.size(); ++i) {
 			is[i] = vars[i];
 			os[i] = is[i] * os[i - 1];
 		}

@@ -40,7 +40,7 @@ struct unary_expression<functor_type, transpose> : expression_base<unary_express
 	}
 	__BCinline__ auto operator ()(int m, int n) -> decltype(array(m,n)) {
 			if (functor_type::CONTINUOUS() == 0)
-				return array(m * array.LD_rows() + n);
+				return array[m * array.LD_rows() + n];
 			else
 				return array(m, n);
 	}
