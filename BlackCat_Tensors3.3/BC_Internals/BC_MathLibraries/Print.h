@@ -137,7 +137,7 @@ static void printHelperSparse(const T& ary, const int_ranks ranks, const os oute
 		auto adj_indent = indent + "    "; //add a tab to the index
 
 		for (int i = 0; i < ranks[order]; ++i) {
-			printHelperSparse(&ary[i * outer[order - 1]], ranks, order, adj_indent, printSpace);
+			printHelperSparse(&ary[i * outer[order - 1]], ranks, outer, order, adj_indent, printSpace);
 		}
 
 		auto gap = std::to_string(order);

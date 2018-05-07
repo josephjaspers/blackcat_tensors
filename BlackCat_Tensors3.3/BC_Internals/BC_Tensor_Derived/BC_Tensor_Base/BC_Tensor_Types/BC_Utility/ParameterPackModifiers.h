@@ -41,7 +41,7 @@ namespace PPack {
 	__BC_host_inline__ auto pop_head(function f, front first, set... pack) {
 		return f(pack...);
 	};
-
+	//removes tail of a parameter pack and calls function f
 	template<class function, class... set>
 	auto pop_tail(function f, set... params) {
 		 auto pop = [&](auto&... xs) { return pop_head(f, xs...); };
@@ -64,7 +64,6 @@ namespace PPack {
 	__BC_host_inline__ auto head(front& f, set&... s) -> decltype(f) {
 		return f;
 	};
-
 }
 
 }

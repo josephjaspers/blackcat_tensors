@@ -12,6 +12,10 @@
 #include <initializer_list>
 #include <iostream>
 #include "../BlackCat_Internal_Definitions.h"
+/*
+ * Defines stack array and lambda array
+ * These are just two trivially classes used for storing small amounts of homogenous data types, generally ints
+ */
 
 namespace BC {
 

@@ -31,7 +31,7 @@ template<template<class...> class TENSOR, class PARENT, class math_lib>
 struct Tensor_Reshape<TENSOR<PARENT, math_lib>> : Core_Base<Tensor_Reshape<TENSOR<PARENT, math_lib>>, TENSOR<PARENT, math_lib>::DIMS()> {
 
 	__BCinline__ static constexpr int PARENT_DIMS() { return PARENT::PARENT_DIMS(); }
-	__BCinline__ static constexpr int DIMS() { return class2rank<TENSOR<PARENT, math_lib>>; };
+	__BCinline__ static constexpr int DIMS() { return dimension_of_v<TENSOR<PARENT, math_lib>>; };
 	__BCinline__ static constexpr int CONTINUOUS() { return 0; }
 
 //	static_assert(PARENT::CONTINUOUS() == 0, "Tensor_Reshape may only reshape continuous tensors, you may attempt to copy instead");

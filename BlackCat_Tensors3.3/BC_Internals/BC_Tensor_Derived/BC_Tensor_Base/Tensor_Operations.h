@@ -196,20 +196,20 @@ public:
 	template<class deriv>
 	auto corr(const Tensor_Operations<deriv>& rv) {
 		assert_same_size(rv);
-		return typename base<0>::template type<
+		return typename tensor_of<0>::template type<
 			binary_expression<functor_type, _functor<deriv>,_x_corr<1, inner>>, mathlib_type>(asDerived().data(),rv.asDerived().data());
 	}
 
 	template<int mv, class type = inner, class deriv>
 	auto x_corr(const Tensor_Operations<deriv>& rv) {
 
-		return typename base<mv>::template type<
+		return typename tensor_of<mv>::template type<
 			binary_expression<functor_type, _functor<deriv>, _x_corr<mv, type>>, mathlib_type>(asDerived().data(),rv.asDerived().data());
 	}
 	template<int mv, class type = inner, class deriv>
 	auto x_corr_stack(const Tensor_Operations<deriv>& rv) {
 
-		return typename base<mv + 1>::template type<
+		return typename tensor_of<mv + 1>::template type<
 			binary_expression<functor_type, _functor<deriv>, _x_corr_stack<mv, type>>, mathlib_type>(asDerived().data(),rv.asDerived().data());
 	}
 

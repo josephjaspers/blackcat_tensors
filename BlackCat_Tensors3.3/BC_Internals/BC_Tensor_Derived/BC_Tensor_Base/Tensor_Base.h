@@ -35,7 +35,7 @@ protected:
 	using mathlib_type 	= _mathlib<derived>;
 	struct DISABLED;
 
-	static constexpr int DIMS() { return ranker<derived>::value; }
+	static constexpr int DIMS() { return dimension_of<derived>::value; }
 	static constexpr int CONTINUOUS() { return functor_type::CONTINUOUS(); }
 	template<class> friend class Tensor_Base;
 
@@ -102,24 +102,24 @@ public:
 	const auto operator [] (int i) const { return slice(i); }
 		  auto operator [] (int i) 		 { return slice(i); }
 
-	const auto scalar(int i) const { return base<0>::type<Tensor_Scalar<functor_type>, mathlib_type>(scalar_impl(i)); }
-		  auto scalar(int i) 	   { return base<0>::type<Tensor_Scalar<functor_type>, mathlib_type>(scalar_impl(i)); }
+	const auto scalar(int i) const { return tensor_of<0>::type<Tensor_Scalar<functor_type>, mathlib_type>(scalar_impl(i)); }
+		  auto scalar(int i) 	   { return tensor_of<0>::type<Tensor_Scalar<functor_type>, mathlib_type>(scalar_impl(i)); }
 
 	const auto slice(int i) const {
 		static_assert(DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");
-		return typename base<DIMS()>::template slice<decltype(slice_impl(0)), mathlib_type>(slice_impl(i)); }
+		return typename tensor_of<DIMS()>::template slice<decltype(slice_impl(0)), mathlib_type>(slice_impl(i)); }
 
 		auto slice(int i) 		  {
 		static_assert(derived::DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");
-		return typename base<DIMS()>::template slice<decltype(slice_impl(0)), mathlib_type>(slice_impl(i)); }
+		return typename tensor_of<DIMS()>::template slice<decltype(slice_impl(0)), mathlib_type>(slice_impl(i)); }
 
 	const auto row(int i) const {
 		static_assert(DIMS() == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
-		return typename base<1>::template type<decltype(row_impl(0)), mathlib_type>(row_impl(i));
+		return typename tensor_of<1>::template type<decltype(row_impl(0)), mathlib_type>(row_impl(i));
 	}
 		  auto row(int i) 		{
 		static_assert(DIMS() == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
-		return typename base<1>::template type<decltype(row_impl(0)), mathlib_type>(row_impl(i));
+		return typename tensor_of<1>::template type<decltype(row_impl(0)), mathlib_type>(row_impl(i));
 	}
 	const auto col(int i) const {
 		static_assert(DIMS() == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
@@ -157,7 +157,7 @@ public:
 	auto reshape(integers... ints) {
 		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
 		using internal = decltype(this->black_cat_array.reshape(ints...));
-		using type = typename base<sizeof...(integers)>::template type<internal, mathlib_type>;
+		using type = typename tensor_of<sizeof...(integers)>::template type<internal, mathlib_type>;
 		return type(this->black_cat_array.reshape(ints...));
 
 	}

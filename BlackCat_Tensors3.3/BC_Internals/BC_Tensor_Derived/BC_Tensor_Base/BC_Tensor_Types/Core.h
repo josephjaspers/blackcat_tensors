@@ -13,10 +13,10 @@
 namespace BC {
 
 template<class T>
-struct Core : Core_Base<Core<T>, _rankOf<T>>{
+struct Core : Core_Base<Core<T>, _dimension_of<T>>{
 
-	__BCinline__ static constexpr int DIMS() { return _rankOf<T>; }
-	__BCinline__ static constexpr int PARENT_DIMS() { return _rankOf<T>; }
+	__BCinline__ static constexpr int DIMS() { return _dimension_of<T>; }
+	__BCinline__ static constexpr int PARENT_DIMS() { return _dimension_of<T>; }
 	__BCinline__ static constexpr int LAST() { return DIMS() - 1;}
 
 	using self = Core<T>;
