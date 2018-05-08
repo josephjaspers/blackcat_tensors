@@ -67,25 +67,25 @@ template<class T> struct rm_const<const T&> { using type = T&; };
 	};
 	struct add_assign {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
-			return l += r;
+			return (const_cast<typename rm_const<lv&>::type>(l) += r);
 		}
 	};
 
 	struct mul_assign {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
-			return l *= r;
+			return (const_cast<typename rm_const<lv&>::type>(l) *= r);
 		}
 	};
 
 	struct sub_assign {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
-			return l -= r;
+			return (const_cast<typename rm_const<lv&>::type>(l) -= r);
 		}
 	};
 
 	struct div_assign {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
-			return l /= r;
+			return (const_cast<typename rm_const<lv&>::type>(l) /= r);
 		}
 	};
 }

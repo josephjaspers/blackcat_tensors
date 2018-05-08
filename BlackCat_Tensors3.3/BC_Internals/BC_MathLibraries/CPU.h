@@ -30,7 +30,7 @@ public:
 	static constexpr int SINGLE_THREAD_THRESHOLD = 8192;
 
 
-
+//-------------------------------Generic Copy ---------------------------------//
 	template<typename T, typename J>
 	static void copy(T& t, const J& j, int sz) {
 		if (sz < SINGLE_THREAD_THRESHOLD) {
@@ -49,7 +49,7 @@ public:
 #pragma omp barrier
 #endif
 	}
-
+	//-------------------------------Generic Eval ---------------------------------//
 	template<typename T>
 	static void eval(T& t) {
 		if (t.size() < SINGLE_THREAD_THRESHOLD) {
@@ -68,13 +68,16 @@ public:
 #pragma omp barrier
 #endif
 	}
+
+	//-------------------------------1d eval/copy ---------------------------------//
+
 	struct n0 {
 		template<class T, class U>
 		static void copy(T to, U from) {
 #ifndef BC_NO_OPENMP
 #pragma omp parallel for
 #endif
-			for (int i = 0; i < to.size(); ++i) {
+			for (int i = 0; i < to.size(); i ++) {
 				to[i] = from[i];
 			}
 #ifndef BC_NO_OPENMP
@@ -97,6 +100,7 @@ public:
 	}
 };
 
+	//-------------------------------2d eval/copy ---------------------------------//
 	struct n2 {
 		template<class T, class U>
 		static void copy(T to, U from) {
@@ -124,6 +128,8 @@ public:
 #endif
 		}
 	};
+	//-------------------------------3d eval/copy ---------------------------------//
+
 	struct n3 {
 		template<class T, class U>
 		static void copy(T to, U from) {
@@ -154,7 +160,7 @@ public:
 #endif
 		}
 	};
-
+	//-------------------------------4d eval/copy ---------------------------------//4
 	struct n4 {
 		template<class T, class U>
 		static void copy(T to, U from) {
@@ -187,6 +193,8 @@ public:
 #endif
 		}
 	};
+	//-------------------------------5d eval/copy ---------------------------------//
+
 	struct n5 {
 		template<class T, class U>
 		static void copy(T to, U from) {
@@ -222,6 +230,7 @@ public:
 #endif
 		}
 	};
+	//-------------------------------implementation ---------------------------------//
 
 	template<int d>
 	struct dimension {

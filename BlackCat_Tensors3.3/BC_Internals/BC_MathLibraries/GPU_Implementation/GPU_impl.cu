@@ -64,6 +64,56 @@ template<typename T, typename J> __global__ static void copy5d(T t, const J j) {
 						t(m, n, k, l, p) = j(m, n, k, l, p);
 }
 
+template<class T> __global__
+static void eval(T t) {
+	int i = blockIdx.x * blockDim.x + threadIdx.x;
+	for (; i < t.size(); i += blockDim.x * gridDim.x) {
+		t[i];
+	}
+}
+
+
+template<typename T> __global__  static void eval2d(T t) {
+	int n = blockIdx.y * blockDim.y + threadIdx.y;
+	for (; n < t.cols(); n += blockDim.y * gridDim.y) {
+
+		int m = blockIdx.x * blockDim.x + threadIdx.x;
+		for (; m < t.rows(); m += blockDim.x * gridDim.x) {
+			t(m, n);
+		}
+	}
+}
+template<typename T> __global__ static void eval3d(T t) {
+	int k = blockIdx.z * blockDim.z + threadIdx.z;
+	for (; k < t.dimension(2); k += blockDim.z * gridDim.z) {
+		int n = blockIdx.y * blockDim.y + threadIdx.y;
+		for (; n < t.cols(); n += blockDim.y * gridDim.y) {
+
+			int m = blockIdx.x * blockDim.x + threadIdx.x;
+			for (; m < t.rows(); m += blockDim.x * gridDim.x) {
+				t(m,n,k);
+			}
+		}
+	}
+}
+//dont know how to do this
+template<typename T> __global__ static void eval4d(T t) {
+	for (int l = 0; l < t.dimension(3); ++l)
+		for (int k = 0; k < t.dimension(2); ++k)
+			for (int n = 0; n < t.cols(); ++n)
+				for (int m = 0; m < t.rows(); ++m)
+					t(m,n,k,l);
+}
+//don't know how to do this
+template<typename T> __global__ static void eval5d(T t) {
+	for (int p = 0; p < t.dimension(4); ++p)
+		for (int l = 0; l < t.dimension(3); ++l)
+			for (int k = 0; k < t.dimension(2); ++k)
+				for (int n = 0; n < t.dimension(1); ++n)
+					for (int m = 0; m < t.dimension(0); ++m)
+						t(m, n, k, l, p);
+}
+
 template<typename T, typename J> __global__
 static void fill(T t, const J j, int sz) {
 	for (int i = 0; i < sz; ++i) {

@@ -150,10 +150,10 @@ auto test() {
 
 }
 #include "Benchmarks/BenchmarkEigen.h"
-
+#include "Benchmarks/ForLoopBench.h"
 int main() {
 
-test();
+test2();
 std::cout << " post test" << std::endl;
 
 mat krnl(2,2);
@@ -176,6 +176,8 @@ img.print();
 
 mat m = krnl.x_corr<2,BC::inner>(krnl.x_corr<2,BC::inner>(img));
 m.print();
+
+
 
 cube krnl2(2,2,3);
 krnl2.zero();
@@ -203,6 +205,9 @@ m2.zero();
 m2 = krnl2.x_corr_stack<2>(img);
 m2.print();
 
+m2 += m2;
+
+m2.print();
 	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
 //	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
 ////	omp_set_num_threads(2);
