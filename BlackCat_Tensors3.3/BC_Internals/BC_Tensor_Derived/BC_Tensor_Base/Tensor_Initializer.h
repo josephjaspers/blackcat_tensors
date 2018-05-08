@@ -78,20 +78,12 @@ public:
 	template<class T>
 	Tensor_Initializer(T dimensions): black_cat_array(dimensions) {}
 
-	template<class T>
-	using derived_alt = typename MTF::shell_of<derived>::template  type<T, Mathlib>;
-
-
-//	template<class... integers>
-//	TensorInitializer(integers... ints) : black_cat_array(ints...) {
-//		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
-//	}
+	template<class T> using derived_alt = typename MTF::shell_of<derived>::template  type<T, Mathlib>;
 
 	template<class U>
 	Tensor_Initializer(const derived_alt<U>&  tensor)
 		: black_cat_array(tensor.innerShape()) {
-//		Mathlib::copy(this->asBase().data(), tensor.data(), this->asBase().size());
-		this->asBase() = tensor; //switch to using operator= to ensure dimensional copies
+		this->asBase() = tensor;
 	}
 
 	~Tensor_Initializer() {

@@ -247,36 +247,6 @@ public:
 			run::eval(to);
 		}
 	};
-
-
-
-
-
-
-
-
-
-
-
 };
 }
 #endif /* MATHEMATICS_CPU_H_ */
-
-//static constexpr int max(int a, int b) {
-//	return a > b ? a : b;
-//}
-//
-//struct v1 {
-//	template<class T, class U, class ... integers>
-//	static void run(T to, U from, integers ... ints) {
-//		for (int i = 0; i < from.dimension(d - 1); ++i)
-//			dimension<max(d - 1, 0)>::copy(to, from, i, ints...);
-//	}
-//};
-//struct v2 {
-//	template<class T, class U, class ... integers>
-//	static void run(T to, U from, integers ... ints) {
-//		for (int i = 0; i < from.dimension(0); ++i)
-//			to(i, ints...) = from(i, ints...);
-//	}
-//};

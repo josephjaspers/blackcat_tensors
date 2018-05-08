@@ -153,13 +153,14 @@ auto test() {
 #include "Benchmarks/ForLoopBench.h"
 int main() {
 
-test2();
+//test2();
 std::cout << " post test" << std::endl;
 
 mat krnl(2,2);
 krnl.zero();
 krnl[0][0] = 1;
 krnl[1][1] = 1;
+
 
 
 mat img(5,5); img.zero();
@@ -177,18 +178,9 @@ img.print();
 mat m = krnl.x_corr<2,BC::inner>(krnl.x_corr<2,BC::inner>(img));
 m.print();
 
-
-
 cube krnl2(2,2,3);
 krnl2.zero();
-//krnl2[0][0][0] = 1;
-//krnl2[0][1][1] = 1;
-//krnl2[1][0][0] = 1;
-//krnl2[1][1][1] = 1;
-//krnl2[2][0][0] = 1;
-//krnl2[2][1][1] = 1;
 
-//krnl2[1][0][1] = 1;
 
 for (int i = 0; i < krnl2.size(); ++i) {
 	krnl2(i) =i ;
@@ -209,26 +201,26 @@ m2 += m2;
 
 m2.print();
 	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
-//	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
-////	omp_set_num_threads(2);
-//	BC_EIGEN_BENCHMARK::benchmark1<4,     100000>();
-//	BC_EIGEN_BENCHMARK::benchmark1<8,     100000>();
-//	BC_EIGEN_BENCHMARK::benchmark1<16,    10000>();
-//	BC_EIGEN_BENCHMARK::benchmark1<64,    10000>();
-//	BC_EIGEN_BENCHMARK::benchmark1<128,   1000>();
-//	BC_EIGEN_BENCHMARK::benchmark1<256,   1000>();
-//	BC_EIGEN_BENCHMARK::benchmark1<512,   100>();
+	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
+//	omp_set_num_threads(2);
+	BC_EIGEN_BENCHMARK::benchmark1<4,     100000>();
+	BC_EIGEN_BENCHMARK::benchmark1<8,     100000>();
+	BC_EIGEN_BENCHMARK::benchmark1<16,    10000>();
+	BC_EIGEN_BENCHMARK::benchmark1<64,    10000>();
+	BC_EIGEN_BENCHMARK::benchmark1<128,   1000>();
+	BC_EIGEN_BENCHMARK::benchmark1<256,   1000>();
+	BC_EIGEN_BENCHMARK::benchmark1<512,   100>();
+
+	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark2_str() << std::endl;
 //
-//	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark2_str() << std::endl;
-////
-//	BC_EIGEN_BENCHMARK::benchmark2<4,     100000>();
-//	BC_EIGEN_BENCHMARK::benchmark2<8,     100000>();
-//	BC_EIGEN_BENCHMARK::benchmark2<16,    10000>();
-//	BC_EIGEN_BENCHMARK::benchmark2<64,    10000>();
-//	BC_EIGEN_BENCHMARK::benchmark2<128,   1000>();
-//	BC_EIGEN_BENCHMARK::benchmark2<256,   1000>();
-//	BC_EIGEN_BENCHMARK::benchmark2<512,   100>();
-//	BC_EIGEN_BENCHMARK::benchmark2<1024,   100>();
+	BC_EIGEN_BENCHMARK::benchmark2<4,     100000>();
+	BC_EIGEN_BENCHMARK::benchmark2<8,     100000>();
+	BC_EIGEN_BENCHMARK::benchmark2<16,    10000>();
+	BC_EIGEN_BENCHMARK::benchmark2<64,    10000>();
+	BC_EIGEN_BENCHMARK::benchmark2<128,   1000>();
+	BC_EIGEN_BENCHMARK::benchmark2<256,   1000>();
+	BC_EIGEN_BENCHMARK::benchmark2<512,   100>();
+	BC_EIGEN_BENCHMARK::benchmark2<1024,   100>();
 
 //		BC_EIGEN_BENCHMARK::benchmark3<4,     100000>();
 //		BC_EIGEN_BENCHMARK::benchmark3<8,     100000>();
