@@ -31,7 +31,7 @@ public:
 
 
 
-	template<typename T, typename J> __attribute__((always_inline)) inline
+	template<typename T, typename J>
 	static void copy(T& t, const J& j, int sz) {
 		if (sz < SINGLE_THREAD_THRESHOLD) {
 			for (int i = 0; i < sz; ++i) {
@@ -49,6 +49,25 @@ public:
 #pragma omp barrier
 #endif
 	}
+
+	template<typename T>
+	static void eval(T& t) {
+		if (t.size() < SINGLE_THREAD_THRESHOLD) {
+			for (int i = 0; i < t.size(); ++i) {
+				t[i];
+			}
+			return;
+		}
+#ifndef BC_NO_OPENMP
+#pragma omp parallel for
+#endif
+		for (int i = 0; i < t.size(); ++i) {
+			t[i];
+		}
+#ifndef BC_NO_OPENMP
+#pragma omp barrier
+#endif
+	}
 	struct n0 {
 		template<class T, class U>
 		static void copy(T to, U from) {
@@ -58,11 +77,26 @@ public:
 			for (int i = 0; i < to.size(); ++i) {
 				to[i] = from[i];
 			}
-		}
 #ifndef BC_NO_OPENMP
 #pragma omp barrier
 #endif
-	};
+		}
+
+	template<class T>
+	static void eval(T to) {
+#ifndef BC_NO_OPENMP
+#pragma omp parallel for
+#endif
+		for (int i = 0; i < to.size(); ++i) {
+			to[i];
+		}
+
+#ifndef BC_NO_OPENMP
+#pragma omp barrier
+#endif
+	}
+};
+
 	struct n2 {
 		template<class T, class U>
 		static void copy(T to, U from) {
@@ -72,13 +106,25 @@ public:
 			for (int n = 0; n < to.dimension(1); ++n)
 				for (int m = 0; m < to.dimension(0); ++m)
 					to(m,n) = from(m,n);
-		}
 #ifndef BC_NO_OPENMP
 #pragma omp barrier
 #endif
+		}
+		template<class T>
+		static void eval(T to) {
+#ifndef BC_NO_OPENMP
+#pragma omp parallel for
+#endif
+			for (int n = 0; n < to.dimension(1); ++n)
+				for (int m = 0; m < to.dimension(0); ++m)
+					to(m,n);
+
+#ifndef BC_NO_OPENMP
+#pragma omp barrier
+#endif
+		}
 	};
 	struct n3 {
-
 		template<class T, class U>
 		static void copy(T to, U from) {
 #ifndef BC_NO_OPENMP
@@ -88,10 +134,25 @@ public:
 				for (int n = 0; n < to.dimension(1); ++n)
 					for (int m = 0; m < to.dimension(0); ++m)
 						to(m,n,k) = from(m,n,k);
-		}
+
 #ifndef BC_NO_OPENMP
 #pragma omp barrier
 #endif
+		}
+		template<class T>
+		static void eval(T to) {
+#ifndef BC_NO_OPENMP
+#pragma omp parallel for
+#endif
+			for (int k = 0; k < to.dimension(2); ++k)
+				for (int n = 0; n < to.dimension(1); ++n)
+					for (int m = 0; m < to.dimension(0); ++m)
+						to(m,n,k);
+
+#ifndef BC_NO_OPENMP
+#pragma omp barrier
+#endif
+		}
 	};
 
 	struct n4 {
@@ -105,10 +166,26 @@ public:
 					for (int n = 0; n < to.dimension(1); ++n)
 						for (int m = 0; m < to.dimension(0); ++m)
 							to(m, n, k, p) = from(m, n, k, p);
-		}
+
 #ifndef BC_NO_OPENMP
 #pragma omp barrier
 #endif
+		}
+		template<class T>
+		static void eval(T to) {
+#ifndef BC_NO_OPENMP
+#pragma omp parallel for
+#endif
+			for (int p = 0; p < to.dimension(3); ++p)
+				for (int k = 0; k < to.dimension(2); ++k)
+					for (int n = 0; n < to.dimension(1); ++n)
+						for (int m = 0; m < to.dimension(0); ++m)
+							to(m, n, k, p);
+
+#ifndef BC_NO_OPENMP
+#pragma omp barrier
+#endif
+		}
 	};
 	struct n5 {
 		template<class T, class U>
@@ -122,10 +199,28 @@ public:
 						for (int n = 0; n < to.dimension(1); ++n)
 							for (int m = 0; m < to.dimension(0); ++m)
 								to(m, n, k, p, j) = from(m, n, k, p, j);
-		}
+
 #ifndef BC_NO_OPENMP
 #pragma omp barrier
 #endif
+		}
+
+		template<class T>
+		static void eval(T to) {
+#ifndef BC_NO_OPENMP
+#pragma omp parallel for
+#endif
+			for (int j = 0; j < to.dimension(4); ++j)
+				for (int p = 0; p < to.dimension(3); ++p)
+					for (int k = 0; k < to.dimension(2); ++k)
+						for (int n = 0; n < to.dimension(1); ++n)
+							for (int m = 0; m < to.dimension(0); ++m)
+								to(m, n, k, p, j);
+
+#ifndef BC_NO_OPENMP
+#pragma omp barrier
+#endif
+		}
 	};
 
 	template<int d>
@@ -137,6 +232,10 @@ public:
 		template<class T, class U>
 		static void copy(T to, U from) {
 			run::copy(to, from);
+		}
+		template<class T>
+		static void eval(T to) {
+			run::eval(to);
 		}
 	};
 

@@ -55,7 +55,6 @@ struct Core : Core_Base<Core<T>, _dimension_of<T>>{
 	__BCinline__ const auto innerShape() const { return is; }
 	__BCinline__ const auto outerShape() const { return os; }
 
-	__BCinline__
 	__BCinline__ const auto slice(int i) const { return slice_type(&array[slice_index(i)],*this); }
 	__BCinline__	   auto slice(int i) 	   { return slice_type(&array[slice_index(i)],*this); }
 

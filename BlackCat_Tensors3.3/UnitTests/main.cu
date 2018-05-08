@@ -9,8 +9,8 @@ using BC::Matrix;
 using BC::Scalar;
 using BC::Cube;
 
-//using ml = BC::CPU;
-using ml = BC::GPU;
+using ml = BC::CPU;
+//using ml = BC::GPU;
 
 using vec = Vector<float, ml>;
 using mat = Matrix<float, ml>;
@@ -197,6 +197,7 @@ for (int i = 0; i < img.size(); ++i) {
 
 krnl2.print();
 img.print();
+
 cube m2(4,4, 3);
 m2.zero();
 m2 = krnl2.x_corr_stack<2>(img);

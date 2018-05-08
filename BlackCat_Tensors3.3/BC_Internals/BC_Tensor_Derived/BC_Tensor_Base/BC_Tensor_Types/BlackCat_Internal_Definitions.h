@@ -22,7 +22,7 @@ static constexpr int CUDA_BASE_THREADS = 256;
 #define __BChd__
 #endif
 
-#define __BCinline__ __BChd__  __attribute__((always_inline)) __attribute__((hot))
+#define __BCinline__ __BChd__  inline __attribute__((always_inline)) __attribute__((hot))
 #define __BC_host_inline__ inline __attribute__((always_inline)) __attribute__((hot))
 }
 

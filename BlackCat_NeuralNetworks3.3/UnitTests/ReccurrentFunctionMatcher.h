@@ -34,7 +34,7 @@ mat fixed_sin_set(int n) {
 
 int test() {
 
-	const int TRAINING_ITERATIONS = 10;
+	const int TRAINING_ITERATIONS = 100;
 	const int NUMB_EXAMPLES = 100;
 	const int TESTS  = 10;
 	NeuralNetwork<FeedForward, GRU, FeedForward> network(1, 125, 40, 1);
