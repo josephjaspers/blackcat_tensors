@@ -59,6 +59,18 @@ public:
 	__BCinline__ int cols() const { return DIMS() > 1 ? IS()[1] : 1; }
 	__BCinline__ int dimension(int i) const { return DIMS() > i ? IS()[i] : 1; }
 
+
+
+	//This returns an alternate iterator pattern (designed for non-Linear function iterations)
+	//The iterator pattern defaults to the standard dimension iterator
+	__BCinline__ int optimized_dimension_iterator(int i) const { return DIMS() > i ? IS()[i] : 1; }
+	//this is applied via the mathlibrary, and reorders the given parameters.
+	//If optimized_dimension_iterator is not shadowed this will not be shadowed either
+	template<class function,class... integers>
+	__BCinline__ static auto dimensional_reorder(function& f, integers&... ints) {
+		return f(ints...);
+	}
+
 	__BCinline__ int LD_rows() const { return DIMS() > 0 ? OS()[0] : 1; }
 	__BCinline__ int LD_cols() const { return DIMS() > 1 ? OS()[1] : 1; }
 	__BCinline__ int LD_dimension(int i) const { return DIMS() > i + 1 ? OS()[i] : 1; }
@@ -101,7 +113,7 @@ public:
 //			return curr * this->dimension(dim - 1) + scal_index<dim + 1>(ints...);
 //	}
 
-	template<class... integers>
+	template<class... integers> __BCinline__
 	int scal_index(integers... ints) const {
 		auto var = array(ints...);
 		int index = var[0];

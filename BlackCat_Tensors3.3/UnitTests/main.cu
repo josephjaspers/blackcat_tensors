@@ -9,8 +9,8 @@ using BC::Matrix;
 using BC::Scalar;
 using BC::Cube;
 
-using ml = BC::CPU;
-//using ml = BC::GPU;
+//using ml = BC::CPU;
+using ml = BC::GPU;
 
 using vec = Vector<float, ml>;
 using mat = Matrix<float, ml>;
@@ -120,7 +120,7 @@ auto test() {
 	std::cout << " adding d[1][1] = d[1][1] + d[1][1] " << std::endl;
 
 
-	d[1][1] = d[1][1] + d[1][1];
+	d = d + d;
 	d.print();
 
 

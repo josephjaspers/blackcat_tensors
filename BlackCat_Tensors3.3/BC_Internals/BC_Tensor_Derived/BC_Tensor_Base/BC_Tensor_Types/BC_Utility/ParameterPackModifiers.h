@@ -16,34 +16,33 @@
 namespace BC {
 namespace PPack {
 
-	template<int x> struct reverse_ {
+	template<int x> struct reverse_impl {
 
 	template<class function, class front, class... set>
-	__BC_host_inline__ static auto impl(function f, front first, set... s){ return reverse_<x - 1>::impl(f, s..., first); }
+	__BCinline__ static auto impl(function f, front first, set... s){ return reverse_impl<x - 1>::impl(f, s..., first); }
 	};
-	template<> struct reverse_<1>  {
+	template<> struct reverse_impl<1>  {
 
 	template<class function, class... set>
-	__BC_host_inline__ static auto impl(function f, set... s) {
+	__BCinline__ static auto impl(function f, set... s) {
 		return f(s...);
 	}
 	};
 
-
 	//reverses a list and calls function f with the parameters
 	template<class function, class... set>
-	__BC_host_inline__ auto reverse(function f, set... s){
-		return reverse_<sizeof...(set)>::impl(f, s...);
+	__BCinline__ auto reverse(function f, set... s){
+		return reverse_impl<sizeof...(set)>::impl(f, s...);
 	}
 
 	//removes head of a parameter pack and calls function f
 	template<class function, class front, class... set>
-	__BC_host_inline__ auto pop_head(function f, front first, set... pack) {
+	__BCinline__ auto pop_head(function f, front first, set... pack) {
 		return f(pack...);
 	};
 	//removes tail of a parameter pack and calls function f
 	template<class function, class... set>
-	auto pop_tail(function f, set... params) {
+	__BCinline__ auto pop_tail(function f, set... params) {
 		 auto pop = [&](auto&... xs) { return pop_head(f, xs...); };
 		 auto reverse_initial = [&](auto&... xs) { return reverse(pop, xs...); };
 
@@ -51,19 +50,25 @@ namespace PPack {
 	};
 	//returns tail of parameter pack
 	template<class last>
-	__BC_host_inline__ auto tail(last& l) -> decltype (l) {
+	__BCinline__ auto tail(last& l) -> decltype (l) {
 		return l;
 	};
 
 	template<class front, class... set>
-	__BC_host_inline__ auto tail(front& f, set&... s) -> decltype(f) {
+	__BCinline__ auto tail(front& f, set&... s) -> decltype(f) {
 		return tail(s...);
 	};
 	//returns head of parameter pack
 	template<class front, class... set>
-	__BC_host_inline__ auto head(front& f, set&... s) -> decltype(f) {
+	__BCinline__ auto head(front& f, set&... s) -> decltype(f) {
 		return f;
 	};
+	//push the tail to the front of the parameter pack and then calls function f
+	template<int n, class function, class... set>
+	__BCinline__ auto queue_tail(function& f, set&... s) {
+		return pop_tail(f, tail(s...), s...);
+	}
+
 }
 
 }

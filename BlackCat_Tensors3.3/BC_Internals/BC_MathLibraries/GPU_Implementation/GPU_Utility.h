@@ -63,23 +63,23 @@ struct GPU_Utility {
 		return sz;
 	}
 
-	template<class RANKS>
-	static void print(const float* ary, const RANKS ranks, int order, int print_length) {
+	template<class RANKS, class os>
+	static void print(const float* ary, const RANKS ranks,const os outer, int order, int print_length) {
 		int sz = calc_size(ranks, order);
 		float* print = new float[sz];
 
 		DeviceToHost(print, ary, sz);
 
-		BC::print(print, ranks, order, print_length);
+		BC::print(print, ranks, outer, order, print_length);
 		delete[] print;
 	}
-	template<class RANKS>
-	static void printSparse(const float* ary, const RANKS ranks, int order, int print_length) {
+	template<class RANKS, class os>
+	static void printSparse(const float* ary, const RANKS ranks, const os outer, int order, int print_length) {
 		int sz = calc_size(ranks, order);
 		float* print = new float[sz];
 		DeviceToHost(print, ary, sz);
 
-		BC::printSparse(print, ranks, order, print_length);
+		BC::printSparse(print, ranks, outer, order, print_length);
 		delete[] print;
 	}
 
