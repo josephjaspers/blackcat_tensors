@@ -7,7 +7,6 @@
 
 #ifndef BASE_FUNCTIONS_H_
 #define BASE_FUNCTIONS_H_
-#include "Tensor_Base.h"
 
 //This should be included at the bottom of Tensor_Base.h
 //Reshape and Chunk are curried functions

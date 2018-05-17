@@ -74,14 +74,14 @@ public:
 	__BCinline__	   auto col(int i) 	     { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
 
 	template<class ... integers> __BCinline__ auto chunk(integers ... location_indices) {
-		return [&, location_indices...](auto... shape_dimension) {
+		return [&](auto... shape_dimension) {
 			auto* array = &(this->base().getIterator()[this->scal_index(location_indices...)]);
 			return typename _Tensor_Chunk<derived>::template implementation<sizeof...(shape_dimension)>(array, this->base(), shape_dimension...);
 		};
 	}
 
 	template<class ... integers> __BCinline__ const auto chunk(integers ... location_indices) const {
-		return [&, location_indices...](auto... shape_dimension) {
+		return [&](auto... shape_dimension) {
 			auto* array = &(this->base().getIterator()[this->scal_index(location_indices...)]);
 			return typename _Tensor_Chunk<derived>::template implementation<sizeof...(shape_dimension)>(array, this->base(), shape_dimension...);
 		};
