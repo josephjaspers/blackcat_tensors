@@ -12,16 +12,16 @@
 
 namespace BC {
 
-template<int i>
-static constexpr int oneLess = i - 1 > 0 ? i - 1 : 0;
 
 template<class PARENT>
-	struct Tensor_Slice : Core_Base<Tensor_Slice<PARENT>, oneLess<PARENT::DIMS()>> {
+	struct Tensor_Slice : Core_Base<Tensor_Slice<PARENT>, floored_decrement(PARENT::DIMS())> {
 
 	using scalar_type = _scalar<PARENT>;
 
-	__BCinline__ static constexpr int CONTINUOUS() { return oneLess<PARENT::CONTINUOUS()>; }
-	__BCinline__ static constexpr int PARENT_DIMS() { return PARENT::PARENT_DIMS(); }
+	__BCinline__ static constexpr int CONTINUOUS() { return floored_decrement(PARENT::CONTINUOUS()); }
+	__BCinline__ static constexpr int DIMS() { return PARENT::PARENT_DIMS(); }
+
+	operator const PARENT() const	{ return parent; }
 
 	const PARENT parent;
 	scalar_type* array_slice;

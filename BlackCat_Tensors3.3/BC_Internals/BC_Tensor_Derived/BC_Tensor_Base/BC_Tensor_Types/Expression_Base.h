@@ -37,7 +37,6 @@ public:
 //	Expression_Core_Base() { static_assert(std::is_trivially_copyable<derived>::value, "EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
 
 	__BCinline__ static constexpr int DIMS() { return derived::DIMS();    }
-	__BCinline__ static constexpr int PARENT_DIMS() { return derived::DIMS();    }
 	__BCinline__ static constexpr bool ASSIGNABLE() { return false; }
 
 	__BCinline__ static constexpr int LAST() { return derived::DIMS() -1; }

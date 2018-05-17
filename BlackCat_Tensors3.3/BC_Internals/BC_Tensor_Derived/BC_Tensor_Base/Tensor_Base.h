@@ -157,7 +157,15 @@ public:
 	template<class... integers>
 	auto self_reshape(integers... ints) {
 		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
-		using internal = decltype(this->black_cat_array.reshape(ints...));
+		using internal = decltype(std::declval<self>().black_cat_array.reshape(ints...));
+		using type = typename tensor_of<sizeof...(integers)>::template type<internal, mathlib_type>;
+		return type(this->black_cat_array.reshape(ints...));
+
+	}
+	template<class... integers>
+	const auto self_reshape(integers... ints) const {
+		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
+		using internal = decltype(std::declval<self>().black_cat_array.reshape(ints...));
 		using type = typename tensor_of<sizeof...(integers)>::template type<internal, mathlib_type>;
 		return type(this->black_cat_array.reshape(ints...));
 

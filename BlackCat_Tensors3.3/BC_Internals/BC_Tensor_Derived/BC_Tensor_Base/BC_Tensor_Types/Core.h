@@ -15,14 +15,14 @@ namespace BC {
 template<class T>
 struct Core : Core_Base<Core<T>, _dimension_of<T>>{
 
-	__BCinline__ static constexpr int DIMS() { return _dimension_of<T>; }
-	__BCinline__ static constexpr int PARENT_DIMS() { return _dimension_of<T>; }
-	__BCinline__ static constexpr int LAST() { return DIMS() - 1;}
-
 	using self = Core<T>;
 	using scalar_type = _scalar<T>;
 	using Mathlib = _mathlib<T>;
 	using slice_type = Tensor_Slice<self>;
+
+	__BCinline__ static constexpr int DIMS() { return _dimension_of<T>; }
+	__BCinline__ static constexpr int PARENT_DIMS() { return _dimension_of<T>; }
+	__BCinline__ static constexpr int LAST() { return DIMS() - 1;}
 
 	scalar_type* array = nullptr;
 	int* is = nullptr;

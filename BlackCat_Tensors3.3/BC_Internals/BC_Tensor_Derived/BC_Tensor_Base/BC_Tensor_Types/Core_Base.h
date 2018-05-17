@@ -23,18 +23,19 @@ template<class> class Tensor_Row;
 template<class> class Tensor_Chunk;
 
 template<class derived, int DIMENSION,
-template<class> class 	_Tensor_Reshape = Tensor_Reshape,
 template<class> class 	_Tensor_Slice 	= Tensor_Slice,
 template<class> class 	_Tensor_Row 	= Tensor_Row,
 template<class> class 	_Tensor_Scalar 	= Tensor_Scalar,
-template<class> class   _Tensor_Chunk	= Tensor_Chunk>			//Nested implementation type
+template<class> class   _Tensor_Chunk	= Tensor_Chunk,			//Nested implementation type
+template<class> class 	_Tensor_Reshape = Tensor_Reshape>		//Nested implementation type
+
 struct Core_Base : expression_base<Core_Base<derived,DIMENSION>> {
 
-	__BCinline__ static constexpr bool ASSIGNABLE() { return true; }
 	__BCinline__ static constexpr int DIMS() { return DIMENSION; }
-	__BCinline__ static constexpr int PARENT_DIMS() { return DIMS(); }
-
 	__BCinline__ static constexpr int CONTINUOUS() { return 0; }
+	__BCinline__ static constexpr bool ASSIGNABLE() { return true; }
+
+
 	__BCinline__ static constexpr int LAST() { return DIMENSION - 1; }
 
 	using self = derived;
@@ -81,6 +82,7 @@ public:
 	}
 
 	template<class ... integers> __BCinline__ const auto chunk(integers ... location_indices) const {
+
 		return [&](auto... shape_dimension) {
 			auto* array = &(this->base().getIterator()[this->scal_index(location_indices...)]);
 			return typename _Tensor_Chunk<derived>::template implementation<sizeof...(shape_dimension)>(array, this->base(), shape_dimension...);
@@ -89,18 +91,12 @@ public:
 
 	template<class ... integers> __BCinline__
 	const auto reshape(integers ... ints) const {
-		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
-		using tensor_type = tensor_of_t<sizeof...(integers), self, _mathlib<derived>>;
-		return Tensor_Reshape<tensor_type>(base(), ints...);
+		return typename _Tensor_Reshape<derived>::template implementation<sizeof...(ints)>(base().getIterator(), base(), ints...);
 	}
 
 	template<class... integers> __BCinline__
 	auto reshape(integers... ints) {
-		static constexpr bool int_seq = MTF::is_integer_sequence<integers...>;
-		static_assert(int_seq, "MUST BE INTEGER LIST");
-
-		using tensor_type = tensor_of_t<sizeof...(integers), self, _mathlib<derived>>;
-		return Tensor_Reshape<tensor_type>(base(), ints...);
+		return typename _Tensor_Reshape<derived>::template implementation<sizeof...(ints)>(base().getIterator(), base(), ints...);
 	}
 
 

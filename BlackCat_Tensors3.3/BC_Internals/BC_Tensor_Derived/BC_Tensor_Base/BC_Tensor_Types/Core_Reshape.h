@@ -12,10 +12,6 @@
 #include "Core_Base.h"
 
 namespace BC {
-
-template<class PARENT>
-struct Tensor_Reshape;
-
 /*
  * Accepts an a tensor_core type wrapped in the new_tensor
  *
@@ -27,38 +23,28 @@ struct Tensor_Reshape;
  * was to ensure consistency across the determiners.h which are imperative to the template-metaprogramming.
  */
 
-template<template<class...> class TENSOR, class PARENT, class math_lib>
-struct Tensor_Reshape<TENSOR<PARENT, math_lib>> : Core_Base<Tensor_Reshape<TENSOR<PARENT, math_lib>>, TENSOR<PARENT, math_lib>::DIMS()> {
+template<class PARENT>
+struct Tensor_Reshape {
 
-	__BCinline__ static constexpr int PARENT_DIMS() { return PARENT::PARENT_DIMS(); }
-	__BCinline__ static constexpr int DIMS() { return dimension_of_v<TENSOR<PARENT, math_lib>>; };
-	__BCinline__ static constexpr int CONTINUOUS() { return 0; }
+	template<int dimension>
+	struct implementation : Core_Base<implementation<dimension>, dimension>{
 
-//	static_assert(PARENT::CONTINUOUS() == 0, "Tensor_Reshape may only reshape continuous tensors, you may attempt to copy instead");
+	using scalar = _scalar<PARENT>;
+
+	__BCinline__ static constexpr int DIMS() { return dimension; };
+	__BCinline__ static constexpr int CONTINUOUS() { return dimension; }
+
+	operator const PARENT() const	{ return parent; }
 
 	PARENT parent;
+	scalar* array;
+
 	int is[DIMS()];
 	int os[DIMS()];
 
-	__BCinline__
-	operator const PARENT	   () const	{ return parent; }
-
-	template<int dim, class... integers> __BCinline__
-	void init(integers... ints) {
-
-		auto vars = array(ints...);
-
-		is[0] = vars[0];
-		os[0] = vars[0];
-		for (int i = 1; i < vars.size(); ++i) {
-			is[i] = vars[i];
-			os[i] = is[i] * os[i - 1];
-		}
-	}
-
 
 	template<class... integers> __BCinline__
-	Tensor_Reshape(PARENT parent, integers... ints) : parent(parent) {
+	implementation(scalar* array_, PARENT parent, integers... ints) : array(array_), parent(parent) {
 		static_assert(sizeof...(integers) == DIMS(), "DIMENSIONALITY OF RESHAPE MUST EQUAL THE PARAMETER INTEGERS FOR RESHAPE");
 		init<0>(ints...);
 	}
@@ -71,7 +57,21 @@ struct Tensor_Reshape<TENSOR<PARENT, math_lib>> : Core_Base<Tensor_Reshape<TENSO
 
 
 
+	template<int dim, class... integers> __BCinline__
+	void init(integers... ints) {
+
+		auto vars = BC::array(ints...);
+
+		is[0] = vars[0];
+		os[0] = vars[0];
+		for (int i = 1; i < vars.size(); ++i) {
+			is[i] = vars[i];
+			os[i] = is[i] * os[i - 1];
+		}
+	}
+
 	};
+};
 }
 
 #endif /* TENSOR_RESHAPE_H_ */

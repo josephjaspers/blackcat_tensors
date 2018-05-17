@@ -15,6 +15,11 @@ template<class... integers>
 __BCinline__ static constexpr int max(int x, integers... ints) { return x > max (ints...) ? x : max(ints...); }
 
 
+__BCinline__ static constexpr int floored_decrement(int x) {
+	return x > 0 ? x - 1 : 0;
+}
+
+
 namespace MTF {
 
 

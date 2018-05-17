@@ -19,14 +19,17 @@ namespace BC {
 template<class PARENT>
 struct Tensor_Row : Core_Base<Tensor_Row<PARENT>, 1>  {
 
+	static_assert(PARENT::DIMS() == 2 || PARENT::DIMS() == 1, "TENSOR_ROW CAN ONLY BE GENERATED FROM ANOTHER VECTOR, ROW_VECTOR, OR MATRIX");
+
 	using array = _iterator<PARENT>;
 	using self = Tensor_Row<PARENT>;
 	using slice_type = Tensor_Scalar<self>;
 	using Mathlib = typename  PARENT::Mathlib;
 
-	__BCinline__ static constexpr int PARENT_DIMS() { return PARENT::PARENT_DIMS(); }
 	__BCinline__ static constexpr int DIMS() { return 1; }
-	static_assert(PARENT::DIMS() == 2 || PARENT::DIMS() == 1, "TENSOR_ROW CAN ONLY BE GENERATED FROM ANOTHER VECTOR, ROW_VECTOR, OR MATRIX");
+	__BCinline__ static constexpr int CONTINUOUS() { return 0; }
+
+	operator const PARENT() const	{ return parent; }
 
 	PARENT parent;
 	array array_slice;

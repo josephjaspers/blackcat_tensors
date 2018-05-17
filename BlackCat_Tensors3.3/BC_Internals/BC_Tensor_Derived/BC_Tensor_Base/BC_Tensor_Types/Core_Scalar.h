@@ -21,8 +21,10 @@ struct Tensor_Scalar : Core_Base<Tensor_Scalar<PARENT>, 0> {
 
 	using scalar = _scalar<PARENT>;
 
-	__BCinline__ static constexpr int PARENT_DIMS() { return PARENT::PARENT_DIMS(); }
 	__BCinline__ static constexpr int CONTINUOUS() { return 0; }
+	__BCinline__ static constexpr int DIMS() { return 0; }
+
+	operator const PARENT() const	{ return parent; }
 
 	const PARENT parent;
 	scalar* array_slice;
