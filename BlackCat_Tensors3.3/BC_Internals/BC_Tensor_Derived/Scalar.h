@@ -25,7 +25,7 @@ public:
 
 	using parent_class::operator=;
 
-	Scalar() : parent_class(std::vector<int>{1}) {}
+	Scalar() : parent_class(array(0)) {}
 	Scalar(const Scalar&& t) : parent_class(t) {}
 	Scalar(		 Scalar&& t) : parent_class(t) {}
 	Scalar(const Scalar&  t) : parent_class(t) {}

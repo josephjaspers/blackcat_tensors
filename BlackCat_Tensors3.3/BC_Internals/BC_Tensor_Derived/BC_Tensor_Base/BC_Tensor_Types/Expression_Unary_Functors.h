@@ -43,6 +43,9 @@ namespace oper {
 			return isnan(val) || isinf(val) ? val = 0 : val;
 		}
 	};
+
+
+
 }
 
 }

@@ -185,8 +185,5 @@ public:
 
 }
 
-#include "Unary_Functions.h"
-
-
 #endif /* TENSOR_BASE_H_ */
 

@@ -209,9 +209,9 @@ m2.print();
 reshape(m2)(4,4,3).print();
 
 std::cout << " printing chunk " << std::endl;
-//chunk(m2)(0,1,2)(2,3).print();
-//chunk(m2)(0,1,2)(2,3).printDimensions();
-//chunk(m2)(0,1,2)(2,3).printLDDimensions();
+chunk(m2)(0,1,2)(2,3).print();
+chunk(m2)(0,1,2)(2,3).printDimensions();
+chunk(m2)(0,1,2)(2,3).printLDDimensions();
 
 m2 = abs(m2);
 m2.print();

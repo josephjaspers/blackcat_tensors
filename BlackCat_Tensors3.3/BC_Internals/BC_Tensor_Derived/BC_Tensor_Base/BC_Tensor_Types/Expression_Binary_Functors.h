@@ -88,6 +88,32 @@ template<class T> struct rm_const<const T&> { using type = T&; };
 			return (const_cast<typename rm_const<lv&>::type>(l) /= r);
 		}
 	};
+	struct equal {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
+			return l == r ? 1 : 0;
+		}
+	};
+
+	struct greater {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
+			return l > r ? 1 : 0;
+		}
+	};
+	struct lesser {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
+			return l < r ? 1 : 0;
+		}
+	};
+	struct greater_equal {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
+			return l >= r ? 1 : 0;
+		}
+	};
+	struct lesser_equal {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
+			return l <= r ? 1 : 0;
+		}
+	};
 }
 
 

@@ -25,6 +25,7 @@
 
 #include "Operations_Utility/AlternateAsterixDenoter.h"
 #include "Operations_Utility/Expression_Determiner.h"
+#include "Operations_Utility/Unary_Functions.h"
 #include <type_traits>
 
 namespace BC {
@@ -125,7 +126,36 @@ public:
 		evaluate(bi_expr<mul_assign>(param));
 		return as_derived();
 	}
+	 //--------------------------------Other Operators------------------------------//
 
+	 auto operator - () const {
+		 return this->un_expr<oper::negation>();
+	 }
+	template<class pDeriv>
+	auto operator ==(const Tensor_Operations<pDeriv>& param) const {
+		assert_same_size(param);
+		return bi_expr<equal>(param);
+	}
+	template<class pDeriv>
+	auto operator >(const Tensor_Operations<pDeriv>& param) const {
+		assert_same_size(param);
+		return bi_expr<greater>(param);
+	}
+	template<class pDeriv>
+	auto operator <(const Tensor_Operations<pDeriv>& param) const {
+		assert_same_size(param);
+		return bi_expr<lesser>(param);
+	}
+	template<class pDeriv>
+	auto operator >=(const Tensor_Operations<pDeriv>& param) const {
+		assert_same_size(param);
+		return bi_expr<greater_equal>(param);
+	}
+	template<class pDeriv>
+	auto operator <=(const Tensor_Operations<pDeriv>& param) const {
+		assert_same_size(param);
+		return bi_expr<lesser_equal>(param);
+	}
 
 	//-------------------------------------------DELAYED ASSIGNMENT OPERATORS---------------------------------------------//
 	template<class pDeriv>
@@ -166,11 +196,7 @@ public:
 		assert_same_size(param);
 		return bi_expr<combine>(param);
 	}
-	 //--------------------------------Unary_Functions------------------------------//
 
-	 auto operator - () const {
-		 return this->un_expr<oper::negation>();
-	 }
 
 	//-----------------------------------custom expressions--------------------------------------------------//
 	template<class functor>

@@ -24,7 +24,7 @@ public:
 
 	__BCinline__ static constexpr int DIMS() { return 2; }
 
-	explicit Matrix(int rows = 1, int cols = 1) : parent_class(array(rows, cols)) {}
+	explicit Matrix(int rows = 0, int cols = 1) : parent_class(array(rows, cols)) {}
 	Matrix(const Matrix&  v) : parent_class(v) {}
 	Matrix(		 Matrix&& v) : parent_class(v) {}
 	Matrix(const Matrix&& v) : parent_class(v) {}
