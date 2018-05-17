@@ -27,7 +27,7 @@ template<class> class 	_Tensor_Reshape = Tensor_Reshape,
 template<class> class 	_Tensor_Slice 	= Tensor_Slice,
 template<class> class 	_Tensor_Row 	= Tensor_Row,
 template<class> class 	_Tensor_Scalar 	= Tensor_Scalar,
-template<class> class   _Tensor_Chunk	= Tensor_Chunk>
+template<class> class   _Tensor_Chunk	= Tensor_Chunk>			//Nested implementation type
 struct Core_Base : expression_base<Core_Base<derived,DIMENSION>> {
 
 	__BCinline__ static constexpr bool ASSIGNABLE() { return true; }
@@ -54,10 +54,10 @@ public:
 	__BCinline__ 	   auto& operator [] (int index) 	   { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[index]; }
 	__BCinline__ const auto& operator [] (int index) const { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[index]; }
 	template<class... integers> __BCinline__ 	   auto& operator () (integers... ints) 	  {
-//		static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
+//FIXME, error in the reading function // static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
 		return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[this->scal_index(ints...)]; }
 	template<class... integers> __BCinline__ const auto& operator () (integers... ints) const {
-//		static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
+//FIXME, error in the reading function // static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
 		return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[this->scal_index(ints...)]; }
 
 	__BCinline__ const auto innerShape() const { return base().innerShape(); }
@@ -73,12 +73,18 @@ public:
 	__BCinline__ const auto col(int i) const { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
 	__BCinline__	   auto col(int i) 	     { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
 
-	template<class ... integers> __BCinline__ auto chunk(integers ... ints) {
-		return _Tensor_Chunk<derived>(base(), ints...);
+	template<class ... integers> __BCinline__ auto chunk(integers ... location_indices) {
+		return [&, location_indices...](auto... shape_dimension) {
+			auto* array = &(this->base().getIterator()[this->scal_index(location_indices...)]);
+			return typename _Tensor_Chunk<derived>::template implementation<sizeof...(shape_dimension)>(array, this->base(), shape_dimension...);
+		};
 	}
 
-	template<class ... integers> __BCinline__ const auto chunk(integers ... ints) const {
-		return _Tensor_Chunk<derived>(base(), ints...);
+	template<class ... integers> __BCinline__ const auto chunk(integers ... location_indices) const {
+		return [&, location_indices...](auto... shape_dimension) {
+			auto* array = &(this->base().getIterator()[this->scal_index(location_indices...)]);
+			return typename _Tensor_Chunk<derived>::template implementation<sizeof...(shape_dimension)>(array, this->base(), shape_dimension...);
+		};
 	}
 
 	template<class ... integers> __BCinline__

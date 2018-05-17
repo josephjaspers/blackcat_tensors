@@ -130,6 +130,7 @@ public:
 		return (*this)[i];
 	}
 
+
 	const auto operator() (int i) const { return scalar(i); }
 		  auto operator() (int i) 	    { return scalar(i); }
 
@@ -154,17 +155,37 @@ public:
 		this->black_cat_array.resetShape(ints...);
 	}
 	template<class... integers>
-	auto reshape(integers... ints) {
+	auto self_reshape(integers... ints) {
 		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
 		using internal = decltype(this->black_cat_array.reshape(ints...));
 		using type = typename tensor_of<sizeof...(integers)>::template type<internal, mathlib_type>;
 		return type(this->black_cat_array.reshape(ints...));
 
 	}
+	template<class... integers>
+	auto self_chunk(integers... ints) {
+		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
+		return [&](auto... shape) {
+			using internal = decltype(this->black_cat_array.chunk(ints...)(shape...));
+			using type = typename tensor_of<sizeof...(shape)>::template type<internal, mathlib_type>;
+			return type(this->black_cat_array.chunk(ints...)(shape...));
+		};
+	}
+	template<class... integers>
+	const auto self_chunk(integers... ints) const {
+		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
+		return [&](auto... shape) {
+			using internal = decltype(this->black_cat_array.chunk(ints...)(shape...));
+			using type = typename tensor_of<sizeof...(shape)>::template type<internal, mathlib_type>;
+			return type(this->black_cat_array.chunk(ints...)(shape...));
+		};
+	}
 
 };
 
 }
+
+#include "Unary_Functions.h"
 
 
 #endif /* TENSOR_BASE_H_ */

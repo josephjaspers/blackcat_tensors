@@ -25,7 +25,6 @@ class forward_list : Collection<T, deleter> {
 
 
 	node* head = nullptr;
-	int sz = 0;
 
 public:
 
@@ -70,35 +69,45 @@ public:
 		} else {
 			head = new node(data);
 		}
-		sz++;
 		return true;
 	}
-	bool contains(const T& data) const  {
+	int contains(const T& data) const  {
 		node* ref = head;
+		int index = 0;
 		while(ref) {
 			if (ref->data == data)
-				return true;
+				return index;
+
 			ref = ref->next;
+			index++;
 		}
+		return 0;
 	}
-	T* get(const T& data) {
+	T& get(int i) {
 		node* ref = head;
-		while (ref) {
-			if (ref->data == data)
-				return &(ref->data);
+		while (ref && i) {
 			ref = ref->next;
+			--i;
 		}
-		return nullptr;
+
+		return ref->data;
 	}
 
 	bool add(T data) override {
 		return push(data);
 	}
 	bool empty() const override {
-		return sz == 0;
+		return head == nullptr;
 	}
 	int size() const override {
+		 node* ref = head;
+		 int sz = 0;
+		 while (ref) {
+			 sz++;
+			 ref = ref->next;
+		 }
 		 return sz;
+
 	}
 	//decapitate
 	void remove_head() {
@@ -107,7 +116,6 @@ public:
 
 		node* h = head;
 		head = head->next;
-		--sz;
 
 		delete h;
 	}
@@ -159,7 +167,6 @@ public:
 			delete del;
 		}
 		head = nullptr;
-		sz = 0;
 	}
 
 	~forward_list() {

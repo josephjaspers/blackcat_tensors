@@ -21,6 +21,7 @@ template<class> class InputLayer;
 		using p = derived;
 		using me = LayerChain<derived, OutputLayer>;
 		using type = OutputLayer<LayerChain<derived, OutputLayer>>;
+		using next_type = void;
 
 		LayerChain(int x) : type(x) {}
 		bool hasNext() const { return false; }
@@ -52,6 +53,7 @@ template<class> class InputLayer;
 		using parent = LayerChain<LayerChain<derived, front, lst...>, lst...>;
 		using me = LayerChain<derived, front, lst...>;
 		using type = front<LayerChain<derived, front, lst...>>;
+		using next_type = n;
 
 		bool hasNext() const { return true; }
 
@@ -84,6 +86,7 @@ template<class> class InputLayer;
 		using parent = LayerChain<LayerChain<BASE, InputLayer, lst...>, lst...>;
 		using me = LayerChain<BASE, InputLayer, lst...>;
 		using type = InputLayer<LayerChain<BASE, InputLayer, lst...>>;
+		using next_type = n;
 
 
 		template<class param, class... integers>

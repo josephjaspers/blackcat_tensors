@@ -21,6 +21,7 @@
 #include "BC_Tensor_Types/Expression_Binary_Correlation.h"
 #include "BC_Tensor_Types/Expression_Binary_Correlation_Padded.h"
 #include "BC_Tensor_Types/Expression_Binary_Correlation_Stack.h"
+#include "BC_Tensor_Types/Expression_Binary_Correlation_Padded_Stack.h"
 
 #include "Operations_Utility/AlternateAsterixDenoter.h"
 #include "Operations_Utility/Expression_Determiner.h"
@@ -170,24 +171,6 @@ public:
 	 auto operator - () const {
 		 return this->un_expr<oper::negation>();
 	 }
-	 static auto zero(Tensor_Operations& tensor) {
-		 return tensor.un_expr<oper::zero>();
-	 }
-	 static auto one(Tensor_Operations& tensor) {
-		 return tensor.un_expr<oper::one>();
-	 }
-	 static auto fix(Tensor_Operations& tensor) {
-		 return tensor.un_expr<oper::fix>();
-	 }
-	 static auto abs(const Tensor_Operations& tensor) {
-		 return tensor.un_expr<oper::abs>();
-	 }
-	 static auto negation(const Tensor_Operations& tensor) {
-		 return tensor.un_expr<oper::negation>();
-	 }
-	 static auto logical(const Tensor_Operations& tensor) {
-		 return tensor.un_expr<oper::logical>();
-	 }
 
 	//-----------------------------------custom expressions--------------------------------------------------//
 	template<class functor>
@@ -212,7 +195,7 @@ public:
 	}
 	 //--------------------------------More_Complex Operations------------------------------//
 	template<class deriv>
-	auto corr(const Tensor_Operations<deriv>& rv) {
+	auto corr(const Tensor_Operations<deriv>& rv) const {
 		assert_same_size(rv);
 		return typename tensor_of<0>::template type<
 				binary_expression<functor_type, _functor<deriv>,
@@ -221,7 +204,7 @@ public:
 	}
 
 	template<int mv, class type = inner, class deriv>
-	auto x_corr(const Tensor_Operations<deriv>& rv) {
+	auto x_corr(const Tensor_Operations<deriv>& rv) const {
 
 		return typename tensor_of<mv>::template type<
 				binary_expression<functor_type, _functor<deriv>,
@@ -229,7 +212,7 @@ public:
 				rv.as_derived().data());
 	}
 	template<int mv, class type = inner, class deriv>
-	auto x_corr_stack(const Tensor_Operations<deriv>& rv) {
+	auto x_corr_stack(const Tensor_Operations<deriv>& rv) const {
 
 		return typename tensor_of<mv + 1>::template type<
 				binary_expression<functor_type, _functor<deriv>,

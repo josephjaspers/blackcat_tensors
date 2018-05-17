@@ -19,8 +19,8 @@ template<int,class> struct _x_corr;
 template<class lv, class rv, int corr_dimension>
 struct binary_expression<lv, rv, _x_corr<corr_dimension, padded>> : expression_base<binary_expression<lv, rv, _x_corr<corr_dimension, padded>>> {
 
-	__BCinline__ static constexpr int DIMS() { return lv::DIMS(); }
-	__BCinline__ static constexpr int CONTINUOUS() { return lv::DIMS(); }
+	__BCinline__ static constexpr int DIMS() { return corr_dimension; }
+	__BCinline__ static constexpr int CONTINUOUS() { return corr_dimension; }
 	using scalar = _scalar<lv>;
 
 	static_assert(lv::DIMS() == rv::DIMS(), "CORRELATION CURRENTLY ONLY SUPPORTED FOR SAME ORDER TENSORS");
@@ -41,14 +41,14 @@ struct binary_expression<lv, rv, _x_corr<corr_dimension, padded>> : expression_b
 
 	//1d correlation
 	template<class... ints> __BCinline__
-	scalar axpy (conditional_int<1> x, ints... location) const {
+	scalar axpy (conditional_int<1> x, ints... indexes) const {
 
 		scalar sum = 0;
 		for (int i = 0 ; i < left.rows(); ++i) {
 
 			int row_index = i + x - left.rows() + 1;
 			if (row_index >= 0 && row_index < right.rows())
-				sum += left(i) * right(row_index, location...);
+				sum += left(i) * right(row_index, indexes...);
 		}
 		return sum;
 	}

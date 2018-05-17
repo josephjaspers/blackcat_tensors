@@ -19,6 +19,11 @@
 #include <vector>
 #include <algorithm>
 
+/*
+ * Takes a CSV_Parser and converts it into an array of the corresponding tuples
+ *
+ */
+
 namespace BC {
 namespace CSV {
 

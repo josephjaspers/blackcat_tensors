@@ -11,6 +11,7 @@ typedef vec tensor;
 namespace BC {
 namespace NN {
 namespace Word_Test {
+
 std::string alphabet = { "abcdefghijklmnopqrstuvwxyz " };
 int alpha_length = alphabet.length();
 
@@ -42,41 +43,29 @@ char vec_to_char(const vec& v) {
 	return alphabet[index];
 }
 
-
-
 template<class T>
-int test(T& words) {
+int test(T& words, int helper = 1) {
 
-	const int ITERATIONS = 100;
+	const int ITERATIONS = 500;
 	const int NUMB_WORDS = words.size();
-
+	std::ifstream is("EANfin.bc");
 
 	//Create a Neural Network
 	NeuralNetwork<FeedForward, GRU, FeedForward> network(alpha_length, 128, 64, alpha_length);
 
-	std::ifstream is("EdgarAllenNetworkfin.bc");
 	network.read(is);
-
-
-
 	network.setLearningRate(.001);
-	//Train 4k iterations
+
+
+
 	for (int i = 0; i < ITERATIONS; ++i) {
 		std::cout << " i = " << i<< std::endl;
-//		if (i% 10 == 0) {
-//			std::cout << " iteration = " << i << std::endl;
-//			std::ofstream os("EdgarAllenNetwork" + std::to_string(i) + ".bc");
-//			network.write(os);
-//			os.close();
-//		}
+
 		for (int j = 0; j < NUMB_WORDS; ++j) {
-//			std::cout << " curr word = " << j << " outof " << NUMB_WORDS << std::endl;
-			for (int x = 0; x < words[j].length(); ++x) {
+			for (int x = 0; x < words[j].length() - 1; ++x) {
 				vec input = char_to_vec(words[j][x]);	//convert current char to 1-hot
 				network.forwardPropagation(input);		//propagate
 			}
-			vec input (char_to_vec(' '));
-			network.backPropagation(input);
 			//iterate backwards through the word
 			for (int x = words[j].length()-1; x > 0; --x){
 				vec output = char_to_vec(words[j][x]);	//back propagate backwards thru word
@@ -88,21 +77,31 @@ int test(T& words) {
 		}
 	}
 
-
-	std::ofstream os(std::string("EdgarAllenNetwork") + std::string("fin") + std::string(".bc"));
+	//save the neural network
+	std::ofstream os(std::string("EANfin.bc"));
 	network.write(os);
 	os.close();
 
 
-	int helper_count = 1;
-	//print out/test the predictions
-	for (int j = 0; j < NUMB_WORDS; ++j) {
-		std::string wrd = "";
-		std::cout << words[j] << " | ";
-//		std::cout << words[j][0];
 
-		//give it the first three characters of a word
+	//-----------------------------------------------RESULTS-----------------------------------------------//
+	//--->Would comment out the training during result tests<---//
+	int helper_count = helper;				//Number of characters given
+	float n_words = 0;						//Number of words
+	float correct = 0;						//Number of correct words
+	float char_correct = 0;					//Number of correct chars
+	float chars = 0;						//number of chars
+	float valid_words = 0;					//number of words predicted by NN that were in the corpus
+	//print out/test the predictions
+	int myj;
+
+	for (int j = 0; j < NUMB_WORDS; ++j) {
+		std::cout << words[j] << " | ";
+
+		//give it the first n characters of a word
 		vec input;
+		std::string wrd = "";
+
 		for (int x = 0; x < helper_count; ++x) {
 			if (x >=  words[j].length())
 				break;
@@ -110,25 +109,56 @@ int test(T& words) {
 			wrd += words[j][x];
 			input = char_to_vec(words[j][x]);
 			input = network.forwardPropagation_Express(input);
-			vec_to_char(input);
 		}
-		//let it predict the rest
+
+		std::cout << wrd; //print current word (the fragment of the word we fed to the NN)
+
+		//Recursively feed output to inputs
 		if (helper_count < words[j].length()) {
-			std::cout << words[j][helper_count];
-		for (int x = helper_count; x < words[j].length() - 1; ++x) {
+			wrd += vec_to_char(input);
+
+			for (int x = helper_count; x < words[j].length() - 1; ++x) {
 			input = network.forwardPropagation_Express(input);
-			if (vec_to_char(input) == ' ') {
-//				if (x == words[j].length() - 2) {
-					std::cout << " || ";
-//				}
-				break;
+			wrd += vec_to_char(input);
+
+			//uncomment this for truncated results
+			//if (words[j].size() < 6)
+				chars ++;
+
+			//uncomment this for truncated results
+			//if (words[j].size() < 6)
+			if (words[j][x] == wrd[wrd.length() - 1]) {
+				char_correct += 1;
 			}
 		}
+
+			//uncomment this for truncated results
+			//if (words[j].size() < 6)
+			if (words[j].size() > helper_count ) {
+				n_words++;
+
+				if (wrd == words[j]) {
+					correct += 1;
+					valid_words++;
+				} else
+				for (auto& w: words) {
+					if (wrd == w) {
+						valid_words++;
+						break;
+					}
+				}
+			}
 		}
+
+
 		std::cout << std::endl;
 
 	}
-
+	std::cout << " helper count == " << helper << "----------------------------------" << std::endl;
+	std::cout << " words correct " << correct / n_words << std::endl;
+	std::cout << " chars correct " << char_correct / chars << std::endl;
+	std::cout << " valid _wrods =" << valid_words << std::endl;
+	std::cout << " valid words " << valid_words / n_words << std::endl;
 
 	return 0;
 }

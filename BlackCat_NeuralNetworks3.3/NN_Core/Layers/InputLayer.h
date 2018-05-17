@@ -59,11 +59,6 @@ struct InputLayer : Layer<derived> {
 	}
 
 };
-
 }
 }
-
-
-
-
 #endif /* FEEDFORWARD_CU_ */

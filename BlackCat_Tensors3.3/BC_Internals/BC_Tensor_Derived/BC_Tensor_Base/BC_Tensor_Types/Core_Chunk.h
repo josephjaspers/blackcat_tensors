@@ -19,20 +19,26 @@
 
 namespace BC {
 
-template<class PARENT, int NEW_DIM>
-struct Tensor_Chunk : Core_Base<Tensor_Chunk<PARENT, NEW_DIM>, NEW_DIM> {
+template<class PARENT>
+struct Tensor_Chunk  {
 
-	using Mathlib = typename  PARENT::Mathlib;
+	template<int dimension>
+	struct implementation : Core_Base<implementation<dimension>,dimension> {
 
-	__BCinline__ static constexpr int DIMS() { return NEW_DIM; };
+	__BCinline__ static constexpr int DIMS() { return dimension; };
 	__BCinline__ static constexpr int CONTINUOUS() { return DIMS(); }
+
+	using scalar = _scalar<PARENT>;
+
 	static_assert(PARENT::CONTINUOUS() == 0, "Tensor_Reshape may only reshape continuous tensors, you may attempt to copy instead");
 
-	static_assert(NEW_DIM > -1, "DIMENSIONALITY OF TENSOR MUST BE >= 0");
+//	static_assert(NEW_DIM > -1, "DIMENSIONALITY OF TENSOR MUST BE >= 0");
 
 	PARENT parent;
-	int* is = Mathlib::unified_initialize(is, DIMS());
-	int* os = Mathlib::unified_initialize(os, DIMS());
+	scalar* array;
+
+	int is[DIMS()];
+	int os[DIMS()];
 
 	operator const PARENT	   () const	{ return parent; }
 
@@ -51,24 +57,24 @@ struct Tensor_Chunk : Core_Base<Tensor_Chunk<PARENT, NEW_DIM>, NEW_DIM> {
 	}
 
 	template<class... integers>
-	Tensor_Chunk(PARENT parent, integers... ints) : parent(parent) {
-		static_assert(sizeof...(integers) <= PARENT::DIMS(), "DIMENSIONALITY OF CHUNK BE LESS THAN OR EQUAL TO TENSOR_CORE_PARENT");
+	implementation(scalar* array_, PARENT parent_, integers... ints) : parent(parent_), array(array_) {
+//		static_assert(sizeof...(integers) <= PARENT::DIMS(), "DIMENSIONALITY OF CHUNK BE LESS THAN OR EQUAL TO TENSOR_CORE_PARENT");
 		init<0>(ints...);
-		if (this->size() >= parent.size()) {
-			std::cout << "TENSOR RESHAPE SIZE MUST BE EQUAL TO ITS ORIGINAL SIZE" << std::endl;
-			throw std::invalid_argument("INVALID CHUNK_SHAPE");
-		}
+//		if (this->size() >= parent.size()) {
+//			std::cout << "TENSOR RESHAPE SIZE MUST BE EQUAL TO ITS ORIGINAL SIZE" << std::endl;
+//			throw std::invalid_argument("INVALID CHUNK_SHAPE");
+//		}
 	}
 
 	__BCinline__ const auto size()		 const  { return this->os[DIMS() - 1]; }
 	__BCinline__ const auto innerShape() const 	{ return is; }
 	__BCinline__ const auto outerShape() const 	{ return parent.outerShape(); }
 
-	__BCinline__ const auto getIterator() const { return parent.getIterator(); }
-	__BCinline__	   auto getIterator()   	{ return parent.getIterator(); }
+	__BCinline__ const auto getIterator() const { return array; }
+	__BCinline__	   auto getIterator()   	{ return array; }
 
 
-
+	};
 	};
 }
 

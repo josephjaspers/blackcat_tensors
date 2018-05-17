@@ -27,9 +27,10 @@ template<class T> using bp_list = omp_unique<forward_list<T>>;
 
 template<class derived>
 class Layer {
-
-
 public:
+
+	using PARAMETER = vec;
+
 	scal lr;
 
 	struct Sum_Gradients {

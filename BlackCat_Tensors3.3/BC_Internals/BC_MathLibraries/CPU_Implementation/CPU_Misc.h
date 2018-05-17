@@ -24,12 +24,6 @@ struct CPU_Misc {
 
 	template<typename T, typename J>
 	static void randomize(T& t, J lower_bound, J upper_bound, int sz) {
-		if (sz < core_lib::SINGLE_THREAD_THRESHOLD) {
-			for (int i = 0; i < sz; ++i) {
-				t[i] = ((double) (rand() / ((double) RAND_MAX + 1)) * (upper_bound - lower_bound)) + lower_bound;
-			}
-			return;
-		}
 #ifndef BC_NO_OPENMP
 #pragma omp parallel for
 #endif
@@ -40,7 +34,6 @@ struct CPU_Misc {
 #pragma omp barrier
 #endif
 	}
-
 
 	template<typename T, typename J>
 	static void fill(T& t, const J j, int sz) {
@@ -61,9 +54,6 @@ struct CPU_Misc {
 
 };
 
-
 }
-
-
 
 #endif /* MATHEMATICS_CPU_MISC_H_ */

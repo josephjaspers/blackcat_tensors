@@ -124,6 +124,7 @@ auto test() {
 	d.print();
 
 
+
 //	d.row(0).print();
 
 	std::cout << "d print " << d.row(0).size() << std::endl;
@@ -153,10 +154,14 @@ auto test() {
 #include "Benchmarks/ForLoopBench.h"
 int main() {
 
+
 //test2();
 std::cout << " post test" << std::endl;
 
 mat krnl(2,2);
+
+abs(krnl);
+
 krnl.zero();
 krnl[0][0] = 1;
 krnl[1][1] = 1;
@@ -198,29 +203,43 @@ m2 = krnl2.x_corr_stack<2>(img);
 m2.print();
 
 m2 += m2;
-
+m2 = -m2;
 m2.print();
-	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
-	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
-//	omp_set_num_threads(2);
-	BC_EIGEN_BENCHMARK::benchmark1<4,     100000>();
-	BC_EIGEN_BENCHMARK::benchmark1<8,     100000>();
-	BC_EIGEN_BENCHMARK::benchmark1<16,    10000>();
-	BC_EIGEN_BENCHMARK::benchmark1<64,    10000>();
-	BC_EIGEN_BENCHMARK::benchmark1<128,   1000>();
-	BC_EIGEN_BENCHMARK::benchmark1<256,   1000>();
-	BC_EIGEN_BENCHMARK::benchmark1<512,   100>();
 
-	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark2_str() << std::endl;
+reshape(m2)(4,4,3).print();
+
+std::cout << " printing chunk " << std::endl;
+chunk(m2)(0,1,2)(2,3).print();
+chunk(m2)(0,1,2)(2,3).printDimensions();
+chunk(m2)(0,1,2)(2,3).printLDDimensions();
+
+m2 = abs(m2);
+m2.print();
+
+//m2[0][0][0].data().chunk(2,2);.print();
+
+
+//	std::cout << "BENCHMARKING - 03 OPTIMIZATIONS" << std::endl;
+//	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark1_str() << std::endl;
+////	omp_set_num_threads(2);
+//	BC_EIGEN_BENCHMARK::benchmark1<4,     100000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<8,     100000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<16,    10000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<64,    10000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<128,   1000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<256,   1000>();
+//	BC_EIGEN_BENCHMARK::benchmark1<512,   100>();
 //
-	BC_EIGEN_BENCHMARK::benchmark2<4,     100000>();
-	BC_EIGEN_BENCHMARK::benchmark2<8,     100000>();
-	BC_EIGEN_BENCHMARK::benchmark2<16,    10000>();
-	BC_EIGEN_BENCHMARK::benchmark2<64,    10000>();
-	BC_EIGEN_BENCHMARK::benchmark2<128,   1000>();
-	BC_EIGEN_BENCHMARK::benchmark2<256,   1000>();
-	BC_EIGEN_BENCHMARK::benchmark2<512,   100>();
-	BC_EIGEN_BENCHMARK::benchmark2<1024,   100>();
+//	std::cout << "Benchmarking: " << BC_EIGEN_BENCHMARK::benchmark2_str() << std::endl;
+////
+//	BC_EIGEN_BENCHMARK::benchmark2<4,     100000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<8,     100000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<16,    10000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<64,    10000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<128,   1000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<256,   1000>();
+//	BC_EIGEN_BENCHMARK::benchmark2<512,   100>();
+//	BC_EIGEN_BENCHMARK::benchmark2<1024,   100>();
 
 //		BC_EIGEN_BENCHMARK::benchmark3<4,     100000>();
 //		BC_EIGEN_BENCHMARK::benchmark3<8,     100000>();

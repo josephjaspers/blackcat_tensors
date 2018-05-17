@@ -8,14 +8,16 @@
 #ifndef BIDIRECTIONAL_TUPLE_H_
 #define BIDIRECTIONAL_TUPLE_H_
 
-namespace BC {
-namespace Structure {
-struct  HEAD;
-template<class derived, class...> struct bidirectional_tuple;
 /*
- * Abstract
+ * A tuple which supports forward and backward traversal
  *
  */
+
+namespace BC {
+namespace Structure {
+
+struct  HEAD;
+template<class derived, class...> struct bidirectional_tuple;
 
 
 template<class... Ts>

@@ -31,12 +31,12 @@ struct GPU_Misc {
 	}
 	template<typename T>
 	static void zero(T t, int sz) {
-		gpu_impl::zero<<<blocks(sz),threads()>>>(t, sz);
+		gpu_impl::fill<<<blocks(sz),threads()>>>(t, 0, sz);
 		cudaDeviceSynchronize();
 	}
 	template<template<class...> class T, class...set>
 	static void zero(T<set...> t, int sz) {
-		gpu_impl::zero<<<blocks(sz),threads()>>>(t, sz);
+		gpu_impl::fill<<<blocks(sz),threads()>>>(t, 0, sz);
 		cudaDeviceSynchronize();
 	}
 
