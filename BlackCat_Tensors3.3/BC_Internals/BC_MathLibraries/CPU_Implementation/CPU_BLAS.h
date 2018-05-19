@@ -10,7 +10,6 @@
 #include "cblas.h"
 
 namespace BC {
-template<class core_lib>
 
 /*
  * creates a BLAS wrapper for BC_Tensors
@@ -18,17 +17,15 @@ template<class core_lib>
  *  The automatic template deduction chooses the correct path
  *
  *  (this is to enable BC_Tensors's to not have to specialize the template system)
- *
  */
 
+template<class core_lib>
 struct CPU_BLAS  {
 
 	template<class U, class T, class V>
 	static void scalarMul(U eval, T a, V b) {
 		*eval = a[0] * b[0];
 	}
-
-
 
 	/*
 	 * a = M x K
@@ -38,39 +35,35 @@ struct CPU_BLAS  {
 	static void gemm(bool transA, bool transB, const float* A, const float* B, float* C, int m, int n, int k,
 			const float* scalarA = nullptr, const float* scalarB = nullptr,  int lda = 0, int ldb =0, int ldc =0) {
 
-		 auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
-		 auto TRANS_B =  transB ? CblasTrans : CblasNoTrans;
+		auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
+		auto TRANS_B =  transB ? CblasTrans : CblasNoTrans;
 
-		  if (lda == 0 ) lda = m;
-		  if (ldb == 0 ) ldb = n;
-		  if (ldc == 0 ) ldc = m;
+		if (lda == 0 ) lda = m;
+		if (ldb == 0 ) ldb = n;
+		if (ldc == 0 ) ldc = m;
 
-	      const float beta   =  scalarB ? *scalarB : 0;
-		  const float alpha  =  scalarA ? *scalarA : 1;
+	    const float beta   =  scalarB ? *scalarB : 0;
+	    const float alpha  =  scalarA ? *scalarA : 1;
 
-	{
 		cblas_sgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 	}
 
-	}
 	static void gemm(bool transA, bool transB, const double* A, const double* B, double* C, int m, int n, int k,
 			const double* scalarA = nullptr, const double* scalarB = nullptr, int lda = 0, int ldb = 0, int ldc = 0) {
 
-		 auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
-		 auto TRANS_B =  transB ? CblasTrans : CblasNoTrans;
+		auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
+		auto TRANS_B =  transB ? CblasTrans : CblasNoTrans;
 
-		  if (lda == 0 ) lda = m;
-		  if (ldb == 0 ) ldb = n;
-		  if (ldc == 0 ) ldc = m;
-
+		if (lda == 0 ) lda = m;
+		if (ldb == 0 ) ldb = n;
+		if (ldc == 0 ) ldc = m;
 
 		const double beta   =  scalarB ? *scalarB : 0.0;
 		const double alpha  =  scalarA ? *scalarA : 1.0;
+
 		cblas_dgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 	}
-
 };
-
 }
 
 #endif /* MATHEMATICS_CPU_BLAS_H_ */

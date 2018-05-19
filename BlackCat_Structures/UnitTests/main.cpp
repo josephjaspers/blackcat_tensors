@@ -5,11 +5,11 @@
 #include "../Structures/omp_unique.h"
 #include "../Structures/binary_tree.h"
 #include "../Structures/forward_list.h"
-#include "../Structures/hash_map.h"
 #include "../Structures/bidirectional_tuple.h"
 
 #include "../Structures/Parser/CSV_Parser.h"
 #include "../Structures/Parser/DataFrame.h"
+#include "../Structures/static_hash_map.h"
 
 #include <pthread.h>
 #include <type_traits>
@@ -72,10 +72,13 @@ int main() {
 
 
 
-//
-//	BC::Structure::hash_map<int, int, hasher> hmap;
-//	hmap[9] = 4;
-//	hmap[2] = 1;
+
+	BC::Structure::static_hash_map<std::string, int> hmap(256);
+	hmap["cats"] = 4;
+	hmap["dogs"] = 2;
+	hmap["total_pets"] = 6;
+
+	hmap.print();
 
 
 

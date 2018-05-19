@@ -23,12 +23,12 @@ template<class core_lib>
 struct CPU_Misc {
 
 	template<typename T, typename J>
-	static void randomize(T& t, J lower_bound, J upper_bound, int sz) {
+	static void randomize(T& tensor, J lower_bound, J upper_bound) {
 #ifndef BC_NO_OPENMP
 #pragma omp parallel for
 #endif
-		for (int i = 0; i < sz; ++i) {
-			t[i] = ((double) (rand() / ((double) RAND_MAX + 1)) * (upper_bound - lower_bound)) + lower_bound;
+		for (int i = 0; i < tensor.size(); ++i) {
+			tensor[i] = ((double) (rand() / ((double) RAND_MAX + 1)) * (upper_bound - lower_bound)) + lower_bound;
 		}
 #ifndef BC_NO_OPENMP
 #pragma omp barrier
@@ -36,20 +36,20 @@ struct CPU_Misc {
 	}
 
 	template<typename T, typename J>
-	static void fill(T& t, const J j, int sz) {
+	static void fill(T tensor, const J j) {
 #ifndef BC_NO_OPENMP
 #pragma omp parallel for
 #endif
-		for (int i = 0; i < sz; ++i) {
-			t[i] = j;
+		for (int i = 0; i < tensor.size(); ++i) {
+			tensor[i] = j;
 		}
 #ifndef BC_NO_OPENMP
 #pragma omp barrier
 #endif
 	}
 	template<typename T>
-	static void zero(T& t, int sz) {
-		fill(t, 0, sz);
+	static void zero(T tensor) {
+		fill(tensor, 0);
 	}
 
 };

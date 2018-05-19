@@ -18,35 +18,35 @@ template<class core_lib>
 struct CPU_Utility {
 
 	template<typename T>
-	static T*& initialize(T*& t, int sz) {
-		t = new T[sz];
-		return t;
+	static T*& initialize(T*& internal_mem_ptr, int size) {
+		internal_mem_ptr = new T[size];
+		return internal_mem_ptr;
 	}
 	template<typename T>
-	static T*& unified_initialize(T*& t, int sz) {
-		t = new T[sz];
-		return t;
+	static T*& unified_initialize(T*& intenral_mem_ptr, int size) {
+		intenral_mem_ptr = new T[size];
+		return intenral_mem_ptr;
 	}
 	template<class T, class U>
-	static void HostToDevice(T* t, U* u, int size) {
-		core_lib::copy(t, u, size);
+	static void HostToDevice(T* device_ptr, U* host_ptr, int size) {
+		core_lib::copy(device_ptr, host_ptr, size);
 	}
 	template<class T, class U>
-	static void DeviceToHost(T* t, U* u, int size) {
-		core_lib::copy(t, u, size);
+	static void DeviceToHost(T* host_ptr, U* device_ptr, int size) {
+		core_lib::copy(host_ptr, device_ptr, size);
 	}
 	template<typename T>
 	static void destroy(T* t) {
 		delete[] t;
 	}
 	template<class T, class is, class os>
-	static void print(const T ary, const is inner, const os outer, int order, int print_length) {
-		BC::print(ary, inner, outer, order, print_length);
+	static void print(const T array_ptr, const is inner_shape, const os outer_shape, int numb_dimensions, int print_gap_length) {
+		BC::print(array_ptr, inner_shape, outer_shape, numb_dimensions, print_gap_length);
 	}
 
 	template<class T, class is, class os>
-	static void printSparse(const T ary, const is inner, os outer, int order, int print_length) {
-		BC::printSparse(ary, inner, outer, order, print_length);
+	static void printSparse(const T array_ptr, const is inner_shape, const os outer_shape, int numb_dimensions, int print_gap_length) {
+		BC::printSparse(array_ptr, inner_shape, outer_shape, numb_dimensions, print_gap_length);
 	}
 };
 }

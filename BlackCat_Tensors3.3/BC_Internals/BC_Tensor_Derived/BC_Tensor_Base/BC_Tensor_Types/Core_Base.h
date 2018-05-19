@@ -36,7 +36,7 @@ struct Core_Base : expression_base<Core_Base<derived,DIMENSION>> {
 	__BCinline__ static constexpr bool ASSIGNABLE() { return true; }
 
 
-	__BCinline__ static constexpr int LAST() { return DIMENSION - 1; }
+	__BCinline__ static constexpr int back() { return DIMENSION - 1; }
 
 	using self = derived;
 
@@ -109,7 +109,7 @@ public:
 		else if (DIMS() == 1)
 			return i;
 		else
-			return base().outerShape()[LAST() - 1] * i;
+			return base().outerShape()[back() - 1] * i;
 	}
 
 

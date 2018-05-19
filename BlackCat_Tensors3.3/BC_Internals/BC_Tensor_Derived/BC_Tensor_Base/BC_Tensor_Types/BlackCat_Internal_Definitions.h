@@ -29,6 +29,8 @@ static constexpr int CUDA_BASE_THREADS = 256;
 
 #include "BC_Utility/Determiners.h"
 #include "BC_Utility/MetaTemplateFunctions.h"
+#include "BC_Utility/MetaTemplateUtility.h"
+
 #include "BC_Utility/ParameterPackModifiers.h"
 
 #include "BC_Utility/Shape_Utility.h" //DEPENDENT UPON __BCinline__

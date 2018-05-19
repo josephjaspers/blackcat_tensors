@@ -1,5 +1,4 @@
 /*
-
  * BC_Expression_Base.h
  *
  *  Created on: Dec 11, 2017
@@ -11,9 +10,9 @@
 
 #include "BlackCat_Internal_Definitions.h"
 #include <iostream>
+#include <type_traits>
 
 namespace BC {
-
 
 struct BC_Type {};
 
@@ -30,7 +29,6 @@ private:
 	__BCinline__ const derived& base() const { return static_cast<const derived&>(*this); }
 	__BCinline__	   derived& base() 		 { return static_cast<	    derived&>(*this); }
 
-
 public:
 	operator 	   auto&()       { return base(); }
 	operator const auto&() const { return base(); }
@@ -40,17 +38,21 @@ public:
 	__BCinline__ static constexpr bool ASSIGNABLE() { return false; }
 
 	__BCinline__ static constexpr int LAST() { return derived::DIMS() -1; }
+
 	__BCinline__ const auto IS() const { return base().innerShape(); }
 	__BCinline__ const auto OS() const { return base().outerShape(); }
 
 	template<class... integers>
 	__BCinline__ const auto operator()(integers... ints) const {
 		static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
-		return base()[scal_index(ints...)]; }
+		return base()[scal_index(ints...)];
+	}
+
 	template<class... integers>
 	__BCinline__ auto operator()(integers... ints) {
 		static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
-		return base()[scal_index(ints...)]; }
+		return base()[scal_index(ints...)];
+	}
 
 	__BCinline__ int dims() const { return DIMS(); }
 	__BCinline__ int size() const { return DIMS() > 0 ? OS()[LAST()] : 1;    }
@@ -77,8 +79,6 @@ public:
 		}
 		std::cout << std::endl;
 	}
-
-
 	//---------------------------------------------------UTILITY/IMPLEMENTATION METHODS------------------------------------------------------------//
 
 	template<class... integers> __BCinline__

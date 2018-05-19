@@ -5,8 +5,8 @@
  *      Author: joseph
  */
 
-#ifndef EXPRESSIONS_BINARY_CORRELATION_H_
-#define EXPRESSIONS_BINARY_CORRELATION_H_
+#ifndef EXPRESSIONS_BINARY_CORRELATION_ERROR_H_
+#define EXPRESSIONS_BINARY_CORRELATION_ERROR_H_
 
 #include "Expression_Base.h"
 #include "Expression_Binary_Pointwise.h"
@@ -14,10 +14,11 @@
 namespace BC {
 
 struct inner;
-template<int,class> struct _x_corr {};
+template<class> struct error;
+template<int,class> struct _x_corr;
 
 template<class lv, class rv, int corr_dimension>
-struct binary_expression<lv, rv, _x_corr<corr_dimension,inner>> : expression_base<binary_expression<lv, rv, _x_corr<corr_dimension,inner>>> {
+struct binary_expression<lv, rv, _x_corr<corr_dimension,error<inner>>> : expression_base<binary_expression<lv, rv, _x_corr<corr_dimension,error<inner>>>> {
 
 	__BCinline__ static constexpr int DIMS() { return corr_dimension; }
 	__BCinline__ static constexpr int CONTINUOUS() { return corr_dimension; }
@@ -33,7 +34,7 @@ struct binary_expression<lv, rv, _x_corr<corr_dimension,inner>> : expression_bas
 
 	binary_expression(lv l_, rv r_) :left(l_), right(r_) {}
 
-	__BCinline__ const auto innerShape() const { return l_array([&](int i) {return right.dimension(i) - left.dimension(i) + 1;} ); }
+	__BCinline__ const auto innerShape() const { return l_array([&](int i) {return right.dimension(i) + left.dimension(i) - 1;} ); }
 	__BCinline__ const auto outerShape() const { return l_array([&](int i) {return i == 0 ? this->rows() : this->dimension(i) * this->dimension(i - 1);} );}
 
 	template<int x> using conditional_int = std::conditional_t<x == lv::DIMS(), int, DISABLED>;
@@ -41,8 +42,9 @@ struct binary_expression<lv, rv, _x_corr<corr_dimension,inner>> : expression_bas
 	template<class... ints> __BCinline__
 	scalar axpy (conditional_int<1> x, ints... location) const {
 		scalar sum = 0;
-		for (int i = 0 ; i < left.rows(); ++i) {
-			sum += left(i) * right(i + x, location...);
+		for (int m = 0 ; m < right.rows(); ++m) {
+			if (m <= x || x + (right.rows() - m) <= right.rows())
+				sum += left(x) * right(m + x, location...);
 		}
 		return sum;
 	}
@@ -50,9 +52,11 @@ struct binary_expression<lv, rv, _x_corr<corr_dimension,inner>> : expression_bas
 	template<class... ints> __BCinline__
 	scalar axpy (conditional_int<2> x, int y, ints... indexes) const {
 		scalar sum = 0;
-		for (int n = 0; n < left.cols(); ++n) {
-			for (int m = 0 ; m < left.rows(); ++m) {
-				sum += left(m, n) * right(m + x, n + y, indexes...);
+		for (int n = 0; n < right.cols(); ++n) {
+			if (n <= x || x + (right.cols() - n) <= right.cols())
+			for (int m = 0 ; m < right.rows(); ++m) {
+				if (m <= y || y + (right.rows() - m) <= right.rows())
+					sum += left(x, y) * right(m + x, n + y, indexes...);
 			}
 		}
 		return sum;
@@ -61,10 +65,10 @@ struct binary_expression<lv, rv, _x_corr<corr_dimension,inner>> : expression_bas
 	template<class... ints> __BCinline__
 	scalar axpy (conditional_int<3> x, int y, int z, ints... indexes) const {
 		scalar sum = 0;
-		for (int k = 0; k < left.dimension(2); ++k) {
-			for (int n = 0; n < left.cols(); ++n) {
-				for (int m = 0 ; m < left.rows(); ++m) {
-					sum += left(m, n, k) * right(m + x, n + y, k + z, indexes...);
+		for (int k = 0; k < right.dimension(2); ++k) {
+			for (int n = 0; n < right.cols(); ++n) {
+				for (int m = 0 ; m < right.rows(); ++m) {
+					sum += left(x, y, z) * right(m + x, n + y, k + z, indexes...);
 				}
 			}
 		}

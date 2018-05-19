@@ -23,6 +23,9 @@
 #include "BC_Tensor_Types/Expression_Binary_Correlation_Stack.h"
 #include "BC_Tensor_Types/Expression_Binary_Correlation_Padded_Stack.h"
 
+#include "BC_Tensor_Types/Expression_Binary_Correlation_Error.h"
+
+
 #include "Operations_Utility/AlternateAsterixDenoter.h"
 #include "Operations_Utility/Expression_Determiner.h"
 #include "Operations_Utility/Unary_Functions.h"
@@ -49,9 +52,9 @@ private:
 	 	   derived& as_derived() 	  { return static_cast<	     derived&>(*this); }
 public:
 
-	void randomize(scalar_type lb, scalar_type ub)  { mathlib_type::randomize(as_derived().data(), lb, ub, as_derived().size()); }
-	void fill(scalar_type value) 					{ mathlib_type::fill(as_derived().data(), value, as_derived().size()); }
-	void zero() 									{ mathlib_type::zero(as_derived().data(), as_derived().size()); }
+	void randomize(scalar_type lb, scalar_type ub)  { mathlib_type::randomize(as_derived().data(), lb, ub); }
+	void fill(scalar_type value) 					{ mathlib_type::fill(as_derived().data(), value); }
+	void zero() 									{ mathlib_type::zero(as_derived().data()); }
 
 	//-------------------------------------dotproduct-------------------- ---------------------//
 

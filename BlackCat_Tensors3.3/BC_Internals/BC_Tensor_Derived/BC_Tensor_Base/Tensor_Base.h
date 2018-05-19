@@ -33,7 +33,6 @@ protected:
 	using functor_type 	= _functor<derived>;
 	using scalar_type	= _scalar<derived>;
 	using mathlib_type 	= _mathlib<derived>;
-	struct DISABLED;
 
 	static constexpr int DIMS() { return dimension_of<derived>::value; }
 	static constexpr int CONTINUOUS() { return functor_type::CONTINUOUS(); }

@@ -17,13 +17,14 @@ template<class> class Core;
 template<class> class Tensor_Slice;
 template<class> class Tensor_Scalar;
 template<class> class Tensor_Reshape;
-template<class,class> class DISABLED;
 template<class,class> class Scalar;
 template<class,class> class Vector;
 template<class,class> class Matrix;
 template<class,class> class Cube;
 template<class,class> class Tensor4;
 template<class,class> class Tensor5;
+template<class...> class DISABLED_LIST;
+struct DISABLED;
 class BC_Type;
 
 //determines if a functor is primary core
@@ -32,8 +33,8 @@ template<class T> struct isPrimaryCore<Core<T>> { static constexpr bool conditio
 template<class T> static constexpr bool pCore_b = isPrimaryCore<T>::conditional;
 
 //determines the tensor type from an integer corresponding to its dimensionality
-template<int> struct tensor_of { template<class t, class m> using type = DISABLED<t,m>;	template<class t, class m> using slice = DISABLED<t, m>; };
-template<> struct tensor_of<0> { template<class t, class m> using type = Scalar<t,m>;  	template<class t, class m> using slice = DISABLED<t, m>; };
+template<int> struct tensor_of { template<class t, class m> using type = DISABLED;	template<class t, class m> using slice = DISABLED; };
+template<> struct tensor_of<0> { template<class t, class m> using type = Scalar<t,m>;  	template<class t, class m> using slice = DISABLED; };
 template<> struct tensor_of<1> { template<class t, class m> using type = Vector<t, m>; 	template<class t,class m> using slice = Scalar<t, m>; };
 template<> struct tensor_of<2> { template<class t, class m> using type = Matrix<t, m>; 	template<class t,class m> using slice = Vector<t, m>; };
 template<> struct tensor_of<3> { template<class t, class m> using type = Cube<t, m>;   	template<class t,class m> using slice = Matrix<t, m>; };

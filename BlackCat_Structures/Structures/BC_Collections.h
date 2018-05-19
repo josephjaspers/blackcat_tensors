@@ -31,6 +31,16 @@ public:
 	virtual ~Collection() {};
 
 };
+
+
+template<class T> std::string to_str(const T& t) {
+	 return std::to_string(t);
+}
+std::string to_str(std::string str) {
+	return str;
+}
+
+
 }
 }
 

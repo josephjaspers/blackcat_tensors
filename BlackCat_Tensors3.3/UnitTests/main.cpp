@@ -180,41 +180,47 @@ krnl.print();
 img.print();
 
 
-mat m = krnl.x_corr<2,BC::inner>(krnl.x_corr<2,BC::inner>(img));
+mat m = krnl.x_corr<2,BC::inner>(img);
+
+
 m.print();
+mat out = m.x_corr<2, BC::error<BC::inner>>(krnl);
+out.print();
 
-cube krnl2(2,2,3);
-krnl2.zero();
 
+//cube krnl2(2,2,3);
+//krnl2.zero();
+//
+//
+//for (int i = 0; i < krnl2.size(); ++i) {
+//	krnl2(i) =i ;
+//}
+//for (int i = 0; i < img.size(); ++i) {
+//	img(i) =i ;
+//}
 
-for (int i = 0; i < krnl2.size(); ++i) {
-	krnl2(i) =i ;
-}
-for (int i = 0; i < img.size(); ++i) {
-	img(i) =i ;
-}
+//krnl2.print();
+//img.print();
 
-krnl2.print();
-img.print();
-
-cube m2(4,4, 3);
-m2.zero();
-m2 = krnl2.x_corr_stack<2>(img);
-m2.print();
-
-m2 += m2;
-m2 = -m2;
-m2.print();
-
-reshape(m2)(4,4,3).print();
-
-std::cout << " printing chunk " << std::endl;
-chunk(m2)(0,1,2)(2,3).print();
-chunk(m2)(0,1,2)(2,3).printDimensions();
-chunk(m2)(0,1,2)(2,3).printLDDimensions();
-
-m2 = abs(m2);
-m2.print();
+//
+//cube m2(4,4, 3);
+//m2.zero();
+//m2 = krnl2.x_corr_stack<2>(img);
+//m2.print();
+//
+//m2 += m2;
+//m2 = -m2;
+//m2.print();
+//
+//reshape(m2)(4,4,3).print();
+//
+//std::cout << " printing chunk " << std::endl;
+//chunk(m2)(3,2,1)(2,3).print();
+//chunk(m2)(0,1,2)(2,3).printDimensions();
+//chunk(m2)(0,1,2)(2,3).printLDDimensions();
+//
+//m2 = abs(m2);
+//m2.print();
 
 //m2[0][0][0].data().chunk(2,2);.print();
 

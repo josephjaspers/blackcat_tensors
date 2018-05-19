@@ -10,7 +10,10 @@
 
 namespace BC {
 
-template<class, class...> struct list;
+struct DISABLED;
+
+template<bool b, class T> using BC_enabled_if = std::conditional_t<b, T, DISABLED>;
+
 
 }
 
