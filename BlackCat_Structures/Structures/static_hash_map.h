@@ -1,0 +1,120 @@
+/*
+ * hash_map.h
+ *
+ *  Created on: May 18, 2018
+ *      Author: joseph
+ */
+
+#ifndef STATIC_HASH_MAP_H_
+#define STATIC_HASH_MAP_H_
+
+#include "BC_Collections.h"
+
+
+//Non rescaling hash_map
+
+
+
+namespace BC{
+namespace Structure {
+
+template<class K, class V, class hasher = std::hash<K>, class deleter = default_deleter>
+struct static_hash_map {
+
+	static constexpr hasher hash = hasher();
+	static constexpr int default_size = 256;
+
+	struct data {
+		bool initialized = false;
+
+		K key;
+		V value;
+
+		data() = default;
+		data(K key_, V value_ = V())
+			: key(key_),
+			  value(value_),
+			  initialized(true)
+		{
+			/*empty*/
+		}
+
+		data(const data&) = default;
+		data(data&&) = default;
+
+		//get a simple string format of the data
+		std::string str() const {
+			return std::string("Key: " + to_str(key) + ", Value: " + to_str(value));
+		}
+	};
+
+	int bucket_length;
+	int element_count;
+
+	//internal data array
+	data* bucket;
+
+
+	static_hash_map(int default_sz = default_size) {
+		bucket = new data[default_sz];
+		bucket_length = default_sz;
+		element_count = 0;
+	}
+
+	V& linear_probe(const K& key, int index) {
+		//search
+		while (bucket[index].initialized){
+			if (bucket[index].key == key)
+				return bucket[index].value;
+
+			index = (index + 1) % bucket_length;
+		}
+
+		//if not found
+		initialize_element(key, index);
+		return bucket[index].value;
+	}
+
+	V& operator [] (const K& key) {
+		int index = hash(key) % bucket_length;
+
+		//first fount perfect O(1)
+		if (bucket[index].key == key) {
+			return bucket[index].value;
+		} else {
+			return linear_probe(key, index);
+		}
+	}
+
+
+
+	void initialize_element(const K& key, int index) {
+		bucket[index].initialized = true;
+		bucket[index].key = key;
+		element_count++;
+
+		assert_range_bounds();
+	}
+
+	void assert_range_bounds() {
+		if (element_count >= bucket_length)
+			throw std::invalid_argument("static_hash_map size capacity maxed");
+	}
+
+	void print() {
+		int index = 0;
+		while (index < bucket_length) {
+			if (bucket[index].initialized)
+				std::cout << "{ Index: " << index << ", "<< bucket[index].str() << " }" << std::endl;
+			index++;
+		}
+	}
+
+
+};
+
+}
+}
+
+
+#endif /* HASH_MAP_H_ */
