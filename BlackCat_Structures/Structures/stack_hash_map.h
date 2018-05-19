@@ -18,10 +18,10 @@
 namespace BC {
 namespace Structure {
 
-template<int SIZE, class K, class V, class hasher = std::hash<K>, class deleter = default_deleter>
+template<int SIZE, class K, class V, class hasher = std::hash<K>>
 struct  stack_hash_map{
 
-	static constexpr hasher hash = hasher();
+	const hasher hash;
 	static constexpr int bucket_length = SIZE;
 
 	struct data {
@@ -45,6 +45,9 @@ struct  stack_hash_map{
 		}
 
 	};
+
+	stack_hash_map(hasher hash_ = hasher())
+		: hash(hash_) {}
 
 	int element_count = 0;
 	data bucket[bucket_length];

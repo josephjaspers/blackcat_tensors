@@ -14,10 +14,6 @@
 #include "../Structures/pthread_unique.h"
 #include "../Structures/omp_unique.h"
 
-//#include <pthread.h>
-//#include <type_traits>
-
-
 int main() {
 //
 //	//This tuple is better in some ways than the std::tuple -> supports forward/backward iteration, get is a built in method.
