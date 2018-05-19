@@ -10,6 +10,7 @@
 #include "../Structures/Parser/CSV_Parser.h"
 #include "../Structures/Parser/DataFrame.h"
 #include "../Structures/static_hash_map.h"
+#include "../Structures/stack_hash_map.h"
 
 #include <pthread.h>
 #include <type_traits>
@@ -73,10 +74,15 @@ int main() {
 
 
 
-	BC::Structure::static_hash_map<std::string, int> hmap(256);
+//	BC::Structure::static_hash_map<std::string, int> hmap(256);
+	BC::Structure::stack_hash_map<4, std::string, int> hmap;
+
 	hmap["cats"] = 4;
 	hmap["dogs"] = 2;
 	hmap["total_pets"] = 6;
+	hmap["adgf"] = 1;
+	hmap["total_petss"] = 7;
+
 
 	hmap.print();
 
