@@ -54,11 +54,52 @@ struct static_hash_map {
 	//internal data array
 	data* bucket;
 
-
 	static_hash_map(int default_sz = default_size) {
 		bucket = new data[default_sz];
 		bucket_length = default_sz;
 		element_count = 0;
+	}
+
+	int size() const {
+		return element_count;
+	}
+
+	V& operator [] (const K& key) {
+		int index = hash(key) % bucket_length;
+
+		//first fount perfect O(1)
+		if (bucket[index].key == key) {
+			return bucket[index].value;
+		} else {
+			return linear_probe(key, index);
+		}
+	}
+
+	V* contains(const K& key) {
+		int index = hash(key) % bucket_length;
+
+		//first fount perfect O(1)
+		if (bucket[index].key == key)
+			return &bucket[index].value;
+		else
+			return safe_linear_probe(key, index);
+	}
+
+	void print() {
+		int index = 0;
+		while (index < bucket_length) {
+			if (bucket[index].initialized)
+				std::cout << "{ Index: " << index << ", "<< bucket[index].str() << " }" << std::endl;
+			index++;
+		}
+	}
+
+	void initialize_element(const K& key, int index) {
+		bucket[index].initialized = true;
+		bucket[index].key = key;
+		element_count++;
+
+		assert_range_bounds();
 	}
 
 	V& linear_probe(const K& key, int index) {
@@ -75,39 +116,22 @@ struct static_hash_map {
 		return bucket[index].value;
 	}
 
-	V& operator [] (const K& key) {
-		int index = hash(key) % bucket_length;
+	//same as linear_probe but doesn't initialize an element if not placed
+	V* safe_linear_probe(const K& key, int index) {
+		//search
+		while (bucket[index].initialized){
+			if (bucket[index].key == key)
+				return &bucket[index].value;
 
-		//first fount perfect O(1)
-		if (bucket[index].key == key) {
-			return bucket[index].value;
-		} else {
-			return linear_probe(key, index);
+			index = (index + 1) % bucket_length;
 		}
+		return nullptr;
 	}
 
-
-
-	void initialize_element(const K& key, int index) {
-		bucket[index].initialized = true;
-		bucket[index].key = key;
-		element_count++;
-
-		assert_range_bounds();
-	}
 
 	void assert_range_bounds() {
 		if (element_count >= bucket_length)
 			throw std::invalid_argument("static_hash_map size capacity maxed");
-	}
-
-	void print() {
-		int index = 0;
-		while (index < bucket_length) {
-			if (bucket[index].initialized)
-				std::cout << "{ Index: " << index << ", "<< bucket[index].str() << " }" << std::endl;
-			index++;
-		}
 	}
 
 
