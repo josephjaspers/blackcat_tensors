@@ -1,25 +1,22 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include "../Structures/list_comprehension.h"
-#include "../Structures/omp_unique.h"
-#include "../Structures/binary_tree.h"
-#include "../Structures/forward_list.h"
-#include "../Structures/bidirectional_tuple.h"
-
-#include "../Structures/Parser/CSV_Parser.h"
-#include "../Structures/Parser/DataFrame.h"
+//#include "../Structures/list_comprehension.h"
+//#include "../Structures/omp_unique.h"
+//#include "../Structures/binary_tree.h"
+//#include "../Structures/forward_list.h"
+//#include "../Structures/bidirectional_tuple.h"
+//
+//#include "../Structures/Parser/CSV_Parser.h"
+//#include "../Structures/Parser/DataFrame.h"
 #include "../Structures/static_hash_map.h"
 #include "../Structures/stack_hash_map.h"
+#include "../Structures/pthread_unique.h"
+#include "../Structures/omp_unique.h"
 
-#include <pthread.h>
-#include <type_traits>
+//#include <pthread.h>
+//#include <type_traits>
 
-struct hasher{
-	int operator()(int i)  const {
-		return i % 7;
-	}
-};
 
 int main() {
 //

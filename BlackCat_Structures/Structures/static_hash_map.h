@@ -9,7 +9,7 @@
 #define STATIC_HASH_MAP_H_
 
 #include "BC_Collections.h"
-
+#include <functional>
 
 //Non rescaling hash_map
 
