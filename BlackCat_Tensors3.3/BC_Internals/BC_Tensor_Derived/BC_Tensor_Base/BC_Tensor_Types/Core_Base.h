@@ -16,18 +16,18 @@ namespace BC {
  * Core_Interface is a common interface amongst all tensor_core subclasses,
  */
 
-template<class> class Tensor_Reshape;
 template<class> class Tensor_Slice;
 template<class> class Tensor_Scalar;
 template<class> class Tensor_Row;
-template<class> class Tensor_Chunk;
+template<int> class Tensor_Reshape;
+template<int> class Tensor_Chunk;
 
 template<class derived, int DIMENSION,
 template<class> class 	_Tensor_Slice 	= Tensor_Slice,
 template<class> class 	_Tensor_Row 	= Tensor_Row,
 template<class> class 	_Tensor_Scalar 	= Tensor_Scalar,
-template<class> class   _Tensor_Chunk	= Tensor_Chunk,			//Nested implementation type
-template<class> class 	_Tensor_Reshape = Tensor_Reshape>		//Nested implementation type
+template<int> class     _Tensor_Chunk	= Tensor_Chunk,			//Nested implementation type
+template<int> class 	_Tensor_Reshape = Tensor_Reshape>		//Nested implementation type
 
 struct Core_Base : expression_base<Core_Base<derived,DIMENSION>> {
 
@@ -77,7 +77,7 @@ public:
 	template<class ... integers> __BCinline__ auto chunk(integers ... location_indices) {
 		return [&](auto... shape_dimension) {
 			auto* array = &(this->base().getIterator()[this->scal_index(location_indices...)]);
-			return typename _Tensor_Chunk<derived>::template implementation<sizeof...(shape_dimension)>(array, this->base(), shape_dimension...);
+			return typename _Tensor_Chunk<sizeof...(shape_dimension)>::template implementation<derived>(array, this->base(), shape_dimension...);
 		};
 	}
 
@@ -85,18 +85,18 @@ public:
 
 		return [&](auto... shape_dimension) {
 			auto* array = &(this->base().getIterator()[this->scal_index(location_indices...)]);
-			return typename _Tensor_Chunk<derived>::template implementation<sizeof...(shape_dimension)>(array, this->base(), shape_dimension...);
+			return typename _Tensor_Chunk<sizeof...(shape_dimension)>::template implementation<derived>(array, this->base(), shape_dimension...);
 		};
 	}
 
 	template<class ... integers> __BCinline__
 	const auto reshape(integers ... ints) const {
-		return typename _Tensor_Reshape<derived>::template implementation<sizeof...(ints)>(base().getIterator(), base(), ints...);
+		return typename _Tensor_Reshape<sizeof...(ints)>::template implementation<derived>(base().getIterator(), this->base(), ints...);
 	}
 
 	template<class... integers> __BCinline__
 	auto reshape(integers... ints) {
-		return typename _Tensor_Reshape<derived>::template implementation<sizeof...(ints)>(base().getIterator(), base(), ints...);
+		return typename _Tensor_Reshape<sizeof...(ints)>::template implementation<derived>(base().getIterator(), this->base(), ints...);
 	}
 
 

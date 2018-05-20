@@ -23,11 +23,11 @@ namespace BC {
  * was to ensure consistency across the determiners.h which are imperative to the template-metaprogramming.
  */
 
-template<class PARENT>
+template<int dimension>
 struct Tensor_Reshape {
 
-	template<int dimension>
-	struct implementation : Core_Base<implementation<dimension>, dimension>{
+	template<class PARENT>
+	struct implementation : Core_Base<implementation<PARENT>, dimension>{
 
 	using scalar = _scalar<PARENT>;
 
@@ -43,8 +43,8 @@ struct Tensor_Reshape {
 	int os[DIMS()];
 
 
-	template<class... integers> __BCinline__
-	implementation(scalar* array_, PARENT parent, integers... ints) : array(array_), parent(parent) {
+	template<class ary, class... integers> __BCinline__
+	implementation(ary array_, PARENT parent, integers... ints) : array(array_), parent(parent) {
 		static_assert(sizeof...(integers) == DIMS(), "DIMENSIONALITY OF RESHAPE MUST EQUAL THE PARAMETER INTEGERS FOR RESHAPE");
 		init<0>(ints...);
 	}
@@ -52,8 +52,8 @@ struct Tensor_Reshape {
 	__BCinline__ const auto innerShape() const 	{ return is; }
 	__BCinline__ const auto outerShape() const 	{ return os; }
 
-	__BCinline__ const auto getIterator() const { return parent.getIterator(); }
-	__BCinline__	   auto getIterator()   	{ return parent.getIterator(); }
+	__BCinline__ const auto getIterator() const { return array; }
+	__BCinline__	   auto getIterator()   	{ return array; }
 
 
 

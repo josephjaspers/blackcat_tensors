@@ -19,11 +19,10 @@
 
 namespace BC {
 
-template<class PARENT>
+template<int dimension>
 struct Tensor_Chunk  {
-
-	template<int dimension>
-	struct implementation : Core_Base<implementation<dimension>,dimension> {
+	template<class PARENT>
+	struct implementation : Core_Base<implementation<PARENT>,dimension> {
 
 		using scalar = _scalar<PARENT>;
 

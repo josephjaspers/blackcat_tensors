@@ -13,7 +13,6 @@ namespace BC {
 template<class derived>
 struct expression_determiner {
 
-	using evaluation_type 	= _evaluation<derived>;
 	using functor_type 		= _functor<derived>;
 	using scalar_type 		= _scalar<derived>;
 	using mathlib_type 		= _mathlib<derived>;

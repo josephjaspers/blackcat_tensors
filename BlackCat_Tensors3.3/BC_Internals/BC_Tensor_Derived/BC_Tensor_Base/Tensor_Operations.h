@@ -41,7 +41,6 @@ struct Tensor_Operations {
 	template<class pderiv, class functor> using impl 	= typename expression_determiner<derived>::template impl<pderiv, functor>;
 	template<class pderiv> 				  using dp_impl	= typename expression_determiner<derived>::template dp_impl<pderiv>;
 
-	using evaluation_type 	= _evaluation<derived>;
 	using functor_type 		= _functor<derived>;
 	using scalar_type 		= _scalar<derived>;
 	using mathlib_type 		= _mathlib<derived>;

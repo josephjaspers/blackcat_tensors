@@ -19,5 +19,6 @@
 #include "BC_Tensor_Derived/Cube.h"
 #include "BC_Tensor_Derived/Tensor4.h"
 #include "BC_Tensor_Derived/Tensor5.h"
+#include "BC_Tensor_Derived/Tensor.h"
 
 #endif /* BLACKCAT_INTERNAL_GLOBALUNIFIER_H_ */
