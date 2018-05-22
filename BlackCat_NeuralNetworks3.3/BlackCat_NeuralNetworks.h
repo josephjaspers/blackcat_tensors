@@ -8,7 +8,6 @@
 #ifndef BLACKCAT_NEURALNETWORKS_H_
 #define BLACKCAT_NEURALNETWORKS_H_
 
-
 #include "NN_Core/Defaults.h"
 #include "NN_Core/NeuralNetwork.h"
 #include "NN_Core/Layers/Layer.h"

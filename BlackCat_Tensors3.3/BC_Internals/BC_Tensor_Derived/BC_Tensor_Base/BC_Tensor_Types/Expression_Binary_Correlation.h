@@ -36,7 +36,7 @@ struct binary_expression<lv, rv, _x_corr<corr_dimension,inner>> : expression_bas
 	__BCinline__ const auto innerShape() const { return l_array([&](int i) {return right.dimension(i) - left.dimension(i) + 1;} ); }
 	__BCinline__ const auto outerShape() const { return l_array([&](int i) {return i == 0 ? this->rows() : this->dimension(i) * this->dimension(i - 1);} );}
 
-	template<int x> using conditional_int = std::conditional_t<x == lv::DIMS(), int, DISABLED>;
+	template<int x> using conditional_int = std::conditional_t<x == corr_dimension, int, DISABLED>;
 
 	template<class... ints> __BCinline__
 	scalar axpy (conditional_int<1> x, ints... location) const {

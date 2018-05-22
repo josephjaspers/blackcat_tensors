@@ -37,7 +37,7 @@ struct binary_expression<lv, rv, _x_corr<corr_dimension, padded>> : expression_b
 
 	struct DISABLED;
 	template<int x>
-	using conditional_int = std::conditional_t<x == lv::DIMS(), int, DISABLED>;
+	using conditional_int = std::conditional_t<x == corr_dimension, int, DISABLED>;
 
 	//1d correlation
 	template<class... ints> __BCinline__

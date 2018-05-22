@@ -24,6 +24,12 @@ struct GPU_Misc {
 		cudaDeviceSynchronize();
 	}
 
+	template<template<class...> class T, class...set, class Value>
+	static void fill(T<set...> t, Value val) {
+		gpu_impl::fill<<<blocks(t.size()),threads()>>>(t, val);
+		cudaDeviceSynchronize();
+	}
+
 	template<typename T>
 	static void zero(T t) {
 		gpu_impl::fill<<<blocks(t.size()),threads()>>>(t, 0);

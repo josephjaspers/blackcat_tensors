@@ -74,10 +74,10 @@ template<typename T> __global__ static void eval5d(T t) {
 }
 
 template<typename T, typename J> __global__
-static void fill(T t, const J j, int sz) {
+static void fill(T t, const J j) {
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
 
-	for (; i < sz; i += blockDim.x * gridDim.x) {
+	for (; i < t.size(); i += blockDim.x * gridDim.x) {
 		t[i] = j;
 	}
 }

@@ -29,8 +29,8 @@ struct binary_expression<lv, rv, _x_corr<corr_dimension,error<inner>>> : express
 	static_assert(DIMS() <= 3, "CORRELATION MOST MOVEMENT IS LIMITED TO 3D");
 
 
-	lv left;  //krnl
-	rv right; //img
+	lv left;  //the original weights
+	rv right; //output error
 
 	binary_expression(lv l_, rv r_) :left(l_), right(r_) {}
 
@@ -43,8 +43,8 @@ struct binary_expression<lv, rv, _x_corr<corr_dimension,error<inner>>> : express
 	scalar axpy (conditional_int<1> x, ints... location) const {
 		scalar sum = 0;
 		for (int m = 0 ; m < right.rows(); ++m) {
-			if (m <= x || x + (right.rows() - m) <= right.rows())
-				sum += left(x) * right(m + x, location...);
+//			if (m <= x && right.rows() - m <= this->rows() - x)
+				sum += left(x) * left(m + x, location...);
 		}
 		return sum;
 	}
@@ -53,10 +53,9 @@ struct binary_expression<lv, rv, _x_corr<corr_dimension,error<inner>>> : express
 	scalar axpy (conditional_int<2> x, int y, ints... indexes) const {
 		scalar sum = 0;
 		for (int n = 0; n < right.cols(); ++n) {
-			if (n <= x || x + (right.cols() - n) <= right.cols())
 			for (int m = 0 ; m < right.rows(); ++m) {
-				if (m <= y || y + (right.rows() - m) <= right.rows())
-					sum += left(x, y) * right(m + x, n + y, indexes...);
+//				std::cout << left(m,n) << " * " << right(right.rows() - m - 1, right.cols() - n - 1) << std::endl;
+					sum += left(m, n) * right(m,n);
 			}
 		}
 		return sum;
