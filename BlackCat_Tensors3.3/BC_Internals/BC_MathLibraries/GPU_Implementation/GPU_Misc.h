@@ -46,6 +46,11 @@ struct GPU_Misc {
 		gpu_impl::randomize<<<blocks(t.size()),threads()>>>(t, lower_bound, upper_bound, rand());
 		cudaDeviceSynchronize();
 	}
+	template<template<class...> class T, class...set, class J>
+	static void randomize(T<set...> t, J lower_bound, J upper_bound) {
+		gpu_impl::randomize<<<blocks(t.size()),threads()>>>(t, lower_bound, upper_bound, rand());
+		cudaDeviceSynchronize();
+	}
 
 
 };

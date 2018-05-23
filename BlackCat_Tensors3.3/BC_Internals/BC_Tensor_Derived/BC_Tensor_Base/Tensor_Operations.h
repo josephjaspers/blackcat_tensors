@@ -162,8 +162,8 @@ public:
 	//-------------------------------------------DELAYED ASSIGNMENT OPERATORS---------------------------------------------//
 	template<class pDeriv>
 	auto operator =(const alternate_asterix_denoter<pDeriv>& param) {
-		assert_same_size(param);
-		return bi_expr<_cache>(param);
+		assert_same_size(param.get());
+		return bi_expr<BC::cache<mathlib_type>>(param.get());
 	}
 
 	template<class pDeriv>

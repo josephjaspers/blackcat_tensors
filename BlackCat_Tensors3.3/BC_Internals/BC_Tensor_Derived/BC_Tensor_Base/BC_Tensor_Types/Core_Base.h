@@ -76,7 +76,7 @@ public:
 
 	template<class ... integers> __BCinline__ auto chunk(integers ... location_indices) {
 		return [&](auto... shape_dimension) {
-			auto* array = &(this->base().getIterator()[this->scal_index(location_indices...)]);
+			auto* array = &(this->base().getIterator()[this->scal_index_reverse(location_indices...)]);
 			return typename _Tensor_Chunk<sizeof...(shape_dimension)>::template implementation<derived>(array, this->base(), shape_dimension...);
 		};
 	}
@@ -84,7 +84,7 @@ public:
 	template<class ... integers> __BCinline__ const auto chunk(integers ... location_indices) const {
 
 		return [&](auto... shape_dimension) {
-			auto* array = &(this->base().getIterator()[this->scal_index(location_indices...)]);
+			auto* array = &(this->base().getIterator()[this->scal_index_reverse(location_indices...)]);
 			return typename _Tensor_Chunk<sizeof...(shape_dimension)>::template implementation<derived>(array, this->base(), shape_dimension...);
 		};
 	}

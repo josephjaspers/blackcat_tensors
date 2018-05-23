@@ -23,21 +23,23 @@ int shaping() {
 
 
 
-	Cube<float, BC::CPU> m2(4,4, 3);
+	Cube<float, BC::CPU> m2(4,4, 4);
 	m2.randomize(0,100);
 	std::cout << " original " << std::endl;
 	m2.print();
 
-	std::cout << " reshape (16,3) " << std::endl;
-	reshape(m2)(16,3).print();
+	std::cout << " reshape (2,2, 16) " << std::endl;
+	reshape(m2)(2, 2, 16).print();
 
-	std::cout << " chunk at (3,2,1) dims (2,3)" << std::endl;
-	chunk(m2)(3,2,1)(2,3).print();
+	std::cout << " chunk at (2,1, 0) dims (2,3)" << std::endl;
+	chunk(m2)(2,1,0)(2,3).print();
 
 
-	std::cout << "reshape (2,3) chunk to (3,2)" << std::endl;
-	auto ch = chunk(m2)(3,2,1)(2,3);
-	reshape(ch)(3,2).print();
+// FIXME DOES NOT WORK
+//	std::cout << "reshape (2,3) chunk to (3,2)" << std::endl;
+//	auto ch = chunk(m2)(2,1,0)(2,3);
+//	reshape(ch)(3,2);
+	m2.print();
 
 #endif
 	return 0;

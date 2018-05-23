@@ -23,6 +23,7 @@ struct binary_expression<lv, rv, _x_corr<corr_dimension,inner>> : expression_bas
 	__BCinline__ static constexpr int CONTINUOUS() { return corr_dimension; }
 
 	using scalar = _scalar<lv>;
+//	scalar* rv_cache = new scalar[right.size()];
 
 	static_assert(lv::DIMS() == rv::DIMS(), "CORRELATION CURRENTLY ONLY SUPPORTED FOR SAME ORDER TENSORS");
 	static_assert(DIMS() <= 3, "CORRELATION MOST MOVEMENT IS LIMITED TO 3D");
@@ -73,6 +74,9 @@ struct binary_expression<lv, rv, _x_corr<corr_dimension,inner>> : expression_bas
 
 	template<class... integers> __BCinline__  scalar operator ()(integers... ints) const {
 		return axpy(ints...);
+	}
+	__BCinline__  scalar operator [](int x) const {
+		return axpy(x);
 	}
 };
 }

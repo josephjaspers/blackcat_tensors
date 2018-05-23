@@ -20,8 +20,7 @@ template<class derived>
 struct expression_base : BC_Type {
 private:
 
-	template<class ret = int>
-	static ret shadowFailure(std::string method) {
+	static int shadowFailure(std::string method) {
 		std::cout << "SHADOW METHOD FAILURE OF REQUIRED METHOD - ENLIGHTENED METHOD: " << method << " -- OVERRIDE THIS METHOD" << std::endl;
 		throw std::invalid_argument("MANDATORY METHOD - NOT SHADOWED POTENTIAL INCORRECT CAST BUG");
 	}
@@ -64,8 +63,8 @@ public:
 	__BCinline__ int LD_cols() const { return DIMS() > 1 ? OS()[1] : 1; }
 	__BCinline__ int LD_dimension(int i) const { return DIMS() > i + 1 ? OS()[i] : 1; }
 
-	__BCinline__ const auto innerShape() const 	{ return shadowFailure<int*>("auto(const int*) innerShape() const  MAY RETURN INT*, _sh<T>, or std::vector<int>, "); }
-	__BCinline__ const auto outerShape() const 	{ return shadowFailure<int*>("auto(const int*) outerShape() const  MAY RETURN INT*, _sh<T>, or std::vector<int>, "); }
+	__BCinline__ const auto innerShape() const 	{ return shadowFailure("auto(const int*) innerShape() const  MAY RETURN INT*, _sh<T>, or std::vector<int>, "); }
+	__BCinline__ const auto outerShape() const 	{ return shadowFailure("auto(const int*) outerShape() const  MAY RETURN INT*, _sh<T>, or std::vector<int>, "); }
 
 	void printDimensions() const {
 		for (int i = 0; i < DIMS(); ++i) {
@@ -80,31 +79,55 @@ public:
 		std::cout << std::endl;
 	}
 	//---------------------------------------------------UTILITY/IMPLEMENTATION METHODS------------------------------------------------------------//
-
 	template<class... integers> __BCinline__
 	int scal_index(integers... ints) const {
-		auto var = array(ints...);
+		return scal_index(BC::array(ints...)); //fixme should use recursive impl
+	}
+	template<class... integers> __BCinline__
+	int scal_index_reverse(integers... ints) const {
+		return  this->scal_index_impl(ints...);
+	}
+
+	template<class... integers> __BCinline__
+	int scal_index_impl(int front, integers... ints) const {
+		return scal_index_impl(ints...) + front * this->LD_dimension(sizeof...(ints) - 1);
+	}
+	__BCinline__
+	int scal_index_impl(int front) const {
+		return front;
+	}
+	template<int D> __BCinline__
+	 int scal_index(stack_array<int, D> var) const {
 		int index = var[0];
-		for (int i = 1; i < var.size(); ++i) {
-			index += var[i] * this->LD_dimension(i - 1);
+		for(int i = 1; i < var.size(); ++i) {
+			index += this->LD_dimension(i - 1) * var[i];
 		}
 		return index;
 	}
 
+	template<int D> __BCinline__
+	 int scal_index_reverse(stack_array<int, D> var) const {
+		int index = var[D - 1];
+
+		for(int i = 0; i < D - 1; ++i) {
+			index += this->LD_dimension(i) * var[D - i - 2];
+		}
+
+		return index;
+	}
+
+
 	//---------------------------------------------------METHODS THAT MAY NEED TO BE SHADOWED------------------------------------------------------------//
 	void destroy() {}
 	//---------------------------------------------------METHODS THAT NEED TO BE SHADOWED------------------------------------------------------------//
-	__BCinline__ auto operator [] (int index) 	  	{ return shadowFailure<int>("operator [] (int index)"); };
-	__BCinline__ auto operator [] (int index) const { return shadowFailure<int>("operator [] (int index) const"); };
-	__BCinline__ int slice(int i) const { return shadowFailure<>("const Tensor_Slice(int) const => NOT ENABLED FOR ALL EXPRESSIONS"); }
-	__BCinline__ int slice(int i) 	    {  return shadowFailure<>("Tensor_Slice(int)  =>  NOT ENABLED FOR ALL EXPRESSIONS"); }
-	__BCinline__ int row(int i) const 	{ return shadowFailure<>("auto row(int i) const "); }
-	__BCinline__ int row(int i) 	   	{ return shadowFailure<>("auto row(int i)"); }
-	__BCinline__ int col(int i) const 	{ return shadowFailure<>("auto col(int i) const"); }
-	__BCinline__ int col(int i) 	   	{ return shadowFailure<>("auto col(int i)"); }
-	template<class... integers>
-	__BCinline__ auto reshape(integers...) { return shadowFailure<>("auto reshape"); }
-
+	__BCinline__ auto operator [] (int index) 	  	{ return shadowFailure("operator [] (int index)"); };
+	__BCinline__ auto operator [] (int index) const { return shadowFailure("operator [] (int index) const"); };
+	__BCinline__ int slice(int i) const { return shadowFailure("const Tensor_Slice(int) const => NOT ENABLED FOR ALL EXPRESSIONS"); }
+	__BCinline__ int slice(int i) 	    {  return shadowFailure("Tensor_Slice(int)  =>  NOT ENABLED FOR ALL EXPRESSIONS"); }
+	__BCinline__ int row(int i) const 	{ return shadowFailure("auto row(int i) const "); }
+	__BCinline__ int row(int i) 	   	{ return shadowFailure("auto row(int i)"); }
+	__BCinline__ int col(int i) const 	{ return shadowFailure("auto col(int i) const"); }
+	__BCinline__ int col(int i) 	   	{ return shadowFailure("auto col(int i)"); }
 };
 
 }

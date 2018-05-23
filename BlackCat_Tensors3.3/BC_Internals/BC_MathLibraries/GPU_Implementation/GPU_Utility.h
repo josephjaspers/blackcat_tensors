@@ -20,6 +20,13 @@ struct GPU_Utility {
 		cudaMalloc((void**) &t, sizeof(T) * sz);
 		return t;
 	}
+	template<typename T>
+	static T*& zero_initialize(T*& t, int sz=1) {
+		cudaMalloc((void**) &t, sizeof(T) * sz);
+		cudaMemset((void**) &t, 0, sizeof(T) * sz);
+		return t;
+	}
+
 
 	template<class T>
 	static void HostToDevice(T* t, const T* u, int size = 1) {

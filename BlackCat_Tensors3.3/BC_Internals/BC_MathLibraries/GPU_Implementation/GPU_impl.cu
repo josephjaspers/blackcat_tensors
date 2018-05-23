@@ -57,20 +57,42 @@ template<typename T> __global__ static void eval3d(T t) {
 }
 //dont know how to do this
 template<typename T> __global__ static void eval4d(T t) {
-	for (int l = 0; l < t.dimension(3); ++l)
-		for (int k = 0; k < t.dimension(2); ++k)
-			for (int n = 0; n < t.cols(); ++n)
-				for (int m = 0; m < t.rows(); ++m)
+	int l = blockIdx.z * blockDim.z + threadIdx.z;
+	for (; l < t.dimension(3); l += blockDim.z * gridDim.z) {
+
+		int k = blockIdx.y * blockDim.y + threadIdx.y;
+		for (;k < t.dimension(2); k += blockDim.y * gridDim.y) {
+
+			int n = blockIdx.x * blockDim.x + threadIdx.x;
+			for (; n < t.cols(); n += blockDim.x * gridDim.x) {
+
+				for (int m = 0; m < t.rows(); ++m) {
 					t(m,n,k,l);
+				}
+			}
+		}
+	}
 }
 //don't know how to do this
 template<typename T> __global__ static void eval5d(T t) {
-	for (int p = 0; p < t.dimension(4); ++p)
-		for (int l = 0; l < t.dimension(3); ++l)
-			for (int k = 0; k < t.dimension(2); ++k)
-				for (int n = 0; n < t.dimension(1); ++n)
-					for (int m = 0; m < t.dimension(0); ++m)
+	int p = blockIdx.z * blockDim.z + threadIdx.z;
+	for (; p < t.dimension(4); p += blockDim.z * gridDim.z) {
+
+		int l = blockIdx.y * blockDim.y + threadIdx.y;
+		for (; l < t.dimension(3); l += blockDim.y * gridDim.y) {
+
+			int k = blockIdx.x * blockDim.x + threadIdx.x;
+			for (; k < t.dimension(2); k += blockDim.x * gridDim.x) {
+
+				for (int n = 0; n < t.dimension(1); ++n) {
+
+					for (int m = 0; m < t.dimension(0); ++m) {
 						t(m, n, k, l, p);
+					}
+				}
+			}
+		}
+	}
 }
 
 template<typename T, typename J> __global__
@@ -87,11 +109,8 @@ static void scalarMul(T* t, U* u, V* v) {
 	*t = u[0] * v[0];
 }
 
-
-
 template<class T, typename J> __global__
-static void randomize(T t, J lower_bound, J upper_bound, int sz, int seed) {
-	static constexpr float rand_max = std::numeric_limits<float>::max();
+static void randomize(T t, J lower_bound, J upper_bound, int seed) {
 
 	 curandState_t state;
 	  curand_init(seed, /* the seed controls the sequence of random values that are produced */
@@ -100,9 +119,9 @@ static void randomize(T t, J lower_bound, J upper_bound, int sz, int seed) {
 	              &state);
 
 
-	for (int i = 0; i < sz; ++i) {
+	for (int i = 0; i < t.size(); ++i) {
 		t[i] = curand(&state);
-		t[i] /= rand_max; //curand max value
+		t[i] /= 1000000000; //curand max value //using std::numeric_limits<float>::max -- causes crash
 		t[i] *= (upper_bound - lower_bound);
 		t[i] += lower_bound;
 	}
