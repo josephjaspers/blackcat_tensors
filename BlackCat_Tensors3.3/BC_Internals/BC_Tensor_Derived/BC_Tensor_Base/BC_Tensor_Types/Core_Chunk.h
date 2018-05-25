@@ -6,25 +6,20 @@
  *      Author: joseph
  */
 
-#ifndef TENSOR_CHUNK
-#define TENSOR_CHUNK
+#ifndef TENSOR_CHUNK_H_
+#define TENSOR_CHUNK_H_
 
 #include "Core_Base.h"
-
-/*
- * I HAVE NOT BEEN TESTED YET, TEST ME
- * I RETURN AN INNER CHUNK OF A TENSOR
- *
- */
 
 namespace BC {
 
 template<int dimension>
 struct Tensor_Chunk  {
 	template<class PARENT>
-	struct implementation : Core_Base<implementation<PARENT>,dimension> {
+	struct implementation : Tensor_Core_Base<implementation<PARENT>,dimension> {
 
 		using scalar = _scalar<PARENT>;
+		static_assert(dimension <= PARENT::DIMS(), "TENSOR-CHUNK'S DIMENSIONS MUST BE LESS OR EQUAL TO PARENT'S DIMENSIONS");
 
 		__BCinline__ static constexpr int DIMS() { return dimension; };
 		__BCinline__ static constexpr int ITERATOR() { return dimension; }
@@ -38,7 +33,7 @@ struct Tensor_Chunk  {
 		template<class... integers>
 		implementation(scalar* array_, PARENT parent_, integers... ints) : parent(parent_), array(array_), shape(ints...) {}
 
-		__BCinline__ const auto size()		 const  { return this->os[DIMS() - 1]; }
+		__BCinline__ const auto size()		 const  { return shape.size(); }
 		__BCinline__ const auto innerShape() const 	{ return shape.is(); }
 		__BCinline__ const auto outerShape() const 	{ return parent.outerShape(); }
 

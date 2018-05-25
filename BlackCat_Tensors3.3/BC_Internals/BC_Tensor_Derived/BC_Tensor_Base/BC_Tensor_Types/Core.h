@@ -9,18 +9,16 @@
 #define SHAPE_H_
 
 #include "Expression_Base.h"
-#include "Shape.h"
+
 namespace BC {
 
 template<class T>
-struct Core : Core_Base<Core<T>, _dimension_of<T>>{
+struct Core : Tensor_Core_Base<Core<T>, _dimension_of<T>>{
 
 	using scalar_type = _scalar<T>;
 	using math_lib = _mathlib<T>;
 
 	__BCinline__ static constexpr int DIMS() { return _dimension_of<T>; }
-	__BCinline__ static constexpr int PARENT_DIMS() { return _dimension_of<T>; }
-	__BCinline__ static constexpr int last() { return DIMS() - 1;}
 
 	scalar_type* array = nullptr;
 	Shape<DIMS()> shape;
@@ -39,8 +37,8 @@ struct Core : Core_Base<Core<T>, _dimension_of<T>>{
 	__BCinline__ const scalar_type* getIterator() const { return array; }
 	__BCinline__	   scalar_type* getIterator()  	    { return array; }
 
-	template<class... integers, int dim = 0>
-	void resetShape(integers... ints)  {
+
+	template<class... integers> void resetShape(integers... ints)  {
 		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
 
 		int sz = this->size();

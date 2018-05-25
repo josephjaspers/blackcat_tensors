@@ -8,7 +8,7 @@
 #ifndef EXPRESSION_UTILITY_STRUCTS_H_
 #define EXPRESSION_UTILITY_STRUCTS_H_
 
-#include "Shapes.h"
+#include "Utility_Structs.h"
 #include <iostream>
 
 //returns the class with the higher_order rank

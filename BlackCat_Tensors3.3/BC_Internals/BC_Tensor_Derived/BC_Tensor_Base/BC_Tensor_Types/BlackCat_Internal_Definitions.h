@@ -10,9 +10,6 @@
 
 namespace BC {
 
-static constexpr int BC_CPU_SINGLE_THREAD_THRESHOLD = 999;
-static constexpr int CUDA_BASE_THREADS = 256;
-
 #define BLACKCAT_TENSORS_ASSERT_VALID							//Ensures basic checks
 
 #ifdef __CUDACC__
@@ -25,7 +22,7 @@ static constexpr int CUDA_BASE_THREADS = 256;
 #define __BCinline__ __BChd__  inline __attribute__((always_inline)) __attribute__((hot))
 #define __BC_host_inline__ inline __attribute__((always_inline)) __attribute__((hot))
 
-class BC_Type {};
+class BC_Type {}; //a type inherited by expressions and tensor_cores, it is used a flag and lacks a "genuine" implementation
 }
 
 #include "BC_Utility/Determiners.h"

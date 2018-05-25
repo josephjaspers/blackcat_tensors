@@ -5,8 +5,8 @@
  *      Author: joseph
  */
 
-#ifndef TENSOR_SLICE_CU_
-#define TENSOR_SLICE_CU_
+#ifndef TENSOR_SLICE_H_
+#define TENSOR_SLICE_H_
 
 #include "Core_Base.h"
 
@@ -15,7 +15,7 @@ namespace BC {
 //Floored decrement just returns the max(param - 1, 0)
 
 template<class PARENT>
-	struct Tensor_Slice : Core_Base<Tensor_Slice<PARENT>, max(PARENT::DIMS() - 1, 0)> {
+	struct Tensor_Slice : Tensor_Core_Base<Tensor_Slice<PARENT>, max(PARENT::DIMS() - 1, 0)> {
 
 	using scalar_type = _scalar<PARENT>;
 

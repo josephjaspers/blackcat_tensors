@@ -28,11 +28,13 @@ int shaping() {
 	std::cout << " original " << std::endl;
 	m2.print();
 
-	std::cout << " reshape (2,2, 16) " << std::endl;
-	reshape(m2)(2, 2, 16).print();
+	std::cout << " reshape (2,16, 2) " << std::endl;
+	reshape(m2)(2, 16, 2).print();
 
-	std::cout << " chunk at (2,1, 0) dims (2,3)" << std::endl;
-	chunk(m2)(2,1,0)(2,3).print();
+	std::cout << " chunk at (2,1, 0) dims (2,3) (utilizing shape object)" << std::endl;
+
+	BC::Shape<2> shape(2,3);
+	chunk(m2)(2,1,0)(shape).print();
 
 
 // FIXME DOES NOT WORK

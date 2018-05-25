@@ -5,8 +5,8 @@
  *      Author: joseph
  */
 
-#ifndef TENSOR_Scalar_CU_
-#define TENSOR_Scalar_CU_
+#ifndef TENSOR_SCALAR_H_
+#define TENSOR_SCALAR_H_
 
 #include "Core_Base.h"
 
@@ -17,7 +17,7 @@ namespace BC {
  */
 
 template<class PARENT>
-struct Tensor_Scalar : Core_Base<Tensor_Scalar<PARENT>, 0> {
+struct Tensor_Scalar : Tensor_Core_Base<Tensor_Scalar<PARENT>, 0> {
 
 	using scalar = _scalar<PARENT>;
 

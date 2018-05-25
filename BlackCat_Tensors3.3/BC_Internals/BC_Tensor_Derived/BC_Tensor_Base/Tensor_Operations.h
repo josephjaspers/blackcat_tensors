@@ -22,7 +22,6 @@
 #include "BC_Tensor_Types/Expression_Binary_Correlation_Padded.h"
 #include "BC_Tensor_Types/Expression_Binary_Correlation_Stack.h"
 #include "BC_Tensor_Types/Expression_Binary_Correlation_Padded_Stack.h"
-
 #include "BC_Tensor_Types/Expression_Binary_Correlation_Error.h"
 
 

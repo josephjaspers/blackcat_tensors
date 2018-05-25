@@ -8,6 +8,8 @@
 #ifndef INTERNAL_SHAPE_H_
 #define INTERNAL_SHAPE_H_
 
+#include <type_traits>
+
 namespace BC {
 
 template<int dimension>
@@ -29,6 +31,10 @@ struct Shape {
 
 
 	Shape() = default;
+	Shape(const Shape&) = default;
+	Shape(Shape&&) = default;
+	Shape& operator = (const Shape&) = default;
+	Shape& operator = (Shape&&) = default;
 
 	template<class... integers> Shape(int first, integers... ints) : inner_shape() {
 		this->init(first, ints...);
@@ -69,6 +75,21 @@ struct Shape {
 	}
 
 };
+
+
+template<class... Ts>
+struct constexpr_length {
+	static constexpr int value =sizeof...(Ts);
+};
+template<int x>
+struct constexpr_length<Shape<x>> {
+	static constexpr int value = x;
+};
+
+template<class... Ts>
+static constexpr int LENGTH = constexpr_length<Ts...>::value;
+
+
 }
 
 

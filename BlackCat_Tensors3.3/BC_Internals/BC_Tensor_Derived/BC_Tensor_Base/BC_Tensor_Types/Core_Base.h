@@ -9,6 +9,7 @@
 #define TENSOR_CORE_BASE_H_
 
 #include "BlackCat_Internal_Definitions.h"
+#include "Internal_Shape.h"
 
 namespace BC {
 
@@ -29,74 +30,71 @@ template<class> class 	_Tensor_Scalar 	= Tensor_Scalar,
 template<int> class     _Tensor_Chunk	= Tensor_Chunk,			//Nested implementation type
 template<int> class 	_Tensor_Reshape = Tensor_Reshape>		//Nested implementation type
 
-struct Core_Base : expression_base<Core_Base<derived,DIMENSION>> {
+struct Tensor_Core_Base : expression_base<Tensor_Core_Base<derived,DIMENSION>> {
 
 	__BCinline__ static constexpr int DIMS() { return DIMENSION; }
 	__BCinline__ static constexpr int ITERATOR() { return 0; }
 	__BCinline__ static constexpr bool ASSIGNABLE() { return true; }
 
-
-	__BCinline__ static constexpr int back() { return DIMENSION - 1; }
-
 	using self = derived;
-
 	using slice_type = std::conditional_t<DIMS() == 0, self, _Tensor_Slice<self>>;
 	using row_type = std::conditional_t<DIMS() == 0, self, _Tensor_Row<self>>;
 	using scalar_type = std::conditional_t<DIMS() == 0, self, _Tensor_Scalar<self>>;
 
 private:
-	__BCinline__ const derived& base() const { return static_cast<const derived&>(*this); }
-	__BCinline__ 	   derived& base() 		 { return static_cast<	    derived&>(*this); }
+	__BCinline__ const derived& asDerived() const { return static_cast<const derived&>(*this); }
+	__BCinline__ 	   derived& asDerived() 	  { return static_cast<	     derived&>(*this); }
 
 public:
-	operator 	   auto()       { return base().getIterator(); }
-	operator const auto() const { return base().getIterator(); }
+	operator 	   auto()       { return asDerived().getIterator(); }
+	operator const auto() const { return asDerived().getIterator(); }
 
-	__BCinline__ 	   auto& operator [] (int index) 	   { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[index]; }
-	__BCinline__ const auto& operator [] (int index) const { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[index]; }
-	template<class... integers> __BCinline__ 	   auto& operator () (integers... ints) 	  {
-//FIXME, error in the reading function // static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
-		return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[this->dims_to_index(ints...)]; }
-	template<class... integers> __BCinline__ const auto& operator () (integers... ints) const {
-//FIXME, error in the reading function // static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
-		return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[this->dims_to_index(ints...)]; }
-
-	__BCinline__ const auto innerShape() const { return base().innerShape(); }
-	__BCinline__ const auto outerShape() const { return base().outerShape(); }
-
-	__BCinline__ const auto slice(int i) const { return slice_type(&(base().getIterator()[slice_index(i)]),base()); }
-	__BCinline__	   auto slice(int i) 	   { return slice_type(&(base().getIterator()[slice_index(i)]),base()); }
-
-	__BCinline__ const auto scalar(int i) const { return scalar_type(&base().getIterator()[i], base()); }
-	__BCinline__	   auto scalar(int i) 	    { return scalar_type(&base().getIterator()[i], base()); }
-	__BCinline__ const auto row(int i) const { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED"); return row_type(&base().getIterator()[i], base()); }
-	__BCinline__	   auto row(int i) 	     { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED"); return row_type(&base().getIterator()[i], base()); }
+	__BCinline__ 	   auto& operator [] (int index) 	   { return DIMS() == 0 ? asDerived().getIterator()[0] : asDerived().getIterator()[index]; }
+	__BCinline__ const auto& operator [] (int index) const { return DIMS() == 0 ? asDerived().getIterator()[0] : asDerived().getIterator()[index]; }
+	__BCinline__ const auto innerShape() const { return asDerived().innerShape(); }
+	__BCinline__ const auto outerShape() const { return asDerived().outerShape(); }
+	__BCinline__ const auto slice(int i) const { return slice_type(&(asDerived().getIterator()[slice_index(i)]),asDerived()); }
+	__BCinline__	   auto slice(int i) 	   { return slice_type(&(asDerived().getIterator()[slice_index(i)]),asDerived()); }
+	__BCinline__ const auto scalar(int i) const { return scalar_type(&asDerived().getIterator()[i], asDerived()); }
+	__BCinline__	   auto scalar(int i) 	    { return scalar_type(&asDerived().getIterator()[i], asDerived()); }
+	__BCinline__ const auto row(int i) const { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED"); return row_type(&asDerived().getIterator()[i], asDerived()); }
+	__BCinline__	   auto row(int i) 	     { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED"); return row_type(&asDerived().getIterator()[i], asDerived()); }
 	__BCinline__ const auto col(int i) const { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
 	__BCinline__	   auto col(int i) 	     { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
 
+	template<class... integers> __BCinline__ 	   auto& operator () (integers... ints) 	  {
+		return DIMS() == 0 ? asDerived().getIterator()[0] : asDerived().getIterator()[this->dims_to_index(ints...)]; }
+	template<class... integers> __BCinline__ const auto& operator () (integers... ints) const {
+		return DIMS() == 0 ? asDerived().getIterator()[0] : asDerived().getIterator()[this->dims_to_index(ints...)]; }
+
+	//------------------------------------------Curried Reshapers ---------------------------------------//
+
 	template<class ... integers> __BCinline__ auto chunk(integers ... location_indices) {
-		return [&](auto... shape_dimension) {
-			auto* array = &(this->base().getIterator()[this->dims_to_index_reverse(location_indices...)]);
-			return typename _Tensor_Chunk<sizeof...(shape_dimension)>::template implementation<derived>(array, this->base(), shape_dimension...);
+		return [&](auto maybe_shape,  auto... shape_dimension) {
+			auto* array = &(this->asDerived().getIterator()[this->dims_to_index_reverse(location_indices...)]);
+			static constexpr int tensor_dim = is_shape<decltype(maybe_shape)> ? LENGTH<decltype(maybe_shape)> : sizeof...(shape_dimension) + 1;
+			return typename _Tensor_Chunk<tensor_dim>::template implementation<derived>(array, this->asDerived(), maybe_shape, shape_dimension...);
 		};
 	}
 
 	template<class ... integers> __BCinline__ const auto chunk(integers ... location_indices) const {
-
-		return [&](auto... shape_dimension) {
-			auto* array = &(this->base().getIterator()[this->dims_to_index_reverse(location_indices...)]);
-			return typename _Tensor_Chunk<sizeof...(shape_dimension)>::template implementation<derived>(array, this->base(), shape_dimension...);
+		return [&](auto maybe_shape, auto... shape_dimension) {
+			auto* array = &(this->asDerived().getIterator()[this->dims_to_index_reverse(location_indices...)]);
+			static constexpr int tensor_dim = is_shape<decltype(maybe_shape)> ? LENGTH<decltype(maybe_shape)> : sizeof...(shape_dimension) + 1;
+			return typename _Tensor_Chunk<tensor_dim>::template implementation<derived>(array, this->asDerived(), maybe_shape, shape_dimension...);
 		};
 	}
 
-	template<class ... integers> __BCinline__
-	const auto reshape(integers ... ints) const {
-		return typename _Tensor_Reshape<sizeof...(ints)>::template implementation<derived>(base().getIterator(), this->base(), ints...);
+	template<class maybe_shape, class ... integers> __BCinline__
+	const auto reshape(maybe_shape sh, integers ... ints) const {
+		static constexpr int tensor_dim = is_shape<maybe_shape> ? LENGTH<maybe_shape> : sizeof...(ints) + 1;
+		return typename _Tensor_Reshape<tensor_dim>::template implementation<derived>(asDerived().getIterator(), this->asDerived(), sh, ints...);
 	}
 
-	template<class... integers> __BCinline__
-	auto reshape(integers... ints) {
-		return typename _Tensor_Reshape<sizeof...(ints)>::template implementation<derived>(base().getIterator(), this->base(), ints...);
+	template<class maybe_shape, class ... integers> __BCinline__
+	auto reshape(maybe_shape sh, integers... ints) {
+		static constexpr int tensor_dim = is_shape<maybe_shape> ? LENGTH<maybe_shape> : sizeof...(ints) + 1;
+		return typename _Tensor_Reshape<tensor_dim>::template implementation<derived>(asDerived().getIterator(), this->asDerived(), sh, ints...);
 	}
 
 
@@ -109,7 +107,7 @@ public:
 		else if (DIMS() == 1)
 			return i;
 		else
-			return base().outerShape()[back() - 1] * i;
+			return asDerived().outerShape()[DIMENSION - 2] * i;
 	}
 
 

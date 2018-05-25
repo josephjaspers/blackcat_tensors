@@ -11,8 +11,6 @@
 #include "BC_MathLibraries/CPU.h"
 #include "BC_MathLibraries/GPU.cu"
 
-#include "BlackCat_ForwardDecls.h"
-
 #include "BC_Tensor_Derived/Scalar.h"
 #include "BC_Tensor_Derived/Vector.h"
 #include "BC_Tensor_Derived/Matrix.h"
@@ -20,5 +18,7 @@
 #include "BC_Tensor_Derived/Tensor4.h"
 #include "BC_Tensor_Derived/Tensor5.h"
 #include "BC_Tensor_Derived/Tensor.h"
+
+
 
 #endif /* BLACKCAT_INTERNAL_GLOBALUNIFIER_H_ */
