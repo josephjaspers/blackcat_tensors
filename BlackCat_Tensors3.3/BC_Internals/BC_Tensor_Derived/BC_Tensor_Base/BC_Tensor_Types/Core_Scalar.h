@@ -21,7 +21,7 @@ struct Tensor_Scalar : Core_Base<Tensor_Scalar<PARENT>, 0> {
 
 	using scalar = _scalar<PARENT>;
 
-	__BCinline__ static constexpr int CONTINUOUS() { return 0; }
+	__BCinline__ static constexpr int ITERATOR() { return 0; }
 	__BCinline__ static constexpr int DIMS() { return 0; }
 
 	operator const PARENT() const	{ return parent; }

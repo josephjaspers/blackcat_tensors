@@ -18,7 +18,7 @@ public:
 	value array;
 
 	__BCinline__ static constexpr int DIMS() { return value::DIMS(); }
-	__BCinline__ static constexpr int CONTINUOUS() { return value::CONTINUOUS(); }
+	__BCinline__ static constexpr int ITERATOR() { return value::ITERATOR(); }
 
 	__BCinline__  unary_expression(value v, operation op = operation()) : array(v), oper(op) {}
 

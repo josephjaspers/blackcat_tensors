@@ -24,7 +24,7 @@ public:
 	mutable bool* is_cached;
 
 	__BCinline__ static constexpr int DIMS() { return rv::DIMS(); }
-	__BCinline__ static constexpr int CONTINUOUS() { return rv::CONTINUOUS(); }
+	__BCinline__ static constexpr int ITERATOR() { return rv::ITERATOR(); }
 
 	__BCinline__  binary_expression(lv l_, rv r_) : left(l_), right(r_) {
 		 ml::zero_initialize(is_cached, right.size());
@@ -51,7 +51,7 @@ public:
 
 	template<class... integers> __BCinline__
 	const auto& operator ()(integers... indices) const {
-		int index = this->scal_index(indices...);
+		int index = this->dims_to_index(indices...);
 		if (is_cached[index])
 			return left(indices...);
 //		else if (is_locked[index]) {

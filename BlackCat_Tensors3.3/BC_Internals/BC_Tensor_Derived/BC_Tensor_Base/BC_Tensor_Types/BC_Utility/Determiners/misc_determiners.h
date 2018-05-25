@@ -21,6 +21,7 @@ class BC_Type;
 template<class> class Core;
 template<class> class lambda_array;
 template<class, int> class stack_array;
+template<int> class Shape;
 
 template<class T> struct isPrimaryCore { static constexpr bool conditional = !std::is_base_of<BC_Type, T>::value; };
 template<class T> struct isPrimaryCore<Core<T>> { static constexpr bool conditional = true; };
@@ -31,9 +32,9 @@ template<class T> static constexpr bool pCore_b = isPrimaryCore<T>::conditional;
 template<class T> 	struct BlackCat_Shape 						{ static constexpr bool conditional = false; };
 template<> 			struct BlackCat_Shape<int*> 				{ static constexpr bool conditional = true; };
 template<>			struct BlackCat_Shape<const int*> 			{ static constexpr bool conditional = true; };
-template<> 			struct BlackCat_Shape<const int*&> 			{ static constexpr bool conditional = true; };
 template<class T> 	struct BlackCat_Shape<lambda_array<T>> 		{ static constexpr bool conditional = true; };
 template<int x> 	struct BlackCat_Shape<stack_array<int,x>> 	{ static constexpr bool conditional = true; };
+template<int x> 	struct BlackCat_Shape<Shape<x>> 			{ static constexpr bool conditional = true; };
 
 template<class T> static constexpr bool is_shape = BlackCat_Shape<T>::conditional;
 

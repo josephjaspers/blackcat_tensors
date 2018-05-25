@@ -32,43 +32,24 @@ struct Tensor_Reshape {
 	using scalar = _scalar<PARENT>;
 
 	__BCinline__ static constexpr int DIMS() { return dimension; };
-	__BCinline__ static constexpr int CONTINUOUS() { return dimension; }
+	__BCinline__ static constexpr int ITERATOR() { return dimension; }
 
 	operator const PARENT() const	{ return parent; }
 
 	PARENT parent;
 	scalar* array;
-
-	int is[DIMS()];
-	int os[DIMS()];
-
+	Shape<dimension> shape;
 
 	template<class ary, class... integers> __BCinline__
-	implementation(ary array_, PARENT parent, integers... ints) : array(array_), parent(parent) {
+	implementation(ary array_, PARENT parent, integers... ints) : array(array_), parent(parent), shape(ints...) {
 		static_assert(sizeof...(integers) == DIMS(), "DIMENSIONALITY OF RESHAPE MUST EQUAL THE PARAMETER INTEGERS FOR RESHAPE");
-		init<0>(ints...);
 	}
 
-	__BCinline__ const auto innerShape() const 	{ return is; }
-	__BCinline__ const auto outerShape() const 	{ return os; }
+	__BCinline__ const auto innerShape() const 	{ return shape.is(); }
+	__BCinline__ const auto outerShape() const 	{ return shape.os(); }
 
 	__BCinline__ const auto getIterator() const { return array; }
 	__BCinline__	   auto getIterator()   	{ return array; }
-
-
-
-	template<int dim, class... integers> __BCinline__
-	void init(integers... ints) {
-
-		auto vars = BC::array(ints...);
-
-		is[0] = vars[0];
-		os[0] = vars[0];
-		for (int i = 1; i < vars.size(); ++i) {
-			is[i] = vars[i];
-			os[i] = is[i] * os[i - 1];
-		}
-	}
 
 	};
 };

@@ -20,7 +20,7 @@ template<class lv, class rv, int corr_dimension>
 struct binary_expression<lv, rv, _x_corr<corr_dimension, padded>> : expression_base<binary_expression<lv, rv, _x_corr<corr_dimension, padded>>> {
 
 	__BCinline__ static constexpr int DIMS() { return corr_dimension; }
-	__BCinline__ static constexpr int CONTINUOUS() { return corr_dimension; }
+	__BCinline__ static constexpr int ITERATOR() { return corr_dimension; }
 	using scalar = _scalar<lv>;
 
 	static_assert(lv::DIMS() == rv::DIMS(), "CORRELATION CURRENTLY ONLY SUPPORTED FOR SAME ORDER TENSORS");

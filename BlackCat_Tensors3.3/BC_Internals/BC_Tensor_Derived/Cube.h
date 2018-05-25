@@ -29,7 +29,7 @@ public:
 	Cube(const Cube&  v) : parent_class(v) {}
 	Cube(	   Cube&& v) : parent_class(v) {}
 	Cube(const Cube&& v) : parent_class(v) {}
-	explicit Cube(int rows = 0, int cols = 1, int pages = 1) : parent_class(array(rows, cols, pages)) {}
+	explicit Cube(int rows = 0, int cols = 1, int pages = 1) : parent_class(Shape<3>(rows, cols, pages)) {}
 
 	template<class U> 		  Cube(const Cube<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Cube(	     Cube<U, Mathlib>&& t) : parent_class(t) {}

@@ -91,7 +91,7 @@ public:
 private:
 	template<class t>
 	static void evaluate(const Tensor_Operations<t>& tensor) {
-		static constexpr int iterator_dimension = _functor<t>::CONTINUOUS();
+		static constexpr int iterator_dimension = _functor<t>::ITERATOR();
 		mathlib_type::template dimension<iterator_dimension>::eval(tensor.as_derived().data());
 	}
 public:

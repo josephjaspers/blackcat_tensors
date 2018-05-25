@@ -64,12 +64,8 @@ private:
 public:
 
 	Tensor_Initializer(derived&& tensor) : black_cat_array() {
-		black_cat_array.is = tensor.black_cat_array.is;
-		black_cat_array.os = tensor.black_cat_array.os;
+		black_cat_array.shape = std::move(tensor.black_cat_array.shape);
 		black_cat_array.array = tensor.black_cat_array.array;
-
-		tensor.black_cat_array.is 		= nullptr;
-		tensor.black_cat_array.os 		= nullptr;
 		tensor.black_cat_array.array 	= nullptr;
 	}
 

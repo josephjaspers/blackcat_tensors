@@ -26,7 +26,7 @@ struct binary_expression<lv, rv, dotproduct<Mathlib>> : expression_base<binary_e
 
 
 	__BCinline__ static constexpr int DIMS() { return rv::DIMS(); }
-	__BCinline__ static constexpr int CONTINUOUS() { return 0; }
+	__BCinline__ static constexpr int ITERATOR() { return 0; }
 
 	static constexpr bool transA = det_eval<lv>::transposed;
 	static constexpr bool transB = det_eval<rv>::transposed;

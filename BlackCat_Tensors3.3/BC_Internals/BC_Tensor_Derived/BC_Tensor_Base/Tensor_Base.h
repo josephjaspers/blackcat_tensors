@@ -35,7 +35,7 @@ protected:
 	using mathlib_type 	= _mathlib<derived>;
 
 	static constexpr int DIMS() { return dimension_of<derived>::value; }
-	static constexpr int CONTINUOUS() { return functor_type::CONTINUOUS(); }
+	static constexpr int ITERATOR() { return functor_type::ITERATOR(); }
 	template<class> friend class Tensor_Base;
 
 public:

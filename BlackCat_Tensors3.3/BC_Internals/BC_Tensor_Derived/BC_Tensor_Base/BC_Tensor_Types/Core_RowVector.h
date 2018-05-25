@@ -27,7 +27,7 @@ struct Tensor_Row : Core_Base<Tensor_Row<PARENT>, 1>  {
 	using Mathlib = typename  PARENT::Mathlib;
 
 	__BCinline__ static constexpr int DIMS() { return 1; }
-	__BCinline__ static constexpr int CONTINUOUS() { return 0; }
+	__BCinline__ static constexpr int ITERATOR() { return 0; }
 
 	operator const PARENT() const	{ return parent; }
 

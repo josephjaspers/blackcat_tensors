@@ -24,6 +24,8 @@ static constexpr int CUDA_BASE_THREADS = 256;
 
 #define __BCinline__ __BChd__  inline __attribute__((always_inline)) __attribute__((hot))
 #define __BC_host_inline__ inline __attribute__((always_inline)) __attribute__((hot))
+
+class BC_Type {};
 }
 
 #include "BC_Utility/Determiners.h"

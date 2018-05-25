@@ -19,7 +19,7 @@ struct unary_expression<functor_type, transpose> : expression_base<unary_express
 	functor_type array;
 
 	__BCinline__ static constexpr int DIMS() { return 2; }
-	__BCinline__ static constexpr int CONTINUOUS() { return 2; }
+	__BCinline__ static constexpr int ITERATOR() { return 2; }
 
 
 	unary_expression(functor_type p) : array(p) {}
@@ -33,13 +33,13 @@ struct unary_expression<functor_type, transpose> : expression_base<unary_express
 		return array[DIMS() == 1 ? index : (int)(index / this->rows()) + (index % this->rows()) * this->LD_rows()];
 	}
 	__BCinline__ auto operator ()(int m, int n) const -> decltype(array(m,n)) {
-			if (functor_type::CONTINUOUS() == 0)
+			if (functor_type::ITERATOR() == 0)
 				return array(m * array.LD_rows() + n);
 			else
 				return array(m, n);
 	}
 	__BCinline__ auto operator ()(int m, int n) -> decltype(array(m,n)) {
-			if (functor_type::CONTINUOUS() == 0)
+			if (functor_type::ITERATOR() == 0)
 				return array[m * array.LD_rows() + n];
 			else
 				return array(m, n);

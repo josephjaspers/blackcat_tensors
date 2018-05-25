@@ -33,7 +33,7 @@ public:
 	Tensor(const Tensor&& v) : parent_class(v) {}
 
 	template<class... integers>
-	explicit Tensor(int x = 0, integers... ints) : parent_class(array(x, ints...)) {}
+	explicit Tensor(int x = 0, integers... ints) : parent_class(Shape<dimensions>(x, ints...)) {}
 
 	template<class U> 		  Tensor(const Tensor<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Tensor(	    Tensor<U, Mathlib>&& t) : parent_class(t) {}

@@ -25,20 +25,30 @@ using tesnor5 = BC::Tensor5<float, ml>;
 int main() {
 
 	//various tests
-//	correlation();
-//	dotproducts();
-//	readwrite();
+	correlation();
+	dotproducts();
+	readwrite();
 
 	shaping();
+
+
 //	for (int i = 1; i < 100; i *= 2)
 
-	cube c(3, 5,4);
-	std::cout << c.data().scal_index(1,2,3) << std::endl;
-	std::cout << c.data().scal_index(BC::array(1,2,3)) << std::endl;
+	cube c(2,3,4);
+	auto var = c.data().index_to_dims(23);
+	for (int i = 0; i < 3; ++i) {
+		std::cout << var[i] << std::endl;
+	}
 
-	std::cout << c.data().scal_index_reverse(3,2,1) << std::endl;
-	std::cout << c.data().scal_index_reverse(BC::array(3,2,1)) << std::endl;
+		std::cout << c.data().dims_to_index(c.data().index_to_dims(23)) << std::endl;
 
+
+//	std::cout << c.data().dims_to_index(1,2,3) << std::endl;
+//	std::cout << c.data().dims_to_index(BC::array(1,2,3)) << std::endl;
+//
+//	std::cout << c.data().dims_to_index_reverse(3,2,1) << std::endl;
+//	std::cout << c.data().dims_to_index_reverse(BC::array(3,2,1)) << std::endl;
+//
 
 
 	std::cout << " success  main" << std::endl;

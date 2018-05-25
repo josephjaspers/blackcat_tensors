@@ -14,7 +14,7 @@ template<class ary,  int search_space = 3>
 struct unary_expression_maxpooling : expression_base<unary_expression_maxpooling<ary, search_space>> {
 
 	__BCinline__ static constexpr int DIMS() { return ary::DIMS(); }
-	__BCinline__ static constexpr int CONTINUOUS() { return ary::CONTINUOUS(); }
+	__BCinline__ static constexpr int ITERATOR() { return ary::ITERATOR(); }
 
 	stack_array<int, DIMS()> positions;
 	stack_array<int, DIMS()> os = init_outerShape();

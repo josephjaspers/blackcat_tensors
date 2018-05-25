@@ -19,7 +19,7 @@ template<class PARENT>
 
 	using scalar_type = _scalar<PARENT>;
 
-	__BCinline__ static constexpr int CONTINUOUS() { return max(PARENT::CONTINUOUS() - 1, 0); }
+	__BCinline__ static constexpr int ITERATOR() { return max(PARENT::ITERATOR() - 1, 0); }
 	__BCinline__ static constexpr int DIMS() { return max(PARENT::DIMS() - 1, 0); }
 
 	operator const PARENT() const	{ return parent; }

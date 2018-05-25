@@ -32,7 +32,7 @@ template<int> class 	_Tensor_Reshape = Tensor_Reshape>		//Nested implementation 
 struct Core_Base : expression_base<Core_Base<derived,DIMENSION>> {
 
 	__BCinline__ static constexpr int DIMS() { return DIMENSION; }
-	__BCinline__ static constexpr int CONTINUOUS() { return 0; }
+	__BCinline__ static constexpr int ITERATOR() { return 0; }
 	__BCinline__ static constexpr bool ASSIGNABLE() { return true; }
 
 
@@ -56,10 +56,10 @@ public:
 	__BCinline__ const auto& operator [] (int index) const { return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[index]; }
 	template<class... integers> __BCinline__ 	   auto& operator () (integers... ints) 	  {
 //FIXME, error in the reading function // static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
-		return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[this->scal_index(ints...)]; }
+		return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[this->dims_to_index(ints...)]; }
 	template<class... integers> __BCinline__ const auto& operator () (integers... ints) const {
 //FIXME, error in the reading function // static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
-		return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[this->scal_index(ints...)]; }
+		return DIMS() == 0 ? base().getIterator()[0] : base().getIterator()[this->dims_to_index(ints...)]; }
 
 	__BCinline__ const auto innerShape() const { return base().innerShape(); }
 	__BCinline__ const auto outerShape() const { return base().outerShape(); }
@@ -76,7 +76,7 @@ public:
 
 	template<class ... integers> __BCinline__ auto chunk(integers ... location_indices) {
 		return [&](auto... shape_dimension) {
-			auto* array = &(this->base().getIterator()[this->scal_index_reverse(location_indices...)]);
+			auto* array = &(this->base().getIterator()[this->dims_to_index_reverse(location_indices...)]);
 			return typename _Tensor_Chunk<sizeof...(shape_dimension)>::template implementation<derived>(array, this->base(), shape_dimension...);
 		};
 	}
@@ -84,7 +84,7 @@ public:
 	template<class ... integers> __BCinline__ const auto chunk(integers ... location_indices) const {
 
 		return [&](auto... shape_dimension) {
-			auto* array = &(this->base().getIterator()[this->scal_index_reverse(location_indices...)]);
+			auto* array = &(this->base().getIterator()[this->dims_to_index_reverse(location_indices...)]);
 			return typename _Tensor_Chunk<sizeof...(shape_dimension)>::template implementation<derived>(array, this->base(), shape_dimension...);
 		};
 	}
