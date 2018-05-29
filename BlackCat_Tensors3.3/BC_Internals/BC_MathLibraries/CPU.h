@@ -12,6 +12,8 @@
 #include "CPU_Implementation/CPU_Utility.h"
 #include "CPU_Implementation/CPU_Misc.h"
 #include "CPU_Implementation/CPU_BLAS.h"
+#include "CPU_Implementation/CPU_BLAS.h"
+#include "CPU_Implementation/CPU_Signal_Processing.h"
 
 namespace BC {
 
@@ -25,7 +27,11 @@ namespace BC {
  *
  */
 
-class CPU: public CPU_Utility<CPU>, public CPU_Misc<CPU>, public CPU_BLAS<CPU> {
+class CPU:
+		public CPU_Utility<CPU>,
+		public CPU_Misc<CPU>,
+		public CPU_BLAS<CPU>,
+		public CPU_Signal_Processing<CPU> {
 
 
 public:

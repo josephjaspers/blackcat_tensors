@@ -75,28 +75,28 @@ namespace PPack {
 	}
 
 
-	template<class function>
-	__BCinline__ auto add_impl(function& f) {
-		return [&](auto... summed_values) {
-			return [&](auto lv, auto... left_values) {
-				return [&](auto rv, auto... right_values) {
-//					if constexpr (sizeof...(left_values) == 0 || sizeof...(right_values) == 0)
-//						return f(lv + rv, summed_values..., left_values..., right_values...);
-//					else
-//						return add_impl(f)(summed_values..., lv + rv)(left_values...)(right_values...);
-				};
-			};
-		};
-	}
-
-	template<class function>
-	__BCinline__ auto add(function f) {
-		return [&](auto... left_values) {
-			return [&](auto... right_values) {
-				return add_impl(f)()(left_values...)(right_values...);
-			};
-		};
-	}
+//	template<class function>
+//	__BCinline__ auto add_impl(function& f) {
+//		return [&](auto... summed_values) {
+//			return [&](auto lv, auto... left_values) {
+//				return [&](auto rv, auto... right_values) {
+////					if constexpr (sizeof...(left_values) == 0 || sizeof...(right_values) == 0)
+////						return f(lv + rv, summed_values..., left_values..., right_values...);
+////					else
+////						return add_impl(f)(summed_values..., lv + rv)(left_values...)(right_values...);
+//				};
+//			};
+//		};
+//	}
+//
+//	template<class function>
+//	__BCinline__ auto add(function f) {
+//		return [&](auto... left_values) {
+//			return [&](auto... right_values) {
+//				return add_impl(f)()(left_values...)(right_values...);
+//			};
+//		};
+//	}
 
 }
 

@@ -82,12 +82,12 @@ int percept_MNIST() {
 
 	//Create the neural network
 //	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
-	NeuralNetwork<FeedForward> network(784, 10);
+	NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10);
 //	NeuralNetwork<Conv, FeedForward> network(std::make_tuple(28,28,1,3), 2700, 10);
 	network.setLearningRate(.03);
+
 	data inputs;
 	data outputs;
-
 	data testInputs;
 	data testOutputs;
 
@@ -116,10 +116,9 @@ int percept_MNIST() {
 			network.forwardPropagation(inputs[j]);
 			network.backPropagation(outputs[j]);
 
-			if (j % 100 == 0) {
 			network.updateWeights();
 			network.clearBPStorage();
-			}
+
 		}
 	}
 

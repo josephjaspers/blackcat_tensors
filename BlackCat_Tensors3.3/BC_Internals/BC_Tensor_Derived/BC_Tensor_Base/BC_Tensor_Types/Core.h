@@ -24,8 +24,7 @@ struct Core : Tensor_Core_Base<Core<T>, _dimension_of<T>>{
 	Shape<DIMS()> shape;
 
 	template<class U>
-	Core(const U& param) : shape(param) {
-		static_assert(is_shape<U>, "NON_SHAPE DETECTED AS INITIALIZATION OF TENSOR SHAPE");
+	Core(U param) : shape(param) {
 		math_lib::initialize(array, this->size());
 	}
 
@@ -39,8 +38,6 @@ struct Core : Tensor_Core_Base<Core<T>, _dimension_of<T>>{
 
 
 	template<class... integers> void resetShape(integers... ints)  {
-		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
-
 		int sz = this->size();
 		shape = Shape<DIMS()>(ints...);
 
@@ -48,6 +45,20 @@ struct Core : Tensor_Core_Base<Core<T>, _dimension_of<T>>{
 			math_lib::destroy(array);
 			math_lib::initialize(array, this->size());
 		}
+	}
+	void resetShape(Shape<DIMS()> new_shape)  {
+		if (shape.size() == new_shape.size()) {
+			shape = new_shape;
+		} else {
+			shape = new_shape;
+			math_lib::destroy(array);
+			math_lib::initialize(array, this->size());
+		}
+	}
+
+	__BCinline__ auto shift(int i ) {
+		array += i;
+		return *this;
 	}
 
 	void destroy() {

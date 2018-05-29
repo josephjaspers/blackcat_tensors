@@ -131,7 +131,6 @@ int percept_MNIST() {
 	std::cout << " training..." << std::endl;
 
 	for (int i = 0; i < TRAINING_ITERATIONS; ++i) {
-		std::cout << " iter = " << i << std::endl;
 		for (int j = 0; j < inputs.size(); j += BATCH_SIZE) {
 			int numb_instances = j + BATCH_SIZE < inputs.size() ? j + BATCH_SIZE : inputs.size();
 #pragma omp parallel for schedule(static)

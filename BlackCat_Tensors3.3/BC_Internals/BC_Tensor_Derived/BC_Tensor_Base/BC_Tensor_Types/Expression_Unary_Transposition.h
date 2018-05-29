@@ -20,6 +20,7 @@ struct unary_expression<functor_type, transpose> : expression_base<unary_express
 
 	__BCinline__ static constexpr int DIMS() { return 2; }
 	__BCinline__ static constexpr int ITERATOR() { return 2; }
+	static_assert(functor_type::DIMS() == 1 || functor_type::DIMS() == 2, "TRANSPOSITION ONLY DEFINED FOR MATRICES AND VECTORS");
 
 
 	unary_expression(functor_type p) : array(p) {}

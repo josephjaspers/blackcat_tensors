@@ -46,7 +46,6 @@ private:
 
 	template<class> friend class Tensor_Base;
 	template<class> friend class Tensor_Operations;
-	template<class,class> friend class Matrix;
 	template<class... params> Matrix(const params&... p) : parent_class(p...) {}
 
 };

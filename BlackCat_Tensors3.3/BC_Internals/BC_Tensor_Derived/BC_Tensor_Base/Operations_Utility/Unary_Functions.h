@@ -39,6 +39,11 @@ auto chunk(Tensor_Base<T>& tensor) {
 			return tensor.self_chunk(location_indices...)(chunk_dimension...); };
 		};
 }
+//alternate names from transposition
+template<class deriv>
+static auto trans(Tensor_Operations<deriv>& tensor) {
+	 return tensor.t();
+}
 //zero and one are the equivalent but delayed evaluation version,
 //modifies the calling the tensor, but if and only if evaluated
 template<class deriv>

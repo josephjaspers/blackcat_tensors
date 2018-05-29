@@ -31,7 +31,7 @@
 //
 //	a.randomize(0, 100);
 //	b.randomize(0, 100);
-//	c.randomize(0, 100);
+////	c.randomize(0, 100);
 //	d.randomize(0, 100);
 //	e.randomize(0, 100);
 //

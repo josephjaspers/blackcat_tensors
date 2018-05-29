@@ -8,14 +8,14 @@
 #ifndef TENSOR_HEAD_H_
 #define TENSOR_HEAD_H_
 
-#include "BC_Tensor_Types/Expression_Binary_Pointwise.h"
+#include "BC_Tensor_Types/Expression_Binary_Base.h"
 #include "BC_Tensor_Types/Expression_Binary_Functors.h"
 #include "BC_Tensor_Types/Expression_Binary_Dotproduct.h"
 
-#include "BC_Tensor_Types/Expression_Unary_Pointwise.h"
+#include "BC_Tensor_Types/Expression_Unary_Base.h"
 #include "BC_Tensor_Types/Expression_Unary_Functors.h"
 
-#include "BC_Tensor_Types/Expression_Unary_MatrixTransposition.h"
+#include "BC_Tensor_Types/Expression_Unary_Transposition.h"
 #include "BC_Tensor_Types/Expression_Unary_MaxPooling.h"
 #include "BC_Tensor_Types/Expression_Unary_Cacher.h"
 #include "BC_Tensor_Types/Expression_Binary_Correlation.h"
@@ -255,25 +255,22 @@ public:
 	//assert either scalar by tensor operation or same size (not same dimensions)
 	template<class deriv>
 	void  assert_same_size(const Tensor_Operations<deriv>& tensor) const {
-#ifndef	BC_RELEASE
+		assert_same_ml(tensor);
 
 		if (derived::DIMS() != 0 && deriv::DIMS() != 0)
-		if ((as_derived().size() != tensor.as_derived().size()) && (this->as_derived().DIMS() != 0 && tensor.as_derived().DIMS() != 0)) {
-			std::cout << "this->DIMS() = "<< derived::DIMS() << " this->size() = " << as_derived().size() << " this_dims "; as_derived().printDimensions();
-			std::cout << "this->DIMS() = "<< deriv::DIMS()   << " param.size() = " << tensor.as_derived().size() << " param_dims "; tensor.as_derived().printDimensions();
-			std::cout << "\n";
-			throw std::invalid_argument("Tensor by Tensor operation - size mismatch - ");
-		}
-		assert_same_ml(tensor);
-#endif
+			if (this->as_derived().DIMS() != 0 && tensor.as_derived().DIMS() != 0)
+				if ((as_derived().size() != tensor.as_derived().size())){
+					std::cout << "this->DIMS() = "<< derived::DIMS() << " this->size() = " << as_derived().size() << " this_dims "; as_derived().printDimensions();
+					std::cout << "this->DIMS() = "<< deriv::DIMS()   << " param.size() = " << tensor.as_derived().size() << " param_dims "; tensor.as_derived().printDimensions();
+					std::cout << "\n";
+					throw std::invalid_argument("Tensor by Tensor operation - size mismatch - ");
+				}
 	}
 
 	//assert same math library // asserts both memory is allocated on gpu or cpu
 	template<class deriv>
 	void assert_same_ml(const Tensor_Operations<deriv>& tensor) const {
-#ifndef BC_RELEASE
 		static_assert(MTF::same<_mathlib<derived>, _mathlib<deriv>>::conditional, "mathlib_type must be identical");
-#endif
 	}
 
 };

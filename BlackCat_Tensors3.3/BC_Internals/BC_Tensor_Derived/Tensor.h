@@ -53,6 +53,9 @@ private:
 
 };
 
+template<int x, class scalar, class ml>
+using TensorN = typename dimension<x>::template Tensor<scalar, ml>;
+
 } //End Namespace BC
 
 #endif /* MATRIX_H */

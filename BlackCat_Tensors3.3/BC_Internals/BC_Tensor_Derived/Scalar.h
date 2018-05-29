@@ -32,7 +32,7 @@ public:
 
 	template<class U> Scalar(const Scalar<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> Scalar(	   Scalar<U, Mathlib>&& t) : parent_class(t) {}
-	Scalar(_scalar<T> val) : parent_class(Shape<0>()) { Mathlib::HostToDevice(this->data().getIterator(), &val, 1); }
+	Scalar(_scalar<T> val) : parent_class(Shape<1>()) { Mathlib::HostToDevice(this->data().getIterator(), &val, 1); }
 
 	template<class U>
 	Scalar& operator =(const Scalar<U, Mathlib>& t) { return parent_class::operator=(t); }

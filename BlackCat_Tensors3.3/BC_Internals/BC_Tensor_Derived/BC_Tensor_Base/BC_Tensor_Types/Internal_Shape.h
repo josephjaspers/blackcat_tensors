@@ -9,8 +9,10 @@
 #define INTERNAL_SHAPE_H_
 
 #include <type_traits>
+#include "BlackCat_Internal_Definitions.h"
 
 namespace BC {
+
 
 template<int dimension>
 struct Shape {
@@ -39,9 +41,13 @@ struct Shape {
 	template<class... integers> Shape(int first, integers... ints) : inner_shape() {
 		this->init(first, ints...);
 	}
+	Shape(const int& first) : inner_shape() {
+		this->init(first);
+	}
+
 
 	template<class U>
-	Shape (const U& param) {
+	Shape (U param) {
 		if (LENGTH() > 0) {
 			inner_shape[0] = param[0];
 			outer_shape[0] = inner_shape[0];

@@ -9,7 +9,7 @@
 #define EXPRESSIONS_BINARY_CORRELATION_PADDED_STACK_H_
 
 #include "Expression_Base.h"
-#include "Expression_Binary_Pointwise.h"
+#include "Expression_Binary_Base.h"
 #include <utility>
 
 namespace BC {
@@ -42,7 +42,6 @@ struct binary_expression<lv, rv, _x_corr_stack<corr_dimension,padded>> : express
 		}
 		is[DIMS() - 1] = left.dimension(DIMS() - 1);
 		os[DIMS() - 1] = is[DIMS() - 1] * os[DIMS() - 2];
-
 	}
 
 	__BCinline__ const auto innerShape() const { return is; }

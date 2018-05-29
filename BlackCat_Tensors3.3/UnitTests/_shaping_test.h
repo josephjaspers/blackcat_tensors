@@ -18,7 +18,7 @@ using BC::Cube;
 int shaping() {
 
 	//parameter oacks + lamdas not supported by CUDA yet
-#ifndef __CUDACC__
+//#ifndef __CUDACC__
 	std::cout << " --------------------------------------SHAPING (RESHAPE, AND CHUNK)--------------------------------------" << std::endl;
 
 
@@ -34,16 +34,16 @@ int shaping() {
 	std::cout << " chunk at (2,1, 0) dims (2,3) (utilizing shape object)" << std::endl;
 
 	BC::Shape<2> shape(2,3);
-	chunk(m2)(2,1,0)(shape).print();
-
+	chunk(m2)(2,1,0)(2,3).print();
 
 // FIXME DOES NOT WORK
+
 //	std::cout << "reshape (2,3) chunk to (3,2)" << std::endl;
 //	auto ch = chunk(m2)(2,1,0)(2,3);
 //	reshape(ch)(3,2);
 	m2.print();
 
-#endif
+//#endif
 	return 0;
 }
 

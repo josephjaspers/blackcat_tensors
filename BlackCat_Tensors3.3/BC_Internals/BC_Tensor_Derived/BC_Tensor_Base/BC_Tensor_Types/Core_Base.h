@@ -20,6 +20,7 @@ namespace BC {
 template<class> class Tensor_Slice;
 template<class> class Tensor_Scalar;
 template<class> class Tensor_Row;
+template<class> class Tensor_Vectorizer;
 template<int> class Tensor_Reshape;
 template<int> class Tensor_Chunk;
 
@@ -27,6 +28,7 @@ template<class derived, int DIMENSION,
 template<class> class 	_Tensor_Slice 	= Tensor_Slice,
 template<class> class 	_Tensor_Row 	= Tensor_Row,
 template<class> class 	_Tensor_Scalar 	= Tensor_Scalar,
+template<class> class 	_Tensor_Vectorizer = Tensor_Vectorizer,
 template<int> class     _Tensor_Chunk	= Tensor_Chunk,			//Nested implementation type
 template<int> class 	_Tensor_Reshape = Tensor_Reshape>		//Nested implementation type
 
@@ -68,7 +70,8 @@ public:
 		return DIMS() == 0 ? asDerived().getIterator()[0] : asDerived().getIterator()[this->dims_to_index(ints...)]; }
 
 	//------------------------------------------Curried Reshapers ---------------------------------------//
-
+	//currently cuda will not compile these
+#ifndef __CUDACC__
 	template<class ... integers> __BCinline__ auto chunk(integers ... location_indices) {
 		return [&](auto maybe_shape,  auto... shape_dimension) {
 			auto* array = &(this->asDerived().getIterator()[this->dims_to_index_reverse(location_indices...)]);
@@ -96,7 +99,7 @@ public:
 		static constexpr int tensor_dim = is_shape<maybe_shape> ? LENGTH<maybe_shape> : sizeof...(ints) + 1;
 		return typename _Tensor_Reshape<tensor_dim>::template implementation<derived>(asDerived().getIterator(), this->asDerived(), sh, ints...);
 	}
-
+#endif
 
 	//------------------------------------------Implementation Details---------------------------------------//
 

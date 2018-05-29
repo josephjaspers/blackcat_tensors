@@ -14,6 +14,7 @@
 #include "BC_Tensor_Types/Core_RowVector.h"
 #include "BC_Tensor_Types/Core_Chunk.h"
 #include "BC_Tensor_Types/Core_Reshape.h"
+#include "BC_Tensor_Types/Core_Vectorizer.h"
 
 namespace BC {
 
@@ -64,7 +65,7 @@ private:
 public:
 
 	Tensor_Initializer(derived&& tensor) : black_cat_array() {
-		black_cat_array.shape = std::move(tensor.black_cat_array.shape);
+		black_cat_array.shape = tensor.black_cat_array.shape;
 		black_cat_array.array = tensor.black_cat_array.array;
 		tensor.black_cat_array.array 	= nullptr;
 	}

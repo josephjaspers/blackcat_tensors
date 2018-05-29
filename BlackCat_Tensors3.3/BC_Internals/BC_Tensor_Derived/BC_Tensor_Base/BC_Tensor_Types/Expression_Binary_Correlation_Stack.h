@@ -9,7 +9,7 @@
 #define EXPRESSIONS_BINARY_CORRELATION_STACK_H_
 
 #include "Expression_Base.h"
-#include "Expression_Binary_Pointwise.h"
+#include "Expression_Binary_Base.h"
 #include <utility>
 
 namespace BC {

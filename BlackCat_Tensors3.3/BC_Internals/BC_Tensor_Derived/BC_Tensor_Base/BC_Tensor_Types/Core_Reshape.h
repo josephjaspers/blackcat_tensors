@@ -44,7 +44,7 @@ struct Tensor_Reshape {
 
 	template<class ary, class... integers> __BCinline__
 	implementation(ary array_, PARENT parent, integers... ints) : array(array_), parent(parent), shape(ints...) {
-		static_assert(sizeof...(integers) == DIMS(), "DIMENSIONALITY OF RESHAPE MUST EQUAL THE PARAMETER INTEGERS FOR RESHAPE");
+//		static_assert(sizeof...(integers) == DIMS(), "DIMENSIONALITY OF RESHAPE MUST EQUAL THE PARAMETER INTEGERS FOR RESHAPE");
 	}
 
 	__BCinline__ const auto innerShape() const 	{ return shape.is(); }

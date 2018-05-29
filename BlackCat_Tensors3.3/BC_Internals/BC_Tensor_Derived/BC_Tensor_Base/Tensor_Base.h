@@ -36,6 +36,7 @@ protected:
 
 	static constexpr int DIMS() { return dimension_of<derived>::value; }
 	static constexpr int ITERATOR() { return functor_type::ITERATOR(); }
+
 	template<class> friend class Tensor_Base;
 
 public:
@@ -47,9 +48,9 @@ public:
 
 	template<class... params> explicit Tensor_Base(const params&... p) : initializer(p...) {}
 
-	//move only defined for Core's
+	//move only defined for primary cores (this is to ensure slices/chunks/reshapes apply copies)
 	using move_parameter = std::conditional_t<pCore_b<functor_type>, derived&&, DISABLED>;
-	Tensor_Base(		 move_parameter tensor) : initializer(std::move(tensor)) {}
+	Tensor_Base(move_parameter tensor) : initializer(std::move(tensor)) {}
 	Tensor_Base(const Tensor_Base& 	tensor) : initializer(tensor) {}
 
 
@@ -90,10 +91,10 @@ public:
 
 private:
 	const auto slice_impl(int i) const { return this->black_cat_array.slice(i); }
-		  auto slice_impl(int i) 	  { return this->black_cat_array.slice(i); }
+		  auto slice_impl(int i) 	  { return this->black_cat_array.slice(i);  }
 
 	const auto scalar_impl(int i) const { return this->black_cat_array.scalar(i); }
-		  auto scalar_impl(int i)	   { return this->black_cat_array.scalar(i); }
+		  auto scalar_impl(int i)	   { return this->black_cat_array.scalar(i);  }
 
 	const auto row_impl(int i) const { return this->black_cat_array.row(i); }
 		  auto row_impl(int i)	     { return this->black_cat_array.row(i); }
@@ -108,7 +109,7 @@ public:
 		static_assert(DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");
 		return typename tensor_of<DIMS()>::template slice<decltype(slice_impl(0)), mathlib_type>(slice_impl(i)); }
 
-		auto slice(int i) 		  {
+		  auto slice(int i) 	  {
 		static_assert(derived::DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");
 		return typename tensor_of<DIMS()>::template slice<decltype(slice_impl(0)), mathlib_type>(slice_impl(i)); }
 
@@ -121,11 +122,11 @@ public:
 		return typename tensor_of<1>::template type<decltype(row_impl(0)), mathlib_type>(row_impl(i));
 	}
 	const auto col(int i) const {
-		static_assert(DIMS() == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		static_assert(DIMS() == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return (*this)[i];
 	}
 		 auto col(int i) {
-		static_assert(DIMS() == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		static_assert(DIMS() == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return (*this)[i];
 	}
 
@@ -148,14 +149,10 @@ public:
 
 	template<class... integers>
 	void resize(integers... ints) {
-//		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
-		//fix_me need to fix the "write" method in Tensor_Utility
-//		static_assert(sizeof...(integers) == derived::DIMS(), "RESIZE MUST MAINTAIN SAME DIMENSIONALITY");
 		this->black_cat_array.resetShape(ints...);
 	}
 	template<class... integers>
 	auto self_reshape(integers... ints) {
-//		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
 		using internal = decltype(std::declval<self>().black_cat_array.reshape(ints...));
 		using type = typename tensor_of<sizeof...(integers)>::template type<internal, mathlib_type>;
 		return type(this->black_cat_array.reshape(ints...));
@@ -163,7 +160,6 @@ public:
 	}
 	template<class... integers>
 	const auto self_reshape(integers... ints) const {
-//		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
 		using internal = decltype(std::declval<self>().black_cat_array.reshape(ints...));
 		using type = typename tensor_of<sizeof...(integers)>::template type<internal, mathlib_type>;
 		return type(this->black_cat_array.reshape(ints...));
@@ -171,7 +167,6 @@ public:
 	}
 	template<class... integers>
 	auto self_chunk(integers... ints) {
-//		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
 		return [&](auto... shape) {
 			using internal = decltype(std::declval<self>().black_cat_array.chunk(ints...)(shape...));
 			using type = typename tensor_of<sizeof...(shape)>::template type<internal, mathlib_type>;
@@ -180,7 +175,6 @@ public:
 	}
 	template<class... integers>
 	const auto self_chunk(integers... ints) const {
-//		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
 		return [&](auto... shape) {
 			using internal = decltype(std::declval<self>().black_cat_array.chunk(ints...)(shape...));
 			using type = typename tensor_of<sizeof...(shape)>::template type<internal, mathlib_type>;

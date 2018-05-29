@@ -15,6 +15,7 @@
 
 namespace BC {
 
+
 template<class derived>
 struct expression_base : BC_Type {
 private:
@@ -81,6 +82,8 @@ public:
 		}
 		std::cout << std::endl;
 	}
+
+
 	//---------------------------------------------------UTILITY/IMPLEMENTATION METHODS------------------------------------------------------------//
 	template<class... integers> __BCinline__
 	int dims_to_index(integers... ints) const {
@@ -141,6 +144,21 @@ public:
 	__BCinline__ int col(int i) const 	{ return shadowFailure("auto col(int i) const"); }
 	__BCinline__ int col(int i) 	   	{ return shadowFailure("auto col(int i)"); }
 };
+
+////---------------------------------------------------internal lazy evaluation expressions---------------------------------------------------------//
+//template<class param> auto operator + (const expression_base<param>& expr) { return bi_expr<derived,param, add>(this->asDerived(), expr.asDerived()); }
+//template<class param> auto operator - (const expression_base<param>& expr) { return bi_expr<derived,param, sub>(this->asDerived(), expr.asDerived()); }
+//template<class param> auto operator / (const expression_base<param>& expr) { return bi_expr<derived,param, div>(this->asDerived(), expr.asDerived()); }
+//template<class param> auto operator * (const expression_base<param>& expr) { return bi_expr<derived,param, mul>(this->asDerived(), expr.asDerived()); }
+//template<class param> auto operator = (const expression_base<param>& expr) { return bi_expr<derived,param, mul>(this->asDerived(), expr.asDerived()); }
+//template<class,class,class> struct binary_expression;
+//template<class,class> struct unary_expression;
+//struct add;
+//struct mul;
+//struct div;
+//struct sub;
+//struct assign;
+
 
 }
 
