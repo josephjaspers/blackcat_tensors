@@ -30,9 +30,9 @@ struct Tensor_Chunk  {
 		scalar* array;
 		Shape<DIMS()> shape;
 
-		template<class... integers>
-		implementation(scalar* array_, PARENT parent_, integers... ints) : parent(parent_), array(array_), shape(ints...) {}
-
+		template<class... integers> __BCinline__
+		implementation(const scalar* array_, PARENT parent, integers... ints) : array(const_cast<scalar*>(array_)), parent(parent), shape(ints...) {
+		}
 		__BCinline__ const auto size()		 const  { return shape.size(); }
 		__BCinline__ const auto innerShape() const 	{ return shape.is(); }
 		__BCinline__ const auto outerShape() const 	{ return parent.outerShape(); }

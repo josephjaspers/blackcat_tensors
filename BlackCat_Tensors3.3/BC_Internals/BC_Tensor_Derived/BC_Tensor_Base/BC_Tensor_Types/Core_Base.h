@@ -116,6 +116,11 @@ public:
 
 };
 
+template<class T, class voider = void> struct isCore { static constexpr bool conditional = false; };
+template<class T> struct isCore<T, std::enable_if_t<std::is_same<decltype(T::DIMS()),int>::value>> { static constexpr bool conditional = std::is_base_of<Tensor_Core_Base<T, T::DIMS()>, T>::value; };
+
+template<class T> static constexpr bool isCore_b = isCore<T>::conditional;
+
 }
 
 

@@ -32,6 +32,10 @@ struct CPU_BLAS  {
 	 * b = K x N
 	 * c = M x N
 	 */
+
+	static void vec_copy(int n, float* x, int incx, float* y, int incy) { return cblas_scopy(n, x, incx, y, incy); }
+	static void vec_copy(int n, double* x, int incx, double* y, int incy) { return cblas_dcopy(n, x, incx, y, incy); }
+
 	static void gemm(bool transA, bool transB, const float* A, const float* B, float* C, int m, int n, int k,
 			const float* scalarA = nullptr, const float* scalarB = nullptr,  int lda = 0, int ldb =0, int ldc =0) {
 

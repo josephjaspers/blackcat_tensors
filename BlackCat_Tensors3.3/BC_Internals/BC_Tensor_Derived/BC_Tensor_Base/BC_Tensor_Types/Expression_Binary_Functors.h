@@ -114,6 +114,16 @@ template<class T> struct rm_const<const T&> { using type = T&; };
 			return l <= r ? 1 : 0;
 		}
 	};
+	struct max {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
+			return l > r ? l : r;
+		}
+	};
+	struct min {
+		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
+			return l < r ? l : r;
+		}
+	};
 }
 
 

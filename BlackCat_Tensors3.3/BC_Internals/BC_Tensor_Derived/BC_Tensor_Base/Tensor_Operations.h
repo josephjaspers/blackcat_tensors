@@ -24,10 +24,11 @@
 #include "BC_Tensor_Types/Expression_Binary_Correlation_Padded_Stack.h"
 #include "BC_Tensor_Types/Expression_Binary_Correlation_Error.h"
 
+#include "Operations_Implementation/AlternateAsterixDenoter.h"
+#include "Operations_Implementation/Expression_Determiner.h"
+#include "Operations_Implementation/Unary_Functions.h"
+#include "Operations_Implementation/conv_toeplitz.h"
 
-#include "Operations_Utility/AlternateAsterixDenoter.h"
-#include "Operations_Utility/Expression_Determiner.h"
-#include "Operations_Utility/Unary_Functions.h"
 #include <type_traits>
 
 namespace BC {
@@ -86,14 +87,19 @@ public:
 		assert_same_size(param.get());
 		return bi_expr<mul>(param.get());
 	}
-	//--------------------------------------assignment operators-----------------------------------------------//
 private:
-	template<class t>
+	//--------------------------------------assignment implementation-----------------------------------------------//
+
+	template<bool BARRIER = true, class t>
 	static void evaluate(const Tensor_Operations<t>& tensor) {
 		static constexpr int iterator_dimension = _functor<t>::ITERATOR();
-		mathlib_type::template dimension<iterator_dimension>::eval(tensor.as_derived().data());
+		if (BARRIER)
+			mathlib_type::template dimension<iterator_dimension>::eval(tensor.as_derived().data());
+		else
+			mathlib_type::template dimension<iterator_dimension>::eval_unsafe(tensor.as_derived().data());
 	}
 public:
+	//--------------------------------------assignment operators-----------------------------------------------//
 
 	template<class pDeriv>
 	derived& operator =(const Tensor_Operations<pDeriv>& param) {
@@ -101,6 +107,7 @@ public:
 		evaluate(bi_expr<assign>(param));
 		return as_derived();
 	}
+
 
 	template<class pDeriv>
 	derived& operator +=(const Tensor_Operations<pDeriv>& param) {
@@ -127,6 +134,42 @@ public:
 		evaluate(bi_expr<mul_assign>(param));
 		return as_derived();
 	}
+
+	//--------------------------------------assignment operators NO BARRIER-----------------------------------------------//
+
+	template<class pDeriv>
+	derived& operator =(const unsafe_AAD<pDeriv>& param) {
+		assert_same_size(param.get());
+		evaluate<false>(bi_expr<assign>(param.get()));
+		return as_derived();
+	}
+
+
+	template<class pDeriv>
+	derived& operator +=(const unsafe_AAD<pDeriv>& param) {
+		assert_same_size(param.get());
+		evaluate<false>(bi_expr<add_assign>(param.get()));
+		return as_derived();
+
+	}
+	template<class pDeriv>
+	derived& operator -=(const unsafe_AAD<pDeriv>& param) {
+		assert_same_size(param.get());
+		evaluate<false>(bi_expr<sub_assign>(param.get()));
+		return as_derived();
+	}
+	template<class pDeriv>
+	derived& operator /=(const unsafe_AAD<pDeriv>& param) {
+		assert_same_size(param.get());
+		evaluate<false>(bi_expr<div_assign>(param.get()));
+		return as_derived();
+	}
+	template<class pDeriv>
+	derived& operator %=(const unsafe_AAD<pDeriv>& param) {
+		assert_same_size(param.get());
+		evaluate<false>(bi_expr<mul_assign>(param.get()));
+		return as_derived();
+	}
 	 //--------------------------------Other Operators------------------------------//
 
 	 auto operator - () const {
@@ -146,6 +189,16 @@ public:
 	auto operator <(const Tensor_Operations<pDeriv>& param) const {
 		assert_same_size(param);
 		return bi_expr<lesser>(param);
+	}
+	template<class pDeriv>
+	auto operator >(const alternate_asterix_denoter<pDeriv>& param) const {
+		assert_same_size(param.get());
+		return bi_expr<max>(param.get());
+	}
+	template<class pDeriv>
+	auto operator <(const alternate_asterix_denoter<pDeriv>& param) const {
+		assert_same_size(param.get());
+		return bi_expr<min>(param.get());
 	}
 	template<class pDeriv>
 	auto operator >=(const Tensor_Operations<pDeriv>& param) const {

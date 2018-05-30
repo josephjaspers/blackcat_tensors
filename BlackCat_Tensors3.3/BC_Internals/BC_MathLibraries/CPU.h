@@ -13,7 +13,7 @@
 #include "CPU_Implementation/CPU_Misc.h"
 #include "CPU_Implementation/CPU_BLAS.h"
 #include "CPU_Implementation/CPU_BLAS.h"
-#include "CPU_Implementation/CPU_Signal_Processing.h"
+#include "CPU_Implementation/Signal_Processing/CPU_Signal_Processing.h"
 
 namespace BC {
 
@@ -31,7 +31,8 @@ class CPU:
 		public CPU_Utility<CPU>,
 		public CPU_Misc<CPU>,
 		public CPU_BLAS<CPU>,
-		public CPU_Signal_Processing<CPU> {
+		public CPU_Signal_Processing<CPU>
+{
 
 
 public:
@@ -62,10 +63,6 @@ public:
 			for (int i = 0; i < to.size(); ++i) {
 				to[i];
 			}
-
-#ifndef BC_NO_OPENMP
-#pragma omp barrier
-#endif
 		}
 	};
 
@@ -79,10 +76,6 @@ public:
 			for (int n = 0; n < to.dimension(1); ++n)
 				for (int m = 0; m < to.dimension(0); ++m)
 					to(m, n);
-
-#ifndef BC_NO_OPENMP
-#pragma omp barrier
-#endif
 		}
 	};
 	//-------------------------------3d eval/copy ---------------------------------//
@@ -97,10 +90,6 @@ public:
 				for (int n = 0; n < to.dimension(1); ++n)
 					for (int m = 0; m < to.dimension(0); ++m)
 						to(m, n, k);
-
-#ifndef BC_NO_OPENMP
-#pragma omp barrier
-#endif
 		}
 	};
 	//-------------------------------4d eval/copy ---------------------------------//4
@@ -115,9 +104,6 @@ public:
 					for (int n = 0; n < to.dimension(1); ++n)
 						for (int m = 0; m < to.dimension(0); ++m)
 							to(m, n, k, p);
-#ifndef BC_NO_OPENMP
-#pragma omp barrier
-#endif
 		}
 	};
 	//-------------------------------5d eval/copy ---------------------------------//
@@ -134,9 +120,6 @@ public:
 						for (int n = 0; n < to.dimension(1); ++n)
 							for (int m = 0; m < to.dimension(0); ++m)
 								to(m, n, k, p, j);
-#ifndef BC_NO_OPENMP
-#pragma omp barrier
-#endif
 		}
 	};
 	//-------------------------------implementation ---------------------------------//
@@ -151,7 +134,16 @@ public:
 		template<class T>
 		static void eval(T to) {
 			run::eval(to);
+#ifndef BC_NO_OPENMP
+#pragma omp barrier
+#endif
+
 		}
+		template<class T>
+		static void eval_unsafe(T to) {
+			run::eval(to);
+		}
+
 	};
 };
 }

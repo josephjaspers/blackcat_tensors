@@ -27,6 +27,10 @@ struct GPU_Utility {
 		return t;
 	}
 
+	static void barrier() {
+		cudaDeviceSynchronize();
+	}
+
 
 	template<class T>
 	static void HostToDevice(T* t, const T* u, int size = 1) {

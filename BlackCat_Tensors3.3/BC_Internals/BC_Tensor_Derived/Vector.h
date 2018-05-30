@@ -27,6 +27,8 @@ public:
 	Vector(		 Vector&& t) : parent_class(std::move(t)) {}
 	Vector(const Vector&  t) : parent_class(t) 	{}
 	explicit Vector(int dim = 0) : parent_class(Shape<1>(dim))  {}
+	explicit Vector(Shape<DIMS()> shape) : parent_class(shape)  {}
+
 	template<class U> 		  Vector(const Vector<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Vector(	   Vector<U, Mathlib>&& t) : parent_class(t) {}
 

@@ -41,7 +41,7 @@ struct Shape {
 	template<class... integers> Shape(int first, integers... ints) : inner_shape() {
 		this->init(first, ints...);
 	}
-	Shape(const int& first) : inner_shape() {
+	Shape(int first) : inner_shape() {
 		this->init(first);
 	}
 
@@ -77,6 +77,13 @@ struct Shape {
 
 		if (dim != LENGTH() - 1) {
 			init<(dim + 1 < LENGTH() ? dim + 1 : LENGTH())>(ints...);
+		}
+	}
+
+	__BCinline__ void calculate_outer_dimensions()  {
+		outer_shape[0] = inner_shape[0];
+		for (int i = 1; i < dimension; ++i) {
+			outer_shape[i] = inner_shape[i] * outer_shape[i - 1];
 		}
 	}
 

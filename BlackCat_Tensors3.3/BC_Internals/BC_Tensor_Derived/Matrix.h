@@ -25,6 +25,8 @@ public:
 	__BCinline__ static constexpr int DIMS() { return 2; }
 
 	explicit Matrix(int rows = 0, int cols = 1) : parent_class(Shape<2>(rows, cols)) {}
+	explicit Matrix(Shape<DIMS()> shape) : parent_class(shape)  {}
+
 	Matrix(const Matrix&  v) : parent_class(v) {}
 	Matrix(		 Matrix&& v) : parent_class(v) {}
 	Matrix(const Matrix&& v) : parent_class(v) {}
@@ -46,6 +48,7 @@ private:
 
 	template<class> friend class Tensor_Base;
 	template<class> friend class Tensor_Operations;
+	template<class,class> friend class Matrix;
 	template<class... params> Matrix(const params&... p) : parent_class(p...) {}
 
 };

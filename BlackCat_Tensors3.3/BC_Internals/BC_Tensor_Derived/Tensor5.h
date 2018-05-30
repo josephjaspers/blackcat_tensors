@@ -28,6 +28,7 @@ public:
 	Tensor5(	  Tensor5&& v) : parent_class(v) {}
 	Tensor5(const Tensor5&& v) : parent_class(v) {}
 	explicit Tensor5(int a = 0,int b = 1,int c = 1, int d = 1, int e = 1) : parent_class(Shape<5>(a,b,c,d,e)) {}
+	explicit Tensor5(Shape<DIMS()> shape) : parent_class(shape)  {}
 
 	template<class U> 		  Tensor5(const Tensor5<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Tensor5(	    Tensor5<U, Mathlib>&& t) : parent_class(t) {}

@@ -76,6 +76,8 @@ public:
 	int size() const { return this->black_cat_array.size(); }
 	int rows() const { return this->black_cat_array.rows(); }
 	int cols() const { return this->black_cat_array.cols(); }
+	int outerDim() const { return this->black_cat_array.outerDim(); }
+
 	int LD_rows() const { return this->black_cat_array.LD_rows(); }
 	int LD_cols() const { return this->black_cat_array.LD_cols(); }
 
@@ -151,34 +153,39 @@ public:
 	void resize(integers... ints) {
 		this->black_cat_array.resetShape(ints...);
 	}
-	template<class... integers>
-	auto self_reshape(integers... ints) {
-		using internal = decltype(std::declval<self>().black_cat_array.reshape(ints...));
-		using type = typename tensor_of<sizeof...(integers)>::template type<internal, mathlib_type>;
-		return type(this->black_cat_array.reshape(ints...));
+	template<class maybe_shape, class... integers>
+	auto self_reshape(maybe_shape shape, integers... ints) {
+		using internal = decltype(std::declval<self>().black_cat_array.reshape(shape, ints...));
+		static constexpr int tensor_dim = is_shape<maybe_shape> ? LENGTH<maybe_shape> : sizeof...(integers) + 1;
+		using type = typename tensor_of<tensor_dim>::template type<internal, mathlib_type>;
+		return type(this->black_cat_array.reshape(shape, ints...));
 
 	}
-	template<class... integers>
-	const auto self_reshape(integers... ints) const {
-		using internal = decltype(std::declval<self>().black_cat_array.reshape(ints...));
-		using type = typename tensor_of<sizeof...(integers)>::template type<internal, mathlib_type>;
-		return type(this->black_cat_array.reshape(ints...));
+	template<class maybe_shape, class... integers>
+	const auto self_reshape(maybe_shape shape, integers... ints) const {
+		using internal = decltype(std::declval<self>().black_cat_array.reshape(shape, ints...));
+		static constexpr int tensor_dim = is_shape<maybe_shape> ? LENGTH<maybe_shape> : sizeof...(integers) + 1;
+		using type = typename tensor_of<tensor_dim>::template type<internal, mathlib_type>;
+		return type(this->black_cat_array.reshape(shape, ints...));
 
 	}
 	template<class... integers>
 	auto self_chunk(integers... ints) {
-		return [&](auto... shape) {
-			using internal = decltype(std::declval<self>().black_cat_array.chunk(ints...)(shape...));
-			using type = typename tensor_of<sizeof...(shape)>::template type<internal, mathlib_type>;
-			return type(this->black_cat_array.chunk(ints...)(shape...));
+		return [&](auto maybe_shape, auto... shape_dimension) {
+			using internal = decltype(std::declval<self>().black_cat_array.chunk(ints...)(maybe_shape, shape_dimension...));
+			static constexpr int tensor_dim = is_shape<decltype(maybe_shape)> ? LENGTH<decltype(maybe_shape)> : sizeof...(shape_dimension) + 1;
+			using type = typename tensor_of<tensor_dim>::template type<internal, mathlib_type>;
+			return type(this->black_cat_array.chunk(ints...)(maybe_shape, shape_dimension...));
 		};
 	}
 	template<class... integers>
 	const auto self_chunk(integers... ints) const {
-		return [&](auto... shape) {
-			using internal = decltype(std::declval<self>().black_cat_array.chunk(ints...)(shape...));
-			using type = typename tensor_of<sizeof...(shape)>::template type<internal, mathlib_type>;
-			return type(this->black_cat_array.chunk(ints...)(shape...));
+		return [&](auto maybe_shape, auto... shape_dimension) {
+			using internal = decltype(std::declval<self>().black_cat_array.chunk(ints...)(maybe_shape, shape_dimension...));
+			static constexpr int tensor_dim = is_shape<decltype(maybe_shape)> ? LENGTH<decltype(maybe_shape)> : sizeof...(shape_dimension) + 1;
+			using type = typename tensor_of<tensor_dim>::template type<internal, mathlib_type>;
+
+			return type(this->black_cat_array.chunk(ints...)(maybe_shape, shape_dimension...));
 		};
 	}
 

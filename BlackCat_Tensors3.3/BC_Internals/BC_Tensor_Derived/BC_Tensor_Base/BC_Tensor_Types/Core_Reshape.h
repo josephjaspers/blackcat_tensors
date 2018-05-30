@@ -42,11 +42,9 @@ struct Tensor_Reshape {
 	scalar* array;
 	Shape<dimension> shape;
 
-	template<class ary, class... integers> __BCinline__
-	implementation(ary array_, PARENT parent, integers... ints) : array(array_), parent(parent), shape(ints...) {
-//		static_assert(sizeof...(integers) == DIMS(), "DIMENSIONALITY OF RESHAPE MUST EQUAL THE PARAMETER INTEGERS FOR RESHAPE");
+	template<class... integers> __BCinline__
+	implementation(const scalar* array_, PARENT parent, integers... ints) : array(const_cast<scalar*>(array_)), parent(parent), shape(ints...) {
 	}
-
 	__BCinline__ const auto innerShape() const 	{ return shape.is(); }
 	__BCinline__ const auto outerShape() const 	{ return shape.os(); }
 

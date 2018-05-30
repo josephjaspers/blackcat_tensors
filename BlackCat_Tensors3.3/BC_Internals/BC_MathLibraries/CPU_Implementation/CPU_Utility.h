@@ -48,6 +48,12 @@ struct CPU_Utility {
 	static void printSparse(const T array_ptr, const is inner_shape, const os outer_shape, int numb_dimensions, int print_gap_length) {
 		BC::printSparse(array_ptr, inner_shape, outer_shape, numb_dimensions, print_gap_length);
 	}
+
+	static void barrier() {
+#ifndef BC_NO_OPENMP
+#pragma omp barrier
+#endif
+	}
 };
 }
 

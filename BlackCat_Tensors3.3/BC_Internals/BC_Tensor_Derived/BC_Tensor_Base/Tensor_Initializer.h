@@ -14,7 +14,6 @@
 #include "BC_Tensor_Types/Core_RowVector.h"
 #include "BC_Tensor_Types/Core_Chunk.h"
 #include "BC_Tensor_Types/Core_Reshape.h"
-#include "BC_Tensor_Types/Core_Vectorizer.h"
 
 namespace BC {
 

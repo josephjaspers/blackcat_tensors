@@ -52,33 +52,14 @@ public:
 
 		//These wonky specializations are essential for cuda to compile
 		//Not sure why
-		template<class T, class F>
-		static void copy(T to, const F from) {
-			run::copy(to,from, to.size());
-			cudaDeviceSynchronize();
-		}
-
-		template<class T, template<class...> class F, class... set>
-		static void copy(T to, F<set...> from) {
-			run::copy(to,from, to.size());
-			cudaDeviceSynchronize();
-		}
-		template<template<class...> class T, template<class...> class F, class... ts, class... fs>
-		static void copy(T<ts...> to, F<fs...> from) {
-			run::copy(to,from, to.size());
-			cudaDeviceSynchronize();
-		}
-
 		template<template<class...> class T, template<class...> class U, class... Ts, class... Us>
 		static void eval(T<U<Us...>, Ts...> to) {
 			run::eval(to);
-			cudaDeviceSynchronize();
+			barrier();
 		}
-
-		template<template<class...> class T, class... ts>
-		static void copy(T<ts...> to) {
+		template<template<class...> class T, template<class...> class U, class... Ts, class... Us>
+		static void eval_unsafe(T<U<Us...>, Ts...> to) {
 			run::eval(to);
-			cudaDeviceSynchronize();
 		}
 	};
 
