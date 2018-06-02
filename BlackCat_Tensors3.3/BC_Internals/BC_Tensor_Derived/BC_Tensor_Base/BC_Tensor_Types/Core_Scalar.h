@@ -32,8 +32,8 @@ struct Tensor_Scalar : Tensor_Core_Base<Tensor_Scalar<PARENT>, 0> {
 	__BCinline__ Tensor_Scalar(const scalar* array, const PARENT& parent_)
 		: array_slice(const_cast<scalar*>(array)), parent(parent_) {}
 
-	__BCinline__ const auto innerShape() const 	{ return parent.innerShape(); }
-	__BCinline__ const auto outerShape() const 	{ return parent.outerShape(); }
+	__BCinline__ const auto inner_shape() const 	{ return parent.inner_shape(); }
+	__BCinline__ const auto outer_shape() const 	{ return parent.outer_shape(); }
 
 	__BCinline__ const scalar* getIterator() const { return array_slice; }
 	__BCinline__	   scalar* getIterator()  	  { return array_slice;  }

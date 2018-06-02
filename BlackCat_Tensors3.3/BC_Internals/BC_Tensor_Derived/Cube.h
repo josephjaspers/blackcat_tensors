@@ -41,10 +41,12 @@ public:
 	template<class U>
 	Cube& operator = (const Cube<U, Mathlib>& t) { return parent_class::operator=(t); }
 
-private:
+//protected:
 
-	template<class> friend class Tensor_Base;
-	template<class> friend class Tensor_Operations;
+//	template<class> friend class Tensor_Base;
+//	template<class> friend class Tensor_Operations;
+//	template<class> friend class Tensor_Shaping;
+
 	template<class... params> Cube(const params&... p) : parent_class(p...) {}
 
 };

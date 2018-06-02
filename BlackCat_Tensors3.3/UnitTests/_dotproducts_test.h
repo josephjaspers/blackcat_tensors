@@ -14,11 +14,11 @@ int dotproducts() {
 	mat c(2, 2);
 	mat abs(10,10);
 
-	abs.printDimensions();
+	abs.print_dimensions();
 
 	std::cout << " param " << std::endl;
 
-	a.printDimensions();
+	a.print_dimensions();
 
 	for (int i = 0; i < 6; ++i)  {
 		a(i) = i + 7;

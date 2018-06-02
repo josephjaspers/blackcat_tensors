@@ -44,11 +44,11 @@ public:
 		return Matrix<unary_expression<typename parent_class::functor_type, transpose>, Mathlib>(this->data());
 	}
 
-private:
+//private:
 
-	template<class> friend class Tensor_Base;
-	template<class> friend class Tensor_Operations;
-	template<class,class> friend class Matrix;
+//	template<class> friend class Tensor_Base;
+//	template<class> friend class Tensor_Operations;
+//	template<class,class> friend class Matrix;
 	template<class... params> Matrix(const params&... p) : parent_class(p...) {}
 
 };

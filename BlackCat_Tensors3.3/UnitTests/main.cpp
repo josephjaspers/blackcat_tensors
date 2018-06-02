@@ -29,27 +29,21 @@ using tesnor5 = BC::Tensor5<float, ml>;
 //#include "_speed_benchmark.h"
 //#include "_d1_xcorr_test.h"
 
-
 int main() {
 
 	//various tests
 //	correlation();
 //	dotproducts();
 //	readwrite();
-//	shaping();
+	shaping();
 
-	cube c(4,3,3);//output
-	mat b(5,5);//img
-	b.randomize(0,1);
-	b.print();
-	c.zero();
+//	cube c(4,3,3);//output
+//	mat b(5,5);//img
+//	b.randomize(0,1);
+//	b.print();
+//	c.zero();
 
-	BC::conv_toeplitz_inner<2>(b, mat(2,2)).print();
 
-//	BC::CPU::mm_corr_toeplitz_2d_inner(
-//			b.rows(), b.cols(),  2,
-//			b.data().getIterator(), b.LD_rows(),
-//			c.data().getIterator(), c.LD_rows());
 	std::cout << " success  main" << std::endl;
 
 }

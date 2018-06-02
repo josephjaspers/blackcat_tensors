@@ -58,8 +58,8 @@ class Tensor_Initializer<_tensor<t, ml>, std::enable_if_t<!std::is_base_of<BC_Ty
 protected:
 	functor_type black_cat_array;
 private:
-	auto& asBase() 			   { return static_cast<	  derived&>(*this); }
-	const auto& asBase() const { return static_cast<const derived&>(*this); }
+	auto& as_derived() 			   { return static_cast<	  derived&>(*this); }
+	const auto& as_derived() const { return static_cast<const derived&>(*this); }
 
 public:
 
@@ -69,8 +69,8 @@ public:
 		tensor.black_cat_array.array 	= nullptr;
 	}
 
-	Tensor_Initializer(const derived& tensor) : black_cat_array(tensor.innerShape()) {
-		Mathlib::copy(asBase().data(), tensor.data(), tensor.size());
+	Tensor_Initializer(const derived& tensor) : black_cat_array(tensor.inner_shape()) {
+		this->as_derived() = tensor;
 	}
 	template<class T>
 	Tensor_Initializer(T dimensions): black_cat_array(dimensions) {}
@@ -79,8 +79,8 @@ public:
 
 	template<class U>
 	Tensor_Initializer(const derived_alt<U>&  tensor)
-		: black_cat_array(tensor.innerShape()) {
-		this->asBase() = tensor;
+		: black_cat_array(tensor.inner_shape()) {
+		this->as_derived() = tensor;
 	}
 
 	~Tensor_Initializer() {

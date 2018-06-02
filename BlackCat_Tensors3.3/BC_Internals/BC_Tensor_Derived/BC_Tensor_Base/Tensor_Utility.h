@@ -37,16 +37,16 @@ private:
 public:
 
 	void print() const {
-		mathlib::print(asDerived().data().getIterator(), asDerived().innerShape(), asDerived().outerShape(), asDerived().dims(), 8);
+		mathlib::print(asDerived().data().getIterator(), asDerived().inner_shape(), asDerived().outer_shape(), asDerived().dims(), 8);
 	}
 	void print(int precision) const {
-		mathlib::print(asDerived().data().getIterator(), asDerived().innerShape(), asDerived().outerShape(), asDerived().dims(), precision);
+		mathlib::print(asDerived().data().getIterator(), asDerived().inner_shape(), asDerived().outer_shape(), asDerived().dims(), precision);
 	}
 	void printSparse() const {
-		mathlib::printSparse(asDerived().data().getIterator(), asDerived().innerShape(), asDerived().outerShape(), asDerived().dims(), 8);
+		mathlib::printSparse(asDerived().data().getIterator(), asDerived().inner_shape(), asDerived().outer_shape(), asDerived().dims(), 8);
 	}
 	void printSparse(int precision) const {
-		mathlib::printSparse(asDerived().data().getIterator(), asDerived().innerShape(), asDerived().outerShape(), asDerived().dims(), precision);
+		mathlib::printSparse(asDerived().data().getIterator(), asDerived().inner_shape(), asDerived().outer_shape(), asDerived().dims(), precision);
 	}
 
 	void write(std::ofstream& os) const {

@@ -24,24 +24,24 @@ struct unary_expression<functor_type, transpose> : expression_base<unary_express
 
 
 	unary_expression(functor_type p) : array(p) {}
-	__BCinline__ const auto innerShape() const { return l_array([=](int i) { return i == 0 ? array.cols() : i == 1 ? array.rows() : 1; }); }
-	__BCinline__ const auto outerShape() const { return array.outerShape(); }
+	__BCinline__ const auto inner_shape() const { return l_array([=](int i) { return i == 0 ? array.cols() : i == 1 ? array.rows() : 1; }); }
+	__BCinline__ const auto outer_shape() const { return array.outer_shape(); }
 
 	__BCinline__ auto operator [](int index) -> decltype(array[index]) {
-		return array[DIMS() == 1 ? index : (int)(index / this->rows()) + (index % this->rows()) * this->LD_rows()];
+		return array[DIMS() == 1 ? index : (int)(index / this->rows()) + (index % this->rows()) * this->ld1()];
 	}
 	__BCinline__ auto operator[](int index) const  -> const decltype(array[index])  {
-		return array[DIMS() == 1 ? index : (int)(index / this->rows()) + (index % this->rows()) * this->LD_rows()];
+		return array[DIMS() == 1 ? index : (int)(index / this->rows()) + (index % this->rows()) * this->ld1()];
 	}
 	__BCinline__ auto operator ()(int m, int n) const -> decltype(array(m,n)) {
 			if (functor_type::ITERATOR() == 0)
-				return array(m * array.LD_rows() + n);
+				return array(m * array.ld1() + n);
 			else
 				return array(m, n);
 	}
 	__BCinline__ auto operator ()(int m, int n) -> decltype(array(m,n)) {
 			if (functor_type::ITERATOR() == 0)
-				return array[m * array.LD_rows() + n];
+				return array[m * array.ld1() + n];
 			else
 				return array(m, n);
 	}

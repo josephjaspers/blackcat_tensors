@@ -30,8 +30,7 @@ namespace BC {
 class CPU:
 		public CPU_Utility<CPU>,
 		public CPU_Misc<CPU>,
-		public CPU_BLAS<CPU>,
-		public CPU_Signal_Processing<CPU>
+		public CPU_BLAS<CPU>
 {
 
 

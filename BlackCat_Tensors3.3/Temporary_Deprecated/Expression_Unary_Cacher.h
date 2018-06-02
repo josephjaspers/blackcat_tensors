@@ -30,8 +30,8 @@ public:
 		 ml::zero_initialize(is_cached, right.size());
 	}
 
-	__BCinline__  const auto innerShape() const 			{ return left.innerShape(); }
-	__BCinline__  const auto outerShape() const 			{ return left.outerShape(); }
+	__BCinline__  const auto inner_shape() const 			{ return left.inner_shape(); }
+	__BCinline__  const auto outer_shape() const 			{ return left.outer_shape(); }
 
 	__BCinline__ const auto& operator [](int index) const {
 		if (is_cached[index])

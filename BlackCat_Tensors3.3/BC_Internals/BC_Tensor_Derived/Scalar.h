@@ -48,10 +48,10 @@ public:
 		return value;
 	}
 
-private:
-
-	template<class U> friend class Tensor_Base;
-	template<class U> friend class Tensor_Operations;
+//private:
+//
+//	template<class U> friend class Tensor_Base;
+//	template<class U> friend class Tensor_Operations;
 	template<class... params> Scalar(const params&... p) : parent_class( p...) {}
 
 };

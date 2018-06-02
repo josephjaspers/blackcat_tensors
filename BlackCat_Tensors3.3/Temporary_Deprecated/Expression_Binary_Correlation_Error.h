@@ -34,8 +34,8 @@ struct binary_expression<lv, rv, _x_corr<corr_dimension,error<inner>>> : express
 
 	binary_expression(lv l_, rv r_) :left(l_), right(r_) {}
 
-	__BCinline__ const auto innerShape() const { return l_array([&](int i) {return right.dimension(i) + left.dimension(i) - 1;} ); }
-	__BCinline__ const auto outerShape() const { return l_array([&](int i) {return i == 0 ? this->rows() : this->dimension(i) * this->dimension(i - 1);} );}
+	__BCinline__ const auto inner_shape() const { return l_array([&](int i) {return right.dimension(i) + left.dimension(i) - 1;} ); }
+	__BCinline__ const auto outer_shape() const { return l_array([&](int i) {return i == 0 ? this->rows() : this->dimension(i) * this->dimension(i - 1);} );}
 
 	template<int x> using conditional_int = std::conditional_t<x == lv::DIMS(), int, DISABLED>;
 

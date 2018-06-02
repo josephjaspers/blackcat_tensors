@@ -40,10 +40,10 @@ public:
 	template<class U>
 	Tensor4& operator = (const Tensor4<U, Mathlib>& t) { return parent_class::operator=(t); }
 
-private:
-
-	template<class U> friend class Tensor_Base;
-	template<class U> friend class Tensor_Operations;
+//private:
+//
+//	template<class U> friend class Tensor_Base;
+//	template<class U> friend class Tensor_Operations;
 	template<class... params> Tensor4(const params&... p) : parent_class(p...) {}
 
 

@@ -35,23 +35,23 @@ struct Tensor_Row : Tensor_Core_Base<Tensor_Row<PARENT>, 1>  {
 	array array_slice;
 
 	__BCinline__ Tensor_Row(array array, PARENT parent_) : array_slice(array), parent(parent_) {}
-	__BCinline__ int increment() const { return parent.LD_rows(); }
+	__BCinline__ int increment() const { return parent.ld1(); }
 	__BCinline__ int dims() const { return 1; }
 	__BCinline__ int size() const { return parent.cols(); }
 	__BCinline__ int rows() const { return parent.cols(); }
 	__BCinline__ int cols() const { return 1; }
 	__BCinline__ int dimension(int i) const { return i == 0 ? rows() : 1; }
-	__BCinline__ int LD_rows() const { return parent.LD_rows(); }
-	__BCinline__ int LD_cols() const { return 0; }
-	__BCinline__ int LDdimension(int i) const { return i == 0 ? LD_rows() : 0; }
-	__BCinline__ const auto innerShape() const 			{ return parent.innerShape(); }
-	__BCinline__ const auto outerShape() const 			{ return parent.outerShape(); }
+	__BCinline__ int ld1() const { return parent.ld1(); }
+	__BCinline__ int ld2() const { return 0; }
+	__BCinline__ int LDdimension(int i) const { return i == 0 ? ld1() : 0; }
+	__BCinline__ const auto inner_shape() const 			{ return parent.inner_shape(); }
+	__BCinline__ const auto outer_shape() const 			{ return parent.outer_shape(); }
 
 	__BCinline__ const auto& operator [] (int i) const { return array_slice[i * increment()]; }
 	__BCinline__ 	   auto& operator [] (int i)  	   { return array_slice[i * increment()]; }
 
-	void printDimensions() 		const { parent.printDimensions(); }
-	void printLDDimensions()	const { parent.printDimensions(); }
+	void print_dimensions() 		const { parent.print_dimensions(); }
+	void print_outer_dimensions()	const { parent.print_dimensions(); }
 
 	__BCinline__ const auto slice(int i) const { return Tensor_Scalar<self>(&array_slice[i * increment()], *this); }
 	__BCinline__	   auto slice(int i) 	   { return Tensor_Scalar<self>(&array_slice[i * increment()], *this); }

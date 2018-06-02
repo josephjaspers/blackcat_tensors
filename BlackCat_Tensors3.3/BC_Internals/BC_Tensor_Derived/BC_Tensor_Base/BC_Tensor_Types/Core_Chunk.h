@@ -34,8 +34,8 @@ struct Tensor_Chunk  {
 		implementation(const scalar* array_, PARENT parent, integers... ints) : array(const_cast<scalar*>(array_)), parent(parent), shape(ints...) {
 		}
 		__BCinline__ const auto size()		 const  { return shape.size(); }
-		__BCinline__ const auto innerShape() const 	{ return shape.is(); }
-		__BCinline__ const auto outerShape() const 	{ return parent.outerShape(); }
+		__BCinline__ const auto inner_shape() const 	{ return shape.is(); }
+		__BCinline__ const auto outer_shape() const 	{ return parent.outer_shape(); }
 
 		__BCinline__ const auto getIterator() const { return array; }
 		__BCinline__	   auto getIterator()   	{ return array; }

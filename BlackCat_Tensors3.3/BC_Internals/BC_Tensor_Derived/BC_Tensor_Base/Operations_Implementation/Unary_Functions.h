@@ -12,33 +12,6 @@
 //Reshape and Chunk are curried functions
 //This file defines a set of unary_functions
 namespace BC {
-
-template<class> class Tensor_Base;
-
-//Returns the tensor reshaped, does not modify the original tensor-dimensions
-template<class T> __BC_host_inline__
-auto reshape(const Tensor_Base<T>& tensor) {
-	return [&](auto... integers) { return tensor.self_reshape(integers...); };
-}
-template<class T> __BC_host_inline__
-auto reshape(Tensor_Base<T>& tensor) {
-	return [&](auto... integers) { return tensor.self_reshape(integers...); };
-}
-//Returns vc da 'chunk' of the tensor, the first set of parameters being the index, the second the shpe
-template<class T> __BC_host_inline__
-auto chunk(const Tensor_Base<T>& tensor) {
-	return [&](auto... location_indices) {
-		return [&] (auto... chunk_dimension) {
-			return tensor.self_chunk(location_indices...)(chunk_dimension...); };
-		};
-}
-template<class T> __BC_host_inline__
-auto chunk(Tensor_Base<T>& tensor) {
-	return [&](auto... location_indices) {
-		return [&] (auto... chunk_dimension) {
-			return tensor.self_chunk(location_indices...)(chunk_dimension...); };
-		};
-}
 //alternate names from transposition
 template<class deriv>
 static auto trans(Tensor_Operations<deriv>& tensor) {

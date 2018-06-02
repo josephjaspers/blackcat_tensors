@@ -31,8 +31,8 @@ struct Core : Tensor_Core_Base<Core<T>, _dimension_of<T>>{
 	Core() = default;
 
 
-	__BCinline__ const auto innerShape() const { return shape.is(); }
-	__BCinline__ const auto outerShape() const { return shape.os(); }
+	__BCinline__ const auto inner_shape() const { return shape.is(); }
+	__BCinline__ const auto outer_shape() const { return shape.os(); }
 	__BCinline__ const scalar_type* getIterator() const { return array; }
 	__BCinline__	   scalar_type* getIterator()  	    { return array; }
 

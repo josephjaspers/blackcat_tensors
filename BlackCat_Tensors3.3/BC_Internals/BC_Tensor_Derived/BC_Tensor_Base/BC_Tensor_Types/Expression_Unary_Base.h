@@ -22,8 +22,8 @@ public:
 
 	__BCinline__  unary_expression(value v, operation op = operation()) : array(v), oper(op) {}
 
-	__BCinline__  const auto innerShape() const 			{ return array.innerShape(); }
-	__BCinline__  const auto outerShape() const 			{ return array.outerShape(); }
+	__BCinline__  const auto inner_shape() const 			{ return array.inner_shape(); }
+	__BCinline__  const auto outer_shape() const 			{ return array.outer_shape(); }
 
 	__BCinline__ auto operator [](int index) const -> decltype(oper(array[index])) {
 		return oper(array[index]);

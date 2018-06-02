@@ -28,8 +28,8 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	template<class... integers> __BCinline__  auto  operator ()(integers... ints) const { return oper(left(ints...), right(ints...)); }
 
 	__BCinline__ const auto& shape() const { return dominant_type<lv, rv>::shape(left, right); }
-	__BCinline__ const auto  innerShape() const { return shape().innerShape(); }
-	__BCinline__ const auto  outerShape() const { return shape().outerShape(); }
+	__BCinline__ const auto  inner_shape() const { return shape().inner_shape(); }
+	__BCinline__ const auto  outer_shape() const { return shape().outer_shape(); }
 
 
 	__BCinline__ const auto slice(int i) const {

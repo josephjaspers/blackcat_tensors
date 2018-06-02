@@ -17,7 +17,7 @@ struct unary_expression_maxpooling : expression_base<unary_expression_maxpooling
 	__BCinline__ static constexpr int ITERATOR() { return ary::ITERATOR(); }
 
 	stack_array<int, DIMS()> positions;
-	stack_array<int, DIMS()> os = init_outerShape();
+	stack_array<int, DIMS()> os = init_outer_shape();
 	using T = _scalar<ary>;
 	ary array;
 
@@ -83,17 +83,17 @@ struct unary_expression_maxpooling : expression_base<unary_expression_maxpooling
 	__BCinline__ int rows() const { return array.rows() - search_space + 1; };
 	__BCinline__ int cols() const { return array.rows() - search_space + 1; };
 
-	__BCinline__ int LD_rows() const { return rows(); }
-	__BCinline__ int LD_cols() const { return size(); }
+	__BCinline__ int ld1() const { return rows(); }
+	__BCinline__ int ld2() const { return size(); }
 	__BCinline__ int dimension(int i) const { return (array.dimension(i) - search_space + 1); }
 	__BCinline__ int LD_dimension(int i) const { return os[i]; }
 
 
-	__BCinline__ const auto innerShape() const {
+	__BCinline__ const auto inner_shape() const {
 		return ref_array(*this);
 	}
 
-	__BCinline__ const auto init_outerShape() const {
+	__BCinline__ const auto init_outer_shape() const {
 		stack_array<int, DIMS()> os;
 		os[0] = rows();
 		for (int i = 1; i < DIMS(); ++i) {
@@ -102,7 +102,7 @@ struct unary_expression_maxpooling : expression_base<unary_expression_maxpooling
 		return os;
 	}
 
-	void printDimensions()const  {
+	void print_dimensions()const  {
 		for (int i = 0; i < DIMS(); ++i) {
 			std::cout << "[" << dimension(i) << "]";
 		}

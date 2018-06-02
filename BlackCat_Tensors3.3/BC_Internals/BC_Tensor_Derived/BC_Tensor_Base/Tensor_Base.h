@@ -12,6 +12,7 @@
 #include "Tensor_Operations.h"
 #include "Tensor_Utility.h"
 #include "Tensor_Initializer.h"
+#include "Tensor_Shaping.h"
 
 namespace BC {
 
@@ -20,7 +21,8 @@ template<class derived>
 class Tensor_Base :
 		public Tensor_Operations<derived>,
 		public Tensor_Utility<derived>,
-		public Tensor_Initializer<derived>
+		public Tensor_Initializer<derived>,
+		public Tensor_Shaping<derived>
 {
 
 protected:
@@ -76,17 +78,17 @@ public:
 	int size() const { return this->black_cat_array.size(); }
 	int rows() const { return this->black_cat_array.rows(); }
 	int cols() const { return this->black_cat_array.cols(); }
-	int outerDim() const { return this->black_cat_array.outerDim(); }
+	int outer_dimension() const { return this->black_cat_array.outer_dimension(); }
 
-	int LD_rows() const { return this->black_cat_array.LD_rows(); }
-	int LD_cols() const { return this->black_cat_array.LD_cols(); }
+	int ld1() const { return this->black_cat_array.ld1(); }
+	int ld2() const { return this->black_cat_array.ld2(); }
 
 	int dimension(int i)		const { return this->black_cat_array.dimension(i); }
-	void printDimensions() 		const { this->black_cat_array.printDimensions();   }
-	void printLDDimensions()	const { this->black_cat_array.printLDDimensions(); }
+	void print_dimensions() 		const { this->black_cat_array.print_dimensions();   }
+	void print_outer_dimensions()	const { this->black_cat_array.print_outer_dimensions(); }
 
-	const auto innerShape() const 			{ return this->black_cat_array.innerShape(); }
-	const auto outerShape() const 			{ return this->black_cat_array.outerShape(); }
+	const auto inner_shape() const 			{ return this->black_cat_array.inner_shape(); }
+	const auto outer_shape() const 			{ return this->black_cat_array.outer_shape(); }
 
 	 const functor_type& data() const { return this->black_cat_array; }
 	 	   functor_type& data()		  { return this->black_cat_array; }
@@ -153,42 +155,6 @@ public:
 	void resize(integers... ints) {
 		this->black_cat_array.resetShape(ints...);
 	}
-	template<class maybe_shape, class... integers>
-	auto self_reshape(maybe_shape shape, integers... ints) {
-		using internal = decltype(std::declval<self>().black_cat_array.reshape(shape, ints...));
-		static constexpr int tensor_dim = is_shape<maybe_shape> ? LENGTH<maybe_shape> : sizeof...(integers) + 1;
-		using type = typename tensor_of<tensor_dim>::template type<internal, mathlib_type>;
-		return type(this->black_cat_array.reshape(shape, ints...));
-
-	}
-	template<class maybe_shape, class... integers>
-	const auto self_reshape(maybe_shape shape, integers... ints) const {
-		using internal = decltype(std::declval<self>().black_cat_array.reshape(shape, ints...));
-		static constexpr int tensor_dim = is_shape<maybe_shape> ? LENGTH<maybe_shape> : sizeof...(integers) + 1;
-		using type = typename tensor_of<tensor_dim>::template type<internal, mathlib_type>;
-		return type(this->black_cat_array.reshape(shape, ints...));
-
-	}
-	template<class... integers>
-	auto self_chunk(integers... ints) {
-		return [&](auto maybe_shape, auto... shape_dimension) {
-			using internal = decltype(std::declval<self>().black_cat_array.chunk(ints...)(maybe_shape, shape_dimension...));
-			static constexpr int tensor_dim = is_shape<decltype(maybe_shape)> ? LENGTH<decltype(maybe_shape)> : sizeof...(shape_dimension) + 1;
-			using type = typename tensor_of<tensor_dim>::template type<internal, mathlib_type>;
-			return type(this->black_cat_array.chunk(ints...)(maybe_shape, shape_dimension...));
-		};
-	}
-	template<class... integers>
-	const auto self_chunk(integers... ints) const {
-		return [&](auto maybe_shape, auto... shape_dimension) {
-			using internal = decltype(std::declval<self>().black_cat_array.chunk(ints...)(maybe_shape, shape_dimension...));
-			static constexpr int tensor_dim = is_shape<decltype(maybe_shape)> ? LENGTH<decltype(maybe_shape)> : sizeof...(shape_dimension) + 1;
-			using type = typename tensor_of<tensor_dim>::template type<internal, mathlib_type>;
-
-			return type(this->black_cat_array.chunk(ints...)(maybe_shape, shape_dimension...));
-		};
-	}
-
 };
 
 }

@@ -39,8 +39,8 @@ public:
 
 	__BCinline__ static constexpr int last() { return derived::DIMS() -1; }
 
-	__BCinline__ const auto IS() const { return base().innerShape(); }
-	__BCinline__ const auto OS() const { return base().outerShape(); }
+	__BCinline__ const auto IS() const { return base().inner_shape(); }
+	__BCinline__ const auto OS() const { return base().outer_shape(); }
 
 	template<class... integers>
 	__BCinline__ const auto operator()(integers... ints) const {
@@ -59,24 +59,24 @@ public:
 	__BCinline__ int rows() const { return DIMS() > 0 ? IS()[0] : 1; }
 	__BCinline__ int cols() const { return DIMS() > 1 ? IS()[1] : 1; }
 	__BCinline__ int dimension(int i) const { return DIMS() > i ? IS()[i] : 1; }
-	__BCinline__ int outerDim() const { return dimension(DIMS() - 1); }
+	__BCinline__ int outer_dimension() const { return dimension(DIMS() - 1); }
 	__BCinline__ auto iterator_limit(int i) { return this->dimension(i); }
 	__BCinline__ auto iterator_increment(int i) { return 1; }
 
-	__BCinline__ int LD_rows() const { return DIMS() > 0 ? OS()[0] : 1; }
-	__BCinline__ int LD_cols() const { return DIMS() > 1 ? OS()[1] : 1; }
+	__BCinline__ int ld1() const { return DIMS() > 0 ? OS()[0] : 1; }
+	__BCinline__ int ld2() const { return DIMS() > 1 ? OS()[1] : 1; }
 	__BCinline__ int LD_dimension(int i) const { return DIMS() > i + 1 ? OS()[i] : 1; }
 
-	__BCinline__ const auto innerShape() const 	{ return shadowFailure("inner_shape not shadowed"); }
-	__BCinline__ const auto outerShape() const 	{ return shadowFailure("outer_shape not shadowed"); }
+	__BCinline__ const auto inner_shape() const 	{ return shadowFailure("inner_shape not shadowed"); }
+	__BCinline__ const auto outer_shape() const 	{ return shadowFailure("outer_shape not shadowed"); }
 
-	void printDimensions() const {
+	void print_dimensions() const {
 		for (int i = 0; i < DIMS(); ++i) {
 			std::cout << "[" << IS()[i] << "]";
 		}
 		std::cout << std::endl;
 	}
-	void printLDDimensions() const {
+	void print_outer_dimensions() const {
 		for (int i = 0; i < DIMS(); ++i) {
 			std::cout << "[" << OS()[i] << "]";
 		}

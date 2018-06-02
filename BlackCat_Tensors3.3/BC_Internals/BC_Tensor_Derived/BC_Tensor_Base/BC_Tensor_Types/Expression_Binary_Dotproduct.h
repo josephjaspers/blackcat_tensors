@@ -54,8 +54,8 @@ struct binary_expression<lv, rv, dotproduct<Mathlib>> : expression_base<binary_e
 	__BCinline__ 	   auto& operator ()(int m_, int n_)	   	{ return array_ptr[m_ + n_ * this->cols()]; }
 
 
-	__BCinline__ const auto innerShape() const { return is; }
-	__BCinline__ const auto outerShape() const { return os; }
+	__BCinline__ const auto inner_shape() const { return is; }
+	__BCinline__ const auto outer_shape() const { return os; }
 
 	__BCinline__ int M() const { return left.rows();  }
 	__BCinline__ int N() const { return right.cols(); }
@@ -99,15 +99,15 @@ public:
 			scalar_type* tmp;
 			Mathlib::initialize(tmp, 1);
 			Mathlib::scalarMul(tmp, alpha, alpha2);
-			Mathlib::gemm(transA, transB, A, B, array_ptr, M(), N(), K(), tmp, nullptr, left.LD_rows(), right.LD_rows(), this->rows());
+			Mathlib::gemm(transA, transB, A, B, array_ptr, M(), N(), K(), tmp, nullptr, left.ld1(), right.ld1(), this->rows());
 			Mathlib::destroy(tmp);
 
 		} else if (rv_scalar)
-			 Mathlib::gemm(transA, transB, A, B, array_ptr, M(), N(), K(), alpha2, nullptr, left.LD_rows(), right.LD_rows(), this->rows());
+			 Mathlib::gemm(transA, transB, A, B, array_ptr, M(), N(), K(), alpha2, nullptr, left.ld1(), right.ld1(), this->rows());
 		 else if (lv_scalar)
-			 Mathlib::gemm(transA, transB, A, B, array_ptr, M(), N(), K(), alpha, nullptr, left.LD_rows(), right.LD_rows(), this->rows());
+			 Mathlib::gemm(transA, transB, A, B, array_ptr, M(), N(), K(), alpha, nullptr, left.ld1(), right.ld1(), this->rows());
 		 else
-			 Mathlib::gemm(transA, transB, A, B, array_ptr, M(), N(), K(), nullptr, nullptr, left.LD_rows(), right.LD_rows(), this->rows());
+			 Mathlib::gemm(transA, transB, A, B, array_ptr, M(), N(), K(), nullptr, nullptr, left.ld1(), right.ld1(), this->rows());
 
 		if (lv_eval)
 			Mathlib::destroy(A);

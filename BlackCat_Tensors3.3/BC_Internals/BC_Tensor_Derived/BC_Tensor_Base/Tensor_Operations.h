@@ -16,18 +16,12 @@
 #include "BC_Tensor_Types/Expression_Unary_Functors.h"
 
 #include "BC_Tensor_Types/Expression_Unary_Transposition.h"
-#include "BC_Tensor_Types/Expression_Unary_MaxPooling.h"
-#include "BC_Tensor_Types/Expression_Unary_Cacher.h"
-#include "BC_Tensor_Types/Expression_Binary_Correlation.h"
-#include "BC_Tensor_Types/Expression_Binary_Correlation_Padded.h"
-#include "BC_Tensor_Types/Expression_Binary_Correlation_Stack.h"
-#include "BC_Tensor_Types/Expression_Binary_Correlation_Padded_Stack.h"
-#include "BC_Tensor_Types/Expression_Binary_Correlation_Error.h"
+
 
 #include "Operations_Implementation/AlternateAsterixDenoter.h"
 #include "Operations_Implementation/Expression_Determiner.h"
 #include "Operations_Implementation/Unary_Functions.h"
-#include "Operations_Implementation/conv_toeplitz.h"
+#include "Operations_Implementation/conv_toeplitz_inner.h"
 
 #include <type_traits>
 
@@ -212,11 +206,6 @@ public:
 	}
 
 	//-------------------------------------------DELAYED ASSIGNMENT OPERATORS---------------------------------------------//
-	template<class pDeriv>
-	auto operator =(const alternate_asterix_denoter<pDeriv>& param) {
-		assert_same_size(param.get());
-		return bi_expr<BC::cache<mathlib_type>>(param.get());
-	}
 
 	template<class pDeriv>
 	auto operator +=(const alternate_asterix_denoter<pDeriv>& param) const {
@@ -273,34 +262,6 @@ public:
 	 const alternate_asterix_denoter<derived> operator * () const {
 		return alternate_asterix_denoter<derived>(*this);
 	}
-	 //--------------------------------More_Complex Operations------------------------------//
-	template<class deriv>
-	auto corr(const Tensor_Operations<deriv>& rv) const {
-		assert_same_size(rv);
-		return typename tensor_of<0>::template type<
-				binary_expression<functor_type, _functor<deriv>,
-						_x_corr<1, inner>>, mathlib_type>(as_derived().data(),
-				rv.as_derived().data());
-	}
-
-	template<int mv, class type = inner, class deriv>
-	auto x_corr(const Tensor_Operations<deriv>& rv) const {
-
-		return typename tensor_of<mv>::template type<
-				binary_expression<functor_type, _functor<deriv>,
-						_x_corr<mv, type>>, mathlib_type>(as_derived().data(),
-				rv.as_derived().data());
-	}
-	template<int mv, class type = inner, class deriv>
-	auto x_corr_stack(const Tensor_Operations<deriv>& rv) const {
-
-		return typename tensor_of<mv + 1>::template type<
-				binary_expression<functor_type, _functor<deriv>,
-						_x_corr_stack<mv, type>>, mathlib_type>(
-				as_derived().data(), rv.as_derived().data());
-	}
-
-
 
 	 //--------------------------------ASSERTIONS------------------------------//
 
@@ -313,8 +274,8 @@ public:
 		if (derived::DIMS() != 0 && deriv::DIMS() != 0)
 			if (this->as_derived().DIMS() != 0 && tensor.as_derived().DIMS() != 0)
 				if ((as_derived().size() != tensor.as_derived().size())){
-					std::cout << "this->DIMS() = "<< derived::DIMS() << " this->size() = " << as_derived().size() << " this_dims "; as_derived().printDimensions();
-					std::cout << "this->DIMS() = "<< deriv::DIMS()   << " param.size() = " << tensor.as_derived().size() << " param_dims "; tensor.as_derived().printDimensions();
+					std::cout << "this->DIMS() = "<< derived::DIMS() << " this->size() = " << as_derived().size() << " this_dims "; as_derived().print_dimensions();
+					std::cout << "this->DIMS() = "<< deriv::DIMS()   << " param.size() = " << tensor.as_derived().size() << " param_dims "; tensor.as_derived().print_dimensions();
 					std::cout << "\n";
 					throw std::invalid_argument("Tensor by Tensor operation - size mismatch - ");
 				}

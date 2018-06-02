@@ -42,10 +42,10 @@ public:
 		return Vector<unary_expression<typename parent_class::functor_type, transpose>, Mathlib>(this->data());
 	}
 
-private:
-	template<class,class> friend class Vector;
-	template<class> friend class Tensor_Base;
-	template<class> friend class Tensor_Operations;
+//private:
+//	template<class,class> friend class Vector;
+//	template<class> friend class Tensor_Base;
+//	template<class> friend class Tensor_Operations;
 	template<class... params> Vector(const params&... p) : parent_class(p...) {}
 };
 }
