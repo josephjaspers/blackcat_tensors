@@ -88,21 +88,6 @@ struct Shape {
 	}
 
 };
-
-
-template<class... Ts>
-struct constexpr_length {
-	static constexpr int value =sizeof...(Ts);
-};
-template<int x>
-struct constexpr_length<Shape<x>> {
-	static constexpr int value = x;
-};
-
-template<class... Ts>
-static constexpr int LENGTH = constexpr_length<Ts...>::value;
-
-
 }
 
 

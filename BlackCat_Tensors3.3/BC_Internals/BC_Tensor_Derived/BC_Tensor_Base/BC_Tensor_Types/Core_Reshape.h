@@ -42,9 +42,8 @@ struct Tensor_Reshape {
 	scalar* array;
 	Shape<dimension> shape;
 
-	template<class... integers> __BCinline__
-	implementation(const scalar* array_, PARENT parent, integers... ints) : array(const_cast<scalar*>(array_)), parent(parent), shape(ints...) {
-	}
+	template<class... integers>
+	implementation(const scalar* array_, PARENT parent, integers... ints) : array(const_cast<scalar*>(array_)), parent(parent), shape(ints...) {}
 	__BCinline__ const auto inner_shape() const 	{ return shape.is(); }
 	__BCinline__ const auto outer_shape() const 	{ return shape.os(); }
 

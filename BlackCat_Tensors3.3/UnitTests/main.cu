@@ -6,8 +6,8 @@ using BC::Matrix;
 using BC::Scalar;
 using BC::Cube;
 
-using ml = BC::CPU;
-//using ml = BC::GPU;
+//using ml = BC::CPU;
+using ml = BC::GPU;
 
 using vec = Vector<float, ml>;
 using mat = Matrix<float, ml>;
@@ -19,7 +19,6 @@ using tesnor5 = BC::Tensor5<float, ml>;
 
 //std::vector<unsigned int> data_type;
 //using ary = std::vector<unsigned int>;
-//ary
 
 #include "_correlation_test.h"
 #include "_dotproducts_test.h"
@@ -33,8 +32,8 @@ int main() {
 
 	//various tests
 //	correlation();
-//	dotproducts();
-//	readwrite();
+	dotproducts();
+	readwrite();
 	shaping();
 
 //	cube c(4,3,3);//output

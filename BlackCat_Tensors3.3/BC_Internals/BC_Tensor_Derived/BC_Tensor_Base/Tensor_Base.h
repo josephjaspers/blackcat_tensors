@@ -85,7 +85,7 @@ public:
 
 	int dimension(int i)		const { return this->black_cat_array.dimension(i); }
 	void print_dimensions() 		const { this->black_cat_array.print_dimensions();   }
-	void print_outer_dimensions()	const { this->black_cat_array.print_outer_dimensions(); }
+	void print_leading_dimensions()	const { this->black_cat_array.print_leading_dimensions(); }
 
 	const auto inner_shape() const 			{ return this->black_cat_array.inner_shape(); }
 	const auto outer_shape() const 			{ return this->black_cat_array.outer_shape(); }

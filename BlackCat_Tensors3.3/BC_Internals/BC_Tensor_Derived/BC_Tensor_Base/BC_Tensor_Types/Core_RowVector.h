@@ -51,7 +51,7 @@ struct Tensor_Row : Tensor_Core_Base<Tensor_Row<PARENT>, 1>  {
 	__BCinline__ 	   auto& operator [] (int i)  	   { return array_slice[i * increment()]; }
 
 	void print_dimensions() 		const { parent.print_dimensions(); }
-	void print_outer_dimensions()	const { parent.print_dimensions(); }
+	void print_leading_dimensions()	const { parent.print_dimensions(); }
 
 	__BCinline__ const auto slice(int i) const { return Tensor_Scalar<self>(&array_slice[i * increment()], *this); }
 	__BCinline__	   auto slice(int i) 	   { return Tensor_Scalar<self>(&array_slice[i * increment()], *this); }

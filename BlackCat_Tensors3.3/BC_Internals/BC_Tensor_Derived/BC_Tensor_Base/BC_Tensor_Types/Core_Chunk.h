@@ -15,11 +15,12 @@ namespace BC {
 
 template<int dimension>
 struct Tensor_Chunk  {
+
 	template<class PARENT>
 	struct implementation : Tensor_Core_Base<implementation<PARENT>,dimension> {
 
 		using scalar = _scalar<PARENT>;
-		static_assert(dimension <= PARENT::DIMS(), "TENSOR-CHUNK'S DIMENSIONS MUST BE LESS OR EQUAL TO PARENT'S DIMENSIONS");
+//		static_assert(dimension <= PARENT::DIMS(), "TENSOR-CHUNK'S DIMENSIONS MUST BE LESS OR EQUAL TO PARENT'S DIMENSIONS");
 
 		__BCinline__ static constexpr int DIMS() { return dimension; };
 		__BCinline__ static constexpr int ITERATOR() { return dimension; }
@@ -30,7 +31,7 @@ struct Tensor_Chunk  {
 		scalar* array;
 		Shape<DIMS()> shape;
 
-		template<class... integers> __BCinline__
+		template<class... integers>
 		implementation(const scalar* array_, PARENT parent, integers... ints) : array(const_cast<scalar*>(array_)), parent(parent), shape(ints...) {
 		}
 		__BCinline__ const auto size()		 const  { return shape.size(); }

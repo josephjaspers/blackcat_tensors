@@ -76,7 +76,7 @@ public:
 		}
 		std::cout << std::endl;
 	}
-	void print_outer_dimensions() const {
+	void print_leading_dimensions() const {
 		for (int i = 0; i < DIMS(); ++i) {
 			std::cout << "[" << OS()[i] << "]";
 		}

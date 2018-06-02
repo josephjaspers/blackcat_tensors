@@ -33,14 +33,16 @@ int shaping() {
 
 	std::cout << " chunk at (2,1, 0) dims (2,3) (utilizing shape object)" << std::endl;
 
-	std::cout << m2.data().chunk(2,1,0)(1,1,1)[0] << std::endl;
+//	std::cout << m2.data().chunk(2,1,0)(1,1,1)[0] << std::endl;
 
-	for (int i = 0; i < 5; ++i)
-		std::cout << chunk(m2)(2,1,0)(5)[i] << std::endl;
-// FIXME DOES NOT WORK
+		chunk(m2)(2,1,0)(2,3).print_leading_dimensions();//.data()[i] << std::endl;
+		chunk(m2)(2,1,0)(2,3).print();//.data()[i] << std::endl;
+
+
+		// FIXME DOES NOT WORK
 
 //	std::cout << "reshape (2,3) chunk to (3,2)" << std::endl;
-	chunk(m2)(2,1,0)(2,3).print();
+//	chunk(m2)(2,1,0)(2,3);//.print();
 //	reshape(ch)(3,2);
 //	m2.print();
 

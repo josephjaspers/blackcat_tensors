@@ -44,10 +44,12 @@ struct Tensor_Core_Base : expression_base<Tensor_Core_Base<derived,DIMENSION>> {
 	using scalar_type = std::conditional_t<DIMS() == 0, self, _Tensor_Scalar<self>>;
 
 private:
+
 	__BCinline__ const derived& asDerived() const { return static_cast<const derived&>(*this); }
 	__BCinline__ 	   derived& asDerived() 	  { return static_cast<	     derived&>(*this); }
 
 public:
+
 	operator 	   auto()       { return asDerived().getIterator(); }
 	operator const auto() const { return asDerived().getIterator(); }
 
@@ -71,40 +73,34 @@ public:
 
 	//------------------------------------------Curried Reshapers ---------------------------------------//
 	//currently cuda will not compile these
-	template<class ... integers> __BCinline__ auto chunk(integers ... location_indices) {
-		return [&](auto maybe_shape,  auto... shape_dimension) {
-			auto* array = &(this->asDerived().getIterator()[this->dims_to_index_reverse(location_indices...)]);
-			static constexpr int tensor_dim = is_shape<decltype(maybe_shape)> ? LENGTH<decltype(maybe_shape)> : sizeof...(shape_dimension) + 1;
-			return typename _Tensor_Chunk<tensor_dim>::template implementation<derived>(array, this->asDerived(), maybe_shape, shape_dimension...);
-		};
+	template<class ... integers>  auto chunk(int location, integers ... shape_dimensions) {
+		static constexpr int tensor_dim =  sizeof...(shape_dimensions);
+		return typename _Tensor_Chunk<tensor_dim>::template implementation<derived>(&asDerived().getIterator()[location], this->asDerived(), shape_dimensions...);
 	}
-	template<class ... integers> __BCinline__ const auto chunk(integers ... location_indices) const {
-		return [&](auto maybe_shape, auto... shape_dimension) {
-			auto* array = &(this->asDerived().getIterator()[this->dims_to_index_reverse(location_indices...)]);
-			static constexpr int tensor_dim = is_shape<decltype(maybe_shape)> ? LENGTH<decltype(maybe_shape)> : sizeof...(shape_dimension) + 1;
-			return typename _Tensor_Chunk<tensor_dim>::template implementation<derived>(array, this->asDerived(), maybe_shape, shape_dimension...);
-		};
+	template<class ... integers>  const auto chunk(int location, integers ... shape_dimensions) const {
+		static constexpr int tensor_dim =  sizeof...(shape_dimensions);
+		return typename _Tensor_Chunk<tensor_dim>::template implementation<derived>(&asDerived().getIterator()[location], this->asDerived(), shape_dimensions...);
 	}
 
 
 
-	template<class ... integers> __BCinline__
+	template<class ... integers>
 	auto reshape(integers... ints) {
 		static constexpr int tensor_dim =  sizeof...(ints);
 		return typename _Tensor_Reshape<tensor_dim>::template implementation<derived>(asDerived().getIterator(), this->asDerived(), ints...);
 	}
 
-	template<int dim> __BCinline__
+	template<int dim>
 	auto reshape(Shape<dim> shape) {
 		return typename _Tensor_Reshape<dim>::template implementation<derived>(asDerived().getIterator(), this->asDerived(), shape);
 	}
-	template<class ... integers> __BCinline__
+	template<class ... integers>
 	const auto reshape(integers... ints) const {
 		static constexpr int tensor_dim =  sizeof...(ints);
 		return typename _Tensor_Reshape<tensor_dim>::template implementation<derived>(asDerived().getIterator(), this->asDerived(), ints...);
 	}
 
-	template<int dim> __BCinline__
+	template<int dim>
 	const auto reshape(Shape<dim> shape) const  {
 		return typename _Tensor_Reshape<dim>::template implementation<derived>(asDerived().getIterator(), this->asDerived(), shape);
 	}

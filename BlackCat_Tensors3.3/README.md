@@ -167,7 +167,7 @@ Methods:
 	int ld2() const				//returns internal col_dimension (only relevant for tensors of order > 2 IE Cubes)
 	int resetShape(std::vector<int>) 		//reshapes tensor, shape must be of same rank
 	void print_dimensions() const			//prints the dimensions of tensor... formated: [row][col][etc]
-	void print_outer_dimensions() const			//prints the internal dimensions of tensor... formated: [ld_row][ld_cols][etc]
+	void print_leading_dimensions() const			//prints the internal dimensions of tensor... formated: [ld_row][ld_cols][etc]
 
 	const auto inner_shape() const			//returns some_array_type which holds inner shape (type depedent on context)
 	const auto outer_shape() const			//returns some_array_type which holds outer shape (type depedent on context)
