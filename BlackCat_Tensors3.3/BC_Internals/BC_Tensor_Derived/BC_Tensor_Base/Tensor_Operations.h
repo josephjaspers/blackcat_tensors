@@ -11,17 +11,12 @@
 #include "BC_Tensor_Types/Expression_Binary_Base.h"
 #include "BC_Tensor_Types/Expression_Binary_Functors.h"
 #include "BC_Tensor_Types/Expression_Binary_Dotproduct.h"
-
 #include "BC_Tensor_Types/Expression_Unary_Base.h"
 #include "BC_Tensor_Types/Expression_Unary_Functors.h"
-
 #include "BC_Tensor_Types/Expression_Unary_Transposition.h"
-
-
 #include "Operations_Implementation/AlternateAsterixDenoter.h"
 #include "Operations_Implementation/Expression_Determiner.h"
 #include "Operations_Implementation/Unary_Functions.h"
-#include "Operations_Implementation/conv_toeplitz_inner.h"
 
 #include <type_traits>
 

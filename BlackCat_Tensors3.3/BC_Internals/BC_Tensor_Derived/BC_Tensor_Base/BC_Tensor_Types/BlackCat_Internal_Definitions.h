@@ -23,6 +23,7 @@ namespace BC {
 #define __BC_host_inline__ inline __attribute__((always_inline)) __attribute__((hot))
 
 class BC_Type {}; //a type inherited by expressions and tensor_cores, it is used a flag and lacks a "genuine" implementation
+class BC_Core {};
 }
 
 #include "BC_Utility/Determiners.h"

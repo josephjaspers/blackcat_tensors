@@ -72,6 +72,19 @@ struct binary_expression<lv, rv, dotproduct<Mathlib>> : expression_base<binary_e
 public:
 
 	void eval() {
+//				//Uncomment and run dotproduct test to check for the correct detections
+//				if (transA)
+//				std::cout << "A is transposed" << transA << std::endl;
+//				if (transB)
+//				std::cout <<"B is transposed" << transB << std::endl;
+//				if (lv_scalar)
+//				std::cout << "A has scalar " <<lv_scalar << std::endl;
+//				if (rv_scalar)
+//				std::cout <<"B has scalar" << rv_scalar << std::endl;
+//				if (lv_eval)
+//				std::cout << "A instant eval" <<lv_eval << std::endl;
+//				if(rv_eval)
+//				std::cout <<"B instant eval " << rv_eval << std::endl;
 
 		scalar_type* A = nullptr;
 		scalar_type* B = nullptr;
@@ -96,6 +109,7 @@ public:
 
 
 		if (lv_scalar && rv_scalar){
+			//in case C = A*a * (B*b) -- multiply both scalars
 			scalar_type* tmp;
 			Mathlib::initialize(tmp, 1);
 			Mathlib::scalarMul(tmp, alpha, alpha2);

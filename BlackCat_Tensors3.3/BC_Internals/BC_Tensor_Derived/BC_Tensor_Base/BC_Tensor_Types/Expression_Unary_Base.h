@@ -19,6 +19,7 @@ public:
 
 	__BCinline__ static constexpr int DIMS() { return value::DIMS(); }
 	__BCinline__ static constexpr int ITERATOR() { return value::ITERATOR(); }
+	__BCinline__ static constexpr bool INJECTABLE() { return value::INJECTABLE(); }
 
 	__BCinline__  unary_expression(value v, operation op = operation()) : array(v), oper(op) {}
 

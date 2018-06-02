@@ -35,7 +35,9 @@ public:
 
 	__BCinline__ static constexpr int DIMS() { return derived::DIMS();    }
 	__BCinline__ static constexpr bool ASSIGNABLE() { return false; }
-	__BCinline__ static constexpr bool ITERATOR() { return -1; } //this will cause compile_failure if not shadowed (mandatory to shadow)
+	__BCinline__ static constexpr bool ITERATOR() { return -1; } 		//this will cause compile_failure if not shadowed (mandatory to shadow)
+	__BCinline__ static constexpr bool INJECTABLE() { return false; }	//Injectable is boolean value determining
+
 
 	__BCinline__ static constexpr int last() { return derived::DIMS() -1; }
 

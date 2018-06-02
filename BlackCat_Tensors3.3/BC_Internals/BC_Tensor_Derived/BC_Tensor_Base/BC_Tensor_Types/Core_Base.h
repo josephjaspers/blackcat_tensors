@@ -32,7 +32,7 @@ template<class> class 	_Tensor_Vectorizer = Tensor_Vectorizer,
 template<int> class     _Tensor_Chunk	= Tensor_Chunk,			//Nested implementation type
 template<int> class 	_Tensor_Reshape = Tensor_Reshape>		//Nested implementation type
 
-struct Tensor_Core_Base : expression_base<Tensor_Core_Base<derived,DIMENSION>> {
+struct Tensor_Core_Base : expression_base<Tensor_Core_Base<derived,DIMENSION>>, BC_Core {
 
 	__BCinline__ static constexpr int DIMS() { return DIMENSION; }
 	__BCinline__ static constexpr int ITERATOR() { return 0; }

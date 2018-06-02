@@ -13,8 +13,13 @@ namespace BC {
 
 template<class, class> class unary_expression;
 template<class> class Core;
+class BC_Core;
 class transpose;
 class scalar_mul;
+
+template<class T> using enable_if_core = std::enable_if_t<std::is_base_of<BC_Core, T>::value>;
+template<class T, class U> using enable_if_cores = std::enable_if_t<std::is_base_of<BC_Core, T>::value && std::is_base_of<BC_Core, U>::value>;
+
 
 template<class T> T&  cc(const T&  param) { return const_cast<T&> (param); }
 template<class T> T&& cc(const T&& param) { return const_cast<T&&>(param); }
@@ -27,7 +32,7 @@ class front<param<first, set...>> {
 };
 
 //DEFAULT TYPE
-template<class T> struct det_eval {
+template<class T, class voider = void> struct det_eval {
 	static constexpr bool evaluate = true;
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = false;
@@ -37,7 +42,7 @@ template<class T> struct det_eval {
 };
 
 //IF TENSOR CORE (NON EXPRESSION)
-template<class deriv> struct det_eval<Core<deriv>> {
+template<class deriv> struct det_eval<deriv, enable_if_core<deriv>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = false;
@@ -48,7 +53,7 @@ template<class deriv> struct det_eval<Core<deriv>> {
 
 ////IF TRANSPOSE
 template<class deriv>
-struct det_eval<unary_expression<Core<deriv>, transpose>> {
+struct det_eval<unary_expression<deriv, transpose>, enable_if_core<deriv>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = false;
@@ -59,8 +64,8 @@ struct det_eval<unary_expression<Core<deriv>, transpose>> {
 
 ////IF A SCALAR BY TENSOR MUL OPERATION
 template<class d1, class d2>
-struct det_eval<binary_expression<Core<d1>, Core<d2>, scalar_mul>> {
-	using self = binary_expression<Core<d1>, Core<d2>, scalar_mul>;
+struct det_eval<binary_expression<d1, d2, scalar_mul>, enable_if_cores<d1, d2>> {
+	using self = binary_expression<d1, d2, scalar_mul>;
 
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = false;
@@ -81,7 +86,7 @@ struct det_eval<binary_expression<Core<d1>, Core<d2>, scalar_mul>> {
 
 //IF A SCALAR BY TENSOR MUL OPERATION R + TRANSPOSED
 template<class d1, class d2>
-struct det_eval<binary_expression<unary_expression<Core<d1>, transpose>, Core<d2>, scalar_mul>> {
+struct det_eval<binary_expression<unary_expression<d1, transpose>, d2, scalar_mul>, enable_if_cores<d1, d2>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;
@@ -92,7 +97,7 @@ struct det_eval<binary_expression<unary_expression<Core<d1>, transpose>, Core<d2
 
 //IF A SCALAR BY TENSOR MUL OPERATION L + TRANSPOSED
 template<class d1, class d2>
-struct det_eval<binary_expression<Core<d1>, unary_expression<Core<d2>, transpose>, scalar_mul>> {
+struct det_eval<binary_expression<d1, unary_expression<d2, transpose>, scalar_mul>, enable_if_cores<d1, d2>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;

@@ -36,7 +36,7 @@ public:
 
 	template<class... params>
 	explicit Tensor_Initializer(const  params&... p) : black_cat_array(p...) {}
-//
+
 	~Tensor_Initializer() {
 		black_cat_array.destroy();
 	}
