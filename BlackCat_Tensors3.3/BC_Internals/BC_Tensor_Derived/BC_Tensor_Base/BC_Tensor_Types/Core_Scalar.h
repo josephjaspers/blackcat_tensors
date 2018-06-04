@@ -11,7 +11,7 @@
 #include "Core_Base.h"
 
 namespace BC {
-
+namespace internal {
 /*
  * Represents a single_scalar value from a tensor
  */
@@ -38,6 +38,7 @@ struct Tensor_Scalar : Tensor_Core_Base<Tensor_Scalar<PARENT>, 0> {
 	__BCinline__ const scalar* getIterator() const { return array_slice; }
 	__BCinline__	   scalar* getIterator()  	  { return array_slice;  }
 	};
+}
 }
 
 

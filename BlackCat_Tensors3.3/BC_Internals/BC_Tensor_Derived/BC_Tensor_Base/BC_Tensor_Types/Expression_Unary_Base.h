@@ -10,6 +10,7 @@
 #include "Expression_Base.h"
 
 namespace BC {
+namespace internal {
 template<class value, class operation>
 class unary_expression : public expression_base<unary_expression<value, operation>> {
 public:
@@ -47,5 +48,6 @@ public:
 	__BCinline__ const auto scalar(int i) const {
 		return unary_expression<decltype(array.scalar(0)),operation>(array.scalar(i)); }
 };
+}
 }
 #endif /* EXPRESSION_UNARY_POINTWISE_CU_ */

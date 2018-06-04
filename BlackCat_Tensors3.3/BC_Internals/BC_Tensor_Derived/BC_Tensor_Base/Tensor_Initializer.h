@@ -16,7 +16,7 @@
 #include "BC_Tensor_Types/Core_Reshape.h"
 
 namespace BC {
-
+namespace Base {
 //-------------------------------------SPECIALIZATION FOR EXPRESSION TENSORS OR TENSORS OF NON_OWNERSHIP/CREATION-------------------------------------//
 template<class derived, class expression_tensor = void>
 class Tensor_Initializer {
@@ -87,7 +87,7 @@ public:
 		black_cat_array.destroy();
 	}
 };
-
+}
 }
 
 

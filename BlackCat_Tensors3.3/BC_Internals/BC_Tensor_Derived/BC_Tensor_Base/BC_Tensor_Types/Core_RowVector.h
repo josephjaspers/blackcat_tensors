@@ -11,7 +11,7 @@
 #include "Core_Base.h"
 
 namespace BC {
-
+namespace internal {
 /*
  * Accepts some core_type of Dimension 1 or 2 and returns a row_vector internal type
  */
@@ -61,7 +61,7 @@ struct Tensor_Row : Tensor_Core_Base<Tensor_Row<PARENT>, 1>  {
 	__BCinline__	   auto& getIterator()  	 { return *this; }
 
 };
-
+}
 }
 
 

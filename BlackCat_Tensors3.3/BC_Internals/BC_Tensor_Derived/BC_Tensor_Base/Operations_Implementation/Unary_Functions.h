@@ -21,31 +21,31 @@ static auto trans(Tensor_Operations<deriv>& tensor) {
 //modifies the calling the tensor, but if and only if evaluated
 template<class deriv>
 static auto zero(Tensor_Operations<deriv>& tensor) {
-	 return tensor.un_expr(oper::zero());
+	 return tensor.un_expr(function::zero());
 }
 template<class deriv>
 static auto one(Tensor_Operations<deriv>& tensor) {
-	 return tensor.un_expr(oper::one());
+	 return tensor.un_expr(function::one());
 }
 
 //converts all NaN/Inf values to 0
 template<class deriv>
 static auto fix(Tensor_Operations<deriv>& tensor) {
-	 return tensor.un_expr(oper::fix());
+	 return tensor.un_expr(function::fix());
 }
 template<class deriv>
 static auto abs(const Tensor_Operations<deriv>& tensor) {
-	 return tensor.un_expr(oper::abs());
+	 return tensor.un_expr(function::abs());
 }
 template<class deriv>
 static auto negation(const Tensor_Operations<deriv>& tensor) {
-	 return tensor.un_expr(oper::negation());
+	 return tensor.un_expr(function::negation());
 }
 
 //if 0 return 0 else return 1
 template<class deriv>
 static auto logical(const Tensor_Operations<deriv>& tensor) {
-	 return tensor.un_expr(oper::logical());
+	 return tensor.un_expr(function::logical());
 }
 
 }

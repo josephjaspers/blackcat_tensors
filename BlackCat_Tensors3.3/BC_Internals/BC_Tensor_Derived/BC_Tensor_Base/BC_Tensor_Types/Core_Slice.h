@@ -11,6 +11,7 @@
 #include "Core_Base.h"
 
 namespace BC {
+namespace internal {
 
 //Floored decrement just returns the max(param - 1, 0)
 
@@ -35,5 +36,5 @@ template<class PARENT>
 
 	};
 }
-
+}
 #endif /* TENSOR_SLICE_CU_ */

@@ -15,6 +15,7 @@
 #include <sstream>
 
 namespace BC {
+namespace Base {
 
 /*
  * Defines standard utility methods related to I/O
@@ -116,7 +117,7 @@ public:
 		}
 	}
 };
-
+}
 }
 
 

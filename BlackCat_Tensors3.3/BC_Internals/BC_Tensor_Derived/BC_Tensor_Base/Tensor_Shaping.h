@@ -9,6 +9,7 @@
 #define TENSOR_SHAPING_H_
 
 namespace BC {
+namespace Base {
 template<class derived>
 struct Tensor_Shaping {
 
@@ -78,7 +79,7 @@ public:
 		template<class... integers>
 		const auto operator () (integers... shape_dimensions) const {
 			static constexpr int tensor_dimension = sizeof...(shape_dimensions);
-			using chunk_type = typename Tensor_Chunk<tensor_dimension>::template implementation<functor_type>;
+			using chunk_type = typename internal::Tensor_Chunk<tensor_dimension>::template implementation<functor_type>;
 			using type = tensor_of_t<tensor_dimension, chunk_type, mathlib_type>;
 
 			return type(tensor.data().chunk(location, shape_dimensions...));
@@ -86,7 +87,7 @@ public:
 		template<class... integers>
 		auto operator () (integers... shape_dimensions) {
 			static constexpr int tensor_dimension = sizeof...(shape_dimensions);
-			using chunk_type = typename Tensor_Chunk<tensor_dimension>::template implementation<functor_type>;
+			using chunk_type = typename internal::Tensor_Chunk<tensor_dimension>::template implementation<functor_type>;
 			using type = tensor_of_t<tensor_dimension, chunk_type, mathlib_type>;
 
 			return type(tensor.data().chunk(location, shape_dimensions...));
@@ -94,6 +95,7 @@ public:
 	};
 };
 
+}	//END OF BASE NAMESPACE
 //-----------------------------------------------THESE ARE THE "CURRIED FUNCTIONS"-------------------------------------------------"
 	template<class> class Tensor_Base;
 
@@ -139,8 +141,6 @@ public:
 			return tensor.lazy_chunk(integers...);
 		};
 	}
-
-
 }
 
 #endif /* TENSOR_SHAPING_H_ */

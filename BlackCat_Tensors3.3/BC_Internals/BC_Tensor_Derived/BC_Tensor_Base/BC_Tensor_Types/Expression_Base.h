@@ -14,7 +14,7 @@
 #include <cmath>
 
 namespace BC {
-
+namespace internal {
 
 template<class derived>
 struct expression_base : BC_Type {
@@ -146,22 +146,7 @@ public:
 	__BCinline__ int col(int i) const 	{ return shadowFailure("auto col(int i) const"); }
 	__BCinline__ int col(int i) 	   	{ return shadowFailure("auto col(int i)"); }
 };
-
-////---------------------------------------------------internal lazy evaluation expressions---------------------------------------------------------//
-//template<class param> auto operator + (const expression_base<param>& expr) { return bi_expr<derived,param, add>(this->asDerived(), expr.asDerived()); }
-//template<class param> auto operator - (const expression_base<param>& expr) { return bi_expr<derived,param, sub>(this->asDerived(), expr.asDerived()); }
-//template<class param> auto operator / (const expression_base<param>& expr) { return bi_expr<derived,param, div>(this->asDerived(), expr.asDerived()); }
-//template<class param> auto operator * (const expression_base<param>& expr) { return bi_expr<derived,param, mul>(this->asDerived(), expr.asDerived()); }
-//template<class param> auto operator = (const expression_base<param>& expr) { return bi_expr<derived,param, mul>(this->asDerived(), expr.asDerived()); }
-//template<class,class,class> struct binary_expression;
-//template<class,class> struct unary_expression;
-//struct add;
-//struct mul;
-//struct div;
-//struct sub;
-//struct assign;
-
-
+}
 }
 
 #endif /* EXPRESSION_BASE_H_ */

@@ -33,6 +33,7 @@ public:
 
 	template<class U> 		  Matrix(const Matrix<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Matrix(	   Matrix<U, Mathlib>&& t) : parent_class(t) {}
+	template<class... params> Matrix(const params&... p) : parent_class(p...) {}
 
 	Matrix& operator =(const Matrix& t)  { return parent_class::operator=(t); }
 	Matrix& operator =(const Matrix&& t) { return parent_class::operator=(std::move(t)); }
@@ -40,16 +41,9 @@ public:
 	template<class U>
 	Matrix& operator = (const Matrix<U, Mathlib>& t) { return parent_class::operator=(t); }
 
-	const Matrix<unary_expression<typename parent_class::functor_type, transpose>, Mathlib> t() const {
-		return Matrix<unary_expression<typename parent_class::functor_type, transpose>, Mathlib>(this->data());
+	const Matrix<internal::unary_expression<typename parent_class::functor_type, function::transpose>, Mathlib> t() const {
+		return Matrix<internal::unary_expression<typename parent_class::functor_type, function::transpose>, Mathlib>(this->data());
 	}
-
-//private:
-
-//	template<class> friend class Tensor_Base;
-//	template<class> friend class Tensor_Operations;
-//	template<class,class> friend class Matrix;
-	template<class... params> Matrix(const params&... p) : parent_class(p...) {}
 
 };
 

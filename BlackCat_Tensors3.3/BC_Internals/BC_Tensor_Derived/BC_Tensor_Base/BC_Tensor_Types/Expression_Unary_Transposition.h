@@ -11,10 +11,15 @@
 #include <vector>
 
 namespace BC {
+namespace function {
 class transpose;
+}
+namespace internal {
+
+
 
 template<class functor_type>
-struct unary_expression<functor_type, transpose> : expression_base<unary_expression<functor_type, transpose>>
+struct unary_expression<functor_type, function::transpose> : expression_base<unary_expression<functor_type, function::transpose>>
 {
 	functor_type array;
 
@@ -46,5 +51,6 @@ struct unary_expression<functor_type, transpose> : expression_base<unary_express
 				return array(m, n);
 	}
 };
+}
 }
 #endif /* EXPRESSION_UNARY_MATRIXTRANSPOSITION_H_ */

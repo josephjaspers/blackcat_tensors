@@ -9,6 +9,10 @@
 #include "BlackCat_Internal_Definitions.h"
 
 namespace BC {
+namespace function {
+template<class ml> class dotproduct;
+}
+namespace internal {
 
 /*
  * a = M x K
@@ -17,10 +21,9 @@ namespace BC {
  */
 //det_Eval
 
-template<class ml> class dotproduct;
 
 template<class lv, class rv, class Mathlib>
-struct binary_expression<lv, rv, dotproduct<Mathlib>> : expression_base<binary_expression<lv, rv, dotproduct<Mathlib>>> {
+struct binary_expression<lv, rv, function::dotproduct<Mathlib>> : expression_base<binary_expression<lv, rv,  function::dotproduct<Mathlib>>> {
 
 	using scalar_type = _scalar<lv>;
 
@@ -38,7 +41,7 @@ struct binary_expression<lv, rv, dotproduct<Mathlib>> : expression_base<binary_e
 	lv left;
 	rv right;
 
-	scalar_type* array_ptr;
+	scalar_type* array_ptr = nullptr;
 	int is[2] { left.rows(), right.cols() };
 	int os[2] { left.rows(), left.rows() * right.cols() };
 
@@ -132,7 +135,7 @@ public:
 };
 
 }
-
+}
 
 //		if (transA)
 //		std::cout << "A is transposed" << transA << std::endl;

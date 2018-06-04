@@ -12,6 +12,7 @@
 #include "Internal_Shape.h"
 
 namespace BC {
+namespace internal {
 
 /*
  * Core_Interface is a common interface amongst all tensor_core subclasses,
@@ -128,6 +129,7 @@ template<class T> struct isCore<T, std::enable_if_t<std::is_same<decltype(T::DIM
 
 template<class T> static constexpr bool isCore_b = isCore<T>::conditional;
 
+}
 }
 
 

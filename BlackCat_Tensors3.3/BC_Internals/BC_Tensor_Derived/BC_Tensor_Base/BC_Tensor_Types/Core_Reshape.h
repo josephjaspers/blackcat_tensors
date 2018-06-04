@@ -12,6 +12,7 @@
 #include "Core_Base.h"
 
 namespace BC {
+namespace internal {
 /*
  * Accepts an a tensor_core type wrapped in the new_tensor
  *
@@ -52,6 +53,7 @@ struct Tensor_Reshape {
 
 	};
 };
+}
 }
 
 #endif /* TENSOR_RESHAPE_H_ */

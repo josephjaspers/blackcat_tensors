@@ -10,7 +10,7 @@
 #include "Expression_Base.h"
 
 namespace BC {
-
+namespace internal {
 template<class lv, class rv, class operation>
 struct binary_expression : public expression_base<binary_expression<lv, rv, operation>> {
 
@@ -43,7 +43,7 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 		return binary_expression<decltype(left.scalar(0)), decltype(right.scalar(0)), operation>(left.col(i), right.col(i)); }
 
 };
-
+}
 }
 
 #endif /* EXPRESSION_BINARY_POINTWISE_SAME_H_ */

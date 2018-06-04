@@ -35,6 +35,7 @@ public:
 	template<class... integers>
 	explicit Tensor(int x = 0, integers... ints) : parent_class(Shape<dimensions>(x, ints...)) {}
 	explicit Tensor(Shape<DIMS()> shape) : parent_class(shape)  {}
+	template<class... params> Tensor(const params&... p) : parent_class(p...) {}
 
 	template<class U> 		  Tensor(const Tensor<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Tensor(	    Tensor<U, Mathlib>&& t) : parent_class(t) {}
@@ -45,11 +46,6 @@ public:
 	template<class U>
 	Tensor& operator = (const Tensor<U, Mathlib>& t) { return parent_class::operator=(t); }
 
-//private:
-//
-//	template<class U> friend class Tensor_Base;
-//	template<class U> friend class Tensor_Operations;
-	template<class... params> Tensor(const params&... p) : parent_class(p...) {}
 };
 
 };

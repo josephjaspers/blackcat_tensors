@@ -20,14 +20,17 @@ namespace BC {
  */
 
 class BC_Type;
+
+namespace internal {
 template<class> class Core;
+}
 template<class> class lambda_array;
 template<class, int> class stack_array;
 template<int> class Shape;
 template<int, class, class> class t_shape;
 
 template<class T> struct isPrimaryCore { static constexpr bool conditional = false; };
-template<class T> struct isPrimaryCore<Core<T>> { static constexpr bool conditional = true; };
+template<class T> struct isPrimaryCore<internal::Core<T>> { static constexpr bool conditional = true; };
 template<class T> static constexpr bool pCore_b = isPrimaryCore<T>::conditional;
 
 //determines if the type is a valid-indexable tensor_shape

@@ -30,6 +30,7 @@ public:
 	Tensor4(const Tensor4&& v) : parent_class(v) {}
 	explicit Tensor4(int a = 0,int b = 1,int c = 1, int d = 1) : parent_class(Shape<4>(a,b,c,d)) {}
 	explicit Tensor4(Shape<DIMS()> shape) : parent_class(shape)  {}
+	template<class... params> Tensor4(const params&... p) : parent_class(p...) {}
 
 	template<class U> 		  Tensor4(const Tensor4<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Tensor4(	    Tensor4<U, Mathlib>&& t) : parent_class(t) {}
@@ -39,12 +40,6 @@ public:
 	Tensor4& operator =(	  Tensor4&& t) { return parent_class::operator=(t); }
 	template<class U>
 	Tensor4& operator = (const Tensor4<U, Mathlib>& t) { return parent_class::operator=(t); }
-
-//private:
-//
-//	template<class U> friend class Tensor_Base;
-//	template<class U> friend class Tensor_Operations;
-	template<class... params> Tensor4(const params&... p) : parent_class(p...) {}
 
 
 };

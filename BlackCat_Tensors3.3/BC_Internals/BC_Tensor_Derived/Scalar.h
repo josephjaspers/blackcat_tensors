@@ -33,6 +33,7 @@ public:
 	template<class U> Scalar(const Scalar<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> Scalar(	   Scalar<U, Mathlib>&& t) : parent_class(t) {}
 	Scalar(_scalar<T> val) : parent_class(Shape<0>()) { Mathlib::HostToDevice(this->data().getIterator(), &val, 1); }
+	template<class... params> Scalar(const params&... p) : parent_class( p...) {}
 
 	template<class U>
 	Scalar& operator =(const Scalar<U, Mathlib>& t) { return parent_class::operator=(t); }
@@ -47,13 +48,6 @@ public:
 		Mathlib::DeviceToHost(&value, this->data().getIterator(), 1);
 		return value;
 	}
-
-//private:
-//
-//	template<class U> friend class Tensor_Base;
-//	template<class U> friend class Tensor_Operations;
-	template<class... params> Scalar(const params&... p) : parent_class( p...) {}
-
 };
 
 

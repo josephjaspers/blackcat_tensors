@@ -11,6 +11,7 @@
 #include <iostream>
 
 namespace BC {
+namespace function {
 template<class T> struct rm_const { using type = T; };
 template<class T> struct rm_const<const T&> { using type = T&; };
 
@@ -125,6 +126,8 @@ template<class T> struct rm_const<const T&> { using type = T&; };
 		}
 	};
 }
+}
+
 
 
 #endif /* EXPRESSION_BINARY_FUNCTORS_H_ */

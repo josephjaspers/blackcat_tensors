@@ -11,7 +11,7 @@
 #include "Expression_Base.h"
 
 namespace BC {
-
+namespace internal {
 template<class T>
 struct Core : Tensor_Core_Base<Core<T>, _dimension_of<T>>{
 
@@ -67,6 +67,7 @@ struct Core : Tensor_Core_Base<Core<T>, _dimension_of<T>>{
 	}
 
 };
+}
 }
 
 #endif /* SHAPE_H_ */

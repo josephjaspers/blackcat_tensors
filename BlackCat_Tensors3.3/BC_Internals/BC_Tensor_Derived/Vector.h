@@ -28,6 +28,7 @@ public:
 	Vector(const Vector&  t) : parent_class(t) 	{}
 	explicit Vector(int dim = 0) : parent_class(Shape<1>(dim))  {}
 	explicit Vector(Shape<DIMS()> shape) : parent_class(shape)  {}
+	template<class... params> Vector(const params&... p) : parent_class(p...) {}
 
 	template<class U> 		  Vector(const Vector<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Vector(	   Vector<U, Mathlib>&& t) : parent_class(t) {}
@@ -38,15 +39,9 @@ public:
 	template<class U>
 	Vector& operator = (const Vector<U, Mathlib>& t) { return parent_class::operator=(t); }
 
-	const Vector<unary_expression<typename parent_class::functor_type, transpose>, Mathlib> t() const {
-		return Vector<unary_expression<typename parent_class::functor_type, transpose>, Mathlib>(this->data());
+	const Vector<internal::unary_expression<typename parent_class::functor_type, function::transpose>, Mathlib> t() const {
+		return Vector<internal::unary_expression<typename parent_class::functor_type, function::transpose>, Mathlib>(this->data());
 	}
-
-//private:
-//	template<class,class> friend class Vector;
-//	template<class> friend class Tensor_Base;
-//	template<class> friend class Tensor_Operations;
-	template<class... params> Vector(const params&... p) : parent_class(p...) {}
 };
 }
 

@@ -12,7 +12,7 @@
 #include "Core_Base.h"
 
 namespace BC {
-
+namespace internal {
 template<int dimension>
 struct Tensor_Chunk  {
 
@@ -42,6 +42,7 @@ struct Tensor_Chunk  {
 		__BCinline__	   auto getIterator()   	{ return array; }
 	};
 	};
+}
 }
 
 #endif /* TENSOR_RESHAPE_H_ */

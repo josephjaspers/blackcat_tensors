@@ -16,21 +16,20 @@
 
 namespace BC {
 
-
 template<class derived>
 class Tensor_Base :
-		public Tensor_Operations<derived>,
-		public Tensor_Utility<derived>,
-		public Tensor_Initializer<derived>,
-		public Tensor_Shaping<derived>
+		public Base::Tensor_Operations<derived>,
+		public Base::Tensor_Utility<derived>,
+		public Base::Tensor_Initializer<derived>,
+		public Base::Tensor_Shaping<derived>
 {
 
 protected:
 
 	using self 			= Tensor_Base<derived>;
-	using operations  	= Tensor_Operations<derived>;
-	using initializer 	= Tensor_Initializer<derived>;
-	using utility		= Tensor_Utility<derived>;
+	using operations  	= Base::Tensor_Operations<derived>;
+	using initializer 	= Base::Tensor_Initializer<derived>;
+	using utility		= Base::Tensor_Utility<derived>;
 
 	using functor_type 	= _functor<derived>;
 	using scalar_type	= _scalar<derived>;
@@ -106,8 +105,8 @@ public:
 	const auto operator [] (int i) const { return slice(i); }
 		  auto operator [] (int i) 		 { return slice(i); }
 
-	const auto scalar(int i) const { return tensor_of<0>::type<Tensor_Scalar<functor_type>, mathlib_type>(scalar_impl(i)); }
-		  auto scalar(int i) 	   { return tensor_of<0>::type<Tensor_Scalar<functor_type>, mathlib_type>(scalar_impl(i)); }
+	const auto scalar(int i) const { return tensor_of<0>::type<internal::Tensor_Scalar<functor_type>, mathlib_type>(scalar_impl(i)); }
+		  auto scalar(int i) 	   { return tensor_of<0>::type<internal::Tensor_Scalar<functor_type>, mathlib_type>(scalar_impl(i)); }
 
 	const auto slice(int i) const {
 		static_assert(DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");

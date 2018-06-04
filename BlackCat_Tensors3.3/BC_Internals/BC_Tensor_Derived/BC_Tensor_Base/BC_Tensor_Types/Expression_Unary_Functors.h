@@ -11,7 +11,7 @@
 #include <iostream>
 
 namespace BC {
-namespace oper {
+namespace function {
 	struct negation {
 		template<class lv> __BCinline__ auto operator ()(lv val) const {
 			return -val;
@@ -44,10 +44,7 @@ namespace oper {
 		}
 	};
 
-
-
 }
-
 }
 
 
