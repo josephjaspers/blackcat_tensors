@@ -13,10 +13,12 @@ namespace BC {
 
 namespace function {
 	class transpose;
+	class scalar_mul;
 }
 
 namespace internal {
 template<class,class> class unary_expression;
+template<class,class,class> class binary_expression;
 
 
 template<class T> using enable_if_core = std::enable_if_t<std::is_base_of<BC_Core, T>::value>;

@@ -56,9 +56,9 @@ public:
 
 
 	derived& operator =(move_parameter tensor) {
-		auto tmp = this->black_cat_array;
-		this->black_cat_array = tensor.black_cat_array;
-		tensor.black_cat_array = tmp;
+		auto tmp = this->array_core;
+		this->array_core = tensor.array_core;
+		tensor.array_core = tmp;
 
 		return *this;
 	}
@@ -73,24 +73,23 @@ public:
 		return *this;
 	}
 
-	int dims() const { return this->black_cat_array.dims(); }
-	int size() const { return this->black_cat_array.size(); }
-	int rows() const { return this->black_cat_array.rows(); }
-	int cols() const { return this->black_cat_array.cols(); }
-	int outer_dimension() const { return this->black_cat_array.outer_dimension(); }
+	int dims() const { return this->array_core.dims(); }
+	int size() const { return this->array_core.size(); }
+	int rows() const { return this->array_core.rows(); }
+	int cols() const { return this->array_core.cols(); }
+	int outer_dimension() const { return this->array_core.outer_dimension(); }
 
-	int ld1() const { return this->black_cat_array.ld1(); }
-	int ld2() const { return this->black_cat_array.ld2(); }
+	int ld1() const { return this->array_core.ld1(); }
+	int ld2() const { return this->array_core.ld2(); }
 
-	int dimension(int i)		const { return this->black_cat_array.dimension(i); }
-	void print_dimensions() 		const { this->black_cat_array.print_dimensions();   }
-	void print_leading_dimensions()	const { this->black_cat_array.print_leading_dimensions(); }
+	int dimension(int i)		const { return this->array_core.dimension(i); }
+	void print_dimensions() 		const { this->array_core.print_dimensions();   }
+	void print_leading_dimensions()	const { this->array_core.print_leading_dimensions(); }
 
-	const auto inner_shape() const 			{ return this->black_cat_array.inner_shape(); }
-	const auto outer_shape() const 			{ return this->black_cat_array.outer_shape(); }
+	const auto inner_shape() const 			{ return this->array_core.inner_shape(); }
+	const auto outer_shape() const 			{ return this->array_core.outer_shape(); }
 
-	 const functor_type& data() const { return this->black_cat_array; }
-	 	   functor_type& data()		  { return this->black_cat_array; }
+
 };
 
 }

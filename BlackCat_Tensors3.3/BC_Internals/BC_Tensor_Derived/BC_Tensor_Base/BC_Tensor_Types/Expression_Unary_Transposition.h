@@ -50,6 +50,10 @@ struct unary_expression<functor_type, function::transpose> : expression_base<una
 			else
 				return array(m, n);
 	}
+
+	void eval() const {
+		array.eval();
+	}
 };
 }
 }

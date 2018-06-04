@@ -42,6 +42,10 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	__BCinline__ const auto scalar(int i) const {
 		return binary_expression<decltype(left.scalar(0)), decltype(right.scalar(0)), operation>(left.col(i), right.col(i)); }
 
+	void eval() const {
+		left.eval();
+		right.eval();
+	}
 };
 }
 }

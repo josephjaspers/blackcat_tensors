@@ -29,7 +29,6 @@ template<class derived, int DIMENSION,
 template<class> class 	_Tensor_Slice 	= Tensor_Slice,
 template<class> class 	_Tensor_Row 	= Tensor_Row,
 template<class> class 	_Tensor_Scalar 	= Tensor_Scalar,
-template<class> class 	_Tensor_Vectorizer = Tensor_Vectorizer,
 template<int> class     _Tensor_Chunk	= Tensor_Chunk,			//Nested implementation type
 template<int> class 	_Tensor_Reshape = Tensor_Reshape>		//Nested implementation type
 

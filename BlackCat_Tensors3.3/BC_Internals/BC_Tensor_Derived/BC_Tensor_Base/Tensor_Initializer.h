@@ -24,67 +24,73 @@ class Tensor_Initializer {
 	using self 			= Tensor_Initializer<derived>;
 
 	using functor_type 	= _functor<derived>;
-	using Mathlib 		= _mathlib<derived>;
-	using scal			= _scalar<derived>;
+	using mathlib_t 		= _mathlib<derived>;
+	using scalar			= _scalar<derived>;
 
 public:
 
-	functor_type black_cat_array;
+	functor_type array_core;
 
-	Tensor_Initializer(		 derived&& tensor) : black_cat_array(tensor.black_cat_array){}
-	Tensor_Initializer(const  derived&  tensor) : black_cat_array(tensor.black_cat_array){}
+	 const functor_type& data() const { return this->array_core; }
+	 	   functor_type& data()		  { return this->array_core; }
+
+	Tensor_Initializer(		 derived&& tensor) : array_core(tensor.array_core){}
+	Tensor_Initializer(const  derived&  tensor) : array_core(tensor.array_core){}
 
 	template<class... params>
-	explicit Tensor_Initializer(const  params&... p) : black_cat_array(p...) {}
+	explicit Tensor_Initializer(const  params&... p) : array_core(p...) {}
 
 	~Tensor_Initializer() {
-		black_cat_array.destroy();
+		array_core.destroy();
 	}
 };
 //-------------------------------------SPECIALIZATION FOR TENSORS THAT CONTROL / DELETE THEIR ARRAY-------------------------------------//
 
 
 template<template<class, class> class _tensor, class t, class ml>
-class Tensor_Initializer<_tensor<t, ml>, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>> {
+struct Tensor_Initializer<_tensor<t, ml>, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>> {
 
 	using derived = _tensor<t, ml>;
 	using self 			= Tensor_Initializer<derived, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>>;
 
 	using functor_type 	= _functor<derived>;
-	using Mathlib 		= _mathlib<derived>;
-	using scal			= _scalar<derived>;
-	using _shape 		= std::vector<int>;
+	using mathlib_t 	= _mathlib<derived>;
+	using scalar		= _scalar<derived>;
 
-public:
-	functor_type black_cat_array;
+	functor_type array_core;
+
 private:
+
 	auto& as_derived() 			   { return static_cast<	  derived&>(*this); }
 	const auto& as_derived() const { return static_cast<const derived&>(*this); }
 
 public:
 
-	Tensor_Initializer(derived&& tensor) : black_cat_array() {
-		black_cat_array.shape = tensor.black_cat_array.shape;
-		black_cat_array.array = tensor.black_cat_array.array;
-		tensor.black_cat_array.array 	= nullptr;
+	 const functor_type& data() const { return this->array_core; }
+	 	   functor_type& data()		  { return this->array_core; }
+
+	Tensor_Initializer(derived&& tensor) : array_core(tensor.data()) {
+//		array_core.shape = tensor.array_core.shape;
+//		array_core.array = tensor.array_core.array;
+		tensor.array_core.array 	= nullptr;
 	}
 
-	Tensor_Initializer(const derived& tensor) : black_cat_array(tensor.inner_shape()) {
+	Tensor_Initializer(const derived& tensor) : array_core(tensor.inner_shape()) {
 		this->as_derived() = tensor;
 	}
 	template<class T>
-	Tensor_Initializer(T dimensions): black_cat_array(dimensions) {}
+	Tensor_Initializer(T dimensions): array_core(dimensions) {}
 
-	template<class T> using derived_alt = typename MTF::shell_of<derived>::template  type<T, Mathlib>;
+	template<class T> using derived_alt = typename MTF::shell_of<derived>::template  type<T, mathlib_t>;
 
 	template<class U>
 	Tensor_Initializer(const derived_alt<U>&  tensor)
-		: black_cat_array(tensor.inner_shape()) {
+		: array_core(tensor.inner_shape()) {
 		this->as_derived() = tensor;
 	}
 
 	~Tensor_Initializer() {
-		black_cat_array.destroy();
+		array_core.destroy();
 	}
 };
 }

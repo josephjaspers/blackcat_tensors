@@ -25,7 +25,7 @@ struct Tensor_Shaping {
 
 private:
 
-	const auto& as_derived() const { return static_cast<derived&>(*this); }
+	const auto& as_derived() const { return static_cast<const derived&>(*this); }
 	auto& as_derived() { return static_cast<derived&>(*this); }
 
 public:
@@ -73,14 +73,14 @@ public:
 
 
 private:
-	const auto slice_impl(int i) const { return this->black_cat_array.slice(i); }
-		  auto slice_impl(int i) 	  { return this->black_cat_array.slice(i);  }
+	const auto slice_impl(int i) const { return this->as_derived().array_core.slice(i); }
+		  auto slice_impl(int i) 	  { return this->as_derived().array_core.slice(i);  }
 
-	const auto scalar_impl(int i) const { return this->as_derived().black_cat_array.scalar(i); }
-		  auto scalar_impl(int i)	    { return this->as_derived().black_cat_array.scalar(i);  }
+	const auto scalar_impl(int i) const { return this->as_derived().array_core.scalar(i); }
+		  auto scalar_impl(int i)	    { return this->as_derived().array_core.scalar(i);  }
 
-	const auto row_impl(int i) const { return this->black_cat_array.row(i); }
-		  auto row_impl(int i)	     { return this->black_cat_array.row(i); }
+	const auto row_impl(int i) const { return this->as_derived().array_core.row(i); }
+		  auto row_impl(int i)	     { return this->as_derived().array_core.row(i); }
 public:
 	const auto operator [] (int i) const { return slice(i); }
 		  auto operator [] (int i) 		 { return slice(i); }
@@ -132,7 +132,7 @@ public:
 
 	template<class... integers>
 	void resize(integers... ints) {
-		this->as_derived().black_cat_array.resetShape(ints...);
+		this->as_derived().array_core.resetShape(ints...);
 	}
 	//THIS IS THE CURRIED CHUNK LAMBDA, WE MUST USE AN ACTUAL CLASS TO ACT AS A LAMDA AS CUDA COMPILER IS IFFY WITH LAMBDA
 	struct CHUNK {

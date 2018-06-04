@@ -23,12 +23,13 @@ struct Core : Tensor_Core_Base<Core<T>, _dimension_of<T>>{
 	scalar_type* array = nullptr;
 	Shape<DIMS()> shape;
 
-	template<class U>
-	Core(U param) : shape(param) {
-		math_lib::initialize(array, this->size());
-	}
+	Core(Shape<DIMS()> shape_, scalar_type* array_) : array(array_), shape(shape_) {}
 
-	Core() = default;
+	template<class U>
+	Core(U param) : shape(param) { math_lib::initialize(array, this->size()); }
+
+	template<class U>
+	Core(U param, scalar_type* array_) : array(array_), shape(param) {}
 
 
 	__BCinline__ const auto inner_shape() const { return shape.is(); }

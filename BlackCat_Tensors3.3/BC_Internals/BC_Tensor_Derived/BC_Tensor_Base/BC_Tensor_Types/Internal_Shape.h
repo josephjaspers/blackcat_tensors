@@ -13,7 +13,6 @@
 
 namespace BC {
 
-
 template<int dimension>
 struct Shape {
 

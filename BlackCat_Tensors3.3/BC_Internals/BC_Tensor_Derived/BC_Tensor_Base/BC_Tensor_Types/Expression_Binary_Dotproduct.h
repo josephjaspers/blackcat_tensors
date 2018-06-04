@@ -10,7 +10,7 @@
 
 namespace BC {
 namespace function {
-template<class ml> class dotproduct;
+template<class ml> class dotproduct : public BLAS_FUNCTION {};
 }
 namespace internal {
 
@@ -23,7 +23,8 @@ namespace internal {
 
 
 template<class lv, class rv, class Mathlib>
-struct binary_expression<lv, rv, function::dotproduct<Mathlib>> : expression_base<binary_expression<lv, rv,  function::dotproduct<Mathlib>>> {
+struct binary_expression<lv, rv, function::dotproduct<Mathlib>>
+: expression_base<binary_expression<lv, rv,  function::dotproduct<Mathlib>>> {
 
 	using scalar_type = _scalar<lv>;
 
@@ -41,13 +42,12 @@ struct binary_expression<lv, rv, function::dotproduct<Mathlib>> : expression_bas
 	lv left;
 	rv right;
 
-	scalar_type* array_ptr = nullptr;
+	mutable scalar_type* array_ptr = nullptr;
 	int is[2] { left.rows(), right.cols() };
 	int os[2] { left.rows(), left.rows() * right.cols() };
 
 	 binary_expression(lv left, rv right) : left(left), right(right) {
 		Mathlib::initialize(array_ptr, this->size());
-		eval();
 	}
 
 	__BCinline__ const auto& operator [](int index) const  { return array_ptr[index]; }
@@ -74,7 +74,7 @@ struct binary_expression<lv, rv, function::dotproduct<Mathlib>> : expression_bas
 
 public:
 
-	void eval() {
+	void eval() const {
 //				//Uncomment and run dotproduct test to check for the correct detections
 //				if (transA)
 //				std::cout << "A is transposed" << transA << std::endl;

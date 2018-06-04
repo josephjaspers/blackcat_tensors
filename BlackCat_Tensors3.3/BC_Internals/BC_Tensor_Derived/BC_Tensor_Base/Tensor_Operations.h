@@ -17,13 +17,12 @@
 #include "Operations_Implementation/AlternateAsterixDenoter.h"
 #include "Operations_Implementation/Expression_Determiner.h"
 #include "Operations_Implementation/Unary_Functions.h"
-
 #include <type_traits>
 
 namespace BC {
 namespace Base {
-//namespace Base {
- //This is where the beautiful lazy expressions are created
+
+//This is where the beautiful lazy expressions are created
 
 template<class derived>
 struct Tensor_Operations {
@@ -78,6 +77,8 @@ private:
 
 	template<bool BARRIER = true, class t>
 	static void evaluate(const Tensor_Operations<t>& tensor) {
+		tensor.as_derived().data().eval();
+
 		static constexpr int iterator_dimension = _functor<t>::ITERATOR();
 		if (BARRIER)
 			mathlib_type::template dimension<iterator_dimension>::eval(tensor.as_derived().data());
@@ -200,6 +201,12 @@ public:
 	//-------------------------------------------DELAYED ASSIGNMENT OPERATORS---------------------------------------------//
 
 	template<class pDeriv>
+	auto operator =(const alternate_asterix_denoter<pDeriv>& param) const {
+		assert_same_size(param.get());
+		return bi_expr<function::assign>(param.get());
+	}
+
+	template<class pDeriv>
 	auto operator +=(const alternate_asterix_denoter<pDeriv>& param) const {
 		assert_same_size(param.get());
 		return bi_expr<function::add_assign>(param.get());
@@ -259,7 +266,7 @@ public:
 
 	//assert either scalar by tensor operation or same size (not same dimensions)
 	template<class deriv>
-	void  assert_same_size(const Tensor_Operations<deriv>& tensor) const {
+	void assert_same_size(const Tensor_Operations<deriv>& tensor) const {
 		assert_same_ml(tensor);
 
 		if (derived::DIMS() != 0 && deriv::DIMS() != 0)
