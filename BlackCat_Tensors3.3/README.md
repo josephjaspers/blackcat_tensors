@@ -1,23 +1,22 @@
-Last Updated: March 15, 2018
+Last Updated: Sunday, June 3rd, 2018
 Author: Joseph Jaspers
 
-BlackCat_Tensors (BCT) is a highly optimized Matrix library designed for NeuralNetworks.
+BlackCat_Tensors (BCT) is a highly optimized Matrix library designed for NeuralNetworks in a multi-threaded context. Various operations enable utilizing low-level multithreaded concepts in this much higher-level framework.
 
 
 Current Work:
-	Focused on integrating standard Linear Algebra routines (IE BLAS routines).
-	Focused on adding convolution/correlation kernel for ConvNets. 
+	Scaleable injection for BLAS routines, implementating convolution/correlation (using MKL/CUDA)
 
 Intallation/Setup:
 	
 	BCT is a header only library that supports compilation with the NVCC and G++ 
-		- stable with G++ 6 and 7 and NVCC (CUDA 9)
+		- stable with G++ 6 and 7 and NVCC (CUDA 9.2)
 		
 	Setting simply requires adding the BlackCat_Tensors3.3 your path and including "BlackCat_Tensors.h"
 
 FAQ Fast Explanation:
 	
-	Can I use non primitive types? No, BCT currently only supports primitive data types.
+	All data-types are now supported, though the classes are designed for primitive-numeric types
 	
 	CPU multithreading? Simply link openmp
 	GPU multithreading? Install CUDA 9 run with NVCC and choose the GPU mathlibrary. 
@@ -26,8 +25,8 @@ FAQ Fast Explanation:
 	BC::Vector<float, BC::GPU> myVec(sz); //Allocates data on the gpu
 	BC::Vector<double, BC::CPU> myVec(sz); //Allocates data on the cpu
 
-	**Must be linked to an apropriate BLAS with a cblas_dgemm function and a cblas_sgemm function.
-	**Dotproduct currently only availalbe to double, and float types.
+	**Must be linked to an apropriate BLAS with cblas_dgemm function and cblas_sgemm function.
+	**Dotproduct currently only available to double, and float types.
 
 FAQ Fast Explanation (GPU):
 
@@ -46,12 +45,153 @@ Supports:
 
 Optimizations:
 
-	Standard linear operations utilize Expression-Templates 
+	All linear or O(n) operations utilize expression-templates/lazy evaluation system.
 	Dotproducts are implemented through BLAS. Currently no default option is available. 
 	(recommended BLAS implementation ATLAS) 
 
 
+Benchmarks:
+	See bottom of file
+Methods:
+
+**DEFINED IN BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h
+
+	_tensor_& operator =  (const _tensor_&) 		//copy
+	_tensor_& operator =  (const T scalar) 			//fill tensor with scalar value
+	_tensor_  operator +  (const _tensor_&) const		//pointwise addition
+	_tensor_  operator -  (const _tensor_&) const		//pointwise subtraction
+	_tensor_  operator /  (const _tensor_&) const		//pointwise scalar
+	_tensor_  operator *  (const _tensor_&) const		//dotproduct or pointwise multiplication if scalar
+	_tensor_  operator %  (const _tensor_&) const		//pointwise multiplication
+	_tensor_  operator ** (const _tensor_&) const		//pointwise multiplication (alternate)
+	_tensor_& operator += (const _tensor_&)			//assign and sum
+	_tensor_& operator -= (const _tensor_&)			//assign and subract
+	_tensor_& operator /= (const _tensor_&)			//assign and divice
+	_tensor_& operator %= (const _tensor_&)			//assign and pointwise multiply
+
+	//Lazy assignments 					//IE  -> y = a +=* b, will result in 1 for loop
+	_tensor_& operator +=* (const _tensor_&)		//assign and sum 		 - nested lazy-eval
+	_tensor_& operator -=* (const _tensor_&)		//assign and subract  		 - nested lazy-eval
+	_tensor_& operator /=* (const _tensor_&)		//assign and divice  		 - nested lazy-eval
+	_tensor_& operator %=* (const _tensor_&)		//assign and pointwise multiply  - nested lazy-eval
+
+	//Non-Barrier assignments !!!For multi-threading
+	//
+	// The operation: y =** a + b;
+	// followed by  : z =** c + d;
+	//
+	// will run parallel to eachother (must be utilizing openmp or CUDA)
+	// To call the barrier utilize BC::CPU::barrier() or BC::GPU::barrier()
+	// OR to call a barrier utilize a standard assignment operation (barrier is called after the standard-assignment runs)
+
+	_tensor_& operator +=** (const _tensor_&)		//assign and sum
+	_tensor_& operator -=** (const _tensor_&)		//assign and subract
+	_tensor_& operator /=** (const _tensor_&)		//assign and divice
+	_tensor_& operator %=** (const _tensor_&)		//assign and pointwise multiply
+
+
+	//Misc
+	_tensor_ operator - () const				//expression of the negation of the tensor
+	alternate_asterix_denoter operator * () const 		//returns the abstraction class to generate variations of standard opererators
+
+	//Comparisons -- each operation does an element-by-element comparison and returns the apropriate value based on the operand
+
+
+	_tensor_ operator == (const _tensor_&) const		//expression of equality of tensor,               1 == true, 0 == false
+	_tensor_ operator >  (const _tensor_&) const		//expression of greater-than of tensor,           1 == true, 0 == false
+	_tensor_ operator <  (const _tensor_&) const		//expression of less-than of tensor,              1 == true, 0 == false
+	_tensor_ operator >= (const _tensor_&) const		//expression of greater-than-or-equal of tensor,  1 == true, 0 == false
+	_tensor_ operator <= (const _tensor_&) const		//expression of less-than-or-equal of tensor,  	  1 == true, 0 == false
+	_tensor_ operator >* (const _tensor_&) const		//expression of max-value of two tensors
+	_tensor_ operator <* (const _tensor_&) const		//expression of min-value of two tensors
+
+	_tensor_ operator && (const _tensor_&)			//Enables combining two expressions into a single for loop (must be same size)
+	
+	template<class functor> _tensor_ unExpr(functor)			//Creates a custom unary_expression to be lazily evaluated
+	template<class functor> _tensor_ biExpr(functor, const_tensor_&) 	//Creates a custom binary_expression to be lazily evaluated
+
+	NOTES:
+		1) _tensor_ is not an actual type, the type returned is based upon the classes used (IE Vector,Vector Matrix etc).
+		2) Tensor by Scalar operations -- return the dominant tensor type (IE the non scalar type)
+		3) Scalar by Tensor operations -- return the dominant tensor type (IE operation order does matter for non commutative functions)
+		4) functor object needs to have a trivial constructor and the overloaded operator()(T value) (if unary) or operator()(T val1, U val2) (if binary)
+
+**DEFINED IN BC_Internals/BC_Core/Implementation_Core/Tensor_Utility.h
+
+	void print	(void) 		const		//print the tensor (formatted) **calls eval if expression tensor**
+	void printSparse(void) 		const 		//print the tensor (formatted) without outputing 0s (useful for images)
+	void print      (int precision) const		//same but with precision p 
+	void printSparse(int precision) const		//same but with precision p
+	void randomize(T lowerbound, T upperbound) 	//randomize the tensor within a given range
+	void fill(T value)				//fill tensor with specific value
+	void zero() 					//fill with 0s
+	
+	void write(ofstream&) const			//write as a single line of CSV -> First writes rank of tensor, then dimensions, then the values
+	void read(ifstream&, 				//Reads a line from a csv (regardless of size),
+			bool read_dimensions=true,     //if read_dimensions assumes line was written by .write() 						 
+			bool overwrite_dimensions=true)	//if overwrite_dimensions, overwrites the dimensions of the tensor (only relevant if read_dimensions is true)
+
+**DEFINED IN BC_Internals/BC_Core/Tensor_Base.h
+
+	int dims() const				//returns number of dimensions (scalar = 0, vector = 1, matrix = 2, etc)
+	int size() const				//returns number of elements 
+	int rows() const				//returns rows 
+	int cols() const				//returns cols 
+	int dimension(int i) const 			//returns the dimension at a given index
+	int ld_dimension(int i) const 			//returns the leading dimension at a given index
+	int ld1() const					//returns internal row_dimension (relevant for transpose expressions, subtensors, etc)
+	int ld2() const					//returns internal matrix_dimension (only relevant for tensors of order > 2 IE Cubes)
+	void print_dimensions() const			//prints the dimensions of tensor... formated: [row][col][etc]
+	void print_leading_dimensions() const		//prints the internal dimensions of tensor... formated: [ld_row][ld_cols][etc]
+
+	const auto inner_shape() const			//returns some_array_type which holds inner shape (type depedent on context)
+	const auto outer_shape() const			//returns some_array_type which holds outer shape (type depedent on context)
+
+	const auto data() const				//returns internal iterator IE expression_functor or Core/Tensor_Slice/Tensor/Scalar
+	      auto data()				//returns internal iterator IE expression_functor or Core/Tensor_Slice/Tensor/Scalar
+
+
+**DEFINED IN BC_Internals/BC_Core/Tensor_Shapinh.h
+
+	const operator[] (int i) const 			//returns "slice" of tensor at index (IE Cube returns Matrix, Matrix returns Vector, Vector returns Scalar)
+   	      operator[] (int i)			//returns "slice" of tensor at index (IE Cube returns Matrix, Matrix returns Vector, Vector returns Scalar)
+	const slice 	 (int i) const 			//same as operator[]
+   	      slice	 (int i)			//same as operator[]
+	
+
+	const opeartor() (int i) const 			//returns a scalar at given index
+	      operator() (int i) 			//returns a scalar at given index
+
+	const row(int i) const 				//returns a row vector (static asserts class is matrix)
+	      row(int i)				//returns a row vector (static asserts class is matrix)
+
+	const col(int i) const 				//returns a slice of a matrix (same as operator[] only, available to matrices)
+	      col(int i)				//returns a slice of a matrix (same as operator[] only, available to matrices)
+
+	const auto operator() (int... dimlist) const 	//returns a tensor slice || IE myTensor(1,2,3) equivalent to myTensor[1][2][3] 
+	      auto operator() (int... dimlist)		//returns a tensor slice || IE myTensor(1,2,3) equivalent to myTensor[1][2][3] 
+
+	void resize(ints...)				//resizes the tensor and deletes the old-contents
+
+	static _tensor_ reshape(_tensor_&)(integers...)	//reshapes the tensor to the given dimensions, this is a lazy expression
+							//reshape does NOT modify the original shape, any modifications of the data
+							//effects its original source 
+							//This function is curried IE reshape(myVec)(5,5) //returns vec expression reshaped to a 5x5 matrix
+	static _tensor_ chunk(_tensor_&)(location_ints...)(shape_ints...) //returns a chunk of a tensor at give location integers
+									  //with the respetive shape given from shape_ints...
+									  //any modifications of the new data effect its original source
+									  //This function is curreid IE chunk(myCube)(2,1,0)(2,2)
+									  // --- returns a 2x2matrix at page 3,column 2, row 0.
+
+**DEFINED IN BC_Internals/BC_Core/Matrix.h and Vector.h
+
+	cosnt auto t() const		//returns a transpose expression (cannot transpose in place)
+	      auto t() 			//returns a transpose expression (cannot transpose in place)
+
+
 --------------------------------------------------------------------------------------------------------
+
+***Planning on more benchmarks soon***
 
 Benchmarks:
 https://github.com/josephjaspers/BlackCat_Libraries/blob/master/BlackCat_Tensors3.3/UnitTests/Benchmarks/BenchmarkEigen.h
@@ -111,85 +251,3 @@ Benchmarks:
 	If these benchmarks seem misleading/incorrect please post an issue, and I will review accordingly.
 	-------------------------------------------------------------------------------------------------------
 
-Methods:
-
-**DEFINED IN BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h
-
-	_tensor_& operator =  (const _tensor_&) 		//copy
-	_tensor_& operator =  (const T scalar) 			//fill tensor with scalar value
-	_tensor_  operator +  (const _tensor_&) const		//pointwise addition
-	_tensor_  operator -  (const _tensor_&) const		//pointwise subtraction
-	_tensor_  operator /  (const _tensor_&) const		//pointwise scalar
-	_tensor_  operator *  (const _tensor_&) const		//dotproduct or pointwise multiplication if scalar
-	_tensor_  operator %  (const _tensor_&) const		//pointwise multiplication
-	_tensor_  operator ** (const _tensor_&) const		//pointwise multiplication (alternate)
-	_tensor_& operator += (const _tensor_&)			//assign and sum
-	_tensor_& operator -= (const _tensor_&)			//assign and subract
-	_tensor_& operator /= (const _tensor_&)			//assign and divice
-	_tensor_& operator %= (const _tensor_&)			//assign and pointwise multiply
-
-	_tensor_ operator == (const _tensor_&)			//LAZY ASSIGNMENT (to be nested within a lazy evaluation)
-	_tensor_ operator && (const _tensor_&)			//Enables combining two expressions into a single for loop (must be same size)
-	
-	template<class functor> _tensor_ unExpr(functor)			//Creates a custom unary_expression to be lazily evaluated
-	template<class functor> _tensor_ biExpr(functor, const_tensor_&) 	//Creates a custom binary_expression to be lazily evaluated
-
-	NOTES:
-		1) _tensor_ is not an actual type, the type returned is based upon the classes used (IE Vector,Vector Matrix etc).
-		2) Tensor by Scalar operations -- return the dominant tensor type (IE the non scalar type)
-		3) Scalar by Tensor operations -- return the dominant tensor type (IE operation order does matter for non commutative functions)
-		4) functor object needs to have a trivial constructor and the overloaded operator()(T value) (if unary) or operator()(T val1, U val2) (if binary)
-
-**DEFINED IN BC_Internals/BC_Core/Implementation_Core/Tensor_Utility.h
-
-	auto eval	(void)  	const		//if an expression_tensor instantly evaluate, else return reference to self
-	void print	(void) 		const		//print the tensor (formatted) **calls eval if expression tensor**
-	void printSparse(void) 		const 		//print the tensor (formatted) without outputing 0s (useful for images)
-	void print      (int precision) const		//same but with precision p 
-	void printSparse(int precision) const		//same but with precision p
-	void randomize(T lowerbound, T upperbound) 	//randomize the tensor within a given range
-	void fill(T value)				//fill tensor with specific value
-	void zero() 					//fill with 0s
-	void zeros()					//fill with 0s (alternate) 
-	
-	void write(ofstream&) const			//write as a single line of CSV -> First writes rank of tensor, then dimensions, then the values
-	void read(ifstream&, 				//Reads a line from a csv (regardless of size),
-			bool read_dimensions=true,     //if read_dimensions assumes line was written by .write() 						 
-			bool overwrite_dimensions=true)	//if overwrite_dimensions, overwrites the dimensions of the tensor (only relevant if read_dimensions is true)
-
-**DEFINED IN BC_Internals/BC_Core/TensorBase.h
-
-	int dims() const				//returns rank 
-	int size() const				//returns size
-	int rows() const				//returns rows 
-	int dimension(int i) const 			//returns the dimension at a given index
-	int ld1() const				//returns internal row_dimension (relevant for transpose expressions, subtensors, etc)
-	int ld2() const				//returns internal col_dimension (only relevant for tensors of order > 2 IE Cubes)
-	int resetShape(std::vector<int>) 		//reshapes tensor, shape must be of same rank
-	void print_dimensions() const			//prints the dimensions of tensor... formated: [row][col][etc]
-	void print_leading_dimensions() const			//prints the internal dimensions of tensor... formated: [ld_row][ld_cols][etc]
-
-	const auto inner_shape() const			//returns some_array_type which holds inner shape (type depedent on context)
-	const auto outer_shape() const			//returns some_array_type which holds outer shape (type depedent on context)
-
-	const auto data() const				//returns internal iterator IE expression_functor or Core/Tensor_Slice/Tensor/Scalar
-	      auto data()				//returns internal iterator IE expression_functor or Core/Tensor_Slice/Tensor/Scalar
-
-	const operator[] (int i) const 			//returns "slice" of tensor at index (IE Cube returns Matrix, Matrix returns Vector, Vector returns Scalar)
-   	      operator[] (int i)			//returns "slice" of tensor at index (IE Cube returns Matrix, Matrix returns Vector, Vector returns Scalar)
-
-	const opeartor() (int i) const 			//returns a scalar at given index
-	      operator() (int i) 			//returns a scalar at given index
-
-	const row(int i) const 				//returns a row vector (static asserts class is matrix)
-	      row(int i)				//returns a row vector (static asserts class is matrix)
-
-	const auto operator() (int... dimlist) const 	//returns a tensor slice || IE myTensor(1,2,3) equivalent to myTensor[1][2][3] 
-	      auto operator() (int... dimlist)		//returns a tensor slice || IE myTensor(1,2,3) equivalent to myTensor[1][2][3] 
-
-	static array shapeOf (const TensorBase<T>&)	//returns shape of given tensor 
-
-**DEFINED IN BC_Internals/BC_Core/Matrix.h and Vector.h
-
-	cosnt auto t() const		//returns a transpose expression (cannot transpose in place)
-	      auto t() 			//returns a transpose expression (cannot transpose in place)

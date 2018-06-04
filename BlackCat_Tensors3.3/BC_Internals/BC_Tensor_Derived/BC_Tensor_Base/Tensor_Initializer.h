@@ -55,7 +55,7 @@ class Tensor_Initializer<_tensor<t, ml>, std::enable_if_t<!std::is_base_of<BC_Ty
 	using scal			= _scalar<derived>;
 	using _shape 		= std::vector<int>;
 
-protected:
+public:
 	functor_type black_cat_array;
 private:
 	auto& as_derived() 			   { return static_cast<	  derived&>(*this); }
