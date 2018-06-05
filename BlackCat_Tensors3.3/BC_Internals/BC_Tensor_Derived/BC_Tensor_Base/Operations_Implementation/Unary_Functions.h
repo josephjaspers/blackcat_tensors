@@ -14,7 +14,7 @@
 namespace BC {
 //alternate names from transposition
 template<class deriv>
-static auto trans(Base::Tensor_Operations<deriv>& tensor) {
+static auto transpose(Base::Tensor_Operations<deriv>& tensor) {
 	 return tensor.t();
 }
 //zero and one are the equivalent but delayed evaluation version,

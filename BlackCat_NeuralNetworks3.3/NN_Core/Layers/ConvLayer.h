@@ -34,11 +34,11 @@
 //	omp_unique<tensor4> w_gradientStorage;
 //	bp_list<tensor4> ys;
 //
-//	Conv(std::initializer_list<int> data) :
-//			row(data.begin()[0]),
-//			col(data.begin()[1]),
-//			channels(data.begin()[2]),
-//			filters(data.begin()[3]),
+//	Conv(std::initializer_list<int> internal) :
+//			row(internal.begin()[0]),
+//			col(internal.begin()[1]),
+//			channels(internal.begin()[2]),
+//			filters(internal.begin()[3]),
 //			w(KRNL_DIM,KRNL_DIM,channels, filters)
 //	{
 //		w.randomize(0, 3);

@@ -6,8 +6,8 @@ using BC::Matrix;
 using BC::Scalar;
 using BC::Cube;
 
-//using ml = BC::CPU;
-using ml = BC::GPU;
+using ml = BC::CPU;
+//using ml = BC::GPU;
 
 using vec = Vector<float, ml>;
 using mat = Matrix<float, ml>;
@@ -17,7 +17,7 @@ using tensor4 = BC::Tensor4<float, ml>;
 using tesnor5 = BC::Tensor5<float, ml>;
 
 
-//std::vector<unsigned int> data_type;
+//std::vector<unsigned int> internal_type;
 //using ary = std::vector<unsigned int>;
 
 #include "_correlation_test.h"
@@ -57,7 +57,6 @@ std::string type_name() {
 template<class T>
 auto g(const T& tensor) {
 	return tensor.un_expr([](auto value) { return 1 / (1 + 2.7182 * value); });
-
 }
 
 int main() {
@@ -68,20 +67,33 @@ int main() {
 	readwrite();
 	shaping();
 
-	mat x(1,1);
-	mat y(1,1);
+	mat x(2,2);
+	mat y(2,2);
+	mat z(2,2);
+	z.zero();
+	for (int i = 0; i < 4; ++i) {
+		x(i) = i;
+		y(i) = i + 4;
+	}
 
-	using t = decltype((x * y).data());
+	x.print();
+	y.print();
+
+	using t = decltype((x * y).internal());
 	std::cout << "evaluate - BLAS detection - " << BC::internal::INJECTION<t>() << std::endl;
 	std::cout << type_name<t>() << std::endl << std::endl;
 
 
-//	using U = decltype((x =* (x * x)).data());
-		using U = decltype((x =* abs(x * x)).data());
+//	using U = decltype((x =* (x * x)).internal());
+		using U = decltype((x =* (x * x + y)).internal());
+		auto function = (z =* (x * x + y)).internal();
 	std::cout << "evaluate - BLAS detection - " << BC::internal::INJECTION<U>() << std::endl;
 	std::cout << type_name<U>() << std::endl << std::endl;
 
-	using adjusted = typename BC::internal::injector<std::decay_t<U>>::template type<decltype(x.data())>;
+	using adjusted = BC::internal::injection_t<U, decltype(x.internal())>;//typename BC::internal::injector<std::decay_t<U>>::template type<decltype(x.internal())>;
+	using tens = BC::tensor_of_t<adjusted::DIMS(), adjusted, ml>;
+
+
 	std::cout << type_name<adjusted>() << std::endl << std::endl;
 
 	//	cube c(4,3,3);//output
@@ -89,8 +101,16 @@ int main() {
 //	b.randomize(0,1);
 //	b.print();
 //	c.zero();
+	adjusted fixed(function, z.internal());
 
+	for (int i = 0; i < 4; ++i) {
+		std::cout << fixed[i] << std::endl;
+	}
 
+	auto var = tens(adjusted(function, z.internal()));
+
+	mat output = var;
+	output.print();
 	std::cout << " success  main" << std::endl;
 
 }

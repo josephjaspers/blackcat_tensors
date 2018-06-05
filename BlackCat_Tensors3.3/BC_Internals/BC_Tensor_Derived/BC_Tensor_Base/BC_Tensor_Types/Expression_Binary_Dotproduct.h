@@ -45,9 +45,7 @@ struct binary_expression<lv, rv, function::dotproduct<Mathlib>>
 	int is[2] { left.rows(), right.cols() };
 	int os[2] { left.rows(), left.rows() * right.cols() };
 
-	 binary_expression(lv left, rv right) : left(left), right(right) {
-		Mathlib::initialize(array_ptr, this->size());
-	 }
+	 binary_expression(lv left, rv right) : left(left), right(right) {}
 
 	__BCinline__ const auto& operator [](int index) const  { return array_ptr[index]; }
 	__BCinline__ 	   auto& operator [](int index) 	   { return array_ptr[index]; }
@@ -73,21 +71,7 @@ struct binary_expression<lv, rv, function::dotproduct<Mathlib>>
 
 public:
 
-	void eval() const {
-//				//Uncomment and run dotproduct test to check for the correct detections
-//				if (transA)
-//				std::cout << "A is transposed" << transA << std::endl;
-//				if (transB)
-//				std::cout <<"B is transposed" << transB << std::endl;
-//				if (lv_scalar)
-//				std::cout << "A has scalar " <<lv_scalar << std::endl;
-//				if (rv_scalar)
-//				std::cout <<"B has scalar" << rv_scalar << std::endl;
-//				if (lv_eval)
-//				std::cout << "A instant eval" <<lv_eval << std::endl;
-//				if(rv_eval)
-//				std::cout <<"B instant eval " << rv_eval << std::endl;
-
+	void eval_impl() const {
 		scalar_type* A = nullptr;
 		scalar_type* B = nullptr;
 		scalar_type* alpha = nullptr;
@@ -129,13 +113,23 @@ public:
 			Mathlib::destroy(A);
 		if (rv_eval)
 			Mathlib::destroy(B);
-
 	}
+	template<class core>
+	void eval(core injection) const {
+		this->array_ptr = injection; //automatically converts (built in cast)
+		eval_impl();
+		this->array_ptr = nullptr; //nullify to ensure it doesn't not delete
+	}
+
+	void eval() const {
+		Mathlib::initialize(array_ptr, this->size());
+		eval_impl();
+	}
+
 };
 
 }
 }
-
 //		if (transA)
 //		std::cout << "A is transposed" << transA << std::endl;
 //		if (transB)

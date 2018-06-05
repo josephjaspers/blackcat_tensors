@@ -19,14 +19,14 @@ class binary_tree : Collection<T, deleter> {
 	struct node {
 		static constexpr deleter destroy = deleter();
 
-		T data;
+		T internal;
 		node* left;
 		node* right;
 
 		node(T d, node* l=nullptr, node* r=nullptr) :
-			data(d), left(l), right(r) {}
+			internal(d), left(l), right(r) {}
 		~node() {
-			deleter()(data);
+			deleter()(internal);
 		}
 	};
 
@@ -39,27 +39,27 @@ public:
 	virtual ~binary_tree() { clear(); }
 	virtual bool empty() const { return !sz; }
 	virtual int size()  const { return sz; }
-	virtual bool add(T data) override {
+	virtual bool add(T internal) override {
 
 		if (!head) {
-			head = new node(data);
+			head = new node(internal);
 			++sz;
 			return true;
 		}
 		node* ref = head;
 
 		while (ref) {
-			if (data < ref->data)
+			if (internal < ref->internal)
 				if (ref -> left)
 					ref = ref->left;
 				else
-					ref -> left = new node(data);
-			else if (data > ref->data)
+					ref -> left = new node(internal);
+			else if (internal > ref->internal)
 				if (ref -> right)
 					ref = ref->right;
 				else
-					ref -> right = new node(data);
-			else if (data == ref->data)
+					ref -> right = new node(internal);
+			else if (internal == ref->internal)
 				return false;
 		}
 		++sz;
@@ -89,10 +89,10 @@ private:
 	}
 
 	//naive implementation, always concats left most side
-	node* remove_impl(T data, node* ref) {
+	node* remove_impl(T internal, node* ref) {
 		if (!ref)
 			return nullptr;
-		if (ref->data == data){
+		if (ref->internal == internal){
 			node* link;
 
 			if (!ref->left)
@@ -105,17 +105,17 @@ private:
 			delete ref;
 			return link;
 		}
-		if (data < ref->data)
-			ref->left = remove_impl(data, ref->left);
-		else if (data > ref->data)
-			ref->right = remove_impl(data, ref->right);
+		if (internal < ref->internal)
+			ref->left = remove_impl(internal, ref->left);
+		else if (internal > ref->internal)
+			ref->right = remove_impl(internal, ref->right);
 
 		return ref;
 	}
 
 public:
-	virtual bool remove(T data) {
-		remove_impl(data, head);
+	virtual bool remove(T internal) {
+		remove_impl(internal, head);
 		return true;
 	}
 
@@ -141,7 +141,7 @@ private:
 			return;
 
 		print_impl(ref->left);
-		std::cout << ref->data << std::endl;
+		std::cout << ref->internal << std::endl;
 		print_impl(ref->right);
 	}
 public:

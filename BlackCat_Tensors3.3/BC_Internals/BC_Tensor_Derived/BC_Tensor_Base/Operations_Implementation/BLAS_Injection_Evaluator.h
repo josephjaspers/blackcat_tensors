@@ -8,7 +8,6 @@
 #ifndef BLAS_INJECTION_EVALUATOR_H_
 #define BLAS_INJECTION_EVALUATOR_H_
 
-#include "Expression_Binary_Functors.h"
 #include <type_traits>
 namespace BC {
 
@@ -114,8 +113,8 @@ namespace internal {
 
 	};
 
-	template<class lv, class rv>
-	struct injector<be<lv, rv, BC::function::dotproduct<BC::CPU>>, void> {
+	template<class lv, class rv, class ml>
+	struct injector<be<lv, rv, BC::function::dotproduct<ml>>, void> {
 		static constexpr int priority = -1;
 		static constexpr bool conditional = true;
 
@@ -128,6 +127,9 @@ namespace internal {
 	static constexpr bool INJECTION() {
 		return injector<std::decay_t<T>>::conditional;
 	}
+
+	template<class expression, class injection>
+	using injection_t =  typename injector<std::decay_t<expression>>::template type<std::decay_t<injection>>;
 
 
 }

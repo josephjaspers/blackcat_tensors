@@ -45,7 +45,7 @@ void convolution() {
 	checkCUDNN(cudnnCreateTensorDescriptor(&input_descriptor));
 	checkCUDNN(tensor_descriptor<dimension>(input_descriptor,
 	                                      /*format=*/CUDNN_TENSOR_HWC,
-	                                      /*dataType=*/CUDNN_DATA_FLOAT,
+	                                      /*internalType=*/CUDNN_DATA_FLOAT,
 	                                      /*batch_size=*/1,
 	                                      /*channels=*/3,
 	                                      /*image_height=*/image.rows,
@@ -55,7 +55,7 @@ void convolution() {
 	checkCUDNN(cudnnCreateTensorDescriptor(&output_descriptor));
 	checkCUDNN(tensor_descriptor<dimension>(output_descriptor,
 	                                      /*format=*/CUDNN_TENSOR_NHWC,
-	                                      /*dataType=*/CUDNN_DATA_FLOAT,
+	                                      /*internalType=*/CUDNN_DATA_FLOAT,
 	                                      /*batch_size=*/1,
 	                                      /*channels=*/3,
 	                                      /*image_height=*/image.rows,
@@ -64,7 +64,7 @@ void convolution() {
 	cudnnFilterDescriptor_t kernel_descriptor;
 	checkCUDNN(cudnnCreateFilterDescriptor(&kernel_descriptor));
 	checkCUDNN(tensor_descriptor<dimension>(kernel_descriptor,
-	                                      /*dataType=*/CUDNN_DATA_FLOAT,
+	                                      /*internalType=*/CUDNN_DATA_FLOAT,
 	                                      /*format=*/CUDNN_TENSOR_NCHW,
 	                                      /*out_channels=*/3,
 	                                      /*in_channels=*/3,

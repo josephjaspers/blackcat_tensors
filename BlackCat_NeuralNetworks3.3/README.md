@@ -45,13 +45,13 @@ How To Use:
 	BC::NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10); //creates a 3 layer neural network
 	
 	network.forwardPropagation(BC::Vector<float>); 			//forward pass through network
-	network.forwardPropagation_Expression(BC::Vector<float>); 	//forward pass, do not store data for backward pass
+	network.forwardPropagation_Expression(BC::Vector<float>); 	//forward pass, do not store internal for backward pass
 	network.backPropagation(BC::Vector<float>)			//backward pass, calculates error byitself
 	network.updateWeights();					//updates neural network weights, gradients are stored during backProapgation.
 	network.clearBPStorage();					//clear the stored gradients
 
 
-Example main (for MNIST dataset) go to:
+Example main (for MNIST internalset) go to:
 	https://github.com/josephjaspers/BlackCat_Libraries/blob/master/BlackCat_NeuralNetworks3.3/UnitTests/MNIST_test.cpp
 
 

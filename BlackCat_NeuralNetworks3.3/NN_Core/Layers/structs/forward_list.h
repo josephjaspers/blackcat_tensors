@@ -18,9 +18,9 @@ class forward_list {
 	struct node {
 
 		node(T d, node* n = nullptr)
-		: data(d), next(n) {}
+		: internal(d), next(n) {}
 
-		T data;
+		T internal;
 		node* next = nullptr;
 	};
 
@@ -29,12 +29,12 @@ class forward_list {
 	int sz = 0;
 public:
 
-	void push(T data) {
+	void push(T internal) {
 		if (head) {
-			node* h = new node(data, head);
+			node* h = new node(internal, head);
 			head = h;
 		} else {
-			head = new node(data);
+			head = new node(internal);
 		}
 		sz++;
 	}
@@ -55,22 +55,22 @@ public:
 		delete h;
 	}
 	T pop() {
-		T data = (head->data);
+		T internal = (head->internal);
 		rm_front();
-		return (data);
+		return (internal);
 	}
 
 	T& first() {
-		return head->data;
+		return head->internal;
 	}
 	const T& first() const {
-		return head->data;
+		return head->internal;
 	}
 	T& second() {
-		return head->next->data;
+		return head->next->internal;
 	}
 	const T& second() const {
-		return head->next->data;
+		return head->next->internal;
 	}
 
 

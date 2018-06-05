@@ -16,14 +16,14 @@ Intallation/Setup:
 
 FAQ Fast Explanation:
 	
-	All data-types are now supported, though the classes are designed for primitive-numeric types
+	All internal-types are now supported, though the classes are designed for primitive-numeric types
 	
 	CPU multithreading? Simply link openmp
 	GPU multithreading? Install CUDA 9 run with NVCC and choose the GPU mathlibrary. 
 
 	How to choose mathlibrary?
-	BC::Vector<float, BC::GPU> myVec(sz); //Allocates data on the gpu
-	BC::Vector<double, BC::CPU> myVec(sz); //Allocates data on the cpu
+	BC::Vector<float, BC::GPU> myVec(sz); //Allocates internal on the gpu
+	BC::Vector<double, BC::CPU> myVec(sz); //Allocates internal on the cpu
 
 	**Must be linked to an apropriate BLAS with cblas_dgemm function and cblas_sgemm function.
 	**Dotproduct currently only available to double, and float types.
@@ -36,7 +36,7 @@ FAQ Fast Explanation (GPU):
 	y = m * x + b 
 
 	will lazily evaluate the entire expression and then sound the entire function to the GPU to run. 
-	data is NOT passed back and forth between the CPU and GPU, (this is more efficient) 
+	internal is NOT passed back and forth between the CPU and GPU, (this is more efficient) 
 
 Supports:
 
@@ -147,8 +147,8 @@ Methods:
 	const auto inner_shape() const			//returns some_array_type which holds inner shape (type depedent on context)
 	const auto outer_shape() const			//returns some_array_type which holds outer shape (type depedent on context)
 
-	const auto data() const				//returns internal iterator IE expression_functor or Core/Tensor_Slice/Tensor/Scalar
-	      auto data()				//returns internal iterator IE expression_functor or Core/Tensor_Slice/Tensor/Scalar
+	const auto internal() const				//returns internal iterator IE expression_functor or Core/Tensor_Slice/Tensor/Scalar
+	      auto internal()				//returns internal iterator IE expression_functor or Core/Tensor_Slice/Tensor/Scalar
 
 
 **DEFINED IN BC_Internals/BC_Core/Tensor_Shapinh.h
@@ -174,12 +174,12 @@ Methods:
 	void resize(ints...)				//resizes the tensor and deletes the old-contents
 
 	static _tensor_ reshape(_tensor_&)(integers...)	//reshapes the tensor to the given dimensions, this is a lazy expression
-							//reshape does NOT modify the original shape, any modifications of the data
+							//reshape does NOT modify the original shape, any modifications of the internal
 							//effects its original source 
 							//This function is curried IE reshape(myVec)(5,5) //returns vec expression reshaped to a 5x5 matrix
 	static _tensor_ chunk(_tensor_&)(location_ints...)(shape_ints...) //returns a chunk of a tensor at give location integers
 									  //with the respetive shape given from shape_ints...
-									  //any modifications of the new data effect its original source
+									  //any modifications of the new internal effect its original source
 									  //This function is curreid IE chunk(myCube)(2,1,0)(2,2)
 									  // --- returns a 2x2matrix at page 3,column 2, row 0.
 

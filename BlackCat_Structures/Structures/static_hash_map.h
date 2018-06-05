@@ -24,14 +24,14 @@ struct static_hash_map {
 	static constexpr hasher hash = hasher();
 	static constexpr int default_size = 256;
 
-	struct data {
+	struct internal {
 		bool initialized = false;
 
 		K key;
 		V value;
 
-		data() = default;
-		data(K key_, V value_ = V())
+		internal() = default;
+		internal(K key_, V value_ = V())
 			: key(key_),
 			  value(value_),
 			  initialized(true)
@@ -39,10 +39,10 @@ struct static_hash_map {
 			/*empty*/
 		}
 
-		data(const data&) = default;
-		data(data&&) = default;
+		internal(const internal&) = default;
+		internal(internal&&) = default;
 
-		//get a simple string format of the data
+		//get a simple string format of the internal
 		std::string str() const {
 			return std::string("Key: " + to_str(key) + ", Value: " + to_str(value));
 		}
@@ -51,11 +51,11 @@ struct static_hash_map {
 	int bucket_length;
 	int element_count;
 
-	//internal data array
-	data* bucket;
+	//internal internal array
+	internal* bucket;
 
 	static_hash_map(int default_sz = default_size) {
-		bucket = new data[default_sz];
+		bucket = new internal[default_sz];
 		bucket_length = default_sz;
 		element_count = 0;
 	}

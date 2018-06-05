@@ -24,14 +24,14 @@ struct  stack_hash_map{
 	const hasher hash;
 	static constexpr int bucket_length = SIZE;
 
-	struct data {
+	struct internal {
 		bool initialized = false;
 
 		K key;
 		V value;
 
-		data() = default;
-		data(K key_, V value_ = V())
+		internal() = default;
+		internal(K key_, V value_ = V())
 			: key(key_),
 			  value(value_),
 			  initialized(true)
@@ -39,7 +39,7 @@ struct  stack_hash_map{
 			/*empty*/
 		}
 
-		//get a simple string format of the data
+		//get a simple string format of the internal
 		std::string str() const {
 			return std::string("Key: " + to_str(key) + ", Value: " + to_str(value));
 		}
@@ -50,7 +50,7 @@ struct  stack_hash_map{
 		: hash(hash_) {}
 
 	int element_count = 0;
-	data bucket[bucket_length];
+	internal bucket[bucket_length];
 
 	int size() const {
 		return element_count;

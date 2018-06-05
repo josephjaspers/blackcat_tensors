@@ -32,7 +32,7 @@ int main() {
 //	parser.parse("///home/joseph///Downloads///parse_test.csv");
 //
 //	BC::CSV::DataFrame<int, std::string, std::string, float> df(parser);
-//	df.ORDER_BY([](auto& x) { return x.head().data(); });
+//	df.ORDER_BY([](auto& x) { return x.head().internal(); });
 //
 //
 //	std::cout << std::endl << " now printing out df" << std::endl;

@@ -14,7 +14,7 @@
 #include "../BlackCat_Internal_Definitions.h"
 /*
  * Defines stack array and lambda array
- * These are just two trivially classes used for storing small amounts of homogenous data types, generally ints
+ * These are just two trivially classes used for storing small amounts of homogenous internal types, generally ints
  */
 
 namespace BC {
@@ -53,7 +53,7 @@ namespace BC {
 	};
 
 	//accepts a lambda that takes a single-integer parameter
-	template<class T> __BChd__ auto l_array(T data) { return lambda_array<T>(data); }
+	template<class T> __BChd__ auto l_array(T internal) { return lambda_array<T>(internal); }
 }
 
 

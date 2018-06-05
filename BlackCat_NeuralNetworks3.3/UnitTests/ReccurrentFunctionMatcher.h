@@ -13,7 +13,7 @@ using BC::NN::mat;
 namespace BC {
 namespace NN {
 namespace FunctionMatcher {
-typedef std::vector<mat> data;
+typedef std::vector<mat> internal;
 
 //CPU only
 mat fixed_sin_set(int n) {
@@ -40,7 +40,7 @@ int test() {
 	NeuralNetwork<FeedForward, GRU, FeedForward> network(1, 125, 40, 1);
 	network.setLearningRate(.003);
 
-	data inputs(NUMB_EXAMPLES);
+	internal inputs(NUMB_EXAMPLES);
 	for (int i = 0; i < NUMB_EXAMPLES; ++i){
 		int length = (rand() % 10) + 3;
 		inputs[i] = fixed_sin_set(length);

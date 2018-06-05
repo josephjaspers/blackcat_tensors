@@ -10,7 +10,6 @@
 
 #include "BlackCat_Internal_Definitions.h"
 #include "BLAS_Expression_Evaluator.h"
-#include "BLAS_Injection_Evaluator.h"
 #include <iostream>
 #include <type_traits>
 

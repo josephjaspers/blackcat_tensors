@@ -21,7 +21,7 @@ class CSV_Parser {
 
 	std::string filename;
 	std::ifstream is;
-	grid data;
+	grid internal;
 
 	std::vector<int> col_skips;
 	std::vector<int> row_skips;
@@ -63,7 +63,7 @@ public:
 
 	void parse(std::string filename, bool skip_header = false, bool read_header = true) {
 		is = std::ifstream(filename);
-		std::vector<std::string> data_row;
+		std::vector<std::string> internal_row;
 		std::string row;
 		std::string cell;
 		int current_row = 0;
@@ -103,7 +103,7 @@ public:
 
 			// check if skip row, else for each line
 			if (!isSkipRow(current_row)) {
-				data_row = std::vector<std::string>(0);
+				internal_row = std::vector<std::string>(0);
 				std::stringstream ss(row);
 
 				current_col = 0;
@@ -111,18 +111,18 @@ public:
 					std::getline(ss, cell, ',');
 					//check is skip col, else read
 					if (!isSkipCol(current_col))
-						data_row.push_back(cell);
+						internal_row.push_back(cell);
 
 					++current_col;
 				}
-				data.push_back(data_row);
+				internal.push_back(internal_row);
 			}
 			++current_row;
 		}
 	}
 
 	const auto& getData() const {
-		 return data;
+		 return internal;
 	}
 	void print() {
 		for (std::string header : column_names) {
@@ -130,9 +130,9 @@ public:
 		}
 		std::cout << std::endl;
 
-		for (int r = 0; r < data.size(); ++r) {
-			for (int c = 0; c < data[r].size(); ++c) {
-				std::cout << data[r][c] << ", ";
+		for (int r = 0; r < internal.size(); ++r) {
+			for (int c = 0; c < internal[r].size(); ++c) {
+				std::cout << internal[r][c] << ", ";
 			}
 			std::cout << std::endl;
 		}

@@ -17,9 +17,9 @@ class forward_list : Collection<T, deleter> {
 	struct node {
 
 		node(T d, node* n = nullptr)
-		: data(d), next(n) {}
+		: internal(d), next(n) {}
 
-		T data;
+		T internal;
 		node* next = nullptr;
 	};
 
@@ -62,20 +62,20 @@ public:
 		return *this;
 	}
 
-	bool push(T data) {
+	bool push(T internal) {
 		if (head) {
-			node* h = new node(data, head);
+			node* h = new node(internal, head);
 			head = h;
 		} else {
-			head = new node(data);
+			head = new node(internal);
 		}
 		return true;
 	}
-	int contains(const T& data) const  {
+	int contains(const T& internal) const  {
 		node* ref = head;
 		int index = 0;
 		while(ref) {
-			if (ref->data == data)
+			if (ref->internal == internal)
 				return index;
 
 			ref = ref->next;
@@ -90,11 +90,11 @@ public:
 			--i;
 		}
 
-		return ref->data;
+		return ref->internal;
 	}
 
-	bool add(T data) override {
-		return push(data);
+	bool add(T internal) override {
+		return push(internal);
 	}
 	bool empty() const override {
 		return head == nullptr;
@@ -120,33 +120,33 @@ public:
 		delete h;
 	}
 	T pop() {
-		T data = (head->data);
+		T internal = (head->internal);
 		remove_head();
-		return (data);
+		return (internal);
 	}
 
 	T& first() {
-		return head->data;
+		return head->internal;
 	}
 	//same as first
 	T& front() {
-		return head->data;
+		return head->internal;
 	}
 	const T& first() const {
-		return head->data;
+		return head->internal;
 	}
 	T& second() {
-		return head->next->data;
+		return head->next->internal;
 	}
 	const T& second() const {
-		return head->next->data;
+		return head->next->internal;
 	}
 
 	template<class functor>
 	void for_each(functor f) const {
 		node* ref = head;
 		while(ref) {
-			f(ref->data);
+			f(ref->internal);
 			ref = ref->next;
 		}
 	}
@@ -154,7 +154,7 @@ public:
 	void for_each(functor f) {
 		node* ref = head;
 		while(ref) {
-			f(ref->data);
+			f(ref->internal);
 			ref = ref->next;
 		}
 	}

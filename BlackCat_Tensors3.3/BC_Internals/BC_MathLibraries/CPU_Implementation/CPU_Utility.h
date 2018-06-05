@@ -11,7 +11,7 @@
 namespace BC {
 
 /*
- * Defines methods relating to data creation/destruction and I/O
+ * Defines methods relating to internal creation/destruction and I/O
  */
 
 template<class core_lib>

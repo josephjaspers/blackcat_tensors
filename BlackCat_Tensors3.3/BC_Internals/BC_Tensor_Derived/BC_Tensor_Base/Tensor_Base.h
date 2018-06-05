@@ -13,12 +13,14 @@
 #include "Tensor_Utility.h"
 #include "Tensor_Initializer.h"
 #include "Tensor_Shaping.h"
+#include "Tensor_Functions.h"
 
 namespace BC {
 
 template<class derived>
 class Tensor_Base :
 		public Base::Tensor_Operations<derived>,
+		public Base::Tensor_Functions<derived>,
 		public Base::Tensor_Utility<derived>,
 		public Base::Tensor_Initializer<derived>,
 		public Base::Tensor_Shaping<derived>
@@ -65,7 +67,7 @@ public:
 
 	derived& operator =(const derived& tensor) {
 		this->assert_same_size(tensor);
-		mathlib_type::copy(this->data(), tensor.data(), this->size());
+		mathlib_type::copy(this->internal(), tensor.internal(), this->size());
 		return *this;
 	}
 	derived& operator =(scalar_type scalar) {

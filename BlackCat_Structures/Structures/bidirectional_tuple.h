@@ -23,49 +23,49 @@ template<class derived, class...> struct bidirectional_tuple;
 template<class... Ts>
 struct Tuple {
 
-	bidirectional_tuple<HEAD, Ts...> data;
+	bidirectional_tuple<HEAD, Ts...> internal;
 
 	template<class... Us>
-	Tuple(Us... data_) : data(data_...) {}
+	Tuple(Us... internal_) : internal(internal_...) {}
 
 
-	template<int x> const auto& get() const { return get_impl<x>(data.head()); }
-	template<int x> 	  auto& get() 		{ return get_impl<x>(data.head()); }
+	template<int x> const auto& get() const { return get_impl<x>(internal.head()); }
+	template<int x> 	  auto& get() 		{ return get_impl<x>(internal.head()); }
 
-	auto& head() { return data.head(); }
-	auto& tail() { return data.tail(); }
+	auto& head() { return internal.head(); }
+	auto& tail() { return internal.tail(); }
 	auto& next() { return head().next(); }
 
-	const auto& head() const { return data.head(); }
-	const auto& tail() const { return data.tail(); }
+	const auto& head() const { return internal.head(); }
+	const auto& tail() const { return internal.tail(); }
 	const auto& next() const { return head().next(); }
 	bool prev() const { return false; }
 
 
 	template<class functor>
 	void for_each(functor f) {
-		for_each_impl(data.head(), f);
+		for_each_impl(internal.head(), f);
 	}
 
 
 	template<int x, class Node>
 	auto& get_impl(Node& n) {
 		if constexpr (x == 0)
-				return n.data();
+				return n.internal();
 		else
 			return get_impl<x-1>(n.next());
 	}
 	template<int x, class Node>
 	const auto& get_impl(Node& n) const {
 		if constexpr (x == 0)
-				return n.data();
+				return n.internal();
 		else
 			return get_impl<x-1>(n.next());
 	}
 
 	template<class functor, class Node>
 	void for_each_impl(Node& n, functor f) {
-		f(n.data());
+		f(n.internal());
 
 		if constexpr (n.hasNext())
 			for_each_impl(n.next(), f);
@@ -86,12 +86,12 @@ struct Tuple {
 		using prev_ = derived;
 		using type = T;
 
-		T data_;
+		T internal_;
 
 
 
 		template<class... params>
-		bidirectional_tuple(params... x) : data_(x...) {}
+		bidirectional_tuple(params... x) : internal_(x...) {}
 
 		constexpr bool hasNext() const { return false; }
 		constexpr bool hasPrev() const { return true; }
@@ -105,11 +105,11 @@ struct Tuple {
 		const bool next() const { return false; }
 			  bool next() 		{ return false; }
 
-		const auto& prev() const { return static_cast<prev_&>(*this).data(); }
-			  auto& prev() 		 { return static_cast<prev_&>(*this).data(); }
+		const auto& prev() const { return static_cast<prev_&>(*this).internal(); }
+			  auto& prev() 		 { return static_cast<prev_&>(*this).internal(); }
 
-		const T& data() const { return data_; }
-			  T& data()  	 { return  data_; }
+		const T& internal() const { return internal_; }
+			  T& internal()  	 { return  internal_; }
 	};
 
 	//BODY
@@ -120,13 +120,13 @@ struct Tuple {
 		using next_ = bidirectional_tuple<bidirectional_tuple<derived, T, Ts...>, Ts...>;
 		using type = T;
 
-		T data_;
+		T internal_;
 
 		constexpr bool hasNext() const { return true; }
 		constexpr bool hasPrev() const { return true; }
 
 		template<class param, class... intiailizers> bidirectional_tuple(param x, intiailizers... params)
-				: data_(x), next_(params...) {}
+				: internal_(x), next_(params...) {}
 		bidirectional_tuple() = default;
 
 
@@ -142,8 +142,8 @@ struct Tuple {
 			  auto& next()    	 { return static_cast<next_&>(*this); }
 		const auto& next() const { return static_cast<next_&>(*this); }
 
-		const auto& data() const { return data_; }
-		 	  auto& data()  	 { return data_; }
+		const auto& internal() const { return internal_; }
+		 	  auto& internal()  	 { return internal_; }
 	};
 
 	//HEAD
@@ -156,18 +156,18 @@ struct Tuple {
 		using next_ = bidirectional_tuple<bidirectional_tuple<HEAD, T, Ts...>, Ts...>;
 		using type = T;
 
-		T data_;
+		T internal_;
 
 		template<class param, class... intiailizers> bidirectional_tuple(param x, intiailizers... params)
-				:next_(params...), data_(x) {}
+				:next_(params...), internal_(x) {}
 		bidirectional_tuple() = default;
 
 
 		constexpr bool hasNext() const { return true; }
 		constexpr bool hasPrev() const { return false; }
 
-		const auto& data() const { return data_; }
-			  auto& data()  	 { return data_; }
+		const auto& internal() const { return internal_; }
+			  auto& internal()  	 { return internal_; }
 		const auto& tail() const { return next().tail(); }
 			  auto& tail() 		 { return next().tail(); }
 		const auto& head() const { return *this; }

@@ -16,6 +16,9 @@
 #include "BC_Tensor_Types/Expression_Unary_Transposition.h"
 #include "Operations_Implementation/AlternateAsterixDenoter.h"
 #include "Operations_Implementation/Expression_Determiner.h"
+#include "Operations_Implementation/Expression_Determiner.h"
+#include "Operations_Implementation/BLAS_Injection_Evaluator.h"
+
 #include "Operations_Implementation/Unary_Functions.h"
 #include <type_traits>
 
@@ -25,7 +28,7 @@ namespace Base {
 //This is where the beautiful lazy expressions are created
 
 template<class derived>
-struct Tensor_Operations {
+class Tensor_Operations {
 
 	template<class> friend class Tensor_Operations;
 	template<class pderiv, class functor> using impl 	= typename operationImpl::expression_determiner<derived>::template impl<pderiv, functor>;
@@ -35,21 +38,16 @@ struct Tensor_Operations {
 	using scalar_type 		= _scalar<derived>;
 	using mathlib_type 		= _mathlib<derived>;
 
-private:
 	//Returns the class returned as its most derived member
 	 const derived& as_derived() const { return static_cast<const derived&>(*this);  }
 	 	   derived& as_derived() 	  { return static_cast<	     derived&>(*this); }
 public:
 
-	void randomize(scalar_type lb, scalar_type ub)  { mathlib_type::randomize(as_derived().data(), lb, ub); }
-	void fill(scalar_type value) 					{ mathlib_type::fill(as_derived().data(), value); }
-	void zero() 									{ mathlib_type::zero(as_derived().data()); }
-
 	//-------------------------------------dotproduct-------------------- ---------------------//
 
 	template<class pDeriv>
 	auto operator *(const Tensor_Operations<pDeriv>& param) const {
-		 return typename dp_impl<pDeriv>::type(as_derived().data(), param.as_derived().data());
+		 return typename dp_impl<pDeriv>::type(as_derived().internal(), param.as_derived().internal());
 	}
 	//--------------------------------------pointwise operators-------------------------------//
 	template<class pDeriv> auto operator +(const Tensor_Operations<pDeriv>& param) const {
@@ -74,17 +72,40 @@ public:
 	}
 private:
 	//--------------------------------------assignment implementation-----------------------------------------------//
+	//non-injectable version
+	template<bool BARRIER = true, class derived_t>
+	std::enable_if_t<!BC::internal::INJECTION<decltype(std::declval<derived_t>().internal())>()> evaluate(const Tensor_Operations<derived_t>& tensor) {
+		tensor.as_derived().internal().eval();
 
-	template<bool BARRIER = true, class t>
-	static void evaluate(const Tensor_Operations<t>& tensor) {
-		tensor.as_derived().data().eval();
-
-		static constexpr int iterator_dimension = _functor<t>::ITERATOR();
+		static constexpr int iterator_dimension = _functor<derived_t>::ITERATOR();
 		if (BARRIER)
-			mathlib_type::template dimension<iterator_dimension>::eval(tensor.as_derived().data());
+			mathlib_type::template dimension<iterator_dimension>::eval(tensor.as_derived().internal());
 		else
-			mathlib_type::template dimension<iterator_dimension>::eval_unsafe(tensor.as_derived().data());
+			mathlib_type::template dimension<iterator_dimension>::eval_unsafe(tensor.as_derived().internal());
 	}
+	template<bool BARRIER = true, class derived_t>
+	std::enable_if_t<BC::internal::INJECTION<decltype(std::declval<derived_t>().internal())>()> evaluate(const Tensor_Operations<derived_t>& tensor) {
+		auto internal = tensor.as_derived().internal();	//operation including assignment
+		auto injection = this->as_derived().internal();	//the left-value assignment core
+
+		using internal_t = decltype(internal);			//internal expression type (to be injected)
+		using injection_t = decltype(injection);		//the injection type
+
+		using successful_inject = BC::internal::injection_t<internal_t, injection_t>;	//the conversion type after injection
+		using tensor_type 		= BC::tensor_of_t<derived::DIMS(), successful_inject, mathlib_type>;
+
+		static constexpr int iterator_dimension = _functor<successful_inject>::ITERATOR();	//the iterator for the evaluation of post inject_t
+		auto post_inject_tensor = tensor_type(successful_inject(internal, injection));		//evaluate the internal tensor_type
+		post_inject_tensor.internal().eval(); //in case any dangling BLAS calls
+
+
+		if (BARRIER)
+			mathlib_type::template dimension<iterator_dimension>::eval(post_inject_tensor.internal());
+		else
+			mathlib_type::template dimension<iterator_dimension>::eval_unsafe(post_inject_tensor.internal());
+	}
+
+
 public:
 	//--------------------------------------assignment operators-----------------------------------------------//
 
@@ -242,19 +263,19 @@ public:
 	//-----------------------------------custom expressions--------------------------------------------------//
 	template<class functor>
 	auto un_expr(functor f) const {
-		return typename impl<derived, functor>::unary_type(as_derived().data(), f);
+		return typename impl<derived, functor>::unary_type(as_derived().internal(), f);
 	}
 	template<class functor>
 	const auto un_expr() const {
-		return typename impl<derived, functor>::unary_type(as_derived().data());
+		return typename impl<derived, functor>::unary_type(as_derived().internal());
 	}
 	template<class d2, class functor>
 	const auto bi_expr(functor f, const Tensor_Operations<d2>& rv) const {
-		return typename impl<d2, functor>::type(as_derived().data(), rv.as_derived().data());
+		return typename impl<d2, functor>::type(as_derived().internal(), rv.as_derived().internal());
 	}
 	template<class functor, class d2>
 	const auto bi_expr(const Tensor_Operations<d2>& rv) const {
-		return typename impl<d2, functor>::type(as_derived().data(), rv.as_derived().data());
+		return typename impl<d2, functor>::type(as_derived().internal(), rv.as_derived().internal());
 	}
 	//------------------------------------alternate asterix denoter----------------------------------//
 	 const alternate_asterix_denoter<derived> operator * () const {

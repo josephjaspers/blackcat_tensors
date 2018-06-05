@@ -3,10 +3,10 @@
  *
  * DataFrame objects accepts a parsed CSV file (from CSV_Parser.h)
  * and converts it into a 2d matrix of (rows by columns) in which the columns
- * of the data match the given type.
+ * of the internal match the given type.
  *
  * Current work: involves adding the ability to override the default parsing of a string -> type
- * 				 This is to enable users to parse data into a dataframe aside from the given BC_from_string
+ * 				 This is to enable users to parse internal into a internalframe aside from the given BC_from_string
  *
  *
  */
@@ -43,7 +43,7 @@ class DataFrame {
 	using row = Structure::Tuple<Ts...>;
 	using grid = std::vector<row>;
 
-	grid dataframe;
+	grid internalframe;
 
 	std::vector<int> skip_columns;
 	std::vector<int> skip_rows;
@@ -53,38 +53,38 @@ public:
 
 	template<class comp>
 	void ORDER_BY(comp c) {
-		std::sort(dataframe.begin(), dataframe.end(), [&](auto& x, auto& y) { return c(x) > c(y); });
+		std::sort(internalframe.begin(), internalframe.end(), [&](auto& x, auto& y) { return c(x) > c(y); });
 	}
 
 	auto& getGrid() {
-		return dataframe;
+		return internalframe;
 	}
 
 	template<class Node>
-	void generateRowData(Node& n, std::vector<std::string> row_data, int i) const {
-		n.data() = BC_from_string<typename Node::type>(row_data[i]);
+	void generateRowData(Node& n, std::vector<std::string> row_internal, int i) const {
+		n.internal() = BC_from_string<typename Node::type>(row_internal[i]);
 
 		if constexpr (n.hasNext())
-				generateRowData(n.next(), row_data, i + 1);
+				generateRowData(n.next(), row_internal, i + 1);
 	}
 
-	auto generateRowData(std::vector<std::string> row_data) {
+	auto generateRowData(std::vector<std::string> row_internal) {
 		row r;
-		generateRowData(r.head(), row_data, 0);
+		generateRowData(r.head(), row_internal, 0);
 		return r;
 	}
 
-	DataFrame(const CSV_Parser& csv) : dataframe(csv.getData().size()) {
+	DataFrame(const CSV_Parser& csv) : internalframe(csv.getData().size()) {
 		const auto& grid = csv.getData();
 
 		for (int i = 0; i < grid.size(); ++i) {
-			dataframe[i] = generateRowData(grid[i]);
+			internalframe[i] = generateRowData(grid[i]);
 		}
 	}
 
 	template<class functor>
 	void for_each(functor f) {
-		for (row& r : dataframe) {
+		for (row& r : internalframe) {
 			f(r);
 		}
 	}

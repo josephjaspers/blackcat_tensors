@@ -38,35 +38,35 @@ private:
 public:
 
 	void print() const {
-		mathlib::print(asDerived().data().getIterator(), asDerived().inner_shape(), asDerived().outer_shape(), asDerived().dims(), 8);
+		mathlib::print(asDerived().internal().getIterator(), asDerived().inner_shape(), asDerived().outer_shape(), asDerived().dims(), 8);
 	}
 	void print(int precision) const {
-		mathlib::print(asDerived().data().getIterator(), asDerived().inner_shape(), asDerived().outer_shape(), asDerived().dims(), precision);
+		mathlib::print(asDerived().internal().getIterator(), asDerived().inner_shape(), asDerived().outer_shape(), asDerived().dims(), precision);
 	}
 	void printSparse() const {
-		mathlib::printSparse(asDerived().data().getIterator(), asDerived().inner_shape(), asDerived().outer_shape(), asDerived().dims(), 8);
+		mathlib::printSparse(asDerived().internal().getIterator(), asDerived().inner_shape(), asDerived().outer_shape(), asDerived().dims(), 8);
 	}
 	void printSparse(int precision) const {
-		mathlib::printSparse(asDerived().data().getIterator(), asDerived().inner_shape(), asDerived().outer_shape(), asDerived().dims(), precision);
+		mathlib::printSparse(asDerived().internal().getIterator(), asDerived().inner_shape(), asDerived().outer_shape(), asDerived().dims(), precision);
 	}
 
 	void write(std::ofstream& os) const {
 
-		scalar* data = new scalar[asDerived().size()];
-		mathlib::DeviceToHost(data, asDerived().data().getIterator(), asDerived().size());
+		scalar* internal = new scalar[asDerived().size()];
+		mathlib::DeviceToHost(internal, asDerived().internal().getIterator(), asDerived().size());
 
 		os << asDerived().dims() << ',';
 		for (int i = 0; i < asDerived().dims(); ++i) {
 			os << asDerived().dimension(i) << ',';
 		}
 		for (int i = 0; i < asDerived().size() - 1; ++i) {
-			os << data[i] << ',';
+			os << internal[i] << ',';
 		}
-		os << data[asDerived().size() - 1]; //back
+		os << internal[asDerived().size() - 1]; //back
 		os << '\n';
 
 
-		delete[] data;
+		delete[] internal;
 	}
 
 	void read(std::ifstream& is, bool read_dimensions = true, bool overrideDimensions = true) {
@@ -74,7 +74,7 @@ public:
 			std::cout << "File open error - returning " << std::endl;
 			return;
 		}
-		std::vector<scalar> data;
+		std::vector<scalar> internal;
 		unsigned read_values = 0;
 
 			std::string tmp;
@@ -87,33 +87,33 @@ public:
 				ss.ignore();
 
 			while (ss >> val) {
-				data.push_back(val);
+				internal.push_back(val);
 				++read_values;
 				if (ss.peek() == ',')
 					ss.ignore();
 			}
 
 		if (read_dimensions) {
-			std::vector<int> dims((int)data[0]);
+			std::vector<int> dims((int)internal[0]);
 			for (int i = 0; i < dims.size(); ++i) {
-				dims[i] = data[i + 1];
+				dims[i] = internal[i + 1];
 			}
 
 			///THIS IS BAD DEAL WITH THIS LATER
 			if (overrideDimensions) {
-				switch ((int)data[0]) {
+				switch ((int)internal[0]) {
 				case 0: break;//is scalar do nothing
-				case 1: asDerived().resize((int)data[1]); break;
-				case 2: asDerived().resize((int)data[1],(int)data[2]); break;
-				case 3: asDerived().resize((int)data[1],(int)data[2],(int)data[3]); break;
-				case 4: asDerived().resize((int)data[1],(int)data[2],(int)data[3],(int)data[4]); break;
-				case 5: asDerived().resize((int)data[1],(int)data[2],(int)data[3],(int)data[4],(int)data[5]); break;
+				case 1: asDerived().resize((int)internal[1]); break;
+				case 2: asDerived().resize((int)internal[1],(int)internal[2]); break;
+				case 3: asDerived().resize((int)internal[1],(int)internal[2],(int)internal[3]); break;
+				case 4: asDerived().resize((int)internal[1],(int)internal[2],(int)internal[3],(int)internal[4]); break;
+				case 5: asDerived().resize((int)internal[1],(int)internal[2],(int)internal[3],(int)internal[4],(int)internal[5]); break;
 				default: throw std::invalid_argument("MAX DIMENSIONS READ == 5 ");
 				}
 			}
-			mathlib::HostToDevice(asDerived().data().getIterator(), &data[data[0] + 1], asDerived().size() > data.size() ? data.size() : asDerived().size());
+			mathlib::HostToDevice(asDerived().internal().getIterator(), &internal[internal[0] + 1], asDerived().size() > internal.size() ? internal.size() : asDerived().size());
 		} else {
-			mathlib::HostToDevice(asDerived().data().getIterator(), &data[0], 			asDerived().size() > data.size() ? data.size() : asDerived().size());
+			mathlib::HostToDevice(asDerived().internal().getIterator(), &internal[0], 			asDerived().size() > internal.size() ? internal.size() : asDerived().size());
 		}
 	}
 };

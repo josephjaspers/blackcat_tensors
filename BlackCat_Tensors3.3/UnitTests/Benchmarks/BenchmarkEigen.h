@@ -45,11 +45,11 @@
 //
 //	//copy to ensure same parameters
 //	for (int i = 0; i < SIZE * SIZE; ++i) {
-//		eg_a(i) = bc_a.data().getIterator()[i];
-//		eg_b(i) = bc_b.data().getIterator()[i];
-//		eg_c(i) = bc_c.data().getIterator()[i];
-//		eg_d(i) = bc_d.data().getIterator()[i];
-//		eg_e(i) = bc_e.data().getIterator()[i];
+//		eg_a(i) = bc_a.internal().getIterator()[i];
+//		eg_b(i) = bc_b.internal().getIterator()[i];
+//		eg_c(i) = bc_c.internal().getIterator()[i];
+//		eg_d(i) = bc_d.internal().getIterator()[i];
+//		eg_e(i) = bc_e.internal().getIterator()[i];
 //	}
 //
 //	float eigen_time = omp_get_wtime();
@@ -130,11 +130,11 @@
 //
 //	//copy to ensure same parameters
 //	for (int i = 0; i < SIZE * SIZE; ++i) {
-//		eg_a(i) = bc_a.data().getIterator()[i];
-//		eg_b(i) = bc_b.data().getIterator()[i];
-//		eg_c(i) = bc_c.data().getIterator()[i];
-//		eg_d(i) = bc_d.data().getIterator()[i];
-//		eg_e(i) = bc_e.data().getIterator()[i];
+//		eg_a(i) = bc_a.internal().getIterator()[i];
+//		eg_b(i) = bc_b.internal().getIterator()[i];
+//		eg_c(i) = bc_c.internal().getIterator()[i];
+//		eg_d(i) = bc_d.internal().getIterator()[i];
+//		eg_e(i) = bc_e.internal().getIterator()[i];
 //	}
 //
 //	float eigen_time = omp_get_wtime();

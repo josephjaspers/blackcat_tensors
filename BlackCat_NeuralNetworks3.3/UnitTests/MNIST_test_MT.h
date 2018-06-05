@@ -19,7 +19,7 @@
 using BC::NN::vec;
 using BC::NN::scal;
 using BC::NN::mat;
-typedef std::vector<vec> data;
+typedef std::vector<vec> internal;
 typedef vec tensor;
 
 namespace BC {
@@ -45,16 +45,16 @@ bool correct(const vec& hypothesis, const vec& output) {
 	int h_id = 0;
 	int o_id = 0;
 
-	double h_max = hypothesis.data()[0];
-	double o_max = output.data()[0];
+	double h_max = hypothesis.internal()[0];
+	double o_max = output.internal()[0];
 
 	for (int i = 1; i < hypothesis.size(); ++i) {
-		if (hypothesis.data()[i] > h_max) {
-			h_max = hypothesis.data()[i];
+		if (hypothesis.internal()[i] > h_max) {
+			h_max = hypothesis.internal()[i];
 			h_id = i;
 		}
-		if (output.data()[i] > o_max) {
-			o_max = output.data()[i];
+		if (output.internal()[i] > o_max) {
+			o_max = output.internal()[i];
 			o_id = i;
 		}
 	}
@@ -63,28 +63,28 @@ bool correct(const vec& hypothesis, const vec& output) {
 
 
 
-void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_data, int MAXVALS) {
+void generateAndLoad(internal& input_internal, internal& output_internal, std::ifstream& read_internal, int MAXVALS) {
 	unsigned vals = 0;
 
-	//load data from CSV (the first number if the correct output, the remaining 784 columns are the pixels)
+	//load internal from CSV (the first number if the correct output, the remaining 784 columns are the pixels)
 	std::cout << " generating loading " << std::endl;
-	while (read_data.good() && vals < MAXVALS) {
+	while (read_internal.good() && vals < MAXVALS) {
 
 		std::string output;
-		std::getline(read_data, output, ',');
+		std::getline(read_internal, output, ',');
 		int out = std::stoi(output);
 
 		tensor input(784);
 
-		input.read(read_data, false);
-		output_data.push_back(expandOutput(out, 10));
+		input.read(read_internal, false);
+		output_internal.push_back(expandOutput(out, 10));
 		normalize(input, 255, 0);
 
-		input_data.push_back(input);
+		input_internal.push_back(input);
 
 		++vals;
 	}
-	std::cout << " return -- finished creating data set " << std::endl;
+	std::cout << " return -- finished creating internal set " << std::endl;
 }
 
 int percept_MNIST() {
@@ -107,19 +107,19 @@ int percept_MNIST() {
 	 *	THIS WILL BE CHANGED IN FUTURE
 	 */
 
-	data inputs;
-	data outputs;
+	internal inputs;
+	internal outputs;
 
-	data testInputs;
-	data testOutputs;
+	internal testInputs;
+	internal testOutputs;
 
-	//load data
-	std::cout << "loading data..." << std::endl << std::endl;
+	//load internal
+	std::cout << "loading internal..." << std::endl << std::endl;
 	std::ifstream in_stream("///home/joseph///Downloads///train.csv");
 	std::string tmp; std::getline(in_stream, tmp, '\n');  	//remove headers
 
 	//Load training examples (taken from kaggle digit recognizer train.csv)
-	std::cout << " generating and loading data from csv to tensors" << std::endl;
+	std::cout << " generating and loading internal from csv to tensors" << std::endl;
 	generateAndLoad(inputs, outputs, in_stream, TRAINING_EXAMPLES);
 	in_stream.close();
 

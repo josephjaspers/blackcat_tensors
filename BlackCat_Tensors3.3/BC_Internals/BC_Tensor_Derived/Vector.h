@@ -40,7 +40,7 @@ public:
 	Vector& operator = (const Vector<U, Mathlib>& t) { return parent_class::operator=(t); }
 
 	const Vector<internal::unary_expression<typename parent_class::functor_type, function::transpose>, Mathlib> t() const {
-		return Vector<internal::unary_expression<typename parent_class::functor_type, function::transpose>, Mathlib>(this->data());
+		return Vector<internal::unary_expression<typename parent_class::functor_type, function::transpose>, Mathlib>(this->internal());
 	}
 };
 }
