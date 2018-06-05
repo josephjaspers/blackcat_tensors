@@ -45,6 +45,30 @@ Supports:
 
 Optimizations:
 
+	***BLAS_DETECTION and INJECTION*** (new feature)
+	BlackCat_Tensor's now supports an injection system for gemm to reduce the generation of temporaries. 
+	Operations utilizing matrix multiplication in which possible "injections" are available will not use a temporary to store the result of a matrix-mul operation.
+
+	This system detects complicated matrix-mul problems such as:
+		ForwardPropagation;	y = g(w * x + b)  
+		In equation, the "optimal" hardcoded method would be to call a BLAS function
+		evaluating w*x to y. And then calling a function such as y = g(y + b)
+		This library detects this entire expression and does the exact stated strategy.
+
+		Current injections are only supported by the standard assignment operator = (+=, -= will be added soon)
+	
+	This however assumes that no aliases of the give problem are utilized. IE 	
+		a = a * b; 
+		will NOT result in the correct output, as it is the equivalent of a single BLAS call. 
+		to utilize expressions such as these use
+
+		a.alias() = a * b;
+		and this will cause a * b to evaluate to a temporary and than copy the values to a. 
+
+	BackPropagation; 	dx = w.t() * dy ** gd(x)
+
+	
+
 	All linear or O(n) operations utilize expression-templates/lazy evaluation system.
 	Dotproducts are implemented through BLAS. Currently no default option is available. 
 	(recommended BLAS implementation ATLAS) 

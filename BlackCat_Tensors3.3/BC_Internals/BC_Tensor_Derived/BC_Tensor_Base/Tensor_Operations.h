@@ -18,6 +18,7 @@
 #include "Operations_Implementation/Expression_Determiner.h"
 #include "Operations_Implementation/Expression_Determiner.h"
 #include "Operations_Implementation/BLAS_Injection_Evaluator.h"
+#include "Operations_Implementation/Aliased_BLAS_func.h"
 
 #include "Operations_Implementation/Unary_Functions.h"
 #include <type_traits>
@@ -74,6 +75,18 @@ private:
 	//--------------------------------------assignment implementation-----------------------------------------------//
 	template<bool BARRIER = true, class derived_t>
 	std::enable_if_t<!BC::internal::INJECTION<decltype(std::declval<derived_t>().internal())>()> evaluate(const Tensor_Operations<derived_t>& tensor) {
+		tensor.as_derived().internal().eval();
+
+		static constexpr int iterator_dimension = _functor<derived_t>::ITERATOR();
+		if (BARRIER)
+			mathlib_type::template dimension<iterator_dimension>::eval(tensor.as_derived().internal());
+		else
+			mathlib_type::template dimension<iterator_dimension>::eval_unsafe(tensor.as_derived().internal());
+	}
+
+	template<class> friend class tensor_alias;
+	template<bool BARRIER = true, class derived_t>
+	void alias_evaluate(const Tensor_Operations<derived_t>& tensor) {
 		tensor.as_derived().internal().eval();
 
 		static constexpr int iterator_dimension = _functor<derived_t>::ITERATOR();
@@ -283,6 +296,10 @@ public:
 		return alternate_asterix_denoter<derived>(*this);
 	}
 
+	 auto alias() const {
+		 return tensor_alias(*this);
+	 }
+
 	 //--------------------------------ASSERTIONS------------------------------//
 
 
@@ -306,6 +323,56 @@ public:
 	void assert_same_ml(const Tensor_Operations<deriv>& tensor) const {
 		static_assert(MTF::same<_mathlib<derived>, _mathlib<deriv>>::conditional, "mathlib_type must be identical");
 	}
+
+	//-------------tensor alias -----------------//
+
+	struct tensor_alias {
+
+		Tensor_Operations<derived>& alias;
+
+		tensor_alias(Tensor_Operations<derived>& alias_) : alias(alias_) {}
+
+		template<class tensor>
+			derived& operator =(const tensor& param) {
+				assert_same_size(param);
+				alias.alias_evaluate(alias.bi_expr<function::assign>(param));
+				return alias.as_derived();
+			}
+			template<class tensor>
+			derived& operator +=(const tensor& param) {
+				assert_same_size(param);
+				alias.alias_evaluate(alias.bi_expr<function::add_assign>(param));
+				return alias.as_derived();
+			}
+			template<class tensor>
+			derived& operator -=(const tensor& param) {
+				assert_same_size(param);
+				alias.alias_evaluate(alias.bi_expr<function::sub_assign>(param));
+				return alias.as_derived();
+			}
+
+			template<class pDeriv>
+			derived& operator =(const unsafe_AAD<pDeriv>& param) {
+				assert_same_size(param);
+				alias.alias_evaluate<false>(alias.bi_expr<function::assign>(param));
+				return alias.as_derived();
+			}
+
+
+			template<class pDeriv>
+			derived& operator +=(const unsafe_AAD<pDeriv>& param) {
+				assert_same_size(param);
+				alias.alias_evaluate<false>(alias.bi_expr<function::add_assign>(param));
+				return alias.as_derived();
+
+			}
+			template<class pDeriv>
+			derived& operator -=(const unsafe_AAD<pDeriv>& param) {
+				assert_same_size(param);
+				alias.alias_evaluate<false>(alias.bi_expr<function::sub_assign>(param));
+				return alias.as_derived();
+			}
+	};
 
 };
 }
