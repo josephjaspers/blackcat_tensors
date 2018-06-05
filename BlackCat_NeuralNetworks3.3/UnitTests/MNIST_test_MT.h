@@ -45,16 +45,16 @@ bool correct(const vec& hypothesis, const vec& output) {
 	int h_id = 0;
 	int o_id = 0;
 
-	double h_max = hypothesis.data()[0];
-	double o_max = output.data()[0];
+	double h_max = hypothesis.internal()[0];
+	double o_max = output.internal()[0];
 
 	for (int i = 1; i < hypothesis.size(); ++i) {
-		if (hypothesis.data()[i] > h_max) {
-			h_max = hypothesis.data()[i];
+		if (hypothesis.internal()[i] > h_max) {
+			h_max = hypothesis.internal()[i];
 			h_id = i;
 		}
-		if (output.data()[i] > o_max) {
-			o_max = output.data()[i];
+		if (output.internal()[i] > o_max) {
+			o_max = output.internal()[i];
 			o_id = i;
 		}
 	}

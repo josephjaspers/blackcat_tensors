@@ -31,8 +31,8 @@ public:
 
 	functor_type array_core;
 
-	 const functor_type& data() const { return this->array_core; }
-	 	   functor_type& data()		  { return this->array_core; }
+	 const functor_type& internal() const { return this->array_core; }
+	 	   functor_type& internal()		  { return this->array_core; }
 
 	Tensor_Initializer(		 derived&& tensor) : array_core(tensor.array_core){}
 	Tensor_Initializer(const  derived&  tensor) : array_core(tensor.array_core){}
@@ -66,10 +66,10 @@ private:
 
 public:
 
-	 const functor_type& data() const { return this->array_core; }
-	 	   functor_type& data()		  { return this->array_core; }
+	 const functor_type& internal() const { return this->array_core; }
+	 	   functor_type& internal()		  { return this->array_core; }
 
-	Tensor_Initializer(derived&& tensor) : array_core(tensor.data()) {
+	Tensor_Initializer(derived&& tensor) : array_core(tensor.internal()) {
 //		array_core.shape = tensor.array_core.shape;
 //		array_core.array = tensor.array_core.array;
 		tensor.array_core.array 	= nullptr;

@@ -65,7 +65,7 @@ public:
 
 	derived& operator =(const derived& tensor) {
 		this->assert_same_size(tensor);
-		mathlib_type::copy(this->data(), tensor.data(), this->size());
+		mathlib_type::copy(this->internal(), tensor.internal(), this->size());
 		return *this;
 	}
 	derived& operator =(scalar_type scalar) {

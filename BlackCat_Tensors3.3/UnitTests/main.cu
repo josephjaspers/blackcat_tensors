@@ -17,7 +17,7 @@ using tensor4 = BC::Tensor4<float, ml>;
 using tesnor5 = BC::Tensor5<float, ml>;
 
 
-//std::vector<unsigned int> data_type;
+//std::vector<unsigned int> internal_type;
 //using ary = std::vector<unsigned int>;
 
 #include "_correlation_test.h"
@@ -71,17 +71,17 @@ int main() {
 	mat x(1,1);
 	mat y(1,1);
 
-	using t = decltype((x * y).data());
+	using t = decltype((x * y).internal());
 	std::cout << "evaluate - BLAS detection - " << BC::internal::INJECTION<t>() << std::endl;
 	std::cout << type_name<t>() << std::endl << std::endl;
 
 
-//	using U = decltype((x =* (x * x)).data());
-		using U = decltype((x =* abs(x * x)).data());
+//	using U = decltype((x =* (x * x)).internal());
+		using U = decltype((x =* abs(x * x)).internal());
 	std::cout << "evaluate - BLAS detection - " << BC::internal::INJECTION<U>() << std::endl;
 	std::cout << type_name<U>() << std::endl << std::endl;
 
-	using adjusted = typename BC::internal::injector<std::decay_t<U>>::template type<decltype(x.data())>;
+	using adjusted = typename BC::internal::injector<std::decay_t<U>>::template type<decltype(x.internal())>;
 	std::cout << type_name<adjusted>() << std::endl << std::endl;
 
 	//	cube c(4,3,3);//output

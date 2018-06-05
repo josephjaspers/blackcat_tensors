@@ -32,7 +32,7 @@ public:
 
 	template<class U> Scalar(const Scalar<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> Scalar(	   Scalar<U, Mathlib>&& t) : parent_class(t) {}
-	Scalar(_scalar<T> val) : parent_class(Shape<0>()) { Mathlib::HostToDevice(this->data().getIterator(), &val, 1); }
+	Scalar(_scalar<T> val) : parent_class(Shape<0>()) { Mathlib::HostToDevice(this->internal().getIterator(), &val, 1); }
 	template<class... params> Scalar(const params&... p) : parent_class( p...) {}
 
 	template<class U>
@@ -40,12 +40,12 @@ public:
 	Scalar& operator =(const Scalar&  t) { return parent_class::operator=(t); }
 	Scalar& operator =(const Scalar&& t) { return parent_class::operator=(t); }
 	Scalar& operator =(	     Scalar&& t) { return parent_class::operator=(t); }
-	Scalar& operator =(_scalar<T> scalar) { Mathlib::HostToDevice(this->data().getIterator(), &scalar, 1); return *this; }
+	Scalar& operator =(_scalar<T> scalar) { Mathlib::HostToDevice(this->internal().getIterator(), &scalar, 1); return *this; }
 //	Scalar& operator =(_scalar<T> scalar) { this->fill(scalar); return *this; } //THIS CAUSES CUDA TO FAIL COMPILATION
 
 	operator _scalar<T>() const {
 		_scalar<T> value = 0;
-		Mathlib::DeviceToHost(&value, this->data().getIterator(), 1);
+		Mathlib::DeviceToHost(&value, this->internal().getIterator(), 1);
 		return value;
 	}
 };

@@ -33,41 +33,41 @@ public:
 	//-------const reshape (using int list)
 	template<class... integers>
 	const auto lazy_reshape(integers... ints) const {
-		using internal = decltype(std::declval<derived>().data().reshape(ints...));
+		using internal = decltype(std::declval<derived>().internal().reshape(ints...));
 		static constexpr int tensor_dim =  sizeof...(integers);
 		using type = typename tensor_of<tensor_dim>::template type<internal, mathlib_type>;
-		return type(this->data().reshape(ints...));
+		return type(this->internal().reshape(ints...));
 	}
 	//-------const reshape (using shape object)
 	template<int dims>
 	const auto lazy_reshape(Shape<dims> shape) const {
-		using internal = decltype(std::declval<derived>().data().reshape(shape));
+		using internal = decltype(std::declval<derived>().internal().reshape(shape));
 		using type = typename tensor_of<dims>::template type<internal, mathlib_type>;
-		return type(this->data().reshape(shape));
+		return type(this->internal().reshape(shape));
 	}
 	//-------non-const reshape (using int list)
 	template<class... integers>
 	 auto lazy_reshape(integers... ints)  {
-		using internal = decltype(std::declval<derived>().data().reshape(ints...));
+		using internal = decltype(std::declval<derived>().internal().reshape(ints...));
 		static constexpr int tensor_dim =  sizeof...(integers);
 		using type = typename tensor_of<tensor_dim>::template type<internal, mathlib_type>;
-		return type(this->as_derived().data().reshape(ints...));
+		return type(this->as_derived().internal().reshape(ints...));
 	}
 	//-------non-const reshape (using shape object)
 	template<int dims>
 	 auto lazy_reshape(Shape<dims> shape)  {
-		using internal = decltype(std::declval<derived>().data().reshape(shape));
+		using internal = decltype(std::declval<derived>().internal().reshape(shape));
 		using type = typename tensor_of<dims>::template type<internal, mathlib_type>;
-		return type(this->as_derived().data().reshape(shape));
+		return type(this->as_derived().internal().reshape(shape));
 	}
 	template<class... integers>
 	auto lazy_chunk(integers... ints) {
-		int location = this->as_derived().data().dims_to_index_reverse(ints...);
+		int location = this->as_derived().internal().dims_to_index_reverse(ints...);
 		return CHUNK(this->as_derived(), location);
 	}
 	template<class... integers>
 	const auto lazy_chunk(integers... ints) const {
-		int location = this->as_derived().data().dims_to_index_reverse(ints...);
+		int location = this->as_derived().internal().dims_to_index_reverse(ints...);
 		return CHUNK(this->as_derived(), location);
 	}
 
@@ -147,7 +147,7 @@ public:
 			using chunk_type = typename internal::Tensor_Chunk<tensor_dimension>::template implementation<functor_type>;
 			using type = tensor_of_t<tensor_dimension, chunk_type, mathlib_type>;
 
-			return type(tensor.data().chunk(location, shape_dimensions...));
+			return type(tensor.internal().chunk(location, shape_dimensions...));
 		}
 		template<class... integers>
 		auto operator () (integers... shape_dimensions) {
@@ -155,7 +155,7 @@ public:
 			using chunk_type = typename internal::Tensor_Chunk<tensor_dimension>::template implementation<functor_type>;
 			using type = tensor_of_t<tensor_dimension, chunk_type, mathlib_type>;
 
-			return type(tensor.data().chunk(location, shape_dimensions...));
+			return type(tensor.internal().chunk(location, shape_dimensions...));
 		}
 	};
 };

@@ -5,7 +5,7 @@
 using BC::NN::vec;
 using BC::NN::scal;
 using BC::NN::mat;
-typedef std::vector<vec> data;
+typedef std::vector<vec> internal;
 typedef vec tensor;
 
 namespace BC {

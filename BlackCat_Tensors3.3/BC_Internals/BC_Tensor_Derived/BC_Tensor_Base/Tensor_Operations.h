@@ -41,15 +41,15 @@ private:
 	 	   derived& as_derived() 	  { return static_cast<	     derived&>(*this); }
 public:
 
-	void randomize(scalar_type lb, scalar_type ub)  { mathlib_type::randomize(as_derived().data(), lb, ub); }
-	void fill(scalar_type value) 					{ mathlib_type::fill(as_derived().data(), value); }
-	void zero() 									{ mathlib_type::zero(as_derived().data()); }
+	void randomize(scalar_type lb, scalar_type ub)  { mathlib_type::randomize(as_derived().internal(), lb, ub); }
+	void fill(scalar_type value) 					{ mathlib_type::fill(as_derived().internal(), value); }
+	void zero() 									{ mathlib_type::zero(as_derived().internal()); }
 
 	//-------------------------------------dotproduct-------------------- ---------------------//
 
 	template<class pDeriv>
 	auto operator *(const Tensor_Operations<pDeriv>& param) const {
-		 return typename dp_impl<pDeriv>::type(as_derived().data(), param.as_derived().data());
+		 return typename dp_impl<pDeriv>::type(as_derived().internal(), param.as_derived().internal());
 	}
 	//--------------------------------------pointwise operators-------------------------------//
 	template<class pDeriv> auto operator +(const Tensor_Operations<pDeriv>& param) const {
@@ -77,13 +77,13 @@ private:
 
 	template<bool BARRIER = true, class t>
 	static void evaluate(const Tensor_Operations<t>& tensor) {
-		tensor.as_derived().data().eval();
+		tensor.as_derived().internal().eval();
 
 		static constexpr int iterator_dimension = _functor<t>::ITERATOR();
 		if (BARRIER)
-			mathlib_type::template dimension<iterator_dimension>::eval(tensor.as_derived().data());
+			mathlib_type::template dimension<iterator_dimension>::eval(tensor.as_derived().internal());
 		else
-			mathlib_type::template dimension<iterator_dimension>::eval_unsafe(tensor.as_derived().data());
+			mathlib_type::template dimension<iterator_dimension>::eval_unsafe(tensor.as_derived().internal());
 	}
 public:
 	//--------------------------------------assignment operators-----------------------------------------------//
@@ -242,19 +242,19 @@ public:
 	//-----------------------------------custom expressions--------------------------------------------------//
 	template<class functor>
 	auto un_expr(functor f) const {
-		return typename impl<derived, functor>::unary_type(as_derived().data(), f);
+		return typename impl<derived, functor>::unary_type(as_derived().internal(), f);
 	}
 	template<class functor>
 	const auto un_expr() const {
-		return typename impl<derived, functor>::unary_type(as_derived().data());
+		return typename impl<derived, functor>::unary_type(as_derived().internal());
 	}
 	template<class d2, class functor>
 	const auto bi_expr(functor f, const Tensor_Operations<d2>& rv) const {
-		return typename impl<d2, functor>::type(as_derived().data(), rv.as_derived().data());
+		return typename impl<d2, functor>::type(as_derived().internal(), rv.as_derived().internal());
 	}
 	template<class functor, class d2>
 	const auto bi_expr(const Tensor_Operations<d2>& rv) const {
-		return typename impl<d2, functor>::type(as_derived().data(), rv.as_derived().data());
+		return typename impl<d2, functor>::type(as_derived().internal(), rv.as_derived().internal());
 	}
 	//------------------------------------alternate asterix denoter----------------------------------//
 	 const alternate_asterix_denoter<derived> operator * () const {
