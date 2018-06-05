@@ -14,6 +14,7 @@
 #include "GPU_Implementation/GPU_Utility.h"
 
 
+
 namespace BC {
 
 class GPU :

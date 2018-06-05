@@ -29,6 +29,9 @@ struct unary_expression<functor_type, function::transpose> : expression_base<una
 
 
 	unary_expression(functor_type p) : array(p) {}
+	template<class V>
+	unary_expression(V ary) : array(ary) {}
+
 	__BCinline__ const auto inner_shape() const { return l_array([=](int i) { return i == 0 ? array.cols() : i == 1 ? array.rows() : 1; }); }
 	__BCinline__ const auto outer_shape() const { return array.outer_shape(); }
 

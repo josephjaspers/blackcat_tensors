@@ -28,7 +28,6 @@ struct binary_expression<lv, rv, function::dotproduct<Mathlib>>
 
 	using scalar_type = _scalar<lv>;
 
-
 	__BCinline__ static constexpr int DIMS() { return rv::DIMS(); }
 	__BCinline__ static constexpr int ITERATOR() { return 0; }
 
@@ -48,7 +47,7 @@ struct binary_expression<lv, rv, function::dotproduct<Mathlib>>
 
 	 binary_expression(lv left, rv right) : left(left), right(right) {
 		Mathlib::initialize(array_ptr, this->size());
-	}
+	 }
 
 	__BCinline__ const auto& operator [](int index) const  { return array_ptr[index]; }
 	__BCinline__ 	   auto& operator [](int index) 	   { return array_ptr[index]; }
