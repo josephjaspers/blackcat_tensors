@@ -6,7 +6,7 @@
 using BC::NN::vec;
 using BC::NN::scal;
 using BC::NN::mat;
-typedef std::vector<vec> internal;
+typedef std::vector<vec> data;
 typedef vec tensor;
 
 namespace BC {
@@ -50,27 +50,27 @@ bool correct(const vec& hypothesis, const vec& output) {
 
 
 
-void generateAndLoad(internal& input_internal, internal& output_internal, std::ifstream& read_internal, int MAXVALS) {
+void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_data, int MAXVALS) {
 	unsigned vals = 0;
 
-	//load internal from CSV (the first number if the correct output, the remaining 784 columns are the pixels)
+	//load data from CSV (the first number if the correct output, the remaining 784 columns are the pixels)
 	std::cout << " generating loading " << std::endl;
-	while (read_internal.good() && vals < MAXVALS) {
+	while (read_data.good() && vals < MAXVALS) {
 
 		std::string output;
-		std::getline(read_internal, output, ',');
+		std::getline(read_data, output, ',');
 		int out = std::stoi(output);
 
 		tensor input(784);
-		input.read(read_internal, false);
-		output_internal.push_back(expandOutput(out, 10));
+		input.read(read_data, false);
+		output_data.push_back(expandOutput(out, 10));
 		normalize(input, 255, 0);
 
-		input_internal.push_back(input);
+		input_data.push_back(input);
 
 		++vals;
 	}
-	std::cout << " return -- finished creating internal set " << std::endl;
+	std::cout << " return -- finished creating data set " << std::endl;
 }
 
 int percept_MNIST() {
@@ -84,19 +84,19 @@ int percept_MNIST() {
 //	NeuralNetwork<FeedForward, Recurrent> network(784, 250, 10);
 	network.setLearningRate(.03);
 
-	internal inputs;
-	internal outputs;
-	internal testInputs;
-	internal testOutputs;
+	data inputs;
+	data outputs;
+	data testInputs;
+	data testOutputs;
 
 
-	//load internal
-	std::cout << "loading internal..." << std::endl << std::endl;
+	//load data
+	std::cout << "loading data..." << std::endl << std::endl;
 	std::ifstream in_stream("///home/joseph///Downloads///train.csv");
 	std::string tmp; std::getline(in_stream, tmp, '\n');  	//remove headers
 
 	//Load training examples (taken from kaggle digit recognizer train.csv)
-	std::cout << " generating and loading internal from csv to tensors" << std::endl;
+	std::cout << " generating and loading data from csv to tensors" << std::endl;
 	generateAndLoad(inputs, outputs, in_stream, TRAINING_EXAMPLES);
 	in_stream.close();
 
@@ -109,7 +109,7 @@ int percept_MNIST() {
 	std::cout << " training..." << std::endl;
 
 	for (int i = 0; i < TRAINING_ITERATIONS; ++i) {
-		std::cout << " iteration =  " << i << std::endl;
+//		std::cout << " iteration =  " << i << std::endl;
 		for (int j = 0; j < inputs.size(); ++j) {
 			network.forwardPropagation(inputs[j]);
 			network.backPropagation(outputs[j]);

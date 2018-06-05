@@ -122,11 +122,21 @@ namespace internal {
 		template<class injection_type> using type = std::decay_t<injection_type>;
 	};
 
+	template<class T>
+	struct valid_injection_assignment {
+		static constexpr bool conditional = false;
+	};
+
+	template<class lv, class rv>
+	struct valid_injection_assignment<BC::internal::binary_expression<lv, rv, BC::function::assign>> {
+		static constexpr bool conditional = true;
+	};
 
 	template<class T>
 	static constexpr bool INJECTION() {
-		return injector<std::decay_t<T>>::conditional;
+		return valid_injection_assignment<T>::conditional && injector<std::decay_t<T>>::conditional;
 	}
+
 
 	template<class expression, class injection>
 	using injection_t =  typename injector<std::decay_t<expression>>::template type<std::decay_t<injection>>;

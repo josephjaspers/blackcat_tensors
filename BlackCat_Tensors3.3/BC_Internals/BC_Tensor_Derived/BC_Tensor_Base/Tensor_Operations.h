@@ -72,7 +72,6 @@ public:
 	}
 private:
 	//--------------------------------------assignment implementation-----------------------------------------------//
-	//non-injectable version
 	template<bool BARRIER = true, class derived_t>
 	std::enable_if_t<!BC::internal::INJECTION<decltype(std::declval<derived_t>().internal())>()> evaluate(const Tensor_Operations<derived_t>& tensor) {
 		tensor.as_derived().internal().eval();
@@ -85,6 +84,8 @@ private:
 	}
 	template<bool BARRIER = true, class derived_t>
 	std::enable_if_t<BC::internal::INJECTION<decltype(std::declval<derived_t>().internal())>()> evaluate(const Tensor_Operations<derived_t>& tensor) {
+//		std::cout << " injection " << std::endl;
+
 		auto internal = tensor.as_derived().internal();	//operation including assignment
 		auto injection = this->as_derived().internal();	//the left-value assignment core
 
