@@ -10,7 +10,7 @@
 
 namespace BC {
 namespace function {
-template<class ml> class dotproduct : public BLAS_FUNCTION {};
+template<class ml> class dotproduct;
 }
 namespace internal {
 
@@ -45,9 +45,7 @@ struct binary_expression<lv, rv, function::dotproduct<Mathlib>>
 	int is[2] { left.rows(), right.cols() };
 	int os[2] { left.rows(), left.rows() * right.cols() };
 
-	 binary_expression(lv left, rv right) : left(left), right(right) {
-		Mathlib::initialize(array_ptr, this->size());
-	 }
+	 binary_expression(lv left, rv right) : left(left), right(right) {}
 
 	__BCinline__ const auto& operator [](int index) const  { return array_ptr[index]; }
 	__BCinline__ 	   auto& operator [](int index) 	   { return array_ptr[index]; }
@@ -74,6 +72,8 @@ struct binary_expression<lv, rv, function::dotproduct<Mathlib>>
 public:
 
 	void eval() const {
+		Mathlib::initialize(array_ptr, this->size());
+
 //				//Uncomment and run dotproduct test to check for the correct detections
 //				if (transA)
 //				std::cout << "A is transposed" << transA << std::endl;
@@ -129,8 +129,10 @@ public:
 			Mathlib::destroy(A);
 		if (rv_eval)
 			Mathlib::destroy(B);
-
 	}
+
+
+
 };
 
 }

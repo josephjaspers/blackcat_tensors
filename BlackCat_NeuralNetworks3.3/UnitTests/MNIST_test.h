@@ -140,16 +140,16 @@ int percept_MNIST() {
 	mat img(28,28);
 	mat img_adj(28,28);
 
-	for (int i = 0; i < 10; ++i) {
-		std::cout << " output " << std::endl;
-		img = inputs[i];//outputs[i];//.print();
-		img_adj = img.t();
-		img_adj.printSparse(3);
-
-		std::cout << "prediction " << std::endl;
-		network.forwardPropagation(inputs[i]).print();
-		std::cout << "-----------------------------------------------------------------------------------------------------------" <<std::endl;
-	}
+//	for (int i = 0; i < 10; ++i) {
+//		std::cout << " output " << std::endl;
+//		img = inputs[i];//outputs[i];//.print();
+//		img_adj = img.t();
+//		img_adj.printSparse(3);
+//
+//		std::cout << "prediction " << std::endl;
+//		network.forwardPropagation(inputs[i]).print();
+//		std::cout << "-----------------------------------------------------------------------------------------------------------" <<std::endl;
+//	}
 	return 0;
 }
 

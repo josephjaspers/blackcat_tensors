@@ -6,8 +6,8 @@ using BC::Matrix;
 using BC::Scalar;
 using BC::Cube;
 
-//using ml = BC::CPU;
-using ml = BC::GPU;
+using ml = BC::CPU;
+//using ml = BC::GPU;
 
 using vec = Vector<float, ml>;
 using mat = Matrix<float, ml>;
@@ -22,6 +22,8 @@ using tesnor5 = BC::Tensor5<float, ml>;
 
 #include "_correlation_test.h"
 #include "_dotproducts_test.h"
+#include "_dotproduct_injection_test.h"
+
 #include "_readwrite_test.h"
 #include "_shaping_test.h"
 #include <iostream>
@@ -52,16 +54,14 @@ std::string type_name() {
 	  return removeNS(removeNS(removeNS(demangled, "BC::"), "internal::"), "function::");
 }
 
-
-
-template<class T>
-auto g(const T& tensor) {
-	return tensor.un_expr([](auto value) { return 1 / (1 + 2.7182 * value); });
-
-}
-
 int main() {
 
+	//various tests
+//	correlation();
+//	dotproducts();
+	dotproduct_injection();
+//	readwrite();
+//	shaping();
 	//various tests
 //	correlation();
 	dotproducts();
@@ -89,6 +89,7 @@ int main() {
 //	b.randomize(0,1);
 //	b.print();
 //	c.zero();
+
 
 
 	std::cout << " success  main" << std::endl;

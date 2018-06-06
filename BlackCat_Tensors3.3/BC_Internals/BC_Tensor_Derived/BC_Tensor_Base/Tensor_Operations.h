@@ -75,16 +75,55 @@ public:
 private:
 	//--------------------------------------assignment implementation-----------------------------------------------//
 
-	template<bool BARRIER = true, class t>
-	static void evaluate(const Tensor_Operations<t>& tensor) {
+	template<bool BARRIER = true, class derived_t>
+	std::enable_if_t<true || !BC::internal::INJECTION<decltype(std::declval<derived_t>().internal())>()> evaluate(const Tensor_Operations<derived_t>& tensor) {
 		tensor.as_derived().internal().eval();
 
-		static constexpr int iterator_dimension = _functor<t>::ITERATOR();
+
+//		std::cout << type_name<decltype(tensor.as_derived().internal())>() << std::endl << std::endl;
+
+		static constexpr int iterator_dimension = _functor<derived_t>::ITERATOR();
 		if (BARRIER)
 			mathlib_type::template dimension<iterator_dimension>::eval(tensor.as_derived().internal());
 		else
 			mathlib_type::template dimension<iterator_dimension>::eval_unsafe(tensor.as_derived().internal());
 	}
+
+	template<class> friend class tensor_alias;
+	template<bool BARRIER = true, class derived_t>
+	void alias_evaluate(const Tensor_Operations<derived_t>& tensor) {
+		tensor.as_derived().internal().eval();
+
+		static constexpr int iterator_dimension = _functor<derived_t>::ITERATOR();
+		if (BARRIER)
+			mathlib_type::template dimension<iterator_dimension>::eval(tensor.as_derived().internal());
+		else
+			mathlib_type::template dimension<iterator_dimension>::eval_unsafe(tensor.as_derived().internal());
+	}
+//	template<bool BARRIER = true, class derived_t>
+//	std::enable_if_t<BC::internal::INJECTION<decltype(std::declval<derived_t>().internal())>()> evaluate(const Tensor_Operations<derived_t>& tensor) {
+////		std::cout << " injection " << std::endl;
+//
+//		auto internal = tensor.as_derived().internal();	//operation including assignment
+//		auto injection = this->as_derived().internal();	//the left-value assignment core
+//
+//		using internal_t = decltype(internal);			//internal expression type (to be injected)
+//		using injection_t = decltype(injection);		//the injection type
+//
+//		using successful_inject = BC::internal::injection_t<internal_t, injection_t>;	//the conversion type after injection
+//		using tensor_type 		= BC::tensor_of_t<derived::DIMS(), successful_inject, mathlib_type>;
+//
+//		static constexpr int iterator_dimension = _functor<successful_inject>::ITERATOR();	//the iterator for the evaluation of post inject_t
+//		auto post_inject_tensor = tensor_type(successful_inject(internal, injection));		//evaluate the internal tensor_type
+//		post_inject_tensor.internal().eval(); //in case any dangling BLAS calls
+//
+//
+//		if (BARRIER)
+//			mathlib_type::template dimension<iterator_dimension>::eval(post_inject_tensor.internal());
+//		else
+//			mathlib_type::template dimension<iterator_dimension>::eval_unsafe(post_inject_tensor.internal());
+//	}
+
 public:
 	//--------------------------------------assignment operators-----------------------------------------------//
 

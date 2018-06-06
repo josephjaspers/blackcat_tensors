@@ -8,12 +8,39 @@
 #ifndef BLAS_INJECTION_EVALUATOR_H_
 #define BLAS_INJECTION_EVALUATOR_H_
 
-#include "Expression_Binary_Functors.h"
 #include <type_traits>
+#include "Expression_Binary_Functors.h"
+
+#include <cxxabi.h>
+#include <iostream>
+
+
 namespace BC {
 
 class GPU;
 class CPU;
+
+
+std::string removeNS( const std::string & source, const std::string & namespace_ )
+{
+    std::string dst = source;
+    size_t position = source.find( namespace_ );
+    while ( position != std::string::npos )
+    {
+        dst.erase( position, namespace_.length() );
+        position = dst.find( namespace_, position + 1 );
+    }
+    return dst;
+}
+
+template<class T>
+std::string type_name() {
+	int status;
+	  std::string demangled = abi::__cxa_demangle(typeid(T).name(),0,0,&status);
+	  return demangled;
+//	  return removeNS(removeNS(removeNS(demangled, "BC::"), "internal::"), "function::");
+}
+
 
 namespace function {
 
@@ -114,8 +141,8 @@ namespace internal {
 
 	};
 
-	template<class lv, class rv>
-	struct injector<be<lv, rv, BC::function::dotproduct<BC::CPU>>, void> {
+	template<class lv, class rv, class ml>
+	struct injector<be<lv, rv, BC::function::dotproduct<ml>>, void> {
 		static constexpr int priority = -1;
 		static constexpr bool conditional = true;
 
@@ -123,11 +150,24 @@ namespace internal {
 		template<class injection_type> using type = std::decay_t<injection_type>;
 	};
 
+	template<class T>
+	struct valid_injection_assignment {
+		static constexpr bool conditional = false;
+	};
+
+	template<class lv, class rv>
+	struct valid_injection_assignment<BC::internal::binary_expression<lv, rv, BC::function::assign>> {
+		static constexpr bool conditional = true;
+	};
 
 	template<class T>
 	static constexpr bool INJECTION() {
-		return injector<std::decay_t<T>>::conditional;
+		return valid_injection_assignment<std::decay_t<T>>::conditional && injector<std::decay_t<T>>::conditional;
 	}
+
+
+	template<class expression, class injection>
+	using injection_t =  typename injector<std::decay_t<expression>>::template type<std::decay_t<injection>>;
 
 
 }
