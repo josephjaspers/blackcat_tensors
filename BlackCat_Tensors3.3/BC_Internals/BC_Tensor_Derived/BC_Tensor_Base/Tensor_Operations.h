@@ -75,12 +75,10 @@ public:
 private:
 	//--------------------------------------assignment implementation-----------------------------------------------//
 
-	template<bool BARRIER = true, class derived_t>
+	template<bool BARRIER = true, class derived_t> __BC_host_inline__
 	std::enable_if_t<true || !BC::internal::INJECTION<decltype(std::declval<derived_t>().internal())>()> evaluate(const Tensor_Operations<derived_t>& tensor) {
 		tensor.as_derived().internal().eval();
 
-
-//		std::cout << type_name<decltype(tensor.as_derived().internal())>() << std::endl << std::endl;
 
 		static constexpr int iterator_dimension = _functor<derived_t>::ITERATOR();
 		if (BARRIER)
@@ -90,7 +88,7 @@ private:
 	}
 
 	template<class> friend class tensor_alias;
-	template<bool BARRIER = true, class derived_t>
+	template<bool BARRIER = true, class derived_t> __BC_host_inline__
 	void alias_evaluate(const Tensor_Operations<derived_t>& tensor) {
 		tensor.as_derived().internal().eval();
 
@@ -100,7 +98,7 @@ private:
 		else
 			mathlib_type::template dimension<iterator_dimension>::eval_unsafe(tensor.as_derived().internal());
 	}
-//	template<bool BARRIER = true, class derived_t>
+//	template<bool BARRIER = true, class derived_t> __BC_host_inline__
 //	std::enable_if_t<BC::internal::INJECTION<decltype(std::declval<derived_t>().internal())>()> evaluate(const Tensor_Operations<derived_t>& tensor) {
 ////		std::cout << " injection " << std::endl;
 //
@@ -115,7 +113,7 @@ private:
 //
 //		static constexpr int iterator_dimension = _functor<successful_inject>::ITERATOR();	//the iterator for the evaluation of post inject_t
 //		auto post_inject_tensor = tensor_type(successful_inject(internal, injection));		//evaluate the internal tensor_type
-//		post_inject_tensor.internal().eval(); //in case any dangling BLAS calls
+////		post_inject_tensor.internal().eval(); //in case any dangling BLAS calls
 //
 //
 //		if (BARRIER)

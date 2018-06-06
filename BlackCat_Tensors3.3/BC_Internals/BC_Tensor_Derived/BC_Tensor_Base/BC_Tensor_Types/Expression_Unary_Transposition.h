@@ -54,7 +54,7 @@ struct unary_expression<functor_type, function::transpose> : expression_base<una
 				return array(m, n);
 	}
 
-	void eval() const {
+	__BCinline__ void eval() const {
 		array.eval();
 	}
 };
