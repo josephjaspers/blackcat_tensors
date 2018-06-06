@@ -97,8 +97,6 @@ private:
 	}
 	template<bool BARRIER = true, class derived_t>
 	std::enable_if_t<BC::internal::INJECTION<decltype(std::declval<derived_t>().internal())>()> evaluate(const Tensor_Operations<derived_t>& tensor) {
-//		std::cout << " injection " << std::endl;
-
 		auto internal = tensor.as_derived().internal();	//operation including assignment
 		auto injection = this->as_derived().internal();	//the left-value assignment core
 
@@ -110,7 +108,7 @@ private:
 
 		static constexpr int iterator_dimension = _functor<successful_inject>::ITERATOR();	//the iterator for the evaluation of post inject_t
 		auto post_inject_tensor = tensor_type(successful_inject(internal, injection));		//evaluate the internal tensor_type
-		post_inject_tensor.internal().eval(); //in case any dangling BLAS calls
+//		post_inject_tensor.internal().eval(); //in case any dangling BLAS calls
 
 
 		if (BARRIER)

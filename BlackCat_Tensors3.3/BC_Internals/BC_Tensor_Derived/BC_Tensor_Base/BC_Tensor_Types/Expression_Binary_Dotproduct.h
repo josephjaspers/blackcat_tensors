@@ -45,7 +45,10 @@ struct binary_expression<lv, rv, function::dotproduct<Mathlib>>
 	int is[2] { left.rows(), right.cols() };
 	int os[2] { left.rows(), left.rows() * right.cols() };
 
-	 binary_expression(lv left, rv right) : left(left), right(right) {}
+	 binary_expression(lv left, rv right) : left(left), right(right) {
+			Mathlib::initialize(array_ptr, this->size());
+
+	 }
 
 	__BCinline__ const auto& operator [](int index) const  { return array_ptr[index]; }
 	__BCinline__ 	   auto& operator [](int index) 	   { return array_ptr[index]; }
@@ -122,7 +125,6 @@ public:
 	}
 
 	void eval() const {
-		Mathlib::initialize(array_ptr, this->size());
 		eval_impl();
 	}
 
