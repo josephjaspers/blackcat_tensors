@@ -7,11 +7,8 @@
 #ifndef EXPRESSION_UNARY_FUNCTORS_H_
 #define EXPRESSION_UNARY_FUNCTORS_H_
 
-#include "BlackCat_Internal_Definitions.h"
-#include <iostream>
-
 namespace BC {
-namespace function {
+namespace oper {
 	struct negation {
 		template<class lv> __BCinline__ auto operator ()(lv val) const {
 			return -val;

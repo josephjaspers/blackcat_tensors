@@ -7,11 +7,10 @@
 #ifndef EXPRESSION_UNARY_MATRIXTRANSPOSITION_H_
 #define EXPRESSION_UNARY_MATRIXTRANSPOSITION_H_
 #include "Expression_Base.h"
-#include "Expression_Binary_Functors.h"
 #include <vector>
 
 namespace BC {
-namespace function {
+namespace oper {
 class transpose;
 }
 namespace internal {
@@ -19,7 +18,7 @@ namespace internal {
 
 
 template<class functor_type>
-struct unary_expression<functor_type, function::transpose> : expression_base<unary_expression<functor_type, function::transpose>>
+struct unary_expression<functor_type, oper::transpose> : expression_base<unary_expression<functor_type, oper::transpose>>
 {
 	functor_type array;
 
@@ -33,7 +32,7 @@ struct unary_expression<functor_type, function::transpose> : expression_base<una
 	//blas injection
 	template<class core> unary_expression(functor_type ary, core tensor) : array(ary, tensor) {}
 	template<class BLAS_expr> //CONVERSION CONSTRUCTOR FOR BLAS ROTATION
-		__BCinline__  unary_expression(unary_expression<BLAS_expr, function::transpose> ue, functor_type tensor) : array(tensor) {
+		__BCinline__  unary_expression(unary_expression<BLAS_expr, oper::transpose> ue, functor_type tensor) : array(tensor) {
 		ue.array.eval(tensor);
 	}
 
@@ -57,10 +56,6 @@ struct unary_expression<functor_type, function::transpose> : expression_base<una
 				return array[m * array.ld1() + n];
 			else
 				return array(m, n);
-	}
-
-	void eval() const {
-		array.eval();
 	}
 };
 }

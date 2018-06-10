@@ -12,9 +12,9 @@ template<class derived, template<class> class...> struct LayerChain;
 template<class> class OutputLayer;
 template<class> class InputLayer;
 
-	//Layer chain - a tuple that inherits from each of its types and has an internal two iteration technique
+	//Layer chain - a tuple that inherits from each of its types and has an data two iteration technique
+	//this is a bidirectional tuple
 
-	//TAIL
 	template<class derived>
 	struct LayerChain<derived, OutputLayer> : public OutputLayer<LayerChain<derived, OutputLayer>>{
 
@@ -35,12 +35,12 @@ template<class> class InputLayer;
 		const me& next() const { throw std::invalid_argument("no next end of chain"); return *this;}
 			  me& next() 		 { throw std::invalid_argument("no next end of chain"); return *this;}
 
-		const auto& prev() const { return static_cast<p&>(*this).internal(); }
-			  auto& prev() 		 { return static_cast<p&>(*this).internal(); }
+		const auto& prev() const { return static_cast<p&>(*this).data(); }
+			  auto& prev() 		 { return static_cast<p&>(*this).data(); }
 
 
-		const auto& internal() const { return static_cast<const type&>(*this); }
-			  auto& internal()  	 { return static_cast<		type&>(*this); }
+		const auto& data() const { return static_cast<const type&>(*this); }
+			  auto& data()  	 { return static_cast<		type&>(*this); }
 	};
 
 	//BODY
@@ -66,14 +66,14 @@ template<class> class InputLayer;
 		auto& tail() { return static_cast<parent&>(*this).tail(); }
 		auto& head() { return prev().head(); }
 
-			  auto& prev()  	 { return static_cast<p&>(*this).internal(); }
-		const auto& prev() const { return static_cast<p&>(*this).internal(); }
+			  auto& prev()  	 { return static_cast<p&>(*this).data(); }
+		const auto& prev() const { return static_cast<p&>(*this).data(); }
 
-			  auto& next()    	 { return static_cast<parent&>(*this).internal(); }
-		const auto& next() const { return static_cast<parent&>(*this).internal(); }
+			  auto& next()    	 { return static_cast<parent&>(*this).data(); }
+		const auto& next() const { return static_cast<parent&>(*this).data(); }
 
-		const auto& internal() const { return static_cast<const type&>(*this); }
-		 	  auto& internal()  	 { return static_cast<		type&>(*this); }
+		const auto& data() const { return static_cast<const type&>(*this); }
+		 	  auto& data()  	 { return static_cast<		type&>(*this); }
 	};
 
 	//HEAD
@@ -93,15 +93,15 @@ template<class> class InputLayer;
 		LayerChain(param x, integers... dims) : parent(x, dims...) {}
 
 		bool hasNext() const { return true; }
-		const auto& internal() const { return static_cast<const type&>(*this); }
-			  auto& internal()  	 { return static_cast<		type&>(*this); }
+		const auto& data() const { return static_cast<const type&>(*this); }
+			  auto& data()  	 { return static_cast<		type&>(*this); }
 
 		const auto& tail() const { return next().tail(); }
 			  auto& tail() 		 { return static_cast<parent&>(*this).tail(); }
-		const auto& head() const { return internal(); }
-			  auto& head()  	 { return internal(); }
-		const auto& next() const { return static_cast<parent&>(*this).internal(); }
-			  auto& next()  	 { return static_cast<parent&>(*this).internal(); }
+		const auto& head() const { return data(); }
+			  auto& head()  	 { return data(); }
+		const auto& next() const { return static_cast<parent&>(*this).data(); }
+			  auto& next()  	 { return static_cast<parent&>(*this).data(); }
 	};
 
 }

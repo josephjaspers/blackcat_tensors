@@ -8,6 +8,8 @@
 #ifndef TENSOR_SHAPING_H_
 #define TENSOR_SHAPING_H_
 
+#include "Tensor_Functions/Shaping.h"
+
 namespace BC {
 namespace Base {
 template<class derived>
@@ -26,7 +28,7 @@ struct Tensor_Shaping {
 private:
 
 	const auto& as_derived() const { return static_cast<const derived&>(*this); }
-	auto& as_derived() { return static_cast<derived&>(*this); }
+		  auto& as_derived()       { return static_cast<	  derived&>(*this); }
 
 public:
 
@@ -51,37 +53,44 @@ public:
 		using internal = decltype(std::declval<derived>().internal().reshape(ints...));
 		static constexpr int tensor_dim =  sizeof...(integers);
 		using type = typename tensor_of<tensor_dim>::template type<internal, mathlib_type>;
-		return type(this->as_derived().internal().reshape(ints...));
+		return type(as_derived().internal().reshape(ints...));
 	}
 	//-------non-const reshape (using shape object)
 	template<int dims>
 	 auto lazy_reshape(Shape<dims> shape)  {
 		using internal = decltype(std::declval<derived>().internal().reshape(shape));
 		using type = typename tensor_of<dims>::template type<internal, mathlib_type>;
-		return type(this->as_derived().internal().reshape(shape));
+		return type(as_derived().internal().reshape(shape));
 	}
 	template<class... integers>
 	auto lazy_chunk(integers... ints) {
-		int location = this->as_derived().internal().dims_to_index_reverse(ints...);
-		return CHUNK(this->as_derived(), location);
+		int location = as_derived().internal().dims_to_index_reverse(ints...);
+		return CHUNK(as_derived(), location);
 	}
 	template<class... integers>
 	const auto lazy_chunk(integers... ints) const {
-		int location = this->as_derived().internal().dims_to_index_reverse(ints...);
-		return CHUNK(this->as_derived(), location);
+		int location = as_derived().internal().dims_to_index_reverse(ints...);
+		return CHUNK(as_derived(), location);
 	}
 
 
 private:
-	const auto slice_impl(int i) const { return this->as_derived().array_core.slice(i); }
-		  auto slice_impl(int i) 	  { return this->as_derived().array_core.slice(i);  }
+	const auto slice_impl(int i) const { return as_derived().internal().slice(i); }
+		  auto slice_impl(int i) 	  { return as_derived().internal().slice(i);  }
 
-	const auto scalar_impl(int i) const { return this->as_derived().array_core.scalar(i); }
-		  auto scalar_impl(int i)	    { return this->as_derived().array_core.scalar(i);  }
+	const auto scalar_impl(int i) const { return as_derived().internal().scalar(i); }
+		  auto scalar_impl(int i)	    { return as_derived().internal().scalar(i);  }
 
-	const auto row_impl(int i) const { return this->as_derived().array_core.row(i); }
-		  auto row_impl(int i)	     { return this->as_derived().array_core.row(i); }
+	const auto row_impl(int i) const { return as_derived().internal().row(i); }
+		  auto row_impl(int i)	     { return as_derived().internal().row(i); }
+
+	const auto transpose_impl() const { return as_derived().internal().transpose(); }
+		  auto transpose_impl() 	  { return as_derived().internal().transpose(); }
+
 public:
+	const auto t() const { return BC::tensor_of_t<DIMS(), decltype(transpose_impl()), mathlib_type>(transpose_impl()); }
+		  auto t() 		 { return BC::tensor_of_t<DIMS(), decltype(transpose_impl()), mathlib_type>(transpose_impl()); }
+
 	const auto operator [] (int i) const { return slice(i); }
 		  auto operator [] (int i) 		 { return slice(i); }
 
@@ -132,7 +141,7 @@ public:
 
 	template<class... integers>
 	void resize(integers... ints) {
-		this->as_derived().array_core.resetShape(ints...);
+		as_derived().internal().resetShape(ints...);
 	}
 	//THIS IS THE CURRIED CHUNK LAMBDA, WE MUST USE AN ACTUAL CLASS TO ACT AS A LAMDA AS CUDA COMPILER IS IFFY WITH LAMBDA
 	struct CHUNK {
@@ -162,50 +171,7 @@ public:
 
 }	//END OF BASE NAMESPACE
 //-----------------------------------------------THESE ARE THE "CURRIED FUNCTIONS"-------------------------------------------------"
-	template<class> class Tensor_Base;
 
-	template<class T> __BC_host_inline__
-	const auto reshape(const Tensor_Base<T>& tensor) {
-		return [&](auto... integers) { return tensor.lazy_reshape(integers...); };
-	}
-	template<class T> __BC_host_inline__
-	auto reshape(Tensor_Base<T>& tensor) {
-		return [&](auto... integers) { return tensor.lazy_reshape(integers...); };
-	}
-
-	template<class T> __BC_host_inline__
-	auto chunk(Tensor_Base<T>& tensor) {
-		return [&](auto... integers) {
-			return tensor.lazy_chunk(integers...);
-		};
-	}
-	template<class T> __BC_host_inline__
-	const auto chunk(const Tensor_Base<T>& tensor) {
-		return [&](auto... integers) {
-			return tensor.lazy_chunk(integers...);
-		};
-	}
-
-	template<class T> __BC_host_inline__
-	const auto reshape(const Tensor_Base<T>&& tensor) {
-		return [&](auto... integers) { return tensor.lazy_reshape(integers...); };
-	}
-	template<class T> __BC_host_inline__
-	auto reshape(Tensor_Base<T>&& tensor) {
-		return [&](auto... integers) { return tensor.lazy_reshape(integers...); };
-	}
-	template<class T> __BC_host_inline__
-	auto chunk(Tensor_Base<T>&& tensor) {
-		return [&](auto... integers) {
-			return tensor.lazy_chunk(integers...);
-		};
-	}
-	template<class T> __BC_host_inline__
-	const auto chunk(const Tensor_Base<T>&& tensor) {
-		return [&](auto... integers) {
-			return tensor.lazy_chunk(integers...);
-		};
-	}
 }
 
 #endif /* TENSOR_SHAPING_H_ */

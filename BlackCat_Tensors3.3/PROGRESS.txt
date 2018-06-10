@@ -5,21 +5,39 @@ CODE DOCUMENTATING CURRENT BUGS OR ODDITIES IN THE PROGRAM
 Certain functions are written in sub-optimal "clean code" methods due to issues with the NVCC
 
 ##############################################################################
-***Injection Evaluator Bug (in Tensor_Operations Implementation)
+***NVCC compiler fails (sometimes) constexper boolean***	June 9th 2018
+------------------------------------------------------------------------------
+IE 
+template<class T>
+static constexpr bool some_condition = some_struct<T>::a_bool_value;
+
+FIX/WORKAROUND
+	using a constexpr function seems to not cause any issues
+	static constexpr bool some_condition() { return some_struct<T>::a_bool_value; }
+
+
+##############################################################################
+***Tensor_Chunk DOES NOT WORK WITH Tensor_Reshape OR Tensor_Transpose***	June 9th 2018
+------------------------------------------------------------------------------
+tensor_chunk does not with reshape/transpose lazy_Evals 
+IT DOES NOT GIVE AN ERROR MESSAGE OR FAIL ON COMPILATION, FIXME
+
+##############################################################################
+***Injection Evaluator Bug (in Tensor_Operations Implementation)		June 4th 2018
 ------------------------------------------------------------------------------
 BLAS_Injection_Evaluator std::is_base_of<BLAS_Function> 
 currently does not work, requires specialization of each blas func //FIXME
 
 
 ##############################################################################
-***BLAS Determine Evaluator
+***BLAS Determine Evaluator***							June 4th 2018
 ------------------------------------------------------------------------------
 Need to wrap binary_expression unary_expression into some unifying class to access arrays,
 current implementation tightly couples the determine_evaluator and the expression_classes 
 
 
 ##############################################################################
-***Shape***
+***Shape***									June 4th 2018
 ------------------------------------------------------------------------------
 Shape class currently accepts a variety of inner_shape types (need to adjust with std::decay)
 -- fix create a superclass that easily wraps an inner_shape and outer_shape type
@@ -30,7 +48,7 @@ this would allow for a fast copy via memcopy or a for loop (dodges re-evaluation
 
 
 ##############################################################################
-***CUDA BUG [Odd specializations/templates]***
+***CUDA BUG [Odd specializations/templates]***					June 4th 2018
 ------------------------------------------------------------------------------
 Many Cuda functions in GPU require an odd specialization...
 
@@ -49,7 +67,7 @@ will cause "invalid sizeof..." with NVCC. This seems to be a bug in the NVCC
 
 
 ##############################################################################
-***CUDA BUG [Lamda parameter pack]***
+***CUDA BUG [Lamda parameter pack]***						June 4th 2018
 ------------------------------------------------------------------------------
 nested lamdas with parameter_packs will fail with Cuda
 

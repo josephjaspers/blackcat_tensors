@@ -10,6 +10,7 @@
 
 #include "BlackCat_Internal_Definitions.h"
 #include "BLAS_Expression_Evaluator.h"
+#include "BLAS_Parse_Tree.h"
 #include <iostream>
 #include <type_traits>
 
@@ -136,7 +137,6 @@ public:
 
 	//---------------------------------------------------METHODS THAT MAY NEED TO BE SHADOWED------------------------------------------------------------//
 	void destroy() {}
-	void eval() const {}
 	//---------------------------------------------------METHODS THAT NEED TO BE SHADOWED------------------------------------------------------------//
 	__BCinline__ auto operator [] (int index) 	  	{ return shadowFailure("operator [] (int index)"); };
 	__BCinline__ auto operator [] (int index) const { return shadowFailure("operator [] (int index) const"); };

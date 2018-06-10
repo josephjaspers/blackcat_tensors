@@ -76,12 +76,6 @@ template<class T>
 struct determine_mathlibrary {
 	using type = std::conditional_t<isTensor_b<T>, MTF::tail<T>, determine_mathlibrary<MTF::head<T>>>;
 };
-
-
-
-
-
-
 }
 
 

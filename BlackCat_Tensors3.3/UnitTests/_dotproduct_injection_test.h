@@ -17,9 +17,8 @@ int dotproduct_injection() {
 	mat abs(10,10);
 
 	abs.print_dimensions();
-
+	f.zero();
 	std::cout << " param " << std::endl;
-
 	a.print_dimensions();
 
 	for (int i = 0; i < 6; ++i)  {
@@ -51,16 +50,17 @@ int dotproduct_injection() {
 	std::cout << "a.t * e + f" << std::endl;
 	c = a.t() * e + f;
 	c.print();
-	std::cout << "-(d * b.t) + f" << std::endl;
-	c =  - (d * b.t()) + f;
-	c.print();
-	std::cout << " dot product -- scalar, regular" << std::endl;
+// not available to detect
+//	std::cout << "-(d * b.t) + f" << std::endl;
+//	c =  - (d * b.t()) + f;
+//	c.print();
+	std::cout << "c = d * scal(2.0f) * e + c;" << std::endl;
 	c = d * scal(2.0f) * e + c;
 	c.print();
-	std::cout << " dot product -- scalar, regular" << std::endl;
+	std::cout << "c = scal(2.0f) * d * e;" << std::endl;
 	c = scal(2.0f) * d * e;
 	c.print();
-	std::cout << " dot product -- regular,  scalar " << std::endl;
+	std::cout << "c = d * e * scal(2.0f); " << std::endl;
 
 	c = d * e * scal(2.0f); ////This is the only version that is not accounted for (it is also the least common notation)
 	c.print();
@@ -68,26 +68,26 @@ int dotproduct_injection() {
 	scal A(2.0f);
 	scal B(2.0f);
 
-	std::cout << " dot product -- trans, trans " << std::endl;
+	std::cout << " a.t * b.t" << std::endl;
 	c = a.t() * b.t();
 	c.print();
 
-	std::cout << " dot product -- trans scalar, trans " << std::endl;
+	std::cout << "c = a.t() * A * b.t();" << std::endl;
 	A.print();
 	c = a.t() * A * b.t();
 	c.print();
 //
-	std::cout << " dot product -- scalar trans, trans " << std::endl;
+	std::cout << "c = A * a.t() * b.t();" << std::endl;
 	A.print();
 	c = A * a.t() * b.t();
 	c.print();
 
-	std::cout << " dot product -- trans, trans scalar " << std::endl;
+	std::cout << "c = a.t() * (b.t() * A);" << std::endl;
 	A.print();
 	c = a.t() * (b.t() * A);
 	c.print();
 
-	std::cout << " dot product -- trans scalar, trans scalar " << std::endl;
+	std::cout << "	c = a.t() * A * (b.t() * A) " << std::endl;
 	A.print();
 	c = a.t() * A * (b.t() * A);
 	c.print();

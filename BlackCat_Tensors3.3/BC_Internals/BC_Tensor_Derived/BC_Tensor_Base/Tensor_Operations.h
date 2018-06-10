@@ -8,19 +8,18 @@
 #ifndef TENSOR_HEAD_H_
 #define TENSOR_HEAD_H_
 
-#include "BC_Tensor_Types/Expression_Binary_Base.h"
-#include "BC_Tensor_Types/Expression_Binary_Functors.h"
-#include "BC_Tensor_Types/Expression_Binary_Dotproduct.h"
-#include "BC_Tensor_Types/Expression_Unary_Base.h"
-#include "BC_Tensor_Types/Expression_Unary_Functors.h"
-#include "BC_Tensor_Types/Expression_Unary_Transposition.h"
-#include "Operations_Implementation/AlternateAsterixDenoter.h"
-#include "Operations_Implementation/Expression_Determiner.h"
-#include "Operations_Implementation/Expression_Determiner.h"
-#include "Operations_Implementation/BLAS_Injection_Evaluator.h"
-#include "Operations_Implementation/Aliased_BLAS_func.h"
+#include "BC_Tensor_Types/Expression_Binary.h"
+#include "BC_Tensor_Types/Operations/Binary.h"
+#include "BC_Tensor_Types/Operations/Unary.h"
 
-#include "Operations_Implementation/Unary_Functions.h"
+#include "BC_Tensor_Types/gemm.h"
+#include "BC_Tensor_Types/Expression_Unary.h"
+#include "BC_Tensor_Types/transpose.h"
+#include "Tensor_Operations_Impl/AlternateAsterixDenoter.h"
+#include "BC_Tensor_Types/Expression_Determiner.h"
+#include "BC_Tensor_Types/BLAS_Injection_Runner.h"
+
+#include "Tensor_Functions/Unary_Functions.h"
 #include <type_traits>
 
 namespace BC {
@@ -45,7 +44,6 @@ class Tensor_Operations {
 public:
 
 	//-------------------------------------dotproduct-------------------- ---------------------//
-
 	template<class pDeriv>
 	auto operator *(const Tensor_Operations<pDeriv>& param) const {
 		 return typename dp_impl<pDeriv>::type(as_derived().internal(), param.as_derived().internal());
@@ -53,70 +51,32 @@ public:
 	//--------------------------------------pointwise operators-------------------------------//
 	template<class pDeriv> auto operator +(const Tensor_Operations<pDeriv>& param) const {
 		assert_same_size(param);
-		return bi_expr<function::add>(param);
+		return bi_expr<oper::add>(param);
 	}
 	template<class pDeriv> auto operator -(const Tensor_Operations<pDeriv>& param) const {
 		assert_same_size(param);
-		return bi_expr<function::sub>(param);
+		return bi_expr<oper::sub>(param);
 	}
 	template<class pDeriv> auto operator /(const Tensor_Operations<pDeriv>& param) const {
 		assert_same_size(param);
-		return bi_expr<function::div>(param);
+		return bi_expr<oper::div>(param);
 	}
 	template<class pDeriv> auto operator %(const Tensor_Operations<pDeriv>& param) const {			//overloaded for pointwise multiply
 		assert_same_size(param);
-		return bi_expr<function::mul>(param);
+		return bi_expr<oper::mul>(param);
 	}
 	template<class pDeriv> auto operator *(const alternate_asterix_denoter<pDeriv>& param) const { //alternative for pointwise multiply
 		assert_same_size(param.get());
-		return bi_expr<function::mul>(param.get());
+		return bi_expr<oper::mul>(param.get());
 	}
+
 private:
+
 	//--------------------------------------assignment implementation-----------------------------------------------//
 	template<bool BARRIER = true, class derived_t>
-	std::enable_if_t<!BC::internal::INJECTION<decltype(std::declval<derived_t>().internal())>()> evaluate(const Tensor_Operations<derived_t>& tensor) {
-		tensor.as_derived().internal().eval();
-
-		static constexpr int iterator_dimension = _functor<derived_t>::ITERATOR();
-		if (BARRIER)
-			mathlib_type::template dimension<iterator_dimension>::eval(tensor.as_derived().internal());
-		else
-			mathlib_type::template dimension<iterator_dimension>::eval_unsafe(tensor.as_derived().internal());
+	void evaluate(const Tensor_Operations<derived_t>& tensor) {
+		BC::Evaluator<mathlib_type, BARRIER>::evaluate(as_derived().internal(), tensor.as_derived().internal());
 	}
-
-	template<class> friend class tensor_alias;
-	template<bool BARRIER = true, class derived_t>
-	void alias_evaluate(const Tensor_Operations<derived_t>& tensor) {
-		tensor.as_derived().internal().eval();
-
-		static constexpr int iterator_dimension = _functor<derived_t>::ITERATOR();
-		if (BARRIER)
-			mathlib_type::template dimension<iterator_dimension>::eval(tensor.as_derived().internal());
-		else
-			mathlib_type::template dimension<iterator_dimension>::eval_unsafe(tensor.as_derived().internal());
-	}
-	template<bool BARRIER = true, class derived_t>
-	std::enable_if_t<BC::internal::INJECTION<decltype(std::declval<derived_t>().internal())>()> evaluate(const Tensor_Operations<derived_t>& tensor) {
-		auto internal = tensor.as_derived().internal();	//operation including assignment
-		auto injection = this->as_derived().internal();	//the left-value assignment core
-
-		using internal_t = decltype(internal);			//internal expression type (to be injected)
-		using injection_t = decltype(injection);		//the injection type
-
-		using successful_inject = BC::internal::injection_t<internal_t, injection_t>;	//the conversion type after injection
-		using tensor_type 		= BC::tensor_of_t<derived::DIMS(), successful_inject, mathlib_type>;
-
-		static constexpr int iterator_dimension = _functor<successful_inject>::ITERATOR();	//the iterator for the evaluation of post inject_t
-		auto post_inject_tensor = tensor_type(successful_inject(internal, injection));		//evaluate the internal tensor_type
-//		post_inject_tensor.internal().eval(); //in case any dangling BLAS calls
-
-
-		if (BARRIER)
-			mathlib_type::template dimension<iterator_dimension>::eval(post_inject_tensor.internal());
-		else
-			mathlib_type::template dimension<iterator_dimension>::eval_unsafe(post_inject_tensor.internal());
-	}
-
 
 public:
 	//--------------------------------------assignment operators-----------------------------------------------//
@@ -124,7 +84,7 @@ public:
 	template<class pDeriv>
 	derived& operator =(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
-		evaluate(bi_expr<function::assign>(param));
+		evaluate(bi_expr<oper::assign>(param));
 		return as_derived();
 	}
 
@@ -132,26 +92,26 @@ public:
 	template<class pDeriv>
 	derived& operator +=(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
-		evaluate(bi_expr<function::add_assign>(param));
+		evaluate(bi_expr<oper::add_assign>(param));
 		return as_derived();
 
 	}
 	template<class pDeriv>
 	derived& operator -=(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
-		evaluate(bi_expr<function::sub_assign>(param));
+		evaluate(bi_expr<oper::sub_assign>(param));
 		return as_derived();
 	}
 	template<class pDeriv>
 	derived& operator /=(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
-		evaluate(bi_expr<function::div_assign>(param));
+		evaluate(bi_expr<oper::div_assign>(param));
 		return as_derived();
 	}
 	template<class pDeriv>
 	derived& operator %=(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
-		evaluate(bi_expr<function::mul_assign>(param));
+		evaluate(bi_expr<oper::mul_assign>(param));
 		return as_derived();
 	}
 
@@ -160,7 +120,7 @@ public:
 	template<class pDeriv>
 	derived& operator =(const unsafe_AAD<pDeriv>& param) {
 		assert_same_size(param.get());
-		evaluate<false>(bi_expr<function::assign>(param.get()));
+		evaluate<false>(bi_expr<oper::assign>(param.get()));
 		return as_derived();
 	}
 
@@ -168,67 +128,67 @@ public:
 	template<class pDeriv>
 	derived& operator +=(const unsafe_AAD<pDeriv>& param) {
 		assert_same_size(param.get());
-		evaluate<false>(bi_expr<function::add_assign>(param.get()));
+		evaluate<false>(bi_expr<oper::add_assign>(param.get()));
 		return as_derived();
 
 	}
 	template<class pDeriv>
 	derived& operator -=(const unsafe_AAD<pDeriv>& param) {
 		assert_same_size(param.get());
-		evaluate<false>(bi_expr<function::sub_assign>(param.get()));
+		evaluate<false>(bi_expr<oper::sub_assign>(param.get()));
 		return as_derived();
 	}
 	template<class pDeriv>
 	derived& operator /=(const unsafe_AAD<pDeriv>& param) {
 		assert_same_size(param.get());
-		evaluate<false>(bi_expr<function::div_assign>(param.get()));
+		evaluate<false>(bi_expr<oper::div_assign>(param.get()));
 		return as_derived();
 	}
 	template<class pDeriv>
 	derived& operator %=(const unsafe_AAD<pDeriv>& param) {
 		assert_same_size(param.get());
-		evaluate<false>(bi_expr<function::mul_assign>(param.get()));
+		evaluate<false>(bi_expr<oper::mul_assign>(param.get()));
 		return as_derived();
 	}
 	 //--------------------------------Other Operators------------------------------//
 
 	 auto operator - () const {
-		 return this->un_expr<function::negation>();
+		 return this->un_expr<oper::negation>();
 	 }
 	template<class pDeriv>
 	auto operator ==(const Tensor_Operations<pDeriv>& param) const {
 		assert_same_size(param);
-		return bi_expr<function::equal>(param);
+		return bi_expr<oper::equal>(param);
 	}
 	template<class pDeriv>
 	auto operator >(const Tensor_Operations<pDeriv>& param) const {
 		assert_same_size(param);
-		return bi_expr<function::greater>(param);
+		return bi_expr<oper::greater>(param);
 	}
 	template<class pDeriv>
 	auto operator <(const Tensor_Operations<pDeriv>& param) const {
 		assert_same_size(param);
-		return bi_expr<function::lesser>(param);
+		return bi_expr<oper::lesser>(param);
 	}
 	template<class pDeriv>
 	auto operator >(const alternate_asterix_denoter<pDeriv>& param) const {
 		assert_same_size(param.get());
-		return bi_expr<function::max>(param.get());
+		return bi_expr<oper::max>(param.get());
 	}
 	template<class pDeriv>
 	auto operator <(const alternate_asterix_denoter<pDeriv>& param) const {
 		assert_same_size(param.get());
-		return bi_expr<function::min>(param.get());
+		return bi_expr<oper::min>(param.get());
 	}
 	template<class pDeriv>
 	auto operator >=(const Tensor_Operations<pDeriv>& param) const {
 		assert_same_size(param);
-		return bi_expr<function::greater_equal>(param);
+		return bi_expr<oper::greater_equal>(param);
 	}
 	template<class pDeriv>
 	auto operator <=(const Tensor_Operations<pDeriv>& param) const {
 		assert_same_size(param);
-		return bi_expr<function::lesser_equal>(param);
+		return bi_expr<oper::lesser_equal>(param);
 	}
 
 	//-------------------------------------------DELAYED ASSIGNMENT OPERATORS---------------------------------------------//
@@ -236,39 +196,39 @@ public:
 	template<class pDeriv>
 	auto operator =(const alternate_asterix_denoter<pDeriv>& param) const {
 		assert_same_size(param.get());
-		return bi_expr<function::assign>(param.get());
+		return bi_expr<oper::assign>(param.get());
 	}
 
 	template<class pDeriv>
 	auto operator +=(const alternate_asterix_denoter<pDeriv>& param) const {
 		assert_same_size(param.get());
-		return bi_expr<function::add_assign>(param.get());
+		return bi_expr<oper::add_assign>(param.get());
 	}
 	template<class pDeriv>
 	auto operator -=(const alternate_asterix_denoter<pDeriv>& param) const {
 		assert_same_size(param.get());
-		return bi_expr<function::sub_assign>(param.get());
+		return bi_expr<oper::sub_assign>(param.get());
 	}
 	template<class pDeriv>
 	auto operator %=(const alternate_asterix_denoter<pDeriv>& param) const {
 		assert_same_size(param.get());
-		return bi_expr<function::mul_assign>(param.get());
+		return bi_expr<oper::mul_assign>(param.get());
 	}
 	template<class pDeriv>
 	auto operator *=(const alternate_asterix_denoter<pDeriv>& param) const {
 		assert_same_size(param.get());
-		return bi_expr<function::mul_assign>(param.get());
+		return bi_expr<oper::mul_assign>(param.get());
 	}
 	template<class pDeriv>
 	auto operator /=(const alternate_asterix_denoter<pDeriv>& param) const {
 		assert_same_size(param.get());
-		return bi_expr<function::div_assign>(param.get());
+		return bi_expr<oper::div_assign>(param.get());
 	}
 
 	//-----------------------------------COMBINE EXPRESSION-------------------------------------------------//
 	template<class pDeriv> auto operator &&(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
-		return bi_expr<function::combine>(param);
+		return bi_expr<oper::combine>(param);
 	}
 
 
@@ -333,26 +293,26 @@ public:
 		template<class tensor>
 			derived& operator =(const tensor& param) {
 				assert_same_size(param);
-				alias.alias_evaluate(alias.bi_expr<function::assign>(param));
+				alias.evaluate(alias.bi_expr<oper::alias_assign>(param));
 				return alias.as_derived();
 			}
 			template<class tensor>
 			derived& operator +=(const tensor& param) {
 				assert_same_size(param);
-				alias.alias_evaluate(alias.bi_expr<function::add_assign>(param));
+				alias.evaluate(alias.bi_expr<oper::alias_add_assign>(param));
 				return alias.as_derived();
 			}
 			template<class tensor>
 			derived& operator -=(const tensor& param) {
 				assert_same_size(param);
-				alias.alias_evaluate(alias.bi_expr<function::sub_assign>(param));
+				alias.evaluate(alias.bi_expr<oper::alias_sub_assign>(param));
 				return alias.as_derived();
 			}
 
 			template<class pDeriv>
 			derived& operator =(const unsafe_AAD<pDeriv>& param) {
 				assert_same_size(param);
-				alias.alias_evaluate<false>(alias.bi_expr<function::assign>(param));
+				alias.evaluate<false>(alias.bi_expr<oper::alias_assign>(param));
 				return alias.as_derived();
 			}
 
@@ -360,14 +320,14 @@ public:
 			template<class pDeriv>
 			derived& operator +=(const unsafe_AAD<pDeriv>& param) {
 				assert_same_size(param);
-				alias.alias_evaluate<false>(alias.bi_expr<function::add_assign>(param));
+				alias.evaluate<false>(alias.bi_expr<oper::alias_add_assign>(param));
 				return alias.as_derived();
 
 			}
 			template<class pDeriv>
 			derived& operator -=(const unsafe_AAD<pDeriv>& param) {
 				assert_same_size(param);
-				alias.alias_evaluate<false>(alias.bi_expr<function::sub_assign>(param));
+				alias.alias_evaluate<false>(alias.bi_expr<oper::alias_sub_assign>(param));
 				return alias.as_derived();
 			}
 	};

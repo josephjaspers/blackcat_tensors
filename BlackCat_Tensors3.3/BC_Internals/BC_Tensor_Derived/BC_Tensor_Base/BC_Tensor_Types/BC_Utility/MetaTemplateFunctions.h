@@ -76,13 +76,6 @@ namespace MTF {
 		using last = V;
 	};
 
-	template<template<class...> class LIST, class T, class n, class... V>
-	struct lst<LIST<T, n, V...>> {
-		using front = T;
-		using last = typename lst<LIST<n,V...>>::last;
-	};
-
-
 	template<class, class> struct same  { static constexpr bool conditional = false; };
 	template<class T> struct same<T, T> { static constexpr bool conditional = true; };
 

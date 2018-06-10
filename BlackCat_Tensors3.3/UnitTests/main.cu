@@ -20,12 +20,12 @@ using tesnor5 = BC::Tensor5<float, ml>;
 //std::vector<unsigned int> internal_type;
 //using ary = std::vector<unsigned int>;
 
-#include "_correlation_test.h"
-#include "_dotproducts_test.h"
+//#include "_correlation_test.h"
+//#include "_dotproducts_test.h"
 #include "_dotproduct_injection_test.h"
 
-#include "_readwrite_test.h"
-#include "_shaping_test.h"
+//#include "_readwrite_test.h"
+//#include "_shaping_test.h"
 #include <iostream>
 //#include "_speed_benchmark.h"
 //#include "_d1_xcorr_test.h"
@@ -51,7 +51,7 @@ template<class T>
 std::string type_name() {
 	int status;
 	  std::string demangled = abi::__cxa_demangle(typeid(T).name(),0,0,&status);
-	  return removeNS(removeNS(removeNS(demangled, "BC::"), "internal::"), "function::");
+	  return removeNS(removeNS(removeNS(demangled, "BC::"), "internal::"), "oper::");
 }
 
 int main() {
@@ -62,6 +62,23 @@ int main() {
 	dotproduct_injection();
 //	readwrite();
 //	shaping();
+
+	mat w;
+	using chunk_t = decltype(chunk(w)(0,0)(0,0).internal());
+
+	using core = std::decay_t<decltype(w.internal())>;
+	using expr = std::decay_t<decltype((chunk(w)(0,0)(0,0) =* (abs(w * w + w))).internal())>;
+
+
+	using sub_t = BC::internal::traversal<expr>::type;
+//	using inj_t = BC::internal::injection_t<expr, core>;
+
+	std::cout << type_name<expr>() << std::endl;
+	std::cout << type_name<sub_t>() << std::endl;
+//	std::cout << type_name<inj_t>() << std::endl;
+
+
+
 
 
 	std::cout << " success  main" << std::endl;

@@ -55,10 +55,6 @@ public:
 		return unary_expression<decltype(array.col(0)),operation>(array.col(i)); }
 	__BCinline__ const auto scalar(int i) const {
 		return unary_expression<decltype(array.scalar(0)),operation>(array.scalar(i)); }
-
-	void eval() const {
-		array.eval();
-	}
 };
 }
 }

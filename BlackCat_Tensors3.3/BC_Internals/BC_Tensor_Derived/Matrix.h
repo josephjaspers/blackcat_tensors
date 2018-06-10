@@ -41,8 +41,8 @@ public:
 	template<class U>
 	Matrix& operator = (const Matrix<U, Mathlib>& t) { return parent_class::operator=(t); }
 
-	const Matrix<internal::unary_expression<typename parent_class::functor_type, function::transpose>, Mathlib> t() const {
-		return Matrix<internal::unary_expression<typename parent_class::functor_type, function::transpose>, Mathlib>(this->internal());
+	const Matrix<internal::unary_expression<typename parent_class::functor_type, oper::transpose>, Mathlib> t() const {
+		return Matrix<internal::unary_expression<typename parent_class::functor_type, oper::transpose>, Mathlib>(this->internal());
 	}
 
 };
