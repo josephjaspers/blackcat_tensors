@@ -20,8 +20,11 @@ template<class T> struct rm_const<const T&> { using type = T&; };
  * 4 = assignments
  *
  */
+class assignment {};
+class matrix_oper {};
 
-	struct scalar_mul {
+
+	struct scalar_mul : matrix_oper {
 		//this is just a flag for dotproduct, it is the same as multiplication though
 		template<class lv, class rv> __BCinline__ auto operator ()(lv l, rv r) const {
 			return l * r;
@@ -29,7 +32,7 @@ template<class T> struct rm_const<const T&> { using type = T&; };
 	};
 
 
-	struct add {
+	struct add : matrix_oper {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
 			return l + r;
 		}
@@ -41,7 +44,7 @@ template<class T> struct rm_const<const T&> { using type = T&; };
 		}
 	};
 
-	struct sub {
+	struct sub : matrix_oper {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
 			return l - r;
 		}
@@ -57,60 +60,60 @@ template<class T> struct rm_const<const T&> { using type = T&; };
 			return l;
 		}
 	};
-	struct assign {
+	struct assign : matrix_oper {
 		template<class lv, class rv> __BCinline__ auto& operator ()(lv& l, rv r) const {
 			return (const_cast<typename rm_const<lv&>::type>(l) = r);
 		}
 	};
 
-	struct add_assign {
+	struct add_assign : matrix_oper, assignment {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return (const_cast<typename rm_const<lv&>::type>(l) += r);
 		}
 	};
 
-	struct mul_assign {
+	struct mul_assign : assignment {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return (const_cast<typename rm_const<lv&>::type>(l) *= r);
 		}
 	};
 
-	struct sub_assign {
+	struct sub_assign : matrix_oper, assignment {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return (const_cast<typename rm_const<lv&>::type>(l) -= r);
 		}
 	};
 
-	struct div_assign {
+	struct div_assign : assignment {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return (const_cast<typename rm_const<lv&>::type>(l) /= r);
 		}
 	};
-	struct alias_assign {
+	struct alias_assign : assignment {
 		template<class lv, class rv> __BCinline__ auto& operator ()(lv& l, rv r) const {
 			return (const_cast<typename rm_const<lv&>::type>(l) = r);
 		}
 	};
 
-	struct alias_add_assign {
+	struct alias_add_assign : assignment {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return (const_cast<typename rm_const<lv&>::type>(l) += r);
 		}
 	};
 
-	struct alias_mul_assign {
+	struct alias_mul_assign : assignment {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return (const_cast<typename rm_const<lv&>::type>(l) *= r);
 		}
 	};
 
-	struct alias_sub_assign {
+	struct alias_sub_assign : assignment {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return (const_cast<typename rm_const<lv&>::type>(l) -= r);
 		}
 	};
 
-	struct alias_div_assign {
+	struct alias_div_assign : assignment {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv& l, rv r) const {
 			return (const_cast<typename rm_const<lv&>::type>(l) /= r);
 		}

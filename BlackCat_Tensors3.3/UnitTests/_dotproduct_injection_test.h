@@ -118,12 +118,20 @@ int dotproduct_injection() {
 	c.print();
 
 
-	using expr = std::decay_t<decltype((c =* ( BC::NN_Abreviated_Functions::g(a.t() * b.t() + c))).internal())>;
+//	using expr = std::decay_t<decltype((c =* ( BC::NN_Abreviated_Functions::g(a.t() * b.t() + c))).internal())>;
 
-	c =  BC::NN_Abreviated_Functions::g(a.t() * b.t() + c);
+//	c =  BC::NN_Abreviated_Functions::g(a.t() * b.t() + c);
 
-	std::cout << type_name<expr>() << std::endl;
-	std::cout << type_name<typename BC::internal::traversal<expr>::type>() << std::endl;
+//	std::cout << type_name<expr>() << std::endl;
+//	std::cout << type_name<typename BC::internal::traversal<expr>::type>() << std::endl;
+
+
+	using expr2 = std::decay_t<decltype((c +=* (c*c - c*c)).internal())>;
+	std::cout << type_name<expr2>() << std::endl;
+	std::cout << type_name<typename BC::internal::traversal<expr2>::type>() << std::endl;
+	c.print();
+	c += a.t() * b.t() - a.t() * b.t();
+	c.print();
 
 
 

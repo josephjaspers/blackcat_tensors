@@ -7,7 +7,7 @@
 #include "Expression_Base.h"
 
 #include "BLAS_Expression_Evaluator.h"
-#include "BLAS_Injection_Runner.h"
+#include "BLAS_Evaluator.h"
 
 #include "BlackCat_Internal_Definitions.h"
 
@@ -25,8 +25,10 @@ namespace internal {
 
 
 template<class lv, class rv, class mathlib>
-struct binary_expression<lv, rv, oper::dotproduct<mathlib>> : expression_base<binary_expression<lv, rv,  oper::dotproduct<mathlib>>> {
+struct binary_expression<lv, rv, oper::dotproduct<mathlib>>
+: expression_base<binary_expression<lv, rv,  oper::dotproduct<mathlib>>>, BLAS_FUNCTION {
 
+	template<class injection> using type = injection;
 	using scalar_type = _scalar<lv>;
 
 	__BCinline__ static constexpr int DIMS() { return rv::DIMS(); }
@@ -43,10 +45,6 @@ struct binary_expression<lv, rv, oper::dotproduct<mathlib>> : expression_base<bi
 	rv right;
 
 	 binary_expression(lv left, rv right) : left(left), right(right) {}
-	 operator Core<tensor_of_t<DIMS(), scalar_type, mathlib>> () const {
-		auto tc = Core<tensor_of_t<DIMS(), scalar_type, mathlib>>(this->inner_shape());
-		this->eval(tc);
-	 }
 
 	__BCinline__ const auto inner_shape() const { return l_array([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.cols() : 1; }); }
 	__BCinline__ const auto outer_shape() const { return l_array([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.cols() * left.rows() : 1; }); }

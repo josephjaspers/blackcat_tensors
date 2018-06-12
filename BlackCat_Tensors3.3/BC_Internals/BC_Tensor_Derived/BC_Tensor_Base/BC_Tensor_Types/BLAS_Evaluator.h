@@ -10,32 +10,8 @@
 
 #include "BLAS_Injection_Wrapper.h"
 #include "Core_Substitution.h"
-#include <cxxabi.h>
-
 
 namespace BC {
-
-std::string removeNS( const std::string & source, const std::string & namespace_ )
-{
-    std::string dst = source;
-    size_t position = source.find( namespace_ );
-    while ( position != std::string::npos )
-    {
-        dst.erase( position, namespace_.length() );
-        position = dst.find( namespace_, position + 1 );
-    }
-    return dst;
-}
-
-template<class T>
-std::string type_name() {
-	int status;
-	  std::string demangled = abi::__cxa_demangle(typeid(T).name(),0,0,&status);
-	  return removeNS(removeNS(removeNS(demangled, "BC::"), "internal::"), "oper::");
-}
-
-
-
 template<class> class Tensor_Base;
 
 template<class mathlib_type, bool BARRIER>
@@ -69,7 +45,6 @@ evaluate(assignment& assign, const expression& expr) {
 	auto post_inject_tensor = rotated_expression_tree(expr, BC::internal::injection_wrapper<assignment, alpha_mod, beta_mod>(assign));		//evaluate the internal tensor_type
 
 	if (!std::is_same<injection_t, rv_of<rotated_expression_tree>>::value) {
-
 	if (BARRIER)
 		mathlib_type::template dimension<iterator_dimension>::eval(post_inject_tensor);
 	else

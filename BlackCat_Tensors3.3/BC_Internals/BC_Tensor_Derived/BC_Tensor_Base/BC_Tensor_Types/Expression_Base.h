@@ -10,7 +10,7 @@
 
 #include "BlackCat_Internal_Definitions.h"
 #include "BLAS_Expression_Evaluator.h"
-#include "BLAS_Parse_Tree.h"
+#include "BLAS_Parse_Tree_Primary.h"
 #include <iostream>
 #include <type_traits>
 

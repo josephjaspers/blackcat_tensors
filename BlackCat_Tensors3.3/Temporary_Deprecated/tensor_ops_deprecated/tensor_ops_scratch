@@ -1,0 +1,83 @@
+        //some functions (removed)
+        template<class pDeriv> auto operator /(const Tensor_Operations<pDeriv>& param) const {
+                assert_same_size(param);
+                return bi_expr<oper::div>(param);
+        }
+        template<class pDeriv> auto operator %(const Tensor_Operations<pDeriv>& param) const {                  //overloaded for pointwise multiply
+                assert_same_size(param);
+                return bi_expr<oper::mul>(param);
+        }
+        template<class pDeriv> auto operator *(const alternate_asterix_denoter<pDeriv>& param) const { //alternative for pointwise multiply
+                assert_same_size(param.get());
+                return bi_expr<oper::mul>(param.get());
+        }
+        //regular assigns (removed)
+        
+                template<class pDeriv>
+        std::enable_if_t<pDeriv::DIMS() == 0, derived&> operator /=(const Tensor_Operations<pDeriv>& param) {
+                assert_same_size(param);
+                evaluate(bi_expr<oper::mul_assign>(param));
+                return as_derived();
+        }
+        template<class pDeriv>
+        std::enable_if_t<pDeriv::DIMS() == 0, derived&> operator %=(const Tensor_Operations<pDeriv>& param) {
+                assert_same_size(param);
+                evaluate(bi_expr<oper::mul_assign>(param));
+                return as_derived();
+        }
+        
+        //----barrierless assigns
+                template<class pDeriv>
+        derived& operator /=(const unsafe_AAD<pDeriv>& param) {
+                assert_same_size(param.get());
+                evaluate<false>(bi_expr<oper::div_assign>(param.get()));
+                return as_derived();
+        }
+        template<class pDeriv>
+        derived& operator %=(const unsafe_AAD<pDeriv>& param) {
+                assert_same_size(param.get());
+                evaluate<false>(bi_expr<oper::mul_assign>(param.get()));
+                return as_derived();
+        }
+        
+        
+        //some dumb functions
+                 auto operator - () const {
+                 return this->un_expr<oper::negation>();
+         }
+         
+         template<class pDeriv>
+        auto operator >(const alternate_asterix_denoter<pDeriv>& param) const {
+                assert_same_size(param.get());
+                return bi_expr<oper::max>(param.get());
+        }
+        template<class pDeriv>
+        auto operator <(const alternate_asterix_denoter<pDeriv>& param) const {
+                assert_same_size(param.get());
+                return bi_expr<oper::min>(param.get());
+        }
+        
+        //-----------delayed assignments
+                template<class pDeriv>
+        auto operator %=(const alternate_asterix_denoter<pDeriv>& param) const {
+                assert_same_size(param.get());
+                return bi_expr<oper::mul_assign>(param.get());
+        }
+        template<class pDeriv>
+        auto operator *=(const alternate_asterix_denoter<pDeriv>& param) const {
+                assert_same_size(param.get());
+                return bi_expr<oper::mul_assign>(param.get());
+        }
+        template<class pDeriv>
+        auto operator /=(const alternate_asterix_denoter<pDeriv>& param) const {
+                assert_same_size(param.get());
+                return bi_expr<oper::div_assign>(param.get());
+        }
+        
+                //-----------------------------------COMBINE EXPRESSION-------------------------------------------------//
+        template<class pDeriv> auto operator &&(const Tensor_Operations<pDeriv>& param) {
+                assert_same_size(param);
+                return bi_expr<oper::combine>(param);
+        }
+        
+        

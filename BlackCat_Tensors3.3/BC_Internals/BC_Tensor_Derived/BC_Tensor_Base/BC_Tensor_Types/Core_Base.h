@@ -51,6 +51,7 @@ private:
 	__BCinline__ 	   derived& asDerived() 	  { return static_cast<	     derived&>(*this); }
 
 public:
+	template<class injection> using type = derived;
 
 	operator 	   auto()       { return asDerived().getIterator(); }
 	operator const auto() const { return asDerived().getIterator(); }

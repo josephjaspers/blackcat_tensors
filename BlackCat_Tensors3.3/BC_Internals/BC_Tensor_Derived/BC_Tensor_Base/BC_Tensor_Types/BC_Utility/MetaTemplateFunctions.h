@@ -133,9 +133,22 @@ namespace MTF {
 	template<class F, class T>
 	static constexpr bool castable_b = castable<F, T>::conditional;
 
+	template<class T, class... Ts>
+	struct one_of_impl {
+		static constexpr bool conditional = false;
+	};
+	template<class T, class U, class... Ts>
+	struct one_of_impl<T, U, Ts...> {
+		static constexpr bool conditional = one_of_impl<T, Ts...>::conditional;
+	};
+	template<class T, class... Ts>
+	struct one_of_impl<T, T, Ts...> {
+		static constexpr bool conditional = true;
+	};
 
-	}
+	template<class T, class... Ts> static constexpr bool is_one_of() { return one_of_impl<T, Ts...>::conditional; }
 
 
+}
 }
 #endif /* SIMPLE_H_ */

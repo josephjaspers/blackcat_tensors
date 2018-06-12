@@ -73,7 +73,7 @@ public:
 	Tensor_Initializer(derived&& tensor) : array_core(tensor.internal()) {
 //		array_core.shape = tensor.array_core.shape;
 //		array_core.array = tensor.array_core.array;
-		tensor.array_core.array 	= nullptr;
+		tensor.array_core.array 	= nullptr; //chk if necessary
 	}
 
 	Tensor_Initializer(const derived& tensor) : array_core(tensor.inner_shape()) {

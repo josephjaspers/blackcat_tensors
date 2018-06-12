@@ -57,6 +57,13 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	binary_expression(binary_expression<expr_t, rv, operation> expr, injection_wrapper<lv, a, b> tensor) : left((lv&)tensor), right(expr.right) {
 		expr.left.eval(tensor); //extract right hand side, which represents a BLAS function, inject the tensor into the output
 	}
+
+	template<class core, int a, int b>
+	std::enable_if<std::is_base_of<BLAS_FUNCTION, lv>::value && std::is_base_of<BLAS_FUNCTION, rv>::value>
+	eval(injection_wrapper<core, a, b> injection) {
+		left.eval(injection);
+		right.eval(injection_wrapper<core, alpha_modifier<operation>(), beta_modifier<operation>()>(injection.data())); //we wrap data to ensure scalar's are not calculated twice
+	}
 };
 }
 }

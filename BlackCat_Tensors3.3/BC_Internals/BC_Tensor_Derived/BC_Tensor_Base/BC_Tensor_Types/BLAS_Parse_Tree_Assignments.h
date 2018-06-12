@@ -8,12 +8,17 @@
 #ifndef BLAS_PARSE_TREE_ASSIGNMENTS_H_
 #define BLAS_PARSE_TREE_ASSIGNMENTS_H_
 
-#include "BLAS_Parse_Tree.h"
+#include "BLAS_Parse_Tree_Primary.h"
 #include "BLAS_Injection_Wrapper.h"
 
 namespace BC {
 namespace internal {
 
+/*
+ * Part of the operation_tree, these specializations contains the
+ * 	constexpr int method ALPHA/BETA modifiers -- which assist in informing what scalars to inject.
+ *
+ */
 
 //overload for the correct
 template<class lv, class rv, class inject_t>

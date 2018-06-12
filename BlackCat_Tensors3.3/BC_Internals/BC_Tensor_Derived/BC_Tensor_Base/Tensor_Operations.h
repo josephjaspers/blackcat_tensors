@@ -16,8 +16,8 @@
 #include "BC_Tensor_Types/Expression_Unary.h"
 #include "BC_Tensor_Types/transpose.h"
 #include "Tensor_Operations_Impl/AlternateAsterixDenoter.h"
-#include "BC_Tensor_Types/Expression_Determiner.h"
-#include "BC_Tensor_Types/BLAS_Injection_Runner.h"
+#include "Tensor_Operations_Impl/Expression_Determiner.h"
+#include "BC_Tensor_Types/BLAS_Evaluator.h"
 
 #include "Tensor_Functions/Unary_Functions.h"
 #include <type_traits>
