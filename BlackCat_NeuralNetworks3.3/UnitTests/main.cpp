@@ -1,7 +1,7 @@
 #include "MNIST_test.h"
-#include "MNIST_test_MT.h"
-#include "CharacterPrediction.h"
-#include "ReccurrentFunctionMatcher.h"
+//#include "MNIST_test_MT.h"
+//#include "CharacterPrediction.h"
+//#include "ReccurrentFunctionMatcher.h"
 #define BC_DISABLE_OPENMP
 
 int main() {

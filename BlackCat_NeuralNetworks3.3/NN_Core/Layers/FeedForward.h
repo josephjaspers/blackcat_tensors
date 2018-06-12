@@ -58,7 +58,7 @@ public:
 		w_gradientStorage() -= dy * x.t();
 		b_gradientStorage() -= dy;
 
-		return this->prev().backPropagation(w.t() * dy ** gd(x));
+		return this->prev().backPropagation(w.t() * dy % gd(x));
 	}
 	auto forwardPropagation_Express(const vec& x) const {
 		return this->next().forwardPropagation_Express(g(w * x + b));

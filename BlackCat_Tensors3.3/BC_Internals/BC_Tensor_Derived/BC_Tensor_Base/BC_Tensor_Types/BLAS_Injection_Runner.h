@@ -68,10 +68,7 @@ evaluate(assignment& assign, const expression& expr) {
 
 	auto post_inject_tensor = rotated_expression_tree(expr, BC::internal::injection_wrapper<assignment, alpha_mod, beta_mod>(assign));		//evaluate the internal tensor_type
 
-	//ensure that we are not just assigning to a self_injected BLAS expr
 	if (!std::is_same<injection_t, rv_of<rotated_expression_tree>>::value) {
-//		std::cout << type_name<injection_t>() << std::endl;
-//		std::cout << type_name<rv_of<rotated_expression_tree>>() << std::endl;
 
 	if (BARRIER)
 		mathlib_type::template dimension<iterator_dimension>::eval(post_inject_tensor);
@@ -84,7 +81,7 @@ evaluate(assignment& assign, const expression& expr) {
 
 template<class mathlib, bool BARRIER>
 struct branched {
-	template<class branch> using sub_t = BC::internal::Tensor_Substitution<tensor_of_t<branch::DIMS(), _scalar<branch>,mathlib>>;
+	template<class branch> using sub_t = BC::internal::Tensor_Substitution<tensor_of_t<branch::DIMS(), _scalar<branch>, mathlib>>;
 	template<class branch> using eval_t =BC::internal::binary_expression<sub_t<branch>, branch, BC::oper::assign>;
 
 

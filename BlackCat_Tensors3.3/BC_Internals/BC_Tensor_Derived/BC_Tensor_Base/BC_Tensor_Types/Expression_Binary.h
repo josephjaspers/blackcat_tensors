@@ -42,7 +42,8 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 
 	//Left side replacement
 	template<class L, class core, int a, int b> 	__BC_host_inline__
-	binary_expression(binary_expression<L, rv, operation> expr, injection_wrapper<core, a, b> tensor_core) : left(expr.left, tensor_core), right(expr.right){}
+	binary_expression(binary_expression<L, rv, operation> expr, injection_wrapper<core, a, b> tensor_core)
+	: left(expr.left, tensor_core), right(expr.right){}
 
 
 	//right side injection

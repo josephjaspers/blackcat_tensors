@@ -11,6 +11,7 @@
 #include <iostream>
 #include "../BlackCat_Tensors.h"
 
+using namespace NN_Functions;
 using BC::Vector;
 using BC::Matrix;
 

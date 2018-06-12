@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../BlackCat_Tensors.h"
+#include "../Extensions/NN_Functions.h"
 
 using BC::Vector;
 using BC::Matrix;
@@ -116,6 +117,13 @@ int dotproduct_injection() {
 	c = a.t() * A * (b.t() * A);
 	c.print();
 
+
+	using expr = std::decay_t<decltype((c =* ( BC::NN_Abreviated_Functions::g(a.t() * b.t() + c))).internal())>;
+
+	c =  BC::NN_Abreviated_Functions::g(a.t() * b.t() + c);
+
+	std::cout << type_name<expr>() << std::endl;
+	std::cout << type_name<typename BC::internal::traversal<expr>::type>() << std::endl;
 
 
 

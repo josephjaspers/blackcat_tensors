@@ -43,18 +43,18 @@ int main() {
 
 	mat w;
 	scal s;
-	using chunk_t = decltype(chunk(w)(0,0)(0,0).internal());
-
-	using core = std::decay_t<decltype(w.internal())>;
-	using expr = std::decay_t<decltype((chunk(w)(0,0)(0,0) =* (abs(w * w + w))).internal())>;
-
-
-	using sub_t = BC::internal::traversal<expr>::type;
-
-	std::cout << type_name<expr>() << std::endl;
-	std::cout << type_name<sub_t>() << std::endl;
-
-
+//	using chunk_t = decltype(chunk(w)(0,0)(0,0).internal());
+//
+//	using core = std::decay_t<decltype(w.internal())>;
+//	using expr = std::decay_t<decltype((chunk(w)(0,0)(0,0) =* (abs(w * w + w))).internal())>;
+//
+//
+//	using sub_t = BC::internal::traversal<expr>::type;
+//
+//	std::cout << type_name<expr>() << std::endl;
+//	std::cout << type_name<sub_t>() << std::endl;
+//
+//
 
 
 	std::cout << " success  main" << std::endl;

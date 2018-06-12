@@ -68,7 +68,8 @@ public:
 			ys().push(c());
 		}
 
-		z() = g(wz * x + rz * z() + bz);
+
+
 		f() = g(wf * x + rf * f() + bf);
 		c() = c() ** f() + z();
 

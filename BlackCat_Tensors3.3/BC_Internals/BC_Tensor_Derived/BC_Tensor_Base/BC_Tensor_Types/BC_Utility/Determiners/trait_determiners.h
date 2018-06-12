@@ -27,12 +27,12 @@ template<class> struct determine_iterator;
 template<class> struct determine_mathlibrary;
 template<class> struct determine_tensor_scalar;
 
-template<class T> using _scalar = typename determine_scalar<T>::type;
-template<class T> using _mathlib = typename determine_mathlibrary<T>::type;
-template<class T> using _functor = typename determine_functor<T>::type;
-template<class T> using _iterator = typename determine_iterator<T>::type;
-template<class T> using _tensor_scalar = typename determine_tensor_scalar<T>::type;
-template<class T> static constexpr int _dimension_of  = dimension_of<T>::value;
+template<class T> using _scalar = typename determine_scalar<std::decay_t<T>>::type;
+template<class T> using _mathlib = typename determine_mathlibrary<std::decay_t<T>>::type;
+template<class T> using _functor = typename determine_functor<std::decay_t<T>>::type;
+template<class T> using _iterator = typename determine_iterator<std::decay_t<T>>::type;
+template<class T> using _tensor_scalar = typename determine_tensor_scalar<std::decay_t<T>>::type;
+template<class T> static constexpr int _dimension_of  = dimension_of<std::decay_t<T>>::value;
 
 ///DETERMINE_FUNCTOR----------------------------------------------------------------------------------------------
 template<template<class...> class tensor, class functor, class... set>
@@ -74,7 +74,7 @@ struct determine_iterator {
 ///DETERMINE_MATHLIB---------------------------------------------------------------------------------------
 template<class T>
 struct determine_mathlibrary {
-	using type = std::conditional_t<isTensor_b<T>, MTF::tail<T>, determine_mathlibrary<MTF::head<T>>>;
+	using type = CPU; //std::conditional_t<isTensor_b<T>, MTF::tail<T>, determine_mathlibrary<MTF::head<T>>>;
 };
 }
 

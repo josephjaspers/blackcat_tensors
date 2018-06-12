@@ -109,7 +109,7 @@ int percept_MNIST() {
 	std::cout << " training..." << std::endl;
 
 	for (int i = 0; i < TRAINING_ITERATIONS; ++i) {
-//		std::cout << " iteration =  " << i << std::endl;
+		std::cout << " iteration =  " << i << std::endl;
 		for (int j = 0; j < inputs.size(); ++j) {
 			network.forwardPropagation(inputs[j]);
 			network.backPropagation(outputs[j]);
