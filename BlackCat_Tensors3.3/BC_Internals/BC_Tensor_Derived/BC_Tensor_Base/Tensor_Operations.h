@@ -269,9 +269,14 @@ public:
 		if (derived::DIMS() != 0 && deriv::DIMS() != 0)
 			if (this->as_derived().DIMS() != 0 && tensor.as_derived().DIMS() != 0)
 				if ((as_derived().size() != tensor.as_derived().size())){
-					std::cout << "this->DIMS() = "<< derived::DIMS() << " this->size() = " << as_derived().size() << " this_dims "; as_derived().print_dimensions();
-					std::cout << "this->DIMS() = "<< deriv::DIMS()   << " param.size() = " << tensor.as_derived().size() << " param_dims "; tensor.as_derived().print_dimensions();
-					std::cout << "\n";
+					print - "this->DIMS() = ", derived::DIMS(), " this->size() = ",  as_derived().size(), " this_dims ";
+					as_derived().print_dimensions();
+
+					print - "this->DIMS() = ", deriv::DIMS(), " param.size() = ", tensor.as_derived().size(), " param_dims ";
+					tensor.as_derived().print_dimensions();
+
+					print - nl;
+
 					throw std::invalid_argument("Tensor by Tensor operation - size mismatch - ");
 				}
 	}

@@ -12,7 +12,7 @@
 #include "GPU_Implementation/GPU_BLAS.h"
 #include "GPU_Implementation/GPU_Misc.h"
 #include "GPU_Implementation/GPU_Utility.h"
-
+#include "GPU_Implementation/GPU_Constants.h"
 
 
 namespace BC {
@@ -20,7 +20,8 @@ namespace BC {
 class GPU :
 	public GPU_Misc<GPU>,
 	public GPU_Utility<GPU>,
-	public GPU_BLAS<GPU> {
+	public GPU_BLAS<GPU>,
+	public GPU_Constants<GPU> {
 public:
 
 	static constexpr int CUDA_BASE_THREADS = 256;

@@ -28,7 +28,7 @@ static constexpr BC_to_string to_string = BC_to_string();
 
 
 namespace BC {
-
+namespace IO {
 template<typename T, class int_ranks, class os>
 static void printHelperSparse(const T& ary, const int_ranks ranks, const os outer, int dimension, std::string indent, int printSpace) {
 	--dimension;
@@ -139,7 +139,6 @@ static void printSparse(const T& ary, const RANKS ranks, const os outer, int dim
 	std::cout << std::endl;
 }
 }
-
-
+}
 
 #endif /* PRINTSPARSE_H_ */

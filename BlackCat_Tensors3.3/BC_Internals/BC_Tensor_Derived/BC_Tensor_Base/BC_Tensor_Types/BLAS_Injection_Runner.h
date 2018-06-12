@@ -8,13 +8,40 @@
 #ifndef TRIVIAL_EVALUATOR_H_
 #define TRIVIAL_EVALUATOR_H_
 
+#include "BLAS_Injection_Wrapper.h"
+#include "Core_Substitution.h"
+#include <cxxabi.h>
+
+
 namespace BC {
+
+std::string removeNS( const std::string & source, const std::string & namespace_ )
+{
+    std::string dst = source;
+    size_t position = source.find( namespace_ );
+    while ( position != std::string::npos )
+    {
+        dst.erase( position, namespace_.length() );
+        position = dst.find( namespace_, position + 1 );
+    }
+    return dst;
+}
+
+template<class T>
+std::string type_name() {
+	int status;
+	  std::string demangled = abi::__cxa_demangle(typeid(T).name(),0,0,&status);
+	  return removeNS(removeNS(removeNS(demangled, "BC::"), "internal::"), "oper::");
+}
+
+
+
 template<class> class Tensor_Base;
 
 template<class mathlib_type, bool BARRIER>
 struct Evaluator {
 
-template<class assignment, class expression>
+template<class assignment, class expression> __BC_host_inline__
 static std::enable_if_t<!BC::internal::INJECTION<expression>()>
 evaluate(const assignment& assign, const expression& expr) {
 	static constexpr int iterator_dimension = expression::ITERATOR();
@@ -24,37 +51,47 @@ evaluate(const assignment& assign, const expression& expr) {
 		mathlib_type::template dimension<iterator_dimension>::eval_unsafe(expr);
 }
 
-template<class assignment, class expression>
-static std::enable_if_t<BC::internal::INJECTION<expression>()>
-evaluate(const assignment& assign, const expression& expr) {
+template<class expression> //get the type of the rv_expression
+using rv_of = std::decay_t<decltype(std::declval<expression>().right)>;
 
+template<class assignment, class expression> __BC_host_inline__
+static std::enable_if_t<BC::internal::INJECTION<expression>()>
+evaluate(assignment& assign, const expression& expr) {
 	using internal_t = expression;			//internal expression type (to be injected)
 	using injection_t = assignment;	//the injection type
+	using tree					  = BC::internal::traversal<expression>;
 	using rotated_expression_tree = typename BC::internal::traversal<expression>::type;	//the conversion type after injection
 
 	static constexpr int iterator_dimension = rotated_expression_tree::ITERATOR();	//the iterator for the evaluation of post inject_t
-	auto post_inject_tensor = rotated_expression_tree(expr, assign);		//evaluate the internal tensor_type
+	static constexpr int alpha_mod = tree::ALPHA_MODIFIER();
+	static constexpr int beta_mod = tree::BETA_MODIFIER();
 
-	if (!std::is_same<injection_t, rotated_expression_tree>::value) {
+	auto post_inject_tensor = rotated_expression_tree(expr, BC::internal::injection_wrapper<assignment, alpha_mod, beta_mod>(assign));		//evaluate the internal tensor_type
+
+	//ensure that we are not just assigning to a self_injected BLAS expr
+	if (!std::is_same<injection_t, rv_of<rotated_expression_tree>>::value) {
+//		std::cout << type_name<injection_t>() << std::endl;
+//		std::cout << type_name<rv_of<rotated_expression_tree>>() << std::endl;
 
 	if (BARRIER)
 		mathlib_type::template dimension<iterator_dimension>::eval(post_inject_tensor);
 	else
 		mathlib_type::template dimension<iterator_dimension>::eval_unsafe(post_inject_tensor);
+	} else {
 	}
 }
 };
 
 template<class mathlib, bool BARRIER>
 struct branched {
-	template<class branch> using sub_t = BC::internal::Core<tensor_of_t<branch::DIMS(), _scalar<branch>,mathlib>>;
+	template<class branch> using sub_t = BC::internal::Tensor_Substitution<tensor_of_t<branch::DIMS(), _scalar<branch>,mathlib>>;
 	template<class branch> using eval_t =BC::internal::binary_expression<sub_t<branch>, branch, BC::oper::assign>;
 
 
-	template<class branch>
+	template<class branch> __BC_host_inline__
 	static std::enable_if_t<BC::internal::isCore<std::decay_t<branch>>(), const branch&> evaluate(const branch& expression) { return expression; }
 
-	template<class branch> static
+	template<class branch> __BC_host_inline__
 	std::enable_if_t<!BC::internal::isCore<std::decay_t<branch>>(), sub_t<std::decay_t<branch>>> evaluate(const branch& expression)
 	{
 		sub_t<std::decay_t<branch>> cached_branch(expression.inner_shape());

@@ -22,11 +22,6 @@ namespace BC {
 template<class core_lib>
 struct CPU_BLAS  {
 
-	template<class U, class T, class V>
-	static void scalarMul(U eval, T a, V b) {
-		*eval = a[0] * b[0];
-	}
-
 	/*
 	 * a = M x K
 	 * b = K x N

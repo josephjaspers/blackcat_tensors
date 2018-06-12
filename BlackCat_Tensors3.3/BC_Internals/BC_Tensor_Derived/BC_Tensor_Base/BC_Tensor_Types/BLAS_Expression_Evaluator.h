@@ -23,7 +23,7 @@ template<class,class,class> class binary_expression;
 
 template<class T> using enable_if_core = std::enable_if_t<std::is_base_of<BC_Core, T>::value>;
 template<class T, class U> using enable_if_cores = std::enable_if_t<std::is_base_of<BC_Core, T>::value && std::is_base_of<BC_Core, U>::value>;
-
+template<class T>		using enable_if_blas = std::enable_if_t<std::is_base_of<BLAS_FUNCTION, T>::value>;
 
 template<class T> T&  cc(const T&  param) { return const_cast<T&> (param); }
 template<class T> T&& cc(const T&& param) { return const_cast<T&&>(param); }
@@ -41,8 +41,8 @@ template<class T, class voider = void> struct det_eval {
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = false;
 
-	template<class param> static auto& get_scalar(const param& p) { return nullptr; }
-	template<class param> static auto& get_array(const param& p)  { throw std::invalid_argument("Attempting to use an array from an unevaluated context"); }
+	template<class param> static auto& get_scalar(const param& p) { throw std::invalid_argument("Attempting to use an array from an unevaluated context"); return cc(p); }
+	template<class param> static auto& get_array(const param& p)  { throw std::invalid_argument("Attempting to use an array from an unevaluated context"); return cc(p); }
 };
 
 //IF TENSOR CORE (NON EXPRESSION)

@@ -13,7 +13,7 @@
 #include "CPU_Implementation/CPU_Misc.h"
 #include "CPU_Implementation/CPU_BLAS.h"
 #include "CPU_Implementation/CPU_BLAS.h"
-#include "CPU_Implementation/Signal_Processing/CPU_Signal_Processing.h"
+#include "CPU_Implementation/CPU_Constants.h"
 
 namespace BC {
 
@@ -30,7 +30,8 @@ namespace BC {
 class CPU:
 		public CPU_Utility<CPU>,
 		public CPU_Misc<CPU>,
-		public CPU_BLAS<CPU>
+		public CPU_BLAS<CPU>,
+		public CPU_Constants<CPU>
 {
 
 

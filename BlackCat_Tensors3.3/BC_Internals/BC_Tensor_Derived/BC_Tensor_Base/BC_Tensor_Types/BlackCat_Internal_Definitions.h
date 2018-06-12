@@ -25,8 +25,11 @@ namespace BC {
 class BC_Type {}; //a type inherited by expressions and tensor_cores, it is used a flag and lacks a "genuine" implementation
 class BC_Core {};
 class BLAS_FUNCTION {};
-}
 
+template<class T> using enable_if_eval = std::enable_if_t<std::is_base_of<BLAS_FUNCTION, T>::value>;
+template<class T> using enable_if_lazy = std::enable_if_t<!std::is_base_of<BLAS_FUNCTION, T>::value>;
+
+}
 #include "BC_Utility/Determiners.h"
 #include "BC_Utility/MetaTemplateFunctions.h"
 #include "BC_Utility/ParameterPackModifiers.h"

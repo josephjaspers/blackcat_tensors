@@ -81,7 +81,7 @@ struct GPU_Utility {
 
 		DeviceToHost(print, ary, sz);
 
-		BC::print(print, ranks, outer, order, print_length);
+		BC::IO::print(print, ranks, outer, order, print_length);
 		delete[] print;
 	}
 	template<class RANKS, class os>
@@ -90,7 +90,7 @@ struct GPU_Utility {
 		float* print = new float[sz];
 		DeviceToHost(print, ary, sz);
 
-		BC::printSparse(print, ranks, outer, order, print_length);
+		BC::IO::printSparse(print, ranks, outer, order, print_length);
 		delete[] print;
 	}
 

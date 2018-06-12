@@ -55,43 +55,45 @@ struct binary_expression<lv, rv, oper::dotproduct<mathlib>> : expression_base<bi
 	__BCinline__ int N() const { return right.cols(); }
 	__BCinline__ int K() const { return left.cols();  }
 
+
 public:
 
-template<class core>
-void eval(core injection) const {
-//
+template<class core, int alpha_mod, int beta_mod>
+void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
+	//type of the left and right side branches (if they are tensor_cores this will be a reference to the lv/rv types -- no computation)
 	using lv_A = decltype(branched<mathlib, true>::evaluate(det_eval<lv>::get_array(left)));
 	using rv_B = decltype(branched<mathlib, true>::evaluate(det_eval<rv>::get_array(right)));
+
+	//get the data of the injection --> injection_wrapper simply stores the alpha/beta scalar modifiers
+	auto& injection = injection_values.data();
+
+	//evaluate the left and right branches (computes only if necessary)
 	lv_A A = branched<mathlib, true>::evaluate(det_eval<lv>::get_array(left));
 	rv_B B = branched<mathlib, true>::evaluate(det_eval<rv>::get_array(right));
 
-	scalar_type* alpha = nullptr;
-	scalar_type* alpha2 = nullptr;
+	//get the left and right side scalar values
+	scalar_type* alpha_lv = det_eval<lv>::get_scalar(left);
+	scalar_type* alpha_rv = det_eval<rv>::get_scalar(right);
 
-	alpha = det_eval<lv>::get_scalar(left);
-	alpha2 = det_eval<rv>::get_scalar(right);
+	//initialize the alpha and beta scalars,
+	scalar_type* alpha = mathlib::static_initialize(1, (scalar_type)alpha_mod);
+	scalar_type* beta = mathlib::static_initialize(1, (scalar_type)beta_mod);
 
-	if (lv_scalar && rv_scalar) {
-		//in case C = A*a * (B*b) -- multiply both scalars
-		scalar_type* tmp;
-		mathlib::initialize(tmp, 1);
-		mathlib::scalarMul(tmp, alpha, alpha2);
-		mathlib::gemm(transA, transB, A, B, injection, M(), N(), K(), tmp, nullptr, left.ld1(), right.ld1(), injection.ld1());
-		mathlib::destroy(tmp);
+	//compute the scalar values if need be
+	if (lv_scalar)
+		mathlib::scalar_mul(alpha, alpha, alpha_lv);
+	if (rv_scalar)
+		mathlib::scalar_mul(alpha, alpha, alpha_rv);
 
-	} else if (rv_scalar)
-	mathlib::gemm(transA, transB, A, B, injection, M(), N(), K(), alpha2, nullptr, left.ld1(), right.ld1(), injection.ld1());
-	else if (lv_scalar)
-	mathlib::gemm(transA, transB, A, B, injection, M(), N(), K(), alpha, nullptr, left.ld1(), right.ld1(), injection.ld1());
-	else
-	mathlib::gemm(transA, transB, A, B, injection, M(), N(), K(), nullptr, nullptr, left.ld1(), right.ld1(), injection.ld1());
+	//call matrix_mul
+	mathlib::gemm(transA, transB, A, B, injection, M(), N(), K(), alpha, beta, left.ld1(), right.ld1(), injection.ld1());
 
-	if (lv_eval) {
-		cc(A).destroy();
-	}
-	if (rv_eval) {
-		cc(B).destroy();
-	}
+
+	//destroy all the temporaries
+	if (lv_eval) cc(A).destroy();
+	if (rv_eval) cc(B).destroy();
+	mathlib::destroy(beta);
+	mathlib::destroy(alpha);
 }
 };
 

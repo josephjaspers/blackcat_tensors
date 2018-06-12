@@ -4,6 +4,29 @@
 using BC::Vector;
 using BC::Matrix;
 
+#include <cxxabi.h>
+
+std::string removeNS( const std::string & source, const std::string & namespace_ )
+{
+    std::string dst = source;
+    size_t position = source.find( namespace_ );
+    while ( position != std::string::npos )
+    {
+        dst.erase( position, namespace_.length() );
+        position = dst.find( namespace_, position + 1 );
+    }
+    return dst;
+}
+
+template<class T>
+std::string type_name() {
+	int status;
+	  std::string demangled = abi::__cxa_demangle(typeid(T).name(),0,0,&status);
+	  return removeNS(removeNS(removeNS(demangled, "BC::"), "internal::"), "oper::");
+}
+
+
+
 int dotproduct_injection() {
 	std::cout << " --------------------------------------DOTPRODUCTS--------------------------------------" << std::endl;
 
@@ -50,10 +73,10 @@ int dotproduct_injection() {
 	std::cout << "a.t * e + f" << std::endl;
 	c = a.t() * e + f;
 	c.print();
-// not available to detect
-//	std::cout << "-(d * b.t) + f" << std::endl;
-//	c =  - (d * b.t()) + f;
-//	c.print();
+//// not available to detect
+////	std::cout << "-(d * b.t) + f" << std::endl;
+////	c =  - (d * b.t()) + f;
+////	c.print();
 	std::cout << "c = d * scal(2.0f) * e + c;" << std::endl;
 	c = d * scal(2.0f) * e + c;
 	c.print();
@@ -87,11 +110,19 @@ int dotproduct_injection() {
 	c = a.t() * (b.t() * A);
 	c.print();
 
+
 	std::cout << "	c = a.t() * A * (b.t() * A) " << std::endl;
 	A.print();
 	c = a.t() * A * (b.t() * A);
 	c.print();
 
+
+
+
+//THIS DOES NOT WORK
+////	std::cout << "	c = a.t() * A * (b.t() * A) + a.t() * A * (b.t() * A)" << std::endl;
+////	c = a.t() * A * (b.t() * A) + a.t() * A * (b.t() * A);
+//	c.print();
 
 	return 0;
 };

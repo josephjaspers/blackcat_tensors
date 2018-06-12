@@ -76,7 +76,7 @@ struct traversal<binary_expression<lv, rv, operand>, inject_t>  {
 	static constexpr bool lv_inject = priority <= traversal<lv>::priority;
 	static constexpr bool rv_inject = priority <= traversal<rv>::priority;
 	using lv_inject_t = std::conditional_t<lv_inject, inject_t, void>;
-	using rv_inject_t = std::conditional_t<rv_inject, inject_t, void>;
+	using rv_inject_t = std::conditional_t<rv_inject && !lv_inject, inject_t, void>;
 
 	using lv_branch = typename traversal<lv, lv_inject_t>::type;
 	using rv_branch = typename traversal<rv, rv_inject_t>::type;
@@ -104,36 +104,12 @@ struct traversal<binary_expression<lv, rv, oper::dotproduct<ml>>, inject_t>  {
 	static constexpr bool substitution = is_void<inject_t>();
 	static constexpr bool injection = !is_void<inject_t>();
 
-	using expr = binary_expression<lv, rv, oper::dotproduct<ml>>;
-	using tensor_t = tensor_of_t<expr::DIMS(), _scalar<lv>, _mathlib<lv>>;
+	using expr 		= binary_expression<lv, rv, oper::dotproduct<ml>>;
+	using tensor_t 	= tensor_of_t<expr::DIMS(), _scalar<lv>, _mathlib<lv>>;
 	using sub_t 	= Core<tensor_t>;
 
 	using type = std::conditional_t<injection, inject_t, sub_t>;
 };
-
-//overload for the correct
-template<class lv, class rv, class inject_t>
-struct traversal<binary_expression<lv, rv, oper::assign>, inject_t>  {
-
-	using traversal_left = traversal<lv, lv>;
-	using traversal_right = traversal<rv, lv>;
-	using lv_branch = typename traversal_left::type;
-	using rv_branch = typename traversal_right::type;
-
-	static constexpr int priority = 1;
-
-
-	static constexpr bool substitution = traversal_left::substitution || traversal_right::substitution;
-	static constexpr bool injection =  traversal_left::injection || traversal_right::injection;
-	using expr_self = binary_expression<lv, rv, oper::assign>;
-
-	using type = binary_expression<lv_branch, rv_branch, oper::assign>;
-};
-
-template<class T>
-static constexpr bool SUBSTITUTION() {
-	return ! std::is_same<T, typename traversal<T>::type>::value;
-}
 
 template<class T>
 static constexpr bool INJECTION() {
@@ -145,6 +121,8 @@ static constexpr bool INJECTION() {
 }
 }
 
+
+#include "BLAS_Parse_Tree_Assignments.h"
 
 
 #endif /* BLAS_PARSE_TREE_H_ */

@@ -13,7 +13,7 @@
 #include "PrintSparse.h"
 
 namespace BC {
-
+namespace IO {
 
 
 template<typename T, class int_ranks, class os>
@@ -110,6 +110,6 @@ static void print(const T& ary, const RANKS ranks, const os outer, int dimension
 	std::cout << std::endl;
 }
 }
-
+}
 
 #endif /* BC_PRINTFUNCTIONS_H_ */

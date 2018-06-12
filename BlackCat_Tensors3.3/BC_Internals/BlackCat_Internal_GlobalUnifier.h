@@ -8,6 +8,8 @@
 #ifndef BLACKCAT_INTERNAL_GLOBALUNIFIER_H_
 #define BLACKCAT_INTERNAL_GLOBALUNIFIER_H_
 
+
+#include "BC_Utility/Print.h"
 #include "BC_MathLibraries/CPU.h"
 #include "BC_MathLibraries/GPU.cu"
 
