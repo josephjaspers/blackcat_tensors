@@ -11,14 +11,14 @@
 
 namespace BC {
 namespace oper {
-class transpose;
+template<class ml> class transpose;
 }
 namespace internal {
 
 
 
-template<class functor_type>
-struct unary_expression<functor_type, oper::transpose> : expression_base<unary_expression<functor_type, oper::transpose>>
+template<class functor_type, class ml>
+struct unary_expression<functor_type, oper::transpose<ml>> : expression_base<unary_expression<functor_type, oper::transpose<ml>>>
 {
 	functor_type array;
 
@@ -32,7 +32,7 @@ struct unary_expression<functor_type, oper::transpose> : expression_base<unary_e
 	//blas injection
 	template<class core> unary_expression(functor_type ary, core tensor) : array(ary, tensor) {}
 	template<class BLAS_expr> //CONVERSION CONSTRUCTOR FOR BLAS ROTATION
-		__BCinline__  unary_expression(unary_expression<BLAS_expr, oper::transpose> ue, functor_type tensor) : array(tensor) {
+		__BCinline__  unary_expression(unary_expression<BLAS_expr, oper::transpose<ml>> ue, functor_type tensor) : array(tensor) {
 		ue.array.eval(tensor);
 	}
 
@@ -57,6 +57,14 @@ struct unary_expression<functor_type, oper::transpose> : expression_base<unary_e
 			else
 				return array(m, n);
 	}
+
+
+	//change this to true once we add the BLAS transpose (cublas has built in transpose, need to write CPU)
+	static constexpr bool injectable() { return functor_type::injectable(); }
+	static constexpr int precedence() { return 1; }
+	template<class injection> using type = unary_expression<typename functor_type::template type<injection>, oper::transpose<ml>>;
+//	std::conditional_t<is_void<injection>(),
+//			Core<tensor_of_t<DIMS(), _scalar<functor_type>, _mathlib<functor_type>>>, injection>;
 };
 }
 }

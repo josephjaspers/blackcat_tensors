@@ -147,6 +147,11 @@ public:
 	__BCinline__ int row(int i) 	   	{ return shadowFailure("auto row(int i)"); }
 	__BCinline__ int col(int i) const 	{ return shadowFailure("auto col(int i) const"); }
 	__BCinline__ int col(int i) 	   	{ return shadowFailure("auto col(int i)"); }
+
+	//-------------------------------------------------tree re-ordering methods---------------------------------------------------------//
+	static constexpr int precedence() { return -1; }
+	static constexpr bool injectable() { return false; }
+
 };
 }
 }

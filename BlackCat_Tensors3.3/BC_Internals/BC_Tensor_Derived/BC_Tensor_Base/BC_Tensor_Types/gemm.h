@@ -10,7 +10,7 @@
 #include "BLAS_Evaluator.h"
 
 #include "BlackCat_Internal_Definitions.h"
-
+#include "Core_Substitution.h"
 namespace BC {
 namespace oper {
 template<class ml> class dotproduct : public BLAS_FUNCTION {};
@@ -28,7 +28,6 @@ template<class lv, class rv, class mathlib>
 struct binary_expression<lv, rv, oper::dotproduct<mathlib>>
 : expression_base<binary_expression<lv, rv,  oper::dotproduct<mathlib>>>, BLAS_FUNCTION {
 
-	template<class injection> using type = injection;
 	using scalar_type = _scalar<lv>;
 
 	__BCinline__ static constexpr int DIMS() { return rv::DIMS(); }
@@ -55,6 +54,11 @@ struct binary_expression<lv, rv, oper::dotproduct<mathlib>>
 
 
 public:
+
+	static constexpr bool injectable() { return true; }
+	static constexpr bool precedence() { return 0; }
+	template<class injection> using type = std::conditional_t<is_void<injection>(),
+			Tensor_Substitution<tensor_of_t<DIMS(), scalar_type, mathlib>>, injection>;
 
 template<class core, int alpha_mod, int beta_mod>
 void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {

@@ -8,18 +8,16 @@
 #define EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
 
 #include "BC_Utility/Determiners.h"
-
+#include "BlackCat_Internal_Forward_Decls.h"
 namespace BC {
 
 namespace oper {
+	template<class ml>
 	class transpose;
 	class scalar_mul;
 }
 
 namespace internal {
-template<class,class> class unary_expression;
-template<class,class,class> class binary_expression;
-
 
 template<class T> using enable_if_core = std::enable_if_t<std::is_base_of<BC_Core, T>::value>;
 template<class T, class U> using enable_if_cores = std::enable_if_t<std::is_base_of<BC_Core, T>::value && std::is_base_of<BC_Core, U>::value>;
@@ -56,8 +54,8 @@ template<class deriv> struct det_eval<deriv, enable_if_core<deriv>> {
 };
 
 ////IF TRANSPOSE
-template<class deriv>
-struct det_eval<internal::unary_expression<deriv, oper::transpose>, enable_if_core<deriv>> {
+template<class deriv, class ml>
+struct det_eval<internal::unary_expression<deriv, oper::transpose<ml>>, enable_if_core<deriv>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = false;
@@ -89,8 +87,8 @@ struct det_eval<binary_expression<d1, d2, oper::scalar_mul>, enable_if_cores<d1,
 };
 
 //IF A SCALAR BY TENSOR MUL OPERATION R + TRANSPOSED
-template<class trans_t, class scalar_t>
-struct det_eval<binary_expression<unary_expression<trans_t, oper::transpose>, scalar_t, oper::scalar_mul>, enable_if_cores<trans_t, scalar_t>> {
+template<class trans_t, class scalar_t, class ml>
+struct det_eval<binary_expression<unary_expression<trans_t, oper::transpose<ml>>, scalar_t, oper::scalar_mul>, enable_if_cores<trans_t, scalar_t>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;
@@ -100,8 +98,8 @@ struct det_eval<binary_expression<unary_expression<trans_t, oper::transpose>, sc
 };
 
 //IF A SCALAR BY TENSOR MUL OPERATION L + TRANSPOSED
-template<class scalar_t, class trans_t>
-struct det_eval<binary_expression<scalar_t, unary_expression<trans_t, oper::transpose>, oper::scalar_mul>, enable_if_cores<scalar_t, trans_t>> {
+template<class scalar_t, class trans_t, class ml>
+struct det_eval<binary_expression<scalar_t, unary_expression<trans_t, oper::transpose<ml>>, oper::scalar_mul>, enable_if_cores<scalar_t, trans_t>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;

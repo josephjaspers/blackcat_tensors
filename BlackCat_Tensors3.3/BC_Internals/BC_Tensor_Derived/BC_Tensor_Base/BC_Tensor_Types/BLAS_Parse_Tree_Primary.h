@@ -20,8 +20,8 @@ template<class> class dotproduct;
 
 template<class T> static constexpr bool is_blas_supported_oper  = MTF::is_one_of<T, oper::add, oper::sub>();
 template<class T> static constexpr bool is_blas				= std::is_base_of<BLAS_FUNCTION, T>::value;
-template<class lv, class rv, class op> static constexpr bool is_blas<BC::internal::binary_expression<lv, rv, op>>
-= is_blas<lv> && is_blas<rv>;
+template<class lv, class rv, class op>
+static constexpr bool is_blas<BC::internal::binary_expression<lv, rv, op>> = is_blas<lv> && is_blas<rv>;
 
 
 namespace internal {

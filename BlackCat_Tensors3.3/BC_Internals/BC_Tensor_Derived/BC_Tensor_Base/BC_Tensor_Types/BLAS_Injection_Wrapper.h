@@ -25,13 +25,6 @@ struct injection_wrapper {
 		   tensor_core& data()  { return array; }
 
 };
-
-template<int alpha, int beta, class tensor_core>
-auto wrap_injection(tensor_core& tensor) {
-	return injection_wrapper<tensor_core, alpha, beta>(tensor);
-}
-
-
 }
 }
 

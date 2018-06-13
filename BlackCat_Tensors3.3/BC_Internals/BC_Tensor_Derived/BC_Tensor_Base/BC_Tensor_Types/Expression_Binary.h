@@ -8,6 +8,8 @@
 #define EXPRESSION_BINARY_POINTWISE_SAME_H_
 
 #include "Expression_Base.h"
+#include "Expression_Tree_Functions.h"
+
 
 namespace BC {
 namespace internal {
@@ -35,6 +37,26 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 
 	//------------------------------------------------------------TREE ROTATION CONSTRUCTORS----------------------------------------------------------------//
 		//still need double replacement
+	static constexpr int precedence() { return tree::precedence<operation>(); }
+	static constexpr bool lv_injectable() { return precedence() <= lv::precedence() && lv::injectable(); }
+	static constexpr bool rv_injectable() { return precedence() <= rv::precedence() && rv::injectable(); }
+	static constexpr bool injectable()	  { return lv_injectable() ||  rv_injectable(); }
+	static constexpr bool double_injection() { return lv_injectable() && rv_injectable() && tree::valid_double_inject<operation>(); }
+
+	static constexpr int alpha_mod() { return tree::alpha_of<operation>(); }
+	static constexpr int beta_mod() { return tree::beta_of<operation>(); }
+
+	template<class injection> using lv_inj_t = typename lv::template type<injection>;
+	template<class injection> using rv_inj_t = typename rv::template type<injection>;
+
+	using default_type = std::conditional_t<tree::injectable_assignment<operation>(), lv, void>;
+
+	template<class injection = default_type>
+	using type = std::conditional_t<double_injection(),
+			injection,
+			binary_expression<lv_inj_t<injection>, rv_inj_t<injection>, operation>>;
+
+	using injection_type = type<default_type>;
 
 	//Right side replacement
 	template<class R, class core, int a, int b> 	__BC_host_inline__
@@ -64,9 +86,15 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 		left.eval(injection);
 		right.eval(injection_wrapper<core, alpha_modifier<operation>(), beta_modifier<operation>()>(injection.data())); //we wrap data to ensure scalar's are not calculated twice
 	}
+
+	void temporary_destroy() {
+		left.temporary_destroy();
+		right.temporary_destroy();
+	}
 };
 }
 }
+
 
 #endif /* EXPRESSION_BINARY_POINTWISE_SAME_H_ */
 

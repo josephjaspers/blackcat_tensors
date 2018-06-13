@@ -18,9 +18,6 @@ template<class tensor>
 struct Tensor_Substitution : Core<tensor>  {
 
 	using Core<tensor>::Core;
-//	using scalar = _scalar<tensor>;
-//	operator Core<tensor>& () { return static_cast<Core<tensor>&>(*this); }
-//	operator scalar* 		() {  return static_cast<Core<tensor>&>(*this);}
 
 	__BCinline__ void temporary_destroy() {
 		Core<tensor>::destroy();

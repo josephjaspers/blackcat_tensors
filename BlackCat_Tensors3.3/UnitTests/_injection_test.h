@@ -45,7 +45,6 @@ void injection() {
 
 
 	std::cout << type_name<adjusted>() << std::endl << std::endl;
-
 	//	cube c(4,3,3);//output
 //	mat b(5,5);//img
 //	b.randomize(0,1);

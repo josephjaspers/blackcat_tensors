@@ -41,11 +41,19 @@ public:
 	}
 
 	//------------------------------------------------------------TREE ROTATION CONSTRUCTORS----------------------------------------------------------------//
+	static constexpr int precedence() { return 1; }/* unary_expressions always have precendence of 1*/
+	static constexpr bool injectable() { return precedence() <= value::precedence() && value::injectable(); }
+	template<class injection> using type = unary_expression<typename value::template type<injection>, operation>;
+
 	template<class V, class core> //CONVERSION CONSTRUCTOR FOR BLAS ROTATION
 	__BCinline__  unary_expression(unary_expression<V, operation> ue, core tensor) : array(ue.array, tensor), oper(ue.oper) {}
 	template<class BLAS_expr, int a, int b> //CONVERSION CONSTRUCTOR FOR BLAS ROTATION
 	__BCinline__  unary_expression(unary_expression<BLAS_expr, operation> ue, injection_wrapper<value, a, b> tensor) : array(tensor), oper(ue.oper) {
 		ue.array.eval(tensor);
+	}
+
+	void temporary_destroy() {
+		array.temporary_destroy();
 	}
 
 };
