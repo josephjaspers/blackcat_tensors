@@ -84,7 +84,7 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	std::enable_if<std::is_base_of<BLAS_FUNCTION, lv>::value && std::is_base_of<BLAS_FUNCTION, rv>::value>
 	eval(injection_wrapper<core, a, b> injection) {
 		left.eval(injection);
-		right.eval(injection_wrapper<core, alpha_modifier<operation>(), beta_modifier<operation>()>(injection.data())); //we wrap data to ensure scalar's are not calculated twice
+		right.eval(injection_wrapper<core, tree::alpha_of<operation>(), tree::beta_of<operation>()>(injection.data())); //we wrap data to ensure scalar's are not calculated twice
 	}
 
 	void temporary_destroy() {
