@@ -9,8 +9,8 @@
 #define EXPRESSION_BASE_H_
 
 #include "BlackCat_Internal_Definitions.h"
-#include "BLAS_Expression_Evaluator.h"
-#include "BLAS_Injection_Wrapper.h"
+#include "Parse_Tree_BLAS_Branch_Evaluator.h"
+#include "Parse_Tree_Injection_Wrapper.h"
 #include "Operations/Binary.h"
 #include "Operations/Unary.h"
 
@@ -152,9 +152,6 @@ public:
 	__BCinline__ int col(int i) 	   	{ return shadowFailure("auto col(int i)"); }
 
 	//-------------------------------------------------tree re-ordering methods---------------------------------------------------------//
-	static constexpr int precedence() { return -1; }
-	static constexpr bool injectable() { return false; }
-
 };
 }
 }

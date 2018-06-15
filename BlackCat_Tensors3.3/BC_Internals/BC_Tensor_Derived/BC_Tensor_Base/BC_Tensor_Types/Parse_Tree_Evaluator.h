@@ -8,9 +8,8 @@
 #ifndef TRIVIAL_EVALUATOR_H_
 #define TRIVIAL_EVALUATOR_H_
 
-#include "BLAS_Injection_Wrapper.h"
+#include "Parse_Tree_Injection_Wrapper.h"
 #include "Core_Substitution.h"
-#include <cxxabi.h>
 
 namespace BC {
 
@@ -18,7 +17,7 @@ template<class> class Tensor_Base;
 template<class expression> //get the type of the rv_expression
 using rv_of = std::decay_t<decltype(std::declval<expression>().right)>;
 
-template<class T>
+template<class T> __BC_host_inline__
 static constexpr bool INJECTION() {
 	return ! std::is_same<T,typename T::injection_type>::value;
 }
@@ -50,8 +49,7 @@ evaluate(assignment& assign, const expression& expr) {
 	static constexpr int beta_mod = expression::beta_mod();
 
 	auto post_inject_tensor = rotated_expression_tree(expr, BC::internal::injection_wrapper<assignment, alpha_mod, beta_mod>(assign));		//evaluate the internal tensor_type
-
-	if (!std::is_same<injection_t, rv_of<rotated_expression_tree>>::value) {
+	if (!std::is_same<injection_t, rv_of<rotated_expression_tree>>::value || BC::internal::isCore<rotated_expression_tree>()) {
 	if (BARRIER)
 		mathlib_type::template dimension<iterator_dimension>::eval(post_inject_tensor);
 	else
@@ -65,7 +63,6 @@ template<class mathlib, bool BARRIER>
 struct branched {
 	template<class branch> using sub_t 	= BC::internal::Tensor_Substitution<tensor_of_t<branch::DIMS(), _scalar<branch>, mathlib>>;
 	template<class branch> using eval_t = BC::internal::binary_expression<sub_t<branch>, branch, BC::oper::assign>;
-
 
 	template<class branch> __BC_host_inline__
 	static std::enable_if_t<BC::internal::isCore<std::decay_t<branch>>(), const branch&> evaluate(const branch& expression) { return expression; }

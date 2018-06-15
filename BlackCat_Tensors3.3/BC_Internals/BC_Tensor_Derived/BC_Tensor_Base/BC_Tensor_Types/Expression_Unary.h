@@ -41,8 +41,10 @@ public:
 	}
 
 	//------------------------------------------------------------TREE ROTATION CONSTRUCTORS----------------------------------------------------------------//
-	static constexpr int precedence() { return 1; }/* unary_expressions always have precendence of 1*/
-	static constexpr bool injectable() { return precedence() <= value::precedence() && value::injectable(); }
+	__BC_host_inline__ static constexpr int precedence() { return 1; }/* unary_expressions always have precendence of 1*/
+	__BC_host_inline__ static constexpr bool injectable() { return precedence() <= value::precedence() && value::injectable(); }
+	__BC_host_inline__ static constexpr bool substituteable() { return false; }	//never fully injectable as we can't "unwrap" the unary _expression
+
 	template<class injection> using type = unary_expression<typename value::template type<injection>, operation>;
 
 	template<class V, class core> //CONVERSION CONSTRUCTOR FOR BLAS ROTATION
@@ -55,7 +57,6 @@ public:
 	void temporary_destroy() {
 		array.temporary_destroy();
 	}
-
 };
 }
 }

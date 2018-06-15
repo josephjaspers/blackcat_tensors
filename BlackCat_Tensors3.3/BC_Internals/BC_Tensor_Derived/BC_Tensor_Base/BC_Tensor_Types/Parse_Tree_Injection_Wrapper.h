@@ -14,6 +14,7 @@ namespace internal {
 template<class tensor_core, int alpha_modifier_ = 1, int beta_modifier_= 0>
 struct injection_wrapper {
 
+	__BC_host_inline__
 	injection_wrapper(tensor_core& array_) : array(array_) {}
 
 	tensor_core& array;
@@ -21,9 +22,8 @@ struct injection_wrapper {
 	operator const tensor_core& () const { return array; }
 	operator  	   tensor_core& ()       { return array; }
 
-	 const tensor_core& data() const { return array; }
-		   tensor_core& data()  { return array; }
-
+	__BC_host_inline__ const tensor_core& data() const { return array; }
+	__BC_host_inline__	     tensor_core& data()  	   { return array; }
 };
 }
 }

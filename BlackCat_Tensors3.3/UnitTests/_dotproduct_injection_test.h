@@ -22,6 +22,7 @@ std::string removeNS( const std::string & source, const std::string & namespace_
 template<class T>
 std::string type_name() {
 	int status;
+//	return abi::__cxa_demangle(typeid(T).name(),0,0,&status);;
 	  std::string demangled = abi::__cxa_demangle(typeid(T).name(),0,0,&status);
 	  return removeNS(removeNS(removeNS(demangled, "BC::"), "internal::"), "oper::");
 }
@@ -116,7 +117,7 @@ int dotproduct_injection() {
 	A.print();
 	c = a.t() * A * (b.t() * A);
 	c.print();
-	using expr3 = std::decay_t<decltype((c =* (a.t() * A * (b.t() * A))).internal())>;
+//	using expr3 = std::decay_t<decltype((c =* (a.t() * A * (b.t() * A))).internal())>;
 //	std::cout << type_name<expr3>() << std::endl;
 //	std::cout << type_name<typename expr3::type<typename expr3::default_type>>() << std::endl;
 
@@ -129,20 +130,40 @@ int dotproduct_injection() {
 //	std::cout << type_name<typename BC::internal::traversal<expr>::type>() << std::endl;
 
 
-	c.print();
-	c += a.t() * b.t() - a.t() * b.t();
-	c.print();
-
-	using expr2 = std::decay_t<decltype((c +=* (a.t() * b.t() - a.t() * b.t())).internal())>;
-//	std::cout << type_name<expr2>() << std::endl;
-//	std::cout << type_name<typename expr2::injection_type>(); //type<typename expr2::default_type>>() << std::endl;
-
-
-
-//THIS DOES NOT WORK
-////	std::cout << "	c = a.t() * A * (b.t() * A) + a.t() * A * (b.t() * A)" << std::endl;
-////	c = a.t() * A * (b.t() * A) + a.t() * A * (b.t() * A);
 //	c.print();
+//	c = f % f + a.t() * b.t() + a.t() * b.t();
+	c.print();
 
+//	dc() ** F + dy + rz.t() * dz() + rf.t() * df(
+//	using core = decltype(c.internal());
+	auto expression = (c =* ( a.t() * b.t() + a.t() * b.t() + f % f)).internal();
+
+	using core = decltype(c.internal());
+	using expr = std::decay_t<decltype(expression)>;
+	using rv_of_assign = decltype(expression.right);
+	using add_of_dps   = decltype(expression.right.right);
+
+	std::cout << type_name<typename expr:: injection_type>() << std::endl;
+//	std::cout << type_name<add_of_dps>() << std::endl;
+//	std::cout << type_name<add_of_dps::type<core>>() << std::endl;
+
+	std::cout << add_of_dps:: substituteable() << std::endl;
+
+	//	std::cout << " is add of dps sub = " << add_of_dps::substituteable() << std::endl;
+//	std::cout << type_name<typename add_of_dps::template type<core>>() << std::endl;
+
+//	using expr2 = std::decay_t<decltype(expression)>;
+//	std::cout << type_name<expr2>() << std::endl;
+//	std::cout << type_name<typename expr2::injection_type>() << std::endl; //type<typename expr2::default_type>>() << std::endl;
+
+
+
+//	std::cout << type_name<expr4>() << std::endl;
+//	std::cout << type_name<typename expr4::injection_type>(); //type<typename expr2::default_type>>() << std::endl;
+	//
+	//	std::cout << " post type " << std::endl;
+//THIS DOES NOT WORK
+//	std::cout << "	c = a.t() * A * (b.t() * A) + a.t() * A * (b.t() * A)" << std::endl;
+//	c = c % c +  a.t() * b.t() + a.t() * b.t();//	c.print();
 	return 0;
 };

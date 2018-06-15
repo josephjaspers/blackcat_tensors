@@ -6,8 +6,8 @@
 
 #include "Expression_Base.h"
 
-#include "BLAS_Expression_Evaluator.h"
-#include "BLAS_Evaluator.h"
+#include "Parse_Tree_BLAS_Branch_Evaluator.h"
+#include "Parse_Tree_Evaluator.h"
 
 #include "BlackCat_Internal_Definitions.h"
 #include "Core_Substitution.h"
@@ -55,8 +55,9 @@ struct binary_expression<lv, rv, oper::dotproduct<mathlib>>
 
 public:
 
-	static constexpr bool injectable() { return true; }
-	static constexpr bool precedence() { return 0; }
+	__BC_host_inline__ static constexpr bool injectable() { return true; }
+	__BC_host_inline__ static constexpr bool substituteable() { return true; }
+	__BC_host_inline__ 	static constexpr bool precedence() { return 0; }
 	template<class injection> using type = std::conditional_t<is_void<injection>(),
 			Tensor_Substitution<tensor_of_t<DIMS(), scalar_type, mathlib>>, injection>;
 
@@ -97,6 +98,11 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 	mathlib::destroy(beta);
 	mathlib::destroy(alpha);
 }
+void temporary_destroy() {
+	left.temporary_destroy();
+	right.temporary_destroy();
+}
+
 };
 
 }

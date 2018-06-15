@@ -126,7 +126,11 @@ public:
 	}
 
 
+	static constexpr int precedence() { return -1; }
+	static constexpr bool injectable() { return false; }
+	static constexpr bool substituteable() { return false; }
 };
+
 
 template<class T, class voider = void> struct isCore_impl { static constexpr bool conditional = false; };
 template<class T> struct isCore_impl<T, std::enable_if_t<std::is_same<decltype(T::DIMS()),int>::value>> { static constexpr bool conditional = std::is_base_of<Tensor_Core_Base<T, T::DIMS()>, T>::value; };

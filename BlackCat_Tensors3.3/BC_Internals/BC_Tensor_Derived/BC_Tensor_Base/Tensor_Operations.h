@@ -12,15 +12,14 @@
 #include "BC_Tensor_Types/Operations/Binary.h"
 #include "BC_Tensor_Types/Operations/Unary.h"
 
-#include "BC_Tensor_Types/gemm.h"
+#include "BC_Tensor_Types/Function_gemm.h"
 #include "BC_Tensor_Types/Expression_Unary.h"
-#include "BC_Tensor_Types/transpose.h"
+#include "BC_Tensor_Types/Function_transpose.h"
 #include "Tensor_Operations_Impl/AlternateAsterixDenoter.h"
 #include "Tensor_Operations_Impl/Expression_Determiner.h"
-#include "BC_Tensor_Types/BLAS_Evaluator.h"
+#include "BC_Tensor_Types/Parse_Tree_Evaluator.h"
 
 #include "Tensor_Functions/Unary_Functions.h"
-#include <type_traits>
 
 namespace BC {
 namespace Base {
