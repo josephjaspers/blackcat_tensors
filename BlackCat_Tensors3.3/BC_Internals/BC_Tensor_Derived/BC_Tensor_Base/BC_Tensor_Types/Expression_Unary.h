@@ -45,7 +45,8 @@ public:
 	__BC_host_inline__ static constexpr bool injectable() { return precedence() <= value::precedence() && value::injectable(); }
 	__BC_host_inline__ static constexpr bool substituteable() { return false; }	//never fully injectable as we can't "unwrap" the unary _expression
 
-	template<class injection> using type = unary_expression<typename value::template type<injection>, operation>;
+	template<class inj_t, bool presub> using sub_t = std::conditional_t<presub, void, inj_t>;
+	template<class injection, bool presub = false> using type = unary_expression<typename value::template type<sub_t<injection,  presub>>, operation>;
 
 	template<class V, class core> //CONVERSION CONSTRUCTOR FOR BLAS ROTATION
 	__BCinline__  unary_expression(unary_expression<V, operation> ue, core tensor) : array(ue.array, tensor), oper(ue.oper) {}

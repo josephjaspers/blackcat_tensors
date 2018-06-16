@@ -52,7 +52,7 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 
 	using default_type = std::conditional_t<tree::injectable_assignment<operation>(), lv, void>;
 
-	template<class injection = default_type>
+	template<class injection = default_type, bool pre_injected = true>
 	using type =
 			std::conditional_t<substituteable(),
 			injection,
@@ -68,7 +68,6 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	template<class L, class core, int a, int b> 	__BC_host_inline__
 	binary_expression(binary_expression<L, rv, operation> expr, injection_wrapper<core, a, b> tensor_core)
 	: left(expr.left, tensor_core), right(expr.right){}
-
 
 	//right side injection
 	template<class expr_t, int a, int b> __BC_host_inline__

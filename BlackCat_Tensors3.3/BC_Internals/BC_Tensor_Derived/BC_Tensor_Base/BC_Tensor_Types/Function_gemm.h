@@ -58,7 +58,9 @@ public:
 	__BC_host_inline__ static constexpr bool injectable() { return true; }
 	__BC_host_inline__ static constexpr bool substituteable() { return true; }
 	__BC_host_inline__ 	static constexpr bool precedence() { return 0; }
-	template<class injection> using type = std::conditional_t<is_void<injection>(),
+
+	//if presub == true then this type should be removed
+	template<class injection, bool presub = false> using type = std::conditional_t<is_void<injection>(),
 			Tensor_Substitution<tensor_of_t<DIMS(), scalar_type, mathlib>>, injection>;
 
 template<class core, int alpha_mod, int beta_mod>

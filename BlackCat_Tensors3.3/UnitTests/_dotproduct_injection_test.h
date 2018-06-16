@@ -144,10 +144,10 @@ int dotproduct_injection() {
 	using add_of_dps   = decltype(expression.right.right);
 
 	std::cout << type_name<typename expr:: injection_type>() << std::endl;
-//	std::cout << type_name<add_of_dps>() << std::endl;
-//	std::cout << type_name<add_of_dps::type<core>>() << std::endl;
+	std::cout << type_name<rv_of_assign>() << std::endl;
+	std::cout << type_name<add_of_dps>() << std::endl;
 
-	std::cout << add_of_dps:: substituteable() << std::endl;
+//	std::cout << add_of_dps:: substituteable() << std::endl;
 
 	//	std::cout << " is add of dps sub = " << add_of_dps::substituteable() << std::endl;
 //	std::cout << type_name<typename add_of_dps::template type<core>>() << std::endl;
