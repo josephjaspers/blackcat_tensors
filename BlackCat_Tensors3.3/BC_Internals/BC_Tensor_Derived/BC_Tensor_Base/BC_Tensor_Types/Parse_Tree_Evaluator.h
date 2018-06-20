@@ -21,7 +21,8 @@ using rv_of = std::decay_t<decltype(std::declval<std::decay_t<expression>>().rig
 
 template<class T> __BC_host_inline__
 static constexpr bool INJECTION() {
-	return ! std::is_same<T,typename T::injection_type>::value;
+	//non-trivial is true even when it is trivial
+	return internal::tree::expression_tree_evaluator<std::decay_t<T>>::non_trivial_blas_injection;
 }
 
 
@@ -46,8 +47,6 @@ evaluate(assignment& assign, const expression& expr) {
 	using injection_t = assignment;	//the injection type
 
 	static constexpr int iterator_dimension = expression::ITERATOR();	//the iterator for the evaluation of post inject_t
-	static constexpr int alpha_mod = expression::alpha_mod();
-	static constexpr int beta_mod = expression::beta_mod();
 
 	auto post_inject_tensor = internal::tree::evaluate(expr);		//evaluate the internal tensor_type
 	if (!std::is_same<injection_t, rv_of<decltype(post_inject_tensor)>>::value || BC::internal::isCore<decltype(post_inject_tensor)>()) {

@@ -52,13 +52,7 @@ struct binary_expression<lv, rv, oper::dotproduct<mathlib>>
 	__BCinline__ int N() const { return right.cols(); }
 	__BCinline__ int K() const { return left.cols();  }
 
-
 public:
-
-	__BC_host_inline__ static constexpr bool injectable() { return true; }
-	__BC_host_inline__ static constexpr bool substituteable() { return true; }
-	__BC_host_inline__ 	static constexpr bool precedence() { return 0; }
-
 	//if presub == true then this type should be removed
 	template<class injection, bool presub = false> using type = std::conditional_t<is_void<injection>(),
 			Tensor_Substitution<tensor_of_t<DIMS(), scalar_type, mathlib>>, injection>;

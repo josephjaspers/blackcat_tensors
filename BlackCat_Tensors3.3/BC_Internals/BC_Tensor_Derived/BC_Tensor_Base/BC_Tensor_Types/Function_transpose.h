@@ -58,15 +58,6 @@ struct unary_expression<functor_type, oper::transpose<ml>> : expression_base<una
 				return array(m, n);
 	}
 
-
-	//change this to true once we add the BLAS transpose (cublas has built in transpose, need to write CPU)
-	static constexpr bool injectable() { return functor_type::injectable(); }
-	static constexpr int precedence() { return -1; }
-	static constexpr bool substituteable() { return false; }
-
-	template<class inj_t, bool presub> using sub_t = std::conditional_t<presub, void, inj_t>;
-	template<class injection, bool presub = false> using type = unary_expression<typename functor_type::template type<sub_t< injection, presub>>, oper::transpose<ml>>;
-
 	void temporary_destroy() {
 		array.temporary_destroy();
 	}

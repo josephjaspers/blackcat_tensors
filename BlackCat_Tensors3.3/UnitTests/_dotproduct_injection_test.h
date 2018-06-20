@@ -122,21 +122,7 @@ int dotproduct_injection() {
 	std::cout << "	c =  - (a.t() * A * (b.t() * A))" << std::endl;
 	A.print();
 	c = (a.t() * A * (b.t() * A));
-//	using expr3 = std::decay_t<decltype((c =* (a.t() * A * (b.t() * A))).internal())>;
-//	std::cout << type_name<expr3>() << std::endl;
-//	std::cout << type_name<typename expr3::type<typename expr3::default_type>>() << std::endl;
 
-
-//	using expr = std::decay_t<decltype((c =* ( BC::NN_Abreviated_Functions::g(a.t() * b.t() + c))).internal())>;
-
-//	c =  BC::NN_Abreviated_Functions::g(a.t() * b.t() + c);
-
-//	std::cout << type_name<expr>() << std::endl;
-//	std::cout << type_name<typename BC::internal::traversal<expr>::type>() << std::endl;
-
-	c.zero();
-
-	c.print();
 	auto f_chunk = chunk(f)(0,0)(2,2);
 	auto expr = (c =* (a.t() * b.t() + a.t() * b.t()  + a.t() * b.t())).internal();
 	auto var =  BC::internal::tree::evaluate(expr);

@@ -154,7 +154,12 @@ static constexpr bool is_linear_assignment_op() {
 }
 template<class T>
 static constexpr bool is_assignment_op() {
-	return MTF::is_one_of<T, oper::assign>();
+	return MTF::is_one_of<T, oper::assign, oper::add_assign,oper::sub_assign, oper::mul_assign,oper::div_assign>();
+}
+
+template<class T>
+static constexpr bool is_standard_assignment_op() {
+	return MTF::is_one_of<oper::assign>();
 }
 
 template<class T>

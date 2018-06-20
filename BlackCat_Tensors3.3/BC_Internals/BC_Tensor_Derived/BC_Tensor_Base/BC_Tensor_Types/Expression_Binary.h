@@ -34,53 +34,6 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	__BCinline__ const auto  inner_shape() const { return shape().inner_shape(); }
 	__BCinline__ const auto  outer_shape() const { return shape().outer_shape(); }
 
-
-	//------------------------------------------------------------TREE ROTATION CONSTRUCTORS----------------------------------------------------------------//
-	__BC_host_inline__ static constexpr int precedence() { return tree::precedence<operation>(); }
-	__BC_host_inline__ static constexpr bool lv_injectable() { return precedence() <= lv::precedence() && lv::injectable(); }
-	__BC_host_inline__ static constexpr bool rv_injectable() { return precedence() <= rv::precedence() && rv::injectable(); }
-	__BC_host_inline__ static constexpr bool lv_substituteable() { return precedence() <= lv::precedence() && lv::injectable(); }
-	__BC_host_inline__ static constexpr bool rv_substituteable() { return precedence() <= rv::precedence() && rv::injectable(); }
-	__BC_host_inline__ static constexpr bool injectable()	  { return lv_injectable() ||  rv_injectable(); }
-	__BC_host_inline__ static constexpr bool substituteable() { return lv::substituteable() && rv::substituteable(); }
-
-	__BC_host_inline__ static constexpr int alpha_mod() { return tree::alpha_of<operation>(); }
-	__BC_host_inline__ static constexpr int beta_mod() { return tree::beta_of<operation>(); }
-
-	template<class injection> using lv_inj_t = typename lv::template type<injection>;
-	template<class injection> using rv_inj_t = typename rv::template type<injection>;
-
-	using default_type = std::conditional_t<tree::injectable_assignment<operation>(), lv, void>;
-
-	template<class injection = default_type, bool pre_injected = true>
-	using type =
-			std::conditional_t<substituteable(),
-			injection,
-			binary_expression<lv_inj_t<injection>, rv_inj_t<injection>, operation>>;
-
-	using injection_type = type<default_type>;
-
-	//Right side replacement
-	template<class R, class core, int a, int b> 	__BC_host_inline__
-	binary_expression(binary_expression<lv, R, operation> expr, injection_wrapper<core, a, b> tensor_core) : left(expr.left), right(expr.right, tensor_core) {}
-
-	//Left side replacement
-	template<class L, class core, int a, int b> 	__BC_host_inline__
-	binary_expression(binary_expression<L, rv, operation> expr, injection_wrapper<core, a, b> tensor_core)
-	: left(expr.left, tensor_core), right(expr.right){}
-
-	//right side injection
-	template<class expr_t, int a, int b> __BC_host_inline__
-	 binary_expression(binary_expression<lv, expr_t, operation> expr, injection_wrapper<rv, a, b> tensor) : left(expr.left), right((rv&)tensor) {
-		expr.right.eval(tensor); //extract right hand side, which represents a BLAS function, inject the tensor into the output
-	}
-
-	//left side injection
-	template<class expr_t, int a , int b> __BC_host_inline__ //function injection left
-	binary_expression(binary_expression<expr_t, rv, operation> expr, injection_wrapper<lv, a, b> tensor) : left((lv&)tensor), right(expr.right) {
-		expr.left.eval(tensor); //extract right hand side, which represents a BLAS function, inject the tensor into the output
-	}
-
 	template<class core, int a, int b>
 	std::enable_if<std::is_base_of<BLAS_FUNCTION, lv>::value && std::is_base_of<BLAS_FUNCTION, rv>::value>
 	eval(injection_wrapper<core, a, b> injection) {

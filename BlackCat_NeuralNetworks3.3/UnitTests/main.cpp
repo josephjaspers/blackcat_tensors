@@ -6,9 +6,9 @@
 
 int main() {
 
-//	BC::NN::MNIST_Test::percept_MNIST();
+	BC::NN::MNIST_Test::percept_MNIST();
 //	BC::NN::MNIST_Test_MT::percept_MNIST();
-	BC::NN::FunctionMatcher::test();
+//	BC::NN::FunctionMatcher::test();
 
 	std::cout << "terminate success "<< std::endl;
 
