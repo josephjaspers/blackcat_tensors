@@ -16,11 +16,12 @@ namespace BC {
 template<int dimension>
 struct Shape {
 
-	static constexpr int last = dimension - 1;
 	__BCinline__ static constexpr int LENGTH() { return dimension; }
-
+private:
+	static constexpr int last = dimension - 1;
 	int inner_shape[dimension];
 	int outer_shape[dimension];
+public:
 
 	__BCinline__ int size() const { return LENGTH() > 0 ?  outer_shape[last] : 1; }
 
@@ -56,7 +57,7 @@ struct Shape {
 			}
 		}
 	}
-
+private:
 	template<int d = 0> __BCinline__
 	void init() {}
 
@@ -78,14 +79,6 @@ struct Shape {
 			init<(dim + 1 < LENGTH() ? dim + 1 : LENGTH())>(ints...);
 		}
 	}
-
-	__BCinline__ void calculate_outer_dimensions()  {
-		outer_shape[0] = inner_shape[0];
-		for (int i = 1; i < dimension; ++i) {
-			outer_shape[i] = inner_shape[i] * outer_shape[i - 1];
-		}
-	}
-
 };
 }
 

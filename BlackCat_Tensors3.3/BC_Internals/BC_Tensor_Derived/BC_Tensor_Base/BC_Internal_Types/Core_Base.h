@@ -47,44 +47,42 @@ struct Tensor_Core_Base : expression_base<Tensor_Core_Base<derived,DIMENSION>>, 
 
 private:
 
-	__BCinline__ const derived& asDerived() const { return static_cast<const derived&>(*this); }
-	__BCinline__ 	   derived& asDerived() 	  { return static_cast<	     derived&>(*this); }
+	__BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }
+	__BCinline__ 	   derived& as_derived() 	  { return static_cast<	     derived&>(*this); }
 
 public:
 	template<class injection> using type = derived;
 
-	operator 	   auto()       { return asDerived().getIterator(); }
-	operator const auto() const { return asDerived().getIterator(); }
+	operator 	   auto()       { return as_derived().memptr(); }
+	operator const auto() const { return as_derived().memptr(); }
 
-	__BCinline__ 	   auto& operator [] (int index) 	   { return DIMS() == 0 ? asDerived().getIterator()[0] : asDerived().getIterator()[index]; }
-	__BCinline__ const auto& operator [] (int index) const { return DIMS() == 0 ? asDerived().getIterator()[0] : asDerived().getIterator()[index]; }
-	__BCinline__ const auto inner_shape() const { return asDerived().inner_shape(); }
-	__BCinline__ const auto outer_shape() const { return asDerived().outer_shape(); }
-	__BCinline__ const auto slice(int i) const { return slice_t(&(asDerived().getIterator()[slice_index(i)]),asDerived()); }
-	__BCinline__	   auto slice(int i) 	   { return slice_t(&(asDerived().getIterator()[slice_index(i)]),asDerived()); }
-	__BCinline__ const auto scalar(int i) const { return scalar_t(&asDerived().getIterator()[i], asDerived()); }
-	__BCinline__	   auto scalar(int i) 	    { return scalar_t(&asDerived().getIterator()[i], asDerived()); }
-	__BCinline__ const auto row(int i) const { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED"); return row_t(&asDerived().getIterator()[i], asDerived()); }
-	__BCinline__	   auto row(int i) 	     { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED"); return row_t(&asDerived().getIterator()[i], asDerived()); }
+	__BCinline__ 	   auto& operator [] (int index) 	   { return DIMS() == 0 ? as_derived().memptr()[0] : as_derived().memptr()[index]; }
+	__BCinline__ const auto& operator [] (int index) const { return DIMS() == 0 ? as_derived().memptr()[0] : as_derived().memptr()[index]; }
+	__BCinline__ const auto inner_shape() const { return as_derived().inner_shape(); }
+	__BCinline__ const auto outer_shape() const { return as_derived().outer_shape(); }
+	__BCinline__ const auto slice(int i) const { return slice_t(&(as_derived().memptr()[slice_index(i)]),as_derived()); }
+	__BCinline__	   auto slice(int i) 	   { return slice_t(&(as_derived().memptr()[slice_index(i)]),as_derived()); }
+	__BCinline__ const auto scalar(int i) const { return scalar_t(&as_derived().memptr()[i], as_derived()); }
+	__BCinline__	   auto scalar(int i) 	    { return scalar_t(&as_derived().memptr()[i], as_derived()); }
+	__BCinline__ const auto row(int i) const { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED"); return row_t(&as_derived().memptr()[i], as_derived()); }
+	__BCinline__	   auto row(int i) 	     { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED"); return row_t(&as_derived().memptr()[i], as_derived()); }
 	__BCinline__ const auto col(int i) const { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
 	__BCinline__	   auto col(int i) 	     { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
-//	__BCinline__ const auto transpose() const { return trans_t(asDerived().getIterator(), asDerived()); }
-//	__BCinline__ 	   auto transpose()       { return trans_t(asDerived().getIterator(), asDerived()); }
 
 	template<class... integers> __BCinline__ 	   auto& operator () (integers... ints) 	  {
-		return DIMS() == 0 ? asDerived().getIterator()[0] : asDerived().getIterator()[this->dims_to_index(ints...)]; }
+		return DIMS() == 0 ? as_derived().memptr()[0] : as_derived().memptr()[this->dims_to_index(ints...)]; }
 	template<class... integers> __BCinline__ const auto& operator () (integers... ints) const {
-		return DIMS() == 0 ? asDerived().getIterator()[0] : asDerived().getIterator()[this->dims_to_index(ints...)]; }
+		return DIMS() == 0 ? as_derived().memptr()[0] : as_derived().memptr()[this->dims_to_index(ints...)]; }
 
 	//------------------------------------------Curried Reshapers ---------------------------------------//
 	//currently cuda will not compile these
 	template<class ... integers>  auto chunk(int location, integers ... shape_dimensions) {
 		static constexpr int tensor_dim =  sizeof...(shape_dimensions);
-		return typename _Tensor_Chunk<tensor_dim>::template implementation<derived>(&asDerived().getIterator()[location], this->asDerived(), shape_dimensions...);
+		return typename _Tensor_Chunk<tensor_dim>::template implementation<derived>(&as_derived().memptr()[location], this->as_derived(), shape_dimensions...);
 	}
 	template<class ... integers>  const auto chunk(int location, integers ... shape_dimensions) const {
 		static constexpr int tensor_dim =  sizeof...(shape_dimensions);
-		return typename _Tensor_Chunk<tensor_dim>::template implementation<derived>(&asDerived().getIterator()[location], this->asDerived(), shape_dimensions...);
+		return typename _Tensor_Chunk<tensor_dim>::template implementation<derived>(&as_derived().memptr()[location], this->as_derived(), shape_dimensions...);
 	}
 
 
@@ -92,22 +90,22 @@ public:
 	template<class ... integers>
 	auto reshape(integers... ints) {
 		static constexpr int tensor_dim =  sizeof...(ints);
-		return typename _Tensor_Reshape<tensor_dim>::template implementation<derived>(asDerived().getIterator(), this->asDerived(), ints...);
+		return typename _Tensor_Reshape<tensor_dim>::template implementation<derived>(as_derived().memptr(), this->as_derived(), ints...);
 	}
 
 	template<int dim>
 	auto reshape(Shape<dim> shape) {
-		return typename _Tensor_Reshape<dim>::template implementation<derived>(asDerived().getIterator(), this->asDerived(), shape);
+		return typename _Tensor_Reshape<dim>::template implementation<derived>(as_derived().memptr(), this->as_derived(), shape);
 	}
 	template<class ... integers>
 	const auto reshape(integers... ints) const {
 		static constexpr int tensor_dim =  sizeof...(ints);
-		return typename _Tensor_Reshape<tensor_dim>::template implementation<derived>(asDerived().getIterator(), this->asDerived(), ints...);
+		return typename _Tensor_Reshape<tensor_dim>::template implementation<derived>(as_derived().memptr(), this->as_derived(), ints...);
 	}
 
 	template<int dim>
 	const auto reshape(Shape<dim> shape) const  {
-		return typename _Tensor_Reshape<dim>::template implementation<derived>(asDerived().getIterator(), this->asDerived(), shape);
+		return typename _Tensor_Reshape<dim>::template implementation<derived>(as_derived().memptr(), this->as_derived(), shape);
 	}
 
 
@@ -122,13 +120,8 @@ public:
 		else if (DIMS() == 1)
 			return i;
 		else
-			return asDerived().outer_shape()[DIMENSION - 2] * i;
+			return as_derived().outer_shape()[DIMENSION - 2] * i;
 	}
-
-
-	static constexpr int precedence() { return -1; }
-	static constexpr bool injectable() { return false; }
-	static constexpr bool substituteable() { return false; }
 };
 
 

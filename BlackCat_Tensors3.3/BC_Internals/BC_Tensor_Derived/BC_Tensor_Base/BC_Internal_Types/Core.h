@@ -34,11 +34,11 @@ struct Core : Tensor_Core_Base<Core<T>, _dimension_of<T>>{
 
 	__BCinline__ const auto inner_shape() const { return shape.is(); }
 	__BCinline__ const auto outer_shape() const { return shape.os(); }
-	__BCinline__ const scalar_type* getIterator() const { return array; }
-	__BCinline__	   scalar_type* getIterator()  	    { return array; }
+	__BCinline__ const scalar_type* memptr() const { return array; }
+	__BCinline__	   scalar_type* memptr()  	    { return array; }
 
 
-	template<class... integers> void resetShape(integers... ints)  {
+	template<class... integers> void resize(integers... ints)  {
 		int sz = this->size();
 		shape = Shape<DIMS()>(ints...);
 
@@ -47,7 +47,7 @@ struct Core : Tensor_Core_Base<Core<T>, _dimension_of<T>>{
 			math_lib::initialize(array, this->size());
 		}
 	}
-	void resetShape(Shape<DIMS()> new_shape)  {
+	void resize(Shape<DIMS()> new_shape)  {
 		if (shape.size() == new_shape.size()) {
 			shape = new_shape;
 		} else {

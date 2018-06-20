@@ -27,7 +27,6 @@ public:
 
 	Tensor4(const Tensor4&  v) : parent_class(v) {}
 	Tensor4(	  Tensor4&& v) : parent_class(v) {}
-	Tensor4(const Tensor4&& v) : parent_class(v) {}
 	explicit Tensor4(int a = 0,int b = 1,int c = 1, int d = 1) : parent_class(Shape<4>(a,b,c,d)) {}
 	explicit Tensor4(Shape<DIMS()> shape) : parent_class(shape)  {}
 	template<class... params> Tensor4(const params&... p) : parent_class(p...) {}

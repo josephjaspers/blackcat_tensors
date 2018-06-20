@@ -70,30 +70,30 @@ struct determine_variable_tensor<T, x, std::enable_if_t<(BC_MAXIMIM_DIMENSIONS <
 };
 //---------------------------------based on tensor, returns the dimensionality of a tensor----------------------------------//
 
-template<class> struct dimension_of;
-template<class a, class b> struct dimension_of<Scalar<a,b>> { static constexpr int value = 0; using ml = b;};
-template<class a, class b> struct dimension_of<Vector<a,b>> { static constexpr int value = 1; using ml = b;};
-template<class a, class b> struct dimension_of<Matrix<a,b>> { static constexpr int value = 2; using ml = b;};
-template<class a, class b> struct dimension_of<Cube<a,b>>   { static constexpr int value = 3; using ml = b;};
-template<class a, class b> struct dimension_of<Tensor4<a,b>>   { static constexpr int value = 4; using ml = b;};
-template<class a, class b> struct dimension_of<Tensor5<a,b>>   { static constexpr int value = 5; using ml = b;};
-template<class a, class b, template<class,class> class tensor> struct dimension_of<tensor<a, b>>
+template<class> struct dimension_of_impl;
+template<class a, class b> struct dimension_of_impl<Scalar<a,b>> { static constexpr int value = 0; using ml = b;};
+template<class a, class b> struct dimension_of_impl<Vector<a,b>> { static constexpr int value = 1; using ml = b;};
+template<class a, class b> struct dimension_of_impl<Matrix<a,b>> { static constexpr int value = 2; using ml = b;};
+template<class a, class b> struct dimension_of_impl<Cube<a,b>>   { static constexpr int value = 3; using ml = b;};
+template<class a, class b> struct dimension_of_impl<Tensor4<a,b>>   { static constexpr int value = 4; using ml = b;};
+template<class a, class b> struct dimension_of_impl<Tensor5<a,b>>   { static constexpr int value = 5; using ml = b;};
+template<class a, class b, template<class,class> class tensor> struct dimension_of_impl<tensor<a, b>>
 { static constexpr int value = determine_variable_tensor<tensor<a,b>>::value; using ml = b;};
 
 //shorthand
-template<class T> static constexpr int dimension_of_v = dimension_of<T>::value;
+template<class T> static constexpr int dimension_of = dimension_of_impl<T>::value;
 
 //---------------------------------determine if the type is a BC_tensor------------------------------------------------------//
-template<class T> struct isTensor { static constexpr bool conditional = determine_variable_tensor<T>::valid; };
-template<class a, class b> struct isTensor<Scalar<a,b>> { static constexpr bool conditional = true; };
-template<class a, class b> struct isTensor<Vector<a,b>> { static constexpr bool conditional = true; };
-template<class a, class b> struct isTensor<Matrix<a,b>> { static constexpr bool conditional = true; };
-template<class a, class b> struct isTensor<Cube<a,b>>   { static constexpr bool conditional = true; };
-template<class a, class b> struct isTensor<Tensor4<a,b>>   { static constexpr bool conditional = true; };
-template<class a, class b> struct isTensor<Tensor5<a,b>>   { static constexpr bool conditional = true; };
+template<class T> struct is_tensor_impl { static constexpr bool conditional = determine_variable_tensor<T>::valid; };
+template<class a, class b> struct is_tensor_impl<Scalar<a,b>> { static constexpr bool conditional = true; };
+template<class a, class b> struct is_tensor_impl<Vector<a,b>> { static constexpr bool conditional = true; };
+template<class a, class b> struct is_tensor_impl<Matrix<a,b>> { static constexpr bool conditional = true; };
+template<class a, class b> struct is_tensor_impl<Cube<a,b>>   { static constexpr bool conditional = true; };
+template<class a, class b> struct is_tensor_impl<Tensor4<a,b>>   { static constexpr bool conditional = true; };
+template<class a, class b> struct is_tensor_impl<Tensor5<a,b>>   { static constexpr bool conditional = true; };
 
 //shorthand
-template<class T> static constexpr bool isTensor_b = isTensor<T>::conditional;
+template<class T> static constexpr bool is_tensor = is_tensor_impl<T>::conditional;
 
 
 

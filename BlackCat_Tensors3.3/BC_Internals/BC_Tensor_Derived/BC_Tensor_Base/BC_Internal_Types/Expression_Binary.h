@@ -33,18 +33,6 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	__BCinline__ const auto& shape() const { return dominant_type<lv, rv>::shape(left, right); }
 	__BCinline__ const auto  inner_shape() const { return shape().inner_shape(); }
 	__BCinline__ const auto  outer_shape() const { return shape().outer_shape(); }
-
-	template<class core, int a, int b>
-	std::enable_if<std::is_base_of<BLAS_FUNCTION, lv>::value && std::is_base_of<BLAS_FUNCTION, rv>::value>
-	eval(injection_wrapper<core, a, b> injection) {
-		left.eval(injection);
-		right.eval(injection_wrapper<core, tree::alpha_of<operation>(), tree::beta_of<operation>()>(injection.data())); //we wrap data to ensure scalar's are not calculated twice
-	}
-
-	__BC_host_inline__ void temporary_destroy() {
-		left.temporary_destroy();
-		right.temporary_destroy();
-	}
 };
 }
 }

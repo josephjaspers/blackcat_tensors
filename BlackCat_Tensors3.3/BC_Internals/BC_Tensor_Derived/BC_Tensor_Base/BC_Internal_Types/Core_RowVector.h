@@ -57,8 +57,8 @@ struct Tensor_Row : Tensor_Core_Base<Tensor_Row<PARENT>, 1>  {
 	__BCinline__	   auto slice(int i) 	   { return Tensor_Scalar<self>(&array_slice[i * increment()], *this); }
 
 
-	__BCinline__ const auto& getIterator() const { return *this; }
-	__BCinline__	   auto& getIterator()  	 { return *this; }
+	__BCinline__ const auto& memptr() const { return *this; }
+	__BCinline__	   auto& memptr()  	 { return *this; }
 
 };
 }

@@ -38,8 +38,8 @@ struct Tensor_Chunk  {
 		__BCinline__ const auto inner_shape() const 	{ return shape.is(); }
 		__BCinline__ const auto outer_shape() const 	{ return parent.outer_shape(); }
 
-		__BCinline__ const auto getIterator() const { return array; }
-		__BCinline__	   auto getIterator()   	{ return array; }
+		__BCinline__ const auto memptr() const { return array; }
+		__BCinline__	   auto memptr()   	{ return array; }
 	};
 	};
 }

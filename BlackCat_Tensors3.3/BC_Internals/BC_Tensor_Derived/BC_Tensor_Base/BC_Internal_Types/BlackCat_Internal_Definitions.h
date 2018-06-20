@@ -30,6 +30,5 @@ template<class T> static constexpr bool is_void() { return std::is_same<T, void>
 }
 #include "BC_Utility/Determiners.h"
 #include "BC_Utility/MetaTemplateFunctions.h"
-#include "BC_Utility/ParameterPackModifiers.h"
 #include "BC_Utility/ShapeHierarchy.h"
 #endif /* BLACKCAT_COMPILERDEFINITIONS_H_ */

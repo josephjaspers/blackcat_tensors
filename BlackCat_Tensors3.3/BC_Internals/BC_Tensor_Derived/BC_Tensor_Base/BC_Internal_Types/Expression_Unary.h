@@ -39,10 +39,6 @@ public:
 	template<class... integers>	__BCinline__ auto operator ()(integers... index) -> decltype(oper(array(index...))) {
 		return oper(array(index...));
 	}
-
-	void temporary_destroy() {
-		array.temporary_destroy();
-	}
 };
 }
 }

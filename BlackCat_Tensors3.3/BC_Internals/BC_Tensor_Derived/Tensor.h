@@ -29,8 +29,7 @@ public:
 	__BCinline__ static constexpr int DIMS() { return dimensions; }
 
 	Tensor(const Tensor&  v) : parent_class(v) {}
-	Tensor(	  Tensor&& v) : parent_class(v) {}
-	Tensor(const Tensor&& v) : parent_class(v) {}
+	Tensor(	     Tensor&& v) : parent_class(v) {}
 
 	template<class... integers>
 	explicit Tensor(int x = 0, integers... ints) : parent_class(Shape<dimensions>(x, ints...)) {}

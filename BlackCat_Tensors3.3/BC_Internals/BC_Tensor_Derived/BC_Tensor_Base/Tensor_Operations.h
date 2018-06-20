@@ -8,15 +8,15 @@
 #ifndef TENSOR_HEAD_H_
 #define TENSOR_HEAD_H_
 
-#include "BC_Tensor_Types/Expression_Binary.h"
-#include "BC_Tensor_Types/Operations/Binary.h"
-#include "BC_Tensor_Types/Operations/Unary.h"
+#include "BC_Internal_Types/Expression_Binary.h"
+#include "BC_Internal_Types/Operations/Binary.h"
+#include "BC_Internal_Types/Operations/Unary.h"
 
-#include "BC_Tensor_Types/Function_gemm.h"
-#include "BC_Tensor_Types/Expression_Unary.h"
-#include "BC_Tensor_Types/Function_transpose.h"
+#include "BC_Internal_Types/Function_gemm.h"
+#include "BC_Internal_Types/Expression_Unary.h"
+#include "BC_Internal_Types/Function_transpose.h"
 #include "Tensor_Operations_Impl/Expression_Determiner.h"
-#include "BC_Tensor_Types/Parse_Tree_Evaluator.h"
+#include "BC_Internal_Types/Parse_Tree_Evaluator.h"
 
 namespace BC {
 namespace Base {
@@ -37,40 +37,16 @@ class Tensor_Operations {
 	//Returns the class returned as its most derived member
 	 const derived& as_derived() const { return static_cast<const derived&>(*this);  }
 	 	   derived& as_derived() 	  { return static_cast<	     derived&>(*this); }
-public:
 
-	//-------------------------------------dotproduct-------------------- ---------------------//
-	template<class pDeriv>
-	auto operator *(const Tensor_Operations<pDeriv>& param) const {
-		 return typename dp_impl<pDeriv>::type(as_derived().internal(), param.as_derived().internal());
-	}
-	//--------------------------------------pointwise operators-------------------------------//
-	template<class pDeriv> auto operator +(const Tensor_Operations<pDeriv>& param) const {
-		assert_same_size(param);
-		return bi_expr<oper::add>(param);
-	}
-	template<class pDeriv> auto operator -(const Tensor_Operations<pDeriv>& param) const {
-		assert_same_size(param);
-		return bi_expr<oper::sub>(param);
-	}
-	template<class pDeriv> auto operator /(const Tensor_Operations<pDeriv>& param) const {
-		assert_same_size(param);
-		return bi_expr<oper::div>(param);
-	}
-	template<class pDeriv> auto operator %(const Tensor_Operations<pDeriv>& param) const {			//overloaded for pointwise multiply
-		assert_same_size(param);
-		return bi_expr<oper::mul>(param);
-	}
 
-private:
-
-	//--------------------------------------assignment implementation-----------------------------------------------//
+	//--------------------------------------evaluation implementation-----------------------------------------------//
 	template<bool BARRIER = true, class derived_t>
 	void evaluate(const Tensor_Operations<derived_t>& tensor) {
 		BC::Evaluator<mathlib_type, BARRIER>::evaluate(as_derived().internal(), tensor.as_derived().internal());
 	}
 
 public:
+
 	//--------------------------------------assignment operators-----------------------------------------------//
 
 	template<class pDeriv>
@@ -79,8 +55,6 @@ public:
 		evaluate(bi_expr<oper::assign>(param));
 		return as_derived();
 	}
-
-
 	template<class pDeriv>
 	derived& operator +=(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
@@ -100,12 +74,37 @@ public:
 		evaluate(bi_expr<oper::div_assign>(param));
 		return as_derived();
 	}
+	//pointwise multiply
 	template<class pDeriv>
 	derived& operator %=(const Tensor_Operations<pDeriv>& param) {
 		assert_same_size(param);
 		evaluate(bi_expr<oper::mul_assign>(param));
 		return as_derived();
 	}
+	//-------------------------------------dotproduct-------------------- ---------------------//
+	template<class pDeriv>
+	auto operator *(const Tensor_Operations<pDeriv>& param) const {
+		 return typename dp_impl<pDeriv>::type(as_derived().internal(), param.as_derived().internal());
+	}
+	//--------------------------------------pointwise operators-------------------------------//
+	template<class pDeriv> auto operator +(const Tensor_Operations<pDeriv>& param) const {
+		assert_same_size(param);
+		return bi_expr<oper::add>(param);
+	}
+	template<class pDeriv> auto operator -(const Tensor_Operations<pDeriv>& param) const {
+		assert_same_size(param);
+		return bi_expr<oper::sub>(param);
+	}
+	template<class pDeriv> auto operator /(const Tensor_Operations<pDeriv>& param) const {
+		assert_same_size(param);
+		return bi_expr<oper::div>(param);
+	}
+	//pointwise multiply
+	template<class pDeriv> auto operator %(const Tensor_Operations<pDeriv>& param) const {
+		assert_same_size(param);
+		return bi_expr<oper::mul>(param);
+	}
+
 
 	 //--------------------------------Other Operators------------------------------//
 
@@ -155,13 +154,6 @@ public:
 	const auto bi_expr(const Tensor_Operations<d2>& rv) const {
 		return typename impl<d2, functor>::type(as_derived().internal(), rv.as_derived().internal());
 	}
-	//------------------------------------alternate asterix denoter----------------------------------//
-
-
-	 auto alias() const {
-		 return tensor_alias(*this);
-	 }
-
 	 //--------------------------------ASSERTIONS------------------------------//
 
 
@@ -189,35 +181,6 @@ public:
 	void assert_same_ml(const Tensor_Operations<deriv>& tensor) const {
 		static_assert(std::is_same<_mathlib<derived>, _mathlib<deriv>>::value, "mathlib_type must be identical");
 	}
-
-	//-------------tensor alias -----------------//
-
-	struct tensor_alias {
-
-		Tensor_Operations<derived>& alias;
-
-		tensor_alias(Tensor_Operations<derived>& alias_) : alias(alias_) {}
-
-		template<class tensor>
-			derived& operator =(const tensor& param) {
-				assert_same_size(param);
-				alias.evaluate(alias.bi_expr<oper::alias_assign>(param));
-				return alias.as_derived();
-			}
-			template<class tensor>
-			derived& operator +=(const tensor& param) {
-				assert_same_size(param);
-				alias.evaluate(alias.bi_expr<oper::alias_add_assign>(param));
-				return alias.as_derived();
-			}
-			template<class tensor>
-			derived& operator -=(const tensor& param) {
-				assert_same_size(param);
-				alias.evaluate(alias.bi_expr<oper::alias_sub_assign>(param));
-				return alias.as_derived();
-			}
-	};
-
 };
 }
 }

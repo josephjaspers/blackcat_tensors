@@ -31,8 +31,8 @@ template<class PARENT>
 	__BCinline__ Tensor_Slice(const scalar_type* array, PARENT parent_) : array_slice(const_cast<scalar_type*>(array)), parent(parent_) {}
 	__BCinline__ const auto inner_shape() const 			{ return parent.inner_shape(); }
 	__BCinline__ const auto outer_shape() const 			{ return parent.outer_shape(); }
-	__BCinline__ const scalar_type* getIterator() const { return array_slice; }
-	__BCinline__	   scalar_type* getIterator()   	{ return array_slice; }
+	__BCinline__ const scalar_type* memptr() const { return array_slice; }
+	__BCinline__	   scalar_type* memptr()   	{ return array_slice; }
 
 	};
 }

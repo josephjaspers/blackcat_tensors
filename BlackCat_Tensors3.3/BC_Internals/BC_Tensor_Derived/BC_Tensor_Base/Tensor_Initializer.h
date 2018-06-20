@@ -8,12 +8,12 @@
 #ifndef TENSOR_INITIALIZER_H_
 #define TENSOR_INITIALIZER_H_
 
-#include "BC_Tensor_Types/Core.h"
-#include "BC_Tensor_Types/Core_Scalar.h"
-#include "BC_Tensor_Types/Core_Slice.h"
-#include "BC_Tensor_Types/Core_RowVector.h"
-#include "BC_Tensor_Types/Core_Chunk.h"
-#include "BC_Tensor_Types/Core_Reshape.h"
+#include "BC_Internal_Types/Core.h"
+#include "BC_Internal_Types/Core_Scalar.h"
+#include "BC_Internal_Types/Core_Slice.h"
+#include "BC_Internal_Types/Core_RowVector.h"
+#include "BC_Internal_Types/Core_Chunk.h"
+#include "BC_Internal_Types/Core_Reshape.h"
 
 namespace BC {
 namespace Base {
@@ -24,8 +24,8 @@ class Tensor_Initializer {
 	using self 			= Tensor_Initializer<derived>;
 
 	using functor_type 	= _functor<derived>;
-	using mathlib_t 		= _mathlib<derived>;
-	using scalar			= _scalar<derived>;
+	using mathlib_t 	= _mathlib<derived>;
+	using scalar		= _scalar<derived>;
 
 public:
 
@@ -34,7 +34,7 @@ public:
 	 const functor_type& internal() const { return this->array_core; }
 	 	   functor_type& internal()		  { return this->array_core; }
 
-	Tensor_Initializer(		 derived&& tensor) : array_core(tensor.array_core){}
+	Tensor_Initializer(		  derived&& tensor) : array_core(tensor.array_core){}
 	Tensor_Initializer(const  derived&  tensor) : array_core(tensor.array_core){}
 
 	template<class... params>
@@ -51,7 +51,7 @@ template<template<class, class> class _tensor, class t, class ml>
 struct Tensor_Initializer<_tensor<t, ml>, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>> {
 
 	using derived = _tensor<t, ml>;
-	using self 			= Tensor_Initializer<derived, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>>;
+	using self 		= Tensor_Initializer<derived, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>>;
 
 	using functor_type 	= _functor<derived>;
 	using mathlib_t 	= _mathlib<derived>;
@@ -69,13 +69,10 @@ public:
 	 const functor_type& internal() const { return this->array_core; }
 	 	   functor_type& internal()		  { return this->array_core; }
 
-	Tensor_Initializer(derived&& tensor) : array_core(tensor.internal()) {
-//		array_core.shape = tensor.array_core.shape;
-//		array_core.array = tensor.array_core.array;
-		tensor.array_core.array 	= nullptr; //chk if necessary
-	}
+	Tensor_Initializer(derived&& tensor) : array_core(tensor.internal()) { tensor.array_core.array 	= nullptr; }
 
 	Tensor_Initializer(const derived& tensor) : array_core(tensor.inner_shape()) {
+		//this calls tensor_operations operator=
 		this->as_derived() = tensor;
 	}
 	template<class T>
@@ -86,6 +83,7 @@ public:
 	template<class U>
 	Tensor_Initializer(const derived_alt<U>&  tensor)
 		: array_core(tensor.inner_shape()) {
+		//this calls tensor_operations operator=
 		this->as_derived() = tensor;
 	}
 

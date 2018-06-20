@@ -30,15 +30,10 @@ struct binary_expression<lv, rv, oper::dotproduct<mathlib>>
 
 	using scalar_type = _scalar<lv>;
 
+	static_assert(std::is_same<_scalar<lv>, _scalar<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
+
 	__BCinline__ static constexpr int DIMS() { return rv::DIMS(); }
 	__BCinline__ static constexpr int ITERATOR() { return 0; }
-
-	static constexpr bool transA = det_eval<lv>::transposed;
-	static constexpr bool transB = det_eval<rv>::transposed;
-	static constexpr bool lv_scalar = det_eval<lv>::scalar;
-	static constexpr bool rv_scalar = det_eval<rv>::scalar;
-	static constexpr bool lv_eval = det_eval<lv>::evaluate;
-	static constexpr bool rv_eval = det_eval<rv>::evaluate;
 
 	lv left;
 	rv right;
@@ -52,14 +47,18 @@ struct binary_expression<lv, rv, oper::dotproduct<mathlib>>
 	__BCinline__ int N() const { return right.cols(); }
 	__BCinline__ int K() const { return left.cols();  }
 
-public:
-	//if presub == true then this type should be removed
-	template<class injection, bool presub = false> using type = std::conditional_t<is_void<injection>(),
-			Tensor_Substitution<tensor_of_t<DIMS(), scalar_type, mathlib>>, injection>;
+
 
 template<class core, int alpha_mod, int beta_mod>
 void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
-	//type of the left and right side branches (if they are tensor_cores this will be a reference to the lv/rv types -- no computation)
+
+	static constexpr bool transA = det_eval<lv>::transposed;
+	static constexpr bool transB = det_eval<rv>::transposed;
+	static constexpr bool lv_scalar = det_eval<lv>::scalar;
+	static constexpr bool rv_scalar = det_eval<rv>::scalar;
+	static constexpr bool lv_eval = det_eval<lv>::evaluate;
+	static constexpr bool rv_eval = det_eval<rv>::evaluate;
+
 	using lv_A = decltype(branched<mathlib, true>::evaluate(det_eval<lv>::get_array(left)));
 	using rv_B = decltype(branched<mathlib, true>::evaluate(det_eval<rv>::get_array(right)));
 
@@ -94,11 +93,6 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 	mathlib::destroy(beta);
 	mathlib::destroy(alpha);
 }
-void temporary_destroy() {
-	left.temporary_destroy();
-	right.temporary_destroy();
-}
-
 };
 
 }
@@ -115,22 +109,5 @@ void temporary_destroy() {
 //		std::cout << "A instant eval" <<lv_eval << std::endl;
 //		if(rv_eval)
 //		std::cout <<"B instant eval " << rv_eval << std::endl;
-
-//		scalar_type* A = nullptr;
-//		scalar_type* B = nullptr;
-//				if (lv_eval) {
-//					mathlib::initialize(A, left.size());
-//					mathlib::copy(A, left, left.size());
-//				} else {
-//					A = det_eval<lv>::get_array(left);
-//				}
-//				if (rv_eval) {
-//					mathlib::initialize(B, right.size());
-//					mathlib::copy(B, right, right.size());
-//				} else {
-//					B = det_eval<rv>::get_array(right);
-//				}
-//
-
 
 #endif /* EXPRESSION_BINARY_DOTPRODUCT_CU_ */

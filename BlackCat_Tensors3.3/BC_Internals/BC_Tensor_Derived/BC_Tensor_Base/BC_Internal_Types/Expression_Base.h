@@ -29,13 +29,13 @@ private:
 		throw std::invalid_argument("MANDATORY METHOD - NOT SHADOWED POTENTIAL INCORRECT CAST BUG");
 	}
 
-	__BCinline__ const derived& base() const { return static_cast<const derived&>(*this); }
-	__BCinline__	   derived& base() 		 { return static_cast<	    derived&>(*this); }
+	__BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }
+	__BCinline__	   derived& as_derived() 		 { return static_cast<	    derived&>(*this); }
 
 public:
-	operator 	   auto&()       { return base(); }
-	operator const auto&() const { return base(); }
-//	Expression_Core_Base() { static_assert(std::is_trivially_copyable<derived>::value, "EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
+	operator 	   auto&()       { return as_derived(); }
+	operator const auto&() const { return as_derived(); }
+	expression_base() { static_assert(std::is_trivially_copyable<derived>::value, "EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
 
 	__BCinline__ static constexpr int DIMS() { return derived::DIMS();    }
 	__BCinline__ static constexpr bool ASSIGNABLE() { return false; }
@@ -45,19 +45,19 @@ public:
 
 	__BCinline__ static constexpr int last() { return derived::DIMS() -1; }
 
-	__BCinline__ const auto IS() const { return base().inner_shape(); }
-	__BCinline__ const auto OS() const { return base().outer_shape(); }
+	__BCinline__ const auto IS() const { return as_derived().inner_shape(); }
+	__BCinline__ const auto OS() const { return as_derived().outer_shape(); }
 
 	template<class... integers>
 	__BCinline__ const auto operator()(integers... ints) const {
 		static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
-		return base()[dims_to_index(ints...)];
+		return as_derived()[dims_to_index(ints...)];
 	}
 
 	template<class... integers>
 	__BCinline__ auto operator()(integers... ints) {
 		static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
-		return base()[dims_to_index(ints...)];
+		return as_derived()[dims_to_index(ints...)];
 	}
 
 	__BCinline__ int dims() const { return DIMS(); }
@@ -124,23 +124,8 @@ public:
 
 		return index;
 	}
-
-	__BCinline__ auto index_to_dims(int index) const {
-
-		stack_array<int, DIMS()> dim_set;
-		for (int i = DIMS() - 2; i >= 0; --i) {
-			dim_set[i + 1] = index / LD_dimension(i);
-			index -= (int)(index / LD_dimension(i)) * LD_dimension(i);
-		}
-		dim_set[0] = index;
-
-		return dim_set;
-	}
-
-
 	//---------------------------------------------------METHODS THAT MAY NEED TO BE SHADOWED------------------------------------------------------------//
 	void destroy() const {}
-	void temporary_destroy() const {}
 	//---------------------------------------------------METHODS THAT NEED TO BE SHADOWED------------------------------------------------------------//
 	__BCinline__ auto operator [] (int index) 	  	{ return shadowFailure("operator [] (int index)"); };
 	__BCinline__ auto operator [] (int index) const { return shadowFailure("operator [] (int index) const"); };

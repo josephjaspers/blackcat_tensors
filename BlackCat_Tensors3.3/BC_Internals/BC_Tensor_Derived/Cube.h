@@ -19,7 +19,6 @@ class Cube : public Tensor_Base<Cube<T, Mathlib>> {
 	using parent_class = Tensor_Base<Cube<T, Mathlib>>;
 
 public:
-	using scalar = T;
 	using parent_class::operator=;
 	using parent_class::operator[];
 	using parent_class::operator();

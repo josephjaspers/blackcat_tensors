@@ -29,7 +29,6 @@ public:
 
 	Matrix(const Matrix&  v) : parent_class(v) {}
 	Matrix(		 Matrix&& v) : parent_class(v) {}
-	Matrix(const Matrix&& v) : parent_class(v) {}
 
 	template<class U> 		  Matrix(const Matrix<U, Mathlib>&  t) : parent_class(t) {}
 	template<class U> 		  Matrix(	   Matrix<U, Mathlib>&& t) : parent_class(t) {}
@@ -40,11 +39,6 @@ public:
 	Matrix& operator =(	     Matrix&& t) { return parent_class::operator=(std::move(t)); }
 	template<class U>
 	Matrix& operator = (const Matrix<U, Mathlib>& t) { return parent_class::operator=(t); }
-
-	const Matrix<internal::unary_expression<typename parent_class::functor_type, oper::transpose<Mathlib>>, Mathlib> t() const {
-		return Matrix<internal::unary_expression<typename parent_class::functor_type, oper::transpose<Mathlib>>, Mathlib>(this->internal());
-	}
-
 };
 
 } //End Namespace BC

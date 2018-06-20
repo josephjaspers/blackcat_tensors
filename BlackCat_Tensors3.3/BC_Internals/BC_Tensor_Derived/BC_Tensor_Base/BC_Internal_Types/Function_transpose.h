@@ -26,15 +26,7 @@ struct unary_expression<functor_type, oper::transpose<ml>> : expression_base<una
 	__BCinline__ static constexpr int ITERATOR() { return 2; }
 	static_assert(functor_type::DIMS() == 1 || functor_type::DIMS() == 2, "TRANSPOSITION ONLY DEFINED FOR MATRICES AND VECTORS");
 
-
 	unary_expression(functor_type p) : array(p) {}
-
-	//blas injection
-	template<class core> unary_expression(functor_type ary, core tensor) : array(ary, tensor) {}
-	template<class BLAS_expr> //CONVERSION CONSTRUCTOR FOR BLAS ROTATION
-		__BCinline__  unary_expression(unary_expression<BLAS_expr, oper::transpose<ml>> ue, functor_type tensor) : array(tensor) {
-		ue.array.eval(tensor);
-	}
 
 	__BCinline__ const auto inner_shape() const { return l_array([=](int i) { return i == 0 ? array.cols() : i == 1 ? array.rows() : 1; }); }
 	__BCinline__ const auto outer_shape() const { return array.outer_shape(); }
@@ -56,10 +48,6 @@ struct unary_expression<functor_type, oper::transpose<ml>> : expression_base<una
 				return array[m * array.ld1() + n];
 			else
 				return array(m, n);
-	}
-
-	void temporary_destroy() {
-		array.temporary_destroy();
 	}
 };
 }

@@ -84,8 +84,8 @@ private:
 	const auto row_impl(int i) const { return as_derived().internal().row(i); }
 		  auto row_impl(int i)	     { return as_derived().internal().row(i); }
 
-	const auto transpose_impl() const { return as_derived().internal().transpose(); }
-		  auto transpose_impl() 	  { return as_derived().internal().transpose(); }
+	const auto transpose_impl() const { return internal::unary_expression<functor_type, oper::transpose<mathlib_type>>(as_derived().internal()); }
+	 	  auto transpose_impl() 	  { return internal::unary_expression<functor_type, oper::transpose<mathlib_type>>(as_derived().internal()); }
 
 public:
 	const auto t() const { return BC::tensor_of_t<DIMS(), decltype(transpose_impl()), mathlib_type>(transpose_impl()); }
@@ -141,7 +141,7 @@ public:
 
 	template<class... integers>
 	void resize(integers... ints) {
-		as_derived().internal().resetShape(ints...);
+		as_derived().internal().resize(ints...);
 	}
 	//THIS IS THE CURRIED CHUNK LAMBDA, WE MUST USE AN ACTUAL CLASS TO ACT AS A LAMDA AS CUDA COMPILER IS IFFY WITH LAMBDA
 	struct CHUNK {

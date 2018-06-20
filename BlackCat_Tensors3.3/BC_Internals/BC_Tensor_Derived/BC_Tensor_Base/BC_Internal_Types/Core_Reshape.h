@@ -48,8 +48,8 @@ struct Tensor_Reshape {
 	__BCinline__ const auto inner_shape() const 	{ return shape.is(); }
 	__BCinline__ const auto outer_shape() const 	{ return shape.os(); }
 
-	__BCinline__ const auto getIterator() const { return array; }
-	__BCinline__	   auto getIterator()   	{ return array; }
+	__BCinline__ const auto memptr() const { return array; }
+	__BCinline__	   auto memptr()   	{ return array; }
 
 	};
 };

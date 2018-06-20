@@ -55,7 +55,7 @@ struct expression_tree_evaluator<unary_expression<array_t, op>>
 {
 	static constexpr bool trivial_blas_eval = false;
 	static constexpr bool trivial_blas_injection = false;
-	static constexpr bool non_trivial_blas_injection = true;
+	static constexpr bool non_trivial_blas_injection = expression_tree_evaluator<array_t>::non_trivial_blas_injection;
 
 	template<class core, int a, int b> __BC_host_inline__
 	static auto linear_evaluation(const unary_expression<array_t, op>& branch, injection_wrapper<core, a, b> tensor) {
@@ -68,6 +68,7 @@ struct expression_tree_evaluator<unary_expression<array_t, op>>
 
 		return unary_expression<array_t_evaluated, op>(array);
 	}
+
 };
 
 template<class lv, class rv, class op>

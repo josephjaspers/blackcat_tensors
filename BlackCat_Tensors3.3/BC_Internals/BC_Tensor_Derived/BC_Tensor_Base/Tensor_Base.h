@@ -37,7 +37,7 @@ protected:
 	using scalar_type	= _scalar<derived>;
 	using mathlib_type 	= _mathlib<derived>;
 
-	static constexpr int DIMS() { return dimension_of<derived>::value; }
+	static constexpr int DIMS() { return dimension_of<derived>; }
 	static constexpr int ITERATOR() { return functor_type::ITERATOR(); }
 
 	template<class> friend class Tensor_Base;
@@ -52,7 +52,7 @@ public:
 	template<class... params> explicit Tensor_Base(const params&... p) : initializer(p...) {}
 
 	//move only defined for primary cores (this is to ensure slices/chunks/reshapes apply copies)
-	using move_parameter = std::conditional_t<pCore_b<functor_type>, derived&&, DISABLED>;
+	using move_parameter = std::conditional_t<is_array_core<functor_type>(), derived&&, DISABLED>;
 	Tensor_Base(move_parameter tensor) : initializer(std::move(tensor)) {}
 	Tensor_Base(const Tensor_Base& 	tensor) : initializer(tensor) {}
 

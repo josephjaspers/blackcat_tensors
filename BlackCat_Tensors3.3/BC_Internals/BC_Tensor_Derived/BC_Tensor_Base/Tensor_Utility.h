@@ -28,41 +28,41 @@ struct Tensor_Utility {
 	using mathlib = _mathlib<deriv>;
 
 private:
-	deriv& asDerived() {
+	deriv& as_derived() {
 		return static_cast<deriv&>(*this);
 	}
-	const deriv& asDerived() const {
+	const deriv& as_derived() const {
 		return static_cast<const deriv&>(*this);
 	}
 
 public:
 
 	void print() const {
-		mathlib::print(asDerived().internal().getIterator(), asDerived().inner_shape(), asDerived().outer_shape(), asDerived().dims(), 8);
+		mathlib::print(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), as_derived().dims(), 8);
 	}
 	void print(int precision) const {
-		mathlib::print(asDerived().internal().getIterator(), asDerived().inner_shape(), asDerived().outer_shape(), asDerived().dims(), precision);
+		mathlib::print(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), as_derived().dims(), precision);
 	}
 	void printSparse() const {
-		mathlib::printSparse(asDerived().internal().getIterator(), asDerived().inner_shape(), asDerived().outer_shape(), asDerived().dims(), 8);
+		mathlib::printSparse(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), as_derived().dims(), 8);
 	}
 	void printSparse(int precision) const {
-		mathlib::printSparse(asDerived().internal().getIterator(), asDerived().inner_shape(), asDerived().outer_shape(), asDerived().dims(), precision);
+		mathlib::printSparse(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), as_derived().dims(), precision);
 	}
 
 	void write(std::ofstream& os) const {
 
-		scalar* internal = new scalar[asDerived().size()];
-		mathlib::DeviceToHost(internal, asDerived().internal().getIterator(), asDerived().size());
+		scalar* internal = new scalar[as_derived().size()];
+		mathlib::DeviceToHost(internal, as_derived().internal().memptr(), as_derived().size());
 
-		os << asDerived().dims() << ',';
-		for (int i = 0; i < asDerived().dims(); ++i) {
-			os << asDerived().dimension(i) << ',';
+		os << as_derived().dims() << ',';
+		for (int i = 0; i < as_derived().dims(); ++i) {
+			os << as_derived().dimension(i) << ',';
 		}
-		for (int i = 0; i < asDerived().size() - 1; ++i) {
+		for (int i = 0; i < as_derived().size() - 1; ++i) {
 			os << internal[i] << ',';
 		}
-		os << internal[asDerived().size() - 1]; //back
+		os << internal[as_derived().size() - 1]; //back
 		os << '\n';
 
 
@@ -103,17 +103,17 @@ public:
 			if (overrideDimensions) {
 				switch ((int)internal[0]) {
 				case 0: break;//is scalar do nothing
-				case 1: asDerived().resize((int)internal[1]); break;
-				case 2: asDerived().resize((int)internal[1],(int)internal[2]); break;
-				case 3: asDerived().resize((int)internal[1],(int)internal[2],(int)internal[3]); break;
-				case 4: asDerived().resize((int)internal[1],(int)internal[2],(int)internal[3],(int)internal[4]); break;
-				case 5: asDerived().resize((int)internal[1],(int)internal[2],(int)internal[3],(int)internal[4],(int)internal[5]); break;
+				case 1: as_derived().resize((int)internal[1]); break;
+				case 2: as_derived().resize((int)internal[1],(int)internal[2]); break;
+				case 3: as_derived().resize((int)internal[1],(int)internal[2],(int)internal[3]); break;
+				case 4: as_derived().resize((int)internal[1],(int)internal[2],(int)internal[3],(int)internal[4]); break;
+				case 5: as_derived().resize((int)internal[1],(int)internal[2],(int)internal[3],(int)internal[4],(int)internal[5]); break;
 				default: throw std::invalid_argument("MAX DIMENSIONS READ == 5 ");
 				}
 			}
-			mathlib::HostToDevice(asDerived().internal().getIterator(), &internal[internal[0] + 1], asDerived().size() > internal.size() ? internal.size() : asDerived().size());
+			mathlib::HostToDevice(as_derived().internal().memptr(), &internal[internal[0] + 1], as_derived().size() > internal.size() ? internal.size() : as_derived().size());
 		} else {
-			mathlib::HostToDevice(asDerived().internal().getIterator(), &internal[0], 			asDerived().size() > internal.size() ? internal.size() : asDerived().size());
+			mathlib::HostToDevice(as_derived().internal().memptr(), &internal[0], 			as_derived().size() > internal.size() ? internal.size() : as_derived().size());
 		}
 	}
 };
