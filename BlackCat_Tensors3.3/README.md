@@ -3,6 +3,7 @@ Author: Joseph Jaspers
 
 BlackCat_Tensors (BCT) is a highly optimized Matrix library designed for NeuralNetworks in a multi-threaded context. Various operations enable utilizing low-level multithreaded concepts in this much higher-level framework.
 
+############GPU LIBRARY CURRENTLY DOES NOT WORK-- WILL FIX SOON---- (nvcc does not support if-constexpr)
 
 Current Work:
 	Scaleable injection for BLAS routines, implementating convolution/correlation (using MKL/CUDA)
@@ -55,7 +56,7 @@ Optimizations:
 		evaluating w*x to y. And then calling a function such as y = g(y + b)
 		This library detects this entire expression and does the exact stated strategy.
 
-		Current injections are only supported by the standard assignment operator = (+=, -= will be added soon)
+		injection may not be used with /= and %= (%= is the 'array-product' and assign)
 	
 	This however assumes that no aliases of the give problem are utilized. IE 	
 		a = a * b; 
@@ -64,9 +65,6 @@ Optimizations:
 
 		a.alias() = a * b;
 		and this will cause a * b to evaluate to a temporary and than copy the values to a. 
-
-	BackPropagation; 	dx = w.t() * dy ** gd(x)
-
 	
 
 	All linear or O(n) operations utilize expression-templates/lazy evaluation system.
@@ -87,52 +85,20 @@ Methods:
 	_tensor_  operator /  (const _tensor_&) const		//pointwise scalar
 	_tensor_  operator *  (const _tensor_&) const		//dotproduct or pointwise multiplication if scalar
 	_tensor_  operator %  (const _tensor_&) const		//pointwise multiplication
-	_tensor_  operator ** (const _tensor_&) const		//pointwise multiplication (alternate)
 	_tensor_& operator += (const _tensor_&)			//assign and sum
 	_tensor_& operator -= (const _tensor_&)			//assign and subract
 	_tensor_& operator /= (const _tensor_&)			//assign and divice
 	_tensor_& operator %= (const _tensor_&)			//assign and pointwise multiply
 
-	//Lazy assignments 					//IE  -> y = a +=* b, will result in 1 for loop
-	_tensor_& operator +=* (const _tensor_&)		//assign and sum 		 - nested lazy-eval
-	_tensor_& operator -=* (const _tensor_&)		//assign and subract  		 - nested lazy-eval
-	_tensor_& operator /=* (const _tensor_&)		//assign and divice  		 - nested lazy-eval
-	_tensor_& operator %=* (const _tensor_&)		//assign and pointwise multiply  - nested lazy-eval
-
-	//Non-Barrier assignments !!!For multi-threading
-	//
-	// The operation: y =** a + b;
-	// followed by  : z =** c + d;
-	//
-	// will run parallel to eachother (must be utilizing openmp or CUDA)
-	// To call the barrier utilize BC::CPU::barrier() or BC::GPU::barrier()
-	// OR to call a barrier utilize a standard assignment operation (barrier is called after the standard-assignment runs)
-
-	_tensor_& operator +=** (const _tensor_&)		//assign and sum
-	_tensor_& operator -=** (const _tensor_&)		//assign and subract
-	_tensor_& operator /=** (const _tensor_&)		//assign and divice
-	_tensor_& operator %=** (const _tensor_&)		//assign and pointwise multiply
-
-
-	//Misc
-	_tensor_ operator - () const				//expression of the negation of the tensor
-	alternate_asterix_denoter operator * () const 		//returns the abstraction class to generate variations of standard opererators
-
 	//Comparisons -- each operation does an element-by-element comparison and returns the apropriate value based on the operand
-
-
 	_tensor_ operator == (const _tensor_&) const		//expression of equality of tensor,               1 == true, 0 == false
 	_tensor_ operator >  (const _tensor_&) const		//expression of greater-than of tensor,           1 == true, 0 == false
 	_tensor_ operator <  (const _tensor_&) const		//expression of less-than of tensor,              1 == true, 0 == false
 	_tensor_ operator >= (const _tensor_&) const		//expression of greater-than-or-equal of tensor,  1 == true, 0 == false
 	_tensor_ operator <= (const _tensor_&) const		//expression of less-than-or-equal of tensor,  	  1 == true, 0 == false
-	_tensor_ operator >* (const _tensor_&) const		//expression of max-value of two tensors
-	_tensor_ operator <* (const _tensor_&) const		//expression of min-value of two tensors
 
-	_tensor_ operator && (const _tensor_&)			//Enables combining two expressions into a single for loop (must be same size)
-	
-	template<class functor> _tensor_ unExpr(functor)			//Creates a custom unary_expression to be lazily evaluated
-	template<class functor> _tensor_ biExpr(functor, const_tensor_&) 	//Creates a custom binary_expression to be lazily evaluated
+	template<class functor> _tensor_ un_expr(functor)			//Creates a custom unary_expression to be lazily evaluated
+	template<class functor> _tensor_ bi_expr(functor, const_tensor_&) 	//Creates a custom binary_expression to be lazily evaluated
 
 	NOTES:
 		1) _tensor_ is not an actual type, the type returned is based upon the classes used (IE Vector,Vector Matrix etc).

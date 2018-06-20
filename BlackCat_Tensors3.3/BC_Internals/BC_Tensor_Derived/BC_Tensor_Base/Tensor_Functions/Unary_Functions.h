@@ -7,11 +7,11 @@
 
 #ifndef BASE_FUNCTIONS_H_
 #define BASE_FUNCTIONS_H_
-
 //This should be included at the bottom of Tensor_Base.h
 //Reshape and Chunk are curried functions
 //This file defines a set of unary_functions
 namespace BC {
+
 //alternate names from transposition
 template<class deriv>
 static auto transpose(Base::Tensor_Operations<deriv>& tensor) {

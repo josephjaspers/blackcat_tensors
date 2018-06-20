@@ -15,11 +15,8 @@
 #include "BC_Tensor_Types/Function_gemm.h"
 #include "BC_Tensor_Types/Expression_Unary.h"
 #include "BC_Tensor_Types/Function_transpose.h"
-#include "Tensor_Operations_Impl/AlternateAsterixDenoter.h"
 #include "Tensor_Operations_Impl/Expression_Determiner.h"
 #include "BC_Tensor_Types/Parse_Tree_Evaluator.h"
-
-#include "Tensor_Functions/Unary_Functions.h"
 
 namespace BC {
 namespace Base {
@@ -63,10 +60,6 @@ public:
 	template<class pDeriv> auto operator %(const Tensor_Operations<pDeriv>& param) const {			//overloaded for pointwise multiply
 		assert_same_size(param);
 		return bi_expr<oper::mul>(param);
-	}
-	template<class pDeriv> auto operator *(const alternate_asterix_denoter<pDeriv>& param) const { //alternative for pointwise multiply
-		assert_same_size(param.get());
-		return bi_expr<oper::mul>(param.get());
 	}
 
 private:
@@ -114,41 +107,6 @@ public:
 		return as_derived();
 	}
 
-	//--------------------------------------assignment operators NO BARRIER-----------------------------------------------//
-
-	template<class pDeriv>
-	derived& operator =(const unsafe_AAD<pDeriv>& param) {
-		assert_same_size(param.get());
-		evaluate<false>(bi_expr<oper::assign>(param.get()));
-		return as_derived();
-	}
-
-
-	template<class pDeriv>
-	derived& operator +=(const unsafe_AAD<pDeriv>& param) {
-		assert_same_size(param.get());
-		evaluate<false>(bi_expr<oper::add_assign>(param.get()));
-		return as_derived();
-
-	}
-	template<class pDeriv>
-	derived& operator -=(const unsafe_AAD<pDeriv>& param) {
-		assert_same_size(param.get());
-		evaluate<false>(bi_expr<oper::sub_assign>(param.get()));
-		return as_derived();
-	}
-	template<class pDeriv>
-	derived& operator /=(const unsafe_AAD<pDeriv>& param) {
-		assert_same_size(param.get());
-		evaluate<false>(bi_expr<oper::div_assign>(param.get()));
-		return as_derived();
-	}
-	template<class pDeriv>
-	derived& operator %=(const unsafe_AAD<pDeriv>& param) {
-		assert_same_size(param.get());
-		evaluate<false>(bi_expr<oper::mul_assign>(param.get()));
-		return as_derived();
-	}
 	 //--------------------------------Other Operators------------------------------//
 
 	 auto operator - () const {
@@ -170,16 +128,6 @@ public:
 		return bi_expr<oper::lesser>(param);
 	}
 	template<class pDeriv>
-	auto operator >(const alternate_asterix_denoter<pDeriv>& param) const {
-		assert_same_size(param.get());
-		return bi_expr<oper::max>(param.get());
-	}
-	template<class pDeriv>
-	auto operator <(const alternate_asterix_denoter<pDeriv>& param) const {
-		assert_same_size(param.get());
-		return bi_expr<oper::min>(param.get());
-	}
-	template<class pDeriv>
 	auto operator >=(const Tensor_Operations<pDeriv>& param) const {
 		assert_same_size(param);
 		return bi_expr<oper::greater_equal>(param);
@@ -189,47 +137,6 @@ public:
 		assert_same_size(param);
 		return bi_expr<oper::lesser_equal>(param);
 	}
-
-	//-------------------------------------------DELAYED ASSIGNMENT OPERATORS---------------------------------------------//
-
-	template<class pDeriv>
-	auto operator =(const alternate_asterix_denoter<pDeriv>& param) const {
-		assert_same_size(param.get());
-		return bi_expr<oper::assign>(param.get());
-	}
-
-	template<class pDeriv>
-	auto operator +=(const alternate_asterix_denoter<pDeriv>& param) const {
-		assert_same_size(param.get());
-		return bi_expr<oper::add_assign>(param.get());
-	}
-	template<class pDeriv>
-	auto operator -=(const alternate_asterix_denoter<pDeriv>& param) const {
-		assert_same_size(param.get());
-		return bi_expr<oper::sub_assign>(param.get());
-	}
-	template<class pDeriv>
-	auto operator %=(const alternate_asterix_denoter<pDeriv>& param) const {
-		assert_same_size(param.get());
-		return bi_expr<oper::mul_assign>(param.get());
-	}
-	template<class pDeriv>
-	auto operator *=(const alternate_asterix_denoter<pDeriv>& param) const {
-		assert_same_size(param.get());
-		return bi_expr<oper::mul_assign>(param.get());
-	}
-	template<class pDeriv>
-	auto operator /=(const alternate_asterix_denoter<pDeriv>& param) const {
-		assert_same_size(param.get());
-		return bi_expr<oper::div_assign>(param.get());
-	}
-
-	//-----------------------------------COMBINE EXPRESSION-------------------------------------------------//
-	template<class pDeriv> auto operator &&(const Tensor_Operations<pDeriv>& param) {
-		assert_same_size(param);
-		return bi_expr<oper::combine>(param);
-	}
-
 
 	//-----------------------------------custom expressions--------------------------------------------------//
 	template<class functor>
@@ -249,9 +156,7 @@ public:
 		return typename impl<d2, functor>::type(as_derived().internal(), rv.as_derived().internal());
 	}
 	//------------------------------------alternate asterix denoter----------------------------------//
-	 const alternate_asterix_denoter<derived> operator * () const {
-		return alternate_asterix_denoter<derived>(*this);
-	}
+
 
 	 auto alias() const {
 		 return tensor_alias(*this);
@@ -268,13 +173,12 @@ public:
 		if (derived::DIMS() != 0 && deriv::DIMS() != 0)
 			if (this->as_derived().DIMS() != 0 && tensor.as_derived().DIMS() != 0)
 				if ((as_derived().size() != tensor.as_derived().size())){
-					print - "this->DIMS() = ", derived::DIMS(), " this->size() = ",  as_derived().size(), " this_dims ";
+					std::cout << "this->DIMS() = " << derived::DIMS() << " this->size() = " <<  as_derived().size() <<  " this_dims ";
 					as_derived().print_dimensions();
 
-					print - "this->DIMS() = ", deriv::DIMS(), " param.size() = ", tensor.as_derived().size(), " param_dims ";
+					std::cout <<  "this->DIMS() = " << deriv::DIMS() << " param.size() = " << tensor.as_derived().size() <<  " param_dims ";
 					tensor.as_derived().print_dimensions();
-
-					print - nl;
+					std::cout << std::endl;
 
 					throw std::invalid_argument("Tensor by Tensor operation - size mismatch - ");
 				}
@@ -312,31 +216,12 @@ public:
 				alias.evaluate(alias.bi_expr<oper::alias_sub_assign>(param));
 				return alias.as_derived();
 			}
-
-			template<class pDeriv>
-			derived& operator =(const unsafe_AAD<pDeriv>& param) {
-				assert_same_size(param);
-				alias.evaluate<false>(alias.bi_expr<oper::alias_assign>(param));
-				return alias.as_derived();
-			}
-
-
-			template<class pDeriv>
-			derived& operator +=(const unsafe_AAD<pDeriv>& param) {
-				assert_same_size(param);
-				alias.evaluate<false>(alias.bi_expr<oper::alias_add_assign>(param));
-				return alias.as_derived();
-
-			}
-			template<class pDeriv>
-			derived& operator -=(const unsafe_AAD<pDeriv>& param) {
-				assert_same_size(param);
-				alias.alias_evaluate<false>(alias.bi_expr<oper::alias_sub_assign>(param));
-				return alias.as_derived();
-			}
 	};
 
 };
 }
 }
+
+#include "Tensor_Functions/Unary_Functions.h"
+
 #endif /* TENSOR_CORE_H_ */
