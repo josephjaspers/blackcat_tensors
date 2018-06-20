@@ -73,9 +73,29 @@ struct determine_iterator {
 
 ///DETERMINE_MATHLIB---------------------------------------------------------------------------------------
 template<class T>
-struct determine_mathlibrary {
-	using type = CPU; //std::conditional_t<isTensor_b<T>, MTF::tail<T>, determine_mathlibrary<MTF::head<T>>>;
+struct determine_mathlibrary;
+
+template<class T, class... Ts, template<class...> class list>
+struct determine_mathlibrary<list<T, Ts...>> {
+	using type = typename determine_mathlibrary<T>::type;
 };
+template<class T, class ml>
+struct determine_mathlibrary<Matrix<T, ml>> {
+	using type = ml;
+};
+template<class T, class ml>
+struct determine_mathlibrary<Scalar<T, ml>> {
+	using type = ml;
+};
+template<class T, class ml>
+struct determine_mathlibrary<Vector<T, ml>> {
+	using type = ml;
+};
+template<class T, class ml>
+struct determine_mathlibrary<Cube<T, ml>> {
+	using type = ml;
+};
+
 }
 
 

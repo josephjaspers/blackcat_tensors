@@ -10,7 +10,7 @@
 
 namespace BC {
 namespace internal {
-template<class tensor_core, int alpha_modifier_ = 1, int beta_modifier_= 0, bool pre_nested = false>
+template<class tensor_core, int alpha_modifier_ = 1, int beta_modifier_= 0>
 struct injection_wrapper {
 
 	__BC_host_inline__
