@@ -71,7 +71,7 @@ public:
 
 
 		f() = g(wf * x + rf * f() + bf);
-		c() = c() ** f() + z();
+		c() = c() % f() + z();
 
 		zs().push(z());
 		fs().push(f());
@@ -85,9 +85,9 @@ public:
 		vec  F = fs().pop();
 		vec& z = zs().second(); zs().pop();
 
-		dc() = dc() ** F + dy + rz.t() * dz() + rf.t() * df();
-		dz() = dc() ** gd(z);
-		df() = dc() ** c ** gd(f);
+		dc() = dc() % F + dy + rz.t() * dz() + rf.t() * df();
+		dz() = dc() % gd(z);
+		df() = dc() % c % gd(f);
 
 		wz_gradientStorage() -= dz() * x.t();
 		rz_gradientStorage() -= dz() * z.t();
@@ -97,12 +97,12 @@ public:
 		rf_gradientStorage() -= df() * f.t();
 		bf_gradientStorage() -= df();
 
-		return this->prev().backPropagation((wz.t() * dz()  + wf.t() * df()) ** gd(x));
+		return this->prev().backPropagation((wz.t() * dz()  + wf.t() * df()) % gd(x));
 	}
 	auto forwardPropagation_Express(const vec& x) const {
 		z() = g(wz * x + rz * z() + bz);
 		f() = g(wf * x + rf * f() + bf);
-		c() = c() ** f() + z();
+		c() = c() % f() + z();
 		return this->next().forwardPropagation_Express(c());
 	}
 

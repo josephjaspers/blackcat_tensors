@@ -2,8 +2,8 @@
 #ifndef EXPRESSION_BINARY_DOTPRODUCT_CU_
 #define EXPRESSION_BINARY_DOTPRODUCT_CU_
 
-#include "Core_Base.h"
 
+#include "Core_Base.h"
 #include "Expression_Base.h"
 
 #include "Parse_Tree_BLAS_Branch_Evaluator.h"
