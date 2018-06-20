@@ -22,7 +22,7 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	rv right;
 
 	__BCinline__ static constexpr int DIMS() { return lv::DIMS() > rv::DIMS() ? lv::DIMS() : rv::DIMS();}
-	__BCinline__ static constexpr int ITERATOR() { return max(lv::ITERATOR(), rv::ITERATOR()); }
+	__BCinline__ static constexpr int ITERATOR() { return MTF::max(lv::ITERATOR(), rv::ITERATOR()); }
 	__BCinline__ static constexpr bool INJECTABLE() { return lv::INJECTABLE() || rv::INJECTABLE(); }
 
 	__BCinline__  binary_expression(lv l, rv r, operation oper_ = operation()) : left(l), right(r), oper(oper_) {}

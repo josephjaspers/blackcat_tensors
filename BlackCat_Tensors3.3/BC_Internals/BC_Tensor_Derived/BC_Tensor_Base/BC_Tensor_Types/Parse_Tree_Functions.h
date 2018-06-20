@@ -129,6 +129,34 @@ template<> struct PRECEDENCE<oper::div_assign> {
 	};
 };
 
+//add overloads for BLAS functions here
+template<class T> struct BLAS_FUNCTION_TYPE { static constexpr bool conditional = false; };
+template<class T> struct BLAS_FUNCTION_TYPE<BC::oper::dotproduct<T>> { static constexpr bool conditional = true; };
+//template<class T> struct BLAS_FUNCTION_TYPE<BC::oper::transpose<T>> { static constexpr bool conditional = true; };
+
+template<class T> __BC_host_inline__ static constexpr bool is_blas_func() {
+	return BLAS_FUNCTION_TYPE<T>::conditional;
+}
+
+
+template<class T>
+static constexpr bool is_linear_op() {
+	return MTF::is_one_of<T, oper::add, oper::sub>();
+}
+
+template<class T>
+static constexpr bool is_nonlinear_op() {
+	return  !MTF::is_one_of<T, oper::add, oper::sub>() && !is_blas_func<T>();
+}
+template<class T>
+static constexpr bool is_linear_assignment_op() {
+	return MTF::is_one_of<T, oper::add_assign, oper::sub_assign>();
+}
+template<class T>
+static constexpr bool is_assignment_op() {
+	return MTF::is_one_of<T, oper::assign>();
+}
+
 template<class T>
 static constexpr int alpha_of() {
 	return PRECEDENCE<std::decay_t<T>>::traits::alpha_modifier;
@@ -152,14 +180,7 @@ static constexpr bool injectable_assignment() {
 	return PRECEDENCE<std::decay_t<T>>::traits::injectable_assignment;
 }
 
-//add overloads for BLAS functions here
-template<class T> struct BLAS_FUNCTION_TYPE { static constexpr bool conditional = false; };
-template<class T> struct BLAS_FUNCTION_TYPE<BC::oper::dotproduct<T>> { static constexpr bool conditional = true; };
-template<class T> struct BLAS_FUNCTION_TYPE<BC::oper::transpose<T>> { static constexpr bool conditional = true; };
 
-template<class T> __BC_host_inline__ static constexpr bool is_blas_func() {
-	return BLAS_FUNCTION_TYPE<T>::conditional;
-}
 }
 }
 }

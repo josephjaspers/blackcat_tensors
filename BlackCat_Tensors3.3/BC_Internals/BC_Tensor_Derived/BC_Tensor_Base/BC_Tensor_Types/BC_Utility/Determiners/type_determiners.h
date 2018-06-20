@@ -57,7 +57,7 @@ struct determine_variable_tensor {
 };
 
 template<template<class,class> class tensor, class scalar, class ml, int x>
-struct determine_variable_tensor<tensor<scalar,ml>, x, std::enable_if_t< MTF::same<tensor<scalar,ml>, typename dimension<x>::template Tensor<scalar, ml>>::conditional>> {
+struct determine_variable_tensor<tensor<scalar,ml>, x, std::enable_if_t< std::is_same<tensor<scalar,ml>, typename dimension<x>::template Tensor<scalar, ml>>::value>> {
 	static constexpr int value = x;
 	static constexpr bool valid = true;
 	using mathlib = ml;

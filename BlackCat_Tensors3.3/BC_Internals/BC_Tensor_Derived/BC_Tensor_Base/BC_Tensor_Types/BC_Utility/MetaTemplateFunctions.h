@@ -10,19 +10,14 @@
 #include <type_traits>
 #include "../BlackCat_Internal_Definitions.h"
 namespace BC {
-__BCinline__ static constexpr int max(int x) { return x; }
-template<class... integers>
-__BCinline__ static constexpr int max(int x, integers... ints) { return x > max (ints...) ? x : max(ints...); }
-__BCinline__ static constexpr int floored_decrement(int x) { return x > 0 ? x - 1 : 0; }
-
-
 namespace MTF {
+__BCinline__ static constexpr int max(int x) { return x; } template<class... integers>
+__BCinline__ static constexpr int max(int x, integers... ints) { return x > max (ints...) ? x : max(ints...); }
+__BCinline__ static constexpr int min(int x) { return x; } template<class... integers>
+__BCinline__ static constexpr int min(int x, integers... ints) { return x < min (ints...) ? x : min(ints...); }
 
+	//short_hand for const cast
 	template<class T> auto& cc(const T& var) { return const_cast<T&>(var); }
-
-	template<class var, class... lst			 > struct isOneOf 					{ static constexpr bool conditional = false; };
-	template<class var, class... lst			 > struct isOneOf<var,var,lst...> 	{ static constexpr bool conditional = true; };
-	template<class var, class front, class... lst> struct isOneOf<var,front,lst...> { static constexpr bool conditional = isOneOf<var, lst...>::conditional; };
 
 	template<class> struct isPrimitive 					{ static constexpr bool conditional = false; };
 	template<> struct isPrimitive<bool> 				{ static constexpr bool conditional = true; };
@@ -41,11 +36,10 @@ namespace MTF {
 	template<> struct isPrimitive<long double> 			{ static constexpr bool conditional = true; };
 	template<> struct isPrimitive<wchar_t> 				{ static constexpr bool conditional = true; };
 
-	template<class T>
-	static constexpr bool isPrim = MTF::isPrimitive<T>::conditional;
+	template<class T> static constexpr bool is_primitive_type() { return  MTF::isPrimitive<T>::conditional; }
 
 	template<class... T> struct isIntList {
-		static constexpr bool conditional = true;
+static constexpr bool conditional = true;
 	};
 	template<class T, class... Ts> struct isIntList<T,Ts...> {
 		static constexpr bool conditional = false;
@@ -56,8 +50,6 @@ namespace MTF {
 
 	template<class... ts>
 	static constexpr bool is_integer_sequence = isIntList<ts...>::conditional;
-
-	template<class...> struct isTypeList { static constexpr bool conditional = false; };
 
 	template<class> struct lst;
 
@@ -76,62 +68,10 @@ namespace MTF {
 		using last = V;
 	};
 
-	template<class, class> struct same  { static constexpr bool conditional = false; };
-	template<class T> struct same<T, T> { static constexpr bool conditional = true; };
-
-	template<class, class> 	struct same_shell  	   	{ static constexpr bool conditional = false; };
-	template<class T>  		struct same_shell<T, T> { static constexpr bool conditional = true;  };
-	template<template <class...> class T, class... p1, class... p2>
-	struct same_shell<T<p1...>, T<p2...>> { static constexpr bool conditional = true;  };
-
-
-
-	template<template<class...> class, 	 template<class...> class  > struct same_empty_shell 	  { static constexpr bool conditional = false; };
-	template<template<class...> class T> struct same_empty_shell<T,T> { static constexpr bool conditional = true; };
-
-	template<template<class...> class T, template<class...> class U>
-	static constexpr bool same_empty_shell_b = same_empty_shell<T, U>::conditional;
-
-
-	template<class> struct front;
-	template<template<class... > class set, class T, class... s>
-	struct front<set<T, s...>> {
-		using type = T;
-	};
-
-	template<class> struct second;
-	template<template<class... > class set, class T, class U, class... s>
-	struct second<set<T, U, s...>> {
-		using type = U;
-	};
-
-	template<class T>
-	using head = typename lst<T>::front;
-
-	template<class T>
-	using tail = typename lst<T>::last;
-
-	template<class T>
-	using front_t = typename front<T>::type;
-
-	template<class T>
-	using second_t = typename second<T>::type;
-
 	template<class> struct shell_of;
 	template<template<class ...> class param, class... ptraits>
 	struct shell_of<param<ptraits...>> { template<class... ntraits> using type = param<ntraits...>; };
 
-	template<class from, class to, class voider = void>
-	struct castable {
-		static constexpr bool conditional= false;
-	};
-	template<class from, class to>
-	struct castable<from, to,  decltype(static_cast<to>(std::declval<from>()))> {
-		static constexpr bool conditional= true;
-	};
-
-	template<class F, class T>
-	static constexpr bool castable_b = castable<F, T>::conditional;
 
 	template<class T, class... Ts>
 	struct one_of_impl {

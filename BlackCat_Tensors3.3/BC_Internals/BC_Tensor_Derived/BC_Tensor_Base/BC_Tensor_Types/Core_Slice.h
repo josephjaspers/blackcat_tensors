@@ -16,12 +16,12 @@ namespace internal {
 //Floored decrement just returns the max(param - 1, 0)
 
 template<class PARENT>
-	struct Tensor_Slice : Tensor_Core_Base<Tensor_Slice<PARENT>, max(PARENT::DIMS() - 1, 0)> {
+	struct Tensor_Slice : Tensor_Core_Base<Tensor_Slice<PARENT>, MTF::max(PARENT::DIMS() - 1, 0)> {
 
 	using scalar_type = _scalar<PARENT>;
 
-	__BCinline__ static constexpr int ITERATOR() { return max(PARENT::ITERATOR() - 1, 0); }
-	__BCinline__ static constexpr int DIMS() { return max(PARENT::DIMS() - 1, 0); }
+	__BCinline__ static constexpr int ITERATOR() { return MTF::max(PARENT::ITERATOR() - 1, 0); }
+	__BCinline__ static constexpr int DIMS() { return MTF::max(PARENT::DIMS() - 1, 0); }
 
 	operator const PARENT() const	{ return parent; }
 

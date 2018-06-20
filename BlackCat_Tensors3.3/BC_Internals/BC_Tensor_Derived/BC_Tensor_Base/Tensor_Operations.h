@@ -283,7 +283,7 @@ public:
 	//assert same math library // asserts both memory is allocated on gpu or cpu
 	template<class deriv>
 	void assert_same_ml(const Tensor_Operations<deriv>& tensor) const {
-		static_assert(MTF::same<_mathlib<derived>, _mathlib<deriv>>::conditional, "mathlib_type must be identical");
+		static_assert(std::is_same<_mathlib<derived>, _mathlib<deriv>>::value, "mathlib_type must be identical");
 	}
 
 	//-------------tensor alias -----------------//

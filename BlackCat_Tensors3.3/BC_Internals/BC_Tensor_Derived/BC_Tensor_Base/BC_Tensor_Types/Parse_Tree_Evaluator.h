@@ -9,13 +9,15 @@
 #define TRIVIAL_EVALUATOR_H_
 
 #include "Parse_Tree_Injection_Wrapper.h"
+#include "Parse_Tree_Complex_Evaluator.h"
 #include "Core_Substitution.h"
+
 
 namespace BC {
 
 template<class> class Tensor_Base;
 template<class expression> //get the type of the rv_expression
-using rv_of = std::decay_t<decltype(std::declval<expression>().right)>;
+using rv_of = std::decay_t<decltype(std::declval<std::decay_t<expression>>().right)>;
 
 template<class T> __BC_host_inline__
 static constexpr bool INJECTION() {
@@ -42,19 +44,17 @@ static std::enable_if_t<INJECTION<expression>()>
 evaluate(assignment& assign, const expression& expr) {
 	using internal_t = expression;			//internal expression type (to be injected)
 	using injection_t = assignment;	//the injection type
-	using rotated_expression_tree = typename expression::injection_type;
 
-	static constexpr int iterator_dimension = rotated_expression_tree::ITERATOR();	//the iterator for the evaluation of post inject_t
+	static constexpr int iterator_dimension = expression::ITERATOR();	//the iterator for the evaluation of post inject_t
 	static constexpr int alpha_mod = expression::alpha_mod();
 	static constexpr int beta_mod = expression::beta_mod();
 
-	auto post_inject_tensor = rotated_expression_tree(expr, BC::internal::injection_wrapper<assignment, alpha_mod, beta_mod>(assign));		//evaluate the internal tensor_type
-	if (!std::is_same<injection_t, rv_of<rotated_expression_tree>>::value || BC::internal::isCore<rotated_expression_tree>()) {
+	auto post_inject_tensor = internal::tree::evaluate(expr);		//evaluate the internal tensor_type
+	if (!std::is_same<injection_t, rv_of<decltype(post_inject_tensor)>>::value || BC::internal::isCore<decltype(post_inject_tensor)>()) {
 	if (BARRIER)
 		mathlib_type::template dimension<iterator_dimension>::eval(post_inject_tensor);
 	else
 		mathlib_type::template dimension<iterator_dimension>::eval_unsafe(post_inject_tensor);
-	} else {
 	}
 }
 };

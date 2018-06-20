@@ -87,7 +87,7 @@ int dotproduct_injection() {
 	c.print();
 	std::cout << "c = d * e * scal(2.0f); " << std::endl;
 
-	c = d * e * scal(2.0f); ////This is the only version that is not accounted for (it is also the least common notation)
+//	c = d * e * scal(2.0f); ////This is the only version that is not accounted for (it is also the least common notation)
 	c.print();
 
 	scal A(2.0f);
@@ -117,6 +117,11 @@ int dotproduct_injection() {
 	A.print();
 	c = a.t() * A * (b.t() * A);
 	c.print();
+
+
+	std::cout << "	c =  - (a.t() * A * (b.t() * A))" << std::endl;
+	A.print();
+	c = (a.t() * A * (b.t() * A));
 //	using expr3 = std::decay_t<decltype((c =* (a.t() * A * (b.t() * A))).internal())>;
 //	std::cout << type_name<expr3>() << std::endl;
 //	std::cout << type_name<typename expr3::type<typename expr3::default_type>>() << std::endl;
@@ -129,23 +134,27 @@ int dotproduct_injection() {
 //	std::cout << type_name<expr>() << std::endl;
 //	std::cout << type_name<typename BC::internal::traversal<expr>::type>() << std::endl;
 
+	c.zero();
 
-//	c.print();
-//	c = f % f + a.t() * b.t() + a.t() * b.t();
+	c.print();
+	auto f_chunk = chunk(f)(0,0)(2,2);
+	auto expr = (c =* (a.t() * b.t() + a.t() * b.t()  + a.t() * b.t())).internal();
+	auto var =  BC::internal::tree::evaluate(expr);
 	c.print();
 
-//	dc() ** F + dy + rz.t() * dz() + rf.t() * df(
+	std::cout << type_name<std::decay_t<decltype(var)>>() << std::endl;
+	//	dc() ** F + dy + rz.t() * dz() + rf.t() * df(
 //	using core = decltype(c.internal());
-	auto expression = (c =* ( a.t() * b.t() + a.t() * b.t() + f % f)).internal();
-
-	using core = decltype(c.internal());
-	using expr = std::decay_t<decltype(expression)>;
-	using rv_of_assign = decltype(expression.right);
-	using add_of_dps   = decltype(expression.right.right);
-
-	std::cout << type_name<typename expr:: injection_type>() << std::endl;
-	std::cout << type_name<rv_of_assign>() << std::endl;
-	std::cout << type_name<add_of_dps>() << std::endl;
+//	auto expression = (c =* ( a.t() * b.t() + a.t() * b.t() + f % f)).internal();
+//
+//	using core = decltype(c.internal());
+//	using expr = std::decay_t<decltype(expression)>;
+//	using rv_of_assign = decltype(expression.right);
+//	using add_of_dps   = decltype(expression.right.right);
+//
+//	std::cout << type_name<typename expr:: injection_type>() << std::endl;
+//	std::cout << type_name<rv_of_assign>() << std::endl;
+//	std::cout << type_name<add_of_dps>() << std::endl;
 
 //	std::cout << add_of_dps:: substituteable() << std::endl;
 
@@ -165,5 +174,5 @@ int dotproduct_injection() {
 //THIS DOES NOT WORK
 //	std::cout << "	c = a.t() * A * (b.t() * A) + a.t() * A * (b.t() * A)" << std::endl;
 //	c = c % c +  a.t() * b.t() + a.t() * b.t();//	c.print();
-	return 0;
+//	return 0;
 };
