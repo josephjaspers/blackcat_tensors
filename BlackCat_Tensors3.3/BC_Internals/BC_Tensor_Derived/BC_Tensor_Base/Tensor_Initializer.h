@@ -23,20 +23,20 @@ class Tensor_Initializer :  public _functor<derived> {
 
 	using self 			= Tensor_Initializer<derived>;
 
-	using array 		= _functor<derived>;
+	using parent 		= _functor<derived>;
 	using mathlib_t 	= _mathlib<derived>;
 	using scalar		= _scalar<derived>;
 
 public:
 
-	 const array& internal() const { return static_cast<const array&>(*this); }
-	 array& internal() 	  { return static_cast<		 array&>(*this); }
+	 Tensor_Initializer(const  derived&  tensor) : parent(		    tensor.internal()){}
+	 Tensor_Initializer(	   derived&& tensor) : parent(std::move(tensor.internal())){}
 
-	Tensor_Initializer(		  derived&& tensor) : array(tensor.internal()){}
-	Tensor_Initializer(const  derived&  tensor) : array(tensor.internal()){}
+	template<class... params> explicit Tensor_Initializer(const  params&... p) : parent(p...) {}
 
-	template<class... params>
-	explicit Tensor_Initializer(const  params&... p) : array(p...) {}
+	 const parent& internal() const { return static_cast<const parent&>(*this); }
+	 	   parent& internal() 	  	{ return static_cast<	   parent&>(*this); }
+
 
 	~Tensor_Initializer() {
 		internal().destroy();
@@ -45,20 +45,14 @@ public:
 //-------------------------------------SPECIALIZATION FOR TENSORS THAT CONTROL / DELETE THEIR ARRAY-------------------------------------//
 
 
-template<template<class, class> class _tensor, class t, class ml>
-struct Tensor_Initializer<_tensor<t, ml>, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>> : public  _functor<_tensor<t, ml>> {
+template<class derived>
+struct Tensor_Initializer<derived, std::enable_if_t<is_array_core<_functor<derived>>()>> : public  _functor<derived> {
 
-	using derived = _tensor<t, ml>;
-	using self 		= Tensor_Initializer<derived, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>>;
+	using self 		= Tensor_Initializer<derived, std::enable_if_t<is_array_core<_functor<derived>>()>>;
 
-	using functor_type 	= _functor<derived>;
+	using parent 		= _functor<derived>;
 	using mathlib_t 	= _mathlib<derived>;
 	using scalar		= _scalar<derived>;
-
-//	functor_type array_core;
-
-	using array_core = _functor<derived>;
-
 
 private:
 
@@ -67,22 +61,21 @@ private:
 
 public:
 
-	 const functor_type& internal() const { return static_cast<const _functor<derived>&>(*this); }
-	  	   functor_type& internal() 	  { return static_cast<		 _functor<derived>&>(*this); }
+	 const parent& internal() const { return static_cast<const parent&>(*this); }
+	 	   parent& internal() 	  	{ return static_cast<	   parent&>(*this); }
 
-	Tensor_Initializer(derived&& tensor) : array_core(tensor.internal()) { tensor.internal().array 	= nullptr; }
+	Tensor_Initializer(derived&& tensor) : parent(std::move(tensor.internal())) { tensor.internal().array 	= nullptr; }
 
-	Tensor_Initializer(const derived& tensor) : array_core(tensor.inner_shape()) {
+	Tensor_Initializer(const derived& tensor) : parent(tensor.inner_shape()) {
 		this->as_derived() = tensor;
 	}
 	template<class T>
-	Tensor_Initializer(T dimensions): array_core(dimensions) {}
+	Tensor_Initializer(T dimensions): parent(dimensions) {}
 
 	template<class T> using derived_alt = typename MTF::shell_of<derived>::template  type<T, mathlib_t>;
 
 	template<class U>
-	Tensor_Initializer(const derived_alt<U>&  tensor)
-		: array_core(tensor.inner_shape()) {
+	Tensor_Initializer(const derived_alt<U>&  tensor) : parent(tensor.inner_shape()) {
 		this->as_derived() = tensor;
 	}
 

@@ -4,7 +4,7 @@ Author: Joseph Jaspers
 BlackCat_Tensors (BCT) is a highly optimized Matrix library designed for NeuralNetworks in a multi-threaded context. Various operations enable utilizing low-level multithreaded concepts in this much higher-level framework.
 
 ############GPU LIBRARY CURRENTLY DOES NOT WORK-- WILL FIX SOON---- (nvcc does not support if-constexpr)
-
+###########STABLE BRANCH DOES WORK FOR GPU, Though the CPU version will be faster for the current branch (master)
 Current Work:
 	Scaleable injection for BLAS routines, implementating convolution/correlation (using MKL/CUDA)
 
