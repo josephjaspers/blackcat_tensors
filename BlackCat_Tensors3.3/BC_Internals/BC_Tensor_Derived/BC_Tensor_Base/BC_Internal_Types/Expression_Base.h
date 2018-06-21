@@ -112,8 +112,8 @@ public:
 	//---------------------------------------------------METHODS THAT MAY NEED TO BE SHADOWED------------------------------------------------------------//
 	void destroy() const {}
 	//---------------------------------------------------METHODS THAT NEED TO BE SHADOWED------------------------------------------------------------//
-	__BCinline__ auto operator [] (int index) 	  	{ return throw std::exception("method: \" operator [] (int index) \" not shadowed"); };
-	__BCinline__ auto operator [] (int index) const { return throw std::exception("method: \" operator [] (int index) const\" not shadowed"); };
+	__BCinline__ _scalar<derived> operator [] (int index) 	  	{ throw std::invalid_argument("method: \" operator [] (int index) \" not shadowed"); return 0;};
+	__BCinline__ _scalar<derived> operator [] (int index) const { throw std::invalid_argument("method: \" operator [] (int index) const\" not shadowed"); return 0;};
 	//-------------------------------------------------tree re-ordering methods---------------------------------------------------------//
 };
 }
