@@ -134,7 +134,7 @@ template<class T> struct BLAS_FUNCTION_TYPE { static constexpr bool conditional 
 template<class T> struct BLAS_FUNCTION_TYPE<BC::oper::dotproduct<T>> { static constexpr bool conditional = true; };
 //template<class T> struct BLAS_FUNCTION_TYPE<BC::oper::transpose<T>> { static constexpr bool conditional = true; };
 
-template<class T> __BC_host_inline__ static constexpr bool is_blas_func() {
+template<class T> static constexpr bool is_blas_func() {
 	return BLAS_FUNCTION_TYPE<T>::conditional;
 }
 

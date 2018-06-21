@@ -36,7 +36,6 @@ struct Tensor_Array_Base : expression_base<derived>, BC_Array {
 
 	__BCinline__ static constexpr int DIMS() { return DIMENSION; }
 	__BCinline__ static constexpr int ITERATOR() { return 0; }
-	__BCinline__ static constexpr bool ASSIGNABLE() { return true; }
 
 	using self 		= derived;
 	using slice_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Slice<self>>;

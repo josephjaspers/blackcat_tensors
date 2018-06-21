@@ -17,7 +17,7 @@ template<class> class Tensor_Base;
 template<class expression> //get the type of the rv_expression
 using rv_of = std::decay_t<decltype(std::declval<std::decay_t<expression>>().right)>;
 
-template<class T> __BC_host_inline__
+template<class T>
 static constexpr bool INJECTION() {
 	//non-trivial is true even when it is trivial
 	return internal::tree::expression_tree_evaluator<std::decay_t<T>>::non_trivial_blas_injection;
@@ -28,7 +28,7 @@ static constexpr bool INJECTION() {
 template<class mathlib_type, bool BARRIER>
 struct Evaluator {
 
-template<class assignment, class expression> __BC_host_inline__
+template<class assignment, class expression>
 static std::enable_if_t<!INJECTION<expression>()>
 evaluate(const assignment& assign, const expression& expr) {
 	static constexpr int iterator_dimension = expression::ITERATOR();
@@ -38,7 +38,7 @@ evaluate(const assignment& assign, const expression& expr) {
 		mathlib_type::template dimension<iterator_dimension>::eval_unsafe(expr);
 }
 
-template<class assignment, class expression> __BC_host_inline__
+template<class assignment, class expression>
 static std::enable_if_t<INJECTION<expression>()>
 evaluate(assignment& assign, const expression& expr) {
 	using internal_t = expression;			//internal expression type (to be injected)
@@ -53,6 +53,8 @@ evaluate(assignment& assign, const expression& expr) {
 	else
 		mathlib_type::template dimension<iterator_dimension>::eval_unsafe(post_inject_tensor);
 	}
+	//destroy any temporaries made by the tree
+	internal::tree::destroy_temporaries(post_inject_tensor);
 }
 };
 
@@ -61,10 +63,10 @@ struct branched {
 	template<class branch> using sub_t 	= BC::internal::Array<branch::DIMS(), _scalar<branch>, mathlib>;
 	template<class branch> using eval_t = BC::internal::binary_expression<sub_t<branch>, branch, BC::oper::assign>;
 
-	template<class branch> __BC_host_inline__
+	template<class branch>
 	static std::enable_if_t<BC::internal::isArray<std::decay_t<branch>>(), const branch&> evaluate(const branch& expression) { return expression; }
 
-	template<class branch> __BC_host_inline__
+	template<class branch>
 	std::enable_if_t<!BC::internal::isArray<std::decay_t<branch>>(), sub_t<std::decay_t<branch>>> evaluate(const branch& expression)
 	{
 		sub_t<std::decay_t<branch>> cached_branch(expression.inner_shape());

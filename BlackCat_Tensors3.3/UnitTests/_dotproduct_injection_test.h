@@ -123,6 +123,11 @@ int dotproduct_injection() {
 	A.print();
 	c = (a.t() * A * (b.t() * A));
 
+	std::cout << "	c = (a.t() * b.t()) % (a.t() * b.t()); " << std::endl;
+
+	c = (a.t() * b.t()) % (a.t() * b.t());
+	c.print();
+
 //	auto f_chunk = chunk(f)(0,0)(2,2);
 //	auto expr = (c =* (a.t() * b.t() + a.t() * b.t()  + a.t() * b.t())).internal();
 //	auto var =  BC::internal::tree::evaluate(expr);
