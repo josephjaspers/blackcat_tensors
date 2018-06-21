@@ -139,10 +139,10 @@ public:
 		return (*this)[i](ints...);
 	}
 
-	template<class... integers>
-	void resize(integers... ints) {
-		as_derived().internal().resize(ints...);
-	}
+//	template<class... integers>
+//	void resize(integers... ints) {
+//		as_derived().internal().resize(ints...);
+//	}
 	//THIS IS THE CURRIED CHUNK LAMBDA, WE MUST USE AN ACTUAL CLASS TO ACT AS A LAMDA AS CUDA COMPILER IS IFFY WITH LAMBDA
 	struct CHUNK {
 

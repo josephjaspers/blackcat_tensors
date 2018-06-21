@@ -19,36 +19,34 @@ namespace BC {
 namespace Base {
 //-------------------------------------SPECIALIZATION FOR EXPRESSION TENSORS OR TENSORS OF NON_OWNERSHIP/CREATION-------------------------------------//
 template<class derived, class expression_tensor = void>
-class Tensor_Initializer {
+class Tensor_Initializer :  public _functor<derived> {
 
 	using self 			= Tensor_Initializer<derived>;
 
-	using functor_type 	= _functor<derived>;
+	using array 		= _functor<derived>;
 	using mathlib_t 	= _mathlib<derived>;
 	using scalar		= _scalar<derived>;
 
 public:
 
-	functor_type array_core;
+	 const array& internal() const { return static_cast<const array&>(*this); }
+	 array& internal() 	  { return static_cast<		 array&>(*this); }
 
-	 const functor_type& internal() const { return this->array_core; }
-	 	   functor_type& internal()		  { return this->array_core; }
-
-	Tensor_Initializer(		  derived&& tensor) : array_core(tensor.array_core){}
-	Tensor_Initializer(const  derived&  tensor) : array_core(tensor.array_core){}
+	Tensor_Initializer(		  derived&& tensor) : array(tensor.internal()){}
+	Tensor_Initializer(const  derived&  tensor) : array(tensor.internal()){}
 
 	template<class... params>
-	explicit Tensor_Initializer(const  params&... p) : array_core(p...) {}
+	explicit Tensor_Initializer(const  params&... p) : array(p...) {}
 
 	~Tensor_Initializer() {
-		array_core.destroy();
+		internal().destroy();
 	}
 };
 //-------------------------------------SPECIALIZATION FOR TENSORS THAT CONTROL / DELETE THEIR ARRAY-------------------------------------//
 
 
 template<template<class, class> class _tensor, class t, class ml>
-struct Tensor_Initializer<_tensor<t, ml>, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>> {
+struct Tensor_Initializer<_tensor<t, ml>, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>> : public  _functor<_tensor<t, ml>> {
 
 	using derived = _tensor<t, ml>;
 	using self 		= Tensor_Initializer<derived, std::enable_if_t<!std::is_base_of<BC_Type,t>::value>>;
@@ -57,7 +55,10 @@ struct Tensor_Initializer<_tensor<t, ml>, std::enable_if_t<!std::is_base_of<BC_T
 	using mathlib_t 	= _mathlib<derived>;
 	using scalar		= _scalar<derived>;
 
-	functor_type array_core;
+//	functor_type array_core;
+
+	using array_core = _functor<derived>;
+
 
 private:
 
@@ -66,13 +67,12 @@ private:
 
 public:
 
-	 const functor_type& internal() const { return this->array_core; }
-	 	   functor_type& internal()		  { return this->array_core; }
+	 const functor_type& internal() const { return static_cast<const _functor<derived>&>(*this); }
+	  	   functor_type& internal() 	  { return static_cast<		 _functor<derived>&>(*this); }
 
-	Tensor_Initializer(derived&& tensor) : array_core(tensor.internal()) { tensor.array_core.array 	= nullptr; }
+	Tensor_Initializer(derived&& tensor) : array_core(tensor.internal()) { tensor.internal().array 	= nullptr; }
 
 	Tensor_Initializer(const derived& tensor) : array_core(tensor.inner_shape()) {
-		//this calls tensor_operations operator=
 		this->as_derived() = tensor;
 	}
 	template<class T>
@@ -83,12 +83,11 @@ public:
 	template<class U>
 	Tensor_Initializer(const derived_alt<U>&  tensor)
 		: array_core(tensor.inner_shape()) {
-		//this calls tensor_operations operator=
 		this->as_derived() = tensor;
 	}
 
 	~Tensor_Initializer() {
-		array_core.destroy();
+		internal().destroy();
 	}
 };
 }

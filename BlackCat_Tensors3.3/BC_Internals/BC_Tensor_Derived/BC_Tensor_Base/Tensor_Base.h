@@ -32,18 +32,18 @@ protected:
 	using operations  	= Base::Tensor_Operations<derived>;
 	using initializer 	= Base::Tensor_Initializer<derived>;
 	using utility		= Base::Tensor_Utility<derived>;
+	using shaping		= Base::Tensor_Shaping<derived>;
 
 	using functor_type 	= _functor<derived>;
 	using scalar_type	= _scalar<derived>;
 	using mathlib_type 	= _mathlib<derived>;
 
-	static constexpr int DIMS() { return dimension_of<derived>; }
-	static constexpr int ITERATOR() { return functor_type::ITERATOR(); }
-
 	template<class> friend class Tensor_Base;
 
 public:
 	using operations::operator=;
+	using shaping::operator[];
+	using shaping::operator();
 
 	operator const derived& () const { return static_cast<const derived&>(*this); }
 	operator	   derived& () 		 { return static_cast< 		derived&>(*this); }
@@ -58,9 +58,9 @@ public:
 
 
 	derived& operator =(move_parameter tensor) {
-		auto tmp = this->array_core;
-		this->array_core = tensor.array_core;
-		tensor.array_core = tmp;
+		auto tmp = this->internal();
+		this->internal() = tensor.internal();
+		tensor.internal() = tmp;
 
 		return *this;
 	}
@@ -74,24 +74,6 @@ public:
 		this->fill(scalar);
 		return *this;
 	}
-
-	int dims() const { return this->array_core.dims(); }
-	int size() const { return this->array_core.size(); }
-	int rows() const { return this->array_core.rows(); }
-	int cols() const { return this->array_core.cols(); }
-	int outer_dimension() const { return this->array_core.outer_dimension(); }
-
-	int ld1() const { return this->array_core.ld1(); }
-	int ld2() const { return this->array_core.ld2(); }
-
-	int dimension(int i)		const { return this->array_core.dimension(i); }
-	void print_dimensions() 		const { this->array_core.print_dimensions();   }
-	void print_leading_dimensions()	const { this->array_core.print_leading_dimensions(); }
-
-	const auto inner_shape() const 			{ return this->array_core.inner_shape(); }
-	const auto outer_shape() const 			{ return this->array_core.outer_shape(); }
-
-
 };
 
 }

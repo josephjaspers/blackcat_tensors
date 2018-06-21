@@ -83,7 +83,7 @@ int test() {
 			//feeding its own output
 			out = network.forwardPropagation_Express(out);
 			vec x = out - inputs[i][j + 1];
-			std::cout << " predicting into future---Hypothesis/Output = " << out(0) << "|" << inputs[i][j + 1](0) << "error = "; x.print();
+//			std::cout << " predicting into future---Hypothesis/Output = " << out(0) << "|" << inputs[i][j + 1](0) << "error = "; x.print();
 		}
 	}
 
