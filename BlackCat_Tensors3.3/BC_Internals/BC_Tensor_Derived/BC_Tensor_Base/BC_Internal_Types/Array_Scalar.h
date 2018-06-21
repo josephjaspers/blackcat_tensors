@@ -8,7 +8,7 @@
 #ifndef TENSOR_SCALAR_H_
 #define TENSOR_SCALAR_H_
 
-#include "Core_Base.h"
+#include "Array_Base.h"
 
 namespace BC {
 namespace internal {
@@ -17,7 +17,7 @@ namespace internal {
  */
 
 template<class PARENT>
-struct Tensor_Scalar : Tensor_Core_Base<Tensor_Scalar<PARENT>, 0> {
+struct Array_Scalar : Tensor_Array_Base<Array_Scalar<PARENT>, 0> {
 
 	using scalar = _scalar<PARENT>;
 
@@ -29,7 +29,7 @@ struct Tensor_Scalar : Tensor_Core_Base<Tensor_Scalar<PARENT>, 0> {
 	const PARENT parent;
 	scalar* array_slice;
 
-	__BCinline__ Tensor_Scalar(const scalar* array, const PARENT& parent_)
+	__BCinline__ Array_Scalar(const scalar* array, const PARENT& parent_)
 		: array_slice(const_cast<scalar*>(array)), parent(parent_) {}
 
 	__BCinline__ const auto inner_shape() const 	{ return parent.inner_shape(); }

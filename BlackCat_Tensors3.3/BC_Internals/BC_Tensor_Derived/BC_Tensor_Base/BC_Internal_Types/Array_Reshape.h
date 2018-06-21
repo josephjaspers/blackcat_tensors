@@ -1,6 +1,6 @@
 
 /*
- * Tensor_Reshape.h
+ * Array_Reshape.h
  *
  *  Created on: Mar 31, 2018
  *      Author: joseph
@@ -9,26 +9,26 @@
 #ifndef TENSOR_RESHAPE_H_
 #define TENSOR_RESHAPE_H_
 
-#include "Core_Base.h"
+#include "Array_Base.h"
 
 namespace BC {
 namespace internal {
 /*
  * Accepts an a tensor_core type wrapped in the new_tensor
  *
- * IE if you have a Vector<Core<Vector<float, ml>, ml>  and wish to Reshape to a Matrix
- * The resulting reshape will be-- Matrix<Tensor_Reshape<Matrix<Core<Vector<float, ml>,ml>>>>
+ * IE if you have a Vector<Array<Vector<float, ml>, ml>  and wish to Reshape to a Matrix
+ * The resulting reshape will be-- Matrix<Array_Reshape<Matrix<Array<Vector<float, ml>,ml>>>>
  *
- * This is somewhat awkward and atypical of the other Core traits, but it is essential to be able to pass
+ * This is somewhat awkward and atypical of the other Array traits, but it is essential to be able to pass
  * the constexpr int DIMS in some form. The choice to utilize this method opposed to expanding the number of template arguments
  * was to ensure consistency across the determiners.h which are imperative to the template-metaprogramming.
  */
 
 template<int dimension>
-struct Tensor_Reshape {
+struct Array_Reshape {
 
 	template<class PARENT>
-	struct implementation : Tensor_Core_Base<implementation<PARENT>, dimension>{
+	struct implementation : Tensor_Array_Base<implementation<PARENT>, dimension>{
 
 	using scalar = _scalar<PARENT>;
 

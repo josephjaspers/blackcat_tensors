@@ -8,9 +8,7 @@
 #ifndef TRIVIAL_EVALUATOR_H_
 #define TRIVIAL_EVALUATOR_H_
 
-#include "Parse_Tree_Injection_Wrapper.h"
 #include "Parse_Tree_Complex_Evaluator.h"
-#include "Core_Substitution.h"
 
 
 namespace BC {
@@ -49,7 +47,7 @@ evaluate(assignment& assign, const expression& expr) {
 	static constexpr int iterator_dimension = expression::ITERATOR();	//the iterator for the evaluation of post inject_t
 
 	auto post_inject_tensor = internal::tree::evaluate(expr);		//evaluate the internal tensor_type
-	if (!std::is_same<injection_t, rv_of<decltype(post_inject_tensor)>>::value || BC::internal::isCore<decltype(post_inject_tensor)>()) {
+	if (!std::is_same<injection_t, rv_of<decltype(post_inject_tensor)>>::value || BC::internal::isArray<decltype(post_inject_tensor)>()) {
 	if (BARRIER)
 		mathlib_type::template dimension<iterator_dimension>::eval(post_inject_tensor);
 	else
@@ -60,14 +58,14 @@ evaluate(assignment& assign, const expression& expr) {
 
 template<class mathlib, bool BARRIER>
 struct branched {
-	template<class branch> using sub_t 	= BC::internal::Tensor_Substitution<tensor_of_t<branch::DIMS(), _scalar<branch>, mathlib>>;
+	template<class branch> using sub_t 	= BC::internal::Array<branch::DIMS(), _scalar<branch>, mathlib>;
 	template<class branch> using eval_t = BC::internal::binary_expression<sub_t<branch>, branch, BC::oper::assign>;
 
 	template<class branch> __BC_host_inline__
-	static std::enable_if_t<BC::internal::isCore<std::decay_t<branch>>(), const branch&> evaluate(const branch& expression) { return expression; }
+	static std::enable_if_t<BC::internal::isArray<std::decay_t<branch>>(), const branch&> evaluate(const branch& expression) { return expression; }
 
 	template<class branch> __BC_host_inline__
-	std::enable_if_t<!BC::internal::isCore<std::decay_t<branch>>(), sub_t<std::decay_t<branch>>> evaluate(const branch& expression)
+	std::enable_if_t<!BC::internal::isArray<std::decay_t<branch>>(), sub_t<std::decay_t<branch>>> evaluate(const branch& expression)
 	{
 		sub_t<std::decay_t<branch>> cached_branch(expression.inner_shape());
 		eval_t<std::decay_t<branch>> assign_to_expression(cached_branch, expression); //create an expression to assign to the left_cached

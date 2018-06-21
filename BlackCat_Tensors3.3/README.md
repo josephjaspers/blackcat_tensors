@@ -76,7 +76,7 @@ Benchmarks:
 	See bottom of file
 Methods:
 
-**DEFINED IN BC_Internals/BC_Core/Implementation_Core/Tensor_Operations.h
+**DEFINED IN BC_Internals/BC_Array/Implementation_Array/Tensor_Operations.h
 
 	_tensor_& operator =  (const _tensor_&) 		//copy
 	_tensor_& operator =  (const T scalar) 			//fill tensor with scalar value
@@ -106,7 +106,7 @@ Methods:
 		3) Scalar by Tensor operations -- return the dominant tensor type (IE operation order does matter for non commutative functions)
 		4) functor object needs to have a trivial constructor and the overloaded operator()(T value) (if unary) or operator()(T val1, U val2) (if binary)
 
-**DEFINED IN BC_Internals/BC_Core/Implementation_Core/Tensor_Utility.h
+**DEFINED IN BC_Internals/BC_Array/Implementation_Array/Tensor_Utility.h
 
 	void print	(void) 		const		//print the tensor (formatted) **calls eval if expression tensor**
 	void printSparse(void) 		const 		//print the tensor (formatted) without outputing 0s (useful for images)
@@ -121,7 +121,7 @@ Methods:
 			bool read_dimensions=true,     //if read_dimensions assumes line was written by .write() 						 
 			bool overwrite_dimensions=true)	//if overwrite_dimensions, overwrites the dimensions of the tensor (only relevant if read_dimensions is true)
 
-**DEFINED IN BC_Internals/BC_Core/Tensor_Base.h
+**DEFINED IN BC_Internals/BC_Array/Tensor_Base.h
 
 	int dims() const				//returns number of dimensions (scalar = 0, vector = 1, matrix = 2, etc)
 	int size() const				//returns number of elements 
@@ -137,11 +137,11 @@ Methods:
 	const auto inner_shape() const			//returns some_array_type which holds inner shape (type depedent on context)
 	const auto outer_shape() const			//returns some_array_type which holds outer shape (type depedent on context)
 
-	const auto internal() const				//returns internal iterator IE expression_functor or Core/Tensor_Slice/Tensor/Scalar
-	      auto internal()				//returns internal iterator IE expression_functor or Core/Tensor_Slice/Tensor/Scalar
+	const auto internal() const				//returns internal iterator IE expression_functor or Array/Tensor_Slice/Tensor/Scalar
+	      auto internal()				//returns internal iterator IE expression_functor or Array/Tensor_Slice/Tensor/Scalar
 
 
-**DEFINED IN BC_Internals/BC_Core/Tensor_Shapinh.h
+**DEFINED IN BC_Internals/BC_Array/Tensor_Shapinh.h
 
 	const operator[] (int i) const 			//returns "slice" of tensor at index (IE Cube returns Matrix, Matrix returns Vector, Vector returns Scalar)
    	      operator[] (int i)			//returns "slice" of tensor at index (IE Cube returns Matrix, Matrix returns Vector, Vector returns Scalar)
@@ -173,7 +173,7 @@ Methods:
 									  //This function is curreid IE chunk(myCube)(2,1,0)(2,2)
 									  // --- returns a 2x2matrix at page 3,column 2, row 0.
 
-**DEFINED IN BC_Internals/BC_Core/Matrix.h and Vector.h
+**DEFINED IN BC_Internals/BC_Array/Matrix.h and Vector.h
 
 	cosnt auto t() const		//returns a transpose expression (cannot transpose in place)
 	      auto t() 			//returns a transpose expression (cannot transpose in place)

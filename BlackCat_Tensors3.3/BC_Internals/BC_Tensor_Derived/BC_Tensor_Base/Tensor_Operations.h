@@ -1,5 +1,5 @@
 /*
- * Core.h
+ * Array.h
  *
  *  Created on: Dec 30, 2017
  *      Author: joseph

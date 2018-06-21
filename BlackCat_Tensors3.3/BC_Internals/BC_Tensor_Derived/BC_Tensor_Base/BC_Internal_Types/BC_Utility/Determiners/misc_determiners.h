@@ -1,5 +1,5 @@
 /*
- * isPrimaryCore.h
+ * isPrimaryArray.h
  *
  *  Created on: May 20, 2018
  *      Author: joseph
@@ -13,22 +13,22 @@
 namespace BC {
 
 /*
- * Determines if a an internal type is a Tensor_Core,
- * 	this is relevant as Tensor_Core's are the only type that has an internal memory_ptr.
+ * Determines if a an internal type is a Tensor_Array,
+ * 	this is relevant as Tensor_Array's are the only type that has an internal memory_ptr.
  * 	All other classes are just expressions (this is semi-not true for dotproduct, reshape, and chunk)
  *
  */
 
 namespace internal {
-template<class> class Core;
+template<int, class, class> class Array;
 }
 template<class> class lambda_array;
 template<class, int> class stack_array;
 template<int> class Shape;
 
-template<class T> struct isPrimaryCore { static constexpr bool conditional = false; };
-template<class T> struct isPrimaryCore<internal::Core<T>> { static constexpr bool conditional = true; };
-template<class T> static constexpr bool is_array_core() { return isPrimaryCore<T>::conditional; }
+template<class T> struct isPrimaryArray { static constexpr bool conditional = false; };
+template<int d, class T, class ml> struct isPrimaryArray<internal::Array<d,T,ml>> { static constexpr bool conditional = true; };
+template<class T> static constexpr bool is_array_core() { return isPrimaryArray<T>::conditional; }
 
 //determines if the type is a valid-indexable tensor_shape
 template<class T> 	struct BlackCat_Shape 						{ static constexpr bool conditional = false; };

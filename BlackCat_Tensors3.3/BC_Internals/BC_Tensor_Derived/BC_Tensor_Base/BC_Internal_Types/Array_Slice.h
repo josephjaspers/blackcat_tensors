@@ -8,7 +8,7 @@
 #ifndef TENSOR_SLICE_H_
 #define TENSOR_SLICE_H_
 
-#include "Core_Base.h"
+#include "Array_Base.h"
 
 namespace BC {
 namespace internal {
@@ -16,7 +16,7 @@ namespace internal {
 //Floored decrement just returns the max(param - 1, 0)
 
 template<class PARENT>
-	struct Tensor_Slice : Tensor_Core_Base<Tensor_Slice<PARENT>, MTF::max(PARENT::DIMS() - 1, 0)> {
+	struct Array_Slice : Tensor_Array_Base<Array_Slice<PARENT>, MTF::max(PARENT::DIMS() - 1, 0)> {
 
 	using scalar_type = _scalar<PARENT>;
 
@@ -28,7 +28,7 @@ template<class PARENT>
 	const PARENT parent;
 	scalar_type* array_slice;
 
-	__BCinline__ Tensor_Slice(const scalar_type* array, PARENT parent_) : array_slice(const_cast<scalar_type*>(array)), parent(parent_) {}
+	__BCinline__ Array_Slice(const scalar_type* array, PARENT parent_) : array_slice(const_cast<scalar_type*>(array)), parent(parent_) {}
 	__BCinline__ const auto inner_shape() const 			{ return parent.inner_shape(); }
 	__BCinline__ const auto outer_shape() const 			{ return parent.outer_shape(); }
 	__BCinline__ const scalar_type* memptr() const { return array_slice; }

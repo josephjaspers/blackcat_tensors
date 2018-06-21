@@ -19,8 +19,8 @@ namespace oper {
 
 namespace internal {
 
-template<class T> using enable_if_core = std::enable_if_t<std::is_base_of<BC_Core, T>::value>;
-template<class T, class U> using enable_if_cores = std::enable_if_t<std::is_base_of<BC_Core, T>::value && std::is_base_of<BC_Core, U>::value>;
+template<class T> using enable_if_core = std::enable_if_t<std::is_base_of<BC_Array, T>::value>;
+template<class T, class U> using enable_if_cores = std::enable_if_t<std::is_base_of<BC_Array, T>::value && std::is_base_of<BC_Array, U>::value>;
 template<class T>		using enable_if_blas = std::enable_if_t<std::is_base_of<BLAS_FUNCTION, T>::value>;
 
 template<class T> T&  cc(const T&  param) { return const_cast<T&> (param); }

@@ -3,14 +3,12 @@
 #define EXPRESSION_BINARY_DOTPRODUCT_CU_
 
 
-#include "Core_Base.h"
+#include "Array_Base.h"
 #include "Expression_Base.h"
-
+#include "BlackCat_Internal_Definitions.h"
 #include "Parse_Tree_BLAS_Branch_Evaluator.h"
 #include "Parse_Tree_Evaluator.h"
 
-#include "BlackCat_Internal_Definitions.h"
-#include "Core_Substitution.h"
 namespace BC {
 namespace oper {
 template<class ml> class dotproduct : public BLAS_FUNCTION {};

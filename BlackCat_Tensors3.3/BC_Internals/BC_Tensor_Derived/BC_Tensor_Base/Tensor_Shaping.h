@@ -94,8 +94,8 @@ public:
 	const auto operator [] (int i) const { return slice(i); }
 		  auto operator [] (int i) 		 { return slice(i); }
 
-	const auto scalar(int i) const { return tensor_of<0>::type<internal::Tensor_Scalar<functor_type>, mathlib_type>(scalar_impl(i)); }
-		  auto scalar(int i) 	   { return tensor_of<0>::type<internal::Tensor_Scalar<functor_type>, mathlib_type>(scalar_impl(i)); }
+	const auto scalar(int i) const { return tensor_of<0>::type<internal::Array_Scalar<functor_type>, mathlib_type>(scalar_impl(i)); }
+		  auto scalar(int i) 	   { return tensor_of<0>::type<internal::Array_Scalar<functor_type>, mathlib_type>(scalar_impl(i)); }
 
 	const auto slice(int i) const {
 		static_assert(DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");
@@ -153,7 +153,7 @@ public:
 		template<class... integers>
 		const auto operator () (integers... shape_dimensions) const {
 			static constexpr int tensor_dimension = sizeof...(shape_dimensions);
-			using chunk_type = typename internal::Tensor_Chunk<tensor_dimension>::template implementation<functor_type>;
+			using chunk_type = typename internal::Array_Chunk<tensor_dimension>::template implementation<functor_type>;
 			using type = tensor_of_t<tensor_dimension, chunk_type, mathlib_type>;
 
 			return type(tensor.internal().chunk(location, shape_dimensions...));
@@ -161,7 +161,7 @@ public:
 		template<class... integers>
 		auto operator () (integers... shape_dimensions) {
 			static constexpr int tensor_dimension = sizeof...(shape_dimensions);
-			using chunk_type = typename internal::Tensor_Chunk<tensor_dimension>::template implementation<functor_type>;
+			using chunk_type = typename internal::Array_Chunk<tensor_dimension>::template implementation<functor_type>;
 			using type = tensor_of_t<tensor_dimension, chunk_type, mathlib_type>;
 
 			return type(tensor.internal().chunk(location, shape_dimensions...));

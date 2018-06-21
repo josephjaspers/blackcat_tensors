@@ -12,24 +12,24 @@
 
 namespace BC {
 namespace internal {
-template<class T>
-struct Core : Tensor_Core_Base<Core<T>, _dimension_of<T>>{
+template<int dimension, class T, class mathlib>
+struct Array : Tensor_Array_Base<Array<dimension, T, mathlib>, dimension>{
 
 	using scalar_type = _scalar<T>;
-	using math_lib = _mathlib<T>;
+	using math_lib = mathlib;
 
-	__BCinline__ static constexpr int DIMS() { return _dimension_of<T>; }
+	__BCinline__ static constexpr int DIMS() { return dimension; }
 
 	scalar_type* array = nullptr;
 	Shape<DIMS()> shape;
 
-	Core(Shape<DIMS()> shape_, scalar_type* array_) : array(array_), shape(shape_) {}
+	Array(Shape<DIMS()> shape_, scalar_type* array_) : array(array_), shape(shape_) {}
 
 	template<class U>
-	Core(U param) : shape(param) { math_lib::initialize(array, this->size()); }
+	Array(U param) : shape(param) { math_lib::initialize(array, this->size()); }
 
 	template<class U>
-	Core(U param, scalar_type* array_) : array(array_), shape(param) {}
+	Array(U param, scalar_type* array_) : array(array_), shape(param) {}
 
 
 	__BCinline__ const auto inner_shape() const { return shape.is(); }
@@ -56,12 +56,6 @@ struct Core : Tensor_Core_Base<Core<T>, _dimension_of<T>>{
 			math_lib::initialize(array, this->size());
 		}
 	}
-
-	__BCinline__ auto shift(int i ) {
-		array += i;
-		return *this;
-	}
-
 	void destroy() {
 		math_lib::destroy(array);
 		array = nullptr;

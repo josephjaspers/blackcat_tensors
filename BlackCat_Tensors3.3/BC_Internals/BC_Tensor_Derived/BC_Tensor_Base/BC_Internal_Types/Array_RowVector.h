@@ -1,5 +1,5 @@
 /*
- * Core_RowVector.h
+ * Array_RowVector.h
  *
  *  Created on: Mar 14, 2018
  *      Author: joseph
@@ -8,7 +8,7 @@
 #ifndef TENSOR_CORE_ROWVECTOR_H_
 #define TENSOR_CORE_ROWVECTOR_H_
 
-#include "Core_Base.h"
+#include "Array_Base.h"
 
 namespace BC {
 namespace internal {
@@ -17,13 +17,13 @@ namespace internal {
  */
 
 template<class PARENT>
-struct Tensor_Row : Tensor_Core_Base<Tensor_Row<PARENT>, 1>  {
+struct Array_Row : Tensor_Array_Base<Array_Row<PARENT>, 1>  {
 
 	static_assert(PARENT::DIMS() == 2 || PARENT::DIMS() == 1, "TENSOR_ROW CAN ONLY BE GENERATED FROM ANOTHER VECTOR, ROW_VECTOR, OR MATRIX");
 
 	using array = _iterator<PARENT>;
-	using self = Tensor_Row<PARENT>;
-	using slice_type = Tensor_Scalar<self>;
+	using self = Array_Row<PARENT>;
+	using slice_type = Array_Scalar<self>;
 	using Mathlib = typename  PARENT::Mathlib;
 
 	__BCinline__ static constexpr int DIMS() { return 1; }
@@ -34,7 +34,7 @@ struct Tensor_Row : Tensor_Core_Base<Tensor_Row<PARENT>, 1>  {
 	PARENT parent;
 	array array_slice;
 
-	__BCinline__ Tensor_Row(array array, PARENT parent_) : array_slice(array), parent(parent_) {}
+	__BCinline__ Array_Row(array array, PARENT parent_) : array_slice(array), parent(parent_) {}
 	__BCinline__ int increment() const { return parent.ld1(); }
 	__BCinline__ int dims() const { return 1; }
 	__BCinline__ int size() const { return parent.cols(); }
@@ -53,8 +53,8 @@ struct Tensor_Row : Tensor_Core_Base<Tensor_Row<PARENT>, 1>  {
 	void print_dimensions() 		const { parent.print_dimensions(); }
 	void print_leading_dimensions()	const { parent.print_dimensions(); }
 
-	__BCinline__ const auto slice(int i) const { return Tensor_Scalar<self>(&array_slice[i * increment()], *this); }
-	__BCinline__	   auto slice(int i) 	   { return Tensor_Scalar<self>(&array_slice[i * increment()], *this); }
+	__BCinline__ const auto slice(int i) const { return Array_Scalar<self>(&array_slice[i * increment()], *this); }
+	__BCinline__	   auto slice(int i) 	   { return Array_Scalar<self>(&array_slice[i * increment()], *this); }
 
 
 	__BCinline__ const auto& memptr() const { return *this; }

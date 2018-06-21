@@ -8,9 +8,6 @@
 #ifndef INTERNAL_SHAPES_H_
 #define INTERNAL_SHAPES_H_
 
-#include <vector>
-#include <initializer_list>
-#include <iostream>
 #include "../BlackCat_Internal_Definitions.h"
 /*
  * Defines stack array and lambda array

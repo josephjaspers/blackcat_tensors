@@ -16,7 +16,7 @@
 //
 //namespace BC {
 //
-//template<class > struct Core;
+//template<class > struct Array;
 ////template<int> struct Shape;
 ////internal tensor type
 //

@@ -1,5 +1,5 @@
 /*
- * Tensor_Lv2_Core_impl.h
+ * Tensor_Lv2_Array_impl.h
  *
  *  Created on: Jan 2, 2018
  *      Author: joseph

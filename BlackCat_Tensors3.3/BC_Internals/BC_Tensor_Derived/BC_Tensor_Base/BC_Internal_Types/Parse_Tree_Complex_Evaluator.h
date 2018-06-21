@@ -34,7 +34,7 @@ template<class T, class enabler = void>
 struct expression_tree_evaluator;
 
 template<class T>
-struct expression_tree_evaluator<T, std::enable_if_t<isCore<T>()>>
+struct expression_tree_evaluator<T, std::enable_if_t<isArray<T>()>>
 {
 	static constexpr bool trivial_blas_eval = false;
 	static constexpr bool trivial_blas_injection = false;

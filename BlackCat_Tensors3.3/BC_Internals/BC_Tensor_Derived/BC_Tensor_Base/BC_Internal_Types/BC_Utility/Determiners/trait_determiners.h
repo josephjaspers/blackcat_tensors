@@ -39,7 +39,7 @@ template<template<class...> class tensor, class functor, class... set>
 struct determine_functor<tensor<functor, set...>>{
 
 	using derived = tensor<functor,set...>;
-	using type = std::conditional_t<std::is_base_of<BC_Type,functor>::value, functor, internal::Core<derived>>;
+	using type = std::conditional_t<std::is_base_of<BC_Type,functor>::value, functor, internal::Array<_dimension_of<derived>, _scalar<derived>, _mathlib<derived>>>;
 };
 
 //DETERMINE_SCALAR_TYPE----------------------------------------------------------------------------------------------
@@ -50,10 +50,10 @@ struct determine_scalar {
 	static constexpr bool nested_core_type = false;
 	using type = T;
 };
-template<template<class...> class tensor, class T, class... set>
-struct determine_scalar<internal::Core<tensor<T, set...>>> {
+template<int dims, class scalar, class ml>
+struct determine_scalar<internal::Array<dims, scalar, ml>> {
 	static constexpr bool nested_core_type = true;
-	using type = typename determine_scalar<T>::type;
+	using type = scalar;
 };
 
 template<template<class...> class expression, class T, class... set>

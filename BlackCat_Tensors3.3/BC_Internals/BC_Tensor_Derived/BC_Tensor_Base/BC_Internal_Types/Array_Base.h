@@ -1,5 +1,5 @@
 /*
- * Core_Interface.h
+ * Array_Interface.h
  *
  *  Created on: Apr 1, 2018
  *      Author: joseph
@@ -15,25 +15,24 @@ namespace BC {
 namespace internal {
 
 /*
- * Core_Interface is a common interface amongst all tensor_core subclasses,
+ * Array_Interface is a common interface amongst all tensor_core subclasses,
  */
 
-template<class> class Tensor_Slice;
-template<class> class Tensor_Scalar;
-template<class> class Tensor_Row;
-template<class> class Tensor_Transpose;
-template<int> class Tensor_Reshape;
-template<int> class Tensor_Chunk;
+template<class> class Array_Slice;
+template<class> class Array_Scalar;
+template<class> class Array_Row;
+template<class> class Array_Transpose;
+template<int> class Array_Reshape;
+template<int> class Array_Chunk;
 
 template<class derived, int DIMENSION,
-template<class> class 	_Tensor_Slice 	= Tensor_Slice,
-template<class> class 	_Tensor_Row 	= Tensor_Row,
-template<class> class 	_Tensor_Scalar 	= Tensor_Scalar,
-//template<class> class	_Tensor_Transpose = Tensor_Transpose,
-template<int> class     _Tensor_Chunk	= Tensor_Chunk,			//Nested implementation type
-template<int> class 	_Tensor_Reshape = Tensor_Reshape>		//Nested implementation type
+template<class> class 	_Tensor_Slice 	= Array_Slice,
+template<class> class 	_Tensor_Row 	= Array_Row,
+template<class> class 	_Tensor_Scalar 	= Array_Scalar,
+template<int> class     _Tensor_Chunk	= Array_Chunk,			//Nested implementation type
+template<int> class 	_Tensor_Reshape = Array_Reshape>		//Nested implementation type
 
-struct Tensor_Core_Base : expression_base<Tensor_Core_Base<derived,DIMENSION>>, BC_Core {
+struct Tensor_Array_Base : expression_base<derived>, BC_Array {
 
 	__BCinline__ static constexpr int DIMS() { return DIMENSION; }
 	__BCinline__ static constexpr int ITERATOR() { return 0; }
@@ -43,25 +42,20 @@ struct Tensor_Core_Base : expression_base<Tensor_Core_Base<derived,DIMENSION>>, 
 	using slice_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Slice<self>>;
 	using row_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Row<self>>;
 	using scalar_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Scalar<self>>;
-//	using trans_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Transpose<self>>;
 
 private:
 
 	__BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }
-	__BCinline__ 	   derived& as_derived() 	  { return static_cast<	     derived&>(*this); }
+	__BCinline__ 	   derived& as_derived() 	   { return static_cast<	     derived&>(*this); }
 
 public:
-	template<class injection> using type = derived;
-
 	operator 	   auto()       { return as_derived().memptr(); }
 	operator const auto() const { return as_derived().memptr(); }
 
 	__BCinline__ 	   auto& operator [] (int index) 	   { return DIMS() == 0 ? as_derived().memptr()[0] : as_derived().memptr()[index]; }
 	__BCinline__ const auto& operator [] (int index) const { return DIMS() == 0 ? as_derived().memptr()[0] : as_derived().memptr()[index]; }
-	__BCinline__ const auto inner_shape() const { return as_derived().inner_shape(); }
-	__BCinline__ const auto outer_shape() const { return as_derived().outer_shape(); }
-	__BCinline__ const auto slice(int i) const { return slice_t(&(as_derived().memptr()[slice_index(i)]),as_derived()); }
-	__BCinline__	   auto slice(int i) 	   { return slice_t(&(as_derived().memptr()[slice_index(i)]),as_derived()); }
+	__BCinline__ const auto slice(int i) const  { return slice_t (&as_derived().memptr()[slice_index(i)] ,as_derived()); }
+	__BCinline__	   auto slice(int i) 	    { return slice_t (&as_derived().memptr()[slice_index(i)] ,as_derived()); }
 	__BCinline__ const auto scalar(int i) const { return scalar_t(&as_derived().memptr()[i], as_derived()); }
 	__BCinline__	   auto scalar(int i) 	    { return scalar_t(&as_derived().memptr()[i], as_derived()); }
 	__BCinline__ const auto row(int i) const { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED"); return row_t(&as_derived().memptr()[i], as_derived()); }
@@ -108,9 +102,6 @@ public:
 		return typename _Tensor_Reshape<dim>::template implementation<derived>(as_derived().memptr(), this->as_derived(), shape);
 	}
 
-
-//#endif
-
 	//------------------------------------------Implementation Details---------------------------------------//
 
 	__BCinline__
@@ -125,10 +116,10 @@ public:
 };
 
 
-template<class T, class voider = void> struct isCore_impl { static constexpr bool conditional = false; };
-template<class T> struct isCore_impl<T, std::enable_if_t<std::is_same<decltype(T::DIMS()),int>::value>> { static constexpr bool conditional = std::is_base_of<Tensor_Core_Base<T, T::DIMS()>, T>::value; };
+template<class T, class voider = void> struct isArray_impl { static constexpr bool conditional = false; };
+template<class T> struct isArray_impl<T, std::enable_if_t<std::is_same<decltype(T::DIMS()),int>::value>> { static constexpr bool conditional = std::is_base_of<Tensor_Array_Base<T, T::DIMS()>, T>::value; };
 
-template<class T> static constexpr bool isCore() { return isCore_impl<std::decay_t<T>>::conditional; }
+template<class T> static constexpr bool isArray() { return isArray_impl<std::decay_t<T>>::conditional; }
 
 }
 }

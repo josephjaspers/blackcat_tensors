@@ -9,15 +9,15 @@
 #ifndef TENSOR_CHUNK_H_
 #define TENSOR_CHUNK_H_
 
-#include "Core_Base.h"
+#include "Array_Base.h"
 
 namespace BC {
 namespace internal {
 template<int dimension>
-struct Tensor_Chunk  {
+struct Array_Chunk  {
 
 	template<class PARENT>
-	struct implementation : Tensor_Core_Base<implementation<PARENT>,dimension> {
+	struct implementation : Tensor_Array_Base<implementation<PARENT>,dimension> {
 
 		using scalar = _scalar<PARENT>;
 //		static_assert(dimension <= PARENT::DIMS(), "TENSOR-CHUNK'S DIMENSIONS MUST BE LESS OR EQUAL TO PARENT'S DIMENSIONS");

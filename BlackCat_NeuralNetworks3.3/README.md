@@ -26,7 +26,7 @@ Installation/Setup:
 FAQ Fast Explanation:
 
 	How to choose GPU/CPU?	
-	-Go to NN_Core/Defaults.h
+	-Go to NN_Array/Defaults.h
 	- using ml = CPU;             // Change to using ml = GPU;
 	- using fp_type = double;     // Change to using fp_type = float;
 	
