@@ -89,6 +89,28 @@ static constexpr bool conditional = true;
 	template<class T, class... Ts> static constexpr bool is_one_of() { return one_of_impl<T, Ts...>::conditional; }
 
 
+	//-------------------------------------if else chain
+	template<bool x, class T> struct IF_IMPL;
+	template<class T> struct IF_IMPL<true, T>  { using type = T; };
+
+	template<class... > struct IF_BLOCK_IMPL;
+	template<class T, class... Ts> struct IF_BLOCK_IMPL<T, Ts...> {
+		using type = T;
+	};
+	template<bool x, class T, class... Ts>
+	struct IF_BLOCK_IMPL<IF_IMPL<x, T>, Ts...> {
+		using type = std::conditional_t<x, T, typename IF_BLOCK_IMPL<Ts...>::type>;
+	};
+	template<bool x, class T, class U, class... Ts>
+	struct IF_BLOCK_IMPL<IF_IMPL<x, T>, U, Ts...> {
+		using type = std::conditional_t<x, T, typename IF_BLOCK_IMPL<U, Ts...>::type>;
+	};
+
+	template<bool x, class t>
+	using IF = typename IF_IMPL<x, t>::type;
+
+	template<class... Ts>
+	using IF_BLOCK = typename IF_BLOCK_IMPL<Ts...>::type;
 }
 }
 #endif /* SIMPLE_H_ */

@@ -40,9 +40,9 @@ class Tensor_Operations {
 
 
 	//--------------------------------------evaluation implementation-----------------------------------------------//
-	template<bool BARRIER = true, class derived_t>
+	template<class derived_t>
 	void evaluate(const Tensor_Operations<derived_t>& tensor) {
-		BC::Evaluator<mathlib_type, BARRIER>::evaluate(as_derived().internal(), tensor.as_derived().internal());
+		BC::Evaluator<mathlib_type>::evaluate(as_derived().internal(), tensor.as_derived().internal());
 	}
 
 public:
@@ -158,8 +158,9 @@ public:
 
 
 	//assert either scalar by tensor operation or same size (not same dimensions)
-	template<class deriv>
+	template<class deriv> __BC_host_inline__
 	void assert_same_size(const Tensor_Operations<deriv>& tensor) const {
+//#ifdef NDEBUG
 		assert_same_ml(tensor);
 
 		if (derived::DIMS() != 0 && deriv::DIMS() != 0)
@@ -174,10 +175,11 @@ public:
 
 					throw std::invalid_argument("Tensor by Tensor operation - size mismatch - ");
 				}
+//#endif
 	}
 
 	//assert same math library // asserts both memory is allocated on gpu or cpu
-	template<class deriv>
+	template<class deriv>__BC_host_inline__
 	void assert_same_ml(const Tensor_Operations<deriv>& tensor) const {
 		static_assert(std::is_same<_mathlib<derived>, _mathlib<deriv>>::value, "mathlib_type must be identical");
 	}

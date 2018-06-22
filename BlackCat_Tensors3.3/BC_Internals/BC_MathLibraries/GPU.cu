@@ -54,15 +54,18 @@ public:
 
 		//These wonky specializations are essential for cuda to compile
 		//Not sure why
+		template<class T>
+		static void eval(T to) {
+			run::eval(to);
+			cudaDeviceSynchronize();
+		}
+
 		template<template<class...> class T, template<class...> class U, class... Ts, class... Us>
 		static void eval(T<U<Us...>, Ts...> to) {
 			run::eval(to);
-			barrier();
+			cudaDeviceSynchronize();
 		}
-		template<template<class...> class T, template<class...> class U, class... Ts, class... Us>
-		static void eval_unsafe(T<U<Us...>, Ts...> to) {
-			run::eval(to);
-		}
+
 	};
 
 // THIS IS MANDATORY WITH CUDA COMPILATION FOR 9.1 --- THIS IS A BUG IN THE NVCC

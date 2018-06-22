@@ -56,114 +56,88 @@ int dotproduct_injection() {
 
 	a.print();
 	b.print();
+	f.print();
 
-	d = a.t();
-	e = b.t();
-//
+	std::cout << "d = a.t" << std::endl;
+	d = a.t() + b - b;
 	d.print();
+
+	std::cout << "e = b.t" << std::endl;
+	e = b.t() + a - a;
 	e.print();
 
-	std::cout << " E" << std::endl;
-	e.print();
-
-	std::cout << " simple dot product [following should all have same value]" << std::endl;
+	std::cout << " c = d * e[following should all have same value]" << std::endl;
+	c.zero();
 	c = d * e;
 	c.print();
-	std::cout << "a.t * b.t + f" << std::endl;
+	std::cout << "c = a.t * b.t + f" << std::endl;
+	c.zero();
 	c = a.t() * b.t() + f ;
 	c.print();
-	std::cout << "a.t * e + f" << std::endl;
+	std::cout << "c = a.t * e + f" << std::endl;
+	c.zero();
 	c = a.t() * e + f;
 	c.print();
 //// not available to detect
 ////	std::cout << "-(d * b.t) + f" << std::endl;
 ////	c =  - (d * b.t()) + f;
 ////	c.print();
-	std::cout << "c = d * scal(2.0f) * e + c;" << std::endl;
-	c = d * scal(2.0f) * e + c;
+	std::cout << "c = d * scal(2.0f) * e + f;" << std::endl;
+	c.zero();
+	c = d * scal(2.0f) * e + f;
 	c.print();
 	std::cout << "c = scal(2.0f) * d * e;" << std::endl;
+	c.zero();
 	c = scal(2.0f) * d * e;
 	c.print();
-	std::cout << "c = d * e * scal(2.0f); " << std::endl;
-
+//	std::cout << "c = d * e * scal(2.0f); " << std::endl;
+//	c.zero();
 //	c = d * e * scal(2.0f); ////This is the only version that is not accounted for (it is also the least common notation)
-	c.print();
+//	c.print();
 
 	scal A(2.0f);
 	scal B(2.0f);
 
 	std::cout << " a.t * b.t" << std::endl;
+	c.zero();
 	c = a.t() * b.t();
 	c.print();
 
 	std::cout << "c = a.t() * A * b.t();" << std::endl;
+	c.zero();
 	A.print();
 	c = a.t() * A * b.t();
 	c.print();
 //
 	std::cout << "c = A * a.t() * b.t();" << std::endl;
+	c.zero();
 	A.print();
 	c = A * a.t() * b.t();
 	c.print();
 
 	std::cout << "c = a.t() * (b.t() * A);" << std::endl;
+	c.zero();
 	A.print();
 	c = a.t() * (b.t() * A);
 	c.print();
 
 
 	std::cout << "	c = a.t() * A * (b.t() * A) " << std::endl;
+	c.zero();
 	A.print();
 	c = a.t() * A * (b.t() * A);
 	c.print();
 
 
 	std::cout << "	c =  - (a.t() * A * (b.t() * A))" << std::endl;
+	c.zero();
 	A.print();
 	c = (a.t() * A * (b.t() * A));
 
 	std::cout << "	c = (a.t() * b.t()) % (a.t() * b.t()); " << std::endl;
-
+	c.zero();
 	c = (a.t() * b.t()) % (a.t() * b.t());
 	c.print();
 
-//	auto f_chunk = chunk(f)(0,0)(2,2);
-//	auto expr = (c =* (a.t() * b.t() + a.t() * b.t()  + a.t() * b.t())).internal();
-//	auto var =  BC::internal::tree::evaluate(expr);
-//	c.print();
-//
-//	std::cout << type_name<std::decay_t<decltype(var)>>() << std::endl;
-	//	dc() ** F + dy + rz.t() * dz() + rf.t() * df(
-//	using core = decltype(c.internal());
-//	auto expression = (c =* ( a.t() * b.t() + a.t() * b.t() + f % f)).internal();
-//
-//	using core = decltype(c.internal());
-//	using expr = std::decay_t<decltype(expression)>;
-//	using rv_of_assign = decltype(expression.right);
-//	using add_of_dps   = decltype(expression.right.right);
-//
-//	std::cout << type_name<typename expr:: injection_type>() << std::endl;
-//	std::cout << type_name<rv_of_assign>() << std::endl;
-//	std::cout << type_name<add_of_dps>() << std::endl;
-
-//	std::cout << add_of_dps:: substituteable() << std::endl;
-
-	//	std::cout << " is add of dps sub = " << add_of_dps::substituteable() << std::endl;
-//	std::cout << type_name<typename add_of_dps::template type<core>>() << std::endl;
-
-//	using expr2 = std::decay_t<decltype(expression)>;
-//	std::cout << type_name<expr2>() << std::endl;
-//	std::cout << type_name<typename expr2::injection_type>() << std::endl; //type<typename expr2::default_type>>() << std::endl;
-
-
-
-//	std::cout << type_name<expr4>() << std::endl;
-//	std::cout << type_name<typename expr4::injection_type>(); //type<typename expr2::default_type>>() << std::endl;
-	//
-	//	std::cout << " post type " << std::endl;
-//THIS DOES NOT WORK
-//	std::cout << "	c = a.t() * A * (b.t() * A) + a.t() * A * (b.t() * A)" << std::endl;
-//	c = c % c +  a.t() * b.t() + a.t() * b.t();//	c.print();
-//	return 0;
+	return 0;
 };

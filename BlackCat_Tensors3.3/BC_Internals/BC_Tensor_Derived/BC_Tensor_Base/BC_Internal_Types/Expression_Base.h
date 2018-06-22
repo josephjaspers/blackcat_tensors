@@ -35,7 +35,7 @@ public:
 	operator 	   auto&()       { return as_derived(); }
 	operator const auto&() const { return as_derived(); }
 
-	expression_base() { static_assert(std::is_trivially_copyable<derived>::value, "EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
+//	expression_base() { static_assert(std::is_trivially_copyable<derived>::value, "EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
 
 
 	template<class... integers>

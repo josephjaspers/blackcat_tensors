@@ -72,31 +72,22 @@ struct determine_iterator {
 };
 
 ///DETERMINE_MATHLIB---------------------------------------------------------------------------------------
-template<class T>
-struct determine_mathlibrary{
-	using type = BC::CPU;
+template<class T> struct determine_mathlibrary { using type = BC::CPU; };
+template<class T, class... Ts, template<class...> class list> struct determine_mathlibrary<list<T, Ts...>>
+{ using type = typename determine_mathlibrary<T>::type;};
+
+template<int x, class scalar, class ml>
+struct determine_mathlibrary<internal::Array<x, scalar, ml>> {
+	using type = ml;
 };
 
-//template<class T, class... Ts, template<class...> class list>
-//struct determine_mathlibrary<list<T, Ts...>> {
-//	using type = typename determine_mathlibrary<T>::type;
-//};
-//template<class T, class ml>
-//struct determine_mathlibrary<Matrix<T, ml>> {
-//	using type = ml;
-//};
-//template<class T, class ml>
-//struct determine_mathlibrary<Scalar<T, ml>> {
-//	using type = ml;
-//};
-//template<class T, class ml>
-//struct determine_mathlibrary<Vector<T, ml>> {
-//	using type = ml;
-//};
-//template<class T, class ml>
-//struct determine_mathlibrary<Cube<T, ml>> {
-//	using type = ml;
-//};
+
+template<class T, class ml> struct determine_mathlibrary<Scalar<T, ml>> { using type = ml; };
+template<class T, class ml> struct determine_mathlibrary<Vector<T, ml>> { using type = ml; };
+template<class T, class ml> struct determine_mathlibrary<Matrix<T, ml>> { using type = ml; };
+template<class T, class ml> struct determine_mathlibrary<Cube<T, ml>> { using type = ml; };
+template<class T, class ml> struct determine_mathlibrary<Tensor4<T, ml>> { using type = ml; };
+template<class T, class ml> struct determine_mathlibrary<Tensor5<T, ml>> { using type = ml; };
 
 }
 

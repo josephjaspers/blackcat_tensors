@@ -10,6 +10,21 @@
 
 namespace BC{
 
+namespace constants {
+static float* static_initialize(int sz, float value) {
+	float* t;
+	cudaMallocManaged((void**) &t, sizeof(float));
+	cudaMemcpy(t, &value, sizeof(float), cudaMemcpyHostToDevice);
+	return t;
+}
+
+
+static float* const s1 = static_initialize(1, 1);
+static float* const s0 = static_initialize(1, 0);
+static float* const sn1 = static_initialize(1, -1);
+
+}
+
 template<class core_lib>
 struct GPU_BLAS {
 
@@ -25,8 +40,8 @@ struct GPU_BLAS {
 		cublasCreate(&handle);
 		cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
 
-		const float *const alpha = scalarA ? const_cast<float*>(scalarA) : core_lib::BC_ONE;
-		const float *const beta = scalarB ? const_cast<float*>(scalarB) : core_lib::BC_ZERO;
+		const float *const alpha = scalarA ? const_cast<float*>(scalarA) : constants::s1;
+		const float *const beta = scalarB ? const_cast<float*>(scalarB) : constants::s0;
 
 		cublasSgemm(handle, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 		cudaDeviceSynchronize();

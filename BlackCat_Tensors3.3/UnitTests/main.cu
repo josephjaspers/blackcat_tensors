@@ -6,8 +6,8 @@ using BC::Matrix;
 using BC::Scalar;
 using BC::Cube;
 
-using ml = BC::CPU;
-//using ml = BC::GPU;
+//using ml = BC::CPU;
+using ml = BC::GPU;
 
 using vec = Vector<float, ml>;
 using mat = Matrix<float, ml>;
@@ -41,8 +41,6 @@ int main() {
 //	readwrite();
 //	shaping();
 
-	mat w;
-	scal s;
 //	using chunk_t = decltype(chunk(w)(0,0)(0,0).internal());
 //
 //	using core = std::decay_t<decltype(w.internal())>;

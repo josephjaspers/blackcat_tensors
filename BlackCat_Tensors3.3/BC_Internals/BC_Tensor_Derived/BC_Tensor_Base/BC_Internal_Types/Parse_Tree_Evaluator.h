@@ -8,8 +8,7 @@
 #ifndef TRIVIAL_EVALUATOR_H_
 #define TRIVIAL_EVALUATOR_H_
 
-#include "Parse_Tree_Complex_Evaluator.h"
-
+#include "Parse_Tree_Evaluator_Impl.h"
 
 namespace BC {
 
@@ -25,17 +24,14 @@ static constexpr bool INJECTION() {
 
 
 
-template<class mathlib_type, bool BARRIER>
+template<class mathlib_type>
 struct Evaluator {
 
 template<class assignment, class expression>
 static std::enable_if_t<!INJECTION<expression>()>
 evaluate(const assignment& assign, const expression& expr) {
 	static constexpr int iterator_dimension = expression::ITERATOR();
-	if (BARRIER)
 		mathlib_type::template dimension<iterator_dimension>::eval(expr);
-	else
-		mathlib_type::template dimension<iterator_dimension>::eval_unsafe(expr);
 }
 
 template<class assignment, class expression>
@@ -48,10 +44,7 @@ evaluate(assignment& assign, const expression& expr) {
 
 	auto post_inject_tensor = internal::tree::evaluate(expr);		//evaluate the internal tensor_type
 	if (!std::is_same<injection_t, rv_of<decltype(post_inject_tensor)>>::value || BC::internal::isArray<decltype(post_inject_tensor)>()) {
-	if (BARRIER)
 		mathlib_type::template dimension<iterator_dimension>::eval(post_inject_tensor);
-	else
-		mathlib_type::template dimension<iterator_dimension>::eval_unsafe(post_inject_tensor);
 	}
 	//destroy any temporaries made by the tree
 	internal::tree::destroy_temporaries(post_inject_tensor);
@@ -67,11 +60,11 @@ struct branched {
 	static std::enable_if_t<BC::internal::isArray<std::decay_t<branch>>(), const branch&> evaluate(const branch& expression) { return expression; }
 
 	template<class branch>
-	std::enable_if_t<!BC::internal::isArray<std::decay_t<branch>>(), sub_t<std::decay_t<branch>>> evaluate(const branch& expression)
+	static std::enable_if_t<!BC::internal::isArray<std::decay_t<branch>>(), sub_t<std::decay_t<branch>>> evaluate(const branch& expression)
 	{
 		sub_t<std::decay_t<branch>> cached_branch(expression.inner_shape());
 		eval_t<std::decay_t<branch>> assign_to_expression(cached_branch, expression); //create an expression to assign to the left_cached
-		Evaluator<mathlib, true>::evaluate(cached_branch, assign_to_expression);
+		Evaluator<mathlib>::evaluate(cached_branch, assign_to_expression);
 		return cached_branch;
 	}
 

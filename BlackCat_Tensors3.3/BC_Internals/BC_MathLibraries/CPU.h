@@ -139,11 +139,6 @@ public:
 #endif
 
 		}
-		template<class T>
-		static void eval_unsafe(T to) {
-			run::eval(to);
-		}
-
 	};
 };
 }
