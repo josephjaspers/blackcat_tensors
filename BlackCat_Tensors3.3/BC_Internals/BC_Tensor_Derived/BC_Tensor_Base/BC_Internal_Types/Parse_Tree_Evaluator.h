@@ -51,7 +51,7 @@ evaluate(assignment& assign, const expression& expr) {
 }
 };
 
-template<class mathlib, bool BARRIER>
+template<class mathlib>
 struct branched {
 	template<class branch> using sub_t 	= BC::internal::Array<branch::DIMS(), _scalar<branch>, mathlib>;
 	template<class branch> using eval_t = BC::internal::binary_expression<sub_t<branch>, branch, BC::oper::assign>;

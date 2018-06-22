@@ -1,3 +1,4 @@
+
 #ifdef __CUDACC__
 #ifndef BC_GPU_IMPL
 #define BC_GPU_IMPL

@@ -72,7 +72,7 @@ struct determine_iterator {
 };
 
 ///DETERMINE_MATHLIB---------------------------------------------------------------------------------------
-template<class T> struct determine_mathlibrary { using type = BC::CPU; };
+template<class T> struct determine_mathlibrary;
 template<class T, class... Ts, template<class...> class list> struct determine_mathlibrary<list<T, Ts...>>
 { using type = typename determine_mathlibrary<T>::type;};
 

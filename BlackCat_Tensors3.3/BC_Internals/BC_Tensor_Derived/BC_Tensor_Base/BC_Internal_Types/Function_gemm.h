@@ -57,15 +57,15 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 	static constexpr bool lv_eval = det_eval<lv>::evaluate;
 	static constexpr bool rv_eval = det_eval<rv>::evaluate;
 
-	using lv_A = decltype(branched<mathlib, true>::evaluate(det_eval<lv>::get_array(left)));
-	using rv_B = decltype(branched<mathlib, true>::evaluate(det_eval<rv>::get_array(right)));
+	using lv_A = decltype(branched<mathlib>::evaluate(det_eval<lv>::get_array(left)));
+	using rv_B = decltype(branched<mathlib>::evaluate(det_eval<rv>::get_array(right)));
 
 	//get the data of the injection --> injection_wrapper simply stores the alpha/beta scalar modifiers
 	auto& injection = injection_values.data();
 
 	//evaluate the left and right branches (computes only if necessary)
-	lv_A A = branched<mathlib, true>::evaluate(det_eval<lv>::get_array(left));
-	rv_B B = branched<mathlib, true>::evaluate(det_eval<rv>::get_array(right));
+	lv_A A = branched<mathlib>::evaluate(det_eval<lv>::get_array(left));
+	rv_B B = branched<mathlib>::evaluate(det_eval<rv>::get_array(right));
 
 	//get the left and right side scalar values
 	scalar_type* alpha_lv = det_eval<lv>::get_scalar(left);

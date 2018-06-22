@@ -56,12 +56,16 @@ public:
 		//Not sure why
 		template<class T>
 		static void eval(T to) {
+			std::cout << "evaluating " << std::endl;
+
 			run::eval(to);
 			cudaDeviceSynchronize();
 		}
 
 		template<template<class...> class T, template<class...> class U, class... Ts, class... Us>
 		static void eval(T<U<Us...>, Ts...> to) {
+			std::cout << "evaluating " << std::endl;
+
 			run::eval(to);
 			cudaDeviceSynchronize();
 		}
