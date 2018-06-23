@@ -107,7 +107,7 @@ static void fill(T t, const J j) {
 
 template<class T, class U, class V> __global__
 static void scalar_mul(T* t, U* u, V* v) {
-	*t = u[0] * v[0];
+	*t = *u * *v;
 }
 
 template<class T, typename J> __global__

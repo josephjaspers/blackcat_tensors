@@ -19,8 +19,8 @@ struct CPU_Constants {
 	}
 
 	template<class T>
-	static T* static_initialize(int sz, T value) {
-		return new T[sz] {value};
+	static T* static_initialize(T value) {
+		return new T(value);
 	}
 	static constexpr float s1 = 1;
 	static constexpr float sn1 = -1;
