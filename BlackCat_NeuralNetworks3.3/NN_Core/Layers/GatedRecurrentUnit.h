@@ -188,10 +188,10 @@ public:
 		//for each matrix/vector gradient storage initialize to correct dims
 		wz_gradientStorage.for_each([&](auto& var) { var = mat(this->OUTPUTS, this->INPUTS);  var.zero(); });
 		rz_gradientStorage.for_each([&](auto& var) { var = mat(this->OUTPUTS, this->OUTPUTS); var.zero(); });
-		bz_gradientStorage.for_each([&](auto& var) { var = vec(this->OUTPUTS);			     var.zero(); });
+		bz_gradientStorage.for_each([&](auto& var) { var = vec(this->OUTPUTS);			      var.zero(); });
 		wf_gradientStorage.for_each([&](auto& var) { var = mat(this->OUTPUTS, this->INPUTS);  var.zero(); });
 		rf_gradientStorage.for_each([&](auto& var) { var = mat(this->OUTPUTS, this->OUTPUTS); var.zero(); });
-		bf_gradientStorage.for_each([&](auto& var) { var = vec(this->OUTPUTS);			     var.zero(); });
+		bf_gradientStorage.for_each([&](auto& var) { var = vec(this->OUTPUTS);			      var.zero(); });
 
 		//for each cell-state error initialize to 0
 		dc.for_each([&](auto& var) { var = vec(this->OUTPUTS); var.zero(); });

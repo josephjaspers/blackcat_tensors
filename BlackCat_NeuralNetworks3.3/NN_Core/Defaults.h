@@ -18,13 +18,13 @@ namespace NN {
  */
 
 struct BASE;
-using ml = CPU;
-using fp_type = double;
+//using ml = CPU;
+//using fp_type = double;
 //
 //does not work with example classes but does work
 //CURRENTLY BROKEN
-//using ml = GPU;
-//using fp_type = float;
+using ml = BC::GPU;
+using fp_type = float;
 //
 
 static constexpr int NUMB_THREADS = 8;
