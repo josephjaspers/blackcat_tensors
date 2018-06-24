@@ -1,43 +1,34 @@
-Last Updated: Sunday, June 3rd, 2018
+Last Updated: Sunday, June 23rd, 2018
 Author: Joseph Jaspers
 
-BlackCat_Tensors (BCT) is a highly optimized Matrix library designed for NeuralNetworks in a multi-threaded context. Various operations enable utilizing low-level multithreaded concepts in this much higher-level framework.
+BlackCat_Tensors (BCT) is a highly optimized Matrix library designed for NeuralNetwork construction. 
+BCT is designed to support GPU computing (CUDA) and CPU multi-threading (OpenMP).
+BCT focuses on delivering a high-level framework for Neural Network construction with low-level performance. 
 
-############GPU LIBRARY CURRENTLY DOES NOT WORK-- WILL FIX SOON---- (nvcc does not support if-constexpr)
-###########STABLE BRANCH DOES WORK FOR GPU, Though the CPU version will be faster for the current branch (master)
 Current Work:
-	Scaleable injection for BLAS routines, implementating convolution/correlation (using MKL/CUDA)
+	Convolution/Correlation kernels for convNets
 
 Intallation/Setup:
 	
-	BCT is a header only library that supports compilation with the NVCC and G++ 
-		- stable with G++ 6 and 7 and NVCC (CUDA 9.2)
+	BCT is a header only library that supports compilation with the NVCC and G++
+	BCT does not support any default BLAS routines, and must be linked with an apropriate BLAS library. 
 		
-	Setting simply requires adding the BlackCat_Tensors3.3 your path and including "BlackCat_Tensors.h"
+	Setting up simply requires adding the BlackCat_Tensors3.3 your path and including "BlackCat_Tensors.h"
 
 FAQ Fast Explanation:
 	
-	All internal-types are now supported, though the classes are designed for primitive-numeric types
-	
-	CPU multithreading? Simply link openmp
-	GPU multithreading? Install CUDA 9 run with NVCC and choose the GPU mathlibrary. 
+	CPU multithreading? Simply link OpenMP
+	GPU multithreading? Simply link CUDA 9
 
 	How to choose mathlibrary?
-	BC::Vector<float, BC::GPU> myVec(sz); //Allocates internal on the gpu
-	BC::Vector<double, BC::CPU> myVec(sz); //Allocates internal on the cpu
+	BC::Vector<float, BC::GPU> myVec(sz); //Allocates data on the gpu
+	BC::Vector<double, BC::CPU> myVec(sz); //Allocates data on the cpu
 
 	**Must be linked to an apropriate BLAS with cblas_dgemm function and cblas_sgemm function.
 	**Dotproduct currently only available to double, and float types.
+	**CUDA BLAS routines only support floats. 
 
-FAQ Fast Explanation (GPU):
-
-	Using the cpu/gpu libraries use the identical interface.
-
-	an expression such as:
-	y = m * x + b 
-
-	will lazily evaluate the entire expression and then sound the entire function to the GPU to run. 
-	internal is NOT passed back and forth between the CPU and GPU, (this is more efficient) 
+	Non-numeric types are supported, though non-numeric types are not heavily tested in release. 
 
 Supports:
 
@@ -46,30 +37,78 @@ Supports:
 
 Optimizations:
 
-	***BLAS_DETECTION and INJECTION*** (new feature)
-	BlackCat_Tensor's now supports an injection system for gemm to reduce the generation of temporaries. 
+	Two relevant built in optimizations are explained briefly here. 
+
+	A) The standard expression-template system allows converting multiple element-wise operations into single for loops.
+		For example an operation such as:
+		y = a + b - c / d; 
+
+		Will automatically produce assembly code that is identical to
+
+		for (int i = 0; i < y.size(); ++i)
+			y[i] = a[i] + b[i] - c[i] / d[i];
+
+		This in short allows users to use code that appears to be identical to mathematical expressions with performance equivalent to hand written code.
+
+		If you are interested in how expression templates are implemented, (Todd Veldhuizen is the original creator of expression-templates)
+		https://www.cct.lsu.edu/~hkaiser/spring_2012/files/ExpressionTemplates-ToddVeldhuizen.pdf		
+
+	B) BlackCat_Tensor's now supports an injection system for gemm (and other BLAS routines) to reduce the generation of temporaries. 
 	Operations utilizing matrix multiplication in which possible "injections" are available will not use a temporary to store the result of a matrix-mul operation.
 
 	This system detects complicated matrix-mul problems such as:
-		ForwardPropagation;	y = g(w * x + b)  
-		In equation, the "optimal" hardcoded method would be to call a BLAS function
-		evaluating w*x to y. And then calling a function such as y = g(y + b)
-		This library detects this entire expression and does the exact stated strategy.
+		For example, in the forward-propagation algorithm of NeuralNetworks
+		
+		y = sigmoid(w * x + b); 
 
-		injection may not be used with /= and %= (%= is the 'array-product' and assign)
-	
-	This however assumes that no aliases of the give problem are utilized. IE 	
-		a = a * b; 
-		will NOT result in the correct output, as it is the equivalent of a single BLAS call. 
-		to utilize expressions such as these use
+		The "optimized" hard-coded form would be 
 
-		a.alias() = a * b;
-		and this will cause a * b to evaluate to a temporary and than copy the values to a. 
+		1) evalute the product of w and x to y.
+		'y = w * x' (which is evaluated via a single BLAS call gemm(y, w, x))
+
+		2) evaluate the element-wise operation of
+		'y = sigmoid (y + b)' (which is evaluated with a single for loop through the expression-template system)
+
+		
+		In another more complex example
+		a more complex neural network algorithm (forward propagation for recurrent neural networks)
+
+		y = sigmoid(w * x + r * y + b)  
 	
+		will convert the problem to
+		'y = w * x'	(BLAS_gemm call)
+		'y += r * y'	(another BLAS_gemm call)
+		'y = g(y + b)'	(finally the element-wise operation (this is a single for loop))
+
+		Certain algorithms require temporaries. 
+		IE
+
+		y += sigmoid(w * x + b)
+
+		must use a temporary as the sigmoid function must be evaluated before summing the output to y.
+
+		However an equation such as
+		y += w * x + b
+
+		will be evaluated as 
+
+		y += w * x (a BLAS_gemm call)
+		y += b	   (element-wise operation)
+
+		***Caveat***
+	
+		BCT cannot detect is an alias is used.
+		so problems such as:
+			 y = y * x
+		will cause the BLAS_gemm call to be writing to Y as it is still calculating the product. 
+		When reusing aliases in a function use:
+			y.alias() = y * x
+		and this will cause the function to skip the injection-optimization and evaluate y * x to a temporary and then copying. 
+
 
 	All linear or O(n) operations utilize expression-templates/lazy evaluation system.
 	Dotproducts are implemented through BLAS. Currently no default option is available. 
-	(recommended BLAS implementation ATLAS) 
+
 
 
 Benchmarks:
@@ -190,6 +229,8 @@ https://github.com/josephjaspers/BlackCat_Libraries/blob/master/BlackCat_Tensors
 G++ 7
 03 Optimizations
 BLAS implementation: ATLAS 
+
+*****THESE BENCHMARKS ARE OUTDATED*****
 
 Benchmarks:
 
