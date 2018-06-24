@@ -51,7 +51,7 @@ struct GPU_Utility {
 		return t;
 	}
 
-	template<typename T> __host__ __device__
+	template<typename T>
 	static void destroy(T* t) {
 		cudaFree((void*)t);
 	}

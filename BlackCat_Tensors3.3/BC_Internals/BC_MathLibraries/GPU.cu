@@ -60,8 +60,8 @@ public:
 			cudaDeviceSynchronize();
 		}
 
-		template<template<class...> class T, template<class...> class U, class... Ts, class... Us>
-		static void eval(T<U<Us...>, Ts...> to) {
+		template<template<class...> class T, class... Ts>
+		static void eval(T<Ts...> to) {
 			run::eval(to);
 			cudaDeviceSynchronize();
 		}
