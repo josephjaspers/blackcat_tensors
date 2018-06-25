@@ -5,8 +5,8 @@
  *      Author: joseph
  */
 
-#ifndef DEFAULTS_H_
-#define DEFAULTS_H_
+#ifndef CPU_DEFAULTS_H_
+#define CPU_DEFAULTS_H_
 
 #include "BlackCat_Tensors.h"
 namespace BC {
@@ -18,16 +18,11 @@ namespace NN {
  */
 
 struct BASE;
-//using ml = CPU;
-//using fp_type = double;
+using ml = CPU;
+using fp_type = double;
 //
-//does not work with example classes but does work
-//CURRENTLY BROKEN
-using ml = BC::GPU;
-using fp_type = float;
-//
-
-static constexpr int NUMB_THREADS = 8;
+//using ml = BC::GPU;
+//using fp_type = float;
 
 using scal = Scalar<fp_type, ml>;
 using vec = Vector<fp_type, ml>;

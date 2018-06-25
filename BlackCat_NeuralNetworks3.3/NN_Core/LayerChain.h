@@ -2,7 +2,6 @@
 #ifndef BLACKCAT_TUPLE
 #define BLACKCAT_TUPLE
 
-#include "Defaults.h"
 #include "Layers/InputLayer.h"
 #include "Layers/OutputLayer.h"
 #include "Layers/Layer.h"

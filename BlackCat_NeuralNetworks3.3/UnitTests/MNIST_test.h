@@ -1,4 +1,4 @@
-#include "../BlackCat_NeuralNetworks.h"
+#include "../BlackCat_GPU_NeuralNetworks.h"
 #include <fstream>
 #include <iostream>
 #include <string>

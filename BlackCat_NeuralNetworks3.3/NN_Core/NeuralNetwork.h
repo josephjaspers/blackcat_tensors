@@ -9,7 +9,6 @@
 #define NEURALNETWORK_H_
 
 #include "LayerChain.h"
-#include "Defaults.h"
 namespace BC {
 namespace NN {
 template<template<class> class... layers>
