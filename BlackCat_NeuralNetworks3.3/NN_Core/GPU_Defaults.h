@@ -28,12 +28,12 @@ using cube = Cube<fp_type, ml>;
 using tensor4 = Tensor4<fp_type, ml>;
 using tensor5 = Tensor5<fp_type, ml>;
 
-template<class T> using _scal = Scalar<T, ml>;
-template<class T> using _vec = Vector<T, ml>;
-template<class T> using _mat = Matrix<T, ml>;
-template<class T> using _cube = Cube<T, ml>;
-template<class T> using _tensor4 = Tensor4<T, ml>;
-template<class T> using _tensor5 = Tensor5<T, ml>;
+template<class T> using f_scal = Scalar<T, ml>;
+template<class T> using f_vec = Vector<T, ml>;
+template<class T> using f_mat = Matrix<T, ml>;
+template<class T> using f_cube = Cube<T, ml>;
+template<class T> using f_tensor4 = Tensor4<T, ml>;
+template<class T> using f_tensor5 = Tensor5<T, ml>;
 
 }
 }

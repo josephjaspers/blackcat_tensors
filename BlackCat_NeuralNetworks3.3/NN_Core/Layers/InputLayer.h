@@ -16,8 +16,6 @@ namespace NN {
 template<class derived>
 struct InputLayer : Layer<derived> {
 
-	using Layer<derived>::clear;
-
 	InputLayer() : Layer<derived>(0) {}
 
 	bp_list<vec> ys;

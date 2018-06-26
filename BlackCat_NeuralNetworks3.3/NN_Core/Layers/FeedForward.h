@@ -14,15 +14,10 @@
 namespace BC {
 namespace NN {
 
-
 template<class derived>
 struct FeedForward : public Layer<derived> {
-
 public:
 
-	using Layer<derived>::sum_gradients;		//a function that stores all the gradients within a thread pool
-	using Layer<derived>::zero;					//a function that zeros all tensor-parameters
-	using Layer<derived>::clear;				//a function that clears back_propagation_lists
 	using Layer<derived>::lr;					//the learning rate
 	using Layer<derived>::xs;					//the input back_propagation_list (from previous layer)
 

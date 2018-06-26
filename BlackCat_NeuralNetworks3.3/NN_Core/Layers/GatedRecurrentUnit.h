@@ -22,12 +22,8 @@ struct GRU : public Layer<derived> {
 
 public:
 
-	using Layer<derived>::sum_gradients;
-	using Layer<derived>::zero;
 	using Layer<derived>::xs;
 	using Layer<derived>::lr;
-//	using Layer<derived>::g;
-//	using Layer<derived>::gd;
 
 	omp_unique<mat> wz_gradientStorage, wf_gradientStorage; 	//gradient storage weights
 	omp_unique<mat> rz_gradientStorage, rf_gradientStorage;		//gradient storage recurrent weights
