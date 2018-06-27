@@ -44,10 +44,7 @@ struct binary_expression<lv, rv, oper::ger<mathlib>>
 	lv left;
 	rv right;
 
-	 binary_expression(lv left, rv right) : left(left), right(right) {
-		 std::cout << " ger " << std::endl;
-
-	 }
+	 binary_expression(lv left, rv right) : left(left), right(right) {}
 
 	__BCinline__ const auto inner_shape() const { return l_array([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.rows() : 1; });}
 	__BCinline__ const auto outer_shape() const { return l_array([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.rows() * left.rows() : 1; });}
