@@ -39,8 +39,8 @@ template<class T, class voider = void> struct det_eval {
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = false;
 
-	template<class param> static auto& get_scalar(const param& p) { throw std::invalid_argument("Attempting to use an array from an unevaluated context"); return cc(p); }
-	template<class param> static auto& get_array(const param& p)  { throw std::invalid_argument("Attempting to use an array from an unevaluated context"); return cc(p); }
+	template<class param> static auto& get_scalar(const param& p) {/*crash*/ }
+	template<class param> static auto& get_array(const param& p)  {/*crash*/ }
 };
 
 //IF TENSOR CORE (NON EXPRESSION)

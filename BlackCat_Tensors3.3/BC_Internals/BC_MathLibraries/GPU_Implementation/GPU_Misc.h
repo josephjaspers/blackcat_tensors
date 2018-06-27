@@ -20,15 +20,15 @@ struct GPU_Misc {
 
 	template<typename T, typename J>
 	static void fill(T t, const J j) {
-		gpu_impl::fill<<<blocks(t.size()),threads()>>>(t, j, t.size());
+		gpu_impl::fill<<<blocks(t.size()),threads()>>>(t, j);
 		cudaDeviceSynchronize();
 	}
 
-	template<template<class...> class T, class...set, class Value>
-	static void fill(T<set...> t, Value val) {
-		gpu_impl::fill<<<blocks(t.size()),threads()>>>(t, val);
-		cudaDeviceSynchronize();
-	}
+//	template<template<class...> class T, class...set, class Value>
+//	static void fill(T<set...> t, Value val) {
+//		gpu_impl::fill<<<blocks(t.size()),threads()>>>(t, val);
+//		cudaDeviceSynchronize();
+//	}
 
 	template<typename T>
 	static void zero(T t) {

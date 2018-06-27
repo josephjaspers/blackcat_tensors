@@ -112,8 +112,8 @@ public:
 	//---------------------------------------------------METHODS THAT MAY NEED TO BE SHADOWED------------------------------------------------------------//
 	void destroy() const {}
 	//---------------------------------------------------METHODS THAT NEED TO BE SHADOWED------------------------------------------------------------//
-	__BCinline__ _scalar<derived> operator [] (int index) 	  	{ throw std::invalid_argument("function not detected");};
-	__BCinline__ _scalar<derived> operator [] (int index) const { throw std::invalid_argument("function not detected");};
+	__BCinline__ _scalar<derived> operator [] (int index) 	  	{ return 0;};
+	__BCinline__ _scalar<derived> operator [] (int index) const { return 0;};
 	//-------------------------------------------------tree re-ordering methods---------------------------------------------------------//
 };
 }

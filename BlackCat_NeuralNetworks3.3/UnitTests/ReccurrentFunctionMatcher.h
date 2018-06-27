@@ -36,7 +36,6 @@ int test() {
 
 	const int TRAINING_ITERATIONS = 200;
 	const int NUMB_EXAMPLES = 100;
-	const int TESTS  = 10;
 	NeuralNetwork<FeedForward, GRU, FeedForward> network(1, 125, 40, 1);
 	network.setLearningRate(.003);
 
@@ -50,8 +49,7 @@ int test() {
 //	network.read(is);
 
 	//Train
-	float t;
-	t = omp_get_wtime();
+
 	printf("\n Calculating... BC_NN training time \n");
 	std::cout << " training..." << std::endl;
 
@@ -90,8 +88,8 @@ int test() {
 
 //	std::ofstream os("NN_adj_sin.bc");
 //	network.write(os);
+	return 0;
 }
-
 
 }
 }

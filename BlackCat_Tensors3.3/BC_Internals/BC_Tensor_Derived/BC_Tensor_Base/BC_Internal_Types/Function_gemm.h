@@ -74,31 +74,12 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 	scalar_type* alpha = mathlib::static_initialize((scalar_type)alpha_mod);
 	scalar_type* beta = mathlib::static_initialize((scalar_type)beta_mod);
 
-
-//	scalar_type alpha_host;
-//	scalar_type beta_host;
-//	scalar_type alphal= -1;
-//	scalar_type alphar = -1;
-//
-//	mathlib::DeviceToHost(&alpha_host, alpha);
-//	mathlib::DeviceToHost(&beta_host, beta);
-//	if (rv_scalar)
-//	mathlib::DeviceToHost(&alphar, alpha_rv);
-//	if (lv_scalar)
-//	mathlib::DeviceToHost(&alphal, alpha_lv);
-
-
 	//compute the scalar values if need be
 	if (lv_scalar)
 		mathlib::scalar_mul(alpha, alpha, alpha_lv);
 	if (rv_scalar)
 		mathlib::scalar_mul(alpha, alpha, alpha_rv);
 
-//	std::cout << " alpha L = " << alphal << std::endl;
-//	std::cout << " alpha R = " <<alphar << std::endl;
-//	std::cout << " alpha val = " << alpha_host << std::endl;
-//	std::cout << " beta val = " << beta_host << std::endl;
-//
 
 	//call matrix_mul
 	mathlib::gemm(transA, transB,  M(), N(), K(), alpha, A, A.ld1(), B, B.ld1(), beta, injection, injection.ld1());

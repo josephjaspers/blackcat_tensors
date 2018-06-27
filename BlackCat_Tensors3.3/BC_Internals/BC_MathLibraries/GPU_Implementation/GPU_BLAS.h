@@ -38,19 +38,44 @@ struct GPU_BLAS {
 		cublasHandle_t handle;
 		cublasCreate(&handle);
 		cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
-
-//		if (lda == 0 ) lda = m;
-//		if (ldb == 0 ) ldb = n;
-//		if (ldc == 0 ) ldc = m;
-//		const float *const alpha = scalarA ? const_cast<float*>(scalarA) : constants::s1;
-//		const float *const beta = scalarC ?  const_cast<float*>(scalarC) : constants::s0;
-
 		cublasSgemm(handle, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 		cudaDeviceSynchronize();
 		cublasDestroy(handle);
 	}
-};
 
+//y := alpha*A*x + beta*y,   or   y := alpha*A**T*x + beta*y,
+static void gemv(bool transA, int m, int n,
+		const float* alpha, const float* A, int lda,
+							 const float* X, int incX,
+		const float* beta, 	   float* Y, int incY) {
+
+
+	auto TRANS_A =  transA ? CUBLAS_OP_T : CUBLAS_OP_N;
+
+
+	cublasHandle_t handle;
+	cublasCreate(&handle);
+	cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
+	cublasSgemv(handle, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY);
+	cudaDeviceSynchronize();
+	cublasDestroy(handle);
+}
+
+static void ger(int m, int n,
+		const float* alpha,
+							 const float* X, int incX,
+							 const float* Y, int incY,
+							  float* A, int lda) {
+
+	cublasHandle_t handle;
+	cublasCreate(&handle);
+	cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
+	cublasSger(handle, m, n, alpha, X, incX, Y, incY, A, lda);
+	cudaDeviceSynchronize();
+	cublasDestroy(handle);
+}
+
+};
 
 }
 
