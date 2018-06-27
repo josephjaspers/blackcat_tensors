@@ -1,6 +1,6 @@
 
-#ifndef EXPRESSION_BINARY_GEMM_H_
-#define EXPRESSION_BINARY_GEMM_H_
+#ifndef EXPRESSION_BINARY_GEMV_H_
+#define EXPRESSION_BINARY_GEMV_H_
 
 
 #include "Array_Base.h"
@@ -11,7 +11,7 @@
 
 namespace BC {
 namespace oper {
-template<class ml> class gemm : public BLAS_FUNCTION {};
+template<class ml> class gemv : public BLAS_FUNCTION {};
 }
 namespace internal {
 
@@ -23,10 +23,12 @@ namespace internal {
 
 
 template<class lv, class rv, class mathlib>
-struct binary_expression<lv, rv, oper::gemm<mathlib>>
-: expression_base<binary_expression<lv, rv,  oper::gemm<mathlib>>>, BLAS_FUNCTION {
+struct binary_expression<lv, rv, oper::gemv<mathlib>>
+: expression_base<binary_expression<lv, rv,  oper::gemv<mathlib>>>, BLAS_FUNCTION {
 
 	using scalar_type = _scalar<lv>;
+
+
 	static constexpr bool transA = det_eval<lv>::transposed;
 	static constexpr bool transB = det_eval<rv>::transposed;
 	static constexpr bool lv_scalar = det_eval<lv>::scalar;
@@ -35,8 +37,8 @@ struct binary_expression<lv, rv, oper::gemm<mathlib>>
 	static constexpr bool rv_eval = det_eval<rv>::evaluate;
 
 	static_assert(std::is_same<_scalar<lv>, _scalar<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
-
-	__BCinline__ static constexpr int DIMS() { return rv::DIMS(); }
+	static_assert(lv::DIMS() == 2 && rv::DIMS() == 1, "GEMV DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
+	__BCinline__ static constexpr int DIMS() { return 1; }
 	__BCinline__ static constexpr int ITERATOR() { return 0; }
 
 	lv left;
@@ -44,13 +46,8 @@ struct binary_expression<lv, rv, oper::gemm<mathlib>>
 
 	 binary_expression(lv left, rv right) : left(left), right(right) {}
 
-	__BCinline__ const auto inner_shape() const { return l_array([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.cols() : 1; }); }
-	__BCinline__ const auto outer_shape() const { return l_array([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.cols() * left.rows() : 1; }); }
-
-	__BCinline__ int M() const { return left.rows();  }
-	__BCinline__ int N() const { return right.cols(); }
-	__BCinline__ int K() const { return left.cols();  }
-
+	__BCinline__ const auto inner_shape() const { return l_array([&](int i) { return i == 0 ? left.rows() : 1; });}
+	__BCinline__ const auto outer_shape() const { return l_array([&](int i) { return i == 0 ? left.rows() : 1; });}
 
 
 template<class core, int alpha_mod, int beta_mod>
@@ -64,49 +61,33 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 
 	//evaluate the left and right branches (computes only if necessary)
 	lv_A A = branched<mathlib>::evaluate(det_eval<lv>::get_array(left));
-	rv_B B = branched<mathlib>::evaluate(det_eval<rv>::get_array(right));
-
-	//get the left and right side scalar values
-	scalar_type* alpha_lv = det_eval<lv>::get_scalar(left);
-	scalar_type* alpha_rv = det_eval<rv>::get_scalar(right);
+	rv_B X = branched<mathlib>::evaluate(det_eval<rv>::get_array(right));
 
 	//initialize the alpha and beta scalars,
 	scalar_type* alpha = mathlib::static_initialize((scalar_type)alpha_mod);
-	scalar_type* beta = mathlib::static_initialize((scalar_type)beta_mod);
+	scalar_type* beta  = mathlib::static_initialize((scalar_type)beta_mod);
 
-
-//	scalar_type alpha_host;
-//	scalar_type beta_host;
-//	scalar_type alphal= -1;
-//	scalar_type alphar = -1;
-//
-//	mathlib::DeviceToHost(&alpha_host, alpha);
-//	mathlib::DeviceToHost(&beta_host, beta);
-//	if (rv_scalar)
-//	mathlib::DeviceToHost(&alphar, alpha_rv);
-//	if (lv_scalar)
-//	mathlib::DeviceToHost(&alphal, alpha_lv);
-
-
+	//get the left and right side scalar values and
 	//compute the scalar values if need be
-	if (lv_scalar)
+	if (lv_scalar) {
+		scalar_type* alpha_lv = det_eval<lv>::get_scalar(left);
 		mathlib::scalar_mul(alpha, alpha, alpha_lv);
-	if (rv_scalar)
+	}
+	if (rv_scalar) {
+		scalar_type* alpha_rv = det_eval<rv>::get_scalar(right);
 		mathlib::scalar_mul(alpha, alpha, alpha_rv);
+	}
 
-//	std::cout << " alpha L = " << alphal << std::endl;
-//	std::cout << " alpha R = " <<alphar << std::endl;
-//	std::cout << " alpha val = " << alpha_host << std::endl;
-//	std::cout << " beta val = " << beta_host << std::endl;
-//
+	//call matrix_mul ///for gemm we always use M, N, K regardless of transpose, but for gemv we always use pre-trans dimensions ???
+	int m = A.rows();
+	int n = A.cols();
 
-	//call matrix_mul
-	mathlib::gemm(transA, transB,  M(), N(), K(), alpha, A, A.ld1(), B, B.ld1(), beta, injection, injection.ld1());
+	mathlib::gemv(transA,  m, n, alpha, A, A.ld1(), X, 1/*inc_X*/, beta, injection/*Y*/, 1/*incy*/);
 
 
 	//destroy all the temporaries
 	if (lv_eval) cc(A).destroy();
-	if (rv_eval) cc(B).destroy();
+	if (rv_eval) cc(X).destroy();
 	mathlib::destroy(beta);
 	mathlib::destroy(alpha);
 }

@@ -4,7 +4,7 @@
 using BC::Vector;
 using BC::Matrix;
 
-int dotproducts() {
+int gemms() {
 	std::cout << " --------------------------------------DOTPRODUCTS--------------------------------------" << std::endl;
 
 	mat a(3, 2);

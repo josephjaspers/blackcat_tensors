@@ -31,17 +31,22 @@ struct expression_determiner {
 	//determines the return type of dot-product operations (and scalar multiplication)
 	template<class param_deriv>
 	struct dp_impl {
-		static constexpr bool SCALAR_MUL = derived::DIMS() == 0 || param_deriv::DIMS() == 0;
 		using param_functor_type 	= _functor<param_deriv>;
 		using greater_shape 	= std::conditional_t<(derived::DIMS() > param_deriv::DIMS()), derived, param_deriv>;
 		using lesser_shape 		= std::conditional_t<(derived::DIMS() < param_deriv::DIMS()), derived, param_deriv>;
 
-		using dot_type 				= internal::binary_expression<_functor<derived>, _functor<param_deriv>, oper::dotproduct<mathlib_type>>;
-		using scalmul_type 			= internal::binary_expression<functor_type , param_functor_type, oper::scalar_mul>;
+		using gemm_t 			= internal::binary_expression<_functor<derived>, _functor<param_deriv>, oper::gemm<mathlib_type>>;
+		using gemv_t 			= internal::binary_expression<_functor<derived>, _functor<param_deriv>, oper::gemv<mathlib_type>>;
+		using axpy_t 			= internal::binary_expression<functor_type , param_functor_type, oper::scalar_mul>;
 
-		using type = std::conditional_t<!SCALAR_MUL,
-						expressionSubstitution<lesser_shape, dot_type, mathlib_type>,
-						expressionSubstitution<greater_shape, scalmul_type, mathlib_type>>;
+		static constexpr bool axpy = derived::DIMS() == 0 || param_deriv::DIMS() == 0;
+		static constexpr bool gemm = (derived::DIMS() == 2 && param_deriv::DIMS() == 2) ||
+										(derived::DIMS() == 1 && param_deriv::DIMS() == 1);
+		static constexpr bool gemv = derived::DIMS() == 2 && param_deriv::DIMS() == 1;
+
+
+		using type = std::conditional_t<axpy, expressionSubstitution<lesser_shape, axpy_t, mathlib_type>,
+						std::conditional_t<gemm, expressionSubstitution<greater_shape, gemm_t, mathlib_type>, expressionSubstitution<lesser_shape, gemv_t, mathlib_type>>>;
 	};
 
 };

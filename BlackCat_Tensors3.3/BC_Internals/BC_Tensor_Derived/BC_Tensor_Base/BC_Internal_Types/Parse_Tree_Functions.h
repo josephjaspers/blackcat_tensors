@@ -19,7 +19,7 @@ struct add_assign;
 struct mul_assign;
 struct div_assign;
 struct sub_assign;
-template<class ml> struct dotproduct;
+template<class ml> struct gemm;
 }
 
 namespace internal {
@@ -130,8 +130,10 @@ template<> struct PRECEDENCE<oper::div_assign> {
 };
 
 //add overloads for BLAS functions here
-template<class T> struct BLAS_FUNCTION_TYPE { static constexpr bool conditional = false; };
-template<class T> struct BLAS_FUNCTION_TYPE<BC::oper::dotproduct<T>> { static constexpr bool conditional = true; };
+template<class T, class enabler = void> struct BLAS_FUNCTION_TYPE { static constexpr bool conditional = false; };
+template<class T> struct BLAS_FUNCTION_TYPE<T, std::enable_if_t<std::is_base_of<BC::BLAS_FUNCTION, T>::value>> { static constexpr bool conditional = true; };
+
+//template<class T> struct BLAS_FUNCTION_TYPE<BC::oper::gemm<T>> { static constexpr bool conditional = true; };
 //template<class T> struct BLAS_FUNCTION_TYPE<BC::oper::transpose<T>> { static constexpr bool conditional = true; };
 
 template<class T> static constexpr bool is_blas_func() {

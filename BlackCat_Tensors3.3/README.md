@@ -122,7 +122,7 @@ Methods:
 	_tensor_  operator +  (const _tensor_&) const		//pointwise addition
 	_tensor_  operator -  (const _tensor_&) const		//pointwise subtraction
 	_tensor_  operator /  (const _tensor_&) const		//pointwise scalar
-	_tensor_  operator *  (const _tensor_&) const		//dotproduct or pointwise multiplication if scalar
+	_tensor_  operator *  (const _tensor_&) const		//gemm or pointwise multiplication if scalar
 	_tensor_  operator %  (const _tensor_&) const		//pointwise multiplication
 	_tensor_& operator += (const _tensor_&)			//assign and sum
 	_tensor_& operator -= (const _tensor_&)			//assign and subract

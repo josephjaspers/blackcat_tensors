@@ -29,7 +29,7 @@ std::string type_name() {
 
 
 
-int dotproduct_injection() {
+int gemm_injection() {
 	std::cout << " --------------------------------------DOTPRODUCTS--------------------------------------" << std::endl;
 
 	mat a(3, 2);
@@ -138,6 +138,24 @@ int dotproduct_injection() {
 	c.zero();
 	c = (a.t() * b.t()) % (a.t() * b.t());
 	c.print();
+
+
+	vec x(2);
+	vec y(2);
+
+	y.print();
+
+
+	x = 1;
+
+
+	std::cout << " this should be gemv call " << std::endl;
+	x.print();
+	c.print();
+	y -= c * x;
+
+	y.print();
+
 
 	return 0;
 };

@@ -13,6 +13,8 @@
 #include "BC_Internal_Types/Operations/Unary.h"
 
 #include "BC_Internal_Types/Function_gemm.h"
+#include "BC_Internal_Types/Function_gemv.h"
+
 #include "BC_Internal_Types/Expression_Unary.h"
 #include "BC_Internal_Types/Function_transpose.h"
 #include "Tensor_Operations_Impl/Expression_Determiner.h"
@@ -81,7 +83,7 @@ public:
 		evaluate(bi_expr<oper::mul_assign>(param));
 		return as_derived();
 	}
-	//-------------------------------------dotproduct-------------------- ---------------------//
+	//-------------------------------------gemm-------------------- ---------------------//
 	template<class pDeriv>
 	auto operator *(const Tensor_Operations<pDeriv>& param) const {
 		 return typename dp_impl<pDeriv>::type(as_derived().internal(), param.as_derived().internal());

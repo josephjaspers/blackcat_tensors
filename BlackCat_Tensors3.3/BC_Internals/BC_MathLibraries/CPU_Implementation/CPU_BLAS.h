@@ -28,39 +28,61 @@ struct CPU_BLAS  {
 	 * c = M x N
 	 */
 
-	static void vec_copy(int n, float* x, int incx, float* y, int incy) { return cblas_scopy(n, x, incx, y, incy); }
-	static void vec_copy(int n, double* x, int incx, double* y, int incy) { return cblas_dcopy(n, x, incx, y, incy); }
-
-	static void gemm(bool transA, bool transB, const float* A, const float* B, float* C, int m, int n, int k,
-			const float* scalarA = nullptr, const float* scalarB = nullptr,  int lda = 0, int ldb =0, int ldc =0) {
+	static void gemm(bool transA, bool transB, int m, int n, int k,
+			const float* alpha, const float* A, int lda,
+								const float* B, int ldb,
+			const float* beta, 		  float* C, int ldc) {
 
 		auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
 		auto TRANS_B =  transB ? CblasTrans : CblasNoTrans;
 
-		if (lda == 0 ) lda = m;
-		if (ldb == 0 ) ldb = n;
-		if (ldc == 0 ) ldc = m;
-
-	    const float beta   =  scalarB ? *scalarB : 0;
-	    const float alpha  =  scalarA ? *scalarA : 1;
-
-		cblas_sgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+		cblas_sgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, *alpha, A, lda, B, ldb, *beta, C, ldc);
 	}
 
-	static void gemm(bool transA, bool transB, const double* A, const double* B, double* C, int m, int n, int k,
-			const double* scalarA = nullptr, const double* scalarB = nullptr, int lda = 0, int ldb = 0, int ldc = 0) {
+	static void gemm(bool transA, bool transB, int m, int n, int k,
+			const double* alpha, const double* A, int lda,
+								 const double* B, int ldb,
+			const double* beta, 	   double* C, int ldc) {
 
 		auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
 		auto TRANS_B =  transB ? CblasTrans : CblasNoTrans;
 
-		if (lda == 0 ) lda = m;
-		if (ldb == 0 ) ldb = n;
-		if (ldc == 0 ) ldc = m;
+		cblas_dgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, *alpha, A, lda, B, ldb, *beta, C, ldc);
+	}
 
-		const double beta   =  scalarB ? *scalarB : 0.0;
-		const double alpha  =  scalarA ? *scalarA : 1.0;
+	//y := alpha*A*x + beta*y,   or   y := alpha*A**T*x + beta*y,
+	static void gemv(bool transA, int m, int n,
+			const double* alpha, const double* A, int lda,
+								 const double* X, int incX,
+			const double* beta, 	   double* Y, int incY) {
 
-		cblas_dgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+		auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
+
+		cblas_dgemv(CblasColMajor, TRANS_A, m, n, *alpha, A, lda, X, incX, *beta, Y, incY);
+	}
+	static void gemv(bool transA, int m, int n,
+			const float* alpha, const float* A, int lda,
+								const float* X, int incX,
+			const float* beta, 	   	  float* Y, int incY) {
+
+		auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
+
+		cblas_sgemv(CblasColMajor, TRANS_A, m, n, *alpha, A, lda, X, incX, *beta, Y, incY);
+	}
+
+	static void ger(int m, int n,
+			const double* alpha, const double* A, int lda,
+								 const double* X, int incX,
+								 	   double* Y, int incY) {
+
+		cblas_dger(CblasColMajor, m, n, *alpha, X, incX, Y, incY,  A, lda);
+	}
+	static void ger(int m, int n,
+			const float* alpha, const float* A, int lda,
+								 const float* X, int incX,
+								 	   float* Y, int incY) {
+
+		cblas_sger(CblasColMajor, m, n, *alpha, X, incX, Y, incY, A, lda);
 	}
 };
 }

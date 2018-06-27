@@ -15,7 +15,7 @@ namespace BC {
 /*
  * Determines if a an internal type is a Tensor_Array,
  * 	this is relevant as Tensor_Array's are the only type that has an internal memory_ptr.
- * 	All other classes are just expressions (this is semi-not true for dotproduct, reshape, and chunk)
+ * 	All other classes are just expressions (this is semi-not true for gemm, reshape, and chunk)
  *
  */
 

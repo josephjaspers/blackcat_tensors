@@ -20,7 +20,7 @@
 
 namespace BC {
 namespace oper {
-template<class> struct dotproduct;
+template<class> struct gemm;
 }
 
 namespace internal {
@@ -48,7 +48,7 @@ class expression_interface {
 		struct dp_impl {
 			static constexpr bool SCALAR_MUL = derived::DIMS() == 0 || param_deriv::DIMS() == 0;
 
-			using dot_type 				= expr2<derived, param_deriv, oper::dotproduct<mathlib_type>>;
+			using dot_type 				= expr2<derived, param_deriv, oper::gemm<mathlib_type>>;
 			using scalmul_type 			= expr2<derived ,param_deriv, oper::scalar_mul>;
 
 			using type = std::conditional_t<!SCALAR_MUL,
@@ -102,7 +102,7 @@ public:
 		evaluate(bi_expr<oper::mul_assign>(param));
 		return as_derived();
 	}
-//	//-------------------------------------dotproduct-------------------- ---------------------//
+//	//-------------------------------------gemm-------------------- ---------------------//
 	template<class pDeriv>
 	auto operator *(const expression_interface<pDeriv>& param) const {
 		 return typename dp_impl<pDeriv>::type(as_derived(), param.as_derived());

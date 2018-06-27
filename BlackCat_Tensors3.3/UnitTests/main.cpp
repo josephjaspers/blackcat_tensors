@@ -21,7 +21,7 @@ using tesnor5 = BC::Tensor5<float, ml>;
 //using ary = std::vector<unsigned int>;
 
 //#include "_correlation_test.h"
-//#include "_dotproducts_test.h"
+//#include "_gemms_test.h"
 #include "_dotproduct_injection_test.h"
 
 //#include "_readwrite_test.h"
@@ -36,8 +36,8 @@ int main() {
 
 	//various tests
 //	correlation();
-//	dotproducts();
-	dotproduct_injection();
+//	gemms();
+	gemm_injection();
 //	readwrite();
 //	shaping();
 

@@ -30,7 +30,7 @@ struct InputLayer : Layer<derived> {
 		return this->next().forwardPropagation_Express(x);
 	}
 
-	template<class T> vec backPropagation(const T&& dy) {
+	template<class T> auto backPropagation(const T&& dy) {
 		ys().pop();
 		return dy;
 	}
