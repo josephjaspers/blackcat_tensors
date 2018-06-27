@@ -81,6 +81,12 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 		mathlib::scalar_mul(alpha, alpha, alpha_rv);
 
 
+	float a;
+	float b;
+
+	mathlib::DeviceToHost(&a, alpha);
+	mathlib::DeviceToHost(&b, beta);
+
 	//call matrix_mul
 	mathlib::gemm(transA, transB,  M(), N(), K(), alpha, A, A.ld1(), B, B.ld1(), beta, injection, injection.ld1());
 

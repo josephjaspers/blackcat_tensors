@@ -44,7 +44,8 @@ struct binary_expression<lv, rv, oper::gemv<mathlib>>
 	lv left;
 	rv right;
 
-	 binary_expression(lv left, rv right) : left(left), right(right) {}
+	 binary_expression(lv left, rv right) : left(left), right(right) {
+	 }
 
 	__BCinline__ const auto inner_shape() const { return l_array([&](int i) { return i == 0 ? left.rows() : 1; });}
 	__BCinline__ const auto outer_shape() const { return l_array([&](int i) { return i == 0 ? left.rows() : 1; });}

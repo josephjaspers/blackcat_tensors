@@ -28,11 +28,11 @@ struct CPU_Utility {
 		return intenral_mem_ptr;
 	}
 	template<class T, class U>
-	static void HostToDevice(T* device_ptr, U* host_ptr, int size) {
+	static void HostToDevice(T* device_ptr, U* host_ptr, int size=1) {
 		core_lib::copy(device_ptr, host_ptr, size);
 	}
 	template<class T, class U>
-	static void DeviceToHost(T* host_ptr, U* device_ptr, int size) {
+	static void DeviceToHost(T* host_ptr, U* device_ptr, int size=1) {
 		core_lib::copy(host_ptr, device_ptr, size);
 	}
 	template<typename T>

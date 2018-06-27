@@ -23,7 +23,7 @@ struct unary_expression<functor_type, oper::transpose<ml>> : expression_base<una
 	functor_type array;
 
 	__BCinline__ static constexpr int DIMS() { return functor_type::DIMS(); }
-	__BCinline__ static constexpr int ITERATOR() { return 2; }
+	__BCinline__ static constexpr int ITERATOR() { return DIMS() == 2 ? 2 : 1; }
 	static_assert(functor_type::DIMS() == 1 || functor_type::DIMS() == 2, "TRANSPOSITION ONLY DEFINED FOR MATRICES AND VECTORS");
 
 	unary_expression(functor_type p) : array(p) {}

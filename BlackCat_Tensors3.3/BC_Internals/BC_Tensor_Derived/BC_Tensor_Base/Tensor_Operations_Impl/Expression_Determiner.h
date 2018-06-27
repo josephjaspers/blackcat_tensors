@@ -56,7 +56,7 @@ struct expression_determiner {
 		static constexpr bool gemv = derived::DIMS() == 2 && param_deriv::DIMS() == 1;
 		static constexpr bool ger  = derived::DIMS() == 1 && param_deriv::DIMS() == 1;
 
-		using type = std::conditional_t<axpy, expressionSubstitution<lesser_shape, axpy_t, mathlib_type>,
+		using type = std::conditional_t<axpy, expressionSubstitution<greater_shape, axpy_t, mathlib_type>,
 					std::conditional_t<gemm, expressionSubstitution<greater_shape, gemm_t, mathlib_type>,
 					std::conditional_t<gemv, expressionSubstitution<lesser_shape,  gemv_t, mathlib_type>,
 					std::conditional_t<ger, tensor_of_t<2, ger_t, mathlib_type>, void>>>>;

@@ -73,6 +73,7 @@ int gemm_injection() {
 	std::cout << "c = a.t * b.t + f" << std::endl;
 	c.zero();
 	c = a.t() * b.t() + f ;
+
 	c.print();
 	std::cout << "c = a.t * e + f" << std::endl;
 	c.zero();
@@ -85,6 +86,11 @@ int gemm_injection() {
 	std::cout << "c = d * scal(2.0f) * e + f;" << std::endl;
 	c.zero();
 	c = d * scal(2.0f) * e + f;
+
+	std::cout << type_name<decltype(d * scal(2.0f) * e + f)>() << std::endl;
+	std::cout << decltype(d * scal(2.0))::DIMS() << " GET DIMS " << std::endl;
+//	std::cout << (d * scal(2.0)).dims() << " GET DIMS " << std::endl;
+
 	c.print();
 	std::cout << "c = scal(2.0f) * d * e;" << std::endl;
 	c.zero();
