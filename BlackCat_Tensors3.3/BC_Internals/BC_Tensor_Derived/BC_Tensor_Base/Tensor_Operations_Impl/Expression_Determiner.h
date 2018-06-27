@@ -10,6 +10,16 @@
 
 namespace BC {
 namespace operationImpl {
+
+template<class T> struct is_transposed_impl {
+	static constexpr bool conditional = false;
+};
+template<class T, class ml> struct is_transposed_impl<BC::internal::unary_expression<T, oper::transpose<ml>>> {
+	static constexpr bool conditional = true;
+};
+template<class T>
+static constexpr bool is_transposed = is_transposed_impl<T>::conditional;
+
 template<class derived>
 struct expression_determiner {
 
@@ -37,16 +47,19 @@ struct expression_determiner {
 
 		using gemm_t 			= internal::binary_expression<_functor<derived>, _functor<param_deriv>, oper::gemm<mathlib_type>>;
 		using gemv_t 			= internal::binary_expression<_functor<derived>, _functor<param_deriv>, oper::gemv<mathlib_type>>;
+		using ger_t 			= internal::binary_expression<_functor<derived>, _functor<param_deriv>, oper::ger<mathlib_type>>;
+
 		using axpy_t 			= internal::binary_expression<functor_type , param_functor_type, oper::scalar_mul>;
 
 		static constexpr bool axpy = derived::DIMS() == 0 || param_deriv::DIMS() == 0;
-		static constexpr bool gemm = (derived::DIMS() == 2 && param_deriv::DIMS() == 2) ||
-										(derived::DIMS() == 1 && param_deriv::DIMS() == 1);
+		static constexpr bool gemm = (derived::DIMS() == 2 && param_deriv::DIMS() == 2);
 		static constexpr bool gemv = derived::DIMS() == 2 && param_deriv::DIMS() == 1;
-
+		static constexpr bool ger  = derived::DIMS() == 1 && param_deriv::DIMS() == 1;
 
 		using type = std::conditional_t<axpy, expressionSubstitution<lesser_shape, axpy_t, mathlib_type>,
-						std::conditional_t<gemm, expressionSubstitution<greater_shape, gemm_t, mathlib_type>, expressionSubstitution<lesser_shape, gemv_t, mathlib_type>>>;
+					std::conditional_t<gemm, expressionSubstitution<greater_shape, gemm_t, mathlib_type>,
+					std::conditional_t<gemv, expressionSubstitution<lesser_shape,  gemv_t, mathlib_type>,
+					std::conditional_t<ger, tensor_of_t<2, ger_t, mathlib_type>, void>>>>;
 	};
 
 };

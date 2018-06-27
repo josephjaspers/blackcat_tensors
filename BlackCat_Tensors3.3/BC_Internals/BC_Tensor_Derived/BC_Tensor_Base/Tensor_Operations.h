@@ -14,6 +14,7 @@
 
 #include "BC_Internal_Types/Function_gemm.h"
 #include "BC_Internal_Types/Function_gemv.h"
+#include "BC_Internal_Types/Function_ger.h"
 
 #include "BC_Internal_Types/Expression_Unary.h"
 #include "BC_Internal_Types/Function_transpose.h"

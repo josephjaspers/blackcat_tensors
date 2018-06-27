@@ -41,6 +41,13 @@ int main() {
 //	readwrite();
 //	shaping();
 
+
+	mat a(2,2);
+	vec x(2);
+	vec y(2);
+
+	a = x * y.t();
+
 //	using chunk_t = decltype(chunk(w)(0,0)(0,0).internal());
 //
 //	using core = std::decay_t<decltype(w.internal())>;

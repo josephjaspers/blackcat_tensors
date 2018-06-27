@@ -71,16 +71,18 @@ struct CPU_BLAS  {
 	}
 
 	static void ger(int m, int n,
-			const double* alpha, const double* A, int lda,
+			const double* alpha,
 								 const double* X, int incX,
-								 	   double* Y, int incY) {
+								 const double* Y, int incY,
+								  double* A, int lda) {
 
-		cblas_dger(CblasColMajor, m, n, *alpha, X, incX, Y, incY,  A, lda);
+		cblas_dger(CblasColMajor, m, n, *alpha, X, incX, Y, incY, A, lda);
 	}
 	static void ger(int m, int n,
-			const float* alpha, const float* A, int lda,
+			const float* alpha,
 								 const float* X, int incX,
-								 	   float* Y, int incY) {
+								 const float* Y, int incY,
+								  float* A, int lda) {
 
 		cblas_sger(CblasColMajor, m, n, *alpha, X, incX, Y, incY, A, lda);
 	}

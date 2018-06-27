@@ -22,13 +22,20 @@ struct unary_expression<functor_type, oper::transpose<ml>> : expression_base<una
 {
 	functor_type array;
 
-	__BCinline__ static constexpr int DIMS() { return 2; }
+	__BCinline__ static constexpr int DIMS() { return functor_type::DIMS(); }
 	__BCinline__ static constexpr int ITERATOR() { return 2; }
 	static_assert(functor_type::DIMS() == 1 || functor_type::DIMS() == 2, "TRANSPOSITION ONLY DEFINED FOR MATRICES AND VECTORS");
 
 	unary_expression(functor_type p) : array(p) {}
 
-	__BCinline__ const auto inner_shape() const { return l_array([=](int i) { return i == 0 ? array.cols() : i == 1 ? array.rows() : 1; }); }
+	__BCinline__ const auto inner_shape() const {
+		return l_array([=](int i) {
+			if (DIMS() == 2)
+				return i == 0 ? array.cols() : i == 1 ? array.rows() : 1;
+			else
+				return i == 0 ? array.rows() : 1;
+		});
+	}
 	__BCinline__ const auto outer_shape() const { return array.outer_shape(); }
 
 	__BCinline__ auto operator [](int index) -> decltype(array[index]) {
