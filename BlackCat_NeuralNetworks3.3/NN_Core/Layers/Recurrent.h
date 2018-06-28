@@ -26,8 +26,6 @@ public:
 	using Layer<derived>::zero;
 	using Layer<derived>::xs;
 	using Layer<derived>::lr;
-//	using Layer<derived>::g;
-//	using Layer<derived>::gd;
 
 	omp_unique<mat> w_gradientStorage; 		//gradient storage weights
 	omp_unique<mat> r_gradientStorage;		//gradient storage recurrent weights

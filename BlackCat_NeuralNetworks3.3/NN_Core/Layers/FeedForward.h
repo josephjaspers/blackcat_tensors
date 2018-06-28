@@ -25,6 +25,7 @@ public:
 	vec b_gradientStorage;		//bias gradient storage
 
 	bp_list<vec> ys;							//outputs
+	bp_list<mat> ys2;
 
 	mat w;										//weights
 	vec b;										//biases
@@ -34,7 +35,6 @@ public:
 			w(this->OUTPUTS, inputs),
 			b(this->OUTPUTS)
 	{
-
 		w.randomize(-1, 1);
 		b.randomize(-1, 1);
 		init_storages();

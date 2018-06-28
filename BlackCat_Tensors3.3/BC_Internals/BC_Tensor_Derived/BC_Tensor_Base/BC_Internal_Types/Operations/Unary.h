@@ -49,7 +49,7 @@ namespace oper {
 
 		norm(scalar min_, scalar max_) : min(min_), max(max_) {}
 
-		auto operator () (scalar v) const {
+		__BCinline__ auto operator () (scalar v) const {
 			return (v - min) / (max - min);
 		}
 	};

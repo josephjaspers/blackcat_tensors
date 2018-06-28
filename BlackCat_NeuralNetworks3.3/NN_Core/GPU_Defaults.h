@@ -5,17 +5,12 @@
  *      Author: joseph
  */
 
-#ifndef GPU_DEFAULTS_H_
-#define GPU_DEFAULTS_H_
-
+#ifndef DEFAULTS_H_
+#define DEFAULTS_H_
 #include "BlackCat_Tensors.h"
 namespace BC {
 namespace NN {
 
-/*
- * This file defines the default types of tensors and which mathlibrary to use.
- * Currently only CPU lib is supported
- */
 struct BASE;
 
 using ml = BC::GPU;
