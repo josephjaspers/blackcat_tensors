@@ -14,13 +14,12 @@
 namespace BC {
 namespace NN {
 
-template<class derived>
+template<class derived, int tensor_dimension = 1>
 class Layer {
 public:
 
 	scal lr;
 
-	auto& xs() { return this->prev().ys(); }
 	const int INPUTS;
 	const int OUTPUTS = static_cast<derived&>(*this).hasNext() ? this->next().INPUTS : INPUTS;
 

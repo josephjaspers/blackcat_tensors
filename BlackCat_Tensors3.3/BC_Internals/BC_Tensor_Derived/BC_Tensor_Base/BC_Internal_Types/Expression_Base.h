@@ -78,6 +78,8 @@ public:
 
 
 	//---------------------------------------------------UTILITY/IMPLEMENTATION METHODS------------------------------------------------------------//
+
+
 	template<class... integers> __BCinline__
 	int dims_to_index(integers... ints) const {
 		return dims_to_index(BC::array(ints...)); //fixme should use recursive impl
@@ -101,7 +103,6 @@ public:
 		}
 		return index;
 	}
-
 	template<int D> __BCinline__ int dims_to_index_reverse(stack_array<int, D> var) const {
 		int index = var[D - 1];
 		for(int i = 0; i < D - 2; ++i) {

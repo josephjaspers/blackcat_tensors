@@ -39,8 +39,8 @@ template<class T, class voider = void> struct det_eval {
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = false;
 
-	template<class param> static auto& get_scalar(const param& p) {/*crash*/ }
-	template<class param> static auto& get_array(const param& p)  {/*crash*/ }
+	template<class param> static _scalar<param>* get_scalar(const param& p) { return nullptr; }
+	template<class param> static auto& get_array (const param& p)  { return p; }
 };
 
 //IF TENSOR CORE (NON EXPRESSION)

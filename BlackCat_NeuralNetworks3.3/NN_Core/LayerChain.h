@@ -8,6 +8,7 @@
 namespace BC {
 namespace NN {
 template<class derived, template<class> class...> struct LayerChain;
+struct BASE;
 template<class> class OutputLayer;
 template<class> class InputLayer;
 

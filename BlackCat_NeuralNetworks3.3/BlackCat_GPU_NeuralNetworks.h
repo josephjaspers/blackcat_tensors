@@ -8,16 +8,7 @@
 #ifndef BLACKCAT_NEURALNETWORKS_H_
 #define BLACKCAT_NEURALNETWORKS_H_
 
-#include "NN_Core/GPU_Defaults.h"
-#include "NN_Core/NeuralNetwork.h"
-#include "NN_Core/Layers/Layer.h"
-
-#include "NN_Core/Layers/FeedForward.h"
-#include "NN_Core/Layers/Recurrent.h"
-#include "NN_Core/Layers/GatedRecurrentUnit.h"
-
-#include  "NN_Core/Layers/ConvLayer.h"
-#include "NN_Core/Layers/OutputLayer.h"
-#include "BlackCat_Tensors.h"
+#include "NN_Core/Defaults_GPU.h"
+#include "NN_Core/BCNN_Global_Unifier.h"
 
 #endif /* BLACKCAT_NEURALNETWORKS_H_ */

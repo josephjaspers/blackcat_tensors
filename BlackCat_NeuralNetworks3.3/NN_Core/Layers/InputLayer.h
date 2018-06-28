@@ -18,11 +18,11 @@ struct InputLayer : Layer<derived> {
 
 	InputLayer() : Layer<derived>(0) {}
 
-	bp_list<vec> ys;
+	vec y;
 
 
 	template<class T> auto forwardPropagation(const T& x) {
-		ys().push(x);
+		y = vec(x);
 		return this->next().forwardPropagation(x);
 	}
 
@@ -31,18 +31,15 @@ struct InputLayer : Layer<derived> {
 	}
 
 	template<class T> auto backPropagation(const T&& dy) {
-		ys().pop();
 		return dy;
 	}
 	void set_omp_threads(int i) {
-		ys.resize(i);
 		this->next().set_omp_threads(i);
 	}
 	void updateWeights() {
 		this->next().updateWeights();
 	}
 	void clearBPStorage() {
-		ys.for_each(clear);
 		this->next().clearBPStorage();
 	}
 

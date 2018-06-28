@@ -18,7 +18,10 @@
 
 #include "BC_Internal_Types/Expression_Unary.h"
 #include "BC_Internal_Types/Function_transpose.h"
+
 #include "Tensor_Operations_Impl/Expression_Determiner.h"
+#include "Tensor_Operations_Impl/Alias.h"
+
 #include "BC_Internal_Types/Parse_Tree_Evaluator.h"
 
 namespace BC {
@@ -84,7 +87,7 @@ public:
 		evaluate(bi_expr<oper::mul_assign>(param));
 		return as_derived();
 	}
-	//-------------------------------------gemm-------------------- ---------------------//
+	//-------------------------------------gemm/gemv/ger-----------------------------------------//
 	template<class pDeriv>
 	auto operator *(const Tensor_Operations<pDeriv>& param) const {
 		 return typename dp_impl<pDeriv>::type(as_derived().internal(), param.as_derived().internal());
@@ -139,6 +142,12 @@ public:
 		assert_same_size(param);
 		return bi_expr<oper::lesser_equal>(param);
 	}
+	//alias ----------------------
+
+	template<class alias> friend class Alias;
+	Alias<derived> alias() {
+		return Alias<derived>(as_derived());
+	}
 
 	//-----------------------------------custom expressions--------------------------------------------------//
 	template<class functor>
@@ -187,6 +196,7 @@ public:
 		static_assert(std::is_same<_mathlib<derived>, _mathlib<deriv>>::value, "mathlib_type must be identical");
 	}
 };
+
 }
 }
 

@@ -19,21 +19,23 @@ struct FeedForward : public Layer<derived> {
 public:
 
 	using Layer<derived>::lr;					//the learning rate
-	using Layer<derived>::xs;					//the input back_propagation_list (from previous layer)
 
 	mat w_gradientStorage;		//weight gradient storage
 	vec b_gradientStorage;		//bias gradient storage
 
-	bp_list<vec> ys;							//outputs
-	bp_list<mat> ys2;
+	vec y;							//outputs
 
 	mat w;										//weights
-	vec b;										//biases
+	vec b;
+	vec& x = this->prev().y;		//biases
 
 	FeedForward(int inputs) :
 			Layer<derived>(inputs),
 			w(this->OUTPUTS, inputs),
-			b(this->OUTPUTS)
+			b(this->OUTPUTS),
+			y(this->OUTPUTS),
+			w_gradientStorage(this->OUTPUTS, this->INPUTS),
+			b_gradientStorage(this->OUTPUTS)
 	{
 		w.randomize(-1, 1);
 		b.randomize(-1, 1);
@@ -41,15 +43,10 @@ public:
 	}
 
 	auto forwardPropagation(const vec& x) {
-		vec y = g(w * x + b);
-
-		ys().push(std::move(y));
-		return this->next().forwardPropagation(ys().first());
+		y = g(w * x + b);
+		return this->next().forwardPropagation(y);
 	}
 	auto backPropagation(const vec& dy) {
-		ys().rm_front();
-		vec& x = xs().first();				//load the last input
-
 		w_gradientStorage -= dy * x.t();
 		b_gradientStorage -= dy;
 
@@ -68,19 +65,9 @@ public:
 
 	void clearBPStorage() {
 		w_gradientStorage = 0;	//gradient lists
-		b_gradientStorage = 0;//.for_each(zero);	//gradient list
-		ys.for_each(clear);					//bp_list
+		b_gradientStorage = 0; //.for_each(zero);	//gradient list
 
 		this->next().clearBPStorage();
-	}
-	void set_omp_threads(int i) {
-		ys.resize(i);
-		w_gradientStorage.resize(i);
-		b_gradientStorage.resize(i);
-
-		init_storages();
-
-		this->next().set_omp_threads(i);
 	}
 
 	void write(std::ofstream& os) {
@@ -95,7 +82,6 @@ public:
 
 		this->next().read(is);
 	}
-
 	void init_storages() {
 		w_gradientStorage = mat(this->OUTPUTS, this->INPUTS);
 		b_gradientStorage = vec(this->OUTPUTS);

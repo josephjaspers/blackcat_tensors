@@ -145,6 +145,18 @@ int gemm_injection() {
 	c = (a.t() * b.t()) % (a.t() * b.t());
 	c.print();
 
+	mat F(2,2);
+
+	c.print();
+	F = c * (a.t() * b.t());
+	F.print();
+
+	c.alias() = c * (a.t() * b.t());
+	c.print();
+
+	std::cout << " no alias  " << std::endl;
+	c = c * (a.t() * b.t());
+	c.print();
 
 	vec x(2);
 	vec y(2);

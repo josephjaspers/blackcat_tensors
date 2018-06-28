@@ -16,8 +16,7 @@ namespace NN {
 template<class derived>
 struct OutputLayer : Layer<derived> {
 
-	using Layer<derived>::xs;
-
+	vec& y = this->prev().y;
 	vec zero = vec(this->OUTPUTS);
 
 public:
@@ -32,16 +31,11 @@ public:
 	vec forwardPropagation_Express(const vec& x) const {
 		return x;
 	}
-	vec backPropagation(const vec& y) {
-		vec& x = xs().first();
-		return this->prev().backPropagation(x - y);
+	vec backPropagation(const vec& exp) {
+		return this->prev().backPropagation(y - exp);
 	}
 	vec backPropagation_throughtime() {
 		return this->prev().backPropagation(zero);
-	}
-
-
-	void set_omp_threads(int i) {
 	}
 
 	void updateWeights() {}

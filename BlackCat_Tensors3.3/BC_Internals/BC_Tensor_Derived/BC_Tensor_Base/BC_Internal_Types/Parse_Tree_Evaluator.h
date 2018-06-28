@@ -49,6 +49,29 @@ evaluate(assignment& assign, const expression& expr) {
 	//destroy any temporaries made by the tree
 	internal::tree::destroy_temporaries(post_inject_tensor);
 }
+
+template<class assignment, class expression>
+static std::enable_if_t<INJECTION<expression>()>
+evaluate_aliased(assignment& assign, const expression& expr) {
+	using internal_t = expression;			//internal expression type (to be injected)
+	using injection_t = assignment;	//the injection type
+
+	static constexpr int iterator_dimension = expression::ITERATOR();	//the iterator for the evaluation of post inject_t
+
+	auto post_inject_tensor = internal::tree::substitution_evaluate(expr);		//evaluate the internal tensor_type
+	if (!std::is_same<injection_t, rv_of<decltype(post_inject_tensor)>>::value || BC::internal::isArray<decltype(post_inject_tensor)>()) {
+		mathlib_type::template dimension<iterator_dimension>::eval(post_inject_tensor);
+	}
+	//destroy any temporaries made by the tree
+	internal::tree::destroy_temporaries(post_inject_tensor);
+}
+template<class assignment, class expression>
+static std::enable_if_t<!INJECTION<expression>()>
+evaluate_aliased(assignment& assign, const expression& expr) {
+	static constexpr int iterator_dimension = expression::ITERATOR();
+	mathlib_type::template dimension<iterator_dimension>::eval(expr);
+}
+
 };
 
 template<class mathlib>

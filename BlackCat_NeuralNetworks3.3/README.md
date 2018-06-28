@@ -9,7 +9,7 @@ BlackCat_NeuralNetworks (BCNN) is a library built on BlackCat_Tensors built for 
 	updateWeights() and clearBPStorage() ARE NOT thread-safe, they are designed to update the NeuralNetwork after each batch 
 	(check the UnitTests folder for examples)
 	
-	***Currently Working on adding ConvNets and LSTM, GRU's are supported however***
+	***Currently Working on adding ConvNets and LSTM***
 
 Past implementations of CNN, RNN, LSTM, and GRU can be found here:
 	https://github.com/josephjaspers/UNMAINTAINED-BlackCat_NeuralNetworks-Version-2/tree/master/BC_NeuralNetwork_Headers
