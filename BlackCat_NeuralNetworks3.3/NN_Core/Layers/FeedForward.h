@@ -21,8 +21,8 @@ public:
 	using Layer<derived>::lr;					//the learning rate
 	using Layer<derived>::xs;					//the input back_propagation_list (from previous layer)
 
-	omp_unique<mat> w_gradientStorage;		//weight gradient storage
-	omp_unique<vec> b_gradientStorage;		//bias gradient storage
+	mat w_gradientStorage;		//weight gradient storage
+	vec b_gradientStorage;		//bias gradient storage
 
 	bp_list<vec> ys;							//outputs
 
@@ -50,8 +50,8 @@ public:
 		ys().rm_front();
 		vec& x = xs().first();				//load the last input
 
-		w_gradientStorage() -= dy * x.t();
-		b_gradientStorage() -= dy;
+		w_gradientStorage -= dy * x.t();
+		b_gradientStorage -= dy;
 
 		return this->prev().backPropagation(w.t() * dy % gd(x));
 	}
@@ -60,15 +60,15 @@ public:
 	}
 
 	void updateWeights() {
-		w_gradientStorage.for_each(sum_gradients(w, lr));
-		b_gradientStorage.for_each(sum_gradients(b, lr));
+		w += w_gradientStorage * lr;
+		b += b_gradientStorage * lr;
 
 		this->next().updateWeights();
 	}
 
 	void clearBPStorage() {
-		w_gradientStorage.for_each(zero);	//gradient lists
-		b_gradientStorage.for_each(zero);	//gradient list
+		w_gradientStorage = 0;	//gradient lists
+		b_gradientStorage = 0;//.for_each(zero);	//gradient list
 		ys.for_each(clear);					//bp_list
 
 		this->next().clearBPStorage();
@@ -90,7 +90,6 @@ public:
 		this->next().write(os);
 	}
 	void read(std::ifstream& is) {
-		std::string tmp;
 		w.read(is);
 		b.read(is);
 
@@ -98,8 +97,11 @@ public:
 	}
 
 	void init_storages() {
-		w_gradientStorage.for_each([&](auto& var) { var = mat(this->OUTPUTS, this->INPUTS); var.zero(); });
-		b_gradientStorage.for_each([&](auto& var) { var = vec(this->OUTPUTS);			    var.zero(); });
+		w_gradientStorage = mat(this->OUTPUTS, this->INPUTS);
+		b_gradientStorage = vec(this->OUTPUTS);
+
+		w_gradientStorage = 0;
+		b_gradientStorage = 0;
 	}
 
 };

@@ -19,22 +19,18 @@ struct NeuralNetwork {
 	template<class... integers>
 	NeuralNetwork(integers... architecture) : network(architecture...) {}
 
-	auto forwardPropagation(const vec& x) { return network.head().forwardPropagation(x); }
-	auto forwardPropagation_Express(const vec& x) { return network.head().forwardPropagation(x); }
-	auto backPropagation(const vec& y) { return network.tail().backPropagation(y); }
-	auto backPropagation_throughtime() { return network.tail().backPropagation_throughtime(); }
+	template<class tensor> auto forwardPropagation				(const tensor& x) { return network.head().forwardPropagation(x); }
+	template<class tensor> auto forwardPropagation_Express		(const tensor& x) { return network.head().forwardPropagation(x); }
+	template<class tensor> auto backPropagation					(const tensor& y) { return network.tail().backPropagation(y); }
+	template<class tensor> auto backPropagation_throughtime() 					  { return network.tail().backPropagation_throughtime(); }
 
 	void write(std::ofstream& os) { network.head().write(os); }
-	void read(std::ifstream& is) { network.head().read(is); }
+	void read(std::ifstream& is)  { network.head().read(is);  }
 
-	auto train(const vec& x, const vec& y) { return network.head().train(x, y); }
-
-	auto updateWeights() { return network.head().updateWeights(); }
+	auto updateWeights()  { return network.head().updateWeights(); }
 	auto clearBPStorage() { return network.head().clearBPStorage(); }
+
 	void setLearningRate(fp_type learning_rate) { network.head().setLearningRate(learning_rate); }
-	void set_omp_threads(int i) { network.head().set_omp_threads(i); }
-
-
 };
 
 }

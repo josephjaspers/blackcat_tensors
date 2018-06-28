@@ -15,21 +15,6 @@ namespace BC {
 namespace NN {
 namespace MNIST_Test {
 
-tensor expandOutput(int val, int total) {
-	//Convert a value to a 1-hot output vector
-	tensor out(total);
-	out.zero();
-	out(val) = 1;
-	return out;
-}
-
-tensor&  normalize(tensor& tens, fp_type max, fp_type min) {
-	//generic feature scaling (range of [0,1])
-	tens -= scal(min);
-	tens /= scal(max - min);
-
-	return tens;
-}
 bool correct(const vec& hypothesis, const vec& output) {
 	int h_id = 0;
 	int o_id = 0;
@@ -59,17 +44,15 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 	std::cout << " generating loading " << std::endl;
 	while (read_data.good() && vals < MAXVALS) {
 
-		std::string output;
-		std::getline(read_data, output, ',');
-		int out = std::stoi(output);
+		vec out(10);
+		out.read_as_one_hot(read_data);
+		output_data.push_back(out);
 
 		tensor input(784);
 		input.read(read_data, false);
-		output_data.push_back(expandOutput(out, 10));
-		normalize(input, 255, 0);
+		input = normalize(input, 0, 255);
 
 		input_data.push_back(input);
-
 		++vals;
 	}
 	std::cout << " return -- finished creating data set " << std::endl;
@@ -78,7 +61,7 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 int percept_MNIST() {
 
 	const int TRAINING_EXAMPLES =  2000;
-	const int TRAINING_ITERATIONS = 10;
+	const int TRAINING_ITERATIONS = 100;
 
 //	Generate the layers (params are: inputs, outputs)
 	//Create the neural network

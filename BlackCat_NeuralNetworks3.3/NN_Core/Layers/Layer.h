@@ -25,7 +25,7 @@ public:
 	const int OUTPUTS = static_cast<derived&>(*this).hasNext() ? this->next().INPUTS : INPUTS;
 
 	Layer(int inputs) : INPUTS(inputs) {
-		lr = .03;
+		lr = .003;
 	}
 	auto& next() { return static_cast<derived&>(*this).next(); }
 	auto& prev() { return static_cast<derived&>(*this).prev(); }

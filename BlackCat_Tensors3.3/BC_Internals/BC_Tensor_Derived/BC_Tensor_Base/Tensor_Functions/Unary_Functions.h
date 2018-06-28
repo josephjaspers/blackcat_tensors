@@ -15,37 +15,42 @@ namespace BC {
 //alternate names from transposition
 template<class deriv>
 static auto transpose(Base::Tensor_Operations<deriv>& tensor) {
-	 return tensor.t();
+	return tensor.t();
 }
 //zero and one are the equivalent but delayed evaluation version,
 //modifies the calling the tensor, but if and only if evaluated
 template<class deriv>
 static auto zero(Base::Tensor_Operations<deriv>& tensor) {
-	 return tensor.un_expr(oper::zero());
+	return tensor.un_expr(oper::zero());
 }
 template<class deriv>
 static auto one(Base::Tensor_Operations<deriv>& tensor) {
-	 return tensor.un_expr(oper::one());
+	return tensor.un_expr(oper::one());
 }
 
 //converts all NaN/Inf values to 0
 template<class deriv>
 static auto fix(Base::Tensor_Operations<deriv>& tensor) {
-	 return tensor.un_expr(oper::fix());
+	return tensor.un_expr(oper::fix());
 }
 template<class deriv>
 static auto abs(const Base::Tensor_Operations<deriv>& tensor) {
-	 return tensor.un_expr(oper::abs());
+	return tensor.un_expr(oper::abs());
 }
 template<class deriv>
 static auto negation(const Base::Tensor_Operations<deriv>& tensor) {
-	 return tensor.un_expr(oper::negation());
+	return tensor.un_expr(oper::negation());
 }
 
 //if 0 return 0 else return 1
 template<class deriv>
 static auto logical(const Base::Tensor_Operations<deriv>& tensor) {
-	 return tensor.un_expr(oper::logical());
+	return tensor.un_expr(oper::logical());
+}
+
+template<class deriv>
+static auto normalize(const Base::Tensor_Operations<deriv>& tensor, _scalar<deriv> min, _scalar<deriv> max) {
+	return tensor.un_expr(oper::norm<_scalar<deriv>>(min, max));
 }
 
 }

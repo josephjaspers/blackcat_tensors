@@ -41,6 +41,19 @@ namespace oper {
 		}
 	};
 
+
+	template<class scalar>
+	struct norm {
+		scalar min;
+		scalar max;
+
+		norm(scalar min_, scalar max_) : min(min_), max(max_) {}
+
+		auto operator () (scalar v) const {
+			return (v - min) / (max - min);
+		}
+	};
+
 }
 }
 
