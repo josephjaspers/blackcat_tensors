@@ -98,15 +98,17 @@ public:
 	}
 	template<int D> __BCinline__ int dims_to_index(stack_array<int, D> var) const {
 		int index = var[0];
-		for(int i = 1; i < var.size(); ++i) {
+		for(int i = 1; i < DIMS(); ++i) {
 			index += this->leading_dimension(i - 1) * var[i];
 		}
 		return index;
 	}
 	template<int D> __BCinline__ int dims_to_index_reverse(stack_array<int, D> var) const {
-		int index = var[D - 1];
-		for(int i = 0; i < D - 2; ++i) {
-			index += this->leading_dimension(i) * var[D - i - 2];
+		static_assert(D >= DIMS(), "converting array_to dimension must have at least as many indices as the tensor");
+
+		int index = var[DIMS() - 1];
+		for(int i = 0; i < DIMS() - 2; ++i) {
+			index += this->leading_dimension(i) * var[DIMS() - i - 2];
 		}
 		return index;
 	}

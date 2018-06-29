@@ -158,21 +158,16 @@ int gemm_injection() {
 	c = c * (a.t() * b.t());
 	c.print();
 
-	vec x(2);
-	vec y(2);
-
-	y.print();
-
-
-	x = 1;
-
-
-	std::cout << " this should be gemv call " << std::endl;
-	x.print();
+	c =  a.t() * b.t();
 	c.print();
-	y -= c * x;
 
-	y.print();
+
+	vec x(2);
+	x(0) = 10;
+	x(1) = 20;
+	c += x;
+
+	c.print();
 
 
 	return 0;

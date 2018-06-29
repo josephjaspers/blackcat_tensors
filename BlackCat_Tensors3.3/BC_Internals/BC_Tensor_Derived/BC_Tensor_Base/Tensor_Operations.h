@@ -169,6 +169,36 @@ public:
 	 //--------------------------------ASSERTIONS------------------------------//
 
 
+	template<class deriv> __BC_host_inline__ bool non_scalar_op(const Tensor_Operations<deriv>& tensor) const {
+		return derived::DIMS() != 0 && deriv::DIMS() != 0;
+	}
+	template<class deriv> __BC_host_inline__ bool same_rank(const Tensor_Operations<deriv>& tensor) const {
+		return derived::DIMS() == deriv::DIMS();
+	}
+	template<class deriv> __BC_host_inline__ bool same_size(const Tensor_Operations<deriv>& tensor) const {
+		return this->as_derived().size() == tensor.as_derived().size();
+	}
+
+	//ensures that the smaller tensor is a same-dimensioned "slice" of the other
+	template<class deriv> __BC_host_inline__ bool valid_slice(const Tensor_Operations<deriv>& tensor) const {
+		constexpr int DIM_MIN = MTF::min(derived::DIMS(), deriv::DIMS());
+		for (int i = 0; i < DIM_MIN; ++i)
+			if (tensor.as_derived().dimension(i) != as_derived().dimension(i))
+				return false;
+
+		return true;
+	}
+
+	template<class deriv> __BC_host_inline__ bool error(const Tensor_Operations<deriv>& tensor) const {
+		std::cout << "this->DIMS() = " << derived::DIMS() << " this->size() = " <<  as_derived().size() <<  " this_dims ";
+		as_derived().print_dimensions();
+		std::cout <<  "param->DIMS() = " << deriv::DIMS() << " param.size() = " << tensor.as_derived().size() <<  " param_dims ";
+		tensor.as_derived().print_dimensions();
+		std::cout << std::endl;
+		throw std::invalid_argument("Tensor by Tensor operation - size mismatch - ");
+	}
+
+
 	//assert either scalar by tensor operation or same size (not same dimensions)
 	template<class deriv> __BC_host_inline__
 	void assert_same_size(const Tensor_Operations<deriv>& tensor) const {
@@ -176,17 +206,13 @@ public:
 		assert_same_ml(tensor);
 
 		if (derived::DIMS() != 0 && deriv::DIMS() != 0)
-			if (this->as_derived().DIMS() != 0 && tensor.as_derived().DIMS() != 0)
-				if ((as_derived().size() != tensor.as_derived().size())){
-					std::cout << "this->DIMS() = " << derived::DIMS() << " this->size() = " <<  as_derived().size() <<  " this_dims ";
-					as_derived().print_dimensions();
+			if (non_scalar_op(tensor))
+				if (same_rank(tensor)) {
+					if (!same_size(tensor))
+						error(tensor);
+				} else if (!valid_slice(tensor))
+					error(tensor);
 
-					std::cout <<  "this->DIMS() = " << deriv::DIMS() << " param.size() = " << tensor.as_derived().size() <<  " param_dims ";
-					tensor.as_derived().print_dimensions();
-					std::cout << std::endl;
-
-					throw std::invalid_argument("Tensor by Tensor operation - size mismatch - ");
-				}
 //#endif
 	}
 
