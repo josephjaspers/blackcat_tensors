@@ -8,21 +8,21 @@
 #ifndef TENSOR_HEAD_H_
 #define TENSOR_HEAD_H_
 
-#include "BC_Internal_Types/Expression_Binary.h"
-#include "BC_Internal_Types/Operations/Binary.h"
-#include "BC_Internal_Types/Operations/Unary.h"
+#include "Expression_Templates/Expression_Binary.h"
+#include "Expression_Templates/Operations/Binary.h"
+#include "Expression_Templates/Operations/Unary.h"
 
-#include "BC_Internal_Types/Function_gemm.h"
-#include "BC_Internal_Types/Function_gemv.h"
-#include "BC_Internal_Types/Function_ger.h"
+#include "Expression_Templates/Function_gemm.h"
+#include "Expression_Templates/Function_gemv.h"
+#include "Expression_Templates/Function_ger.h"
 
-#include "BC_Internal_Types/Expression_Unary.h"
-#include "BC_Internal_Types/Function_transpose.h"
+#include "Expression_Templates/Expression_Unary.h"
+#include "Expression_Templates/Function_transpose.h"
 
 #include "Tensor_Operations_Impl/Expression_Determiner.h"
 #include "Tensor_Operations_Impl/Alias.h"
 
-#include "BC_Internal_Types/Parse_Tree_Evaluator.h"
+#include "Expression_Templates/Parse_Tree_Evaluator.h"
 
 namespace BC {
 namespace Base {
@@ -41,8 +41,8 @@ class Tensor_Operations {
 	using mathlib_type 		= _mathlib<derived>;
 
 	//Returns the class returned as its most derived member
-	 const derived& as_derived() const { return static_cast<const derived&>(*this);  }
-	 	   derived& as_derived() 	  { return static_cast<	     derived&>(*this); }
+	 const derived& as_derived() const { return static_cast<const derived&>(*this); }
+	 	   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
 
 
 	//--------------------------------------evaluation implementation-----------------------------------------------//
@@ -54,36 +54,35 @@ class Tensor_Operations {
 public:
 
 	//--------------------------------------assignment operators-----------------------------------------------//
-
 	template<class pDeriv>
 	derived& operator =(const Tensor_Operations<pDeriv>& param) {
-		assert_same_size(param);
+		assert_valid(param);
 		evaluate(bi_expr<oper::assign>(param));
 		return as_derived();
 	}
 	template<class pDeriv>
 	derived& operator +=(const Tensor_Operations<pDeriv>& param) {
-		assert_same_size(param);
+		assert_valid(param);
 		evaluate(bi_expr<oper::add_assign>(param));
 		return as_derived();
 
 	}
 	template<class pDeriv>
 	derived& operator -=(const Tensor_Operations<pDeriv>& param) {
-		assert_same_size(param);
+		assert_valid(param);
 		evaluate(bi_expr<oper::sub_assign>(param));
 		return as_derived();
 	}
 	template<class pDeriv>
 	derived& operator /=(const Tensor_Operations<pDeriv>& param) {
-		assert_same_size(param);
+		assert_valid(param);
 		evaluate(bi_expr<oper::div_assign>(param));
 		return as_derived();
 	}
 	//pointwise multiply
 	template<class pDeriv>
 	derived& operator %=(const Tensor_Operations<pDeriv>& param) {
-		assert_same_size(param);
+		assert_valid(param);
 		evaluate(bi_expr<oper::mul_assign>(param));
 		return as_derived();
 	}
@@ -94,20 +93,20 @@ public:
 	}
 	//--------------------------------------pointwise operators-------------------------------//
 	template<class pDeriv> auto operator +(const Tensor_Operations<pDeriv>& param) const {
-		assert_same_size(param);
+		assert_valid(param);
 		return bi_expr<oper::add>(param);
 	}
 	template<class pDeriv> auto operator -(const Tensor_Operations<pDeriv>& param) const {
-		assert_same_size(param);
+		assert_valid(param);
 		return bi_expr<oper::sub>(param);
 	}
 	template<class pDeriv> auto operator /(const Tensor_Operations<pDeriv>& param) const {
-		assert_same_size(param);
+		assert_valid(param);
 		return bi_expr<oper::div>(param);
 	}
 	//pointwise multiply
 	template<class pDeriv> auto operator %(const Tensor_Operations<pDeriv>& param) const {
-		assert_same_size(param);
+		assert_valid(param);
 		return bi_expr<oper::mul>(param);
 	}
 
@@ -119,31 +118,31 @@ public:
 	 }
 	template<class pDeriv>
 	auto operator ==(const Tensor_Operations<pDeriv>& param) const {
-		assert_same_size(param);
+		assert_valid(param);
 		return bi_expr<oper::equal>(param);
 	}
 	template<class pDeriv>
 	auto operator >(const Tensor_Operations<pDeriv>& param) const {
-		assert_same_size(param);
+		assert_valid(param);
 		return bi_expr<oper::greater>(param);
 	}
 	template<class pDeriv>
 	auto operator <(const Tensor_Operations<pDeriv>& param) const {
-		assert_same_size(param);
+		assert_valid(param);
 		return bi_expr<oper::lesser>(param);
 	}
 	template<class pDeriv>
 	auto operator >=(const Tensor_Operations<pDeriv>& param) const {
-		assert_same_size(param);
+		assert_valid(param);
 		return bi_expr<oper::greater_equal>(param);
 	}
 	template<class pDeriv>
 	auto operator <=(const Tensor_Operations<pDeriv>& param) const {
-		assert_same_size(param);
+		assert_valid(param);
 		return bi_expr<oper::lesser_equal>(param);
 	}
-	//alias ----------------------
 
+	//alias ----------------------
 	template<class alias> friend class Alias;
 	Alias<derived> alias() {
 		return Alias<derived>(as_derived());
@@ -189,7 +188,7 @@ public:
 		return true;
 	}
 
-	template<class deriv> __BC_host_inline__ bool error(const Tensor_Operations<deriv>& tensor) const {
+	template<class deriv> __BC_host_inline__ bool error_message(const Tensor_Operations<deriv>& tensor) const {
 		std::cout << "this->DIMS() = " << derived::DIMS() << " this->size() = " <<  as_derived().size() <<  " this_dims ";
 		as_derived().print_dimensions();
 		std::cout <<  "param->DIMS() = " << deriv::DIMS() << " param.size() = " << tensor.as_derived().size() <<  " param_dims ";
@@ -198,20 +197,16 @@ public:
 		throw std::invalid_argument("Tensor by Tensor operation - size mismatch - ");
 	}
 
-
-	//assert either scalar by tensor operation or same size (not same dimensions)
 	template<class deriv> __BC_host_inline__
-	void assert_same_size(const Tensor_Operations<deriv>& tensor) const {
+	void assert_valid(const Tensor_Operations<deriv>& tensor) const {
 //#ifdef NDEBUG
-		assert_same_ml(tensor);
-
-		if (derived::DIMS() != 0 && deriv::DIMS() != 0)
-			if (non_scalar_op(tensor))
-				if (same_rank(tensor)) {
-					if (!same_size(tensor))
-						error(tensor);
-				} else if (!valid_slice(tensor))
-					error(tensor);
+		assert_same_ml(tensor);					//static_assert same allocation (gpu/cpu)
+		if (non_scalar_op(tensor))				//check if a tensor by scalar operation
+			if (same_rank(tensor)) {			//else check is same dimension (element-wise function) (
+				if (!same_size(tensor))			//if is same dimension, ensure same size
+					error_message(tensor);		//else error
+				} else if (!valid_slice(tensor))//if not same dimension check if valid slice operation
+					error_message(tensor);		//else error
 
 //#endif
 	}

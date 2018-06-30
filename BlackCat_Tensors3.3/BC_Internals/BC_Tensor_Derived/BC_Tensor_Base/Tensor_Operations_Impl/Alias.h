@@ -30,21 +30,21 @@ struct Alias {
 
 	template<class derived_t>
 	auto& operator = (const Tensor_Operations<derived_t>& param) {
-		tensor.assert_same_size(param);
+		tensor.assert_valid(param);
 		evaluate(tensor.bi_expr(oper::assign(), param));
 		return tensor;
 	}
 
 	template<class derived_t>
 	auto& operator += (const Tensor_Operations<derived_t>& param) {
-		tensor.assert_same_size(param);
+		tensor.assert_valid(param);
 		evaluate(tensor.bi_expr(oper::add_assign(), param));
 		return tensor.as_derived();
 	}
 
 	template<class derived_t>
 	auto& operator -= (const Tensor_Operations<derived_t>& param) {
-		tensor.assert_same_size(param);
+		tensor.assert_valid(param);
 		evaluate(tensor.bi_expr(oper::sub_assign(), param));
 		return tensor.as_derived();
 	}

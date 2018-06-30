@@ -51,10 +51,10 @@ void generateAndLoad(data& input_data, data& output_data, std::ifstream& read_da
 		tensor input(784);
 		input.read(read_data, false);
 		input = normalize(input, 0, 255);
-
 		input_data.push_back(input);
 		++vals;
 	}
+	std::cout << " post while "  << std::endl;
 	std::cout << " return -- finished creating data set " << std::endl;
 }
 
@@ -83,6 +83,8 @@ int percept_MNIST() {
 	//Load training examples (taken from kaggle digit recognizer train.csv)
 	std::cout << " generating and loading data from csv to tensors" << std::endl;
 	generateAndLoad(inputs, outputs, in_stream, TRAINING_EXAMPLES);
+	std::cout << " post load "  << std::endl;
+
 	in_stream.close();
 
 
@@ -122,13 +124,13 @@ int percept_MNIST() {
 	std::cout << "\n \n \n " << std::endl;
 	std::cout << " testing... " << std::endl;
 
-	mat img(28,28);
-	mat img_adj(28,28);
+	mat img;
+	mat img_adj;
 
 	for (int i = 0; i < 10; ++i) {
 		std::cout << " output " << std::endl;
-		img = inputs[i];//outputs[i];//.print();
-		img_adj = img.t();
+		img 	= mat(reshape(inputs[i])(28,28));
+		img_adj = mat(img.t());
 		img_adj.printSparse(3);
 
 		std::cout << "prediction " << std::endl;

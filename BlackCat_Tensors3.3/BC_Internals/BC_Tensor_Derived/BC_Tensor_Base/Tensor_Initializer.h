@@ -8,12 +8,12 @@
 #ifndef TENSOR_INITIALIZER_H_
 #define TENSOR_INITIALIZER_H_
 
-#include "BC_Internal_Types/Array.h"
-#include "BC_Internal_Types/Array_Scalar.h"
-#include "BC_Internal_Types/Array_Slice.h"
-#include "BC_Internal_Types/Array_RowVector.h"
-#include "BC_Internal_Types/Array_Chunk.h"
-#include "BC_Internal_Types/Array_Reshape.h"
+#include "Expression_Templates/Array.h"
+#include "Expression_Templates/Array_Scalar.h"
+#include "Expression_Templates/Array_Slice.h"
+#include "Expression_Templates/Array_RowVector.h"
+#include "Expression_Templates/Array_Chunk.h"
+#include "Expression_Templates/Array_Reshape.h"
 
 namespace BC {
 namespace Base {

@@ -35,7 +35,7 @@ static auto fix(Base::Tensor_Operations<deriv>& tensor) {
 }
 template<class deriv>
 static auto abs(const Base::Tensor_Operations<deriv>& tensor) {
-	return tensor.un_expr(oper::abs());
+	return tensor.un_expr(oper::absolute());
 }
 template<class deriv>
 static auto negation(const Base::Tensor_Operations<deriv>& tensor) {

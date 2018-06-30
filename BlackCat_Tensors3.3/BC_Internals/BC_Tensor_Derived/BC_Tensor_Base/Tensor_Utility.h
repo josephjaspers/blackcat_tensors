@@ -38,31 +38,22 @@ private:
 public:
 
 	void print() const {
-		mathlib::print(as_derived().internal().memptr(),
-				as_derived().inner_shape(), as_derived().outer_shape(),
-				as_derived().dims(), 8);
+		mathlib::print(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), as_derived().dims(), 8);
 	}
 	void print(int precision) const {
-		mathlib::print(as_derived().internal().memptr(),
-				as_derived().inner_shape(), as_derived().outer_shape(),
-				as_derived().dims(), precision);
+		mathlib::print(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), as_derived().dims(), precision);
 	}
 	void printSparse() const {
-		mathlib::printSparse(as_derived().internal().memptr(),
-				as_derived().inner_shape(), as_derived().outer_shape(),
-				as_derived().dims(), 8);
+		mathlib::printSparse(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), as_derived().dims(), 8);
 	}
 	void printSparse(int precision) const {
-		mathlib::printSparse(as_derived().internal().memptr(),
-				as_derived().inner_shape(), as_derived().outer_shape(),
-				as_derived().dims(), precision);
+		mathlib::printSparse(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), as_derived().dims(), precision);
 	}
 
 	void write(std::ofstream& os) const {
 
 		scalar* internal = new scalar[as_derived().size()];
-		mathlib::DeviceToHost(internal, as_derived().internal().memptr(),
-				as_derived().size());
+		mathlib::DeviceToHost(internal, as_derived().internal().memptr(), as_derived().size());
 
 		os << as_derived().dims() << ',';
 		for (int i = 0; i < as_derived().dims(); ++i) {
@@ -90,12 +81,11 @@ public:
 		std::string tmp;
 		std::getline(is, tmp, ',');
 
-		as_derived()(std::stoi(tmp))  = 1;
+		as_derived()(std::stoi(tmp)) = 1;
 
 	}
 
-	void read(std::ifstream& is, bool read_dimensions = true,
-			bool overrideDimensions = true) {
+	void read(std::ifstream& is, bool read_dimensions = true, bool overrideDimensions = true) {
 		if (!is.good()) {
 			std::cout << "File open error - returning " << std::endl;
 			return;
@@ -122,11 +112,8 @@ public:
 		if (read_dimensions) {
 			std::vector<int> dims((int) file_data[0]);
 			if (file_data[0] != deriv::DIMS()) {
-				std::cout
-						<< " attempting to read data from file of tensor of dimensions = "
-						<< file_data[0]
-						<< " however the reading to tensor is of dimension = "
-						<< deriv::DIMS();
+				std::cout << " attempting to read data from file of tensor of dimensions = " << file_data[0]
+						<< " however the reading to tensor is of dimension = " << deriv::DIMS();
 				throw std::invalid_argument("Invalid Tensor File");
 			}
 			for (int i = 0; i < dims.size(); ++i) {
@@ -141,15 +128,11 @@ public:
 
 				as_derived() = deriv(shape);
 			}
-			mathlib::HostToDevice(as_derived().internal().memptr(),
-					&file_data[file_data[0] + 1],
-					as_derived().size() > file_data.size() ?
-							file_data.size() : as_derived().size());
+			mathlib::HostToDevice(as_derived().internal().memptr(), &file_data[file_data[0] + 1],
+					as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
 		} else {
-			mathlib::HostToDevice(as_derived().internal().memptr(),
-					&file_data[0],
-					as_derived().size() > file_data.size() ?
-							file_data.size() : as_derived().size());
+			mathlib::HostToDevice(as_derived().internal().memptr(), &file_data[0],
+					as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
 		}
 	}
 };

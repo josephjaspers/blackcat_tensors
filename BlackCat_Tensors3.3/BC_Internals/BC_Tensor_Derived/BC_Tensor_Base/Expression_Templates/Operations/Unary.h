@@ -14,9 +14,9 @@ namespace oper {
 			return -val;
 		}
 	};
-	struct abs {
+	struct absolute {
 		template<class lv> __BCinline__ auto operator ()(lv val) const {
-			return val < 0  ? -val : val;
+			return abs(val);
 		}
 	};
 	struct logical {
