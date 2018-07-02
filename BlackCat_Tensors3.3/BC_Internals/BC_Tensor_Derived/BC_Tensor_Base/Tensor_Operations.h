@@ -200,13 +200,15 @@ public:
 	template<class deriv> __BC_host_inline__
 	void assert_valid(const Tensor_Operations<deriv>& tensor) const {
 //#ifdef NDEBUG
-		assert_same_ml(tensor);					//static_assert same allocation (gpu/cpu)
-		if (non_scalar_op(tensor))				//check if a tensor by scalar operation
-			if (same_rank(tensor)) {			//else check is same dimension (element-wise function) (
-				if (!same_size(tensor))			//if is same dimension, ensure same size
-					error_message(tensor);		//else error
-				} else if (!valid_slice(tensor))//if not same dimension check if valid slice operation
-					error_message(tensor);		//else error
+		assert_same_ml(tensor);						//static_assert same allocation (gpu/cpu)
+		if (non_scalar_op(tensor)) {				//check if a tensor by scalar operation
+			if (same_rank(tensor)) {				//else check is same dimension (element-wise function) (
+				if (!same_size(tensor))				//if is same dimension, ensure same size
+					error_message(tensor);			//else error
+				} else if (!valid_slice(tensor)) {	//if not same dimension check if valid slice operation
+					error_message(tensor);			//else error
+				}
+		}
 
 //#endif
 	}

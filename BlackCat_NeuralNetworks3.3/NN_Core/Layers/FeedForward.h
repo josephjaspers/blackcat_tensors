@@ -23,51 +23,57 @@ public:
 	mat w_gradientStorage;		//weight gradient storage
 	vec b_gradientStorage;		//bias gradient storage
 
-	vec y;							//outputs
+	mat y;							//outputs
 
 	mat w;							//weights
 	vec b;							//biases
-	vec& x = this->prev().y;
+	mat& x = this->prev().y;
 
 	FeedForward(int inputs) :
 			Layer<derived>(inputs),
 			w(this->OUTPUTS, inputs),
 			b(this->OUTPUTS),
-			y(this->OUTPUTS),
 			w_gradientStorage(this->OUTPUTS, this->INPUTS),
 			b_gradientStorage(this->OUTPUTS)
 	{
-		w.randomize(-1, 1);
+		w.randomize(-2, 2);
 		b.randomize(-1, 1);
 		init_storages();
 	}
 
-	auto forwardPropagation(const vec& x) {
+	template<class expr> auto forward_propagation(const f_mat<expr>& x) {
 		y = g(w * x + b);
-		return this->next().forwardPropagation(y);
+		return this->next().forward_propagation(y);
 	}
-	auto backPropagation(const vec& dy) {
+	template<class expr> auto back_propagation(const f_mat<expr>& dy_) {
+		mat dy = dy_; //cache the values (avoid recomputing dy_)
+
 		w_gradientStorage -= dy * x.t();
 		b_gradientStorage -= dy;
 
-		return this->prev().backPropagation(w.t() * dy % gd(x));
+		return this->prev().back_propagation(w.t() * dy % gd(x));
 	}
-	auto forwardPropagation_Express(const vec& x) const {
-		return this->next().forwardPropagation_Express(g(w * x + b));
+	template<class expr> auto forward_propagation_express(const f_mat<expr>& x) const {
+		return this->next().forward_propagation_express(g(w * x + b));
 	}
 
-	void updateWeights() {
+	void update_weights() {
 		w += w_gradientStorage * lr;
 		b += b_gradientStorage * lr;
 
-		this->next().updateWeights();
+		this->next().update_weights();
 	}
 
-	void clearBPStorage() {
+	void clear_stored_delta_gradients() {
 		w_gradientStorage = 0;	//gradient lists
 		b_gradientStorage = 0; //.for_each(zero);	//gradient list
 
-		this->next().clearBPStorage();
+		this->next().clear_stored_delta_gradients();
+	}
+
+	void set_batch_size(int x) {
+		y = mat(this->OUTPUTS, x);
+		this->next().set_batch_size(x);
 	}
 
 	void write(std::ofstream& os) {

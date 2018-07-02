@@ -28,12 +28,12 @@ template<class,class> class Cube;
 template<class,class> class Tensor4;
 template<class,class> class Tensor5;
 template<int> struct dimension;
-struct DISABLED;
+template<int> struct DISABLED;
 
 //---------------------------------returns template-tensor type based on dimensionality----------------------------------//
 
 template<int> struct tensor_of;
-template<> struct tensor_of<0> { template<class t, class m> using type = Scalar<t,m>;  	template<class t, class m> using slice = DISABLED; };
+template<> struct tensor_of<0> { template<class t, class m> using type = Scalar<t,m>;  	template<class t, class m> using slice = DISABLED<0>; };
 template<> struct tensor_of<1> { template<class t, class m> using type = Vector<t, m>; 	template<class t,class m> using slice = Scalar<t, m>; };
 template<> struct tensor_of<2> { template<class t, class m> using type = Matrix<t, m>; 	template<class t,class m> using slice = Vector<t, m>; };
 template<> struct tensor_of<3> { template<class t, class m> using type = Cube<t, m>;   	template<class t,class m> using slice = Matrix<t, m>; };

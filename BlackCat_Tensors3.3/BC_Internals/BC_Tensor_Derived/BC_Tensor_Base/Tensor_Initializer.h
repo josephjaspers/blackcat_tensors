@@ -53,6 +53,8 @@ struct Tensor_Initializer<derived, std::enable_if_t<is_array_core<_functor<deriv
 	using parent 		= _functor<derived>;
 	using mathlib_t 	= _mathlib<derived>;
 	using scalar		= _scalar<derived>;
+	template<class T> using derived_alt = typename MTF::shell_of<derived>::template  type<T, mathlib_t>;
+
 
 private:
 
@@ -64,12 +66,11 @@ public:
 	 const parent& internal() const { return static_cast<const parent&>(*this); }
 	 	   parent& internal() 	  	{ return static_cast<	   parent&>(*this); }
 
-	Tensor_Initializer(const derived& tensor) : parent(tensor.inner_shape()) { this->as_derived() = tensor; }
+	Tensor_Initializer(const derived& tensor)  : parent(tensor.inner_shape()) { this->as_derived() = tensor; }
 	Tensor_Initializer(		 derived&& tensor) : parent(std::move(tensor.internal())) { tensor.internal().array = nullptr; }
 
-	template<class T> Tensor_Initializer(const T& dimensions) : parent(dimensions) {}
-
-	template<class T> using derived_alt = typename MTF::shell_of<derived>::template  type<T, mathlib_t>;
+	template<class Shape_t>
+	Tensor_Initializer(const Shape_t& shape) : parent(shape) {}
 
 	template<class U>
 	Tensor_Initializer(const derived_alt<U>&  tensor) : parent(tensor.inner_shape()) {

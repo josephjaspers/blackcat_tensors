@@ -18,31 +18,32 @@ struct InputLayer : Layer<derived> {
 
 	InputLayer() : Layer<derived>(0) {}
 
-	vec y;
+	mat y;
 
 
-	template<class T> auto forwardPropagation(const T& x) {
-		y = vec(x);
-		return this->next().forwardPropagation(x);
+	template<class tensor> auto forward_propagation(const tensor& x) {
+		y = mat(x);
+		return this->next().forward_propagation(x);
 	}
 
-	template<class T> auto forwardPropagation_Express(const T& x) const {
-		return this->next().forwardPropagation_Express(x);
+	template<class tensor> auto forward_propagation_express(const tensor& x) const {
+		return this->next().forward_propagation_express(x);
 	}
 
-	template<class T> auto backPropagation(const T&& dy) {
+	template<class tensor> auto back_propagation(const tensor& dy) {
 		return dy;
 	}
-	void set_omp_threads(int i) {
-		this->next().set_omp_threads(i);
-	}
-	void updateWeights() {
-		this->next().updateWeights();
-	}
-	void clearBPStorage() {
-		this->next().clearBPStorage();
+
+	void set_batch_size(int x) {
+		this->next().set_batch_size(x);
 	}
 
+	void update_weights() {
+		this->next().update_weights();
+	}
+	void clear_stored_delta_gradients() {
+		this->next().clear_stored_delta_gradients();
+	}
 	void write(std::ofstream& os) {
 		this->next().write(os);
 	}

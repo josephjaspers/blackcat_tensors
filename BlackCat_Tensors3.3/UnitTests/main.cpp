@@ -35,9 +35,21 @@ int main() {
 	vec x(2);
 	vec y(2);
 
-	a = x * y.t();
+	a.randomize(0, 10);
+	a.print();
+	x.zero();
+	x += a;
+
+	x.print();
 
 
+
+	std::cout << " a + x <" << std::endl;
+	a + x;
+
+	std::cout << " rando " << std::endl;
+	x.randomize(10, 10);
+	x.print();
 	mat b(x);
 	b.print_dimensions();
 	b.print_leading_dimensions();

@@ -5,8 +5,8 @@ BlackCat_NeuralNetworks (BCNN) is a library built on BlackCat_Tensors built for 
 
 
 	BlackCat_NeuralNetworks semi-thread-safe library. Designed to support batch-multithreading with openMP
-	The NeuralNetwork object methods forwardPropagation(), and backPropagation() are now thread-safe
-	updateWeights() and clearBPStorage() ARE NOT thread-safe, they are designed to update the NeuralNetwork after each batch 
+	The NeuralNetwork object methods forward_propagation(), and back_propagation() are now thread-safe
+	update_weights() and clear_stored_delta_gradients() ARE NOT thread-safe, they are designed to update the NeuralNetwork after each batch 
 	(check the UnitTests folder for examples)
 	
 	***Currently Working on adding ConvNets and LSTM***
@@ -35,11 +35,11 @@ How To Use:
 	
 	BC::NeuralNetwork<FeedForward, FeedForward> network(784, 250, 10); //creates a 3 layer neural network
 	
-	network.forwardPropagation(BC::Vector<float>); 			//forward pass through network
-	network.forwardPropagation_Expression(BC::Vector<float>); 	//forward pass, do not store data for backward pass (optimized for post-training)
-	network.backPropagation(BC::Vector<float>)			//backward pass, calculates automatically calculates residual
-	network.updateWeights();					//updates neural network weights, based on gradients are stored during backProapgation.
-	network.clearBPStorage();					//clear the stored gradients
+	network.forward_propagation(BC::Vector<float>); 			//forward pass through network
+	network.forward_propagation_expression(BC::Vector<float>); 	//forward pass, do not store data for backward pass (optimized for post-training)
+	network.back_propagation(BC::Vector<float>)			//backward pass, calculates automatically calculates residual
+	network.update_weights();					//updates neural network weights, based on gradients are stored during backProapgation.
+	network.clear_stored_delta_gradients();					//clear the stored gradients
 
 
 Example main (for MNIST dataset):

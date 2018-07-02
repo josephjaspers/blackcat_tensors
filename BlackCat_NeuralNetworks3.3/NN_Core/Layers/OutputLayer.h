@@ -16,7 +16,7 @@ namespace NN {
 template<class derived>
 struct OutputLayer : Layer<derived> {
 
-	vec& y = this->prev().y;
+	mat& y = this->prev().y;
 	vec zero = vec(this->OUTPUTS);
 
 public:
@@ -25,21 +25,23 @@ public:
 		zero.zero();
 	}
 
-	auto forwardPropagation(const vec& x) {
+	template<class expr> auto forward_propagation(const f_mat<expr>& x) {
 		return x;
 	}
-	vec forwardPropagation_Express(const vec& x) const {
+	template<class expr> auto forward_propagation_express(const f_mat<expr>& x) const {
 		return x;
 	}
-	vec backPropagation(const vec& exp) {
-		return this->prev().backPropagation(y - exp);
+	template<class expr> auto back_propagation(const f_mat<expr>& exp) {
+		return this->prev().back_propagation(y - exp);
 	}
-	vec backPropagation_throughtime() {
-		return this->prev().backPropagation(zero);
+	template<class expr> auto back_propagation_throughtime() {
+		return this->prev().back_propagation(zero);
 	}
 
-	void updateWeights() {}
-	void clearBPStorage() {}
+
+	void set_batch_size(int) {}
+	void update_weights() {}
+	void clear_stored_delta_gradients() {}
 	void write(std::ofstream& is) {
 	}
 	void read(std::ifstream& os) {

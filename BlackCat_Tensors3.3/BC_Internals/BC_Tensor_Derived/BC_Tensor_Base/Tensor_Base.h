@@ -48,15 +48,15 @@ public:
 	operator const derived& () const { return static_cast<const derived&>(*this); }
 	operator	   derived& () 		 { return static_cast< 		derived&>(*this); }
 
-	template<class... params> explicit Tensor_Base(const params&... p) : initializer(p...) {}
+	template<class... params> explicit Tensor_Base(const params&...  p) : initializer(p...) {}
+	template<class... params> explicit Tensor_Base(		 params&&... p) : initializer(p...) {}
 
 	//move only defined for primary cores (this is to ensure slices/chunks/reshapes apply copies)
-	using move_parameter = std::conditional_t<is_array_core<functor_type>(), derived&&, DISABLED>;
-	using copy_parameter = std::conditional_t<is_array_core<functor_type>(), const derived&, DISABLED>;
+	using move_parameter = std::conditional_t<is_array_core<functor_type>(), derived&&, BC::DISABLED<0>>;
+	using copy_parameter = std::conditional_t<is_array_core<functor_type>(), const derived&, BC::DISABLED<1>>;
 
 	Tensor_Base(move_parameter tensor) : initializer(std::move(tensor)) {}
-	Tensor_Base(const Tensor_Base& 	tensor) : initializer(tensor) {}
-
+	Tensor_Base(copy_parameter tensor) : initializer(tensor) {}
 
 	//copy move (only availble to "primary" array types (non-expressions)
 	derived& operator =(move_parameter tensor) {
