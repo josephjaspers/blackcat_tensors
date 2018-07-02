@@ -21,15 +21,19 @@ public:
 	scal lr;
 
 	const int INPUTS;
-	const int OUTPUTS = static_cast<derived&>(*this).hasNext() ? this->next().INPUTS : INPUTS;
+	const int OUTPUTS;
 
-	Layer(int inputs) : INPUTS(inputs) {
-		lr = .003;
-	}
-	auto& next() { return static_cast<derived&>(*this).next(); }
-	auto& prev() { return static_cast<derived&>(*this).prev(); }
+	Layer(int inputs)
+		: INPUTS(inputs),
+		  OUTPUTS(as_derived().hasNext() ? next().INPUTS : INPUTS),
+		  lr(scal(.03)) {}
+
+	const auto& as_derived() const { return static_cast<const derived&>(*this); }
+
 	const auto& next() const { return static_cast<derived&>(*this).next(); }
+		  auto& next() 		 { return static_cast<derived&>(*this).next(); }
 	const auto& prev() const { return static_cast<derived&>(*this).prev(); }
+		  auto& prev() 		 { return static_cast<derived&>(*this).prev(); }
 
 	void setLearningRate(fp_type learning_rate) {
 		lr = learning_rate;

@@ -12,7 +12,6 @@ namespace BC {
 namespace internal {
 namespace tree {
 
-
 template<class lv, class rv, class op>
 struct expression_tree_evaluator<binary_expression<lv, rv, op>, std::enable_if_t<is_linear_op<op>()>> {
 	static constexpr bool trivial_blas_eval = expression_tree_evaluator<lv>::trivial_blas_eval && expression_tree_evaluator<rv>::trivial_blas_eval;

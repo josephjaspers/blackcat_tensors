@@ -38,6 +38,11 @@ int main() {
 
 	a = x * y.t();
 
+
+	mat b(x);
+	b.print_dimensions();
+	b.print_leading_dimensions();
+
 	std::cout << " success  main" << std::endl;
 
 }

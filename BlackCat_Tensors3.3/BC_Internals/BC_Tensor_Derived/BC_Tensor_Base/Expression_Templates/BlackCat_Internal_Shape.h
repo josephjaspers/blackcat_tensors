@@ -57,6 +57,27 @@ public:
 			}
 		}
 	}
+
+
+	template<int x>
+	Shape(const Shape<x>& shape) {
+		if (dimension == 0)
+			return;
+
+		static constexpr int dims = MTF::max(x, dimension);
+
+		is()[0] = shape[0];
+		os()[0] = shape[0];
+		for (int i = 1; i < dims; ++i) {
+			is()[i] = shape[i];
+			os()[i] = shape[i] * os()[i - 1];
+		}
+
+		for (int i = dims; i < dimension; ++i) {
+			is()[i] = i;
+			os()[i] = 0;
+		}
+	}
 private:
 	template<int d = 0> __BCinline__
 	void init() {}

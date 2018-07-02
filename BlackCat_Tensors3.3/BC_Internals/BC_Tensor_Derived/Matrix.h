@@ -7,6 +7,7 @@
 
 #ifndef BC_MATRIX_H
 #define BC_MATRIX_H
+
 #include "BC_Tensor_Base/Tensor_Base.h"
 
 namespace BC {
@@ -18,29 +19,30 @@ class Matrix : public Tensor_Base<Matrix<T, Mathlib>> {
 
 public:
 
+	__BCinline__ static constexpr int DIMS() { return 2; }
 	using parent_class::operator=;
 	using parent_class::operator[];
 	using parent_class::operator();
 
-	__BCinline__ static constexpr int DIMS() { return 2; }
-
-	explicit Matrix(int rows = 0, int cols = 1) : parent_class(Shape<2>(rows, cols)) {}
-	explicit Matrix(Shape<DIMS()> shape) : parent_class(shape)  {}
+	//constructors---------------------------------------------------
 
 	Matrix(const Matrix&  v) : parent_class(v) {}
 	Matrix(		 Matrix&& v) : parent_class(v) {}
 
-	template<class U> 		  Matrix(const Matrix<U, Mathlib>&  t) : parent_class(t) {}
-	template<class U> 		  Matrix(	   Matrix<U, Mathlib>&& t) : parent_class(t) {}
-	template<class... params> Matrix(const params&... p) : parent_class(p...) {}
+	explicit Matrix(int rows = 0, int cols = 1) : parent_class(Shape<2>(rows, cols)) {}
+	explicit Matrix(Shape<DIMS()> shape) : parent_class(shape)  {}
+
+	template<class... params>
+	Matrix(const params&... p) : parent_class(p...) {}
+
+	//copy_operators--------------------------------------------------
 
 	Matrix& operator =(const Matrix& t)  { return parent_class::operator=(t); }
-	Matrix& operator =(const Matrix&& t) { return parent_class::operator=(std::move(t)); }
 	Matrix& operator =(	     Matrix&& t) { return parent_class::operator=(std::move(t)); }
+
 	template<class U>
 	Matrix& operator = (const Matrix<U, Mathlib>& t) { return parent_class::operator=(t); }
 };
-
 } //End Namespace BC
 
 #endif /* MATRIX_H */

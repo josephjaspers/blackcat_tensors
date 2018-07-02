@@ -71,6 +71,7 @@ public:
 		mathlib_type::copy(this->internal(), tensor.internal(), this->size());
 		return *this;
 	}
+	//"fill"
 	derived& operator =(scalar_type scalar) {
 		this->fill(scalar);
 		return *this;

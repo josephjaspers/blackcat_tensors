@@ -18,7 +18,6 @@
 #include "PTEE_BLAS.h"
 #include "PTEE_Temporary.h"
 
-
 namespace BC{
 namespace internal {
 namespace tree {

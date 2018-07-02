@@ -25,9 +25,9 @@ public:
 
 	vec y;							//outputs
 
-	mat w;										//weights
-	vec b;
-	vec& x = this->prev().y;		//biases
+	mat w;							//weights
+	vec b;							//biases
+	vec& x = this->prev().y;
 
 	FeedForward(int inputs) :
 			Layer<derived>(inputs),
