@@ -16,7 +16,6 @@ using cube = Cube<float, ml>;
 using tensor4 = BC::Tensor4<float, ml>;
 using tesnor5 = BC::Tensor5<float, ml>;
 
-
 #include "_blas_test.h"
 #include "_readwrite_test.h"
 #include "_shaping_test.h"

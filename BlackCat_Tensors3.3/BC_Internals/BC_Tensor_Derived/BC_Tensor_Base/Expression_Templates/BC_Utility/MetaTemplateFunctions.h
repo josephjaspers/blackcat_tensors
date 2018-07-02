@@ -111,6 +111,22 @@ static constexpr bool conditional = true;
 
 	template<class... Ts>
 	using IF_BLOCK = typename IF_BLOCK_IMPL<Ts...>::type;
+
+	template<class from, class to, class enabler = void>
+	struct is_castable_impl {
+		static constexpr bool conditional = false;
+	};
+
+	template<class from, class to>
+	struct is_castable_impl<from, to, decltype(static_cast<to>(std::declval<from>()))> {
+		static constexpr bool conditional = true;
+
+	};
+
+	template<class from, class to> static constexpr bool is_castable() {
+		return is_castable_impl<from, to>::conditional;
+	}
+
 }
 }
 #endif /* SIMPLE_H_ */

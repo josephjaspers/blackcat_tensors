@@ -18,8 +18,6 @@ namespace tree {
 template<class T, class enabler = void>
 struct expression_tree_evaluator;
 
-
-
 template<class T>
 struct expression_tree_evaluator<T, std::enable_if_t<isArray<T>()>>
 {

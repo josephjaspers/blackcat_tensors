@@ -64,21 +64,10 @@ public:
 	 const parent& internal() const { return static_cast<const parent&>(*this); }
 	 	   parent& internal() 	  	{ return static_cast<	   parent&>(*this); }
 
-	Tensor_Initializer(derived&& tensor) : parent(std::move(tensor.internal())) { tensor.internal().array 	= nullptr; }
+	Tensor_Initializer(const derived& tensor) : parent(tensor.inner_shape()) { this->as_derived() = tensor; }
+	Tensor_Initializer(		 derived&& tensor) : parent(std::move(tensor.internal())) { tensor.internal().array = nullptr; }
 
-	Tensor_Initializer(const derived& tensor) : parent(tensor.inner_shape()) {
-		this->as_derived() = tensor; //calls operations = assignment
-	}
-
-	template<class tensor_t>
-	Tensor_Initializer(const Tensor_Initializer<tensor_t>& tensor) : parent(tensor.inner_shape()) {
-		std::cout << "Tensor base init" << std::endl;
-		this->as_derived() = tensor;
-	}
-	template<class T> Tensor_Initializer(const T& dimensions): parent(dimensions) {
-		std::cout << "Tensor unknown init" << std::endl;
-
-	}
+	template<class T> Tensor_Initializer(const T& dimensions) : parent(dimensions) {}
 
 	template<class T> using derived_alt = typename MTF::shell_of<derived>::template  type<T, mathlib_t>;
 
