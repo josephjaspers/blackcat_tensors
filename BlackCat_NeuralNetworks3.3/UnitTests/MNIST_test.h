@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <omp.h>
+#include <omp.h>
 using BC::NN::vec;
 using BC::NN::scal;
 using BC::NN::mat;
@@ -14,26 +15,6 @@ typedef vec tensor;
 namespace BC {
 namespace NN {
 namespace MNIST_Test {
-
-//int correct(const vec& hypothesis, const vec& output) {
-//	int h_id = 0;
-//	int o_id = 0;
-//
-//	double h_max = hypothesis(0);
-//	double o_max = output(0);
-//
-//	for (int i = 1; i < hypothesis.size(); ++i) {
-//		if (h_max < hypothesis(i)) {
-//			h_max = hypothesis(i);
-//			h_id = i;
-//		}
-//		if (o_max < output(i)) {
-//			o_max = output(i);
-//			o_id = i;
-//		}
-//	}
-//	return h_id == o_id;
-//}
 
 void generateAndLoad(cube& input_data, cube& output_data, std::ifstream& read_data, int training_examples, int batch_size) {
 
@@ -52,6 +33,7 @@ void generateAndLoad(cube& input_data, cube& output_data, std::ifstream& read_da
 		}
 	}
 
+
 	input_data = normalize(input_data, 0, 255);
 	std::cout << " post while "  << std::endl;
 	std::cout << " return -- finished creating data set " << std::endl;
@@ -59,16 +41,18 @@ void generateAndLoad(cube& input_data, cube& output_data, std::ifstream& read_da
 
 int percept_MNIST() {
 
-	const int TRAINING_EXAMPLES =  2000;
+	const int TRAINING_EXAMPLES =  40000;
 	const int BATCH_SIZE = 100;
 	const int NUMB_BATCHES = TRAINING_EXAMPLES / BATCH_SIZE;
 
-	const int EPOCHS = 100;
+	const int EPOCHS = 15;
 
-	NeuralNetwork<FeedForward> network(784, 10);
+	NeuralNetwork<FeedForward,FeedForward,FeedForward> network(784, 256, 256, 10);
 	network.setLearningRate(.03);
-	network.set_batch_size(BATCH_SIZE);
 
+	omp_set_num_threads(3);
+
+	network.set_batch_size(BATCH_SIZE);
 	cube inputs(784, BATCH_SIZE, NUMB_BATCHES);
 	cube outputs(10, BATCH_SIZE, NUMB_BATCHES);
 
@@ -89,28 +73,18 @@ int percept_MNIST() {
 	float t = omp_get_wtime();
 
 	for (int i = 0; i < EPOCHS; ++i) {
+		std::cout << " current epoch: " << i << std::endl;
 		for (int j = 0; j < NUMB_BATCHES; ++j) {
 			network.forward_propagation(inputs[j]);
-
 			network.back_propagation(outputs[j]);
 			network.update_weights();
 			network.clear_stored_delta_gradients();
 		}
 	}
-//
-//
-//
+
 	t = omp_get_wtime() - t;
 	printf("It took me %f clicks (%f seconds).\n", t, ((float) t));
 	std::cout << "success " << std::endl;
-//
-//	float correct_ = 0;
-//	for (int i = 0; i < inputs.size(); ++i) {
-//		if (correct(network.forward_propagation(inputs[i]), outputs[i])) {
-//			++correct_;
-//		}
-//	}
-//	std::cout << " correct: " << correct_/inputs.size()  <<std::endl;
 
 	std::cout << "\n \n \n " << std::endl;
 	std::cout << " testing... " << std::endl;
@@ -118,7 +92,7 @@ int percept_MNIST() {
 	int test_images = 10;
 
 	mat img_adj(28,28);
-//
+
 	cube img = cube(reshape(inputs[0])(28,28, BATCH_SIZE));
 	mat hyps = mat(network.forward_propagation(inputs[0]));
 	for (int i = 0; i < test_images; ++i) {

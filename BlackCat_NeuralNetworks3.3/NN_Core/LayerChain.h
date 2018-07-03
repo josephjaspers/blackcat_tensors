@@ -35,7 +35,7 @@ template<class> class InputLayer;
 		const me& next() const { throw std::invalid_argument("no next end of chain");}
 			  me& next() 		 { throw std::invalid_argument("no next end of chain");}
 
-		const auto& prev() const { return static_cast<p&>(*this).data(); }
+		const auto& prev() const { return static_cast<const p&>(*this).data(); }
 			  auto& prev() 		 { return static_cast<p&>(*this).data(); }
 
 
@@ -67,10 +67,10 @@ template<class> class InputLayer;
 		auto& head() { return prev().head(); }
 
 			  auto& prev()  	 { return static_cast<p&>(*this).data(); }
-		const auto& prev() const { return static_cast<p&>(*this).data(); }
+		const auto& prev() const { return static_cast<const p&>(*this).data(); }
 
 			  auto& next()    	 { return static_cast<parent&>(*this).data(); }
-		const auto& next() const { return static_cast<parent&>(*this).data(); }
+		const auto& next() const { return static_cast<const parent&>(*this).data(); }
 
 		const auto& data() const { return static_cast<const type&>(*this); }
 		 	  auto& data()  	 { return static_cast<		type&>(*this); }

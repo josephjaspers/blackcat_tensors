@@ -33,7 +33,24 @@ FAQ Fast Explanation:
 Supports:
 
 	CPU Multithreaded (via openmp)
-	GPU Multithreading (via CUDA) 
+	GPU Multithreading (via CUDA)
+
+Why Use BCT Opposed to Armadillo/Eigen/XYZ_Library: 
+
+	BCT is designed specifically for Neural Network and certain features are designed in regard to this.
+	A) Blas injection:
+		The expression -> y = sigmoid(w * x + b)  (this is forward propagation in feedforward layers)
+		First, w*x will be evaluated to y,
+		Secondly, the new expression y = sigmoid(y + b)
+		will be evaluated in a single for loop.
+		Therefor while evaluating this expression 0 temporaries are generated. 
+		(This is a compile time feature, and incurs nearly 0 overhead).
+
+	B) Tensor Broadcasting:
+		Tensor broadcasting is the ability of BCT to handle operations of different-dimensions
+		IE a 'mat += vec' expression will add the column vector to every column of the matrix.
+		Tensor broadcasting is useful in batch-training when we want to utilize
+		matrix multiplications operations to optimize training (which is more efficient than matrix-vector operations)
 
 Optimizations:
 

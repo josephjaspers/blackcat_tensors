@@ -26,13 +26,13 @@ public:
 	Layer(int inputs)
 		: INPUTS(inputs),
 		  OUTPUTS(as_derived().hasNext() ? next().INPUTS : INPUTS),
-		  lr(scal(.03)) {}
+		  lr(fp_type(.03)) {}
 
 	const auto& as_derived() const { return static_cast<const derived&>(*this); }
 
-	const auto& next() const { return static_cast<derived&>(*this).next(); }
+	const auto& next() const { return static_cast<const derived&>(*this).next(); }
 		  auto& next() 		 { return static_cast<derived&>(*this).next(); }
-	const auto& prev() const { return static_cast<derived&>(*this).prev(); }
+	const auto& prev() const { return static_cast<const derived&>(*this).prev(); }
 		  auto& prev() 		 { return static_cast<derived&>(*this).prev(); }
 
 	void setLearningRate(fp_type learning_rate) {

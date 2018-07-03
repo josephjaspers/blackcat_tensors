@@ -33,6 +33,7 @@ public:
 			Layer<derived>(inputs),
 			w(this->OUTPUTS, inputs),
 			b(this->OUTPUTS),
+
 			w_gradientStorage(this->OUTPUTS, this->INPUTS),
 			b_gradientStorage(this->OUTPUTS)
 	{
