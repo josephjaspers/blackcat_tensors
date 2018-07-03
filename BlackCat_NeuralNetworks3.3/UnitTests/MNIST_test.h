@@ -23,13 +23,8 @@ void generateAndLoad(cube& input_data, cube& output_data, std::ifstream& read_da
 	std::cout << " generating loading " << std::endl;
 	for (int i = 0; i < training_sets && read_data.good(); ++i) {
 		for (int j = 0; j < batch_size && read_data.good(); ++j) {
-			vec out(10);
-			out.read_as_one_hot(read_data);
-			output_data[i][j] = out;
-
-			vec in(784);
-			in.read(read_data, false);
-			input_data[i][j] = in;
+			output_data[i][j].read_as_one_hot(read_data);
+			input_data[i][j].read(read_data);
 		}
 	}
 
@@ -47,7 +42,7 @@ int percept_MNIST() {
 
 	const int EPOCHS = 15;
 
-	NeuralNetwork<FeedForward,FeedForward,FeedForward> network(784, 256, 256, 10);
+	NeuralNetwork<FeedForward,FeedForward> network(784, 256, 10);
 	network.setLearningRate(.03);
 
 	omp_set_num_threads(3);

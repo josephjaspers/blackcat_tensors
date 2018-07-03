@@ -34,7 +34,7 @@ public:
 
 	//-------const reshape (using int list)
 	template<class... integers>
-	const auto lazy_reshape(integers... ints) const {
+	const auto reshape_impl(integers... ints) const {
 		using internal = decltype(std::declval<derived>().internal().reshape(ints...));
 		static constexpr int tensor_dim =  sizeof...(integers);
 		using type = typename tensor_of<tensor_dim>::template type<internal, mathlib_type>;
@@ -42,14 +42,14 @@ public:
 	}
 	//-------const reshape (using shape object)
 	template<int dims>
-	const auto lazy_reshape(Shape<dims> shape) const {
+	const auto reshape_impl(Shape<dims> shape) const {
 		using internal = decltype(std::declval<derived>().internal().reshape(shape));
 		using type = typename tensor_of<dims>::template type<internal, mathlib_type>;
 		return type(this->internal().reshape(shape));
 	}
 	//-------non-const reshape (using int list)
 	template<class... integers>
-	 auto lazy_reshape(integers... ints)  {
+	 auto reshape_impl(integers... ints)  {
 		using internal = decltype(std::declval<derived>().internal().reshape(ints...));
 		static constexpr int tensor_dim =  sizeof...(integers);
 		using type = typename tensor_of<tensor_dim>::template type<internal, mathlib_type>;
@@ -57,18 +57,18 @@ public:
 	}
 	//-------non-const reshape (using shape object)
 	template<int dims>
-	 auto lazy_reshape(Shape<dims> shape)  {
+	 auto reshape_impl(Shape<dims> shape)  {
 		using internal = decltype(std::declval<derived>().internal().reshape(shape));
 		using type = typename tensor_of<dims>::template type<internal, mathlib_type>;
 		return type(as_derived().internal().reshape(shape));
 	}
 	template<class... integers>
-	auto lazy_chunk(integers... ints) {
+	auto chunk_impl(integers... ints) {
 		int location = as_derived().internal().dims_to_index_reverse(ints...);
 		return CHUNK(as_derived(), location);
 	}
 	template<class... integers>
-	const auto lazy_chunk(integers... ints) const {
+	const auto chunk_impl(integers... ints) const {
 		int location = as_derived().internal().dims_to_index_reverse(ints...);
 		return CHUNK(as_derived(), location);
 	}

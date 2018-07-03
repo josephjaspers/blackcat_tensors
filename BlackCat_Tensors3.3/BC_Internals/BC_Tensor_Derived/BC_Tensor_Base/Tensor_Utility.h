@@ -68,14 +68,10 @@ public:
 		delete[] internal;
 	}
 
-	void read_as_one_hot(std::ifstream& is, int sz = -1) {
+	void read_as_one_hot(std::ifstream& is) {
 		if (dimension_of<deriv> != 1)
 			throw std::invalid_argument("one_hot only supported by vectors");
 
-		//rescale
-		if (sz > 0) {
-			as_derived() = deriv(sz);
-		}
 		as_derived().zero(); //clear
 
 		std::string tmp;
@@ -84,8 +80,34 @@ public:
 		as_derived()(std::stoi(tmp)) = 1;
 
 	}
+	void read(std::ifstream& is) {
+		if (!is.good()) {
+			std::cout << "File open error - returning " << std::endl;
+			return;
+		}
+		std::vector<scalar> file_data;
+		scalar val;
+		std::string tmp;
+		unsigned read_values = 0;
 
-	void read(std::ifstream& is, bool read_dimensions = true, bool overrideDimensions = true) {
+		std::getline(is, tmp, '\n');
+
+		std::stringstream ss(tmp);
+
+		if (ss.peek() == ',' || ss.peek() == ' ' || ss.peek() == '\t')
+			ss.ignore();
+
+		while (ss >> val) {
+			file_data.push_back(val);
+			++read_values;
+			if (ss.peek() == ',')
+				ss.ignore();
+		}
+			mathlib::HostToDevice(as_derived().internal().memptr(), &file_data[0], as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
+
+	}
+
+	void read_tensor_data(std::ifstream& is, bool read_dimensions = true, bool overrideDimensions = true) {
 		if (!is.good()) {
 			std::cout << "File open error - returning " << std::endl;
 			return;
@@ -134,6 +156,22 @@ public:
 			mathlib::HostToDevice(as_derived().internal().memptr(), &file_data[0],
 					as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
 		}
+	}
+	void read_tensor_data_as_one_hot(std::ifstream& is, int sz) {
+		if (dimension_of<deriv> != 1)
+			throw std::invalid_argument("one_hot only supported by vectors");
+
+		//rescale
+		if (sz > 0) {
+			as_derived() = deriv(sz);
+		}
+		as_derived().zero(); //clear
+
+		std::string tmp;
+		std::getline(is, tmp, ',');
+
+		as_derived()(std::stoi(tmp)) = 1;
+
 	}
 };
 
