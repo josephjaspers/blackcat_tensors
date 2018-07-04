@@ -110,8 +110,10 @@ static void scalar_mul(T* t, U* u, V* v) {
 	*t = *u * *v;
 }
 
-template<class T, typename J> __global__
-static void randomize(T t, J lower_bound, J upper_bound, int seed) {
+
+
+template<class T> __global__
+static void randomize(T t, float lower_bound, float upper_bound, int seed) {
 
 	 curandState_t state;
 	  curand_init(seed, /* the seed controls the sequence of random values that are produced */
@@ -119,10 +121,11 @@ static void randomize(T t, J lower_bound, J upper_bound, int seed) {
 	              1, /* the offset is how much extra we advance in the sequence for each call, can be 0 */
 	              &state);
 
+	constexpr int floating_point_decimal_length = 10000;
 
 	for (int i = 0; i < t.size(); ++i) {
-		t[i] = curand(&state);
-		t[i] /= 1000000000; //curand max value //using std::numeric_limits<float>::max -- causes crash
+		t[i] = curand(&state) % floating_point_decimal_length;
+		t[i] /= floating_point_decimal_length;
 		t[i] *= (upper_bound - lower_bound);
 		t[i] += lower_bound;
 	}

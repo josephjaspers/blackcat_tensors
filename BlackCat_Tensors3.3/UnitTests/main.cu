@@ -6,8 +6,8 @@ using BC::Matrix;
 using BC::Scalar;
 using BC::Cube;
 
-using ml = BC::CPU;		//to test cpu
-//using ml = BC::GPU;	//to test gpu
+//using ml = BC::CPU;		//to test cpu
+using ml = BC::GPU;	//to test gpu
 
 using vec = Vector<float, ml>;
 using mat = Matrix<float, ml>;
@@ -31,29 +31,11 @@ int main() {
 //	shaping();
 
 
-	mat a(2,2);
-	vec x(2);
-	vec y(2);
+	std::cout << "----------------RANDOMIZE---------------"<<std::endl;
+	mat a(5,5);
 
-	a.randomize(0, 10);
+	a.randomize(-10, 10);
 	a.print();
-	x.zero();
-	x += a;
-
-	x.print();
-
-
-
-	std::cout << " a + x <" << std::endl;
-	a + x;
-
-	std::cout << " rando " << std::endl;
-	x.randomize(10, 10);
-	x.print();
-	mat b(x);
-	b.print_dimensions();
-	b.print_leading_dimensions();
-
 	std::cout << " success  main" << std::endl;
 
 }

@@ -28,7 +28,7 @@ struct CPU_Misc {
 #pragma omp parallel for
 #endif
 		for (int i = 0; i < tensor.size(); ++i) {
-			tensor[i] = ((double) (rand() / ((double) RAND_MAX + 1)) * (upper_bound - lower_bound)) + lower_bound;
+			tensor[i] = ((J) (rand() / ((J) RAND_MAX + 1)) * (upper_bound - lower_bound)) + lower_bound;
 		}
 #ifndef BC_NO_OPENMP
 #pragma omp barrier

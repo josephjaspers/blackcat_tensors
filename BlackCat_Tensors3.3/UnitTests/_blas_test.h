@@ -87,8 +87,6 @@ int gemm_injection() {
 	c.zero();
 	c = d * scal(2.0f) * e + f;
 
-	std::cout << type_name<decltype(d * scal(2.0f) * e + f)>() << std::endl;
-	std::cout << decltype(d * scal(2.0))::DIMS() << " GET DIMS " << std::endl;
 //	std::cout << (d * scal(2.0)).dims() << " GET DIMS " << std::endl;
 
 	c.print();

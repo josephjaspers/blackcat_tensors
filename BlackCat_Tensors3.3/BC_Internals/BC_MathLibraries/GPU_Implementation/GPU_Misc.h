@@ -19,7 +19,7 @@ struct GPU_Misc {
 
 
 	template<typename T, typename J>
-	static void fill(T t, J j) {
+	static void fill(T t, const J j) {
 		gpu_impl::fill<<<blocks(t.size()),threads()>>>(t, j);
 		cudaDeviceSynchronize();
 	}
@@ -41,13 +41,13 @@ struct GPU_Misc {
 		cudaDeviceSynchronize();
 	}
 
-	template<typename T, class J>
-	static void randomize(T t, J lower_bound, J upper_bound) {
+	template<typename T>
+	static void randomize(T t, float lower_bound, float upper_bound) {
 		gpu_impl::randomize<<<blocks(t.size()),threads()>>>(t, lower_bound, upper_bound, rand());
 		cudaDeviceSynchronize();
 	}
-	template<template<class...> class T, class...set, class J>
-	static void randomize(T<set...> t, J lower_bound, J upper_bound) {
+	template<template<class...> class T, class...set>
+	static void randomize(T<set...> t, float lower_bound, float upper_bound) {
 		gpu_impl::randomize<<<blocks(t.size()),threads()>>>(t, lower_bound, upper_bound, rand());
 		cudaDeviceSynchronize();
 	}

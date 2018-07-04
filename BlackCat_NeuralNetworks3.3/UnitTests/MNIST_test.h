@@ -1,5 +1,5 @@
-//#include "../BlackCat_GPU_NeuralNetworks.h"
-#include "../BlackCat_NeuralNetworks.h"
+#include "../BlackCat_GPU_NeuralNetworks.h"
+//#include "../BlackCat_NeuralNetworks.h"
 
 #include <fstream>
 #include <iostream>
@@ -20,6 +20,9 @@ void generateAndLoad(cube& input_data, cube& output_data, std::ifstream& read_da
 
 	int training_sets = training_examples / batch_size;
 
+	output_data.zero();
+	input_data.zero();
+
 	std::cout << " generating loading " << std::endl;
 	for (int i = 0; i < training_sets && read_data.good(); ++i) {
 		for (int j = 0; j < batch_size && read_data.good(); ++j) {
@@ -27,7 +30,6 @@ void generateAndLoad(cube& input_data, cube& output_data, std::ifstream& read_da
 			input_data[i][j].read(read_data);
 		}
 	}
-
 
 	input_data = normalize(input_data, 0, 255);
 	std::cout << " post while "  << std::endl;
@@ -39,22 +41,25 @@ int percept_MNIST() {
 	const int TRAINING_EXAMPLES =  40000;
 	const int BATCH_SIZE = 100;
 	const int NUMB_BATCHES = TRAINING_EXAMPLES / BATCH_SIZE;
+	const int PICTURE_SZ = 784;
+	const int NUMB_DIGITS = 10;
 
-	const int EPOCHS = 15;
+	const int EPOCHS = 3;
 
 	NeuralNetwork<FeedForward,FeedForward> network(784, 256, 10);
 	network.setLearningRate(.03);
 
-	omp_set_num_threads(3);
 
 	network.set_batch_size(BATCH_SIZE);
-	cube inputs(784, BATCH_SIZE, NUMB_BATCHES);
-	cube outputs(10, BATCH_SIZE, NUMB_BATCHES);
+	cube inputs(PICTURE_SZ, BATCH_SIZE, NUMB_BATCHES);
+	cube outputs(NUMB_DIGITS, BATCH_SIZE, NUMB_BATCHES);
 
 	//load data
 	std::cout << "loading data..." << std::endl << std::endl;
 	std::ifstream in_stream("///home/joseph///Downloads///train.csv");
-	std::string tmp; std::getline(in_stream, tmp, '\n');  	//remove headers
+
+	//move the file_ptr of the csv past the headers
+	std::string tmp; std::getline(in_stream, tmp, '\n');
 
 	//Load training examples (taken from kaggle digit recognizer train.csv)
 	std::cout << " generating and loading data from csv to tensors" << std::endl;
@@ -96,6 +101,7 @@ int percept_MNIST() {
 		hyps[i].print();
 		std::cout << "-----------------------------------------------------------------------------------------------------------" <<std::endl;
 	}
+
 	return 0;
 }
 
