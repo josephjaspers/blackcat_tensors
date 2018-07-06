@@ -32,8 +32,8 @@ struct Array : Tensor_Array_Base<Array<dimension, T, mathlib>, dimension>{
 	Array(U param, scalar_type* array_) : array(array_), shape(param) {}
 
 
-	__BCinline__ const auto inner_shape() const { return shape.is(); }
-	__BCinline__ const auto outer_shape() const { return shape.os(); }
+	__BCinline__ const auto inner_shape() const { return shape.inner_shape(); }
+	__BCinline__ const auto outer_shape() const { return shape.outer_shape(); }
 	__BCinline__ const scalar_type* memptr() const { return array; }
 	__BCinline__	   scalar_type* memptr()  	    { return array; }
 

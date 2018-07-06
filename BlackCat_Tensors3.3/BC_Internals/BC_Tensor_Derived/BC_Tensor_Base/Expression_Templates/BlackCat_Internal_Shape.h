@@ -19,17 +19,17 @@ struct Shape {
 	__BCinline__ static constexpr int LENGTH() { return dimension; }
 private:
 	static constexpr int last = dimension - 1;
-	int inner_shape[dimension];
-	int outer_shape[dimension];
+	int IS[dimension];
+	int OS[dimension];
 public:
 
-	__BCinline__ int size() const { return LENGTH() > 0 ?  outer_shape[last] : 1; }
+	__BCinline__ int size() const { return LENGTH() > 0 ?  OS[last] : 1; }
 
-	__BCinline__ int* is() { return inner_shape; }
-	__BCinline__ const int* is() const { return inner_shape; }
+	__BCinline__ auto inner_shape() { return ptr_array<dimension>(IS); }
+	__BCinline__ const auto inner_shape() const { return ptr_array<dimension>(IS);; }
 
-	__BCinline__ int* os() { return outer_shape; }
-	__BCinline__ const int* os() const { return outer_shape; }
+	__BCinline__ auto outer_shape() { return ptr_array<dimension>(OS); }
+	__BCinline__ const auto outer_shape() const { return ptr_array<dimension>(OS); }
 
 
 	Shape() = default;
@@ -38,46 +38,50 @@ public:
 	Shape& operator = (const Shape&) = default;
 	Shape& operator = (Shape&&) = default;
 
-	template<class... integers> Shape(int first, integers... ints) : inner_shape() {
+	template<class... integers> Shape(int first, integers... ints) : IS() {
 		this->init(first, ints...);
 	}
-	Shape(int first) : inner_shape() {
+	Shape(int first) : IS() {
 		this->init(first);
 	}
 
-
-	template<class U>
-	Shape (U param) {
+	template<int dim, class int_t>
+	Shape (stack_array<dim, int_t> param) {
+		static_assert(dim >= dimension, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
 		if (LENGTH() > 0) {
-			inner_shape[0] = param[0];
-			outer_shape[0] = inner_shape[0];
+			IS[0] = param[0];
+			OS[0] = IS[0];
 			for (int i = 1; i < LENGTH(); ++i) {
-				inner_shape[i] = param[i];
-				outer_shape[i] = outer_shape[i - 1] * inner_shape[i];
+				IS[i] = param[i];
+				OS[i] = OS[i - 1] * IS[i];
+			}
+		}
+	}
+	template<int dim, class int_t>
+	Shape (pointer_array<dim, int_t> param) {
+		static_assert(dim >= dimension, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
+		if (LENGTH() > 0) {
+			IS[0] = param[0];
+			OS[0] = IS[0];
+			for (int i = 1; i < LENGTH(); ++i) {
+				IS[i] = param[i];
+				OS[i] = OS[i - 1] * IS[i];
+			}
+		}
+	}
+	template<int dim, class f, class int_t>
+	Shape (lambda_array<dim, int_t, f> param) {
+		static_assert(dim >= dimension, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
+		if (LENGTH() > 0) {
+			IS[0] = param[0];
+			OS[0] = IS[0];
+			for (int i = 1; i < LENGTH(); ++i) {
+				IS[i] = param[i];
+				OS[i] = OS[i - 1] * IS[i];
 			}
 		}
 	}
 
-
-	template<int x>
-	Shape(const Shape<x>& shape) {
-		if (dimension == 0)
-			return;
-
-		static constexpr int dims = MTF::max(x, dimension);
-
-		is()[0] = shape[0];
-		os()[0] = shape[0];
-		for (int i = 1; i < dims; ++i) {
-			is()[i] = shape[i];
-			os()[i] = shape[i] * os()[i - 1];
-		}
-
-		for (int i = dims; i < dimension; ++i) {
-			is()[i] = i;
-			os()[i] = 0;
-		}
-	}
 private:
 	template<int d = 0> __BCinline__
 	void init() {}
@@ -89,17 +93,24 @@ private:
 		static constexpr bool intList = MTF::is_integer_sequence<integers...>;
 		static_assert(intList, "MUST BE INTEGER LIST");
 
-		is()[dim] = front;
+		inner_shape()[dim] = front;
 
 		if (dim > 0)
-			os()[dim] = front * os()[dim - 1];
+			outer_shape()[dim] = front * outer_shape()[dim - 1];
 		else
-			os()[0] = front;
+			outer_shape()[0] = front;
 
 		if (dim != LENGTH() - 1) {
 			init<(dim + 1 < LENGTH() ? dim + 1 : LENGTH())>(ints...);
 		}
 	}
+};
+
+template<>
+struct Shape<0> {
+	__BCinline__ int size() const { return 1; }
+	__BCinline__ const auto inner_shape() const { return l_array<0>([&](auto x) { return 1; });}
+	__BCinline__ const auto outer_shape() const { return l_array<0>([&](auto x) { return 0; });}
 };
 }
 

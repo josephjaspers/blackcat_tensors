@@ -51,6 +51,20 @@ namespace BC {
 
 	//accepts a lambda that takes a single-integer parameter
 	template<int dimension, class func> __BChd__ auto l_array(func internal) { return lambda_array<dimension, decltype(internal(0)), func>(internal); }
+
+
+	template<int x, class scalar_t>
+	struct pointer_array {
+		scalar_t* array;
+		__BCinline__ pointer_array(scalar_t* array_) : array(array_) {}
+
+		__BCinline__ const scalar_t& operator [](int i) const { return array[i]; }
+		__BCinline__ 	   scalar_t& operator [](int i) 	{ return array[i]; }
+	};
+
+	template<int x, class scalar> __BChd__ auto ptr_array(scalar* array) {
+		return pointer_array<x, scalar>(array);
+	}
 }
 
 

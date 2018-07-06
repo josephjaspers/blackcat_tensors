@@ -45,8 +45,8 @@ struct Array_Reshape {
 
 	template<class... integers>
 	implementation(const scalar* array_, PARENT parent, integers... ints) : array(const_cast<scalar*>(array_)), parent(parent), shape(ints...) {}
-	__BCinline__ const auto inner_shape() const 	{ return shape.is(); }
-	__BCinline__ const auto outer_shape() const 	{ return shape.os(); }
+	__BCinline__ const auto inner_shape() const 	{ return shape.inner_shape(); }
+	__BCinline__ const auto outer_shape() const 	{ return shape.outer_shape(); }
 
 	__BCinline__ const auto memptr() const { return array; }
 	__BCinline__	   auto memptr()   	{ return array; }
