@@ -56,9 +56,6 @@ public:
 	__BCinline__ int cols() const { return DIMS() > 1 ? IS()[1] : 1; }
 	__BCinline__ int dimension(int i) const { return DIMS() > i ? IS()[i] : 1; }
 	__BCinline__ int outer_dimension() const { return dimension(DIMS() - 1); }
-	__BCinline__ auto iterator_limit(int i) { return this->dimension(i); }
-	__BCinline__ auto iterator_increment(int i) { return 1; }
-
 	__BCinline__ int ld1() const { return DIMS() > 0 ? OS()[0] : 1; }
 	__BCinline__ int ld2() const { return DIMS() > 1 ? OS()[1] : 1; }
 	__BCinline__ int leading_dimension(int i) const { return DIMS() > i + 1 ? OS()[i] : 1; }
@@ -96,14 +93,14 @@ public:
 	__BCinline__ int dims_to_index_impl(int front) const {
 		return front;
 	}
-	template<int D> __BCinline__ int dims_to_index(stack_array<int, D> var) const {
+	template<int D> __BCinline__ int dims_to_index(stack_array<D, int> var) const {
 		int index = var[0];
 		for(int i = 1; i < DIMS(); ++i) {
 			index += this->leading_dimension(i - 1) * var[i];
 		}
 		return index;
 	}
-	template<int D> __BCinline__ int dims_to_index_reverse(stack_array<int, D> var) const {
+	template<int D> __BCinline__ int dims_to_index_reverse(stack_array<D, int> var) const {
 		static_assert(D >= DIMS(), "converting array_to dimension must have at least as many indices as the tensor");
 
 		int index = var[DIMS() - 1];

@@ -22,8 +22,8 @@ namespace BC {
 namespace internal {
 template<int, class, class> class Array;
 }
-template<class> class lambda_array;
-template<class, int> class stack_array;
+template<int, class, class> class lambda_array;
+template<int, class> class stack_array;
 template<int> class Shape;
 
 template<class T> struct isPrimaryArray { static constexpr bool conditional = false; };
@@ -32,8 +32,8 @@ template<class T> static constexpr bool is_array_core() { return isPrimaryArray<
 
 //determines if the type is a valid-indexable tensor_shape
 template<class T> 	struct BlackCat_Shape 						{ static constexpr bool conditional = false; };
-template<class T> 	struct BlackCat_Shape<lambda_array<T>> 		{ static constexpr bool conditional = true; };
-template<int x> 	struct BlackCat_Shape<stack_array<int,x>> 	{ static constexpr bool conditional = true; };
+template<int x, class S, class T> 	struct BlackCat_Shape<lambda_array<x, S, T>> 		{ static constexpr bool conditional = true; };
+template<int x> 	struct BlackCat_Shape<stack_array<x, int>> 	{ static constexpr bool conditional = true; };
 template<int x> 	struct BlackCat_Shape<Shape<x>> 			{ static constexpr bool conditional = true; };
 template<class T> static constexpr bool is_shape = BlackCat_Shape<std::decay_t<T>>::conditional;
 

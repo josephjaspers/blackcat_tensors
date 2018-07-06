@@ -28,7 +28,7 @@ struct unary_expression<functor_type, oper::transpose<ml>> : expression_base<una
 	unary_expression(functor_type p) : array(p) {}
 
 	__BCinline__ const auto inner_shape() const {
-		return l_array([=](int i) {
+		return l_array<DIMS()>([=](int i) {
 			if (DIMS() == 2)
 				return i == 0 ? array.cols() : i == 1 ? array.rows() : 1;
 			else
