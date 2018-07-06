@@ -56,15 +56,12 @@ struct binary_expression<lv, rv, oper::gemm<mathlib>>
 template<class core, int alpha_mod, int beta_mod>
 void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 
-	using lv_A = decltype(branched<mathlib>::evaluate(det_eval<lv>::get_array(left)));
-	using rv_B = decltype(branched<mathlib>::evaluate(det_eval<rv>::get_array(right)));
-
 	//get the data of the injection --> injection_wrapper simply stores the alpha/beta scalar modifiers
 	auto& injection = injection_values.data();
 
 	//evaluate the left and right branches (computes only if necessary)
-	lv_A A = branched<mathlib>::evaluate(det_eval<lv>::get_array(left));
-	rv_B B = branched<mathlib>::evaluate(det_eval<rv>::get_array(right));
+	auto A = branched<mathlib>::evaluate(det_eval<lv>::get_array(left));
+	auto B = branched<mathlib>::evaluate(det_eval<rv>::get_array(right));
 
 	//get the left and right side scalar values
 	scalar_type* alpha_lv = det_eval<lv>::get_scalar(left);
@@ -79,13 +76,6 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 		mathlib::scalar_mul(alpha, alpha, alpha_lv);
 	if (rv_scalar)
 		mathlib::scalar_mul(alpha, alpha, alpha_rv);
-
-
-	float a;
-	float b;
-
-	mathlib::DeviceToHost(&a, alpha);
-	mathlib::DeviceToHost(&b, beta);
 
 	//call matrix_mul
 	mathlib::gemm(transA, transB,  M(), N(), K(), alpha, A, A.ld1(), B, B.ld1(), beta, injection, injection.ld1());

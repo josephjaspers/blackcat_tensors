@@ -53,6 +53,7 @@ namespace BC {
 	template<int dimension, class func> __BChd__ auto l_array(func internal) { return lambda_array<dimension, decltype(internal(0)), func>(internal); }
 
 
+	//-------------------------------stupid wrapper around pointer than use a template<int> to remember its length -------------------------------//
 	template<int x, class scalar_t>
 	struct pointer_array {
 		scalar_t* array;

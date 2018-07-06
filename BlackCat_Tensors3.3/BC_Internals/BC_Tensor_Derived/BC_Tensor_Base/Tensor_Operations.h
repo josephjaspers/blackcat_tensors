@@ -12,6 +12,8 @@
 #include "Expression_Templates/Operations/Binary.h"
 #include "Expression_Templates/Operations/Unary.h"
 
+#include "Expression_Templates/Function_conv2.h"
+
 #include "Expression_Templates/Function_gemm.h"
 #include "Expression_Templates/Function_gemv.h"
 #include "Expression_Templates/Function_ger.h"
@@ -148,6 +150,10 @@ public:
 		return Alias<derived>(as_derived());
 	}
 
+
+	template<int x, class param_derived> auto conv(const Tensor_Operations<param_derived>& tensor) const {
+		return as_derived().bi_expr<oper::conv<x, mathlib_type>>(tensor.as_derived());
+	}
 	//-----------------------------------custom expressions--------------------------------------------------//
 	template<class functor>
 	auto un_expr(functor f) const {

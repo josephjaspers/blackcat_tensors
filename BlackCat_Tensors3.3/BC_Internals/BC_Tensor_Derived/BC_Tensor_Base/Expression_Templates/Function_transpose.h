@@ -13,9 +13,9 @@ namespace BC {
 namespace oper {
 template<class ml> class transpose;
 }
+
+
 namespace internal {
-
-
 
 template<class functor_type, class ml>
 struct unary_expression<functor_type, oper::transpose<ml>> : expression_base<unary_expression<functor_type, oper::transpose<ml>>>
@@ -29,10 +29,14 @@ struct unary_expression<functor_type, oper::transpose<ml>> : expression_base<una
 
 	__BCinline__ const auto inner_shape() const {
 		return l_array<DIMS()>([=](int i) {
-			if (DIMS() == 2)
+			if (DIMS() >= 2)
+				return i == 0 ? array.cols() : i == 1 ? array.rows() : array.dimension(i);
+			else if (DIMS() == 2)
 				return i == 0 ? array.cols() : i == 1 ? array.rows() : 1;
-			else
+			else if (DIMS() == 1)
 				return i == 0 ? array.rows() : 1;
+			else
+				return 1;
 		});
 	}
 	__BCinline__ const auto outer_shape() const { return array.outer_shape(); }
