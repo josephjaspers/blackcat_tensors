@@ -15,13 +15,16 @@
 #include "GPU_Implementation/GPU_Constants.h"
 
 
+#include "GPU_Implementation/GPU_Convolution.h"
+
 namespace BC {
 
 class GPU :
 	public GPU_Misc<GPU>,
 	public GPU_Utility<GPU>,
 	public GPU_BLAS<GPU>,
-	public GPU_Constants<GPU> {
+	public GPU_Constants<GPU>,
+	public GPU_Convolution<GPU> {
 public:
 
 	static constexpr int CUDA_BASE_THREADS = 256;

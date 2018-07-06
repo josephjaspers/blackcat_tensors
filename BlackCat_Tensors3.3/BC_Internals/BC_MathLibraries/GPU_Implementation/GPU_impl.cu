@@ -8,10 +8,6 @@
 #include <curand.h>
 #include <curand_kernel.h>
 
-#include <limits>
-#include <cstddef>
-#include <type_traits>
-
 namespace BC {
 namespace gpu_impl {
 

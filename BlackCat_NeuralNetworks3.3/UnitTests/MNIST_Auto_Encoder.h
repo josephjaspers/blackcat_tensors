@@ -12,7 +12,7 @@ using BC::NN::mat;
 
 namespace BC {
 namespace NN {
-namespace MNIST_Test {
+namespace MNIST_Auto_Encoder_Test {
 
 void generateAndLoad(cube& input_data, cube& output_data, std::ifstream& read_data, int training_examples, int batch_size) {
 
@@ -42,11 +42,10 @@ int percept_MNIST() {
 	const int PICTURE_SZ = 784;
 	const int NUMB_DIGITS = 10;
 
-	const int EPOCHS = 3;
+	const int EPOCHS = 10;
 
-	NeuralNetwork<FeedForward,FeedForward> network(784, 256, 10);
-	network.setLearningRate(.03);
-
+	NeuralNetwork<FeedForward, FeedForward> network(784, 128, 784);
+	network.setLearningRate(.01);
 
 	network.set_batch_size(BATCH_SIZE);
 	cube inputs(PICTURE_SZ, BATCH_SIZE, NUMB_BATCHES);
@@ -77,7 +76,7 @@ int percept_MNIST() {
 		std::cout << " current epoch: " << i << std::endl;
 		for (int j = 0; j < NUMB_BATCHES; ++j) {
 			network.forward_propagation(inputs[j]);
-			network.back_propagation(outputs[j]);
+			network.back_propagation(inputs[j]);
 			network.update_weights();
 			network.clear_stored_delta_gradients();
 		}
@@ -96,10 +95,14 @@ int percept_MNIST() {
 
 	cube img = cube(reshape(inputs[0])(28,28, BATCH_SIZE));
 	mat hyps = mat(network.forward_propagation(inputs[0]));
+	cube hyps_fixed = reshape(hyps)(28, 28, BATCH_SIZE);
+
 	for (int i = 0; i < test_images; ++i) {
 		img_adj = img[i].t();
 		img_adj.printSparse(3);
-		hyps[i].print();
+		mat x = hyps_fixed[i];
+		mat xt = x.t();
+		xt.printSparse();
 		std::cout << "-----------------------------------------------------------------------------------------------------------" <<std::endl;
 	}
 

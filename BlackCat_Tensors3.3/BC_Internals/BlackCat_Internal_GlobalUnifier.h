@@ -8,8 +8,6 @@
 #ifndef BLACKCAT_INTERNAL_GLOBALUNIFIER_H_
 #define BLACKCAT_INTERNAL_GLOBALUNIFIER_H_
 
-#include "BC_MathLibraries/CPU.h"
-#include "BC_MathLibraries/GPU.cu"
 
 #include "BC_Tensor_Derived/Scalar.h"
 #include "BC_Tensor_Derived/Vector.h"
@@ -19,6 +17,8 @@
 #include "BC_Tensor_Derived/Tensor5.h"
 #include "BC_Tensor_Derived/Tensor.h"
 
+#include "BC_MathLibraries/CPU.h"
+#include "BC_MathLibraries/GPU.cu"
 
 
 #endif /* BLACKCAT_INTERNAL_GLOBALUNIFIER_H_ */

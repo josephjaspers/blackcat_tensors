@@ -46,9 +46,10 @@ struct Tensor_Array_Base : expression_base<derived>, BC_Array {
 private:
 
 	__BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }
-	__BCinline__ 	   derived& as_derived() 	   { return static_cast<	     derived&>(*this); }
+	__BCinline__ 	   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
 
 public:
+
 	operator 	   auto()       { return as_derived().memptr(); }
 	operator const auto() const { return as_derived().memptr(); }
 
@@ -61,7 +62,7 @@ public:
 	__BCinline__ const auto row(int i) const { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED"); return row_t(&as_derived().memptr()[i], as_derived()); }
 	__BCinline__	   auto row(int i) 	     { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED"); return row_t(&as_derived().memptr()[i], as_derived()); }
 	__BCinline__ const auto col(int i) const { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
-	__BCinline__	   auto col(int i) 	     { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED"); return slice(i); }
+	__BCinline__	   auto col(int i) 	     { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOTx DEFINED"); return slice(i); }
 
 	template<class... integers> __BCinline__ 	   auto& operator () (integers... ints) 	  {
 		return DIMS() == 0 ? as_derived().memptr()[0] : as_derived().memptr()[this->dims_to_index(ints...)]; }

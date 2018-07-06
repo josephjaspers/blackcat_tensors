@@ -23,8 +23,7 @@ struct unary_expression<functor_type, oper::transpose<ml>> : expression_base<una
 	functor_type array;
 
 	__BCinline__ static constexpr int DIMS() { return functor_type::DIMS(); }
-	__BCinline__ static constexpr int ITERATOR() { return DIMS() == 2 ? 2 : 1; }
-	static_assert(functor_type::DIMS() == 1 || functor_type::DIMS() == 2, "TRANSPOSITION ONLY DEFINED FOR MATRICES AND VECTORS");
+	__BCinline__ static constexpr int ITERATOR() { return DIMS(); }
 
 	unary_expression(functor_type p) : array(p) {}
 
@@ -44,17 +43,13 @@ struct unary_expression<functor_type, oper::transpose<ml>> : expression_base<una
 	__BCinline__ auto operator[](int index) const  -> const decltype(array[index])  {
 		return array[DIMS() == 1 ? index : (int)(index / this->rows()) + (index % this->rows()) * this->ld1()];
 	}
-	__BCinline__ auto operator ()(int m, int n) const -> decltype(array(m,n)) {
-			if (functor_type::ITERATOR() == 0)
-				return array(m * array.ld1() + n);
-			else
-				return array(m, n);
+	template<class... ints>
+	__BCinline__ auto operator ()(int m, int n, ints... integers) const -> decltype(array(n,m)) {
+		return array(n,m, integers...);
 	}
-	__BCinline__ auto operator ()(int m, int n) -> decltype(array(m,n)) {
-			if (functor_type::ITERATOR() == 0)
-				return array[m * array.ld1() + n];
-			else
-				return array(m, n);
+	template<class... ints>
+	__BCinline__ auto operator ()(int m, int n, ints... integers) -> decltype(array(n,m)) {
+		return array(n, m, integers...);
 	}
 };
 }
