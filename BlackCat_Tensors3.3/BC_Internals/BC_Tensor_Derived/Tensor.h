@@ -50,7 +50,7 @@ public:
 };
 
 template<int x, class scalar, class ml>
-using TensorN = typename dimension<x>::template Tensor<scalar, ml>;
+using Tensor = typename dimension<x>::template Tensor<scalar, ml>;
 
 } //End Namespace BC
 

@@ -25,10 +25,7 @@ public:
 
 	__BCinline__ int size() const { return LENGTH() > 0 ?  OS[last] : 1; }
 
-	__BCinline__ auto inner_shape() { return ptr_array<dimension>(IS); }
-	__BCinline__ const auto inner_shape() const { return ptr_array<dimension>(IS);; }
-
-	__BCinline__ auto outer_shape() { return ptr_array<dimension>(OS); }
+	__BCinline__ const auto inner_shape() const { return ptr_array<dimension>(IS); }
 	__BCinline__ const auto outer_shape() const { return ptr_array<dimension>(OS); }
 
 
@@ -39,12 +36,9 @@ public:
 	Shape& operator = (Shape&&) = default;
 
 	template<class... integers> Shape(int first, integers... ints) : IS() {
+		static_assert(sizeof...(integers) + 1 == dimension, "integer initialization must have the same number of dimensions");
 		this->init(first, ints...);
 	}
-	Shape(int first) : IS() {
-		this->init(first);
-	}
-
 	template<int dim, class int_t>
 	Shape (stack_array<dim, int_t> param) {
 		static_assert(dim >= dimension, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
@@ -93,12 +87,12 @@ private:
 		static constexpr bool intList = MTF::is_integer_sequence<integers...>;
 		static_assert(intList, "MUST BE INTEGER LIST");
 
-		inner_shape()[dim] = front;
+		IS[dim] = front;
 
 		if (dim > 0)
-			outer_shape()[dim] = front * outer_shape()[dim - 1];
+			OS[dim] = front * outer_shape()[dim - 1];
 		else
-			outer_shape()[0] = front;
+			OS[0] = front;
 
 		if (dim != LENGTH() - 1) {
 			init<(dim + 1 < LENGTH() ? dim + 1 : LENGTH())>(ints...);
@@ -111,6 +105,36 @@ struct Shape<0> {
 	__BCinline__ int size() const { return 1; }
 	__BCinline__ const auto inner_shape() const { return l_array<0>([&](auto x) { return 1; });}
 	__BCinline__ const auto outer_shape() const { return l_array<0>([&](auto x) { return 0; });}
+};
+
+template<>
+struct Shape<1> {
+	static constexpr int dimension = 1;
+	int length;
+
+	Shape(int length_) : length(length_) {}
+
+	template<int dim, class int_t>
+	Shape (stack_array<dim, int_t> param) {
+		static_assert(dim >= dimension, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
+		length = param[0];
+	}
+	template<int dim, class int_t>
+	Shape (pointer_array<dim, int_t> param) {
+		static_assert(dim >= dimension, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
+		length = param[0];
+
+	}
+	template<int dim, class f, class int_t>
+	Shape (lambda_array<dim, int_t, f> param) {
+		static_assert(dim >= dimension, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
+		length = param[0];
+
+	}
+
+	__BCinline__ int size() const { return length; }
+	__BCinline__ const auto inner_shape() const { return l_array<1>([&](auto x) { return length; });}
+	__BCinline__ const auto outer_shape() const { return l_array<1>([&](auto x) { return x == 0 ? length : 0; });}
 };
 }
 

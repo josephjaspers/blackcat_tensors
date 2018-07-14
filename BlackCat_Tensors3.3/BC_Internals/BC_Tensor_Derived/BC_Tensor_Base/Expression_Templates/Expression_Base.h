@@ -35,7 +35,7 @@ public:
 	operator 	   auto&()       { return as_derived(); }
 	operator const auto&() const { return as_derived(); }
 
-//	expression_base() { static_assert(std::is_trivially_copyable<derived>::value, "EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
+	__BCinline__ expression_base() { static_assert(std::is_trivially_copy_constructible<derived>::value, "EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
 
 
 	template<class... integers>
@@ -58,7 +58,7 @@ public:
 	__BCinline__ int outer_dimension() const { return dimension(DIMS() - 1); }
 	__BCinline__ int ld1() const { return DIMS() > 0 ? OS()[0] : 1; }
 	__BCinline__ int ld2() const { return DIMS() > 1 ? OS()[1] : 1; }
-	__BCinline__ int leading_dimension(int i) const { return DIMS() > i + 1 ? OS()[i] : 1; }
+	__BCinline__ int leading_dimension(int i) const { return DIMS() > i + 1 ? OS()[i] : 0; }
 
 	void print_dimensions() const {
 		for (int i = 0; i < DIMS(); ++i) {
@@ -79,20 +79,13 @@ public:
 
 	template<class... integers> __BCinline__
 	int dims_to_index(integers... ints) const {
-		return dims_to_index(BC::array(ints...)); //fixme should use recursive impl
+		return dims_to_index(BC::array(ints...));
 	}
 	template<class... integers> __BCinline__
 	int dims_to_index_reverse(integers... ints) const {
-		return  this->dims_to_index_impl(ints...);
+		return dims_to_index_reverse(BC::array(ints...));
 	}
 
-	template<class... integers> __BCinline__
-	int dims_to_index_impl(int front, integers... ints) const {
-		return dims_to_index_impl(ints...) + front * this->leading_dimension(sizeof...(ints) - 1);
-	}
-	__BCinline__ int dims_to_index_impl(int front) const {
-		return front;
-	}
 	template<int D> __BCinline__ int dims_to_index(stack_array<D, int> var) const {
 		int index = var[0];
 		for(int i = 1; i < DIMS(); ++i) {

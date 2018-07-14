@@ -23,42 +23,31 @@ struct Array_Row : Tensor_Array_Base<Array_Row<PARENT>, 1>  {
 
 	using array = _iterator<PARENT>;
 	using self = Array_Row<PARENT>;
-	using slice_type = Array_Scalar<self>;
-	using Mathlib = typename  PARENT::Mathlib;
 
 	__BCinline__ static constexpr int DIMS() { return 1; }
 	__BCinline__ static constexpr int ITERATOR() { return 0; }
 
-	operator const PARENT() const	{ return parent; }
+	__BCinline__ operator const PARENT() const	{ return parent; }
 
 	PARENT parent;
 	array array_slice;
 
 	__BCinline__ Array_Row(array array, PARENT parent_) : array_slice(array), parent(parent_) {}
-	__BCinline__ int increment() const { return parent.ld1(); }
-	__BCinline__ int dims() const { return 1; }
 	__BCinline__ int size() const { return parent.cols(); }
-	__BCinline__ int rows() const { return parent.cols(); }
-	__BCinline__ int cols() const { return 1; }
-	__BCinline__ int dimension(int i) const { return i == 0 ? rows() : 1; }
-	__BCinline__ int ld1() const { return parent.ld1(); }
-	__BCinline__ int ld2() const { return 0; }
-	__BCinline__ int LDdimension(int i) const { return i == 0 ? ld1() : 0; }
-	__BCinline__ const auto inner_shape() const 			{ return parent.inner_shape(); }
-	__BCinline__ const auto outer_shape() const 			{ return parent.outer_shape(); }
+	__BCinline__ const auto inner_shape() const 			{ return l_array<1>([&](int i) { return i == 0 ? parent.cols() : 1; }); }
+	__BCinline__ const auto outer_shape() const 			{ return l_array<1>([&](int i) { return i == 0 ? parent.ld1()  : 0; }); }
 
-	__BCinline__ const auto& operator [] (int i) const { return array_slice[i * increment()]; }
-	__BCinline__ 	   auto& operator [] (int i)  	   { return array_slice[i * increment()]; }
+	__BCinline__ const auto& operator [] (int i) const { return array_slice[i * this->ld1()]; }
+	__BCinline__ 	   auto& operator [] (int i)  	   { return array_slice[i * this->ld1()]; }
 
 	void print_dimensions() 		const { parent.print_dimensions(); }
 	void print_leading_dimensions()	const { parent.print_dimensions(); }
 
-	__BCinline__ const auto slice(int i) const { return Array_Scalar<self>(&array_slice[i * increment()], *this); }
-	__BCinline__	   auto slice(int i) 	   { return Array_Scalar<self>(&array_slice[i * increment()], *this); }
-
+	__BCinline__ const auto slice(int i) const { return Array_Scalar<self>(&array_slice[i * this->ld1()], *this); }
+	__BCinline__	   auto slice(int i) 	   { return Array_Scalar<self>(&array_slice[i * this->ld1()], *this); }
 
 	__BCinline__ const auto& memptr() const { return *this; }
-	__BCinline__	   auto& memptr()  	 { return *this; }
+	__BCinline__	   auto& memptr()  	 	{ return *this; }
 
 };
 }

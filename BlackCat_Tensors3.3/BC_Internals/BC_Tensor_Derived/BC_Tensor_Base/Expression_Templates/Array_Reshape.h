@@ -35,7 +35,7 @@ struct Array_Reshape {
 	__BCinline__ static constexpr int DIMS() { return dimension; };
 	__BCinline__ static constexpr int ITERATOR() { return dimension; }
 
-	static_assert(PARENT::ITERATOR() == 0, "RESHAPE IS NOT SUPPORTED ON NON-CONTINUOUS TENSORS");
+	static_assert(PARENT::ITERATOR() == 0 || PARENT::ITERATOR() == DIMS(), "RESHAPE IS NOT SUPPORTED ON NON-CONTINUOUS TENSORS");
 
 	operator const PARENT() const	{ return parent; }
 
@@ -49,7 +49,7 @@ struct Array_Reshape {
 	__BCinline__ const auto outer_shape() const 	{ return shape.outer_shape(); }
 
 	__BCinline__ const auto memptr() const { return array; }
-	__BCinline__	   auto memptr()   	{ return array; }
+	__BCinline__	   auto memptr()   	   { return array; }
 
 	};
 };

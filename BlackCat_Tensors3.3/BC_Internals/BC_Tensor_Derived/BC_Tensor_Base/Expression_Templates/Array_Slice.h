@@ -23,7 +23,7 @@ template<class PARENT>
 	__BCinline__ static constexpr int ITERATOR() { return MTF::max(PARENT::ITERATOR() - 1, 0); }
 	__BCinline__ static constexpr int DIMS() { return MTF::max(PARENT::DIMS() - 1, 0); }
 
-	operator const PARENT() const	{ return parent; }
+	__BCinline__ operator const PARENT() const	{ return parent; }
 
 	const PARENT parent;
 	scalar_type* array_slice;
@@ -32,7 +32,7 @@ template<class PARENT>
 	__BCinline__ const auto inner_shape() const 			{ return parent.inner_shape(); }
 	__BCinline__ const auto outer_shape() const 			{ return parent.outer_shape(); }
 	__BCinline__ const scalar_type* memptr() const { return array_slice; }
-	__BCinline__	   scalar_type* memptr()   	{ return array_slice; }
+	__BCinline__	   scalar_type* memptr()   	   { return array_slice; }
 
 	};
 }

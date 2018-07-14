@@ -19,10 +19,11 @@ struct Array_Chunk  {
 	template<class PARENT>
 	struct implementation : Tensor_Array_Base<implementation<PARENT>,dimension> {
 
-		using scalar = _scalar<PARENT>;
-//		static_assert(dimension <= PARENT::DIMS(), "TENSOR-CHUNK'S DIMENSIONS MUST BE LESS OR EQUAL TO PARENT'S DIMENSIONS");
+		static_assert(PARENT::ITERATOR() == 0 || dimension <= PARENT::DIMS(), "TENSOR-CHUNK'S DIMENSIONS MUST BE LESS OR EQUAL TO PARENT'S DIMENSIONS");
 
-		__BCinline__ static constexpr int DIMS() { return dimension; };
+		using scalar = _scalar<PARENT>;
+
+		__BCinline__ static constexpr int DIMS() 	{ return dimension; };
 		__BCinline__ static constexpr int ITERATOR() { return dimension; }
 
 		operator const PARENT() const	{ return parent; }
@@ -34,12 +35,12 @@ struct Array_Chunk  {
 		template<class... integers>
 		implementation(const scalar* array_, PARENT parent, integers... ints) : array(const_cast<scalar*>(array_)), parent(parent), shape(ints...) {
 		}
-		__BCinline__ const auto size()		 const  { return shape.size(); }
+		__BCinline__ const auto size()		 const      { return shape.size(); }
 		__BCinline__ const auto inner_shape() const 	{ return shape.inner_shape(); }
 		__BCinline__ const auto outer_shape() const 	{ return parent.outer_shape(); }
 
 		__BCinline__ const auto memptr() const { return array; }
-		__BCinline__	   auto memptr()   	{ return array; }
+		__BCinline__	   auto memptr()   	   { return array; }
 	};
 	};
 }

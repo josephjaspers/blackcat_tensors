@@ -24,7 +24,7 @@ struct Array_Scalar : Tensor_Array_Base<Array_Scalar<PARENT>, 0> {
 	__BCinline__ static constexpr int ITERATOR() { return 0; }
 	__BCinline__ static constexpr int DIMS() { return 0; }
 
-	operator const PARENT() const	{ return parent; }
+	__BCinline__ operator const PARENT() const	{ return parent; }
 
 	const PARENT parent;
 	scalar* array_slice;
@@ -32,12 +32,13 @@ struct Array_Scalar : Tensor_Array_Base<Array_Scalar<PARENT>, 0> {
 	__BCinline__ Array_Scalar(const scalar* array, const PARENT& parent_)
 		: array_slice(const_cast<scalar*>(array)), parent(parent_) {}
 
-	__BCinline__ const auto inner_shape() const 	{ return parent.inner_shape(); }
-	__BCinline__ const auto outer_shape() const 	{ return parent.outer_shape(); }
+	__BCinline__ int size() const { return 1; }
+	__BCinline__ const auto inner_shape() const 	{ return l_array<0>([](int i) { return 1; }); }
+	__BCinline__ const auto outer_shape() const 	{ return l_array<0>([](int i) { return 0; }); }
 
 	__BCinline__ const scalar* memptr() const { return array_slice; }
-	__BCinline__	   scalar* memptr()  	  { return array_slice;  }
-	};
+	__BCinline__	   scalar* memptr()  	  { return array_slice; }
+};
 }
 }
 
