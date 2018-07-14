@@ -38,6 +38,28 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	__BCinline__ const auto& shape() const { return dominant_type<lv, rv>::shape(left, right); }
 	__BCinline__ const auto  inner_shape() const { return shape().inner_shape(); }
 	__BCinline__ const auto  outer_shape() const { return shape().outer_shape(); }
+
+	__BCinline__ const auto slice(int i) const {
+		using slice_lv = decltype(left.slice(i));
+		using slice_rv = decltype(left.slice(i));
+
+		return binary_expression<slice_lv, slice_rv, operation>(left.slice(i), right.slice(i), oper);
+	}
+	__BCinline__ const auto scalar(int i) const {
+		using scalar_lv = decltype(left.scalar(i));
+		using scalar_rv = decltype(left.scalar(i));
+
+		return binary_expression<scalar_lv, scalar_rv, operation>(left.scalar(i), right.scalar(i), oper);
+	}
+
+	__BCinline__ const auto col(int i) const {
+		static_assert(DIMS() == 2, "COLUMN ACCESS ONLY AVAILABLE TO MATRICES");
+		return slice(i);
+	}
+	__BCinline__ const auto row(int i) const {
+		static_assert(DIMS() == 2 || DIMS() == 1, "ROW ACCESS ONLY AVAILABLE TO MATRICES");
+		return slice(i);
+	}
 };
 }
 }

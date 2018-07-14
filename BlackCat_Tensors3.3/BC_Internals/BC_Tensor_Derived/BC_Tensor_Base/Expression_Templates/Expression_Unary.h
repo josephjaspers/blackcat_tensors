@@ -20,7 +20,6 @@ public:
 
 	__BCinline__ static constexpr int DIMS() { return value::DIMS(); }
 	__BCinline__ static constexpr int ITERATOR() { return value::ITERATOR(); }
-	__BCinline__ static constexpr bool INJECTABLE() { return value::INJECTABLE(); }
 
 	__BCinline__  unary_expression(value v, operation op = operation()) : array(v), oper(op) {}
 
@@ -38,6 +37,21 @@ public:
 	}
 	template<class... integers>	__BCinline__ auto operator ()(integers... index) -> decltype(oper(array(index...))) {
 		return oper(array(index...));
+	}
+
+
+	__BCinline__ const auto slice(int i) const {
+		using slice_t = decltype(array.slice(i));
+		return unary_expression<slice_t, operation>(array.slice(i), oper);
+	}
+	__BCinline__ const auto scalar(int i) const {
+		using scalar_t = decltype(array.scalar(i));
+		return unary_expression<scalar_t, operation>(array.scalar(i), oper);
+	}
+
+	__BCinline__ const auto col(int i) const {
+		static_assert(DIMS() == 2, "COLUMN ACCESS ONLY AVAILABLE TO MATRICEDS");
+		return slice(i);
 	}
 };
 }

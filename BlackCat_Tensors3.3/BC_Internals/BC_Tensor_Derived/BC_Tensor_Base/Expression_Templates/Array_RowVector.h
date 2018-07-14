@@ -19,13 +19,11 @@ namespace internal {
 template<class PARENT>
 struct Array_Row : Tensor_Array_Base<Array_Row<PARENT>, 1>  {
 
-	static_assert(PARENT::DIMS() == 2 || PARENT::DIMS() == 1, "TENSOR_ROW CAN ONLY BE GENERATED FROM ANOTHER VECTOR, ROW_VECTOR, OR MATRIX");
-
 	using array = _iterator<PARENT>;
 	using self = Array_Row<PARENT>;
 
-	__BCinline__ static constexpr int DIMS() { return 1; }
-	__BCinline__ static constexpr int ITERATOR() { return 0; }
+	__BCinline__ static constexpr int DIMS() { return PARENT::DIMS() - 1; }
+	__BCinline__ static constexpr int ITERATOR() { return DIMS(); }
 
 	__BCinline__ operator const PARENT() const	{ return parent; }
 
@@ -33,7 +31,7 @@ struct Array_Row : Tensor_Array_Base<Array_Row<PARENT>, 1>  {
 	array array_slice;
 
 	__BCinline__ Array_Row(array array, PARENT parent_) : array_slice(array), parent(parent_) {}
-	__BCinline__ int size() const { return parent.cols(); }
+	__BCinline__ int size() const { return parent.size() / parent.dimension(0); }
 	__BCinline__ const auto inner_shape() const 			{ return l_array<1>([&](int i) { return i == 0 ? parent.cols() : 1; }); }
 	__BCinline__ const auto outer_shape() const 			{ return l_array<1>([&](int i) { return i == 0 ? parent.ld1()  : 0; }); }
 
