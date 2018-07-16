@@ -56,10 +56,17 @@ public:
 	__BCinline__ int cols() const { return DIMS() > 1 ? IS()[1] : 1; }
 	__BCinline__ int dimension(int i) const { return DIMS() > i ? IS()[i] : 1; }
 	__BCinline__ int outer_dimension() const { return dimension(DIMS() - 1); }
-	__BCinline__ int ld1() const { return DIMS() > 0 ? OS()[0] : 1; }
-	__BCinline__ int ld2() const { return DIMS() > 1 ? OS()[1] : 1; }
+	__BCinline__ int ld1() const { return DIMS() > 0 ? OS()[0] : 0; }
+	__BCinline__ int ld2() const { return DIMS() > 1 ? OS()[1] : 0; }
 	__BCinline__ int leading_dimension(int i) const { return DIMS() > i + 1 ? OS()[i] : 0; }
-
+	__BCinline__ int outer_leading_dimension() const {
+		if (DIMS() == 0)
+			return 0;
+		else if (DIMS() == 1)
+			return 1;
+		else
+			return OS()[DIMS() - 2];
+	}
 	void print_dimensions() const {
 		for (int i = 0; i < DIMS(); ++i) {
 			std::cout << "[" << IS()[i] << "]";

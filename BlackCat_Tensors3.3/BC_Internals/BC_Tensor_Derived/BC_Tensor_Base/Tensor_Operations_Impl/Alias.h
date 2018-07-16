@@ -25,7 +25,7 @@ struct Alias {
 
 	template<class derived_t>
 	void evaluate(const Tensor_Operations<derived_t>& param) {
-		BC::Evaluator<mathlib_type>::evaluate_aliased(tensor.internal(), static_cast<const derived_t&>(param).internal());
+		BC::Evaluator<mathlib_type>::evaluate_aliased(static_cast<const derived_t&>(param).internal());
 	}
 
 	template<class derived_t>

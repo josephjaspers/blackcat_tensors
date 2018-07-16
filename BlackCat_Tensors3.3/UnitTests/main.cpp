@@ -30,28 +30,23 @@ int main() {
 //	readwrite();
 //	shaping();
 
+	/*
+	 * JOSEPH YOU WAKE UP TOMORROW NAD WONDER WHAT I WAS DOING HORIZONTAL ACCESS IS SHITTY STILL FIX IT
+	 */
 
-
-//
-	mat a(4,4);
+	cube a(2,4,6);
 
 	for (int i = 0; i < a.size(); ++i){
 		a(i) = i;
 	}
+
+	mat b(4, 6);
+	vec c(6);
+
+	c = 1;
+
 	a.print();
-
-	mat k(2,2);
-	for (int i = 0; i < k.size(); ++i){
-		k(i) = i;
-	}
-
-	k.print();
-
-	mat c(3,3);
-
-	c = a.conv<2>(k);
-	c.print();
+	b.zero();
 
 	std::cout << " success " << std::endl;
-
 }

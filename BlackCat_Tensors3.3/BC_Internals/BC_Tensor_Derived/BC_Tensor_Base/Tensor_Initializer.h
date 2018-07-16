@@ -11,7 +11,6 @@
 #include "Expression_Templates/Array.h"
 #include "Expression_Templates/Array_Scalar.h"
 #include "Expression_Templates/Array_Slice.h"
-#include "Expression_Templates/Array_RowVector.h"
 #include "Expression_Templates/Array_Chunk.h"
 #include "Expression_Templates/Array_Reshape.h"
 

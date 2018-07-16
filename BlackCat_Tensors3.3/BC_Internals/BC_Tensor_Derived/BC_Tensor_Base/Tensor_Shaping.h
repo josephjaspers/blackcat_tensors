@@ -81,9 +81,6 @@ private:
 	const auto scalar_impl(int i) const { return as_derived().internal().scalar(i); }
 		  auto scalar_impl(int i)	    { return as_derived().internal().scalar(i);  }
 
-	const auto row_impl(int i) const { return as_derived().internal().row(i); }
-		  auto row_impl(int i)	     { return as_derived().internal().row(i); }
-
 	const auto transpose_impl() const { return internal::unary_expression<functor_type, oper::transpose<mathlib_type>>(as_derived().internal()); }
 	 	  auto transpose_impl() 	  { return internal::unary_expression<functor_type, oper::transpose<mathlib_type>>(as_derived().internal()); }
 
@@ -99,27 +96,19 @@ public:
 
 	const auto slice(int i) const {
 		static_assert(DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");
-		return typename tensor_of<DIMS()>::template slice<decltype(slice_impl(0)), mathlib_type>(slice_impl(i)); }
+		return tensor_of_t<DIMS() - 1, decltype(slice_impl(0)), mathlib_type>(slice_impl(i)); }
 
 		  auto slice(int i) 	  {
 		static_assert(derived::DIMS() > 0, "SCALAR SLICE IS NOT DEFINED");
-		return typename tensor_of<DIMS()>::template slice<decltype(slice_impl(0)), mathlib_type>(slice_impl(i)); }
+		return tensor_of_t<DIMS() - 1, decltype(slice_impl(0)), mathlib_type>(slice_impl(i)); }
 
-	const auto row(int i) const {
-		static_assert(DIMS() == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
-		return typename tensor_of<1>::template type<decltype(row_impl(0)), mathlib_type>(row_impl(i));
-	}
-		  auto row(int i) 		{
-		static_assert(DIMS() == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
-		return typename tensor_of<1>::template type<decltype(row_impl(0)), mathlib_type>(row_impl(i));
-	}
 	const auto col(int i) const {
 		static_assert(DIMS() == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
-		return (*this)[i];
+		return slice(i);
 	}
-		 auto col(int i) {
+	auto col(int i) {
 		static_assert(DIMS() == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
-		return (*this)[i];
+		return slice(i);
 	}
 
 
@@ -138,11 +127,6 @@ public:
 		static_assert(MTF::is_integer_sequence<integers...>, "MUST BE INTEGER LIST");
 		return (*this)[i](ints...);
 	}
-
-//	template<class... integers>
-//	void resize(integers... ints) {
-//		as_derived().internal().resize(ints...);
-//	}
 	//THIS IS THE CURRIED CHUNK LAMBDA, WE MUST USE AN ACTUAL CLASS TO ACT AS A LAMDA AS CUDA COMPILER IS IFFY WITH LAMBDA
 	struct CHUNK {
 

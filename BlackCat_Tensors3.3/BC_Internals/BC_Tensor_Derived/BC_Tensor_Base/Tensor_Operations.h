@@ -50,7 +50,7 @@ class Tensor_Operations {
 	//--------------------------------------evaluation implementation-----------------------------------------------//
 	template<class derived_t>
 	void evaluate(const Tensor_Operations<derived_t>& tensor) {
-		BC::Evaluator<mathlib_type>::evaluate(as_derived().internal(), tensor.as_derived().internal());
+		BC::Evaluator<mathlib_type>::evaluate(tensor.as_derived().internal());
 	}
 
 public:
@@ -67,7 +67,6 @@ public:
 		assert_valid(param);
 		evaluate(bi_expr<oper::add_assign>(param));
 		return as_derived();
-
 	}
 	template<class pDeriv>
 	derived& operator -=(const Tensor_Operations<pDeriv>& param) {

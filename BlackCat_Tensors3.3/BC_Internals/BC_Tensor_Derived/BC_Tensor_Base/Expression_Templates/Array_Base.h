@@ -21,14 +21,12 @@ namespace internal {
 
 template<class> class Array_Slice;
 template<class> class Array_Scalar;
-template<class> class Array_Row;
 template<class> class Array_Transpose;
 template<int> class Array_Reshape;
 template<int> class Array_Chunk;
 
 template<class derived, int DIMENSION,
 template<class> class 	_Tensor_Slice 	= Array_Slice,
-template<class> class 	_Tensor_Row 	= Array_Row,
 template<class> class 	_Tensor_Scalar 	= Array_Scalar,
 template<int> class     _Tensor_Chunk	= Array_Chunk,			//Nested implementation type
 template<int> class 	_Tensor_Reshape = Array_Reshape>		//Nested implementation type
@@ -40,7 +38,6 @@ struct Tensor_Array_Base : expression_base<derived>, BC_Array {
 
 	using self 		= derived;
 	using slice_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Slice<self>>;
-	using row_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Row<self>>;
 	using scalar_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Scalar<self>>;
 
 private:
@@ -53,31 +50,29 @@ public:
 	operator 	   auto()       { return as_derived().memptr(); }
 	operator const auto() const { return as_derived().memptr(); }
 
-	__BCinline__ 	   auto& operator [] (int index) 	   { return DIMS() == 0 ? as_derived().memptr()[0] : as_derived().memptr()[index]; }
 	__BCinline__ const auto& operator [] (int index) const { return DIMS() == 0 ? as_derived().memptr()[0] : as_derived().memptr()[index]; }
-	__BCinline__ const auto slice(int i) const  { return slice_t (&as_derived().memptr()[slice_index(i)] ,as_derived()); }
-	__BCinline__	   auto slice(int i) 	    { return slice_t (&as_derived().memptr()[slice_index(i)] ,as_derived()); }
-	__BCinline__ const auto scalar(int i) const { return scalar_t(&as_derived().memptr()[i], as_derived()); }
-	__BCinline__	   auto scalar(int i) 	    { return scalar_t(&as_derived().memptr()[i], as_derived()); }
-	__BCinline__ const auto row(int i) const { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED");  return row_t(&as_derived().memptr()[i], as_derived()); }
-	__BCinline__	   auto row(int i) 	     { static_assert (DIMS() == 2, "ROW OF NON-MATRIX NOT DEFINED");  return row_t(&as_derived().memptr()[i], as_derived()); }
-	__BCinline__ const auto col(int i) const { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOT DEFINED");  return slice(i); }
-	__BCinline__	   auto col(int i) 	     { static_assert (DIMS() == 2, "COL OF NON-MATRIX NOTx DEFINED"); return slice(i); }
-
+	__BCinline__ 	   auto& operator [] (int index) 	   { return DIMS() == 0 ? as_derived().memptr()[0] : as_derived().memptr()[index]; }
+	__BCinline__ const auto slice		(int i) const { return slice_t (&as_derived()[slice_index(i)], as_derived()); }
+	__BCinline__	   auto slice		(int i) 	  { return slice_t (&as_derived()[slice_index(i)], as_derived()); }
+	__BCinline__ const auto scalar		(int i) const { return scalar_t(&as_derived()[i], as_derived()); }
+	__BCinline__	   auto scalar		(int i) 	  { return scalar_t(&as_derived()[i], as_derived()); }
+public:
 	template<class... integers> __BCinline__ 	   auto& operator () (integers... ints) 	  {
-		return DIMS() == 0 ? as_derived().memptr()[0] : as_derived().memptr()[this->dims_to_index(ints...)]; }
+		return DIMS() == 0 ? as_derived()[0] : as_derived()[this->dims_to_index(ints...)];
+	}
 	template<class... integers> __BCinline__ const auto& operator () (integers... ints) const {
-		return DIMS() == 0 ? as_derived().memptr()[0] : as_derived().memptr()[this->dims_to_index(ints...)]; }
+		return DIMS() == 0 ? as_derived()[0] : as_derived()[this->dims_to_index(ints...)];
+	}
 
 	//------------------------------------------Curried Reshapers ---------------------------------------//
 	//currently cuda will not compile these
 	template<class ... integers>  auto chunk(int location, integers ... shape_dimensions) {
 		static constexpr int tensor_dim =  sizeof...(shape_dimensions);
-		return typename _Tensor_Chunk<tensor_dim>::template implementation<derived>(&as_derived().memptr()[location], this->as_derived(), shape_dimensions...);
+		return typename _Tensor_Chunk<tensor_dim>::template implementation<derived>(&as_derived()[location], this->as_derived(), shape_dimensions...);
 	}
 	template<class ... integers>  const auto chunk(int location, integers ... shape_dimensions) const {
 		static constexpr int tensor_dim =  sizeof...(shape_dimensions);
-		return typename _Tensor_Chunk<tensor_dim>::template implementation<derived>(&as_derived().memptr()[location], this->as_derived(), shape_dimensions...);
+		return typename _Tensor_Chunk<tensor_dim>::template implementation<derived>(&as_derived()[location], this->as_derived(), shape_dimensions...);
 	}
 
 
@@ -85,22 +80,22 @@ public:
 	template<class ... integers>
 	auto reshape(integers... ints) {
 		static constexpr int tensor_dim =  sizeof...(ints);
-		return typename _Tensor_Reshape<tensor_dim>::template implementation<derived>(as_derived().memptr(), this->as_derived(), ints...);
+		return typename _Tensor_Reshape<tensor_dim>::template implementation<derived>(as_derived(), this->as_derived(), ints...);
 	}
 
 	template<int dim>
 	auto reshape(Shape<dim> shape) {
-		return typename _Tensor_Reshape<dim>::template implementation<derived>(as_derived().memptr(), this->as_derived(), shape);
+		return typename _Tensor_Reshape<dim>::template implementation<derived>(as_derived(), this->as_derived(), shape);
 	}
 	template<class ... integers>
 	const auto reshape(integers... ints) const {
 		static constexpr int tensor_dim =  sizeof...(ints);
-		return typename _Tensor_Reshape<tensor_dim>::template implementation<derived>(as_derived().memptr(), this->as_derived(), ints...);
+		return typename _Tensor_Reshape<tensor_dim>::template implementation<derived>(as_derived(), this->as_derived(), ints...);
 	}
 
 	template<int dim>
 	const auto reshape(Shape<dim> shape) const  {
-		return typename _Tensor_Reshape<dim>::template implementation<derived>(as_derived().memptr(), this->as_derived(), shape);
+		return typename _Tensor_Reshape<dim>::template implementation<derived>(as_derived(), this->as_derived(), shape);
 	}
 
 	//------------------------------------------Implementation Details---------------------------------------//

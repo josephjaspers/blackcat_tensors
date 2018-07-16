@@ -27,18 +27,18 @@ static constexpr bool INJECTION() {
 template<class mathlib_type>
 struct Evaluator {
 
-template<class assignment, class expression>
+template< class expression>
 static std::enable_if_t<!INJECTION<expression>()>
-evaluate(const assignment& assign, const expression& expr) {
+evaluate(const expression& expr) {
 	static constexpr int iterator_dimension = expression::ITERATOR();
 		mathlib_type::template dimension<iterator_dimension>::eval(expr);
 }
 
-template<class assignment, class expression>
+template< class expression>
 static std::enable_if_t<INJECTION<expression>()>
-evaluate(assignment& assign, const expression& expr) {
+evaluate(const expression& expr) {
 	using internal_t = expression;			//internal expression type (to be injected)
-	using injection_t = assignment;	//the injection type
+	using injection_t = decltype(expr.left);	//the injection type
 
 	static constexpr int iterator_dimension = expression::ITERATOR();	//the iterator for the evaluation of post inject_t
 
@@ -50,11 +50,11 @@ evaluate(assignment& assign, const expression& expr) {
 	internal::tree::destroy_temporaries(post_inject_tensor);
 }
 
-template<class assignment, class expression>
+template< class expression>
 static std::enable_if_t<INJECTION<expression>()>
-evaluate_aliased(assignment& assign, const expression& expr) {
+evaluate_aliased(const expression& expr) {
 	using internal_t = expression;			//internal expression type (to be injected)
-	using injection_t = assignment;	//the injection type
+	using injection_t = decltype(expr.left);	//the injection type
 
 	static constexpr int iterator_dimension = expression::ITERATOR();	//the iterator for the evaluation of post inject_t
 
@@ -65,9 +65,9 @@ evaluate_aliased(assignment& assign, const expression& expr) {
 	//destroy any temporaries made by the tree
 	internal::tree::destroy_temporaries(post_inject_tensor);
 }
-template<class assignment, class expression>
+template< class expression>
 static std::enable_if_t<!INJECTION<expression>()>
-evaluate_aliased(assignment& assign, const expression& expr) {
+evaluate_aliased(const expression& expr) {
 	static constexpr int iterator_dimension = expression::ITERATOR();
 	mathlib_type::template dimension<iterator_dimension>::eval(expr);
 }
@@ -87,7 +87,7 @@ struct branched {
 	{
 		sub_t<std::decay_t<branch>> cached_branch(expression.inner_shape());
 		eval_t<std::decay_t<branch>> assign_to_expression(cached_branch, expression); //create an expression to assign to the left_cached
-		Evaluator<mathlib>::evaluate(cached_branch, assign_to_expression);
+		Evaluator<mathlib>::evaluate(assign_to_expression);
 		return cached_branch;
 	}
 
