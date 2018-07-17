@@ -106,7 +106,7 @@ struct CPU_Convolution {
 		static constexpr scalar_t alpha_mod = 1;
 		static constexpr scalar_t beta_mod = 0;
 
-		core_lib::gemv(true, filter.size(), k_length, &alpha_mod, toeplitz, in.ld1(), filter, 1, &beta_mod, out, 1);
+		core_lib::gemv(true, filter.size(), k_length, &alpha_mod, toeplitz, in.leading_dimension(0), filter, 1, &beta_mod, out, 1);
 	}
 
 
@@ -136,7 +136,7 @@ struct CPU_Convolution {
 			static constexpr scalar_t alpha_mod = 1;
 			static constexpr scalar_t beta_mod = 0;
 
-			core_lib::gemv(true, filter.size(), k_length, &alpha_mod, toeplitz, in.ld1(), filter, 1, &beta_mod, out, 1);
+			core_lib::gemv(true, filter.size(), k_length, &alpha_mod, toeplitz, in.leading_dimension(0), filter, 1, &beta_mod, out, 1);
 		}
 
 

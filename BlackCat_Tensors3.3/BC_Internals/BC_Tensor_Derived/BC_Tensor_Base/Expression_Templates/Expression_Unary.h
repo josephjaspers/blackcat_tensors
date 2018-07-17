@@ -38,7 +38,11 @@ public:
 	template<class... integers>	__BCinline__ auto operator ()(integers... index) -> decltype(oper(array(index...))) {
 		return oper(array(index...));
 	}
-
+	__BCinline__ int size() const { return array.size(); }
+	__BCinline__ int rows() const { return array.rows(); }
+	__BCinline__ int cols() const { return array.cols(); }
+	__BCinline__ int dimension(int i) const { return array.dimension(i); }
+	__BCinline__ int outer_dimension() const { return array.outer_dimension(); }
 
 	__BCinline__ const auto slice(int i) const {
 		using slice_t = decltype(array.slice(i));

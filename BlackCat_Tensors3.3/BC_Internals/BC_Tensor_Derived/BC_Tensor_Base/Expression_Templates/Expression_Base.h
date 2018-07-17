@@ -13,6 +13,7 @@
 #include "Parse_Tree_Injection_Wrapper.h"
 #include "Operations/Binary.h"
 #include "Operations/Unary.h"
+#include <limits>
 
 #include <iostream>
 #include <type_traits>
@@ -27,93 +28,41 @@ class expression_base : BC_Type {
 	__BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }
 	__BCinline__	   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
 
-	__BCinline__ const auto IS() const { return as_derived().inner_shape(); }
-	__BCinline__ const auto OS() const { return as_derived().outer_shape(); }
-
 public:
 
 	operator 	   auto&()       { return as_derived(); }
 	operator const auto&() const { return as_derived(); }
 
 	__BCinline__ expression_base() { static_assert(std::is_trivially_copy_constructible<derived>::value, "EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
+	__BCinline__ constexpr int  dims() const { return derived::DIMS(); }
 
 
-	template<class... integers>
-	__BCinline__ const auto operator()(integers... ints) const {
-		static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
-		return as_derived()[dims_to_index(ints...)];
-	}
-
-	template<class... integers>
-	__BCinline__ auto operator()(integers... ints) {
-		static_assert(sizeof...(integers) == DIMS(), "non-definite index given");
-		return as_derived()[dims_to_index(ints...)];
-	}
-
-	__BCinline__ int dims() const { return DIMS(); }
-	__BCinline__ int size() const { return DIMS() > 0 ? OS()[derived::DIMS() -1] : 1;    }
-	__BCinline__ int rows() const { return DIMS() > 0 ? IS()[0] : 1; }
-	__BCinline__ int cols() const { return DIMS() > 1 ? IS()[1] : 1; }
-	__BCinline__ int dimension(int i) const { return DIMS() > i ? IS()[i] : 1; }
-	__BCinline__ int outer_dimension() const { return dimension(DIMS() - 1); }
-	__BCinline__ int ld1() const { return DIMS() > 0 ? OS()[0] : 0; }
-	__BCinline__ int ld2() const { return DIMS() > 1 ? OS()[1] : 0; }
-	__BCinline__ int leading_dimension(int i) const { return DIMS() > i + 1 ? OS()[i] : 0; }
-	__BCinline__ int outer_leading_dimension() const {
-		if (DIMS() == 0)
-			return 0;
-		else if (DIMS() == 1)
-			return 1;
-		else
-			return OS()[DIMS() - 2];
-	}
 	void print_dimensions() const {
 		for (int i = 0; i < DIMS(); ++i) {
-			std::cout << "[" << IS()[i] << "]";
+			std::cout << "[" << as_derived().dimension(i) << "]";
 		}
 		std::cout << std::endl;
 	}
 	void print_leading_dimensions() const {
 		for (int i = 0; i < DIMS(); ++i) {
-			std::cout << "[" << OS()[i] << "]";
+			std::cout << "[" << as_derived().leading_dimension(i) << "]";
 		}
 		std::cout << std::endl;
 	}
 
 
-	//---------------------------------------------------UTILITY/IMPLEMENTATION METHODS------------------------------------------------------------//
 
-
-	template<class... integers> __BCinline__
-	int dims_to_index(integers... ints) const {
-		return dims_to_index(BC::array(ints...));
-	}
-	template<class... integers> __BCinline__
-	int dims_to_index_reverse(integers... ints) const {
-		return dims_to_index_reverse(BC::array(ints...));
-	}
-
-	template<int D> __BCinline__ int dims_to_index(stack_array<D, int> var) const {
-		int index = var[0];
-		for(int i = 1; i < DIMS(); ++i) {
-			index += this->leading_dimension(i - 1) * var[i];
-		}
-		return index;
-	}
-	template<int D> __BCinline__ int dims_to_index_reverse(stack_array<D, int> var) const {
-		static_assert(D >= DIMS(), "converting array_to dimension must have at least as many indices as the tensor");
-
-		int index = var[DIMS() - 1];
-		for(int i = 0; i < DIMS() - 2; ++i) {
-			index += this->leading_dimension(i) * var[DIMS() - i - 2];
-		}
-		return index;
-	}
 	//---------------------------------------------------METHODS THAT MAY NEED TO BE SHADOWED------------------------------------------------------------//
 	void destroy() const {}
 	//---------------------------------------------------METHODS THAT NEED TO BE SHADOWED------------------------------------------------------------//
-	__BCinline__ _scalar<derived> operator [] (int index) 	  	{ return 0;};
-	__BCinline__ _scalar<derived> operator [] (int index) const { return 0;};
+	static constexpr _scalar<derived> BC_NAN = std::numeric_limits<_scalar<derived>>::quiet_NaN();
+
+	__BCinline__ _scalar<derived> operator [] (int index) const { return BC_NAN; }
+
+	template<class... integers>
+	__BCinline__ auto operator()(integers... ints) const { return BC_NAN; }
+
+
 	//-------------------------------------------------tree re-ordering methods---------------------------------------------------------//
 };
 }

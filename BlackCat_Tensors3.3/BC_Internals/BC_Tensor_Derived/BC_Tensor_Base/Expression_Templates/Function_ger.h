@@ -45,6 +45,12 @@ struct binary_expression<lv, rv, oper::ger<mathlib>>
 	rv right;
 
 	 binary_expression(lv left, rv right) : left(left), right(right) {}
+	__BCinline__ int size() const { return left.size() * right.size(); }
+		__BCinline__ int rows() const { return left.rows(); }
+		__BCinline__ int cols() const { return right.cols(); }
+		__BCinline__ int dimension(int i) const { return i == 0 ? rows() : i == 1 ? cols() : 1; }
+		__BCinline__ int outer_dimension() const { return rows(); }
+		__BCinline__ int leading_dimension(int i) const { return 0; }
 
 	__BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.rows() : 1; });}
 	__BCinline__ const auto outer_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.rows() * left.rows() : 1; });}
@@ -77,7 +83,7 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 		mathlib::scalar_mul(alpha, alpha, alpha_rv);
 
 	//call outer product
-	mathlib::ger(M(), N(), alpha, A, 1, B, 1, injection, injection.ld1());
+	mathlib::ger(M(), N(), alpha, A, 1, B, 1, injection, injection.leading_dimension(0));
 
 
 	//destroy all the temporaries

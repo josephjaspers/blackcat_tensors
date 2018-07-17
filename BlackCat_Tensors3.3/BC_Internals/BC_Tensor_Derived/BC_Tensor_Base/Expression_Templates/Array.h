@@ -13,7 +13,7 @@
 namespace BC {
 namespace internal {
 template<int dimension, class T, class mathlib>
-struct Array : Tensor_Array_Base<Array<dimension, T, mathlib>, dimension>{
+struct Array : Tensor_Array_Base<Array<dimension, T, mathlib>, dimension>, public Shape<dimension> {
 
 	using scalar_type = _scalar<T>;
 	using math_lib = mathlib;
@@ -21,19 +21,15 @@ struct Array : Tensor_Array_Base<Array<dimension, T, mathlib>, dimension>{
 	__BCinline__ static constexpr int DIMS() { return dimension; }
 
 	scalar_type* array = nullptr;
-	Shape<DIMS()> shape;
 
-	Array(Shape<DIMS()> shape_, scalar_type* array_) : array(array_), shape(shape_) {}
-
-	template<class U>
-	Array(U param) : shape(param) { math_lib::initialize(array, this->size()); }
+	Array(Shape<DIMS()> shape_, scalar_type* array_) : array(array_), Shape<DIMS()>(shape_) {}
 
 	template<class U>
-	Array(U param, scalar_type* array_) : array(array_), shape(param) {}
+	Array(U param) : Shape<DIMS()>(param) { math_lib::initialize(array, this->size()); }
 
+	template<class U>
+	Array(U param, scalar_type* array_) : array(array_), Shape<DIMS()>(param) {}
 
-	__BCinline__ const auto inner_shape() const { return shape.inner_shape(); }
-	__BCinline__ const auto outer_shape() const { return shape.outer_shape(); }
 	__BCinline__ const scalar_type* memptr() const { return array; }
 	__BCinline__	   scalar_type* memptr()  	   { return array; }
 

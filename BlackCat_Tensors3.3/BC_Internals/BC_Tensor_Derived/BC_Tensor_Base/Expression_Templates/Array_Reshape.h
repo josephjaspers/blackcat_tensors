@@ -28,7 +28,7 @@ template<int dimension>
 struct Array_Reshape {
 
 	template<class PARENT>
-	struct implementation : Tensor_Array_Base<implementation<PARENT>, dimension>{
+	struct implementation : Tensor_Array_Base<implementation<PARENT>, dimension>, Shape<dimension> {
 
 	using scalar = _scalar<PARENT>;
 
@@ -41,12 +41,9 @@ struct Array_Reshape {
 
 	PARENT parent;
 	scalar* array;
-	Shape<dimension> shape;
 
 	template<class... integers>
-	implementation(const scalar* array_, PARENT parent, integers... ints) : array(const_cast<scalar*>(array_)), parent(parent), shape(ints...) {}
-	__BCinline__ const auto inner_shape() const 	{ return shape.inner_shape(); }
-	__BCinline__ const auto outer_shape() const 	{ return shape.outer_shape(); }
+	implementation(const scalar* array_, PARENT parent, integers... ints) : array(const_cast<scalar*>(array_)), parent(parent), Shape<dimension>(ints...) {}
 
 	__BCinline__ const auto memptr() const { return array; }
 	__BCinline__	   auto memptr()   	   { return array; }

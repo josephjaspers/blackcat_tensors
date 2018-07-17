@@ -47,6 +47,11 @@ struct binary_expression<lv, rv, oper::gemm<mathlib>>
 	__BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.cols() : 1; }); }
 	__BCinline__ const auto outer_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.cols() * left.rows() : 1; }); }
 
+	__BCinline__ int size() const { return left.rows() * right.cols(); }
+	__BCinline__ int rows() const { return left.rows(); }
+	__BCinline__ int cols() const { return right.cols(); }
+	__BCinline__ int dimension(int i) const { return inner_shape()[i]; }
+
 	__BCinline__ int M() const { return left.rows();  }
 	__BCinline__ int N() const { return right.cols(); }
 	__BCinline__ int K() const { return left.cols();  }
@@ -78,7 +83,7 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 		mathlib::scalar_mul(alpha, alpha, alpha_rv);
 
 	//call matrix_mul
-	mathlib::gemm(transA, transB,  M(), N(), K(), alpha, A, A.ld1(), B, B.ld1(), beta, injection, injection.ld1());
+	mathlib::gemm(transA, transB,  M(), N(), K(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), beta, injection, injection.leading_dimension(0));
 
 
 	//destroy all the temporaries

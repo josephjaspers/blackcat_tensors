@@ -29,8 +29,16 @@ template<class PARENT>
 	scalar_type* array_slice;
 
 	__BCinline__ Array_Slice(const scalar_type* array, PARENT parent_) : array_slice(const_cast<scalar_type*>(array)), parent(parent_) {}
+
 	__BCinline__ const auto inner_shape() const 			{ return parent.inner_shape(); }
 	__BCinline__ const auto outer_shape() const 			{ return parent.outer_shape(); }
+	__BCinline__ int size() const { return parent.outer_shape()[DIMS() - 1]; }
+	__BCinline__ int rows() const { return parent.inner_shape()[0]; }
+	__BCinline__ int cols() const { return  parent.inner_shape()[1]; }
+	__BCinline__ int dimension(int i) const { return parent.dimension(i); }
+	__BCinline__ int outer_dimension() const { return parent.inner_shape()[DIMS() - 2]; }
+	__BCinline__ int leading_dimension(int i) const { return parent.leading_dimension(i); }
+
 	__BCinline__ const scalar_type* memptr() const { return array_slice; }
 	__BCinline__	   scalar_type* memptr()   	   { return array_slice; }
 

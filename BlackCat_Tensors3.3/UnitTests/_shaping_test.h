@@ -35,8 +35,10 @@ int shaping() {
 
 //	std::cout << m2.internal().chunk(2,1,0)(1,1,1)[0] << std::endl;
 
-		chunk(m2)(2,1,0)(2,3).print_leading_dimensions();//.internal()[i] << std::endl;
-		chunk(m2)(2,1,0)(2,3).print();//.internal()[i] << std::endl;
+
+//		m2.print_leading_dimension();
+		chunk(m2)(2,1,2)(2,3).print_leading_dimensions();//.internal()[i] << std::endl;
+		chunk(m2)(2,1,2)(2,3).print();//.internal()[i] << std::endl;
 
 
 		// FIXME DOES NOT WORK

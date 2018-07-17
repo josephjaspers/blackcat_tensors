@@ -44,6 +44,7 @@ public:
 
 	template<class expr> auto forward_propagation(const f_mat<expr>& x) {
 		y = g(w * x + b);
+
 		return this->next().forward_propagation(y);
 	}
 	template<class expr> auto back_propagation(const f_mat<expr>& dy_) {

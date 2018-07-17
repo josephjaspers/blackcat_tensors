@@ -46,8 +46,15 @@ struct binary_expression<lv, rv, oper::gemv<mathlib>>
 
 	 binary_expression(lv left, rv right) : left(left), right(right) {}
 
+	__BCinline__ int size() const { return left.rows(); }
+	__BCinline__ int rows() const { return left.rows(); }
+	__BCinline__ int cols() const { return 1; }
+	__BCinline__ int dimension(int i) const { return i == 0 ? rows() : 1; }
+	__BCinline__ int outer_dimension() const { return rows(); }
+	__BCinline__ int leading_dimension(int i) const { return 1; }
+
 	__BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : 1; });}
-	__BCinline__ const auto outer_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : 1; });}
+	__BCinline__ const auto outer_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? 1 : 0; });}
 
 
 template<class core, int alpha_mod, int beta_mod>
@@ -79,7 +86,7 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 	int m = A.rows();
 	int n = A.cols();
 
-	mathlib::gemv(transA,  m, n, alpha, A, A.ld1(), X, 1/*inc_X*/, beta, injection/*Y*/, 1/*incy*/);
+	mathlib::gemv(transA,  m, n, alpha, A, A.leading_dimension(0), X, 1/*inc_X*/, beta, injection/*Y*/, 1/*incy*/);
 
 	//destroy all the temporaries
 	if (lv_eval) cc(A).destroy();

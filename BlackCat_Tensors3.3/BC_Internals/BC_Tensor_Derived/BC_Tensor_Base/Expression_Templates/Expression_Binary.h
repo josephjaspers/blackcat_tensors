@@ -26,7 +26,6 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 		//if dimension mismatch choose the max dimension as iterator, else choose the max iterator
 		return lv::DIMS() != rv::DIMS() ? DIMS() : MTF::max(lv::ITERATOR(), rv::ITERATOR());
 	}
-	__BCinline__ static constexpr bool INJECTABLE() { return lv::INJECTABLE() || rv::INJECTABLE(); }
 
 	__BCinline__  binary_expression(lv l, rv r, operation oper_ = operation()) : left(l), right(r), oper(oper_) {}
 
@@ -34,9 +33,14 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	template<class... integers> __BCinline__  auto  operator ()(integers... ints) const { return oper(left(ints...), right(ints...)); }
 
 	__BCinline__ const auto& shape() const { return dominant_type<lv, rv>::shape(left, right); }
-	__BCinline__ const auto  inner_shape() const { return shape().inner_shape(); }
-	__BCinline__ const auto  outer_shape() const { return shape().outer_shape(); }
-//	__BCinline__ int size() const { return shape().size(); }
+	__BCinline__ int size() const { return shape().size(); }
+	__BCinline__ int rows() const { return shape().rows(); }
+	__BCinline__ int cols() const { return shape().cols(); }
+	__BCinline__ int dimension(int i) const { return shape().dimension(i); }
+	__BCinline__ int outer_dimension() const { return shape().outer_dimension(); }
+	__BCinline__ int leading_dimension(int i) const { return 0; }
+	__BCinline__ const auto inner_shape() const { return shape().inner_shape(); }
+	__BCinline__ const auto outer_shape() const { return shape().outer_shape(); }
 	__BCinline__ const auto slice(int i) const {
 		using slice_lv = decltype(left.slice(i));
 		using slice_rv = decltype(left.slice(i));

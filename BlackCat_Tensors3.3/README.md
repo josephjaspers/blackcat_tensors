@@ -185,7 +185,7 @@ Methods:
 	int cols() const				//returns cols 
 	int dimension(int i) const 			//returns the dimension at a given index
 	int ld_dimension(int i) const 			//returns the leading dimension at a given index
-	int ld1() const					//returns internal row_dimension (relevant for transpose expressions, subtensors, etc)
+	int leading_dimension(0) const					//returns internal row_dimension (relevant for transpose expressions, subtensors, etc)
 	int ld2() const					//returns internal matrix_dimension (only relevant for tensors of order > 2 IE Cubes)
 	void print_dimensions() const			//prints the dimensions of tensor... formated: [row][col][etc]
 	void print_leading_dimensions() const		//prints the internal dimensions of tensor... formated: [ld_row][ld_cols][etc]
