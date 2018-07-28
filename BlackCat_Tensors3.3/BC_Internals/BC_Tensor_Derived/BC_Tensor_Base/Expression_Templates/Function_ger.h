@@ -50,10 +50,8 @@ struct binary_expression<lv, rv, oper::ger<mathlib>>
 		__BCinline__ int cols() const { return right.cols(); }
 		__BCinline__ int dimension(int i) const { return i == 0 ? rows() : i == 1 ? cols() : 1; }
 		__BCinline__ int outer_dimension() const { return rows(); }
-		__BCinline__ int leading_dimension(int i) const { return 0; }
 
 	__BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.rows() : 1; });}
-	__BCinline__ const auto outer_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.rows() * left.rows() : 1; });}
 
 	__BCinline__ int M() const { return left.rows();  }
 	__BCinline__ int N() const { return right.rows(); }

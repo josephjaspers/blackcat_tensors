@@ -54,17 +54,6 @@ struct binary_expression<lv, rv, oper::conv<2, mathlib>>
 						return 1;
 				});
 	}
-	__BCinline__ const auto outer_shape() const {
-		return l_array<DIMS()>([&](int i) {
-					if (i == 0)
-						return (left.rows() - right.rows() + 1);
-					else if (i == 1)
-						return (left.cols() - right.cols() + 1) * (left.rows() - right.rows() + 1);
-					else
-					return 0;
-				}
-		);
-	}
 
 	__BCinline__ int M() const { return left.rows();  }
 	__BCinline__ int N() const { return right.cols(); }

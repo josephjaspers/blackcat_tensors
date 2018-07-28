@@ -38,9 +38,7 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	__BCinline__ int cols() const { return shape().cols(); }
 	__BCinline__ int dimension(int i) const { return shape().dimension(i); }
 	__BCinline__ int outer_dimension() const { return shape().outer_dimension(); }
-	__BCinline__ int leading_dimension(int i) const { return 0; }
 	__BCinline__ const auto inner_shape() const { return shape().inner_shape(); }
-	__BCinline__ const auto outer_shape() const { return shape().outer_shape(); }
 	__BCinline__ const auto slice(int i) const {
 		using slice_lv = decltype(left.slice(i));
 		using slice_rv = decltype(left.slice(i));

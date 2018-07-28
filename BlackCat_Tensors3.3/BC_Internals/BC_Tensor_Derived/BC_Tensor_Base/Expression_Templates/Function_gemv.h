@@ -51,11 +51,8 @@ struct binary_expression<lv, rv, oper::gemv<mathlib>>
 	__BCinline__ int cols() const { return 1; }
 	__BCinline__ int dimension(int i) const { return i == 0 ? rows() : 1; }
 	__BCinline__ int outer_dimension() const { return rows(); }
-	__BCinline__ int leading_dimension(int i) const { return 1; }
 
 	__BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : 1; });}
-	__BCinline__ const auto outer_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? 1 : 0; });}
-
 
 template<class core, int alpha_mod, int beta_mod>
 void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {

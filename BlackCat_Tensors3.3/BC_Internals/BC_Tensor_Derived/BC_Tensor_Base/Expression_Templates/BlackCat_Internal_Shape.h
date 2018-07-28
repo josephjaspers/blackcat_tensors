@@ -23,11 +23,26 @@ private:
 	int OS[dims];
 public:
 
-	template<class... integers> Shape(int first, integers... ints) : IS() {
-		static_assert(sizeof...(integers) + 1 == dims, "integer initialization must have the same number of dimensions");
-		this->init(first, ints...);
+	template<class... integers> Shape(integers... ints) : IS() {
+		static_assert(sizeof...(integers) == dims, "integer initialization must have the same number of dimensions");
+		init(BC::array(ints...));
 	}
 
+	template<int dim, class int_t>
+	Shape (stack_array<dim, int_t> param) {
+		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
+		init(param);
+	}
+	template<int dim, class int_t>
+	Shape (pointer_array<dim, int_t> param) {
+		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
+		init(param);
+	}
+	template<int dim, class f, class int_t>
+	Shape (lambda_array<dim, int_t, f> param) {
+		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
+		init(param);
+	}
 	__BCinline__ const auto inner_shape() const { return ptr_array<dims>(IS); }
 	__BCinline__ const auto outer_shape() const { return ptr_array<dims>(OS); }
 	__BCinline__ int size() const { return OS[last]; }
@@ -38,63 +53,17 @@ public:
 	__BCinline__ int leading_dimension(int i) const { return OS[i]; }
 
 
-	template<int dim, class int_t>
-	Shape (stack_array<dim, int_t> param) {
-		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
-		if (LENGTH() > 0) {
-			IS[0] = param[0];
-			OS[0] = IS[0];
-			for (int i = 1; i < LENGTH(); ++i) {
-				IS[i] = param[i];
-				OS[i] = OS[i - 1] * IS[i];
-			}
-		}
-	}
-	template<int dim, class int_t>
-	Shape (pointer_array<dim, int_t> param) {
-		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
-		if (LENGTH() > 0) {
-			IS[0] = param[0];
-			OS[0] = IS[0];
-			for (int i = 1; i < LENGTH(); ++i) {
-				IS[i] = param[i];
-				OS[i] = OS[i - 1] * IS[i];
-			}
-		}
-	}
-	template<int dim, class f, class int_t>
-	Shape (lambda_array<dim, int_t, f> param) {
-		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
-		if (LENGTH() > 0) {
-			IS[0] = param[0];
-			OS[0] = IS[0];
-			for (int i = 1; i < LENGTH(); ++i) {
-				IS[i] = param[i];
-				OS[i] = OS[i - 1] * IS[i];
-			}
-		}
-	}
-
 private:
-	template<int d = 0> __BCinline__
-	void init() {}
 
-	template<int dim = 0, class... integers> __BCinline__
-	void init(int front, integers... ints) {
-
-		//NVCC gives warning if you convert the static_assert into a one-liner
-		static constexpr bool intList = MTF::is_integer_sequence<integers...>;
-		static_assert(intList, "MUST BE INTEGER LIST");
-
-		IS[dim] = front;
-
-		if (dim > 0)
-			OS[dim] = front * outer_shape()[dim - 1];
-		else
-			OS[0] = front;
-
-		if (dim != LENGTH() - 1) {
-			init<(dim + 1 < LENGTH() ? dim + 1 : LENGTH())>(ints...);
+	template<class shape_t> __BCinline__
+	void init(const shape_t& param) {
+		if (LENGTH() > 0) {
+			IS[0] = param[0];
+			OS[0] = IS[0];
+			for (int i = 1; i < LENGTH(); ++i) {
+				IS[i] = param[i];
+				OS[i] = OS[i - 1] * IS[i];
+			}
 		}
 	}
 };
