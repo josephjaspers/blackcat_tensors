@@ -50,8 +50,8 @@ public:
 	operator 	   auto()       { return as_derived().memptr(); }
 	operator const auto() const { return as_derived().memptr(); }
 
-	__BCinline__ const auto& operator [] (int index) const { return DIMS() == 0 ? as_derived().memptr()[0] : as_derived().memptr()[index]; }
-	__BCinline__ 	   auto& operator [] (int index) 	   { return DIMS() == 0 ? as_derived().memptr()[0] : as_derived().memptr()[index]; }
+	__BCinline__ const auto& operator [] (int index) const { return as_derived().memptr()[index]; }
+	__BCinline__ 	   auto& operator [] (int index) 	   { return as_derived().memptr()[index]; }
 	__BCinline__ const auto slice		(int i) const { return slice_t (&as_derived()[slice_index(i)], as_derived()); }
 	__BCinline__	   auto slice		(int i) 	  { return slice_t (&as_derived()[slice_index(i)], as_derived()); }
 	__BCinline__ const auto scalar		(int i) const { return scalar_t(&as_derived()[i], as_derived()); }
@@ -107,7 +107,7 @@ public:
 		else if (DIMS() == 1)
 			return i;
 		else
-			return as_derived().outer_shape()[DIMENSION - 2] * i;
+			return as_derived().leading_dimension(DIMENSION - 2) * i;
 	}
 
 

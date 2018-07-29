@@ -46,10 +46,10 @@ struct binary_expression<lv, rv, oper::ger<mathlib>>
 
 	 binary_expression(lv left, rv right) : left(left), right(right) {}
 	__BCinline__ int size() const { return left.size() * right.size(); }
-		__BCinline__ int rows() const { return left.rows(); }
-		__BCinline__ int cols() const { return right.cols(); }
-		__BCinline__ int dimension(int i) const { return i == 0 ? rows() : i == 1 ? cols() : 1; }
-		__BCinline__ int outer_dimension() const { return rows(); }
+	__BCinline__ int rows() const { return left.rows(); }
+	__BCinline__ int cols() const { return right.cols(); }
+	__BCinline__ int dimension(int i) const { return i == 0 ? rows() : i == 1 ? cols() : 1; }
+	__BCinline__ int outer_dimension() const { return rows(); }
 
 	__BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.rows() : 1; });}
 
