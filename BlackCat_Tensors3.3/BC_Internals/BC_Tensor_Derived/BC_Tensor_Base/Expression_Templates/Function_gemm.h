@@ -80,7 +80,7 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 		mathlib::scalar_mul(alpha, alpha, alpha_rv);
 
 	//call matrix_mul
-	mathlib::gemm(transA, transB,  M(), N(), K(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), beta, injection, injection.leading_dimension(0));
+	mathlib::gemm(transA, transB,  M(), N(), K(), alpha, A, A.leading_dimension(1), B, B.leading_dimension(1), beta, injection, injection.leading_dimension(1));
 
 
 	//destroy all the temporaries

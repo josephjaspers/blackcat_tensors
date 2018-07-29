@@ -107,7 +107,7 @@ public:
 		else if (DIMS() == 1)
 			return i;
 		else
-			return as_derived().leading_dimension(DIMENSION - 2) * i;
+			return as_derived().leading_dimension(DIMENSION - 1) * i;
 	}
 
 
@@ -125,9 +125,9 @@ public:
 	}
 
 	template<int D> __BCinline__ int dims_to_index(stack_array<D, int> var) const {
-		int index = var[0];
-		for(int i = 1; i < DIMS(); ++i) {
-			index += this->as_derived().leading_dimension(i - 1) * var[i];
+		int index = 0;
+		for(int i = 0; i < DIMS(); ++i) {
+			index += this->as_derived().leading_dimension(i) * var[i];
 		}
 		return index;
 	}
@@ -136,7 +136,7 @@ public:
 
 		int index = var[DIMS() - 1];
 		for(int i = 0; i < DIMS() - 1; ++i) {
-			index += this->as_derived().leading_dimension(i) * var[DIMS() - i - 2];
+			index += this->as_derived().leading_dimension(i + 1) * var[DIMS() - i - 2];
 		}
 		return index;
 	}

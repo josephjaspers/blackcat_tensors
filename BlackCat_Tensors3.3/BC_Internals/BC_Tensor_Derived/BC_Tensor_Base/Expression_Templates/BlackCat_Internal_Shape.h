@@ -21,6 +21,7 @@ private:
 	static constexpr int last = dims - 1;
 	int IS[dims];
 	int OS[dims];
+	int sz = 0;
 public:
 
 	template<class... integers> Shape(integers... ints) : IS() {
@@ -45,7 +46,7 @@ public:
 	}
 	__BCinline__ const auto inner_shape() const { return ptr_array<dims>(IS); }
 	__BCinline__ const auto outer_shape() const { return ptr_array<dims>(OS); }
-	__BCinline__ int size() const { return OS[last]; }
+	__BCinline__ int size() const { return sz; }
 	__BCinline__ int rows() const { return IS[0]; }
 	__BCinline__ int cols() const { return IS[1]; }
 	__BCinline__ int dimension(int i) const { return IS[i]; }
@@ -59,11 +60,12 @@ private:
 	void init(const shape_t& param) {
 		if (LENGTH() > 0) {
 			IS[0] = param[0];
-			OS[0] = IS[0];
+			OS[0] = 1;//IS[0];
 			for (int i = 1; i < LENGTH(); ++i) {
 				IS[i] = param[i];
-				OS[i] = OS[i - 1] * IS[i];
+				OS[i] = OS[i - 1] * IS[i - 1];
 			}
+			sz = IS[dims - 1] * OS[dims - 1];
 		}
 	}
 };
@@ -91,7 +93,7 @@ struct Shape<1> {
 	__BCinline__ int cols() const { return 1; }
 	__BCinline__ int dimension(int i) const { return (&length)[i]; }
 	__BCinline__ int outer_dimension() const { return length; }
-	__BCinline__ int leading_dimension(int i) const { return i == 0 ? length : 0; }
+	__BCinline__ int leading_dimension(int i) const { return i == 0 ? 1 : 0; }
 
 	template<int dim, class int_t>
 	Shape (stack_array<dim, int_t> param) {
@@ -111,8 +113,8 @@ struct Shape<1> {
 
 	}
 
-	__BCinline__ const auto inner_shape() const { return l_array<1>([&](auto x) { return length; });}
-	__BCinline__ const auto outer_shape() const { return l_array<1>([&](auto x) { return x == 0 ? length : 0; });}
+	__BCinline__ const auto inner_shape() const { return l_array<1>([&](auto x) { return x == 0 ? length : 1; });}
+	__BCinline__ const auto outer_shape() const { return l_array<1>([&](auto x) { return x == 0 ? 1 : 0; });}
 };
 }
 

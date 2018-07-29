@@ -83,7 +83,7 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 	int m = A.rows();
 	int n = A.cols();
 
-	mathlib::gemv(transA,  m, n, alpha, A, A.leading_dimension(0), X, 1/*inc_X*/, beta, injection/*Y*/, 1/*incy*/);
+	mathlib::gemv(transA,  m, n, alpha, A, A.leading_dimension(1), X, 1/*inc_X*/, beta, injection/*Y*/, 1/*incy*/);
 
 	//destroy all the temporaries
 	if (lv_eval) cc(A).destroy();

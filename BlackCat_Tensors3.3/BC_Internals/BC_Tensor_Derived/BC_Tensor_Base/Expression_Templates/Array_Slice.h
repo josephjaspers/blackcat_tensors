@@ -32,7 +32,7 @@ template<class PARENT>
 
 	__BCinline__ const auto inner_shape() const 			{ return parent.inner_shape(); }
 	__BCinline__ const auto outer_shape() const 			{ return parent.outer_shape(); }
-	__BCinline__ int size() const { return parent.outer_shape()[DIMS() - 1]; }
+	__BCinline__ int size() const { return parent.outer_shape()[DIMS()]; }
 	__BCinline__ int rows() const { return parent.inner_shape()[0]; }
 	__BCinline__ int cols() const { return  parent.inner_shape()[1]; }
 	__BCinline__ int dimension(int i) const { return parent.dimension(i); }
