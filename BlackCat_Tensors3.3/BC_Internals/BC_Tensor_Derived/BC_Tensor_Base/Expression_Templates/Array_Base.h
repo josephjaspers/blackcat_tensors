@@ -39,6 +39,8 @@ struct Tensor_Array_Base : expression_base<derived>, BC_Array {
 	using self 		= derived;
 	using slice_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Slice<self>>;
 	using scalar_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Scalar<self>>;
+	template<int dimension> using reshape_t = typename _Tensor_Reshape<dimension>::template implementation<derived>;
+	template<int dimension> using chunk_t = typename _Tensor_Chunk<dimension>::template implementation<derived>;
 
 private:
 
@@ -58,44 +60,38 @@ public:
 	__BCinline__	   auto scalar		(int i) 	  { return scalar_t(&as_derived()[i], as_derived()); }
 public:
 	template<class... integers> __BCinline__ 	   auto& operator () (integers... ints) 	  {
-		return DIMS() == 0 ? as_derived()[0] : as_derived()[this->dims_to_index(ints...)];
+		return as_derived()[this->dims_to_index(ints...)];
 	}
 	template<class... integers> __BCinline__ const auto& operator () (integers... ints) const {
-		return DIMS() == 0 ? as_derived()[0] : as_derived()[this->dims_to_index(ints...)];
+		return as_derived()[this->dims_to_index(ints...)];
 	}
 
 	//------------------------------------------Curried Reshapers ---------------------------------------//
-	//currently cuda will not compile these
+
 	template<class ... integers>  auto chunk(int location, integers ... shape_dimensions) {
-		static constexpr int tensor_dim =  sizeof...(shape_dimensions);
-		return typename _Tensor_Chunk<tensor_dim>::template implementation<derived>(&as_derived()[location], this->as_derived(), shape_dimensions...);
+		return chunk_t<sizeof...(integers)>(&as_derived()[location], this->as_derived(), shape_dimensions...);;
 	}
 	template<class ... integers>  const auto chunk(int location, integers ... shape_dimensions) const {
-		static constexpr int tensor_dim =  sizeof...(shape_dimensions);
-		return typename _Tensor_Chunk<tensor_dim>::template implementation<derived>(&as_derived()[location], this->as_derived(), shape_dimensions...);
+		return chunk_t<sizeof...(integers)>(&as_derived()[location], this->as_derived(), shape_dimensions...);;
 	}
-
-
 
 	template<class ... integers>
 	auto reshape(integers... ints) {
-		static constexpr int tensor_dim =  sizeof...(ints);
-		return typename _Tensor_Reshape<tensor_dim>::template implementation<derived>(as_derived(), this->as_derived(), ints...);
+		return reshape_t<sizeof...(integers)>(as_derived(), this->as_derived(), ints...);
 	}
 
 	template<int dim>
 	auto reshape(Shape<dim> shape) {
-		return typename _Tensor_Reshape<dim>::template implementation<derived>(as_derived(), this->as_derived(), shape);
+		return reshape_t<dim>(as_derived(), this->as_derived(), shape);
 	}
 	template<class ... integers>
 	const auto reshape(integers... ints) const {
-		static constexpr int tensor_dim =  sizeof...(ints);
-		return typename _Tensor_Reshape<tensor_dim>::template implementation<derived>(as_derived(), this->as_derived(), ints...);
+		return reshape_t<sizeof...(integers)>(as_derived(), this->as_derived(), ints...);
 	}
 
 	template<int dim>
 	const auto reshape(Shape<dim> shape) const  {
-		return typename _Tensor_Reshape<dim>::template implementation<derived>(as_derived(), this->as_derived(), shape);
+		return reshape_t<dim>(as_derived(), this->as_derived(), shape);
 	}
 
 	//------------------------------------------Implementation Details---------------------------------------//
@@ -147,7 +143,8 @@ public:
 
 
 template<class T, class voider = void> struct isArray_impl { static constexpr bool conditional = false; };
-template<class T> struct isArray_impl<T, std::enable_if_t<std::is_same<decltype(T::DIMS()),int>::value>> { static constexpr bool conditional = std::is_base_of<Tensor_Array_Base<T, T::DIMS()>, T>::value; };
+template<class T> struct isArray_impl<T, std::enable_if_t<std::is_same<decltype(T::DIMS()),int>::value>>
+		{ static constexpr bool conditional = std::is_base_of<Tensor_Array_Base<T, T::DIMS()>, T>::value; };
 
 template<class T> static constexpr bool isArray() { return isArray_impl<std::decay_t<T>>::conditional; }
 
