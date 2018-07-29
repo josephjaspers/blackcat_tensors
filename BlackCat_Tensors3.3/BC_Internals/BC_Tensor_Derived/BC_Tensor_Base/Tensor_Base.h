@@ -41,6 +41,7 @@ protected:
 	template<class> friend class Tensor_Base;
 
 public:
+
 	using operations::operator=;
 	using shaping::operator[];
 	using shaping::operator();

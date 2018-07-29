@@ -6,8 +6,8 @@ using BC::Matrix;
 using BC::Scalar;
 using BC::Cube;
 
-using ml = BC::CPU;		//to test cpu
-//using ml = BC::GPU;	//to test gpu
+//using ml = BC::CPU;		//to test cpu
+using ml = BC::GPU;	//to test gpu
 
 using vec = Vector<float, ml>;
 using mat = Matrix<float, ml>;
@@ -25,8 +25,8 @@ int main() {
 
 	//various tests
 	gemm_injection();
-//	readwrite();
+	//readwrite();
 	shaping();
-
+	mat a(3,3);
 	std::cout << " success " << std::endl;
 }

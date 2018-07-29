@@ -36,15 +36,15 @@ void generateAndLoad(cube& input_data, cube& output_data, std::ifstream& read_da
 
 int percept_MNIST() {
 //
-	const int TRAINING_EXAMPLES =  4000;
-	const int BATCH_SIZE = 100;
+	const int TRAINING_EXAMPLES =  4096;
+	const int BATCH_SIZE = 128;
 	const int NUMB_BATCHES = TRAINING_EXAMPLES / BATCH_SIZE;
 	const int PICTURE_SZ = 784;
 	const int NUMB_DIGITS = 10;
 
 	const int EPOCHS = 10;
 
-	NeuralNetwork<FeedForward> network(784, 10);
+	NeuralNetwork<FeedForward, FeedForward> network(784, 256,  10);
 	network.setLearningRate(.03);
 
 

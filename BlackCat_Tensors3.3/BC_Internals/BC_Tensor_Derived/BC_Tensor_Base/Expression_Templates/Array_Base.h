@@ -52,45 +52,63 @@ public:
 	operator 	   auto()       { return as_derived().memptr(); }
 	operator const auto() const { return as_derived().memptr(); }
 
-	__BCinline__ const auto& operator [] (int index) const { return as_derived().memptr()[index]; }
-	__BCinline__ 	   auto& operator [] (int index) 	   { return as_derived().memptr()[index]; }
-	__BCinline__ const auto slice		(int i) const { return slice_t (&as_derived()[slice_index(i)], as_derived()); }
-	__BCinline__	   auto slice		(int i) 	  { return slice_t (&as_derived()[slice_index(i)], as_derived()); }
-	__BCinline__ const auto scalar		(int i) const { return scalar_t(&as_derived()[i], as_derived()); }
-	__BCinline__	   auto scalar		(int i) 	  { return scalar_t(&as_derived()[i], as_derived()); }
-public:
-	template<class... integers> __BCinline__ 	   auto& operator () (integers... ints) 	  {
+	__BCinline__ const auto& operator [](int index) const {
+		return as_derived().memptr()[index];
+	}
+	__BCinline__ auto& operator [](int index) {
+		return as_derived().memptr()[index];
+	}
+
+	template<class ... integers>
+	__BCinline__ auto& operator ()(integers ... ints) {
 		return as_derived()[this->dims_to_index(ints...)];
 	}
-	template<class... integers> __BCinline__ const auto& operator () (integers... ints) const {
+	template<class ... integers>
+	__BCinline__ const auto& operator ()(integers ... ints) const {
 		return as_derived()[this->dims_to_index(ints...)];
 	}
+
+	//internal_views-------------------------------------------------------------------
+
+	__BCinline__ const auto _slice(int i) const {
+		return slice_t(&as_derived()[slice_index(i)], as_derived());
+	}
+	__BCinline__ auto _slice(int i) {
+		return slice_t(&as_derived()[slice_index(i)], as_derived());
+	}
+	__BCinline__ const auto _scalar(int i) const {
+		return scalar_t(&as_derived()[i], as_derived());
+	}
+	__BCinline__ auto _scalar(int i) {
+		return scalar_t(&as_derived()[i], as_derived());
+	}
+
 
 	//------------------------------------------Curried Reshapers ---------------------------------------//
 
-	template<class ... integers>  auto chunk(int location, integers ... shape_dimensions) {
+	template<class ... integers>  auto _chunk(int location, integers ... shape_dimensions) {
 		return chunk_t<sizeof...(integers)>(&as_derived()[location], this->as_derived(), shape_dimensions...);;
 	}
-	template<class ... integers>  const auto chunk(int location, integers ... shape_dimensions) const {
+	template<class ... integers>  const auto _chunk(int location, integers ... shape_dimensions) const {
 		return chunk_t<sizeof...(integers)>(&as_derived()[location], this->as_derived(), shape_dimensions...);;
 	}
 
 	template<class ... integers>
-	auto reshape(integers... ints) {
+	auto _reshape(integers... ints) {
 		return reshape_t<sizeof...(integers)>(as_derived(), this->as_derived(), ints...);
 	}
 
 	template<int dim>
-	auto reshape(Shape<dim> shape) {
+	auto _reshape(Shape<dim> shape) {
 		return reshape_t<dim>(as_derived(), this->as_derived(), shape);
 	}
 	template<class ... integers>
-	const auto reshape(integers... ints) const {
+	const auto _reshape(integers... ints) const {
 		return reshape_t<sizeof...(integers)>(as_derived(), this->as_derived(), ints...);
 	}
 
 	template<int dim>
-	const auto reshape(Shape<dim> shape) const  {
+	const auto _reshape(Shape<dim> shape) const  {
 		return reshape_t<dim>(as_derived(), this->as_derived(), shape);
 	}
 
