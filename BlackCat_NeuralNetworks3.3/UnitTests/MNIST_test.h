@@ -44,7 +44,7 @@ int percept_MNIST() {
 
 	const int EPOCHS = 10;
 
-	NeuralNetwork<FeedForward, FeedForward> network(784, 256,  10);
+	NeuralNetwork<FeedForward> network(784,  10);
 	network.setLearningRate(.03);
 
 

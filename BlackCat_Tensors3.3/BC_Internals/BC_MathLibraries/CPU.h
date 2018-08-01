@@ -9,13 +9,17 @@
 #define MATHEMATICS_CPU_H_
 
 #include "Print.h"
+
+#include "Math_Library_Directives.h"
+
 #include "CPU_Implementation/CPU_Utility.h"
 #include "CPU_Implementation/CPU_Misc.h"
 #include "CPU_Implementation/CPU_BLAS.h"
 #include "CPU_Implementation/CPU_BLAS.h"
 #include "CPU_Implementation/CPU_Constants.h"
-
 #include "CPU_Implementation/CPU_Convolution.h"
+
+
 
 namespace BC {
 
@@ -46,24 +50,18 @@ public:
 //-------------------------------Generic Copy ---------------------------------//
 	template<typename T, typename J>
 	static void copy(T& t, const J& j, int sz) {
-#ifndef BC_NO_OPENMP
-#pragma omp parallel for
-#endif
+ __BC_omp_for__
 		for (int i = 0; i < sz; ++i) {
 			t[i] = j[i];
 		}
-#ifndef BC_NO_OPENMP
-#pragma omp barrier
-#endif
+ __BC_omp_bar__
 	}
 	//-------------------------------1d eval/copy ---------------------------------//
 
 	struct n0 {
 		template<class T>
 		static void eval(T to) {
-#ifndef BC_NO_OPENMP
-#pragma omp parallel for
-#endif
+ __BC_omp_for__
 			for (int i = 0; i < to.size(); ++i) {
 				to[i];
 			}
@@ -74,9 +72,7 @@ public:
 	struct n2 {
 		template<class T>
 		static void eval(T to) {
-#ifndef BC_NO_OPENMP
-#pragma omp parallel for
-#endif
+ __BC_omp_for__
 			for (int n = 0; n < to.dimension(1); ++n)
 				for (int m = 0; m < to.dimension(0); ++m)
 					to(m, n);
@@ -87,9 +83,9 @@ public:
 	struct n3 {
 		template<class T>
 		static void eval(T to) {
-#ifndef BC_NO_OPENMP
-#pragma omp parallel for
-#endif
+
+ __BC_omp_for__
+
 			for (int k = 0; k < to.dimension(2); ++k)
 				for (int n = 0; n < to.dimension(1); ++n)
 					for (int m = 0; m < to.dimension(0); ++m)
@@ -100,9 +96,8 @@ public:
 	struct n4 {
 		template<class T>
 		static void eval(T to) {
-#ifndef BC_NO_OPENMP
-#pragma omp parallel for
-#endif
+
+ __BC_omp_for__
 			for (int p = 0; p < to.dimension(3); ++p)
 				for (int k = 0; k < to.dimension(2); ++k)
 					for (int n = 0; n < to.dimension(1); ++n)
@@ -115,9 +110,8 @@ public:
 	struct n5 {
 		template<class T>
 		static void eval(T to) {
-#ifndef BC_NO_OPENMP
-#pragma omp parallel for
-#endif
+
+ __BC_omp_for__
 			for (int j = 0; j < to.dimension(4); ++j)
 				for (int p = 0; p < to.dimension(3); ++p)
 					for (int k = 0; k < to.dimension(2); ++k)
@@ -138,12 +132,10 @@ public:
 		template<class T>
 		static void eval(T to) {
 			run::eval(to);
-#ifndef BC_NO_OPENMP
-#pragma omp barrier
-#endif
-
+ __BC_omp_bar__
 		}
 	};
 };
 }
-#endif /* MATHEMATICS_CPU_H_ */
+#endif
+ /* MATHEMATICS_CPU_H_ */

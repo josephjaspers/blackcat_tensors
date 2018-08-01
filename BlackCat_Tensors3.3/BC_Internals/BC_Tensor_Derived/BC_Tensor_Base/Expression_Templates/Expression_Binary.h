@@ -14,12 +14,13 @@
 namespace BC {
 namespace internal {
 template<class lv, class rv, class operation>
-struct binary_expression : public expression_base<binary_expression<lv, rv, operation>> {
-
-	operation oper;
+struct binary_expression : public expression_base<binary_expression<lv, rv, operation>>, public operation {
 
 	lv left;
 	rv right;
+
+	template<class L, class R> __BCinline__ const auto oper(const L& l, const R& r) const { return static_cast<const operation&>(*this)(l,r); }
+	template<class L, class R> __BCinline__ 	  auto oper(const L& l, const R& r) 	   { return static_cast<      operation&>(*this)(l,r); }
 
 	__BCinline__ static constexpr int DIMS() { return MTF::max(lv::DIMS(),rv::DIMS());}
 	__BCinline__ static constexpr int ITERATOR() {
@@ -27,7 +28,8 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 		return lv::DIMS() != rv::DIMS() ? DIMS() : MTF::max(lv::ITERATOR(), rv::ITERATOR());
 	}
 
-	__BCinline__  binary_expression(lv l, rv r, operation oper_ = operation()) : left(l), right(r), oper(oper_) {}
+	template<class... args>
+	__BCinline__  binary_expression(lv l, rv r, const args&... args_) : left(l), right(r), operation(args_...) {}
 
 	__BCinline__  auto  operator [](int index) const { return oper(left[index], right[index]); }
 	template<class... integers> __BCinline__  auto  operator ()(integers... ints) const { return oper(left(ints...), right(ints...)); }

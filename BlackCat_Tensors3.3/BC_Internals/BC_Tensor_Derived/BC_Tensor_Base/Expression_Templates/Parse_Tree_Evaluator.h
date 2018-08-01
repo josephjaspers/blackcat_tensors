@@ -37,7 +37,6 @@ evaluate(const expression& expr) {
 template< class expression>
 static std::enable_if_t<INJECTION<expression>()>
 evaluate(const expression& expr) {
-	using internal_t = expression;			//internal expression type (to be injected)
 	using injection_t = decltype(expr.left);	//the injection type
 
 	static constexpr int iterator_dimension = expression::ITERATOR();	//the iterator for the evaluation of post inject_t
@@ -53,7 +52,6 @@ evaluate(const expression& expr) {
 template< class expression>
 static std::enable_if_t<INJECTION<expression>()>
 evaluate_aliased(const expression& expr) {
-	using internal_t = expression;			//internal expression type (to be injected)
 	using injection_t = decltype(expr.left);	//the injection type
 
 	static constexpr int iterator_dimension = expression::ITERATOR();	//the iterator for the evaluation of post inject_t

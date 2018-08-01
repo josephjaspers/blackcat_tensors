@@ -10,7 +10,7 @@ namespace NN_Functions {
 struct Sigmoid {
 
 	template<class T> __BCinline__
-	T operator () (T t) const {
+	T operator () (const T& t) const {
 		static constexpr T e = 2.71828;
 
 		return 1 / (1 + pow(e, - t));
@@ -20,7 +20,7 @@ struct Sigmoid {
 struct CachedSigmoidDeriv {
 
 	template<class T> __BCinline__
-	T operator () (T t) const {
+	T operator () (const T& t) const {
 		return t * (1 - t);
 	}
 };
@@ -28,7 +28,7 @@ struct CachedSigmoidDeriv {
 struct Tanh {
 
 	template<class T> __BCinline__
-	T operator () (T t) const {
+	T operator () (const T& t) const {
 		static constexpr double e = 2.71828;
 
 		return (pow(e, t) - pow(e, -t)) /
@@ -38,7 +38,7 @@ struct Tanh {
 
 struct CachedTanhDeriv {
 	template<class T> __BCinline__
-	 T operator () (T t) const {
+	 T operator () (const T& t) const {
 		return 1 - powf(t, 2);
 	}
 };

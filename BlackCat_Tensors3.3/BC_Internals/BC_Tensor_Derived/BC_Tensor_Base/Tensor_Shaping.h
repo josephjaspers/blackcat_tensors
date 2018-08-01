@@ -8,7 +8,7 @@
 #ifndef TENSOR_SHAPING_H_
 #define TENSOR_SHAPING_H_
 
-#include "Tensor_Functions/Shaping.h"
+#include "Tensor_Shaping_Static.h"
 
 namespace BC {
 namespace Base {

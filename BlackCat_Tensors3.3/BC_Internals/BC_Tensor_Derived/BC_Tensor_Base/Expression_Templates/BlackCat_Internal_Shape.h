@@ -45,6 +45,8 @@ public:
 	}
 	__BCinline__ const auto inner_shape() const { return ptr_array<dims>(IS); }
 	__BCinline__ const auto outer_shape() const { return ptr_array<dims>(OS); }
+	__BCinline__ const auto block_shape() const { return ptr_array<dims>(OS); }
+
 	__BCinline__ int size() const { return OS[last]; }
 	__BCinline__ int rows() const { return IS[0]; }
 	__BCinline__ int cols() const { return IS[1]; }

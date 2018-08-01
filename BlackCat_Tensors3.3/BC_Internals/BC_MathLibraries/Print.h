@@ -44,10 +44,10 @@ static void printHelper(const T& ary, const int_ranks ranks, const os outer, int
 				auto str = to_string(ary[i * outer[dimension - 1] + j]);
 
 				//if the string is longer than the printspace truncate it
-				str = str.substr(0, str.length() < printSpace ? str.length() : printSpace);
+				str = str.substr(0, (int)str.length() < printSpace ? str.length() : printSpace);
 
 				//if its less we add blanks (so all numbers are uniform in size)
-				if (str.length() < printSpace)
+				if ((int)str.length() < printSpace)
 					str += std::string(" ", printSpace - str.length());
 
 				//print the string
@@ -68,10 +68,10 @@ static void printHelper(const T& ary, const int_ranks ranks, const os outer, int
 			auto str = to_string(ary[i]);
 
 			//if the string is longer than the printspace truncate it
-			str = str.substr(0, str.length() < printSpace ? str.length() : printSpace);
+			str = str.substr(0, (int)str.length() < printSpace ? str.length() : printSpace);
 
 			//if its less we add blanks (so all numbers are uniform in size)
-			if (str.length() < printSpace)
+			if ((int)str.length() < printSpace)
 				str += std::string(" ", printSpace - str.length());
 
 			//print the string

@@ -103,7 +103,7 @@ public:
 			if (ss.peek() == ',')
 				ss.ignore();
 		}
-			mathlib::HostToDevice(as_derived().internal().memptr(), &file_data[0], as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
+			mathlib::HostToDevice(as_derived().internal().memptr(), &file_data[0], (unsigned)as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
 
 	}
 
