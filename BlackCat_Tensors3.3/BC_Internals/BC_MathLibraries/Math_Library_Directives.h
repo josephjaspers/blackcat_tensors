@@ -10,8 +10,8 @@
 
 
 #ifdef _OPENMP
-#define __BC_omp_for__ pragma omp parallel for
-#define __BC_omp_bar__ pragma omp barrier
+#define __BC_omp_for__ _Pragma("omp parallel for")
+#define __BC_omp_bar__ _Pragma("omp barrier")
 #else
 #define __BC_omp_for__
 #define __BC_omp_bar__
