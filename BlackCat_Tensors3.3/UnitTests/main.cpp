@@ -26,6 +26,8 @@ int main() {
 
 		//various tests
 	gemm_injection();
+
+
 	//readwrite();
 	shaping();
 	mat a(3,3);

@@ -67,8 +67,8 @@ public:
 	}
 
 	void clear_stored_delta_gradients() {
-		w_gradientStorage = 0;	//gradient lists
-		b_gradientStorage = 0; //.for_each(zero);	//gradient list
+		w_gradientStorage.fill(0);	//gradient lists
+		b_gradientStorage.fill(0); //.for_each(zero);	//gradient list
 
 		this->next().clear_stored_delta_gradients();
 	}
@@ -94,8 +94,8 @@ public:
 		w_gradientStorage = mat(this->OUTPUTS, this->INPUTS);
 		b_gradientStorage = vec(this->OUTPUTS);
 
-		w_gradientStorage = 0;
-		b_gradientStorage = 0;
+		w_gradientStorage.fill(0);
+		b_gradientStorage.fill(0);
 	}
 
 };

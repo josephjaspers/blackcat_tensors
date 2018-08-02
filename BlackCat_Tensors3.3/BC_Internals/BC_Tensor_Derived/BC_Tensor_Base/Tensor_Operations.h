@@ -115,7 +115,7 @@ public:
 	 //--------------------------------Other Operators------------------------------//
 
 	 auto operator - () const {
-		 return this->un_expr<oper::negation>();
+		 return un_expr<oper::negation>();
 	 }
 	template<class pDeriv>
 	auto operator ==(const Tensor_Operations<pDeriv>& param) const {
@@ -208,8 +208,8 @@ public:
 		assert_same_ml(tensor);						//static_assert same allocation (gpu/cpu)
 		if (non_scalar_op(tensor)) {				//check if a tensor by scalar operation
 			if (same_rank(tensor)) {				//else check is same dimension (element-wise function) (
-				if (!same_size(tensor))				//if is same dimension, ensure same size
-					error_message(tensor);			//else error
+				if (!same_size(tensor))					//if is same dimension, ensure same size
+					error_message(tensor);				//else error
 				} else if (!valid_slice(tensor)) {	//if not same dimension check if valid slice operation
 					error_message(tensor);			//else error
 				}

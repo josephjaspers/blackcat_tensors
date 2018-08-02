@@ -23,7 +23,6 @@ public:
 	using parent_class::operator=;
 	using parent_class::operator[];
 	using parent_class::operator();
-
 	//constructors---------------------------------------------------
 
 	Vector(const Vector&  t) : parent_class(t) {}

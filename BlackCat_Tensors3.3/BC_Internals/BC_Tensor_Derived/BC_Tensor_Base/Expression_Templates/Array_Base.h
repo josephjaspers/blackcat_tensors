@@ -19,6 +19,8 @@ namespace internal {
  * Array_Interface is a common interface amongst all tensor_core subclasses,
  */
 
+
+//required forward decls
 template<class> class Array_Slice;
 template<class> class Array_Scalar;
 template<class> class Array_Transpose;
@@ -26,6 +28,8 @@ template<int> class Array_Reshape;
 template<int> class Array_Chunk;
 template<int> class Array_Slice_Complex;
 
+
+//Many template params
 template<class derived, int DIMENSION,
 template<class> class 	_Tensor_Slice 	= Array_Slice,
 template<int>   class	_Tensor_Slice_Complex = Array_Slice_Complex,
@@ -43,7 +47,6 @@ struct Tensor_Array_Base : expression_base<derived>, BC_Array {
 	using scalar_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Scalar<self>>;
 	template<int dimension> using reshape_t = typename _Tensor_Reshape<dimension>::template implementation<derived>;
 	template<int dimension> using chunk_t 	= typename _Tensor_Chunk<dimension>::template implementation<derived>;
-
 	template<int dimension> using c_slice_t = typename _Tensor_Slice_Complex<dimension>::template implementation<derived>;
 
 
@@ -84,12 +87,12 @@ public:
 	}
 
 //CURRENTLY BROKEN, will fix
-	template<int axis> __BCinline__ const auto _slice(int i) const {
-		return c_slice_t<axis>(&as_derived()[slice_index(i)], as_derived());
-	}
-	template<int axis>  __BCinline__ auto _slice(int i) {
-		return c_slice_t<axis>(&as_derived()[slice_index(i)], as_derived());
-	}
+//	template<int axis> __BCinline__ const auto _slice(int i) const {
+//		return c_slice_t<axis>(&as_derived()[slice_index(i)], as_derived());
+//	}
+//	template<int axis>  __BCinline__ auto _slice(int i) {
+//		return c_slice_t<axis>(&as_derived()[slice_index(i)], as_derived());
+//	}
 
 
 	__BCinline__ const auto _scalar(int i) const {

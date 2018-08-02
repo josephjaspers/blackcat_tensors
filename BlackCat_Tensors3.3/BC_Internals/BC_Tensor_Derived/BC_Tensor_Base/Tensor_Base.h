@@ -66,7 +66,7 @@ public:
 		tensor.internal() = tmp;
 		return *this;
 	}
-	//fast move (only availble to "primary" array types (non-expressions)
+
 	derived& operator =(const copy_parameter& tensor) {
 		this->assert_valid(tensor);
 		mathlib_type::copy(this->internal(), tensor.internal(), this->size());

@@ -63,10 +63,10 @@ struct Array<0, T, mathlib> : Tensor_Array_Base<Array<0, T, mathlib>, 0>, public
 	__BCinline__ 	   auto& operator [] (int index) 	   { return array[0]; }
 
 	template<class... integers> __BCinline__ 	   auto& operator () (integers... ints) {
-		return array[0];;
+		return array[0];
 	}
 	template<class... integers> __BCinline__ const auto& operator () (integers... ints) const {
-		return array[0];;
+		return array[0];
 	}
 
 

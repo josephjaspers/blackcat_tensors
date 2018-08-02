@@ -23,7 +23,6 @@ public:
 	using parent_class::operator=;
 	using parent_class::operator[];
 	using parent_class::operator();
-
 	//constructors---------------------------------------------------
 
 	Matrix(const Matrix&  v) : parent_class(v) {}
