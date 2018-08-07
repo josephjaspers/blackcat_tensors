@@ -15,6 +15,9 @@ template<class value, class operation>
 class unary_expression : public expression_base<unary_expression<value, operation>>, public operation {
 public:
 
+	using scalar_t  = decltype(std::declval<operation>()(std::declval<typename value::scalar_t>()));
+	using mathlib_t = typename value::mathlib_t;
+
 	value array;
 
 	__BCinline__ static constexpr int DIMS() { return value::DIMS(); }

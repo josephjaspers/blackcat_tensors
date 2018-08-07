@@ -21,7 +21,8 @@ struct Array_Chunk  {
  {
 
 		static_assert(PARENT::ITERATOR() == 0 || dimension <= PARENT::DIMS(), "TENSOR-CHUNK'S DIMENSIONS MUST BE LESS OR EQUAL TO PARENT'S DIMENSIONS");
-		using scalar = _scalar<PARENT>;
+		using scalar_t = typename PARENT::scalar_t;
+		using mathlib_t = typename PARENT::mathlib_t;
 
 		__BCinline__ static constexpr int DIMS() 	{ return dimension; };
 		__BCinline__ static constexpr int ITERATOR() { return dimension; }
@@ -29,11 +30,11 @@ struct Array_Chunk  {
 		operator const PARENT() const	{ return parent; }
 
 		PARENT parent;
-		scalar* array;
+		scalar_t* array;
 
 		template<class... integers>
-		implementation(const scalar* array_, PARENT parent, integers... ints) : array(const_cast<scalar*>(array_)), parent(parent), Shape<dimension>(ints...) {
-		}
+		implementation(const scalar_t* array_, PARENT parent, integers... ints)
+		: array(const_cast<scalar_t*>(array_)), parent(parent), Shape<dimension>(ints...) {}
 		__BCinline__ const auto outer_shape() const 	{ return parent.outer_shape(); }
 		__BCinline__ int leading_dimension(int i) const { return parent.leading_dimension(i); }
 

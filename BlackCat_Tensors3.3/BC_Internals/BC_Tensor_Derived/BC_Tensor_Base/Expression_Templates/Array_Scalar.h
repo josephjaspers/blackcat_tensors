@@ -19,7 +19,8 @@ namespace internal {
 template<class PARENT>
 struct Array_Scalar : Tensor_Array_Base<Array_Scalar<PARENT>, 0>, Shape<0> {
 
-	using scalar = _scalar<PARENT>;
+	using scalar_t = typename PARENT::scalar_t;
+	using mathlib_t = typename PARENT::mathlib_t;
 
 	__BCinline__ static constexpr int ITERATOR() { return 0; }
 	__BCinline__ static constexpr int DIMS() { return 0; }
@@ -37,13 +38,13 @@ struct Array_Scalar : Tensor_Array_Base<Array_Scalar<PARENT>, 0>, Shape<0> {
 	__BCinline__ operator const PARENT() const	{ return parent; }
 
 	const PARENT parent;
-	scalar* array_slice;
+	scalar_t* array_slice;
 
-	__BCinline__ Array_Scalar(const scalar* array, const PARENT& parent_)
-		: array_slice(const_cast<scalar*>(array)), parent(parent_) {}
+	__BCinline__ Array_Scalar(const scalar_t* array, const PARENT& parent_)
+		: array_slice(const_cast<scalar_t*>(array)), parent(parent_) {}
 
-	__BCinline__ const scalar* memptr() const { return array_slice; }
-	__BCinline__	   scalar* memptr()  	  { return array_slice; }
+	__BCinline__ const scalar_t* memptr() const { return array_slice; }
+	__BCinline__	   scalar_t* memptr()  	  { return array_slice; }
 };
 }
 }

@@ -20,7 +20,12 @@ namespace internal {
 template<class functor_type, class ml>
 struct unary_expression<functor_type, oper::transpose<ml>> : expression_base<unary_expression<functor_type, oper::transpose<ml>>>
 {
+
+
 	functor_type array;
+
+	using scalar_t  = typename functor_type::scalar_t;
+	using mathlib_t = typename functor_type::mathlib_t;
 
 	__BCinline__ static constexpr int DIMS() { return functor_type::DIMS(); }
 	__BCinline__ static constexpr int ITERATOR() { return DIMS(); }

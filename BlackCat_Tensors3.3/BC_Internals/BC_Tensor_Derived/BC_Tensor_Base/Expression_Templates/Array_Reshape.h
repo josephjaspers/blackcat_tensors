@@ -30,7 +30,8 @@ struct Array_Reshape {
 	template<class PARENT>
 	struct implementation : Tensor_Array_Base<implementation<PARENT>, dimension>, Shape<dimension> {
 
-	using scalar = _scalar<PARENT>;
+	using scalar_t = typename PARENT::scalar_t;
+	using mathlib_t = typename PARENT::mathlib_t;
 
 	__BCinline__ static constexpr int DIMS() { return dimension; };
 	__BCinline__ static constexpr int ITERATOR() { return dimension; }
@@ -40,10 +41,11 @@ struct Array_Reshape {
 	operator const PARENT() const	{ return parent; }
 
 	PARENT parent;
-	scalar* array;
+	scalar_t* array;
 
 	template<class... integers>
-	implementation(const scalar* array_, PARENT parent, integers... ints) : array(const_cast<scalar*>(array_)), parent(parent), Shape<dimension>(ints...) {}
+	implementation(const scalar_t* array_, PARENT parent, integers... ints)
+	: array(const_cast<scalar_t*>(array_)), parent(parent), Shape<dimension>(ints...) {}
 
 	__BCinline__ const auto memptr() const { return array; }
 	__BCinline__	   auto memptr()   	   { return array; }

@@ -26,6 +26,11 @@ template<class lv, class rv, class mathlib>
 struct binary_expression<lv, rv, oper::gemm<mathlib>>
 : expression_base<binary_expression<lv, rv,  oper::gemm<mathlib>>>, BLAS_FUNCTION {
 
+
+	using scalar_t  = typename lv::scalar_t;
+	using mathlib_t = mathlib;
+
+
 	using scalar_type = _scalar<lv>;
 	static constexpr bool transA = det_eval<lv>::transposed;
 	static constexpr bool transB = det_eval<rv>::transposed;

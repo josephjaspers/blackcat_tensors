@@ -18,7 +18,8 @@ namespace internal {
 template<class PARENT>
 	struct Array_Slice : Tensor_Array_Base<Array_Slice<PARENT>, MTF::max(PARENT::DIMS() - 1, 0)> {
 
-	using scalar_type = _scalar<PARENT>;
+	using scalar_t = typename PARENT::scalar_t;
+	using mathlib_t = typename PARENT::mathlib_t;
 
 	__BCinline__ static constexpr int ITERATOR() { return MTF::max(PARENT::ITERATOR() - 1, 0); }
 	__BCinline__ static constexpr int DIMS() { return MTF::max(PARENT::DIMS() - 1, 0); }
@@ -26,9 +27,9 @@ template<class PARENT>
 	__BCinline__ operator const PARENT() const	{ return parent; }
 
 	const PARENT parent;
-	scalar_type* array_slice;
+	scalar_t* array_slice;
 
-	__BCinline__ Array_Slice(const scalar_type* array, PARENT parent_) : array_slice(const_cast<scalar_type*>(array)), parent(parent_) {}
+	__BCinline__ Array_Slice(const scalar_t* array, PARENT parent_) : array_slice(const_cast<scalar_t*>(array)), parent(parent_) {}
 
 	__BCinline__ const auto inner_shape() const 			{ return parent.inner_shape(); }
 	__BCinline__ const auto outer_shape() const 			{ return parent.outer_shape(); }
@@ -39,8 +40,8 @@ template<class PARENT>
 	__BCinline__ int outer_dimension() const { return parent.inner_shape()[DIMS() - 2]; }
 	__BCinline__ int leading_dimension(int i) const { return parent.leading_dimension(i); }
 
-	__BCinline__ const scalar_type* memptr() const { return array_slice; }
-	__BCinline__	   scalar_type* memptr()   	   { return array_slice; }
+	__BCinline__ const scalar_t* memptr() const { return array_slice; }
+	__BCinline__	   scalar_t* memptr()   	   { return array_slice; }
 
 	};
 }

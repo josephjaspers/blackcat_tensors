@@ -33,7 +33,12 @@ public:
 	operator 	   auto&()       { return as_derived(); }
 	operator const auto&() const { return as_derived(); }
 
-	__BCinline__ expression_base() { static_assert(std::is_trivially_copy_constructible<derived>::value, "EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE"); }
+	__BCinline__ expression_base() {
+		static_assert(std::is_trivially_copy_constructible<derived>::value, "EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE");
+		static_assert(!std::is_same<void, typename derived::scalar_t>::value, "CLASSES DERIVING EXPRESSION_BASE MUST HAVE A 'using scalar_t = some_Type'");
+		static_assert(!std::is_same<void, typename derived::mathlib_t>::value, "CLASSES DERIVING EXPRESSION_BASE MUST HAVE A 'using mathlib_t = some_Type'");
+
+	}
 	__BCinline__ constexpr int  dims() const { return derived::DIMS(); }
 
 

@@ -29,7 +29,6 @@ template<class T> struct isPrimaryArray { static constexpr bool conditional = fa
 template<int d, class T, class ml> struct isPrimaryArray<internal::Array<d,T,ml>> { static constexpr bool conditional = true; };
 template<class T> static constexpr bool is_array_core() { return isPrimaryArray<T>::conditional; }
 
-
 template<class> struct determine_functor;
 template<class> struct determine_scalar;
 template<class> struct determine_iterator;
@@ -39,7 +38,6 @@ template<class> struct determine_tensor_scalar;
 template<class T> using _scalar = typename determine_scalar<std::decay_t<T>>::type;
 template<class T> using _mathlib = typename determine_mathlibrary<std::decay_t<T>>::type;
 template<class T> using _functor = typename determine_functor<std::decay_t<T>>::type;
-template<class T> using _iterator = typename determine_iterator<std::decay_t<T>>::type;
 template<class T> using _tensor_scalar = typename determine_tensor_scalar<std::decay_t<T>>::type;
 template<class T> static constexpr int _dimension_of  = dimension_of<std::decay_t<T>>;
 
