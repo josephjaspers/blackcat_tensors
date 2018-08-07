@@ -17,9 +17,8 @@ const auto reshape(const Tensor_Base<T>& tensor) {
 	return [&](auto... integers) {
 		using mathlib_type = _mathlib<T>;
 
-	using internal = decltype(std::declval<T>().internal()._reshape(integers...));
-	using type = typename tensor_of<sizeof...(integers)>::template type<internal, mathlib_type>;
-	return type(tensor._reshape(integers...));
+	using internal = decltype(std::declval<T>()._reshape(integers...));
+	return Tensor_Base<internal>(tensor._reshape(integers...));
 	};
 }
 template<class T> __BC_host_inline__
@@ -27,10 +26,8 @@ auto reshape(Tensor_Base<T>& tensor) {
 	return [&](auto... integers) {
 		using mathlib_type = _mathlib<T>;
 
-	using internal = decltype(std::declval<T>().internal()._reshape(integers...));
-	//using shorthand (tensor_of_t causes seg fault with NVCC compiler)
-	using type = typename tensor_of<sizeof...(integers)>::template type<internal, mathlib_type>;
-	return type(tensor._reshape(integers...));
+	using internal = decltype(std::declval<T>()._reshape(integers...));
+	return Tensor_Base<internal>(tensor._reshape(integers...));
 	};
 }
 

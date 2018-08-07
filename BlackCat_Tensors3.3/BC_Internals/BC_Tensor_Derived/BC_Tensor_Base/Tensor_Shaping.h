@@ -11,6 +11,9 @@
 #include "Tensor_Shaping_Static.h"
 
 namespace BC {
+
+template<class> class Tensor_Base;
+
 namespace Base {
 template<class derived>
 struct Tensor_Shaping {
@@ -35,17 +38,17 @@ private:
 
 public:
 
-	const auto t() const { return BC::tensor_of_t<DIMS(), decltype(transpose_impl()), mathlib_type>(transpose_impl()); }
-		  auto t() 		 { return BC::tensor_of_t<DIMS(), decltype(transpose_impl()), mathlib_type>(transpose_impl()); }
+	const auto t() const { return Tensor_Base<decltype(transpose_impl())>(transpose_impl()); }
+		  auto t() 		 { return Tensor_Base<decltype(transpose_impl())>(transpose_impl()); }
 
 	const auto operator [] (int i) const { return slice(i); }
 		  auto operator [] (int i) 		 { return slice(i); }
 
-	const auto scalar(int i) const { return tensor_of_t<0, internal::Array_Scalar<functor_type>, mathlib_type>(as_derived()._scalar(i)); }
-		  auto scalar(int i) 	   { return tensor_of_t<0, internal::Array_Scalar<functor_type>, mathlib_type>(as_derived()._scalar(i)); }
+	const auto scalar(int i) const { return Tensor_Base<internal::Array_Scalar<functor_type>>(as_derived()._scalar(i)); }
+		  auto scalar(int i) 	   { return Tensor_Base<internal::Array_Scalar<functor_type>>(as_derived()._scalar(i)); }
 
-	const auto slice(int i) const  { return tensor_of_t<DIMS() - 1, decltype(as_derived()._slice(0)), mathlib_type>(as_derived()._slice(i)); }
-		  auto slice(int i) 	   { return tensor_of_t<DIMS() - 1, decltype(as_derived()._slice(0)), mathlib_type>(as_derived()._slice(i)); }
+	const auto slice(int i) const  { return Tensor_Base<decltype(as_derived()._slice(0))>(as_derived()._slice(i)); }
+		  auto slice(int i) 	   { return Tensor_Base<decltype(as_derived()._slice(0))>(as_derived()._slice(i)); }
 
 	const auto col(int i) const {
 		static_assert(DIMS() == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
@@ -85,7 +88,7 @@ public:
 		const auto operator () (integers... shape_dimensions) const {
 			static constexpr int tensor_dimension = sizeof...(shape_dimensions);
 			using chunk_type = typename internal::Array_Chunk<tensor_dimension>::template implementation<functor_type>;
-			using type = tensor_of_t<tensor_dimension, chunk_type, mathlib_type>;
+			using type = Tensor_Base<chunk_type>;
 
 			return type(tensor.internal()._chunk(location, shape_dimensions...));
 		}
@@ -93,7 +96,7 @@ public:
 		auto operator () (integers... shape_dimensions) {
 			static constexpr int tensor_dimension = sizeof...(shape_dimensions);
 			using chunk_type = typename internal::Array_Chunk<tensor_dimension>::template implementation<functor_type>;
-			using type = tensor_of_t<tensor_dimension, chunk_type, mathlib_type>;
+			using type = Tensor_Base<chunk_type>;
 
 			return type(tensor.internal()._chunk(location, shape_dimensions...));
 		}

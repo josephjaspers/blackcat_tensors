@@ -23,7 +23,7 @@ struct InputLayer : Layer<derived> {
 
 	template<class tensor> auto forward_propagation(const tensor& x) {
 		y = mat(x);
-		return this->next().forward_propagation(x);
+		return this->next().forward_propagation(y);
 	}
 
 	template<class tensor> auto forward_propagation_express(const tensor& x) const {

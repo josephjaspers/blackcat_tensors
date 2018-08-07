@@ -19,8 +19,11 @@
 //-------------------------------------SPECIALIZATION FOR EXPRESSION TENSORS OR TENSORS OF NON_OWNERSHIP/CREATION-------------------------------------//
 
 namespace BC {
+
+template<class T> class Tensor_Base;
+
 namespace Base {
-template<class derived, class expression_tensor = void>
+template<class derived>
 class Tensor_Initializer :  public _functor<derived> {
 
 	using self 			= Tensor_Initializer<derived>;
@@ -46,15 +49,15 @@ public:
 };
 //-------------------------------------SPECIALIZATION FOR TENSORS THAT CONTROL / DELETE THEIR ARRAY-------------------------------------//
 
-template<class derived>
-struct Tensor_Initializer<derived, std::enable_if_t<is_array_core<_functor<derived>>()>> : public  _functor<derived> {
+template<int x, class T, class ml>
+struct Tensor_Initializer<Tensor_Base<internal::Array<x, T, ml>>> : public  internal::Array<x, T, ml> {
 
-	using self 		= Tensor_Initializer<derived, std::enable_if_t<is_array_core<_functor<derived>>()>>;
-
-	using parent 		= _functor<derived>;
-	using mathlib_t 	= _mathlib<derived>;
-	using scalar		= _scalar<derived>;
-	template<class T> using derived_alt = typename MTF::shell_of<derived>::template  type<T, mathlib_t>;
+	using self 		= Tensor_Initializer<Tensor_Base<internal::Array<x, T, ml>>>;
+	using derived = Tensor_Base<internal::Array<x,T,ml>>;
+	using parent 		= internal::Array<x,T,ml>;
+	using mathlib_t 	= ml;
+	using scalar		= T;
+//	template<class T> using derived_alt = typename MTF::shell_of<derived>::template  type<T, mathlib_t>;
 
 
 private:
@@ -69,12 +72,17 @@ public:
 
 	Tensor_Initializer(const derived& tensor)  : parent(tensor.inner_shape()) { this->as_derived() = tensor; }
 	Tensor_Initializer(		 derived&& tensor) : parent(std::move(tensor.internal())) { tensor.internal().array = nullptr; }
+	Tensor_Initializer() : parent(Shape<0>()){
+		static_assert(derived::DIMS() == 0);
+	}
+	template<class... params> explicit Tensor_Initializer(const params&...  p) : parent(p...) {}
+	template<class... params> explicit Tensor_Initializer(		params&&... p) : parent(p...) {}
 
 	template<class Shape_t>
 	Tensor_Initializer(const Shape_t& shape) : parent(shape) {}
 
 	template<class U>
-	Tensor_Initializer(const derived_alt<U>&  tensor) : parent(tensor.inner_shape()) {
+	Tensor_Initializer(const Tensor_Base<U>&  tensor) : parent(tensor.inner_shape()) {
 		this->as_derived() = tensor;
 	}
 

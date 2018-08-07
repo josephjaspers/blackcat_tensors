@@ -9,6 +9,9 @@
 #define TYPE_EVALUATOR_H_
 
 namespace BC {
+
+template<class> class Tensor_Base;
+
 namespace operationImpl {
 
 template<class T> struct is_transposed_impl {
@@ -20,6 +23,7 @@ template<class T, class ml> struct is_transposed_impl<BC::internal::unary_expres
 template<class T>
 static constexpr bool is_transposed = is_transposed_impl<T>::conditional;
 
+
 template<class derived>
 struct expression_determiner {
 
@@ -27,15 +31,13 @@ struct expression_determiner {
 	using scalar_type 		= _scalar<derived>;
 	using mathlib_type 		= _mathlib<derived>;
 
-	template<class shell, class... T> using expressionSubstitution = typename MTF::shell_of<shell>::template type<T...>;
-
 	//determines the return type of pointwise operations
 	template<class param_deriv, class functor>
 	struct impl {
 		using greater_rank_type = std::conditional_t<(derived::DIMS() > param_deriv::DIMS()), derived, param_deriv>;
 		using param_functor_type = _functor<param_deriv>;
-		using type = 	   expressionSubstitution<greater_rank_type, internal::binary_expression<functor_type ,param_functor_type, functor>, mathlib_type>;
-		using unary_type = expressionSubstitution<greater_rank_type, internal::unary_expression <functor_type, functor>, mathlib_type>;
+		using type = 	   Tensor_Base<internal::binary_expression<functor_type ,param_functor_type, functor>>;
+		using unary_type = Tensor_Base<internal::unary_expression <functor_type, functor>>;
 	};
 
 	//determines the return type of dot-product operations (and scalar multiplication)
@@ -56,10 +58,10 @@ struct expression_determiner {
 		static constexpr bool gemv = derived::DIMS() == 2 && param_deriv::DIMS() == 1;
 		static constexpr bool ger  = derived::DIMS() == 1 && param_deriv::DIMS() == 1;
 
-		using type = std::conditional_t<axpy, expressionSubstitution<greater_shape, axpy_t, mathlib_type>,
-					std::conditional_t<gemm, expressionSubstitution<greater_shape, gemm_t, mathlib_type>,
-					std::conditional_t<gemv, expressionSubstitution<lesser_shape,  gemv_t, mathlib_type>,
-					std::conditional_t<ger, tensor_of_t<2, ger_t, mathlib_type>, void>>>>;
+		using type = std::conditional_t<axpy, Tensor_Base<axpy_t>,
+					std::conditional_t<gemm, Tensor_Base<gemm_t>,
+					std::conditional_t<gemv, Tensor_Base<gemv_t>,
+					std::conditional_t<ger, Tensor_Base<ger_t>, void>>>>;
 	};
 
 };

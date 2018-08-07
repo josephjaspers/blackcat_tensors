@@ -8,6 +8,7 @@
 #ifndef BLACKCAT_COMPILERDEFINITIONS_H_
 #define BLACKCAT_COMPILERDEFINITIONS_H_
 
+#include <type_traits>
 namespace BC {
 
 #define BLACKCAT_TENSORS_ASSERT_VALID							//Ensures basic checks

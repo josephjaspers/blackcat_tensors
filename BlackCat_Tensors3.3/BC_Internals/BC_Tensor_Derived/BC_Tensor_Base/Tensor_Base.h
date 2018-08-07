@@ -19,20 +19,20 @@ namespace BC {
 
 template<class derived>
 class Tensor_Base :
-		public Base::Tensor_Operations<derived>,
-		public Base::Tensor_Functions<derived>,
-		public Base::Tensor_Utility<derived>,
-		public Base::Tensor_Initializer<derived>,
-		public Base::Tensor_Shaping<derived>
+		public Base::Tensor_Operations<Tensor_Base<derived>>,
+		public Base::Tensor_Functions<Tensor_Base<derived>>,
+		public Base::Tensor_Utility<Tensor_Base<derived>>,
+		public Base::Tensor_Initializer<Tensor_Base<derived>>,
+		public Base::Tensor_Shaping<Tensor_Base<derived>>
 {
 
 protected:
 
 	using self 			= Tensor_Base<derived>;
-	using operations  	= Base::Tensor_Operations<derived>;
-	using initializer 	= Base::Tensor_Initializer<derived>;
-	using utility		= Base::Tensor_Utility<derived>;
-	using shaping		= Base::Tensor_Shaping<derived>;
+	using operations  	= Base::Tensor_Operations<Tensor_Base<derived>>;
+	using initializer 	= Base::Tensor_Initializer<Tensor_Base<derived>>;
+	using utility		= Base::Tensor_Utility<Tensor_Base<derived>>;
+	using shaping		= Base::Tensor_Shaping<Tensor_Base<derived>>;
 
 	using functor_type 	= _functor<derived>;
 	using scalar_type	= _scalar<derived>;
@@ -46,18 +46,28 @@ public:
 	using shaping::operator[];
 	using shaping::operator();
 
-	operator const derived& () const { return static_cast<const derived&>(*this); }
-	operator	   derived& () 		 { return static_cast< 		derived&>(*this); }
+	using initializer::DIMS;//This is important -- if removed ambiguous calls from the super classes
+	using scalar_t = typename derived::scalar_t;
 
-	template<class... params> explicit Tensor_Base(const params&...  p) : initializer(p...) {}
-	template<class... params> explicit Tensor_Base(		 params&&... p) : initializer(p...) {}
+//	operator const derived& () const { return static_cast<const derived&>(*this); }
+//	operator	   derived& () 		 { return static_cast< 		derived&>(*this); }
+
+	template<class T, class... params> explicit Tensor_Base(const T& p1, const params&...  ps) : initializer(p1, ps...) {}
+	template<class T, class... params> explicit Tensor_Base(T&& p1,	 params&&... ps) : initializer(p1, ps...) {}
 
 	//move only defined for primary cores (this is to ensure slices/chunks/reshapes apply copies)
 	using move_parameter = std::conditional_t<is_array_core<functor_type>(), derived&&, BC::DISABLED<0>>;
 	using copy_parameter = std::conditional_t<is_array_core<functor_type>(), const derived&, BC::DISABLED<1>>;
 
+
+	Tensor_Base() : initializer(Shape<DIMS()>()) {}
 	Tensor_Base(move_parameter tensor) : initializer(std::move(tensor)) {}
 	Tensor_Base(copy_parameter tensor) : initializer(tensor) {}
+
+	Tensor_Base(scalar_t scalar) {
+		static_assert(DIMS() == 0, "SCALAR_INITIALIZATION ONLY AVAILABLE TO SCALARS");
+		this->fill(scalar);
+	}
 
 	//copy move (only availble to "primary" array types (non-expressions)
 	derived& operator =(move_parameter tensor) {

@@ -45,7 +45,7 @@ int gemm_injection() {
 	f.zero();
 	std::cout << " param " << std::endl;
 	a.print_dimensions();
-
+//
 	for (int i = 0; i < 6; ++i)  {
 		a(i) = i + 7;
 		b(i) = i + 1;
@@ -57,7 +57,7 @@ int gemm_injection() {
 	a.print();
 	b.print();
 	f.print();
-
+//
 	std::cout << "d = a.t" << std::endl;
 	d = a.t() + b - b;
 	d.print();
@@ -94,10 +94,10 @@ int gemm_injection() {
 	c.zero();
 	c = scal(2.0f) * d * e;
 	c.print();
-//	std::cout << "c = d * e * scal(2.0f); " << std::endl;
-//	c.zero();
-//	c = d * e * scal(2.0f); ////This is the only version that is not accounted for (it is also the least common notation)
-//	c.print();
+	std::cout << "c = d * e * scal(2.0f); " << std::endl;
+	c.zero();
+	c = d * e * scal(2.0f); ////This is the only version that is not accounted for (it is also the least common notation)
+	c.print();
 
 	scal A(2.0f);
 	scal B(2.0f);

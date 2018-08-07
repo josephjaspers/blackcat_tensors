@@ -18,9 +18,8 @@ template<class ml> class transpose;
 namespace internal {
 
 template<class functor_type, class ml>
-struct unary_expression<functor_type, oper::transpose<ml>> : expression_base<unary_expression<functor_type, oper::transpose<ml>>>
-{
-
+struct unary_expression<functor_type, oper::transpose<ml>>
+	: expression_base<unary_expression<functor_type, oper::transpose<ml>>> {
 
 	functor_type array;
 

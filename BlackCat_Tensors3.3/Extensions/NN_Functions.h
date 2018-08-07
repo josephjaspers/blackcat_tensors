@@ -5,6 +5,8 @@
 
 namespace BC {
 
+template<class> class Tensor_Base;
+
 namespace NN_Functions {
 
 struct Sigmoid {
@@ -42,22 +44,22 @@ struct CachedTanhDeriv {
 		return 1 - powf(t, 2);
 	}
 };
-template<template<class, class > class tensor, class T, class ml>
-auto sigmoid(const tensor<T, ml> & x) {
+template<class T>
+auto sigmoid(const Tensor_Base<T> & x) {
 	return x.un_expr(Sigmoid());
 }
 
-template<template<class, class > class tensor, class T, class ml>
-auto sigmoidDeriv(const tensor<T, ml> & x) {
+template<class T>
+auto sigmoidDeriv(const Tensor_Base<T> & x) {
 	return x.un_expr(CachedSigmoidDeriv());
 }
 
-template<template<class, class > class tensor, class T, class ml>
-auto tanh(const tensor<T, ml> & x) {
+template<class T>
+auto tanh(const Tensor_Base<T> & x) {
 	return x.un_expr(Tanh());
 }
-template<template<class, class > class tensor, class T, class ml>
-auto tanhDeriv(const tensor<T, ml> & x) {
+template<class T>
+auto tanhDeriv(const Tensor_Base<T> & x) {
 	return x.un_expr(CachedTanhDeriv());
 }
 
@@ -65,23 +67,23 @@ auto tanhDeriv(const tensor<T, ml> & x) {
 
 namespace NN_Abreviated_Functions {
 using namespace NN_Functions;
-template<template<class, class > class tensor, class T, class ml>
-auto g(const tensor<T, ml>& x) {
+template<class T>
+auto g(const Tensor_Base<T>& x) {
 	return x.un_expr(Sigmoid());
 }
 
-template<template<class, class > class tensor, class T, class ml>
-auto gd(const tensor<T, ml>& x) {
+template<class T>
+auto gd(const Tensor_Base<T>& x) {
 	return x.un_expr(CachedSigmoidDeriv());
 }
 
-template<template<class, class > class tensor, class T, class ml>
-auto h(const tensor<T, ml>& x) {
+template<class T>
+auto h(const Tensor_Base<T>& x) {
 	return x.un_expr(Tanh());
 }
 
-template<template<class, class > class tensor, class T, class ml>
-auto hd(const tensor<T, ml>& x) {
+template<class T>
+auto hd(const Tensor_Base<T>& x) {
 	return x.un_expr(CachedTanhDeriv());
 }
 

@@ -26,7 +26,6 @@ template<class lv, class rv, class mathlib>
 struct binary_expression<lv, rv, oper::gemv<mathlib>>
 : expression_base<binary_expression<lv, rv,  oper::gemv<mathlib>>>, BLAS_FUNCTION {
 
-	using scalar_type = _scalar<lv>;
 	using scalar_t  = typename lv::scalar_t;
 	using mathlib_t = mathlib;
 
@@ -66,17 +65,17 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 	auto X = branched<mathlib>::evaluate(det_eval<rv>::get_array(right));
 
 	//initialize the alpha and beta scalars,
-	scalar_type* alpha = mathlib::static_initialize((scalar_type)alpha_mod);
-	scalar_type* beta  = mathlib::static_initialize((scalar_type)beta_mod);
+	scalar_t* alpha = mathlib::static_initialize((scalar_t)alpha_mod);
+	scalar_t* beta  = mathlib::static_initialize((scalar_t)beta_mod);
 
 	//get the left and right side scalar values and
 	//compute the scalar values if need be
 	if (lv_scalar) {
-		scalar_type* alpha_lv = det_eval<lv>::get_scalar(left);
+		scalar_t* alpha_lv = det_eval<lv>::get_scalar(left);
 		mathlib::scalar_mul(alpha, alpha, alpha_lv);
 	}
 	if (rv_scalar) {
-		scalar_type* alpha_rv = det_eval<rv>::get_scalar(right);
+		scalar_t* alpha_rv = det_eval<rv>::get_scalar(right);
 		mathlib::scalar_mul(alpha, alpha, alpha_rv);
 	}
 

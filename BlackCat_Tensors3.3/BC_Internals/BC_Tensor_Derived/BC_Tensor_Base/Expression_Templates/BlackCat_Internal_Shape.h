@@ -27,7 +27,7 @@ public:
 		static_assert(sizeof...(integers) == dims, "integer initialization must have the same number of dimensions");
 		init(BC::array(ints...));
 	}
-
+	Shape() {};
 	template<int dim, class int_t>
 	Shape (stack_array<dim, int_t> param) {
 		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");

@@ -69,7 +69,7 @@ public:
 	}
 
 	void read_as_one_hot(std::ifstream& is) {
-		if (dimension_of<deriv> != 1)
+		if (deriv::DIMS() != 1)
 			throw std::invalid_argument("one_hot only supported by vectors");
 
 //		as_derived().zero(); //clear FIXME COMPILE ISSUE WITH NVCC
@@ -158,7 +158,7 @@ public:
 		}
 	}
 	void read_tensor_data_as_one_hot(std::ifstream& is, int sz) {
-		if (dimension_of<deriv> != 1)
+		if (deriv::DIMS() != 1)
 			throw std::invalid_argument("one_hot only supported by vectors");
 
 		//rescale

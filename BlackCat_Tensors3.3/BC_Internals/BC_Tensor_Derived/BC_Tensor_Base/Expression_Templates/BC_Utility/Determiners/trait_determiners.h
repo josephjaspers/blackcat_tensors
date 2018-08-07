@@ -25,6 +25,8 @@ namespace internal {
 template<int, class, class> class Array;
 }
 
+template<class>class Tensor_Base;
+
 template<class T> struct isPrimaryArray { static constexpr bool conditional = false; };
 template<int d, class T, class ml> struct isPrimaryArray<internal::Array<d,T,ml>> { static constexpr bool conditional = true; };
 template<class T> static constexpr bool is_array_core() { return isPrimaryArray<T>::conditional; }
@@ -39,43 +41,35 @@ template<class T> using _scalar = typename determine_scalar<std::decay_t<T>>::ty
 template<class T> using _mathlib = typename determine_mathlibrary<std::decay_t<T>>::type;
 template<class T> using _functor = typename determine_functor<std::decay_t<T>>::type;
 template<class T> using _tensor_scalar = typename determine_tensor_scalar<std::decay_t<T>>::type;
-template<class T> static constexpr int _dimension_of  = dimension_of<std::decay_t<T>>;
+//template<class T> static constexpr int _dimension_of  = dimension_of<std::decay_t<T>>;
 
 ///DETERMINE_FUNCTOR----------------------------------------------------------------------------------------------
-template<template<class...> class tensor, class functor, class... set>
-struct determine_functor<tensor<functor, set...>>{
-
-	using derived = tensor<functor,set...>;
-	using type = std::conditional_t<std::is_base_of<BC_Type,functor>::value, functor, internal::Array<_dimension_of<derived>, _scalar<derived>, _mathlib<derived>>>;
+template<class functor>
+struct determine_functor<Tensor_Base<functor>>{
+	using type = functor;
 };
 
+template<int x, class a, class b>
+struct determine_functor<internal::Array<x, a, b>>{
+	using type = internal::Array<x,a,b>;
+};
+
+template<template<class...> class expression, class T, class... set>
+struct determine_functor<expression<T, set...>> {
+	using type = typename determine_functor<T>::type;
+};
 //DETERMINE_SCALAR_TYPE----------------------------------------------------------------------------------------------
-template<class> struct determine_tensor_scalar;
 
 template<class T>
-struct determine_scalar {
-	static constexpr bool nested_core_type = false;
-	using type = T;
-};
+struct determine_scalar;//  { using type = T; };
 template<int dims, class scalar, class ml>
 struct determine_scalar<internal::Array<dims, scalar, ml>> {
-	static constexpr bool nested_core_type = true;
 	using type = scalar;
 };
 
 template<template<class...> class expression, class T, class... set>
 struct determine_scalar<expression<T, set...>> {
-	static constexpr bool nested_core_type = determine_scalar<T>::nested_core_type;
-	using type = std::conditional_t<nested_core_type, typename determine_scalar<T>::type,
-
-			std::conditional_t<is_tensor<expression<T, set...>>, T,
-
-			expression<T, set...>>>;
-};
-///DETERMINE_ITERATOR---------------------------------------------------------------------------------------
-template<class T>
-struct determine_iterator {
-	using type = decltype(std::declval<T>().memptr());
+	using type = typename determine_scalar<T>::type;
 };
 
 ///DETERMINE_MATHLIB---------------------------------------------------------------------------------------
@@ -87,14 +81,17 @@ template<int x, class scalar, class ml>
 struct determine_mathlibrary<internal::Array<x, scalar, ml>> {
 	using type = ml;
 };
+//template<template<class...> class T, class U, class... set>
+//struct determine_mathlibrary<T<U, set...>> {
+//	using type = typename determine_mathlibrary<U>::type;
+//};
 
-
-template<class T, class ml> struct determine_mathlibrary<Scalar<T, ml>> { using type = ml; };
-template<class T, class ml> struct determine_mathlibrary<Vector<T, ml>> { using type = ml; };
-template<class T, class ml> struct determine_mathlibrary<Matrix<T, ml>> { using type = ml; };
-template<class T, class ml> struct determine_mathlibrary<Cube<T, ml>> { using type = ml; };
-template<class T, class ml> struct determine_mathlibrary<Tensor4<T, ml>> { using type = ml; };
-template<class T, class ml> struct determine_mathlibrary<Tensor5<T, ml>> { using type = ml; };
+//template<class T, class ml> struct determine_mathlibrary<Scalar<T, ml>> { using type = ml; };
+//template<class T, class ml> struct determine_mathlibrary<Vector<T, ml>> { using type = ml; };
+//template<class T, class ml> struct determine_mathlibrary<Matrix<T, ml>> { using type = ml; };
+//template<class T, class ml> struct determine_mathlibrary<Cube<T, ml>> { using type = ml; };
+//template<class T, class ml> struct determine_mathlibrary<Tensor4<T, ml>> { using type = ml; };
+//template<class T, class ml> struct determine_mathlibrary<Tensor5<T, ml>> { using type = ml; };
 
 }
 

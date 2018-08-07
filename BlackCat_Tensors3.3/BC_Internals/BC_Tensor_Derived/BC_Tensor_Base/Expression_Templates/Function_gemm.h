@@ -30,8 +30,6 @@ struct binary_expression<lv, rv, oper::gemm<mathlib>>
 	using scalar_t  = typename lv::scalar_t;
 	using mathlib_t = mathlib;
 
-
-	using scalar_type = _scalar<lv>;
 	static constexpr bool transA = det_eval<lv>::transposed;
 	static constexpr bool transB = det_eval<rv>::transposed;
 	static constexpr bool lv_scalar = det_eval<lv>::scalar;
@@ -71,12 +69,12 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 	auto B = branched<mathlib>::evaluate(det_eval<rv>::get_array(right));
 
 	//get the left and right side scalar values
-	scalar_type* alpha_lv = det_eval<lv>::get_scalar(left);
-	scalar_type* alpha_rv = det_eval<rv>::get_scalar(right);
+	scalar_t* alpha_lv = det_eval<lv>::get_scalar(left);
+	scalar_t* alpha_rv = det_eval<rv>::get_scalar(right);
 
 	//initialize the alpha and beta scalars,
-	scalar_type* alpha = mathlib::static_initialize((scalar_type)alpha_mod);
-	scalar_type* beta = mathlib::static_initialize((scalar_type)beta_mod);
+	scalar_t* alpha = mathlib::static_initialize((scalar_t)alpha_mod);
+	scalar_t* beta = mathlib::static_initialize((scalar_t)beta_mod);
 
 	//compute the scalar values if need be
 	if (lv_scalar)
