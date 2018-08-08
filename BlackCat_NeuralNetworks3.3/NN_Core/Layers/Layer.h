@@ -18,7 +18,7 @@ template<class derived, int tensor_dimension = 1>
 class Layer {
 public:
 
-	scal lr;
+	Scalar lr;
 
 	const int INPUTS;
 	const int OUTPUTS;

@@ -9,7 +9,7 @@
 using BC::NN::vec;
 using BC::NN::scal;
 using BC::NN::mat;
-
+using BC::NN::cube;
 namespace BC {
 namespace NN {
 namespace MNIST_Test {
@@ -78,15 +78,15 @@ int percept_MNIST() {
 		for (int j = 0; j < NUMB_BATCHES; ++j) {
 			network.forward_propagation(inputs[j]);
 //			network.back_propagation(outputs[j]);
-//			network.update_weights();
-//			network.clear_stored_delta_gradients();
+			network.update_weights();
+			network.clear_stored_delta_gradients();
 		}
 	}
-
-	t = omp_get_wtime() - t;
-	printf("It took me %f clicks (%f seconds).\n", t, ((float) t));
-	std::cout << "success " << std::endl;
-
+//
+//	t = omp_get_wtime() - t;
+//	printf("It took me %f clicks (%f seconds).\n", t, ((float) t));
+//	std::cout << "success " << std::endl;
+//
 //	std::cout << "\n \n \n " << std::endl;
 //	std::cout << " testing... " << std::endl;
 //
@@ -102,7 +102,7 @@ int percept_MNIST() {
 //		hyps[i].print();
 //		std::cout << "-----------------------------------------------------------------------------------------------------------" <<std::endl;
 //	}
-//
+
 	return 0;
 }
 

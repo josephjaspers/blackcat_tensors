@@ -85,7 +85,15 @@ int gemm_injection() {
 ////	c.print();
 	std::cout << "c = d * scal(2.0f) * e + f;" << std::endl;
 	c.zero();
-	c = d * scal(2.0f) * e + f;
+	c = d * e;
+	c.print();
+	c = c + f;
+	c.print();
+	scal x;
+	std::cout << " fill x with 2"<<std::endl;
+	x = 2.0f;
+	std::cout <<" owrking " << std::endl;
+	c = d * x * e + f;
 
 //	std::cout << (d * scal(2.0)).dims() << " GET DIMS " << std::endl;
 
@@ -160,10 +168,10 @@ int gemm_injection() {
 	c.print();
 
 
-	vec x(2);
-	x(0) = 10;
-	x(1) = 20;
-	c += x;
+//	vec x(2);
+//	x(0) = 10;
+//	x(1) = 20;
+//	c += x;
 
 	c.print();
 

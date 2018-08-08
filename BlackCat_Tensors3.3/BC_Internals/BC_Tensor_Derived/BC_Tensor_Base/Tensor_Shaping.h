@@ -21,7 +21,7 @@ struct Tensor_Shaping {
 	__BCinline__ static constexpr int DIMS() { return derived::DIMS(); }
 
 	using operations  	= Tensor_Operations<derived>;
-	using initializer 	= Tensor_Initializer<derived>;
+//	using initializer 	= Tensor_Initializer<derived>;
 	using utility		= Tensor_Utility<derived>;
 
 	using functor_type 	= _functor<derived>;

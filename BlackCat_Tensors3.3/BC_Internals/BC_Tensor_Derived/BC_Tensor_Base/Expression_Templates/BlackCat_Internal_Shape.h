@@ -23,7 +23,11 @@ private:
 	int OS[dims];
 public:
 
+	Shape(const Shape&) = default;
+	Shape(Shape&&) = default;
+
 	template<class... integers> Shape(integers... ints) : IS() {
+		static_assert(MTF::is_integer_sequence<integers...>, "INTEGER LIST OF SHAPE");
 		static_assert(sizeof...(integers) == dims, "integer initialization must have the same number of dimensions");
 		init(BC::array(ints...));
 	}

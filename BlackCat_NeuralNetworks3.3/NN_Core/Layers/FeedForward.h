@@ -42,12 +42,12 @@ public:
 		init_storages();
 	}
 
-	template<class expr> auto forward_propagation(const f_mat<expr>& x) {
+	template<class t> auto forward_propagation(const expr::mat<t>& x) {
 		y = g(w * x + b);
 
 		return this->next().forward_propagation(y);
 	}
-	template<class expr> auto back_propagation(const f_mat<expr>& dy_) {
+	template<class t> auto back_propagation(const expr::mat<t>& dy_) {
 		mat dy = dy_; //cache the values (avoid recomputing dy_)
 
 		w_gradientStorage -= dy * x.t();
@@ -55,8 +55,8 @@ public:
 
 		return this->prev().back_propagation(w.t() * dy % gd(x));
 	}
-	template<class expr> auto forward_propagation_express(const f_mat<expr>& x) const {
-		return this->next().forward_propagation_express(g(w * x + b));
+	template<class t> auto forward_propagation_tess(const expr::mat<t>& x) const {
+		return this->next().forward_propagation_tess(g(w * x + b));
 	}
 
 	void update_weights() {

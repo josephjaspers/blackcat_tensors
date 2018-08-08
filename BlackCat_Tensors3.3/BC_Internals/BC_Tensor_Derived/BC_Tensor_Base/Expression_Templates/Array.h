@@ -22,6 +22,7 @@ struct Array : Tensor_Array_Base<Array<dimension, T, mathlib>, dimension>, publi
 	__BCinline__ static constexpr int DIMS() { return dimension; }
 
 	scalar_t* array = nullptr;
+	Array() = default;
 
 	Array(Shape<DIMS()> shape_, scalar_t* array_) : array(array_), Shape<DIMS()>(shape_) {}
 
@@ -31,12 +32,16 @@ struct Array : Tensor_Array_Base<Array<dimension, T, mathlib>, dimension>, publi
 	template<class... integers>
 	Array(integers... ints) : Shape<DIMS()>(ints...) { mathlib_t::initialize(array, this->size()); }
 
-
 	template<class U>
 	Array(U param, scalar_t* array_) : array(array_), Shape<DIMS()>(param) {}
 
 	__BCinline__ const scalar_t* memptr() const { return array; }
 	__BCinline__	   scalar_t* memptr()  	   { return array; }
+
+
+	Array(const Array&) = default;
+	Array(Array&&) = default;
+	Array& operator =(Array&&) = default;
 
 	void destroy() {
 		mathlib_t::destroy(array);
@@ -62,7 +67,9 @@ struct Array<0, T, mathlib> : Tensor_Array_Base<Array<0, T, mathlib>, 0>, public
 	}
 
 	scalar_t* array = nullptr;
-
+	Array() {
+		mathlib_t::initialize(array, this->size());
+	}
 	Array(Shape<DIMS()> shape_, scalar_t* array_) : array(array_), Shape<0>(shape_) {}
 
 	template<class U>
