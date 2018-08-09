@@ -81,18 +81,6 @@ template<int x, class scalar, class ml>
 struct determine_mathlibrary<internal::Array<x, scalar, ml>> {
 	using type = ml;
 };
-//template<template<class...> class T, class U, class... set>
-//struct determine_mathlibrary<T<U, set...>> {
-//	using type = typename determine_mathlibrary<U>::type;
-//};
-
-//template<class T, class ml> struct determine_mathlibrary<Scalar<T, ml>> { using type = ml; };
-//template<class T, class ml> struct determine_mathlibrary<Vector<T, ml>> { using type = ml; };
-//template<class T, class ml> struct determine_mathlibrary<Matrix<T, ml>> { using type = ml; };
-//template<class T, class ml> struct determine_mathlibrary<Cube<T, ml>> { using type = ml; };
-//template<class T, class ml> struct determine_mathlibrary<Tensor4<T, ml>> { using type = ml; };
-//template<class T, class ml> struct determine_mathlibrary<Tensor5<T, ml>> { using type = ml; };
-
 }
 
 

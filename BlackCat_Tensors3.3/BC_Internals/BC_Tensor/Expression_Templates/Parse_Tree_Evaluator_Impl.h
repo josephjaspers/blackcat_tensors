@@ -22,11 +22,6 @@ namespace BC{
 namespace internal {
 namespace tree {
 
-using BC::MTF::IF_BLOCK;
-using BC::MTF::IF;
-
-
-
 template<class lv, class rv, class op>
 auto substitution_evaluate(binary_expression<lv, rv, op> expression);
 

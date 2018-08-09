@@ -39,9 +39,9 @@ struct Array : Tensor_Array_Base<Array<dimension, T, mathlib>, dimension>, publi
 	__BCinline__	   scalar_t* memptr()  	   { return array; }
 
 
-	Array(const Array&) = default;
-	Array(Array&&) = default;
-	Array& operator =(Array&&) = default;
+//	Array(const Array&) = default;
+//	Array(Array&&) = default;
+//	Array& operator =(Array&&) = default;
 
 	void destroy() {
 		mathlib_t::destroy(array);

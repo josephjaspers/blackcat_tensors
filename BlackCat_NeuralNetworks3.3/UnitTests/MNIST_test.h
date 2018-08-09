@@ -42,7 +42,7 @@ void generateAndLoad(cube& input_data, cube& output_data, std::ifstream& read_da
 
 int percept_MNIST() {
 //
-	const int TRAINING_EXAMPLES =  1024;
+	const int TRAINING_EXAMPLES =  1024 * 4;
 	const int BATCH_SIZE = 128;
 	const int NUMB_BATCHES = TRAINING_EXAMPLES / BATCH_SIZE;
 	const int PICTURE_SZ = 784;

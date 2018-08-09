@@ -53,18 +53,17 @@ public:
 	using derived::DIMS;//This is important -- if removed ambiguous calls from the super classes
 	using scalar_t = typename derived::scalar_t;
 
-
-	Tensor_Base() = default;
-	Tensor_Base(const Tensor_Base&  tensor) : derived(tensor.internal()) {}
-	Tensor_Base(      Tensor_Base&& tensor) : derived(std::move(tensor.internal())) {}
-	Tensor_Base(const derived& param) : derived(param) {}
-	Tensor_Base( derived&& param) : derived(param) {}
-
-	//	template<class... params> explicit Tensor_Base(const params&...  ps) : derived(ps...) {}
-//	template<class... params> explicit Tensor_Base(		 params&&... ps) : derived(ps...) {}
-	//copy move (only availble to "primary" array types (non-expressions)
 	using move_parameter = std::conditional_t<is_array_core<derived>(), self&&, BC::DISABLED<0>>;
 	using copy_parameter = std::conditional_t<is_array_core<derived>(), const self&, BC::DISABLED<1>>;
+
+	Tensor_Base() = default;
+	Tensor_Base(const copy_parameter&  tensor) : derived(tensor.inner_shape()) {
+		mathlib_type::copy(this->internal(), tensor.internal(), this->size());
+	}
+
+	Tensor_Base(const derived&  param) : derived(param) {}
+	Tensor_Base( 	  derived&& param) : derived(param) {}
+
 
 	Tensor_Base& operator =(copy_parameter tensor) {
 		this->assert_valid(tensor);
@@ -72,7 +71,7 @@ public:
 		mathlib_type::copy(this->internal(), tensor.internal(), this->size());
 		return *this;
 	}
-//
+
 	Tensor_Base& operator =(move_parameter tensor) {
 		this->swap_shape(tensor);
 		std::swap(this->array, tensor.array);
@@ -96,11 +95,8 @@ public:
 
 
 	~Tensor_Base() {
-
-
 		if (is_array_core<derived>()) {
-//		std::cout << " destructor " << std::endl;
-//		this->internal().destroy();
+			this->destroy();
 		}
 	}
 

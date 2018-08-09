@@ -16,7 +16,7 @@
 //#include "BC_Tensor_Derived/Tensor4.h"
 //#include "BC_Tensor_Derived/Tensor5.h"
 //#include "BC_Tensor_Derived/Tensor.h"
-#include "BC_Tensor_Derived/Tensor_Aliases.h"
+#include "BC_Tensor/Tensor_Aliases.h"
 #include "BC_MathLibraries/CPU.h"
 #include "BC_MathLibraries/GPU.cu"
 
