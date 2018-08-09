@@ -10,18 +10,31 @@
 
 #include <type_traits>
 #include "BlackCat_Internal_Definitions.h"
-
+#include <array>
 namespace BC {
+template<class T, int dims>
+struct simple_array {
+	int value[dims];
+	__BCinline__ int& operator[] (int i ) { return value[i]; }
+	__BCinline__ const int& operator[] (int i ) const { return value[i]; }
+
+};
 
 template<int dims>
 struct Shape {
 
 	__BCinline__ static constexpr int LENGTH() { return dims; }
-private:
+protected:
 	static constexpr int last = dims - 1;
-	int IS[dims];
-	int OS[dims];
+
+	simple_array<int, dims> IS;
+	simple_array<int, dims> OS;
 public:
+
+	void swap_shape(Shape& b) {
+		std::swap(IS, b.IS);
+		std::swap(OS, b.OS);
+	}
 
 	Shape(const Shape&) = default;
 	Shape(Shape&&) = default;
@@ -38,7 +51,7 @@ public:
 		init(param);
 	}
 	template<int dim, class int_t>
-	Shape (pointer_array<dim, int_t> param) {
+	Shape (simple_array<int_t, dim> param) {
 		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
 		init(param);
 	}
@@ -47,8 +60,8 @@ public:
 		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
 		init(param);
 	}
-	__BCinline__ const auto inner_shape() const { return ptr_array<dims>(IS); }
-	__BCinline__ const auto outer_shape() const { return ptr_array<dims>(OS); }
+	__BCinline__ const auto inner_shape() const { return IS; }
+	__BCinline__ const auto outer_shape() const { return OS; }
 	__BCinline__ const auto block_shape() const { return ptr_array<dims>(OS); }
 
 	__BCinline__ int size() const { return OS[last]; }
@@ -57,6 +70,13 @@ public:
 	__BCinline__ int dimension(int i) const { return IS[i]; }
 	__BCinline__ int outer_dimension() const { return IS[dims - 2]; }
 	__BCinline__ int leading_dimension(int i) const { return OS[i]; }
+
+	void copy_shape(const Shape& shape) {
+		for (int i = 0; i < dims; ++i) {
+			IS[i] = shape.IS[i];
+			OS[i] = shape.OS[i];
+		}
+	}
 
 
 private:
@@ -76,6 +96,9 @@ private:
 
 template<>
 struct Shape<0> {
+	void copy_shape(const Shape& shape) {}
+	static void swap_shape(Shape& a, Shape& b) {}
+
 	__BCinline__ int size() const { return 1; }
 	__BCinline__ const auto inner_shape() const { return l_array<0>([&](auto x) { return 1; });}
 	__BCinline__ const auto outer_shape() const { return l_array<0>([&](auto x) { return 0; });}
@@ -91,6 +114,13 @@ struct Shape<1> {
 	static constexpr int dims = 1;
 	int length;
 
+	void copy_shape(const Shape<1>& shape) {
+		this->length = shape.length;
+	}
+	void swap_shape(Shape<1>& shape){
+		std::swap(length, shape.length);
+	}
+
 	Shape(int length_) : length(length_) {}
 	__BCinline__ int size() const { return length; }
 	__BCinline__ int rows() const { return length; }
@@ -105,7 +135,7 @@ struct Shape<1> {
 		length = param[0];
 	}
 	template<int dim, class int_t>
-	Shape (pointer_array<dim, int_t> param) {
+	Shape (simple_array<int_t, dim> param) {
 		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
 		length = param[0];
 
@@ -114,12 +144,14 @@ struct Shape<1> {
 	Shape (lambda_array<dim, int_t, f> param) {
 		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
 		length = param[0];
-
 	}
 
 	__BCinline__ const auto inner_shape() const { return l_array<1>([&](auto x) { return length; });}
 	__BCinline__ const auto outer_shape() const { return l_array<1>([&](auto x) { return x == 0 ? length : 0; });}
 };
+
+
+
 }
 
 

@@ -30,6 +30,33 @@ int main() {
 
 	//readwrite();
 	shaping();
-//	mat a(3,3);
+	mat a(3,3);
+	a.randomize(0,10);
+
+	a.print();
+//	std::cout << " a " << std::endl;
+//	a.print();
+	mat b = a;
+	b.print();
+	a.print();
+	b = a;
+
+	a = mat(b);
+//	std::cout << " b " << std::endl;
+//
+//	b.print();
+//	a.randomize(0,10);
+//	std::cout << " a " << std::endl;
+//
+//	a.print();
+////	b = std::move(a);
+//	std::cout << " b " << std::endl;
+//
+//	b.print();
+//	std::cout << " a " << std::endl;
+//
+//	a.print();
+
+
 	std::cout << " success " << std::endl;
 }

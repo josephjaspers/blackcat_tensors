@@ -1,4 +1,8 @@
 //#include "../BlackCat_GPU_NeuralNetworks.h"
+
+#include <cxxabi.h>
+
+
 #include "../BlackCat_NeuralNetworks.h"
 
 #include <fstream>
@@ -13,6 +17,8 @@ using BC::NN::cube;
 namespace BC {
 namespace NN {
 namespace MNIST_Test {
+
+
 
 void generateAndLoad(cube& input_data, cube& output_data, std::ifstream& read_data, int training_examples, int batch_size) {
 
@@ -36,7 +42,7 @@ void generateAndLoad(cube& input_data, cube& output_data, std::ifstream& read_da
 
 int percept_MNIST() {
 //
-	const int TRAINING_EXAMPLES =  4096;
+	const int TRAINING_EXAMPLES =  1024;
 	const int BATCH_SIZE = 128;
 	const int NUMB_BATCHES = TRAINING_EXAMPLES / BATCH_SIZE;
 	const int PICTURE_SZ = 784;
@@ -44,11 +50,12 @@ int percept_MNIST() {
 
 	const int EPOCHS = 10;
 
-	NeuralNetwork<FeedForward> network(784,  10);
+	NeuralNetwork<FeedForward> network(784, 10);
 	network.setLearningRate(.03);
 
 //
 	network.set_batch_size(BATCH_SIZE);
+	std::cout << " asdfg " << std::endl;
 	cube inputs(PICTURE_SZ, BATCH_SIZE, NUMB_BATCHES);
 	cube outputs(NUMB_DIGITS, BATCH_SIZE, NUMB_BATCHES);
 
@@ -67,42 +74,46 @@ int percept_MNIST() {
 	generateAndLoad(inputs, outputs, in_stream, TRAINING_EXAMPLES, BATCH_SIZE);
 	std::cout << " post load "  << std::endl;
 
+
+//	inputs.print();
 	in_stream.close();
 
 	//Train
 	std::cout << " training..." << std::endl;
 	float t = omp_get_wtime();
-
+//
 	for (int i = 0; i < EPOCHS; ++i) {
 		std::cout << " current epoch: " << i << std::endl;
 		for (int j = 0; j < NUMB_BATCHES; ++j) {
-			network.forward_propagation(inputs[j]);
-//			network.back_propagation(outputs[j]);
+			auto x = network.forward_propagation(inputs[j]);
+			network.back_propagation(outputs[j]);
 			network.update_weights();
 			network.clear_stored_delta_gradients();
 		}
 	}
-//
-//	t = omp_get_wtime() - t;
-//	printf("It took me %f clicks (%f seconds).\n", t, ((float) t));
-//	std::cout << "success " << std::endl;
-//
-//	std::cout << "\n \n \n " << std::endl;
-//	std::cout << " testing... " << std::endl;
-//
-//	int test_images = 10;
-//
-//	mat img_adj(28,28);
-//
-//	cube img = cube(reshape(inputs[0])(28,28, BATCH_SIZE));
-//	mat hyps = mat(network.forward_propagation(inputs[0]));
-//	for (int i = 0; i < test_images; ++i) {
-//		img_adj = img[i].t();
-//		img_adj.printSparse(3);
-//		hyps[i].print();
-//		std::cout << "-----------------------------------------------------------------------------------------------------------" <<std::endl;
-//	}
 
+
+	t = omp_get_wtime() - t;
+	printf("It took me %f clicks (%f seconds).\n", t, ((float) t));
+	std::cout << "success " << std::endl;
+
+	std::cout << "\n \n \n " << std::endl;
+	std::cout << " testing... " << std::endl;
+
+	int test_images = 10;
+
+	mat img_adj(28,28);
+
+	cube img = cube(reshape(inputs[0])(28,28, BATCH_SIZE));
+	mat hyps = mat(network.forward_propagation(inputs[0]));
+	for (int i = 0; i < test_images; ++i) {
+		img_adj = img[i].t();
+		img_adj.printSparse(3);
+		hyps[i].print();
+		std::cout << "-----------------------------------------------------------------------------------------------------------" <<std::endl;
+	}
+
+	std::cout << " returning " << std::endl;
 	return 0;
 }
 
