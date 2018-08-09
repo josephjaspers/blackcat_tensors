@@ -38,10 +38,9 @@ struct Array : Tensor_Array_Base<Array<dimension, T, mathlib>, dimension>, publi
 	__BCinline__ const scalar_t* memptr() const { return array; }
 	__BCinline__	   scalar_t* memptr()  	   { return array; }
 
-
-//	Array(const Array&) = default;
-//	Array(Array&&) = default;
-//	Array& operator =(Array&&) = default;
+	void swap_array(Array& param) {
+		std::swap(this->array, param.array);
+	}
 
 	void destroy() {
 		mathlib_t::destroy(array);
@@ -87,7 +86,6 @@ struct Array<0, T, mathlib> : Tensor_Array_Base<Array<0, T, mathlib>, 0>, public
 	template<class... integers> __BCinline__ const auto& operator () (integers... ints) const {
 		return array[0];
 	}
-
 
 	__BCinline__ const scalar_t* memptr() const { return array; }
 	__BCinline__	   scalar_t* memptr()  	   { return array; }

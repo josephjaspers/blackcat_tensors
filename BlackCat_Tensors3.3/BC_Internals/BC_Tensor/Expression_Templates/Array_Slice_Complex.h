@@ -44,8 +44,6 @@ struct Array_Slice_Complex {
 			});
 		}
 		__BCinline__ int size() const {
-			std::cout << " pa sz = " << parent.size() << std::endl;
-			std::cout << "bs [axis ] = " << parent.dimension(axis) << std::endl;
 			return parent.size() / parent.dimension(axis); }
 		__BCinline__ int rows() const { return inner_shape()[0]; }
 		__BCinline__ int cols() const { return  inner_shape()[1]; }

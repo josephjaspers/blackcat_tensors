@@ -49,8 +49,6 @@ struct Tensor_Array_Base : expression_base<derived>, BC_Array {
 	template<int dimension> using chunk_t 	= typename _Tensor_Chunk<dimension>::template implementation<derived>;
 	template<int dimension> using c_slice_t = typename _Tensor_Slice_Complex<dimension>::template implementation<derived>;
 
-
-
 private:
 
 	__BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }

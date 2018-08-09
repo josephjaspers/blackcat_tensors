@@ -12,18 +12,6 @@ namespace BC {
 
 template<class> class Tensor_Base;
 
-namespace operationImpl {
-
-template<class T> struct is_transposed_impl {
-	static constexpr bool conditional = false;
-};
-template<class T, class ml> struct is_transposed_impl<BC::internal::unary_expression<T, oper::transpose<ml>>> {
-	static constexpr bool conditional = true;
-};
-template<class T>
-static constexpr bool is_transposed = is_transposed_impl<T>::conditional;
-
-
 template<class derived>
 struct expression_determiner {
 
@@ -65,7 +53,6 @@ struct expression_determiner {
 	};
 
 };
-}
 }
 
 #endif /* TYPE_EVALUATOR_H_ */

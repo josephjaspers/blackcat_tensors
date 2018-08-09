@@ -22,24 +22,24 @@
 #include "Expression_Templates/Array_Reshape.h"
 namespace BC {
 
-template<class derived>
+template<class internal_t>
 class Tensor_Base :
 
-		public Base::Tensor_Operations<Tensor_Base<derived>>,
-		public Base::Tensor_Functions<Tensor_Base<derived>>,
-		public Base::Tensor_Utility<Tensor_Base<derived>>,
-		public Base::Tensor_Shaping<Tensor_Base<derived>>,
-		public derived {
+		public Base::Tensor_Operations<Tensor_Base<internal_t>>,
+		public Base::Tensor_Functions<Tensor_Base<internal_t>>,
+		public Base::Tensor_Utility<Tensor_Base<internal_t>>,
+		public Base::Tensor_Shaping<Tensor_Base<internal_t>>,
+		public internal_t {
 
 protected:
 
-	using self 			= Tensor_Base<derived>;
-	using operations  	= Base::Tensor_Operations<Tensor_Base<derived>>;
-	using utility		= Base::Tensor_Utility<Tensor_Base<derived>>;
-	using shaping		= Base::Tensor_Shaping<Tensor_Base<derived>>;
+	using self 			= Tensor_Base<internal_t>;
+	using operations  	= Base::Tensor_Operations<Tensor_Base<internal_t>>;
+	using utility		= Base::Tensor_Utility<Tensor_Base<internal_t>>;
+	using shaping		= Base::Tensor_Shaping<Tensor_Base<internal_t>>;
 
-	using scalar_type	= _scalar<derived>;
-	using mathlib_type 	= _mathlib<derived>;
+	using scalar_type	= _scalar<internal_t>;
+	using mathlib_type 	= _mathlib<internal_t>;
 
 	template<class> friend class Tensor_Base;
 
@@ -48,37 +48,43 @@ public:
 	using operations::operator=;
 	using shaping::operator[];
 	using shaping::operator();
-	using derived::derived;
+	using internal_t::internal_t;
 
-	using derived::DIMS;//This is important -- if removed ambiguous calls from the super classes
-	using scalar_t = typename derived::scalar_t;
+	using internal_t::DIMS; //required
+	using scalar_t = typename internal_t::scalar_t;
 
-	using move_parameter = std::conditional_t<is_array_core<derived>(), self&&, BC::DISABLED<0>>;
-	using copy_parameter = std::conditional_t<is_array_core<derived>(), const self&, BC::DISABLED<1>>;
+	using move_parameter = std::conditional_t<is_array_core<internal_t>(), self&&, BC::DISABLED<0>>;
+	using copy_parameter = std::conditional_t<is_array_core<internal_t>(), const self&, BC::DISABLED<1>>;
+
 
 	Tensor_Base() = default;
-	Tensor_Base(const copy_parameter&  tensor) : derived(tensor.inner_shape()) {
+	Tensor_Base(copy_parameter tensor) : internal_t(tensor.inner_shape()) {
 		mathlib_type::copy(this->internal(), tensor.internal(), this->size());
 	}
-
-	Tensor_Base(const derived&  param) : derived(param) {}
-	Tensor_Base( 	  derived&& param) : derived(param) {}
-
+	Tensor_Base(move_parameter tensor) : internal_t(tensor.inner_shape()) {
+		std::swap(this->array, tensor.array);
+		this->swap_shape(tensor);
+	}
+	template<class U>
+	Tensor_Base(const Tensor_Base<U>&  tensor) : internal_t(tensor.inner_shape()) {
+		operations::operator=(tensor);
+	}
+	Tensor_Base(const internal_t&  param) : internal_t(param) {}
+	Tensor_Base( 	  internal_t&& param) : internal_t(param) {}
 
 	Tensor_Base& operator =(copy_parameter tensor) {
 		this->assert_valid(tensor);
-		this->copy_shape(tensor);//this is derived from shape
+		this->copy_shape(tensor);//this is internal_t from shape
 		mathlib_type::copy(this->internal(), tensor.internal(), this->size());
 		return *this;
 	}
 
 	Tensor_Base& operator =(move_parameter tensor) {
 		this->swap_shape(tensor);
-		std::swap(this->array, tensor.array);
+		this->swap_array(tensor);
 		return *this;
 	}
 
-//-------------------------------------------FILL CONSTRUCTORS/=OPERATOR--------------------------------//
 	Tensor_Base(scalar_t scalar) {
 		static_assert(DIMS() == 0, "SCALAR_INITIALIZATION ONLY AVAILABLE TO SCALARS");
 		this->fill(scalar);
@@ -87,29 +93,15 @@ public:
 		this->fill(scalar);
 		return *this;
 	}
-
-	template<class U>
-	Tensor_Base(const Tensor_Base<U>&  tensor) : derived(tensor.inner_shape()) {
-		operations::operator=(tensor);
-	}
-
-
 	~Tensor_Base() {
-		if (is_array_core<derived>()) {
+		if (is_array_core<internal_t>()) {
 			this->destroy();
 		}
 	}
-
-	 const derived& internal() const { return static_cast<const derived&>(*this); }
-	 	   derived& internal() 	  	 { return static_cast<	    derived&>(*this); }
+	 const internal_t& internal() const { return static_cast<const internal_t&>(*this); }
+	 	   internal_t& internal() 	  	 { return static_cast<	    internal_t&>(*this); }
 };
 
 }
 
 #endif /* TENSOR_BASE_H_ */
-
-
-
-////move only defined for primary cores (this is to ensure slices/chunks/reshapes apply copies)
-//using move_parameter = std::conditional_t<is_array_core<derived>(), self&&, BC::DISABLED<0>>;
-//using copy_parameter = std::conditional_t<is_array_core<derived>(), const self&, BC::DISABLED<1>>;
