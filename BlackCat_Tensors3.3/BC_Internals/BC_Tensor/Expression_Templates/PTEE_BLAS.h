@@ -33,7 +33,7 @@ struct expression_tree_evaluator<binary_expression<lv, rv, op>, std::enable_if_t
 
 	//if no replacement is used yet, auto inject
 	static auto replacement(const binary_expression<lv, rv, op>& branch) {
-		auto tmp =  temporary<internal::Array<branch_t::DIMS(), _scalar<branch_t>, _mathlib<branch_t>>>(branch.inner_shape());
+		auto tmp =  temporary<internal::Array<branch_t::DIMS(), scalar_of<branch_t>, mathlib_of<branch_t>>>(branch.inner_shape());
 		branch.eval(injection_wrapper<std::decay_t<decltype(tmp)>, 1, 0>(tmp));
 		return tmp;
 	}

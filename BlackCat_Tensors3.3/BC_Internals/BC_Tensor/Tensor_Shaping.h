@@ -23,9 +23,9 @@ struct Tensor_Shaping {
 	using operations  	= Tensor_Operations<derived>;
 	using utility		= Tensor_Utility<derived>;
 
-	using functor_type 	= _functor<derived>;
-	using scalar_type	= _scalar<derived>;
-	using mathlib_type 	= _mathlib<derived>;
+	using functor_type 	= functor_of<derived>;
+	using scalar_type	= scalar_of<derived>;
+	using mathlib_type 	= mathlib_of<derived>;
 
 private:
 

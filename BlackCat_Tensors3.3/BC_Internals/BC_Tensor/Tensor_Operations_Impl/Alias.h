@@ -17,7 +17,7 @@ template<class derived>
 struct Alias {
 
 
-	using mathlib_type = _mathlib<derived>;
+	using mathlib_type = mathlib_of<derived>;
 
 	derived& tensor;
 

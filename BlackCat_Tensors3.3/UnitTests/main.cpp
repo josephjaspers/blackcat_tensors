@@ -17,18 +17,18 @@ using cube = Cube<float, ml>;
 //using tesnor5 = BC::Tensor5<float, ml>;
 
 #include "_blas_test.h"
-//#include "_readwrite_test.h"
+#include "_readwrite_test.h"
 #include "_shaping_test.h"
 //#include <iostream>
 
 int test() {
 
 	//various tests
-gemm_injection();
+//gemm_injection();
 
 
-//readwrite();
-shaping();
+readwrite();
+//shaping();
 
 
 mat a(3,3);
@@ -59,7 +59,7 @@ std::cout << " a " << std::endl;
 a.print();
 
 std::cout << " last call: " << std::endl;
-
+	return 0;
 }
 
 int main() {

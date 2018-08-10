@@ -7,7 +7,6 @@
 #ifndef EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
 #define EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
 
-#include "BC_Utility/Determiners.h"
 #include "BlackCat_Internal_Forward_Decls.h"
 namespace BC {
 
@@ -39,7 +38,7 @@ template<class T, class voider = void> struct det_eval {
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = false;
 
-	template<class param> static _scalar<param>* get_scalar(const param& p) { return nullptr; }
+	template<class param> static scalar_of<param>* getscalar_of(const param& p) { return nullptr; }
 	template<class param> static auto& get_array (const param& p)  { return p; }
 };
 
@@ -49,7 +48,7 @@ template<class deriv> struct det_eval<deriv, enable_if_core<deriv>> {
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = false;
 
-	template<class param> static _scalar<param>* get_scalar(const param& p) { return nullptr; }
+	template<class param> static scalar_of<param>* getscalar_of(const param& p) { return nullptr; }
 	template<class param> static auto& get_array(const param& p) { return cc(p); }
 };
 
@@ -60,7 +59,7 @@ struct det_eval<internal::unary_expression<deriv, oper::transpose<ml>>, enable_i
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = false;
 
-	template<class param> static _scalar<param>* get_scalar(const param& p) { return nullptr; }
+	template<class param> static scalar_of<param>* getscalar_of(const param& p) { return nullptr; }
 	template<class param> static auto& get_array(const param& p) { return cc(p.array); }
 };
 
@@ -82,8 +81,8 @@ struct det_eval<binary_expression<d1, d2, oper::scalar_mul>, enable_if_cores<d1,
 
 	static auto&  get_array(const left_scal_t& p) { return cc(p.right);  }
 	static auto& get_array(const right_scal_t& p) { return cc(p.left);   }
-	static auto&  get_scalar(const left_scal_t& p) { return cc(p.left);  }
-	static auto& get_scalar(const right_scal_t& p) { return cc(p.right); }
+	static auto&  getscalar_of(const left_scal_t& p) { return cc(p.left);  }
+	static auto& getscalar_of(const right_scal_t& p) { return cc(p.right); }
 };
 
 //IF A SCALAR BY TENSOR MUL OPERATION R + TRANSPOSED
@@ -93,7 +92,7 @@ struct det_eval<binary_expression<unary_expression<trans_t, oper::transpose<ml>>
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;
 
-	template<class param> static auto& get_scalar(const param& p) { return cc(p.right); }
+	template<class param> static auto& getscalar_of(const param& p) { return cc(p.right); }
 	template<class param> static auto& get_array(const param& p) { return cc(p.left.array); }
 };
 
@@ -104,7 +103,7 @@ struct det_eval<binary_expression<scalar_t, unary_expression<trans_t, oper::tran
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;
 
-	template<class param> static auto& get_scalar(const param& p) { return cc(p.left); }
+	template<class param> static auto& getscalar_of(const param& p) { return cc(p.left); }
 	template<class param> static auto& get_array(const param& p) { return cc(p.right.array); }
 
 };

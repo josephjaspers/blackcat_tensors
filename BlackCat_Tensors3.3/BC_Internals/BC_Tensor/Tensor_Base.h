@@ -38,8 +38,8 @@ protected:
 	using utility		= Base::Tensor_Utility<Tensor_Base<internal_t>>;
 	using shaping		= Base::Tensor_Shaping<Tensor_Base<internal_t>>;
 
-	using scalar_type	= _scalar<internal_t>;
-	using mathlib_type 	= _mathlib<internal_t>;
+	using scalar_type	= scalar_of<internal_t>;
+	using mathlib_type 	= mathlib_of<internal_t>;
 
 	template<class> friend class Tensor_Base;
 

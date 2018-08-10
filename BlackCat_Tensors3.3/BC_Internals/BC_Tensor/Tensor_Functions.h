@@ -17,9 +17,9 @@ class Tensor_Functions {
 	template<class pderiv, class functor> using impl 	= typename expression_determiner<derived>::template impl<pderiv, functor>;
 	template<class pderiv> 				  using dp_impl	= typename expression_determiner<derived>::template dp_impl<pderiv>;
 
-	using functor_type 		= _functor<derived>;
-	using scalar_type 		= _scalar<derived>;
-	using mathlib_type 		= _mathlib<derived>;
+	using functor_type 		= functor_of<derived>;
+	using scalar_type 		= scalar_of<derived>;
+	using mathlib_type 		= mathlib_of<derived>;
 
 	//Returns the class returned as its most derived member
 	 const derived& as_derived() const { return static_cast<const derived&>(*this);  }

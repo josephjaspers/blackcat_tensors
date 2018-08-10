@@ -15,8 +15,6 @@ template<class> class Tensor_Base;
 template<class T> __BC_host_inline__
 const auto reshape(const Tensor_Base<T>& tensor) {
 	return [&](auto... integers) {
-		using mathlib_type = _mathlib<T>;
-
 	using internal = decltype(std::declval<T>()._reshape(integers...));
 	return Tensor_Base<internal>(tensor._reshape(integers...));
 	};
@@ -24,10 +22,8 @@ const auto reshape(const Tensor_Base<T>& tensor) {
 template<class T> __BC_host_inline__
 auto reshape(Tensor_Base<T>& tensor) {
 	return [&](auto... integers) {
-		using mathlib_type = _mathlib<T>;
-
-	using internal = decltype(std::declval<T>()._reshape(integers...));
-	return Tensor_Base<internal>(tensor._reshape(integers...));
+		using internal = decltype(std::declval<T>()._reshape(integers...));
+		return Tensor_Base<internal>(tensor._reshape(integers...));
 	};
 }
 

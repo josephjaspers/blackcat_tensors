@@ -25,12 +25,12 @@ int readwrite() {
 	std::ofstream os("save.txt");
 	d.write(os);
 	os.close();
-
-
+//
+//
 	std::cout << " trying to read" << std::endl;
 	std::ifstream is("save.txt");
-
-	mat readM(d.size());
+//
+	mat readM(d.size(), 1);
 	readM.read(is);
 	readM.print();
 	is.close();

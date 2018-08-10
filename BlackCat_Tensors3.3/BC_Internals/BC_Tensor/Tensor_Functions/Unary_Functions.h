@@ -49,8 +49,8 @@ static auto logical(const Base::Tensor_Operations<deriv>& tensor) {
 }
 
 template<class deriv>
-static auto normalize(const Base::Tensor_Operations<deriv>& tensor, _scalar<deriv> min, _scalar<deriv> max) {
-	return tensor.un_expr(oper::norm<_scalar<deriv>>(min, max));
+static auto normalize(const Base::Tensor_Operations<deriv>& tensor, scalar_of<deriv> min, scalar_of<deriv> max) {
+	return tensor.un_expr(oper::norm<scalar_of<deriv>>(min, max));
 }
 
 }

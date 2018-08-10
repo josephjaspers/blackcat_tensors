@@ -17,8 +17,7 @@ template<int dimension>
 struct Array_Chunk  {
 
 	template<class PARENT>
-	struct implementation : Tensor_Array_Base<implementation<PARENT>,dimension>, Shape<dimension>
- {
+	struct implementation : Tensor_Array_Base<implementation<PARENT>,dimension>, Shape<dimension> {
 
 		static_assert(PARENT::ITERATOR() == 0 || dimension <= PARENT::DIMS(), "TENSOR-CHUNK'S DIMENSIONS MUST BE LESS OR EQUAL TO PARENT'S DIMENSIONS");
 		using scalar_t = typename PARENT::scalar_t;

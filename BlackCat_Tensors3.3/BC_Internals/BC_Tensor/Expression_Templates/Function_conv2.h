@@ -26,15 +26,15 @@ template<class lv, class rv, class mathlib>
 struct binary_expression<lv, rv, oper::conv<2, mathlib>>
 : expression_base<binary_expression<lv, rv,  oper::conv<2, mathlib>>>, BLAS_FUNCTION {
 
-	using scalar_type = _scalar<lv>;
+	using scalar_type = scalar_of<lv>;
 	static constexpr bool transA = det_eval<lv>::transposed;
 	static constexpr bool transB = det_eval<rv>::transposed;
-	static constexpr bool lv_scalar = det_eval<lv>::scalar;
-	static constexpr bool rv_scalar = det_eval<rv>::scalar;
+	static constexpr bool lvscalar_of = det_eval<lv>::scalar;
+	static constexpr bool rvscalar_of = det_eval<rv>::scalar;
 	static constexpr bool lv_eval = det_eval<lv>::evaluate;
 	static constexpr bool rv_eval = det_eval<rv>::evaluate;
 
-	static_assert(std::is_same<_scalar<lv>, _scalar<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
+	static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
 
 	__BCinline__ static constexpr int DIMS() { return 2; }
 	__BCinline__ static constexpr int ITERATOR() { return 0; }
@@ -86,10 +86,10 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 //		std::cout << "A is transposed" << transA << std::endl;
 //		if (transB)
 //		std::cout <<"B is transposed" << transB << std::endl;
-//		if (lv_scalar)
-//		std::cout << "A has scalar " <<lv_scalar << std::endl;
-//		if (rv_scalar)
-//		std::cout <<"B has scalar" << rv_scalar << std::endl;
+//		if (lvscalar_of)
+//		std::cout << "A has scalar " <<lvscalar_of << std::endl;
+//		if (rvscalar_of)
+//		std::cout <<"B has scalar" << rvscalar_of << std::endl;
 //		if (lv_eval)
 //		std::cout << "A instant eval" <<lv_eval << std::endl;
 //		if(rv_eval)

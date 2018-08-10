@@ -38,7 +38,7 @@ struct expression_tree_evaluator<unary_expression<array_t, op>>
 	struct trivial {
 		static auto impl(const unary_expression<array_t, op>& branch) {
 			using branch_t = unary_expression<array_t, op>;
-			auto tmp =  temporary<internal::Array<branch_t::DIMS(), _scalar<branch_t>, _mathlib<branch_t>>>(branch.inner_shape());
+			auto tmp =  temporary<internal::Array<branch_t::DIMS(), scalar_of<branch_t>, mathlib_of<branch_t>>>(branch.inner_shape());
 			return injection(branch, tmp);
 		}
 	};

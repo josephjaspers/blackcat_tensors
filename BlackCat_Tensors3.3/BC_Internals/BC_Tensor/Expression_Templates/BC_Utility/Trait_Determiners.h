@@ -8,8 +8,6 @@
 #ifndef TRAIT_DETERMINERS_H_
 #define TRAIT_DETERMINERS_H_
 
-#include "type_determiners.h"
-
 /*
  * Determines the primary traits of an internal-type
  * functor
@@ -21,6 +19,8 @@
  */
 
 namespace BC {
+template<int> struct DISABLED;
+
 namespace internal {
 template<int, class, class> class Array;
 }
@@ -35,15 +35,11 @@ template<class> struct determine_functor;
 template<class> struct determine_scalar;
 template<class> struct determine_iterator;
 template<class> struct determine_mathlibrary;
-template<class> struct determine_tensor_scalar;
 
-template<class T> using _scalar = typename determine_scalar<std::decay_t<T>>::type;
-template<class T> using _mathlib = typename determine_mathlibrary<std::decay_t<T>>::type;
-template<class T> using _functor = typename determine_functor<std::decay_t<T>>::type;
-template<class T> using _tensor_scalar = typename determine_tensor_scalar<std::decay_t<T>>::type;
-//template<class T> static constexpr int _dimension_of  = dimension_of<std::decay_t<T>>;
+template<class T> using scalar_of = typename determine_scalar<std::decay_t<T>>::type;
+template<class T> using mathlib_of = typename determine_mathlibrary<std::decay_t<T>>::type;
+template<class T> using functor_of = typename determine_functor<std::decay_t<T>>::type;
 
-///DETERMINE_FUNCTOR----------------------------------------------------------------------------------------------
 template<class functor>
 struct determine_functor<Tensor_Base<functor>>{
 	using type = functor;

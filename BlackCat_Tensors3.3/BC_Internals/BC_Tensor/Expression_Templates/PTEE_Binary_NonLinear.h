@@ -75,7 +75,7 @@ struct expression_tree_evaluator<binary_expression<lv, rv, op>, std::enable_if_t
 	struct replacement_required {
 		static auto function(const binary_expression<lv,rv,op>& branch) {
 			using branch_t = binary_expression<lv,rv,op>;
-			auto tmp =  temporary<internal::Array<branch_t::DIMS(), _scalar<branch_t>, _mathlib<branch_t>>>(branch.inner_shape());
+			auto tmp =  temporary<internal::Array<branch_t::DIMS(), scalar_of<branch_t>, mathlib_of<branch_t>>>(branch.inner_shape());
 			auto inject_tmp = injection_wrapper<std::decay_t<decltype(tmp)>, 1, 0>(tmp);
 			return injection(branch, inject_tmp);
 		}

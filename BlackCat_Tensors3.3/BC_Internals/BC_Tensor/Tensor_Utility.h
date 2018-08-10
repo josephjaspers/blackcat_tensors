@@ -24,8 +24,10 @@ namespace Base {
 template<class deriv>
 struct Tensor_Utility {
 
-	using scalar = _scalar<deriv>;
-	using mathlib = _mathlib<deriv>;
+	using scalar = scalar_of<deriv>;
+	using mathlib = mathlib_of<deriv>;
+//	using scalar_t = typename deriv::scalar_t;
+//	using mathlib_t = typename deriv::mathlib_t;
 
 private:
 	deriv& as_derived() {
@@ -55,6 +57,19 @@ public:
 		scalar* internal = new scalar[as_derived().size()];
 		mathlib::DeviceToHost(internal, as_derived().internal().memptr(), as_derived().size());
 
+		for (int i = 0; i < as_derived().size() - 1; ++i) {
+			os << internal[i] << ',';
+		}
+		os << internal[as_derived().size() - 1]; //back
+		os << '\n';
+
+		delete[] internal;
+	}
+	void write_tensor_data(std::ofstream& os) const {
+
+		scalar* internal = new scalar[as_derived().size()];
+		mathlib::DeviceToHost(internal, as_derived().internal().memptr(), as_derived().size());
+
 		os << as_derived().dims() << ',';
 		for (int i = 0; i < as_derived().dims(); ++i) {
 			os << as_derived().dimension(i) << ',';
@@ -67,7 +82,6 @@ public:
 
 		delete[] internal;
 	}
-
 	void read_as_one_hot(std::ifstream& is) {
 		if (deriv::DIMS() != 1)
 			throw std::invalid_argument("one_hot only supported by vectors");
