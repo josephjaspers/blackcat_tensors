@@ -24,7 +24,7 @@ using cube = Cube<float, ml>;
 int test() {
 
 	//various tests
-//gemm_injection();
+gemm_injection();
 
 
 	mat a(3,3);
