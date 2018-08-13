@@ -56,6 +56,10 @@ public:
 	using move_parameter = std::conditional_t<is_array_core<internal_t>(), self&&, BC::DISABLED<0>>;
 	using copy_parameter = std::conditional_t<is_array_core<internal_t>(), const self&, BC::DISABLED<1>>;
 
+	using move_oper_parameter = std::conditional_t<is_array_core<internal_t>(), self&&, BC::DISABLED<0>>;
+	using copy_oper_parameter = std::conditional_t<internal::isArray<internal_t>(), const self&, BC::DISABLED<1>>;
+
+
 
 	Tensor_Base() = default;
 	Tensor_Base(copy_parameter tensor) : internal_t(tensor.inner_shape()) {
@@ -66,15 +70,12 @@ public:
 		this->swap_shape(tensor);
 	}
 	template<class U>
-	Tensor_Base(const Tensor_Base<U>&  tensor) : internal_t(tensor.inner_shape()) {
-		operations::operator=(tensor);
-	}
+	Tensor_Base(const Tensor_Base<U>&  tensor) : internal_t(tensor.internal()) {}
 	Tensor_Base(const internal_t&  param) : internal_t(param) {}
 	Tensor_Base( 	  internal_t&& param) : internal_t(param) {}
 
-	Tensor_Base& operator =(copy_parameter tensor) {
+	Tensor_Base& operator =(copy_oper_parameter tensor) {
 		this->assert_valid(tensor);
-		this->copy_shape(tensor);//this is internal_t from shape
 		mathlib_type::copy(this->internal(), tensor.internal(), this->size());
 		return *this;
 	}
