@@ -32,11 +32,11 @@ gemm_injection();
 
 	a.print();
 
+//	(a + a).print();
+
 	mat b(a + a);
 
 	b.print();
-
-
 
 	b[0] = a[0];
 	b.print();

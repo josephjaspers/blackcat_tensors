@@ -58,24 +58,28 @@ public:
 	//--------------------------------------assignment operators-----------------------------------------------//
 	template<class pDeriv>
 	derived& operator =(const Tensor_Operations<pDeriv>& param) {
+		BC_ARRAY_ONLY("derived& operator =(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
 		evaluate(bi_expr<oper::assign>(param));
 		return as_derived();
 	}
 	template<class pDeriv>
 	derived& operator +=(const Tensor_Operations<pDeriv>& param) {
+		BC_ARRAY_ONLY("derived& operator +=(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
 		evaluate(bi_expr<oper::add_assign>(param));
 		return as_derived();
 	}
 	template<class pDeriv>
 	derived& operator -=(const Tensor_Operations<pDeriv>& param) {
+		BC_ARRAY_ONLY("derived& operator -=(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
 		evaluate(bi_expr<oper::sub_assign>(param));
 		return as_derived();
 	}
 	template<class pDeriv>
 	derived& operator /=(const Tensor_Operations<pDeriv>& param) {
+		BC_ARRAY_ONLY("derived& operator /=(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
 		evaluate(bi_expr<oper::div_assign>(param));
 		return as_derived();
@@ -83,6 +87,7 @@ public:
 	//pointwise multiply
 	template<class pDeriv>
 	derived& operator %=(const Tensor_Operations<pDeriv>& param) {
+		BC_ARRAY_ONLY("derived& operator %=(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
 		evaluate(bi_expr<oper::mul_assign>(param));
 		return as_derived();

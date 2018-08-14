@@ -21,38 +21,34 @@ namespace Base {
  * Defines standard utility methods related to I/O
  */
 
-template<class deriv>
+template<class derived>
 struct Tensor_Utility {
 
-	using scalar = scalar_of<deriv>;
-	using mathlib = mathlib_of<deriv>;
-//	using scalar_t = typename deriv::scalar_t;
-//	using mathlib_t = typename deriv::mathlib_t;
+	using scalar = scalar_of<derived>;
+	using mathlib = mathlib_of<derived>;
 
 private:
-	deriv& as_derived() {
-		return static_cast<deriv&>(*this);
+	derived& as_derived() {
+		return static_cast<derived&>(*this);
 	}
-	const deriv& as_derived() const {
-		return static_cast<const deriv&>(*this);
+	const derived& as_derived() const {
+		return static_cast<const derived&>(*this);
 	}
 
 public:
 
-	void print() const {
-		mathlib::print(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), as_derived().dims(), 8);
-	}
-	void print(int precision) const {
+
+	void print(int precision=8) const {
+		BC_ARRAY_ONLY("void print(int precision=8) const");
 		mathlib::print(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), as_derived().dims(), precision);
 	}
-	void printSparse() const {
-		mathlib::printSparse(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), as_derived().dims(), 8);
-	}
-	void printSparse(int precision) const {
+	void printSparse(int precision=8) const {
+		BC_ARRAY_ONLY("void printSparse(int precision=8) const");
 		mathlib::printSparse(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), as_derived().dims(), precision);
 	}
 
 	void write(std::ofstream& os) const {
+		BC_ARRAY_ONLY("write(std::ofstream& os)");
 
 		scalar* internal = new scalar[as_derived().size()];
 		mathlib::DeviceToHost(internal, as_derived().internal().memptr(), as_derived().size());
@@ -66,6 +62,7 @@ public:
 		delete[] internal;
 	}
 	void write_tensor_data(std::ofstream& os) const {
+		BC_ARRAY_ONLY("void write_tensor_data(std::ofstream& os)");
 
 		scalar* internal = new scalar[as_derived().size()];
 		mathlib::DeviceToHost(internal, as_derived().internal().memptr(), as_derived().size());
@@ -83,7 +80,9 @@ public:
 		delete[] internal;
 	}
 	void read_as_one_hot(std::ifstream& is) {
-		if (deriv::DIMS() != 1)
+		BC_ARRAY_ONLY("void read_as_one_hot(std::ifstream& is)");
+
+		if (derived::DIMS() != 1)
 			throw std::invalid_argument("one_hot only supported by vectors");
 
 //		as_derived().zero(); //clear FIXME COMPILE ISSUE WITH NVCC
@@ -95,6 +94,8 @@ public:
 
 	}
 	void read(std::ifstream& is) {
+		BC_ARRAY_ONLY("void read(std::ifstream& is)");
+
 		if (!is.good()) {
 			std::cout << "File open error - returning " << std::endl;
 			return;
@@ -122,6 +123,8 @@ public:
 	}
 
 	void read_tensor_data(std::ifstream& is, bool read_dimensions = true, bool overrideDimensions = true) {
+		BC_ARRAY_ONLY("void read_tensor_data(std::ifstream& is, bool read_dimensions = true, bool overrideDimensions = true)");
+
 		if (!is.good()) {
 			std::cout << "File open error - returning " << std::endl;
 			return;
@@ -147,9 +150,9 @@ public:
 
 		if (read_dimensions) {
 			std::vector<int> dims((int) file_data[0]);
-			if (file_data[0] != deriv::DIMS()) {
+			if (file_data[0] != derived::DIMS()) {
 				std::cout << " attempting to read data from file of tensor of dimensions = " << file_data[0]
-						<< " however the reading to tensor is of dimension = " << deriv::DIMS();
+						<< " however the reading to tensor is of dimension = " << derived::DIMS();
 				throw std::invalid_argument("Invalid Tensor File");
 			}
 			for (int i = 0; i < dims.size(); ++i) {
@@ -157,12 +160,12 @@ public:
 			}
 			if (overrideDimensions) {
 
-				Shape<deriv::DIMS()> shape;
-				for (int i = 0; i < deriv::DIMS(); ++i) {
+				Shape<derived::DIMS()> shape;
+				for (int i = 0; i < derived::DIMS(); ++i) {
 					shape.is()[i] = (int) file_data[i + 1];
 				}
 
-				as_derived() = deriv(shape);
+				as_derived() = derived(shape);
 			}
 			mathlib::HostToDevice(as_derived().internal().memptr(), &file_data[file_data[0] + 1],
 					as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
@@ -172,12 +175,13 @@ public:
 		}
 	}
 	void read_tensor_data_as_one_hot(std::ifstream& is, int sz) {
-		if (deriv::DIMS() != 1)
+		BC_ARRAY_ONLY("void read_tensor_data_as_one_hot(std::ifstream& is, int sz)");
+		if (derived::DIMS() != 1)
 			throw std::invalid_argument("one_hot only supported by vectors");
 
 		//rescale
 		if (sz > 0) {
-			as_derived() = deriv(sz);
+			as_derived() = derived(sz);
 		}
 		//		as_derived().zero(); //clear FIXME COMPILE ISSUE WITH NVCC
 

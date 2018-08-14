@@ -181,9 +181,9 @@ template<class T, class voider = void> struct isArray_impl { static constexpr bo
 template<class T> struct isArray_impl<T, std::enable_if_t<std::is_same<decltype(T::DIMS()),int>::value>>
 		{ static constexpr bool conditional = std::is_base_of<Tensor_Array_Base<T, T::DIMS()>, T>::value; };
 
-template<class T> static constexpr bool isArray() { return isArray_impl<std::decay_t<T>>::conditional; }
-
 }
+template<class T> static constexpr bool is_array() { return internal::isArray_impl<std::decay_t<T>>::conditional; }
+
 }
 
 

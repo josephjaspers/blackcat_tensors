@@ -57,7 +57,7 @@ public:
 	using copy_parameter = std::conditional_t<is_array_core<internal_t>(), const self&, BC::DISABLED<1>>;
 
 	using move_oper_parameter = std::conditional_t<is_array_core<internal_t>(), self&&, BC::DISABLED<0>>;
-	using copy_oper_parameter = std::conditional_t<internal::isArray<internal_t>(), const self&, BC::DISABLED<1>>;
+	using copy_oper_parameter = std::conditional_t<is_array<internal_t>(), const self&, BC::DISABLED<1>>;
 
 
 
