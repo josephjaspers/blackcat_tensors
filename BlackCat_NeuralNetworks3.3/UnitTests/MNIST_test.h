@@ -1,9 +1,9 @@
-//#include "../BlackCat_GPU_NeuralNetworks.h"
+#include "../BlackCat_GPU_NeuralNetworks.h"
 
 #include <cxxabi.h>
 
 
-#include "../BlackCat_NeuralNetworks.h"
+//#include "../BlackCat_NeuralNetworks.h"
 
 #include <fstream>
 #include <iostream>
@@ -85,7 +85,7 @@ int percept_MNIST() {
 	for (int i = 0; i < EPOCHS; ++i) {
 		std::cout << " current epoch: " << i << std::endl;
 		for (int j = 0; j < NUMB_BATCHES; ++j) {
-			auto x = network.forward_propagation(inputs[j]);
+			network.forward_propagation(inputs[j]);
 			network.back_propagation(outputs[j]);
 			network.update_weights();
 			network.clear_stored_delta_gradients();

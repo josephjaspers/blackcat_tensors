@@ -29,10 +29,8 @@ struct Array : Tensor_Array_Base<Array<dimension, T, mathlib>, dimension>, publi
 	template<class U,typename = std::enable_if_t<not std::is_base_of<expression_base<U>, U>::value>>
 	Array(U param) : Shape<DIMS()>(param) { mathlib_t::initialize(array, this->size()); }
 
-	template<class... integers>//CAUSES FAILURE WITH NVCC 9.2, typename = std::enable_if_t<MTF::is_integer_sequence<integers...>>>
-	Array(integers... ints) : Shape<DIMS()>(ints...) {
-		static_assert(MTF::is_integer_sequence<integers...>,"PARAMETER LIST MUST BE INTEGER_SEQUNCE");
-		mathlib_t::initialize(array, this->size()); }
+	template<class... integers, typename = std::enable_if_t<MTF::is_integer_sequence<integers...>>>
+	Array(integers... ints) : Shape<DIMS()>(ints...) { mathlib_t::initialize(array, this->size()); }
 
 	template<class deriv_expr, typename = std::enable_if_t<std::is_base_of<expression_base<deriv_expr>, deriv_expr>::value>>
 	Array(const deriv_expr& expr) : Shape<DIMS()>(static_cast<const deriv_expr&>(expr).inner_shape()) {
