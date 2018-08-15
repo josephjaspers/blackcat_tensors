@@ -16,8 +16,6 @@
  *      Author: joseph
  */
 
-#ifndef FEEDFORWARD_CU_
-#define FEEDFORWARD_CU_
 
 #include "Layer.h"
 #include <mutex>
@@ -31,40 +29,39 @@ public:
 
 	using Layer<derived>::lr;
 	vec w_gradientStorage;
-	mat y;
 
 	vec w;
 	mat& x = this->prev().y;
 
 	Addition(int inputs) :
 			Layer<derived>(inputs),
-			w(this->inputs),
+			w(this->INPUTS),
 			w_gradientStorage(this->INPUTS)
 	{
-		b.randomize(-1, 1);
+		w.randomize(-1, 1);
 		init_storages();
 	}
 
-	template<class expr> auto forward_propagation(const f_mat<expr>& x) {
-		auto y = x + w;
-		return this->next().forward_propagation(y);
+	template<class e> auto forward_propagation(const expr::mat<e>& x) {
+		return this->next().forward_propagation(w + x);
 	}
-	template<class expr> auto back_propagation(const f_mat<expr>& dy_) {
-		b_gradientStorage -= dy;
+	template<class e> auto back_propagation(const expr::mat<e>& dy_) {
+		vec dy = dy_;
+		w_gradientStorage -= dy;
 		return this->prev().back_propagation(dy_);
 	}
-	template<class expr> auto forward_propagation_express(const f_mat<expr>& x) const {
+	template<class e> auto forward_propagation_express(const expr::mat<e>& x) const {
 		auto y = x + w;
 		return this->next().forward_propagation(y);
 	}
 
 	void update_weights() {
-		b += b_gradientStorage * lr;
+		w += w_gradientStorage * lr;
 		this->next().update_weights();
 	}
 
 	void clear_stored_delta_gradients() {
-		b_gradientStorage = 0;
+		w_gradientStorage = 0;
 		this->next().clear_stored_delta_gradients();
 	}
 

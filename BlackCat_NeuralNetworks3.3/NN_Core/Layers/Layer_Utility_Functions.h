@@ -8,18 +8,16 @@
 #ifndef LAYER_UTILITY_FUNCTIONS_H_
 #define LAYER_UTILITY_FUNCTIONS_H_
 
+#include "structs/omp_unique.h"
+
 namespace BC {
 namespace NN {
-
-
-using Structure::forward_list;
-using Structure::omp_unique;
 
 using NN_Abreviated_Functions::g; //sigmoid
 using NN_Abreviated_Functions::h;
 using NN_Abreviated_Functions::gd;
 using NN_Abreviated_Functions::hd;
-template<class T> using bp_list = omp_unique<forward_list<T>>;
+//template<class T> using bp_list = omp_unique<forward_list<T>>;
 
 
 struct Sum_Gradients {

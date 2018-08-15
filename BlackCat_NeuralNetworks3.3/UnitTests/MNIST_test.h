@@ -1,8 +1,4 @@
 //#include "../BlackCat_GPU_NeuralNetworks.h"
-
-#include <cxxabi.h>
-
-
 #include "../BlackCat_NeuralNetworks.h"
 
 #include <fstream>
@@ -42,30 +38,28 @@ void generateAndLoad(cube& input_data, cube& output_data, std::ifstream& read_da
 
 int percept_MNIST() {
 //
-	const int TRAINING_EXAMPLES =  1024 * 4;
+	const int TRAINING_EXAMPLES =  1024 * 8;
 	const int BATCH_SIZE = 128;
 	const int NUMB_BATCHES = TRAINING_EXAMPLES / BATCH_SIZE;
 	const int PICTURE_SZ = 784;
 	const int NUMB_DIGITS = 10;
-
 	const int EPOCHS = 10;
 
-	NeuralNetwork<FeedForward> network(784, 10);
+	NeuralNetwork<FeedForward, FeedForward> network(784, 512, 10);
 	network.setLearningRate(.03);
-
-//
 	network.set_batch_size(BATCH_SIZE);
-	std::cout << " asdfg " << std::endl;
+
 	cube inputs(PICTURE_SZ, BATCH_SIZE, NUMB_BATCHES);
 	cube outputs(NUMB_DIGITS, BATCH_SIZE, NUMB_BATCHES);
 
-	//load data
 	std::cout << "loading data..." << std::endl << std::endl;
 	std::ifstream in_stream("///home/joseph///DataSets///train.csv");
+
 	if (!in_stream.is_open()){
 		std::cout << " error opening file" << std::endl;
 		return -1;
 	}
+
 	//move the file_ptr of the csv past the headers
 	std::string tmp; std::getline(in_stream, tmp, '\n');
 
@@ -73,15 +67,11 @@ int percept_MNIST() {
 	std::cout << " generating and loading data from csv to tensors" << std::endl;
 	generateAndLoad(inputs, outputs, in_stream, TRAINING_EXAMPLES, BATCH_SIZE);
 	std::cout << " post load "  << std::endl;
-
-
-//	inputs.print();
 	in_stream.close();
 
-	//Train
 	std::cout << " training..." << std::endl;
 	float t = omp_get_wtime();
-//
+
 	for (int i = 0; i < EPOCHS; ++i) {
 		std::cout << " current epoch: " << i << std::endl;
 		for (int j = 0; j < NUMB_BATCHES; ++j) {
@@ -91,9 +81,9 @@ int percept_MNIST() {
 			network.clear_stored_delta_gradients();
 		}
 	}
-
-
 	t = omp_get_wtime() - t;
+
+
 	printf("It took me %f clicks (%f seconds).\n", t, ((float) t));
 	std::cout << "success " << std::endl;
 
@@ -101,7 +91,6 @@ int percept_MNIST() {
 	std::cout << " testing... " << std::endl;
 
 	int test_images = 10;
-
 	mat img_adj(28,28);
 
 	cube img = cube(reshape(inputs[0])(28,28, BATCH_SIZE));

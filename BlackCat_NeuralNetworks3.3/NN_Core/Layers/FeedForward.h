@@ -18,11 +18,13 @@ template<class derived>
 struct FeedForward : public Layer<derived> {
 public:
 
-	using Layer<derived>::lr;					//the learning rate
+	using Layer<derived>::lr;	//the learning rate
 
 	mat w_gradientStorage;		//weight gradient storage
 	vec b_gradientStorage;		//bias gradient storage
 
+
+	mat dy;							//error
 	mat y;							//outputs
 
 	mat w;							//weights
@@ -48,7 +50,7 @@ public:
 		return this->next().forward_propagation(y);
 	}
 	template<class t> auto back_propagation(const expr::mat<t>& dy_) {
-		mat dy = dy_; //cache the values (avoid recomputing dy_)
+		dy = dy_;
 
 		w_gradientStorage -= dy * x.t();
 		b_gradientStorage -= dy;
@@ -67,14 +69,16 @@ public:
 	}
 
 	void clear_stored_delta_gradients() {
-		w_gradientStorage.fill(0);	//gradient lists
-		b_gradientStorage.fill(0); //.for_each(zero);	//gradient list
+		w_gradientStorage.fill(0);
+		b_gradientStorage.fill(0);
 
 		this->next().clear_stored_delta_gradients();
 	}
 
 	void set_batch_size(int x) {
 		y = mat(this->OUTPUTS, x);
+		dy = mat(this->OUTPUTS, x);
+
 		this->next().set_batch_size(x);
 	}
 
