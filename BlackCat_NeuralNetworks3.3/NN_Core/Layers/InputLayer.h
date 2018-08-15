@@ -18,11 +18,11 @@ struct InputLayer : Layer<derived> {
 
 	InputLayer() : Layer<derived>(0) {}
 
-	mat y;
+	mat_view y;
 
 
 	template<class tensor> auto forward_propagation(const tensor& x) {
-		y = mat(x);
+		y = mat_view(x);
 		return this->next().forward_propagation(y);
 	}
 

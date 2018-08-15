@@ -10,7 +10,7 @@
 #define TENSOR_CORE_BASE_H_
 
 #include "BlackCat_Internal_Definitions.h"
-#include "BlackCat_Internal_Shape.h"
+#include "Shape.h"
 
 namespace BC {
 namespace internal {
@@ -182,7 +182,10 @@ template<class T> struct isArray_impl<T, std::enable_if_t<std::is_same<decltype(
 		{ static constexpr bool conditional = std::is_base_of<Tensor_Array_Base<T, T::DIMS()>, T>::value; };
 
 }
-template<class T> static constexpr bool is_array() { return internal::isArray_impl<std::decay_t<T>>::conditional; }
+//template<class T> static constexpr bool is_array() { return std::is_base_of<internal::Tensor_Array_Base<T, T::DIMS()>, T>::value; };//return internal::isArray_impl<std::decay_t<T>>::conditional; }
+
+template<class T> static constexpr bool is_array() { return std::is_base_of<internal::Tensor_Array_Base<T, T::DIMS()>, T>::value; };//return internal::isArray_impl<std::decay_t<T>>::conditional; }
+
 
 }
 

@@ -10,6 +10,7 @@
 
 #include <type_traits>
 #include "BlackCat_Internal_Definitions.h"
+#include "Shape_Base.h"
 #include <array>
 namespace BC {
 template<class T, int dims>
@@ -21,7 +22,7 @@ struct simple_array {
 };
 
 template<int dims>
-struct Shape {
+struct Shape : Shape_Base<dims, Shape<dims>> {
 
 	__BCinline__ static constexpr int LENGTH() { return dims; }
 protected:
@@ -45,6 +46,12 @@ public:
 		init(BC::array(ints...));
 	}
 	Shape() {};
+
+	template<class is_deriv>
+	Shape(const Inner_Shape<dims, is_deriv> param) {
+		init(param);
+	}
+
 	template<int dim, class int_t>
 	Shape (stack_array<dim, int_t> param) {
 		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
@@ -71,10 +78,17 @@ public:
 	__BCinline__ int outer_dimension() const { return IS[dims - 2]; }
 	__BCinline__ int leading_dimension(int i) const { return OS[i]; }
 
-	void copy_shape(const Shape& shape) {
+//	void copy_shape(const Shape& shape) {
+//		for (int i = 0; i < dims; ++i) {
+//			IS[i] = shape.IS[i];
+//			OS[i] = shape.OS[i];
+//		}
+//	}
+	template<class T>
+	void copy_shape(const Shape_Base<dims, T>& shape) {
 		for (int i = 0; i < dims; ++i) {
-			IS[i] = shape.IS[i];
-			OS[i] = shape.OS[i];
+			IS[i] = shape.dimension(i);
+			OS[i] = shape.leading_dimension(i);
 		}
 	}
 
@@ -96,7 +110,8 @@ private:
 
 template<>
 struct Shape<0> {
-	void copy_shape(const Shape& shape) {}
+
+	template<class deriv> void copy_shape(const Shape_Base<0, deriv>& shape) {}
 	static void swap_shape(Shape& a, Shape& b) {}
 
 	__BCinline__ int size() const { return 1; }
@@ -117,6 +132,11 @@ struct Shape<1> {
 	void copy_shape(const Shape<1>& shape) {
 		this->length = shape.length;
 	}
+
+	template<class deriv> void copy_shape(const Shape_Base<1, deriv>& shape) {
+		this->length = shape.dimension(0);
+	}
+
 	void swap_shape(Shape<1>& shape){
 		std::swap(length, shape.length);
 	}

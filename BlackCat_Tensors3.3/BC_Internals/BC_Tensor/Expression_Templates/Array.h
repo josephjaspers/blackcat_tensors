@@ -41,11 +41,13 @@ struct Array : Tensor_Array_Base<Array<dimension, T, mathlib>, dimension>, publi
 		BC::Evaluator<mathlib_t>::evaluate(eval);
 	}
 
-	template<class U>
-	Array(U param, scalar_t* array_) : array(array_), Shape<DIMS()>(param) {}
+protected:
+	template<class U> Array(U param, scalar_t* array_) : array(array_), Shape<DIMS()>(param) {}
+	Array(scalar_t* array_) : array(array_) {}
 
+public:
 	__BCinline__ const scalar_t* memptr() const { return array; }
-	__BCinline__	   scalar_t* memptr()  	   { return array; }
+	__BCinline__	   scalar_t* memptr()  	    { return array; }
 
 	void swap_array(Array& param) {
 		std::swap(this->array, param.array);

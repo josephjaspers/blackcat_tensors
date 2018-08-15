@@ -6,13 +6,16 @@ using BC::Matrix;
 using BC::Scalar;
 using BC::Cube;
 
-using ml =  BC::CPU;		//to test cpu
+using ml =  BC::CPU;	//to test cpu
 //using ml = BC::GPU;	//to test gpu
 
 using vec = Vector<float, ml>;
 using mat = Matrix<float, ml>;
 using scal = Scalar<float, ml>;
 using cube = Cube<float, ml>;
+
+
+using mat_view = BC::Matrix_View<float, ml>;
 //using tensor4 = BC::Tensor4<float, ml>;
 //using tesnor5 = BC::Tensor5<float, ml>;
 
@@ -27,6 +30,8 @@ int test() {
 gemm_injection();
 
 
+
+
 	mat a(3,3);
 	a.randomize(0, 10);
 
@@ -36,10 +41,32 @@ gemm_injection();
 
 	mat b(a + a);
 
-	b.print();
 
-	b[0] = a[0];
+
+	a.print_leading_dimensions();
+	mat_view c(a);
+	c.print();
+
+//	b = c + c;
+
+	c += c;
+
+	a.print();
+
+	b = c * a;
+
 	b.print();
+//	b.print();
+//
+
+//	c.print();
+//
+//	a.print();
+
+//	b.print();
+//
+//	b[0] = a[0];
+//	b.print();
 
 //readwrite();
 ////shaping();

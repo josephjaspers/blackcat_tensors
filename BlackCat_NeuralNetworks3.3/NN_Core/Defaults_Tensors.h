@@ -14,8 +14,12 @@ namespace NN {
 using Scalar = BC::Scalar<fp_type, ml>;
 using Vector = BC::Vector<fp_type, ml>;
 using Matrix = BC::Matrix<fp_type, ml>;
-
 using Cube = BC::Cube<fp_type, ml>;
+
+using Scalar_View = BC::Scalar_View<fp_type, ml>;
+using Vector_View = BC::Vector_View<fp_type, ml>;
+using Matrix_View = BC::Matrix_View<fp_type, ml>;
+using Cube_View = BC::Cube_View<fp_type, ml>;
 //using Scalar = BC::Scalar<fp_type, ml>;
 //using Scalar = BC::Scalar<fp_type, ml>;
 //
@@ -23,6 +27,11 @@ using scal 		= Scalar;
 using vec 		= Vector;
 using mat 		= Matrix;
 using cube 		= Cube;
+
+using scal_view 	= Scalar;
+using vec_view 		= Vector;
+using mat_view 		= Matrix;
+using cube_view 	= Cube;
 //using tensor4 	= Tensor4<fp_type, ml>;
 //using tensor5 	= Tensor5<fp_type, ml>;
 

@@ -1,9 +1,9 @@
-#include "../BlackCat_GPU_NeuralNetworks.h"
+//#include "../BlackCat_GPU_NeuralNetworks.h"
 
 #include <cxxabi.h>
 
 
-//#include "../BlackCat_NeuralNetworks.h"
+#include "../BlackCat_NeuralNetworks.h"
 
 #include <fstream>
 #include <iostream>

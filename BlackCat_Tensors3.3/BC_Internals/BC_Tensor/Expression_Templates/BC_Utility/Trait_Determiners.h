@@ -23,6 +23,8 @@ template<int> struct DISABLED;
 
 namespace internal {
 template<int, class, class> class Array;
+template<int, class, class> class Array_View;
+
 }
 
 template<class>class Tensor_Base;
@@ -50,6 +52,11 @@ struct determine_functor<internal::Array<x, a, b>>{
 	using type = internal::Array<x,a,b>;
 };
 
+template<int x, class a, class b>
+struct determine_functor<internal::Array_View<x, a, b>>{
+	using type = internal::Array_View<x,a,b>;
+};
+
 template<template<class...> class expression, class T, class... set>
 struct determine_functor<expression<T, set...>> {
 	using type = typename determine_functor<T>::type;
@@ -62,6 +69,12 @@ template<int dims, class scalar, class ml>
 struct determine_scalar<internal::Array<dims, scalar, ml>> {
 	using type = scalar;
 };
+
+template<int dims, class scalar, class ml>
+struct determine_scalar<internal::Array_View<dims, scalar, ml>> {
+	using type = scalar;
+};
+
 
 template<template<class...> class expression, class T, class... set>
 struct determine_scalar<expression<T, set...>> {
@@ -77,6 +90,12 @@ template<int x, class scalar, class ml>
 struct determine_mathlibrary<internal::Array<x, scalar, ml>> {
 	using type = ml;
 };
+
+template<int x, class scalar, class ml>
+struct determine_mathlibrary<internal::Array_View<x, scalar, ml>> {
+	using type = ml;
+};
+
 }
 
 
