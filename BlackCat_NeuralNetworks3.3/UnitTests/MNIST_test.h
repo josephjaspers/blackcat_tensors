@@ -45,7 +45,7 @@ int percept_MNIST() {
 	const int NUMB_DIGITS = 10;
 	const int EPOCHS = 10;
 
-	NeuralNetwork<FeedForward, FeedForward> network(784, 512, 10);
+	NeuralNetwork<FeedForward, FeedForward> network(784, 256, 10);
 	network.setLearningRate(.03);
 	network.set_batch_size(BATCH_SIZE);
 

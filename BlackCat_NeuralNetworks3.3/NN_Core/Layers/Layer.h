@@ -14,7 +14,7 @@
 namespace BC {
 namespace NN {
 
-template<class derived, int tensor_dimension = 1>
+template<class derived>
 class Layer {
 public:
 

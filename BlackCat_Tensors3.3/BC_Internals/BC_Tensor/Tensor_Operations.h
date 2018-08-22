@@ -21,7 +21,7 @@
 #include "Expression_Templates/Expression_Unary.h"
 #include "Expression_Templates/Function_transpose.h"
 
-#include "Tensor_Operations_Impl/Expression_Determiner.h"
+//#include "Tensor_Operations_Impl/Expression_Determiner.h"
 #include "Tensor_Operations_Impl/Alias.h"
 
 #include "Expression_Templates/Parse_Tree_Evaluator.h"
@@ -35,17 +35,16 @@ template<class derived>
 class Tensor_Operations {
 
 	template<class> friend class Tensor_Operations;
-	template<class pderiv, class functor> using impl 	= typename expression_determiner<derived>::template impl<pderiv, functor>;
-	template<class pderiv> 				  using dp_impl	= typename expression_determiner<derived>::template dp_impl<pderiv>;
 
 	using functor_type 		= functor_of<derived>;
 	using scalar_type 		= scalar_of<derived>;
 	using mathlib_type 		= mathlib_of<derived>;
 
-	//Returns the class returned as its most derived member
-	 const derived& as_derived() const { return static_cast<const derived&>(*this); }
-	 	   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
+	template<class expr> 		   using unary_expression_t  = BC::Tensor_Base<internal::unary_expression<functor_type, expr>>;
+	template<class rv, class expr> using binary_expression_t = BC::Tensor_Base<internal::binary_expression<functor_type, rv, expr>>;
 
+	const derived& as_derived() const { return static_cast<const derived&>(*this); }
+	 	  derived& as_derived() 	  { return static_cast<	     derived&>(*this); }
 
 	//--------------------------------------evaluation implementation-----------------------------------------------//
 	template<class derived_t>
@@ -93,10 +92,25 @@ public:
 		return as_derived();
 	}
 	//-------------------------------------gemm/gemv/ger-----------------------------------------//
-	template<class pDeriv>
-	auto operator *(const Tensor_Operations<pDeriv>& param) const {
-		 return typename dp_impl<pDeriv>::type(as_derived().internal(), param.as_derived().internal());
+	template<class param_deriv>
+	auto operator *(const Tensor_Operations<param_deriv>& param) const {
+
+		static constexpr bool scalmul	= derived::DIMS() == 0 || param_deriv::DIMS() == 0;
+		static constexpr bool gemm 		= derived::DIMS() == 2 && param_deriv::DIMS() == 2;
+		static constexpr bool gemv 		= derived::DIMS() == 2 && param_deriv::DIMS() == 1;
+		static constexpr bool ger  		= derived::DIMS() == 1 && param_deriv::DIMS() == 1;
+
+		using matmul_t =
+					 std::conditional_t<scalmul, binary_expression_t<functor_of<param_deriv>, oper::scalar_mul>,
+					 std::conditional_t<gemm, 	 binary_expression_t<functor_of<param_deriv>, oper::gemm<mathlib_type>>,
+					 std::conditional_t<gemv, 	 binary_expression_t<functor_of<param_deriv>, oper::gemv<mathlib_type>>,
+					 std::conditional_t<ger, 	 binary_expression_t<functor_of<param_deriv>, oper::ger<mathlib_type>>, void>>>>;
+
+		static_assert(!std::is_same<matmul_t, void>::value, "Matrix Multiplication currently does not support broadcasting");
+
+		return matmul_t(as_derived().internal(), param.as_derived().internal());
 	}
+
 	//--------------------------------------pointwise operators-------------------------------//
 	template<class pDeriv> auto operator +(const Tensor_Operations<pDeriv>& param) const {
 		assert_valid(param);
@@ -159,21 +173,22 @@ public:
 		return as_derived().bi_expr<oper::conv<x, mathlib_type>>(tensor.as_derived());
 	}
 	//-----------------------------------custom expressions--------------------------------------------------//
+
 	template<class functor>
 	auto un_expr(functor f) const {
-		return typename impl<derived, functor>::unary_type(as_derived().internal(), f);
+		return unary_expression_t<functor>(as_derived().internal(), f);
 	}
 	template<class functor>
 	const auto un_expr() const {
-		return typename impl<derived, functor>::unary_type(as_derived().internal());
+		return unary_expression_t<functor>(as_derived().internal());
 	}
-	template<class d2, class functor>
-	const auto bi_expr(functor f, const Tensor_Operations<d2>& rv) const {
-		return typename impl<d2, functor>::type(as_derived().internal(), rv.as_derived().internal());
+	template<class functor, class right_value>
+	const auto bi_expr(functor f, const Tensor_Operations<right_value>& rv) const {
+		return binary_expression_t<functor_of<right_value>, functor>(as_derived().internal(), rv.as_derived().internal());
 	}
-	template<class functor, class d2>
-	const auto bi_expr(const Tensor_Operations<d2>& rv) const {
-		return typename impl<d2, functor>::type(as_derived().internal(), rv.as_derived().internal());
+	template<class functor, class right_value>
+	const auto bi_expr(const Tensor_Operations<right_value>& rv) const {
+		return binary_expression_t<functor_of<right_value>, functor>(as_derived().internal(), rv.as_derived().internal());
 	}
 	 //--------------------------------ASSERTIONS------------------------------//
 

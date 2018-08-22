@@ -14,8 +14,6 @@ namespace Base {
 template<class derived>
 class Tensor_Functions {
 	template<class> friend class Tensor_Functions;
-	template<class pderiv, class functor> using impl 	= typename expression_determiner<derived>::template impl<pderiv, functor>;
-	template<class pderiv> 				  using dp_impl	= typename expression_determiner<derived>::template dp_impl<pderiv>;
 
 	using functor_type 		= functor_of<derived>;
 	using scalar_type 		= scalar_of<derived>;
@@ -31,8 +29,6 @@ public:
 	void zero() 									{ mathlib_type::zero(as_derived().internal()); }
 
 };
-
-
 
 }
 }
