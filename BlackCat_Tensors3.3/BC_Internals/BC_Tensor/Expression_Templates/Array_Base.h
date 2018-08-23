@@ -78,10 +78,26 @@ public:
 	//internal_views-------------------------------------------------------------------
 
 	__BCinline__ const auto _slice(int i) const {
-		return slice_t(&as_derived()[slice_index(i)], as_derived());
+		//change to if constexpr once NVCC supports it
+		struct ret_scalar { __BCinline__ static auto impl(const Tensor_Array_Base& self, int i) { return self._scalar(i); } };
+		struct ret_slice { __BCinline__ static auto impl(const Tensor_Array_Base& self, int i) {
+			return slice_t(&self.as_derived()[self.slice_index(i)], self.as_derived()); } };
+
+		using xslice_t = std::conditional_t<DIMS() == 1, ret_scalar,
+				std::conditional_t<(DIMS() > 1), ret_slice, void>>;
+
+		return xslice_t::impl(*this);
 	}
 	__BCinline__ auto _slice(int i) {
-		return slice_t(&as_derived()[slice_index(i)], as_derived());
+		//change to if constexpr once NVCC supports it
+		struct ret_scalar { __BCinline__ static auto impl(const Tensor_Array_Base& self, int i) { return self._scalar(i); } };
+		struct ret_slice { __BCinline__ static auto impl(const Tensor_Array_Base& self, int i) {
+			return slice_t(&self.as_derived()[self.slice_index(i)], self.as_derived()); } };
+
+		using xslice_t = std::conditional_t<DIMS() == 1, ret_scalar,
+				std::conditional_t<(DIMS() > 1), ret_slice, void>>;
+
+		return xslice_t::impl(*this, i);
 	}
 
 //CURRENTLY BROKEN, will fix
@@ -94,10 +110,12 @@ public:
 
 
 	__BCinline__ const auto _scalar(int i) const {
-		return scalar_t(&as_derived()[i], as_derived());
+		static_assert(derived::ITERATOR() == 0 || derived::ITERATOR() == 1, "SCALAR_ACCESS IS NOT ALLOWED FOR NON CONTINUOUS TENSORS");
+		return scalar_t(as_derived()[i]);
 	}
 	__BCinline__ auto _scalar(int i) {
-		return scalar_t(&as_derived()[i], as_derived());
+		static_assert(derived::ITERATOR() == 0 || derived::ITERATOR() == 1, "SCALAR_ACCESS IS NOT ALLOWED FOR NON CONTINUOUS TENSORS");
+		return scalar_t(as_derived()[i]);
 	}
 
 
@@ -182,9 +200,8 @@ template<class T> struct isArray_impl<T, std::enable_if_t<std::is_same<decltype(
 		{ static constexpr bool conditional = std::is_base_of<Tensor_Array_Base<T, T::DIMS()>, T>::value; };
 
 }
-//template<class T> static constexpr bool is_array() { return std::is_base_of<internal::Tensor_Array_Base<T, T::DIMS()>, T>::value; };//return internal::isArray_impl<std::decay_t<T>>::conditional; }
 
-template<class T> static constexpr bool is_array() { return std::is_base_of<internal::Tensor_Array_Base<T, T::DIMS()>, T>::value; };//return internal::isArray_impl<std::decay_t<T>>::conditional; }
+template<class T> static constexpr bool is_array() { return std::is_base_of<internal::Tensor_Array_Base<T, T::DIMS()>, T>::value; };
 
 
 }

@@ -35,19 +35,24 @@ private:
 	const auto transpose_impl() const { return internal::unary_expression<functor_type, oper::transpose<mathlib_type>>(as_derived().internal()); }
 	 	  auto transpose_impl() 	  { return internal::unary_expression<functor_type, oper::transpose<mathlib_type>>(as_derived().internal()); }
 
+	 template<class internal_t>
+	 auto tensor(internal_t internal) {
+		 return Tensor_Base<internal_t>(internal);
+	 }
+
 public:
 
-	const auto t() const { return Tensor_Base<decltype(transpose_impl())>(transpose_impl()); }
-		  auto t() 		 { return Tensor_Base<decltype(transpose_impl())>(transpose_impl()); }
+	const auto t() const { return tensor(transpose_impl()); }
+		  auto t() 		 { return tensor(transpose_impl()); }
 
 	const auto operator [] (int i) const { return slice(i); }
 		  auto operator [] (int i) 		 { return slice(i); }
 
-	const auto scalar(int i) const { return Tensor_Base<internal::Array_Scalar<functor_type>>(as_derived()._scalar(i)); }
-		  auto scalar(int i) 	   { return Tensor_Base<internal::Array_Scalar<functor_type>>(as_derived()._scalar(i)); }
+	const auto scalar(int i) const { return tensor(as_derived()._scalar(i)); }
+		  auto scalar(int i) 	   { return tensor(as_derived()._scalar(i)); }
 
-	const auto slice(int i) const  { return Tensor_Base<decltype(as_derived()._slice(0))>(as_derived()._slice(i)); }
-		  auto slice(int i) 	   { return Tensor_Base<decltype(as_derived()._slice(0))>(as_derived()._slice(i)); }
+	const auto slice(int i) const  { return tensor(as_derived()._slice(i)); }
+		  auto slice(int i) 	   { return tensor(as_derived()._slice(i)); }
 
 	const auto col(int i) const {
 		static_assert(DIMS() == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
