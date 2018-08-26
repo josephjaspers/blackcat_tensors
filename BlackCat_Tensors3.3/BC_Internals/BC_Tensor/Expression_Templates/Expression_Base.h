@@ -57,16 +57,6 @@ public:
 
 	//---------------------------------------------------METHODS THAT MAY NEED TO BE SHADOWED------------------------------------------------------------//
 	void destroy() const {}
-	//---------------------------------------------------METHODS THAT NEED TO BE SHADOWED------------------------------------------------------------//
-	static constexpr scalar_of<derived> BC_NAN = std::numeric_limits<scalar_of<derived>>::quiet_NaN();
-
-	__BCinline__ scalar_of<derived> operator [] (int index) const { return BC_NAN; }
-
-	template<class... integers>
-	__BCinline__ auto operator()(integers... ints) const { return BC_NAN; }
-
-
-	//-------------------------------------------------tree re-ordering methods---------------------------------------------------------//
 };
 }
 }

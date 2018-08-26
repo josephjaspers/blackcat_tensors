@@ -10,10 +10,41 @@
 
 namespace BC {
 namespace internal {
+
 template<class,class,class> class binary_expression;
 template<class,class>		class unary_expression;
 
+}
 
+template<class T, class enabler=void>
+struct BC_array_move_constructible_overrider {
+	static constexpr bool boolean = false;
+};
+template<class T, class enabler=void>
+struct BC_array_copy_constructible_overrider {
+	static constexpr bool boolean = false;
+};
+template<class T, class enabler=void>
+struct BC_array_move_assignable_overrider {
+	static constexpr bool boolean = false;
+};
+template<class T, class enabler=void>
+struct BC_array_copy_assignable_overrider {
+	static constexpr bool boolean = false;
+};
+
+
+template<class T> constexpr bool BC_array_move_constructible() {
+	return BC_array_move_constructible_overrider<T>::boolean;
+}
+template<class T> constexpr bool BC_array_copy_constructible() {
+	return BC_array_copy_constructible_overrider<T>::boolean;
+}
+template<class T> constexpr bool BC_array_move_assignable() {
+	return BC_array_move_assignable_overrider<T>::boolean;
+}
+template<class T> constexpr bool BC_array_copy_assignable()	{
+	return BC_array_copy_assignable_overrider<T>::boolean;
 }
 
 

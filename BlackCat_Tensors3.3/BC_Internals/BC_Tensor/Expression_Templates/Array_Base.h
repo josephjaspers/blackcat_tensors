@@ -80,8 +80,8 @@ public:
 	__BCinline__ const auto _slice(int i) const {
 		//change to if constexpr once NVCC supports it
 		struct ret_scalar { __BCinline__ static auto impl(const Tensor_Array_Base& self, int i) { return self._scalar(i); } };
-		struct ret_slice { __BCinline__ static auto impl(const Tensor_Array_Base& self, int i) {
-			return slice_t(&self.as_derived()[self.slice_index(i)], self.as_derived()); } };
+		struct ret_slice  { __BCinline__ static auto impl(const Tensor_Array_Base& self, int i) {
+			return slice_t(self.slice_ptr(i), self.as_derived()); } };
 
 		using xslice_t = std::conditional_t<DIMS() == 1, ret_scalar,
 				std::conditional_t<(DIMS() > 1), ret_slice, void>>;
@@ -91,8 +91,8 @@ public:
 	__BCinline__ auto _slice(int i) {
 		//change to if constexpr once NVCC supports it
 		struct ret_scalar { __BCinline__ static auto impl(const Tensor_Array_Base& self, int i) { return self._scalar(i); } };
-		struct ret_slice { __BCinline__ static auto impl(const Tensor_Array_Base& self, int i) {
-			return slice_t(&self.as_derived()[self.slice_index(i)], self.as_derived()); } };
+		struct ret_slice  { __BCinline__ static auto impl(const Tensor_Array_Base& self, int i) {
+			return slice_t(self.slice_ptr(i), self.as_derived()); } };
 
 		using xslice_t = std::conditional_t<DIMS() == 1, ret_scalar,
 				std::conditional_t<(DIMS() > 1), ret_slice, void>>;
@@ -100,32 +100,23 @@ public:
 		return xslice_t::impl(*this, i);
 	}
 
-//CURRENTLY BROKEN, will fix
-//	template<int axis> __BCinline__ const auto _slice(int i) const {
-//		return c_slice_t<axis>(&as_derived()[slice_index(i)], as_derived());
-//	}
-//	template<int axis>  __BCinline__ auto _slice(int i) {
-//		return c_slice_t<axis>(&as_derived()[slice_index(i)], as_derived());
-//	}
-
-
 	__BCinline__ const auto _scalar(int i) const {
 		static_assert(derived::ITERATOR() == 0 || derived::ITERATOR() == 1, "SCALAR_ACCESS IS NOT ALLOWED FOR NON CONTINUOUS TENSORS");
-		return scalar_t(as_derived()[i]);
+		return scalar_t(&as_derived()[i]);
 	}
 	__BCinline__ auto _scalar(int i) {
 		static_assert(derived::ITERATOR() == 0 || derived::ITERATOR() == 1, "SCALAR_ACCESS IS NOT ALLOWED FOR NON CONTINUOUS TENSORS");
-		return scalar_t(as_derived()[i]);
+		return scalar_t(&as_derived()[i]);
 	}
 
 
 	//------------------------------------------Curried Reshapers ---------------------------------------//
 
 	template<class ... integers>  auto _chunk(int location, integers ... shape_dimensions) {
-		return chunk_t<sizeof...(integers)>(&as_derived()[location], this->as_derived(), shape_dimensions...);;
+		return chunk_t<sizeof...(integers)>(&as_derived()[location], this->as_derived(), shape_dimensions...);
 	}
 	template<class ... integers>  const auto _chunk(int location, integers ... shape_dimensions) const {
-		return chunk_t<sizeof...(integers)>(&as_derived()[location], this->as_derived(), shape_dimensions...);;
+		return chunk_t<sizeof...(integers)>(&as_derived()[location], this->as_derived(), shape_dimensions...);
 	}
 
 	template<class ... integers>
@@ -150,13 +141,13 @@ public:
 	//------------------------------------------Implementation Details---------------------------------------//
 
 	__BCinline__
-	int slice_index(int i) const {
+	auto slice_ptr(int i) const {
 		if (DIMS() == 0)
-			return 0;
+			return &as_derived()[0];
 		else if (DIMS() == 1)
-			return i;
+			return &as_derived()[i];
 		else
-			return as_derived().leading_dimension(DIMENSION - 2) * i;
+			return &as_derived()[as_derived().leading_dimension(DIMENSION - 2) * i];
 	}
 
 
@@ -189,19 +180,15 @@ public:
 		}
 		return index;
 	}
-
-
-
 };
-
-
-template<class T, class voider = void> struct isArray_impl { static constexpr bool conditional = false; };
-template<class T> struct isArray_impl<T, std::enable_if_t<std::is_same<decltype(T::DIMS()),int>::value>>
-		{ static constexpr bool conditional = std::is_base_of<Tensor_Array_Base<T, T::DIMS()>, T>::value; };
-
 }
 
 template<class T> static constexpr bool is_array() { return std::is_base_of<internal::Tensor_Array_Base<T, T::DIMS()>, T>::value; };
+
+template<class T>
+struct BC_array_copy_assignable_overrider<T, std::enable_if_t<is_array<T>()>> {
+	static constexpr bool boolean = true;
+};
 
 
 }

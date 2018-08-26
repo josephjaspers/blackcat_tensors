@@ -108,6 +108,29 @@ struct Array<0, T, mathlib> : Tensor_Array_Base<Array<0, T, mathlib>, 0>, public
 
 };
 }
+template<class T> struct isPrimaryArray { static constexpr bool conditional = false; };
+template<int d, class T, class ml> struct isPrimaryArray<internal::Array<d,T,ml>> { static constexpr bool conditional = true; };
+template<class T> static constexpr bool is_array_core() { return isPrimaryArray<T>::conditional; }
+
+
+template<class T>
+struct BC_array_move_assignable_overrider<T, std::enable_if_t<is_array_core<T>()>> {
+	static constexpr bool boolean = true;
+};
+//template<class T>
+//struct BC_array_copy_assignable_overrider<T, std::enable_if_t<is_array_core<T>()>> {
+//	static constexpr bool boolean = true;
+//};
+template<class T>
+struct BC_array_move_constructible_overrider<T, std::enable_if_t<is_array_core<T>()>> {
+	static constexpr bool boolean = true;
+};
+template<class T>
+struct BC_array_copy_constructible_overrider<T, std::enable_if_t<is_array_core<T>()>> {
+	static constexpr bool boolean = true;
+};
+
+
 }
 
 #endif /* SHAPE_H_ */

@@ -9,7 +9,6 @@
 #define FEEDFORWARD_CU_
 
 #include "Layer.h"
-#include <mutex>
 
 namespace BC {
 namespace NN {
@@ -19,17 +18,16 @@ struct FeedForward : public Layer<derived> {
 public:
 
 	using Layer<derived>::lr;	//the learning rate
+	using Layer<derived>::x;
 
 	mat w_gradientStorage;		//weight gradient storage
 	vec b_gradientStorage;		//bias gradient storage
-
 
 	mat dy;							//error
 	mat y;							//outputs
 
 	mat w;							//weights
 	vec b;							//biases
-	mat& x = this->prev().y;
 
 	FeedForward(int inputs) :
 			Layer<derived>(inputs),
@@ -52,10 +50,10 @@ public:
 	template<class t> auto back_propagation(const expr::mat<t>& dy_) {
 		dy = dy_;
 
-		w_gradientStorage -= dy * x.t();
+		w_gradientStorage -= dy * x().t();
 		b_gradientStorage -= dy;
 
-		return this->prev().back_propagation(w.t() * dy % gd(x));
+		return this->prev().back_propagation(w.t() * dy % gd(x()));
 	}
 	template<class t> auto forward_propagation_tess(const expr::mat<t>& x) const {
 		return this->next().forward_propagation_tess(g(w * x + b));

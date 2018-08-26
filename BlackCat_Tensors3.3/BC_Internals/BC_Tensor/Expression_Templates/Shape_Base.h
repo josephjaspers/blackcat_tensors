@@ -15,10 +15,10 @@ namespace BC {
 template<int dims, class derived>
 class Inner_Shape {
 
-	const derived& as_derived() const { return static_cast<const derived&>(*this); }
-		  derived& as_derived() 	  { return static_cast<derived&>(*this); }
+	__BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }
+	__BCinline__	   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
 
-	auto is() const{
+	__BCinline__ auto is() const{
 		return as_derived().inner_shape();
 	}
 public:
@@ -32,10 +32,10 @@ public:
 template<int dims, class derived>
 class Outer_Shape {
 
-	const derived& as_derived() const { return static_cast<const derived&>(*this); }
-		  derived& as_derived() 	  { return static_cast<derived&>(*this); }
+	__BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }
+	__BCinline__	   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
 
-	auto os()const {
+	__BCinline__ auto os()const {
 		return as_derived().outer_shape();
 	}
 public:

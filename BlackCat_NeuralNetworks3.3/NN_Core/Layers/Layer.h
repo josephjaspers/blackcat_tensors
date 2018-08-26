@@ -18,7 +18,7 @@ template<class derived>
 class Layer {
 public:
 
-	Scalar lr;
+	scal lr;
 
 	const int INPUTS;
 	const int OUTPUTS;
@@ -39,6 +39,16 @@ public:
 		lr = learning_rate;
 		this->next().setLearningRate(learning_rate);
 	}
+
+
+	const auto& x() const {
+		return prev().y;
+	}
+	auto& x() {
+		return prev().y;
+	}
+
+//	decltype(std::declval<Layer<derived>>().prev().xt()) x = xt();
 };
 
 }

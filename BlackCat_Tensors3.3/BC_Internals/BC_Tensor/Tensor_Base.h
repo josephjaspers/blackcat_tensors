@@ -55,11 +55,11 @@ public:
 	using internal_t::DIMS; //required
 	using scalar_t = typename internal_t::scalar_t;
 
-	using move_parameter = std::conditional_t<is_array_core<internal_t>(), self&&, BC::DISABLED<0>>;
-	using copy_parameter = std::conditional_t<is_array_core<internal_t>(), const self&, BC::DISABLED<1>>;
+	using move_parameter = std::conditional_t<BC_array_move_constructible<internal_t>(), self&&, BC::DISABLED<0>>;
+	using copy_parameter = std::conditional_t<BC_array_copy_constructible<internal_t>(), const self&, BC::DISABLED<1>>;
 
-	using move_oper_parameter = std::conditional_t<is_array_core<internal_t>(), self&&, BC::DISABLED<0>>;
-	using copy_oper_parameter = std::conditional_t<is_array<internal_t>(), const self&, BC::DISABLED<1>>;
+	using move_oper_parameter = std::conditional_t<BC_array_move_assignable<internal_t>(), self&&, BC::DISABLED<0>>;
+	using copy_oper_parameter = std::conditional_t<BC_array_copy_assignable<internal_t>(), const self&, BC::DISABLED<1>>;
 
 
 

@@ -13,12 +13,12 @@
 
 #include "Layers/Layer.h"
 #include "Layers/FeedForward.h"
-#include "Layers/Recurrent.h"
-#include "Layers/GatedRecurrentUnit.h"
+//#include "Layers/Recurrent.h"
+//#include "Layers/GatedRecurrentUnit.h"
 #include "Layers/OutputLayer.h"
 
-#include "Layers/addition_layer.h"
-#include "Layers/matmul_layer.h"
+//#include "Layers/addition_layer.h"
+//#include "Layers/matmul_layer.h"
 
 
 #endif /* BCNN_GLOBAL_UNIFIER_H_ */

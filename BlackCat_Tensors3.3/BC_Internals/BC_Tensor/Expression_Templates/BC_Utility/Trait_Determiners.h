@@ -29,9 +29,9 @@ template<int, class, class> class Array_View;
 
 template<class>class Tensor_Base;
 
-template<class T> struct isPrimaryArray { static constexpr bool conditional = false; };
-template<int d, class T, class ml> struct isPrimaryArray<internal::Array<d,T,ml>> { static constexpr bool conditional = true; };
-template<class T> static constexpr bool is_array_core() { return isPrimaryArray<T>::conditional; }
+//template<class T> struct isPrimaryArray { static constexpr bool conditional = false; };
+//template<int d, class T, class ml> struct isPrimaryArray<internal::Array<d,T,ml>> { static constexpr bool conditional = true; };
+//template<class T> static constexpr bool is_array_core() { return isPrimaryArray<T>::conditional; }
 
 template<class> struct determine_functor;
 template<class> struct determine_scalar;
