@@ -12,6 +12,8 @@
 namespace BC {
 namespace oper {
 template<class ml> class gemv : public BLAS_FUNCTION {};
+template<class ml> class dot;
+
 }
 namespace internal {
 
@@ -54,9 +56,9 @@ struct binary_expression<lv, rv, oper::gemv<mathlib>>
 
 	__BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : 1; });}
 
-//	__BCinline__ auto _slice(int i) {
-//		return binary_expression<decltype(left._slice(i)), decltype(right._slice(i)), oper::scalar_mul>(left._slice(i), right._slice(i));
-//	}
+	__BCinline__ auto _slice(int i) {
+		return binary_expression<decltype(left._row(i)), decltype(right._slice(i)), oper::dot<mathlib>>(left._row(i), right._slice(i));
+	}
 
 template<class core, int alpha_mod, int beta_mod>
 void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {

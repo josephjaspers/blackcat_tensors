@@ -1,5 +1,5 @@
 #include <iostream>
-#include "BlackCat_Tensors.h"
+#include "../BlackCat_Tensors.h"
 #include <typeinfo>
 using BC::Vector;
 using BC::Matrix;

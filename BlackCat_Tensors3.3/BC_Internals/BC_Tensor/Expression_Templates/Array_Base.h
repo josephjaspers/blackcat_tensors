@@ -45,9 +45,10 @@ struct Tensor_Array_Base : expression_base<derived>, BC_Array {
 	using self 		= derived;
 	using slice_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Slice<self>>;
 	using scalar_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Scalar<self>>;
+	using row_t =  _Tensor_Row<self>;
+
 	template<int dimension> using reshape_t = typename _Tensor_Reshape<dimension>::template implementation<derived>;
 	template<int dimension> using chunk_t 	= typename _Tensor_Chunk<dimension>::template implementation<derived>;
-	template<int dimension> using row_t =  _Tensor_Row<self>;
 
 private:
 
@@ -99,6 +100,15 @@ public:
 
 		return xslice_t::impl(*this, i);
 	}
+
+
+	__BCinline__ const auto _row(int i) const {
+		return row_t(&as_derived()[i], as_derived());
+	}
+	__BCinline__  auto _row(int i)  {
+		return row_t(&as_derived()[i], as_derived());
+	}
+
 
 	__BCinline__ const auto _scalar(int i) const {
 		static_assert(derived::ITERATOR() == 0 || derived::ITERATOR() == 1, "SCALAR_ACCESS IS NOT ALLOWED FOR NON CONTINUOUS TENSORS");

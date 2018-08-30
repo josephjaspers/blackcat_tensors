@@ -22,9 +22,7 @@
 #include "Expression_Templates/Expression_Unary.h"
 #include "Expression_Templates/Function_transpose.h"
 
-//#include "Tensor_Operations_Impl/Expression_Determiner.h"
-#include "Tensor_Operations_Impl/Alias.h"
-
+#include "Tensor_Operations_Alias.h"
 #include "Expression_Templates/Parse_Tree_Evaluator.h"
 
 namespace BC {
