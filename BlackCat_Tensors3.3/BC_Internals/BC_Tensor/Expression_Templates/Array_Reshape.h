@@ -45,7 +45,7 @@ struct Array_Reshape {
 
 	template<class... integers>
 	implementation(const scalar_t* array_, PARENT parent, integers... ints)
-	: array(const_cast<scalar_t*>(array_)), parent(parent), Shape<dimension>(ints...) {}
+	: Shape<dimension>(ints...),  parent(parent), array(const_cast<scalar_t*>(array_)) {}
 
 	__BCinline__ const auto memptr() const { return array; }
 	__BCinline__	   auto memptr()   	   { return array; }
