@@ -168,10 +168,10 @@ public:
 		return Alias<derived>(as_derived());
 	}
 
-
-	template<int x, class param_derived> auto conv(const Tensor_Operations<param_derived>& tensor) const {
-		return as_derived().bi_expr<oper::conv<x, mathlib_type>>(tensor.as_derived());
-	}
+//
+//	template<int x, class param_derived> auto conv(const Tensor_Operations<param_derived>& tensor) const {
+//		return as_derived().bi_expr<oper::conv<x, mathlib_type>>(tensor.as_derived());
+//	}
 	//-----------------------------------custom expressions--------------------------------------------------//
 
 	template<class functor>

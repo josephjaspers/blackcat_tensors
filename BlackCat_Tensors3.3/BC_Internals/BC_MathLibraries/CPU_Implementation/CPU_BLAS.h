@@ -8,6 +8,7 @@
 #ifndef MATHEMATICS_CPU_BLAS_H_
 #define MATHEMATICS_CPU_BLAS_H_
 #include <cblas.h>
+//#include <mkl_cblas.h>
 
 namespace BC {
 

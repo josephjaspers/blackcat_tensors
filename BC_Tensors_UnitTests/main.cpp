@@ -14,7 +14,6 @@ using mat = Matrix<float, ml>;
 using scal = Scalar<float, ml>;
 using cube = Cube<float, ml>;
 
-
 using mat_view = BC::Matrix_View<float, ml>;
 //using tensor4 = BC::Tensor4<float, ml>;
 //using tesnor5 = BC::Tensor5<float, ml>;

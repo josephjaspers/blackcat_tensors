@@ -33,7 +33,7 @@ struct Array_Chunk  {
 
 		template<class... integers>
 		implementation(const scalar_t* array_, PARENT parent, integers... ints)
-		: array(const_cast<scalar_t*>(array_)), parent(parent), Shape<dimension>(ints...) {}
+		:  Shape<dimension>(ints...), parent(parent), array(const_cast<scalar_t*>(array_)) {}
 		__BCinline__ const auto outer_shape() const 	{ return parent.outer_shape(); }
 		__BCinline__ int leading_dimension(int i) const { return parent.leading_dimension(i); }
 

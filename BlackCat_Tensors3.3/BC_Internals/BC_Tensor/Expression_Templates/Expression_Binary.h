@@ -32,7 +32,7 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	}
 
 	template<class... args>
-	__BCinline__  binary_expression(lv l, rv r, const args&... args_) : left(l), right(r), operation(args_...) {}
+	__BCinline__  binary_expression(lv l, rv r, const args&... args_) :  operation(args_...), left(l), right(r) {}
 
 	__BCinline__  auto  operator [](int index) const { return oper(left[index], right[index]); }
 	template<class... integers> __BCinline__  auto  operator ()(integers... ints) const { return oper(left(ints...), right(ints...)); }
