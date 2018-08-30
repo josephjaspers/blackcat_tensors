@@ -168,13 +168,23 @@ int gemm_injection() {
 	c.print();
 
 
-//	vec x(2);
-//	x(0) = 10;
-//	x(1) = 20;
-//	c += x;
+
+
 
 	c.print();
 
+
+	c = d * e;
+	c.print();
+	c.zero();
+	c[0] = (d * e)[0];
+	c.print();
+
+	c[1] = (d * e)[1];
+
+	c.print();
+
+	c.zero();
 
 	return 0;
 };

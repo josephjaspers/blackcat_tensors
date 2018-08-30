@@ -127,11 +127,6 @@ UnitTests/main.o : ../UnitTests/main.cu \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/surface_indirect_functions.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/device_launch_parameters.h \
     ../UnitTests/MNIST_test.h \
-    /usr/include/c++/6/cxxabi.h \
-    /usr/include/x86_64-linux-gnu/c++/6/bits/cxxabi_tweaks.h \
-    /usr/include/c++/6/bits/cxxabi_forced.h \
-    /usr/include/c++/6/typeinfo \
-    /usr/include/c++/6/bits/hash_bytes.h \
     ../UnitTests/../BlackCat_NeuralNetworks.h \
     ../UnitTests/../NN_Core/Defaults_CPU.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h \
@@ -193,6 +188,7 @@ UnitTests/main.o : ../UnitTests/main.cu \
     /usr/include/x86_64-linux-gnu/c++/6/bits/c++allocator.h \
     /usr/include/c++/6/ext/new_allocator.h \
     /usr/include/c++/6/bits/ostream_insert.h \
+    /usr/include/c++/6/bits/cxxabi_forced.h \
     /usr/include/c++/6/bits/stl_function.h \
     /usr/include/c++/6/backward/binders.h \
     /usr/include/c++/6/bits/range_access.h \
@@ -210,6 +206,7 @@ UnitTests/main.o : ../UnitTests/main.cu \
     /usr/include/asm-generic/errno.h \
     /usr/include/asm-generic/errno-base.h \
     /usr/include/c++/6/bits/functional_hash.h \
+    /usr/include/c++/6/bits/hash_bytes.h \
     /usr/include/c++/6/bits/basic_string.tcc \
     /usr/include/c++/6/bits/locale_classes.tcc \
     /usr/include/c++/6/system_error \
@@ -238,7 +235,8 @@ UnitTests/main.o : ../UnitTests/main.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Parse_Tree_Functions.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Function_conv2.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Array_Base.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/BlackCat_Internal_Shape.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Shape.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Shape_Base.h \
     /usr/include/c++/6/array \
     /usr/include/c++/6/utility \
     /usr/include/c++/6/bits/stl_relops.h \
@@ -262,7 +260,6 @@ UnitTests/main.o : ../UnitTests/main.cu \
     /usr/include/c++/6/bits/stl_vector.h \
     /usr/include/c++/6/bits/stl_bvector.h \
     /usr/include/c++/6/bits/vector.tcc \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Operations_Impl/Expression_Determiner.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Operations_Impl/Alias.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Functions/Unary_Functions.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Utility.h \
@@ -277,6 +274,7 @@ UnitTests/main.o : ../UnitTests/main.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Shaping_Static.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Functions.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Array.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Array_View.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Array_Scalar.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Array_Slice.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Array_Slice_Complex.h \
@@ -329,7 +327,7 @@ UnitTests/main.o : ../UnitTests/main.cu \
     ../UnitTests/../NN_Core/NeuralNetwork.h \
     ../UnitTests/../NN_Core/LayerChain.h \
     ../UnitTests/../NN_Core/Layers/InputLayer.h \
-    ../UnitTests/../NN_Core/Layers/Layer.h \
+    ../UnitTests/../NN_Core/Layers/Layer_Base.h \
     ../UnitTests/../NN_Core/Layers/structs/forward_list.h \
     ../UnitTests/../NN_Core/Layers/structs/omp_unique.h \
     /usr/include/c++/6/unordered_map \
@@ -342,13 +340,4 @@ UnitTests/main.o : ../UnitTests/main.cu \
     /usr/lib/gcc/x86_64-linux-gnu/6/include/omp.h \
     ../UnitTests/../NN_Core/Layers/Layer_Utility_Functions.h \
     ../UnitTests/../NN_Core/Layers/OutputLayer.h \
-    ../UnitTests/../NN_Core/Layers/FeedForward.h \
-    /usr/include/c++/6/mutex \
-    /usr/include/c++/6/chrono \
-    /usr/include/c++/6/ratio \
-    /usr/include/c++/6/ctime \
-    /usr/include/c++/6/bits/parse_numbers.h \
-    /usr/include/c++/6/functional \
-    /usr/include/c++/6/bits/std_mutex.h \
-    ../UnitTests/../NN_Core/Layers/Recurrent.h \
-    ../UnitTests/../NN_Core/Layers/GatedRecurrentUnit.h
+    ../UnitTests/../NN_Core/Layers/FeedForward.h

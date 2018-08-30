@@ -17,8 +17,8 @@ CU_DEPS += \
 UnitTests/%.o: ../UnitTests/%.cu
 	@echo 'Building file: $<'
 	@echo 'Invoking: NVCC Compiler'
-	/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -G -g -O0   -odir "UnitTests" -M -o "$(@:%.o=%.d)" "$<"
-	/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -G -g -O0 --compile --relocatable-device-code=false  -x cu -o  "$@" "$<"
+	/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -G -g -O0 -gencode arch=compute_50,code=sm_50  -odir "UnitTests" -M -o "$(@:%.o=%.d)" "$<"
+	/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -G -g -O0 --compile --relocatable-device-code=false -gencode arch=compute_50,code=compute_50 -gencode arch=compute_50,code=sm_50  -x cu -o  "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

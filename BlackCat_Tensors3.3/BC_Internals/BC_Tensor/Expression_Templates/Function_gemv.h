@@ -54,6 +54,10 @@ struct binary_expression<lv, rv, oper::gemv<mathlib>>
 
 	__BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : 1; });}
 
+//	__BCinline__ auto _slice(int i) {
+//		return binary_expression<decltype(left._slice(i)), decltype(right._slice(i)), oper::scalar_mul>(left._slice(i), right._slice(i));
+//	}
+
 template<class core, int alpha_mod, int beta_mod>
 void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 
@@ -83,7 +87,7 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 	int m = A.rows();
 	int n = A.cols();
 
-	mathlib::gemv(transA,  m, n, alpha, A, A.leading_dimension(0), X, 1/*inc_X*/, beta, injection/*Y*/, 1/*incy*/);
+	mathlib::gemv(transA,  m, n, alpha, A, A.leading_dimension(0), X, X.leading_dimension(0)/*inc_X*/, beta, injection/*Y*/, injection.leading_dimension(0)/*incy*/);
 
 	//destroy all the temporaries
 	if (lv_eval) cc(A).destroy();

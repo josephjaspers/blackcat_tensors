@@ -15,7 +15,7 @@ namespace BC {
 namespace NN {
 
 template<class derived>
-class Layer {
+class Layer_Base {
 public:
 
 	scal lr;
@@ -23,7 +23,7 @@ public:
 	const int INPUTS;
 	const int OUTPUTS;
 
-	Layer(int inputs)
+	Layer_Base(int inputs)
 		: INPUTS(inputs),
 		  OUTPUTS(as_derived().hasNext() ? next().INPUTS : INPUTS),
 		  lr(fp_type(.03)) {}

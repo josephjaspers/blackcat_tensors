@@ -10,8 +10,6 @@
 
 #include "BlackCat_Tensors.h"
 #include "NeuralNetwork.h"
-
-#include "Layers/Layer.h"
 #include "Layers/FeedForward.h"
 //#include "Layers/Recurrent.h"
 //#include "Layers/GatedRecurrentUnit.h"

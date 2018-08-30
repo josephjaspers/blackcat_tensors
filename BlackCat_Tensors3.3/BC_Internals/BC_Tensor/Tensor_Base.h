@@ -15,6 +15,7 @@
 #include "Tensor_Functions.h"
 
 #include "Expression_Templates/Array.h"
+#include "Expression_Templates/Array_Row.h"
 #include "Expression_Templates/Array_View.h"
 #include "Expression_Templates/Array_Scalar.h"
 #include "Expression_Templates/Array_Slice.h"
@@ -55,13 +56,11 @@ public:
 	using internal_t::DIMS; //required
 	using scalar_t = typename internal_t::scalar_t;
 
-	using move_parameter = std::conditional_t<BC_array_move_constructible<internal_t>(), self&&, BC::DISABLED<0>>;
-	using copy_parameter = std::conditional_t<BC_array_copy_constructible<internal_t>(), const self&, BC::DISABLED<1>>;
+	using move_parameter = std::conditional_t<BC_array_move_constructible<internal_t>(), 	   self&&, BC::DISABLED<0>>;
+	using copy_parameter = std::conditional_t<BC_array_copy_constructible<internal_t>(), const self&,  BC::DISABLED<1>>;
 
-	using move_oper_parameter = std::conditional_t<BC_array_move_assignable<internal_t>(), self&&, BC::DISABLED<0>>;
-	using copy_oper_parameter = std::conditional_t<BC_array_copy_assignable<internal_t>(), const self&, BC::DISABLED<1>>;
-
-
+	using move_oper_parameter = std::conditional_t<BC_array_move_assignable<internal_t>(), 		 self&&, BC::DISABLED<0>>;
+	using copy_oper_parameter = std::conditional_t<BC_array_copy_assignable<internal_t>(), const self&,  BC::DISABLED<1>>;
 
 	Tensor_Base() = default;
 	Tensor_Base(copy_parameter tensor) : internal_t(tensor.inner_shape()) {
@@ -97,12 +96,11 @@ public:
 		return *this;
 	}
 	~Tensor_Base() {
-		if (is_array_core<internal_t>()) {
-			this->destroy();
-		}
+		this->destroy();
 	}
+
 	 const internal_t& internal() const { return static_cast<const internal_t&>(*this); }
-	 	   internal_t& internal() 	  	 { return static_cast<	    internal_t&>(*this); }
+	 	   internal_t& internal() 	  	 { return static_cast<	   internal_t&>(*this); }
 };
 
 }

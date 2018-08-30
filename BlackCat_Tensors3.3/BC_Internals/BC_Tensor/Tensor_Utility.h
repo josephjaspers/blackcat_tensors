@@ -85,7 +85,7 @@ public:
 		if (derived::DIMS() != 1)
 			throw std::invalid_argument("one_hot only supported by vectors");
 
-//		as_derived().zero(); //clear FIXME COMPILE ISSUE WITH NVCC
+		as_derived().zero(); //clear FIXME COMPILE ISSUE WITH NVCC
 
 		std::string tmp;
 		std::getline(is, tmp, ',');
@@ -183,7 +183,7 @@ public:
 		if (sz > 0) {
 			as_derived() = derived(sz);
 		}
-		//		as_derived().zero(); //clear FIXME COMPILE ISSUE WITH NVCC
+				as_derived().zero(); //clear FIXME COMPILE ISSUE WITH NVCC
 
 		std::string tmp;
 		std::getline(is, tmp, ',');

@@ -36,9 +36,8 @@ struct Array_View : Tensor_Array_Base<Array_View<dimension, scalar, allocator_t>
 	:  array(const_cast<tensor_t&>(static_cast<const tensor_t&>(tensor)).memptr()) {
 		this->copy_shape(static_cast<const tensor_t&>(tensor));
 	}
-
-	__BCinline__ scalar_t* memptr() { return array; }
-	__BCinline__ const scalar_t* memptr()const  { return array; }
+	__BCinline__ const scalar_t* memptr() const  { return array; }
+	__BCinline__ 	   scalar_t* memptr() 	     { return array; }
 
 
 

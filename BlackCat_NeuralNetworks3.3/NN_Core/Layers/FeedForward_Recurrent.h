@@ -1,36 +1,36 @@
 /*
- * FeedForward.cu
+ * FeedForward_Recurrent.h
  *
- *  Created on: Jan 28, 2018
+ *  Created on: Aug 26, 2018
  *      Author: joseph
  */
 
-#ifndef FEEDFORWARD_CU_
-#define FEEDFORWARD_CU_
+#ifndef FEEDFORWARD_RECURRENT_H_
+#define FEEDFORWARD_RECURRENT_H_
 
-#include "Layer_Base.h"
+#include "Layer.h"
 
 namespace BC {
 namespace NN {
 
 template<class derived>
-struct FeedForward : public Layer_Base<derived> {
+struct FeedForward_Recurrent : public Layer_Base_Recurrent<derived> {
 public:
 
-	using Layer_Base<derived>::lr;	//the learning rate
-	using Layer_Base<derived>::x;
-
+	using Layer_Base_Recurrent<derived>::lr;	//the learning rate
+	using Layer_Base_Recurrent<derived>::x;
+	using Layer_Base_Recurrent<derived>::curr_timestamp;
 	mat w_gradientStorage;		//weight gradient storage
 	vec b_gradientStorage;		//bias gradient storage
 
 	mat dy;							//error
-	mat y;							//outputs
+	cube y;							//outputs
 
 	mat w;							//weights
 	vec b;							//biases
 
 	FeedForward(int inputs) :
-		Layer_Base<derived>(inputs),
+		Layer_Base_Recurrent<derived>(inputs),
 			w(this->OUTPUTS, inputs),
 			b(this->OUTPUTS),
 
@@ -43,14 +43,14 @@ public:
 	}
 
 	template<class t> auto forward_propagation(const expr::mat<t>& x) {
-		y = g(w * x + b);
+		y[curr_timestamp] = g(w * x + b);
 
 		return this->next().forward_propagation(y);
 	}
 	template<class t> auto back_propagation(const expr::mat<t>& dy_) {
 		dy = dy_;
 
-		w_gradientStorage -= dy * x().t();
+		w_gradientStorage -= dy * x()[curr_time_stamp].t();
 		b_gradientStorage -= dy;
 
 		return this->prev().back_propagation(w.t() * dy % gd(x()));
@@ -104,4 +104,7 @@ public:
 }
 }
 
-#endif /* FEEDFORWARD_CU_ */
+
+
+
+#endif /* FEEDFORWARD_RECURRENT_H_ */

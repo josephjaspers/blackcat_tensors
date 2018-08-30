@@ -40,7 +40,7 @@ struct Array_Slice
 	__BCinline__ int cols() const { return  parent.inner_shape()[1]; }
 	__BCinline__ int dimension(int i) const { return parent.dimension(i); }
 	__BCinline__ int outer_dimension() const { return parent.inner_shape()[DIMS() - 2]; }
-	__BCinline__ int leading_dimension(int i) const { return parent.leading_dimension(i); }
+	__BCinline__ int leading_dimension(int i) const { return DIMS() == 1 ? 1 : parent.leading_dimension(i); }
 
 	__BCinline__ const scalar_t* memptr() const { return array_slice; }
 	__BCinline__	   scalar_t* memptr()   	   { return array_slice; }

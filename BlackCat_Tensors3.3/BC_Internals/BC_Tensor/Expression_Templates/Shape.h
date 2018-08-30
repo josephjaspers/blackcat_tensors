@@ -126,7 +126,6 @@ struct Shape<0> {
 
 template<>
 struct Shape<1> {
-	static constexpr int dims = 1;
 	int length;
 
 	void copy_shape(const Shape<1>& shape) {
@@ -146,28 +145,28 @@ struct Shape<1> {
 	__BCinline__ int rows() const { return length; }
 	__BCinline__ int cols() const { return 1; }
 	__BCinline__ int dimension(int i) const { return (&length)[i]; }
-	__BCinline__ int outer_dimension() const { return length; }
-	__BCinline__ int leading_dimension(int i) const { return i == 0 ? length : 0; }
+	__BCinline__ int outer_dimension() const { return 1; }
+	__BCinline__ int leading_dimension(int i) const { return i == 0 ? 1 : i == 1 ? length : 0; }
 
 	template<int dim, class int_t>
 	Shape (stack_array<dim, int_t> param) {
-		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
+		static_assert(dim >= 1, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
 		length = param[0];
 	}
 	template<int dim, class int_t>
 	Shape (simple_array<int_t, dim> param) {
-		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
+		static_assert(dim >= 1, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
 		length = param[0];
 
 	}
 	template<int dim, class f, class int_t>
 	Shape (lambda_array<dim, int_t, f> param) {
-		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
+		static_assert(dim >= 1, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
 		length = param[0];
 	}
 
 	__BCinline__ const auto inner_shape() const { return l_array<1>([&](auto x) { return length; });}
-	__BCinline__ const auto outer_shape() const { return l_array<1>([&](auto x) { return x == 0 ? length : 0; });}
+	__BCinline__ const auto outer_shape() const { return l_array<1>([&](auto x) { return this->leading_dimension(x);});}
 };
 
 

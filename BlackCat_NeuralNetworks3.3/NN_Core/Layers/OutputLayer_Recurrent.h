@@ -1,30 +1,26 @@
 /*
- * FeedForward.cu
+ * OutputLayer_Recurrent.h
  *
- *  Created on: Jan 28, 2018
+ *  Created on: Aug 26, 2018
  *      Author: joseph
  */
 
-#ifndef OUTPUTas_CU
-#define OUTPUTas_CU
+#ifndef OUTPUTLAYER_RECURRENT_H_
+#define OUTPUTLAYER_RECURRENT_H_
 
-#include "Layer_Base.h"
+#include "Layer_Base_Recurrent.h"
 
 namespace BC {
 namespace NN {
 
 template<class derived>
-struct OutputLayer : Layer_Base<derived> {
-
-	const mat& x_() const { return this->prev().y; }
+struct OutputLayer_Recurrent : Layer_Base_Recurrent<derived> {
 
 	vec zero = vec(this->OUTPUTS);
 
 public:
 
-	OutputLayer(int inputs) : Layer_Base<derived>(inputs) {
-		zero.zero();
-	}
+	OutputLayer(int inputs) : Layer_Base<derived>(inputs) {}
 
 	template<class t> auto forward_propagation(const expr::mat<t>& x) {
 		return x;
@@ -33,12 +29,8 @@ public:
 		return x;
 	}
 	template<class t> auto back_propagation(const expr::mat<t>& exp) {
-		return this->prev().back_propagation(x_() - exp);
+		return this->prev().back_propagation(this->prev().y[this->curr_timestamp] - exp);
 	}
-	 auto back_propagation_throughtime() {
-		return this->prev().back_propagation(zero);
-	}
-
 
 	void set_batch_size(int) {}
 	void update_weights() {}
@@ -51,7 +43,3 @@ public:
 
 }
 }
-
-
-
-#endif /* FEEDFORWARD_CU_ */

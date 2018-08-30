@@ -81,7 +81,7 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 		mathlib::scalar_mul(alpha, alpha, alpha_rv);
 
 	//call outer product
-	mathlib::ger(M(), N(), alpha, A, 1, B, 1, injection, injection.leading_dimension(0));
+	mathlib::ger(M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
 
 
 	//destroy all the temporaries

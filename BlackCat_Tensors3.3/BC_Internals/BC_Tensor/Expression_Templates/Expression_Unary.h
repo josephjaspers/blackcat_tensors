@@ -43,21 +43,22 @@ public:
 	__BCinline__ int outer_dimension() const { return array.outer_dimension(); }
 
 
+	__BCinline__ const auto _slice(int i) const {
+		using slice_t = decltype(array.slice(i));
+		return unary_expression<slice_t, operation>(array.slice(i), static_cast<const operation&>(*this));
+	}
+	__BCinline__ const auto _scalar(int i) const {
+		using scalar_t = decltype(array.scalar(i));
+		return unary_expression<scalar_t, operation>(array.scalar(i),  static_cast<const operation&>(*this));
+	}
+
+	__BCinline__ const auto _col(int i) const {
+		static_assert(DIMS() == 2, "COLUMN ACCESS ONLY AVAILABLE TO MATRICEDS");
+		return _slice(i);
+	}
 };
 }
 }
 #endif /* EXPRESSION_UNARY_POINTWISE_CU_ */
 
-//__BCinline__ const auto slice(int i) const {
-//	using slice_t = decltype(array.slice(i));
-//	return unary_expression<slice_t, operation>(array.slice(i), oper);
-//}
-//__BCinline__ const auto scalar(int i) const {
-//	using scalar_t = decltype(array.scalar(i));
-//	return unary_expression<scalar_t, operation>(array.scalar(i), oper);
-//}
-//
-//__BCinline__ const auto col(int i) const {
-//	static_assert(DIMS() == 2, "COLUMN ACCESS ONLY AVAILABLE TO MATRICEDS");
-//	return slice(i);
-//}
+

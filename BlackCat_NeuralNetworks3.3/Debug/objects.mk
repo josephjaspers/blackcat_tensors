@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lcblas -lf77blas -lcublas -lgomp
+LIBS := -lf77blas -lcblas -lcublas -lgomp
 

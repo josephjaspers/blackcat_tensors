@@ -12,6 +12,7 @@
 namespace BC {
 namespace oper {
 template<class ml> class gemm : public BLAS_FUNCTION {};
+template<class>class gemv;
 }
 namespace internal {
 
@@ -57,6 +58,13 @@ struct binary_expression<lv, rv, oper::gemm<mathlib>>
 	__BCinline__ int M() const { return left.rows();  }
 	__BCinline__ int N() const { return right.cols(); }
 	__BCinline__ int K() const { return left.cols();  }
+
+	__BCinline__ auto _slice(int i) {
+		return binary_expression<lv, decltype(right._slice(i)), oper::gemv<mathlib_t>>(left, right._slice(i));
+	}
+	__BCinline__ auto _col(int i) {
+		return _slice(i);
+	}
 
 template<class core, int alpha_mod, int beta_mod>
 void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {

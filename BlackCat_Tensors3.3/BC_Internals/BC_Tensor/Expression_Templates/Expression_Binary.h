@@ -44,25 +44,23 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	__BCinline__ int dimension(int i) const { return shape().dimension(i); }
 	__BCinline__ int outer_dimension() const { return shape().outer_dimension(); }
 	__BCinline__ const auto inner_shape() const { return shape().inner_shape(); }
+
+
+
 	__BCinline__ const auto slice(int i) const {
 		using slice_lv = decltype(left.slice(i));
 		using slice_rv = decltype(left.slice(i));
 
-		return binary_expression<slice_lv, slice_rv, operation>(left.slice(i), right.slice(i), oper);
+		return binary_expression<slice_lv, slice_rv, operation>(left.slice(i), right.slice(i),  static_cast<const operation&>(*this));
 	}
 	__BCinline__ const auto scalar(int i) const {
 		using scalar_lv = decltype(left.scalar(i));
 		using scalar_rv = decltype(left.scalar(i));
 
-		return binary_expression<scalar_lv, scalar_rv, operation>(left.scalar(i), right.scalar(i), oper);
+		return binary_expression<scalar_lv, scalar_rv, operation>(left.scalar(i), right.scalar(i),  static_cast<const operation&>(*this));
 	}
-
 	__BCinline__ const auto col(int i) const {
 		static_assert(DIMS() == 2, "COLUMN ACCESS ONLY AVAILABLE TO MATRICES");
-		return slice(i);
-	}
-	__BCinline__ const auto row(int i) const {
-		static_assert(DIMS() == 2 || DIMS() == 1, "ROW ACCESS ONLY AVAILABLE TO MATRICES");
 		return slice(i);
 	}
 };

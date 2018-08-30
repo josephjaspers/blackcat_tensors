@@ -4,7 +4,6 @@
 
 #include "Layers/InputLayer.h"
 #include "Layers/OutputLayer.h"
-#include "Layers/Layer.h"
 namespace BC {
 namespace NN {
 template<class derived, template<class> class...> struct LayerChain;

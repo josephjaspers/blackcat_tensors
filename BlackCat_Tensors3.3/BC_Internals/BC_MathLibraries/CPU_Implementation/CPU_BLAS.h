@@ -86,7 +86,16 @@ struct CPU_BLAS  {
 
 		cblas_sger(CblasColMajor, m, n, *alpha, X, incX, Y, incY, A, lda);
 	}
+
+
+	static void dot(int n, double* A, const double* x, int incX, const double* y, int incY) {
+		*A = cblas_ddot(n, x, incX, y, incY);
+	}
+	static void dot(int n, float* A, const float* x, int incX, const float* y, int incY) {
+		*A = cblas_sdot(n, x, incX, y, incY);
+	}
 };
+
 }
 
 #endif /* MATHEMATICS_CPU_BLAS_H_ */

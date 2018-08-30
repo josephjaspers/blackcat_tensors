@@ -75,6 +75,16 @@ static void ger(int m, int n,
 	cublasDestroy(handle);
 }
 
+static void dot(int n, float* A, const float* x, int incX, const float* y, int incY) {
+	cublasHandle_t handle;
+	cublasCreate(&handle);
+	cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
+	cublasSdot(handle, n, x, incX, y, incY, A);
+	cudaDeviceSynchronize();
+	cublasDestroy(handle);
+
+}
+
 };
 
 }

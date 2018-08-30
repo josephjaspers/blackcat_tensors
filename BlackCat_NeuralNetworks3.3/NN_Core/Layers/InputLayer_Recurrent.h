@@ -1,28 +1,26 @@
 /*
- * FeedForward.cu
+ * InputLayer_Recurrent.h
  *
- *  Created on: Jan 28, 2018
+ *  Created on: Aug 26, 2018
  *      Author: joseph
  */
 
-#ifndef OUTPUT_CU
-#define OUTPUT_CU
-
-#include "Layer_Base.h"
+#ifndef INPUTLAYER_RECURRENT_H_
+#define INPUTLAYER_RECURRENT_H_
 
 namespace BC {
 namespace NN {
 
 template<class derived>
-struct InputLayer : Layer_Base<derived> {
+struct InputLayer_Recurrent : Layer_Base_Recurrent<derived> {
 
-	InputLayer() : Layer_Base<derived>(0) {}
+	InputLayer_Recurrent() : Layer_Base_Recurrent<derived>(0) {}
 
-	mat_view y;
+	mat_view* y = new mat_view[this->max_bptt];
 
 	template<class tensor> auto forward_propagation(const tensor& x) {
-		y = mat_view(x);
-		return this->next().forward_propagation(y);
+		y[this->curr_time_stamp] = mat_view(x);
+		return this->next().forward_propagation(y[this->curr_time_stamp]);
 	}
 
 	template<class tensor> auto forward_propagation_express(const tensor& x) const {
@@ -54,6 +52,10 @@ struct InputLayer : Layer_Base<derived> {
 	}
 
 };
+
 }
 }
-#endif /* FEEDFORWARD_CU_ */
+
+
+
+#endif /* INPUTLAYER_RECURRENT_H_ */

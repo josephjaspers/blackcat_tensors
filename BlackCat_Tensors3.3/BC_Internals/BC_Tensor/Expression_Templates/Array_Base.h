@@ -24,15 +24,15 @@ namespace internal {
 template<class> class Array_Slice;
 template<class> class Array_Scalar;
 template<class> class Array_Transpose;
+template<class> class Array_Row;
 template<int> class Array_Reshape;
 template<int> class Array_Chunk;
-template<int> class Array_Slice_Complex;
 
 
 //Many template params
 template<class derived, int DIMENSION,
 template<class> class 	_Tensor_Slice 	= Array_Slice,
-template<int>   class	_Tensor_Slice_Complex = Array_Slice_Complex,
+template<class> class	_Tensor_Row 	= Array_Row,
 template<class> class 	_Tensor_Scalar 	= Array_Scalar,
 template<int> class     _Tensor_Chunk	= Array_Chunk,			//Nested implementation type
 template<int> class 	_Tensor_Reshape = Array_Reshape>		//Nested implementation type
@@ -47,7 +47,7 @@ struct Tensor_Array_Base : expression_base<derived>, BC_Array {
 	using scalar_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Scalar<self>>;
 	template<int dimension> using reshape_t = typename _Tensor_Reshape<dimension>::template implementation<derived>;
 	template<int dimension> using chunk_t 	= typename _Tensor_Chunk<dimension>::template implementation<derived>;
-	template<int dimension> using c_slice_t = typename _Tensor_Slice_Complex<dimension>::template implementation<derived>;
+	template<int dimension> using row_t =  _Tensor_Row<self>;
 
 private:
 
@@ -68,14 +68,14 @@ public:
 
 	template<class ... integers>
 	__BCinline__ auto& operator ()(integers ... ints) {
-		return as_derived()[this->dims_to_index(ints...)];
+		return as_derived()	[this->dims_to_index(ints...)];
 	}
 	template<class ... integers>
 	__BCinline__ const auto& operator ()(integers ... ints) const {
 		return as_derived()[this->dims_to_index(ints...)];
 	}
 
-	//internal_views-------------------------------------------------------------------
+	//internal_views---------------------------------------------------------------------------------------------------------------
 
 	__BCinline__ const auto _slice(int i) const {
 		//change to if constexpr once NVCC supports it
@@ -112,7 +112,7 @@ public:
 
 	//------------------------------------------Curried Reshapers ---------------------------------------//
 
-	template<class ... integers>  auto _chunk(int location, integers ... shape_dimensions) {
+	template<class ... integers> auto _chunk(int location, integers ... shape_dimensions) {
 		return chunk_t<sizeof...(integers)>(&as_derived()[location], this->as_derived(), shape_dimensions...);
 	}
 	template<class ... integers>  const auto _chunk(int location, integers ... shape_dimensions) const {
@@ -138,6 +138,8 @@ public:
 		return reshape_t<dim>(as_derived(), this->as_derived(), shape);
 	}
 
+
+//private:
 	//------------------------------------------Implementation Details---------------------------------------//
 
 	__BCinline__
@@ -163,6 +165,13 @@ public:
 	int dims_to_index_reverse(integers... ints) const {
 		return dims_to_index_reverse(BC::array(ints...));
 	}
+
+//	__BCinline__ int dims_to_index(int index) const {
+//		return index * as_derived().leading_dimension(0);
+//	}
+//	__BCinline__ int dims_to_index_reverse(int index) const {
+//		return index * as_derived().leading_dimension(0);
+//	}
 
 	template<int D> __BCinline__ int dims_to_index(stack_array<D, int> var) const {
 		int index = var[0];

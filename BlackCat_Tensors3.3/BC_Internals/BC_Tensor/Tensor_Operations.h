@@ -17,6 +17,7 @@
 #include "Expression_Templates/Function_gemm.h"
 #include "Expression_Templates/Function_gemv.h"
 #include "Expression_Templates/Function_ger.h"
+#include "Expression_Templates/Function_dot.h"
 
 #include "Expression_Templates/Expression_Unary.h"
 #include "Expression_Templates/Function_transpose.h"
@@ -98,13 +99,14 @@ public:
 		static constexpr bool scalmul	= derived::DIMS() == 0 || param_deriv::DIMS() == 0;
 		static constexpr bool gemm 		= derived::DIMS() == 2 && param_deriv::DIMS() == 2;
 		static constexpr bool gemv 		= derived::DIMS() == 2 && param_deriv::DIMS() == 1;
-		static constexpr bool ger  		= derived::DIMS() == 1 && param_deriv::DIMS() == 1;
-
+		static constexpr bool ger  		= derived::DIMS() == 1 && param_deriv::DIMS() == 1 && internal::det_eval<param_deriv>::transposed;
+		static constexpr bool dot		= derived::DIMS() == 1 && param_deriv::DIMS() == 1 && !ger;
 		using matmul_t =
 					 std::conditional_t<scalmul, binary_expression_t<functor_of<param_deriv>, oper::scalar_mul>,
 					 std::conditional_t<gemm, 	 binary_expression_t<functor_of<param_deriv>, oper::gemm<mathlib_type>>,
 					 std::conditional_t<gemv, 	 binary_expression_t<functor_of<param_deriv>, oper::gemv<mathlib_type>>,
-					 std::conditional_t<ger, 	 binary_expression_t<functor_of<param_deriv>, oper::ger<mathlib_type>>, void>>>>;
+					 std::conditional_t<ger, 	 binary_expression_t<functor_of<param_deriv>, oper::ger<mathlib_type>>,
+					 std::conditional_t<dot,	 binary_expression_t<functor_of<param_deriv>, oper::dot<mathlib_type>>, void>>>>>;
 
 		static_assert(!std::is_same<matmul_t, void>::value, "Matrix Multiplication currently does not support broadcasting");
 
