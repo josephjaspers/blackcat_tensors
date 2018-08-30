@@ -62,6 +62,15 @@ public:
 		static_assert(DIMS() == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return slice(i);
 	}
+	const auto row(int i) const {
+		static_assert(DIMS() == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		return tensor(as_derived()._row(i));
+	}
+	auto row(int i) {
+		static_assert(DIMS() == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		return tensor(as_derived()._row(i));
+	}
+
 
 	const auto operator() (int i) const { return scalar(i); }
 		  auto operator() (int i) 	    { return scalar(i); }

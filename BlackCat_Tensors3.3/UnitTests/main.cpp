@@ -39,6 +39,15 @@ int test() {
 	mat_view c(a);
 	c.print();
 
+
+
+	std::cout << " b is  " << std::endl;
+	b.print();
+	b.row(1) += b.row(1);
+
+	b.print();
+
+
 //	b = c + c;
 
 	c += c;

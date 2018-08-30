@@ -30,6 +30,8 @@ struct Array_Row : Tensor_Array_Base<Array_Row<PARENT>, 1> {
 	scalar_t* array_slice;
 
 	__BCinline__ Array_Row(const scalar_t* array, PARENT parent_) : array_slice(const_cast<scalar_t*>(array)), parent(parent_) {}
+	__BCinline__ const auto& operator [] (int i) const { return array_slice[parent.leading_dimension(0) * i]; }
+	__BCinline__ 	   auto& operator [] (int i) 	   { return array_slice[parent.leading_dimension(0) * i]; }
 
 	__BCinline__ const auto inner_shape() const { return l_array<1>([&](int i) { return this->dimension(i); }); }
 	__BCinline__ const auto outer_shape() const { return l_array<1>([&](int i) { return this->leading_dimension(i); }); }
@@ -38,7 +40,7 @@ struct Array_Row : Tensor_Array_Base<Array_Row<PARENT>, 1> {
 	__BCinline__ int cols() const { return  1; }
 	__BCinline__ int dimension(int i) const { return i == 0 ? parent.cols() : 1; }
 	__BCinline__ int outer_dimension() const { return 1; }
-	__BCinline__ int leading_dimension(int i) const { return i == 0 ? parent.leading_dimension(1) : 0; }
+	__BCinline__ int leading_dimension(int i) const { return i == 0 ? parent.leading_dimension(0) : 0; }
 
 	__BCinline__ const scalar_t* memptr() const { return array_slice; }
 	__BCinline__	   scalar_t* memptr()   	{ return array_slice; }

@@ -7,7 +7,7 @@
 #ifndef EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
 #define EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
 
-#include "BlackCat_Internal_Forward_Decls.h"
+#include "BlackCat_Internal_TypeTraits.h"
 namespace BC {
 
 namespace oper {
