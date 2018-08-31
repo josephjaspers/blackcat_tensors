@@ -1,4 +1,4 @@
-Last Updated: Sunday, June 23rd, 2018
+Last Updated: Thursday, Auguest 30rd, 2018
 Author: Joseph Jaspers
 
 BlackCat_Tensors (BCT) is a highly optimized Matrix library designed for NeuralNetwork construction. 
@@ -87,12 +87,10 @@ Optimizations:
 		'y = sigmoid (y + b)' (which is evaluated with a single for loop through the expression-template system)
 
 		
-		In another more complex example
-		a more complex neural network algorithm (forward propagation for recurrent neural networks)
-
-		y = sigmoid(w * x + r * y + b)  
+		In another more complex example (forward propagation for recurrent neural networks)
+		c = sigmoid(w * x + r * y + b)  
 	
-		will convert the problem to
+		BCT convert the problem to
 		'y = w * x'	(BLAS_gemm call)
 		'y += r * y'	(another BLAS_gemm call)
 		'y = g(y + b)'	(finally the element-wise operation (this is a single for loop))
@@ -114,25 +112,23 @@ Optimizations:
 
 		***Caveat***
 	
-		BCT cannot detect is an alias is used.
+		BCT cannot detect if an alias is used.
 		so problems such as:
 			 y = y * x
-		will cause the BLAS_gemm call to be writing to Y as it is still calculating the product. 
-		When reusing aliases in a function use:
-			y.alias() = y * x
-		and this will cause the function to skip the injection-optimization and evaluate y * x to a temporary and then copying. 
+		will cause the BLAS_gemm call to start writing to Y as it is still calculating the product. 
+		When reusing tensors you may use aliases to skip this optimization.
+		Example: y.alias() = y * x
 
 
 	All linear or O(n) operations utilize expression-templates/lazy evaluation system.
 	Dotproducts are implemented through BLAS. Currently no default option is available. 
 
 
-
 Benchmarks:
 	See bottom of file
 Methods:
 
-**DEFINED IN BC_Internals/BC_Array/Implementation_Array/Tensor_Operations.h
+**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Operations.h
 
 	_tensor_& operator =  (const _tensor_&) 		//copy
 	_tensor_& operator =  (const T scalar) 			//fill tensor with scalar value
@@ -162,12 +158,10 @@ Methods:
 		3) Scalar by Tensor operations -- return the dominant tensor type (IE operation order does matter for non commutative functions)
 		4) functor object needs to have a trivial constructor and the overloaded operator()(T value) (if unary) or operator()(T val1, U val2) (if binary)
 
-**DEFINED IN BC_Internals/BC_Array/Implementation_Array/Tensor_Utility.h
+**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Utility.h
 
-	void print	(void) 		const		//print the tensor (formatted) **calls eval if expression tensor**
-	void printSparse(void) 		const 		//print the tensor (formatted) without outputing 0s (useful for images)
-	void print      (int precision) const		//same but with precision p 
-	void printSparse(int precision) const		//same but with precision p
+	void print      (int precision=6) const		//print the tensor (formatted)
+	void printSparse(int precision=6) const		//print the tensor but ignore 0s (formatted)
 	void randomize(T lowerbound, T upperbound) 	//randomize the tensor within a given range
 	void fill(T value)				//fill tensor with specific value
 	void zero() 					//fill with 0s
@@ -177,32 +171,34 @@ Methods:
 			bool read_dimensions=true,     //if read_dimensions assumes line was written by .write() 						 
 			bool overwrite_dimensions=true)	//if overwrite_dimensions, overwrites the dimensions of the tensor (only relevant if read_dimensions is true)
 
-**DEFINED IN BC_Internals/BC_Array/Tensor_Base.h
+**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Shape.h
 
 	int dims() const				//returns number of dimensions (scalar = 0, vector = 1, matrix = 2, etc)
 	int size() const				//returns number of elements 
 	int rows() const				//returns rows 
 	int cols() const				//returns cols 
 	int dimension(int i) const 			//returns the dimension at a given index
-	int ld_dimension(int i) const 			//returns the leading dimension at a given index
-	int leading_dimension(0) const					//returns internal row_dimension (relevant for transpose expressions, subtensors, etc)
-	int ld2() const					//returns internal matrix_dimension (only relevant for tensors of order > 2 IE Cubes)
+	int leading_dimension(int i) const 		//returns the leading dimension at a given index
 	void print_dimensions() const			//prints the dimensions of tensor... formated: [row][col][etc]
 	void print_leading_dimensions() const		//prints the internal dimensions of tensor... formated: [ld_row][ld_cols][etc]
 
 	const auto inner_shape() const			//returns some_array_type which holds inner shape (type depedent on context)
 	const auto outer_shape() const			//returns some_array_type which holds outer shape (type depedent on context)
 
-	const auto internal() const				//returns internal iterator IE expression_functor or Array/Tensor_Slice/Tensor/Scalar
-	      auto internal()				//returns internal iterator IE expression_functor or Array/Tensor_Slice/Tensor/Scalar
 
-
-**DEFINED IN BC_Internals/BC_Array/Tensor_Shapinh.h
+**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Shaping.h
 
 	const operator[] (int i) const 			//returns "slice" of tensor at index (IE Cube returns Matrix, Matrix returns Vector, Vector returns Scalar)
    	      operator[] (int i)			//returns "slice" of tensor at index (IE Cube returns Matrix, Matrix returns Vector, Vector returns Scalar)
+
+	const operator[] (range) const 			//returns ranged slice, similair to python's array[start:end] ---> BCT notation: array[{start, end}]
+   	      operator[] (range)			//returns ranged slice, similair to python's array[start:end] ---> BCT notation: array[{start, end}]
+
 	const slice 	 (int i) const 			//same as operator[]
    	      slice	 (int i)			//same as operator[]
+
+	const slice	(int from, int to)		//returns a ranged slice
+	      slice     (int from, int to)		//returns a ranged slice 
 	
 
 	const opeartor() (int i) const 			//returns a scalar at given index
@@ -211,13 +207,12 @@ Methods:
 	const row(int i) const 				//returns a row vector (static asserts class is matrix)
 	      row(int i)				//returns a row vector (static asserts class is matrix)
 
-	const col(int i) const 				//returns a slice of a matrix (same as operator[] only, available to matrices)
-	      col(int i)				//returns a slice of a matrix (same as operator[] only, available to matrices)
+	const col(int i) const 				//returns a slice of a matrix (same as operator[], only available to matrices)
+	      col(int i)				//returns a slice of a matrix (same as operator[], only available to matrices)
 
 	const auto operator() (int... dimlist) const 	//returns a tensor slice || IE myTensor(1,2,3) equivalent to myTensor[1][2][3] 
 	      auto operator() (int... dimlist)		//returns a tensor slice || IE myTensor(1,2,3) equivalent to myTensor[1][2][3] 
 
-	void resize(ints...)				//resizes the tensor and deletes the old-contents
 
 	static _tensor_ reshape(_tensor_&)(integers...)	//reshapes the tensor to the given dimensions, this is a lazy expression
 							//reshape does NOT modify the original shape, any modifications of the internal
@@ -231,7 +226,7 @@ Methods:
 
 **DEFINED IN BC_Internals/BC_Array/Matrix.h and Vector.h
 
-	cosnt auto t() const		//returns a transpose expression (cannot transpose in place)
+	const auto t() const		//returns a transpose expression (cannot transpose in place)
 	      auto t() 			//returns a transpose expression (cannot transpose in place)
 
 

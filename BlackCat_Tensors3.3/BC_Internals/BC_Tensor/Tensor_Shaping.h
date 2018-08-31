@@ -13,6 +13,8 @@
 namespace BC {
 
 template<class> class Tensor_Base;
+struct range { int from, to; };
+
 
 namespace Base {
 template<class derived>
@@ -48,11 +50,18 @@ public:
 	const auto operator [] (int i) const { return slice(i); }
 		  auto operator [] (int i) 		 { return slice(i); }
 
+	const auto operator [] (range r) const { return slice(r.from, r.to); }
+		  auto operator [] (range r) 		{ return slice(r.from, r.to); }
+
 	const auto scalar(int i) const { return tensor(as_derived()._scalar(i)); }
 		  auto scalar(int i) 	   { return tensor(as_derived()._scalar(i)); }
 
 	const auto slice(int i) const  { return tensor(as_derived()._slice(i)); }
 		  auto slice(int i) 	   { return tensor(as_derived()._slice(i)); }
+
+	const auto slice(int from, int to) const  { return tensor(as_derived()._slice_range(from, to)); }
+		  auto slice(int from, int to) 	   	  { return tensor(as_derived()._slice_range(from, to)); }
+
 
 	const auto col(int i) const {
 		static_assert(DIMS() == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");

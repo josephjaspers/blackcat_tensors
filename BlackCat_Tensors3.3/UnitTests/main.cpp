@@ -25,50 +25,56 @@ using mat_view = BC::Matrix_View<float, ml>;
 
 int test() {
 
-//various tests
-//gemm_injection();
-
-	mat a(3,3);
+	mat a(7,7);
 	a.randomize(0, 10);
 	a.print();
 
-//	(a + a).print();
+	a[{3,5}].print();
 
-	mat b(a + a);
-	a.print_leading_dimensions();
-	mat_view c(a);
-	c.print();
+//various tests
+//gemm_injection();
 
-
-
-	std::cout << " b is  " << std::endl;
-	b.print();
-	b.row(1) += b.row(1);
-
-	b.print();
-
-
-//	b = c + c;
-
-	c += c;
-	a.print();
-	b = c * a;
-	b.print();
-
-
-
-	vec A(4);
-	vec B(4);
-	A.randomize(0, 3);
-	B.randomize(0, 3);
-	scal x;
-
-	x = A * B;
-
-
-	A.print();
-	B.print();
-	x.print();
+//	mat a(3,3);
+//	a.randomize(0, 10);
+//	a.print();
+//
+////	(a + a).print();
+//
+//	mat b(a + a);
+//	a.print_leading_dimensions();
+//	mat_view c(a);
+//	c.print();
+//
+//
+//
+//	std::cout << " b is  " << std::endl;
+//	b.print();
+//	b.row(1) += b.row(1);
+//
+//	b.print();
+//
+//
+////	b = c + c;
+//
+//	c += c;
+//	a.print();
+//	b = c * a;
+//	b.print();
+//
+//
+//
+//	vec A(4);
+//	vec B(4);
+//	A.randomize(0, 3);
+//	B.randomize(0, 3);
+//	scal x;
+//
+//	x = A * B;
+//
+//
+//	A.print();
+//	B.print();
+//	x.print();
 
 //	b.print();
 //	c.print();

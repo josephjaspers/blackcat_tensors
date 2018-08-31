@@ -22,6 +22,8 @@ namespace internal {
 
 //required forward decls
 template<class> class Array_Slice;
+template<class> class Array_Slice_Range;
+
 template<class> class Array_Scalar;
 template<class> class Array_Transpose;
 template<class> class Array_Row;
@@ -32,6 +34,7 @@ template<int> class Array_Chunk;
 //Many template params
 template<class derived, int DIMENSION,
 template<class> class 	_Tensor_Slice 	= Array_Slice,
+template<class> class 	_Tensor_Range	= Array_Slice_Range,
 template<class> class	_Tensor_Row 	= Array_Row,
 template<class> class 	_Tensor_Scalar 	= Array_Scalar,
 template<int> class     _Tensor_Chunk	= Array_Chunk,			//Nested implementation type
@@ -46,7 +49,7 @@ struct Tensor_Array_Base : expression_base<derived>, BC_Array {
 	using slice_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Slice<self>>;
 	using scalar_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Scalar<self>>;
 	using row_t =  _Tensor_Row<self>;
-
+	using slice_range_t = _Tensor_Range<self>;
 	template<int dimension> using reshape_t = typename _Tensor_Reshape<dimension>::template implementation<derived>;
 	template<int dimension> using chunk_t 	= typename _Tensor_Chunk<dimension>::template implementation<derived>;
 
@@ -99,6 +102,13 @@ public:
 				std::conditional_t<(DIMS() > 1), ret_slice, void>>;
 
 		return xslice_t::impl(*this, i);
+	}
+
+	__BCinline__ const auto _slice_range(int from, int to) const {
+		return slice_range_t(slice_ptr(from), *this, to - from);
+	}
+	__BCinline__ auto _slice_range(int from, int to) {
+		return slice_range_t(slice_ptr(from), *this, to - from);
 	}
 
 
