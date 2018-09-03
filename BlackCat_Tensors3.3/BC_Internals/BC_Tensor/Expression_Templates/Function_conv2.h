@@ -38,7 +38,9 @@ struct binary_expression<lv, rv, oper::conv<2, mathlib>>
 
 	__BCinline__ static constexpr int DIMS() { return 2; }
 	__BCinline__ static constexpr int ITERATOR() { return 0; }
-
+	int size() const {
+		return inner_shape()[0] * inner_shape()[1];
+	}
 	lv left;
 	rv right;
 
@@ -54,6 +56,8 @@ struct binary_expression<lv, rv, oper::conv<2, mathlib>>
 						return 1;
 				});
 	}
+	__BCinline__ const auto block_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? size() : 1; });}
+
 
 	__BCinline__ int M() const { return left.rows();  }
 	__BCinline__ int N() const { return right.cols(); }

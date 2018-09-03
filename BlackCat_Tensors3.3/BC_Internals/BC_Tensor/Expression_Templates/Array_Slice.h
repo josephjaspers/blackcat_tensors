@@ -17,7 +17,7 @@ namespace internal {
 
 template<class PARENT>
 struct Array_Slice
-		: Tensor_Array_Base<Array_Slice<PARENT>, MTF::max(PARENT::DIMS() - 1, 0)>,
+		: Array_Base<Array_Slice<PARENT>, MTF::max(PARENT::DIMS() - 1, 0)>,
 		  Shape_Base<Array_Slice<PARENT>>{
 
 	using scalar_t = typename PARENT::scalar_t;

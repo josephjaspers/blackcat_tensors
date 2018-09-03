@@ -28,7 +28,7 @@ template<int dimension>
 struct Array_Reshape {
 
 	template<class PARENT>
-	struct implementation : Tensor_Array_Base<implementation<PARENT>, dimension>, Shape<dimension> {
+	struct implementation : Array_Base<implementation<PARENT>, dimension>, Shape<dimension> {
 
 	using scalar_t = typename PARENT::scalar_t;
 	using mathlib_t = typename PARENT::mathlib_t;

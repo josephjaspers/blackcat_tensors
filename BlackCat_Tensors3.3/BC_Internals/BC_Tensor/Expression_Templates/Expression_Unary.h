@@ -27,7 +27,7 @@ public:
 	unary_expression(value v, const args&... args_) : array(v), operation(args_...) {}
 
 	__BCinline__  const auto inner_shape() const 			{ return array.inner_shape(); }
-	__BCinline__  const auto outer_shape() const 			{ return array.outer_shape(); }
+	__BCinline__  const auto block_shape() const 			{ return array.block_shape(); }
 
 	__BCinline__ auto operator [](int index) const {
 		return static_cast<const operation&>(*this)(array[index]);

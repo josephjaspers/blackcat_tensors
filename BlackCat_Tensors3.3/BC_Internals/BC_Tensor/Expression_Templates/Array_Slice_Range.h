@@ -15,7 +15,7 @@ namespace internal {
 
 template<class PARENT>
 struct Array_Slice_Range
-		: Tensor_Array_Base<Array_Slice_Range<PARENT>,PARENT::DIMS()>,
+		: Array_Base<Array_Slice_Range<PARENT>,PARENT::DIMS()>,
 		  Shape<PARENT::DIMS()> {
 
 	using scalar_t = typename PARENT::scalar_t;

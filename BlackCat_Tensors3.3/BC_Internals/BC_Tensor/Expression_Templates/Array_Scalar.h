@@ -17,7 +17,7 @@ namespace internal {
  */
 
 template<class PARENT>
-struct Array_Scalar : Tensor_Array_Base<Array_Scalar<PARENT>, 0>, Shape<0> {
+struct Array_Scalar : Array_Base<Array_Scalar<PARENT>, 0>, Shape<0> {
 
 	using scalar_t = typename PARENT::scalar_t;
 	using mathlib_t = typename PARENT::mathlib_t;

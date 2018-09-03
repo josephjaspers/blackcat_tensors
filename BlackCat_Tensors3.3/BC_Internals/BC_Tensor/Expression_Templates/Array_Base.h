@@ -10,6 +10,8 @@
 #define TENSOR_CORE_BASE_H_
 
 #include "BlackCat_Internal_Definitions.h"
+#include "BC_Internal_Base.h"
+
 #include "Shape.h"
 
 namespace BC {
@@ -40,7 +42,7 @@ template<class> class 	_Tensor_Scalar 	= Array_Scalar,
 template<int> class     _Tensor_Chunk	= Array_Chunk,			//Nested implementation type
 template<int> class 	_Tensor_Reshape = Array_Reshape>		//Nested implementation type
 
-struct Tensor_Array_Base : expression_base<derived>, BC_Array {
+struct Array_Base : BC_internal_base<derived>, BC_Array {
 
 	__BCinline__ static constexpr int DIMS() { return DIMENSION; }
 	__BCinline__ static constexpr int ITERATOR() { return 0; }
@@ -83,8 +85,8 @@ public:
 
 	__BCinline__ const auto _slice(int i) const {
 		//change to if constexpr once NVCC supports it
-		struct ret_scalar { __BCinline__ static auto impl(const Tensor_Array_Base& self, int i) { return self._scalar(i); } };
-		struct ret_slice  { __BCinline__ static auto impl(const Tensor_Array_Base& self, int i) {
+		struct ret_scalar { __BCinline__ static auto impl(const Array_Base& self, int i) { return self._scalar(i); } };
+		struct ret_slice  { __BCinline__ static auto impl(const Array_Base& self, int i) {
 			return slice_t(self.slice_ptr(i), self.as_derived()); } };
 
 		using xslice_t = std::conditional_t<DIMS() == 1, ret_scalar,
@@ -94,8 +96,8 @@ public:
 	}
 	__BCinline__ auto _slice(int i) {
 		//change to if constexpr once NVCC supports it
-		struct ret_scalar { __BCinline__ static auto impl(const Tensor_Array_Base& self, int i) { return self._scalar(i); } };
-		struct ret_slice  { __BCinline__ static auto impl(const Tensor_Array_Base& self, int i) {
+		struct ret_scalar { __BCinline__ static auto impl(const Array_Base& self, int i) { return self._scalar(i); } };
+		struct ret_slice  { __BCinline__ static auto impl(const Array_Base& self, int i) {
 			return slice_t(self.slice_ptr(i), self.as_derived()); } };
 
 		using xslice_t = std::conditional_t<DIMS() == 1, ret_scalar,
@@ -214,7 +216,7 @@ public:
 };
 }
 
-template<class T> static constexpr bool is_array() { return std::is_base_of<internal::Tensor_Array_Base<T, T::DIMS()>, T>::value; };
+template<class T> static constexpr bool is_array() { return std::is_base_of<internal::Array_Base<T, T::DIMS()>, T>::value; };
 
 template<class T>
 struct BC_array_copy_assignable_overrider<T, std::enable_if_t<is_array<T>()>> {

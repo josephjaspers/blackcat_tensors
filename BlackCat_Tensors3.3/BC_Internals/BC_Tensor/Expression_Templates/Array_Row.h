@@ -14,7 +14,7 @@ namespace BC {
 namespace internal {
 
 template<class PARENT>
-struct Array_Row : Tensor_Array_Base<Array_Row<PARENT>, 1> {
+struct Array_Row : Array_Base<Array_Row<PARENT>, 1> {
 
 	using scalar_t = typename PARENT::scalar_t;
 	using mathlib_t = typename PARENT::mathlib_t;

@@ -32,7 +32,7 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	}
 
 	template<class... args>
-	__BCinline__  binary_expression(lv l, rv r, const args&... args_) :  operation(args_...), left(l), right(r) {}
+	__BC_host_inline__ binary_expression(lv l, rv r, const args&... args_) :  operation(args_...), left(l), right(r) {}
 
 	__BCinline__  auto  operator [](int index) const { return oper(left[index], right[index]); }
 	template<class... integers> __BCinline__  auto  operator ()(integers... ints) const { return oper(left(ints...), right(ints...)); }
@@ -44,6 +44,7 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	__BCinline__ int dimension(int i) const { return shape().dimension(i); }
 	__BCinline__ int outer_dimension() const { return shape().outer_dimension(); }
 	__BCinline__ const auto inner_shape() const { return shape().inner_shape(); }
+	__BCinline__ const auto block_shape() const { return shape().block_shape(); }
 
 
 

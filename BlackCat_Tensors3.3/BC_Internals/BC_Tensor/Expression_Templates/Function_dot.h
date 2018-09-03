@@ -29,7 +29,7 @@ namespace internal {
 
 template<class lv, class rv, class mathlib>
 struct binary_expression<lv, rv, oper::dot<mathlib>>
-: expression_base<binary_expression<lv, rv,  oper::dot<mathlib>>>, BLAS_FUNCTION{
+: expression_base<binary_expression<lv, rv,  oper::dot<mathlib>>>, BLAS_FUNCTION, Shape<0> {
 
 	using scalar_t  = typename lv::scalar_t;
 	using mathlib_t = mathlib;

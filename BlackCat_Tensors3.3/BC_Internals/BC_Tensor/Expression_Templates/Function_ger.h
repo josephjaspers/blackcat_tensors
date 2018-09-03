@@ -52,7 +52,7 @@ struct binary_expression<lv, rv, oper::ger<mathlib>>
 	__BCinline__ int outer_dimension() const { return rows(); }
 
 	__BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.rows() : 1; });}
-
+	__BCinline__ const auto block_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? size() : 1; });}
 	__BCinline__ int M() const { return left.rows();  }
 	__BCinline__ int N() const { return right.rows(); }
 

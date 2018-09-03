@@ -15,7 +15,7 @@ namespace BC {
 template<class derived>
 struct Shape_Expression : Shape_Base<derived>{
 
-	Shape_Expression() {
+	__BCinline__ Shape_Expression() {
 
 		static_assert(!std::is_same<decltype(std::declval<derived>().inner_shape()), void>::value, "EXPRESSION_MUST DEFINE inner_shape()");
 		static_assert(!std::is_same<decltype(std::declval<derived>().block_shape()), void>::value, "EXPRESSION_MUST DEFINE block_shape()");

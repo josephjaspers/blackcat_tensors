@@ -13,7 +13,7 @@
 namespace BC {
 namespace internal {
 template<int dimension, class T, class mathlib>
-struct Array : Tensor_Array_Base<Array<dimension, T, mathlib>, dimension>, public Shape<dimension> {
+struct Array : Array_Base<Array<dimension, T, mathlib>, dimension>, public Shape<dimension> {
 
 	using scalar_t = T;
 	using mathlib_t = mathlib;
@@ -26,7 +26,7 @@ struct Array : Tensor_Array_Base<Array<dimension, T, mathlib>, dimension>, publi
 
 	Array(Shape<DIMS()> shape_, scalar_t* array_) : array(array_), Shape<DIMS()>(shape_) {}
 
-	template<class U,typename = std::enable_if_t<not std::is_base_of<expression_base<U>, U>::value>>
+	template<class U,typename = std::enable_if_t<not std::is_base_of<BC_internal_base<U>, U>::value>>
 	Array(U param) : Shape<DIMS()>(param) { mathlib_t::initialize(array, this->size()); }
 
 	template<class... integers>//CAUSES FAILURE WITH NVCC 9.2, typename = std::enable_if_t<MTF::is_integer_sequence<integers...>>>
@@ -34,7 +34,7 @@ struct Array : Tensor_Array_Base<Array<dimension, T, mathlib>, dimension>, publi
 		static_assert(MTF::is_integer_sequence<integers...>,"PARAMETER LIST MUST BE INTEGER_SEQUNCE");
 		mathlib_t::initialize(array, this->size()); }
 
-	template<class deriv_expr, typename = std::enable_if_t<std::is_base_of<expression_base<deriv_expr>, deriv_expr>::value>>
+	template<class deriv_expr, typename = std::enable_if_t<std::is_base_of<BC_internal_base<deriv_expr>, deriv_expr>::value>>
 	Array(const deriv_expr& expr) : Shape<DIMS()>(static_cast<const deriv_expr&>(expr).inner_shape()) {
 		mathlib_t::initialize(array, this->size());
 		auto eval = binary_expression<Array<dimension, T, mathlib_t>, deriv_expr, oper::assign>(*this, static_cast<const deriv_expr&>(expr));
@@ -62,7 +62,7 @@ public:
 
 //specialization for scalar --------------------------------------------------------------------------------------------------------
 template<class T, class mathlib>
-struct Array<0, T, mathlib> : Tensor_Array_Base<Array<0, T, mathlib>, 0>, public Shape<0> {
+struct Array<0, T, mathlib> : Array_Base<Array<0, T, mathlib>, 0>, public Shape<0> {
 
 	using scalar_t = T;
 	using mathlib_t = mathlib;

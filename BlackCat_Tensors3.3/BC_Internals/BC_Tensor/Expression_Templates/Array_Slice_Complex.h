@@ -19,7 +19,7 @@ struct Array_Slice_Complex {
 	static_assert(axis != 0, "COMPLEX SLICE IS NOT LEGAL FOR ROW_SLICES");
 
 	template<class PARENT>
-	struct implementation : Tensor_Array_Base<implementation<PARENT>, MTF::max(PARENT::DIMS() - 1, 0)> {
+	struct implementation : Array_Base<implementation<PARENT>, MTF::max(PARENT::DIMS() - 1, 0)> {
 		using scalar_t = typename PARENT::scalar_t;
 		using mathlib_t = typename PARENT::mathlib_t;
 
