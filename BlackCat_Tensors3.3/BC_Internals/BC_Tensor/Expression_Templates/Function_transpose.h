@@ -27,7 +27,7 @@ struct unary_expression<functor_type, oper::transpose<ml>>
 	using mathlib_t = typename functor_type::mathlib_t;
 
 	__BCinline__ static constexpr int DIMS() { return functor_type::DIMS(); }
-	__BCinline__ static constexpr int ITERATOR() { return DIMS(); }
+	__BCinline__ static constexpr int ITERATOR() { return DIMS() > 1? DIMS() :0; }
 
 	unary_expression(functor_type p) : array(p) {}
 
@@ -42,6 +42,14 @@ struct unary_expression<functor_type, oper::transpose<ml>>
 			else
 				return 1;
 		});
+	}
+	__BCinline__ const auto block_shape() const {
+		return l_array<DIMS()>([=](int i) {
+			return i == 0 ? array.cols() : 1 == 1 ? array.rows() : array.block_dimension(i);
+		});
+	}
+	__BCinline__ auto operator [] (int i) const -> decltype(array[0]) {
+		return array[i];
 	}
 	__BCinline__ int size() const { return array.size(); }
 	__BCinline__ int rows() const { return array.cols(); }

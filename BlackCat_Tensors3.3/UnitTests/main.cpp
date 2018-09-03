@@ -23,13 +23,21 @@ using mat_view = BC::Matrix_View<float, ml>;
 #include "_shaping_test.h"
 //#include <iostream>
 
-int test() {
 
+int test() {
 	mat a(7,7);
 	a.randomize(0, 10);
 	a.print();
 
 	a[{3,5}].print();
+	a.slice(3,5);
+
+
+	a[{3,5}] = 3;
+
+	a.print();
+
+
 
 //various tests
 //gemm_injection();

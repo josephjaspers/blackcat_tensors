@@ -33,8 +33,8 @@ struct Array_Slice_Range
 							: Shape<DIMS()>(parent_.inner_shape()), parent(parent_), array_slice(const_cast<scalar_t*>(array)) {
 
 		int size = parent.leading_dimension(DIMS() - 2) * range;
-		this->IS[DIMS() - 1] = range; //setting the outer_dimension
-		this->OS[DIMS() - 1] = size;  //adjusting the size
+		this->m_inner_shape[DIMS() - 1] = range; //setting the outer_dimension
+		this->m_outer_shape[DIMS() - 1] = size;  //adjusting the size
 	}
 
 	__BCinline__ const scalar_t* memptr() const { return array_slice; }

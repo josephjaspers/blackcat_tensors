@@ -13,8 +13,7 @@
 #include "Parse_Tree_Injection_Wrapper.h"
 #include "Operations/Binary.h"
 #include "Operations/Unary.h"
-#include <limits>
-
+#include "Shape_Expression.h"
 #include <iostream>
 #include <type_traits>
 
@@ -39,7 +38,6 @@ public:
 		static_assert(!std::is_same<void, typename derived::mathlib_t>::value, "CLASSES DERIVING EXPRESSION_BASE MUST HAVE A 'using mathlib_t = some_Type'");
 
 	}
-	__BCinline__ constexpr int  dims() const { return derived::DIMS(); }
 
 
 	void print_dimensions() const {

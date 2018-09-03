@@ -18,7 +18,7 @@ namespace internal {
 template<class PARENT>
 struct Array_Slice
 		: Tensor_Array_Base<Array_Slice<PARENT>, MTF::max(PARENT::DIMS() - 1, 0)>,
-		  Shape_Base<MTF::max(PARENT::DIMS() - 1, 0), Array_Slice<PARENT>>{
+		  Shape_Base<Array_Slice<PARENT>>{
 
 	using scalar_t = typename PARENT::scalar_t;
 	using mathlib_t = typename PARENT::mathlib_t;
@@ -35,6 +35,8 @@ struct Array_Slice
 
 	__BCinline__ const auto inner_shape() const 			{ return parent.inner_shape(); }
 	__BCinline__ const auto outer_shape() const 			{ return parent.outer_shape(); }
+	__BCinline__ const auto block_shape() const 			{ return parent.block_shape(); }
+
 	__BCinline__ int size() const { return parent.outer_shape()[DIMS() - 1]; }
 	__BCinline__ int rows() const { return parent.inner_shape()[0]; }
 	__BCinline__ int cols() const { return  parent.inner_shape()[1]; }

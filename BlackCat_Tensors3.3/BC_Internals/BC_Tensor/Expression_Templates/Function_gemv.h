@@ -55,7 +55,7 @@ struct binary_expression<lv, rv, oper::gemv<mathlib>>
 	__BCinline__ int outer_dimension() const { return rows(); }
 
 	__BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : 1; });}
-
+	__BCinline__ const auto block_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? rows() : 1; });}
 	__BCinline__ auto _slice(int i) {
 		return binary_expression<decltype(left._row(i)), decltype(right._slice(i)), oper::dot<mathlib>>(left._row(i), right._slice(i));
 	}

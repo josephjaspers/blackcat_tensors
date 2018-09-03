@@ -28,6 +28,8 @@ struct Tensor_Utility {
 	using mathlib = mathlib_of<derived>;
 
 private:
+	static constexpr int DIMS() { return derived::DIMS(); }
+
 	derived& as_derived() {
 		return static_cast<derived&>(*this);
 	}
@@ -40,11 +42,11 @@ public:
 
 	void print(int precision=8) const {
 		BC_ARRAY_ONLY("void print(int precision=8) const");
-		mathlib::print(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), as_derived().dims(), precision);
+		mathlib::print(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), DIMS(), precision);
 	}
 	void printSparse(int precision=8) const {
 		BC_ARRAY_ONLY("void printSparse(int precision=8) const");
-		mathlib::printSparse(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), as_derived().dims(), precision);
+		mathlib::printSparse(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), DIMS(), precision);
 	}
 
 	void write(std::ofstream& os) const {

@@ -159,6 +159,8 @@ public:
 	}
 
 
+
+	void destroy() {}
 //private:
 	//------------------------------------------Implementation Details---------------------------------------//
 
@@ -179,11 +181,11 @@ public:
 
 	template<class... integers> __BCinline__
 	int dims_to_index(integers... ints) const {
-		return dims_to_index(BC::array(ints...));
+		return dims_to_index(BC::make_array(ints...));
 	}
 	template<class... integers> __BCinline__
 	int dims_to_index_reverse(integers... ints) const {
-		return dims_to_index_reverse(BC::array(ints...));
+		return dims_to_index_reverse(BC::make_array(ints...));
 	}
 
 //	__BCinline__ int dims_to_index(int index) const {
@@ -193,14 +195,14 @@ public:
 //		return index * as_derived().leading_dimension(0);
 //	}
 
-	template<int D> __BCinline__ int dims_to_index(stack_array<D, int> var) const {
+	template<int D> __BCinline__ int dims_to_index(BC::array<D, int> var) const {
 		int index = var[0];
 		for(int i = 1; i < DIMS(); ++i) {
 			index += this->as_derived().leading_dimension(i - 1) * var[i];
 		}
 		return index;
 	}
-	template<int D> __BCinline__ int dims_to_index_reverse(stack_array<D, int> var) const {
+	template<int D> __BCinline__ int dims_to_index_reverse(BC::array<D, int> var) const {
 		static_assert(D >= DIMS(), "converting array_to dimension must have at least as many indices as the tensor");
 
 		int index = var[DIMS() - 1];
