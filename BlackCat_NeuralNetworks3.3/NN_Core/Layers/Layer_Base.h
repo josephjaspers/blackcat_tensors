@@ -18,10 +18,9 @@ template<class derived>
 class Layer_Base {
 public:
 
-	scal lr;
-
 	const int INPUTS;
 	const int OUTPUTS;
+	scal lr;
 
 	Layer_Base(int inputs)
 		: INPUTS(inputs),
@@ -47,8 +46,6 @@ public:
 	auto& x() {
 		return prev().y;
 	}
-
-//	decltype(std::declval<Layer<derived>>().prev().xt()) x = xt();
 };
 
 }

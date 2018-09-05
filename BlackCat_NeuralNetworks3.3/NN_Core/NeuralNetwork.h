@@ -14,8 +14,6 @@ namespace NN {
 template<template<class> class... layers>
 struct NeuralNetwork {
 
-	int NUMB_THREADS = 1;
-
 	LayerChain<BASE, InputLayer, layers..., OutputLayer> network;
 
 	template<class... integers>

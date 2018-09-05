@@ -1,14 +1,15 @@
+#ifndef BCT_TEST_MNIST
+#define BCT_TEST_MNIST
+
 //#include "../BlackCat_GPU_NeuralNetworks.h"
+
+
 #include "BlackCat_NeuralNetworks.h"
 
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <omp.h>
-using BC::NN::vec;
-using BC::NN::scal;
-using BC::NN::mat;
-using BC::NN::cube;
+//#include <omp.h>
 namespace BC {
 namespace NN {
 namespace MNIST_Test {
@@ -69,7 +70,7 @@ int percept_MNIST() {
 	in_stream.close();
 
 	std::cout << " training..." << std::endl;
-	float t = omp_get_wtime();
+//	float t = omp_get_wtime();
 
 	for (int i = 0; i < EPOCHS; ++i) {
 		std::cout << " current epoch: " << i << std::endl;
@@ -80,10 +81,10 @@ int percept_MNIST() {
 			network.clear_stored_delta_gradients();
 		}
 	}
-	t = omp_get_wtime() - t;
+//	t = omp_get_wtime() - t;
 
 
-	printf("It took me %f clicks (%f seconds).\n", t, ((float) t));
+//	printf("It took me %f clicks (%f seconds).\n", t, ((float) t));
 	std::cout << "success " << std::endl;
 
 	std::cout << "\n \n \n " << std::endl;
@@ -108,3 +109,5 @@ int percept_MNIST() {
 }
 }
 }
+
+#endif

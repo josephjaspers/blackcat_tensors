@@ -20,14 +20,16 @@ public:
 	using Layer_Base<derived>::lr;	//the learning rate
 	using Layer_Base<derived>::x;
 
-	mat w_gradientStorage;		//weight gradient storage
-	vec b_gradientStorage;		//bias gradient storage
 
 	mat dy;							//error
 	mat y;							//outputs
 
 	mat w;							//weights
 	vec b;							//biases
+
+	mat w_gradientStorage;		//weight gradient storage
+	vec b_gradientStorage;		//bias gradient storage
+
 
 	FeedForward(int inputs) :
 		Layer_Base<derived>(inputs),
