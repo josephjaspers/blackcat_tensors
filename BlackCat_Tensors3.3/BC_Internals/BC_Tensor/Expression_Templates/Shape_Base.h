@@ -16,31 +16,31 @@ namespace internal {
 template<class derived>
 class Inner_Shape {
 
-	__BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }
-	__BCinline__	   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
+	 const derived& as_derived() const { return static_cast<const derived&>(*this); }
+		   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
 
-	__BCinline__ auto is() const{
+	 auto is() const{
 		return as_derived().inner_shape();
 	}
 public:
-	__BCinline__ int rows() const { return is()[0]; }
-	__BCinline__ int cols() const { return is()[1]; }
-	__BCinline__ int dimension(int i) const { return is()[i]; }
-	__BCinline__ int outer_dimension() const { return is()[derived::DIMS() - 2]; }
+	 int rows() const { return is()[0]; }
+	 int cols() const { return is()[1]; }
+	 int dimension(int i) const { return is()[i]; }
+	 int outer_dimension() const { return is()[derived::DIMS() - 2]; }
 };
 
 template<class derived>
 class Block_Shape {
 
-	__BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }
-	__BCinline__	   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
+	 const derived& as_derived() const { return static_cast<const derived&>(*this); }
+		   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
 
-	__BCinline__ auto bs()const {
+	 auto bs()const {
 		return as_derived().block_shape();
 	}
 public:
-	__BCinline__ int size() const { return bs()[derived::DIMS() - 1]; }
-	__BCinline__ int block_dimension(int i) const { return bs()[i]; }
+	 int size() const { return bs()[derived::DIMS() - 1]; }
+	 int block_dimension(int i) const { return bs()[i]; }
 };
 
 
