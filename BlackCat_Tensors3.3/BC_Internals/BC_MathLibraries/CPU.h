@@ -37,8 +37,8 @@ class CPU:
 		public CPU_Utility<CPU>,
 		public CPU_Misc<CPU>,
 		public CPU_BLAS<CPU>,
-		public CPU_Constants<CPU>,
-		public CPU_Convolution<CPU>
+		public CPU_Constants<CPU>//,
+//		public CPU_Convolution<CPU>
 
 {
 

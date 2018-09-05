@@ -11,7 +11,7 @@
 #include "Shape_Base.h"
 
 namespace BC {
-
+namespace internal {
 template<class derived>
 struct Shape_Expression : Shape_Base<derived>{
 
@@ -22,7 +22,7 @@ struct Shape_Expression : Shape_Base<derived>{
 };
 
 }
-
+}
 
 
 #endif /* SHAPE_INTERFACE_H_ */

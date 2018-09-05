@@ -10,12 +10,10 @@
 #include "Expression_Interface.h"
 
 namespace BC {
+namespace internal {
 namespace oper {
 template<class ml> class transpose;
 }
-
-
-namespace internal {
 
 template<class functor_type, class ml>
 struct unary_expression<functor_type, oper::transpose<ml>>

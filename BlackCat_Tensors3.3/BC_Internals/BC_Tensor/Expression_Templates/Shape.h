@@ -13,7 +13,7 @@
 #include "Shape_Base.h"
 #include <array>
 namespace BC {
-
+namespace internal {
 template<int dims>
 struct Shape : Shape_Base<Shape<dims>> {
 protected:
@@ -147,7 +147,7 @@ struct Shape<1> {
 };
 
 
-
+}
 }
 
 

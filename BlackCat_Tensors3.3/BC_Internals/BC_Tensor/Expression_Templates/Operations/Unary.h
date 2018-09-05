@@ -8,6 +8,7 @@
 #define EXPRESSION_UNARY_FUNCTORS_H_
 
 namespace BC {
+namespace internal {
 namespace oper {
 	struct negation {
 		template<class lv> __BCinline__ auto operator ()(lv val) const {
@@ -56,7 +57,7 @@ namespace oper {
 
 }
 }
-
+}
 
 #endif /* EXPRESSION_BINARY_FUNCTORS_H_ */
 

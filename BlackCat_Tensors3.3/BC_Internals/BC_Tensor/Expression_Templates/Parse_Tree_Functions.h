@@ -133,9 +133,6 @@ template<> struct PRECEDENCE<oper::div_assign> {
 template<class T, class enabler = void> struct BLAS_FUNCTION_TYPE { static constexpr bool conditional = false; };
 template<class T> struct BLAS_FUNCTION_TYPE<T, std::enable_if_t<std::is_base_of<BC::BLAS_FUNCTION, T>::value>> { static constexpr bool conditional = true; };
 
-//template<class T> struct BLAS_FUNCTION_TYPE<BC::oper::gemm<T>> { static constexpr bool conditional = true; };
-//template<class T> struct BLAS_FUNCTION_TYPE<BC::oper::transpose<T>> { static constexpr bool conditional = true; };
-
 template<class T> static constexpr bool is_blas_func() {
 	return BLAS_FUNCTION_TYPE<T>::conditional;
 }

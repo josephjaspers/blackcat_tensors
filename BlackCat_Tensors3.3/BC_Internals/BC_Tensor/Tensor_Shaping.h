@@ -16,7 +16,7 @@ template<class> class Tensor_Base;
 struct range { int from, to; };
 
 
-namespace Base {
+namespace Module {
 template<class derived>
 struct Tensor_Shaping {
 

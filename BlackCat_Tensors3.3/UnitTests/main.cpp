@@ -40,7 +40,8 @@ int test() {
 
 
 //various tests
-//gemm_injection();
+gemm_injection();
+shaping();
 
 //	mat a(3,3);
 //	a.randomize(0, 10);

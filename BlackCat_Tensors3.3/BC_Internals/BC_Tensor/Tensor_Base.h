@@ -29,18 +29,18 @@ namespace BC {
 template<class internal_t>
 class Tensor_Base :
 
-		public Base::Tensor_Operations<Tensor_Base<internal_t>>,
-		public Base::Tensor_Functions<Tensor_Base<internal_t>>,
-		public Base::Tensor_Utility<Tensor_Base<internal_t>>,
-		public Base::Tensor_Shaping<Tensor_Base<internal_t>>,
+		public Module::Tensor_Operations<Tensor_Base<internal_t>>,
+		public Module::Tensor_Functions<Tensor_Base<internal_t>>,
+		public Module::Tensor_Utility<Tensor_Base<internal_t>>,
+		public Module::Tensor_Shaping<Tensor_Base<internal_t>>,
 		public internal_t {
 
 protected:
 
 	using self 			= Tensor_Base<internal_t>;
-	using operations  	= Base::Tensor_Operations<Tensor_Base<internal_t>>;
-	using utility		= Base::Tensor_Utility<Tensor_Base<internal_t>>;
-	using shaping		= Base::Tensor_Shaping<Tensor_Base<internal_t>>;
+	using operations  	= Module::Tensor_Operations<Tensor_Base<internal_t>>;
+	using utility		= Module::Tensor_Utility<Tensor_Base<internal_t>>;
+	using shaping		= Module::Tensor_Shaping<Tensor_Base<internal_t>>;
 
 	using scalar_type	= scalar_of<internal_t>;
 	using mathlib_type 	= mathlib_of<internal_t>;

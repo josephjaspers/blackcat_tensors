@@ -10,10 +10,10 @@
 #include "Parse_Tree_Evaluator.h"
 
 namespace BC {
+namespace internal {
 namespace oper {
 template<class ml> class ger : public BLAS_FUNCTION {};
 }
-namespace internal {
 
 /*
  * a = M x K

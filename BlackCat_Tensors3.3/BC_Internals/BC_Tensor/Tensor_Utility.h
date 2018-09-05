@@ -15,7 +15,7 @@
 #include <sstream>
 
 namespace BC {
-namespace Base {
+namespace Module {
 
 /*
  * Defines standard utility methods related to I/O
@@ -162,7 +162,7 @@ public:
 			}
 			if (overrideDimensions) {
 
-				Shape<derived::DIMS()> shape;
+				internal::Shape<derived::DIMS()> shape;
 				for (int i = 0; i < derived::DIMS(); ++i) {
 					shape.is()[i] = (int) file_data[i + 1];
 				}

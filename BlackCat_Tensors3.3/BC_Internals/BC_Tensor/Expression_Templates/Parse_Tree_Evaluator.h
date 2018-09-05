@@ -75,7 +75,7 @@ evaluate_aliased(const expression& expr) {
 template<class mathlib>
 struct branched {
 	template<class branch> using sub_t 	= BC::internal::Array<branch::DIMS(), scalar_of<branch>, mathlib>;
-	template<class branch> using eval_t = BC::internal::binary_expression<sub_t<branch>, branch, BC::oper::assign>;
+	template<class branch> using eval_t = BC::internal::binary_expression<sub_t<branch>, branch, BC::internal::oper::assign>;
 
 	template<class branch>
 	static std::enable_if_t<BC::is_array<std::decay_t<branch>>(), const branch&> evaluate(const branch& expression) { return expression; }

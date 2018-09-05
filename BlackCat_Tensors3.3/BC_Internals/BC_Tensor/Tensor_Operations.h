@@ -26,7 +26,8 @@
 #include "Expression_Templates/Parse_Tree_Evaluator.h"
 
 namespace BC {
-namespace Base {
+namespace Module {
+namespace oper = BC::internal::oper;
 
 //This is where the beautiful lazy expressions are created
 

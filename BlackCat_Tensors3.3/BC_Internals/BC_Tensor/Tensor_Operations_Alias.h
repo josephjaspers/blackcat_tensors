@@ -9,8 +9,9 @@
 #define ALIAS_H_
 
 namespace BC {
-namespace Base {
-
+namespace Module {
+namespace oper = BC::internal::oper;
+using namespace oper;
 template<class> class Tensor_Operations;
 
 template<class derived>

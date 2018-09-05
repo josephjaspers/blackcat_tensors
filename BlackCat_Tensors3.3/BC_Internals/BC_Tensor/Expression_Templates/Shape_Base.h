@@ -11,6 +11,7 @@
 #include "BlackCat_Internal_Definitions.h"
 
 namespace BC {
+namespace internal {
 
 template<class derived>
 class Inner_Shape {
@@ -49,7 +50,7 @@ class Shape_Base
 		  public Block_Shape<derived> {};
 
 }
-
+}
 
 
 #endif /* SHAPE_BASE_H_ */

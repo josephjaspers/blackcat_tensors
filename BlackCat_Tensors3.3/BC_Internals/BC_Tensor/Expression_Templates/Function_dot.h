@@ -15,11 +15,10 @@
 #include "Parse_Tree_Evaluator.h"
 
 namespace BC {
+namespace internal {
 namespace oper {
 template<class ml> class dot : public BLAS_FUNCTION {};
 }
-namespace internal {
-
 /*
  * a = M x K
  * b = K x N

@@ -8,22 +8,7 @@
 #define EXPRESSION_BINARY_FUNCTORS_H_
 
 namespace BC {
-
-template<class T, class U, class... Ts>
-struct  inherits_from {
-	static constexpr bool conditional = std::is_base_of<U, T>::value && inherits_from<T, Ts...>::conditional;
-
-};
-template<class T, class U>
-struct  inherits_from<T, U> {
-	static constexpr bool conditional = std::is_base_of<U, T>::value;
-};
-
-template<class T, class... Ts>
-using enable_if_is = std::enable_if_t<inherits_from<T, Ts...>::conditional>;
-
-
-
+namespace internal {
 namespace oper {
 template<class T> struct rm_const { using type = T; };
 template<class T> struct rm_const<const T&> { using type = T&; };
@@ -171,8 +156,7 @@ class matrix_oper {};
 	};
 }
 }
-
-
+}
 
 #endif /* EXPRESSION_BINARY_FUNCTORS_H_ */
 
