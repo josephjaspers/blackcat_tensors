@@ -10,14 +10,14 @@
 
 #include "Array_Base.h"
 #include "BlackCat_Internal_Definitions.h"
-#include "Expression_Interface.h"
+#include "Expression_Base.h"
 #include "BLAS_Feature_Detector.h"
 #include "Tree_Evaluator_Runner.h"
 
 namespace BC {
 namespace internal {
 namespace oper {
-template<class ml> class dot : public BLAS_FUNCTION {};
+template<class ml> class dot;
 }
 /*
  * a = M x K
@@ -28,15 +28,15 @@ template<class ml> class dot : public BLAS_FUNCTION {};
 
 template<class lv, class rv, class mathlib>
 struct binary_expression<lv, rv, oper::dot<mathlib>>
-: expression_interface<binary_expression<lv, rv,  oper::dot<mathlib>>>, BLAS_FUNCTION, Shape<0> {
+: expression_base<binary_expression<lv, rv,  oper::dot<mathlib>>>, BLAS_FUNCTION, Shape<0> {
 
 	using scalar_t  = typename lv::scalar_t;
 	using mathlib_t = mathlib;
 
 	static constexpr bool transA = blas_feature_detector<lv>::transposed;
 	static constexpr bool transB = blas_feature_detector<rv>::transposed;
-	static constexpr bool lvscalar_of = blas_feature_detector<lv>::scalar;
-	static constexpr bool rvscalar_of = blas_feature_detector<rv>::scalar;
+	static constexpr bool lv_scalar = blas_feature_detector<lv>::scalar;
+	static constexpr bool rv_scalar = blas_feature_detector<rv>::scalar;
 	static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
 	static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
 
@@ -71,11 +71,11 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 	//call outer product
 	mathlib::dot(X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
 
-	if (lvscalar_of) {
+	if (lv_scalar) {
 		scalar_t* alpha_lv = blas_feature_detector<lv>::get_scalar(left);
 		mathlib::scalar_mul(injection, alpha, alpha_lv);
 	}
-	if (rvscalar_of) {
+	if (rv_scalar) {
 		scalar_t* alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 		mathlib::scalar_mul(injection, alpha, alpha_rv);
 	}

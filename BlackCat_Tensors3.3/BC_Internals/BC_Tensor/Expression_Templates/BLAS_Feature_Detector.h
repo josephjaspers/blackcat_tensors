@@ -9,14 +9,12 @@
 
 #include "BlackCat_Internal_TypeTraits.h"
 namespace BC {
-
+namespace internal {
 namespace oper {
 	template<class ml>
 	class transpose;
 	class scalar_mul;
 }
-
-namespace internal {
 
 template<class T> using enable_if_core = std::enable_if_t<std::is_base_of<BC_Array, T>::value>;
 template<class T, class U> using enable_if_cores = std::enable_if_t<std::is_base_of<BC_Array, T>::value && std::is_base_of<BC_Array, U>::value>;

@@ -8,7 +8,7 @@
 #ifndef SHAPE_H_
 #define SHAPE_H_
 
-#include "Expression_Interface.h"
+#include "Array_Base.h"
 
 namespace BC {
 namespace internal {

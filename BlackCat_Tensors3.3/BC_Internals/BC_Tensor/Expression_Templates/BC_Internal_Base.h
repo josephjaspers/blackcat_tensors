@@ -36,27 +36,13 @@ public:
 //		static_assert(std::is_trivially_copyable<derived>::value, "INTERNAL_TYPES MUST BE TRIVIALLY COPYABLE");
 		static_assert(!std::is_same<void, typename derived::scalar_t>::value, "INTERNAL_TYPES MUST HAVE A 'using scalar_t = some_Type'");
 		static_assert(!std::is_same<void, typename derived::mathlib_t>::value, "INTERNAL_TYPES MUST HAVE A 'using mathlib_t = some_Type'");
+		static_assert(!std::is_same<decltype(std::declval<derived>().inner_shape()), void>::value, "INTERNAL_TYPE MUST DEFINE inner_shape()");
+		static_assert(!std::is_same<decltype(std::declval<derived>().block_shape()), void>::value, "INTERNAL_TYPE MUST DEFINE block_shape()");
+		static_assert(std::is_same<decltype(std::declval<derived>().rows()), int>::value, "INTERNAL_TYPE MUST DEFINE rows()");
+		static_assert(std::is_same<decltype(std::declval<derived>().cols()), int>::value, "INTERNAL_TYPE MUST DEFINE cols()");
+		static_assert(std::is_same<decltype(std::declval<derived>().dimension(0)), int>::value, "INTERNAL_TYPE MUST DEFINE dimension(int)");
+		static_assert(std::is_same<decltype(std::declval<derived>().block_dimension(0)), int>::value, "INTERNAL_TYPE MUST DEFINE block_dimension(int)");
 
-	}
-
-
-	void print_dimensions() const {
-		for (int i = 0; i < DIMS(); ++i) {
-			std::cout << "[" << as_derived().dimension(i) << "]";
-		}
-		std::cout << std::endl;
-	}
-	void print_leading_dimensions() const {
-		for (int i = 0; i < DIMS(); ++i) {
-			std::cout << "[" << as_derived().leading_dimension(i) << "]";
-		}
-		std::cout << std::endl;
-	}
-	void print_block_dimensions() const {
-		for (int i = 0; i < DIMS(); ++i) {
-			std::cout << "[" << as_derived().block_dimensions(i) << "]";
-		}
-		std::cout << std::endl;
 	}
 
 	void destroy() const {}

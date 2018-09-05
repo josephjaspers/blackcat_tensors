@@ -7,14 +7,14 @@
 #ifndef EXPRESSION_BINARY_POINTWISE_SAME_H_
 #define EXPRESSION_BINARY_POINTWISE_SAME_H_
 
-#include "Expression_Interface.h"
+#include "Expression_Base.h"
 #include "Tree_Evaluator_Functions.h"
 
 
 namespace BC {
 namespace internal {
 template<class lv, class rv, class operation>
-struct binary_expression : public expression_interface<binary_expression<lv, rv, operation>>, public operation {
+struct binary_expression : public expression_base<binary_expression<lv, rv, operation>>, public operation {
 
 	using scalar_t = decltype(std::declval<operation>()(std::declval<typename lv::scalar_t&>(), std::declval<typename lv::scalar_t&>()));
 	using mathlib_t = typename lv::mathlib_t;
@@ -42,7 +42,7 @@ struct binary_expression : public expression_interface<binary_expression<lv, rv,
 	__BCinline__ int rows() const { return shape().rows(); }
 	__BCinline__ int cols() const { return shape().cols(); }
 	__BCinline__ int dimension(int i) const { return shape().dimension(i); }
-	__BCinline__ int outer_dimension() const { return shape().outer_dimension(); }
+	__BCinline__ int block_dimension(int i) const { return shape().block_dimension(i); }
 	__BCinline__ const auto inner_shape() const { return shape().inner_shape(); }
 	__BCinline__ const auto block_shape() const { return shape().block_shape(); }
 

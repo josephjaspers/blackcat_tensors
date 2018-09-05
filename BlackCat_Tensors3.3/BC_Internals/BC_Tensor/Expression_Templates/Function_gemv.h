@@ -5,7 +5,7 @@
 
 #include "Array_Base.h"
 #include "BlackCat_Internal_Definitions.h"
-#include "Expression_Interface.h"
+#include "Expression_Base.h"
 #include "BLAS_Feature_Detector.h"
 #include "Tree_Evaluator_Runner.h"
 
@@ -25,15 +25,15 @@ template<class ml> class dot;
 
 template<class lv, class rv, class mathlib>
 struct binary_expression<lv, rv, oper::gemv<mathlib>>
-: expression_interface<binary_expression<lv, rv,  oper::gemv<mathlib>>>, BLAS_FUNCTION {
+: expression_base<binary_expression<lv, rv,  oper::gemv<mathlib>>>, BLAS_FUNCTION {
 
 	using scalar_t  = typename lv::scalar_t;
 	using mathlib_t = mathlib;
 
 	static constexpr bool transA = blas_feature_detector<lv>::transposed;
 	static constexpr bool transB = blas_feature_detector<rv>::transposed;
-	static constexpr bool lvscalar_of = blas_feature_detector<lv>::scalar;
-	static constexpr bool rvscalar_of = blas_feature_detector<rv>::scalar;
+	static constexpr bool lv_scalar = blas_feature_detector<lv>::scalar;
+	static constexpr bool rv_scalar = blas_feature_detector<rv>::scalar;
 	static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
 	static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
 
@@ -51,7 +51,7 @@ struct binary_expression<lv, rv, oper::gemv<mathlib>>
 	__BCinline__ int rows() const { return left.rows(); }
 	__BCinline__ int cols() const { return 1; }
 	__BCinline__ int dimension(int i) const { return i == 0 ? rows() : 1; }
-	__BCinline__ int outer_dimension() const { return rows(); }
+	__BCinline__ int block_dimension(int i) const { return i == 0 ? rows() : 1; }
 
 	__BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : 1; });}
 	__BCinline__ const auto block_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? rows() : 1; });}
@@ -75,11 +75,11 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 
 	//get the left and right side scalar values and
 	//compute the scalar values if need be
-	if (lvscalar_of) {
+	if (lv_scalar) {
 		scalar_t* alpha_lv = blas_feature_detector<lv>::get_scalar(left);
 		mathlib::scalar_mul(alpha, alpha, alpha_lv);
 	}
-	if (rvscalar_of) {
+	if (rv_scalar) {
 		scalar_t* alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 		mathlib::scalar_mul(alpha, alpha, alpha_rv);
 	}
@@ -100,17 +100,5 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 
 }
 }
-//		if (transA)
-//		std::cout << "A is transposed" << transA << std::endl;
-//		if (transB)
-//		std::cout <<"B is transposed" << transB << std::endl;
-//		if (lvscalar_of)
-//		std::cout << "A has scalar " <<lvscalar_of << std::endl;
-//		if (rvscalar_of)
-//		std::cout <<"B has scalar" << rvscalar_of << std::endl;
-//		if (lv_eval)
-//		std::cout << "A instant eval" <<lv_eval << std::endl;
-//		if(rv_eval)
-//		std::cout <<"B instant eval " << rv_eval << std::endl;
 
 #endif /* EXPRESSION_BINARY_DOTPRODUCT_CU_ */

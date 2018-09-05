@@ -8,9 +8,11 @@
 #ifndef TENSOR_HEAD_H_
 #define TENSOR_HEAD_H_
 
+#include "Expression_Templates/Expression_Unary.h"
 #include "Expression_Templates/Expression_Binary.h"
 #include "Expression_Templates/Operations/Binary.h"
 #include "Expression_Templates/Operations/Unary.h"
+
 
 #include "Expression_Templates/Function_conv2.h"
 
@@ -18,8 +20,6 @@
 #include "Expression_Templates/Function_gemv.h"
 #include "Expression_Templates/Function_ger.h"
 #include "Expression_Templates/Function_dot.h"
-
-#include "Expression_Templates/Expression_Unary.h"
 #include "Expression_Templates/Function_transpose.h"
 
 #include "Tensor_Operations_Alias.h"
@@ -27,7 +27,6 @@
 
 namespace BC {
 namespace module {
-namespace oper = BC::internal::oper;
 
 //This is where the beautiful lazy expressions are created
 
@@ -59,28 +58,28 @@ public:
 	derived& operator =(const Tensor_Operations<pDeriv>& param) {
 		BC_ARRAY_ONLY("derived& operator =(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
-		evaluate(bi_expr<oper::assign>(param));
+		evaluate(bi_expr<internal::oper::assign>(param));
 		return as_derived();
 	}
 	template<class pDeriv> __BC_host_inline__
 	derived& operator +=(const Tensor_Operations<pDeriv>& param) {
 		BC_ARRAY_ONLY("derived& operator +=(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
-		evaluate(bi_expr<oper::add_assign>(param));
+		evaluate(bi_expr<internal::oper::add_assign>(param));
 		return as_derived();
 	}
 	template<class pDeriv> __BC_host_inline__
 	derived& operator -=(const Tensor_Operations<pDeriv>& param) {
 		BC_ARRAY_ONLY("derived& operator -=(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
-		evaluate(bi_expr<oper::sub_assign>(param));
+		evaluate(bi_expr<internal::oper::sub_assign>(param));
 		return as_derived();
 	}
 	template<class pDeriv> __BC_host_inline__
 	derived& operator /=(const Tensor_Operations<pDeriv>& param) {
 		BC_ARRAY_ONLY("derived& operator /=(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
-		evaluate(bi_expr<oper::div_assign>(param));
+		evaluate(bi_expr<internal::oper::div_assign>(param));
 		return as_derived();
 	}
 	//pointwise multiply
@@ -88,7 +87,7 @@ public:
 	derived& operator %=(const Tensor_Operations<pDeriv>& param) {
 		BC_ARRAY_ONLY("derived& operator %=(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
-		evaluate(bi_expr<oper::mul_assign>(param));
+		evaluate(bi_expr<internal::oper::mul_assign>(param));
 		return as_derived();
 	}
 	//-------------------------------------gemm/gemv/ger-----------------------------------------//
@@ -101,11 +100,11 @@ public:
 		static constexpr bool ger  		= derived::DIMS() == 1 && param_deriv::DIMS() == 1 && internal::blas_feature_detector<param_deriv>::transposed;
 		static constexpr bool dot		= derived::DIMS() == 1 && param_deriv::DIMS() == 1 && !ger;
 		using matmul_t =
-					 std::conditional_t<scalmul, binary_expression_t<functor_of<param_deriv>, oper::scalar_mul>,
-					 std::conditional_t<gemm, 	 binary_expression_t<functor_of<param_deriv>, oper::gemm<mathlib_type>>,
-					 std::conditional_t<gemv, 	 binary_expression_t<functor_of<param_deriv>, oper::gemv<mathlib_type>>,
-					 std::conditional_t<ger, 	 binary_expression_t<functor_of<param_deriv>, oper::ger<mathlib_type>>,
-					 std::conditional_t<dot,	 binary_expression_t<functor_of<param_deriv>, oper::dot<mathlib_type>>, void>>>>>;
+					 std::conditional_t<scalmul, binary_expression_t<functor_of<param_deriv>, internal::oper::scalar_mul>,
+					 std::conditional_t<gemm, 	 binary_expression_t<functor_of<param_deriv>, internal::oper::gemm<mathlib_type>>,
+					 std::conditional_t<gemv, 	 binary_expression_t<functor_of<param_deriv>, internal::oper::gemv<mathlib_type>>,
+					 std::conditional_t<ger, 	 binary_expression_t<functor_of<param_deriv>, internal::oper::ger<mathlib_type>>,
+					 std::conditional_t<dot,	 binary_expression_t<functor_of<param_deriv>, internal::oper::dot<mathlib_type>>, void>>>>>;
 
 		static_assert(!std::is_same<matmul_t, void>::value, "Matrix Multiplication currently does not support broadcasting");
 
@@ -116,55 +115,55 @@ public:
 	template<class pDeriv> __BC_host_inline__
 	auto operator +(const Tensor_Operations<pDeriv>& param) const {
 		assert_valid(param);
-		return bi_expr<oper::add>(param);
+		return bi_expr<internal::oper::add>(param);
 	}
 	template<class pDeriv> __BC_host_inline__
 	auto operator -(const Tensor_Operations<pDeriv>& param) const {
 		assert_valid(param);
-		return bi_expr<oper::sub>(param);
+		return bi_expr<internal::oper::sub>(param);
 	}
 	template<class pDeriv> __BC_host_inline__
 	auto operator /(const Tensor_Operations<pDeriv>& param) const {
 		assert_valid(param);
-		return bi_expr<oper::div>(param);
+		return bi_expr<internal::oper::div>(param);
 	}
 	//pointwise multiply
 	template<class pDeriv> __BC_host_inline__
 	auto operator %(const Tensor_Operations<pDeriv>& param) const {
 		assert_valid(param);
-		return bi_expr<oper::mul>(param);
+		return bi_expr<internal::oper::mul>(param);
 	}
 
 
 	 //--------------------------------Other Operators------------------------------//
 
 	__BC_host_inline__ auto operator - () const {
-		 return un_expr<oper::negation>();
+		 return un_expr<internal::oper::negation>();
 	 }
 	template<class pDeriv> __BC_host_inline__
 	auto operator ==(const Tensor_Operations<pDeriv>& param) const {
 		assert_valid(param);
-		return bi_expr<oper::equal>(param);
+		return bi_expr<internal::oper::equal>(param);
 	}
 	template<class pDeriv> __BC_host_inline__
 	auto operator >(const Tensor_Operations<pDeriv>& param) const {
 		assert_valid(param);
-		return bi_expr<oper::greater>(param);
+		return bi_expr<internal::oper::greater>(param);
 	}
 	template<class pDeriv> __BC_host_inline__
 	auto operator <(const Tensor_Operations<pDeriv>& param) const {
 		assert_valid(param);
-		return bi_expr<oper::lesser>(param);
+		return bi_expr<internal::oper::lesser>(param);
 	}
 	template<class pDeriv> __BC_host_inline__
 	auto operator >=(const Tensor_Operations<pDeriv>& param) const {
 		assert_valid(param);
-		return bi_expr<oper::greater_equal>(param);
+		return bi_expr<internal::oper::greater_equal>(param);
 	}
 	template<class pDeriv> __BC_host_inline__
 	auto operator <=(const Tensor_Operations<pDeriv>& param) const {
 		assert_valid(param);
-		return bi_expr<oper::lesser_equal>(param);
+		return bi_expr<internal::oper::lesser_equal>(param);
 	}
 
 	//alias ----------------------
@@ -175,7 +174,7 @@ public:
 
 //
 //	template<int x, class param_derived> auto conv(const Tensor_Operations<param_derived>& tensor) const {
-//		return as_derived().bi_expr<oper::conv<x, mathlib_type>>(tensor.as_derived());
+//		return as_derived().bi_expr<internal::oper::conv<x, mathlib_type>>(tensor.as_derived());
 //	}
 	//-----------------------------------custom expressions--------------------------------------------------//
 

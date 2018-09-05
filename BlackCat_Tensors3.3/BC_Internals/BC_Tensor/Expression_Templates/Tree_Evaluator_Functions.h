@@ -184,7 +184,7 @@ static constexpr bool injectable_assignment() {
 	return PRECEDENCE<std::decay_t<T>>::traits::injectable_assignment;
 }
 
-//trivial_blas_feature_detector -- detects if the tree is entirely +/- operations with blas functions, --> y = a * b + c * d - e * f  --> true, y = a + b * c --> false
+//trivial_blas_evaluation -- detects if the tree is entirely +/- operations with blas functions, --> y = a * b + c * d - e * f  --> true, y = a + b * c --> false
 template<class op, class core, int a, int b>//only apply update if right hand side branch
 auto update_injection(injector<core,a,b> tensor) {
 	static constexpr int alpha_modifier = a != 0 ? a * alpha_of<op>() : 1;

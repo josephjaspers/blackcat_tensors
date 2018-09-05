@@ -11,7 +11,6 @@
 
 #include "BlackCat_Internal_Definitions.h"
 #include "BC_Internal_Base.h"
-
 #include "Shape.h"
 
 namespace BC {

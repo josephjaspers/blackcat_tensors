@@ -9,14 +9,19 @@
 #define EXPRESSION_BASE_H_
 
 #include "BC_Internal_Base.h"
-#include "Shape_Expression.h"
 namespace BC {
 namespace internal {
 
 template<class derived>
-struct expression_interface
-		: BC_internal_interface<derived>, Shape_Expression<derived> {
+struct expression_base
+		: BC_internal_interface<derived>{
 };
+
+template<class derived>
+struct function_interface
+		: BC_internal_interface<derived> {
+};
+
 }
 }
 

@@ -21,36 +21,36 @@ static auto transpose(module::Tensor_Operations<deriv>& tensor) {
 //modifies the calling the tensor, but if and only if evaluated
 template<class deriv>
 static auto zero(module::Tensor_Operations<deriv>& tensor) {
-	return tensor.un_expr(module::oper::zero());
+	return tensor.un_expr(internal::oper::zero());
 }
 template<class deriv>
 static auto one(module::Tensor_Operations<deriv>& tensor) {
-	return tensor.un_expr(module::oper::one());
+	return tensor.un_expr(internal::oper::one());
 }
 
 //converts all NaN/Inf values to 0
 template<class deriv>
 static auto fix(module::Tensor_Operations<deriv>& tensor) {
-	return tensor.un_expr(module::oper::fix());
+	return tensor.un_expr(internal::oper::fix());
 }
 template<class deriv>
 static auto abs(const module::Tensor_Operations<deriv>& tensor) {
-	return tensor.un_expr(module::oper::absolute());
+	return tensor.un_expr(internal::oper::absolute());
 }
 template<class deriv>
 static auto negation(const module::Tensor_Operations<deriv>& tensor) {
-	return tensor.un_expr(module::oper::negation());
+	return tensor.un_expr(internal::oper::negation());
 }
 
 //if 0 return 0 else return 1
 template<class deriv>
 static auto logical(const module::Tensor_Operations<deriv>& tensor) {
-	return tensor.un_expr(module::oper::logical());
+	return tensor.un_expr(internal::oper::logical());
 }
 
 template<class deriv>
 static auto normalize(const module::Tensor_Operations<deriv>& tensor, scalar_of<deriv> min, scalar_of<deriv> max) {
-	return tensor.un_expr(module::oper::norm<scalar_of<deriv>>(min, max));
+	return tensor.un_expr(internal::oper::norm<scalar_of<deriv>>(min, max));
 }
 
 }

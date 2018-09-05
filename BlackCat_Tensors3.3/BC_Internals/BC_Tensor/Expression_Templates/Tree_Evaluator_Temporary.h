@@ -16,7 +16,7 @@ namespace tree {
 template<class core>
 struct evaluator<temporary<core>>
 {
-	static constexpr bool trivial_blas_feature_detector = false;
+	static constexpr bool trivial_blas_evaluation = false;
 	static constexpr bool trivial_blas_injection = false;
 	static constexpr bool non_trivial_blas_injection = false;
 

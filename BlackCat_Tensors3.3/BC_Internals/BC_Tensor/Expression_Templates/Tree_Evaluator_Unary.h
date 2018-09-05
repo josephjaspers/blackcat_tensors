@@ -18,7 +18,7 @@ namespace tree {
 template<class array_t, class op>
 struct evaluator<unary_expression<array_t, op>>
 {
-	static constexpr bool trivial_blas_feature_detector = false;
+	static constexpr bool trivial_blas_evaluation = false;
 	static constexpr bool trivial_blas_injection = false;
 	static constexpr bool non_trivial_blas_injection = evaluator<array_t>::non_trivial_blas_injection;
 

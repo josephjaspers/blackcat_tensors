@@ -8,6 +8,7 @@
 #ifndef ARRAY_VIEW_H_
 #define ARRAY_VIEW_H_
 
+#include "Array_Base.h"
 #include "Array.h"
 
 namespace BC{

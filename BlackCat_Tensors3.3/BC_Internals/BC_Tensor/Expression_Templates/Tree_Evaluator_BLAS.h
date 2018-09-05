@@ -15,7 +15,7 @@ namespace tree {
 
 template<class lv, class rv, class op>
 struct evaluator<binary_expression<lv, rv, op>, std::enable_if_t<is_blas_func<op>()>> {
-	static constexpr bool trivial_blas_feature_detector = true;
+	static constexpr bool trivial_blas_evaluation = true;
 	static constexpr bool trivial_blas_injection = true;
 	static constexpr bool non_trivial_blas_injection = true;
 	using branch_t = binary_expression<lv, rv, op>;

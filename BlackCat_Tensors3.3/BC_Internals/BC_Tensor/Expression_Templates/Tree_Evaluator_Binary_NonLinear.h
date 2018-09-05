@@ -14,7 +14,7 @@ namespace tree {
 
 template<class lv, class rv, class op>
 struct evaluator<binary_expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op<op>()>> {
-	static constexpr bool trivial_blas_feature_detector = false;
+	static constexpr bool trivial_blas_evaluation = false;
 	static constexpr bool trivial_blas_injection = false;
 	static constexpr bool non_trivial_blas_injection = evaluator<lv>::non_trivial_blas_injection || evaluator<rv>::non_trivial_blas_injection;
 

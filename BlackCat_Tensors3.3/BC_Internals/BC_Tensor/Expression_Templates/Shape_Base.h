@@ -43,6 +43,25 @@ public:
 	 int block_dimension(int i) const { return bs()[i]; }
 };
 
+template<class derived>
+class Outer_Shape {
+
+	 const derived& as_derived() const { return static_cast<const derived&>(*this); }
+		   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
+
+	 auto os()const {
+		return as_derived().outer_shape();
+	}
+public:
+	 int leading_dimension(int i) const {
+		 if (derived::DIMS() == 1)
+			 if (i == 1)
+				 return 1;
+		 return os(i)[i];
+	 }
+};
+
+
 
 template<class derived>
 class Shape_Base

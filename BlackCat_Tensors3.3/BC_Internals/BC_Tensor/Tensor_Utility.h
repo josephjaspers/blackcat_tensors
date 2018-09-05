@@ -193,6 +193,25 @@ public:
 		as_derived()(std::stoi(tmp)) = 1;
 
 	}
+
+	void print_dimensions() const {
+		for (int i = 0; i < DIMS(); ++i) {
+			std::cout << "[" << as_derived().dimension(i) << "]";
+		}
+		std::cout << std::endl;
+	}
+	void print_leading_dimensions() const {
+		for (int i = 0; i < DIMS(); ++i) {
+			std::cout << "[" << as_derived().leading_dimension(i) << "]";
+		}
+		std::cout << std::endl;
+	}
+	void print_block_dimensions() const {
+		for (int i = 0; i < DIMS(); ++i) {
+			std::cout << "[" << as_derived().block_dimensions(i) << "]";
+		}
+		std::cout << std::endl;
+	}
 };
 
 }

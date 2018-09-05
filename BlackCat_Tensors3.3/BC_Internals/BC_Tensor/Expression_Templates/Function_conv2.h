@@ -5,7 +5,7 @@
 
 #include "Array_Base.h"
 #include "BlackCat_Internal_Definitions.h"
-#include "Expression_Interface.h"
+#include "Expression_Base.h"
 #include "BLAS_Feature_Detector.h"
 #include "Tree_Evaluator_Runner.h"
 
@@ -24,13 +24,13 @@ template<int dimension, class ml> class conv : public BLAS_FUNCTION {};
 
 template<class lv, class rv, class mathlib>
 struct binary_expression<lv, rv, oper::conv<2, mathlib>>
-: expression_interface<binary_expression<lv, rv,  oper::conv<2, mathlib>>>, BLAS_FUNCTION {
+: expression_base<binary_expression<lv, rv,  oper::conv<2, mathlib>>>, BLAS_FUNCTION {
 
 	using scalar_type = scalar_of<lv>;
 	static constexpr bool transA = blas_feature_detector<lv>::transposed;
 	static constexpr bool transB = blas_feature_detector<rv>::transposed;
-	static constexpr bool lvscalar_of = blas_feature_detector<lv>::scalar;
-	static constexpr bool rvscalar_of = blas_feature_detector<rv>::scalar;
+	static constexpr bool lv_scalar = blas_feature_detector<lv>::scalar;
+	static constexpr bool rv_scalar = blas_feature_detector<rv>::scalar;
 	static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
 	static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
 
@@ -90,10 +90,10 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 //		std::cout << "A is transposed" << transA << std::endl;
 //		if (transB)
 //		std::cout <<"B is transposed" << transB << std::endl;
-//		if (lvscalar_of)
-//		std::cout << "A has scalar " <<lvscalar_of << std::endl;
-//		if (rvscalar_of)
-//		std::cout <<"B has scalar" << rvscalar_of << std::endl;
+//		if (lv_scalar)
+//		std::cout << "A has scalar " <<lv_scalar << std::endl;
+//		if (rv_scalar)
+//		std::cout <<"B has scalar" << rv_scalar << std::endl;
 //		if (lv_eval)
 //		std::cout << "A instant eval" <<lv_eval << std::endl;
 //		if(rv_eval)

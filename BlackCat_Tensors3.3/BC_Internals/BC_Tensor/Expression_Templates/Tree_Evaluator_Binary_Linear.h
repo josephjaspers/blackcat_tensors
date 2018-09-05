@@ -14,7 +14,7 @@ namespace tree {
 
 template<class lv, class rv, class op>
 struct evaluator<binary_expression<lv, rv, op>, std::enable_if_t<is_linear_op<op>()>> {
-	static constexpr bool trivial_blas_feature_detector = evaluator<lv>::trivial_blas_feature_detector && evaluator<rv>::trivial_blas_feature_detector;
+	static constexpr bool trivial_blas_evaluation = evaluator<lv>::trivial_blas_evaluation && evaluator<rv>::trivial_blas_evaluation;
 	static constexpr bool trivial_blas_injection = evaluator<lv>::trivial_blas_injection || evaluator<rv>::trivial_blas_injection;
 	static constexpr bool non_trivial_blas_injection = evaluator<lv>::non_trivial_blas_injection || evaluator<rv>::non_trivial_blas_injection;
 
@@ -43,10 +43,10 @@ struct evaluator<binary_expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 
 	template<class core, int a, int b>
 	static auto linear_evaluation(const binary_expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
-		static constexpr bool double_eval = evaluator<lv>::trivial_blas_feature_detector && evaluator<rv>::trivial_blas_feature_detector;
+		static constexpr bool double_eval = evaluator<lv>::trivial_blas_evaluation && evaluator<rv>::trivial_blas_evaluation;
 
 		using impl = std::conditional_t<double_eval, full_eval,
-			std::conditional_t<evaluator<lv>::trivial_blas_feature_detector, left_eval, right_eval>>;
+			std::conditional_t<evaluator<lv>::trivial_blas_evaluation, left_eval, right_eval>>;
 
 		return impl::function(branch, tensor);
 	}
@@ -70,7 +70,7 @@ struct evaluator<binary_expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 			auto left = evaluator<lv>::injection(branch.left, tensor);
 			auto right = evaluator<rv>::linear_evaluation(branch.right, update_injection<op>(tensor));
 
-			using impl = std::conditional_t<evaluator<rv>::trivial_blas_feature_detector,
+			using impl = std::conditional_t<evaluator<rv>::trivial_blas_evaluation,
 					trivial_injection, non_trivial_injection>;
 
 			return impl::function(left, right);
@@ -94,7 +94,7 @@ struct evaluator<binary_expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 			auto left = evaluator<lv>::linear_evaluation(branch.left, tensor);
 			auto right = evaluator<rv>::injection(branch.right, update_injection<op>(tensor));
 
-			using impl = std::conditional_t<evaluator<lv>::trivial_blas_feature_detector,
+			using impl = std::conditional_t<evaluator<lv>::trivial_blas_evaluation,
 					trivial_injection, non_trivial_injection>;
 
 			return impl::function(left, right);		}
@@ -118,7 +118,7 @@ struct evaluator<binary_expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 	};
 	template<class core, int a, int b>
 	static auto injection(const binary_expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
-		static constexpr bool full_eval_b= evaluator<lv>::trivial_blas_feature_detector && evaluator<rv>::trivial_blas_feature_detector;
+		static constexpr bool full_eval_b= evaluator<lv>::trivial_blas_evaluation && evaluator<rv>::trivial_blas_evaluation;
 
 		using impl =
 				std::conditional_t<full_eval_b, full_eval,
