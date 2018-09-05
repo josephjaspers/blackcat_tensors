@@ -31,7 +31,7 @@ struct Array_Slice
 	const PARENT parent;
 	scalar_t* array_slice;
 
-	__BCinline__ Array_Slice(const scalar_t* array, PARENT parent_) : array_slice(const_cast<scalar_t*>(array)), parent(parent_) {}
+	__BCinline__ Array_Slice(const scalar_t* array, PARENT parent_) : parent(parent_), array_slice(const_cast<scalar_t*>(array)) {}
 
 	__BCinline__ const auto inner_shape() const { return parent.inner_shape(); }
 	__BCinline__ const auto outer_shape() const { return parent.outer_shape(); }

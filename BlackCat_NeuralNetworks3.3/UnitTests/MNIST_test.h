@@ -1,10 +1,9 @@
 //#include "../BlackCat_GPU_NeuralNetworks.h"
-#include "../BlackCat_NeuralNetworks.h"
+#include "BlackCat_NeuralNetworks.h"
 
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <omp.h>
 #include <omp.h>
 using BC::NN::vec;
 using BC::NN::scal;

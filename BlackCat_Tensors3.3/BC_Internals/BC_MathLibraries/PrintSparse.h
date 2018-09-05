@@ -56,15 +56,15 @@ static void printHelperSparse(const T& ary, const int_ranks ranks, const os oute
 				auto str = to_string(ary[i * outer[dimension - 1] + j]);
 
 				//if the string is longer than the printspace truncate it
-				str = str.substr(0, str.length() < printSpace ? str.length() : printSpace);
+				str = str.substr(0, str.length() < (unsigned)printSpace ? str.length() : printSpace);
 
 				//if its less we add blanks (so all numbers are uniform in size)
-				if (str.length() < printSpace)
+				if (str.length() < (unsigned)printSpace)
 					str += std::string(" ", printSpace - str.length());
 
 				//print the string
 				if (ary[i * outer[dimension - 1] + j] < .0001) {
-					for (int x= 0; x < str.length(); ++x) {
+					for (unsigned x= 0; x < str.length(); ++x) {
 						std::cout << " ";
 					}
 				} else  {
@@ -86,15 +86,15 @@ static void printHelperSparse(const T& ary, const int_ranks ranks, const os oute
 			auto str = to_string(ary[i]);
 
 			//if the string is longer than the printspace truncate it
-			str = str.substr(0, str.length() < printSpace ? str.length() : printSpace);
+			str = str.substr(0, str.length() < (unsigned)printSpace ? str.length() : printSpace);
 
 			//if its less we add blanks (so all numbers are uniform in size)
-			if (str.length() < printSpace)
+			if (str.length() < (unsigned)printSpace)
 				str += std::string(" ", printSpace - str.length());
 
 			//print the string
 			if (ary[i] < .0001) {
-				for (int x= 0; x < str.length(); ++x) {
+				for (unsigned x= 0; x < str.length(); ++x) {
 						std::cout << " ";
 					}
 			} else

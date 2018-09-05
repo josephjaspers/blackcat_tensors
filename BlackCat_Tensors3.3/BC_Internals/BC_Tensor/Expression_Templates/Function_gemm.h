@@ -4,8 +4,8 @@
 
 
 #include "Array_Base.h"
-#include "Expression_Base.h"
 #include "BlackCat_Internal_Definitions.h"
+#include "Expression_Interface.h"
 #include "Parse_Tree_BLAS_Branch_Evaluator.h"
 #include "Parse_Tree_Evaluator.h"
 
@@ -25,7 +25,7 @@ namespace internal {
 
 template<class lv, class rv, class mathlib>
 struct binary_expression<lv, rv, oper::gemm<mathlib>>
-: expression_base<binary_expression<lv, rv,  oper::gemm<mathlib>>>, BLAS_FUNCTION {
+: expression_interface<binary_expression<lv, rv,  oper::gemm<mathlib>>>, BLAS_FUNCTION {
 
 
 	using scalar_t  = typename lv::scalar_t;

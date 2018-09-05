@@ -6,8 +6,8 @@
  */
 #ifndef EXPRESSION_UNARY_MATRIXTRANSPOSITION_H_
 #define EXPRESSION_UNARY_MATRIXTRANSPOSITION_H_
-#include "Expression_Base.h"
 #include <vector>
+#include "Expression_Interface.h"
 
 namespace BC {
 namespace oper {
@@ -19,7 +19,7 @@ namespace internal {
 
 template<class functor_type, class ml>
 struct unary_expression<functor_type, oper::transpose<ml>>
-	: expression_base<unary_expression<functor_type, oper::transpose<ml>>> {
+	: expression_interface<unary_expression<functor_type, oper::transpose<ml>>> {
 
 	functor_type array;
 

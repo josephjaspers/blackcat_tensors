@@ -4,8 +4,8 @@
 
 
 #include "Array_Base.h"
-#include "Expression_Base.h"
 #include "BlackCat_Internal_Definitions.h"
+#include "Expression_Interface.h"
 #include "Parse_Tree_BLAS_Branch_Evaluator.h"
 #include "Parse_Tree_Evaluator.h"
 
@@ -24,7 +24,7 @@ namespace internal {
 
 template<class lv, class rv, class mathlib>
 struct binary_expression<lv, rv, oper::conv<2, mathlib>>
-: expression_base<binary_expression<lv, rv,  oper::conv<2, mathlib>>>, BLAS_FUNCTION {
+: expression_interface<binary_expression<lv, rv,  oper::conv<2, mathlib>>>, BLAS_FUNCTION {
 
 	using scalar_type = scalar_of<lv>;
 	static constexpr bool transA = det_eval<lv>::transposed;
