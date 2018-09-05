@@ -7,12 +7,12 @@
 #ifndef EXPRESSION_UNARY_POINTWISE_CU_
 #define EXPRESSION_UNARY_POINTWISE_CU_
 
-#include "Expression_Base.h"
+#include "Expression_Interface.h"
 
 namespace BC {
 namespace internal {
 template<class value, class operation>
-class unary_expression : public expression_base<unary_expression<value, operation>>, public operation {
+class unary_expression : public expression_interface<unary_expression<value, operation>>, public operation {
 public:
 
 	using scalar_t  = decltype(std::declval<operation>()(std::declval<typename value::scalar_t>()));
@@ -24,7 +24,7 @@ public:
 	__BCinline__ static constexpr int ITERATOR() { return value::ITERATOR(); }
 
 	template<class... args> __BCinline__
-	unary_expression(value v, const args&... args_) : array(v), operation(args_...) {}
+	unary_expression(value v, const args&... args_) : operation(args_...) , array(v) {}
 
 	__BCinline__  const auto inner_shape() const 			{ return array.inner_shape(); }
 	__BCinline__  const auto block_shape() const 			{ return array.block_shape(); }

@@ -42,7 +42,7 @@ template<class> class 	_Tensor_Scalar 	= Array_Scalar,
 template<int> class     _Tensor_Chunk	= Array_Chunk,			//Nested implementation type
 template<int> class 	_Tensor_Reshape = Array_Reshape>		//Nested implementation type
 
-struct Array_Base : BC_internal_base<derived>, BC_Array {
+struct Array_Base : BC_internal_interface<derived>, BC_Array {
 
 	__BCinline__ static constexpr int DIMS() { return DIMENSION; }
 	__BCinline__ static constexpr int ITERATOR() { return 0; }

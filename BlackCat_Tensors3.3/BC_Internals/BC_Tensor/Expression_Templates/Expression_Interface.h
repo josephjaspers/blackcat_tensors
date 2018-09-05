@@ -14,8 +14,8 @@ namespace BC {
 namespace internal {
 
 template<class derived>
-struct expression_base
-		: BC_internal_base<derived>, Shape_Expression<derived> {
+struct expression_interface
+		: BC_internal_interface<derived>, Shape_Expression<derived> {
 };
 }
 }

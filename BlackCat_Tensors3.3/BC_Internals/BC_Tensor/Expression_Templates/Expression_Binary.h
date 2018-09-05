@@ -7,14 +7,14 @@
 #ifndef EXPRESSION_BINARY_POINTWISE_SAME_H_
 #define EXPRESSION_BINARY_POINTWISE_SAME_H_
 
-#include "Expression_Base.h"
+#include "Expression_Interface.h"
 #include "Parse_Tree_Functions.h"
 
 
 namespace BC {
 namespace internal {
 template<class lv, class rv, class operation>
-struct binary_expression : public expression_base<binary_expression<lv, rv, operation>>, public operation {
+struct binary_expression : public expression_interface<binary_expression<lv, rv, operation>>, public operation {
 
 	using scalar_t = decltype(std::declval<operation>()(std::declval<typename lv::scalar_t&>(), std::declval<typename lv::scalar_t&>()));
 	using mathlib_t = typename lv::mathlib_t;

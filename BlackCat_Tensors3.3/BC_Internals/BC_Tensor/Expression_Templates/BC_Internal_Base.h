@@ -20,7 +20,7 @@ namespace BC {
 namespace internal {
 
 template<class derived>
-class BC_internal_base : BC_Type {
+class BC_internal_interface : BC_Type {
 
 	__BCinline__ static constexpr int  DIMS()       { return derived::DIMS(); }
 	__BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }
@@ -31,10 +31,11 @@ public:
 	operator 	   auto&()       { return as_derived(); }
 	operator const auto&() const { return as_derived(); }
 
-	__BCinline__ BC_internal_base() {
-		static_assert(std::is_trivially_copy_constructible<derived>::value, "EXPRESSION TYPES MUST BE TRIVIALLY COPYABLE");
-		static_assert(!std::is_same<void, typename derived::scalar_t>::value, "CLASSES DERIVING EXPRESSION_BASE MUST HAVE A 'using scalar_t = some_Type'");
-		static_assert(!std::is_same<void, typename derived::mathlib_t>::value, "CLASSES DERIVING EXPRESSION_BASE MUST HAVE A 'using mathlib_t = some_Type'");
+	__BCinline__ BC_internal_interface() {
+		static_assert(std::is_trivially_copy_constructible<derived>::value, "INTERNAL_TYPES TYPES MUST BE TRIVIALLY COPYABLE");
+		static_assert(std::is_trivially_copyable<derived>::value, "INTERNAL_TYPES MUST BE TRIVIALLY COPYABLE");
+		static_assert(!std::is_same<void, typename derived::scalar_t>::value, "INTERNAL_TYPES MUST HAVE A 'using scalar_t = some_Type'");
+		static_assert(!std::is_same<void, typename derived::mathlib_t>::value, "INTERNAL_TYPES MUST HAVE A 'using mathlib_t = some_Type'");
 
 	}
 
@@ -48,6 +49,12 @@ public:
 	void print_leading_dimensions() const {
 		for (int i = 0; i < DIMS(); ++i) {
 			std::cout << "[" << as_derived().leading_dimension(i) << "]";
+		}
+		std::cout << std::endl;
+	}
+	void print_block_dimensions() const {
+		for (int i = 0; i < DIMS(); ++i) {
+			std::cout << "[" << as_derived().block_dimensions(i) << "]";
 		}
 		std::cout << std::endl;
 	}
