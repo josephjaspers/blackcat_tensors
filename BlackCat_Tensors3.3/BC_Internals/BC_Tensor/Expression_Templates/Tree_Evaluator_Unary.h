@@ -16,19 +16,19 @@ namespace tree {
 
 
 template<class array_t, class op>
-struct expression_tree_evaluator<unary_expression<array_t, op>>
+struct evaluator<unary_expression<array_t, op>>
 {
-	static constexpr bool trivial_blas_eval = false;
+	static constexpr bool trivial_blas_feature_detector = false;
 	static constexpr bool trivial_blas_injection = false;
-	static constexpr bool non_trivial_blas_injection = expression_tree_evaluator<array_t>::non_trivial_blas_injection;
+	static constexpr bool non_trivial_blas_injection = evaluator<array_t>::non_trivial_blas_injection;
 
 	template<class core, int a, int b>
-	static auto linear_evaluation(const unary_expression<array_t, op>& branch, injection_wrapper<core, a, b> tensor) {
+	static auto linear_evaluation(const unary_expression<array_t, op>& branch, injector<core, a, b> tensor) {
 		return branch;
 	}
 	template<class core, int a, int b>
-	static auto injection(const unary_expression<array_t, op>& branch, injection_wrapper<core, a, b> tensor) {
-		auto array =  expression_tree_evaluator<array_t>::injection(branch.array, tensor);
+	static auto injection(const unary_expression<array_t, op>& branch, injector<core, a, b> tensor) {
+		auto array =  evaluator<array_t>::injection(branch.array, tensor);
 		using array_t_evaluated = std::decay_t<decltype(array)>;
 
 		return unary_expression<array_t_evaluated, op>(array);
@@ -53,7 +53,7 @@ struct expression_tree_evaluator<unary_expression<array_t, op>>
 		return function::impl(branch);
 	}
 	static void destroy_temporaries(const unary_expression<array_t, op>& branch) {
-		expression_tree_evaluator<array_t>::destroy_temporaries(branch.array);
+		evaluator<array_t>::destroy_temporaries(branch.array);
 	}
 };
 

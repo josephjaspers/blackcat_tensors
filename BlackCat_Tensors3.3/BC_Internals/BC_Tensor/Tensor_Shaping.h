@@ -11,12 +11,10 @@
 #include "Tensor_Shaping_Static.h"
 
 namespace BC {
-
 template<class> class Tensor_Base;
-struct range { int from, to; };
 
+namespace module {
 
-namespace Module {
 template<class derived>
 struct Tensor_Shaping {
 
@@ -49,6 +47,9 @@ public:
 
 	const auto operator [] (int i) const { return slice(i); }
 		  auto operator [] (int i) 		 { return slice(i); }
+
+
+	struct range { int from, to; };
 
 	const auto operator [] (range r) const { return slice(r.from, r.to); }
 		  auto operator [] (range r) 		{ return slice(r.from, r.to); }

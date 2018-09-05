@@ -23,10 +23,10 @@
 #include "Expression_Templates/Function_transpose.h"
 
 #include "Tensor_Operations_Alias.h"
-#include "Expression_Templates/Parse_Tree_Evaluator.h"
+#include "Expression_Templates/Tree_Evaluator_Runner.h"
 
 namespace BC {
-namespace Module {
+namespace module {
 namespace oper = BC::internal::oper;
 
 //This is where the beautiful lazy expressions are created
@@ -98,7 +98,7 @@ public:
 		static constexpr bool scalmul	= derived::DIMS() == 0 || param_deriv::DIMS() == 0;
 		static constexpr bool gemm 		= derived::DIMS() == 2 && param_deriv::DIMS() == 2;
 		static constexpr bool gemv 		= derived::DIMS() == 2 && param_deriv::DIMS() == 1;
-		static constexpr bool ger  		= derived::DIMS() == 1 && param_deriv::DIMS() == 1 && internal::det_eval<param_deriv>::transposed;
+		static constexpr bool ger  		= derived::DIMS() == 1 && param_deriv::DIMS() == 1 && internal::blas_feature_detector<param_deriv>::transposed;
 		static constexpr bool dot		= derived::DIMS() == 1 && param_deriv::DIMS() == 1 && !ger;
 		using matmul_t =
 					 std::conditional_t<scalmul, binary_expression_t<functor_of<param_deriv>, oper::scalar_mul>,

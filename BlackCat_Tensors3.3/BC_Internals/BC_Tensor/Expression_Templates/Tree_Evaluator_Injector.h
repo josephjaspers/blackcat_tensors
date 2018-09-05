@@ -10,10 +10,11 @@
 
 namespace BC {
 namespace internal {
+namespace tree {
 template<class tensor_core, int alpha_modifier_ = 1, int beta_modifier_= 0>
-struct injection_wrapper {
+struct injector {
 
-	injection_wrapper(tensor_core& array_) : array(array_) {}
+	injector(tensor_core& array_) : array(array_) {}
 
 	tensor_core& array;
 
@@ -25,7 +26,7 @@ struct injection_wrapper {
 };
 }
 }
-
+}
 
 
 #endif /* INJECTION_INFO_H_ */

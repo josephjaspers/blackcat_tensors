@@ -8,7 +8,7 @@
 #ifndef PTE_ARRAY_H_
 #define PTE_ARRAY_H_
 
-#include "Parse_Tree_Functions.h"
+#include "Tree_Evaluator_Runner.h"
 
 namespace BC {
 namespace internal {
@@ -16,21 +16,21 @@ namespace tree {
 
 //disable default implementation (specialize for each type to ensure correct compilation)
 template<class T, class enabler = void>
-struct expression_tree_evaluator;
+struct evaluator;
 
 template<class T>
-struct expression_tree_evaluator<T, std::enable_if_t<is_array<T>()>>
+struct evaluator<T, std::enable_if_t<is_array<T>()>>
 {
-	static constexpr bool trivial_blas_eval = false;
+	static constexpr bool trivial_blas_feature_detector = false;
 	static constexpr bool trivial_blas_injection = false;
 	static constexpr bool non_trivial_blas_injection = false;
 
 	template<class core, int a, int b>
-	static auto linear_evaluation(const T& branch, injection_wrapper<core, a, b> tensor) {
+	static auto linear_evaluation(const T& branch, injector<core, a, b> tensor) {
 		return branch;
 	}
 	template<class core, int a, int b>
-	static auto injection(const T& branch, injection_wrapper<core, a, b> tensor) {
+	static auto injection(const T& branch, injector<core, a, b> tensor) {
 		return branch;
 	}
 	static auto replacement(const T& branch) {

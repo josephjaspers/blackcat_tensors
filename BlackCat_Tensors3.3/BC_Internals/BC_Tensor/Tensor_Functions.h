@@ -9,7 +9,7 @@
 #define TENSOR_FUNCTIONS_H_
 
 namespace BC{
-namespace Module {
+namespace module {
 
 template<class derived>
 class Tensor_Functions {

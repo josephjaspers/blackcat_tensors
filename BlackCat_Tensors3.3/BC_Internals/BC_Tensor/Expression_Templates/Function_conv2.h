@@ -6,8 +6,8 @@
 #include "Array_Base.h"
 #include "BlackCat_Internal_Definitions.h"
 #include "Expression_Interface.h"
-#include "Parse_Tree_BLAS_Branch_Evaluator.h"
-#include "Parse_Tree_Evaluator.h"
+#include "BLAS_Feature_Detector.h"
+#include "Tree_Evaluator_Runner.h"
 
 namespace BC {
 namespace internal {
@@ -27,12 +27,12 @@ struct binary_expression<lv, rv, oper::conv<2, mathlib>>
 : expression_interface<binary_expression<lv, rv,  oper::conv<2, mathlib>>>, BLAS_FUNCTION {
 
 	using scalar_type = scalar_of<lv>;
-	static constexpr bool transA = det_eval<lv>::transposed;
-	static constexpr bool transB = det_eval<rv>::transposed;
-	static constexpr bool lvscalar_of = det_eval<lv>::scalar;
-	static constexpr bool rvscalar_of = det_eval<rv>::scalar;
-	static constexpr bool lv_eval = det_eval<lv>::evaluate;
-	static constexpr bool rv_eval = det_eval<rv>::evaluate;
+	static constexpr bool transA = blas_feature_detector<lv>::transposed;
+	static constexpr bool transB = blas_feature_detector<rv>::transposed;
+	static constexpr bool lvscalar_of = blas_feature_detector<lv>::scalar;
+	static constexpr bool rvscalar_of = blas_feature_detector<rv>::scalar;
+	static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
+	static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
 
 	static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
 
@@ -66,9 +66,9 @@ struct binary_expression<lv, rv, oper::conv<2, mathlib>>
 
 
 template<class core, int alpha_mod, int beta_mod>
-void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
+void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 
-	//get the data of the injection --> injection_wrapper simply stores the alpha/beta scalar modifiers
+	//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
 	auto& injection = injection_values.data();
 
 	//evaluate the left and right branches (computes only if necessary)

@@ -14,18 +14,18 @@ namespace tree {
 
 
 template<class core>
-struct expression_tree_evaluator<temporary<core>>
+struct evaluator<temporary<core>>
 {
-	static constexpr bool trivial_blas_eval = false;
+	static constexpr bool trivial_blas_feature_detector = false;
 	static constexpr bool trivial_blas_injection = false;
 	static constexpr bool non_trivial_blas_injection = false;
 
 	template<int a, int b>
-	static auto linear_evaluation(const temporary<core>& branch, injection_wrapper<core, a, b> tensor) {
+	static auto linear_evaluation(const temporary<core>& branch, injector<core, a, b> tensor) {
 		return branch;
 	}
 	template<int a, int b>
-	static auto injection(const temporary<core>& branch, injection_wrapper<core, a, b> tensor) {
+	static auto injection(const temporary<core>& branch, injector<core, a, b> tensor) {
 		return branch;
 	}
 	static auto replacement(const temporary<core>& branch) {

@@ -8,7 +8,7 @@
 #ifndef TRIVIAL_EVALUATOR_H_
 #define TRIVIAL_EVALUATOR_H_
 
-#include "Parse_Tree_Evaluator_Impl.h"
+#include "Tree_Evaluator_Runner_Impl.h"
 
 namespace BC {
 
@@ -19,7 +19,7 @@ using rv_of = std::decay_t<decltype(std::declval<std::decay_t<expression>>().rig
 template<class T>
 static constexpr bool INJECTION() {
 	//non-trivial is true even when it is trivial
-	return internal::tree::expression_tree_evaluator<std::decay_t<T>>::non_trivial_blas_injection;
+	return internal::tree::evaluator<std::decay_t<T>>::non_trivial_blas_injection;
 }
 
 

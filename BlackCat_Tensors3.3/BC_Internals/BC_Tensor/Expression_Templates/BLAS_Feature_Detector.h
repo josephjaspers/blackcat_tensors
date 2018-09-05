@@ -33,39 +33,39 @@ class front<param<first, set...>> {
 };
 
 //DEFAULT TYPE
-template<class T, class voider = void> struct det_eval {
+template<class T, class voider = void> struct blas_feature_detector {
 	static constexpr bool evaluate = true;
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = false;
 
-	template<class param> static scalar_of<param>* getscalar_of(const param& p) { return nullptr; }
+	template<class param> static scalar_of<param>* get_scalar(const param& p) { return nullptr; }
 	template<class param> static auto& get_array (const param& p)  { return p; }
 };
 
 //IF TENSOR CORE (NON EXPRESSION)
-template<class deriv> struct det_eval<deriv, enable_if_core<deriv>> {
+template<class deriv> struct blas_feature_detector<deriv, enable_if_core<deriv>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = false;
 
-	template<class param> static scalar_of<param>* getscalar_of(const param& p) { return nullptr; }
+	template<class param> static scalar_of<param>* get_scalar(const param& p) { return nullptr; }
 	template<class param> static auto& get_array(const param& p) { return cc(p); }
 };
 
 ////IF TRANSPOSE
 template<class deriv, class ml>
-struct det_eval<internal::unary_expression<deriv, oper::transpose<ml>>, enable_if_core<deriv>> {
+struct blas_feature_detector<internal::unary_expression<deriv, oper::transpose<ml>>, enable_if_core<deriv>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = false;
 
-	template<class param> static scalar_of<param>* getscalar_of(const param& p) { return nullptr; }
+	template<class param> static scalar_of<param>* get_scalar(const param& p) { return nullptr; }
 	template<class param> static auto& get_array(const param& p) { return cc(p.array); }
 };
 
 ////IF A SCALAR BY TENSOR MUL OPERATION
 template<class d1, class d2>
-struct det_eval<binary_expression<d1, d2, oper::scalar_mul>, enable_if_cores<d1, d2>> {
+struct blas_feature_detector<binary_expression<d1, d2, oper::scalar_mul>, enable_if_cores<d1, d2>> {
 	using self = binary_expression<d1, d2, oper::scalar_mul>;
 
 	static constexpr bool evaluate = false;
@@ -81,29 +81,29 @@ struct det_eval<binary_expression<d1, d2, oper::scalar_mul>, enable_if_cores<d1,
 
 	static auto&  get_array(const left_scal_t& p) { return cc(p.right);  }
 	static auto& get_array(const right_scal_t& p) { return cc(p.left);   }
-	static auto&  getscalar_of(const left_scal_t& p) { return cc(p.left);  }
-	static auto& getscalar_of(const right_scal_t& p) { return cc(p.right); }
+	static auto&  get_scalar(const left_scal_t& p) { return cc(p.left);  }
+	static auto& get_scalar(const right_scal_t& p) { return cc(p.right); }
 };
 
 //IF A SCALAR BY TENSOR MUL OPERATION R + TRANSPOSED
 template<class trans_t, class scalar_t, class ml>
-struct det_eval<binary_expression<unary_expression<trans_t, oper::transpose<ml>>, scalar_t, oper::scalar_mul>, enable_if_cores<trans_t, scalar_t>> {
+struct blas_feature_detector<binary_expression<unary_expression<trans_t, oper::transpose<ml>>, scalar_t, oper::scalar_mul>, enable_if_cores<trans_t, scalar_t>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;
 
-	template<class param> static auto& getscalar_of(const param& p) { return cc(p.right); }
+	template<class param> static auto& get_scalar(const param& p) { return cc(p.right); }
 	template<class param> static auto& get_array(const param& p) { return cc(p.left.array); }
 };
 
 //IF A SCALAR BY TENSOR MUL OPERATION L + TRANSPOSED
 template<class scalar_t, class trans_t, class ml>
-struct det_eval<binary_expression<scalar_t, unary_expression<trans_t, oper::transpose<ml>>, oper::scalar_mul>, enable_if_cores<scalar_t, trans_t>> {
+struct blas_feature_detector<binary_expression<scalar_t, unary_expression<trans_t, oper::transpose<ml>>, oper::scalar_mul>, enable_if_cores<scalar_t, trans_t>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;
 
-	template<class param> static auto& getscalar_of(const param& p) { return cc(p.left); }
+	template<class param> static auto& get_scalar(const param& p) { return cc(p.left); }
 	template<class param> static auto& get_array(const param& p) { return cc(p.right.array); }
 
 };

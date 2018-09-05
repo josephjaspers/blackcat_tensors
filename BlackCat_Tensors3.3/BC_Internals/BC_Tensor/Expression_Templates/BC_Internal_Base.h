@@ -9,8 +9,8 @@
 #define BC_INTERNAL_BASE_H_
 
 #include "BlackCat_Internal_Definitions.h"
-#include "Parse_Tree_BLAS_Branch_Evaluator.h"
-#include "Parse_Tree_Injection_Wrapper.h"
+#include "BLAS_Feature_Detector.h"
+#include "Tree_Evaluator_Injector.h"
 #include "Operations/Binary.h"
 #include "Operations/Unary.h"
 #include <iostream>

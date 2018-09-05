@@ -11,8 +11,8 @@
 #include "Array_Base.h"
 #include "BlackCat_Internal_Definitions.h"
 #include "Expression_Interface.h"
-#include "Parse_Tree_BLAS_Branch_Evaluator.h"
-#include "Parse_Tree_Evaluator.h"
+#include "BLAS_Feature_Detector.h"
+#include "Tree_Evaluator_Runner.h"
 
 namespace BC {
 namespace internal {
@@ -33,12 +33,12 @@ struct binary_expression<lv, rv, oper::dot<mathlib>>
 	using scalar_t  = typename lv::scalar_t;
 	using mathlib_t = mathlib;
 
-	static constexpr bool transA = det_eval<lv>::transposed;
-	static constexpr bool transB = det_eval<rv>::transposed;
-	static constexpr bool lvscalar_of = det_eval<lv>::scalar;
-	static constexpr bool rvscalar_of = det_eval<rv>::scalar;
-	static constexpr bool lv_eval = det_eval<lv>::evaluate;
-	static constexpr bool rv_eval = det_eval<rv>::evaluate;
+	static constexpr bool transA = blas_feature_detector<lv>::transposed;
+	static constexpr bool transB = blas_feature_detector<rv>::transposed;
+	static constexpr bool lvscalar_of = blas_feature_detector<lv>::scalar;
+	static constexpr bool rvscalar_of = blas_feature_detector<rv>::scalar;
+	static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
+	static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
 
 	static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
 	static_assert(lv::DIMS() == 1 && rv::DIMS() == 1, "GEMV DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
@@ -51,15 +51,15 @@ struct binary_expression<lv, rv, oper::dot<mathlib>>
 	 binary_expression(lv left, rv right) : left(left), right(right) {}
 
 template<class core, int alpha_mod, int beta_mod>
-void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
+void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 
 
-	//get the data of the injection --> injection_wrapper simply stores the alpha/beta scalar modifiers
+	//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
 	auto& injection = injection_values.data();
 
 	//evaluate the left and right branches (computes only if necessary)
-	auto X = branched<mathlib>::evaluate(det_eval<lv>::get_array(left));
-	auto Y = branched<mathlib>::evaluate(det_eval<rv>::get_array(right));
+	auto X = branched<mathlib>::evaluate(blas_feature_detector<lv>::get_array(left));
+	auto Y = branched<mathlib>::evaluate(blas_feature_detector<rv>::get_array(right));
 
 	//get the left and right side scalar values
 
@@ -72,11 +72,11 @@ void eval(injection_wrapper<core, alpha_mod, beta_mod> injection_values) const {
 	mathlib::dot(X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
 
 	if (lvscalar_of) {
-		scalar_t* alpha_lv = det_eval<lv>::getscalar_of(left);
+		scalar_t* alpha_lv = blas_feature_detector<lv>::get_scalar(left);
 		mathlib::scalar_mul(injection, alpha, alpha_lv);
 	}
 	if (rvscalar_of) {
-		scalar_t* alpha_rv = det_eval<rv>::getscalar_of(right);
+		scalar_t* alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 		mathlib::scalar_mul(injection, alpha, alpha_rv);
 	}
 	if (beta_mod) {

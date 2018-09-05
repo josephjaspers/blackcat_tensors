@@ -15,7 +15,7 @@
 #include <sstream>
 
 namespace BC {
-namespace Module {
+namespace module {
 
 /*
  * Defines standard utility methods related to I/O
