@@ -163,7 +163,6 @@ public:
 
 
 	void destroy() {}
-//private:
 	//------------------------------------------Implementation Details---------------------------------------//
 
 	__BCinline__

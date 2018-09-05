@@ -33,9 +33,9 @@ struct Array_Slice
 
 	__BCinline__ Array_Slice(const scalar_t* array, PARENT parent_) : array_slice(const_cast<scalar_t*>(array)), parent(parent_) {}
 
-	__BCinline__ const auto inner_shape() const 			{ return parent.inner_shape(); }
-	__BCinline__ const auto outer_shape() const 			{ return parent.outer_shape(); }
-	__BCinline__ const auto block_shape() const 			{ return parent.block_shape(); }
+	__BCinline__ const auto inner_shape() const { return parent.inner_shape(); }
+	__BCinline__ const auto outer_shape() const { return parent.outer_shape(); }
+	__BCinline__ const auto block_shape() const { return parent.block_shape(); }
 
 	__BCinline__ int size() const { return parent.outer_shape()[DIMS() - 1]; }
 	__BCinline__ int rows() const { return parent.inner_shape()[0]; }
