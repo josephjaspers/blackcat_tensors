@@ -8,12 +8,11 @@
 #ifndef PTEE_UNARY_H_
 #define PTEE_UNARY_H_
 
+#include "Tree_Evaluator_Common.h"
+
 namespace BC{
 namespace internal {
 namespace tree {
-
-
-
 
 template<class array_t, class op>
 struct evaluator<unary_expression<array_t, op>>

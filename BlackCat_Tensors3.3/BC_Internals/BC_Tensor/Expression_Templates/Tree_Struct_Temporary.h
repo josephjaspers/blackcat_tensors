@@ -10,6 +10,7 @@
 
 namespace BC {
 namespace internal {
+namespace tree {
 
 /*
  * used as a wrapper for BC_Arrays, enalbes the expression tree to traverse through and delete the correct
@@ -20,6 +21,7 @@ struct temporary : data_t {
 	using data_t::data_t;
 };
 
+}
 }
 }
 

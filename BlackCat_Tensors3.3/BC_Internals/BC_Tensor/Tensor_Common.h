@@ -1,22 +1,16 @@
 /*
- * trait_determiners.h
+ * Tensor_Common.h
  *
- *  Created on: May 20, 2018
+ *  Created on: Sep 9, 2018
  *      Author: joseph
  */
 
-#ifndef TRAIT_DETERMINERS_H_
-#define TRAIT_DETERMINERS_H_
+#ifndef BC_INTERNALS_BC_TENSOR_TENSOR_COMMON_H_
+#define BC_INTERNALS_BC_TENSOR_TENSOR_COMMON_H_
 
-/*
- * Determines the primary traits of an internal-type
- * functor
- * scalar
- * iterator
- * mathlibrary
- * --tensor_scalar is the specific function determining the scalar of a tensor (opposed to internal-tensor type)
- * --IE tensor_scalar<Matrix<A,B>>, while _scalar is for... _scalar<binary_expression<lv,rv,oper>>
- */
+#define BC_ARRAY_ONLY(literal) static_assert(BC::is_array<functor_of<derived>>(), "BC Method: '" literal "' is only supported by Array_Base classes")
+
+#include <type_traits>
 
 namespace BC {
 template<int> struct DISABLED;
@@ -28,11 +22,6 @@ template<int, class, class> class Array_View;
 }
 
 template<class>class Tensor_Base;
-
-//template<class T> struct isPrimaryArray { static constexpr bool conditional = false; };
-//template<int d, class T, class ml> struct isPrimaryArray<internal::Array<d,T,ml>> { static constexpr bool conditional = true; };
-//template<class T> static constexpr bool is_array_core() { return isPrimaryArray<T>::conditional; }
-
 template<class> struct determine_functor;
 template<class> struct determine_scalar;
 template<class> struct determine_iterator;
@@ -99,5 +88,4 @@ struct determine_mathlibrary<internal::Array_View<x, scalar, ml>> {
 }
 
 
-
-#endif /* TRAIT_DETERMINERS_H_ */
+#endif /* BC_INTERNALS_BC_TENSOR_TENSOR_COMMON_H_ */

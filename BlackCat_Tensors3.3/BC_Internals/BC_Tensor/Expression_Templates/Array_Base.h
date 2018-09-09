@@ -10,7 +10,7 @@
 #define TENSOR_CORE_BASE_H_
 
 #include "BlackCat_Internal_Definitions.h"
-#include "BC_Internal_Base.h"
+#include "Internal_Type_Interface.h"
 #include "Shape.h"
 
 namespace BC {

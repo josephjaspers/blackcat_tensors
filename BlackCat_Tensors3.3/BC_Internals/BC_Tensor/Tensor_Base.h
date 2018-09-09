@@ -9,6 +9,7 @@
 #ifndef TENSOR_BASE_H_
 #define TENSOR_BASE_H_
 
+#include "Tensor_Common.h"
 #include "Tensor_Operations.h"
 #include "Tensor_Utility.h"
 #include "Tensor_Shaping.h"
@@ -28,12 +29,11 @@ namespace BC {
 
 template<class internal_t>
 class Tensor_Base :
-
+		public internal_t,
 		public module::Tensor_Operations<Tensor_Base<internal_t>>,
 		public module::Tensor_Functions<Tensor_Base<internal_t>>,
 		public module::Tensor_Utility<Tensor_Base<internal_t>>,
-		public module::Tensor_Shaping<Tensor_Base<internal_t>>,
-		public internal_t {
+		public module::Tensor_Shaping<Tensor_Base<internal_t>> {
 
 protected:
 
@@ -56,6 +56,7 @@ public:
 
 	using internal_t::DIMS; //required
 	using scalar_t = typename internal_t::scalar_t;
+	using mathlib_t = typename internal_t::mathlib_t;
 
 	using move_parameter = std::conditional_t<BC_array_move_constructible<internal_t>(), 	   self&&, BC::DISABLED<0>>;
 	using copy_parameter = std::conditional_t<BC_array_copy_constructible<internal_t>(), const self&,  BC::DISABLED<1>>;

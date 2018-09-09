@@ -8,8 +8,8 @@
 #ifndef PTE_ARRAY_H_
 #define PTE_ARRAY_H_
 
-#include "Tree_Evaluator_Runner.h"
-
+#include "Tree_Evaluator_Common.h"
+#include "Array_Base.h"
 namespace BC {
 namespace internal {
 namespace tree {

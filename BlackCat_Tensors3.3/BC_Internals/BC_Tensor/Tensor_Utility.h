@@ -13,8 +13,10 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include "Tensor_Common.h"
 
 namespace BC {
+template<class> class Tensor_Base;
 namespace module {
 
 /*
@@ -22,10 +24,14 @@ namespace module {
  */
 
 template<class derived>
-struct Tensor_Utility {
+struct Tensor_Utility;
 
-	using scalar = scalar_of<derived>;
-	using mathlib = mathlib_of<derived>;
+template<class internal_t>
+struct Tensor_Utility<Tensor_Base<internal_t>> {
+
+	using derived = Tensor_Base<internal_t>;
+	using scalar = typename internal_t::scalar_t;
+	using mathlib =typename internal_t::mathlib_t;
 
 private:
 	static constexpr int DIMS() { return derived::DIMS(); }

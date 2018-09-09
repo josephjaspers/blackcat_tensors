@@ -29,7 +29,6 @@ class BLAS_FUNCTION {};
 template<class T> static constexpr bool is_void() { return std::is_same<T, void>::value; }
 
 }
-#include "BC_Utility/Trait_Determiners.h"
-#include "BC_Utility/MetaTemplateFunctions.h"
-#include "BC_Utility/ShapeHierarchy.h"
+#include "Utility/MetaTemplateFunctions.h"
+#include "Utility/ShapeHierarchy.h"
 #endif /* BLACKCAT_COMPILERDEFINITIONS_H_ */

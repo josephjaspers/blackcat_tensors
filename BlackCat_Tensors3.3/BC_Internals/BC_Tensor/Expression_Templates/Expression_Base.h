@@ -8,7 +8,7 @@
 #ifndef EXPRESSION_BASE_H_
 #define EXPRESSION_BASE_H_
 
-#include "BC_Internal_Base.h"
+#include "Internal_Type_Interface.h"
 namespace BC {
 namespace internal {
 

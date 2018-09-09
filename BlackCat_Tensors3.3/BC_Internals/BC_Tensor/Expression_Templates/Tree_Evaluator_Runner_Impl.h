@@ -8,9 +8,6 @@
 #ifndef PARSE_TREE_COMPLEX_EVALUATOR_H_
 #define PARSE_TREE_COMPLEX_EVALUATOR_H_
 
-#include "Operations/Binary.h"
-#include "Operations/Unary.h"
-#include "BC_Utility/Temporary.h"
 #include "Tree_Evaluator_Array.h"
 #include "Tree_Evaluator_Binary_Linear.h"
 #include "Tree_Evaluator_Binary_NonLinear.h"

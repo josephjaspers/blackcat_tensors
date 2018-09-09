@@ -8,6 +8,9 @@
 #ifndef PTEE_BLAS_H_
 #define PTEE_BLAS_H_
 
+#include "Tree_Evaluator_Common.h"
+#include "Expression_Binary.h"
+
 namespace BC {
 namespace internal {
 namespace tree {

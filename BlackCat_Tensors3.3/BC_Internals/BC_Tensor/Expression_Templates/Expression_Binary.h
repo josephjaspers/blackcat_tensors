@@ -8,8 +8,6 @@
 #define EXPRESSION_BINARY_POINTWISE_SAME_H_
 
 #include "Expression_Base.h"
-#include "Tree_Evaluator_Functions.h"
-
 
 namespace BC {
 namespace internal {

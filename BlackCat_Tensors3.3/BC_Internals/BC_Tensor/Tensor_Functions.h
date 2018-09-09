@@ -9,15 +9,18 @@
 #define TENSOR_FUNCTIONS_H_
 
 namespace BC{
-namespace module {
+template<class internal> class Tensor_Base;
 
-template<class derived>
-class Tensor_Functions {
+namespace module {
+template<class derived> class Tensor_Functions;
+
+template<class internal_t>
+class Tensor_Functions<Tensor_Base<internal_t>> {
 	template<class> friend class Tensor_Functions;
 
-	using functor_type 		= functor_of<derived>;
-	using scalar_type 		= scalar_of<derived>;
-	using mathlib_type 		= mathlib_of<derived>;
+	using derived			= Tensor_Base<internal_t>;
+	using scalar_type 		= typename internal_t::scalar_t;
+	using mathlib_type 		= typename internal_t::mathlib_t;
 
 	//Returns the class returned as its most derived member
 	 const derived& as_derived() const { return static_cast<const derived&>(*this);  }

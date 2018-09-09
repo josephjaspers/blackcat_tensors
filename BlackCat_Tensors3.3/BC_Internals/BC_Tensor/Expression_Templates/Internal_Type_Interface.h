@@ -10,7 +10,7 @@
 
 #include "BlackCat_Internal_Definitions.h"
 #include "BLAS_Feature_Detector.h"
-#include "Tree_Evaluator_Injector.h"
+//#include "Tree_Struct_Injector.h"
 #include "Operations/Binary.h"
 #include "Operations/Unary.h"
 #include <iostream>
@@ -48,7 +48,6 @@ public:
 	void destroy() const {}
 
 };
-
 }
 }
 

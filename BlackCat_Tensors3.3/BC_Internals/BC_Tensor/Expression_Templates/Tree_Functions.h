@@ -8,20 +8,12 @@
 #ifndef EXPRESSION_TREE_FUNCTIONS_H_
 #define EXPRESSION_TREE_FUNCTIONS_H_
 
-namespace BC{
-namespace oper {
-struct add;
-struct sub;
-struct mul;
-struct div;
-struct assign;
-struct add_assign;
-struct mul_assign;
-struct div_assign;
-struct sub_assign;
-template<class ml> struct gemm;
-}
+#include "Operations/Unary.h"
+#include "Operations/Binary.h"
+#include "Operations/BLAS.h"
+#include "Utility/MetaTemplateFunctions.h"
 
+namespace BC{
 namespace internal {
 namespace tree {
 

@@ -8,9 +8,8 @@
 #ifndef TENSOR_ALIASES_H_
 #define TENSOR_ALIASES_H_
 
-
-
 #include "Tensor_Base.h"
+#include <type_traits>
 
 namespace BC {
 

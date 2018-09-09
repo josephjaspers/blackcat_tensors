@@ -40,7 +40,7 @@ struct binary_expression<lv, rv, oper::dot<mathlib>>
 	static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
 	static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
 
-	static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
+	static_assert(std::is_same<i_scalar_of<lv>, i_scalar_of<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
 	static_assert(lv::DIMS() == 1 && rv::DIMS() == 1, "GEMV DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
 	__BCinline__ static constexpr int DIMS() { return 0; }
 	__BCinline__ static constexpr int ITERATOR() { return 0; }

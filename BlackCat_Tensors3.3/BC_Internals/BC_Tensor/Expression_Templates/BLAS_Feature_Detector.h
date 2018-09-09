@@ -8,6 +8,7 @@
 #define EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
 
 #include "BlackCat_Internal_TypeTraits.h"
+#include "Expression_Templates_Common.h"
 namespace BC {
 namespace internal {
 namespace oper {
@@ -36,7 +37,7 @@ template<class T, class voider = void> struct blas_feature_detector {
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = false;
 
-	template<class param> static scalar_of<param>* get_scalar(const param& p) { return nullptr; }
+	template<class param> static i_scalar_of<param>* get_scalar(const param& p) { return nullptr; }
 	template<class param> static auto& get_array (const param& p)  { return p; }
 };
 
@@ -46,7 +47,7 @@ template<class deriv> struct blas_feature_detector<deriv, enable_if_core<deriv>>
 	static constexpr bool transposed = false;
 	static constexpr bool scalar = false;
 
-	template<class param> static scalar_of<param>* get_scalar(const param& p) { return nullptr; }
+	template<class param> static i_scalar_of<param>* get_scalar(const param& p) { return nullptr; }
 	template<class param> static auto& get_array(const param& p) { return cc(p); }
 };
 
@@ -57,7 +58,7 @@ struct blas_feature_detector<internal::unary_expression<deriv, oper::transpose<m
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = false;
 
-	template<class param> static scalar_of<param>* get_scalar(const param& p) { return nullptr; }
+	template<class param> static i_scalar_of<param>* get_scalar(const param& p) { return nullptr; }
 	template<class param> static auto& get_array(const param& p) { return cc(p.array); }
 };
 

@@ -7,7 +7,7 @@
 
 #ifndef TENSOR_HEAD_H_
 #define TENSOR_HEAD_H_
-
+#include "Tensor_Common.h"
 #include "Expression_Templates/Expression_Unary.h"
 #include "Expression_Templates/Expression_Binary.h"
 #include "Expression_Templates/Operations/Binary.h"
@@ -25,22 +25,32 @@
 #include "Tensor_Operations_Alias.h"
 #include "Expression_Templates/Tree_Evaluator_Runner.h"
 
-namespace BC {
-namespace module {
 
+namespace BC {
+template<class internal_t> class Tensor_Base;
+
+namespace module {
+template<class derived> class Tensor_Operations;
 //This is where the beautiful lazy expressions are created
 
-template<class derived>
-class Tensor_Operations {
+template<class internal_type>
+class Tensor_Operations<Tensor_Base<internal_type>> {
 
 	template<class> friend class Tensor_Operations;
 
-	using functor_type 		= functor_of<derived>;
-	using scalar_type 		= scalar_of<derived>;
-	using mathlib_type 		= mathlib_of<derived>;
+	using derived 			= Tensor_Base<internal_type>;
+	using internal_t 		= internal_type;
+	using scalar_t 			= typename internal_t::scalar_t;
+	using mathlib_t 		= typename internal_t::mathlib_t;
 
-	template<class expr> 		   using unary_expression_t  = BC::Tensor_Base<internal::unary_expression<functor_type, expr>>;
-	template<class rv, class expr> using binary_expression_t = BC::Tensor_Base<internal::binary_expression<functor_type, rv, expr>>;
+	template<class deriv>
+	using internal_t_of		= typename Tensor_Operations<deriv>::internal_t;
+
+	template<class deriv>
+	using mathlib_t_of		= typename Tensor_Operations<deriv>::mathlib_t;
+
+	template<class expr> 		   using unary_expression_t  = BC::Tensor_Base<internal::unary_expression<internal_t, expr>>;
+	template<class rv, class expr> using binary_expression_t = BC::Tensor_Base<internal::binary_expression<internal_t, rv, expr>>;
 
 	const derived& as_derived() const { return static_cast<const derived&>(*this); }
 	 	  derived& as_derived() 	  { return static_cast<	     derived&>(*this); }
@@ -48,7 +58,7 @@ class Tensor_Operations {
 	//--------------------------------------evaluation implementation-----------------------------------------------//
 	template<class derived_t> __BC_host_inline__
 	void evaluate(const Tensor_Operations<derived_t>& tensor) {
-		BC::Evaluator<mathlib_type>::evaluate(tensor.as_derived().internal());
+		BC::Evaluator<mathlib_t>::evaluate(tensor.as_derived().internal());
 	}
 
 public:
@@ -100,11 +110,11 @@ public:
 		static constexpr bool ger  		= derived::DIMS() == 1 && param_deriv::DIMS() == 1 && internal::blas_feature_detector<param_deriv>::transposed;
 		static constexpr bool dot		= derived::DIMS() == 1 && param_deriv::DIMS() == 1 && !ger;
 		using matmul_t =
-					 std::conditional_t<scalmul, binary_expression_t<functor_of<param_deriv>, internal::oper::scalar_mul>,
-					 std::conditional_t<gemm, 	 binary_expression_t<functor_of<param_deriv>, internal::oper::gemm<mathlib_type>>,
-					 std::conditional_t<gemv, 	 binary_expression_t<functor_of<param_deriv>, internal::oper::gemv<mathlib_type>>,
-					 std::conditional_t<ger, 	 binary_expression_t<functor_of<param_deriv>, internal::oper::ger<mathlib_type>>,
-					 std::conditional_t<dot,	 binary_expression_t<functor_of<param_deriv>, internal::oper::dot<mathlib_type>>, void>>>>>;
+					 std::conditional_t<scalmul, binary_expression_t<internal_t_of<param_deriv>, internal::oper::scalar_mul>,
+					 std::conditional_t<gemm, 	 binary_expression_t<internal_t_of<param_deriv>, internal::oper::gemm<mathlib_t>>,
+					 std::conditional_t<gemv, 	 binary_expression_t<internal_t_of<param_deriv>, internal::oper::gemv<mathlib_t>>,
+					 std::conditional_t<ger, 	 binary_expression_t<internal_t_of<param_deriv>, internal::oper::ger<mathlib_t>>,
+					 std::conditional_t<dot,	 binary_expression_t<internal_t_of<param_deriv>, internal::oper::dot<mathlib_t>>, void>>>>>;
 
 		static_assert(!std::is_same<matmul_t, void>::value, "Matrix Multiplication currently does not support broadcasting");
 
@@ -140,6 +150,12 @@ public:
 	__BC_host_inline__ auto operator - () const {
 		 return un_expr<internal::oper::negation>();
 	 }
+	const auto transpose() const { return un_expr<internal::oper::transpose<mathlib_t>>(); }
+	 	  auto transpose() 		 { return un_expr<internal::oper::transpose<mathlib_t>>(); }
+
+	const auto t() const { return transpose(); }
+		  auto t()       { return transpose(); }
+
 	template<class pDeriv> __BC_host_inline__
 	auto operator ==(const Tensor_Operations<pDeriv>& param) const {
 		assert_valid(param);
@@ -174,7 +190,7 @@ public:
 
 //
 //	template<int x, class param_derived> auto conv(const Tensor_Operations<param_derived>& tensor) const {
-//		return as_derived().bi_expr<internal::oper::conv<x, mathlib_type>>(tensor.as_derived());
+//		return as_derived().bi_expr<internal::oper::conv<x, mathlib_t>>(tensor.as_derived());
 //	}
 	//-----------------------------------custom expressions--------------------------------------------------//
 
@@ -188,11 +204,11 @@ public:
 	}
 	template<class functor, class right_value> __BC_host_inline__
 	const auto bi_expr(functor f, const Tensor_Operations<right_value>& rv) const {
-		return binary_expression_t<functor_of<right_value>, functor>(as_derived().internal(), rv.as_derived().internal());
+		return binary_expression_t<internal_t_of<right_value>, functor>(as_derived().internal(), rv.as_derived().internal());
 	}
 	template<class functor, class right_value> __BC_host_inline__
 	const auto bi_expr(const Tensor_Operations<right_value>& rv) const {
-		return binary_expression_t<functor_of<right_value>, functor>(as_derived().internal(), rv.as_derived().internal());
+		return binary_expression_t<internal_t_of<right_value>, functor>(as_derived().internal(), rv.as_derived().internal());
 	}
 	 //--------------------------------ASSERTIONS------------------------------//
 
@@ -246,11 +262,24 @@ public:
 	//assert same math library // asserts both memory is allocated on gpu or cpu
 	template<class deriv>__BC_host_inline__
 	void assert_same_ml(const Tensor_Operations<deriv>& tensor) const {
-		static_assert(std::is_same<mathlib_of<derived>, mathlib_of<deriv>>::value, "mathlib_type must be identical");
+		static_assert(std::is_same<mathlib_t_of<derived>, mathlib_t_of<deriv>>::value, "mathlib_t must be identical");
 	}
+public:
+	auto _normalize(scalar_t min, scalar_t max) const {
+		return un_expr(internal::oper::norm<scalar_t>(scalar_t(min), scalar_t(max)));
+	}
+
 };
 
+template<class internal_t, class min_, class max_>
+static auto normalize(const Tensor_Operations<internal_t>& tensor, min_ min, max_ max) {
+	return tensor._normalize(min, max);
 }
+
+}
+
+
+
 }
 
 #include "Tensor_Functions/Unary_Functions.h"

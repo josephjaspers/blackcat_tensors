@@ -8,6 +8,9 @@
 #ifndef PTEE_BINARY_NONLINEAR_H_
 #define PTEE_BINARY_NONLINEAR_H_
 
+#include "Tree_Evaluator_Common.h"
+#include "Expression_Binary.h"
+
 namespace BC {
 namespace internal {
 namespace tree {

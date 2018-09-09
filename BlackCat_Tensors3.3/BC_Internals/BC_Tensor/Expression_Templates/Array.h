@@ -11,6 +11,8 @@
 #include "Array_Base.h"
 
 namespace BC {
+template<class> class Evaluator;
+
 namespace internal {
 template<int dimension, class T, class mathlib>
 struct Array : Array_Base<Array<dimension, T, mathlib>, dimension>, public Shape<dimension> {

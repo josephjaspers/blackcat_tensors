@@ -20,20 +20,10 @@ struct Tensor_Shaping {
 
 	__BCinline__ static constexpr int DIMS() { return derived::DIMS(); }
 
-	using operations  	= Tensor_Operations<derived>;
-	using utility		= Tensor_Utility<derived>;
-
-	using functor_type 	= functor_of<derived>;
-	using scalar_type	= scalar_of<derived>;
-	using mathlib_type 	= mathlib_of<derived>;
-
 private:
 
 	const auto& as_derived() const { return static_cast<const derived&>(*this); }
 		  auto& as_derived()       { return static_cast<	  derived&>(*this); }
-
-	const auto transpose_impl() const { return internal::unary_expression<functor_type, oper::transpose<mathlib_type>>(as_derived().internal()); }
-	 	  auto transpose_impl() 	  { return internal::unary_expression<functor_type, oper::transpose<mathlib_type>>(as_derived().internal()); }
 
 	 template<class internal_t>
 	 auto tensor(internal_t internal) {
@@ -42,12 +32,8 @@ private:
 
 public:
 
-	const auto t() const { return tensor(transpose_impl()); }
-		  auto t() 		 { return tensor(transpose_impl()); }
-
 	const auto operator [] (int i) const { return slice(i); }
 		  auto operator [] (int i) 		 { return slice(i); }
-
 
 	struct range { int from, to; };
 
@@ -101,29 +87,29 @@ public:
 
 	//THIS IS THE CURRIED CHUNK LAMBDA, WE MUST USE AN ACTUAL CLASS TO ACT AS A LAMDA AS CUDA COMPILER IS IFFY WITH LAMBDA
 
-	struct CHUNK {
-
-		const derived& tensor;
-		int location;
-		CHUNK(const derived& tensor_, int index_) : tensor(tensor_), location(index_) {}
-
-		template<class... integers>
-		const auto operator () (integers... shape_dimensions) const {
-			static constexpr int tensor_dimension = sizeof...(shape_dimensions);
-			using chunk_type = typename internal::Array_Chunk<tensor_dimension>::template implementation<functor_type>;
-			using type = Tensor_Base<chunk_type>;
-
-			return type(tensor.internal()._chunk(location, shape_dimensions...));
-		}
-		template<class... integers>
-		auto operator () (integers... shape_dimensions) {
-			static constexpr int tensor_dimension = sizeof...(shape_dimensions);
-			using chunk_type = typename internal::Array_Chunk<tensor_dimension>::template implementation<functor_type>;
-			using type = Tensor_Base<chunk_type>;
-
-			return type(tensor.internal()._chunk(location, shape_dimensions...));
-		}
-	};
+//	struct CHUNK {
+//
+//		const derived& tensor;
+//		int location;
+//		CHUNK(const derived& tensor_, int index_) : tensor(tensor_), location(index_) {}
+//
+//		template<class... integers>
+//		const auto operator () (integers... shape_dimensions) const {
+//			static constexpr int tensor_dimension = sizeof...(shape_dimensions);
+//			using chunk_type = typename internal::Array_Chunk<tensor_dimension>::template implementation<functor_type>;
+//			using type = Tensor_Base<chunk_type>;
+//
+//			return type(tensor.internal()._chunk(location, shape_dimensions...));
+//		}
+//		template<class... integers>
+//		auto operator () (integers... shape_dimensions) {
+//			static constexpr int tensor_dimension = sizeof...(shape_dimensions);
+//			using chunk_type = typename internal::Array_Chunk<tensor_dimension>::template implementation<functor_type>;
+//			using type = Tensor_Base<chunk_type>;
+//
+//			return type(tensor.internal()._chunk(location, shape_dimensions...));
+//		}
+//	};
 };
 
 }	//END OF BASE NAMESPACE
