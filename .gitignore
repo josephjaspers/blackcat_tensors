@@ -12,5 +12,6 @@
 /BlackCat_NeuralNetworks3.3/.*
 /BC_Tensors_UnitTests/.*
 /BlackCat_Tests/.*
+/BlackCat_Tests/
 /unit_tests/.*
 
