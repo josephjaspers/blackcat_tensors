@@ -183,10 +183,6 @@ public:
 	}
 
 	//alias ----------------------
-	template<class alias> friend class Alias;
-	Alias<derived> alias() {
-		return Alias<derived>(as_derived());
-	}
 
 //
 //	template<int x, class param_derived> auto conv(const Tensor_Operations<param_derived>& tensor) const {
@@ -268,6 +264,47 @@ public:
 	auto _normalize(scalar_t min, scalar_t max) const {
 		return un_expr(internal::oper::norm<scalar_t>(scalar_t(min), scalar_t(max)));
 	}
+
+
+	struct Alias;
+	friend class Alias;
+	Alias alias() {
+		return Alias (as_derived());
+	}
+
+	struct Alias{
+
+		derived& tensor;
+
+		Alias(derived& tensor_) : tensor(tensor_) {}
+
+		template<class derived_t>
+		void evaluate(const Tensor_Operations<derived_t>& param) {
+			BC::Evaluator<mathlib_t>::evaluate_aliased(static_cast<const derived_t&>(param).internal());
+		}
+
+		template<class derived_t>
+		auto& operator = (const Tensor_Operations<derived_t>& param) {
+			tensor.assert_valid(param);
+			evaluate(tensor.bi_expr(internal::oper::assign(), param));
+			return tensor;
+		}
+
+		template<class derived_t>
+		auto& operator += (const Tensor_Operations<derived_t>& param) {
+			tensor.assert_valid(param);
+			evaluate(tensor.bi_expr(internal::oper::add_assign(), param));
+			return tensor.as_derived();
+		}
+
+		template<class derived_t>
+		auto& operator -= (const Tensor_Operations<derived_t>& param) {
+			tensor.assert_valid(param);
+			evaluate(tensor.bi_expr(internal::oper::sub_assign(), param));
+			return tensor.as_derived();
+		}
+	};
+
 
 };
 

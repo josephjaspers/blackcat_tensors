@@ -134,7 +134,7 @@ struct evaluator<binary_expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 	struct replacement_required {
 		static auto function(const binary_expression<lv,rv,op>& branch) {
 			using branch_t = binary_expression<lv,rv,op>;
-			auto tmp =  temporary<internal::Array<branch_t::DIMS(), i_scalar_of<branch_t>, i_mathlib_of<branch_t>>>(branch.inner_shape());
+			auto tmp =  temporary<internal::Array<branch_t::DIMS(), scalar_of<branch_t>, mathlib_of<branch_t>>>(branch.inner_shape());
 			auto inject_tmp = injector<std::decay_t<decltype(tmp)>, 1, 0>(tmp);
 			return injection(branch, inject_tmp);
 		}

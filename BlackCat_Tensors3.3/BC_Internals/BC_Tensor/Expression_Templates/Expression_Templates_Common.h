@@ -15,8 +15,8 @@
 namespace BC {
 namespace internal {
 
-template<class T> using i_mathlib_of = typename T::mathlib_t;
-template<class T> using i_scalar_of  = typename T::scalar_t;
+template<class T> using mathlib_of = std::decay_t<typename T::mathlib_t>;
+template<class T> using scalar_of  = std::decay_t<typename T::scalar_t>;
 
 }
 }

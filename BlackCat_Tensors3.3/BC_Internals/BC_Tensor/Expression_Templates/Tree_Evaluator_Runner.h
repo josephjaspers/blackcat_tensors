@@ -9,6 +9,8 @@
 #define TRIVIAL_EVALUATOR_H_
 
 #include "Tree_Evaluator_Runner_Impl.h"
+#include "Expression_Templates_Common.h"
+
 
 namespace BC {
 
@@ -74,7 +76,7 @@ evaluate_aliased(const expression& expr) {
 
 template<class mathlib>
 struct branched {
-	template<class branch> using sub_t 	= BC::internal::Array<branch::DIMS(), scalar_of<branch>, mathlib>;
+	template<class branch> using sub_t 	= BC::internal::Array<branch::DIMS(), BC::internal::scalar_of<branch>, mathlib>;
 	template<class branch> using eval_t = BC::internal::binary_expression<sub_t<branch>, branch, BC::internal::oper::assign>;
 
 	template<class branch>
