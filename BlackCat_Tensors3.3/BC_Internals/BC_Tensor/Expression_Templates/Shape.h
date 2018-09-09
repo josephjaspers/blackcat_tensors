@@ -8,10 +8,9 @@
 #ifndef INTERNAL_SHAPE_H_
 #define INTERNAL_SHAPE_H_
 
-#include <type_traits>
 #include "BlackCat_Internal_Definitions.h"
 #include "Shape_Base.h"
-#include <array>
+
 namespace BC {
 namespace internal {
 template<int dims>

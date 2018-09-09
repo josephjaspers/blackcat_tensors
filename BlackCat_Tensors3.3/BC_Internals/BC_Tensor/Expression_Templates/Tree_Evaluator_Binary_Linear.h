@@ -11,6 +11,7 @@
 #include "Tree_Evaluator_Common.h"
 #include "Expression_Binary.h"
 #include "Array.h"
+
 namespace BC {
 namespace internal {
 namespace tree {

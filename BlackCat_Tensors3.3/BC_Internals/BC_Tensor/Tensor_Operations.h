@@ -12,9 +12,7 @@
 #include "Expression_Templates/Expression_Binary.h"
 #include "Expression_Templates/Operations/Binary.h"
 #include "Expression_Templates/Operations/Unary.h"
-
-
-#include "Expression_Templates/Function_conv2.h"
+#include "Expression_Templates/Operations/BLAS.h"
 
 #include "Expression_Templates/Function_gemm.h"
 #include "Expression_Templates/Function_gemv.h"
@@ -22,7 +20,6 @@
 #include "Expression_Templates/Function_dot.h"
 #include "Expression_Templates/Function_transpose.h"
 
-#include "Tensor_Operations_Alias.h"
 #include "Expression_Templates/Tree_Evaluator_Runner.h"
 
 
@@ -264,7 +261,12 @@ public:
 	auto _normalize(scalar_t min, scalar_t max) const {
 		return un_expr(internal::oper::norm<scalar_t>(scalar_t(min), scalar_t(max)));
 	}
-
+	static auto fix(Tensor_Operations& tensor) {
+		return tensor.un_expr(internal::oper::fix());
+	}
+	static auto abs(const Tensor_Operations& tensor) {
+		return tensor.un_expr(internal::oper::absolute());
+	}
 
 	struct Alias;
 	friend class Alias;
@@ -318,7 +320,5 @@ static auto normalize(const Tensor_Operations<internal_t>& tensor, min_ min, max
 
 
 }
-
-#include "Tensor_Functions/Unary_Functions.h"
 
 #endif /* TENSOR_CORE_H_ */

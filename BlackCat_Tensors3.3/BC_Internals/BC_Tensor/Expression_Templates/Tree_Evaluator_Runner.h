@@ -9,8 +9,6 @@
 #define TRIVIAL_EVALUATOR_H_
 
 #include "Tree_Evaluator_Runner_Impl.h"
-#include "Expression_Templates_Common.h"
-
 
 namespace BC {
 

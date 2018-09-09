@@ -10,6 +10,7 @@
 
 #include "Tree_Evaluator_Common.h"
 #include "Array_Base.h"
+
 namespace BC {
 namespace internal {
 namespace tree {

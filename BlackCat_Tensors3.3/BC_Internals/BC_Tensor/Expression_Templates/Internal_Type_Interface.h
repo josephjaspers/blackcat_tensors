@@ -10,10 +10,8 @@
 
 #include "BlackCat_Internal_Definitions.h"
 #include "BLAS_Feature_Detector.h"
-//#include "Tree_Struct_Injector.h"
 #include "Operations/Binary.h"
 #include "Operations/Unary.h"
-#include <iostream>
 #include <type_traits>
 
 namespace BC {
@@ -28,8 +26,8 @@ class BC_internal_interface : BC_Type {
 
 public:
 
-	operator 	   auto&()       { return as_derived(); }
-	operator const auto&() const { return as_derived(); }
+	operator 	   derived&()       { return as_derived(); }
+	operator const derived&() const { return as_derived(); }
 
 	__BCinline__ BC_internal_interface() {
 		static_assert(std::is_trivially_copy_constructible<derived>::value, "INTERNAL_TYPES TYPES MUST BE TRIVIALLY COPYABLE");
