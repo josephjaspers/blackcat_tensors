@@ -14,6 +14,10 @@ namespace internal {
 template<class,class,class> class binary_expression;
 template<class,class>		class unary_expression;
 
+
+template<class T> using mathlib_of = std::decay_t<typename T::mathlib_t>;
+template<class T> using scalar_of  = std::decay_t<typename T::scalar_t>;
+
 }
 
 template<class T, class enabler=void>

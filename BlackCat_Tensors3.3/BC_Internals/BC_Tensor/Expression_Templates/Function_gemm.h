@@ -2,11 +2,8 @@
 #ifndef EXPRESSION_BINARY_GEMM_H_
 #define EXPRESSION_BINARY_GEMM_H_
 
-
-#include "Array_Base.h"
-#include "BlackCat_Internal_Definitions.h"
 #include "Expression_Base.h"
-#include "BLAS_Feature_Detector.h"
+#include "Internal_BLAS_Feature_Detector.h"
 #include "Tree_Evaluator_Runner.h"
 
 namespace BC {

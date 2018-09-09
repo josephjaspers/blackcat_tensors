@@ -9,7 +9,8 @@
 #define BC_INTERNAL_BASE_H_
 
 #include "BlackCat_Internal_Definitions.h"
-#include "BLAS_Feature_Detector.h"
+#include "Internal_Type_Traits.h"
+#include "Internal_BLAS_Feature_Detector.h"
 #include "Operations/Binary.h"
 #include "Operations/Unary.h"
 #include <type_traits>

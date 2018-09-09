@@ -8,10 +8,8 @@
 #ifndef FUNCTION_DOT_H_
 #define FUNCTION_DOT_H_
 
-#include "Array_Base.h"
-#include "BlackCat_Internal_Definitions.h"
 #include "Expression_Base.h"
-#include "BLAS_Feature_Detector.h"
+#include "Internal_BLAS_Feature_Detector.h"
 #include "Tree_Evaluator_Runner.h"
 
 namespace BC {
