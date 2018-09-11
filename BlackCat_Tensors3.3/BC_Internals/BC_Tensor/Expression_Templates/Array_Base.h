@@ -9,7 +9,6 @@
 #ifndef TENSOR_CORE_BASE_H_
 #define TENSOR_CORE_BASE_H_
 
-#include "BlackCat_Internal_Definitions.h"
 #include "Internal_Type_Interface.h"
 #include "Shape.h"
 
@@ -24,7 +23,6 @@ namespace internal {
 //required forward decls
 template<class> class Array_Slice;
 template<class> class Array_Slice_Range;
-
 template<class> class Array_Scalar;
 template<class> class Array_Transpose;
 template<class> class Array_Row;
@@ -46,11 +44,12 @@ struct Array_Base : BC_internal_interface<derived>, BC_Array {
 	__BCinline__ static constexpr int DIMS() { return DIMENSION; }
 	__BCinline__ static constexpr int ITERATOR() { return 0; }
 
-	using self 		= derived;
-	using slice_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Slice<self>>;
-	using scalar_t 	= std::conditional_t<DIMS() == 0, self, _Tensor_Scalar<self>>;
-	using row_t =  _Tensor_Row<self>;
-	using slice_range_t = _Tensor_Range<self>;
+	using self 			= derived;
+	using slice_t 		= std::conditional_t<DIMS() == 0, self, _Tensor_Slice<self>>;
+	using slice_range_t = std::conditional_t<DIMS() == 0, self, _Tensor_Range<self>>;
+	using scalar_t 		= std::conditional_t<DIMS() == 0, self, _Tensor_Scalar<self>>;
+	using row_t 		=  _Tensor_Row<self>;
+
 	template<int dimension> using reshape_t = typename _Tensor_Reshape<dimension>::template implementation<derived>;
 	template<int dimension> using chunk_t 	= typename _Tensor_Chunk<dimension>::template implementation<derived>;
 
@@ -163,6 +162,7 @@ public:
 
 	void destroy() {}
 	//------------------------------------------Implementation Details---------------------------------------//
+private:
 
 	__BCinline__
 	auto slice_ptr(int i) const {
@@ -174,11 +174,6 @@ public:
 			return &as_derived()[as_derived().leading_dimension(DIMENSION - 2) * i];
 	}
 
-
-
-	//---------------------------------------------------UTILITY/IMPLEMENTATION METHODS------------------------------------------------------------//
-
-
 	template<class... integers> __BCinline__
 	int dims_to_index(integers... ints) const {
 		return dims_to_index(BC::make_array(ints...));
@@ -187,13 +182,6 @@ public:
 	int dims_to_index_reverse(integers... ints) const {
 		return dims_to_index_reverse(BC::make_array(ints...));
 	}
-
-//	__BCinline__ int dims_to_index(int index) const {
-//		return index * as_derived().leading_dimension(0);
-//	}
-//	__BCinline__ int dims_to_index_reverse(int index) const {
-//		return index * as_derived().leading_dimension(0);
-//	}
 
 	template<int D> __BCinline__ int dims_to_index(BC::array<D, int> var) const {
 		int index = var[0];
@@ -215,6 +203,7 @@ public:
 }
 
 template<class T> static constexpr bool is_array() { return std::is_base_of<internal::Array_Base<T, T::DIMS()>, T>::value; };
+template<class T> static constexpr bool is_expr() { return !is_array<T>(); };
 
 template<class T>
 struct BC_array_copy_assignable_overrider<T, std::enable_if_t<is_array<T>()>> {

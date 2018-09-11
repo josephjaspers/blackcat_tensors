@@ -121,36 +121,32 @@ template<> struct PRECEDENCE<oper::div_assign> {
 	};
 };
 
-//add overloads for BLAS functions here
-template<class T, class enabler = void> struct BLAS_FUNCTION_TYPE { static constexpr bool conditional = false; };
-template<class T> struct BLAS_FUNCTION_TYPE<T, std::enable_if_t<std::is_base_of<BC::BLAS_FUNCTION, T>::value>> { static constexpr bool conditional = true; };
-
 template<class T> static constexpr bool is_blas_func() {
-	return BLAS_FUNCTION_TYPE<T>::conditional;
+	return std::is_base_of<BC::BLAS_FUNCTION, T>::value;
 }
 
 
 template<class T>
 static constexpr bool is_linear_op() {
-	return MTF::is_one_of<T, oper::add, oper::sub>();
+	return MTF::seq_contains<T, oper::add, oper::sub>;
 }
 
 template<class T>
 static constexpr bool is_nonlinear_op() {
-	return  !MTF::is_one_of<T, oper::add, oper::sub>() && !is_blas_func<T>();
+	return  !MTF::seq_contains<T, oper::add, oper::sub> && !is_blas_func<T>();
 }
 template<class T>
 static constexpr bool is_linear_assignment_op() {
-	return MTF::is_one_of<T, oper::add_assign, oper::sub_assign>();
+	return MTF::seq_contains<T, oper::add_assign, oper::sub_assign>;
 }
 template<class T>
 static constexpr bool is_assignment_op() {
-	return MTF::is_one_of<T, oper::assign, oper::add_assign,oper::sub_assign, oper::mul_assign,oper::div_assign>();
+	return MTF::seq_contains<T, oper::assign, oper::add_assign,oper::sub_assign, oper::mul_assign,oper::div_assign>;
 }
 
 template<class T>
 static constexpr bool is_standard_assignment_op() {
-	return MTF::is_one_of<oper::assign>();
+	return MTF::seq_contains<oper::assign>;
 }
 
 template<class T>

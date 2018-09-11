@@ -13,6 +13,7 @@
 
 namespace BC {
 namespace internal {
+
 template<int dimension>
 struct Array_Chunk  {
 

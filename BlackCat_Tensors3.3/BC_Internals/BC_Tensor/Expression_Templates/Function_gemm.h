@@ -65,55 +65,42 @@ struct binary_expression<lv, rv, oper::gemm<mathlib>>
 		return _slice(i);
 	}
 
-template<class core, int alpha_mod, int beta_mod>
-void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
+	template<class core, int alpha_mod, int beta_mod>
+	void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 
-	//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
-	auto& injection = injection_values.data();
+		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
+		auto& injection = injection_values.data();
 
-	//evaluate the left and right branches (computes only if necessary)
-	auto A = branched<mathlib>::evaluate(blas_feature_detector<lv>::get_array(left));
-	auto B = branched<mathlib>::evaluate(blas_feature_detector<rv>::get_array(right));
+		//evaluate the left and right branches (computes only if necessary)
+		auto A = CacheEvaluator<mathlib>::evaluate(blas_feature_detector<lv>::get_array(left));
+		auto B = CacheEvaluator<mathlib>::evaluate(blas_feature_detector<rv>::get_array(right));
 
-	//get the left and right side scalar values
-	scalar_t* alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-	scalar_t* alpha_rv = blas_feature_detector<rv>::get_scalar(right);
+		//get the left and right side scalar values
+		scalar_t* alpha_lv = blas_feature_detector<lv>::get_scalar(left);
+		scalar_t* alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 
-	//initialize the alpha and beta scalars,
-	scalar_t* alpha = mathlib::static_initialize((scalar_t)alpha_mod);
-	scalar_t* beta = mathlib::static_initialize((scalar_t)beta_mod);
+		//initialize the alpha and beta scalars,
+		scalar_t* alpha = mathlib::static_initialize((scalar_t)alpha_mod);
+		scalar_t* beta = mathlib::static_initialize((scalar_t)beta_mod);
 
-	//compute the scalar values if need be
-	if (lv_scalar)
-		mathlib::scalar_mul(alpha, alpha, alpha_lv);
-	if (rv_scalar)
-		mathlib::scalar_mul(alpha, alpha, alpha_rv);
+		//compute the scalar values if need be
+		if (lv_scalar)
+			mathlib::scalar_mul(alpha, alpha, alpha_lv);
+		if (rv_scalar)
+			mathlib::scalar_mul(alpha, alpha, alpha_rv);
 
-	//call matrix_mul
-	mathlib::gemm(transA, transB,  M(), N(), K(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), beta, injection, injection.leading_dimension(0));
+		//call matrix_mul
+		mathlib::gemm(transA, transB,  M(), N(), K(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), beta, injection, injection.leading_dimension(0));
 
 
-	//destroy all the temporaries
-	if (lv_eval) cc(A).destroy();
-	if (rv_eval) cc(B).destroy();
-	mathlib::destroy(beta);
-	mathlib::destroy(alpha);
-}
+		//destroy all the temporaries
+		if (lv_eval) cc(A).destroy();
+		if (rv_eval) cc(B).destroy();
+		mathlib::destroy(beta);
+		mathlib::destroy(alpha);
+	}
 };
 
 }
 }
-//		if (transA)
-//		std::cout << "A is transposed" << transA << std::endl;
-//		if (transB)
-//		std::cout <<"B is transposed" << transB << std::endl;
-//		if (lv_scalar)
-//		std::cout << "A has scalar " <<lv_scalar << std::endl;
-//		if (rv_scalar)
-//		std::cout <<"B has scalar" << rv_scalar << std::endl;
-//		if (lv_eval)
-//		std::cout << "A instant eval" <<lv_eval << std::endl;
-//		if(rv_eval)
-//		std::cout <<"B instant eval " << rv_eval << std::endl;
-
 #endif /* EXPRESSION_BINARY_DOTPRODUCT_CU_ */

@@ -55,7 +55,7 @@ class Tensor_Operations<Tensor_Base<internal_type>> {
 	//--------------------------------------evaluation implementation-----------------------------------------------//
 	template<class derived_t> __BC_host_inline__
 	void evaluate(const Tensor_Operations<derived_t>& tensor) {
-		BC::Evaluator<mathlib_t>::evaluate(tensor.as_derived().internal());
+		internal::evaluate(tensor.as_derived().internal());
 	}
 
 public:
@@ -282,7 +282,7 @@ public:
 
 		template<class derived_t>
 		void evaluate(const Tensor_Operations<derived_t>& param) {
-			BC::Evaluator<mathlib_t>::evaluate_aliased(static_cast<const derived_t&>(param).internal());
+			internal::Lazy_Evaluator<mathlib_t>::evaluate_aliased(static_cast<const derived_t&>(param).internal());
 		}
 
 		template<class derived_t>

@@ -75,12 +75,12 @@ public:
 		  auto& operator() () 	    { return *this; }
 
 	template<class... integers> const auto operator() (int i, integers... ints) const  {
-		static_assert(MTF::is_integer_sequence<integers...>, "operator()(integers...) -> PARAMS MUST BE INTEGER LIST");
+		static_assert(MTF::seq_of<int, integers...>, "operator()(integers...) -> PARAMS MUST BE INTEGER LIST");
 		return (*this)[i](ints...);
 	}
 
 	template<class... integers> 	  auto operator() (int i, integers... ints) {
-		static_assert(MTF::is_integer_sequence<integers...>, "operator()(integers...) -> PARAMS MUST BE INTEGER LIST");
+		static_assert(MTF::seq_of<int, integers...>, "operator()(integers...) -> PARAMS MUST BE INTEGER LIST");
 		return (*this)[i](ints...);
 	}
 

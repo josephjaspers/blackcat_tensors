@@ -19,112 +19,51 @@ __BCinline__ static constexpr int min(int x, integers... ints) { return x < min 
 	//short_hand for const cast
 	template<class T> auto& cc(const T& var) { return const_cast<T&>(var); }
 
-	template<class> struct isPrimitive 					{ static constexpr bool conditional = false; };
-	template<> struct isPrimitive<bool> 				{ static constexpr bool conditional = true; };
-	template<> struct isPrimitive<short> 				{ static constexpr bool conditional = true; };
-	template<> struct isPrimitive<unsigned short> 		{ static constexpr bool conditional = true; };
-	template<> struct isPrimitive<int> 					{ static constexpr bool conditional = true; };
-	template<> struct isPrimitive<unsigned> 			{ static constexpr bool conditional = true; };
-	template<> struct isPrimitive<long> 				{ static constexpr bool conditional = true; };
-	template<> struct isPrimitive<unsigned long> 		{ static constexpr bool conditional = true; };
-	template<> struct isPrimitive<long long> 			{ static constexpr bool conditional = true; };
-	template<> struct isPrimitive<unsigned long long> 	{ static constexpr bool conditional = true; };
-	template<> struct isPrimitive<char> 				{ static constexpr bool conditional = true; };
-	template<> struct isPrimitive<unsigned char>		{ static constexpr bool conditional = true; };
-	template<> struct isPrimitive<float> 				{ static constexpr bool conditional = true; };
-	template<> struct isPrimitive<double> 				{ static constexpr bool conditional = true; };
-	template<> struct isPrimitive<long double> 			{ static constexpr bool conditional = true; };
-	template<> struct isPrimitive<wchar_t> 				{ static constexpr bool conditional = true; };
-
-	template<class T> static constexpr bool is_primitive_type() { return  MTF::isPrimitive<T>::conditional; }
-
-	template<class... T> struct isIntList {
-static constexpr bool conditional = true;
-	};
-	template<class T, class... Ts> struct isIntList<T,Ts...> {
-		static constexpr bool conditional = false;
-	};
-	template<class... Ts> struct isIntList<int,Ts...> {
-		static constexpr bool conditional = true && isIntList<Ts...>::conditional;
-	};
-
-	template<class... ts>
-	static constexpr bool is_integer_sequence = isIntList<ts...>::conditional;
-
-	template<class> struct lst;
-
-	template<class T> struct lst {
-		using front = T;
-		using last = T;
-	};
-	template<template<class...> class LIST, class T, class... V>
-	struct lst<LIST<T, V...>>  {
-		using front = T;
-		using last = T;
-	};
-	template<template<class...> class LIST, class T, class V>
-	struct lst<LIST<T, V>>  {
-		using front = T;
-		using last = V;
-	};
-
-	template<class> struct shell_of;
-	template<template<class ...> class param, class... ptraits>
-	struct shell_of<param<ptraits...>> { template<class... ntraits> using type = param<ntraits...>; };
-
-
-	template<class T, class... Ts>
-	struct one_of_impl {
-		static constexpr bool conditional = false;
-	};
-	template<class T, class U, class... Ts>
-	struct one_of_impl<T, U, Ts...> {
-		static constexpr bool conditional = one_of_impl<T, Ts...>::conditional;
-	};
-	template<class T, class... Ts>
-	struct one_of_impl<T, T, Ts...> {
-		static constexpr bool conditional = true;
-	};
-
-	template<class T, class... Ts> static constexpr bool is_one_of() { return one_of_impl<T, Ts...>::conditional; }
-
-
-	//-------------------------------------if else chain
-	template<bool x, class T> struct IF_IMPL;
-	template<class T> struct IF_IMPL<true, T>  { using type = T; };
-
-	template<class... > struct IF_BLOCK_IMPL;
-	template<class T, class... Ts> struct IF_BLOCK_IMPL<T, Ts...> {
-		using type = T;
-	};
-	template<bool x, class T, class... Ts>
-	struct IF_BLOCK_IMPL<IF_IMPL<x, T>, Ts...> {
-		using type = std::conditional_t<x, T, typename IF_BLOCK_IMPL<Ts...>::type>;
-	};
-	template<bool x, class T, class U, class... Ts>
-	struct IF_BLOCK_IMPL<IF_IMPL<x, T>, U, Ts...> {
-		using type = std::conditional_t<x, T, typename IF_BLOCK_IMPL<U, Ts...>::type>;
-	};
-
-	template<bool x, class t>
-	using IF = typename IF_IMPL<x, t>::type;
-
 	template<class... Ts>
-	using IF_BLOCK = typename IF_BLOCK_IMPL<Ts...>::type;
-
-	template<class from, class to, class enabler = void>
-	struct is_castable_impl {
-		static constexpr bool conditional = false;
+	struct sequence {
+		template<class U> static constexpr bool of = false;
+		template<class U> static constexpr bool contains = false;
+		template<class U> static constexpr bool excludes = false;
+	};
+	template<class T> struct sequence<T> {
+		template<class U> static constexpr bool of 		 = std::is_same<T, U>::value;
+		template<class U> static constexpr bool contains = std::is_same<T, U>::value;
+		template<class U> static constexpr bool excludes = !std::is_same<T,U>::value;
+		using head = T;
+		using tail = T;
 	};
 
-	template<class from, class to>
-	struct is_castable_impl<from, to, decltype(static_cast<to>(std::declval<from>()))> {
-		static constexpr bool conditional = true;
-
+	template<class T, class... Ts> struct sequence<T, Ts...> {
+		template<class U> static constexpr bool of 			= std::is_same<T, U>::value && sequence<Ts...>::template of<U>;
+		template<class U> static constexpr bool contains 	= std::is_same<T, U>::value || sequence<Ts...>::template contains<U>;
+		template<class U> static constexpr bool excludes 	= !std::is_same<T,U>::value && sequence<Ts...>::template excludes<U>;
+		using head = T;
+		using tail = typename sequence<Ts...>::tail;
 	};
 
-	template<class from, class to> static constexpr bool is_castable() {
-		return is_castable_impl<from, to>::conditional;
+	template<class T, class... Ts> static constexpr bool seq_of = sequence<Ts...>::template of<T>;
+	template<class T, class... Ts> static constexpr bool seq_contains = sequence<Ts...>::template contains<T>;
+	template<class T, class... Ts> static constexpr bool seq_excludes = sequence<Ts...>::template excludes<T>;
+
+	template<bool>
+	struct constexpr_ternary_impl {
+		template<class f1, class f2>
+		static auto impl(f1 true_path, f2 false_path) {
+			return true_path();
+		}
+	};
+
+	template<>
+	struct constexpr_ternary_impl<false> {
+		template<class f1, class f2>
+		static auto impl(f1 true_path, f2 false_path) {
+			return false_path();
+		}
+	};
+
+	template<bool cond, class f1, class f2>
+	auto constexpr_ternary(f1 true_path, f2 false_path) {
+		return constexpr_ternary_impl<cond>::impl(true_path, false_path);
 	}
 
 }

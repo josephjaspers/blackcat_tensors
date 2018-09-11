@@ -56,8 +56,8 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 	auto& injection = injection_values.data();
 
 	//evaluate the left and right branches (computes only if necessary)
-	auto X = branched<mathlib>::evaluate(blas_feature_detector<lv>::get_array(left));
-	auto Y = branched<mathlib>::evaluate(blas_feature_detector<rv>::get_array(right));
+	auto X = CacheEvaluator<mathlib>::evaluate(blas_feature_detector<lv>::get_array(left));
+	auto Y = CacheEvaluator<mathlib>::evaluate(blas_feature_detector<rv>::get_array(right));
 
 	//get the left and right side scalar values
 

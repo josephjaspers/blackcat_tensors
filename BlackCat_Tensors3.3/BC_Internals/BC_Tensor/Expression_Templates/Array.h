@@ -33,14 +33,13 @@ struct Array : Array_Base<Array<dimension, T, mathlib>, dimension>, public Shape
 
 	template<class... integers>//CAUSES FAILURE WITH NVCC 9.2, typename = std::enable_if_t<MTF::is_integer_sequence<integers...>>>
 	Array(integers... ints) : Shape<DIMS()>(ints...) {
-		static_assert(MTF::is_integer_sequence<integers...>,"PARAMETER LIST MUST BE INTEGER_SEQUNCE");
+		static_assert(MTF::seq_of<int, integers...>,"PARAMETER LIST MUST BE INTEGER_SEQUNCE");
 		mathlib_t::initialize(array, this->size()); }
 
 	template<class deriv_expr, typename = std::enable_if_t<std::is_base_of<BC_internal_interface<deriv_expr>, deriv_expr>::value>>
 	Array(const deriv_expr& expr) : Shape<DIMS()>(static_cast<const deriv_expr&>(expr).inner_shape()) {
 		mathlib_t::initialize(array, this->size());
-		auto eval = binary_expression<Array<dimension, T, mathlib_t>, deriv_expr, oper::assign>(*this, static_cast<const deriv_expr&>(expr));
-		BC::Evaluator<mathlib_t>::evaluate(eval);
+		evaluate_to(*this, expr);
 	}
 
 protected:

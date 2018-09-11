@@ -16,37 +16,6 @@
 
 namespace BC {
 
-
-//template<int size_, class T>
-//struct array {
-//	T m_array[size_] = {T()};
-//
-//	__BCinline__ array() = default;
-//	__BCinline__ array(const array&) = default;
-//	__BCinline__ array(array&&) = default;
-//
-//	__BCinline__ array& operator = (const array&) = default;
-//	__BCinline__ array& operator = (array&&) = default;
-//	template<class... params>
-//	__BCinline__ array(params... p) :  m_array{p...}  {
-//
-//	}
-//
-//
-//	__BCinline__ const T& operator [](int i) const {
-//		return m_array[i];
-//	}
-//	__BCinline__ T& operator [](int i) {
-//		return m_array[i];
-//	}
-//
-//};
-//
-////---------------------short_hand----------------------//
-//template<class T, class... vals> __BChd__
-//auto make_array(T front, vals... values) { return array<sizeof...(values) + 1, T> {front, values...}; }//(front, values...); }
-
-
 //-------------------------------Lightweight array, implemented as a homogeneous tuple-------------------------------//
 	template<int size_, class T>
 	struct array : array< size_ - 1, T> {
