@@ -30,8 +30,8 @@ template<class internal_t>
 struct Tensor_Utility<Tensor_Base<internal_t>> {
 
 	using derived = Tensor_Base<internal_t>;
-	using scalar = typename internal_t::scalar_t;
-	using mathlib =typename internal_t::mathlib_t;
+	using scalar  = typename internal_t::scalar_t;
+	using mathlib = typename internal_t::mathlib_t;
 
 private:
 	static constexpr int DIMS() { return derived::DIMS(); }

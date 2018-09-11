@@ -19,112 +19,46 @@ namespace tree {
 
 
 
-template<class> struct PRECEDENCE {
-	enum traits {
-		value = -1,
-		alpha_modifier = 0,
-		beta_modifier = 0,
-		injectable_assignment = false,
-		blas_rotation = false,
-		injector = false
+template<class> struct scalar_modifer {
+	enum mod {
+		alpha = 0,
+		beta = 0,
 	};
 };
-template<> struct PRECEDENCE<oper::add> {
-	enum traits {
-		value = 0,
-		alpha_modifier = 1,
-		beta_modifier = 1,
-		injectable_assignment = false,
-		blas_rotation = true,
-		injector = false
+template<> struct scalar_modifer<oper::add> {
+	enum mod {
+		alpha = 1,
+		beta = 1,
 	};
 };
-template<> struct PRECEDENCE<oper::sub> {
-	enum traits {
-		value = 0,
-		alpha_modifier = -1,
-		beta_modifier = 1,
-		injectable_assignment = false,
-		blas_rotation = true,
-		injector = false
+template<> struct scalar_modifer<oper::sub> {
+	enum mod {
+		alpha = -1,
+		beta = 1
 	};
 };
-template<> struct PRECEDENCE<oper::mul> {
-	enum traits {
-		value = 1,
-		alpha_modifier = 0,
-		beta_modifier = 0,
-		injectable_assignment = false,
-		blas_rotation = false,
-		injector = false
+template<> struct scalar_modifer<oper::add_assign> {
+	enum mod {
+		alpha = 1,
+		beta = 1,
 	};
 };
-template<> struct PRECEDENCE<oper::div> {
-	enum traits {
-		value = 1,
-		alpha_modifier = 0,
-		beta_modifier = 0,
-		injectable_assignment = false,
-		blas_rotation = false,
-		injector = false
+template<> struct scalar_modifer<oper::sub_assign> {
+	enum mod {
+		alpha = -1,
+		beta = 1,
 	};
 };
-template<> struct PRECEDENCE<oper::add_assign> {
-	enum traits {
-		value = 0,
-		alpha_modifier = 1,
-		beta_modifier = 1,
-		injectable_assignment = true,
-		blas_rotation = false,
-		injector = true
-	};
-};
-template<> struct PRECEDENCE<oper::sub_assign> {
-	enum traits {
-		value = 0,
-		alpha_modifier = -1,
-		beta_modifier = 1,
-		injectable_assignment = true,
-		blas_rotation = false,
-		injector = true
-	};
-};
-template<> struct PRECEDENCE<oper::assign> {
-	enum traits {
-		value = 1,
-		alpha_modifier = 1,
-		beta_modifier = 0,
-		injectable_assignment = true,
-		blas_rotation = false,
-		injector = true
-	};
-};
-
-template<> struct PRECEDENCE<oper::mul_assign> {
-	enum traits {
-		value = 1,
-		alpha_modifier = 0,
-		beta_modifier = 0,
-		injectable_assignment = false,
-		blas_rotation = false,
-		injector = false
-	};
-};
-template<> struct PRECEDENCE<oper::div_assign> {
-	enum traits {
-		value = 1,
-		alpha_modifier = 0,
-		beta_modifier = 0,
-		injectable_assignment = false,
-		blas_rotation = false,
-		injector = false
+template<> struct scalar_modifer<oper::assign> {
+	enum mod {
+		alpha = 1,
+		beta = 0,
 	};
 };
 
 template<class T> static constexpr bool is_blas_func() {
 	return std::is_base_of<BC::BLAS_FUNCTION, T>::value;
 }
-
 
 template<class T>
 static constexpr bool is_linear_op() {
@@ -151,33 +85,20 @@ static constexpr bool is_standard_assignment_op() {
 
 template<class T>
 static constexpr int alpha_of() {
-	return PRECEDENCE<std::decay_t<T>>::traits::alpha_modifier;
+	return scalar_modifer<std::decay_t<T>>::mod::alpha;
 }
 template<class T>
 static constexpr int beta_of() {
-	return PRECEDENCE<std::decay_t<T>>::traits::beta_modifier;
-}
-template<class T>
-static constexpr int precedence() {
-	return PRECEDENCE<std::decay_t<T>>::traits::value;
+	return scalar_modifer<std::decay_t<T>>::mod::beta;
 }
 
-template<class T>
-static constexpr int valid_double_inject() {
-	return PRECEDENCE<std::decay_t<T>>::traits::blas_rotation;
-}
-
-template<class T>
-static constexpr bool injectable_assignment() {
-	return PRECEDENCE<std::decay_t<T>>::traits::injectable_assignment;
-}
 
 //trivial_blas_evaluation -- detects if the tree is entirely +/- operations with blas functions, --> y = a * b + c * d - e * f  --> true, y = a + b * c --> false
 template<class op, class core, int a, int b>//only apply update if right hand side branch
 auto update_injection(injector<core,a,b> tensor) {
-	static constexpr int alpha_modifier = a != 0 ? a * alpha_of<op>() : 1;
-	static constexpr int beta_modifier = b != 0 ? b * beta_of<op>() : 1;
-	return injector<core, alpha_modifier, beta_modifier>(tensor.data());
+	static constexpr int alpha = a != 0 ? a * alpha_of<op>() : 1;
+	static constexpr int beta = b != 0 ? b * beta_of<op>() : 1;
+	return injector<core, alpha, beta>(tensor.data());
 }
 
 

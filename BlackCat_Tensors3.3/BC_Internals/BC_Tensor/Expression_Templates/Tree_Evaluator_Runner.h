@@ -15,47 +15,46 @@ namespace internal {
 template<class mathlib_type>
 struct Lazy_Evaluator {
 
-
-//------------------------------------------------Purely lazy evaluation----------------------------------//
-template< class expression>
-static std::enable_if_t<!INJECTION<expression>()>
-evaluate(const expression& expr) {
-	static constexpr int iterator_dimension = expression::ITERATOR();
-	mathlib_type::template dimension<iterator_dimension>::eval(expr);
-}
-//------------------------------------------------Purely lazy alias evaluation----------------------------------//
-template< class expression>
-static std::enable_if_t<!INJECTION<expression>()>
-evaluate_aliased(const expression& expr) {
-	static constexpr int iterator_dimension = expression::ITERATOR();
-	mathlib_type::template dimension<iterator_dimension>::eval(expr);
-}
-//------------------------------------------------Greedy evaluation (BLAS function call detected)----------------------------------//
-template< class expression>
-static std::enable_if_t<INJECTION<expression>()>
-evaluate(const expression& expr) {
-	auto greedy_evaluated_expr = internal::tree::Greedy_Evaluator::evaluate(expr);
-
-	if (is_expr<decltype(greedy_evaluated_expr)>()) {
+	//------------------------------------------------Purely lazy evaluation----------------------------------//
+	template< class expression>
+	static std::enable_if_t<!INJECTION<expression>()>
+	evaluate(const expression& expr) {
 		static constexpr int iterator_dimension = expression::ITERATOR();
-		mathlib_type::template dimension<iterator_dimension>::eval(greedy_evaluated_expr);
+		mathlib_type::template dimension<iterator_dimension>::eval(expr);
 	}
-	//destroy any temporaries made by the tree
-	internal::tree::Greedy_Evaluator::destroy_temporaries(greedy_evaluated_expr);
-}
-//------------------------------------------------Greedy evaluation (BLAS function call detected), skip injection optimization--------------------//
-template< class expression>
-static std::enable_if_t<INJECTION<expression>()>
-evaluate_aliased(const expression& expr) {
-	static constexpr int iterator_dimension = expression::ITERATOR();	//the iterator for the evaluation of post inject_t
+	//------------------------------------------------Purely lazy alias evaluation----------------------------------//
+	template< class expression>
+	static std::enable_if_t<!INJECTION<expression>()>
+	evaluate_aliased(const expression& expr) {
+		static constexpr int iterator_dimension = expression::ITERATOR();
+		mathlib_type::template dimension<iterator_dimension>::eval(expr);
+	}
+	//------------------------------------------------Greedy evaluation (BLAS function call detected)----------------------------------//
+	template< class expression>
+	static std::enable_if_t<INJECTION<expression>()>
+	evaluate(const expression& expr) {
+		auto greedy_evaluated_expr = internal::tree::Greedy_Evaluator::evaluate(expr);
 
-	auto greedy_evaluated_expr = internal::tree::Greedy_Evaluator::substitution_evaluate(expr);		//evaluate the internal tensor_type
-	if (is_expr<decltype(greedy_evaluated_expr)>()) {
-		mathlib_type::template dimension<iterator_dimension>::eval(greedy_evaluated_expr);
+		if (is_expr<decltype(greedy_evaluated_expr)>()) {
+			static constexpr int iterator_dimension = expression::ITERATOR();
+			mathlib_type::template dimension<iterator_dimension>::eval(greedy_evaluated_expr);
+		}
+		//destroy any temporaries made by the tree
+		internal::tree::Greedy_Evaluator::destroy_temporaries(greedy_evaluated_expr);
 	}
-	//destroy any temporaries made by the tree
-	internal::tree::Greedy_Evaluator::destroy_temporaries(greedy_evaluated_expr);
-}
+	//------------------------------------------------Greedy evaluation (BLAS function call detected), skip injection optimization--------------------//
+	template< class expression>
+	static std::enable_if_t<INJECTION<expression>()>
+	evaluate_aliased(const expression& expr) {
+		static constexpr int iterator_dimension = expression::ITERATOR();	//the iterator for the evaluation of post inject_t
+
+		auto greedy_evaluated_expr = internal::tree::Greedy_Evaluator::substitution_evaluate(expr);		//evaluate the internal tensor_type
+		if (is_expr<decltype(greedy_evaluated_expr)>()) {
+			mathlib_type::template dimension<iterator_dimension>::eval(greedy_evaluated_expr);
+		}
+		//destroy any temporaries made by the tree
+		internal::tree::Greedy_Evaluator::destroy_temporaries(greedy_evaluated_expr);
+	}
 };
 
 template<class mathlib>

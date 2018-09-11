@@ -132,11 +132,12 @@ public:
 
 	//------------------------------------------Curried Reshapers ---------------------------------------//
 
-	template<class ... integers> auto _chunk(int location, integers ... shape_dimensions) {
-		return chunk_t<sizeof...(integers)>(&as_derived()[location], this->as_derived(), shape_dimensions...);
+	template<int dimensions> const auto _chunk(BC::array<DIMS(), int> point, BC::array<dimensions, int> shape) const{
+		return chunk_t<dimensions>(&as_derived()[dims_to_index(point)], this->as_derived(), shape);
 	}
-	template<class ... integers>  const auto _chunk(int location, integers ... shape_dimensions) const {
-		return chunk_t<sizeof...(integers)>(&as_derived()[location], this->as_derived(), shape_dimensions...);
+
+	template<int dimensions> auto _chunk(BC::array<DIMS(), int> point, BC::array<dimensions, int> shape) {
+		return chunk_t<dimensions>(&as_derived()[dims_to_index(point)], this->as_derived(), shape);
 	}
 
 	template<class ... integers>

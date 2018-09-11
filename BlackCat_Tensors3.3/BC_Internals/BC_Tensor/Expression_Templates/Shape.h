@@ -109,7 +109,7 @@ template<>
 struct Shape<1> {
 
 	BC::array<1, int> m_inner_shape;
-
+	Shape() = default;
 	Shape (BC::array<1, int> param) : m_inner_shape(param) {}
 
 	template<int dim, class f, class int_t>

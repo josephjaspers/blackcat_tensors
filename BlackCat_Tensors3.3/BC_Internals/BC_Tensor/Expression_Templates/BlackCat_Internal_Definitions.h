@@ -26,7 +26,6 @@ namespace BC {
 class BC_Type {}; //a type inherited by expressions and tensor_cores, it is used a flag and lacks a "genuine" implementation
 class BC_Array {};
 class BLAS_FUNCTION {};
-template<class T> static constexpr bool is_void() { return std::is_same<T, void>::value; }
 
 }
 #include "Utility/MetaTemplateFunctions.h"

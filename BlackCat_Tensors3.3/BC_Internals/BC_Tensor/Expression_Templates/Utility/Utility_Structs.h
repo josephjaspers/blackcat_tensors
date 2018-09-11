@@ -51,7 +51,6 @@ namespace BC {
 
 	//accepts a lambda that takes a single-integer parameter
 	template<int dimension, class func> __BChd__ auto l_array(func internal) { return lambda_array<dimension, decltype(internal(0)), func>(internal); }
-
 }
 
 

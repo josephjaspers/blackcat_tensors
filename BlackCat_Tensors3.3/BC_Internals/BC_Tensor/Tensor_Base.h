@@ -21,7 +21,6 @@
 #include "Expression_Templates/Array_Scalar.h"
 #include "Expression_Templates/Array_Slice.h"
 #include "Expression_Templates/Array_Slice_Range.h"
-#include "Expression_Templates/Array_Slice_Complex.h"
 #include "Expression_Templates/Array_Chunk.h"
 #include "Expression_Templates/Array_Reshape.h"
 
@@ -38,52 +37,42 @@ class Tensor_Base :
 protected:
 
 	using self 			= Tensor_Base<internal_t>;
+	using parent		= internal_t;
 	using operations  	= module::Tensor_Operations<Tensor_Base<internal_t>>;
 	using utility		= module::Tensor_Utility<Tensor_Base<internal_t>>;
 	using shaping		= module::Tensor_Shaping<Tensor_Base<internal_t>>;
-
-	using scalar_type	= internal::scalar_of<internal_t>;
-	using mathlib_type 	= internal::mathlib_of<internal_t>;
 
 	template<class> friend class Tensor_Base;
 
 public:
 
+	using scalar_t	= internal::scalar_of<internal_t>;
+	using mathlib_t	= internal::mathlib_of<internal_t>;
 	using operations::operator=;
 	using shaping::operator[];
 	using shaping::operator();
 	using internal_t::internal_t;
 
 	using internal_t::DIMS; //required
-	using scalar_t = typename internal_t::scalar_t;
-	using mathlib_t = typename internal_t::mathlib_t;
-
-	using move_parameter = std::conditional_t<BC_array_move_constructible<internal_t>(), 	   self&&, BC::DISABLED<0>>;
-	using copy_parameter = std::conditional_t<BC_array_copy_constructible<internal_t>(), const self&,  BC::DISABLED<1>>;
-
-	using move_oper_parameter = std::conditional_t<BC_array_move_assignable<internal_t>(), 		 self&&, BC::DISABLED<0>>;
-	using copy_oper_parameter = std::conditional_t<BC_array_copy_assignable<internal_t>(), const self&,  BC::DISABLED<1>>;
+	using move_parameter 		= std::conditional_t<BC_array_move_constructible<internal_t>(), 	   self&&, BC::DISABLED<0>>;
+	using copy_parameter 		= std::conditional_t<BC_array_copy_constructible<internal_t>(), const self&,  BC::DISABLED<1>>;
+	using move_assign_parameter = std::conditional_t<BC_array_move_assignable<internal_t>(), self&&, BC::DISABLED<0>>;
 
 	Tensor_Base() = default;
 	Tensor_Base(copy_parameter tensor) : internal_t(tensor.inner_shape()) {
-		mathlib_type::copy(this->internal(), tensor.internal(), this->size());
+		mathlib_t::copy(this->internal(), tensor.internal(), this->size());
 	}
-	Tensor_Base(move_parameter tensor) : internal_t(tensor.inner_shape()) {
+	Tensor_Base(move_parameter tensor) {
 		std::swap(this->array, tensor.array);
 		this->swap_shape(tensor);
 	}
 	template<class U>
 	Tensor_Base(const Tensor_Base<U>&  tensor) : internal_t(tensor.internal()) {}
-	Tensor_Base(const internal_t&  param) : internal_t(param) {}
-	Tensor_Base( 	  internal_t&& param) : internal_t(param) {}
+	Tensor_Base(const parent&  param) : internal_t(param) {}
+	Tensor_Base( 	  parent&& param) : internal_t(param) {}
 
-	Tensor_Base& operator =(copy_oper_parameter tensor) {
-		this->assert_valid(tensor);
-		mathlib_type::copy(this->internal(), tensor.internal(), this->size());
-		return *this;
-	}
 
-	Tensor_Base& operator =(move_parameter tensor) {
+	Tensor_Base& operator =(move_assign_parameter tensor) {
 		this->swap_shape(tensor);
 		this->swap_array(tensor);
 		return *this;
@@ -101,8 +90,8 @@ public:
 		this->destroy();
 	}
 
-	 const internal_t& internal() const { return static_cast<const internal_t&>(*this); }
-	 	   internal_t& internal() 	  	 { return static_cast<	   internal_t&>(*this); }
+	 const parent& internal() const { return static_cast<const parent&>(*this); }
+	 	   parent& internal() 	  	{ return static_cast<	   parent&>(*this); }
 };
 
 }
