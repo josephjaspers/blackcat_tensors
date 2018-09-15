@@ -36,11 +36,11 @@ class Tensor_Base :
 
 protected:
 
-	using self 			= Tensor_Base<internal_t>;
-	using parent		= internal_t;
-	using operations  	= module::Tensor_Operations<Tensor_Base<internal_t>>;
-	using utility		= module::Tensor_Utility<Tensor_Base<internal_t>>;
-	using shaping		= module::Tensor_Shaping<Tensor_Base<internal_t>>;
+	using parent        = internal_t;
+	using self          = Tensor_Base<internal_t>;
+	using operations    = module::Tensor_Operations<Tensor_Base<internal_t>>;
+	using utility       = module::Tensor_Utility<Tensor_Base<internal_t>>;
+	using shaping       = module::Tensor_Shaping<Tensor_Base<internal_t>>;
 
 	template<class> friend class Tensor_Base;
 
@@ -54,23 +54,26 @@ public:
 	using internal_t::internal_t;
 
 	using internal_t::DIMS; //required
-	using move_parameter 		= std::conditional_t<BC_array_move_constructible<internal_t>(), 	   self&&, BC::DISABLED<0>>;
-	using copy_parameter 		= std::conditional_t<BC_array_copy_constructible<internal_t>(), const self&,  BC::DISABLED<1>>;
-	using move_assign_parameter = std::conditional_t<BC_array_move_assignable<internal_t>(), self&&, BC::DISABLED<0>>;
+	using move_parameter        = std::conditional_t<BC_array_move_constructible<internal_t>(), self&&, 		BC::DISABLED<0>>;
+	using copy_parameter        = std::conditional_t<BC_array_copy_constructible<internal_t>(), const self&,  	BC::DISABLED<1>>;
+	using move_assign_parameter = std::conditional_t<BC_array_move_assignable<internal_t>(), 	self&&, 		BC::DISABLED<0>>;
 
 	Tensor_Base() = default;
-	Tensor_Base(copy_parameter tensor) : internal_t(tensor.inner_shape()) {
-		mathlib_t::copy(this->internal(), tensor.internal(), this->size());
-	}
-	Tensor_Base(move_parameter tensor) {
-		std::swap(this->array, tensor.array);
-		this->swap_shape(tensor);
-	}
+
 	template<class U>
 	Tensor_Base(const Tensor_Base<U>&  tensor) : internal_t(tensor.internal()) {}
 	Tensor_Base(const parent&  param) : internal_t(param) {}
 	Tensor_Base( 	  parent&& param) : internal_t(param) {}
 
+
+	Tensor_Base(copy_parameter tensor) : internal_t(tensor.inner_shape()) {
+		mathlib_t::copy(this->internal(), tensor.internal(), this->size());
+	}
+
+	Tensor_Base(move_parameter tensor) {
+		this->swap_array(tensor);
+		this->swap_shape(tensor);
+	}
 
 	Tensor_Base& operator =(move_assign_parameter tensor) {
 		this->swap_shape(tensor);
@@ -86,6 +89,8 @@ public:
 		this->fill(scalar);
 		return *this;
 	}
+
+
 	~Tensor_Base() {
 		this->destroy();
 	}

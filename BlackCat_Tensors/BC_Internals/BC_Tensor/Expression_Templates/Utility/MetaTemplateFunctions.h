@@ -11,12 +11,16 @@
 #include "../BlackCat_Internal_Definitions.h"
 namespace BC {
 namespace MTF {
-__BCinline__ static constexpr int max(int x) { return x; } template<class... integers>
-__BCinline__ static constexpr int max(int x, integers... ints) { return x > max (ints...) ? x : max(ints...); }
-__BCinline__ static constexpr int min(int x) { return x; } template<class... integers>
-__BCinline__ static constexpr int min(int x, integers... ints) { return x < min (ints...) ? x : min(ints...); }
+	static constexpr int max(int x) { return x; }
+	static constexpr int min(int x) { return x; }
 
-	//short_hand for const cast
+	template<class... integers>
+	static constexpr int max(int x, integers... ints) { return x > max (ints...) ? x : max(ints...); }
+
+	template<class... integers>
+	static constexpr int min(int x, integers... ints) { return x < min (ints...) ? x : min(ints...); }
+
+		//short_hand for const cast
 	template<class T> auto& cc(const T& var) { return const_cast<T&>(var); }
 
 	template<class... Ts>
@@ -66,6 +70,24 @@ __BCinline__ static constexpr int min(int x, integers... ints) { return x < min 
 		return constexpr_ternary_impl<cond>::impl(true_path, false_path);
 	}
 
+	template<bool>
+	struct constexpr_if_impl {
+		template<class f1>
+		static auto impl(f1 path) {
+			return path();
+		}
+	};
+	template<>
+	struct constexpr_if_impl<false> {
+		template<class f1>
+		static auto impl(f1 path) {
+			return path();
+		}
+	};
+	template<bool b,class f>
+	auto constexpr_if(f path) {
+		return constexpr_if_impl<b>::impl(path);
+	}
 }
 }
 #endif /* SIMPLE_H_ */

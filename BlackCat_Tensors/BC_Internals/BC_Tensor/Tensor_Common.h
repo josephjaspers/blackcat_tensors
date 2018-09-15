@@ -8,11 +8,18 @@
 #ifndef BC_INTERNALS_BC_TENSOR_TENSOR_COMMON_H_
 #define BC_INTERNALS_BC_TENSOR_TENSOR_COMMON_H_
 
-#define BC_ARRAY_ONLY(literal) static_assert(true, " ");//static_assert(BC::is_array<functor_of<derived>>(), "BC Method: '" literal "' is only supported by Array_Base classes")
+#define BC_ARRAY_ONLY(literal) static_assert(BC::is_array<internal_t>(), "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
 
 #include <type_traits>
 namespace BC {
+
 template<int> class DISABLED;
+template<class> class Tensor_Base;
+
+template<class internal_t>
+auto make_tensor(internal_t internal) {
+	return Tensor_Base<internal_t>(internal);
+}
 
 }
 

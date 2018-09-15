@@ -1,17 +1,19 @@
 /.metadata/
 /RemoteSystemsTempFiles/
-/BlackCat_Tensors3.3/.cproject
-/BlackCat_Tensors3.3/.cproject
-/BlackCat_Tensors3.3/Release/
-/BlackCat_Tensors3.3/Release_/
-/BlackCat_Tensors3.3/Debug/
+/BlackCat_Tensors/.cproject
+/BlackCat_Tensors/.cproject
+/BlackCat_Tensors/Release/
+/BlackCat_Tensors/Release_/
+/BlackCat_Tensors/Debug/
 /BlackCat_Library_deprecated/*
 /BlackCat_MetaTemplate_Functions/.*
-/BlackCat_Tensors3.3/.*
+/BlackCat_Tensors/.*
 /BlackCat_Structures/.*
-/BlackCat_NeuralNetworks3.3/.*
+/BlackCat_NeuralNetworks/.*
 /BC_Tensors_UnitTests/.*
 /BlackCat_Tests/.*
 /BlackCat_Tests/
 /unit_tests/.*
+/Python_BlackCat_NeuralNetworks/.*
+/Python_BlackCat_NeuralNetworks/    
 

@@ -46,6 +46,9 @@ class Tensor_Operations<Tensor_Base<internal_type>> {
 	template<class deriv>
 	using mathlib_t_of		= typename Tensor_Operations<deriv>::mathlib_t;
 
+	static constexpr bool	copy_assignable = BC_array_copy_assignable<internal_type>();
+#define BC_ASSERT_ASSIGNABLE(literal) static_assert(copy_assignable, "ASSERT COPY ASSIGNABLE: " literal)
+
 	template<class expr> 		   using unary_expression_t  = BC::Tensor_Base<internal::unary_expression<internal_t, expr>>;
 	template<class rv, class expr> using binary_expression_t = BC::Tensor_Base<internal::binary_expression<internal_t, rv, expr>>;
 
@@ -63,28 +66,28 @@ public:
 	//--------------------------------------assignment operators-----------------------------------------------//
 	template<class pDeriv> __BC_host_inline__
 	derived& operator =(const Tensor_Operations<pDeriv>& param) {
-		BC_ARRAY_ONLY("derived& operator =(const Tensor_Operations<pDeriv>& param)");
+		BC_ASSERT_ASSIGNABLE("derived& operator =(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
 		evaluate(bi_expr<internal::oper::assign>(param));
 		return as_derived();
 	}
 	template<class pDeriv> __BC_host_inline__
 	derived& operator +=(const Tensor_Operations<pDeriv>& param) {
-		BC_ARRAY_ONLY("derived& operator +=(const Tensor_Operations<pDeriv>& param)");
+		BC_ASSERT_ASSIGNABLE("derived& operator +=(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
 		evaluate(bi_expr<internal::oper::add_assign>(param));
 		return as_derived();
 	}
 	template<class pDeriv> __BC_host_inline__
 	derived& operator -=(const Tensor_Operations<pDeriv>& param) {
-		BC_ARRAY_ONLY("derived& operator -=(const Tensor_Operations<pDeriv>& param)");
+		BC_ASSERT_ASSIGNABLE("derived& operator -=(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
 		evaluate(bi_expr<internal::oper::sub_assign>(param));
 		return as_derived();
 	}
 	template<class pDeriv> __BC_host_inline__
 	derived& operator /=(const Tensor_Operations<pDeriv>& param) {
-		BC_ARRAY_ONLY("derived& operator /=(const Tensor_Operations<pDeriv>& param)");
+		BC_ASSERT_ASSIGNABLE("derived& operator /=(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
 		evaluate(bi_expr<internal::oper::div_assign>(param));
 		return as_derived();
@@ -92,7 +95,7 @@ public:
 	//pointwise multiply
 	template<class pDeriv> __BC_host_inline__
 	derived& operator %=(const Tensor_Operations<pDeriv>& param) {
-		BC_ARRAY_ONLY("derived& operator %=(const Tensor_Operations<pDeriv>& param)");
+		BC_ASSERT_ASSIGNABLE("derived& operator %=(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
 		evaluate(bi_expr<internal::oper::mul_assign>(param));
 		return as_derived();
@@ -113,7 +116,7 @@ public:
 					 std::conditional_t<ger, 	 binary_expression_t<internal_t_of<param_deriv>, internal::oper::ger<mathlib_t>>,
 					 std::conditional_t<dot,	 binary_expression_t<internal_t_of<param_deriv>, internal::oper::dot<mathlib_t>>, void>>>>>;
 
-		static_assert(!std::is_same<matmul_t, void>::value, "Matrix Multiplication currently does not support broadcasting");
+		static_assert(!std::is_same<matmul_t, void>::value, "INVALID USE OF OPERATOR *");
 
 		return matmul_t(as_derived().internal(), param.as_derived().internal());
 	}
@@ -178,13 +181,6 @@ public:
 		assert_valid(param);
 		return bi_expr<internal::oper::lesser_equal>(param);
 	}
-
-	//alias ----------------------
-
-//
-//	template<int x, class param_derived> auto conv(const Tensor_Operations<param_derived>& tensor) const {
-//		return as_derived().bi_expr<internal::oper::conv<x, mathlib_t>>(tensor.as_derived());
-//	}
 	//-----------------------------------custom expressions--------------------------------------------------//
 
 	template<class functor> __BC_host_inline__
@@ -255,7 +251,8 @@ public:
 	//assert same math library // asserts both memory is allocated on gpu or cpu
 	template<class deriv>__BC_host_inline__
 	void assert_same_ml(const Tensor_Operations<deriv>& tensor) const {
-		static_assert(std::is_same<mathlib_t_of<derived>, mathlib_t_of<deriv>>::value, "mathlib_t must be identical");
+		static_assert(std::is_same<mathlib_t_of<derived>, mathlib_t_of<deriv>>::value,
+				"TENSOR OPERATIONS BETWEEN THE CPU/GPU ARE PROHIBITED");
 	}
 public:
 	auto _normalize(scalar_t min, scalar_t max) const {

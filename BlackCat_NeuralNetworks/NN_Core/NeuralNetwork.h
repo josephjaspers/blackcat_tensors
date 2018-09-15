@@ -29,9 +29,8 @@ struct NeuralNetwork {
 	void write(std::ofstream& os) { network.head().write(os); }
 	void read(std::ifstream& is)  { network.head().read(is);  }
 
-	auto update_weights()  { return network.head().update_weights(); }
-	auto clear_stored_delta_gradients() { return network.head().clear_stored_delta_gradients(); }
-
+	void update_weights()  { network.head().update_weights(); }
+	void clear_stored_delta_gradients() { network.head().clear_stored_delta_gradients(); }
 	void setLearningRate(fp_type learning_rate) { network.head().setLearningRate(learning_rate); }
 };
 

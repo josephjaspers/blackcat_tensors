@@ -46,9 +46,9 @@ public:
 		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
 		init(param);
 	}
-	__BCinline__ const auto inner_shape() const { return m_inner_shape; }
-	__BCinline__ const auto outer_shape() const { return m_outer_shape; }
-	__BCinline__ const auto block_shape() const { return outer_shape(); }
+	__BCinline__ const auto& inner_shape() const { return m_inner_shape; }
+	__BCinline__ const auto& outer_shape() const { return m_outer_shape; }
+	__BCinline__ const auto& block_shape() const { return outer_shape(); }
 
 	__BCinline__ int size() const { return m_outer_shape[dims - 1]; }
 	__BCinline__ int rows() const { return m_inner_shape[0]; }
@@ -126,9 +126,9 @@ struct Shape<1> {
 	__BCinline__ int outer_dimension() const { return 1; }
 	__BCinline__ int leading_dimension(int i) const { return i == 0 ? 1 : i == 1 ? m_inner_shape[0] : 0; }
 	__BCinline__ int block_dimension(int i)       const { return leading_dimension(i); }
-	__BCinline__ const auto inner_shape() const { return m_inner_shape; }
+	__BCinline__ const auto& inner_shape() const { return m_inner_shape; }
 	__BCinline__ const auto outer_shape() const { return l_array<1>([&](auto x) { return this->leading_dimension(x);});}
-	__BCinline__ const auto block_shape() const { return m_inner_shape; }
+	__BCinline__ const auto& block_shape() const { return m_inner_shape; }
 
 	void copy_shape(const Shape<1>& shape) {
 		this->m_inner_shape = shape.m_inner_shape;
