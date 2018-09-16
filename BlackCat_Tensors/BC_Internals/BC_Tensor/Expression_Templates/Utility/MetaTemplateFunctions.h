@@ -8,9 +8,12 @@
 #ifndef SIMPLE_H_
 #define SIMPLE_H_
 #include <type_traits>
-#include "../BlackCat_Internal_Definitions.h"
+#include "../Internal_Common.h"
 namespace BC {
 namespace MTF {
+
+	template<class t,class u> static constexpr bool is_same = std::is_same<t,u>::value;
+
 	static constexpr int max(int x) { return x; }
 	static constexpr int min(int x) { return x; }
 
@@ -19,6 +22,11 @@ namespace MTF {
 
 	template<class... integers>
 	static constexpr int min(int x, integers... ints) { return x < min (ints...) ? x : min(ints...); }
+
+	static constexpr int sum(int x) { return x; }
+
+	template<class... integers>
+	static constexpr int sum(int x, integers... ints) { return x + sum(ints...); }
 
 		//short_hand for const cast
 	template<class T> auto& cc(const T& var) { return const_cast<T&>(var); }
@@ -30,17 +38,17 @@ namespace MTF {
 		template<class U> static constexpr bool excludes = false;
 	};
 	template<class T> struct sequence<T> {
-		template<class U> static constexpr bool of 		 = std::is_same<T, U>::value;
-		template<class U> static constexpr bool contains = std::is_same<T, U>::value;
-		template<class U> static constexpr bool excludes = !std::is_same<T,U>::value;
+		template<class U> static constexpr bool of 		 = is_same<T, U>;
+		template<class U> static constexpr bool contains = is_same<T, U>;
+		template<class U> static constexpr bool excludes = !is_same<T,U>;
 		using head = T;
 		using tail = T;
 	};
 
 	template<class T, class... Ts> struct sequence<T, Ts...> {
-		template<class U> static constexpr bool of 			= std::is_same<T, U>::value && sequence<Ts...>::template of<U>;
-		template<class U> static constexpr bool contains 	= std::is_same<T, U>::value || sequence<Ts...>::template contains<U>;
-		template<class U> static constexpr bool excludes 	= !std::is_same<T,U>::value && sequence<Ts...>::template excludes<U>;
+		template<class U> static constexpr bool of 			= is_same<T, U> && sequence<Ts...>::template of<U>;
+		template<class U> static constexpr bool contains 	= is_same<T, U> || sequence<Ts...>::template contains<U>;
+		template<class U> static constexpr bool excludes 	= !is_same<T,U> && sequence<Ts...>::template excludes<U>;
 		using head = T;
 		using tail = typename sequence<Ts...>::tail;
 	};

@@ -53,6 +53,10 @@ struct InputLayer : Layer_Base<derived> {
 		this->next().setLearningRate(learning_rate);
 	}
 
+	void init_input_view(vec& workspace, int& offset, int batch_size) {
+		this->next().init_input_view(workspace, offset, batch_size);
+	}
+
 };
 }
 }

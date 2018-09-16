@@ -8,7 +8,7 @@
 #ifndef SHAPE_BASE_H_
 #define SHAPE_BASE_H_
 
-#include "BlackCat_Internal_Definitions.h"
+#include "Internal_Common.h"
 
 namespace BC {
 namespace internal {
@@ -57,7 +57,7 @@ public:
 		 if (derived::DIMS() == 1)
 			 if (i == 1)
 				 return 1;
-		 return os(i)[i];
+		 return os()[i];
 	 }
 };
 

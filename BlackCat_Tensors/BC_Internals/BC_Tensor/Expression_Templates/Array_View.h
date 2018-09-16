@@ -22,7 +22,7 @@ struct Array_View
 	using scalar_t = scalar;
 	using mathlib_t = allocator_t;
 
-	scalar_t* array = nullptr;
+	const scalar_t* array = nullptr;
 
 	Array_View() 				   = default;
 	Array_View(const Array_View& ) = default;
@@ -39,19 +39,16 @@ struct Array_View
 
 	template<class tensor_t, typename = std::enable_if_t<tensor_t::DIMS() == dimension>>
 	Array_View(const Array_Base<tensor_t, dimension>& tensor)
-		:  array(const_cast<tensor_t&>(static_cast<const tensor_t&>(tensor)).memptr()) {
+		:  array(tensor) {
 
 		this->copy_shape(static_cast<const tensor_t&>(tensor));
 	}
 	__BCinline__ const scalar_t* memptr() const  { return array; }
-//	__BCinline__ 	   scalar_t* memptr() 	     { return array; }
-
-
 
 	void destroy() {}
 };
-
 }
+
 	template<int x, class s, class a>
 	struct BC_array_move_constructible_overrider<internal::Array_View<x,s,a>> {
 		static constexpr bool boolean = true;
@@ -68,7 +65,7 @@ struct Array_View
 	};
 
 	template<int x, class s, class a>
-	struct BC_array_copy_assignable_overrider<internal::Array_View<x,s,a>> {
+	struct BC_array_copy_assignable_overrider<internal::Array_View<x,s,a>,  std::enable_if_t<is_array<internal::Array_View<x,s,a>>()>> {
 		static constexpr bool boolean = false;
 	};
 

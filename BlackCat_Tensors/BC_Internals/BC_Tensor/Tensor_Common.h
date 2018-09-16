@@ -13,6 +13,9 @@
 #include <type_traits>
 namespace BC {
 
+
+#define __BC_host_inline__ inline __attribute__((always_inline)) __attribute__((hot))
+
 template<int> class DISABLED;
 template<class> class Tensor_Base;
 

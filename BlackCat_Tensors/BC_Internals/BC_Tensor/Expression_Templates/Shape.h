@@ -8,7 +8,7 @@
 #ifndef INTERNAL_SHAPE_H_
 #define INTERNAL_SHAPE_H_
 
-#include "BlackCat_Internal_Definitions.h"
+#include "Internal_Common.h"
 #include "Shape_Base.h"
 
 namespace BC {

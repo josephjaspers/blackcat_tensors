@@ -10,6 +10,7 @@
 #define TENSOR_CORE_BASE_H_
 
 #include "Internal_Type_Interface.h"
+#include "Internal_Common.h"
 #include "Shape.h"
 
 namespace BC {
@@ -18,7 +19,6 @@ namespace internal {
 /*
  * Array_Interface is a common interface amongst all tensor_core subclasses,
  */
-
 
 //required forward decls
 template<class> class Array_Slice;
@@ -29,8 +29,6 @@ template<class> class Array_Row;
 template<int> class Array_Reshape;
 template<int> class Array_Chunk;
 
-
-//Many template params
 template<class derived, int DIMENSION,
 template<class> class 	_Tensor_Slice 	= Array_Slice,
 template<class> class 	_Tensor_Range	= Array_Slice_Range,
@@ -52,9 +50,7 @@ struct Array_Base : BC_internal_interface<derived>, BC_Array {
 
 	template<int dimension> using reshape_t = typename _Tensor_Reshape<dimension>::template implementation<derived>;
 	template<int dimension> using chunk_t 	= typename _Tensor_Chunk<dimension>::template implementation<derived>;
-
 private:
-
 	__BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }
 	__BCinline__ 	   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
 
@@ -83,23 +79,41 @@ public:
 
 	__BCinline__ const auto _slice(int i) const {
 		//change to if constexpr once NVCC supports it
-		struct ret_scalar { __BCinline__ static auto impl(const Array_Base& self, int i) { return self._scalar(i); } };
-		struct ret_slice  { __BCinline__ static auto impl(const Array_Base& self, int i) {
-			return slice_t(self.slice_ptr(i), self.as_derived()); } };
+
+		struct ret_scalar {
+			static auto impl(const Array_Base& self, int i) {
+				return self._scalar(i);
+			}
+		};
+
+		struct ret_slice {
+			static auto impl(const Array_Base& self, int i) {
+				return slice_t(self.slice_ptr(i), self.as_derived());
+			}
+		};
 
 		using xslice_t = std::conditional_t<DIMS() == 1, ret_scalar,
-				std::conditional_t<(DIMS() > 1), ret_slice, void>>;
+		std::conditional_t<(DIMS() > 1), ret_slice, void>>;
 
 		return xslice_t::impl(*this);
 	}
 	__BCinline__ auto _slice(int i) {
 		//change to if constexpr once NVCC supports it
-		struct ret_scalar { __BCinline__ static auto impl(const Array_Base& self, int i) { return self._scalar(i); } };
-		struct ret_slice  { __BCinline__ static auto impl(const Array_Base& self, int i) {
-			return slice_t(self.slice_ptr(i), self.as_derived()); } };
+
+		struct ret_scalar {
+			static auto impl(const Array_Base& self, int i) {
+				return self._scalar(i);
+			}
+		};
+
+		struct ret_slice {
+			static auto impl(const Array_Base& self, int i) {
+				return slice_t(self.slice_ptr(i), self.as_derived());
+			}
+		};
 
 		using xslice_t = std::conditional_t<DIMS() == 1, ret_scalar,
-				std::conditional_t<(DIMS() > 1), ret_slice, void>>;
+							std::conditional_t<(DIMS() > 1), ret_slice, void>>;
 
 		return xslice_t::impl(*this, i);
 	}
@@ -132,11 +146,13 @@ public:
 
 	//------------------------------------------Curried Reshapers ---------------------------------------//
 
-	template<int dimensions> const auto _chunk(BC::array<DIMS(), int> point, BC::array<dimensions, int> shape) const{
+	template<int dimensions>
+	const auto _chunk(BC::array<DIMS(), int> point, BC::array<dimensions, int> shape) const{
 		return chunk_t<dimensions>(&as_derived()[dims_to_index(point)], this->as_derived(), shape);
 	}
 
-	template<int dimensions> auto _chunk(BC::array<DIMS(), int> point, BC::array<dimensions, int> shape) {
+	template<int dimensions>
+	auto _chunk(BC::array<DIMS(), int> point, BC::array<dimensions, int> shape) {
 		return chunk_t<dimensions>(&as_derived()[dims_to_index(point)], this->as_derived(), shape);
 	}
 
@@ -192,8 +208,6 @@ private:
 		return index;
 	}
 	template<int D> __BCinline__ int dims_to_index_reverse(BC::array<D, int> var) const {
-		static_assert(D >= DIMS(), "converting array_to dimension must have at least as many indices as the tensor");
-
 		int index = var[DIMS() - 1];
 		for(int i = 0; i < DIMS() - 1; ++i) {
 			index += this->as_derived().leading_dimension(i) * var[DIMS() - i - 2];

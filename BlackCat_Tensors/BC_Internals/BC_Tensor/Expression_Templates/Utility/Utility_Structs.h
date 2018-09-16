@@ -8,7 +8,7 @@
 #ifndef INTERNAL_SHAPES_H_
 #define INTERNAL_SHAPES_H_
 
-#include "../BlackCat_Internal_Definitions.h"
+#include "../Internal_Common.h"
 /*
  * Defines stack array and lambda array
  * These are just two trivially classes used for storing small amounts of homogenous internal types, generally ints
@@ -35,7 +35,7 @@ namespace BC {
 
 
 	//---------------------short_hand----------------------//
-	template<class T, class... vals> __BChd__
+	template<class T, class... vals>
 	auto make_array(T front, vals... values) { return array<sizeof...(values) + 1, T> {front, values...}; }//(front, values...); }
 
 

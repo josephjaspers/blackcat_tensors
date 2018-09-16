@@ -8,7 +8,6 @@
 #ifndef BLACKCAT_COMPILERDEFINITIONS_H_
 #define BLACKCAT_COMPILERDEFINITIONS_H_
 
-#include <type_traits>
 namespace BC {
 
 #define BLACKCAT_TENSORS_ASSERT_VALID							//Ensures basic checks
@@ -28,6 +27,8 @@ class BC_Array {};
 class BLAS_FUNCTION {};
 
 }
+#include <type_traits>
+#include "Internal_Type_Traits.h"
 #include "Utility/MetaTemplateFunctions.h"
 #include "Utility/ShapeHierarchy.h"
 #endif /* BLACKCAT_COMPILERDEFINITIONS_H_ */
