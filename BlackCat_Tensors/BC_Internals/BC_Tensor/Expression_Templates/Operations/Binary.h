@@ -120,28 +120,28 @@ class matrix_oper {};
 	};
 	struct equal {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
-			return l == r ? 1 : 0;
+			return l == r;
 		}
 	};
 
 	struct greater {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
-			return l > r ? 1 : 0;
+			return l > r;
 		}
 	};
 	struct lesser {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
-			return l < r ? 1 : 0;
+			return l < r;
 		}
 	};
 	struct greater_equal {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
-			return l >= r ? 1 : 0;
+			return l >= r;
 		}
 	};
 	struct lesser_equal {
 		template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
-			return l <= r ? 1 : 0;
+			return l <= r;
 		}
 	};
 	struct max {

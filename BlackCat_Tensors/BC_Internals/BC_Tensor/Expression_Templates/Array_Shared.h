@@ -39,9 +39,9 @@ struct Array_Shared
 
 	template<class tensor_t, typename = std::enable_if_t<tensor_t::DIMS() == dimension>>
 	Array_Shared(Array_Base<tensor_t, dimension>& tensor)
-		:  array(tensor) {
+		:  Shape<dimension>(), array(tensor) {
 
-		this->copy_shape(static_cast<const tensor_t&>(tensor));
+		this->copy_shape(static_cast<tensor_t&>(tensor));
 	}
 	__BCinline__  const scalar_t* memptr() const  { return array; }
 	__BCinline__  		scalar_t* memptr()  	  { return array; }

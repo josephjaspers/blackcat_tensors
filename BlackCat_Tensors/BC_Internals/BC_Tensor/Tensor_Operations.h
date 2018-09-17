@@ -249,7 +249,6 @@ public:
 //#endif
 	}
 
-	//assert same math library // asserts both memory is allocated on gpu or cpu
 	template<class deriv>
 	void assert_same_ml(const Tensor_Operations<deriv>& tensor) const {
 		static_assert(std::is_same<mathlib_t_of<derived>, mathlib_t_of<deriv>>::value,
@@ -266,11 +265,6 @@ public:
 		return tensor.un_expr(internal::oper::absolute());
 	}
 
-	struct Alias;
-	friend class Alias;
-	Alias alias() {
-		return Alias (as_derived());
-	}
 
 	struct Alias{
 
@@ -304,6 +298,12 @@ public:
 			return tensor.as_derived();
 		}
 	};
+
+	friend class Alias;
+
+	Alias alias() {
+		return Alias (as_derived());
+	}
 
 
 };

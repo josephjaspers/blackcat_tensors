@@ -55,7 +55,7 @@ public:
 	__BCinline__ int cols() const { return m_inner_shape[1]; }
 	__BCinline__ int dimension(int i) const { return m_inner_shape[i]; }
 	__BCinline__ int outer_dimension() const { return m_inner_shape[dims - 2]; }
-	__BCinline__ int leading_dimension(int i) const { return m_outer_shape[i]; }
+	__BCinline__ int leading_dimension(int i) const { return i < dims ? m_outer_shape[i] : 0; }
 	__BCinline__ int block_dimension(int i) const  { return leading_dimension(i); }
 
 protected:
@@ -109,13 +109,16 @@ template<>
 struct Shape<1> {
 
 	BC::array<1, int> m_inner_shape;
+	BC::array<1, int> m_outer_shape;
+
 	Shape() = default;
-	Shape (BC::array<1, int> param) : m_inner_shape(param) {}
+	Shape (BC::array<1, int> param) : m_inner_shape(param), m_outer_shape(1) {}
 
 	template<int dim, class f, class int_t>
 	Shape (lambda_array<dim, int_t, f> param) {
 		static_assert(dim >= 1, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
 		m_inner_shape[0] = param[0];
+		m_outer_shape[0] = 1;
 	}
 
 	Shape(int length_) : m_inner_shape(length_) {}
@@ -124,22 +127,25 @@ struct Shape<1> {
 	__BCinline__ int cols() const { return 1; }
 	__BCinline__ int dimension(int i) const { return i == 0 ? m_inner_shape[0] : 1; }
 	__BCinline__ int outer_dimension() const { return 1; }
-	__BCinline__ int leading_dimension(int i) const { return i == 0 ? 1 : i == 1 ? m_inner_shape[0] : 0; }
-	__BCinline__ int block_dimension(int i)       const { return leading_dimension(i); }
+	__BCinline__ int leading_dimension(int i) const { return i == 0 ? m_outer_shape[0] : 0; }
+	__BCinline__ int block_dimension(int i)   const { return leading_dimension(i); }
 	__BCinline__ const auto& inner_shape() const { return m_inner_shape; }
-	__BCinline__ const auto outer_shape() const { return l_array<1>([&](auto x) { return this->leading_dimension(x);});}
+	__BCinline__ const auto& outer_shape() const { return m_outer_shape; }
 	__BCinline__ const auto& block_shape() const { return m_inner_shape; }
 
 	void copy_shape(const Shape<1>& shape) {
 		this->m_inner_shape = shape.m_inner_shape;
+		this->m_outer_shape = shape.m_outer_shape;
 	}
 
 	template<class deriv> void copy_shape(const Shape_Base<deriv>& shape) {
 		this->m_inner_shape[0] = shape.dimension(0);
+		this->m_outer_shape[0] = shape.dimension(0);
 	}
 
 	void swap_shape(Shape<1>& shape){
 		std::swap(m_inner_shape, shape.m_inner_shape);
+		std::swap(m_outer_shape, shape.m_outer_shape);
 	}
 
 

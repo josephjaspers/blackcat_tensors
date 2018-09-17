@@ -1,4 +1,4 @@
-/*
+ /*
  * Layer.h
  *
  *  Created on: Mar 1, 2018
@@ -48,7 +48,12 @@ public:
 	void for_each(function f) {
 		f(as_derived());
 	}
-
+	const auto& x() const {
+		return prev().y;
+	}
+	auto& x() {
+		return prev().y;
+	}
 };
 
 }

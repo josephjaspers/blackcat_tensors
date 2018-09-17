@@ -16,22 +16,26 @@
 namespace BC {
 namespace NN {
 
+int sum(int x) { return x; }
+
 template<class... integers>
 int sum(int x, integers... ints) {
 	return x + sum(ints...);
 }
-int sum(int x) { return x; }
 
 template<template<class> class... layers>
 struct NeuralNetwork {
 
 	Chain<InputLayer, layers..., OutputLayer> network;
 
-	int batch_size = 1;
+	int batch_size =  1;
+	int input_size = -1;
 //	Linker<InputLayer, layers..., OutputLayer> network;
 
 	template<class... integers>
-	NeuralNetwork(integers... architecture) : network(architecture...) {}
+	NeuralNetwork(integers... architecture) : network(architecture...) {
+		input_size = sum(architecture...);
+	}
 
 	template<class tensor> auto forward_propagation				(const tensor& x) { return network.head().forward_propagation(x); }
 	template<class tensor> auto forward_propagation_express		(const tensor& x) { return network.head().forward_propagation(x); }
@@ -39,7 +43,7 @@ struct NeuralNetwork {
 	template<class tensor> auto back_propagation_throughtime() 					  { return network.tail().back_propagation_throughtime(); }
 
 
-	void set_batch_size(int size) { batch_size = size; network.head().set_batch_size(size); initlayer_inputs(); }
+	void set_batch_size(int size) { batch_size = size; network.head().set_batch_size(size); }// initlayer_inputs(); }
 	void write(std::ofstream& os) { network.head().write(os); }
 	void read(std::ifstream& is)  { network.head().read(is);  }
 
@@ -48,7 +52,9 @@ struct NeuralNetwork {
 	void setLearningRate(fp_type learning_rate) { network.head().setLearningRate(learning_rate); }
 
 	void initlayer_inputs() {
+		std::cout << " init " << std::endl;
 		int input_base_index = 0;
+		forward_propagation_memories.resize(input_size * batch_size);
 		auto& ws = forward_propagation_memories.get_workspace();
 		network.head().init_input_view(ws, input_base_index, batch_size);
 	}

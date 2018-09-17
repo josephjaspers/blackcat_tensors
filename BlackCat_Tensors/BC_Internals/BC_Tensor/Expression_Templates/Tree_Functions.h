@@ -70,20 +70,6 @@ static constexpr bool is_nonlinear_op() {
 	return  !MTF::seq_contains<T, oper::add, oper::sub> && !is_blas_func<T>();
 }
 template<class T>
-static constexpr bool is_linear_assignment_op() {
-	return MTF::seq_contains<T, oper::add_assign, oper::sub_assign>;
-}
-template<class T>
-static constexpr bool is_assignment_op() {
-	return MTF::seq_contains<T, oper::assign, oper::add_assign,oper::sub_assign, oper::mul_assign,oper::div_assign>;
-}
-
-template<class T>
-static constexpr bool is_standard_assignment_op() {
-	return MTF::seq_contains<oper::assign>;
-}
-
-template<class T>
 static constexpr int alpha_of() {
 	return scalar_modifer<std::decay_t<T>>::mod::alpha;
 }

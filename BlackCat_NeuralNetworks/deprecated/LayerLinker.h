@@ -60,7 +60,7 @@ namespace util {
 }
 
 template<template<class> class... layers>
-class Linker : public LayerLinker<Linker<layers...>, 0, layers...>{
+class Linker : public LayerLinker<Linker<layers...>, 0, layers...> {
 
 	using parent = LayerLinker<Linker<layers...>, 0, layers...>;
 
@@ -82,16 +82,10 @@ public:
 		workspace = vec(x * workspace_size);
 		batch_size = x;
 	}
-
-
-
-
-
 };
 
 
 }
 }
-
 
 #endif /* DEPRECATED_LAYERLINKER_H_ */

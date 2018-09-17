@@ -48,6 +48,7 @@ struct Array_View
 	void destroy() {}
 };
 }
+//------------------------------------------------type traits--------------------------------------------------------------//
 
 	template<int x, class s, class a>
 	struct BC_array_move_constructible_overrider<internal::Array_View<x,s,a>> {

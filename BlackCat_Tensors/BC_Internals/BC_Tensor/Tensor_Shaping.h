@@ -64,19 +64,6 @@ public:
 	const auto operator() (int i) const { return scalar(i); }
 		  auto operator() (int i) 	    { return scalar(i); }
 
-	const auto& operator() () const { return *this; }
-		  auto& operator() () 	    { return *this; }
-
-	template<class... integers> const auto operator() (int i, integers... ints) const  {
-		static_assert(MTF::seq_of<int, integers...>, "operator()(integers...) -> PARAMS MUST BE INTEGER LIST");
-		return (*this)[i](ints...);
-	}
-
-	template<class... integers> 	  auto operator() (int i, integers... ints) {
-		static_assert(MTF::seq_of<int, integers...>, "operator()(integers...) -> PARAMS MUST BE INTEGER LIST");
-		return (*this)[i](ints...);
-	}
-
 };
 
 }

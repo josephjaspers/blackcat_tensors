@@ -16,9 +16,9 @@ namespace NN {
 template<class derived>
 struct OutputLayer : Layer_Base<derived> {
 
-	vec zero = vec(this->OUTPUTS);
+	const mat& x_() const { return this->prev().y; }
 
-	auto& x() { return this->prev().y; }
+	vec zero = vec(this->OUTPUTS);
 
 public:
 
@@ -26,14 +26,14 @@ public:
 		zero.zero();
 	}
 
-	template<class t> mat forward_propagation(const expr::mat<t>& x) {
+	template<class t> auto forward_propagation(const expr::mat<t>& x) {
 		return x;
 	}
 	template<class t> auto forward_propagation_express(const expr::mat<t>& x) {
 		return x;
 	}
 	template<class t> auto back_propagation(const expr::mat<t>& exp) {
-		return this->prev().back_propagation(x() - exp);
+		return this->prev().back_propagation(x_() - exp);
 	}
 	 auto back_propagation_throughtime() {
 		return this->prev().back_propagation(zero);
@@ -47,10 +47,6 @@ public:
 	void read(std::ifstream& os) {}
 	void setLearningRate(fp_type learning_rate) {}
 
-
-	template<class function>
-	void for_each(function f) {}
-	void init_input_view(vec& workspace, int& offset, int batch_size) {	}
 };
 
 }

@@ -21,6 +21,12 @@ using vec_view = BC::Vector_View<fp_type, ml>;
 using mat_view = BC::Matrix_View<fp_type, ml>;
 using cube_view = BC::Cube_View<fp_type, ml>;
 
+
+using scal_shared = BC::Scalar_Shared<fp_type, ml>;
+using vec_shared = BC::Vector_Shared<fp_type, ml>;
+using mat_shared = BC::Matrix_Shared<fp_type, ml>;
+using cube_shared = BC::Cube_Shared<fp_type, ml>;
+
 }
 }
 #endif /* DEFAULTS_TENSORS_H_ */
