@@ -16,13 +16,12 @@ namespace NN {
 template<class derived>
 struct InputLayer : Layer_Base<derived> {
 
-	InputLayer(int inputs) : Layer_Base<derived>(inputs) {}
+	InputLayer(int inputs, int outputs) : Layer_Base<derived>(inputs, outputs) {}
 
 	mat_view y;
 
 	template<class tensor> const auto& forward_propagation(const tensor& x) {
-		y = mat_view(x); return y;
-//		return this->next().forward_propagation(y);
+		return y = mat_view(x);
 	}
 
 	template<class tensor> auto forward_propagation_express(const tensor& x) const {
@@ -33,25 +32,13 @@ struct InputLayer : Layer_Base<derived> {
 		return dy;
 	}
 
-	void set_batch_size(int x) {
-		this->next().set_batch_size(x);
-	}
+	void set_batch_size(int x) {}
 
-	void update_weights() {
-		this->next().update_weights();
-	}
-	void clear_stored_delta_gradients() {
-		this->next().clear_stored_delta_gradients();
-	}
-	void write(std::ofstream& os) {
-		this->next().write(os);
-	}
-	void read(std::ifstream& is) {
-		this->next().read(is);
-	}
-	void setLearningRate(fp_type learning_rate) {
-		this->next().setLearningRate(learning_rate);
-	}
+	void update_weights() {}
+	void clear_stored_delta_gradients() {}
+	void write(std::ofstream& os) {}
+	void read(std::ifstream& is) {}
+	void setLearningRate(fp_type learning_rate) {}
 };
 }
 }

@@ -21,7 +21,6 @@ struct Array_View
 
 	using scalar_t = scalar;
 	using mathlib_t = allocator_t;
-
 	const scalar_t* array = nullptr;
 
 	Array_View() 				   = default;
@@ -35,6 +34,11 @@ struct Array_View
 
 	void swap_array(Array_View& tensor) {
 		std::swap(array, tensor.array);
+	}
+
+	void copy_init(const Array_View& view) {
+		this->copy_shape(view);
+		this->array = view.array;
 	}
 
 	template<class tensor_t, typename = std::enable_if_t<tensor_t::DIMS() == dimension>>

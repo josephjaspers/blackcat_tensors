@@ -16,28 +16,20 @@ namespace NN {
 template<class derived>
 struct OutputLayer : Layer_Base<derived> {
 
-	const mat& x_() const { return this->prev().y; }
-
-	vec zero = vec(this->OUTPUTS);
+	mat_view x;
 
 public:
 
-	OutputLayer(int inputs) : Layer_Base<derived>(inputs) {
-		zero.zero();
-	}
+	OutputLayer(int inputs) : Layer_Base<derived>(inputs, inputs) {}
 
-	template<class t> const auto& forward_propagation(const expr::mat<t>& x) {
-		return x;
+	template<class t> const auto& forward_propagation(const expr::mat<t>& x_) {
+		return x = mat_view(x_);
 	}
-	template<class t> auto forward_propagation_express(const expr::mat<t>& x) {
-		return x;
+	template<class t> auto forward_propagation_express(const expr::mat<t>& x_) {
+		return x = mat_view(x_);
 	}
 	template<class t> auto back_propagation(const expr::mat<t>& exp) {
-		return x_() - exp;
-//		return this->prev().back_propagation(x_() - exp);
-	}
-	 auto back_propagation_throughtime() {
-		return this->prev().back_propagation(zero);
+		return x - exp;
 	}
 
 

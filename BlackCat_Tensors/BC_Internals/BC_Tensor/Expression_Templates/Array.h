@@ -46,6 +46,12 @@ protected:
 	template<class U> Array(U param, scalar_t* array_) : array(array_), Shape<DIMS()>(param) {}
 	Array(scalar_t* array_) : array(array_) {}
 
+
+	void copy_init(const Array& array_copy) {
+		this->copy_shape(array_copy);
+		mathlib_t::initialize(array, this->size());
+		evaluate_to(*this, array_copy);
+	}
 public:
 	__BCinline__ const scalar_t* memptr() const { return array; }
 	__BCinline__	   scalar_t* memptr()  	    { return array; }
@@ -101,6 +107,11 @@ struct Array<0, T, mathlib> : Array_Base<Array<0, T, mathlib>, 0>, public Shape<
 
 	__BCinline__ const scalar_t* memptr() const { return array; }
 	__BCinline__	   scalar_t* memptr()  	   { return array; }
+
+	void copy_init(const Array& array_copy) {
+		mathlib_t::initialize(array, this->size());
+		evaluate_to(*this, array_copy);
+	}
 
 	void destroy() {
 		mathlib_t::destroy(array);

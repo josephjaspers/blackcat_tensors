@@ -18,11 +18,12 @@ struct FeedForward : public Layer_Base<derived> {
 public:
 
 	using Layer_Base<derived>::lr;	//the learning rate
-	using Layer_Base<derived>::x;
+//	using Layer_Base<derived>::x;
 
 
 	mat dy;							//error
 	mat y;							//outputs
+	mat_view x;
 
 	mat w;							//weights
 	vec b;							//biases
@@ -31,8 +32,8 @@ public:
 	vec b_gradientStorage;		//bias gradient storage
 
 
-	FeedForward(int inputs) :
-		Layer_Base<derived>(inputs),
+	FeedForward(int inputs, int outputs) :
+		Layer_Base<derived>(inputs, outputs),
 			w(this->OUTPUTS, inputs),
 			b(this->OUTPUTS),
 
@@ -44,56 +45,41 @@ public:
 		init_storages();
 	}
 
-	template<class t> const auto& forward_propagation(const expr::mat<t>& x) {
-		y = g(w * x + b);
+	template<class t> const auto& forward_propagation(const expr::mat<t>& x_) {
+		x = mat_view(x_);
 
-		return y;
+		return y = g(w * x + b);
 	}
 	template<class t> auto back_propagation(const expr::mat<t>& dy_) {
 		dy = dy_;
 
-		w_gradientStorage -= dy * x().t();
+		w_gradientStorage -= dy * x.t();
 		b_gradientStorage -= dy;
 
-		return w.t() * dy % gd(x());
-//		return this->prev().back_propagation(w.t() * dy % gd(x()));
+		return w.t() * dy % gd(x);
 	}
-	template<class t> auto forward_propagation_tess(const expr::mat<t>& x) const {
-		return this->next().forward_propagation_tess(g(w * x + b));
-	}
-
 	void update_weights() {
 		w += w_gradientStorage * lr;
 		b += b_gradientStorage * lr;
-
-		this->next().update_weights();
 	}
 
 	void clear_stored_delta_gradients() {
 		w_gradientStorage.fill(0);
 		b_gradientStorage.fill(0);
-
-		this->next().clear_stored_delta_gradients();
 	}
 
 	void set_batch_size(int x) {
 		y = mat(this->OUTPUTS, x);
 		dy = mat(this->OUTPUTS, x);
-
-		this->next().set_batch_size(x);
 	}
 
 	void write(std::ofstream& os) {
 		w.write(os);
 		b.write(os);
-
-		this->next().write(os);
 	}
 	void read(std::ifstream& is) {
 		w.read(is);
 		b.read(is);
-
-		this->next().read(is);
 	}
 	void init_storages() {
 		w_gradientStorage = mat(this->OUTPUTS, this->INPUTS);

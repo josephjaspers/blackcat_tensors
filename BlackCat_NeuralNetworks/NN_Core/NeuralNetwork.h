@@ -16,74 +16,25 @@
 namespace BC {
 namespace NN {
 
-int sum(int x) { return x; }
-
-template<class... integers>
-int sum(int x, integers... ints) {
-	return x + sum(ints...);
-}
-
 template<template<class> class... layers>
 struct NeuralNetwork {
 
 	Chain<InputLayer, layers..., OutputLayer> network;
 
-	int batch_size =  1;
-	int input_size = -1;
-//	Linker<InputLayer, layers..., OutputLayer> network;
-
 	template<class... integers>
-	NeuralNetwork(integers... architecture) : network(architecture...) {
-		input_size = sum(architecture...);
-	}
+	NeuralNetwork(integers... architecture) : network(architecture...) {}
 
-	template<class tensor> auto forward_propagation				(const tensor& x) { return network.fp(x); }
-	template<class tensor> auto forward_propagation_express		(const tensor& x) { return network.tail().forward_propagation(x); }
-	template<class tensor> auto back_propagation				(const tensor& y) { return network.backprop(y); }
-	template<class tensor> auto back_propagation_throughtime() 					  { return network.tail().back_propagation_throughtime(); }
+	template<class tensor> auto forward_propagation	(const tensor& x) { return network.fp(x); }
+	template<class tensor> auto back_propagation	(const tensor& y) { return network.backprop(y); }
 
 
-	void set_batch_size(int size) { batch_size = size; network.head().set_batch_size(size); }// initlayer_inputs(); }
-	void write(std::ofstream& os) { network.head().write(os); }
-	void read(std::ifstream& is)  { network.head().read(is);  }
+	void set_batch_size(int size) { network.set_batch_size(size); }// initlayer_inputs(); }
+	void write(std::ofstream& os) { network.write(os); }
+	void read(std::ifstream& is)  { network.read(is);  }
 
-	void update_weights()  { network.head().update_weights(); }
-	void clear_stored_delta_gradients() { network.head().clear_stored_delta_gradients(); }
-	void setLearningRate(fp_type learning_rate) { network.head().setLearningRate(learning_rate); }
-
-	void initlayer_inputs() {
-		std::cout << " init " << std::endl;
-		int input_base_index = 0;
-		forward_propagation_memories.resize(input_size * batch_size);
-		auto& ws = forward_propagation_memories.get_workspace();
-		network.head().init_input_view(ws, input_base_index, batch_size);
-	}
-	struct {
-
-		int ws_size() {
-			return current_timestamp.size();
-		}
-
-		vec& get_workspace() {
-			return current_timestamp;
-		}
-
-		vec current_timestamp;
-		std::forward_list<vec> previous_timestamps;
-
-		void resize(int new_sz) {
-			if (current_timestamp.size() != new_sz)
-				current_timestamp = vec(new_sz);
-		}
-		void push() {
-			int workspace_sz = current_timestamp.size();
-			previous_timestamps.push_front(std::move(current_timestamp));
-			current_timestamp = vec(workspace_sz);
-		}
-		void pop() {
-			previous_timestamps.pop_front();
-		}
-	} forward_propagation_memories;
+	void update_weights()  						{ network.update_weights(); }
+	void clear_stored_delta_gradients() 		{ network.clear_stored_delta_gradients(); }
+	void setLearningRate(fp_type learning_rate) { network.setLearningRate(learning_rate); }
 };
 
 }

@@ -68,8 +68,9 @@ public:
 	Tensor_Base( 	  parent&& param) : internal_t(param) {}
 
 
-	Tensor_Base(copy_parameter tensor) : internal_t(tensor.inner_shape()) {
-		mathlib_t::copy(this->internal(), tensor.internal(), this->size());
+	Tensor_Base(copy_parameter tensor) {
+		this->copy_init(tensor);
+//		mathlib_t::copy(this->internal(), tensor.internal(), this->size());
 	}
 
 	Tensor_Base(move_parameter tensor) {
