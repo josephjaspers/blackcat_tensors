@@ -7,6 +7,7 @@
 namespace BC {
 namespace NN {
 
+//Basically a specialized tuple
 
 template<int index, class derived, template<class> class...> struct LayerChain;
 template<class> class OutputLayer;
@@ -70,34 +71,6 @@ template<class> class InputLayer;
 	};
 
 	//HEAD
-	template<class chain_Base, template<class> class... lst>
-	struct LayerChain<0, chain_Base, InputLayer, lst...>
-		: public LayerChain<1, LayerChain<0, chain_Base, InputLayer, lst...>, lst...>,
-		  public InputLayer<LayerChain<0, chain_Base, InputLayer, lst...>> {
-
-		static constexpr int index = 0;
-		using self = LayerChain<index, chain_Base, InputLayer, lst...>;
-		using parent = LayerChain<index + 1, self, lst...>;
-		using type = InputLayer<self>;
-
-
-		template<class param, class... integers>
-		LayerChain(param x, integers... dims) : parent(x, dims...) {}
-
-		bool hasNext() const { return true; }
-
-		const auto& data() const { return static_cast<const type&>(*this); }
-			  auto& data()  	 { return static_cast<		type&>(*this); }
-
-		const auto& tail() const { return next().tail(); }
-			  auto& tail() 		 { return static_cast<parent&>(*this).tail(); }
-		const auto& head() const { return data(); }
-			  auto& head()  	 { return data(); }
-		const auto& next() const { return static_cast<parent&>(*this).data(); }
-			  auto& next()  	 { return static_cast<parent&>(*this).data(); }
-	};
-
-	//HEAD
 	template<template<class> class... lst>
 	struct Chain
 		: public LayerChain<0, Chain<lst...>, lst...>{
@@ -105,8 +78,10 @@ template<class> class InputLayer;
 		using self = Chain<lst...>;
 		using parent = LayerChain<0, self, lst...>;
 
+		auto& head() { return this->data(); }
+
 		template<class... integers>
-		Chain(integers... dims) : parent(dims...) {}
+		Chain(int x, integers... dims) : parent(x, x, dims...) {} //first layer is always input layer
 
 	};
 

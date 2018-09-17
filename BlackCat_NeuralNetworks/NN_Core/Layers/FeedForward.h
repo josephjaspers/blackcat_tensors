@@ -97,7 +97,6 @@ public:
 	void init_storages() {
 		w_gradientStorage = mat(this->OUTPUTS, this->INPUTS);
 		b_gradientStorage = vec(this->OUTPUTS);
-
 		w_gradientStorage.fill(0);
 		b_gradientStorage.fill(0);
 	}

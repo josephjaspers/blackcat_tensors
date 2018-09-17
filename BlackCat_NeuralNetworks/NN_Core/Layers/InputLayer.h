@@ -16,7 +16,7 @@ namespace NN {
 template<class derived>
 struct InputLayer : Layer_Base<derived> {
 
-	InputLayer() : Layer_Base<derived>(0) {}
+	InputLayer(int inputs) : Layer_Base<derived>(inputs) {}
 
 	mat_view y;
 
