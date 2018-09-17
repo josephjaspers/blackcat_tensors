@@ -26,14 +26,15 @@ public:
 		zero.zero();
 	}
 
-	template<class t> auto forward_propagation(const expr::mat<t>& x) {
+	template<class t> const auto& forward_propagation(const expr::mat<t>& x) {
 		return x;
 	}
 	template<class t> auto forward_propagation_express(const expr::mat<t>& x) {
 		return x;
 	}
 	template<class t> auto back_propagation(const expr::mat<t>& exp) {
-		return this->prev().back_propagation(x_() - exp);
+		return x_() - exp;
+//		return this->prev().back_propagation(x_() - exp);
 	}
 	 auto back_propagation_throughtime() {
 		return this->prev().back_propagation(zero);

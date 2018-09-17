@@ -20,9 +20,9 @@ struct InputLayer : Layer_Base<derived> {
 
 	mat_view y;
 
-	template<class tensor> auto forward_propagation(const tensor& x) {
-		y = mat_view(x);
-		return this->next().forward_propagation(y);
+	template<class tensor> const auto& forward_propagation(const tensor& x) {
+		y = mat_view(x); return y;
+//		return this->next().forward_propagation(y);
 	}
 
 	template<class tensor> auto forward_propagation_express(const tensor& x) const {
@@ -52,11 +52,6 @@ struct InputLayer : Layer_Base<derived> {
 	void setLearningRate(fp_type learning_rate) {
 		this->next().setLearningRate(learning_rate);
 	}
-
-	void init_input_view(vec& workspace, int& offset, int batch_size) {
-		this->next().init_input_view(workspace, offset, batch_size);
-	}
-
 };
 }
 }

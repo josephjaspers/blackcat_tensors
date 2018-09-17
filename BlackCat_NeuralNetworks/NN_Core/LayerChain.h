@@ -35,9 +35,16 @@ template<class> class InputLayer;
 		const auto& prev() const { return static_cast<const derived&>(*this).data(); }
 			  auto& prev() 		 { return static_cast<derived&>(*this).data(); }
 
-
 		const auto& data() const { return static_cast<const type&>(*this); }
 			  auto& data()  	 { return static_cast<		type&>(*this); }
+
+		  	  auto& prev_link()    	 { return static_cast<derived&>(*this); }
+		  const auto& prev_link() const { return static_cast<const derived&>(*this); }
+
+		template<class T>
+		const auto& fp(const T& tensor) { return this->data().forward_propagation(tensor); }
+		template<class T> const auto& bp(const T& tensor) { return this->prev_link().bp(data().back_propagation(tensor)); }
+
 	};
 
 	//BODY
@@ -66,8 +73,18 @@ template<class> class InputLayer;
 			  auto& next()    	 { return static_cast<parent&>(*this).data(); }
 		const auto& next() const { return static_cast<const parent&>(*this).data(); }
 
+
 		const auto& data() const { return static_cast<const type&>(*this); }
 		 	  auto& data()  	 { return static_cast<		type&>(*this); }
+
+			  auto& next_link()    	 { return static_cast<parent&>(*this); }
+		const auto& next_link() const { return static_cast<const parent&>(*this); }
+		  	  auto& prev_link()    	 { return static_cast<derived&>(*this); }
+		  const auto& prev_link() const { return static_cast<const derived&>(*this); }
+
+		template<class T> const auto& fp(const T& tensor) { return this->next_link().fp(data().forward_propagation(tensor)); }
+		template<class T> const auto& bp(const T& tensor) { return this->prev_link().bp(data().back_propagation(tensor)); }
+
 	};
 
 	//HEAD
@@ -80,11 +97,16 @@ template<class> class InputLayer;
 
 		auto& head() { return this->data(); }
 
+		template<class T>
+		const auto& backprop(const T& tensor_expected) { return this->tail().bp(tensor_expected); }
+
+		template<class T>
+		const auto& bp(const T& dx) { return dx; }
+
+
 		template<class... integers>
 		Chain(int x, integers... dims) : parent(x, x, dims...) {} //first layer is always input layer
-
 	};
-
 }
 }
 #endif

@@ -37,9 +37,9 @@ struct NeuralNetwork {
 		input_size = sum(architecture...);
 	}
 
-	template<class tensor> auto forward_propagation				(const tensor& x) { return network.head().forward_propagation(x); }
-	template<class tensor> auto forward_propagation_express		(const tensor& x) { return network.head().forward_propagation(x); }
-	template<class tensor> auto back_propagation				(const tensor& y) { return network.tail().back_propagation(y); }
+	template<class tensor> auto forward_propagation				(const tensor& x) { return network.fp(x); }
+	template<class tensor> auto forward_propagation_express		(const tensor& x) { return network.tail().forward_propagation(x); }
+	template<class tensor> auto back_propagation				(const tensor& y) { return network.backprop(y); }
 	template<class tensor> auto back_propagation_throughtime() 					  { return network.tail().back_propagation_throughtime(); }
 
 
