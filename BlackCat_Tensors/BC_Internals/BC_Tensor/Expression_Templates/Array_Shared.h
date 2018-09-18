@@ -43,6 +43,11 @@ struct Array_Shared
 
 		this->copy_shape(static_cast<tensor_t&>(tensor));
 	}
+
+
+	template<class... integers>
+	Array_Shared(int dim1, integers... dims) : Shape<dimension>(dim1, dims...) {}
+
 	__BCinline__  const scalar_t* memptr() const  { return array; }
 	__BCinline__  		scalar_t* memptr()  	  { return array; }
 

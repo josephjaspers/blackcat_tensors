@@ -56,8 +56,8 @@ private:
 
 public:
 
-	operator 	   auto()       { return as_derived().memptr(); }
-	operator const auto() const { return as_derived().memptr(); }
+	operator 	   auto*()       { return as_derived().memptr(); }
+	operator const auto*() const { return as_derived().memptr(); }
 
 	__BCinline__ const auto& operator [](int index) const {
 		return as_derived().memptr()[index];

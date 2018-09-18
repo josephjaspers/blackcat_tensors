@@ -15,6 +15,7 @@ namespace NN {
 using NN_Abreviated_Functions::g;
 using NN_Abreviated_Functions::gd;
 
+static const BC::internal::Shape<0> NULL_TENSOR = BC::internal::Shape<0>();
 
 //template<class derived>
 class Layer_Base {

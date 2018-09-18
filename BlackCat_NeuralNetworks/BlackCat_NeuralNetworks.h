@@ -8,7 +8,7 @@
 #ifndef BLACKCAT_NEURALNETWORKS_H_
 #define BLACKCAT_NEURALNETWORKS_H_
 
-#include "NN_Core/Defaults_CPU.h"
-#include "NN_Core/BCNN_Global_Unifier.h"
+#include "BC_Internals/Defaults_CPU.h"
+#include "BC_Internals/BCNN_Global_Unifier.h"
 
 #endif /* BLACKCAT_NEURALNETWORKS_H_ */

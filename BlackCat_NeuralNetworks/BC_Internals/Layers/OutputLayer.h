@@ -8,7 +8,7 @@
 #ifndef OUTPUTas_CU
 #define OUTPUTas_CU
 
-#include "Layer_Base.h"
+#include "../../BC_Internals/Layers/Layer_Base.h"
 
 namespace BC {
 namespace NN {
@@ -34,11 +34,20 @@ public:
 
 	void set_batch_size(int) {}
 	void update_weights() {}
-	void clear_stored_delta_gradients() {}
+	void clear_stored_gradients() {}
 	void write(std::ofstream& is) {}
 	void read(std::ifstream& os) {}
 	void setLearningRate(fp_type learning_rate) {}
 
+	auto& activations() { return x; }
+	auto& weights()	    { return NULL_TENSOR; }
+	auto& bias()		{ return NULL_TENSOR; }
+
+	template<class tensor> void set_weight_view(tensor&){}
+	template<class tensor> void set_bias_view(tensor&){}
+
+	template<class tensor> void set_weight(tensor& workspace) {}
+	template<class tensor> void set_bias(tensor& workspace) {}
 };
 
 }

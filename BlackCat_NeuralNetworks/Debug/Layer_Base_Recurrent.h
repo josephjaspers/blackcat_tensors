@@ -8,7 +8,7 @@
 #ifndef LAYER_RECURRENT_BASE_H_
 #define LAYER_RECURRENT_BASE_H_
 
-#include "Layer_Base.h"
+#include "../BC_Internals/Layers/Layer_Base.h"
 
 namespace BC {
 namespace NN {
