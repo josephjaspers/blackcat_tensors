@@ -16,7 +16,7 @@
 namespace BC {
 namespace NN {
 
-template<template<class> class... layers>
+template<class... layers>
 struct NeuralNetwork {
 
 	Chain<InputLayer, layers..., OutputLayer> network;

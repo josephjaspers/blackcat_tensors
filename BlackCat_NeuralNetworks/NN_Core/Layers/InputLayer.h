@@ -13,10 +13,10 @@
 namespace BC {
 namespace NN {
 
-template<class derived>
-struct InputLayer : Layer_Base<derived> {
+//template<class derived>
+struct InputLayer : Layer_Base {
 
-	InputLayer(int inputs, int outputs) : Layer_Base<derived>(inputs, outputs) {}
+	InputLayer(int inputs, int outputs) : Layer_Base(inputs, outputs) {}
 
 	mat_view y;
 
@@ -24,9 +24,6 @@ struct InputLayer : Layer_Base<derived> {
 		return y = mat_view(x);
 	}
 
-	template<class tensor> auto forward_propagation_express(const tensor& x) const {
-		return this->next().forward_propagation_express(x);
-	}
 
 	template<class tensor> auto back_propagation(const tensor& dy) {
 		return dy;

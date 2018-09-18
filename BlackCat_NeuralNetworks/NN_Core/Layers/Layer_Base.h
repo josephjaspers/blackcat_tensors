@@ -16,7 +16,7 @@ using NN_Abreviated_Functions::g;
 using NN_Abreviated_Functions::gd;
 
 
-template<class derived>
+//template<class derived>
 class Layer_Base {
 public:
 

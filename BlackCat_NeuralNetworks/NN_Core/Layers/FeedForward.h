@@ -13,11 +13,10 @@
 namespace BC {
 namespace NN {
 
-template<class derived>
-struct FeedForward : public Layer_Base<derived> {
+struct FeedForward : public Layer_Base{
 public:
 
-	using Layer_Base<derived>::lr;	//the learning rate
+	using Layer_Base::lr;	//the learning rate
 //	using Layer_Base<derived>::x;
 
 
@@ -33,12 +32,12 @@ public:
 
 
 	FeedForward(int inputs, int outputs) :
-		Layer_Base<derived>(inputs, outputs),
-			w(this->OUTPUTS, inputs),
-			b(this->OUTPUTS),
+		Layer_Base(inputs, outputs),
+			w(outputs, inputs),
+			b(outputs),
 
-			w_gradientStorage(this->OUTPUTS, this->INPUTS),
-			b_gradientStorage(this->OUTPUTS)
+			w_gradientStorage(outputs, this->INPUTS),
+			b_gradientStorage(outputs)
 	{
 		w.randomize(-2, 2);
 		b.randomize(-1, 1);
