@@ -60,7 +60,9 @@ public:
 		template<class T>
 		static void eval(T to) {
 			run::eval(to);
+#ifndef __BC_PARALLEL_SECTION__
 			cudaDeviceSynchronize();
+#endif 
 		}
 
 		template<template<class...> class T, class... Ts>

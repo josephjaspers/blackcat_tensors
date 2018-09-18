@@ -28,7 +28,7 @@ struct NeuralNetwork {
 	template<class tensor> auto back_propagation	(const tensor& y) { return network.backprop(y); }
 
 
-	void set_batch_size(int size) { network.set_batch_size(size); }// initlayer_inputs(); }
+	void set_batch_size(int size) { network.set_batch_size(size); }
 	void write(std::ofstream& os) { network.write(os); }
 	void read(std::ifstream& is)  { network.read(is);  }
 
