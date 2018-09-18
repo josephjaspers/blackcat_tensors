@@ -8,7 +8,6 @@
 
 #include "Print.h"
 #include "GPU_Implementation/GPU_impl.cu"
-
 #include "GPU_Implementation/GPU_BLAS.h"
 #include "GPU_Implementation/GPU_Misc.h"
 #include "GPU_Implementation/GPU_Utility.h"
