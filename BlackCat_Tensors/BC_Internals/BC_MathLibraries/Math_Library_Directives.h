@@ -19,7 +19,4 @@
 #define __BC_omp_bar__
 #endif
 
-#define BC_parallel_section #define __BC_PARALLEL_SECTION__
-#define BC_parallel_barrier	rrier  #undef  __BC_PARALLEL_SECTION__
-
 #endif /* MATH_LIBRARY_DIRECTIVES_H_ */
