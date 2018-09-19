@@ -103,4 +103,19 @@ struct binary_expression<lv, rv, oper::gemm<mathlib>>
 
 }
 }
+
+//std::cout << "A is transposed" << transA << std::endl;
+//if (transB)
+//std::cout <<"B is transposed" << transB << std::endl;
+//if (lv_scalar)
+//std::cout << "A has scalar " <<lv_scalar << std::endl;
+//if (rv_scalar)
+//std::cout <<"B has scalar" << rv_scalar << std::endl;
+//if (lv_eval)
+//std::cout << "A instant eval" <<lv_eval << std::endl;
+//if(rv_eval)
+//std::cout <<"B instant eval " << rv_eval << std::endl;
+//std::cout << "alpha modifier = " << alpha_mod << std::endl;
+//std::cout << " beta_mod = " << beta_mod << std::endl;
+
 #endif /* EXPRESSION_BINARY_DOTPRODUCT_CU_ */

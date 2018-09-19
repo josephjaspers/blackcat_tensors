@@ -39,10 +39,14 @@ struct sub_eval_terminate {
 
 template<class lv, class rv, class op>
 static auto substitution_evaluate(binary_expression<lv, rv, op> expression) {
+
+#ifndef BC_NO_SUBSTITUTIONS
 	using impl = std::conditional_t<evaluator<binary_expression<lv, rv, op>>::non_trivial_blas_injection,
 					sub_eval_recursion, sub_eval_terminate>;
-
 	return impl::function(expression);
+#else
+	return expression;
+#endif
 }
 
 template<class expression>

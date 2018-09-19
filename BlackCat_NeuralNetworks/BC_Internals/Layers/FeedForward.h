@@ -57,15 +57,6 @@ public:
 		dy = mat(this->OUTPUTS, x);
 	}
 
-	void write(std::ofstream& os) {
-		w.write(os);
-		b.write(os);
-	}
-	void read(std::ifstream& is) {
-		w.read(is);
-		b.read(is);
-	}
-
 	auto& activations() { return x; }
 	auto& weights()	    { return w; }
 	auto& bias()		{ return b; }

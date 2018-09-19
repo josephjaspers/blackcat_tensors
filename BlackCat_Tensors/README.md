@@ -13,7 +13,7 @@ Intallation/Setup:
 	BCT is a header only library that supports compilation with the NVCC and G++
 	BCT does not support any default BLAS routines, and must be linked with an apropriate BLAS library. 
 		
-	Setting up simply requires adding the BlackCat_Tensors3.3 your path and including "BlackCat_Tensors.h"
+	Setting up simply requires adding the BlackCat_Tensors your path and including "BlackCat_Tensors.h"
 
 FAQ Fast Explanation:
 	
@@ -128,7 +128,40 @@ Benchmarks:
 	See bottom of file
 Methods:
 
-**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Operations.h
+**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor.h
+    Tensor_Types 
+    
+        scalar_t  --> the scalar_type of the Tensor
+        mathlib_t --> BC::CPU or BC::GPU
+        
+        Standard Tensor Types
+            Tensor<int x, scalar_t, mathlib_t> 
+            Scalar<scalar_t, mathlib_t>
+            Vector<scalar_t, mathlib_t>
+            Matrix<scalar_t, mathlib_t>
+
+        View Types - accepts an Array to construct. Shares the internal_pointer and is not mutable. 
+            Tensor_View<int x, scalar_t, mathlib_t>
+            Scalar_View<scalar_t, mathlib_t>
+            Vector_View<scalar_t, mathlib_t>
+            Matrix_View<scalar_t, mathlib_t>
+           
+        Shared Types - accepts a non-const Array to construct. Shares the internal_pointer but is mutable
+            Tensor_Shared<int x, scalar_t, mathlib_t> 
+            Scalar_Shared<scalar_t, mathlib_t> 
+            Vector_Shared<scalar_t, mathlib_t>
+            Matrix_Shared<scalar_t, mathlib_t>
+        
+        expression Types - any tensor that is expression or array of the apropriate dimensionality
+            expr::Tensor<int> 
+            expr::Scalar
+            expr::Vector
+            expr::Matrix
+            
+            
+
+
+**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Operations.h
 
 	_tensor_& operator =  (const _tensor_&) 		//copy
 	_tensor_& operator =  (const T scalar) 			//fill tensor with scalar value
@@ -158,7 +191,7 @@ Methods:
 		3) Scalar by Tensor operations -- return the dominant tensor type (IE operation order does matter for non commutative functions)
 		4) functor object needs to have a trivial constructor and the overloaded operator()(T value) (if unary) or operator()(T val1, U val2) (if binary)
 
-**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Utility.h
+**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Utility.h
 
 	void print      (int precision=6) const		//print the tensor (formatted)
 	void printSparse(int precision=6) const		//print the tensor but ignore 0s (formatted)
@@ -171,7 +204,7 @@ Methods:
 			bool read_dimensions=true,     //if read_dimensions assumes line was written by .write() 						 
 			bool overwrite_dimensions=true)	//if overwrite_dimensions, overwrites the dimensions of the tensor (only relevant if read_dimensions is true)
 
-**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Shape.h
+**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Shape.h
 
 	int dims() const				//returns number of dimensions (scalar = 0, vector = 1, matrix = 2, etc)
 	int size() const				//returns number of elements 
@@ -186,7 +219,7 @@ Methods:
 	const auto outer_shape() const			//returns some_array_type which holds outer shape (type depedent on context)
 
 
-**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Shaping.h
+**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Shaping.h
 
 	const operator[] (int i) const 			//returns "slice" of tensor at index (IE Cube returns Matrix, Matrix returns Vector, Vector returns Scalar)
    	      operator[] (int i)			//returns "slice" of tensor at index (IE Cube returns Matrix, Matrix returns Vector, Vector returns Scalar)
@@ -235,7 +268,7 @@ Methods:
 ***Planning on more benchmarks soon***
 
 Benchmarks:
-https://github.com/josephjaspers/BlackCat_Libraries/blob/master/BlackCat_Tensors3.3/UnitTests/Benchmarks/BenchmarkEigen.h
+https://github.com/josephjaspers/BlackCat_Libraries/blob/master/BlackCat_Tensors/UnitTests/Benchmarks/BenchmarkEigen.h
 
 (CPU only)
 G++ 7
