@@ -8,10 +8,7 @@
 #ifndef EXPRESSION_TREE_FUNCTIONS_H_
 #define EXPRESSION_TREE_FUNCTIONS_H_
 
-#include "Operations/Unary.h"
-#include "Operations/Binary.h"
-#include "Operations/BLAS.h"
-#include "Utility/MetaTemplateFunctions.h"
+#include "Tree_Evaluator_Common.h"
 
 namespace BC{
 namespace internal {
@@ -25,31 +22,31 @@ template<class> struct scalar_modifer {
 		beta = 0,
 	};
 };
-template<> struct scalar_modifer<oper::add> {
+template<> struct scalar_modifer<internal::oper::add> {
 	enum mod {
 		alpha = 1,
 		beta = 1,
 	};
 };
-template<> struct scalar_modifer<oper::sub> {
+template<> struct scalar_modifer<internal::oper::sub> {
 	enum mod {
 		alpha = -1,
 		beta = 1
 	};
 };
-template<> struct scalar_modifer<oper::add_assign> {
+template<> struct scalar_modifer<internal::oper::add_assign> {
 	enum mod {
 		alpha = 1,
 		beta = 1,
 	};
 };
-template<> struct scalar_modifer<oper::sub_assign> {
+template<> struct scalar_modifer<internal::oper::sub_assign> {
 	enum mod {
 		alpha = -1,
 		beta = 1,
 	};
 };
-template<> struct scalar_modifer<oper::assign> {
+template<> struct scalar_modifer<internal::oper::assign> {
 	enum mod {
 		alpha = 1,
 		beta = 0,
@@ -62,12 +59,12 @@ template<class T> static constexpr bool is_blas_func() {
 
 template<class T>
 static constexpr bool is_linear_op() {
-	return MTF::seq_contains<T, oper::add, oper::sub>;
+	return MTF::seq_contains<T, internal::oper::add, internal::oper::sub>;
 }
 
 template<class T>
 static constexpr bool is_nonlinear_op() {
-	return  !MTF::seq_contains<T, oper::add, oper::sub> && !is_blas_func<T>();
+	return  !MTF::seq_contains<T, internal::oper::add, internal::oper::sub> && !is_blas_func<T>();
 }
 template<class T>
 static constexpr int alpha_of() {

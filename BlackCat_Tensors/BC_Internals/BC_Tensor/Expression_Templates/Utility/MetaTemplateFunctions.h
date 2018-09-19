@@ -14,14 +14,14 @@ namespace MTF {
 
 	template<class t,class u> static constexpr bool is_same = std::is_same<t,u>::value;
 
-	static constexpr int max(int x) { return x; }
-	static constexpr int min(int x) { return x; }
+	__BCinline__ static constexpr int max(int x) { return x; }
+	__BCinline__ static constexpr int min(int x) { return x; }
 
 	template<class... integers>
-	static constexpr int max(int x, integers... ints) { return x > max (ints...) ? x : max(ints...); }
+	__BCinline__ static constexpr int max(int x, integers... ints) { return x > max (ints...) ? x : max(ints...); }
 
 	template<class... integers>
-	static constexpr int min(int x, integers... ints) { return x < min (ints...) ? x : min(ints...); }
+	__BCinline__ static constexpr int min(int x, integers... ints) { return x < min (ints...) ? x : min(ints...); }
 
 	static constexpr int sum(int x) { return x; }
 
@@ -40,7 +40,7 @@ namespace MTF {
 	template<class T> struct sequence<T> {
 		template<class U> static constexpr bool of 		 = is_same<T, U>;
 		template<class U> static constexpr bool contains = is_same<T, U>;
-		template<class U> static constexpr bool excludes = !is_same<T,U>;
+//		template<class U> static constexpr bool excludes = !is_same<T,U>;
 		using head = T;
 		using tail = T;
 	};
@@ -48,7 +48,7 @@ namespace MTF {
 	template<class T, class... Ts> struct sequence<T, Ts...> {
 		template<class U> static constexpr bool of 			= is_same<T, U> && sequence<Ts...>::template of<U>;
 		template<class U> static constexpr bool contains 	= is_same<T, U> || sequence<Ts...>::template contains<U>;
-		template<class U> static constexpr bool excludes 	= !is_same<T,U> && sequence<Ts...>::template excludes<U>;
+//		template<class U> static constexpr bool excludes 	= (!is_same<T,U>) && (sequence<Ts...>::template excludes<U>);
 		using head = T;
 		using tail = typename sequence<Ts...>::tail;
 	};

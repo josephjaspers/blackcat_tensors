@@ -77,7 +77,7 @@ int percept_MNIST() {
 			network.forward_propagation(inputs[j]);
 			network.back_propagation(outputs[j]);
 			network.update_weights();
-			network.clear_stored_delta_gradients();
+//			network.clear_stored_delta_gradients();
 		}
 	}
 	t = omp_get_wtime() - t;
