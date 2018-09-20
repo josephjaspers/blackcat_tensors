@@ -30,7 +30,7 @@ struct LayerChain<index, derived, OutputLayer> {
 	template<class T> const auto& fp(const T& tensor) { return layer.forward_propagation(tensor); }
 	template<class T> const auto& bp(const T& tensor) { return this->prev().bp(layer.back_propagation(tensor)); }
 	template<class function> void for_each(function f) { f(layer); }
-
+	template<class function> void for_each_internal(function f) {}
 
 };
 
@@ -64,6 +64,10 @@ struct LayerChain<index, derived, front, lst...>
 		f(layer);
 		next().for_each(f);
 	}
+	template<class function> void for_each_internal(function f) {
+		f(layer);
+		next().for_each_internal(f);
+	}
 };
 
 //HEAD
@@ -91,6 +95,11 @@ struct Chain : public LayerChain<0, Chain<lst...>, lst...>{
 	void set_learning_rate(fp_type lr)	{ this->for_each([&](auto& layer) { layer.set_learning_rate(lr); 	});}
 //	void clear_stored_gradients()		{ this->for_each([ ](auto& layer) { layer.clear_stored_gradients(); }); }
 
+	template<class function>
+	void for_each_internal(function f) {
+		//same as for each but excludes input and output layers
+		this->next().for_each_internal(f);
+	}
 
 	void initialize_variables() {
 		initialize_workspace_variables();
@@ -100,7 +109,7 @@ private:
 	void initialize_workspace_variables() {
 		int workspace_size  = 0;
 
-		this->for_each([&](auto& layer) {
+		this->for_each_internal([&](auto& layer) {
 			workspace_size  += layer.outputs().size();
 		});
 
@@ -111,7 +120,7 @@ private:
 		initialize_workspace_variables();
 		int activation_offset = 0;
 
-		this->for_each([&](auto& layer) {
+		this->for_each_internal([&](auto& layer) {
 			int a_sz = layer.outputs().size();
 			auto activation_workspace = outputs[{activation_offset, activation_offset + a_sz}];
 			auto delta_workspace      = deltas[{activation_offset, activation_offset + a_sz}];

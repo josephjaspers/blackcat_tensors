@@ -40,8 +40,10 @@ public:
 	void set_learning_rate(fp_type learning_rate) {}
 
 	auto& outputs() { return x; }
-	auto& weights()	    { return NULL_TENSOR; }
-	auto& bias()		{ return NULL_TENSOR; }
+	auto& inputs()  { return x; }
+	auto& deltas()  { return NULL_TENSOR; }
+	auto& weights()	{ return NULL_TENSOR; }
+	auto& bias()	{ return NULL_TENSOR; }
 
 
 	template<class tensor, class deltas> void set_activation(tensor&, deltas&) {}

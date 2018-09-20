@@ -13,8 +13,7 @@
 namespace BC {
 namespace NN {
 
-struct FeedForward : public Layer_Base{
-public:
+struct FeedForward : public Layer_Base {
 
 	using Layer_Base::lr;	//the learning rate
 
@@ -55,6 +54,7 @@ public:
 
 	auto& inputs()  { return x; }
 	auto& outputs() { return y; }
+	auto& deltas()  { return dy;}
 	auto& weights()	{ return w; }
 	auto& bias()	{ return b; }
 

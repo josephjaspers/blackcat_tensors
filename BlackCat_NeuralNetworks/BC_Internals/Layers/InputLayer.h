@@ -36,8 +36,9 @@ struct InputLayer : Layer_Base {
 	void read(std::ifstream& is) {}
 	void set_learning_rate(fp_type learning_rate) {}
 
-	auto& inputs()  { return NULL_TENSOR; }
-	auto& outputs() { return NULL_TENSOR; }
+	auto& inputs()  { return y; }
+	auto& deltas()  { return NULL_TENSOR; }
+	auto& outputs() { return y; }
 	auto& weights()	{ return NULL_TENSOR; }
 	auto& bias()	{ return NULL_TENSOR; }
 
