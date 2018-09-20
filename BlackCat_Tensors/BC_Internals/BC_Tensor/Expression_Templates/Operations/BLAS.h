@@ -10,7 +10,7 @@
 
 namespace BC {
 namespace internal {
-namespace opers {
+namespace oper {
 
 template<class mathlib> struct transpose;
 template<class mathlib> struct gemm;

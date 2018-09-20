@@ -29,7 +29,7 @@ struct LayerChain<index, derived, OutputLayer> {
 
 	template<class T> const auto& fp(const T& tensor) { return layer.forward_propagation(tensor); }
 	template<class T> const auto& bp(const T& tensor) { return this->prev().bp(layer.back_propagation(tensor)); }
-	template<class function> void for_each(function f) { f(layer); };
+	template<class function> void for_each(function f) { f(layer); }
 
 
 };

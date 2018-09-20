@@ -126,22 +126,21 @@ UnitTests/main.o : ../UnitTests/main.cu \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/texture_indirect_functions.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/surface_indirect_functions.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/device_launch_parameters.h \
-    ../UnitTests/MNIST_test.h \
-    ../UnitTests/../BlackCat_NeuralNetworks.h \
-    ../UnitTests/../NN_Core/Defaults_CPU.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BlackCat_Tensors.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BlackCat_Internal_GlobalUnifier.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Base.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Operations.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Expression_Binary.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Expression_Base.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/BlackCat_Internal_Definitions.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/BC_Utility/Trait_Determiners.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/BC_Utility/MetaTemplateFunctions.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/BC_Utility/../BlackCat_Internal_Definitions.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/BC_Utility/ShapeHierarchy.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/BC_Utility/Utility_Structs.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BlackCat_Tensors.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BlackCat_Internal_GlobalUnifier.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Base.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Common.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Operations.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Expression_Unary.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Expression_Base.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Internal_Type_Interface.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Internal_Common.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Internal_Type_Traits.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Utility/MetaTemplateFunctions.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Utility/../Internal_Common.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Utility/ShapeHierarchy.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Utility/Utility_Structs.h \
     /usr/include/c++/6/iostream \
     /usr/include/c++/6/ostream \
     /usr/include/c++/6/ios \
@@ -226,43 +225,39 @@ UnitTests/main.o : ../UnitTests/main.cu \
     /usr/include/c++/6/bits/ostream.tcc \
     /usr/include/c++/6/istream \
     /usr/include/c++/6/bits/istream.tcc \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Parse_Tree_BLAS_Branch_Evaluator.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/BlackCat_Internal_Forward_Decls.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Parse_Tree_Injection_Wrapper.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Operations/Binary.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Operations/Unary.h \
-    /usr/include/c++/6/limits \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Parse_Tree_Functions.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Function_conv2.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Array_Base.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Shape.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Shape_Base.h \
-    /usr/include/c++/6/array \
-    /usr/include/c++/6/utility \
-    /usr/include/c++/6/bits/stl_relops.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Parse_Tree_Evaluator.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Parse_Tree_Evaluator_Impl.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/BC_Utility/Temporary.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/PTEE_Array.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/PTEE_Binary_Linear.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/PTEE_Binary_NonLinear.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/PTEE_Unary.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/PTEE_BLAS.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/PTEE_Temporary.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Function_gemm.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Function_gemv.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Function_ger.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Expression_Unary.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Function_transpose.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Internal_BLAS_Feature_Detector.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Operations/Binary.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Operations/Unary.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Expression_Binary.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Operations/BLAS.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Function_gemm.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Tree_Evaluator_Runner.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Tree_Evaluator_Runner_Impl.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Tree_Evaluator_Array.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Tree_Evaluator_Common.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Tree_Struct_Temporary.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Tree_Struct_Injector.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Tree_Functions.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Array_Base.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Shape.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Shape_Base.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Tree_Evaluator_Binary_Linear.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Array.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Tree_Evaluator_Binary_NonLinear.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Tree_Evaluator_Unary.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Tree_Evaluator_BLAS.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Tree_Evaluator_Temporary.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Function_gemv.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Function_ger.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Function_dot.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Function_transpose.h \
     /usr/include/c++/6/vector \
     /usr/include/c++/6/bits/stl_construct.h \
     /usr/include/c++/6/bits/stl_uninitialized.h \
     /usr/include/c++/6/bits/stl_vector.h \
     /usr/include/c++/6/bits/stl_bvector.h \
     /usr/include/c++/6/bits/vector.tcc \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Operations_Impl/Alias.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Functions/Unary_Functions.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Utility.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Utility.h \
     /usr/include/c++/6/fstream \
     /usr/include/c++/6/bits/codecvt.h \
     /usr/include/x86_64-linux-gnu/c++/6/bits/basic_file.h \
@@ -270,35 +265,37 @@ UnitTests/main.o : ../UnitTests/main.cu \
     /usr/include/c++/6/bits/fstream.tcc \
     /usr/include/c++/6/sstream \
     /usr/include/c++/6/bits/sstream.tcc \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Shaping.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Shaping_Static.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Tensor_Functions.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Array.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Array_View.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Array_Scalar.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Array_Slice.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Array_Slice_Complex.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Array_Chunk.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_Tensor/Expression_Templates/Array_Reshape.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/CPU.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Print.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/PrintSparse.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/Math_Library_Directives.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/CPU_Implementation/CPU_Utility.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/CPU_Implementation/CPU_Misc.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/CPU_Implementation/CPU_BLAS.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Shaping.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Functions.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Array_Row.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Array_View.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Array_Shared.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Array_Scalar.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Array_Slice.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Array_Slice_Range.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Array_Chunk.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Array_Reshape.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/CPU.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/Print.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/PrintSparse.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/Math_Library_Directives.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/CPU_Implementation/CPU_Utility.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/CPU_Implementation/CPU_Misc.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/CPU_Implementation/CPU_BLAS.h \
     /usr/include/cblas.h \
     /usr/include/cblas_mangling.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/CPU_Implementation/CPU_Constants.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/CPU_Implementation/CPU_Convolution.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/GPU.cu \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/CPU_Implementation/CPU_Constants.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/CPU_Implementation/CPU_Convolution.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/GPU.cu \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/cublas_v2.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/cublas_api.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/cuComplex.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/cuda_fp16.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/cuda_fp16.hpp \
+    /usr/include/c++/6/utility \
+    /usr/include/c++/6/bits/stl_relops.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/cuda.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_impl.cu \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_impl.cu \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/curand.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/curand_kernel.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/curand_discrete.h \
@@ -315,29 +312,10 @@ UnitTests/main.o : ../UnitTests/main.cu \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/curand_lognormal.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/curand_poisson.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/curand_discrete2.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_BLAS.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_Misc.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_Utility.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_Constants.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_Convolution.h \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_Convolution_impl.cu \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3/Extensions/NN_Functions.h \
-    ../UnitTests/../NN_Core/Defaults_Tensors.h \
-    ../UnitTests/../NN_Core/BCNN_Global_Unifier.h \
-    ../UnitTests/../NN_Core/NeuralNetwork.h \
-    ../UnitTests/../NN_Core/LayerChain.h \
-    ../UnitTests/../NN_Core/Layers/InputLayer.h \
-    ../UnitTests/../NN_Core/Layers/Layer_Base.h \
-    ../UnitTests/../NN_Core/Layers/structs/forward_list.h \
-    ../UnitTests/../NN_Core/Layers/structs/omp_unique.h \
-    /usr/include/c++/6/unordered_map \
-    /usr/include/c++/6/tuple \
-    /usr/include/c++/6/bits/uses_allocator.h \
-    /usr/include/c++/6/ext/aligned_buffer.h \
-    /usr/include/c++/6/bits/hashtable.h \
-    /usr/include/c++/6/bits/hashtable_policy.h \
-    /usr/include/c++/6/bits/unordered_map.h \
-    /usr/lib/gcc/x86_64-linux-gnu/6/include/omp.h \
-    ../UnitTests/../NN_Core/Layers/Layer_Utility_Functions.h \
-    ../UnitTests/../NN_Core/Layers/OutputLayer.h \
-    ../UnitTests/../NN_Core/Layers/FeedForward.h
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_BLAS.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_Misc.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_Utility.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_Constants.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_Convolution.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_Convolution_impl.cu \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/Extensions/NN_Functions.h

@@ -35,7 +35,7 @@ namespace BC {
 
 
 	//---------------------short_hand----------------------//
-	template<class T, class... vals>
+	template<class T, class... vals> __BCinline__
 	auto make_array(T front, vals... values) { return array<sizeof...(values) + 1, T> {front, values...}; }//(front, values...); }
 
 

@@ -101,13 +101,13 @@ public:
 		//change to if constexpr once NVCC supports it
 
 		struct ret_scalar {
-			static auto impl(const Array_Base& self, int i) {
+			__BCinline__ static auto impl(const Array_Base& self, int i) {
 				return self._scalar(i);
 			}
 		};
 
 		struct ret_slice {
-			static auto impl(const Array_Base& self, int i) {
+			__BCinline__ static auto impl(const Array_Base& self, int i) {
 				return slice_t(self.slice_ptr(i), self.as_derived());
 			}
 		};
