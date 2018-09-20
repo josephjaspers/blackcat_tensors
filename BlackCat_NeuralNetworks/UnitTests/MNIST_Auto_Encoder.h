@@ -45,7 +45,7 @@
 //	const int EPOCHS = 10;
 //
 //	NeuralNetwork<FeedForward, FeedForward> network(784, 128, 784);
-//	network.setLearningRate(.01);
+//	network.set_learning_rate(.01);
 //
 //	network.set_batch_size(BATCH_SIZE);
 //	cube inputs(PICTURE_SZ, BATCH_SIZE, NUMB_BATCHES);

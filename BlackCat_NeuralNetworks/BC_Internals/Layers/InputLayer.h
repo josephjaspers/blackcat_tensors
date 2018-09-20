@@ -24,24 +24,24 @@ struct InputLayer : Layer_Base {
 		return y = mat_view(x);
 	}
 
-
 	template<class tensor> auto back_propagation(const tensor& dy) {
 		return dy;
 	}
 
-	void set_batch_size(int x) {}
 
+	void set_batch_size(int x) {}
 	void update_weights() {}
 	void clear_stored_gradients() {}
 	void write(std::ofstream& os) {}
 	void read(std::ifstream& is) {}
-	void setLearningRate(fp_type learning_rate) {}
+	void set_learning_rate(fp_type learning_rate) {}
 
-	auto& activations() { return NULL_TENSOR; }
-	auto& weights()	    { return NULL_TENSOR; }
-	auto& bias()		{ return NULL_TENSOR; }
+	auto& inputs()  { return NULL_TENSOR; }
+	auto& outputs() { return NULL_TENSOR; }
+	auto& weights()	{ return NULL_TENSOR; }
+	auto& bias()	{ return NULL_TENSOR; }
 
-	template<class tensor> void set_activation(tensor& workspace) {};
+	template<class tensor, class deltas> void set_activation(tensor&,deltas&) {};
 	template<class tensor> void set_weight(tensor&) {};
 	template<class tensor> void set_bias(tensor&) {};
 

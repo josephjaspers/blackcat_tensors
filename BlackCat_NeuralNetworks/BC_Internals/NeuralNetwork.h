@@ -27,16 +27,15 @@ struct NeuralNetwork {
 
 	template<class tensor> auto forward_propagation	(const tensor& x) { return network.fp(x); }
 	template<class tensor> auto back_propagation	(const tensor& y) { return network.back_propagation(y); }
+	void update_weights()  { network.update_weights(); }
 
+	void set_learning_rate(fp_type lr)  { network.set_learning_rate(lr);  }
+	void set_batch_size(int size) 		{ network.set_batch_size(size);   }
+	void initialize_variables()      	{ network.initialize_variables(); }
 
-	void set_batch_size(int size) { network.set_batch_size(size); }
 	void write(std::ofstream& os) { network.write(os); }
 	void read(std::ifstream& is)  { network.read(is);  }
 
-	void update_weights()  			 { network.update_weights(); }
-//	void clear_stored_gradients() 	 { network.clear_stored_gradients(); }
-	void setLearningRate(fp_type lr) { network.setLearningRate(lr); }
-	void initialize_variables()      { network.initialize_variables(); }
 };
 
 }

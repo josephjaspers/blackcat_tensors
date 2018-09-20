@@ -33,7 +33,7 @@ public:
 	int inputs() const { return INPUTS; }
 	int outputs() const { return OUTPUTS; }
 
-	void setLearningRate(fp_type learning_rate) {
+	void set_learning_rate(fp_type learning_rate) {
 		lr = learning_rate;
 	}
 };

@@ -73,9 +73,8 @@ struct Chain : public LayerChain<0, Chain<lst...>, lst...>{
 	using self = Chain<lst...>;
 	using parent = LayerChain<0, self, lst...>;
 
-	vec weights;
-	vec biases;
-	vec activations;
+	vec outputs;
+	vec deltas;
 
 	int batch_size = 1;
 
@@ -89,7 +88,7 @@ struct Chain : public LayerChain<0, Chain<lst...>, lst...>{
 	void write(std::ifstream& os) 		{ this->for_each([&](auto& layer) { layer.write(os); 	});}
 	void set_batch_size(int x) 			{ this->for_each([&](auto& layer) { layer.set_batch_size(x);	});}
 	void update_weights() 				{ this->for_each([ ](auto& layer) { layer.update_weights();		});}
-	void setLearningRate(fp_type lr)	{ this->for_each([&](auto& layer) { layer.setLearningRate(lr); 	});}
+	void set_learning_rate(fp_type lr)	{ this->for_each([&](auto& layer) { layer.set_learning_rate(lr); 	});}
 //	void clear_stored_gradients()		{ this->for_each([ ](auto& layer) { layer.clear_stored_gradients(); }); }
 
 
@@ -99,46 +98,25 @@ struct Chain : public LayerChain<0, Chain<lst...>, lst...>{
 	}
 private:
 	void initialize_workspace_variables() {
-		int weight_workspace_size = 0;
-		int bias_workspace_size   = 0;
-		int input_workspace_size  = 0;
+		int workspace_size  = 0;
 
 		this->for_each([&](auto& layer) {
-			input_workspace_size  += layer.activations().size();
-			weight_workspace_size += layer.weights().size();
-			bias_workspace_size   += layer.bias().size();
+			workspace_size  += layer.outputs().size();
 		});
 
-		activations = vec(input_workspace_size);
-		weights 	= vec(weight_workspace_size);
-		biases  	= vec(bias_workspace_size);
+		outputs = vec(workspace_size);
+		deltas  = vec(workspace_size);
 	}
 	void initialize_layer_views() {
 		initialize_workspace_variables();
-
 		int activation_offset = 0;
-		int weight_offset = 0;
-		int bias_offset = 0;
 
 		this->for_each([&](auto& layer) {
-			int w_sz = layer.weights().size();
-			int b_sz = layer.bias().size();
-			int a_sz = layer.activations().size();
-
-			auto weight_workspace = weights[{weight_offset, weight_offset + w_sz}];
-			auto bias_workspace   = biases[{bias_offset, bias_offset + b_sz}];
-			auto activation_workspace = activations[{activation_offset, activation_offset + a_sz}];
-
-
-			layer.set_activation(activation_workspace);
-			layer.set_weight(weight_workspace);
-			layer.set_bias(bias_workspace);
-
-			activation_offset += layer.activations().size();
-			weight_offset     += w_sz;
-			bias_offset 	  += b_sz;
-
-
+			int a_sz = layer.outputs().size();
+			auto activation_workspace = outputs[{activation_offset, activation_offset + a_sz}];
+			auto delta_workspace      = deltas[{activation_offset, activation_offset + a_sz}];
+			layer.set_activation(activation_workspace, delta_workspace);
+			activation_offset += layer.outputs().size();
 		});
 	}
 

@@ -37,18 +37,16 @@ public:
 	void clear_stored_gradients() {}
 	void write(std::ofstream& is) {}
 	void read(std::ifstream& os) {}
-	void setLearningRate(fp_type learning_rate) {}
+	void set_learning_rate(fp_type learning_rate) {}
 
-	auto& activations() { return x; }
+	auto& outputs() { return x; }
 	auto& weights()	    { return NULL_TENSOR; }
 	auto& bias()		{ return NULL_TENSOR; }
 
-	template<class tensor> void set_weight_view(tensor&){}
-	template<class tensor> void set_bias_view(tensor&){}
 
-	template<class tensor> void set_activation(tensor& workspace) {}
-	template<class tensor> void set_weight(tensor& workspace) {}
-	template<class tensor> void set_bias(tensor& workspace) {}
+	template<class tensor, class deltas> void set_activation(tensor&, deltas&) {}
+	template<class tensor> void set_weight(tensor&) {}
+	template<class tensor> void set_bias(tensor&) {}
 };
 
 }

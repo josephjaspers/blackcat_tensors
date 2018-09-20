@@ -18,29 +18,25 @@ public:
 
 	using Layer_Base::lr;	//the learning rate
 
-	mat dy;					//error
+	mat_shared dy;					//error
 	mat_shared y;					//outputs
 	mat_view x;				//inputs
 
 	mat w;			//weights
 	vec b;			//biases
 
-//	mat w_gradientStorage;	//weight gradient storage
-//	vec b_gradientStorage;	//bias gradient storage
-
 
 	FeedForward(int inputs, int outputs) :
 		Layer_Base(inputs, outputs),
 			w(outputs, inputs),
-			b(outputs)//,
-
-//			w_gradientStorage(outputs, this->INPUTS),
-//			b_gradientStorage(outputs)
-	{	}
+			b(outputs)
+	{
+		w.randomize(-1, 1);
+		b.randomize(-1, 1);
+	}
 
 	template<class t> const auto& forward_propagation(const expr::mat<t>& x_) {
 		x = mat_view(x_);
-
 		return y = g(w * x + b);
 	}
 	template<class t> auto back_propagation(const expr::mat<t>& dy_) {
@@ -54,24 +50,17 @@ public:
 
 	void set_batch_size(int x) {
 		y = mat_shared(this->OUTPUTS, x);
-		dy = mat(this->OUTPUTS, x);
+		dy = mat_shared(this->OUTPUTS, x);
 	}
 
-	auto& activations() { return y; }
-	auto& weights()	    { return w; }
-	auto& bias()		{ return b; }
+	auto& inputs()  { return x; }
+	auto& outputs() { return y; }
+	auto& weights()	{ return w; }
+	auto& bias()	{ return b; }
 
-	template<class tensor> void set_activation(tensor& workspace) {
+	template<class tensor, class deltas> void set_activation(tensor& workspace, deltas& error_workspace) {
 		y.internal() = workspace.internal();
-	}
-
-	template<class tensor> void set_weight(tensor& workspace) {
-//		w.internal() = workspace.internal().memptr();		//FIXME w = workspace.internal() //doesn't compile but should
-		w.randomize(-2,2);
-	}
-	template<class tensor> void set_bias(tensor& workspace) {
-//		b = workspace.internal();
-		b.randomize(-1,1);
+		dy.internal() = error_workspace.internal();
 	}
 
 };

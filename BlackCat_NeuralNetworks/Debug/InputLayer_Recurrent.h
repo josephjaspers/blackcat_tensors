@@ -47,8 +47,8 @@ struct InputLayer_Recurrent : Layer_Base_Recurrent<derived> {
 	void read(std::ifstream& is) {
 		this->next().read(is);
 	}
-	void setLearningRate(fp_type learning_rate) {
-		this->next().setLearningRate(learning_rate);
+	void set_learning_rate(fp_type learning_rate) {
+		this->next().set_learning_rate(learning_rate);
 	}
 
 };

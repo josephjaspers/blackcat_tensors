@@ -37,7 +37,7 @@ public:
 	void clear_stored_delta_gradients() {}
 	void write(std::ofstream& is) {}
 	void read(std::ifstream& os) {}
-	void setLearningRate(fp_type learning_rate) {}
+	void set_learning_rate(fp_type learning_rate) {}
 
 };
 

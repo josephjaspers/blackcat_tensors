@@ -58,7 +58,7 @@ public:
 		dy = mat(this->outputs(), batch_sz);
 	}
 
-	auto& activations() { return y; }
+	auto& outputs() { return y; }
 	auto& weights()	    { return w; }
 	auto& bias()		{ return b; }
 
