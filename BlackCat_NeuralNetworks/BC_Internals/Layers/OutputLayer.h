@@ -46,6 +46,7 @@ public:
 	template<class tensor> void set_weight_view(tensor&){}
 	template<class tensor> void set_bias_view(tensor&){}
 
+	template<class tensor> void set_activation(tensor& workspace) {}
 	template<class tensor> void set_weight(tensor& workspace) {}
 	template<class tensor> void set_bias(tensor& workspace) {}
 };

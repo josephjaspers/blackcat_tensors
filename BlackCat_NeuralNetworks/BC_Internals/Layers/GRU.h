@@ -1,25 +1,26 @@
 /*
- * FeedForward.cu
+ * GRU.h
  *
- *  Created on: Jan 28, 2018
+ *  Created on: Sep 20, 2018
  *      Author: joseph
  */
 
-#ifndef FEEDFORWARD_CU_
-#define FEEDFORWARD_CU_
+#ifndef BC_INTERNALS_LAYERS_GRU_H_
+#define BC_INTERNALS_LAYERS_GRU_H_
 
-#include "../../BC_Internals/Layers/Layer_Base.h"
+#include "Layer_Base.h"
 
 namespace BC {
 namespace NN {
 
-struct FeedForward : public Layer_Base{
+
+struct GRU : public Layer_Base{
 public:
 
 	using Layer_Base::lr;	//the learning rate
 
 	mat dy;					//error
-	mat_shared y;					//outputs
+	mat_shared y;			//outputs
 	mat_view x;				//inputs
 
 	mat w;			//weights
@@ -29,9 +30,9 @@ public:
 //	vec b_gradientStorage;	//bias gradient storage
 
 
-	FeedForward(int inputs, int outputs) :
+	GRU(int inputs, int outputs) :
 		Layer_Base(inputs, outputs),
-			w(outputs, inputs),
+			w(outputs, inputs + outputs),
 			b(outputs)//,
 
 //			w_gradientStorage(outputs, this->INPUTS),
@@ -39,8 +40,6 @@ public:
 	{	}
 
 	template<class t> const auto& forward_propagation(const expr::mat<t>& x_) {
-		x = mat_view(x_);
-
 		return y = g(w * x + b);
 	}
 	template<class t> auto back_propagation(const expr::mat<t>& dy_) {
@@ -54,6 +53,7 @@ public:
 
 	void set_batch_size(int x) {
 		y = mat_shared(this->OUTPUTS, x);
+		x = mat_view(this->inputs(), x);
 		dy = mat(this->OUTPUTS, x);
 	}
 
@@ -61,21 +61,22 @@ public:
 	auto& weights()	    { return w; }
 	auto& bias()		{ return b; }
 
+//	template<class tensor> void set_weight(tensor& workspace) {
+//		w.internal() = workspace.internal().memptr();		//FIXME w = workspace.internal() //doesn't compile but should
+//		w.randomize(-2,2);
+//	}
+//	template<class tensor> void set_bias(tensor& workspace) {
+//		b = workspace.internal();
+//		b.randomize(-1,1);
+//	}
 	template<class tensor> void set_activation(tensor& workspace) {
 		y.internal() = workspace.internal();
+		x.internal() = (workspace.internal().memptr() - x.size());
 	}
-
-	template<class tensor> void set_weight(tensor& workspace) {
-//		w.internal() = workspace.internal().memptr();		//FIXME w = workspace.internal() //doesn't compile but should
-		w.randomize(-2,2);
-	}
-	template<class tensor> void set_bias(tensor& workspace) {
-//		b = workspace.internal();
-		b.randomize(-1,1);
-	}
-
-};
 }
 }
 
-#endif /* FEEDFORWARD_CU_ */
+
+
+
+#endif /* BC_INTERNALS_LAYERS_GRU_H_ */
