@@ -12,7 +12,7 @@
 #include "../BC_Internals/Layers/FeedForward.h"
 #include "../BC_Internals/Layers/OutputLayer.h"
 #include "../BC_Internals/NeuralNetwork.h"
-#include "BlackCat_Tensors.h"
+#include "../BlackCat_Tensors/BlackCat_Tensors.h"
 
 //#include "Layers/addition_layer.h"
 //#include "Layers/matmul_layer.h"

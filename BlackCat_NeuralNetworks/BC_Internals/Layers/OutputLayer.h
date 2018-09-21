@@ -21,13 +21,14 @@ public:
 
 	OutputLayer(int inputs) : Layer_Base(inputs, inputs) {}
 
-	template<class t> const auto& forward_propagation(const expr::mat<t>& x_) {
-		return x = mat_view(x_);
+	const auto& forward_propagation() {
+		return x;
 	}
-	template<class t> auto forward_propagation_express(const expr::mat<t>& x_) {
-		return x = mat_view(x_);
+	auto forward_propagation_express() {
+		return x;
 	}
-	template<class t> auto back_propagation(const expr::mat<t>& exp) {
+	template<class t>
+	auto back_propagation(const expr::mat<t>& exp) {
 		return x - exp;
 	}
 

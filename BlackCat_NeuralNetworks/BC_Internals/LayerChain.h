@@ -27,7 +27,9 @@ struct LayerChain<index, derived, OutputLayer> {
 	const auto& prev() const { return static_cast<const derived&>(*this); }
 		  auto& prev()    	 { return static_cast<		derived&>(*this); }
 
-	template<class T> const auto& fp(const T& tensor) { return layer.forward_propagation(tensor); }
+	template<class T> const auto& fp(const T& tensor) {
+		layer.x = mat_view(tensor);
+		return layer.forward_propagation(); }
 	template<class T> const auto& bp(const T& tensor) { return this->prev().bp(layer.back_propagation(tensor)); }
 	template<class function> void for_each(function f) { f(layer); }
 	template<class function> void for_each_internal(function f) {}
@@ -57,8 +59,19 @@ struct LayerChain<index, derived, front, lst...>
 	const auto& prev() const { return static_cast<const derived&>(*this); }
 		  auto& prev()    	 { return static_cast<		derived&>(*this); }
 
-	template<class T> const auto& fp(const T& tensor) { return this->next().fp(layer.forward_propagation(tensor)); }
-	template<class T> const auto& bp(const T& tensor) { return this->prev().bp(layer.back_propagation(tensor)); }
+	template<class T> const auto& fp(const T& tensor) {
+		layer.x = mat_view(tensor);
+		return this->next().fp(layer.forward_propagation());
+	}
+	template<class T, class enabler = std::enable_if_t<index != 0 && !std::is_same<T, void>::value>>
+	const auto& bp(const T& tensor) {
+		layer.dy = tensor;
+		return this->prev().bp(layer.back_propagation());
+	}
+	template<class T, class enabler = std::enable_if_t<index == 0 && !std::is_same<T, void>::value>>
+		const T& bp(const T& tensor) {
+			return tensor;
+		}
 
 	template<class function> void for_each(function f) {
 		f(layer);

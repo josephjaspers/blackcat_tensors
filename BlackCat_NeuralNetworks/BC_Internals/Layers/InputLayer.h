@@ -18,14 +18,13 @@ struct InputLayer : Layer_Base {
 
 	InputLayer(int inputs, int outputs) : Layer_Base(inputs, outputs) {}
 
-	mat_view y;
+	mat_view x;
 
-	template<class tensor> const auto& forward_propagation(const tensor& x) {
-		return y = mat_view(x);
+	const auto& forward_propagation() {
+		return x;
 	}
 
-	template<class tensor> auto back_propagation(const tensor& dy) {
-		return dy;
+	void back_propagation() {
 	}
 
 
@@ -36,9 +35,9 @@ struct InputLayer : Layer_Base {
 	void read(std::ifstream& is) {}
 	void set_learning_rate(fp_type learning_rate) {}
 
-	auto& inputs()  { return y; }
+	auto& inputs()  { return x; }
 	auto& deltas()  { return NULL_TENSOR; }
-	auto& outputs() { return y; }
+	auto& outputs() { return x; }
 	auto& weights()	{ return NULL_TENSOR; }
 	auto& bias()	{ return NULL_TENSOR; }
 

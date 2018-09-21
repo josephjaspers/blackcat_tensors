@@ -17,12 +17,12 @@ struct FeedForward : public Layer_Base {
 
 	using Layer_Base::lr;	//the learning rate
 
-	mat_shared dy;					//error
-	mat_shared y;					//outputs
+	mat_shared dy;			//error
+	mat_shared y;			//outputs
 	mat_view x;				//inputs
 
-	mat w;			//weights
-	vec b;			//biases
+	mat w;					//weights
+	vec b;					//biases
 
 
 	FeedForward(int inputs, int outputs) :
@@ -34,12 +34,10 @@ struct FeedForward : public Layer_Base {
 		b.randomize(-1, 1);
 	}
 
-	template<class t> const auto& forward_propagation(const expr::mat<t>& x_) {
-		x = mat_view(x_);
+	const auto& forward_propagation() {
 		return y = g(w * x + b);
 	}
-	template<class t> auto back_propagation(const expr::mat<t>& dy_) {
-		dy = dy_;
+	auto back_propagation() {
 		return w.t() * dy % gd(x);
 	}
 	void update_weights() {
