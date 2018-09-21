@@ -8,7 +8,7 @@
 #ifndef FEEDFORWARD_CU_
 #define FEEDFORWARD_CU_
 
-#include "../../BC_Internals/Layers/Layer_Base.h"
+#include "Layer_Base.h"
 
 namespace BC {
 namespace NN {
@@ -17,12 +17,12 @@ struct FeedForward : public Layer_Base {
 
 	using Layer_Base::lr;	//the learning rate
 
-	mat_shared dy;			//error
-	mat_shared y;			//outputs
-	mat_view x;				//inputs
+	mat_shared dy;          //error
+	mat_shared y;           //outputs
+	mat_view x;             //inputs
 
-	mat w;					//weights
-	vec b;					//biases
+	mat w;                  //weights
+	vec b;                  //biases
 
 
 	FeedForward(int inputs, int outputs) :
