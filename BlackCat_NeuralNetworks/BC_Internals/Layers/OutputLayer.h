@@ -21,8 +21,9 @@ public:
 
 	OutputLayer(int inputs) : Layer_Base(inputs, inputs) {}
 
-	const auto& forward_propagation() {
-		return x;
+	template <class t>
+	const auto& forward_propagation(const expr::mat<t>& x_) {
+		return x = mat_view(x_);
 	}
 	auto forward_propagation_express() {
 		return x;

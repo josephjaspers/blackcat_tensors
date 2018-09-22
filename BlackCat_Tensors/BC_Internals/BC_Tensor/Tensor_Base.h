@@ -58,6 +58,7 @@ public:
 	using move_parameter        = std::conditional_t<BC_array_move_constructible<internal_t>(), self&&, 		BC::DISABLED<0>>;
 	using copy_parameter        = std::conditional_t<BC_array_copy_constructible<internal_t>(), const self&,  	BC::DISABLED<1>>;
 	using move_assign_parameter = std::conditional_t<BC_array_move_assignable<internal_t>(), 	self&&, 		BC::DISABLED<0>>;
+	using copy_assign_parameter = std::conditional_t<BC_array_copy_assignable<internal_t>(), 	const self&, 	BC::DISABLED<1>>;
 
 	Tensor_Base() = default;
 
@@ -77,6 +78,7 @@ public:
 		this->swap_array(tensor);
 		this->swap_shape(tensor);
 	}
+
 
 	Tensor_Base& operator =(move_assign_parameter tensor) {
 		this->swap_shape(tensor);

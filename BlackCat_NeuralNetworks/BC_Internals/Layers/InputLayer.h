@@ -20,11 +20,14 @@ struct InputLayer : Layer_Base {
 
 	mat_view x;
 
-	const auto& forward_propagation() {
-		return x;
+	template <class t>
+	const auto& forward_propagation(const expr::mat<t>& x_) {
+		return x = mat_view(x_);
 	}
 
-	void back_propagation() {
+	template <class t>
+	const auto& back_propagation(const expr::mat<t>& dy) {
+		return dy;
 	}
 
 

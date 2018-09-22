@@ -33,11 +33,14 @@ struct FeedForward : public Layer_Base {
 		w.randomize(-1, 1);
 		b.randomize(-1, 1);
 	}
-
-	const auto& forward_propagation() {
+	template<class t>
+	const auto& forward_propagation(const expr::mat<t>& x_) {
+		x = mat_view(x_);
 		return y = g(w * x + b);
 	}
-	auto back_propagation() {
+	template<class t>
+	auto back_propagation(const expr::mat<t>& dy_) {
+		dy = dy_;
 		return w.t() * dy % gd(x);
 	}
 	void update_weights() {
