@@ -47,6 +47,9 @@ struct Array_View
 
 		this->copy_shape(static_cast<const tensor_t&>(tensor));
 	}
+
+	template<class... integers>
+	Array_View(int x, integers... ints) :Shape<dimension>(x, ints...) {}
 	__BCinline__ const scalar_t* memptr() const  { return array; }
 
 	void destroy() {}

@@ -102,8 +102,8 @@ struct Chain : public LayerChain<0, Chain<lst...>, lst...>{
 	}
 
 	void initialize_variables() {
-		initialize_workspace_variables();
-		initialize_layer_views();
+//		initialize_workspace_variables();
+//		initialize_layer_views();
 	}
 private:
 	void initialize_workspace_variables() {

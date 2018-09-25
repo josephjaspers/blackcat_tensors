@@ -17,8 +17,8 @@ struct FeedForward : public Layer_Base {
 
 	using Layer_Base::lr;	//the learning rate
 
-	mat_shared dy;          //error
-	mat_shared y;           //outputs
+	mat dy;          //error
+	mat y;           //outputs
 	mat_view x;             //inputs
 
 	mat w;                  //weights
@@ -49,8 +49,8 @@ struct FeedForward : public Layer_Base {
 	}
 
 	void set_batch_size(int x) {
-		y = mat_shared(this->OUTPUTS, x);
-		dy = mat_shared(this->OUTPUTS, x);
+		y = mat(this->OUTPUTS, x);
+		dy = mat(this->OUTPUTS, x);
 	}
 
 	auto& inputs()  { return x; }
@@ -59,10 +59,6 @@ struct FeedForward : public Layer_Base {
 	auto& weights()	{ return w; }
 	auto& bias()	{ return b; }
 
-	template<class tensor, class deltas> void set_activation(tensor& workspace, deltas& error_workspace) {
-		y.internal() = workspace.internal();
-		dy.internal() = error_workspace.internal();
-	}
 
 };
 }

@@ -1,84 +1,117 @@
-///*
-// * GRU.h
-// *
-// *  Created on: Sep 20, 2018
-// *      Author: joseph
-// */
+/*
+ * GRU.h
+ *
+ *  Created on: Sep 20, 2018
+ *      Author: joseph
+ */
+
+#ifndef BC_INTERNALS_LAYERS_GRU_H_
+#define BC_INTERNALS_LAYERS_GRU_H_
+
+#include "Layer_Base_Recurrent.h"
+#include <forward_list>
+#include "Utility.h"
+namespace BC {
+namespace NN {
+
+struct GRU : public Layer_Base_Recurrent {
+
+	using Layer_Base_Recurrent::lr;	//the learning rate
+	using Layer_Base_Recurrent::inputs;
+	using Layer_Base_Recurrent::outputs;
+	using Layer_Base_Recurrent::t; 	//current_time_stamp
+	using Layer_Base_Recurrent::max_backprop_length;
+	cube x;							//inputs + outputs , batch_size (concatenated x and y)
+	cube f, z, c;				 	//inputs, batch_size, maximum_BPTT
+	mat dc, df, dz;
+	mat wf, wz;                  	//weights
+	vec bf, bz;                  	//biases
+
+	mat wfd, wzd;					//weight deltas
+	vec bfd, bzd; 					//bias deltas
+
+	GRU(int inputs, int outputs) :
+		Layer_Base_Recurrent(inputs, outputs),
+			wf(outputs, outputs), wz(outputs, outputs),
+			bf(outputs), bz(outputs),
+			wfd(outputs, outputs), wzd(outputs, outputs),
+			bfd(outputs), bzd(outputs)
+
+	{
+		wf.randomize(-1, 0);
+		wz.randomize(-1, 1);
+		bf.randomize(-1, 0);
+		bz.randomize(-1, 1);
+	}
+	template<class T>
+	void cache_inputs(const expr::mat<T>& x_) {
+		int i = this->inputs();
+		int s = x[t].size();
+
+		x[t][{0, i}] =  x_;						//x[t][{begin, end}] --> similar to python's  x[begin:end]
+		x[t][{i, s}] = x[t-1][{0, inputs()}];
+	}
+
+	template<class T>
+	const auto& forward_propagation(const expr::mat<T>& x_) {
+		cache_inputs(x_);
+
+		f[t] = g(wf * x[t] + bf);
+		z[t] = g(wz * x[t] + bz);
+
+		return c = c % f + z;
+
+	}
+	template<class T>
+	auto back_propagation(const expr::mat<T>& dy_) {
+		dc = dy_;
+		dz = dc * gd(z[t]);
+		df = dc % c[t - 1] % gd(f[t]);
+
+		return (wf.t() * dz + wz.t() * dz) % gd(x[t]);
+	}
+	void cache_gradients() {
+		wzd -= dz * lr * z[t].t();
+		wfd -= df * lr * f[t].t();
+
+		bzd -= dz;
+		bfd -= df;
+	}
+
+	void update_weights() {
+		wz += wzd;
+		wf += wfd;
+		bz += bzd;
+		bf += bfd;
+
+		wzd.zero();
+		wfd.zero();
+		bzd.zero();
+		bfd.zero();
+	}
+
+	void set_batch_size(int batch_sz) {
+		x = cube(this->outputs() + this->inputs(), batch_sz, max_backprop_length);
+		f = cube(this->outputs() + this->inputs(), batch_sz, max_backprop_length);
+		c = cube(this->outputs() + this->outputs(), batch_sz, max_backprop_length);
+		z = cube(this->outputs() + this->inputs(), batch_sz, max_backprop_length);
+	}
 //
-//#ifndef BC_INTERNALS_LAYERS_GRU_H_
-//#define BC_INTERNALS_LAYERS_GRU_H_
-//
-//#include "Layer_Base.h"
-//
-//namespace BC {
-//namespace NN {
-//
-//struct GRU : public Layer_Base{
-//public:
-//
-//	using Layer_Base::lr;	//the learning rate
-//
-//	mat dy;					//error
-//	mat_shared y;					//outputs
-//	mat_view x;				//inputs
-//
-//	mat w;			//weights
-//	vec b;			//biases
-//
-////	mat w_gradientStorage;	//weight gradient storage
-////	vec b_gradientStorage;	//bias gradient storage
-//
-//
-//	GRU(int inputs, int outputs) :
-//		Layer_Base(inputs, outputs),
-//			w(outputs, inputs + outputs), //add outputs for recurrence
-//			b(outputs)//,
-//
-////			w_gradientStorage(outputs, this->INPUTS),
-////			b_gradientStorage(outputs)
-//	{	}
-//
-//	template<class t> const auto& forward_propagation(const expr::mat<t>& x_) {
-//		x = mat_view(x_);
-//
-//		return y = g(w * x + b);
-//	}
-//	template<class t> auto back_propagation(const expr::mat<t>& dy_) {
-//		dy = dy_;
-//		return w.t() * dy % gd(x);
-//	}
-//	void update_weights() {
-//		w -= dy * lr * x.t();
-//		b -= dy * lr;
-//	}
-//
-//	void set_batch_size(int batch_sz) {
-//		y = mat_shared(this->outputs(), batch_sz);
-//		x = mat_view(this->inputs() + this->outputs(), batch_sz);
-//		dy = mat(this->outputs(), batch_sz);
-//	}
-//
-//	auto& outputs() { return y; }
-//	auto& weights()	    { return w; }
-//	auto& bias()		{ return b; }
-//
-//	template<class tensor> void set_activation(tensor& workspace) {
-//		y.internal() = workspace.internal();
-//	}
-//
-//	template<class tensor> void set_weight(tensor& workspace) {
-////		w.internal() = workspace.internal().memptr();		//FIXME w = workspace.internal() //doesn't compile but should
-//		w.randomize(-2,2);
-//	}
-//	template<class tensor> void set_bias(tensor& workspace) {
-////		b = workspace.internal();
-//		b.randomize(-1,1);
-//	}
-//
-//}
-//}
-//
-//
-//
-//
-//#endif /* BC_INTERNALS_LAYERS_GRU_H_ */
+//	auto& inputs()  { return x; }
+//	auto& outputs() { return c; }
+////	auto& deltas()  { return dy;}
+//	auto& weights()	{ return w; }
+//	auto& bias()	{ return b; }
+
+	template<class tensor, class deltas> void set_activation(tensor& workspace, deltas& error_workspace) {
+
+	}
+
+};
+}
+}
+
+
+
+
+#endif /* BC_INTERNALS_LAYERS_GRU_H_ */

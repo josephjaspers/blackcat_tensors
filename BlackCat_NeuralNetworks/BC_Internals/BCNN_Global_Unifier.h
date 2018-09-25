@@ -9,10 +9,12 @@
 #ifndef BCNN_GLOBAL_UNIFIER_H_
 #define BCNN_GLOBAL_UNIFIER_H_
 
-#include "../BC_Internals/Layers/FeedForward.h"
-#include "../BC_Internals/Layers/OutputLayer.h"
-#include "../BC_Internals/NeuralNetwork.h"
-#include "../BlackCat_Tensors/BlackCat_Tensors.h"
+#include "Layers/FeedForward.h"
+#include "Layers/OutputLayer.h"
+#include "Layers/GRU.h"
+#include "Layers/Recurrent_FeedForward.h"
+#include "NeuralNetwork.h"
+//#include "../../BlackCat_Tensors/BlackCat_Tensors.h"
 
 //#include "Layers/addition_layer.h"
 //#include "Layers/matmul_layer.h"
