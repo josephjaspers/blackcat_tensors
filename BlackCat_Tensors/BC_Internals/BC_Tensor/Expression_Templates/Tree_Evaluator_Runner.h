@@ -14,6 +14,11 @@ namespace BC {
 namespace internal {
 template<class mathlib_type>
 struct Lazy_Evaluator {
+	template<class T>
+	static constexpr bool INJECTION() {
+		//non-trivial is true even when it is trivial
+		return internal::tree::evaluator<std::decay_t<T>>::non_trivial_blas_injection;
+	}
 
 	//------------------------------------------------Purely lazy evaluation----------------------------------//
 	template< class expression>

@@ -126,6 +126,9 @@ UnitTests/main.o : ../UnitTests/main.cu \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/texture_indirect_functions.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/surface_indirect_functions.h \
     /usr/local/cuda-9.1/bin/../targets/x86_64-linux/include/device_launch_parameters.h \
+    ../UnitTests/MNIST_test.h \
+    ../UnitTests/../BlackCat_GPU_NeuralNetworks.h \
+    ../UnitTests/../BC_Internals/Defaults_GPU.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BlackCat_Tensors.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BlackCat_Internal_GlobalUnifier.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor.h \
@@ -318,4 +321,21 @@ UnitTests/main.o : ../UnitTests/main.cu \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_Constants.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_Convolution.h \
     /home/joseph/BlackCat_Libraries/BlackCat_Tensors/BC_Internals/BC_MathLibraries/GPU_Implementation/GPU_Convolution_impl.cu \
-    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/Extensions/NN_Functions.h
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/Extensions/NN_Functions.h \
+    ../UnitTests/../BC_Internals/../BC_Internals/Defaults_Tensors.h \
+    ../UnitTests/../BC_Internals/BCNN_Global_Unifier.h \
+    ../UnitTests/../BC_Internals/../BC_Internals/Layers/FeedForward.h \
+    ../UnitTests/../BC_Internals/../BC_Internals/Layers/Layer_Base.h \
+    ../UnitTests/../BC_Internals/../BC_Internals/Layers/OutputLayer.h \
+    ../UnitTests/../BC_Internals/../BC_Internals/Layers/../../BC_Internals/Layers/Layer_Base.h \
+    ../UnitTests/../BC_Internals/../BC_Internals/NeuralNetwork.h \
+    /usr/include/c++/6/forward_list \
+    /usr/include/c++/6/bits/forward_list.h \
+    /usr/include/c++/6/ext/aligned_buffer.h \
+    /usr/include/c++/6/bits/forward_list.tcc \
+    ../UnitTests/../BC_Internals/../BC_Internals/../BC_Internals/LayerChain.h \
+    ../UnitTests/../BC_Internals/../BC_Internals/../BC_Internals/Layers/InputLayer.h \
+    ../UnitTests/../BC_Internals/../BC_Internals/../BC_Internals/Layers/../../BC_Internals/Layers/Layer_Base.h \
+    ../UnitTests/../BC_Internals/../BC_Internals/../BC_Internals/Layers/OutputLayer.h \
+    /home/joseph/BlackCat_Libraries/BlackCat_Tensors/../BlackCat_Tensors/BlackCat_Tensors.h \
+    /usr/lib/gcc/x86_64-linux-gnu/6/include/omp.h

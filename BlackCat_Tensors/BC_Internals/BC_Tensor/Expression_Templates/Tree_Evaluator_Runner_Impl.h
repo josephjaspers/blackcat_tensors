@@ -102,12 +102,6 @@ static auto evaluate(binary_expression<lv, rv, oper::div_assign> expression) {
 
 }
 }
-
-template<class T>
-static constexpr bool INJECTION() {
-	//non-trivial is true even when it is trivial
-	return internal::tree::evaluator<std::decay_t<T>>::non_trivial_blas_injection;
-}
 }
 
 

@@ -44,9 +44,9 @@ struct InputLayer : Layer_Base {
 	auto& weights()	{ return NULL_TENSOR; }
 	auto& bias()	{ return NULL_TENSOR; }
 
-	template<class tensor, class deltas> void set_activation(tensor&,deltas&) {};
-	template<class tensor> void set_weight(tensor&) {};
-	template<class tensor> void set_bias(tensor&) {};
+	template<class tensor, class deltas> void set_activation(tensor&,deltas&) {}
+	template<class tensor> void set_weight(tensor&) {}
+	template<class tensor> void set_bias(tensor&) {}
 
 };
 }

@@ -33,6 +33,7 @@ struct Array_Slice_Range
 	using vec_scalar_t = std::conditional_t<(DIMS() == 1), scalar_t, voidt>;
 	using tensor_scalar_t = std::conditional_t<(DIMS() > 1), scalar_t, voidt>;
 
+	__BCinline__
 	Array_Slice_Range(const tensor_scalar_t* array, PARENT parent_, int range)
 							: Shape<DIMS()>(parent_.inner_shape()), parent(parent_), array_slice(const_cast<scalar_t*>(array)) {
 
@@ -40,6 +41,8 @@ struct Array_Slice_Range
 		this->m_inner_shape[DIMS() - 1] = range; //setting the outer_dimension
 		this->m_outer_shape[DIMS() - 1] = size;  //adjusting the size
 	}
+
+	__BCinline__
 	Array_Slice_Range(const vec_scalar_t* array, PARENT parent_, int range)
 							: Shape<DIMS()>(parent_.inner_shape()), parent(parent_), array_slice(const_cast<scalar_t*>(array)) {
 		this->m_inner_shape[DIMS() - 1] = range;

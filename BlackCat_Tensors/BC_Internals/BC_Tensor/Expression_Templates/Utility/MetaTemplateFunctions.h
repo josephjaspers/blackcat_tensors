@@ -30,32 +30,58 @@ namespace MTF {
 
 		//short_hand for const cast
 	template<class T> auto& cc(const T& var) { return const_cast<T&>(var); }
+//
+//	template<class... Ts>
+//	struct sequence {
+//		template<class U> static constexpr bool of = false;
+//		template<class U> static constexpr bool contains = false;
+//		template<class U> static constexpr bool excludes = false;
+//	};
+//	template<class T> struct sequence<T> {
+//		template<class U> static constexpr bool of 		 = is_same<T, U>;
+//		template<class U> static constexpr bool contains = is_same<T, U>;
+////		template<class U> static constexpr bool excludes = !is_same<T,U>;
+//		using head = T;
+//		using tail = T;
+//	};
+//
+//	template<class T, class... Ts> struct sequence<T, Ts...> {
+//		template<class U> static constexpr bool of 			= is_same<T, U> && sequence<Ts...>::template of<U>;
+//		template<class U> static constexpr bool contains 	= is_same<T, U> || sequence<Ts...>::template contains<U>;
+////		template<class U> static constexpr bool excludes 	= (!is_same<T,U>) && (sequence<Ts...>::template excludes<U>);
+//		using head = T;
+//		using tail = typename sequence<Ts...>::tail;
+//	};
 
-	template<class... Ts>
-	struct sequence {
-		template<class U> static constexpr bool of = false;
-		template<class U> static constexpr bool contains = false;
-		template<class U> static constexpr bool excludes = false;
+
+	template<class T, class... Ts> using head_t = T;
+
+	template<class T, class... Ts>
+	struct seq_contains_impl {
+		static constexpr bool value= false;
 	};
-	template<class T> struct sequence<T> {
-		template<class U> static constexpr bool of 		 = is_same<T, U>;
-		template<class U> static constexpr bool contains = is_same<T, U>;
-//		template<class U> static constexpr bool excludes = !is_same<T,U>;
-		using head = T;
-		using tail = T;
+	template<class T, class U, class... Ts>
+		struct seq_contains_impl<T,U,Ts...> {
+			static constexpr bool value= std::is_same<T,U>::value || seq_contains_impl<T,Ts...>::value;
+		};
+
+	template<class T, class... Ts>
+	struct seq_of_impl {
+		static constexpr bool value = false;
+	};
+	template<class T, class U>
+	struct seq_of_impl<T,U> {
+		static constexpr bool value = std::is_same<T,U>::value;
+	};
+	template<class T, class U, class... Ts>
+	struct seq_of_impl<T,U,Ts...> {
+		static constexpr bool value = std::is_same<T,U>::value || seq_of_impl<T,Ts...>::value;
 	};
 
-	template<class T, class... Ts> struct sequence<T, Ts...> {
-		template<class U> static constexpr bool of 			= is_same<T, U> && sequence<Ts...>::template of<U>;
-		template<class U> static constexpr bool contains 	= is_same<T, U> || sequence<Ts...>::template contains<U>;
-//		template<class U> static constexpr bool excludes 	= (!is_same<T,U>) && (sequence<Ts...>::template excludes<U>);
-		using head = T;
-		using tail = typename sequence<Ts...>::tail;
-	};
+	template<class T, class U, class... Ts> static constexpr bool seq_of = seq_of_impl<T,U,Ts...>::value;
 
-	template<class T, class... Ts> static constexpr bool seq_of = sequence<Ts...>::template of<T>;
-	template<class T, class... Ts> static constexpr bool seq_contains = sequence<Ts...>::template contains<T>;
-	template<class T, class... Ts> static constexpr bool seq_excludes = sequence<Ts...>::template excludes<T>;
+	template<class... Ts> static constexpr bool seq_contains = seq_contains_impl<Ts...>::value;
+//	template<class T, class... Ts> static constexpr bool seq_excludes = sequence<Ts...>::template excludes<T>;
 
 	template<bool>
 	struct constexpr_ternary_impl {

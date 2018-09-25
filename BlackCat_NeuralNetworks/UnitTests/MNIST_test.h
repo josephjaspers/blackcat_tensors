@@ -1,5 +1,5 @@
-//#include "../BlackCat_GPU_NeuralNetworks.h"
-#include "../BlackCat_NeuralNetworks.h"
+#include "../BlackCat_GPU_NeuralNetworks.h"
+//#include "../BlackCat_NeuralNetworks.h"
 
 #include <fstream>
 #include <iostream>
@@ -37,7 +37,7 @@ void generateAndLoad(cube& input_data, cube& output_data, std::ifstream& read_da
 
 int percept_MNIST() {
 //
-	const int TRAINING_EXAMPLES =  1024 * 8;
+	const int TRAINING_EXAMPLES =  1024 * 1;
 	const int BATCH_SIZE = 128;
 	const int NUMB_BATCHES = TRAINING_EXAMPLES / BATCH_SIZE;
 	const int PICTURE_SZ = 784;
@@ -47,6 +47,7 @@ int percept_MNIST() {
 	NeuralNetwork<FeedForward, FeedForward> network(784, 256, 10);
 	network.set_learning_rate(.03);
 	network.set_batch_size(BATCH_SIZE);
+	network.initialize_variables();
 
 	cube inputs(PICTURE_SZ, BATCH_SIZE, NUMB_BATCHES);
 	cube outputs(NUMB_DIGITS, BATCH_SIZE, NUMB_BATCHES);

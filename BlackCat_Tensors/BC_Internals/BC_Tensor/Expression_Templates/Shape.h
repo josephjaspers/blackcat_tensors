@@ -17,14 +17,12 @@ template<int dims>
 struct Shape : Shape_Base<Shape<dims>> {
 protected:
 
-	BC::array<dims, int> m_inner_shape;
-	BC::array<dims, int> m_outer_shape;
+	BC::array<dims, int> m_inner_shape = 0;
+	BC::array<dims, int> m_outer_shape = 0;
 
 public:
 
-	Shape()	= default;
-	Shape(const Shape&) = default;
-	Shape(		Shape&&) = default;
+	__BCinline__ Shape() {}
 
 	template<class... integers> Shape(integers... ints) {
 		static_assert(MTF::seq_of<int, integers...>, "INTEGER LIST OF SHAPE");
@@ -33,16 +31,16 @@ public:
 	}
 
 	template<class is_deriv>
-	Shape(const Inner_Shape<is_deriv> param) {
+	__BCinline__ Shape(const Inner_Shape<is_deriv> param) {
 		init(param);
 	}
 	template<int dim, class int_t>
-	Shape (BC::array<dim, int_t> param) {
+	__BCinline__ Shape (BC::array<dim, int_t> param) {
 		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
 		init(param);
 	}
 	template<int dim, class f, class int_t>
-	Shape (lambda_array<dim, int_t, f> param) {
+	__BCinline__ Shape (lambda_array<dim, int_t, f> param) {
 		static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
 		init(param);
 	}
@@ -89,6 +87,7 @@ private:
 template<>
 struct Shape<0> {
 
+	__BCinline__ Shape<0>() {}
 	__BCinline__ const auto inner_shape() const { return l_array<0>([&](auto x) { return 1; });}
 	__BCinline__ const auto outer_shape() const { return l_array<0>([&](auto x) { return 0; });}
 	__BCinline__ const auto block_shape() const { return l_array<0>([&](auto x) { return 1; });}
@@ -108,11 +107,11 @@ struct Shape<0> {
 template<>
 struct Shape<1> {
 
-	BC::array<1, int> m_inner_shape;
-	BC::array<1, int> m_outer_shape;
+	BC::array<1, int> m_inner_shape = 0;
+	BC::array<1, int> m_outer_shape = 0;
 
-	Shape() = default;
-	Shape (BC::array<1, int> param) : m_inner_shape(param), m_outer_shape(1) {}
+	__BCinline__ Shape() {};
+	__BCinline__ Shape (BC::array<1, int> param) : m_inner_shape(param), m_outer_shape(1) {}
 
 	template<int dim, class f, class int_t>
 	Shape (lambda_array<dim, int_t, f> param) {
@@ -121,7 +120,7 @@ struct Shape<1> {
 		m_outer_shape[0] = 1;
 	}
 
-	Shape(int length_) : m_inner_shape(length_) {}
+	__BCinline__ Shape(int length_) : m_inner_shape(length_) {}
 	__BCinline__ int size() const { return m_inner_shape[0]; }
 	__BCinline__ int rows() const { return m_inner_shape[0]; }
 	__BCinline__ int cols() const { return 1; }
