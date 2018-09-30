@@ -146,11 +146,52 @@ public:
 	}
 
 
-	 //--------------------------------Other Operators------------------------------//
+// disables optimizations (do not uncomment)
+//	auto operator +(scalar_t scalar) const {
+//		return un_expr([&](const auto& val) { return val + scalar; }); //l<internal::oper::add>(scalar); });
+//	}
+//
+//	auto operator -(scalar_t scalar) const {
+//		return un_expr([&](const auto& val) { return val - scalar; }); //l<internal::oper::add>(scalar); });
+//	}
+//
+//	auto operator /(scalar_t scalar) const {
+//		return un_expr([&](const auto& val) { return val / scalar; }); //l<internal::oper::add>(scalar); });
+//	}
+//	auto operator *(scalar_t scalar) const {
+//		return un_expr([&](const auto& val) { return val / scalar; }); //l<internal::oper::add>(scalar); });
+//	}
+	//pointwise multiply
 
+	 //--------------------------------Negation and its Conversions------------------------------//
 	 auto operator - () const {
 		 return un_expr<internal::oper::negation>();
 	 }
+private:
+	 template<class internal_t> using negated_t = Tensor_Base<internal::unary_expression<internal_t, internal::oper::negation>>;
+public:
+	 //specializations that upcast negation to a 'better' function (ensures that y -= w * x is as good as y += -(w*x)
+		template<class internal_t>
+		derived& operator +=(const negated_t<internal_t>& param) {
+			BC_ASSERT_ASSIGNABLE("derived& operator +=(const Tensor_Operations<pDeriv>& param)");
+			assert_valid(param);
+			evaluate(bi_expr_internal<internal::oper::sub_assign>(param.array));
+			return as_derived();
+		}
+		template<class internal_t>
+		derived& operator -=(const negated_t<internal_t>& param) {
+			BC_ASSERT_ASSIGNABLE("derived& operator -=(const Tensor_Operations<pDeriv>& param)");
+			assert_valid(param);
+			evaluate(bi_expr_internal<internal::oper::add_assign>(param.array));
+			return as_derived();
+		}
+		template<class internal_t>
+		auto operator +(const negated_t<internal_t>& param) const {
+			assert_valid(param);
+			return bi_expr_internal<internal::oper::sub>(param.array);
+		}
+
+
 	const auto transpose() const { return un_expr<internal::oper::transpose<mathlib_t>>(); }
 	 	  auto transpose() 		 { return un_expr<internal::oper::transpose<mathlib_t>>(); }
 
@@ -199,6 +240,14 @@ public:
 	template<class functor, class right_value>
 	const auto bi_expr(const Tensor_Operations<right_value>& rv) const {
 		return binary_expression_t<internal_t_of<right_value>, functor>(as_derived().internal(), rv.as_derived().internal());
+	}
+	template<class functor, class right_value>
+	const auto bi_expr_internal(functor f, const right_value& rv) const {
+		return binary_expression_t<right_value, functor>(as_derived().internal(), rv.as_derived().internal());
+	}
+	template<class functor, class right_value>
+	const auto bi_expr_internal(const right_value& rv) const {
+		return binary_expression_t<right_value, functor>(as_derived().internal(), rv);
 	}
 	 //--------------------------------ASSERTIONS------------------------------//
 

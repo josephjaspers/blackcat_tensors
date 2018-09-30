@@ -16,25 +16,36 @@ namespace NN {
 		int max = 0;
 
 		circular_int() = default;
-		circular_int(int x_, int max_=1) : x(x_), max(max_) {}
+		circular_int(int max_) : x(0), max(max_) {}
+		circular_int(int x_, int max_) : x(x_), max(max_) {}
 
-		operator int& () { return x; }
+		operator int () { return x; }
 
-		int& operator ++() {
+		int operator ++() {
 			x++;
 
-			if (x > max)
+			if (x >= max)
 				x = 0;
 
 			return x;
 		}
-		int& operator --() {
+		int operator --() {
 			x--;
 
 			if (x < 0)
-				x = max;
+				x = max - 1;
 
 			return x;
+		}
+		int operator ++(int) {
+			int tmp_x = x;
+			this->operator++();
+			return tmp_x;
+		}
+		int operator --(int) {
+			int tmp_x = x;
+			this->operator--();
+			return tmp_x;
 		}
 
 		int operator + (int value) {

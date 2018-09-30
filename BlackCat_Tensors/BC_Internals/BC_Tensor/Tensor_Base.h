@@ -85,6 +85,10 @@ public:
 		this->swap_array(tensor);
 		return *this;
 	}
+	Tensor_Base& operator =(copy_assign_parameter tensor) {
+		 operations::operator=(tensor);
+		 return *this;
+	}
 
 	Tensor_Base(scalar_t scalar) {
 		static_assert(DIMS() == 0, "SCALAR_INITIALIZATION ONLY AVAILABLE TO SCALARS");

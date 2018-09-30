@@ -11,6 +11,34 @@
 
 namespace BC {
 namespace internal {
+
+enum BLAS_format {
+	std,
+	upTri,
+	loTri,
+	upSym,
+	loSym,
+};
+enum BLAS_layout {
+	dense,
+	packed,
+	sparse,
+};
+enum BLAS_trans {
+	trans,
+	notrans,
+};
+template<
+BLAS_format form = std,
+BLAS_layout lay  = dense,
+BLAS_trans transp = notrans>
+
+struct BLAS_traits {
+	BLAS_format format 	= form;
+	BLAS_layout layout 	= lay;
+	BLAS_trans trans 	= transp;
+};
+
 namespace oper {
 	template<class ml>
 	class transpose;

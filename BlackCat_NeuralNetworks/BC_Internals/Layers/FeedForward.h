@@ -49,8 +49,8 @@ struct FeedForward : public Layer_Base {
 	}
 
 	void set_batch_size(int x) {
-		y = mat(this->OUTPUTS, x);
-		dy = mat(this->OUTPUTS, x);
+		y = mat(this->numb_outputs(), x);
+		dy = mat(this->numb_outputs(), x);
 	}
 
 	auto& inputs()  { return x; }

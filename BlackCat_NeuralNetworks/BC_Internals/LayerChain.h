@@ -11,13 +11,13 @@ template<int index, class derived, class...>
 struct LayerChain;
 
 //TAIL
-template<int index, class derived>
-struct LayerChain<index, derived, OutputLayer> {
+template<int index, class derived, class output_layer_t>
+struct LayerChain<index, derived, output_layer_t> {
 
-	using self = LayerChain<index, derived, OutputLayer>;
-	using type = OutputLayer;
+	using self = LayerChain<index, derived, output_layer_t>;
+	using type = output_layer_t;
 
-	OutputLayer layer;
+	output_layer_t layer;
 
 	LayerChain(int x) : layer(x) {}
 	const auto& head() const { return prev().head(); }
@@ -92,6 +92,8 @@ struct Chain : public LayerChain<0, Chain<lst...>, lst...>{
 	void write(std::ifstream& os) 		{ this->for_each([&](auto& layer) { layer.write(os); 	});}
 	void set_batch_size(int x) 			{ this->for_each([&](auto& layer) { layer.set_batch_size(x);	});}
 	void update_weights() 				{ this->for_each([ ](auto& layer) { layer.update_weights();		});}
+	void cache_gradients()				{ this->for_each([ ](auto& layer) { layer.cache_gradients();    });}
+	void set_max_bptt_length(int len)   { this->for_each_internal([&](auto& layer)  { layer.set_max_bptt_length(len);}); }
 	void set_learning_rate(fp_type lr)	{ this->for_each([&](auto& layer) { layer.set_learning_rate(lr); 	});}
 //	void clear_stored_gradients()		{ this->for_each([ ](auto& layer) { layer.clear_stored_gradients(); }); }
 

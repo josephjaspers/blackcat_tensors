@@ -14,12 +14,14 @@
 namespace BC {
 namespace NN {
 
-struct Layer_Base_Recurrent : Layer_Base{
+struct Recurrent_Layer_Base : Layer_Base{
 
-	circular_int t = 0; //timestamp
-	int max_backprop_length = 50;
+	static constexpr bool is_recurrent = true;
 
-	Layer_Base_Recurrent(int x, int y) : Layer_Base(x, y) {}
+	circular_int t = 1; //timestamp
+	int max_backprop_length = 1;
+
+	Recurrent_Layer_Base(int x, int y) : Layer_Base(x, y) {}
 
 	void set_max_bptt_length(int x) {
 		max_backprop_length = x;

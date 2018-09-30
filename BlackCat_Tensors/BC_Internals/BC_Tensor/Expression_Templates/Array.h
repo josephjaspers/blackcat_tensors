@@ -20,7 +20,6 @@ struct Array : Array_Base<Array<dimension, T, mathlib>, dimension>, public Shape
 	using scalar_t = T;
 	using mathlib_t = mathlib;
 
-
 	__BCinline__ static constexpr int DIMS() { return dimension; }
 
 	scalar_t* array = nullptr;

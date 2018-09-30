@@ -8,11 +8,15 @@
 
 #ifndef BCNN_GLOBAL_UNIFIER_H_
 #define BCNN_GLOBAL_UNIFIER_H_
-
+#include "Layers/InputLayer.h"
 #include "Layers/FeedForward.h"
 #include "Layers/OutputLayer.h"
-#include "Layers/GRU.h"
+
+#include "Layers/Recurrent_InputLayer.h"
 #include "Layers/Recurrent_FeedForward.h"
+#include "Layers/Recurrent_OutputLayer.h"
+
+#include "Layers/GRU.h"
 #include "NeuralNetwork.h"
 //#include "../../BlackCat_Tensors/BlackCat_Tensors.h"
 

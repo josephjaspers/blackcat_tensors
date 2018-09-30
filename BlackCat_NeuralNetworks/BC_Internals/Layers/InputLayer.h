@@ -8,12 +8,13 @@
 #ifndef OUTPUT_CU
 #define OUTPUT_CU
 
-#include "../../BC_Internals/Layers/Layer_Base.h"
+#include "Layer_Base.h"
+#include <vector>
+#include "Recurrent_Layer_Base.h"
 
 namespace BC {
 namespace NN {
 
-//template<class derived>
 struct InputLayer : Layer_Base {
 
 	InputLayer(int inputs, int outputs) : Layer_Base(inputs, outputs) {}
@@ -30,8 +31,6 @@ struct InputLayer : Layer_Base {
 		return dy;
 	}
 
-
-	void set_batch_size(int x) {}
 	void update_weights() {}
 	void clear_stored_gradients() {}
 	void write(std::ofstream& os) {}
@@ -43,11 +42,6 @@ struct InputLayer : Layer_Base {
 	auto& outputs() { return x; }
 	auto& weights()	{ return NULL_TENSOR; }
 	auto& bias()	{ return NULL_TENSOR; }
-
-	template<class tensor, class deltas> void set_activation(tensor&,deltas&) {}
-	template<class tensor> void set_weight(tensor&) {}
-	template<class tensor> void set_bias(tensor&) {}
-
 };
 }
 }
