@@ -15,6 +15,7 @@
 #include "Layers/Recurrent_InputLayer.h"
 #include "Layers/Recurrent_FeedForward.h"
 #include "Layers/Recurrent_OutputLayer.h"
+#include "Layers/Recurrent_Layer.h"
 
 #include "Layers/GRU.h"
 #include "NeuralNetwork.h"

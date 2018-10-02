@@ -27,9 +27,27 @@ class Tensor_Functions<Tensor_Base<internal_t>> {
 	 	   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
 public:
 
-	void randomize(scalar_type lb, scalar_type ub)  { mathlib_type::randomize(as_derived().internal(), lb, ub); }
-	void fill(scalar_type value) 					{ mathlib_type::fill(as_derived().internal(), value); }
-	void zero() 									{ mathlib_type::zero(as_derived().internal()); }
+	void randomize(scalar_type lb=0, scalar_type ub=1)  { mathlib_type::randomize(as_derived().internal(), lb, ub); }
+	void fill(scalar_type value) 						{ mathlib_type::fill(as_derived().internal(), value); }
+	void zero() 										{ mathlib_type::zero(as_derived().internal()); }
+
+
+	template<class function>
+	void for_each(function f) {
+		auto for_each_expr = this->as_derived().un_expr(f);
+		this->as_derived() = for_each_expr;
+	}
+
+	//transform is an alias for for_each
+	template<class function>
+	void transform(function f) {
+		return for_each(f);
+	}
+
+	bool is_square() {
+		return derived::DIMS() == 2 && as_derived().dimension(0) == as_derived().dimension(1);
+	}
+	//diag
 
 };
 
