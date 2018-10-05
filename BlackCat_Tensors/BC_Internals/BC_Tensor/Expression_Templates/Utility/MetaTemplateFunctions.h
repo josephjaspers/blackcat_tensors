@@ -30,29 +30,6 @@ namespace MTF {
 
 		//short_hand for const cast
 	template<class T> auto& cc(const T& var) { return const_cast<T&>(var); }
-//
-//	template<class... Ts>
-//	struct sequence {
-//		template<class U> static constexpr bool of = false;
-//		template<class U> static constexpr bool contains = false;
-//		template<class U> static constexpr bool excludes = false;
-//	};
-//	template<class T> struct sequence<T> {
-//		template<class U> static constexpr bool of 		 = is_same<T, U>;
-//		template<class U> static constexpr bool contains = is_same<T, U>;
-////		template<class U> static constexpr bool excludes = !is_same<T,U>;
-//		using head = T;
-//		using tail = T;
-//	};
-//
-//	template<class T, class... Ts> struct sequence<T, Ts...> {
-//		template<class U> static constexpr bool of 			= is_same<T, U> && sequence<Ts...>::template of<U>;
-//		template<class U> static constexpr bool contains 	= is_same<T, U> || sequence<Ts...>::template contains<U>;
-////		template<class U> static constexpr bool excludes 	= (!is_same<T,U>) && (sequence<Ts...>::template excludes<U>);
-//		using head = T;
-//		using tail = typename sequence<Ts...>::tail;
-//	};
-
 
 	template<class T, class... Ts> using head_t = T;
 
@@ -81,7 +58,30 @@ namespace MTF {
 	template<class T, class U, class... Ts> static constexpr bool seq_of = seq_of_impl<T,U,Ts...>::value;
 
 	template<class... Ts> static constexpr bool seq_contains = seq_contains_impl<Ts...>::value;
-//	template<class T, class... Ts> static constexpr bool seq_excludes = sequence<Ts...>::template excludes<T>;
+
+
+	template<int index, class... Ts>
+	struct get_impl;
+
+	template<int index>
+	struct get_impl<index>{
+		template<class T, class... Ts>
+		static auto impl(T head, Ts... params) {
+			 return get_impl<index - 1>::impl(params...);
+		}
+	};
+	template<>
+	struct get_impl<0>{
+		template<class T, class... Ts>
+		static auto impl(T head, Ts... params) {
+			 return head;
+		}
+	};
+	template<int index, class... Ts>
+	auto get(Ts... params) {
+		return get_impl<index>::impl(params...);
+	}
+
 
 	template<bool>
 	struct constexpr_ternary_impl {

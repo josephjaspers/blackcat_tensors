@@ -14,9 +14,8 @@ namespace BC {
 template<class> class Evaluator;
 
 namespace internal {
-template<int dimension, class T, class mathlib, class derived = void>
-struct Array : Array_Base<
-std::conditional_t<std::is_same<derived, void>::value, Array<dimension, T, mathlib>, derived>, dimension>, public Shape<dimension> {
+template<int dimension, class T, class mathlib>
+struct Array : Array_Base<Array<dimension, T, mathlib>, dimension>, public Shape<dimension> {
 
 	using scalar_t = T;
 	using mathlib_t = mathlib;

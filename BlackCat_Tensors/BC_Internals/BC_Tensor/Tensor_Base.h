@@ -63,6 +63,7 @@ public:
 	Tensor_Base() = default;
 	Tensor_Base(const parent&  param) : internal_t(param) {}
 	Tensor_Base( 	  parent&& param) : internal_t(param) {}
+
 	template<class U> Tensor_Base(const Tensor_Base<U>&  tensor) : internal_t(tensor.internal()) {}
 	template<class U> Tensor_Base(	    Tensor_Base<U>&  tensor) : internal_t(tensor.internal()) {}
 

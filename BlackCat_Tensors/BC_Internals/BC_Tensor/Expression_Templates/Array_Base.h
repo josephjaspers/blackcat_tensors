@@ -76,45 +76,25 @@ public:
 	}
 
 	//internal_views---------------------------------------------------------------------------------------------------------------
+	struct ret_scalar {
+		__BCinline__ static auto impl(const Array_Base& self, int i) { return self._scalar(i); }
+		__BCinline__ static auto impl(	    Array_Base& self, int i) { return self._scalar(i); }
+	};
+
+	struct ret_slice {
+		__BCinline__ static auto impl(const Array_Base& self, int i) { return slice_t(self.slice_ptr(i), self.as_derived()); }
+		__BCinline__ static auto impl(		Array_Base& self, int i) { return slice_t(self.slice_ptr(i), self.as_derived()); }
+	};
 
 	__BCinline__ const auto _slice(int i) const {
 		//change to if constexpr once NVCC supports it
-
-		struct ret_scalar {
-			static auto impl(const Array_Base& self, int i) {
-				return self._scalar(i);
-			}
-		};
-
-		struct ret_slice {
-			static auto impl(const Array_Base& self, int i) {
-				return slice_t(self.slice_ptr(i), self.as_derived());
-			}
-		};
-
-		using xslice_t = std::conditional_t<DIMS() == 1, ret_scalar,
-		std::conditional_t<(DIMS() > 1), ret_slice, void>>;
-
+		using xslice_t = std::conditional_t<DIMS() == 1, ret_scalar, ret_slice>;
 		return xslice_t::impl(*this);
 	}
+
+	using xslice_t = std::conditional_t<DIMS() == 1, ret_scalar, ret_slice>;
 	__BCinline__ auto _slice(int i) {
-		//change to if constexpr once NVCC supports it
-
-		struct ret_scalar {
-			__BCinline__ static auto impl(const Array_Base& self, int i) {
-				return self._scalar(i);
-			}
-		};
-
-		struct ret_slice {
-			__BCinline__ static auto impl(const Array_Base& self, int i) {
-				return slice_t(self.slice_ptr(i), self.as_derived());
-			}
-		};
-
-		using xslice_t = std::conditional_t<DIMS() == 1, ret_scalar,
-							std::conditional_t<(DIMS() > 1), ret_slice, void>>;
-
+		using xslice_t = std::conditional_t<DIMS() == 1, ret_scalar, ret_slice>;
 		return xslice_t::impl(*this, i);
 	}
 

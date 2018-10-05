@@ -14,7 +14,6 @@ namespace internal {
 template<class,class,class> class binary_expression;
 template<class,class>		class unary_expression;
 
-
 template<class T> using mathlib_of = std::decay_t<typename T::mathlib_t>;
 template<class T> using scalar_of  = std::decay_t<typename T::scalar_t>;
 
@@ -34,6 +33,11 @@ struct BC_array_move_assignable_overrider {
 };
 template<class T, class enabler=void>
 struct BC_array_copy_assignable_overrider {
+	static constexpr bool boolean = false;
+};
+
+template<class T, class enabler=void>
+struct BC_triangle_matrix_overrider {
 	static constexpr bool boolean = false;
 };
 

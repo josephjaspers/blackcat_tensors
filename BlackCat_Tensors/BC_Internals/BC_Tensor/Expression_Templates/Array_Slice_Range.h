@@ -24,27 +24,24 @@ struct Array_Slice_Range
 	__BCinline__ static constexpr int ITERATOR() { return PARENT::ITERATOR(); }
 	__BCinline__ static constexpr int DIMS() 	 { return PARENT::DIMS(); }
 
-	__BCinline__ operator const PARENT() const { return parent; }
-
-	const PARENT parent;
 	scalar_t* array_slice;
 
 	struct voidt;
 	using vec_scalar_t = std::conditional_t<(DIMS() == 1), scalar_t, voidt>;
 	using tensor_scalar_t = std::conditional_t<(DIMS() > 1), scalar_t, voidt>;
 
-	__BCinline__
+	__BCinline__ //specialization if not a vector
 	Array_Slice_Range(const tensor_scalar_t* array, PARENT parent_, int range)
-							: Shape<DIMS()>(parent_.inner_shape()), parent(parent_), array_slice(const_cast<scalar_t*>(array)) {
+		: Shape<DIMS()>(parent_.as_shape()), array_slice(const_cast<scalar_t*>(array)) {
 
-		int size = parent.leading_dimension(DIMS() - 2) * range;
+		int size = parent_.leading_dimension(DIMS() - 2) * range;
 		this->m_inner_shape[DIMS() - 1] = range; //setting the outer_dimension
 		this->m_outer_shape[DIMS() - 1] = size;  //adjusting the size
 	}
 
-	__BCinline__
+	__BCinline__ //specialization if vector
 	Array_Slice_Range(const vec_scalar_t* array, PARENT parent_, int range)
-							: Shape<DIMS()>(parent_.inner_shape()), parent(parent_), array_slice(const_cast<scalar_t*>(array)) {
+		: Shape<DIMS()>(parent_.inner_shape()), array_slice(const_cast<scalar_t*>(array)) {
 		this->m_inner_shape[DIMS() - 1] = range;
 	}
 

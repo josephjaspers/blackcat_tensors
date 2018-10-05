@@ -15,12 +15,13 @@ namespace BC {
 namespace internal {
 template<int dims>
 struct Shape : Shape_Base<Shape<dims>> {
-protected:
 
 	BC::array<dims, int> m_inner_shape = 0;
 	BC::array<dims, int> m_outer_shape = 0;
 
-public:
+	Shape& as_shape() { return *this; }
+	const Shape& as_shape() const { return *this; }
+
 
 	__BCinline__ Shape() {}
 
@@ -28,6 +29,15 @@ public:
 		static_assert(MTF::seq_of<int, integers...>, "INTEGER LIST OF SHAPE");
 		static_assert(sizeof...(integers) == dims, "integer initialization must have the same number of dimensions");
 		init(BC::make_array(ints...));
+	}
+
+	template<int x>
+	Shape(const Shape<x>& shape) {
+		static_assert(x >= dims);
+		for (int i = 0; i < dims; ++i) {
+			m_inner_shape[i] = shape.m_inner_shape[i];
+			m_outer_shape[i] = shape.m_outer_shape[i];
+		}
 	}
 
 	template<class is_deriv>
@@ -87,6 +97,9 @@ private:
 template<>
 struct Shape<0> {
 
+	Shape& as_shape() { return *this; }
+	const Shape& as_shape() const { return *this; }
+
 	__BCinline__ Shape<0>() {}
 	__BCinline__ const auto inner_shape() const { return l_array<0>([&](auto x) { return 1; });}
 	__BCinline__ const auto outer_shape() const { return l_array<0>([&](auto x) { return 0; });}
@@ -101,12 +114,13 @@ struct Shape<0> {
 
 	template<class deriv> void copy_shape(const Shape_Base<deriv>& shape) {}
 	static void swap_shape(Shape& a, Shape& b) {}
-
 };
 
 template<>
 struct Shape<1> {
 
+	Shape& as_shape() { return *this; }
+	const Shape& as_shape() const { return *this; }
 	BC::array<1, int> m_inner_shape = 0;
 	BC::array<1, int> m_outer_shape = 0;
 
@@ -118,6 +132,13 @@ struct Shape<1> {
 		static_assert(dim >= 1, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
 		m_inner_shape[0] = param[0];
 		m_outer_shape[0] = 1;
+	}
+
+	template<int x>
+	Shape(const Shape<x>& shape) {
+		static_assert(x >= 1);
+		m_inner_shape[0] = shape.m_inner_shape[0];
+		m_outer_shape[0] = shape.m_outer_shape[0];
 	}
 
 	__BCinline__ Shape(int length_) : m_inner_shape(length_) {}

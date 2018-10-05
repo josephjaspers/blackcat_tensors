@@ -9,6 +9,7 @@
 #define TENSOR_SHAPING_H_
 
 #include "Tensor_Common.h"
+#include "Expression_Templates/Array_Format.h"
 
 namespace BC {
 namespace module {
@@ -68,6 +69,7 @@ public:
 
 }
 
+
 template<class T>
 const auto reshape(const Tensor_Base<T>& tensor) {
 	return [&](auto... integers) {
@@ -93,6 +95,16 @@ template<class T, class... integers>//, class enabler = std::enable_if_t<MTF::se
 	return [&](auto... shape_indicies) {
 		return make_tensor(tensor._chunk(make_array(ints...), make_array(shape_indicies...)));
 	};
+}
+
+template<class T, class... integers>
+auto format(Tensor_Base<T>& tensor,  integers... ints) {
+	return make_tensor(internal::Array_Format<T>(tensor.memptr(), tensor.internal(), ints...));
+}
+
+template<class T, class... integers>
+const auto format(const Tensor_Base<T>& tensor,  integers... ints) {
+	return make_tensor(internal::Array_Format<T>(tensor.memptr(), tensor.internal(), ints...));
 }
 
 }

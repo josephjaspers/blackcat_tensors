@@ -38,14 +38,11 @@ struct Array_Reshape {
 
 	static_assert(PARENT::ITERATOR() == 0, "RESHAPE IS NOT SUPPORTED ON NON-CONTINUOUS TENSORS");
 
-	operator const PARENT() const	{ return parent; }
-
-	PARENT parent;
 	scalar_t* array;
 
 	template<class... integers>
 	implementation(const scalar_t* array_, PARENT parent, integers... ints)
-	: Shape<dimension>(ints...),  parent(parent), array(const_cast<scalar_t*>(array_)) {}
+	: Shape<dimension>(ints...),  array(const_cast<scalar_t*>(array_)) {}
 
 	__BCinline__ const auto memptr() const { return array; }
 	__BCinline__	   auto memptr()   	   { return array; }
