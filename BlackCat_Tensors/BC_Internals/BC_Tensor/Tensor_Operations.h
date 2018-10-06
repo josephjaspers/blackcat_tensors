@@ -9,17 +9,17 @@
 #define TENSOR_HEAD_H_
 
 #include "Tensor_Common.h"
-#include "Expression_Templates/Expression_Unary.h"
-#include "Expression_Templates/Expression_Binary.h"
 #include "Expression_Templates/Operations/Binary.h"
 #include "Expression_Templates/Operations/Unary.h"
 #include "Expression_Templates/Operations/BLAS.h"
+#include "Expression_Templates/Expression_Unary.h"
+#include "Expression_Templates/Expression_Binary.h"
 
-#include "Expression_Templates/Function_gemm.h"
-#include "Expression_Templates/Function_gemv.h"
-#include "Expression_Templates/Function_ger.h"
-#include "Expression_Templates/Function_dot.h"
 #include "Expression_Templates/Function_transpose.h"
+#include "Expression_Templates/Function_dot.h"
+#include "Expression_Templates/Function_ger.h"
+#include "Expression_Templates/Function_gemv.h"
+#include "Expression_Templates/Function_gemm.h"
 
 #include "Expression_Templates/Tree_Evaluator_Runner.h"
 

@@ -147,7 +147,7 @@ struct Shape<1> {
 	__BCinline__ int cols() const { return 1; }
 	__BCinline__ int dimension(int i) const { return i == 0 ? m_inner_shape[0] : 1; }
 	__BCinline__ int outer_dimension() const { return 1; }
-	__BCinline__ int leading_dimension(int i) const { return i == 0 ? m_outer_shape[0] : 0; }
+	__BCinline__ int leading_dimension(int i) const { return i == 0 ? 1 : 0; }
 	__BCinline__ int block_dimension(int i)   const { return leading_dimension(i); }
 	__BCinline__ const auto& inner_shape() const { return m_inner_shape; }
 	__BCinline__ const auto& outer_shape() const { return m_outer_shape; }

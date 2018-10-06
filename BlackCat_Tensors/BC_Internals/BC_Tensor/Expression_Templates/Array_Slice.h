@@ -27,13 +27,19 @@ struct Array_Slice
 
 	scalar_t* array_slice;
 
-	__BCinline__ Array_Slice(const scalar_t* array, PARENT parent_)
-	: Shape<PARENT::DIMS() - 1> (parent_.as_shape()), array_slice(const_cast<scalar_t*>(array)) {}
+	__BCinline__ Array_Slice(PARENT parent_, int index)
+	: Shape<PARENT::DIMS() - 1> (parent_.as_shape()),
+	  array_slice(const_cast<scalar_t*>(parent_.slice_ptr(index))) {}
 
 	__BCinline__ const scalar_t* memptr() const { return array_slice; }
 	__BCinline__	   scalar_t* memptr()   	{ return array_slice; }
 
 	};
+
+	template<class internal_t>
+	auto make_slice(internal_t internal, int index) {
+		return Array_Slice<internal_t>(internal, index);
+	}
 }
 }
 #endif /* TENSOR_SLICE_CU_ */

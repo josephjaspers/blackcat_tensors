@@ -41,24 +41,23 @@ struct unary_expression : public expression_base<unary_expression<value, operati
 	__BCinline__ int cols() const { return array.cols(); }
 	__BCinline__ int dimension(int i) const { return array.dimension(i); }
 	__BCinline__ int block_dimension(int i) const { return array.block_dimension(i); }
-
-
-	__BCinline__ const auto _slice(int i) const {
-		using slice_t = decltype(array.slice(i));
-		return unary_expression<slice_t, operation>(array.slice(i), static_cast<const operation&>(*this));
-	}
-	__BCinline__ const auto _scalar(int i) const {
-		using scalar_t = decltype(array.scalar(i));
-		return unary_expression<scalar_t, operation>(array.scalar(i),  static_cast<const operation&>(*this));
-	}
-
-	__BCinline__ const auto _col(int i) const {
-		static_assert(DIMS() == 2, "COLUMN ACCESS ONLY AVAILABLE TO MATRICEDS");
-		return _slice(i);
-	}
 };
 }
 }
 #endif /* EXPRESSION_UNARY_POINTWISE_CU_ */
 
 
+
+//__BCinline__ const auto _slice(int i) const {
+//	using slice_t = decltype(array._slice(i));
+//	return unary_expression<slice_t, operation>(array._slice(i), static_cast<const operation&>(*this));
+//}
+//__BCinline__ const auto _scalar(int i) const {
+//	using scalar_t = decltype(array._scalar(i));
+//	return unary_expression<scalar_t, operation>(array._scalar(i),  static_cast<const operation&>(*this));
+//}
+//__BCinline__ const auto _slice_range(int from, int to) const {
+//	using scalar_t = decltype(array._slice_range(from, to));
+//	return unary_expression<scalar_t, operation>(array._slice_range(from,to),  static_cast<const operation&>(*this));
+//}
+//

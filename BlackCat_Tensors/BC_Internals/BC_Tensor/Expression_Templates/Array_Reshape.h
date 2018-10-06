@@ -41,14 +41,19 @@ struct Array_Reshape {
 	scalar_t* array;
 
 	template<class... integers>
-	implementation(const scalar_t* array_, PARENT parent, integers... ints)
-	: Shape<dimension>(ints...),  array(const_cast<scalar_t*>(array_)) {}
+	implementation(PARENT parent, BC::array<dimension,int> shape)
+	: Shape<dimension>(shape),  array(const_cast<scalar_t*>(parent.memptr())) {}
 
 	__BCinline__ const auto memptr() const { return array; }
 	__BCinline__	   auto memptr()   	   { return array; }
 
 	};
 };
+
+template<class internal_t, int dimension>
+auto make_reshape(internal_t internal, BC::array<dimension,int> shape) {
+	return typename Array_Reshape<dimension>::template implementation<internal_t>(internal, shape);
+}
 }
 }
 

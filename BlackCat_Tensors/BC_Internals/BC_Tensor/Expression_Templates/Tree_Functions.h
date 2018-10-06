@@ -11,6 +11,10 @@
 #include "Tree_Evaluator_Common.h"
 
 namespace BC{
+
+class CPU;
+class GPU;
+
 namespace internal {
 namespace tree {
 
@@ -53,7 +57,15 @@ template<> struct scalar_modifer<internal::oper::assign> {
 	};
 };
 
+
+template<class T>
+struct is_blas_func_impl { static constexpr bool value = false; };
+template<> struct is_blas_func_impl<BC::CPU> { static constexpr bool value = true; };
+template<> struct is_blas_func_impl<BC::GPU> { static constexpr bool value = true; };
+
+
 template<class T> static constexpr bool is_blas_func() {
+//	return is_blas_func_impl<T>::value;
 	return std::is_base_of<BC::BLAS_FUNCTION, T>::value;
 }
 

@@ -33,8 +33,10 @@ struct Array_Chunk  {
 		scalar_t* array;
 
 		template<class... integers>
-		implementation(const scalar_t* array_, PARENT parent, integers... ints)
-		:  Shape<dimension>(ints...), parent(parent), array(const_cast<scalar_t*>(array_)) {}
+		implementation(PARENT parent, BC::array<PARENT::DIMS(), int> index, BC::array<dimension, int> shape)
+		:  Shape<dimension>(shape),
+		   parent(parent),
+		   array(const_cast<scalar_t*>(& parent(index))) {}
 
 		__BCinline__ const auto block_shape() const 	{ return Shape<dimension>::outer_shape(); }
 		__BCinline__ const auto outer_shape() const 	{ return parent.outer_shape(); }
@@ -43,7 +45,13 @@ struct Array_Chunk  {
 		__BCinline__ const auto memptr() const { return array; }
 		__BCinline__	   auto memptr()   	   { return array; }
 	};
-	};
+};
+
+template<class internal_t, int parent_dims, int dims>
+auto make_chunk(internal_t internal, BC::array<parent_dims, int> index, BC::array<dims, int> shape) {
+		return typename Array_Chunk<dims>::template implementation<internal_t>(internal, index, shape);
+}
+
 }
 }
 

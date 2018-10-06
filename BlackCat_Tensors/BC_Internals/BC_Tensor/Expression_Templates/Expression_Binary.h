@@ -43,29 +43,31 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	__BCinline__ int block_dimension(int i) const { return shape().block_dimension(i); }
 	__BCinline__ const auto inner_shape() const { return shape().inner_shape(); }
 	__BCinline__ const auto block_shape() const { return shape().block_shape(); }
-
-
-
-	__BCinline__ const auto slice(int i) const {
-		using slice_lv = decltype(left.slice(i));
-		using slice_rv = decltype(left.slice(i));
-
-		return binary_expression<slice_lv, slice_rv, operation>(left.slice(i), right.slice(i),  static_cast<const operation&>(*this));
-	}
-	__BCinline__ const auto scalar(int i) const {
-		using scalar_lv = decltype(left.scalar(i));
-		using scalar_rv = decltype(left.scalar(i));
-
-		return binary_expression<scalar_lv, scalar_rv, operation>(left.scalar(i), right.scalar(i),  static_cast<const operation&>(*this));
-	}
-	__BCinline__ const auto col(int i) const {
-		static_assert(DIMS() == 2, "COLUMN ACCESS ONLY AVAILABLE TO MATRICES");
-		return slice(i);
-	}
 };
 }
 }
 
-
 #endif /* EXPRESSION_BINARY_POINTWISE_SAME_H_ */
+
+//
+//private:
+//	template<class l, class r>
+//	auto make_binexpr(l l_, r r_, const operation& op) {
+//		return binary_expression<l, r, operation>(l_, r_, op);
+//	}
+//
+//	const operation& as_op() {
+//		return static_cast<const operation&>(*this);
+//	}
+//public:
+//
+//	__BCinline__ const auto _slice(int i) const {
+//		return make_binexpr(left._slice(i), right._slice(i), this->as_op());
+//	}
+//	__BCinline__ const auto _scalar(int i) const {
+//		return make_binexpr(left._scalar(i), right._scalar(i), this->as_op());
+//	}
+//	__BCinline__ const auto _slice_range(int from, int to) {
+//		return make_binexpr(left._slice_range(from, to), right._slice_range(from, to),  this->as_op());
+//	}
 

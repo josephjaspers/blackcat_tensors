@@ -12,7 +12,8 @@
 namespace BC {
 namespace internal {
 namespace oper {
-template<class ml> class transpose;
+template<class>
+ class transpose;
 }
 
 template<class functor_type, class ml>

@@ -2,6 +2,7 @@
 #ifndef EXPRESSION_BINARY_GEMV_H_
 #define EXPRESSION_BINARY_GEMV_H_
 
+#include "Function_dot.h"
 
 #include "Expression_Base.h"
 #include "Internal_BLAS_Feature_Detector.h"
@@ -54,9 +55,6 @@ struct binary_expression<lv, rv, oper::gemv<mathlib>>
 
 	__BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : 1; });}
 	__BCinline__ const auto block_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? rows() : 1; });}
-	__BCinline__ auto _slice(int i) {
-		return binary_expression<decltype(left._row(i)), decltype(right._slice(i)), oper::dot<mathlib>>(left._row(i), right._slice(i));
-	}
 
 template<class core, int alpha_mod, int beta_mod>
 void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
@@ -101,3 +99,13 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 }
 
 #endif /* EXPRESSION_BINARY_DOTPRODUCT_CU_ */
+
+/*
+ * 	__BCinline__ auto _slice(int i) {
+		return binary_expression<decltype(left._row(i)), decltype(right._slice(i)), oper::dot<mathlib_t>>(left._row(i), right._slice(i));
+	}
+	__BCinline__ auto _slice_range(int from, int to) {
+		return binary_expression<lv, decltype(right._slice_range(from, to)), oper::gemv<mathlib_t>>(left, right._slice_range(from, to));
+	}
+ *
+ */

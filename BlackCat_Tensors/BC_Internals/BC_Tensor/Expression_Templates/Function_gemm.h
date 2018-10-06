@@ -58,13 +58,6 @@ struct binary_expression<lv, rv, oper::gemm<mathlib>>
 	__BCinline__ int N() const { return right.cols(); }
 	__BCinline__ int K() const { return left.cols();  }
 
-	__BCinline__ auto _slice(int i) {
-		return binary_expression<lv, decltype(right._slice(i)), oper::gemv<mathlib_t>>(left, right._slice(i));
-	}
-	__BCinline__ auto _col(int i) {
-		return _slice(i);
-	}
-
 	template<class core, int alpha_mod, int beta_mod>
 	void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 
@@ -117,5 +110,12 @@ struct binary_expression<lv, rv, oper::gemm<mathlib>>
 //std::cout <<"B instant eval " << rv_eval << std::endl;
 //std::cout << "alpha modifier = " << alpha_mod << std::endl;
 //std::cout << " beta_mod = " << beta_mod << std::endl;
+
+//__BCinline__ auto _slice(int i) {
+//	return binary_expression<lv, decltype(right._slice(i)), oper::gemv<mathlib_t>>(left, right._slice(i));
+//}
+//__BCinline__ auto _slice_range(int from, int to) {
+//	return binary_expression<lv, decltype(right._slice_range(from, to)), oper::gemm<mathlib_t>>(left, right._slice_range(from, to));
+//}
 
 #endif /* EXPRESSION_BINARY_DOTPRODUCT_CU_ */

@@ -88,9 +88,10 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 	mathlib::destroy(alpha);
 }
 };
+}
+}
+#endif /* EXPRESSION_BINARY_DOTPRODUCT_CU_ */
 
-}
-}
 //		if (transA)
 //		std::cout << "A is transposed" << transA << std::endl;
 //		if (transB)
@@ -104,4 +105,11 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 //		if(rv_eval)
 //		std::cout <<"B instant eval " << rv_eval << std::endl;
 
-#endif /* EXPRESSION_BINARY_DOTPRODUCT_CU_ */
+//__BCinline__ auto _slice(int i) {
+//	return binary_expression<lv, decltype(right._scalar(i)), oper::scalar_mul>(left, right._scalar(i));
+//}
+//__BCinline__ auto _slice_range(int from, int to) {
+//	return binary_expression<lv, decltype(right._slice_range(from, to)), oper::ger<mathlib_t>>(left, right._slice_range(from, to));
+//}
+//
+

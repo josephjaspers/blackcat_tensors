@@ -7,6 +7,8 @@
 #ifndef EXPRESSION_BINARY_FUNCTORS_H_
 #define EXPRESSION_BINARY_FUNCTORS_H_
 
+#include "../Internal_Common.h"
+
 namespace BC {
 namespace internal {
 namespace oper {

@@ -75,92 +75,18 @@ public:
 		return as_derived()[this->dims_to_index(ints...)];
 	}
 
-	//internal_views---------------------------------------------------------------------------------------------------------------
-	struct ret_scalar {
-		__BCinline__ static auto impl(const Array_Base& self, int i) { return self._scalar(i); }
-		__BCinline__ static auto impl(	    Array_Base& self, int i) { return self._scalar(i); }
-	};
-
-	struct ret_slice {
-		__BCinline__ static auto impl(const Array_Base& self, int i) { return slice_t(self.slice_ptr(i), self.as_derived()); }
-		__BCinline__ static auto impl(		Array_Base& self, int i) { return slice_t(self.slice_ptr(i), self.as_derived()); }
-	};
-
-	__BCinline__ const auto _slice(int i) const {
-		//change to if constexpr once NVCC supports it
-		using xslice_t = std::conditional_t<DIMS() == 1, ret_scalar, ret_slice>;
-		return xslice_t::impl(*this);
+	__BCinline__ auto& operator ()(BC::array<DIMS(), int> index) {
+		return as_derived()	[this->dims_to_index(index)];
 	}
-
-	using xslice_t = std::conditional_t<DIMS() == 1, ret_scalar, ret_slice>;
-	__BCinline__ auto _slice(int i) {
-		using xslice_t = std::conditional_t<DIMS() == 1, ret_scalar, ret_slice>;
-		return xslice_t::impl(*this, i);
-	}
-
-	__BCinline__ const auto _slice_range(int from, int to) const {
-		return slice_range_t(slice_ptr(from), *this, to - from);
-	}
-	__BCinline__ auto _slice_range(int from, int to) {
-		return slice_range_t(slice_ptr(from), *this, to - from);
-	}
-
-
-	__BCinline__ const auto _row(int i) const {
-		return row_t(&as_derived()[i], as_derived());
-	}
-	__BCinline__  auto _row(int i)  {
-		return row_t(&as_derived()[i], as_derived());
-	}
-
-
-	__BCinline__ const auto _scalar(int i) const {
-		static_assert(derived::ITERATOR() == 0 || derived::ITERATOR() == 1, "SCALAR_ACCESS IS NOT ALLOWED FOR NON CONTINUOUS TENSORS");
-		return scalar_t(&as_derived()[i]);
-	}
-	__BCinline__ auto _scalar(int i) {
-		static_assert(derived::ITERATOR() == 0 || derived::ITERATOR() == 1, "SCALAR_ACCESS IS NOT ALLOWED FOR NON CONTINUOUS TENSORS");
-		return scalar_t(&as_derived()[i]);
-	}
-
-
-	//------------------------------------------Curried Reshapers ---------------------------------------//
-
-	template<int dimensions>
-	const auto _chunk(BC::array<DIMS(), int> point, BC::array<dimensions, int> shape) const{
-		return chunk_t<dimensions>(&as_derived()[dims_to_index(point)], this->as_derived(), shape);
-	}
-
-	template<int dimensions>
-	auto _chunk(BC::array<DIMS(), int> point, BC::array<dimensions, int> shape) {
-		return chunk_t<dimensions>(&as_derived()[dims_to_index(point)], this->as_derived(), shape);
-	}
-
-	template<class ... integers>
-	auto _reshape(integers... ints) {
-		return reshape_t<sizeof...(integers)>(as_derived(), this->as_derived(), ints...);
-	}
-
-	template<int dim>
-	auto _reshape(Shape<dim> shape) {
-		return reshape_t<dim>(as_derived(), this->as_derived(), shape);
-	}
-	template<class ... integers>
-	const auto _reshape(integers... ints) const {
-		return reshape_t<sizeof...(integers)>(as_derived(), this->as_derived(), ints...);
-	}
-
-	template<int dim>
-	const auto _reshape(Shape<dim> shape) const  {
-		return reshape_t<dim>(as_derived(), this->as_derived(), shape);
+	__BCinline__ const auto& operator ()(BC::array<DIMS(), int> index) const {
+		return as_derived()[this->dims_to_index(index)];
 	}
 
 
 
 	void destroy() {}
 	//------------------------------------------Implementation Details---------------------------------------//
-private:
-
+public:
 	__BCinline__
 	auto slice_ptr(int i) const {
 		if (DIMS() == 0)
@@ -170,6 +96,7 @@ private:
 		else
 			return &as_derived()[as_derived().leading_dimension(DIMENSION - 2) * i];
 	}
+private:
 
 	template<class... integers> __BCinline__
 	int dims_to_index(integers... ints) const {
@@ -211,3 +138,4 @@ struct BC_array_copy_assignable_overrider<T, std::enable_if_t<is_array<T>()>> {
 
 
 #endif /* TENSOR_CORE_INTERFACE_H_ */
+
