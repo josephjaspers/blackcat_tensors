@@ -19,19 +19,20 @@ struct Shape : Shape_Base<Shape<dims>> {
 	BC::array<dims, int> m_inner_shape = 0;
 	BC::array<dims, int> m_outer_shape = 0;
 
-	Shape& as_shape() { return *this; }
-	const Shape& as_shape() const { return *this; }
+	__BCinline__ Shape& as_shape() { return *this; }
+	__BCinline__ const Shape& as_shape() const { return *this; }
 
 
 	__BCinline__ Shape() {}
 
-	template<class... integers> Shape(integers... ints) {
+	template<class... integers>
+	Shape(integers... ints) {
 		static_assert(MTF::seq_of<int, integers...>, "INTEGER LIST OF SHAPE");
 		static_assert(sizeof...(integers) == dims, "integer initialization must have the same number of dimensions");
 		init(BC::make_array(ints...));
 	}
 
-	template<int x>
+	template<int x> __BCinline__
 	Shape(const Shape<x>& shape) {
 		static_assert(x >= dims);
 		for (int i = 0; i < dims; ++i) {
@@ -97,8 +98,8 @@ private:
 template<>
 struct Shape<0> {
 
-	Shape& as_shape() { return *this; }
-	const Shape& as_shape() const { return *this; }
+	__BCinline__ Shape& as_shape() { return *this; }
+	__BCinline__ const Shape& as_shape() const { return *this; }
 
 	__BCinline__ Shape<0>() {}
 	__BCinline__ const auto inner_shape() const { return l_array<0>([&](auto x) { return 1; });}
@@ -127,7 +128,7 @@ struct Shape<1> {
 	__BCinline__ Shape() {};
 	__BCinline__ Shape (BC::array<1, int> param) : m_inner_shape(param), m_outer_shape(1) {}
 
-	template<int dim, class f, class int_t>
+	template<int dim, class f, class int_t> __BCinline__
 	Shape (lambda_array<dim, int_t, f> param) {
 		static_assert(dim >= 1, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
 		m_inner_shape[0] = param[0];
@@ -135,7 +136,7 @@ struct Shape<1> {
 	}
 
 	template<int x>
-	Shape(const Shape<x>& shape) {
+	__BCinline__ Shape(const Shape<x>& shape) {
 		static_assert(x >= 1);
 		m_inner_shape[0] = shape.m_inner_shape[0];
 		m_outer_shape[0] = shape.m_outer_shape[0];
