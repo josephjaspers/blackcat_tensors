@@ -16,14 +16,9 @@
 #include "Tensor_Functions.h"
 
 #include "Expression_Templates/Array.h"
-#include "Expression_Templates/Array_Row.h"
 #include "Expression_Templates/Array_View.h"
 #include "Expression_Templates/Array_Shared.h"
-#include "Expression_Templates/Array_Scalar.h"
-#include "Expression_Templates/Array_Slice.h"
-#include "Expression_Templates/Array_Slice_Range.h"
-#include "Expression_Templates/Array_Chunk.h"
-#include "Expression_Templates/Array_Reshape.h"
+
 
 namespace BC {
 

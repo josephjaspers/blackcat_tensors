@@ -24,15 +24,13 @@ struct Array_Format
 
 	scalar_t* array_slice;
 
-	template<class... format, class enabler = std::enable_if_t<MTF::seq_of<int, format...>>> __BCinline__
-	Array_Format(const scalar_t* array, PARENT parent_, format... integers)
-	: Shape<PARENT::DIMS()> (parent_.as_shape()), array_slice(const_cast<scalar_t*>(array)) {
-		static_assert(sizeof...(format) == DIMS() - 1, "FORMATTED DIMENSIONS MUST BE EQUAL TO NUMB_DIMENSION - 1. DIMENSION(1) CAN NOT BE REFORMATTED");
-		auto format_array = BC::make_array(integers...);
+	 __BCinline__
+	Array_Format(PARENT parent_, BC::array<DIMS() - 1, int> format)
+	: Shape<PARENT::DIMS()> (parent_.as_shape()), array_slice(const_cast<scalar_t*>(parent_.memptr())) {
 
-		for (int i = 0; i < format_array.size(); ++i) {
-			this->m_inner_shape[i] = parent_.dimension(format_array[i] - 1);
-			this->m_outer_shape[i] = parent_.leading_dimension(format_array[i] - 1);
+		for (int i = 0; i < format.size(); ++i) {
+			this->m_inner_shape[i] = parent_.dimension(format[i] - 1);
+			this->m_outer_shape[i] = parent_.leading_dimension(format[i] - 1);
 
 			std::cout << " ld is " << this->leading_dimension(i) << std::endl;
 		}
@@ -41,7 +39,12 @@ struct Array_Format
 	__BCinline__ const scalar_t* memptr() const { return array_slice; }
 	__BCinline__	   scalar_t* memptr()   	{ return array_slice; }
 
-	};
+};
+
+template<class internal_t, int dims>
+auto make_format(internal_t internal, BC::array<dims, int> format) {
+	return Array_Format<internal_t>(internal, format);
+}
 }
 }
 

@@ -9,13 +9,13 @@
 #define TENSOR_SHAPING_H_
 
 #include "Tensor_Common.h"
-#include "Expression_Templates/Array_Format.h"
 #include "Expression_Templates/Array_Slice.h"
 #include "Expression_Templates/Array_Slice_Range.h"
 #include "Expression_Templates/Array_Row.h"
 #include "Expression_Templates/Array_Scalar.h"
 #include "Expression_Templates/Array_Chunk.h"
 #include "Expression_Templates/Array_Reshape.h"
+#include "Expression_Templates/Array_Format.h"
 
 namespace BC {
 namespace module {
@@ -108,6 +108,15 @@ auto chunk(Tensor_Base<T>& tensor, integers... ints) {
 				BC::make_array(ints...),
 				BC::make_array(shape_indicies...)));
 	};
+}
+
+template<class T, class... integers>
+auto format_as(Tensor_Base<T>& tensor,  int zero, integers... ints) {
+	return make_tensor(internal::make_format(tensor.internal(), BC::make_array(ints...)));
+}
+template<class T, class... integers>
+const auto format_as(const Tensor_Base<T>& tensor, int zero, integers... ints) {
+	return make_tensor(internal::make_format(tensor.internal(), BC::make_array(ints...)));
 }
 
 }
