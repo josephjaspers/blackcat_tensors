@@ -40,7 +40,7 @@ struct evaluator<binary_expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 	struct right_eval {
 		template<class core, int a, int b>
 		static auto function(const binary_expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
-			evaluator<rv>::linear_evaluation(branch.left, update_injection<op>(tensor));
+			evaluator<rv>::linear_evaluation(branch.right, update_injection<op>(tensor));
 			return evaluator<lv>::linear_evaluation(branch.left, tensor);
 		}
 	};
