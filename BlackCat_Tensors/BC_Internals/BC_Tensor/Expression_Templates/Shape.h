@@ -123,7 +123,7 @@ struct Shape<1> {
 	Shape& as_shape() { return *this; }
 	const Shape& as_shape() const { return *this; }
 	BC::array<1, int> m_inner_shape = 0;
-	BC::array<1, int> m_outer_shape = 0;
+	BC::array<1, int> m_outer_shape = 1;
 
 	__BCinline__ Shape() {};
 	__BCinline__ Shape (BC::array<1, int> param) : m_inner_shape(param), m_outer_shape(1) {}
@@ -139,7 +139,12 @@ struct Shape<1> {
 	__BCinline__ Shape(const Shape<x>& shape) {
 		static_assert(x >= 1);
 		m_inner_shape[0] = shape.m_inner_shape[0];
-		m_outer_shape[0] = shape.m_outer_shape[0];
+		m_outer_shape[0] = 1; //shape.m_outer_shape[0];
+	}
+
+	__BCinline__ Shape(int length, int leading_dimension) {
+		m_inner_shape[0] = length;
+		m_outer_shape[0] = leading_dimension;
 	}
 
 	__BCinline__ Shape(int length_) : m_inner_shape(length_) {}
@@ -148,7 +153,7 @@ struct Shape<1> {
 	__BCinline__ int cols() const { return 1; }
 	__BCinline__ int dimension(int i) const { return i == 0 ? m_inner_shape[0] : 1; }
 	__BCinline__ int outer_dimension() const { return 1; }
-	__BCinline__ int leading_dimension(int i) const { return i == 0 ? 1 : 0; }
+	__BCinline__ int leading_dimension(int i) const { return i == 0 ? m_outer_shape[0] : 0; }
 	__BCinline__ int block_dimension(int i)   const { return leading_dimension(i); }
 	__BCinline__ const auto& inner_shape() const { return m_inner_shape; }
 	__BCinline__ const auto& outer_shape() const { return m_outer_shape; }

@@ -95,7 +95,7 @@ static void print(const T& ary, const RANKS ranks, const os outer, int dimension
 	} else if (dimension == 1) {
 		std::cout << "[ ";
 		for (int i = 0; i < ranks[0]; ++i) {
-			std::cout << ary[i];
+			std::cout << ary[i * outer[0]];
 			if (i != ranks[0] - 1) {
 				std::cout << " | ";
 			}

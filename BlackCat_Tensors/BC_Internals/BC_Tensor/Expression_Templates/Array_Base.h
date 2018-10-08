@@ -50,10 +50,14 @@ public:
 		return as_derived()[this->dims_to_index(ints...)];
 	}
 
-	__BCinline__ auto& operator ()(BC::array<DIMS(), int> index) {
+	template<int length>
+	__BCinline__ auto& operator ()(const BC::array<length, int>& index) {
+		static_assert(length >= DIMS());
 		return as_derived()	[this->dims_to_index(index)];
 	}
-	__BCinline__ const auto& operator ()(BC::array<DIMS(), int> index) const {
+	template<int length>
+	__BCinline__ const auto& operator ()(const BC::array<length, int>& index) const {
+		static_assert(length >= DIMS());
 		return as_derived()[this->dims_to_index(index)];
 	}
 
@@ -76,7 +80,7 @@ private:
 		return dims_to_index(BC::make_array(ints...));
 	}
 
-	template<int D> __BCinline__ int dims_to_index(BC::array<D, int> var) const {
+	template<int D> __BCinline__ int dims_to_index(const BC::array<D, int>& var) const {
 		int index = var[0];
 		for(int i = 1; i < DIMS(); ++i) {
 			index += this->as_derived().leading_dimension(i - 1) * var[i];

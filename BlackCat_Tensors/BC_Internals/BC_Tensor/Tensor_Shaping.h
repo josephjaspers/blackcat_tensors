@@ -11,11 +11,11 @@
 #include "Tensor_Common.h"
 #include "Expression_Templates/Array_Slice.h"
 #include "Expression_Templates/Array_Slice_Range.h"
-#include "Expression_Templates/Array_Row.h"
 #include "Expression_Templates/Array_Scalar.h"
 #include "Expression_Templates/Array_Chunk.h"
 #include "Expression_Templates/Array_Reshape.h"
 #include "Expression_Templates/Array_Format.h"
+#include "Expression_Templates/Array_Strided_Vector.h"
 
 namespace BC {
 namespace module {
@@ -51,6 +51,15 @@ public:
 	const auto slice(int from, int to) const  { return make_tensor(internal::make_ranged_slice(internal(),from,  to)); }
 		  auto slice(int from, int to) 	   	  { return make_tensor(internal::make_ranged_slice(internal(),from,  to)); }
 
+
+	const auto diag(int index = 0) const {
+		static_assert(derived::DIMS()  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
+		return make_tensor(internal::make_diagnol(internal(),index));
+	}
+	auto diag(int index = 0) {
+		static_assert(derived::DIMS()  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
+		return make_tensor(internal::make_diagnol(internal(),index));
+	}
 
 	const auto col(int i) const {
 		static_assert(DIMS() == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
@@ -102,6 +111,7 @@ const auto chunk(const Tensor_Base<T>& tensor, integers... ints) {
 
 template<class T, class... integers>// class enabler = std::enable_if_t<MTF::seq_of<int, integers...>>>
 auto chunk(Tensor_Base<T>& tensor, integers... ints) {
+	std::cout << " chunk is bugged unsure why " << std::endl;
 	return [&](auto... shape_indicies) {
 		return make_tensor(internal::make_chunk(
 				tensor.internal(),

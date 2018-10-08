@@ -16,8 +16,6 @@ namespace internal {
 namespace tree {
 
 //disable default implementation (specialize for each type to ensure correct compilation)
-template<class T, class enabler = void>
-struct evaluator;
 
 template<class T>
 struct evaluator<T, std::enable_if_t<is_array<T>()>>

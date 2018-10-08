@@ -28,6 +28,9 @@ namespace internal {
 namespace tree {
 
 
+//initial forward decl
+template<class T, class enabler = void>
+struct evaluator;
 
 }
 }
