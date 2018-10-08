@@ -57,12 +57,12 @@ auto make_diagnol(internal_t internal, int index) {
 		return Array_Strided_Vector<internal_t>(internal.memptr(), length, stride);
 	}
 
-	if (index > 0) {
+	else if (index > 0) {
 		int length = MTF::min(internal.rows(), internal.cols() - index);
 		int location = index * internal.leading_dimension(0);
 		return Array_Strided_Vector<internal_t>(&internal.memptr()[location], length, stride);
 	}
-	if (index < 0)  {
+	else { // (index < 0)  {
 		int length = MTF::min(internal.rows(), internal.cols() + index);
 		return Array_Strided_Vector<internal_t>(&internal.memptr()[std::abs(index)], length, stride);
 	}

@@ -18,15 +18,16 @@ namespace BC {
 
 //-------------------------------Lightweight array, implemented as a homogeneous tuple-------------------------------//
 	template<int size_, class T>
-	struct array : array< size_ - 1, T> {
-		T value;
+	struct array {
+		T value[size_] = { 0 } ;
 
-		template<class... values>
-		__BCinline__ array(T val, values... integers) : array<size_ - 1, T>(integers...), value(val) {}
-		__BCinline__ array() {}
+//		__BCinline__ array(values... integers) : value {integers...} {}
+//		__BCinline__ array() {}
+		__BCinline__ array(const array<size_, T>&) = default;
+	//	__BCinline__ array(array&&) = default;
 
-		__BCinline__ const T& operator [] (int i) const { return (&value)[-i]; }
-		__BCinline__ 	   T& operator [] (int i) 		{ return (&value)[-i]; }
+		__BCinline__ const T& operator [] (int i) const { return value[i]; }
+		__BCinline__ 	   T& operator [] (int i) 		{ return value[i]; }
 		__BCinline__ static constexpr int size() 		{ return size_; }
 	};
 

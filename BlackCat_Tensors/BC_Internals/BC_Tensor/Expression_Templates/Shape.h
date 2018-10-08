@@ -16,8 +16,8 @@ namespace internal {
 template<int dims>
 struct Shape : Shape_Base<Shape<dims>> {
 
-	BC::array<dims, int> m_inner_shape = 0;
-	BC::array<dims, int> m_outer_shape = 0;
+	BC::array<dims, int> m_inner_shape = {0};
+	BC::array<dims, int> m_outer_shape = {0};
 
 	__BCinline__ Shape& as_shape() { return *this; }
 	__BCinline__ const Shape& as_shape() const { return *this; }
@@ -122,11 +122,11 @@ struct Shape<1> {
 
 	Shape& as_shape() { return *this; }
 	const Shape& as_shape() const { return *this; }
-	BC::array<1, int> m_inner_shape = 0;
-	BC::array<1, int> m_outer_shape = 1;
+	BC::array<1, int> m_inner_shape = {0};
+	BC::array<1, int> m_outer_shape = {1};
 
 	__BCinline__ Shape() {};
-	__BCinline__ Shape (BC::array<1, int> param) : m_inner_shape(param), m_outer_shape(1) {}
+	__BCinline__ Shape (BC::array<1, int> param) : m_inner_shape {param}, m_outer_shape { 1 }  {}
 
 	template<int dim, class f, class int_t> __BCinline__
 	Shape (lambda_array<dim, int_t, f> param) {
@@ -147,7 +147,7 @@ struct Shape<1> {
 		m_outer_shape[0] = leading_dimension;
 	}
 
-	__BCinline__ Shape(int length_) : m_inner_shape(length_) {}
+	__BCinline__ Shape(int length_) : m_inner_shape { length_ }, m_outer_shape {1} {}
 	__BCinline__ int size() const { return m_inner_shape[0]; }
 	__BCinline__ int rows() const { return m_inner_shape[0]; }
 	__BCinline__ int cols() const { return 1; }

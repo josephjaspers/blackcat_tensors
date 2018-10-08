@@ -101,7 +101,7 @@ auto reshape(Tensor_Base<T>& tensor) {
 
 template<class T, class... integers>// class enabler = std::enable_if_t<MTF::seq_of<int, integers...>>>
 const auto chunk(const Tensor_Base<T>& tensor, integers... ints) {
-	return [&](auto... shape_indicies) {
+	return [&, ints...](auto... shape_indicies) {
 		return make_tensor(internal::make_chunk(
 				tensor.internal(),
 				BC::make_array(ints...),
@@ -111,8 +111,7 @@ const auto chunk(const Tensor_Base<T>& tensor, integers... ints) {
 
 template<class T, class... integers>// class enabler = std::enable_if_t<MTF::seq_of<int, integers...>>>
 auto chunk(Tensor_Base<T>& tensor, integers... ints) {
-	std::cout << " chunk is bugged unsure why " << std::endl;
-	return [&](auto... shape_indicies) {
+	return [&, ints...](auto... shape_indicies) {
 		return make_tensor(internal::make_chunk(
 				tensor.internal(),
 				BC::make_array(ints...),

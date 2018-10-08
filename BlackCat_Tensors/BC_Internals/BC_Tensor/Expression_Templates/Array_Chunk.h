@@ -49,7 +49,7 @@ struct Array_Chunk  {
 
 template<class internal_t, int parent_dims, int dims>
 auto make_chunk(internal_t internal, BC::array<parent_dims, int> index, BC::array<dims, int> shape) {
-		return typename Array_Chunk<dims>::template implementation<internal_t>(internal, index, shape);
+	return typename Array_Chunk<dims>::template implementation<internal_t>(internal, index, shape);
 }
 
 }
