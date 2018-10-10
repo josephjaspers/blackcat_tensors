@@ -24,8 +24,8 @@ template<class ml> class dot;
 
 
 template<class lv, class rv, class mathlib>
-struct binary_expression<lv, rv, oper::gemv<mathlib>>
-: expression_base<binary_expression<lv, rv,  oper::gemv<mathlib>>>, BLAS_FUNCTION {
+struct Binary_Expression<lv, rv, oper::gemv<mathlib>>
+: Expression_Base<Binary_Expression<lv, rv,  oper::gemv<mathlib>>>, BLAS_FUNCTION {
 
 	using scalar_t  = typename lv::scalar_t;
 	using mathlib_t = mathlib;
@@ -45,7 +45,7 @@ struct binary_expression<lv, rv, oper::gemv<mathlib>>
 	lv left;
 	rv right;
 
-	 binary_expression(lv left, rv right) : left(left), right(right) {}
+	 Binary_Expression(lv left, rv right) : left(left), right(right) {}
 
 	__BCinline__ int size() const { return left.rows(); }
 	__BCinline__ int rows() const { return left.rows(); }
@@ -102,10 +102,10 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 
 /*
  * 	__BCinline__ auto _slice(int i) {
-		return binary_expression<decltype(left._row(i)), decltype(right._slice(i)), oper::dot<mathlib_t>>(left._row(i), right._slice(i));
+		return Binary_Expression<decltype(left._row(i)), decltype(right._slice(i)), oper::dot<mathlib_t>>(left._row(i), right._slice(i));
 	}
 	__BCinline__ auto _slice_range(int from, int to) {
-		return binary_expression<lv, decltype(right._slice_range(from, to)), oper::gemv<mathlib_t>>(left, right._slice_range(from, to));
+		return Binary_Expression<lv, decltype(right._slice_range(from, to)), oper::gemv<mathlib_t>>(left, right._slice_range(from, to));
 	}
  *
  */

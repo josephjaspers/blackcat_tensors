@@ -81,7 +81,7 @@ template<class deriv> struct blas_feature_detector<deriv, enable_if_core<deriv>>
 
 ////IF TRANSPOSE
 template<class deriv, class ml>
-struct blas_feature_detector<internal::unary_expression<deriv, oper::transpose<ml>>, enable_if_core<deriv>> {
+struct blas_feature_detector<internal::Unary_Expression<deriv, oper::transpose<ml>>, enable_if_core<deriv>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = false;
@@ -92,8 +92,8 @@ struct blas_feature_detector<internal::unary_expression<deriv, oper::transpose<m
 
 ////IF A SCALAR BY TENSOR MUL OPERATION
 template<class d1, class d2>
-struct blas_feature_detector<binary_expression<d1, d2, oper::scalar_mul>, enable_if_cores<d1, d2>> {
-	using self = binary_expression<d1, d2, oper::scalar_mul>;
+struct blas_feature_detector<Binary_Expression<d1, d2, oper::scalar_mul>, enable_if_cores<d1, d2>> {
+	using self = Binary_Expression<d1, d2, oper::scalar_mul>;
 
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = false;
@@ -114,7 +114,7 @@ struct blas_feature_detector<binary_expression<d1, d2, oper::scalar_mul>, enable
 
 //IF A SCALAR BY TENSOR MUL OPERATION R + TRANSPOSED
 template<class trans_t, class scalar_t, class ml>
-struct blas_feature_detector<binary_expression<unary_expression<trans_t, oper::transpose<ml>>, scalar_t, oper::scalar_mul>, enable_if_cores<trans_t, scalar_t>> {
+struct blas_feature_detector<Binary_Expression<Unary_Expression<trans_t, oper::transpose<ml>>, scalar_t, oper::scalar_mul>, enable_if_cores<trans_t, scalar_t>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;
@@ -125,7 +125,7 @@ struct blas_feature_detector<binary_expression<unary_expression<trans_t, oper::t
 
 //IF A SCALAR BY TENSOR MUL OPERATION L + TRANSPOSED
 template<class scalar_t, class trans_t, class ml>
-struct blas_feature_detector<binary_expression<scalar_t, unary_expression<trans_t, oper::transpose<ml>>, oper::scalar_mul>, enable_if_cores<scalar_t, trans_t>> {
+struct blas_feature_detector<Binary_Expression<scalar_t, Unary_Expression<trans_t, oper::transpose<ml>>, oper::scalar_mul>, enable_if_cores<scalar_t, trans_t>> {
 	static constexpr bool evaluate = false;
 	static constexpr bool transposed = true;
 	static constexpr bool scalar = true;

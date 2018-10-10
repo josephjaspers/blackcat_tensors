@@ -17,8 +17,8 @@ template<class>
 }
 
 template<class functor_type, class ml>
-struct unary_expression<functor_type, oper::transpose<ml>>
-	: expression_base<unary_expression<functor_type, oper::transpose<ml>>> {
+struct Unary_Expression<functor_type, oper::transpose<ml>>
+	: Expression_Base<Unary_Expression<functor_type, oper::transpose<ml>>> {
 
 
 	using scalar_t  = typename functor_type::scalar_t;
@@ -29,7 +29,7 @@ struct unary_expression<functor_type, oper::transpose<ml>>
 
 	functor_type array;
 
-	unary_expression(functor_type p) : array(p) {}
+	Unary_Expression(functor_type p) : array(p) {}
 
 	__BCinline__ const auto inner_shape() const {
 		return l_array<DIMS()>([=](int i) {

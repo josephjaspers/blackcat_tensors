@@ -12,7 +12,7 @@
 namespace BC {
 namespace internal {
 template<class value, class operation>
-struct unary_expression : public expression_base<unary_expression<value, operation>>, public operation {
+struct Unary_Expression : public Expression_Base<Unary_Expression<value, operation>>, public operation {
 
 	using scalar_t  = decltype(std::declval<operation>()(std::declval<typename value::scalar_t>()));
 	using mathlib_t = typename value::mathlib_t;
@@ -24,7 +24,7 @@ struct unary_expression : public expression_base<unary_expression<value, operati
 
 
 	template<class... args> __BCinline__
-	unary_expression(value v, const args&... args_) : operation(args_...) , array(v) {}
+	Unary_Expression(value v, const args&... args_) : operation(args_...) , array(v) {}
 
 	__BCinline__ auto operator [](int index) const {
 		return static_cast<const operation&>(*this)(array[index]);
@@ -50,14 +50,14 @@ struct unary_expression : public expression_base<unary_expression<value, operati
 
 //__BCinline__ const auto _slice(int i) const {
 //	using slice_t = decltype(array._slice(i));
-//	return unary_expression<slice_t, operation>(array._slice(i), static_cast<const operation&>(*this));
+//	return Unary_Expression<slice_t, operation>(array._slice(i), static_cast<const operation&>(*this));
 //}
 //__BCinline__ const auto _scalar(int i) const {
 //	using scalar_t = decltype(array._scalar(i));
-//	return unary_expression<scalar_t, operation>(array._scalar(i),  static_cast<const operation&>(*this));
+//	return Unary_Expression<scalar_t, operation>(array._scalar(i),  static_cast<const operation&>(*this));
 //}
 //__BCinline__ const auto _slice_range(int from, int to) const {
 //	using scalar_t = decltype(array._slice_range(from, to));
-//	return unary_expression<scalar_t, operation>(array._slice_range(from,to),  static_cast<const operation&>(*this));
+//	return Unary_Expression<scalar_t, operation>(array._slice_range(from,to),  static_cast<const operation&>(*this));
 //}
 //

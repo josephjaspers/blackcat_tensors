@@ -65,7 +65,7 @@ struct Lazy_Evaluator {
 template<class mathlib>
 struct CacheEvaluator {
 	template<class branch> using sub_t 	= BC::internal::Array<branch::DIMS(), BC::internal::scalar_of<branch>, mathlib>;
-	template<class branch> using eval_t = BC::internal::binary_expression<sub_t<branch>, branch, BC::internal::oper::assign>;
+	template<class branch> using eval_t = BC::internal::Binary_Expression<sub_t<branch>, branch, BC::internal::oper::assign>;
 
 	template<class branch> //The branch is an array, no evaluation required
 	static std::enable_if_t<BC::is_array<std::decay_t<branch>>(), const branch&> evaluate(const branch& expression) { return expression; }
@@ -84,7 +84,7 @@ struct CacheEvaluator {
 template<class array_t, class expression_t>
 void evaluate_to(array_t array, expression_t expr) {
 	static_assert(is_array<array_t>(), "MAY ONLY EVALUATE TO ARRAYS");
-	Lazy_Evaluator<internal::mathlib_of<array_t>>::evaluate(internal::binary_expression<array_t, expression_t, internal::oper::assign>(array, expr));
+	Lazy_Evaluator<internal::mathlib_of<array_t>>::evaluate(internal::Binary_Expression<array_t, expression_t, internal::oper::assign>(array, expr));
 }
 
 template<class expression_t>

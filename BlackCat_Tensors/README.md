@@ -182,8 +182,8 @@ Methods:
 	_tensor_ operator >= (const _tensor_&) const		//expression of greater-than-or-equal of tensor,  1 == true, 0 == false
 	_tensor_ operator <= (const _tensor_&) const		//expression of less-than-or-equal of tensor,  	  1 == true, 0 == false
 
-	template<class functor> _tensor_ un_expr(functor)			//Creates a custom unary_expression to be lazily evaluated
-	template<class functor> _tensor_ bi_expr(functor, const_tensor_&) 	//Creates a custom binary_expression to be lazily evaluated
+	template<class functor> _tensor_ un_expr(functor)			//Creates a custom Unary_Expression to be lazily evaluated
+	template<class functor> _tensor_ bi_expr(functor, const_tensor_&) 	//Creates a custom Binary_Expression to be lazily evaluated
 
 	NOTES:
 		1) _tensor_ is not an actual type, the type returned is based upon the classes used (IE Vector,Vector Matrix etc).

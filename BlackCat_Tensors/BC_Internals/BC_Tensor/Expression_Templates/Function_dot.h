@@ -25,8 +25,8 @@ template<class ml> class dot;
 
 
 template<class lv, class rv, class mathlib>
-struct binary_expression<lv, rv, oper::dot<mathlib>>
-: expression_base<binary_expression<lv, rv,  oper::dot<mathlib>>>, BLAS_FUNCTION, Shape<0> {
+struct Binary_Expression<lv, rv, oper::dot<mathlib>>
+: Expression_Base<Binary_Expression<lv, rv,  oper::dot<mathlib>>>, BLAS_FUNCTION, Shape<0> {
 
 	using scalar_t  = typename lv::scalar_t;
 	using mathlib_t = mathlib;
@@ -46,7 +46,7 @@ struct binary_expression<lv, rv, oper::dot<mathlib>>
 	lv left;
 	rv right;
 
-	 binary_expression(lv left, rv right) : left(left), right(right) {}
+	 Binary_Expression(lv left, rv right) : left(left), right(right) {}
 
 template<class core, int alpha_mod, int beta_mod>
 void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {

@@ -12,7 +12,7 @@
 namespace BC {
 namespace internal {
 template<class lv, class rv, class operation>
-struct binary_expression : public expression_base<binary_expression<lv, rv, operation>>, public operation {
+struct Binary_Expression : public Expression_Base<Binary_Expression<lv, rv, operation>>, public operation {
 
 	using scalar_t = decltype(std::declval<operation>()(std::declval<typename lv::scalar_t&>(), std::declval<typename lv::scalar_t&>()));
 	using mathlib_t = typename lv::mathlib_t;
@@ -30,7 +30,7 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 	}
 
 	template<class... args>
-	__BC_host_inline__ binary_expression(lv l, rv r, const args&... args_) :  operation(args_...), left(l), right(r) {}
+	__BC_host_inline__ Binary_Expression(lv l, rv r, const args&... args_) :  operation(args_...), left(l), right(r) {}
 
 	__BCinline__  auto  operator [](int index) const { return oper(left[index], right[index]); }
 	template<class... integers> __BCinline__  auto  operator ()(integers... ints) const { return oper(left(ints...), right(ints...)); }
@@ -53,7 +53,7 @@ struct binary_expression : public expression_base<binary_expression<lv, rv, oper
 //private:
 //	template<class l, class r>
 //	auto make_binexpr(l l_, r r_, const operation& op) {
-//		return binary_expression<l, r, operation>(l_, r_, op);
+//		return Binary_Expression<l, r, operation>(l_, r_, op);
 //	}
 //
 //	const operation& as_op() {

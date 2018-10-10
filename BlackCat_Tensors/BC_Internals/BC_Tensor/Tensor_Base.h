@@ -60,7 +60,7 @@ public:
 	Tensor_Base( 	  parent&& param) : internal_t(param) {}
 
 	template<class U> Tensor_Base(const Tensor_Base<U>&  tensor) : internal_t(tensor.internal()) {}
-	template<class U> Tensor_Base(	    Tensor_Base<U>&  tensor) : internal_t(tensor.internal()) {}
+	template<class U> Tensor_Base(	    Tensor_Base<U>&&  tensor) : internal_t(tensor.internal()) {}
 
 
 	Tensor_Base(copy_parameter tensor) {

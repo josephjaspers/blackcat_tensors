@@ -122,6 +122,10 @@ namespace MTF {
 	auto constexpr_if(f path) {
 		return constexpr_if_impl<b>::impl(path);
 	}
+
+
+	//---------------------
+
 }
 }
 #endif /* SIMPLE_H_ */

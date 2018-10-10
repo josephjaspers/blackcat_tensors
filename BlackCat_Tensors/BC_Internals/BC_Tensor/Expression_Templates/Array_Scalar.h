@@ -25,24 +25,24 @@ struct Array_Scalar : Array_Base<Array_Scalar<PARENT>, 0>, Shape<0> {
 	__BCinline__ static constexpr int ITERATOR() { return 0; }
 	__BCinline__ static constexpr int DIMS() 	 { return 0; }
 
-	scalar_t* array_slice;
+	scalar_t* array;
 
-	__BCinline__ Array_Scalar(PARENT parent_, int index) : array_slice(const_cast<scalar_t*>(&(parent_.memptr()[index]))) {}
+	__BCinline__ Array_Scalar(PARENT parent_, int index) : array(const_cast<scalar_t*>(&(parent_.memptr()[index]))) {}
 
-	__BCinline__ const auto& operator [] (int index) const { return array_slice[0]; }
-	__BCinline__ 	   auto& operator [] (int index) 	   { return array_slice[0]; }
+	__BCinline__ const auto& operator [] (int index) const { return array[0]; }
+	__BCinline__ 	   auto& operator [] (int index) 	   { return array[0]; }
 
 	template<class... integers> __BCinline__
 	auto& operator ()(integers ... ints) {
-		return array_slice[0];
+		return array[0];
 	}
 	template<class... integers> __BCinline__
 	const auto& operator ()(integers ... ints) const {
-		return array_slice[0];
+		return array[0];
 	}
 
-	__BCinline__ const scalar_t* memptr() const { return array_slice; }
-	__BCinline__	   scalar_t* memptr()  	  { return array_slice; }
+	__BCinline__ const scalar_t* memptr() const { return array; }
+	__BCinline__	   scalar_t* memptr()  	    { return array; }
 };
 
 template<class internal_t>

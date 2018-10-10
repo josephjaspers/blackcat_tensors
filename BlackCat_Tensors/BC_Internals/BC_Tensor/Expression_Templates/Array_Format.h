@@ -31,8 +31,6 @@ struct Array_Format
 		for (int i = 0; i < format.size(); ++i) {
 			this->m_inner_shape[i] = parent_.dimension(format[i] - 1);
 			this->m_outer_shape[i] = parent_.leading_dimension(format[i] - 1);
-
-			std::cout << " ld is " << this->leading_dimension(i) << std::endl;
 		}
 	}
 

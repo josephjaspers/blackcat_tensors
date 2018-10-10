@@ -23,8 +23,8 @@ template<int dimension, class ml> class conv : public BLAS_FUNCTION {};
 
 
 template<class lv, class rv, class mathlib>
-struct binary_expression<lv, rv, oper::conv<2, mathlib>>
-: expression_base<binary_expression<lv, rv,  oper::conv<2, mathlib>>>, BLAS_FUNCTION {
+struct Binary_Expression<lv, rv, oper::conv<2, mathlib>>
+: Expression_Base<Binary_Expression<lv, rv,  oper::conv<2, mathlib>>>, BLAS_FUNCTION {
 
 	using scalar_type = scalar_of<lv>;
 	static constexpr bool transA = blas_feature_detector<lv>::transposed;
@@ -44,7 +44,7 @@ struct binary_expression<lv, rv, oper::conv<2, mathlib>>
 	lv left;
 	rv right;
 
-	 binary_expression(lv left, rv right) : left(left), right(right) {}
+	 Binary_Expression(lv left, rv right) : left(left), right(right) {}
 
 	__BCinline__ const auto inner_shape() const {
 		return l_array<DIMS()>([&](int i) {

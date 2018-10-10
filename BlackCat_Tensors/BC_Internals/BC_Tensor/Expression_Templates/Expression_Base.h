@@ -13,12 +13,12 @@ namespace BC {
 namespace internal {
 
 template<class derived>
-struct expression_base
+struct Expression_Base
 		: BC_internal_interface<derived>{
 };
 
 template<class derived>
-struct function_interface
+struct Function_Interface
 		: BC_internal_interface<derived> {
 };
 

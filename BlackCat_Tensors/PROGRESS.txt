@@ -32,7 +32,7 @@ currently does not work, requires specialization of each blas func //FIXME
 ##############################################################################
 ***BLAS Determine Evaluator***							June 4th 2018
 ------------------------------------------------------------------------------
-Need to wrap binary_expression unary_expression into some unifying class to access arrays,
+Need to wrap Binary_Expression Unary_Expression into some unifying class to access arrays,
 current implementation tightly couples the determine_evaluator and the expression_classes 
 
 

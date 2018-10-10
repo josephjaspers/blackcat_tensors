@@ -21,8 +21,8 @@ template<class>class gemv;
 
 
 template<class lv, class rv, class mathlib>
-struct binary_expression<lv, rv, oper::gemm<mathlib>>
-: expression_base<binary_expression<lv, rv,  oper::gemm<mathlib>>>, BLAS_FUNCTION {
+struct Binary_Expression<lv, rv, oper::gemm<mathlib>>
+: Expression_Base<Binary_Expression<lv, rv,  oper::gemm<mathlib>>>, BLAS_FUNCTION {
 
 
 	using scalar_t  = typename lv::scalar_t;
@@ -43,7 +43,7 @@ struct binary_expression<lv, rv, oper::gemm<mathlib>>
 	lv left;
 	rv right;
 
-	 binary_expression(lv left, rv right) : left(left), right(right) {}
+	 Binary_Expression(lv left, rv right) : left(left), right(right) {}
 
 	__BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.cols() : 1; }); }
 	__BCinline__ const auto block_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? size() : 1; });}
@@ -112,10 +112,10 @@ struct binary_expression<lv, rv, oper::gemm<mathlib>>
 //std::cout << " beta_mod = " << beta_mod << std::endl;
 
 //__BCinline__ auto _slice(int i) {
-//	return binary_expression<lv, decltype(right._slice(i)), oper::gemv<mathlib_t>>(left, right._slice(i));
+//	return Binary_Expression<lv, decltype(right._slice(i)), oper::gemv<mathlib_t>>(left, right._slice(i));
 //}
 //__BCinline__ auto _slice_range(int from, int to) {
-//	return binary_expression<lv, decltype(right._slice_range(from, to)), oper::gemm<mathlib_t>>(left, right._slice_range(from, to));
+//	return Binary_Expression<lv, decltype(right._slice_range(from, to)), oper::gemm<mathlib_t>>(left, right._slice_range(from, to));
 //}
 
 #endif /* EXPRESSION_BINARY_DOTPRODUCT_CU_ */
