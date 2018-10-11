@@ -14,8 +14,20 @@ template<class core_lib>
 struct CPU_Constants {
 
 	template<class U, class T, class V>
-	static void scalar_mul(U eval, T a, V b) {
+	static void scalar_mul(U eval, T* a, V* b) {
 		*eval = a[0] * b[0];
+	}
+	template<class U, class T, class V>
+	static void scalar_mul(U eval, T a, V* b) {
+		*eval = a * b[0];
+	}
+	template<class U, class T, class V>
+	static void scalar_mul(U eval, T* a, V b) {
+		*eval = a[0] * b;
+	}
+	template<class U, class T, class V>
+	static void scalar_mul(U eval, T a, V b) {
+		*eval = a * b;
 	}
 
 	template<class T>

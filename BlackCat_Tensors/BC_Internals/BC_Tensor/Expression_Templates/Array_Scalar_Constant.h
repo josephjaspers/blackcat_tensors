@@ -25,6 +25,11 @@ struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<scalar_t_>, 0>{
 	__BCinline__ static constexpr int DIMS() 	 { return 0; }
 
 	scalar_t scalar;
+
+	operator scalar_t () const {
+		return scalar;
+	}
+
 	Scalar_Constant(scalar_t scalar_) : scalar(scalar_) {}
 
 

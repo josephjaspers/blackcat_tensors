@@ -1,0 +1,49 @@
+/*
+ * Array_Scalar_Rand.h
+ *
+ *  Created on: Oct 11, 2018
+ *      Author: joseph
+ */
+
+#ifndef BC_INTERNALS_BC_TENSOR_EXPRESSION_TEMPLATES_ARRAY_SCALAR_RAND_H_
+#define BC_INTERNALS_BC_TENSOR_EXPRESSION_TEMPLATES_ARRAY_SCALAR_RAND_H_
+
+#include "Array_Base.h"
+
+
+namespace BC {
+namespace internal {
+//identical to Array_Scalar, though the scalar is allocated on the stack opposed to heap
+template<class scalar_t_, class mathlib_t_>
+struct Rand_Constant : Shape<0>, Array_Base<Rand_Constant<scalar_t_, mathlib_t_>, 0>{
+
+	using scalar_t = scalar_t_;
+	using mathlib_t = mathlib_t_;
+
+	__BCinline__ static constexpr int ITERATOR() { return 0; }
+	__BCinline__ static constexpr int DIMS() 	 { return 0; }
+
+	operator scalar_t () { return value(); }
+
+	scalar_t lower_bound, upper_bound;
+
+	scalar_t value() const {
+		return mathlib_t::rand(lower_bound, upper_bound);
+	}
+
+
+
+	Rand_Constant(scalar_t lower_bound_, scalar_t upper_bound_)
+	: lower_bound(lower_bound_), upper_bound(upper_bound_) {}
+
+
+	template<class... integers>
+	auto operator()  (const integers&...) const{ return value(); }
+	auto operator [] (int i ) { return value(); }
+
+	const scalar_t* memptr() const { return nullptr; }
+};
+}
+}
+
+#endif /* BC_INTERNALS_BC_TENSOR_EXPRESSION_TEMPLATES_ARRAY_SCALAR_RAND_H_ */

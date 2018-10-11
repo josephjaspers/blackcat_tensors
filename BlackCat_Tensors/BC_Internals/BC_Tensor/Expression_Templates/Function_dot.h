@@ -66,15 +66,15 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 	mathlib::dot(X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
 
 	if (lv_scalar) {
-		scalar_t* alpha_lv = blas_feature_detector<lv>::get_scalar(left);
+		auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
 		mathlib::scalar_mul(injection, alpha, alpha_lv);
 	}
 	if (rv_scalar) {
-		scalar_t* alpha_rv = blas_feature_detector<rv>::get_scalar(right);
+		auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 		mathlib::scalar_mul(injection, alpha, alpha_rv);
 	}
 	if (beta_mod) {
-		scalar_t* beta = mathlib::static_initialize((scalar_t)alpha_mod);
+		auto beta = mathlib::static_initialize((scalar_t)alpha_mod);
 		mathlib::scalar_mul(alpha, alpha, beta);
 		mathlib::destroy(beta);
 	}

@@ -24,7 +24,21 @@ struct GPU_Constants {
 		gpu_impl::scalar_mul<<<1, 1>>>(eval, a, b);
 		cudaDeviceSynchronize();
 	}
+	static void scalar_mul(float* eval, float a, float* b) {
 
+		gpu_impl::scalar_mul<<<1, 1>>>(eval, a, b);
+		cudaDeviceSynchronize();
+	}
+	static void scalar_mul(float* eval, float* a, float b) {
+
+		gpu_impl::scalar_mul<<<1, 1>>>(eval, a, b);
+		cudaDeviceSynchronize();
+	}
+	static void scalar_mul(float* eval, float a, float b) {
+
+		gpu_impl::scalar_mul<<<1, 1>>>(eval, a, b);
+		cudaDeviceSynchronize();
+	}
 
 };
 
