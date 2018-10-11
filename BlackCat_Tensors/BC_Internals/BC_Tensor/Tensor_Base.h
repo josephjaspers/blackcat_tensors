@@ -85,10 +85,6 @@ public:
 		static_assert(DIMS() == 0, "SCALAR_INITIALIZATION ONLY AVAILABLE TO SCALARS");
 		this->fill(scalar);
 	}
-	Tensor_Base& operator =(scalar_t scalar) {
-		this->fill(scalar);
-		return *this;
-	}
 
 	~Tensor_Base() {
 		this->destroy();

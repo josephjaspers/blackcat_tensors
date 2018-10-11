@@ -60,7 +60,7 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 	auto Y = CacheEvaluator<mathlib>::evaluate(blas_feature_detector<rv>::get_array(right));
 
 	//initialize the alpha and beta scalars,
-	scalar_t* alpha = mathlib::static_initialize((scalar_t)alpha_mod);
+	auto alpha = mathlib::static_initialize((scalar_t)alpha_mod);
 
 	//call outer product
 	mathlib::dot(X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));

@@ -28,8 +28,8 @@ class Tensor_Functions<Tensor_Base<internal_t>> {
 public:
 
 	void randomize(scalar_type lb=0, scalar_type ub=1)  { mathlib_type::randomize(as_derived().internal(), lb, ub); }
-	void fill(scalar_type value) 						{ mathlib_type::fill(as_derived().internal(), value); }
-	void zero() 										{ mathlib_type::zero(as_derived().internal()); }
+	void fill(scalar_type value) 						{ as_derived() = value; }
+	void zero() 										{ as_derived() = 0; 	}
 
 
 	template<class function>

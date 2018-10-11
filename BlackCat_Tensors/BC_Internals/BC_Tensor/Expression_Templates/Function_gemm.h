@@ -73,8 +73,8 @@ struct Binary_Expression<lv, rv, oper::gemm<mathlib>>
 		auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 
 		//initialize the alpha and beta scalars,
-		scalar_t* alpha = mathlib::static_initialize((scalar_t)alpha_mod);
-		scalar_t* beta = mathlib::static_initialize((scalar_t)beta_mod);
+		auto alpha = mathlib::static_initialize((scalar_t)alpha_mod);
+		auto beta = mathlib::static_initialize((scalar_t)beta_mod);
 
 		//compute the scalar values if need be
 		if (lv_scalar)

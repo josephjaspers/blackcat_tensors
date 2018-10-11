@@ -57,7 +57,7 @@ struct GPU_Utility {
 	}
 	template<typename T>
 	static void destroy(T t) {
-		throw std::invalid_argument("destruction on class object");
+		//empty
 	}
 
 
