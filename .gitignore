@@ -11,8 +11,6 @@
 /BlackCat_Structures/.*
 /BlackCat_NeuralNetworks/.*
 /BC_Tensors_UnitTests/.*
-/BlackCat_Tests/.*
-/BlackCat_Tests/
 /unit_tests/.*
 /Python_BlackCat_NeuralNetworks/.*
 /Python_BlackCat_NeuralNetworks/    
