@@ -14,4 +14,7 @@
 /unit_tests/.*
 /Python_BlackCat_NeuralNetworks/.*
 /Python_BlackCat_NeuralNetworks/    
-
+/BlackCat_Tests/.*
+/BlackCat_Tests/
+/BlackCat_Tests2/
+/BlackCat_Tests2/.*
