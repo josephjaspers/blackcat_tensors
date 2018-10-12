@@ -8,7 +8,7 @@
 #ifndef DEFAULTS_H_
 #define DEFAULTS_H_
 
-#include "BlackCat_Tensors.h"
+//#include "BlackCat_Tensors.h"
 
 namespace BC {
 namespace NN {

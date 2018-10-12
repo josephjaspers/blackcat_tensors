@@ -76,11 +76,11 @@ struct Array<0, T, mathlib> : Array_Base<Array<0, T, mathlib>, 0>, public Shape<
 	__BCinline__ static constexpr int DIMS() { return 0; }
 
 
-	operator T () const {
-		T value;
-		mathlib::DeviceToHost(&value, array);
-		return value;
-	}
+//	operator T () const {
+//		T value;
+//		mathlib::DeviceToHost(&value, array);
+//		return value;
+//	}
 
 	scalar_t* array = nullptr;
 	Array() {

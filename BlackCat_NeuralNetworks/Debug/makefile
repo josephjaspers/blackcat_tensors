@@ -58,7 +58,7 @@ all: BlackCat_NeuralNetworks
 BlackCat_NeuralNetworks: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: NVCC Linker'
-	/usr/local/cuda-9.1/bin/nvcc --cudart static -L/home/joseph/Library_Sources/ATLAS/Build/lib --relocatable-device-code=false -gencode arch=compute_50,code=compute_50 -gencode arch=compute_50,code=sm_50 -link -o  "BlackCat_NeuralNetworks" $(OBJS) $(USER_OBJS) $(LIBS)
+	/usr/local/cuda-10.0/bin/nvcc --cudart static -L/home/joseph/Library_Sources/ATLAS/Build/lib --relocatable-device-code=false -gencode arch=compute_50,code=compute_50 -gencode arch=compute_50,code=sm_50 -link -o  "BlackCat_NeuralNetworks" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
