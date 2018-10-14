@@ -1,5 +1,12 @@
 Last Updated: Thursday, Auguest 30rd, 2018
-Author: Joseph Jaspers
+
+/*  Project: BlackCat_Tensors
+ *  Author: JosephJaspers
+ *  Copyright 2018
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 BlackCat_Tensors (BCT) is a highly optimized Matrix library designed for NeuralNetwork construction. 
 BCT is designed to support GPU computing (CUDA) and CPU multi-threading (OpenMP).

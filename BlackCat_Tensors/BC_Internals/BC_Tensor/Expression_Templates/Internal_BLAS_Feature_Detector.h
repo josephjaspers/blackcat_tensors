@@ -1,9 +1,11 @@
-/*
- * Expression_Binary_Dotproduct_impl2.h
+/*  Project: BlackCat_Tensors
+ *  Author: JosephJaspers
+ *  Copyright 2018
  *
- *  Created on: Jan 23, 2018
- *      Author: joseph
- */
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 #ifndef EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
 #define EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
 

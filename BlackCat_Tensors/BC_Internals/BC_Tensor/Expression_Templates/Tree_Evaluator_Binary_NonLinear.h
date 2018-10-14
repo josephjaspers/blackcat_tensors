@@ -1,9 +1,10 @@
-/*
- * PTEE_Binary_NonLinear.h
+/*  Project: BlackCat_Tensors
+ *  Author: Joseph Jaspers
+ *  Copyright 2018
  *
- *  Created on: Jun 21, 2018
- *      Author: joseph
- */
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #ifndef PTEE_BINARY_NONLINEAR_H_
 #define PTEE_BINARY_NONLINEAR_H_

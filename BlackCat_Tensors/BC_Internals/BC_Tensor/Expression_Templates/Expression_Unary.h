@@ -1,9 +1,11 @@
-/*
- * Expression_Unary_Base.cu
+/*  Project: BlackCat_Tensors
+ *  Author: JosephJaspers
+ *  Copyright 2018
  *
- *  Created on: Jan 25, 2018
- *      Author: joseph
- */
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 #ifndef EXPRESSION_UNARY_POINTWISE_CU_
 #define EXPRESSION_UNARY_POINTWISE_CU_
 

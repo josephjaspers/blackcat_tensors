@@ -1,9 +1,22 @@
 /*
- * PTEE_BLAS.h
- *
- *  Created on: Jun 21, 2018
- *      Author: joseph
- */
+Author: Joseph F. Jaspers
+Project: BlackCat_Tensors
+
+	This file is part of BlackCat_Tensors.
+
+	BlackCat_Tensors is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	BlackCat_Tensors is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with BlackCat_Tensors.  If not, see <https://www.gnu.org/licenses/>.
+*/
 
 #ifndef PTEE_BLAS_H_
 #define PTEE_BLAS_H_
