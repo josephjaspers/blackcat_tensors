@@ -158,10 +158,13 @@ public:
 		 return un_expr<internal::oper::negation>();
 	 }
 private:
-	 template<class internal_t> using negated_t = Tensor_Base<internal::Unary_Expression<internal_t, internal::oper::negation>>;
+	 template<class internal_t>
+	 using negated_t = Tensor_Base<internal::Unary_Expression<internal_t, internal::oper::negation>>;
 public:
-	 //specializations that upcast negation to a 'better' function (ensures that y -= w * x is as good as y += -(w*x)
-		template<class internal_t>
+	 //specializations that upcast negation to a 'better' function
+	 //(ensures that y -= w * x is as good as y += -(w*x)
+
+	 template<class internal_t>
 		derived& operator +=(const negated_t<internal_t>& param) {
 			BC_ASSERT_ASSIGNABLE("derived& operator +=(const Tensor_Operations<pDeriv>& param)");
 			assert_valid(param);
@@ -182,6 +185,7 @@ public:
 		}
 
 
+//---------------------------------Comparison operators------------------------------------//
 	template<class pDeriv>
 	auto operator ==(const Tensor_Operations<pDeriv>& param) const {
 		assert_valid(param);
@@ -208,11 +212,9 @@ public:
 		return bi_expr<internal::oper::lesser_equal>(param);
 	}
 
-#define BC_CONSTANT_SCALAR_CPU_ONLY(helper_message) static_assert(std::is_same<mathlib_t,BC::CPU>::value, helper_message);
-#define BC_CONSTANT_SCALAR_SUGGESTION(op) "OPERATION: '" op "' ON SCALAR_CONSTANTS, ONLY AVAILABLE TO CPU IMPL USE 'BC::Scalar<scalar_t, BC::GPU>' instead"
-#define BC_SCALAR_CONST_ASSERT(op) BC_CONSTANT_SCALAR_CPU_ONLY(BC_CONSTANT_SCALAR_SUGGESTION(op))
-template<class p_scalar_t> using enable_if_convertible = std::enable_if_t<std::is_convertible<p_scalar_t, scalar_t>::value>;
-
+//----------------------------------------------scalar assignment operations--------------------------------------------------//
+	template<class p_scalar_t>
+	using enable_if_convertible = std::enable_if_t<std::is_convertible<p_scalar_t, scalar_t>::value>;
 
 	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
 	derived& operator =(const p_scalar_t& param) {
@@ -245,7 +247,7 @@ template<class p_scalar_t> using enable_if_convertible = std::enable_if_t<std::i
 		evaluate(bi_expr_internal<internal::oper::scalar_mul>(internal::scalar_constant<mathlib_t>((scalar_t)param)));
 		return as_derived();
 	}
-
+	//----------------------------------------------scalar element-wise operations--------------------------------------------------//
 	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
 	auto operator +(const p_scalar_t& param) {
 		return bi_expr_internal<internal::oper::add>(internal::scalar_constant<mathlib_t>((scalar_t)param));
@@ -272,8 +274,29 @@ template<class p_scalar_t> using enable_if_convertible = std::enable_if_t<std::i
 		return bi_expr_internal<internal::oper::scalar_mul>(internal::scalar_constant<mathlib_t>((scalar_t)param));
 	}
 
-	//-----------------------------------custom expressions--------------------------------------------------//
+	//-------------------------------------------scalar comparison operators-----------------------------------------------//
+	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
+	auto operator ==(const p_scalar_t& param) {
+		return bi_expr_internal<internal::oper::equal>(internal::scalar_constant<mathlib_t>((scalar_t)param));
+	}
+	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
+	auto operator >(const p_scalar_t& param) {
+		return bi_expr_internal<internal::oper::greater>(internal::scalar_constant<mathlib_t>((scalar_t)param));
+	}
+	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
+	auto operator <(const p_scalar_t& param) {
+		return bi_expr_internal<internal::oper::lesser>(internal::scalar_constant<mathlib_t>((scalar_t)param));
+	}
+	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
+	auto operator >=(const p_scalar_t& param) {
+		return bi_expr_internal<internal::oper::greater_equal>(internal::scalar_constant<mathlib_t>((scalar_t)param));
+	}
+	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
+	auto operator <=(const p_scalar_t& param) {
+		return bi_expr_internal<internal::oper::lesser_equal>(internal::scalar_constant<mathlib_t>((scalar_t)param));
+	}
 
+	//-----------------------------------expression_factory--------------------------------------------------//
 	template<class functor>
 	auto un_expr(functor f) const {
 		return Unary_Expression_t<functor>(as_derived().internal(), f);
@@ -298,9 +321,8 @@ template<class p_scalar_t> using enable_if_convertible = std::enable_if_t<std::i
 	const auto bi_expr_internal(const right_value& rv) const {
 		return Binary_Expression_t<right_value, functor>(as_derived().internal(), rv);
 	}
-	 //--------------------------------ASSERTIONS------------------------------//
 
-
+	//----------------------------------------------validity checks--------------------------------------------------//
 	template<class deriv>  bool non_scalar_op(const Tensor_Operations<deriv>& tensor) const {
 		return derived::DIMS() != 0 && deriv::DIMS() != 0;
 	}
@@ -317,7 +339,6 @@ template<class p_scalar_t> using enable_if_convertible = std::enable_if_t<std::i
 		for (int i = 0; i < DIM_MIN; ++i)
 			if (tensor.as_derived().dimension(i) != as_derived().dimension(i))
 				return false;
-
 		return true;
 	}
 
