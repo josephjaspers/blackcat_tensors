@@ -12,8 +12,15 @@
 namespace BC {
 namespace NN {
 
-using NN_Abreviated_Functions::g;
-using NN_Abreviated_Functions::gd;
+template<class tensor_t>
+auto g(const tensor_t& tensor) {
+	return logistic(tensor);
+}
+template<class tensor_t>
+auto gd(const tensor_t& tensor) {
+	return cached_dx_logistic(tensor);
+}
+
 
 static const BC::internal::Shape<0> NULL_TENSOR = BC::internal::Shape<0>();
 

@@ -10,6 +10,5 @@
 #define BLACKCAT_TENSORS_H_
 
 #include "BC_Internals/BlackCat_Internal_GlobalUnifier.h"
-#include "Extensions/NN_Functions.h"
 
 #endif /* BLACKCAT_TENSORS_H_ */

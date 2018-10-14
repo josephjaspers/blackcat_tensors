@@ -375,13 +375,6 @@ public:
 	auto _normalize(scalar_t min, scalar_t max) const {
 		return un_expr(internal::oper::norm<scalar_t>(scalar_t(min), scalar_t(max)));
 	}
-	static auto fix(Tensor_Operations& tensor) {
-		return tensor.un_expr(internal::oper::fix());
-	}
-	static auto abs(const Tensor_Operations& tensor) {
-		return tensor.un_expr(internal::oper::absolute());
-	}
-
 
 	struct Alias{
 
