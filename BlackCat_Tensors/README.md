@@ -1,4 +1,4 @@
-Last Updated: Thursday, Auguest 30rd, 2018
+Last Updated: Thursday, October 14, 2018
 
 /*  Project: BlackCat_Tensors
  *  Author: JosephJaspers
@@ -167,6 +167,8 @@ Methods:
             
             
 
+
+
 ----------------------------------------------------tensor operations-------------------------------------------------------
 
 **SOURCE: https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Operations.h
@@ -201,6 +203,8 @@ Methods:
 		4) functor object needs to have a trivial constructor and the overloaded operator()(T value) (if unary) or operator()(T val1, U val2) (if binary)
 
 
+
+
 ----------------------------------------------------tensor utility methods--------------------------------------------------
 
 **SOURCE:
@@ -216,6 +220,8 @@ https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/B
 	void read(ifstream&, 				//Reads a line from a csv (regardless of size),
 			bool read_dimensions=true,     //if read_dimensions assumes line was written by .write() 						 
 			bool overwrite_dimensions=true)	//if overwrite_dimensions, overwrites the dimensions of the tensor (only relevant if read_dimensions is true)
+
+
 
 
 ----------------------------------------------------tensor metadata methods------------------------------------------------
@@ -234,6 +240,8 @@ https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/B
 
 	const auto inner_shape() const			//returns some_array_type which holds inner shape (type depedent on context)
 	const auto outer_shape() const			//returns some_array_type which holds outer shape (type depedent on context)
+
+
 
 
 
@@ -284,6 +292,8 @@ https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/B
 									  // --- returns a 2x2matrix at page 3,column 2, row 0.
 
 
+
+
 ----------------------------------------------------supported lazy functions------------------------------------------------
 
 **SOURCE:
@@ -329,6 +339,8 @@ https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/B
 	sqrt
 	tan
 	tanh
+
+
 
 
 
