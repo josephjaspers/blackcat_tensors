@@ -168,8 +168,9 @@ Methods:
             
 
 
-**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Operations.h
-** The following options also provide support for single_scalar operations 	
+**SOURCE:
+	 https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Operations.h
+	** The following options also provide support for single_scalar operations 	
 
 	_tensor_& operator =  (const _tensor_&) 		//copy
 	_tensor_& operator =  (const T scalar) 			//fill tensor with scalar value
@@ -199,7 +200,8 @@ Methods:
 		3) Scalar by Tensor operations -- return the dominant tensor type (IE operation order does matter for non commutative functions)
 		4) functor object needs to have a trivial constructor and the overloaded operator()(T value) (if unary) or operator()(T val1, U val2) (if binary)
 
-**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Utility.h
+**SOURCE:
+	 https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Utility.h
 
 	void print      (int precision=6) const		//print the tensor (formatted)
 	void printSparse(int precision=6) const		//print the tensor but ignore 0s (formatted)
@@ -212,7 +214,8 @@ Methods:
 			bool read_dimensions=true,     //if read_dimensions assumes line was written by .write() 						 
 			bool overwrite_dimensions=true)	//if overwrite_dimensions, overwrites the dimensions of the tensor (only relevant if read_dimensions is true)
 
-**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Shape.h
+**SOURCE:
+	 https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Shape.h
 
 	int dims() const				//returns number of dimensions (scalar = 0, vector = 1, matrix = 2, etc)
 	int size() const				//returns number of elements 
@@ -227,7 +230,8 @@ Methods:
 	const auto outer_shape() const			//returns some_array_type which holds outer shape (type depedent on context)
 
 
-**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Shaping.h
+**SOURCE:
+	 https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Shaping.h
 
 	const operator[] (int i) const 			//returns "slice" of tensor at index (IE Cube returns Matrix, Matrix returns Vector, Vector returns Scalar)
    	      operator[] (int i)			//returns "slice" of tensor at index (IE Cube returns Matrix, Matrix returns Vector, Vector returns Scalar)
@@ -269,9 +273,11 @@ Methods:
 									  //any modifications of the new internal effect its original source
 									  //This function is curreid IE chunk(myCube)(2,1,0)(2,2)
 									  // --- returns a 2x2matrix at page 3,column 2, row 0.
-**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Functions.h
-**SOURCE (implementation) https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Operations/Unary.h
-	Lazily_Support functions. 
+**SOURCE:
+	 https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Functions.h
+	(implementation) https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Operations/Unary.h
+	
+	Lazily_Support functions: 
 	auto function_name(const _tensor_)				 //returns a lazy expression of the stated function, 
 
 	logistic							//logistic function '1/(1 + exp(-x))'
