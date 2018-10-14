@@ -10,20 +10,12 @@
 namespace BC {
 namespace cpu_evaluator {
 
-template<class expression>
-static void continuous_evaluate(expression expr) {
-	__BC_omp_for__
-	for (int i = 0; i < expr.size(); ++i) {
-		expr[i];
-	}
-}
-
 	template<int dim>
 	struct evaluator {
 		template<class expression, class... indexes>
 		static void impl(expression expr, indexes... indicies) {
 			__BC_omp_for__
-			for (int i = 0; i < expr.dimension(dim); ++i) {
+			for (int i = 0; i < expr.dimension(dim-1); ++i) {
 				evaluator<dim-1>::impl(expr, indicies..., i);
 			}
 		}
@@ -33,7 +25,7 @@ static void continuous_evaluate(expression expr) {
 		template<class expression, class... indexes>
 		static void impl(expression expr, indexes... indicies) {
 			__BC_omp_for__
-			for (int i = 0; i < expr.dimension(1); ++i) {
+			for (int i = 0; i < expr.dimension(0); ++i) {
 				expr(indicies..., i);
 			}
 		}
@@ -50,14 +42,24 @@ static void continuous_evaluate(expression expr) {
 //--------------------------------
 	template<class mathlib_core>
 	struct CPU_Evaluator {
-		template<int dim, class expression>
-		static void nd_evaluator(expression expr) {
-			if (dim == 0 || dim == 1)
-				continuous_evaluate(expr);
-			else
-				cpu_evaluator::evaluator<dim>::impl(expr);
-			__BC_omp_bar__
-		}
+
+//      need to fix this //FIXME RECURSIVE EVAUATOR FOR CPU AND GPU NEED TO WORK (SO FAR BUGGY)
+//		template<class expression>
+//		static void continuous_evaluate(expression expr) {
+//			__BC_omp_for__
+//			for (int i = 0; i < expr.size(); ++i) {
+//				expr[i];
+//			}
+//		}
+//
+//		template<int dim, class expression>
+//		static void nd_evaluator(expression expr) {
+//			if (dim == 0 || dim == 1)
+//				continuous_evaluate(expr);
+//			else
+//				cpu_evaluator::evaluator<dim>::impl(expr);
+//			__BC_omp_bar__
+//		}
 	};
 
 
