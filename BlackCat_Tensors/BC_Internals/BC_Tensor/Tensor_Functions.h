@@ -28,10 +28,13 @@ class Tensor_Functions<Tensor_Base<internal_t>> {
 	 	   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
 public:
 
-	void randomize(scalar_type lb=0, scalar_type ub=1)  { mathlib_type::randomize(as_derived().internal(), lb, ub); }
-	void fill(scalar_type value) 						{ as_derived() = value; }
-	void zero() 										{ as_derived() = 0; 	}
-
+	void randomize(scalar_type lb=0, scalar_type ub=1)  {
+		static_assert(derived::ITERATOR() == 0 || derived::ITERATOR() == 1,
+				"randomize not available to non-continuous tensors");
+		mathlib_type::randomize(as_derived().internal(), lb, ub);
+	}
+	void fill(scalar_type value)   { as_derived() = value; }
+	void zero()                    { as_derived() = 0; 	   }
 
 	template<class function>
 	void for_each(function f) {
@@ -48,8 +51,6 @@ public:
 	bool is_square() {
 		return derived::DIMS() == 2 && as_derived().dimension(0) == as_derived().dimension(1);
 	}
-	//diag
-
 };
 
 }
