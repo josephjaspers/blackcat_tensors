@@ -13,37 +13,20 @@ namespace BC {
 namespace internal {
 namespace oper {
 	struct negation {
-		template<class lv> __BCinline__ auto operator ()(lv val) const {
+		template<class lv> __BCinline__ lv operator ()(lv val) const {
 			return -val;
 		}
 	};
 	struct absolute {
-		template<class lv> __BCinline__ auto operator ()(lv val) const {
+		template<class lv> __BCinline__ lv operator ()(lv val) const {
 			return abs(val);
 		}
 	};
 	struct logical {
-		template<class lv> __BCinline__ auto operator ()(lv val) const {
+		template<class lv> __BCinline__ lv operator ()(lv val) const {
 			return val == 0 ? 0 : 1;
 		}
 	};
-
-	struct zero {
-		template<class lv> __BCinline__ auto& operator ()(lv& val) const {
-			return val = 0;
-		}
-	};
-	struct one {
-		template<class lv> __BCinline__ auto& operator ()(lv& val) const {
-			return val = 1;
-		}
-	};
-	struct fix {
-		template<class lv> __BCinline__ auto& operator ()(lv& val) const {
-			return isnan(val) || isinf(val) ? val = 0 : val;
-		}
-	};
-
 
 	template<class scalar>
 	struct norm {
@@ -57,7 +40,39 @@ namespace oper {
 		}
 	};
 
+//DEFINE FOR SHORTHAND GENERATION
+#define BLACKCAT_FUNCTION(func)             						        \
+struct func {                    								\
+  template<class scalar_t> __BCinline__							\
+   scalar_t operator () (scalar_t s) const {  return std::func(s); }			\
+};
 
+BLACKCAT_FUNCTION(acos)
+BLACKCAT_FUNCTION(acosh)
+BLACKCAT_FUNCTION(sin)
+BLACKCAT_FUNCTION(asin)
+BLACKCAT_FUNCTION(asinh)
+BLACKCAT_FUNCTION(atan)
+BLACKCAT_FUNCTION(atanh)
+BLACKCAT_FUNCTION(cbrt)
+BLACKCAT_FUNCTION(ceil)
+BLACKCAT_FUNCTION(cos)
+BLACKCAT_FUNCTION(cosh)
+BLACKCAT_FUNCTION(exp)
+BLACKCAT_FUNCTION(exp2)
+BLACKCAT_FUNCTION(fabs)
+BLACKCAT_FUNCTION(floor)
+BLACKCAT_FUNCTION(fma)
+BLACKCAT_FUNCTION(isinf)
+BLACKCAT_FUNCTION(isnan)
+BLACKCAT_FUNCTION(log)
+BLACKCAT_FUNCTION(log2)
+BLACKCAT_FUNCTION(lrint)
+BLACKCAT_FUNCTION(lround)
+BLACKCAT_FUNCTION(modf)
+BLACKCAT_FUNCTION(sqrt)
+BLACKCAT_FUNCTION(tan)
+BLACKCAT_FUNCTION(tanh)
 }
 }
 }
