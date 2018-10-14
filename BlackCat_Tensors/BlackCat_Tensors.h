@@ -1,22 +1,10 @@
-/*
-Author: Joseph F. Jaspers
-Project: BlackCat_Tensors
-
-	This file is part of BlackCat_Tensors.
-
-	BlackCat_Tensors is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	BlackCat_Tensors is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with BlackCat_Tensors.  If not, see <https://www.gnu.org/licenses/>.
-*/
+/*  Project: BlackCat_Tensors
+ *  Author: JosephJaspers
+ *  Copyright 2018
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #ifndef BLACKCAT_TENSORS_H_
 #define BLACKCAT_TENSORS_H_
