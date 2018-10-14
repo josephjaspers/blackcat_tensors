@@ -167,7 +167,7 @@ Methods:
             
             
 
-
+	----------------------------------------------------tensor operations-------------------------------------------------------
 **SOURCE:
 	 https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Operations.h
 	** The following options also provide support for single_scalar operations 	
@@ -200,6 +200,8 @@ Methods:
 		3) Scalar by Tensor operations -- return the dominant tensor type (IE operation order does matter for non commutative functions)
 		4) functor object needs to have a trivial constructor and the overloaded operator()(T value) (if unary) or operator()(T val1, U val2) (if binary)
 
+
+	----------------------------------------------------tensor utility methods-------------------------------------------------------
 **SOURCE:
 	 https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Utility.h
 
@@ -214,6 +216,8 @@ Methods:
 			bool read_dimensions=true,     //if read_dimensions assumes line was written by .write() 						 
 			bool overwrite_dimensions=true)	//if overwrite_dimensions, overwrites the dimensions of the tensor (only relevant if read_dimensions is true)
 
+
+	----------------------------------------------------tensor metadata methods-------------------------------------------------------
 **SOURCE:
 	 https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Shape.h
 
@@ -230,6 +234,7 @@ Methods:
 	const auto outer_shape() const			//returns some_array_type which holds outer shape (type depedent on context)
 
 
+	----------------------------------------------------tensor views and data accessing-------------------------------------------------------
 **SOURCE:
 	 https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Shaping.h
 
@@ -273,6 +278,8 @@ Methods:
 									  //any modifications of the new internal effect its original source
 									  //This function is curreid IE chunk(myCube)(2,1,0)(2,2)
 									  // --- returns a 2x2matrix at page 3,column 2, row 0.
+
+	----------------------------------------------------supported lazy functions-------------------------------------------------------
 **SOURCE:
 	 https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Functions.h
 	(implementation) https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Operations/Unary.h
