@@ -91,7 +91,7 @@ public:
 	}
 
 	 const parent& internal() const { return static_cast<const parent&>(*this); }
-	 	   parent& internal() 	  	{ return static_cast<	   parent&>(*this); }
+	       parent& internal()       { return static_cast<	   parent&>(*this); }
 };
 
 }

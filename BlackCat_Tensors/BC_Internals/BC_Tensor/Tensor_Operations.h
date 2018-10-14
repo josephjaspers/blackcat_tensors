@@ -65,7 +65,6 @@ class Tensor_Operations<Tensor_Base<internal_type>> {
 	}
 
 public:
-
 	//--------------------------------------assignment operators-----------------------------------------------//
 	template<class pDeriv>
 	derived& operator =(const Tensor_Operations<pDeriv>& param) {
@@ -121,15 +120,14 @@ public:
 					 std::conditional_t<dot,	 Binary_Expression_t<internal_t_of<param_deriv>, internal::oper::dot<mathlib_t>>, void>>>>>;
 
 		static_assert(!std::is_same<matmul_t, void>::value, "INVALID USE OF OPERATOR *");
-
 		return matmul_t(as_derived().internal(), param.as_derived().internal());
 	}
 
 	const auto transpose() const { return un_expr<internal::oper::transpose<mathlib_t>>(); }
 	 	  auto transpose() 		 { return un_expr<internal::oper::transpose<mathlib_t>>(); }
 
-	const auto t() const { return transpose(); }
-		  auto t()       { return transpose(); }
+	const auto t() const { return this->transpose(); }
+		  auto t()       { return this->transpose(); }
 
 	//--------------------------------------pointwise operators-------------------------------//
 	template<class pDeriv>
