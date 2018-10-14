@@ -169,6 +169,7 @@ Methods:
 
 
 **SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Operations.h
+** The following options also provide support for single_scalar operations 	
 
 	_tensor_& operator =  (const _tensor_&) 		//copy
 	_tensor_& operator =  (const T scalar) 			//fill tensor with scalar value
@@ -240,8 +241,13 @@ Methods:
 	const slice	(int from, int to)		//returns a ranged slice
 	      slice     (int from, int to)		//returns a ranged slice 
 	
+	const auto transpose() const 			//returns a transpose expression (cannot transpose in place)
+	      auto transpose() 				//returns a transpose expression (cannot transpose in place)
 
-	const opeartor() (int i) const 			//returns a scalar at given index
+	const auto t() const				//short hand for transpose
+	      auto t() 					//short hand for transpose
+
+	const operator() (int i) const 			//returns a scalar at given index
 	      operator() (int i) 			//returns a scalar at given index
 
 	const row(int i) const 				//returns a row vector (static asserts class is matrix)
@@ -250,8 +256,8 @@ Methods:
 	const col(int i) const 				//returns a slice of a matrix (same as operator[], only available to matrices)
 	      col(int i)				//returns a slice of a matrix (same as operator[], only available to matrices)
 
-	const auto operator() (int... dimlist) const 	//returns a tensor slice || IE myTensor(1,2,3) equivalent to myTensor[1][2][3] 
-	      auto operator() (int... dimlist)		//returns a tensor slice || IE myTensor(1,2,3) equivalent to myTensor[1][2][3] 
+	const auto operator() (int... dimlist) const 	//returns a tensor slice || IE myTensor(1,2,3) comparable to myTensor[1][2][3] 
+	      auto operator() (int... dimlist)		//returns a tensor slice || IE myTensor(1,2,3) comparable to myTensor[1][2][3] 
 
 
 	static _tensor_ reshape(_tensor_&)(integers...)	//reshapes the tensor to the given dimensions, this is a lazy expression
@@ -263,11 +269,48 @@ Methods:
 									  //any modifications of the new internal effect its original source
 									  //This function is curreid IE chunk(myCube)(2,1,0)(2,2)
 									  // --- returns a 2x2matrix at page 3,column 2, row 0.
+**SOURCE https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Functions.h
+**SOURCE (implementation) https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Operations/Unary.h
+	Lazily_Support functions. 
+	auto function_name(const _tensor_)				 //returns a lazy expression of the stated function, 
 
-**DEFINED IN BC_Internals/BC_Array/Matrix.h and Vector.h
+	logistic							//logistic function '1/(1 + exp(-x))'
+	dx_logistic							//derivative
+	cached_dx_logistic						//cached derivative
+	dx_tanh								//tanh derivative
+	cached_dx_tanh							//tanh cached derivative
+	relu								//relu (max(0, x))
+	dx_relu								//relu_derivative (x > 0 ? 1 : 0)
+	cached_dx_relu							//relu_derivative (x > 0  ? 1 : 0)
 
-	const auto t() const		//returns a transpose expression (cannot transpose in place)
-	      auto t() 			//returns a transpose expression (cannot transpose in place)
+	abs
+	acos
+	acosh
+	sin
+	asin
+	asinh
+	atan
+	atanh
+	cbrt
+	ceil
+	cos
+	cosh
+	exp
+	exp2
+	fabs
+	floor
+	fma
+	isinf
+	isnan
+	log
+	log2
+	lrint
+	lround
+	modf
+	sqrt
+	tan
+	tanh
+
 
 
 --------------------------------------------------------------------------------------------------------
