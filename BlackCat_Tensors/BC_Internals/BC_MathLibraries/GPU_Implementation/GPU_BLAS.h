@@ -18,11 +18,6 @@ static float* static_initialize(int sz, float value) {
 	return t;
 }
 
-
-static float* const s1 = static_initialize(1, 1);
-static float* const s0 = static_initialize(1, 0);
-static float* const sn1 = static_initialize(1, -1);
-
 }
 
 template<class core_lib>

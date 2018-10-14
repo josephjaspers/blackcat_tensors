@@ -10,9 +10,16 @@
 namespace BC {
 namespace cpu_evaluator {
 
+template<class expression>
+static void continuous_evaluate(expression expr) {
+	__BC_omp_for__
+	for (int i = 0; i < expr.size(); ++i) {
+		expr[i];
+	}
+}
+
 	template<int dim>
 	struct evaluator {
-
 		template<class expression, class... indexes>
 		static void impl(expression expr, indexes... indicies) {
 			__BC_omp_for__
@@ -23,7 +30,6 @@ namespace cpu_evaluator {
 	};
 	template<>
 	struct evaluator<1> {
-
 		template<class expression, class... indexes>
 		static void impl(expression expr, indexes... indicies) {
 			__BC_omp_for__
@@ -34,7 +40,6 @@ namespace cpu_evaluator {
 	};
 	template<>
 	struct evaluator<0> {
-
 		template<class expression, class... indexes>
 		static void impl(expression expr) {
 			expr[0];
@@ -47,19 +52,12 @@ namespace cpu_evaluator {
 	struct CPU_Evaluator {
 		template<int dim, class expression>
 		static void nd_evaluator(expression expr) {
-			cpu_evaluator::evaluator<dim>::impl(expr);
+			if (dim == 0 || dim == 1)
+				continuous_evaluate(expr);
+			else
+				cpu_evaluator::evaluator<dim>::impl(expr);
 			__BC_omp_bar__
 		}
-
-		template<typename T, typename J>
-		static void copy(T& t, const J& j, int sz) {
-	 __BC_omp_for__
-			for (int i = 0; i < sz; ++i) {
-				t[i] = j[i];
-			}
-	 __BC_omp_bar__
-		}
-
 	};
 
 

@@ -30,20 +30,6 @@ struct CPU_Misc {
 		}
  __BC_omp_bar__
 	}
-
-	template<typename T, typename J>
-	static void fill(T tensor, const J j) {
- __BC_omp_for__
-		for (int i = 0; i < tensor.size(); ++i) {
-			tensor[i] = j;
-		}
- __BC_omp_bar__
-	}
-	template<typename T>
-	static void zero(T tensor) {
-		fill(tensor, 0);
-	}
-
 };
 
 }

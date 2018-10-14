@@ -11,16 +11,44 @@
 namespace BC {
 namespace gpu_impl {
 
-template<class T, class J> __global__
-static void copy(T t, const J j, int sz) {
-	int i = blockIdx.x * blockDim.x + threadIdx.x;
-	for (; i < sz; i += blockDim.x * gridDim.x) {
-		t[i] = j[i];
-	}
-}
+template<int i> __device__  int tid() { return 0; }
 
+//
+//template<> __device__ int tid<0>() { return blockIdx.x * blockDim.x + threadIdx.x; }
+//template<> __device__ int tid<1>() { return blockIdx.y * blockDim.y + threadIdx.y; }
+//template<> __device__ int tid<2>() { return blockIdx.z * blockDim.z + threadIdx.z; }
+//
+//template<int t> __device__ int tid_inc() { return 1; }
+//template<> __device__ int tid_inc<0>() { return blockDim.x * gridDim.x; }
+//template<> __device__ int tid_inc<1>() { return blockDim.y * gridDim.y; }
+//template<> __device__ int tid_inc<2>() { return blockDim.z * gridDim.z; }
+//
+//
+//
+//template<int dim, int tid_x, class expression_t, class... indexes> __device__
+//static std::enable_if_t<(dim == 0)> dev_evaluate(expression_t expr, indexes... ids) {
+//	for (int i = tid<tid_x>(); i < expr.dimension(dim); i += tid_inc<tid_x>())
+//		expr(i, ids...);
+//}
+//template<int dim, int tid_x, class expression_t, class... indexes> __device__
+//static std::enable_if_t<(dim > 0)> dev_evaluate(expression_t expr, indexes... ids) {
+//	for (int i = tid<tid_x>(); i < expr.dimension(dim); i += tid_inc<tid_x>())
+//	return dev_evaluate<dim - 1, tid_x + 1>(expr, i, ids...);
+//}
+//
+//	template<int dim, int tid_x, class expression_t, class... indexes> __global__
+//	static std::enable_if_t<(dim > 0)> evaluate(expression_t expr, indexes... ids) {
+//		for (int i = tid<tid_x>(); i < expr.dimension(dim); i += tid_inc<tid_x>())
+//		return dev_evaluate<dim - 1, tid_x + 1>(expr, i, ids...);
+//	}
+//	template<int dim, int tid_x, class expression_t, class... indexes> __global__
+//	static std::enable_if_t<(dim == 0)> evaluate(expression_t expr, indexes... ids) {
+//		for (int i = tid<tid_x>(); i < expr.dimension(dim); i += tid_inc<tid_x>())
+//			expr(i, ids...);
+//	}
 
-
+//};
+//
 template<class T> __global__
 static void eval(T t) {
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -89,15 +117,6 @@ template<typename T> __global__ static void eval5d(T t) {
 				}
 			}
 		}
-	}
-}
-
-template<typename T, typename J> __global__
-static void fill(T t, const J j) {
-	int i = blockIdx.x * blockDim.x + threadIdx.x;
-
-	for (; i < t.size(); i += blockDim.x * gridDim.x) {
-		t[i] = j;
 	}
 }
 

@@ -9,7 +9,6 @@
 #define CPU_CONSTANTS_H_
 
 namespace BC {
-
 namespace cpu_impl {
 
 template<class T, class enabler = void>
@@ -24,8 +23,9 @@ struct get_value<T, std::enable_if_t<!std::is_same<decltype(std::declval<T&>()[0
 		return scalar[0];
 	}
 };
+} //end of cpu_impl namespace
 
-}
+
 template<class core_lib>
 struct CPU_Constants {
 

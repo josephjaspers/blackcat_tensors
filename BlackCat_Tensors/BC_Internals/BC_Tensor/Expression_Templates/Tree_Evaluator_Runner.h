@@ -25,14 +25,14 @@ struct Lazy_Evaluator {
 	static std::enable_if_t<!INJECTION<expression>()>
 	evaluate(const expression& expr) {
 		static constexpr int iterator_dimension = expression::ITERATOR();
-		mathlib_type::template dimension<iterator_dimension>::eval(expr);
+		mathlib_type::template nd_evaluator<iterator_dimension>(expr);
 	}
 	//------------------------------------------------Purely lazy alias evaluation----------------------------------//
 	template< class expression>
 	static std::enable_if_t<!INJECTION<expression>()>
 	evaluate_aliased(const expression& expr) {
 		static constexpr int iterator_dimension = expression::ITERATOR();
-		mathlib_type::template dimension<iterator_dimension>::eval(expr);
+		mathlib_type::template nd_evaluator<iterator_dimension>(expr);
 	}
 	//------------------------------------------------Greedy evaluation (BLAS function call detected)----------------------------------//
 	template< class expression>
@@ -42,7 +42,7 @@ struct Lazy_Evaluator {
 
 		if (is_expr<decltype(greedy_evaluated_expr)>()) {
 			static constexpr int iterator_dimension = expression::ITERATOR();
-			mathlib_type::template dimension<iterator_dimension>::eval(greedy_evaluated_expr);
+			mathlib_type::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
 		}
 		//destroy any temporaries made by the tree
 		internal::tree::Greedy_Evaluator::destroy_temporaries(greedy_evaluated_expr);
@@ -55,7 +55,7 @@ struct Lazy_Evaluator {
 
 		auto greedy_evaluated_expr = internal::tree::Greedy_Evaluator::substitution_evaluate(expr);		//evaluate the internal tensor_type
 		if (is_expr<decltype(greedy_evaluated_expr)>()) {
-			mathlib_type::template dimension<iterator_dimension>::eval(greedy_evaluated_expr);
+			mathlib_type::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
 		}
 		//destroy any temporaries made by the tree
 		internal::tree::Greedy_Evaluator::destroy_temporaries(greedy_evaluated_expr);
