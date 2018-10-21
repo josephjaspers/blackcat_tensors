@@ -90,7 +90,7 @@ public:
 	}
 
 	~Tensor_Base() {
-		this->destroy();
+		this->deallocate();
 	}
 
 	 const parent& internal() const { return static_cast<const parent&>(*this); }

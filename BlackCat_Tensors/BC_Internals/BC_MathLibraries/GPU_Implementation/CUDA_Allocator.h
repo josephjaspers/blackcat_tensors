@@ -12,17 +12,15 @@
 
 namespace BC {
 
-template<class core_lib>
-struct GPU_Utility {
-
+struct CUDA_Allocator {
 
 	template<typename T>
-	static T*& initialize(T*& t, int sz=1) {
+	static T*& allocate(T*& t, int sz=1) {
 		cudaMalloc((void**) &t, sizeof(T) * sz);
 		return t;
 	}
 	template<typename T>
-	static T*& zero_initialize(T*& t, int sz=1) {
+	static T*& zero_allocate(T*& t, int sz=1) {
 		cudaMalloc((void**) &t, sizeof(T) * sz);
 		cudaMemset((void**) &t, 0, sizeof(T) * sz);
 		return t;
@@ -47,17 +45,17 @@ struct GPU_Utility {
 	}
 
 	template<typename T>
-	static T*& unified_initialize(T*& t, int sz) {
+	static T*& unified_allocate(T*& t, int sz) {
 		cudaMallocManaged((void**) &t, sizeof(T) * sz);
 		return t;
 	}
 
 	template<typename T>
-	static void destroy(T* t) {
+	static void deallocate(T* t) {
 		cudaFree((void*)t);
 	}
 	template<typename T>
-	static void destroy(T t) {
+	static void deallocate(T t) {
 		//empty
 	}
 

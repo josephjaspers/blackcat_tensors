@@ -25,12 +25,12 @@ template<class ml> class dot;
  */
 
 
-template<class lv, class rv, class mathlib>
-struct Binary_Expression<lv, rv, oper::dot<mathlib>>
-: Expression_Base<Binary_Expression<lv, rv,  oper::dot<mathlib>>>, BLAS_FUNCTION, Shape<0> {
+template<class lv, class rv, class allocator>
+struct Binary_Expression<lv, rv, oper::dot<allocator>>
+: Expression_Base<Binary_Expression<lv, rv,  oper::dot<allocator>>>, BLAS_FUNCTION, Shape<0> {
 
 	using scalar_t  = typename lv::scalar_t;
-	using allocator_t = mathlib;
+	using allocator_t = allocator;
 
 	static constexpr bool transA = blas_feature_detector<lv>::transposed;
 	static constexpr bool transB = blas_feature_detector<rv>::transposed;
@@ -57,34 +57,34 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 	auto& injection = injection_values.data();
 
 	//evaluate the left and right branches (computes only if necessary)
-	auto X = CacheEvaluator<mathlib>::evaluate(blas_feature_detector<lv>::get_array(left));
-	auto Y = CacheEvaluator<mathlib>::evaluate(blas_feature_detector<rv>::get_array(right));
+	auto X = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left));
+	auto Y = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right));
 
-	//initialize the alpha and beta scalars,
-	auto alpha = mathlib::static_initialize((scalar_t)alpha_mod);
+	//allocate the alpha and beta scalars,
+	auto alpha = allocator::static_allocate((scalar_t)alpha_mod);
 
 	//call outer product
-	mathlib::dot(X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
+	allocator::dot(X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
 
 	if (lv_scalar) {
 		auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-		mathlib::scalar_mul(injection, alpha, alpha_lv);
+		allocator::scalar_mul(injection, alpha, alpha_lv);
 	}
 	if (rv_scalar) {
 		auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-		mathlib::scalar_mul(injection, alpha, alpha_rv);
+		allocator::scalar_mul(injection, alpha, alpha_rv);
 	}
 	if (beta_mod) {
-		auto beta = mathlib::static_initialize((scalar_t)alpha_mod);
-		mathlib::scalar_mul(alpha, alpha, beta);
-		mathlib::destroy(beta);
+		auto beta = allocator::static_allocate((scalar_t)alpha_mod);
+		allocator::scalar_mul(alpha, alpha, beta);
+		allocator::deallocate(beta);
 	}
 
 
-	//destroy all the temporaries
-	if (lv_eval) cc(X).destroy();
-	if (rv_eval) cc(Y).destroy();
-	mathlib::destroy(alpha);
+	//deallocate all the temporaries
+	if (lv_eval) cc(X).deallocate();
+	if (rv_eval) cc(Y).deallocate();
+	allocator::deallocate(alpha);
 }
 };
 

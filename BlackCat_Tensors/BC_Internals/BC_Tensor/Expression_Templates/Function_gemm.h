@@ -27,13 +27,13 @@ template<class>class gemv;
  */
 
 
-template<class lv, class rv, class mathlib>
-struct Binary_Expression<lv, rv, oper::gemm<mathlib>>
-: Expression_Base<Binary_Expression<lv, rv,  oper::gemm<mathlib>>>, BLAS_FUNCTION {
+template<class lv, class rv, class allocator>
+struct Binary_Expression<lv, rv, oper::gemm<allocator>>
+: Expression_Base<Binary_Expression<lv, rv,  oper::gemm<allocator>>>, BLAS_FUNCTION {
 
 
 	using scalar_t  = typename lv::scalar_t;
-	using allocator_t = mathlib;
+	using allocator_t = allocator;
 
 	static constexpr bool transA = blas_feature_detector<lv>::transposed;
 	static constexpr bool transB = blas_feature_detector<rv>::transposed;
@@ -72,32 +72,32 @@ struct Binary_Expression<lv, rv, oper::gemm<mathlib>>
 		auto& injection = injection_values.data();
 
 		//evaluate the left and right branches (computes only if necessary)
-		auto A = CacheEvaluator<mathlib>::evaluate(blas_feature_detector<lv>::get_array(left));
-		auto B = CacheEvaluator<mathlib>::evaluate(blas_feature_detector<rv>::get_array(right));
+		auto A = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left));
+		auto B = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right));
 
 		//get the left and right side scalar values
 		auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
 		auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 
-		//initialize the alpha and beta scalars,
-		auto alpha = mathlib::static_initialize((scalar_t)alpha_mod);
-		auto beta = mathlib::static_initialize((scalar_t)beta_mod);
+		//allocate the alpha and beta scalars,
+		auto alpha = allocator::static_allocate((scalar_t)alpha_mod);
+		auto beta = allocator::static_allocate((scalar_t)beta_mod);
 
 		//compute the scalar values if need be
 		if (lv_scalar)
-			mathlib::scalar_mul(alpha, alpha, alpha_lv);
+			allocator::scalar_mul(alpha, alpha, alpha_lv);
 		if (rv_scalar)
-			mathlib::scalar_mul(alpha, alpha, alpha_rv);
+			allocator::scalar_mul(alpha, alpha, alpha_rv);
 
 		//call matrix_mul
-		mathlib::gemm(transA, transB,  M(), N(), K(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), beta, injection, injection.leading_dimension(0));
+		allocator::gemm(transA, transB,  M(), N(), K(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), beta, injection, injection.leading_dimension(0));
 
 
-		//destroy all the temporaries
-		if (lv_eval) cc(A).destroy();
-		if (rv_eval) cc(B).destroy();
-		mathlib::destroy(beta);
-		mathlib::destroy(alpha);
+		//deallocate all the temporaries
+		if (lv_eval) cc(A).deallocate();
+		if (rv_eval) cc(B).deallocate();
+		allocator::deallocate(beta);
+		allocator::deallocate(alpha);
 	}
 };
 

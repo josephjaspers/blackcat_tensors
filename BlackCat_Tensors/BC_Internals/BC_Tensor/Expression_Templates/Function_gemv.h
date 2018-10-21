@@ -28,12 +28,12 @@ template<class ml> class dot;
  */
 
 
-template<class lv, class rv, class mathlib>
-struct Binary_Expression<lv, rv, oper::gemv<mathlib>>
-: Expression_Base<Binary_Expression<lv, rv,  oper::gemv<mathlib>>>, BLAS_FUNCTION {
+template<class lv, class rv, class allocator>
+struct Binary_Expression<lv, rv, oper::gemv<allocator>>
+: Expression_Base<Binary_Expression<lv, rv,  oper::gemv<allocator>>>, BLAS_FUNCTION {
 
 	using scalar_t  = typename lv::scalar_t;
-	using allocator_t = mathlib;
+	using allocator_t = allocator;
 
 	static constexpr bool transA = blas_feature_detector<lv>::transposed;
 	static constexpr bool transB = blas_feature_detector<rv>::transposed;
@@ -68,35 +68,35 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 	auto& injection = injection_values.data();
 
 	//evaluate the left and right branches (computes only if necessary)
-	auto A = CacheEvaluator<mathlib>::evaluate(blas_feature_detector<lv>::get_array(left));
-	auto X = CacheEvaluator<mathlib>::evaluate(blas_feature_detector<rv>::get_array(right));
+	auto A = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left));
+	auto X = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right));
 
-	//initialize the alpha and beta scalars,
-	auto alpha = mathlib::static_initialize((scalar_t)alpha_mod);
-	auto beta  = mathlib::static_initialize((scalar_t)beta_mod);
+	//allocate the alpha and beta scalars,
+	auto alpha = allocator::static_allocate((scalar_t)alpha_mod);
+	auto beta  = allocator::static_allocate((scalar_t)beta_mod);
 
 	//get the left and right side scalar values and
 	//compute the scalar values if need be
 	if (lv_scalar) {
 		auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-		mathlib::scalar_mul(alpha, alpha, alpha_lv);
+		allocator::scalar_mul(alpha, alpha, alpha_lv);
 	}
 	if (rv_scalar) {
 		auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-		mathlib::scalar_mul(alpha, alpha, alpha_rv);
+		allocator::scalar_mul(alpha, alpha, alpha_rv);
 	}
 
 	//call matrix_mul ///for gemm we always use M, N, K regardless of transpose, but for gemv we always use pre-trans dimensions ???
 	int m = A.rows();
 	int n = A.cols();
 
-	mathlib::gemv(transA,  m, n, alpha, A, A.leading_dimension(0), X, X.leading_dimension(0)/*inc_X*/, beta, injection/*Y*/, injection.leading_dimension(0)/*incy*/);
+	allocator::gemv(transA,  m, n, alpha, A, A.leading_dimension(0), X, X.leading_dimension(0)/*inc_X*/, beta, injection/*Y*/, injection.leading_dimension(0)/*incy*/);
 
-	//destroy all the temporaries
-	if (lv_eval) cc(A).destroy();
-	if (rv_eval) cc(X).destroy();
-	mathlib::destroy(beta);
-	mathlib::destroy(alpha);
+	//deallocate all the temporaries
+	if (lv_eval) cc(A).deallocate();
+	if (rv_eval) cc(X).deallocate();
+	allocator::deallocate(beta);
+	allocator::deallocate(alpha);
 }
 };
 

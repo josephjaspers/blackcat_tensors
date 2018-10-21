@@ -51,8 +51,8 @@ static auto substitution_evaluate(Binary_Expression<lv, rv, op> expression) {
 }
 
 template<class expression>
-static void destroy_temporaries(expression expr) {
-	evaluator<expression>::destroy_temporaries(expr);
+static void deallocate_temporaries(expression expr) {
+	evaluator<expression>::deallocate_temporaries(expr);
 }
 
 template<class lv, class rv>

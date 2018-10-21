@@ -56,7 +56,7 @@ struct Array_Shared
 	__BCinline__  const scalar_t* memptr() const  { return array; }
 	__BCinline__  		scalar_t* memptr()  	  { return array; }
 
-	void destroy() {}
+	void deallocate() {}
 };
 
 	template<int x, class s, class a>

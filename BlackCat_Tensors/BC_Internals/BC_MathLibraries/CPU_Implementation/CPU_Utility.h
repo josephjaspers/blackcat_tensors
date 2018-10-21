@@ -15,15 +15,15 @@ namespace BC {
  */
 
 template<class core_lib>
-struct CPU_Utility {
+struct CPU_Allocator {
 
 	template<typename T>
-	static T*& initialize(T*& internal_mem_ptr, int size) {
+	static T*& allocate(T*& internal_mem_ptr, int size) {
 		internal_mem_ptr = new T[size];
 		return internal_mem_ptr;
 	}
 	template<typename T>
-	static T*& unified_initialize(T*& intenral_mem_ptr, int size) {
+	static T*& unified_allocate(T*& intenral_mem_ptr, int size) {
 		intenral_mem_ptr = new T[size];
 		return intenral_mem_ptr;
 	}
@@ -36,11 +36,11 @@ struct CPU_Utility {
 		core_lib::copy(host_ptr, device_ptr, size);
 	}
 	template<typename T>
-	static void destroy(T* t) {
+	static void deallocate(T* t) {
 		delete[] t;
 	}
 	template<typename T>
-	static void destroy(T t) {
+	static void deallocate(T t) {
 		//empty
 	}
 	template<class T, class is, class os>

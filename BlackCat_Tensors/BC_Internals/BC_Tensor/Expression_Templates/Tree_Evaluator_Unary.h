@@ -38,7 +38,7 @@ struct evaluator<Unary_Expression<array_t, op>>
 	struct trivial {
 		static auto impl(const Unary_Expression<array_t, op>& branch) {
 			using branch_t = Unary_Expression<array_t, op>;
-			auto tmp =  temporary<internal::Array<branch_t::DIMS(), scalar_of<branch_t>, mathlib_of<branch_t>>>(branch.inner_shape());
+			auto tmp =  temporary<internal::Array<branch_t::DIMS(), scalar_of<branch_t>, allocator_of<branch_t>>>(branch.inner_shape());
 			return injection(branch, tmp);
 		}
 	};
@@ -52,8 +52,8 @@ struct evaluator<Unary_Expression<array_t, op>>
 		using function = std::conditional_t<non_trivial_blas_injection, trivial, nontrivial>;
 		return function::impl(branch);
 	}
-	static void destroy_temporaries(const Unary_Expression<array_t, op>& branch) {
-		evaluator<array_t>::destroy_temporaries(branch.array);
+	static void deallocate_temporaries(const Unary_Expression<array_t, op>& branch) {
+		evaluator<array_t>::deallocate_temporaries(branch.array);
 	}
 };
 

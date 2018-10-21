@@ -35,7 +35,7 @@ struct CPU_Constants {
 	}
 
 	template<class T>
-	static T static_initialize(T value) {
+	static T static_allocate(T value) {
 		return T(value);
 	}
 };

@@ -31,10 +31,10 @@ namespace BC {
  */
 
 class CPU:
-		public CPU_Utility<CPU>,
+		public CPU_Allocator<CPU>,
 		public CPU_Misc<CPU>,
 		public CPU_BLAS<CPU>,
-		public CPU_Constants<CPU>,//,
+		public CPU_Constants<CPU>,
 	    public CPU_Evaluator<CPU>
 {
 

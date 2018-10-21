@@ -36,7 +36,7 @@ struct evaluator<T, std::enable_if_t<is_array<T>()>>
 	static auto replacement(const T& branch) {
 		return branch;
 	}
-	static void destroy_temporaries(const T& tmp) {
+	static void deallocate_temporaries(const T& tmp) {
 		return;
 	}
 };

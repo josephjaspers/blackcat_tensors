@@ -29,9 +29,9 @@ template<int dimension, class ml> class conv : public BLAS_FUNCTION {};
  */
 
 
-template<class lv, class rv, class mathlib>
-struct Binary_Expression<lv, rv, oper::conv<2, mathlib>>
-: Expression_Base<Binary_Expression<lv, rv,  oper::conv<2, mathlib>>>, BLAS_FUNCTION {
+template<class lv, class rv, class allocator>
+struct Binary_Expression<lv, rv, oper::conv<2, allocator>>
+: Expression_Base<Binary_Expression<lv, rv,  oper::conv<2, allocator>>>, BLAS_FUNCTION {
 
 	using scalar_type = scalar_of<lv>;
 	static constexpr bool transA = blas_feature_detector<lv>::transposed;
@@ -79,15 +79,15 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 	auto& injection = injection_values.data();
 
 	//evaluate the left and right branches (computes only if necessary)
-	auto A = branched<mathlib>::evaluate(left);
-	auto B = branched<mathlib>::evaluate(right);
+	auto A = branched<allocator>::evaluate(left);
+	auto B = branched<allocator>::evaluate(right);
 
 	//call matrix_mul
-	mathlib::conv2(injection, A, B);
+	allocator::conv2(injection, A, B);
 
-	//destroy all the temporaries
-	if (lv_eval) cc(A).destroy();
-	if (rv_eval) cc(B).destroy();
+	//deallocate all the temporaries
+	if (lv_eval) cc(A).deallocate();
+	if (rv_eval) cc(B).deallocate();
 }
 };
 

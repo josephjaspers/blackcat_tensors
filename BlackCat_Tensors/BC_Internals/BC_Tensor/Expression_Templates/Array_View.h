@@ -53,7 +53,7 @@ struct Array_View
 	Array_View(int x, integers... ints) :Shape<dimension>(x, ints...) {}
 	__BCinline__ const scalar_t* memptr() const  { return array; }
 
-	void destroy() {}
+	void deallocate() {}
 };
 //------------------------------------------------type traits--------------------------------------------------------------//
 

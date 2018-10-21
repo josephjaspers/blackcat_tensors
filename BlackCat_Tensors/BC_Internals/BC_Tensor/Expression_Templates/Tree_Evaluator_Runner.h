@@ -75,8 +75,8 @@ struct Lazy_Evaluator {
 			static constexpr int iterator_dimension = expression::ITERATOR();
 			allocator_type::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
 		}
-		//destroy any temporaries made by the tree
-		internal::tree::Greedy_Evaluator::destroy_temporaries(greedy_evaluated_expr);
+		//deallocate any temporaries made by the tree
+		internal::tree::Greedy_Evaluator::deallocate_temporaries(greedy_evaluated_expr);
 	}
 	//------------------------------------------------Greedy evaluation (BLAS function call detected), skip injection optimization--------------------//
 	template< class expression>
@@ -88,14 +88,14 @@ struct Lazy_Evaluator {
 		if (is_expr<decltype(greedy_evaluated_expr)>()) {
 			allocator_type::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
 		}
-		//destroy any temporaries made by the tree
-		internal::tree::Greedy_Evaluator::destroy_temporaries(greedy_evaluated_expr);
+		//deallocate any temporaries made by the tree
+		internal::tree::Greedy_Evaluator::deallocate_temporaries(greedy_evaluated_expr);
 	}
 };
 
-template<class mathlib>
+template<class allocator>
 struct CacheEvaluator {
-	template<class branch> using sub_t 	= BC::internal::Array<branch::DIMS(), BC::internal::scalar_of<branch>, mathlib>;
+	template<class branch> using sub_t 	= BC::internal::Array<branch::DIMS(), BC::internal::scalar_of<branch>, allocator>;
 	template<class branch> using eval_t = BC::internal::Binary_Expression<sub_t<branch>, branch, BC::internal::oper::assign>;
 
 	template<class branch> //The branch is an array, no evaluation required
@@ -106,7 +106,7 @@ struct CacheEvaluator {
 	{
 		sub_t<std::decay_t<branch>> cached_branch(expression.inner_shape());
 		eval_t<std::decay_t<branch>> assign_to_expression(cached_branch, expression);
-		Lazy_Evaluator<mathlib>::evaluate(assign_to_expression);
+		Lazy_Evaluator<allocator>::evaluate(assign_to_expression);
 		return cached_branch;
 	}
 
@@ -115,12 +115,12 @@ struct CacheEvaluator {
 template<class array_t, class expression_t>
 void evaluate_to(array_t array, expression_t expr) {
 	static_assert(is_array<array_t>(), "MAY ONLY EVALUATE TO ARRAYS");
-	Lazy_Evaluator<internal::mathlib_of<array_t>>::evaluate(internal::Binary_Expression<array_t, expression_t, internal::oper::assign>(array, expr));
+	Lazy_Evaluator<internal::allocator_of<array_t>>::evaluate(internal::Binary_Expression<array_t, expression_t, internal::oper::assign>(array, expr));
 }
 
 template<class expression_t>
 void evaluate(expression_t expr) {
-	Lazy_Evaluator<mathlib_of<expression_t>>::evaluate(expr);
+	Lazy_Evaluator<allocator_of<expression_t>>::evaluate(expr);
 }
 
 

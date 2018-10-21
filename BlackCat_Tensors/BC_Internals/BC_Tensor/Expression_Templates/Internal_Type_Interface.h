@@ -42,7 +42,7 @@ public:
 
 	}
 
-	void destroy() const {}
+	void deallocate() const {}
 
 };
 }

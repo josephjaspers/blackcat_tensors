@@ -124,8 +124,8 @@ struct Shape<0> {
 template<>
 struct Shape<1> {
 
-	Shape& as_shape() { return *this; }
-	const Shape& as_shape() const { return *this; }
+	__BCinline__ Shape& as_shape() { return *this; }
+	__BCinline__ const Shape& as_shape() const { return *this; }
 	BC::array<1, int> m_inner_shape = {0};
 	BC::array<1, int> m_outer_shape = {1};
 

@@ -61,7 +61,7 @@ public:
 		return as_derived()[this->dims_to_index(index)];
 	}
 
-	void destroy() {}
+	void deallocate() {}
 	//------------------------------------------Implementation Details---------------------------------------//
 public:
 	__BCinline__

@@ -13,12 +13,12 @@ namespace BC {
 namespace internal {
 namespace oper {
 
-template<class mathlib> struct transpose;
-template<class mathlib> struct gemm;
-template<class mathlib> struct gemv;
-template<class mathlib> struct ger;
-template<class mathlib> struct dot;
-template<int x,class mathlib> struct conv;
+template<class allocator> struct transpose;
+template<class allocator> struct gemm;
+template<class allocator> struct gemv;
+template<class allocator> struct ger;
+template<class allocator> struct dot;
+template<int x,class allocator> struct conv;
 
 
 

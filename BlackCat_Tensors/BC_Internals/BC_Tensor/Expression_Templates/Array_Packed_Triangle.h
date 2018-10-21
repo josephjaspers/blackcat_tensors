@@ -32,7 +32,7 @@
 //	scalar_t* array;
 //
 //	Array_Packed_Triangle(int N) : Shape<2>(N, N) {
-//		allocator_t::initialize(array, this->size() / 2);
+//		allocator_t::allocate(array, this->size() / 2);
 //	}
 ////I would like to thank stack overflow for its contribution
 //	scalar_t& operator () (int row, int col) {

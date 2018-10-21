@@ -32,8 +32,8 @@ struct evaluator<temporary<core>>
 	static auto replacement(const temporary<core>& branch) {
 		return branch;
 	}
-	static void destroy_temporaries(temporary<core> tmp) {
-		tmp.destroy();
+	static void deallocate_temporaries(temporary<core> tmp) {
+		tmp.deallocate();
 	}
 };
 

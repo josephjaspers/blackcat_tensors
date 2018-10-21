@@ -18,7 +18,7 @@
 #include "GPU_Implementation/GPU_impl.cu"
 #include "GPU_Implementation/GPU_BLAS.h"
 #include "GPU_Implementation/GPU_Misc.h"
-#include "GPU_Implementation/GPU_Utility.h"
+#include "GPU_Implementation/CUDA_Allocator.h"
 #include "GPU_Implementation/GPU_Constants.h"
 #include "GPU_Implementation/GPU_Evaluator.h"
 
@@ -26,7 +26,7 @@ namespace BC {
 
 class GPU :
 	public GPU_Misc<GPU>,
-	public GPU_Utility<GPU>,
+	public CUDA_Allocator,
 	public GPU_BLAS<GPU>,
 	public GPU_Constants<GPU>,
 	public GPU_Evaluator<GPU>{

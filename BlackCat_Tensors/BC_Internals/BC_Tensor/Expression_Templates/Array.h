@@ -15,11 +15,11 @@ namespace BC {
 template<class> class Evaluator;
 
 namespace internal {
-template<int dimension, class T, class mathlib>
-struct Array : Array_Base<Array<dimension, T, mathlib>, dimension>, public Shape<dimension> {
+template<int dimension, class T, class allocator>
+struct Array : Array_Base<Array<dimension, T, allocator>, dimension>, public Shape<dimension> {
 
 	using scalar_t = T;
-	using allocator_t = mathlib;
+	using allocator_t = allocator;
 
 	__BCinline__ static constexpr int DIMS() { return dimension; }
 
@@ -29,16 +29,16 @@ struct Array : Array_Base<Array<dimension, T, mathlib>, dimension>, public Shape
 	Array(Shape<DIMS()> shape_, scalar_t* array_) : array(array_), Shape<DIMS()>(shape_) {}
 
 	template<class U,typename = std::enable_if_t<not std::is_base_of<BC_internal_interface<U>, U>::value>>
-	Array(U param) : Shape<DIMS()>(param) { allocator_t::initialize(array, this->size()); }
+	Array(U param) : Shape<DIMS()>(param) { allocator_t::allocate(array, this->size()); }
 
 	template<class... integers>//CAUSES FAILURE WITH NVCC 9.2, typename = std::enable_if_t<MTF::is_integer_sequence<integers...>>>
 	Array(integers... ints) : Shape<DIMS()>(ints...) {
 		static_assert(MTF::seq_of<int, integers...>,"PARAMETER LIST MUST BE INTEGER_SEQUNCE");
-		allocator_t::initialize(array, this->size()); }
+		allocator_t::allocate(array, this->size()); }
 
 	template<class deriv_expr, typename = std::enable_if_t<std::is_base_of<BC_internal_interface<deriv_expr>, deriv_expr>::value>>
 	Array(const deriv_expr& expr) : Shape<DIMS()>(static_cast<const deriv_expr&>(expr).inner_shape()) {
-		allocator_t::initialize(array, this->size());
+		allocator_t::allocate(array, this->size());
 		evaluate_to(*this, expr);
 	}
 
@@ -49,7 +49,7 @@ protected:
 
 	void copy_init(const Array& array_copy) {
 		this->copy_shape(array_copy);
-		allocator_t::initialize(array, this->size());
+		allocator_t::allocate(array, this->size());
 		evaluate_to(*this, array_copy);
 	}
 public:
@@ -60,30 +60,30 @@ public:
 		std::swap(this->array, param.array);
 	}
 
-	void destroy() {
-		allocator_t::destroy(array);
+	void deallocate() {
+		allocator_t::deallocate(array);
 		array = nullptr;
 	}
 };
 
 
 //specialization for scalar --------------------------------------------------------------------------------------------------------
-template<class T, class mathlib>
-struct Array<0, T, mathlib> : Array_Base<Array<0, T, mathlib>, 0>, public Shape<0> {
+template<class T, class allocator>
+struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Shape<0> {
 
 	using scalar_t = T;
-	using allocator_t = mathlib;
+	using allocator_t = allocator;
 
 	__BCinline__ static constexpr int DIMS() { return 0; }
 
 	scalar_t* array = nullptr;
 	Array() {
-		allocator_t::initialize(array, this->size());
+		allocator_t::allocate(array, this->size());
 	}
 	Array(Shape<DIMS()> shape_, scalar_t* array_) : array(array_), Shape<0>(shape_) {}
 
 	template<class U>
-	Array(U param) : Shape<DIMS()>(param) { allocator_t::initialize(array, this->size()); }
+	Array(U param) : Shape<DIMS()>(param) { allocator_t::allocate(array, this->size()); }
 
 	template<class U>
 	Array(U param, scalar_t* array_) : array(array_), Shape<DIMS()>(param) {}
@@ -102,12 +102,12 @@ struct Array<0, T, mathlib> : Array_Base<Array<0, T, mathlib>, 0>, public Shape<
 	__BCinline__	   scalar_t* memptr()  	   { return array; }
 
 	void copy_init(const Array& array_copy) {
-		allocator_t::initialize(array, this->size());
+		allocator_t::allocate(array, this->size());
 		evaluate_to(*this, array_copy);
 	}
 
-	void destroy() {
-		allocator_t::destroy(array);
+	void deallocate() {
+		allocator_t::deallocate(array);
 		array = nullptr;
 	}
 

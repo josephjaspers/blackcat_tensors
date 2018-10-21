@@ -19,7 +19,7 @@ FAQ Fast Explanation:
 	CPU multithreading? Simply link OpenMP
 	GPU multithreading? Simply link CUDA 9
 
-	How to choose mathlibrary?
+	How to choose allocatorrary?
 	BC::Vector<float, BC::GPU> myVec(sz); //Allocates data on the gpu
 	BC::Vector<double, BC::CPU> myVec(sz); //Allocates data on the cpu
 

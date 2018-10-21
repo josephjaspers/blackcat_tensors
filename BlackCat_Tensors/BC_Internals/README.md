@@ -9,13 +9,13 @@
 folder: BC_Internals
 
 
-BC_MathLibraries:
+BC_ALLOCATOR:
 
 	Stores the files relating to any calls that differ between CPU/GPU backends.
 	Any call that would differ accross CUDA and standard CPU will belong to these files.
 
 	An example of this would be 
-		'template<class T>void initialize(T*& memptr, int size)'
+		'template<class T>void allocate(T*& memptr, int size)'
 
 	The CPU implementation is simply 'memptr = new T[size];'
         while CUDA's implementation is 'cudaMalloc((void**) &t, sizeof(T) * sz);'

@@ -136,7 +136,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 	struct replacement_required {
 		static auto function(const Binary_Expression<lv,rv,op>& branch) {
 			using branch_t = Binary_Expression<lv,rv,op>;
-			auto tmp =  temporary<internal::Array<branch_t::DIMS(), scalar_of<branch_t>, mathlib_of<branch_t>>>(branch.inner_shape());
+			auto tmp =  temporary<internal::Array<branch_t::DIMS(), scalar_of<branch_t>, allocator_of<branch_t>>>(branch.inner_shape());
 			auto inject_tmp = injector<std::decay_t<decltype(tmp)>, 1, 0>(tmp);
 			return injection(branch, inject_tmp);
 		}
@@ -152,9 +152,9 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 	}
 
 
-	static void destroy_temporaries(const Binary_Expression<lv, rv, op>& branch) {
-		evaluator<lv>::destroy_temporaries(branch.left);
-		evaluator<rv>::destroy_temporaries(branch.right);
+	static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch) {
+		evaluator<lv>::deallocate_temporaries(branch.left);
+		evaluator<rv>::deallocate_temporaries(branch.right);
 	}
 
 };

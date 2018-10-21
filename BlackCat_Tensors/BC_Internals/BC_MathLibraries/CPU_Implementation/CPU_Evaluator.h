@@ -5,8 +5,8 @@
  *      Author: joseph
  */
 
-#ifndef BC_INTERNALS_BC_MATHLIBRARIES_CPU_IMPLEMENTATION_CPU_EVALUATOR_H_
-#define BC_INTERNALS_BC_MATHLIBRARIES_CPU_IMPLEMENTATION_CPU_EVALUATOR_H_
+#ifndef BC_INTERNALS_BC_ALLOCATOR_CPU_IMPLEMENTATION_CPU_EVALUATOR_H_
+#define BC_INTERNALS_BC_ALLOCATOR_CPU_IMPLEMENTATION_CPU_EVALUATOR_H_
 namespace BC {
 namespace cpu_evaluator {
 
@@ -40,7 +40,7 @@ namespace cpu_evaluator {
 }
 
 //--------------------------------
-	template<class mathlib_core>
+	template<class allocator_core>
 	struct CPU_Evaluator {
 
 //      need to fix this //FIXME RECURSIVE EVAUATOR FOR CPU AND GPU NEED TO WORK (SO FAR BUGGY)
@@ -66,4 +66,4 @@ namespace cpu_evaluator {
 }
 
 
-#endif /* BC_INTERNALS_BC_MATHLIBRARIES_CPU_IMPLEMENTATION_CPU_EVALUATOR_H_ */
+#endif /* BC_INTERNALS_BC_ALLOCATOR_CPU_IMPLEMENTATION_CPU_EVALUATOR_H_ */
