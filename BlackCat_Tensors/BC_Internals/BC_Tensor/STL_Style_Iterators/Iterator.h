@@ -8,14 +8,11 @@
 #ifndef ITERATOR_H_
 #define ITERATOR_H_
 
+#include "STL_Iterator_Common.h"
+
 namespace BC {
 namespace module {
 namespace stl {
-
-enum direction {
-	forward = 1,
-	reverse = -1
-};
 
 template<direction direction, class tensor_t>
 struct Iterator {

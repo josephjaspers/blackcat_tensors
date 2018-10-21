@@ -11,8 +11,8 @@
 
 
 #include "BC_Tensor/Tensor.h"
-#include "BC_ALLOCATOR/CPU.h"
-#include "BC_ALLOCATOR/GPU.cu"
+#include "BC_MathLibraries/CPU.h"
+#include "BC_MathLibraries/GPU.cu"
 
 
 #endif /* BLACKCAT_INTERNAL_GLOBALUNIFIER_H_ */
