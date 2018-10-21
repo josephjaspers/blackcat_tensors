@@ -73,6 +73,10 @@ struct Array_Shared
 	struct BC_array_move_assignable_overrider<internal::Array_Shared<x,s,a>> {
 		static constexpr bool boolean = true;
 	};
+	template<int d, class s, class a> struct BC_lvalue_type_overrider<Array_Shared<d,s,a>> {
+		static constexpr bool boolean = true;
+	};
+
 }
 }
 

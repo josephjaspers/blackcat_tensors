@@ -76,6 +76,10 @@ struct Array_View
 	struct BC_array_copy_assignable_overrider<internal::Array_View<x,s,a>,  std::enable_if_t<is_array<internal::Array_View<x,s,a>>()>> {
 		static constexpr bool boolean = false;
 	};
+	template<int d, class s, class a> struct BC_lvalue_type_overrider<Array_View<d,s,a>> {
+		static constexpr bool boolean = true;
+	};
+
 
 
 }

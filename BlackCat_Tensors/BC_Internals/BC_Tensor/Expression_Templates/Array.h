@@ -139,6 +139,10 @@ template<class T>
 struct BC_array_copy_constructible_overrider<T, std::enable_if_t<is_array_core<T>()>> {
 	static constexpr bool boolean = true;
 };
+template<int d, class s, class a> struct BC_lvalue_type_overrider<Array<d,s,a>> {
+	static constexpr bool boolean = false;
+};
+
 
 }
 }

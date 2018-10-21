@@ -46,6 +46,9 @@ auto make_format(internal_t internal, BC::array<dims, int> format) {
 	return Array_Format<internal_t>(internal, format);
 }
 
+template<class internal> struct BC_lvalue_type_overrider<Array_Format<internal>> {
+	static constexpr bool boolean = true;
+};
 
 }
 }

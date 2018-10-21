@@ -20,7 +20,7 @@ namespace module {
 			return static_cast<derived&>(*this);
 		}
 		const derived& as_derived() const {
-			return static_cast<derived&>(*this);
+			return static_cast<const derived&>(*this);
 		}
 	public:
 
@@ -45,6 +45,9 @@ namespace module {
 		auto* data() const {
 			return as_derived().memptr();
 		}
+
+	public:
+
 		auto begin() {
 			return stl::forward_iterator_begin(as_derived());
 		}
@@ -71,6 +74,90 @@ namespace module {
 		}
 
 
+		//----------------------iterator wrappers---------------------------//
+
+		struct _forward_iterator {
+
+			derived& tensor;
+
+			using begin_t = decltype(tensor.begin());
+			using end_t   = decltype(tensor.end());
+
+			begin_t _begin = tensor.begin();
+			end_t   _end = tensor.end();
+
+			_forward_iterator(derived& tensor_)
+				: tensor(tensor_) {}
+
+			_forward_iterator(derived& tensor_, int start)
+				: tensor(tensor_) {
+
+				_begin += start;
+			}
+			_forward_iterator(derived& tensor_, int start, int end)
+				: tensor(tensor_) {
+				_begin += start;
+				_end = end;
+			}
+
+
+
+			auto begin() {
+				return _begin;
+			}
+			const begin_t& cbegin() const {
+				return _begin;
+			}
+			const end_t& end() const {
+				return _end;
+			}
+
+		};
+		struct _reverse_iterator {
+
+			derived& tensor;
+
+			using begin_t = decltype(tensor.rbegin());
+			using end_t   = decltype(tensor.rend());
+
+			begin_t _begin = tensor.rbegin();
+			end_t   _end = tensor.rend();
+
+			_reverse_iterator(derived& tensor_)
+				: tensor(tensor_) {}
+
+			_reverse_iterator(derived& tensor_, int lower_index)
+				: tensor(tensor_) {
+
+				_end += lower_index;
+			}
+			_reverse_iterator(derived& tensor_, int lower, int higher)
+				: tensor(tensor_) {
+				_begin -= higher;
+				_end = lower;
+			}
+
+
+
+			auto begin() {
+				return _begin;
+			}
+			const begin_t& cbegin() const {
+				return _begin;
+			}
+			const end_t& end() const {
+				return _end;
+			}
+
+		};
+
+
+		template<class...params> auto iterator(params... ps) {
+			return _forward_iterator(as_derived(), ps...);
+		}
+		template<class... params> auto reverse_iterator(params... ps) {
+			return _reverse_iterator(as_derived(), ps...);
+		}
 	};
 
 }
