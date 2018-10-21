@@ -1,12 +1,4 @@
-Last Updated: Thursday, Auguest 30rd, 2018
-
-/*  Project: BlackCat_Tensors
- *  Author: JosephJaspers
- *  Copyright 2018
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+Last Updated: Thursday, October 14, 2018
 
 BlackCat_Tensors (BCT) is a highly optimized Matrix library designed for NeuralNetwork construction. 
 BCT is designed to support GPU computing (CUDA) and CPU multi-threading (OpenMP).
@@ -167,9 +159,11 @@ Methods:
             
             
 
+
+
 ----------------------------------------------------tensor operations-------------------------------------------------------
-**SOURCE:
-	 https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Operations.h
+
+SOURCE: 	https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Operations.h
 	** The following options also provide support for single_scalar operations 	
 
 	_tensor_& operator =  (const _tensor_&) 		//copy
@@ -201,9 +195,12 @@ Methods:
 		4) functor object needs to have a trivial constructor and the overloaded operator()(T value) (if unary) or operator()(T val1, U val2) (if binary)
 
 
-----------------------------------------------------tensor utility methods-------------------------------------------------------
+
+
+----------------------------------------------------tensor utility methods--------------------------------------------------
+
 **SOURCE:
-	 https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Utility.h
+https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Utility.h
 
 	void print      (int precision=6) const		//print the tensor (formatted)
 	void printSparse(int precision=6) const		//print the tensor but ignore 0s (formatted)
@@ -217,9 +214,12 @@ Methods:
 			bool overwrite_dimensions=true)	//if overwrite_dimensions, overwrites the dimensions of the tensor (only relevant if read_dimensions is true)
 
 
-----------------------------------------------------tensor metadata methods-------------------------------------------------------
+
+
+----------------------------------------------------tensor metadata methods------------------------------------------------
+
 **SOURCE:
-	 https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Shape.h
+https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Shape.h
 
 	int dims() const				//returns number of dimensions (scalar = 0, vector = 1, matrix = 2, etc)
 	int size() const				//returns number of elements 
@@ -235,9 +235,12 @@ Methods:
 
 
 
-----------------------------------------------------tensor views and data accessing-------------------------------------------------------
+
+
+----------------------------------------------------tensor views and data accessing-----------------------------------------
+
 **SOURCE:
-	 https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Shaping.h
+https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Shaping.h
 
 	const operator[] (int i) const 			//returns "slice" of tensor at index (IE Cube returns Matrix, Matrix returns Vector, Vector returns Scalar)
    	      operator[] (int i)			//returns "slice" of tensor at index (IE Cube returns Matrix, Matrix returns Vector, Vector returns Scalar)
@@ -281,10 +284,13 @@ Methods:
 									  // --- returns a 2x2matrix at page 3,column 2, row 0.
 
 
-----------------------------------------------------supported lazy functions-------------------------------------------------------
+
+
+----------------------------------------------------supported lazy functions------------------------------------------------
+
 **SOURCE:
-	 https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Functions.h
-	(implementation) https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Operations/Unary.h
+https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Functions.h
+(implementation) https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Operations/Unary.h
 	
 	Lazily_Support functions: 
 	auto function_name(const _tensor_)				 //returns a lazy expression of the stated function, 
@@ -325,6 +331,8 @@ Methods:
 	sqrt
 	tan
 	tanh
+
+
 
 
 
