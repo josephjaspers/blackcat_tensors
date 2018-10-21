@@ -17,7 +17,7 @@ template<class lv, class rv, class operation>
 struct Binary_Expression : public Expression_Base<Binary_Expression<lv, rv, operation>>, public operation {
 
 	using scalar_t = decltype(std::declval<operation>()(std::declval<typename lv::scalar_t&>(), std::declval<typename lv::scalar_t&>()));
-	using mathlib_t = typename lv::mathlib_t;
+	using allocator_t = typename lv::allocator_t;
 
 	lv left;
 	rv right;

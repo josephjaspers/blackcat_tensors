@@ -30,7 +30,7 @@ struct Binary_Expression<lv, rv, oper::dot<mathlib>>
 : Expression_Base<Binary_Expression<lv, rv,  oper::dot<mathlib>>>, BLAS_FUNCTION, Shape<0> {
 
 	using scalar_t  = typename lv::scalar_t;
-	using mathlib_t = mathlib;
+	using allocator_t = mathlib;
 
 	static constexpr bool transA = blas_feature_detector<lv>::transposed;
 	static constexpr bool transB = blas_feature_detector<rv>::transposed;

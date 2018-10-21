@@ -23,7 +23,7 @@ class Tensor_Functions<Tensor_Base<internal_t>> {
 
 	using derived	    = Tensor_Base<internal_t>;
 	using scalar_t 		= typename internal_t::scalar_t;
-	using mathlib_t     = typename internal_t::mathlib_t;
+	using allocator_t     = typename internal_t::allocator_t;
 
 	 const derived& as_derived() const { return static_cast<const derived&>(*this);  }
 	 	   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
@@ -33,7 +33,7 @@ public:
 	void randomize(scalar_t lb=0, scalar_t ub=1)  {
 		static_assert(derived::ITERATOR() == 0 || derived::ITERATOR() == 1,
 				"randomize not available to non-continuous tensors");
-		mathlib_t::randomize(as_derived().internal(), lb, ub);
+		allocator_t::randomize(as_derived().internal(), lb, ub);
 	}
 	void fill(scalar_t value)   { as_derived() = value; }
 	void zero()                    { as_derived() = 0; 	   }

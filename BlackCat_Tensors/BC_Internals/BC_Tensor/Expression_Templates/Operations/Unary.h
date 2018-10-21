@@ -8,6 +8,7 @@
 
 #ifndef EXPRESSION_UNARY_FUNCTORS_H_
 #define EXPRESSION_UNARY_FUNCTORS_H_
+#include <cmath>
 
 namespace BC {
 namespace internal {

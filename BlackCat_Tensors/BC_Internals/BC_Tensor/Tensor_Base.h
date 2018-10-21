@@ -14,6 +14,7 @@
 #include "Tensor_Utility.h"
 #include "Tensor_Shaping.h"
 #include "Tensor_Functions.h"
+#include "Tensor_Iterator.h"
 
 #include "Expression_Templates/Array.h"
 #include "Expression_Templates/Array_View.h"
@@ -28,7 +29,8 @@ class Tensor_Base :
 		public module::Tensor_Operations<Tensor_Base<internal_t>>,
 		public module::Tensor_Functions<Tensor_Base<internal_t>>,
 		public module::Tensor_Utility<Tensor_Base<internal_t>>,
-		public module::Tensor_Shaping<Tensor_Base<internal_t>> {
+		public module::Tensor_Shaping<Tensor_Base<internal_t>>,
+		public module::Tensor_Iterator<Tensor_Base<internal_t>> {
 
 protected:
 
@@ -45,15 +47,16 @@ public:
 
 	using internal_t::DIMS; //required
 	using scalar_t	= typename internal_t::scalar_t;
-	using mathlib_t	= typename internal_t::mathlib_t;
+	using allocator_t	= typename internal_t::allocator_t;
 	using operations::operator=;
 	using shaping::operator[];
 	using shaping::operator();
 
-	using move_parameter        = std::conditional_t<BC_array_move_constructible<internal_t>(),       self&&, 	BC::DISABLED<0>>;
-	using copy_parameter        = std::conditional_t<BC_array_copy_constructible<internal_t>(), const self&,  	BC::DISABLED<1>>;
-	using move_assign_parameter = std::conditional_t<BC_array_move_assignable<internal_t>(), 	      self&&, 	BC::DISABLED<0>>;
-	using copy_assign_parameter = std::conditional_t<BC_array_copy_assignable<internal_t>(), 	const self&,  	BC::DISABLED<1>>;
+	using move_parameter        = std::conditional_t<internal::BC_array_move_constructible<internal_t>(),       self&&, BC::DISABLED<0>>;
+	using copy_parameter        = std::conditional_t<internal::BC_array_copy_constructible<internal_t>(), const self&,  BC::DISABLED<1>>;
+
+	using move_assign_parameter = std::conditional_t<internal::BC_array_move_assignable<internal_t>(),       self&&, BC::DISABLED<0>>;
+	using copy_assign_parameter = std::conditional_t<internal::BC_array_copy_assignable<internal_t>(), const self&,  BC::DISABLED<1>>;
 
 	Tensor_Base() = default;
 	Tensor_Base(const parent&  param) : internal_t(param) {}

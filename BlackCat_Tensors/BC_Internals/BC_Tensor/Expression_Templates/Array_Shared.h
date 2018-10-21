@@ -15,13 +15,13 @@
 namespace BC {
 namespace internal {
 
-template<int dimension, class scalar, class allocator_t>
+template<int dimension, class scalar, class allocator>
 struct Array_Shared
-		: Array_Base<Array_Shared<dimension, scalar, allocator_t>, dimension>,
+		: Array_Base<Array_Shared<dimension, scalar, allocator>, dimension>,
 		  Shape<dimension> {
 
 	using scalar_t = scalar;
-	using mathlib_t = allocator_t;
+	using allocator_t = allocator;
 
 	scalar_t* array = nullptr;
 
@@ -58,7 +58,6 @@ struct Array_Shared
 
 	void destroy() {}
 };
-}
 
 	template<int x, class s, class a>
 	struct BC_array_move_constructible_overrider<internal::Array_Shared<x,s,a>> {
@@ -74,6 +73,7 @@ struct Array_Shared
 	struct BC_array_move_assignable_overrider<internal::Array_Shared<x,s,a>> {
 		static constexpr bool boolean = true;
 	};
+}
 }
 
 

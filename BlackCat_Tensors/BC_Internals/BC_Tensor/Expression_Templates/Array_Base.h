@@ -88,7 +88,6 @@ private:
 		return index;
 	}
 };
-}
 //------------------------------------------------type traits--------------------------------------------------------------//
 
 template<class T> static constexpr bool is_array() { return std::is_base_of<internal::Array_Base<T, T::DIMS()>, T>::value; };
@@ -100,6 +99,7 @@ struct BC_array_copy_assignable_overrider<T, std::enable_if_t<is_array<T>()>> {
 };
 
 
+}
 }
 
 

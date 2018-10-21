@@ -32,7 +32,7 @@ public:
 		static_assert(std::is_trivially_copy_constructible<derived>::value, "INTERNAL_TYPES TYPES MUST BE TRIVIALLY COPYABLE");
 //		static_assert(std::is_trivially_copyable<derived>::value, "INTERNAL_TYPES MUST BE TRIVIALLY COPYABLE");
 		static_assert(!std::is_same<void, typename derived::scalar_t>::value, "INTERNAL_TYPES MUST HAVE A 'using scalar_t = some_Type'");
-		static_assert(!std::is_same<void, typename derived::mathlib_t>::value, "INTERNAL_TYPES MUST HAVE A 'using mathlib_t = some_Type'");
+		static_assert(!std::is_same<void, typename derived::allocator_t>::value, "INTERNAL_TYPES MUST HAVE A 'using allocator_t = some_Type'");
 		static_assert(!std::is_same<decltype(std::declval<derived>().inner_shape()), void>::value, "INTERNAL_TYPE MUST DEFINE inner_shape()");
 		static_assert(!std::is_same<decltype(std::declval<derived>().block_shape()), void>::value, "INTERNAL_TYPE MUST DEFINE block_shape()");
 		static_assert(std::is_same<decltype(std::declval<derived>().rows()), int>::value, "INTERNAL_TYPE MUST DEFINE rows()");

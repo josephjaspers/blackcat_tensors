@@ -19,7 +19,7 @@ struct Array_Format
 		: Array_Base<Array_Format<PARENT>, PARENT::DIMS()>, Shape<PARENT::DIMS()> {
 
 	using scalar_t = typename PARENT::scalar_t;
-	using mathlib_t = typename PARENT::mathlib_t;
+	using allocator_t = typename PARENT::allocator_t;
 
 	__BCinline__ static constexpr int DIMS() 		 { return PARENT::DIMS(); }
 	__BCinline__ static constexpr int ITERATOR()	 { return DIMS(); }
@@ -45,6 +45,8 @@ template<class internal_t, int dims>
 auto make_format(internal_t internal, BC::array<dims, int> format) {
 	return Array_Format<internal_t>(internal, format);
 }
+
+
 }
 }
 

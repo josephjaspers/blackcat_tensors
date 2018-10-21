@@ -15,10 +15,9 @@ namespace internal {
 template<class,class,class> class Binary_Expression;
 template<class,class>		class Unary_Expression;
 
-template<class T> using mathlib_of = std::decay_t<typename T::mathlib_t>;
+template<class T> using mathlib_of = std::decay_t<typename T::allocator_t>;
 template<class T> using scalar_of  = std::decay_t<typename T::scalar_t>;
 
-}
 
 template<class T, class enabler=void>
 struct BC_array_move_constructible_overrider {
@@ -38,7 +37,7 @@ struct BC_array_copy_assignable_overrider {
 };
 
 template<class T, class enabler=void>
-struct BC_triangle_matrix_overrider {
+struct BC_lvalue_type_overrider {
 	static constexpr bool boolean = false;
 };
 
@@ -55,7 +54,13 @@ template<class T> constexpr bool BC_array_move_assignable() {
 template<class T> constexpr bool BC_array_copy_assignable()	{
 	return BC_array_copy_assignable_overrider<T>::boolean;
 }
-
+template<class T> constexpr bool BC_lvalue()	{
+	return BC_lvalue_type_overrider<T>::boolean;
+}
+template<class T> constexpr bool BC_rvalue()	{
+	return !BC_lvalue<T>();
+}
+}
 
 }
 #endif /* BLACKCAT_INTERNAL_FORWARD_DECLS_H_ */

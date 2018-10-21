@@ -22,7 +22,7 @@ struct Array_Chunk  {
 
 		static_assert(PARENT::ITERATOR() == 0 || dimension <= PARENT::DIMS(), "TENSOR-CHUNK'S DIMENSIONS MUST BE LESS OR EQUAL TO PARENT'S DIMENSIONS");
 		using scalar_t = typename PARENT::scalar_t;
-		using mathlib_t = typename PARENT::mathlib_t;
+		using allocator_t = typename PARENT::allocator_t;
 
 		__BCinline__ static constexpr int DIMS() 	{ return dimension; };
 		__BCinline__ static constexpr int ITERATOR() { return dimension; }

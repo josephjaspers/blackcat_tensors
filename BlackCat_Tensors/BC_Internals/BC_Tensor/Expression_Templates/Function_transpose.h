@@ -24,7 +24,7 @@ struct Unary_Expression<functor_type, oper::transpose<ml>>
 
 
 	using scalar_t  = typename functor_type::scalar_t;
-	using mathlib_t = typename functor_type::mathlib_t;
+	using allocator_t = typename functor_type::allocator_t;
 
 	__BCinline__ static constexpr int DIMS() { return functor_type::DIMS(); }
 	__BCinline__ static constexpr int ITERATOR() { return DIMS() > 1? DIMS() :0; }

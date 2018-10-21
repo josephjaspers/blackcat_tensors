@@ -43,7 +43,7 @@ Project: BlackCat_Tensors
 
 namespace BC {
 namespace internal {
-template<class mathlib_type>
+template<class allocator_type>
 struct Lazy_Evaluator {
 	template<class T>
 	static constexpr bool INJECTION() {
@@ -56,14 +56,14 @@ struct Lazy_Evaluator {
 	static std::enable_if_t<!INJECTION<expression>()>
 	evaluate(const expression& expr) {
 		static constexpr int iterator_dimension = expression::ITERATOR();
-		mathlib_type::template nd_evaluator<iterator_dimension>(expr);
+		allocator_type::template nd_evaluator<iterator_dimension>(expr);
 	}
 	//------------------------------------------------Purely lazy alias evaluation----------------------------------//
 	template< class expression>
 	static std::enable_if_t<!INJECTION<expression>()>
 	evaluate_aliased(const expression& expr) {
 		static constexpr int iterator_dimension = expression::ITERATOR();
-		mathlib_type::template nd_evaluator<iterator_dimension>(expr);
+		allocator_type::template nd_evaluator<iterator_dimension>(expr);
 	}
 	//------------------------------------------------Greedy evaluation (BLAS function call detected)----------------------------------//
 	template< class expression>
@@ -73,7 +73,7 @@ struct Lazy_Evaluator {
 
 		if (is_expr<decltype(greedy_evaluated_expr)>()) {
 			static constexpr int iterator_dimension = expression::ITERATOR();
-			mathlib_type::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
+			allocator_type::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
 		}
 		//destroy any temporaries made by the tree
 		internal::tree::Greedy_Evaluator::destroy_temporaries(greedy_evaluated_expr);
@@ -86,7 +86,7 @@ struct Lazy_Evaluator {
 
 		auto greedy_evaluated_expr = internal::tree::Greedy_Evaluator::substitution_evaluate(expr);		//evaluate the internal tensor_type
 		if (is_expr<decltype(greedy_evaluated_expr)>()) {
-			mathlib_type::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
+			allocator_type::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
 		}
 		//destroy any temporaries made by the tree
 		internal::tree::Greedy_Evaluator::destroy_temporaries(greedy_evaluated_expr);
@@ -99,10 +99,10 @@ struct CacheEvaluator {
 	template<class branch> using eval_t = BC::internal::Binary_Expression<sub_t<branch>, branch, BC::internal::oper::assign>;
 
 	template<class branch> //The branch is an array, no evaluation required
-	static std::enable_if_t<BC::is_array<std::decay_t<branch>>(), const branch&> evaluate(const branch& expression) { return expression; }
+	static std::enable_if_t<BC::internal::is_array<std::decay_t<branch>>(), const branch&> evaluate(const branch& expression) { return expression; }
 
 	template<class branch> //Create and return an array_core created from the expression
-	static std::enable_if_t<!BC::is_array<std::decay_t<branch>>(), sub_t<std::decay_t<branch>>> evaluate(const branch& expression)
+	static std::enable_if_t<!BC::internal::is_array<std::decay_t<branch>>(), sub_t<std::decay_t<branch>>> evaluate(const branch& expression)
 	{
 		sub_t<std::decay_t<branch>> cached_branch(expression.inner_shape());
 		eval_t<std::decay_t<branch>> assign_to_expression(cached_branch, expression);

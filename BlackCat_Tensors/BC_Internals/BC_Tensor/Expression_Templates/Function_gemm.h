@@ -33,7 +33,7 @@ struct Binary_Expression<lv, rv, oper::gemm<mathlib>>
 
 
 	using scalar_t  = typename lv::scalar_t;
-	using mathlib_t = mathlib;
+	using allocator_t = mathlib;
 
 	static constexpr bool transA = blas_feature_detector<lv>::transposed;
 	static constexpr bool transB = blas_feature_detector<rv>::transposed;
@@ -119,10 +119,10 @@ struct Binary_Expression<lv, rv, oper::gemm<mathlib>>
 //std::cout << " beta_mod = " << beta_mod << std::endl;
 
 //__BCinline__ auto _slice(int i) {
-//	return Binary_Expression<lv, decltype(right._slice(i)), oper::gemv<mathlib_t>>(left, right._slice(i));
+//	return Binary_Expression<lv, decltype(right._slice(i)), oper::gemv<allocator_t>>(left, right._slice(i));
 //}
 //__BCinline__ auto _slice_range(int from, int to) {
-//	return Binary_Expression<lv, decltype(right._slice_range(from, to)), oper::gemm<mathlib_t>>(left, right._slice_range(from, to));
+//	return Binary_Expression<lv, decltype(right._slice_range(from, to)), oper::gemm<allocator_t>>(left, right._slice_range(from, to));
 //}
 
 #endif /* EXPRESSION_BINARY_DOTPRODUCT_CU_ */

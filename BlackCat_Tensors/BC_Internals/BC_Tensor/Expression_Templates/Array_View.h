@@ -15,13 +15,13 @@
 namespace BC{
 namespace internal {
 
-template<int dimension, class scalar, class allocator_t>
+template<int dimension, class scalar, class allocator>
 struct Array_View
-		: Array_Base<Array_View<dimension, scalar, allocator_t>, dimension>,
+		: Array_Base<Array_View<dimension, scalar, allocator>, dimension>,
 		  Shape<dimension> {
 
 	using scalar_t = scalar;
-	using mathlib_t = allocator_t;
+	using allocator_t = allocator;
 	const scalar_t* array = nullptr;
 
 	Array_View() 				   = default;
@@ -55,7 +55,6 @@ struct Array_View
 
 	void destroy() {}
 };
-}
 //------------------------------------------------type traits--------------------------------------------------------------//
 
 	template<int x, class s, class a>
@@ -78,6 +77,8 @@ struct Array_View
 		static constexpr bool boolean = false;
 	};
 
+
+}
 }
 
 #endif /* ARRAY_VIEW_H_ */

@@ -139,25 +139,25 @@ Methods:
     Tensor_Types 
     
         scalar_t  --> the scalar_type of the Tensor
-        mathlib_t --> BC::CPU or BC::GPU
+        allocator_t --> BC::CPU or BC::GPU
         
         Standard Tensor Types
-            Tensor<int x, scalar_t, mathlib_t> 
-            Scalar<scalar_t, mathlib_t>
-            Vector<scalar_t, mathlib_t>
-            Matrix<scalar_t, mathlib_t>
+            Tensor<int x, scalar_t, allocator_t> 
+            Scalar<scalar_t, allocator_t>
+            Vector<scalar_t, allocator_t>
+            Matrix<scalar_t, allocator_t>
 
         View Types - accepts an Array to construct. Shares the internal_pointer and is not mutable. 
-            Tensor_View<int x, scalar_t, mathlib_t>
-            Scalar_View<scalar_t, mathlib_t>
-            Vector_View<scalar_t, mathlib_t>
-            Matrix_View<scalar_t, mathlib_t>
+            Tensor_View<int x, scalar_t, allocator_t>
+            Scalar_View<scalar_t, allocator_t>
+            Vector_View<scalar_t, allocator_t>
+            Matrix_View<scalar_t, allocator_t>
            
         Shared Types - accepts a non-const Array to construct. Shares the internal_pointer but is mutable
-            Tensor_Shared<int x, scalar_t, mathlib_t> 
-            Scalar_Shared<scalar_t, mathlib_t> 
-            Vector_Shared<scalar_t, mathlib_t>
-            Matrix_Shared<scalar_t, mathlib_t>
+            Tensor_Shared<int x, scalar_t, allocator_t> 
+            Scalar_Shared<scalar_t, allocator_t> 
+            Vector_Shared<scalar_t, allocator_t>
+            Matrix_Shared<scalar_t, allocator_t>
         
         expression Types - any tensor that is expression or array of the apropriate dimensionality
             expr::Tensor<int> 

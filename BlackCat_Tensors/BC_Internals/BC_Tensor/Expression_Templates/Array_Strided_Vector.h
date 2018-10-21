@@ -18,7 +18,7 @@ template<class PARENT>
 struct Array_Strided_Vector : Array_Base<Array_Strided_Vector<PARENT>, 1>, Shape<1> {
 
 	using scalar_t = typename PARENT::scalar_t;
-	using mathlib_t = typename PARENT::mathlib_t;
+	using allocator_t = typename PARENT::allocator_t;
 
 	static_assert(PARENT::DIMS() == 2, "A ROW VIEW MAY ONLY BE CONSTRUCTED FROM A MATRIX");
 

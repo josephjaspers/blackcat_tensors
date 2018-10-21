@@ -33,11 +33,11 @@ public:
 	struct BC_curand_handle {
 		curandState* rand_ptr;
 		static constexpr int floating_point_decimal_length = 10000;
-
-		BC_curand_handle() {
-			cudaMalloc(&rand_ptr, sizeof(curandState));
-			gpu_impl::init_curand_handle<<<1,1>>>(rand_ptr);
-		}
+//
+//		BC_curand_handle() {
+//			cudaMalloc(&rand_ptr, sizeof(curandState));
+//			gpu_impl::init_curand_handle<<<1,1>>>(rand_ptr);
+//		}
 
 		template<class scalar_t> 	__device__
 		scalar_t operator () (scalar_t lower_bound, scalar_t upper_bound) const {

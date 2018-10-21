@@ -33,7 +33,7 @@ struct Binary_Expression<lv, rv, oper::gemv<mathlib>>
 : Expression_Base<Binary_Expression<lv, rv,  oper::gemv<mathlib>>>, BLAS_FUNCTION {
 
 	using scalar_t  = typename lv::scalar_t;
-	using mathlib_t = mathlib;
+	using allocator_t = mathlib;
 
 	static constexpr bool transA = blas_feature_detector<lv>::transposed;
 	static constexpr bool transB = blas_feature_detector<rv>::transposed;
@@ -107,10 +107,10 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 
 /*
  * 	__BCinline__ auto _slice(int i) {
-		return Binary_Expression<decltype(left._row(i)), decltype(right._slice(i)), oper::dot<mathlib_t>>(left._row(i), right._slice(i));
+		return Binary_Expression<decltype(left._row(i)), decltype(right._slice(i)), oper::dot<allocator_t>>(left._row(i), right._slice(i));
 	}
 	__BCinline__ auto _slice_range(int from, int to) {
-		return Binary_Expression<lv, decltype(right._slice_range(from, to)), oper::gemv<mathlib_t>>(left, right._slice_range(from, to));
+		return Binary_Expression<lv, decltype(right._slice_range(from, to)), oper::gemv<allocator_t>>(left, right._slice_range(from, to));
 	}
  *
  */

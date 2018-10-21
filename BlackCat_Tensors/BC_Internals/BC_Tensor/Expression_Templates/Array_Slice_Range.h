@@ -20,7 +20,7 @@ struct Array_Slice_Range
 		  Shape<PARENT::DIMS()> {
 
 	using scalar_t = typename PARENT::scalar_t;
-	using mathlib_t = typename PARENT::mathlib_t;
+	using allocator_t = typename PARENT::allocator_t;
 
 	__BCinline__ static constexpr int ITERATOR() { return PARENT::ITERATOR(); }
 	__BCinline__ static constexpr int DIMS() 	 { return PARENT::DIMS(); }

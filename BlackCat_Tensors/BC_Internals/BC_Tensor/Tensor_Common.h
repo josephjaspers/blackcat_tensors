@@ -17,7 +17,7 @@ namespace BC {
 
 #define __BCfinline__ inline __attribute__((always_inline)) __attribute__((hot))
 
-template<int> class DISABLED;
+template<int>   class DISABLED;
 template<class> class Tensor_Base;
 
 template<class internal_t>

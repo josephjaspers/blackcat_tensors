@@ -21,7 +21,7 @@ struct Array_Slice
 		: Array_Base<Array_Slice<PARENT>, PARENT::DIMS() - 1>, Shape<PARENT::DIMS() - 1> {
 
 	using scalar_t = typename PARENT::scalar_t;
-	using mathlib_t = typename PARENT::mathlib_t;
+	using allocator_t = typename PARENT::allocator_t;
 
 	__BCinline__ static constexpr int ITERATOR() { return MTF::max(PARENT::ITERATOR() - 1, 0); }
 	__BCinline__ static constexpr int DIMS() { return PARENT::DIMS() - 1; }

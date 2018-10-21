@@ -21,7 +21,7 @@ template<class PARENT>
 struct Array_Scalar : Array_Base<Array_Scalar<PARENT>, 0>, Shape<0> {
 
 	using scalar_t = typename PARENT::scalar_t;
-	using mathlib_t = typename PARENT::mathlib_t;
+	using allocator_t = typename PARENT::allocator_t;
 
 	__BCinline__ static constexpr int ITERATOR() { return 0; }
 	__BCinline__ static constexpr int DIMS() 	 { return 0; }

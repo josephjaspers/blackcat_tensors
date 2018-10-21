@@ -144,12 +144,12 @@ static void scalar_mul(T* t, U u, V v) {
 	*t = u * v;
 }
 
-
-__global__ void init_curand_handle(curandState *state){
-
-  int idx = threadIdx.x+blockDim.x*blockIdx.x;
-  curand_init(1234, idx, 0, &state[idx]);
-}
+//
+//__global__ void init_curand_handle(curandState *state){
+//
+//  int idx = threadIdx.x+blockDim.x*blockIdx.x;
+//  curand_init(1234, idx, 0, &state[idx]);
+//}
 
 
 template<class T> __global__

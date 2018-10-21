@@ -102,6 +102,9 @@ struct Shape<0> {
 	__BCinline__ Shape& as_shape() { return *this; }
 	__BCinline__ const Shape& as_shape() const { return *this; }
 
+	template<int x> __BCinline__
+	Shape(const Shape<x>&) {} //empty
+
 	__BCinline__ Shape<0>() {}
 	__BCinline__ const auto inner_shape() const { return l_array<0>([&](auto x) { return 1; });}
 	__BCinline__ const auto outer_shape() const { return l_array<0>([&](auto x) { return 0; });}
@@ -153,7 +156,7 @@ struct Shape<1> {
 	__BCinline__ int rows() const { return m_inner_shape[0]; }
 	__BCinline__ int cols() const { return 1; }
 	__BCinline__ int dimension(int i) const { return i == 0 ? m_inner_shape[0] : 1; }
-	__BCinline__ int outer_dimension() const { return 1; }
+	__BCinline__ int outer_dimension() const { return m_inner_shape[0]; }
 	__BCinline__ int leading_dimension(int i) const { return i == 0 ? m_outer_shape[0] : 0; }
 	__BCinline__ int block_dimension(int i)   const { return leading_dimension(i); }
 	__BCinline__ const auto& inner_shape() const { return m_inner_shape; }

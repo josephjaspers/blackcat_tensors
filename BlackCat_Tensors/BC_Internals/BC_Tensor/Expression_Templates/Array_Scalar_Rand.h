@@ -16,11 +16,11 @@
 namespace BC {
 namespace internal {
 //identical to Array_Scalar, though the scalar is allocated on the stack opposed to heap
-template<class scalar_t_, class mathlib_t_>
-struct Rand_Constant : Shape<0>, Array_Base<Rand_Constant<scalar_t_, mathlib_t_>, 0>{
+template<class scalar_t_, class allocator_t_>
+struct Rand_Constant : Shape<0>, Array_Base<Rand_Constant<scalar_t_, allocator_t_>, 0>{
 
 	using scalar_t = scalar_t_;
-	using mathlib_t = mathlib_t_;
+	using allocator_t = allocator_t_;
 
 	__BCinline__ static constexpr int ITERATOR() { return 0; }
 	__BCinline__ static constexpr int DIMS() 	 { return 0; }
@@ -30,7 +30,7 @@ struct Rand_Constant : Shape<0>, Array_Base<Rand_Constant<scalar_t_, mathlib_t_>
 	scalar_t lower_bound, upper_bound;
 
 	scalar_t value() const {
-		return mathlib_t::rand(lower_bound, upper_bound);
+		return allocator_t::rand(lower_bound, upper_bound);
 	}
 
 
