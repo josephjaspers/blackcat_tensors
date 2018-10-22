@@ -1,9 +1,10 @@
-/*
- * Basic_Allocator.h
+/*  Project: BlackCat_Tensors
+ *  Author: JosephJaspers
+ *  Copyright 2018
  *
- *  Created on: Oct 22, 2018
- *      Author: joseph
- */
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #ifndef BASIC_ALLOCATOR_H_
 #define BASIC_ALLOCATOR_H_
@@ -34,6 +35,14 @@ struct Basic_Allocator : CPU {
 	template<typename T>
 	static void deallocate(T t) {
 		//empty
+	}
+	template<class T, class U>
+	static void HostToDevice(T* device_ptr, U* host_ptr, int size=1) {
+		CPU::copy(device_ptr, host_ptr, size);
+	}
+	template<class T, class U>
+	static void DeviceToHost(T* host_ptr, U* device_ptr, int size=1) {
+		CPU::copy(host_ptr, device_ptr, size);
 	}
 
 };

@@ -20,14 +20,18 @@
 namespace BC {
 
 #ifndef BC_GPU_DEFAULT
-class CPU;
+//class CPU;
 using alloc_t = module::stl::Basic_Allocator;
 #else
 class GPU;
 using alloc_t = module::stl::CUDA_Allocator;
 #endif
 
-
+using Basic_Allocator = module::stl::Basic_Allocator;
+#ifdef __CUDACC__
+using CUDA_Allocator = module::stl::CUDA_Allocator;
+using CUDA = CUDA_Allocator;
+#endif
 template<int dimension, class scalar_t, class allocator_t=alloc_t>
 using Tensor = Tensor_Base<internal::Array<dimension, scalar_t, allocator_t>>;
 

@@ -13,7 +13,7 @@
 namespace BC {
 namespace NN {
 
-using ml = CPU;
+using ml = BC::Basic_Allocator;
 using fp_type = double;
 
 }

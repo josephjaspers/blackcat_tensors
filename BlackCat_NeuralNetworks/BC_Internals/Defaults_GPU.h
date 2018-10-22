@@ -13,7 +13,7 @@
 namespace BC {
 namespace NN {
 
-using ml = BC::GPU;
+using ml = BC::CUDA;
 using fp_type = float;
 
 }

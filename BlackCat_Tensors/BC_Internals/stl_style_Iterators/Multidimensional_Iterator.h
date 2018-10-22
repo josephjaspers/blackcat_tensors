@@ -1,9 +1,10 @@
-/*
- * Iterator.h
+/*  Project: BlackCat_Tensors
+ *  Author: JosephJaspers
+ *  Copyright 2018
  *
- *  Created on: Oct 18, 2018
- *      Author: joseph
- */
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #ifndef ITERATOR_H_
 #define ITERATOR_H_
@@ -15,8 +16,9 @@ namespace module {
 namespace stl {
 
 template<direction direction, class tensor_t>
-struct Iterator {
+struct Multidimensional_Iterator {
 
+	using Iterator = Multidimensional_Iterator<direction, tensor_t>;
 	using iterator_category = std::random_access_iterator_tag;
 	using value_type = decltype(std::declval<tensor_t>().slice(0));
 	using difference_type = int;
@@ -31,7 +33,7 @@ public:
 	tensor_t& tensor;
 	mutable int index= 0;
 
-	Iterator(tensor_t& tensor_, int index_=0)
+	Multidimensional_Iterator(tensor_t& tensor_, int index_=0)
 	: tensor(tensor_), index(index_) {
 	}
 
@@ -51,6 +53,8 @@ public:
 	}
 
 	BC_Iter_Compare(<, >)
+	BC_Iter_Compare(>, <)
+	BC_Iter_Compare(<=, >=)
 	BC_Iter_Compare(>=, <=)
 
 	Iterator& operator =  (int index_) { this->index = index_;  return *this; }
@@ -80,21 +84,21 @@ public:
 template<class derived_t>
 auto forward_iterator_begin(derived_t& derived) {
 //	std::cout << " iter begin " << derived.data() << std::endl;
-	 return Iterator<direction::forward, derived_t>(derived, 0);
+	 return Multidimensional_Iterator<direction::forward, derived_t>(derived, 0);
 }
 template<class derived_t>
 auto forward_iterator_end(derived_t& derived) {
-	 return Iterator<direction::forward, derived_t>(derived, derived.outer_dimension());
+	 return Multidimensional_Iterator<direction::forward, derived_t>(derived, derived.outer_dimension());
 }
 
 template<class derived_t>
 auto reverse_iterator_begin(derived_t& derived) {
-	 return Iterator<direction::reverse, derived_t>(derived, derived.outer_dimension()-1);
+	 return Multidimensional_Iterator<direction::reverse, derived_t>(derived, derived.outer_dimension()-1);
 }
 
 template<class derived_t>
 auto reverse_iterator_end(derived_t& derived) {
-	 return Iterator<direction::reverse, derived_t>(derived, -1);
+	 return Multidimensional_Iterator<direction::reverse, derived_t>(derived, -1);
 }
 
 }

@@ -1,9 +1,10 @@
-/*
- * Elementwise_Coefficientwise_Iterator.h
+/*  Project: BlackCat_Tensors
+ *  Author: JosephJaspers
+ *  Copyright 2018
  *
- *  Created on: Oct 21, 2018
- *      Author: joseph
- */
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #ifndef ELEMENTWISE_Coefficientwise_Iterator_H_
 #define ELEMENTWISE_Coefficientwise_Iterator_H_
@@ -54,6 +55,8 @@ public:
 	}
 
 	BC_Iter_Cwise_Compare(<, >)
+	BC_Iter_Cwise_Compare(>, <)
+	BC_Iter_Cwise_Compare(<=, >=)
 	BC_Iter_Cwise_Compare(>=, <=)
 
 	Coefficientwise_Iterator& operator =  (int index_) { this->index = index_;  return *this; }

@@ -9,7 +9,7 @@
 #define TENSOR_STL_INTERFACE_H_
 
 #include "Tensor_Common.h"
-#include "stl_style_Iterators/Iterator.h"
+#include "stl_style_Iterators/Multidimensional_Iterator.h"
 #include "stl_style_Iterators/Coefficientwise_Iterator.h"
 
 namespace BC {

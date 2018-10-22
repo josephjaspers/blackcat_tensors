@@ -1,9 +1,10 @@
-/*
- * CUDA_Allocator.h
+/*  Project: BlackCat_Tensors
+ *  Author: JosephJaspers
+ *  Copyright 2018
  *
- *  Created on: Oct 22, 2018
- *      Author: joseph
- */
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 
 #ifdef __CUDACC__
@@ -13,10 +14,9 @@
 
 
 namespace BC {
-
+namespace module {
 class GPU;
 
-namespace module {
 namespace stl {
 
 template<class T>
@@ -37,6 +37,20 @@ struct CUDA_Allocator : GPU {
 		//empty
 	}
 
+
+
+	template<class T>
+	static void HostToDevice(T* t, const T* u, int size = 1) {
+		cudaDeviceSynchronize();
+		cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyHostToDevice);
+		cudaDeviceSynchronize();
+	}
+	template<class T>
+	static void DeviceToHost(T* t, const T* u, int size = 1) {
+		cudaDeviceSynchronize();
+		cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyDeviceToHost);
+		cudaDeviceSynchronize();
+	}
 
 
 };
