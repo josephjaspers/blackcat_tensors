@@ -15,7 +15,7 @@ namespace BC {
  */
 
 template<class core_lib>
-struct CPU_Allocator {
+struct CPU_Utility {
 
 	template<typename T>
 	static T*& allocate(T*& internal_mem_ptr, int size) {
@@ -27,14 +27,6 @@ struct CPU_Allocator {
 		intenral_mem_ptr = new T[size];
 		return intenral_mem_ptr;
 	}
-	template<class T, class U>
-	static void HostToDevice(T* device_ptr, U* host_ptr, int size=1) {
-		core_lib::copy(device_ptr, host_ptr, size);
-	}
-	template<class T, class U>
-	static void DeviceToHost(T* host_ptr, U* device_ptr, int size=1) {
-		core_lib::copy(host_ptr, device_ptr, size);
-	}
 	template<typename T>
 	static void deallocate(T* t) {
 		delete[] t;
@@ -43,6 +35,15 @@ struct CPU_Allocator {
 	static void deallocate(T t) {
 		//empty
 	}
+	template<class T, class U>
+	static void HostToDevice(T* device_ptr, U* host_ptr, int size=1) {
+		core_lib::copy(device_ptr, host_ptr, size);
+	}
+	template<class T, class U>
+	static void DeviceToHost(T* host_ptr, U* device_ptr, int size=1) {
+		core_lib::copy(host_ptr, device_ptr, size);
+	}
+
 	template<class T, class is, class os>
 	static void print(const T array_ptr, const is inner_shape, const os outer_shape, int numb_dimensions, int print_gap_length) {
 		BC::IO::print(array_ptr, inner_shape, outer_shape, numb_dimensions, print_gap_length);

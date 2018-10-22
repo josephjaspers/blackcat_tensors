@@ -10,17 +10,21 @@
 #ifndef TENSOR_ALIASES_H_
 #define TENSOR_ALIASES_H_
 
-#include "Tensor_Base.h"
 #include <type_traits>
+#include "Mathematics/CPU.h"
+#include "Mathematics/GPU.cu"
+#include "stl_style_Allocators/Basic_Allocator.h"
+#include "stl_style_Allocators/CUDA_Allocator.h"
+#include "Tensor_Base.h"
 
 namespace BC {
 
 #ifndef BC_GPU_DEFAULT
 class CPU;
-using alloc_t = CPU;
+using alloc_t = module::stl::Basic_Allocator;
 #else
 class GPU;
-using alloc_t = GPU;
+using alloc_t = module::stl::CUDA_Allocator;
 #endif
 
 
