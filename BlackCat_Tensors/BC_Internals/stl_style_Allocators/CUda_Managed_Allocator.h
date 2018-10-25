@@ -1,15 +1,12 @@
-/*  Project: BlackCat_Tensors
- *  Author: JosephJaspers
- *  Copyright 2018
+/*
+ * CUda_Managed_Allocator.h
  *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
-
+ *  Created on: Oct 24, 2018
+ *      Author: joseph
+ */
 #ifdef __CUDACC__
-#ifndef CUDA_ALLOCATOR_H_
-#define CUDA_ALLOCATOR_H_
+#ifndef CUDA_MANAGED_ALLOCATOR_H_
+#define CUDA_MANAGED_ALLOCATOR_H_
 
 
 
@@ -20,11 +17,11 @@ class GPU;
 namespace stl {
 
 template<class T>
-struct CUDA_Allocator : GPU {
+struct CUDA_Managed_Allocator : GPU {
 
 	template<typename T>
 	static T*& allocate(T*& t, int sz=1) {
-		cudaMalloc((void**) &t, sizeof(T) * sz);
+		cudaMallocManaged((void**) &t, sizeof(T) * sz);
 		return t;
 	}
 
@@ -36,8 +33,6 @@ struct CUDA_Allocator : GPU {
 	static void deallocate(T t) {
 		//empty
 	}
-
-
 
 	template<class T>
 	static void HostToDevice(T* t, const T* u, int size = 1) {
@@ -52,12 +47,13 @@ struct CUDA_Allocator : GPU {
 		cudaDeviceSynchronize();
 	}
 };
-
 }
 }
 }
 
 
 
-#endif /* CUDA_ALLOCATOR_H_ */
+
+
+#endif /* CUDA_MANAGED_ALLOCATOR_H_ */
 #endif

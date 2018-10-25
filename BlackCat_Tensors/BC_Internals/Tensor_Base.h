@@ -68,7 +68,6 @@ public:
 	Tensor_Base(copy_parameter tensor) {
 		this->copy_init(tensor);
 	}
-
 	Tensor_Base(move_parameter tensor) {
 		this->swap_array(tensor);
 		this->swap_shape(tensor);

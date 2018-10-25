@@ -23,14 +23,14 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
 	static constexpr bool non_trivial_blas_injection = evaluator<lv>::non_trivial_blas_injection || evaluator<rv>::non_trivial_blas_injection;
 
 
-	template<class core, int a, int b>
+	template<class core, int a, int b> __BCinline__
 	static auto linear_evaluation(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
 		return branch;
 	}
 
 
 	struct left_trivial_injection {
-		template<class core, int a, int b>
+		template<class core, int a, int b> __BCinline__
 		static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
 			auto left = evaluator<lv>::injection(branch.left, tensor);
 			auto right = branch.right;
@@ -38,7 +38,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
 		}
 	};
 	struct right_trivial_injection {
-		template<class core, int a, int b>
+		template<class core, int a, int b> __BCinline__
 		static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
 			auto left = branch.left;
 			auto right = evaluator<rv>::injection(branch.right, tensor);
@@ -46,7 +46,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
 		}
 	};
 	struct left_nontrivial_injection {
-		template<class core, int a, int b>
+		template<class core, int a, int b> __BCinline__
 		static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
 			auto left = evaluator<lv>::injection(branch.left, tensor);
 			auto right = branch.right; //rv
@@ -54,7 +54,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
 		}
 	};
 	struct right_nontrivial_injection {
-		template<class core, int a, int b>
+		template<class core, int a, int b> __BCinline__
 		static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
 			auto left = branch.left; //lv
 			auto right = evaluator<rv>::injection(branch.right, tensor);
@@ -62,7 +62,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
 		}
 	};
 
-	template<class core, int a, int b>
+	template<class core, int a, int b> __BCinline__
 	static auto injection(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
 			//dont need to update injection
 			//trivial injection left_hand side (we attempt to prefer trivial injections opposed to non-trivial)
@@ -77,6 +77,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
 	}
 
 	struct replacement_required {
+		__BCinline__
 		static auto function(const Binary_Expression<lv,rv,op>& branch) {
 			using branch_t = Binary_Expression<lv,rv,op>;
 			auto tmp =  temporary<internal::Array<branch_t::DIMS(), scalar_of<branch_t>, allocator_of<branch_t>>>(branch.inner_shape());
@@ -85,15 +86,18 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
 		}
 	};
 	struct replacement_not_required {
+		__BCinline__
 		static auto function(const Binary_Expression<lv,rv,op>& branch) {
 			return branch;
 		}
 	};
 
+	__BCinline__
 	static auto replacement(const Binary_Expression<lv,rv,op>& branch) {
 		using impl = std::conditional_t<non_trivial_blas_injection, replacement_required, replacement_not_required>;
 		return impl::function(branch);
 	}
+	__BCinline__
 	static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch) {
 		evaluator<lv>::deallocate_temporaries(branch.left);
 		evaluator<rv>::deallocate_temporaries(branch.right);

@@ -38,17 +38,17 @@ struct GPU_Utility {
 		int sz = calc_size(ranks, order);
 		float* print = new float[sz];
 
-		cudaMemcpy(print, ary, sizeof(T) * size, cudaMemcpyDeviceToHost);
+		cudaMemcpy(print, ary, sizeof(float) * sz, cudaMemcpyDeviceToHost);
 		cudaDeviceSynchronize();
 
 		BC::IO::print(print, ranks, outer, order, print_length);
 		delete[] print;
 	}
-	template<class RANKS, class os>
+	template<class RANKS, class	 os>
 	static void printSparse(const float* ary, const RANKS ranks, const os outer, int order, int print_length) {
 		int sz = calc_size(ranks, order);
 		float* print = new float[sz];
-		cudaMemcpy(print, ary, sizeof(T) * size, cudaMemcpyDeviceToHost);
+		cudaMemcpy(print, ary, sizeof(float) * sz, cudaMemcpyDeviceToHost);
 		cudaDeviceSynchronize();
 
 

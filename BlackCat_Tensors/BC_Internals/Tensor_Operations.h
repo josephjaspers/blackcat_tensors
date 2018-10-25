@@ -47,7 +47,7 @@ class Tensor_Operations<Tensor_Base<internal_type>> {
 	using internal_t_of		= typename Tensor_Operations<deriv>::internal_t;
 
 	template<class deriv>
-	using allocator_t_of		= typename Tensor_Operations<deriv>::allocator_t;
+	using allocator_t_of	= typename Tensor_Operations<deriv>::allocator_t;
 
 	static constexpr bool	copy_assignable = internal::BC_array_copy_assignable<internal_type>();
 	#define BC_ASSERT_ASSIGNABLE(literal) static_assert(copy_assignable, "ASSERT COPY ASSIGNABLE: " literal)
@@ -64,54 +64,93 @@ class Tensor_Operations<Tensor_Base<internal_type>> {
 		internal::evaluate(tensor.as_derived().internal());
 	}
 
+
 public:
 	//--------------------------------------assignment operators-----------------------------------------------//
-	template<class pDeriv>
-	derived& operator =(const Tensor_Operations<pDeriv>& param) {
-		BC_ASSERT_ASSIGNABLE("derived& operator =(const Tensor_Operations<pDeriv>& param)");
-		assert_valid(param);
-		evaluate(bi_expr<internal::oper::assign>(param));
-		return as_derived();
+#define BC_ASSIGNMENT_OPER_DEF(op, op_functor)													\
+																								\
+	template<class pDeriv>																		\
+	derived& operator op (const Tensor_Operations<pDeriv>& param) {								\
+		BC_ASSERT_ASSIGNABLE("derived& operator op (const Tensor_Operations<pDeriv>& param)");	\
+		assert_valid(param);																	\
+		evaluate(bi_expr< internal::oper:: op_functor >(param));								\
+		return as_derived();																	\
 	}
-	template<class pDeriv>
-	derived& operator +=(const Tensor_Operations<pDeriv>& param) {
-		BC_ASSERT_ASSIGNABLE("derived& operator +=(const Tensor_Operations<pDeriv>& param)");
-		assert_valid(param);
-		evaluate(bi_expr<internal::oper::add_assign>(param));
-		return as_derived();
+
+	BC_ASSIGNMENT_OPER_DEF(=, assign);
+	BC_ASSIGNMENT_OPER_DEF(+=, add_assign);
+	BC_ASSIGNMENT_OPER_DEF(-=, sub_assign);
+	BC_ASSIGNMENT_OPER_DEF(%=, mul_assign);
+	BC_ASSIGNMENT_OPER_DEF(/=, div_assign);
+
+	//--------------------------------------pointwise operators-------------------------------//
+
+#define BC_COEFFICIENTWISE_OPER_DEF(op, op_functor)							\
+																			\
+	template<class pDeriv>													\
+	auto operator op (const Tensor_Operations<pDeriv>& param) const {		\
+		assert_valid(param);												\
+		return bi_expr< internal::oper:: op_functor >(param);				\
 	}
-	template<class pDeriv>
-	derived& operator -=(const Tensor_Operations<pDeriv>& param) {
-		BC_ASSERT_ASSIGNABLE("derived& operator -=(const Tensor_Operations<pDeriv>& param)");
-		assert_valid(param);
-		evaluate(bi_expr<internal::oper::sub_assign>(param));
-		return as_derived();
+
+	BC_COEFFICIENTWISE_OPER_DEF(+, add)
+	BC_COEFFICIENTWISE_OPER_DEF(-, sub)
+	BC_COEFFICIENTWISE_OPER_DEF(%, mul)
+	BC_COEFFICIENTWISE_OPER_DEF(/, div)
+	BC_COEFFICIENTWISE_OPER_DEF( == , equal )
+	BC_COEFFICIENTWISE_OPER_DEF( >  , greater)
+	BC_COEFFICIENTWISE_OPER_DEF( <  , lesser)
+	BC_COEFFICIENTWISE_OPER_DEF( >= , greater_equal)
+	BC_COEFFICIENTWISE_OPER_DEF( <= , lesser_equal )
+
+
+//----------------------------------------------scalar assignment operations--------------------------------------------------//
+	template<class p_scalar_t>
+	using enable_if_convertible = std::enable_if_t<std::is_convertible<p_scalar_t, scalar_t>::value>;
+
+#define BC_SCALAR_ASSIGNMENT_OPER_DEF(op, op_functor)																		\
+	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>												\
+	derived& operator  op (const p_scalar_t& param) {																			\
+		BC_ASSERT_ASSIGNABLE("derived& operator =(const Tensor_Operations<pDeriv>& param)");								\
+		evaluate(bi_expr_internal<internal::oper:: op_functor >(internal::scalar_constant<allocator_t>((scalar_t)param)));		\
+		return as_derived();																								\
 	}
-	template<class pDeriv>
-	derived& operator /=(const Tensor_Operations<pDeriv>& param) {
-		BC_ASSERT_ASSIGNABLE("derived& operator /=(const Tensor_Operations<pDeriv>& param)");
-		assert_valid(param);
-		evaluate(bi_expr<internal::oper::div_assign>(param));
-		return as_derived();
-	}
-	//pointwise multiply
-	template<class pDeriv>
-	derived& operator %=(const Tensor_Operations<pDeriv>& param) {
-		BC_ASSERT_ASSIGNABLE("derived& operator %=(const Tensor_Operations<pDeriv>& param)");
-		assert_valid(param);
-		evaluate(bi_expr<internal::oper::mul_assign>(param));
-		return as_derived();
-	}
+
+	BC_SCALAR_ASSIGNMENT_OPER_DEF(=, assign)
+	BC_SCALAR_ASSIGNMENT_OPER_DEF(+=, add_assign)
+	BC_SCALAR_ASSIGNMENT_OPER_DEF(-=, sub_assign)
+	BC_SCALAR_ASSIGNMENT_OPER_DEF(/=, div_assign)
+	BC_SCALAR_ASSIGNMENT_OPER_DEF(%=, mul_assign)
+
+#define BC_SCALAR_BASIC_OPER_DEF(op, op_functor)																		\
+		template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>										\
+		auto operator op (const p_scalar_t& param) {																		\
+			return bi_expr_internal<internal::oper:: op_functor >(internal::scalar_constant<allocator_t>((scalar_t)param));		\
+		}
+
+	//----------------------------------------------scalar element-wise operations--------------------------------------------------//
+	BC_SCALAR_BASIC_OPER_DEF(+, add)
+	BC_SCALAR_BASIC_OPER_DEF(-, sub)
+	BC_SCALAR_BASIC_OPER_DEF(%, mul)
+	BC_SCALAR_BASIC_OPER_DEF(>, greater)
+	BC_SCALAR_BASIC_OPER_DEF(<, lesser)
+	BC_SCALAR_BASIC_OPER_DEF(>=, greater_equal)
+	BC_SCALAR_BASIC_OPER_DEF(<=, lesser_equal)
+	BC_SCALAR_BASIC_OPER_DEF(==, equal)
+
 
 	//-------------------------------------gemm/gemv/ger-----------------------------------------//
 	template<class param_deriv>
 	auto operator *(const Tensor_Operations<param_deriv>& param) const {
 
+		static constexpr bool lv_trans  = internal::blas_feature_detector<derived>::transposed;
+		static constexpr bool rv_trans  = internal::blas_feature_detector<param_deriv>::transposed;
+
 		static constexpr bool scalmul	= derived::DIMS() == 0 || param_deriv::DIMS() == 0;
 		static constexpr bool gemm 		= derived::DIMS() == 2 && param_deriv::DIMS() == 2;
 		static constexpr bool gemv 		= derived::DIMS() == 2 && param_deriv::DIMS() == 1;
-		static constexpr bool ger  		= derived::DIMS() == 1 && param_deriv::DIMS() == 1 && internal::blas_feature_detector<param_deriv>::transposed;
-		static constexpr bool dot		= derived::DIMS() == 1 && param_deriv::DIMS() == 1 && !ger;
+		static constexpr bool ger  		= derived::DIMS() == 1 && param_deriv::DIMS() == 1 && !lv_trans && rv_trans;
+		static constexpr bool dot	  	= derived::DIMS() == 1 && param_deriv::DIMS() == 1 && !ger;
 		using matmul_t =
 					 std::conditional_t<scalmul, Binary_Expression_t<internal_t_of<param_deriv>, internal::oper::scalar_mul>,
 					 std::conditional_t<gemm, 	 Binary_Expression_t<internal_t_of<param_deriv>, internal::oper::gemm<allocator_t>>,
@@ -129,32 +168,12 @@ public:
 	const auto t() const { return this->transpose(); }
 		  auto t()       { return this->transpose(); }
 
-	//--------------------------------------pointwise operators-------------------------------//
-	template<class pDeriv>
-	auto operator +(const Tensor_Operations<pDeriv>& param) const {
-		assert_valid(param);
-		return bi_expr<internal::oper::add>(param);
-	}
-	template<class pDeriv>
-	auto operator -(const Tensor_Operations<pDeriv>& param) const {
-		assert_valid(param);
-		return bi_expr<internal::oper::sub>(param);
-	}
-	template<class pDeriv>
-	auto operator /(const Tensor_Operations<pDeriv>& param) const {
-		assert_valid(param);
-		return bi_expr<internal::oper::div>(param);
-	}
-	//pointwise multiply
-	template<class pDeriv>
-	auto operator %(const Tensor_Operations<pDeriv>& param) const {
-		assert_valid(param);
-		return bi_expr<internal::oper::mul>(param);
-	}
+
 	 //--------------------------------Negation and its Conversions------------------------------//
 	 auto operator - () const {
 		 return un_expr<internal::oper::negation>();
 	 }
+
 private:
 	 template<class internal_t>
 	 using negated_t = Tensor_Base<internal::Unary_Expression<internal_t, internal::oper::negation>>;
@@ -183,115 +202,18 @@ public:
 		}
 
 
-//---------------------------------Comparison operators------------------------------------//
-	template<class pDeriv>
-	auto operator ==(const Tensor_Operations<pDeriv>& param) const {
-		assert_valid(param);
-		return bi_expr<internal::oper::equal>(param);
-	}
-	template<class pDeriv>
-	auto operator >(const Tensor_Operations<pDeriv>& param) const {
-		assert_valid(param);
-		return bi_expr<internal::oper::greater>(param);
-	}
-	template<class pDeriv>
-	auto operator <(const Tensor_Operations<pDeriv>& param) const {
-		assert_valid(param);
-		return bi_expr<internal::oper::lesser>(param);
-	}
-	template<class pDeriv>
-	auto operator >=(const Tensor_Operations<pDeriv>& param) const {
-		assert_valid(param);
-		return bi_expr<internal::oper::greater_equal>(param);
-	}
-	template<class pDeriv>
-	auto operator <=(const Tensor_Operations<pDeriv>& param) const {
-		assert_valid(param);
-		return bi_expr<internal::oper::lesser_equal>(param);
-	}
+	template<class param_scalar>
+	using enable_if_scalar_mul_t = std::enable_if_t<std::is_convertible<param_scalar, scalar_t>::value &&
+													!std::is_base_of<BC_Type, param_scalar>::value>;
 
-//----------------------------------------------scalar assignment operations--------------------------------------------------//
-	template<class p_scalar_t>
-	using enable_if_convertible = std::enable_if_t<std::is_convertible<p_scalar_t, scalar_t>::value>;
-
-	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
-	derived& operator =(const p_scalar_t& param) {
-		BC_ASSERT_ASSIGNABLE("derived& operator =(const Tensor_Operations<pDeriv>& param)");
-		evaluate(bi_expr_internal<internal::oper::assign>(internal::scalar_constant<allocator_t>((scalar_t)param)));
-		return as_derived();
-	}
-	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
-	derived& operator +=(const p_scalar_t& param) {
-		BC_ASSERT_ASSIGNABLE("derived& operator +=(const Tensor_Operations<pDeriv>& param)");
-		evaluate(bi_expr_internal<internal::oper::add_assign>(internal::scalar_constant<allocator_t>((scalar_t)param)));
-		return as_derived();
-	}
-	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
-	derived& operator -=(const p_scalar_t& param) {
-		BC_ASSERT_ASSIGNABLE("derived& operator -=(const Tensor_Operations<pDeriv>& param)");
-		evaluate(bi_expr_internal<internal::oper::sub_assign>(internal::scalar_constant<allocator_t>((scalar_t)param)));
-		return as_derived();
-	}
-	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
-	derived& operator /=(const p_scalar_t& param) {
-		BC_ASSERT_ASSIGNABLE("derived& operator /=(const Tensor_Operations<pDeriv>& param)");
-		evaluate(bi_expr_internal<internal::oper::div_assign>(internal::scalar_constant<allocator_t>((scalar_t)param)));
-		return as_derived();
-	}
-	//pointwise multiply
-	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
-	derived& operator *=(const p_scalar_t& param) {
-		BC_ASSERT_ASSIGNABLE("derived& operator %=(const Tensor_Operations<pDeriv>& param)");
-		evaluate(bi_expr_internal<internal::oper::scalar_mul>(internal::scalar_constant<allocator_t>((scalar_t)param)));
-		return as_derived();
-	}
-	//----------------------------------------------scalar element-wise operations--------------------------------------------------//
-	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
-	auto operator +(const p_scalar_t& param) {
-		return bi_expr_internal<internal::oper::add>(internal::scalar_constant<allocator_t>((scalar_t)param));
-	}
-	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
-	auto operator -(const p_scalar_t& param) {
-		return bi_expr_internal<internal::oper::sub>(internal::scalar_constant<allocator_t>((scalar_t)param));
-	}
-	template<class p_scalar_t, typename =
-			std::enable_if_t<
-				std::is_convertible<p_scalar_t, scalar_t>::value&&
-				!std::is_base_of<BC_Type, p_scalar_t>::value>
-	>
+	template<class p_scalar_t, typename = enable_if_scalar_mul_t<p_scalar_t>>
 	auto operator /(const p_scalar_t& param) {
 		return bi_expr_internal<internal::oper::scalar_mul>(internal::scalar_constant<allocator_t>((scalar_t)(1/param)));
 	}
 
-	template<class p_scalar_t, typename =
-			std::enable_if_t<
-				std::is_convertible<p_scalar_t, scalar_t>::value&&
-				!std::is_base_of<BC_Type, p_scalar_t>::value>
-	>
+	template<class p_scalar_t, typename = enable_if_scalar_mul_t<p_scalar_t>>
 	auto operator *(const p_scalar_t& param) {
 		return bi_expr_internal<internal::oper::scalar_mul>(internal::scalar_constant<allocator_t>((scalar_t)param));
-	}
-
-	//-------------------------------------------scalar comparison operators-----------------------------------------------//
-	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
-	auto operator ==(const p_scalar_t& param) {
-		return bi_expr_internal<internal::oper::equal>(internal::scalar_constant<allocator_t>((scalar_t)param));
-	}
-	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
-	auto operator >(const p_scalar_t& param) {
-		return bi_expr_internal<internal::oper::greater>(internal::scalar_constant<allocator_t>((scalar_t)param));
-	}
-	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
-	auto operator <(const p_scalar_t& param) {
-		return bi_expr_internal<internal::oper::lesser>(internal::scalar_constant<allocator_t>((scalar_t)param));
-	}
-	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
-	auto operator >=(const p_scalar_t& param) {
-		return bi_expr_internal<internal::oper::greater_equal>(internal::scalar_constant<allocator_t>((scalar_t)param));
-	}
-	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
-	auto operator <=(const p_scalar_t& param) {
-		return bi_expr_internal<internal::oper::lesser_equal>(internal::scalar_constant<allocator_t>((scalar_t)param));
 	}
 
 	//-----------------------------------expression_factory--------------------------------------------------//
