@@ -68,7 +68,7 @@ public:
 																								\
 	template<class pDeriv>																		\
 	derived& operator op (const Tensor_Operations<pDeriv>& param) {								\
-		BC_ASSERT_ASSIGNABLE("derived& operator op (const Tensor_Operations<pDeriv>& param)");	\
+		BC_ASSERT_ASSIGNABLE("derived& operator " #op "(const Tensor_Operations<pDeriv>& param)");	\
 		assert_valid(param);																	\
 		evaluate(bi_expr< internal::oper:: op_functor >(param));								\
 		return as_derived();																	\
@@ -108,7 +108,7 @@ public:
 #define BC_SCALAR_ASSIGNMENT_OPER_DEF(op, op_functor)																		\
 	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>												\
 	derived& operator  op (const p_scalar_t& param) {																			\
-		BC_ASSERT_ASSIGNABLE("derived& operator =(const Tensor_Operations<pDeriv>& param)");								\
+		BC_ASSERT_ASSIGNABLE("derived& operator " #op " (const Tensor_Operations<pDeriv>& param)");								\
 		evaluate(bi_expr_internal<internal::oper:: op_functor >(internal::scalar_constant<allocator_t>((scalar_t)param)));		\
 		return as_derived();																								\
 	}
@@ -119,23 +119,27 @@ public:
 	BC_SCALAR_ASSIGNMENT_OPER_DEF(/=, div_assign)
 	BC_SCALAR_ASSIGNMENT_OPER_DEF(%=, mul_assign)
 
-#define BC_SCALAR_BASIC_OPER_DEF(op, op_functor)																		\
-		template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>										\
+#define BC_SCALAR_BASIC_OPER_DEF(op, op_functor)																			\
+		template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>											\
 		auto operator op (const p_scalar_t& param) {																		\
-			return bi_expr_internal<internal::oper:: op_functor >(internal::scalar_constant<allocator_t>((scalar_t)param));		\
+			return bi_expr_internal<internal::oper:: op_functor >(internal::scalar_constant<allocator_t>((scalar_t)param));	\
 		}
 
 	//----------------------------------------------scalar element-wise operations--------------------------------------------------//
 	BC_SCALAR_BASIC_OPER_DEF(+, add)
 	BC_SCALAR_BASIC_OPER_DEF(-, sub)
-	BC_SCALAR_BASIC_OPER_DEF(%, mul)
+	BC_SCALAR_BASIC_OPER_DEF(*, scalar_mul)
 	BC_SCALAR_BASIC_OPER_DEF(>, greater)
 	BC_SCALAR_BASIC_OPER_DEF(<, lesser)
 	BC_SCALAR_BASIC_OPER_DEF(>=, greater_equal)
 	BC_SCALAR_BASIC_OPER_DEF(<=, lesser_equal)
 	BC_SCALAR_BASIC_OPER_DEF(==, equal)
 
-
+	//specialized to upcast  matrix/scalar_value to matrix * (1/scalar_value)
+	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
+	auto operator /(const p_scalar_t& param) {
+		return bi_expr_internal<internal::oper::scalar_mul>(internal::scalar_constant<allocator_t>((scalar_t)(1/param)));
+	}
 	//-------------------------------------gemm/gemv/ger-----------------------------------------//
 	template<class param_deriv>
 	auto operator *(const Tensor_Operations<param_deriv>& param) const {
@@ -202,16 +206,6 @@ public:
 	template<class param_scalar>
 	using enable_if_scalar_mul_t = std::enable_if_t<std::is_convertible<param_scalar, scalar_t>::value &&
 													!std::is_base_of<BC_Type, param_scalar>::value>;
-
-	template<class p_scalar_t, typename = enable_if_scalar_mul_t<p_scalar_t>>
-	auto operator /(const p_scalar_t& param) {
-		return bi_expr_internal<internal::oper::scalar_mul>(internal::scalar_constant<allocator_t>((scalar_t)(1/param)));
-	}
-
-	template<class p_scalar_t, typename = enable_if_scalar_mul_t<p_scalar_t>>
-	auto operator *(const p_scalar_t& param) {
-		return bi_expr_internal<internal::oper::scalar_mul>(internal::scalar_constant<allocator_t>((scalar_t)param));
-	}
 
 	//-----------------------------------expression_factory--------------------------------------------------//
 	template<class functor>
@@ -291,9 +285,6 @@ public:
 				"TENSOR OPERATIONS BETWEEN THE CPU/GPU ARE PROHIBITED");
 	}
 public:
-	auto _normalize(scalar_t min, scalar_t max) const {
-		return un_expr(internal::oper::norm<scalar_t>(scalar_t(min), scalar_t(max)));
-	}
 
 	struct Alias{
 
@@ -337,51 +328,38 @@ public:
 
 };
 
-template<class internal_t, class min_, class max_>
-static auto normalize(const Tensor_Operations<internal_t>& tensor, min_ min, max_ max) {
-	return tensor._normalize(min, max);
-}
 
 }
 
 
-template<class p_scalar_t, class scalar_t> using enable_if_convertible = std::enable_if_t<std::is_convertible<p_scalar_t, scalar_t>::value>;
+template<class p_scalar_t, class p_scalar_t2>
+using enable_if_convertible = std::enable_if_t<std::is_convertible<p_scalar_t, p_scalar_t2>::value>;
 
-template<class p_scalar_t, class internal_t, typename = enable_if_convertible<p_scalar_t, typename internal_t::scalar_t>>
-auto operator +(const p_scalar_t& param, const module::Tensor_Operations<Tensor_Base<internal_t>>& tensor) {
-	using scalar_t = typename internal_t::scalar_t;
-	using allocator_t = typename internal_t::allocator_t;
-	return tensor.bi_expr_internal(internal::oper::add(), internal::scalar_constant<allocator_t>((scalar_t)param));
-}
+//----------------------------------------------scalar element-wise operations--------------------------------------------------//
+#define BC_SCALAR_BASIC_OPER_DEF_INVERTED(op, op_functor)																				\
+		template<class p_scalar_t, class internal_t, typename = enable_if_convertible<p_scalar_t, typename internal_t::scalar_t>>		\
+		 auto operator op (const p_scalar_t& param, const module::Tensor_Operations<internal_t>& tensor) {								\
+			using scalar_t = typename internal_t::scalar_t;																				\
+			auto scalar_obj = internal::scalar_constant<typename internal_t::allocator_t>((scalar_t)param);								\
+			return make_tensor(scalar_obj).bi_expr(internal::oper:: op_functor (), tensor);												\
+		}
 
-template<class p_scalar_t, class internal_t, typename = enable_if_convertible<p_scalar_t, typename internal_t::scalar_t>>
-auto operator -(const p_scalar_t& param, const module::Tensor_Operations<Tensor_Base<internal_t>>& tensor) {
-	using scalar_t = typename internal_t::scalar_t;
-	using allocator_t = typename internal_t::allocator_t;
-	return make_tensor(internal::scalar_constant<allocator_t>((scalar_t)param)).bi_expr(internal::oper::sub(), tensor);
-}
-
-template<class p_scalar_t, class internal_t, typename = enable_if_convertible<p_scalar_t, typename internal_t::scalar_t>>
-auto operator /(const p_scalar_t& param, const module::Tensor_Operations<Tensor_Base<internal_t>>& tensor) {
-	using scalar_t = typename internal_t::scalar_t;
-	using allocator_t = typename internal_t::allocator_t;
-	return make_tensor(internal::scalar_constant<allocator_t>((scalar_t)param)).bi_expr(internal::oper::div(), tensor);
-}
-
-template<class p_scalar_t, class internal_t, typename =
-		std::enable_if_t<
-			std::is_convertible<p_scalar_t, typename internal_t::scalar_t>::value&&
-			!std::is_base_of<BC_Type, p_scalar_t>::value>
->
-auto operator *(const p_scalar_t& param,  const module::Tensor_Operations<Tensor_Base<internal_t>>& tensor) {
-	using scalar_t = typename internal_t::scalar_t;
-	using allocator_t = typename internal_t::allocator_t;
-	return tensor.bi_expr_internal(internal::oper::scalar_mul(), internal::scalar_constant<allocator_t>((scalar_t)param));
-}
+	BC_SCALAR_BASIC_OPER_DEF_INVERTED(+, add)
+	BC_SCALAR_BASIC_OPER_DEF_INVERTED(-, sub)
+	BC_SCALAR_BASIC_OPER_DEF_INVERTED(*, scalar_mul)
+	BC_SCALAR_BASIC_OPER_DEF_INVERTED(>, greater)
+	BC_SCALAR_BASIC_OPER_DEF_INVERTED(<, lesser)
+	BC_SCALAR_BASIC_OPER_DEF_INVERTED(>=, greater_equal)
+	BC_SCALAR_BASIC_OPER_DEF_INVERTED(<=, lesser_equal)
+	BC_SCALAR_BASIC_OPER_DEF_INVERTED(==, equal)
 
 
-
-
+	template<class p_scalar_t, class internal_t, typename = enable_if_convertible<p_scalar_t, typename internal_t::scalar_t>>
+	 auto operator / (const p_scalar_t& param, const module::Tensor_Operations<internal_t>& tensor) {
+		using scalar_t = typename internal_t::scalar_t;
+		auto scalar_obj = internal::scalar_constant<typename internal_t::allocator_t>((scalar_t)(1/param));
+		return make_tensor(scalar_obj).bi_expr(internal::oper::scalar_mul(), tensor);														\
+	}
 
 }
 

@@ -36,7 +36,8 @@ public:
 		allocator_t::randomize(as_derived().internal(), lb, ub);
 	}
 	void fill(scalar_t value)   { as_derived() = value; }
-	void zero()                    { as_derived() = 0; 	   }
+	void zero()                 { as_derived() = scalar_t(0); }
+	void ones()					{ as_derived() = scalar_t(1); }
 
 	template<class function>
 	void for_each(function f) {
@@ -47,10 +48,14 @@ public:
 }  //end_of namespace 'module'
 
 //--------------------------lazy functions-------------------------//
-
+template<class internal_t, class min_, class max_>
+static auto normalize(const Tensor_Base<internal_t>& tensor, min_ min, max_ max) {
+	using scalar_t = typename internal_t::scalar_t;
+	return tensor.un_expr(internal::oper::norm<scalar_t>(scalar_t(min), scalar_t(max)));
+}
 
 #define BLACKCAT_LAZY_EXPR(func)                                      \
-        template<class internal_t>                                    \
+	template<class internal_t>                                    \
 		static auto func(const Tensor_Base<internal_t>& tensor) {	  \
 			return tensor.un_expr(internal::oper::func());	          \
 		}
