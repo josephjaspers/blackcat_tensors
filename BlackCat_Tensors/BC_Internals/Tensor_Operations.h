@@ -43,11 +43,8 @@ class Tensor_Operations<Tensor_Base<internal_type>> {
 	using scalar_t 			= typename internal_t::scalar_t;
 	using allocator_t 		= typename internal_t::allocator_t;
 
-	template<class deriv>
-	using internal_t_of		= typename Tensor_Operations<deriv>::internal_t;
-
-	template<class deriv>
-	using allocator_t_of	= typename Tensor_Operations<deriv>::allocator_t;
+	template<class deriv> using internal_t_of = typename Tensor_Operations<deriv>::internal_t;
+	template<class deriv> using allocator_t_of= typename Tensor_Operations<deriv>::allocator_t;
 
 	static constexpr bool	copy_assignable = internal::BC_array_copy_assignable<internal_type>();
 	#define BC_ASSERT_ASSIGNABLE(literal) static_assert(copy_assignable, "ASSERT COPY ASSIGNABLE: " literal)

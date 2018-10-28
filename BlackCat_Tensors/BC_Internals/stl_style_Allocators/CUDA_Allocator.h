@@ -19,7 +19,6 @@ class GPU;
 
 namespace stl {
 
-template<class T>
 struct CUDA_Allocator : GPU {
 
 	template<typename T>

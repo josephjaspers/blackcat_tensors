@@ -26,19 +26,19 @@ struct Greedy_Evaluator {
 //static auto substitution_evaluate(Binary_Expression<lv, rv, op> expression);
 
 struct sub_eval_recursion {
-	template<class lv, class rv, class op> __BCinline__
+	template<class lv, class rv, class op> __BChot__
 	static auto function(Binary_Expression<lv, rv, op> expression) {
 		return substitution_evaluate(evaluator<Binary_Expression<lv, rv, op>>::replacement(expression));
 	}
 };
 struct sub_eval_terminate {
-	template<class lv, class rv, class op> __BCinline__
+	template<class lv, class rv, class op> __BChot__
 	static auto function(Binary_Expression<lv, rv, op> expression) {
 		return expression;
 	}
 };
 
-template<class lv, class rv, class op> __BCinline__
+template<class lv, class rv, class op> __BChot__
 static auto substitution_evaluate(Binary_Expression<lv, rv, op> expression) {
 
 #ifndef BC_NO_SUBSTITUTIONS
@@ -50,12 +50,12 @@ static auto substitution_evaluate(Binary_Expression<lv, rv, op> expression) {
 #endif
 }
 
-template<class expression> __BCinline__
+template<class expression> __BChot__
 static void deallocate_temporaries(expression expr) {
 	evaluator<expression>::deallocate_temporaries(expr);
 }
 
-template<class lv, class rv> __BCinline__
+template<class lv, class rv> __BChot__
 static  auto evaluate(Binary_Expression<lv, rv, oper::add_assign> expression) {
 	constexpr bool fast_eval = tree::evaluator<rv>::trivial_blas_evaluation;
 	auto right = evaluator<rv>::linear_evaluation(expression.right, injector<lv, 1, 1>(expression.left));
@@ -67,7 +67,7 @@ static  auto evaluate(Binary_Expression<lv, rv, oper::add_assign> expression) {
 									(expression.left, right));
 			});
 }
-template<class lv, class rv> __BCinline__
+template<class lv, class rv> __BChot__
 static auto evaluate(Binary_Expression<lv, rv, oper::sub_assign> expression) {
 
 	constexpr bool fast_eval = tree::evaluator<rv>::trivial_blas_evaluation;
@@ -79,7 +79,7 @@ static auto evaluate(Binary_Expression<lv, rv, oper::sub_assign> expression) {
 				return substitution_evaluate(Binary_Expression<lv, std::decay_t<decltype(right)>, oper::sub_assign>(expression.left, right));
 			});
 }
-template<class lv, class rv> __BCinline__
+template<class lv, class rv> __BChot__
 static auto evaluate(Binary_Expression<lv, rv, oper::assign> expression) {
 	auto right = evaluator<rv>::injection(expression.right, injector<lv, 1, 0>(expression.left));
 
@@ -91,11 +91,11 @@ static auto evaluate(Binary_Expression<lv, rv, oper::assign> expression) {
 				return substitution_evaluate(Binary_Expression<lv, std::decay_t<decltype(right)>, oper::assign>(expression.left, right));
 			});
 }
-template<class lv, class rv> __BCinline__
+template<class lv, class rv> __BChot__
 static auto evaluate(Binary_Expression<lv, rv, oper::mul_assign> expression) {
 	return substitution_evaluate(expression);
 }
-template<class lv, class rv>__BCinline__
+template<class lv, class rv>__BChot__
 static auto evaluate(Binary_Expression<lv, rv, oper::div_assign> expression) {
 	return substitution_evaluate(expression);
 }
