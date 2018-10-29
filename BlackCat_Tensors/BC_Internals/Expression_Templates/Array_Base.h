@@ -98,6 +98,11 @@ struct BC_array_copy_assignable_overrider<T, std::enable_if_t<is_array<T>()>> {
 	static constexpr bool boolean = true;
 };
 
+template<class T>
+struct BC_iterable_overrider<T, std::enable_if_t<is_array<T>()>> {
+	static constexpr bool boolean = true;
+};
+
 
 }
 }

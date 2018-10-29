@@ -26,6 +26,15 @@ namespace module {
 		}
 	public:
 
+//		using iterator =
+//
+//				std::conditional_t<internal::BC_iterable<derived>(),
+//				decltype(stl::forward_iterator_begin(std::declval<Tensor_Iterator&>().as_derived())), voidz>;
+//		using const_iterator = decltype(stl::forward_iterator_begin(std::declval<const Tensor_Iterator&>().as_derived()));
+//		using const_reverse_iterator = decltype(stl::reverse_iterator_begin(std::declval<const Tensor_Iterator&>().as_derived()));
+//		using reverse_iterator = decltype(stl::reverse_iterator_begin(std::declval<Tensor_Iterator&>().as_derived()));
+
+
 		//element access ----------------------
 		auto front() {
 			return this->as_derived().slice(0);
@@ -178,10 +187,10 @@ namespace module {
 		};
 
 
-		template<class...params> auto iterator(params... ps) {
+		template<class...params> auto iter(params... ps) {
 			return _forward_iterator(as_derived(), ps...);
 		}
-		template<class... params> auto reverse_iterator(params... ps) {
+		template<class... params> auto reverse_iter(params... ps) {
 			return _reverse_iterator(as_derived(), ps...);
 		}
 
@@ -259,10 +268,10 @@ namespace module {
 
 	};
 
-	template<class...params> auto cwise_iterator(params... ps) {
+	template<class...params> auto cwise_iter(params... ps) {
 		return _cwise_forward_iterator(as_derived(), ps...);
 	}
-	template<class... params> auto cwise_reverse_iterator(params... ps) {
+	template<class... params> auto cwise_reverse_iter(params... ps) {
 		return _cwise_reverse_iterator(as_derived(), ps...);
 	}
 

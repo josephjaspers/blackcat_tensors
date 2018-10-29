@@ -43,6 +43,8 @@ struct BC_lvalue_type_overrider {
 	static constexpr bool boolean = false;
 };
 
+template<class T, class enabler=void>
+struct BC_iterable_overrider : std::false_type {};
 
 template<class T> constexpr bool BC_array_move_constructible() {
 	return BC_array_move_constructible_overrider<std::decay_t<T>>::boolean;
@@ -61,6 +63,10 @@ template<class T> constexpr bool BC_lvalue_type()	{
 }
 template<class T> constexpr bool BC_rvalue_type()	{
 	return !BC_lvalue_type<T>();
+}
+
+template<class T> constexpr bool BC_iterable() {
+	return BC_iterable_overrider<T>::boolean;
 }
 }
 

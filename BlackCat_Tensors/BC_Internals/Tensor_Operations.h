@@ -121,7 +121,7 @@ public:
 
 #define BC_SCALAR_BASIC_OPER_DEF(op, op_functor)																			\
 		template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>											\
-		auto operator op (const p_scalar_t& param) {																		\
+		auto operator op (const p_scalar_t& param) const {																		\
 			return bi_expr_internal<internal::oper:: op_functor >(internal::scalar_constant<allocator_t>((scalar_t)param));	\
 		}
 
