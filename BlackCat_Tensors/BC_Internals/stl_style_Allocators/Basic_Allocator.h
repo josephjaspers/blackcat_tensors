@@ -18,6 +18,8 @@ namespace stl  {
 
 struct Basic_Allocator : CPU {
 
+	using mathlib_t = CPU;
+
 	template<typename T>
 	static T*& allocate(T*& internal_mem_ptr, int size) {
 		internal_mem_ptr = new T[size];

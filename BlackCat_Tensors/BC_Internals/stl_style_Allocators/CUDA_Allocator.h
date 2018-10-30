@@ -21,6 +21,8 @@ namespace stl {
 
 struct CUDA_Allocator : GPU {
 
+	using mathlib_t = GPU;
+
 	template<typename T>
 	static T*& allocate(T*& t, int sz=1) {
 		cudaMalloc((void**) &t, sizeof(T) * sz);

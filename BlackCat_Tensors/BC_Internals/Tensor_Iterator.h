@@ -24,89 +24,57 @@ namespace module {
 		const derived& as_derived() const {
 			return static_cast<const derived&>(*this);
 		}
-	public:
-
-//		using iterator =
-//
-//				std::conditional_t<internal::BC_iterable<derived>(),
-//				decltype(stl::forward_iterator_begin(std::declval<Tensor_Iterator&>().as_derived())), voidz>;
-//		using const_iterator = decltype(stl::forward_iterator_begin(std::declval<const Tensor_Iterator&>().as_derived()));
-//		using const_reverse_iterator = decltype(stl::reverse_iterator_begin(std::declval<const Tensor_Iterator&>().as_derived()));
-//		using reverse_iterator = decltype(stl::reverse_iterator_begin(std::declval<Tensor_Iterator&>().as_derived()));
-
-
-		//element access ----------------------
-		auto front() {
-			return this->as_derived().slice(0);
-		}
-		auto back() {
-			auto last = this->as_derived().outer_dimension();
-			return this->as_derived().slice(last-1);
-		}
-		auto front() const {
-			return this->as_derived().slice(0);
-		}
-		auto back() const {
-			auto last = this->as_derived().outer_dimension();
-			return this->as_derived().slice(last-1);
-		}
-		auto* data() {
-			return as_derived().memptr();
-		}
-		auto* data() const {
-			return as_derived().memptr();
-		}
 
 	public:
 		//------------------------multidimension_iterator------------------------//
 
-		auto begin() {
+		auto nd_begin() {
 			return stl::forward_iterator_begin(as_derived());
 		}
-		auto end() {
+		auto nd_end() {
 			return stl::forward_iterator_end(as_derived());
 		}
-		const auto cbegin() const {
+		const auto nd_cbegin() const {
 			return stl::forward_iterator_begin(as_derived());
 		}
-		const auto cend() const {
+		const auto nd_cend() const {
 			return stl::forward_iterator_end(as_derived());
 		}
-		auto rbegin() {
+		auto nd_rbegin() {
 			return stl::reverse_iterator_begin(as_derived());
 		}
-		auto rend() {
+		auto nd_rend() {
 			return stl::reverse_iterator_end(as_derived());
 		}
-		const auto crbegin() const {
+		const auto nd_crbegin() const {
 			return stl::reverse_iterator_begin(as_derived());
 		}
-		const auto crend() const {
+		const auto nd_crend() const {
 			return stl::reverse_iterator_end(as_derived());
 		}
 		//------------------------elementwise_iterator------------------------//
-		auto cwise_begin() {
+		auto begin() {
 			return stl::forward_cwise_iterator_begin(as_derived());
 		}
-		auto cwise_end() {
+		auto end() {
 			return stl::forward_cwise_iterator_end(as_derived());
 		}
-		const auto cwise_cbegin() const {
+		const auto cbegin() const {
 			return stl::forward_cwise_iterator_begin(as_derived());
 		}
-		const auto cwise_cend() const {
+		const auto cend() const {
 			return stl::forward_cwise_iterator_end(as_derived());
 		}
-		auto cwise_rbegin() {
+		auto rbegin() {
 			return stl::reverse_cwise_iterator_begin(as_derived());
 		}
-		auto cwise_rend() {
+		auto rend() {
 			return stl::reverse_cwise_iterator_end(as_derived());
 		}
-		const auto cwise_crbegin() const {
+		const auto crbegin() const {
 			return stl::reverse_cwise_iterator_begin(as_derived());
 		}
-		const auto cwise_crend() const {
+		const auto crend() const {
 			return stl::reverse_cwise_iterator_end(as_derived());
 		}
 
@@ -117,11 +85,11 @@ namespace module {
 
 			derived& tensor;
 
-			using begin_t = decltype(tensor.begin());
-			using end_t   = decltype(tensor.end());
+			using begin_t = decltype(tensor.nd_begin());
+			using end_t   = decltype(tensor.nd_end());
 
-			begin_t _begin = tensor.begin();
-			end_t   _end = tensor.end();
+			begin_t _begin = tensor.nd_begin();
+			end_t   _end = tensor.nd_end();
 
 			_forward_iterator(derived& tensor_)
 				: tensor(tensor_) {}
@@ -152,8 +120,8 @@ namespace module {
 
 			derived& tensor;
 
-			using begin_t = decltype(tensor.rbegin());
-			using end_t   = decltype(tensor.rend());
+			using begin_t = decltype(tensor.nd_rbegin());
+			using end_t   = decltype(tensor.nd_rend());
 
 			begin_t _begin = tensor.rbegin();
 			end_t   _end = tensor.rend();
@@ -187,10 +155,10 @@ namespace module {
 		};
 
 
-		template<class...params> auto iter(params... ps) {
+		template<class...params> auto nd_iter(params... ps) {
 			return _forward_iterator(as_derived(), ps...);
 		}
-		template<class... params> auto reverse_iter(params... ps) {
+		template<class... params> auto nd_reverse_iter(params... ps) {
 			return _reverse_iterator(as_derived(), ps...);
 		}
 
@@ -201,11 +169,11 @@ namespace module {
 
 		derived& tensor;
 
-		using begin_t = decltype(tensor.cwise_begin());
-		using end_t   = decltype(tensor.cwise_end());
+		using begin_t = decltype(tensor.begin());
+		using end_t   = decltype(tensor.end());
 
-		begin_t _begin = tensor.cwise_begin();
-		end_t   _end = tensor.cwise_end();
+		begin_t _begin = tensor.begin();
+		end_t   _end = tensor.end();
 
 		_cwise_forward_iterator(derived& tensor_)
 			: tensor(tensor_) {}
@@ -236,11 +204,11 @@ namespace module {
 
 		derived& tensor;
 
-		using begin_t = decltype(tensor.cwise_rbegin());
-		using end_t   = decltype(tensor.cwise_rend());
+		using begin_t = decltype(tensor.rbegin());
+		using end_t   = decltype(tensor.rend());
 
-		begin_t _begin = tensor.cwise_rbegin();
-		end_t   _end = tensor.cwise_rend();
+		begin_t _begin = tensor.rbegin();
+		end_t   _end = tensor.rend();
 
 		_cwise_reverse_iterator(derived& tensor_)
 			: tensor(tensor_) {}
@@ -268,10 +236,10 @@ namespace module {
 
 	};
 
-	template<class...params> auto cwise_iter(params... ps) {
+	template<class...params> auto iter(params... ps) {
 		return _cwise_forward_iterator(as_derived(), ps...);
 	}
-	template<class... params> auto cwise_reverse_iter(params... ps) {
+	template<class... params> auto revierse_iter(params... ps) {
 		return _cwise_reverse_iterator(as_derived(), ps...);
 	}
 

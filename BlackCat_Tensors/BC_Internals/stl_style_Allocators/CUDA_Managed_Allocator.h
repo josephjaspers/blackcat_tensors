@@ -19,6 +19,8 @@ namespace stl {
 template<class T>
 struct CUDA_Managed_Allocator : GPU {
 
+	using mathlib_t = GPU;
+
 	template<typename T>
 	static T*& allocate(T*& t, int sz=1) {
 		cudaMallocManaged((void**) &t, sizeof(T) * sz);

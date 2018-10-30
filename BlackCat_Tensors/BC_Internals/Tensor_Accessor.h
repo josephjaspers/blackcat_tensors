@@ -22,7 +22,7 @@ namespace BC {
 namespace module {
 
 template<class derived>
-struct Tensor_Shaping {
+struct Tensor_Accessor {
 
 	static constexpr int DIMS() { return derived::DIMS(); }
 
@@ -35,6 +35,9 @@ private:
 		  auto& internal()       { return as_derived().internal(); }
 
 public:
+
+    auto data() const { return this->as_derived().memptr(); }
+    auto data() 	  { return this->as_derived().memptr(); }
 
 	const auto operator [] (int i) const { return slice(i); }
 		  auto operator [] (int i) 		 { return slice(i); }

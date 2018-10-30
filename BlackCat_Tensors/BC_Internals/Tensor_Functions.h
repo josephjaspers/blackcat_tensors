@@ -17,19 +17,25 @@ template<class internal> class Tensor_Base;
 namespace module {
 template<class derived> class Tensor_Functions;
 
+enum functional_library {
+	std = 0,
+	thrust = 1
+};
+
 template<class internal_t>
 class Tensor_Functions<Tensor_Base<internal_t>> {
 	template<class> friend class Tensor_Functions;
 
 	using derived	    = Tensor_Base<internal_t>;
 	using scalar_t 		= typename internal_t::scalar_t;
-	using allocator_t     = typename internal_t::allocator_t;
+	using allocator_t   = typename internal_t::allocator_t;
 
 	 const derived& as_derived() const { return static_cast<const derived&>(*this);  }
 	 	   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
 public:
 
 //-------------------------in-place functions-------------------------//
+	//TODO enable support for multi-dimensional randomize
 	void randomize(scalar_t lb=0, scalar_t ub=1)  {
 		static_assert(derived::ITERATOR() == 0 || derived::ITERATOR() == 1,
 				"randomize not available to non-continuous tensors");
@@ -38,12 +44,15 @@ public:
 	void fill(scalar_t value)   { as_derived() = value; }
 	void zero()                 { as_derived() = scalar_t(0); }
 	void ones()					{ as_derived() = scalar_t(1); }
+//
+//#define BC_RANDOM_DEF(random_func, default_t)
+//	template<class rand_scalar_t = default_t>
+//	void random_func (rand_scalar_t lower_bound, rand_scalar_t upper_bound) {
+//
+//
+//	}
 
-	template<class function>
-	void for_each(function f) {
-		auto for_each_expr = this->as_derived().un_expr(f);
-		this->as_derived() = for_each_expr;
-	}
+
 }; //end_of class 'Tensor_Functions'
 }  //end_of namespace 'module'
 

@@ -12,7 +12,7 @@
 #include "Tensor_Common.h"
 #include "Tensor_Operations.h"
 #include "Tensor_Utility.h"
-#include "Tensor_Shaping.h"
+#include "Tensor_Accessor.h"
 #include "Tensor_Functions.h"
 #include "Tensor_Iterator.h"
 
@@ -29,7 +29,7 @@ class Tensor_Base :
 		public module::Tensor_Operations<Tensor_Base<internal_t>>,
 		public module::Tensor_Functions<Tensor_Base<internal_t>>,
 		public module::Tensor_Utility<Tensor_Base<internal_t>>,
-		public module::Tensor_Shaping<Tensor_Base<internal_t>>,
+		public module::Tensor_Accessor<Tensor_Base<internal_t>>,
 		public module::Tensor_Iterator<Tensor_Base<internal_t>> {
 
 protected:
@@ -38,7 +38,7 @@ protected:
 	using self          = Tensor_Base<internal_t>;
 	using operations    = module::Tensor_Operations<Tensor_Base<internal_t>>;
 	using utility       = module::Tensor_Utility<Tensor_Base<internal_t>>;
-	using shaping       = module::Tensor_Shaping<Tensor_Base<internal_t>>;
+	using shaping       = module::Tensor_Accessor<Tensor_Base<internal_t>>;
 
 	template<class> friend class Tensor_Base;
 	using internal_t::internal_t;
