@@ -52,6 +52,19 @@ namespace module {
 		const auto nd_crend() const {
 			return stl::reverse_iterator_end(as_derived());
 		}
+		//----------const versions----------//
+		auto nd_begin() const {
+			return stl::forward_iterator_begin(as_derived());
+		}
+		auto nd_end() const {
+			return stl::forward_iterator_end(as_derived());
+		}
+		auto nd_rbegin() const {
+			return stl::reverse_iterator_begin(as_derived());
+		}
+		auto nd_rend() const {
+			return stl::reverse_iterator_end(as_derived());
+		}
 		//------------------------elementwise_iterator------------------------//
 		auto begin() {
 			return stl::forward_cwise_iterator_begin(as_derived());
@@ -77,6 +90,20 @@ namespace module {
 		const auto crend() const {
 			return stl::reverse_cwise_iterator_end(as_derived());
 		}
+		//const versions
+		auto begin() const {
+			return stl::forward_cwise_iterator_begin(as_derived());
+		}
+		auto end() const {
+			return stl::forward_cwise_iterator_end(as_derived());
+		}
+		auto rbegin() const {
+			return stl::reverse_cwise_iterator_begin(as_derived());
+		}
+		auto rend() const {
+			return stl::reverse_cwise_iterator_end(as_derived());
+		}
+
 
 
 		//----------------------iterator wrappers---------------------------//

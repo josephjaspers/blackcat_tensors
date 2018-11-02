@@ -16,7 +16,6 @@ class GPU;
 
 namespace stl {
 
-template<class T>
 struct CUDA_Managed_Allocator : GPU {
 
 	using mathlib_t = GPU;

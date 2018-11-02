@@ -19,6 +19,7 @@ namespace BC {
  *
  */
 
+//TODO DEPRECATE THIS, RANDOMIZATION SHOULD BE MOVED TOWARDS THE STD LIB
 template<class core_lib>
 struct CPU_Misc {
 

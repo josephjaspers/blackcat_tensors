@@ -11,7 +11,7 @@
 
 namespace BC {
 
-
+//TODO deprecate this, move towards using thrust library
 template<class core_lib>
 class GPU_Misc {
 

@@ -15,7 +15,7 @@
 #include "Tensor_Accessor.h"
 #include "Tensor_Functions.h"
 #include "Tensor_Iterator.h"
-
+#include "Tensor_CMath.h"
 #include "Expression_Templates/Array.h"
 #include "Expression_Templates/Array_View.h"
 #include "Expression_Templates/Array_Shared.h"
@@ -93,6 +93,7 @@ public:
 
 	 const parent& internal() const { return static_cast<const parent&>(*this); }
 	       parent& internal()       { return static_cast<	   parent&>(*this); }
+
 };
 
 }

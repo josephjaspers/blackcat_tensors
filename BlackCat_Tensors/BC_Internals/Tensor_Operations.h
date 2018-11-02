@@ -25,6 +25,9 @@
 
 #include "Expression_Templates/Tree_Evaluator_Runner.h"
 
+#include "stl_style_Iterators/Coefficientwise_Iterator.h"
+#include "stl_style_Iterators/Multidimensional_Iterator.h"
+
 
 namespace BC {
 template<class internal_t> class Tensor_Base;
@@ -43,8 +46,8 @@ class Tensor_Operations<Tensor_Base<internal_type>> {
 	using scalar_t 			= typename internal_t::scalar_t;
 	using allocator_t 		= typename internal_t::allocator_t;
 
-	template<class deriv> using internal_t_of = typename Tensor_Operations<deriv>::internal_t;
-	template<class deriv> using allocator_t_of= typename Tensor_Operations<deriv>::allocator_t;
+	template<class deriv> using internal_t_of  = typename Tensor_Operations<deriv>::internal_t;
+	template<class deriv> using allocator_t_of = typename Tensor_Operations<deriv>::allocator_t;
 
 	static constexpr bool	copy_assignable = internal::BC_array_copy_assignable<internal_type>();
 	#define BC_ASSERT_ASSIGNABLE(literal) static_assert(copy_assignable, "ASSERT COPY ASSIGNABLE: " literal)
@@ -64,7 +67,7 @@ class Tensor_Operations<Tensor_Base<internal_type>> {
 
 public:
 	//--------------------------------------assignment operators-----------------------------------------------//
-#define BC_ASSIGNMENT_OPER_DEF(op, op_functor)													\
+#define BC_OPER_ASSIGNMENT_DEF(op, op_functor)													\
 																								\
 	template<class pDeriv>																		\
 	derived& operator op (const Tensor_Operations<pDeriv>& param) {								\
@@ -74,15 +77,15 @@ public:
 		return as_derived();																	\
 	}
 
-	BC_ASSIGNMENT_OPER_DEF(=, assign);
-	BC_ASSIGNMENT_OPER_DEF(+=, add_assign);
-	BC_ASSIGNMENT_OPER_DEF(-=, sub_assign);
-	BC_ASSIGNMENT_OPER_DEF(%=, mul_assign);
-	BC_ASSIGNMENT_OPER_DEF(/=, div_assign);
+	BC_OPER_ASSIGNMENT_DEF(=, assign);
+	BC_OPER_ASSIGNMENT_DEF(+=, add_assign);
+	BC_OPER_ASSIGNMENT_DEF(-=, sub_assign);
+	BC_OPER_ASSIGNMENT_DEF(%=, mul_assign);
+	BC_OPER_ASSIGNMENT_DEF(/=, div_assign);
 
 	//--------------------------------------pointwise operators-------------------------------//
 
-#define BC_COEFFICIENTWISE_OPER_DEF(op, op_functor)							\
+#define BC_OPER_COEFFICIENTWISE_DEF(op, op_functor)							\
 																			\
 	template<class pDeriv>													\
 	auto operator op (const Tensor_Operations<pDeriv>& param) const {		\
@@ -90,22 +93,22 @@ public:
 		return bi_expr< internal::oper:: op_functor >(param);				\
 	}
 
-	BC_COEFFICIENTWISE_OPER_DEF(+, add)
-	BC_COEFFICIENTWISE_OPER_DEF(-, sub)
-	BC_COEFFICIENTWISE_OPER_DEF(%, mul)
-	BC_COEFFICIENTWISE_OPER_DEF(/, div)
-	BC_COEFFICIENTWISE_OPER_DEF( == , equal )
-	BC_COEFFICIENTWISE_OPER_DEF( >  , greater)
-	BC_COEFFICIENTWISE_OPER_DEF( <  , lesser)
-	BC_COEFFICIENTWISE_OPER_DEF( >= , greater_equal)
-	BC_COEFFICIENTWISE_OPER_DEF( <= , lesser_equal )
+	BC_OPER_COEFFICIENTWISE_DEF(+, add)
+	BC_OPER_COEFFICIENTWISE_DEF(-, sub)
+	BC_OPER_COEFFICIENTWISE_DEF(%, mul)
+	BC_OPER_COEFFICIENTWISE_DEF(/, div)
+	BC_OPER_COEFFICIENTWISE_DEF( == , equal )
+	BC_OPER_COEFFICIENTWISE_DEF( >  , greater)
+	BC_OPER_COEFFICIENTWISE_DEF( <  , lesser)
+	BC_OPER_COEFFICIENTWISE_DEF( >= , greater_equal)
+	BC_OPER_COEFFICIENTWISE_DEF( <= , lesser_equal )
 
 
 //----------------------------------------------scalar assignment operations--------------------------------------------------//
 	template<class p_scalar_t>
 	using enable_if_convertible = std::enable_if_t<std::is_convertible<p_scalar_t, scalar_t>::value>;
 
-#define BC_SCALAR_ASSIGNMENT_OPER_DEF(op, op_functor)																		\
+#define BC_OPER_SCALAR_ASSIGNMENT_DEF(op, op_functor)																		\
 	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>												\
 	derived& operator  op (const p_scalar_t& param) {																			\
 		BC_ASSERT_ASSIGNABLE("derived& operator " #op " (const Tensor_Operations<pDeriv>& param)");								\
@@ -113,27 +116,27 @@ public:
 		return as_derived();																								\
 	}
 
-	BC_SCALAR_ASSIGNMENT_OPER_DEF(=, assign)
-	BC_SCALAR_ASSIGNMENT_OPER_DEF(+=, add_assign)
-	BC_SCALAR_ASSIGNMENT_OPER_DEF(-=, sub_assign)
-	BC_SCALAR_ASSIGNMENT_OPER_DEF(/=, div_assign)
-	BC_SCALAR_ASSIGNMENT_OPER_DEF(%=, mul_assign)
+	BC_OPER_SCALAR_ASSIGNMENT_DEF(=, assign)
+	BC_OPER_SCALAR_ASSIGNMENT_DEF(+=, add_assign)
+	BC_OPER_SCALAR_ASSIGNMENT_DEF(-=, sub_assign)
+	BC_OPER_SCALAR_ASSIGNMENT_DEF(/=, div_assign)
+	BC_OPER_SCALAR_ASSIGNMENT_DEF(%=, mul_assign)
 
-#define BC_SCALAR_BASIC_OPER_DEF(op, op_functor)																			\
+#define BC_OPER_SCALAR_BASIC_DEF(op, op_functor)																			\
 		template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>											\
 		auto operator op (const p_scalar_t& param) const {																		\
 			return bi_expr_internal<internal::oper:: op_functor >(internal::scalar_constant<allocator_t>((scalar_t)param));	\
 		}
 
 	//----------------------------------------------scalar element-wise operations--------------------------------------------------//
-	BC_SCALAR_BASIC_OPER_DEF(+, add)
-	BC_SCALAR_BASIC_OPER_DEF(-, sub)
-	BC_SCALAR_BASIC_OPER_DEF(*, scalar_mul)
-	BC_SCALAR_BASIC_OPER_DEF(>, greater)
-	BC_SCALAR_BASIC_OPER_DEF(<, lesser)
-	BC_SCALAR_BASIC_OPER_DEF(>=, greater_equal)
-	BC_SCALAR_BASIC_OPER_DEF(<=, lesser_equal)
-	BC_SCALAR_BASIC_OPER_DEF(==, equal)
+	BC_OPER_SCALAR_BASIC_DEF(+, add)
+	BC_OPER_SCALAR_BASIC_DEF(-, sub)
+	BC_OPER_SCALAR_BASIC_DEF(*, scalar_mul)
+	BC_OPER_SCALAR_BASIC_DEF(>, greater)
+	BC_OPER_SCALAR_BASIC_DEF(<, lesser)
+	BC_OPER_SCALAR_BASIC_DEF(>=, greater_equal)
+	BC_OPER_SCALAR_BASIC_DEF(<=, lesser_equal)
+	BC_OPER_SCALAR_BASIC_DEF(==, equal)
 
 	//specialized to upcast  matrix/scalar_value to matrix * (1/scalar_value)
 	template<class p_scalar_t, typename = enable_if_convertible<p_scalar_t>>
@@ -281,7 +284,7 @@ public:
 
 	template<class deriv>
 	void assert_same_ml(const Tensor_Operations<deriv>& tensor) const {
-		static_assert(std::is_same<allocator_t_of<derived>, allocator_t_of<deriv>>::value,
+		static_assert(std::is_same<allocator_t, allocator_t_of<deriv>>::value,
 				"TENSOR OPERATIONS BETWEEN THE CPU/GPU ARE PROHIBITED");
 	}
 public:
@@ -336,7 +339,7 @@ template<class p_scalar_t, class p_scalar_t2>
 using enable_if_convertible = std::enable_if_t<std::is_convertible<p_scalar_t, p_scalar_t2>::value>;
 
 //----------------------------------------------scalar element-wise operations--------------------------------------------------//
-#define BC_SCALAR_BASIC_OPER_DEF_INVERTED(op, op_functor)																				\
+#define BC_OPER_LV_SCALAR_DEF(op, op_functor)																				\
 		template<class p_scalar_t, class internal_t, typename = enable_if_convertible<p_scalar_t, typename internal_t::scalar_t>>		\
 		 auto operator op (const p_scalar_t& param, const module::Tensor_Operations<internal_t>& tensor) {								\
 			using scalar_t = typename internal_t::scalar_t;																				\
@@ -344,14 +347,14 @@ using enable_if_convertible = std::enable_if_t<std::is_convertible<p_scalar_t, p
 			return make_tensor(scalar_obj).bi_expr(internal::oper:: op_functor (), tensor);												\
 		}
 
-	BC_SCALAR_BASIC_OPER_DEF_INVERTED(+, add)
-	BC_SCALAR_BASIC_OPER_DEF_INVERTED(-, sub)
-	BC_SCALAR_BASIC_OPER_DEF_INVERTED(*, scalar_mul)
-	BC_SCALAR_BASIC_OPER_DEF_INVERTED(>, greater)
-	BC_SCALAR_BASIC_OPER_DEF_INVERTED(<, lesser)
-	BC_SCALAR_BASIC_OPER_DEF_INVERTED(>=, greater_equal)
-	BC_SCALAR_BASIC_OPER_DEF_INVERTED(<=, lesser_equal)
-	BC_SCALAR_BASIC_OPER_DEF_INVERTED(==, equal)
+	BC_OPER_LV_SCALAR_DEF(+, add)
+	BC_OPER_LV_SCALAR_DEF(-, sub)
+	BC_OPER_LV_SCALAR_DEF(*, scalar_mul)
+	BC_OPER_LV_SCALAR_DEF(>, greater)
+	BC_OPER_LV_SCALAR_DEF(<, lesser)
+	BC_OPER_LV_SCALAR_DEF(>=, greater_equal)
+	BC_OPER_LV_SCALAR_DEF(<=, lesser_equal)
+	BC_OPER_LV_SCALAR_DEF(==, equal)
 
 
 	template<class p_scalar_t, class internal_t, typename = enable_if_convertible<p_scalar_t, typename internal_t::scalar_t>>

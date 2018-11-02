@@ -20,7 +20,7 @@ namespace gpu_impl {
 
 template<int i> __device__  int tid() { return 0; }
 
-//
+//TODO SWITCH to recursive template iterator
 //template<> __device__ int tid<0>() { return blockIdx.x * blockDim.x + threadIdx.x; }
 //template<> __device__ int tid<1>() { return blockIdx.y * blockDim.y + threadIdx.y; }
 //template<> __device__ int tid<2>() { return blockIdx.z * blockDim.z + threadIdx.z; }

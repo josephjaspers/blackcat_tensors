@@ -14,12 +14,12 @@ namespace BC {
 namespace module {
 namespace stl {
 
-template<class derived, direction direction, class tensor_t>
+template<class derived, direction direction, class tensor_t_>
 struct IteratorBase {
 
 	using Iterator = derived;
 	using iterator_category = std::random_access_iterator_tag;
-
+	using tensor_t = std::decay_t<tensor_t_>;
 	operator const derived&() const { return static_cast<derived&>(*this); }
 	operator derived&() { return  static_cast<derived&>(*this); }
 
