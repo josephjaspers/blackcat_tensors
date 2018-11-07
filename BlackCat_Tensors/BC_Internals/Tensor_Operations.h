@@ -41,13 +41,15 @@ class Tensor_Operations<Tensor_Base<internal_type>> {
 
 	template<class> friend class Tensor_Operations;
 
-	using derived 			= Tensor_Base<internal_type>;
-	using internal_t 		= internal_type;
-	using scalar_t 			= typename internal_t::scalar_t;
-	using allocator_t 		= typename internal_t::allocator_t;
+	using derived 		= Tensor_Base<internal_type>;
+	using internal_t 	= internal_type;
+	using scalar_t 		= typename internal_t::scalar_t;
+	using allocator_t 	= typename internal_t::allocator_t;
+	using mathlib_t		= typename allocator_t::mathlib_t;
 
 	template<class deriv> using internal_t_of  = typename Tensor_Operations<deriv>::internal_t;
 	template<class deriv> using allocator_t_of = typename Tensor_Operations<deriv>::allocator_t;
+	template<class deriv> using mathlib_t_of = typename Tensor_Operations<deriv>::mathlib_t;
 
 	static constexpr bool	copy_assignable = internal::BC_array_copy_assignable<internal_type>();
 	#define BC_ASSERT_ASSIGNABLE(literal) static_assert(copy_assignable, "ASSERT COPY ASSIGNABLE: " literal)
@@ -77,11 +79,11 @@ public:
 		return as_derived();																	\
 	}
 
-	BC_OPER_ASSIGNMENT_DEF(=, assign);
-	BC_OPER_ASSIGNMENT_DEF(+=, add_assign);
-	BC_OPER_ASSIGNMENT_DEF(-=, sub_assign);
-	BC_OPER_ASSIGNMENT_DEF(%=, mul_assign);
-	BC_OPER_ASSIGNMENT_DEF(/=, div_assign);
+	BC_OPER_ASSIGNMENT_DEF(=, assign)
+	BC_OPER_ASSIGNMENT_DEF(+=, add_assign)
+	BC_OPER_ASSIGNMENT_DEF(-=, sub_assign)
+	BC_OPER_ASSIGNMENT_DEF(%=, mul_assign)
+	BC_OPER_ASSIGNMENT_DEF(/=, div_assign)
 
 	//--------------------------------------pointwise operators-------------------------------//
 
@@ -284,7 +286,7 @@ public:
 
 	template<class deriv>
 	void assert_same_ml(const Tensor_Operations<deriv>& tensor) const {
-		static_assert(std::is_same<allocator_t, allocator_t_of<deriv>>::value,
+		static_assert(std::is_same<mathlib_t, mathlib_t_of<deriv>>::value,
 				"TENSOR OPERATIONS BETWEEN THE CPU/GPU ARE PROHIBITED");
 	}
 public:

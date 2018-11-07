@@ -16,8 +16,8 @@
 #include "stl_style_Allocators/Basic_Allocator.h"
 #include "stl_style_Allocators/CUDA_Allocator.h"
 #include "stl_style_Allocators/CUDA_Managed_Allocator.h"
-
 #include "Tensor_Base.h"
+#include "Tensor_Functions.h"//needs to be included after allocators
 
 namespace BC {
 
@@ -68,9 +68,6 @@ template<class iterator_t> using vec  = tensor<1, iterator_t>;
 template<class iterator_t> using mat  = tensor<2, iterator_t>;
 template<class iterator_t> using cube  = tensor<3, iterator_t>;
 }
-
 }
-
-
 
 #endif /* TENSOR_ALIASES_H_ */
