@@ -37,7 +37,7 @@ template<class derived> class Tensor_Operations;
 //This is where the beautiful lazy expressions are created
 
 template<class internal_type>
-class Tensor_Operations<Tensor_Base<internal_type>> {
+struct Tensor_Operations<Tensor_Base<internal_type>> {
 
 	template<class> friend class Tensor_Operations;
 
@@ -46,6 +46,8 @@ class Tensor_Operations<Tensor_Base<internal_type>> {
 	using scalar_t 		= typename internal_t::scalar_t;
 	using allocator_t 	= typename internal_t::allocator_t;
 	using mathlib_t		= typename allocator_t::mathlib_t;
+
+private:
 
 	template<class deriv> using internal_t_of  = typename Tensor_Operations<deriv>::internal_t;
 	template<class deriv> using allocator_t_of = typename Tensor_Operations<deriv>::allocator_t;
@@ -61,13 +63,12 @@ class Tensor_Operations<Tensor_Base<internal_type>> {
 	 	  derived& as_derived() 	  { return static_cast<	     derived&>(*this); }
 
 	//--------------------------------------evaluation implementation-----------------------------------------------//
+public:
+
 	template<class derived_t>
 	void evaluate(const Tensor_Operations<derived_t>& tensor) {
 		internal::evaluate(tensor.as_derived().internal());
 	}
-
-
-public:
 	//--------------------------------------assignment operators-----------------------------------------------//
 #define BC_OPER_ASSIGNMENT_DEF(op, op_functor)													\
 																								\

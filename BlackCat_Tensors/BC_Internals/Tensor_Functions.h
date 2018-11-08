@@ -79,6 +79,81 @@ static auto normalize(const Tensor_Base<internal_t>& tensor, min_ min, max_ max)
 	return tensor.un_expr(norm<scalar_t>(scalar_t(min), scalar_t(max)));
 }
 
+
+#define BC_TENSOR_ALGORITHM_DEF(function) \
+	template<class iter_begin, class iter_end, class functor>\
+	static auto function (iter_begin begin, iter_end end, functor func) {\
+		using tensor_t = typename iter_begin::tensor_t;\
+		using mathlib_t = typename tensor_t::mathlib_t;\
+\
+		mathlib_t :: function (begin, end, func);\
+	}
+
+//	BC_CPU_ALGORITHM_DEF(all_of
+//	BC_CPU_ALGORITHM_DEF(any_of
+//	none_of
+//	for_each
+//	find
+//	find_End
+//	find_first_of
+//	find_adjacent_find
+//	count
+//	mismatch
+//	equal
+//	is_permutation
+//	search
+//	search_n
+//
+	BC_TENSOR_ALGORITHM_DEF(all_of)
+	BC_TENSOR_ALGORITHM_DEF(any_of)
+	BC_TENSOR_ALGORITHM_DEF(none_of)
+	BC_TENSOR_ALGORITHM_DEF(for_each)
+	BC_TENSOR_ALGORITHM_DEF(find)
+	//find if
+	//find if not
+
+	BC_TENSOR_ALGORITHM_DEF(find_end)
+	BC_TENSOR_ALGORITHM_DEF(find_first_of)
+	BC_TENSOR_ALGORITHM_DEF(adjacent_find)
+	BC_TENSOR_ALGORITHM_DEF(count)
+	//count if
+	BC_TENSOR_ALGORITHM_DEF(mismatch)
+	BC_TENSOR_ALGORITHM_DEF(equal)
+	BC_TENSOR_ALGORITHM_DEF(is_permutation)
+	BC_TENSOR_ALGORITHM_DEF(search)
+	BC_TENSOR_ALGORITHM_DEF(search_n)
+
+
+	//modifying-----------------------------------------
+
+	BC_TENSOR_ALGORITHM_DEF(copy)
+	BC_TENSOR_ALGORITHM_DEF(copy_n)
+//	BC_TENSOR_ALGORITHM_DEF(adjacent_find)
+	BC_TENSOR_ALGORITHM_DEF(copy_if)
+	BC_TENSOR_ALGORITHM_DEF(copy_backward)
+	BC_TENSOR_ALGORITHM_DEF(move)
+	BC_TENSOR_ALGORITHM_DEF(move_backward)
+	BC_TENSOR_ALGORITHM_DEF(swap)
+	BC_TENSOR_ALGORITHM_DEF(swap_ranges)
+	BC_TENSOR_ALGORITHM_DEF(iter_swap)
+	BC_TENSOR_ALGORITHM_DEF(transform)
+	BC_TENSOR_ALGORITHM_DEF(replace)
+	BC_TENSOR_ALGORITHM_DEF(replace_if)
+	BC_TENSOR_ALGORITHM_DEF(replace_copy)
+	BC_TENSOR_ALGORITHM_DEF(replace_copy_if)
+	BC_TENSOR_ALGORITHM_DEF(fill)
+
+	BC_TENSOR_ALGORITHM_DEF(fill_n)
+	BC_TENSOR_ALGORITHM_DEF(generate)
+	BC_TENSOR_ALGORITHM_DEF(generate_n)
+//	BC_TENSOR_ALGORITHM_DEF(remove)
+//	BC_TENSOR_ALGORITHM_DEF(remove_if)
+
+//	BC_TENSOR_ALGORITHM_DEF(remove_copy)
+//	BC_TENSOR_ALGORITHM_DEF(remove_copy_if)
+//	BC_TENSOR_ALGORITHM_DEF(unique)
+//	BC_TENSOR_ALGORITHM_DEF(unique_copy)
+
 }
 
 

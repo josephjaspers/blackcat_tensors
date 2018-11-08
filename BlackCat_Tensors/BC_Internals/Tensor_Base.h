@@ -32,7 +32,7 @@ class Tensor_Base :
 		public module::Tensor_Accessor<Tensor_Base<internal_t>>,
 		public module::Tensor_Iterator<Tensor_Base<internal_t>> {
 
-protected:
+public:
 
 	using parent        = internal_t;
 	using self          = Tensor_Base<internal_t>;
@@ -43,7 +43,6 @@ protected:
 	template<class> friend class Tensor_Base;
 	using internal_t::internal_t;
 
-public:
 
 	using internal_t::DIMS; //required
 	using scalar_t	= typename internal_t::scalar_t;
