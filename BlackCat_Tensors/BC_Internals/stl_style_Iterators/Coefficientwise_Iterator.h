@@ -28,7 +28,7 @@ struct Coefficientwise_Iterator  : IteratorBase<Coefficientwise_Iterator<directi
 
 	parent::operator=;
 
-	static_assert(tensor_t::DIMS() > 0, "Iterator not defined for scalar_types");
+//	static_assert(tensor_t::DIMS() > 0, "Iterator not defined for scalar_types");
 	static_assert(tensor_t::ITERATOR() == 0 || tensor_t::ITERATOR() == 1,
 			"Elementwise-Iterator only available to continuous tensors");
 

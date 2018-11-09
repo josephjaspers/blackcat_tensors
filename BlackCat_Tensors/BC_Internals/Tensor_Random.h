@@ -46,6 +46,26 @@ class Tensor_Random<Tensor_Base<internal_t>>{
 
 
 }
+
+template<class scalar>
+struct norm {
+	scalar min;
+	scalar max;
+
+	norm(scalar min_, scalar max_) : min(min_), max(max_) {}
+
+	__BCinline__ auto operator () (scalar v) const {
+		return (v - min) / (max - min);
+	}
+};
+
+template<class internal_t, class min_, class max_>
+static auto normalize(const Tensor_Base<internal_t>& tensor, min_ min, max_ max) {
+	using scalar_t = typename internal_t::scalar_t;
+	return tensor.un_expr(norm<scalar_t>(scalar_t(min), scalar_t(max)));
+}
+
+
 }
 
 

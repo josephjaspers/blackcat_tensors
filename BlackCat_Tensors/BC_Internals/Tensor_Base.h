@@ -13,7 +13,7 @@
 #include "Tensor_Operations.h"
 #include "Tensor_Utility.h"
 #include "Tensor_Accessor.h"
-#include "Tensor_Functions.h"
+#include "Tensor_Algorithm.h"
 #include "Tensor_Iterator.h"
 #include "Tensor_CMath.h"
 #include "Expression_Templates/Array.h"
@@ -27,7 +27,7 @@ template<class internal_t>
 class Tensor_Base :
 		public internal_t,
 		public module::Tensor_Operations<Tensor_Base<internal_t>>,
-		public module::Tensor_Functions<Tensor_Base<internal_t>>,
+		public module::Tensor_Algorithm<Tensor_Base<internal_t>>,
 		public module::Tensor_Utility<Tensor_Base<internal_t>>,
 		public module::Tensor_Accessor<Tensor_Base<internal_t>>,
 		public module::Tensor_Iterator<Tensor_Base<internal_t>> {

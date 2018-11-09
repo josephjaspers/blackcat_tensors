@@ -266,7 +266,7 @@ namespace module {
 	template<class...params> auto iter(params... ps) {
 		return _cwise_forward_iterator(as_derived(), ps...);
 	}
-	template<class... params> auto revierse_iter(params... ps) {
+	template<class... params> auto reverse_iterator(params... ps) {
 		return _cwise_reverse_iterator(as_derived(), ps...);
 	}
 

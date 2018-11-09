@@ -17,7 +17,7 @@
 #include "stl_style_Allocators/CUDA_Allocator.h"
 #include "stl_style_Allocators/CUDA_Managed_Allocator.h"
 #include "Tensor_Base.h"
-#include "Tensor_Functions.h"//needs to be included after allocators
+#include "Tensor_Algorithm.h"//needs to be included after allocators
 
 namespace BC {
 
