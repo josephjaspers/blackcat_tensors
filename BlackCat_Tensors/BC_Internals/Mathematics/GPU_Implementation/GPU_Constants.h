@@ -13,33 +13,33 @@ namespace BC {
 
 template<class core_lib>
 struct GPU_Constants {
-	static float* static_allocate(float value) {
-		float* t;
-		cudaMallocManaged((void**) &t, sizeof(float));
-		cudaMemcpy(t, &value, sizeof(float), cudaMemcpyHostToDevice);
-		return t;
-	}
+    static float* static_allocate(float value) {
+        float* t;
+        cudaMallocManaged((void**) &t, sizeof(float));
+        cudaMemcpy(t, &value, sizeof(float), cudaMemcpyHostToDevice);
+        return t;
+    }
 
-	static void scalar_mul(float* eval, float* a, float* b) {
+    static void scalar_mul(float* eval, float* a, float* b) {
 
-		gpu_impl::scalar_mul<<<1, 1>>>(eval, a, b);
-		cudaDeviceSynchronize();
-	}
-	static void scalar_mul(float* eval, float a, float* b) {
+        gpu_impl::scalar_mul<<<1, 1>>>(eval, a, b);
+        cudaDeviceSynchronize();
+    }
+    static void scalar_mul(float* eval, float a, float* b) {
 
-		gpu_impl::scalar_mul<<<1, 1>>>(eval, a, b);
-		cudaDeviceSynchronize();
-	}
-	static void scalar_mul(float* eval, float* a, float b) {
+        gpu_impl::scalar_mul<<<1, 1>>>(eval, a, b);
+        cudaDeviceSynchronize();
+    }
+    static void scalar_mul(float* eval, float* a, float b) {
 
-		gpu_impl::scalar_mul<<<1, 1>>>(eval, a, b);
-		cudaDeviceSynchronize();
-	}
-	static void scalar_mul(float* eval, float a, float b) {
+        gpu_impl::scalar_mul<<<1, 1>>>(eval, a, b);
+        cudaDeviceSynchronize();
+    }
+    static void scalar_mul(float* eval, float a, float b) {
 
-		gpu_impl::scalar_mul<<<1, 1>>>(eval, a, b);
-		cudaDeviceSynchronize();
-	}
+        gpu_impl::scalar_mul<<<1, 1>>>(eval, a, b);
+        cudaDeviceSynchronize();
+    }
 
 };
 

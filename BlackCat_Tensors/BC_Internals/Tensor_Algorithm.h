@@ -16,13 +16,13 @@ namespace BC{
 
 #define BC_TENSOR_ALGORITHM_DEF(function)\
 \
-	template<class iter_begin_, class iter_end_, class... args>\
-	static auto function (iter_begin_ begin_, iter_end_ end_, args... params) {\
-		using tensor_t = typename iter_end_::tensor_t;\
-		using mathlib_t = typename tensor_t::mathlib_t;\
+    template<class iter_begin_, class iter_end_, class... args>\
+    static auto function (iter_begin_ begin_, iter_end_ end_, args... params) {\
+        using tensor_t = typename iter_end_::tensor_t;\
+        using mathlib_t = typename tensor_t::mathlib_t;\
 \
-		return mathlib_t :: function (begin_, end_, params...);\
-	}
+        return mathlib_t :: function (begin_, end_, params...);\
+    }
 
 //put into namespace alg
 //to force BC::prefix
@@ -57,8 +57,8 @@ BC_TENSOR_ALGORITHM_DEF(fill_n)
 BC_TENSOR_ALGORITHM_DEF(transform)
 BC_TENSOR_ALGORITHM_DEF(generate)
 BC_TENSOR_ALGORITHM_DEF(generate_n)
-//	BC_TENSOR_ALGORITHM_DEF(remove)
-//	BC_TENSOR_ALGORITHM_DEF(remove_if)
+//    BC_TENSOR_ALGORITHM_DEF(remove)
+//    BC_TENSOR_ALGORITHM_DEF(remove_if)
 BC_TENSOR_ALGORITHM_DEF(replace)
 BC_TENSOR_ALGORITHM_DEF(replace_if)
 BC_TENSOR_ALGORITHM_DEF(replace_copy)
@@ -75,8 +75,8 @@ BC_DEF_IF_CPP17(BC_TENSOR_ALGORITHM_DEF(shift_left))
 BC_DEF_IF_CPP17(BC_TENSOR_ALGORITHM_DEF(shift_right))
 BC_TENSOR_ALGORITHM_DEF(random_shuffle)
 BC_DEF_IF_CPP17(BC_TENSOR_ALGORITHM_DEF(sample))
-//	BC_TENSOR_ALGORITHM_DEF(unique)
-//	BC_TENSOR_ALGORITHM_DEF(unique_copy)
+//    BC_TENSOR_ALGORITHM_DEF(unique)
+//    BC_TENSOR_ALGORITHM_DEF(unique_copy)
 
 //--------------------------- sorting ---------------------------//
 BC_TENSOR_ALGORITHM_DEF(is_sorted)
@@ -127,36 +127,36 @@ template<class derived> class Tensor_Algorithm;
 
 template<class internal_t>
 class Tensor_Algorithm<Tensor_Base<internal_t>> {
-	template<class> friend class Tensor_Algorithm;
+    template<class> friend class Tensor_Algorithm;
 
-	using derived	    = Tensor_Base<internal_t>;
-	using scalar_t 		= typename internal_t::scalar_t;
-	using allocator_t   = typename internal_t::allocator_t;
+    using derived        = Tensor_Base<internal_t>;
+    using scalar_t         = typename internal_t::scalar_t;
+    using allocator_t   = typename internal_t::allocator_t;
 
-	 const derived& as_derived() const { return static_cast<const derived&>(*this);  }
-	 	   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
+     const derived& as_derived() const { return static_cast<const derived&>(*this);  }
+            derived& as_derived()        { return static_cast<      derived&>(*this); }
 
-	auto begin_() { return this->as_derived().begin(); }
-	auto end_() { return this->as_derived().end(); }
-	auto begin_() const { return this->as_derived().begin(); }
-	auto end_() const { return this->as_derived().end(); }
+    auto begin_() { return this->as_derived().begin(); }
+    auto end_() { return this->as_derived().end(); }
+    auto begin_() const { return this->as_derived().begin(); }
+    auto end_() const { return this->as_derived().end(); }
 
 public:
 
-	void fill(scalar_t value)   { BC::alg::fill(as_derived().begin_(), as_derived().end_(), value);}
-	void zero()                 { fill(0); }
-	void ones()					{ fill(1); }
+    void fill(scalar_t value)   { BC::alg::fill(as_derived().begin_(), as_derived().end_(), value);}
+    void zero()                 { fill(0); }
+    void ones()                    { fill(1); }
 
-	template<class function>
-	void for_each(function func) {
-		BC::alg::for_each(this->begin_(), this->end_(), func);
-	}
+    template<class function>
+    void for_each(function func) {
+        BC::alg::for_each(this->begin_(), this->end_(), func);
+    }
 
-   	void randomize(scalar_t lb=0, scalar_t ub=1)  {
-   		static_assert(internal_t::ITERATOR() == 0 || internal_t::ITERATOR() == 1,
-   				"randomize not available to non-continuous tensors");
-   		allocator_t::randomize(this->as_derived().internal(), lb, ub);
-   	}
+       void randomize(scalar_t lb=0, scalar_t ub=1)  {
+           static_assert(internal_t::ITERATOR() == 0 || internal_t::ITERATOR() == 1,
+                   "randomize not available to non-continuous tensors");
+           allocator_t::randomize(this->as_derived().internal(), lb, ub);
+       }
 
 }; //end__of class 'Tensor_Functions'
 

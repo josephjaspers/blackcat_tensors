@@ -21,27 +21,27 @@ using NN_Abreviated_Functions::hd;
 
 
 struct Sum_Gradients {
-		template<class T, class S>
-		auto operator () (T& weights, S& lr) const {
-			return [&](auto& gradients) { return weights += gradients * lr; };
-		}
-	};
-	struct Zero_Tensors {
-		template<class T>
-		void operator () (T& var) const {
-			var.zero();
-		}
-	};
-	struct ClearBPLists {
-		template<class T>
-		void operator () (T& var) const {
-			var.clear();
-		}
-	};
+        template<class T, class S>
+        auto operator () (T& weights, S& lr) const {
+            return [&](auto& gradients) { return weights += gradients * lr; };
+        }
+    };
+    struct Zero_Tensors {
+        template<class T>
+        void operator () (T& var) const {
+            var.zero();
+        }
+    };
+    struct ClearBPLists {
+        template<class T>
+        void operator () (T& var) const {
+            var.clear();
+        }
+    };
 
-	static constexpr Sum_Gradients sum_gradients = Sum_Gradients();
-	static constexpr Zero_Tensors zero = Zero_Tensors();
-	static constexpr ClearBPLists clear	= ClearBPLists();
+    static constexpr Sum_Gradients sum_gradients = Sum_Gradients();
+    static constexpr Zero_Tensors zero = Zero_Tensors();
+    static constexpr ClearBPLists clear    = ClearBPLists();
 
 
 }

@@ -56,16 +56,16 @@ all: BlackCat_NeuralNetworks3.3
 
 # Tool invocations
 BlackCat_NeuralNetworks3.3: $(OBJS) $(USER_OBJS)
-	@echo 'Building target: $@'
-	@echo 'Invoking: NVCC Linker'
-	/usr/local/cuda-9.1/bin/nvcc --cudart static -L/home/joseph/Library_Sources/ATLAS/Build/lib --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3" $(OBJS) $(USER_OBJS) $(LIBS)
-	@echo 'Finished building target: $@'
-	@echo ' '
+    @echo 'Building target: $@'
+    @echo 'Invoking: NVCC Linker'
+    /usr/local/cuda-9.1/bin/nvcc --cudart static -L/home/joseph/Library_Sources/ATLAS/Build/lib --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52 -link -o  "BlackCat_NeuralNetworks3.3" $(OBJS) $(USER_OBJS) $(LIBS)
+    @echo 'Finished building target: $@'
+    @echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(CU_DEPS)$(CPP_DEPS)$(C_DEPS) BlackCat_NeuralNetworks3.3
-	-@echo ' '
+    -$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(CU_DEPS)$(CPP_DEPS)$(C_DEPS) BlackCat_NeuralNetworks3.3
+    -@echo ' '
 
 .PHONY: all clean dependents
 .SECONDARY:

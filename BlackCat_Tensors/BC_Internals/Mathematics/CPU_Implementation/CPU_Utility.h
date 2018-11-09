@@ -18,26 +18,26 @@ namespace BC {
 template<class core_lib>
 struct CPU_Utility {
 
-	template<class T, class U>
-	static void HostToDevice(T* t, U* u, int sz) {
-		for (int i = 0; i < sz; ++i)
-			t[i] = u[i];
-	}
-	template<class T, class U>
-	static void DeviceToHost(T* t, U* u, int sz) {
-		for (int i = 0; i < sz; ++i)
-			t[i] = u[i];
-	}
+    template<class T, class U>
+    static void HostToDevice(T* t, U* u, int sz) {
+        for (int i = 0; i < sz; ++i)
+            t[i] = u[i];
+    }
+    template<class T, class U>
+    static void DeviceToHost(T* t, U* u, int sz) {
+        for (int i = 0; i < sz; ++i)
+            t[i] = u[i];
+    }
 
-	template<class T, class is, class os>
-	static void print(const T array_ptr, const is inner_shape, const os outer_shape, int numb_dimensions, int print_gap_length) {
-		BC::IO::print(array_ptr, inner_shape, outer_shape, numb_dimensions, print_gap_length);
-	}
+    template<class T, class is, class os>
+    static void print(const T array_ptr, const is inner_shape, const os outer_shape, int numb_dimensions, int print_gap_length) {
+        BC::IO::print(array_ptr, inner_shape, outer_shape, numb_dimensions, print_gap_length);
+    }
 
-	template<class T, class is, class os>
-	static void printSparse(const T array_ptr, const is inner_shape, const os outer_shape, int numb_dimensions, int print_gap_length) {
-		BC::IO::printSparse(array_ptr, inner_shape, outer_shape, numb_dimensions, print_gap_length);
-	}
+    template<class T, class is, class os>
+    static void printSparse(const T array_ptr, const is inner_shape, const os outer_shape, int numb_dimensions, int print_gap_length) {
+        BC::IO::printSparse(array_ptr, inner_shape, outer_shape, numb_dimensions, print_gap_length);
+    }
 };
 }
 

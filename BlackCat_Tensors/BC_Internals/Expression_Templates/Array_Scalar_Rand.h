@@ -19,31 +19,31 @@ namespace internal {
 template<class scalar_t_, class allocator_t_>
 struct Rand_Constant : Shape<0>, Array_Base<Rand_Constant<scalar_t_, allocator_t_>, 0>{
 
-	using scalar_t = scalar_t_;
-	using allocator_t = allocator_t_;
+    using scalar_t = scalar_t_;
+    using allocator_t = allocator_t_;
 
-	__BCinline__ static constexpr int ITERATOR() { return 0; }
-	__BCinline__ static constexpr int DIMS() 	 { return 0; }
+    __BCinline__ static constexpr int ITERATOR() { return 0; }
+    __BCinline__ static constexpr int DIMS()      { return 0; }
 
-	operator scalar_t () { return value(); }
+    operator scalar_t () { return value(); }
 
-	scalar_t lower_bound, upper_bound;
+    scalar_t lower_bound, upper_bound;
 
-	scalar_t value() const {
-		return allocator_t::rand(lower_bound, upper_bound);
-	}
-
-
-
-	Rand_Constant(scalar_t lower_bound_, scalar_t upper_bound_)
-	: lower_bound(lower_bound_), upper_bound(upper_bound_) {}
+    scalar_t value() const {
+        return allocator_t::rand(lower_bound, upper_bound);
+    }
 
 
-	template<class... integers>
-	auto operator()  (const integers&...) const{ return value(); }
-	auto operator [] (int i ) { return value(); }
 
-	const scalar_t* memptr() const { return nullptr; }
+    Rand_Constant(scalar_t lower_bound_, scalar_t upper_bound_)
+    : lower_bound(lower_bound_), upper_bound(upper_bound_) {}
+
+
+    template<class... integers>
+    auto operator()  (const integers&...) const{ return value(); }
+    auto operator [] (int i ) { return value(); }
+
+    const scalar_t* memptr() const { return nullptr; }
 };
 }
 }

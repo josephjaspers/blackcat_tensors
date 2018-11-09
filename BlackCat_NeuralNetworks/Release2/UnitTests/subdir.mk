@@ -15,11 +15,11 @@ CU_DEPS += \
 
 # Each subdirectory must supply rules for building sources it contributes
 UnitTests/%.o: ../UnitTests/%.cu
-	@echo 'Building file: $<'
-	@echo 'Invoking: NVCC Compiler'
-	/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "$(@:%.o=%.d)" "$<"
-	/usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "$@" "$<"
-	@echo 'Finished building: $<'
-	@echo ' '
+    @echo 'Building file: $<'
+    @echo 'Invoking: NVCC Compiler'
+    /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -O3 -gencode arch=compute_52,code=sm_52  -odir "UnitTests" -M -o "$(@:%.o=%.d)" "$<"
+    /usr/local/cuda-9.1/bin/nvcc -I/home/joseph/BlackCat_Libraries/BlackCat_Tensors3.3 -O3 --compile --relocatable-device-code=true -gencode arch=compute_52,code=compute_52 -gencode arch=compute_52,code=sm_52  -x cu -o  "$@" "$<"
+    @echo 'Finished building: $<'
+    @echo ' '
 
 

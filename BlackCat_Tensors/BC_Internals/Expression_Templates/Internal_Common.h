@@ -11,7 +11,7 @@
 
 namespace BC {
 
-#define BLACKCAT_TENSORS_ASSERT_VALID							//Ensures basic checks
+#define BLACKCAT_TENSORS_ASSERT_VALID                            //Ensures basic checks
 
 #ifdef __CUDACC__
 #define __BChd__ __host__ __device__

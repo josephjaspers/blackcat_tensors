@@ -22,7 +22,7 @@ template<class> class Tensor_Base;
 
 template<class internal_t>
 auto make_tensor(internal_t internal) {
-	return Tensor_Base<internal_t>(internal);
+    return Tensor_Base<internal_t>(internal);
 }
 
 }

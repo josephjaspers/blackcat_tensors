@@ -17,57 +17,57 @@ namespace internal {
 template<class derived>
 class Inner_Shape {
 
-	 const derived& as_derived() const { return static_cast<const derived&>(*this); }
-		   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
+     const derived& as_derived() const { return static_cast<const derived&>(*this); }
+           derived& as_derived()        { return static_cast<      derived&>(*this); }
 
-	 auto is() const{
-		return as_derived().inner_shape();
-	}
+     auto is() const{
+        return as_derived().inner_shape();
+    }
 public:
-	 int rows() const { return is()[0]; }
-	 int cols() const { return is()[1]; }
-	 int dimension(int i) const { return is()[i]; }
-	 int outer_dimension() const { return is()[derived::DIMS() - 2]; }
+     int rows() const { return is()[0]; }
+     int cols() const { return is()[1]; }
+     int dimension(int i) const { return is()[i]; }
+     int outer_dimension() const { return is()[derived::DIMS() - 2]; }
 };
 
 template<class derived>
 class Block_Shape {
 
-	 const derived& as_derived() const { return static_cast<const derived&>(*this); }
-		   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
+     const derived& as_derived() const { return static_cast<const derived&>(*this); }
+           derived& as_derived()        { return static_cast<      derived&>(*this); }
 
-	 auto bs()const {
-		return as_derived().block_shape();
-	}
+     auto bs()const {
+        return as_derived().block_shape();
+    }
 public:
-	 int size() const { return bs()[derived::DIMS() - 1]; }
-	 int block_dimension(int i) const { return bs()[i]; }
+     int size() const { return bs()[derived::DIMS() - 1]; }
+     int block_dimension(int i) const { return bs()[i]; }
 };
 
 template<class derived>
 class Outer_Shape {
 
-	 const derived& as_derived() const { return static_cast<const derived&>(*this); }
-		   derived& as_derived() 	   { return static_cast<	  derived&>(*this); }
+     const derived& as_derived() const { return static_cast<const derived&>(*this); }
+           derived& as_derived()        { return static_cast<      derived&>(*this); }
 
-	 auto os()const {
-		return as_derived().outer_shape();
-	}
+     auto os()const {
+        return as_derived().outer_shape();
+    }
 public:
-	 int leading_dimension(int i) const {
-		 if (derived::DIMS() == 1)
-			 if (i == 1)
-				 return 1;
-		 return os()[i];
-	 }
+     int leading_dimension(int i) const {
+         if (derived::DIMS() == 1)
+             if (i == 1)
+                 return 1;
+         return os()[i];
+     }
 };
 
 
 
 template<class derived>
 class Shape_Base
-		: public Inner_Shape<derived>,
-		  public Block_Shape<derived> {};
+        : public Inner_Shape<derived>,
+          public Block_Shape<derived> {};
 
 }
 }

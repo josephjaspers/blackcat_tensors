@@ -23,40 +23,40 @@ namespace tree {
 
 
 template<class> struct scalar_modifer {
-	enum mod {
-		alpha = 0,
-		beta = 0,
-	};
+    enum mod {
+        alpha = 0,
+        beta = 0,
+    };
 };
 template<> struct scalar_modifer<internal::oper::add> {
-	enum mod {
-		alpha = 1,
-		beta = 1,
-	};
+    enum mod {
+        alpha = 1,
+        beta = 1,
+    };
 };
 template<> struct scalar_modifer<internal::oper::sub> {
-	enum mod {
-		alpha = -1,
-		beta = 1
-	};
+    enum mod {
+        alpha = -1,
+        beta = 1
+    };
 };
 template<> struct scalar_modifer<internal::oper::add_assign> {
-	enum mod {
-		alpha = 1,
-		beta = 1,
-	};
+    enum mod {
+        alpha = 1,
+        beta = 1,
+    };
 };
 template<> struct scalar_modifer<internal::oper::sub_assign> {
-	enum mod {
-		alpha = -1,
-		beta = 1,
-	};
+    enum mod {
+        alpha = -1,
+        beta = 1,
+    };
 };
 template<> struct scalar_modifer<internal::oper::assign> {
-	enum mod {
-		alpha = 1,
-		beta = 0,
-	};
+    enum mod {
+        alpha = 1,
+        beta = 0,
+    };
 };
 
 
@@ -67,35 +67,35 @@ template<> struct is_blas_func_impl<BC::GPU> { static constexpr bool value = tru
 
 
 template<class T> static constexpr bool is_blas_func() {
-//	return is_blas_func_impl<T>::value;
-	return std::is_base_of<BC::BLAS_FUNCTION, T>::value;
+//    return is_blas_func_impl<T>::value;
+    return std::is_base_of<BC::BLAS_FUNCTION, T>::value;
 }
 
 template<class T>
 static constexpr bool is_linear_op() {
-	return MTF::seq_contains<T, internal::oper::add, internal::oper::sub>;
+    return MTF::seq_contains<T, internal::oper::add, internal::oper::sub>;
 }
 
 template<class T>
 static constexpr bool is_nonlinear_op() {
-	return  !MTF::seq_contains<T, internal::oper::add, internal::oper::sub> && !is_blas_func<T>();
+    return  !MTF::seq_contains<T, internal::oper::add, internal::oper::sub> && !is_blas_func<T>();
 }
 template<class T>
 static constexpr int alpha_of() {
-	return scalar_modifer<std::decay_t<T>>::mod::alpha;
+    return scalar_modifer<std::decay_t<T>>::mod::alpha;
 }
 template<class T>
 static constexpr int beta_of() {
-	return scalar_modifer<std::decay_t<T>>::mod::beta;
+    return scalar_modifer<std::decay_t<T>>::mod::beta;
 }
 
 
 //trivial_blas_evaluation -- detects if the tree is entirely +/- operations with blas functions, --> y = a * b + c * d - e * f  --> true, y = a + b * c --> false
 template<class op, class core, int a, int b>//only apply update if right hand side branch
 auto update_injection(injector<core,a,b> tensor) {
-	static constexpr int alpha = a != 0 ? a * alpha_of<op>() : 1;
-	static constexpr int beta = b != 0 ? b * beta_of<op>() : 1;
-	return injector<core, alpha, beta>(tensor.data());
+    static constexpr int alpha = a != 0 ? a * alpha_of<op>() : 1;
+    static constexpr int beta = b != 0 ? b * beta_of<op>() : 1;
+    return injector<core, alpha, beta>(tensor.data());
 }
 
 

@@ -18,34 +18,34 @@ namespace stl  {
 
 struct Basic_Allocator : CPU {
 
-	using mathlib_t = CPU;
+    using mathlib_t = CPU;
 
-	template<typename T>
-	static T*& allocate(T*& internal_mem_ptr, int size) {
-		internal_mem_ptr = new T[size];
-		return internal_mem_ptr;
-	}
-	template<typename T>
-	static T*& unified_allocate(T*& intenral_mem_ptr, int size) {
-		intenral_mem_ptr = new T[size];
-		return intenral_mem_ptr;
-	}
-	template<typename T>
-	static void deallocate(T* t) {
-		delete[] t;
-	}
-	template<typename T>
-	static void deallocate(T t) {
-		//empty
-	}
-	template<class T, class U>
-	static void HostToDevice(T* device_ptr, U* host_ptr, int size=1) {
-		CPU::copy(device_ptr, host_ptr, size);
-	}
-	template<class T, class U>
-	static void DeviceToHost(T* host_ptr, U* device_ptr, int size=1) {
-		CPU::copy(host_ptr, device_ptr, size);
-	}
+    template<typename T>
+    static T*& allocate(T*& internal_mem_ptr, int size) {
+        internal_mem_ptr = new T[size];
+        return internal_mem_ptr;
+    }
+    template<typename T>
+    static T*& unified_allocate(T*& intenral_mem_ptr, int size) {
+        intenral_mem_ptr = new T[size];
+        return intenral_mem_ptr;
+    }
+    template<typename T>
+    static void deallocate(T* t) {
+        delete[] t;
+    }
+    template<typename T>
+    static void deallocate(T t) {
+        //empty
+    }
+    template<class T, class U>
+    static void HostToDevice(T* device_ptr, U* host_ptr, int size=1) {
+        CPU::copy(device_ptr, host_ptr, size);
+    }
+    template<class T, class U>
+    static void DeviceToHost(T* host_ptr, U* device_ptr, int size=1) {
+        CPU::copy(host_ptr, device_ptr, size);
+    }
 
 };
 }

@@ -14,42 +14,42 @@ namespace NN {
 template<class derived>
 struct InputLayer_Recurrent : Layer_Base_Recurrent<derived> {
 
-	InputLayer_Recurrent() : Layer_Base_Recurrent<derived>(0) {}
+    InputLayer_Recurrent() : Layer_Base_Recurrent<derived>(0) {}
 
-	mat_view* y = new mat_view[this->max_bptt];
+    mat_view* y = new mat_view[this->max_bptt];
 
-	template<class tensor> auto forward_propagation(const tensor& x) {
-		y[this->curr_time_stamp] = mat_view(x);
-		return this->next().forward_propagation(y[this->curr_time_stamp]);
-	}
+    template<class tensor> auto forward_propagation(const tensor& x) {
+        y[this->curr_time_stamp] = mat_view(x);
+        return this->next().forward_propagation(y[this->curr_time_stamp]);
+    }
 
-	template<class tensor> auto forward_propagation_express(const tensor& x) const {
-		return this->next().forward_propagation_express(x);
-	}
+    template<class tensor> auto forward_propagation_express(const tensor& x) const {
+        return this->next().forward_propagation_express(x);
+    }
 
-	template<class tensor> auto back_propagation(const tensor& dy) {
-		return dy;
-	}
+    template<class tensor> auto back_propagation(const tensor& dy) {
+        return dy;
+    }
 
-	void set_batch_size(int x) {
-		this->next().set_batch_size(x);
-	}
+    void set_batch_size(int x) {
+        this->next().set_batch_size(x);
+    }
 
-	void update_weights() {
-		this->next().update_weights();
-	}
-	void clear_stored_delta_gradients() {
-		this->next().clear_stored_delta_gradients();
-	}
-	void write(std::ofstream& os) {
-		this->next().write(os);
-	}
-	void read(std::ifstream& is) {
-		this->next().read(is);
-	}
-	void set_learning_rate(fp_type learning_rate) {
-		this->next().set_learning_rate(learning_rate);
-	}
+    void update_weights() {
+        this->next().update_weights();
+    }
+    void clear_stored_delta_gradients() {
+        this->next().clear_stored_delta_gradients();
+    }
+    void write(std::ofstream& os) {
+        this->next().write(os);
+    }
+    void read(std::ifstream& is) {
+        this->next().read(is);
+    }
+    void set_learning_rate(fp_type learning_rate) {
+        this->next().set_learning_rate(learning_rate);
+    }
 
 };
 

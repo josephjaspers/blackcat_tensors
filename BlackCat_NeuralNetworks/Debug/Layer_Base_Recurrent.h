@@ -16,34 +16,34 @@ namespace NN {
 template<class derived>
 class Layer_Base_Recurrent : Layer_Base<derived> {
 
-	int max_bptt = 36;
-	int curr_time_stamp = 0;
+    int max_bptt = 36;
+    int curr_time_stamp = 0;
 
-	Layer_Base_Recurrent(int inputs) : Layer_Base<derived>(inputs) {
-		static_assert(!std::is_same<void, std::declval<derived>().set_max_bptt_length(0)>::value,
-				"RECURRENT LAYERS MUST IMPLEMENT void set_max_bptt_length(int ) const");
-	}
+    Layer_Base_Recurrent(int inputs) : Layer_Base<derived>(inputs) {
+        static_assert(!std::is_same<void, std::declval<derived>().set_max_bptt_length(0)>::value,
+                "RECURRENT LAYERS MUST IMPLEMENT void set_max_bptt_length(int ) const");
+    }
 
-	int max_numb_backprop_storages() const {
-		return max_bptt;
-	}
+    int max_numb_backprop_storages() const {
+        return max_bptt;
+    }
 
-	int current_time_stamp() const {
-		return curr_time_stamp;
-	}
+    int current_time_stamp() const {
+        return curr_time_stamp;
+    }
 
-	void time_forward() const {
-		curr_time_stamp += 1;
-		curr_time_stamp %= max_bptt;
-	}
+    void time_forward() const {
+        curr_time_stamp += 1;
+        curr_time_stamp %= max_bptt;
+    }
 
-	void time_backward() const {
-		curr_time_stamp -= 1;
+    void time_backward() const {
+        curr_time_stamp -= 1;
 
-		if (curr_time_stamp < 0)
-			curr_time_stamp = max_bptt;
+        if (curr_time_stamp < 0)
+            curr_time_stamp = max_bptt;
 
-	}
+    }
 
 };
 

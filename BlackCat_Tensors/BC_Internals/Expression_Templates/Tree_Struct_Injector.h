@@ -15,15 +15,15 @@ namespace tree {
 template<class tensor_core, int alpha_modifier_ = 1, int beta_modifier_= 0>
 struct injector {
 
-	injector(tensor_core& array_) : array(array_) {}
+    injector(tensor_core& array_) : array(array_) {}
 
-	tensor_core& array;
+    tensor_core& array;
 
-	operator const tensor_core& () const { return array; }
-	operator  	   tensor_core& ()       { return array; }
+    operator const tensor_core& () const { return array; }
+    operator         tensor_core& ()       { return array; }
 
-	const tensor_core& data() const { return array; }
-		  tensor_core& data()  	    { return array; }
+    const tensor_core& data() const { return array; }
+          tensor_core& data()          { return array; }
 };
 }
 }

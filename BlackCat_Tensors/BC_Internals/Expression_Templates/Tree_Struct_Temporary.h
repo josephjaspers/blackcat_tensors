@@ -19,7 +19,7 @@ namespace tree {
 
 template<class data_t>
 struct temporary : data_t {
-	using data_t::data_t;
+    using data_t::data_t;
 };
 
 }

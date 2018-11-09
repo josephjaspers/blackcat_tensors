@@ -15,16 +15,16 @@ namespace stl {
 
 
 enum direction {
-	forward = 1,
-	reverse = -1
+    forward = 1,
+    reverse = -1
 };
 
 struct scalar_access {
 
-	template<class tensor_t>
-	static auto& impl(tensor_t& tensor, int index) {
-		return tensor.memptr()[index];
-	}
+    template<class tensor_t>
+    static auto& impl(tensor_t& tensor, int index) {
+        return tensor.memptr()[index];
+    }
 };
 }
 }

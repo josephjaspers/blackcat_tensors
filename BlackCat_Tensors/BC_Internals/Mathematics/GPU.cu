@@ -27,22 +27,22 @@ namespace BC {
 namespace module {
 
 class GPU :
-	public GPU_Misc<GPU>,
-	public GPU_Utility<GPU>,
-	public GPU_BLAS<GPU>,
-	public GPU_Constants<GPU>,
-	public GPU_Evaluator<GPU>,
-	public GPU_Algorithm<GPU> {
+    public GPU_Misc<GPU>,
+    public GPU_Utility<GPU>,
+    public GPU_BLAS<GPU>,
+    public GPU_Constants<GPU>,
+    public GPU_Evaluator<GPU>,
+    public GPU_Algorithm<GPU> {
 public:
 
-	static constexpr int CUDA_BASE_THREADS = 256;
+    static constexpr int CUDA_BASE_THREADS = 256;
 
-	static int blocks(int size) {
-		return 1 + (int)(size / CUDA_BASE_THREADS);
-	}
-	static int threads(int sz = CUDA_BASE_THREADS) {
-		return sz > CUDA_BASE_THREADS ? CUDA_BASE_THREADS : sz;
-	}
+    static int blocks(int size) {
+        return 1 + (int)(size / CUDA_BASE_THREADS);
+    }
+    static int threads(int sz = CUDA_BASE_THREADS) {
+        return sz > CUDA_BASE_THREADS ? CUDA_BASE_THREADS : sz;
+    }
 
 };
 

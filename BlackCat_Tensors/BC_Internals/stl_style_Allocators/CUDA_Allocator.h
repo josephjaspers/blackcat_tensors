@@ -21,37 +21,37 @@ namespace stl {
 
 struct CUDA_Allocator : GPU {
 
-	using mathlib_t = GPU;
+    using mathlib_t = GPU;
 
-	template<typename T>
-	static T*& allocate(T*& t, int sz=1) {
-		cudaMalloc((void**) &t, sizeof(T) * sz);
-		return t;
-	}
+    template<typename T>
+    static T*& allocate(T*& t, int sz=1) {
+        cudaMalloc((void**) &t, sizeof(T) * sz);
+        return t;
+    }
 
-	template<typename T>
-	static void deallocate(T* t) {
-		cudaFree((void*)t);
-	}
-	template<typename T>
-	static void deallocate(T t) {
-		//empty
-	}
+    template<typename T>
+    static void deallocate(T* t) {
+        cudaFree((void*)t);
+    }
+    template<typename T>
+    static void deallocate(T t) {
+        //empty
+    }
 
 
 
-	template<class T>
-	static void HostToDevice(T* t, const T* u, int size = 1) {
-		cudaDeviceSynchronize();
-		cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyHostToDevice);
-		cudaDeviceSynchronize();
-	}
-	template<class T>
-	static void DeviceToHost(T* t, const T* u, int size = 1) {
-		cudaDeviceSynchronize();
-		cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyDeviceToHost);
-		cudaDeviceSynchronize();
-	}
+    template<class T>
+    static void HostToDevice(T* t, const T* u, int size = 1) {
+        cudaDeviceSynchronize();
+        cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyHostToDevice);
+        cudaDeviceSynchronize();
+    }
+    template<class T>
+    static void DeviceToHost(T* t, const T* u, int size = 1) {
+        cudaDeviceSynchronize();
+        cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
+    }
 };
 
 }

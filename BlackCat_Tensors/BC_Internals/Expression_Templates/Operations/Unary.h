@@ -14,16 +14,16 @@ namespace BC {
 namespace internal {
 namespace oper {
 
-	struct negation {
-		template<class lv> __BCinline__ lv operator ()(lv val) const {
-			return -val;
-		}
-	};
-	struct logical {
-		template<class lv> __BCinline__ lv operator ()(lv val) const {
-			return val == 0 ? 0 : 1;
-		}
-	};
+    struct negation {
+        template<class lv> __BCinline__ lv operator ()(lv val) const {
+            return -val;
+        }
+    };
+    struct logical {
+        template<class lv> __BCinline__ lv operator ()(lv val) const {
+            return val == 0 ? 0 : 1;
+        }
+    };
 
 }
 }

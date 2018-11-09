@@ -20,50 +20,50 @@ template<class>
 
 template<class functor_type, class ml>
 struct Unary_Expression<functor_type, oper::transpose<ml>>
-	: Expression_Base<Unary_Expression<functor_type, oper::transpose<ml>>> {
+    : Expression_Base<Unary_Expression<functor_type, oper::transpose<ml>>> {
 
 
-	using scalar_t  = typename functor_type::scalar_t;
-	using allocator_t = typename functor_type::allocator_t;
+    using scalar_t  = typename functor_type::scalar_t;
+    using allocator_t = typename functor_type::allocator_t;
 
-	__BCinline__ static constexpr int DIMS() { return functor_type::DIMS(); }
-	__BCinline__ static constexpr int ITERATOR() { return DIMS() > 1? DIMS() :0; }
+    __BCinline__ static constexpr int DIMS() { return functor_type::DIMS(); }
+    __BCinline__ static constexpr int ITERATOR() { return DIMS() > 1? DIMS() :0; }
 
-	functor_type array;
+    functor_type array;
 
-	Unary_Expression(functor_type p) : array(p) {}
+    Unary_Expression(functor_type p) : array(p) {}
 
-	__BCinline__ const auto inner_shape() const {
-		return l_array<DIMS()>([=](int i) {
-			if (DIMS() >= 2)
-				return i == 0 ? array.cols() : i == 1 ? array.rows() : array.dimension(i);
-			else if (DIMS() == 2)
-				return i == 0 ? array.cols() : i == 1 ? array.rows() : 1;
-			else if (DIMS() == 1)
-				return i == 0 ? array.rows() : 1;
-			else
-				return 1;
-		});
-	}
-	__BCinline__ const auto block_shape() const {
-		return l_array<DIMS()>([=](int i) {
-			return i == 0 ? array.cols() : 1 == 1 ? array.rows() : array.block_dimension(i);
-		});
-	}
-	__BCinline__ auto operator [] (int i) const -> decltype(array[0]) {
-		return array[i];
-	}
-	__BCinline__ int size() const { return array.size(); }
-	__BCinline__ int rows() const { return array.cols(); }
-	__BCinline__ int cols() const { return array.rows(); }
+    __BCinline__ const auto inner_shape() const {
+        return l_array<DIMS()>([=](int i) {
+            if (DIMS() >= 2)
+                return i == 0 ? array.cols() : i == 1 ? array.rows() : array.dimension(i);
+            else if (DIMS() == 2)
+                return i == 0 ? array.cols() : i == 1 ? array.rows() : 1;
+            else if (DIMS() == 1)
+                return i == 0 ? array.rows() : 1;
+            else
+                return 1;
+        });
+    }
+    __BCinline__ const auto block_shape() const {
+        return l_array<DIMS()>([=](int i) {
+            return i == 0 ? array.cols() : 1 == 1 ? array.rows() : array.block_dimension(i);
+        });
+    }
+    __BCinline__ auto operator [] (int i) const -> decltype(array[0]) {
+        return array[i];
+    }
+    __BCinline__ int size() const { return array.size(); }
+    __BCinline__ int rows() const { return array.cols(); }
+    __BCinline__ int cols() const { return array.rows(); }
 
-	__BCinline__ int dimension(int i) const { return i == 0 ? array.cols() : i == 1 ? array.rows() : array.dimension(i); }
-	__BCinline__ int block_dimension(int i) const { return block_shape()[i]; }
+    __BCinline__ int dimension(int i) const { return i == 0 ? array.cols() : i == 1 ? array.rows() : array.dimension(i); }
+    __BCinline__ int block_dimension(int i) const { return block_shape()[i]; }
 
-	template<class... ints>
-	__BCinline__ auto operator ()(int m, int n, ints... integers) const -> decltype(array(n,m)) {
-		return array(n,m, integers...);
-	}
+    template<class... ints>
+    __BCinline__ auto operator ()(int m, int n, ints... integers) const -> decltype(array(n,m)) {
+        return array(n,m, integers...);
+    }
 
 };
 }

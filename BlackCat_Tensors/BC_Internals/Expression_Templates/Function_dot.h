@@ -29,62 +29,62 @@ template<class lv, class rv, class allocator>
 struct Binary_Expression<lv, rv, oper::dot<allocator>>
 : Expression_Base<Binary_Expression<lv, rv,  oper::dot<allocator>>>, BLAS_FUNCTION, Shape<0> {
 
-	using scalar_t  = typename lv::scalar_t;
-	using allocator_t = allocator;
+    using scalar_t  = typename lv::scalar_t;
+    using allocator_t = allocator;
 
-	static constexpr bool transA = blas_feature_detector<lv>::transposed;
-	static constexpr bool transB = blas_feature_detector<rv>::transposed;
-	static constexpr bool lv_scalar = blas_feature_detector<lv>::scalar;
-	static constexpr bool rv_scalar = blas_feature_detector<rv>::scalar;
-	static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
-	static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
+    static constexpr bool transA = blas_feature_detector<lv>::transposed;
+    static constexpr bool transB = blas_feature_detector<rv>::transposed;
+    static constexpr bool lv_scalar = blas_feature_detector<lv>::scalar;
+    static constexpr bool rv_scalar = blas_feature_detector<rv>::scalar;
+    static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
+    static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
 
-	static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
-	static_assert(lv::DIMS() == 1 && (rv::DIMS() == 1 || rv::DIMS() ==0), "DOT DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
-	__BCinline__ static constexpr int DIMS() { return 0; }
-	__BCinline__ static constexpr int ITERATOR() { return 0; }
+    static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
+    static_assert(lv::DIMS() == 1 && (rv::DIMS() == 1 || rv::DIMS() ==0), "DOT DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
+    __BCinline__ static constexpr int DIMS() { return 0; }
+    __BCinline__ static constexpr int ITERATOR() { return 0; }
 
-	lv left;
-	rv right;
+    lv left;
+    rv right;
 
-	 Binary_Expression(lv left, rv right) : left(left), right(right) {}
+     Binary_Expression(lv left, rv right) : left(left), right(right) {}
 
 template<class core, int alpha_mod, int beta_mod>
 void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 
 
-	//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
-	auto& injection = injection_values.data();
+    //get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
+    auto& injection = injection_values.data();
 
-	//evaluate the left and right branches (computes only if necessary)
-	auto X = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left));
-	auto Y = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right));
+    //evaluate the left and right branches (computes only if necessary)
+    auto X = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left));
+    auto Y = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right));
 
-	//allocate the alpha and beta scalars,
-	auto alpha = allocator::static_allocate((scalar_t)alpha_mod);
+    //allocate the alpha and beta scalars,
+    auto alpha = allocator::static_allocate((scalar_t)alpha_mod);
 
-	//call outer product
-	allocator::dot(X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
+    //call outer product
+    allocator::dot(X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
 
-	if (lv_scalar) {
-		auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-		allocator::scalar_mul(injection, alpha, alpha_lv);
-	}
-	if (rv_scalar) {
-		auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-		allocator::scalar_mul(injection, alpha, alpha_rv);
-	}
-	if (beta_mod) {
-		auto beta = allocator::static_allocate((scalar_t)alpha_mod);
-		allocator::scalar_mul(alpha, alpha, beta);
-		allocator::deallocate(beta);
-	}
+    if (lv_scalar) {
+        auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
+        allocator::scalar_mul(injection, alpha, alpha_lv);
+    }
+    if (rv_scalar) {
+        auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
+        allocator::scalar_mul(injection, alpha, alpha_rv);
+    }
+    if (beta_mod) {
+        auto beta = allocator::static_allocate((scalar_t)alpha_mod);
+        allocator::scalar_mul(alpha, alpha, beta);
+        allocator::deallocate(beta);
+    }
 
 
-	//deallocate all the temporaries
-	if (lv_eval) cc(X).deallocate();
-	if (rv_eval) cc(Y).deallocate();
-	allocator::deallocate(alpha);
+    //deallocate all the temporaries
+    if (lv_eval) cc(X).deallocate();
+    if (rv_eval) cc(Y).deallocate();
+    allocator::deallocate(alpha);
 }
 };
 

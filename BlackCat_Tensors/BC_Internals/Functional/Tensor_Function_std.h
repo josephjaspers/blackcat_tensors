@@ -15,22 +15,22 @@ namespace stl {
 template<class derived>
 class Tensor_std_functional {
 
-	auto& as_derived() {
-		return static_cast<derived&>(*this);
-	}
-	auto& as_derived() const {
-		return static_cast<const derived&>(*this);
-	}
+    auto& as_derived() {
+        return static_cast<derived&>(*this);
+    }
+    auto& as_derived() const {
+        return static_cast<const derived&>(*this);
+    }
 
 public:
 
-#define BC_TENSOR_FUNCTIONAL_STD_DEF(functor) 	\
-												\
-												\
-												\
-												\
-												\
-												\
+#define BC_TENSOR_FUNCTIONAL_STD_DEF(functor)     \
+                                                \
+                                                \
+                                                \
+                                                \
+                                                \
+                                                \
 
 };
 }

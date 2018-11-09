@@ -18,36 +18,36 @@
 namespace BC {
 
 //-------------------------------Lightweight array, implemented as a homogeneous tuple-------------------------------//
-	template<int size_, class T>
-	struct array {
-		T value[size_] = { 0 } ;
+    template<int size_, class T>
+    struct array {
+        T value[size_] = { 0 } ;
 
-		__BCinline__ const T& operator [] (int i) const { return value[i]; }
-		__BCinline__ 	   T& operator [] (int i) 		{ return value[i]; }
-		__BCinline__ static constexpr int size() 		{ return size_; }
-	};
+        __BCinline__ const T& operator [] (int i) const { return value[i]; }
+        __BCinline__        T& operator [] (int i)         { return value[i]; }
+        __BCinline__ static constexpr int size()         { return size_; }
+    };
 
-	//---------------------base_case----------------------//
-	template<class T> struct array<0, T> {};
+    //---------------------base_case----------------------//
+    template<class T> struct array<0, T> {};
 
 
-	//---------------------short_hand----------------------//
-	template<class T, class... vals> __BCinline__
-	auto make_array(T front, vals... values) { return array<sizeof...(values) + 1, T> {front, values...}; }//(front, values...); }
+    //---------------------short_hand----------------------//
+    template<class T, class... vals> __BCinline__
+    auto make_array(T front, vals... values) { return array<sizeof...(values) + 1, T> {front, values...}; }//(front, values...); }
 
 
 //-------------------------------Lightweight lambda-wrapper to enable usage of the bracket-operator-------------------------------//
-	template<int dimension, class scalar, class ref>
-	struct lambda_array{
-		ref value;
-		__BCinline__ lambda_array(ref a) : value(a) {}
+    template<int dimension, class scalar, class ref>
+    struct lambda_array{
+        ref value;
+        __BCinline__ lambda_array(ref a) : value(a) {}
 
-		__BCinline__ const scalar operator [](int i) const { return value(i); }
-		__BCinline__ 	   scalar operator [](int i) 		 { return value(i); }
-	};
+        __BCinline__ const scalar operator [](int i) const { return value(i); }
+        __BCinline__        scalar operator [](int i)          { return value(i); }
+    };
 
-	//accepts a lambda that takes a single-integer parameter
-	template<int dimension, class func> __BChd__ auto l_array(func internal) { return lambda_array<dimension, decltype(internal(0)), func>(internal); }
+    //accepts a lambda that takes a single-integer parameter
+    template<int dimension, class func> __BChd__ auto l_array(func internal) { return lambda_array<dimension, decltype(internal(0)), func>(internal); }
 }
 
 

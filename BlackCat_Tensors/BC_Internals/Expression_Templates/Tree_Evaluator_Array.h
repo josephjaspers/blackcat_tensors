@@ -21,25 +21,25 @@ namespace tree {
 template<class T>
 struct evaluator<T, std::enable_if_t<is_array<T>()>>
 {
-	static constexpr bool trivial_blas_evaluation = false;
-	static constexpr bool trivial_blas_injection = false;
-	static constexpr bool non_trivial_blas_injection = false;
+    static constexpr bool trivial_blas_evaluation = false;
+    static constexpr bool trivial_blas_injection = false;
+    static constexpr bool non_trivial_blas_injection = false;
 
-	template<class core, int a, int b> __BChot__
-	static auto linear_evaluation(const T& branch, injector<core, a, b> tensor) {
-		return branch;
-	}
-	template<class core, int a, int b> __BChot__
-	static auto injection(const T& branch, injector<core, a, b> tensor) {
-		return branch;
-	}
+    template<class core, int a, int b> __BChot__
+    static auto linear_evaluation(const T& branch, injector<core, a, b> tensor) {
+        return branch;
+    }
+    template<class core, int a, int b> __BChot__
+    static auto injection(const T& branch, injector<core, a, b> tensor) {
+        return branch;
+    }
 
-	__BChot__ static auto replacement(const T& branch) {
-		return branch;
-	}
-	__BChot__ static void deallocate_temporaries(const T& tmp) {
-		return;
-	}
+    __BChot__ static auto replacement(const T& branch) {
+        return branch;
+    }
+    __BChot__ static void deallocate_temporaries(const T& tmp) {
+        return;
+    }
 };
 
 
