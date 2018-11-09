@@ -40,20 +40,20 @@ public:
     auto data()       { return this->as_derived().memptr(); }
 
     const auto operator [] (int i) const { return slice(i); }
-          auto operator [] (int i)          { return slice(i); }
+          auto operator [] (int i)       { return slice(i); }
 
     struct range { int from, to; };
     const auto operator [] (range r) const { return slice(r.from, r.to); }
-          auto operator [] (range r)        { return slice(r.from, r.to); }
+          auto operator [] (range r)       { return slice(r.from, r.to); }
 
     const auto scalar(int i) const { return make_tensor(internal::make_scalar(internal(), i)); }
-          auto scalar(int i)        { return make_tensor(internal::make_scalar(internal(), i)); }
+          auto scalar(int i)       { return make_tensor(internal::make_scalar(internal(), i)); }
 
-    const auto slice(int i) const  { return make_tensor(internal::make_slice(internal(), i)); }
-          auto slice(int i)        { return make_tensor(internal::make_slice(internal(), i)); }
+    const auto slice(int i) const { return make_tensor(internal::make_slice(internal(), i)); }
+          auto slice(int i)       { return make_tensor(internal::make_slice(internal(), i)); }
 
     const auto slice(int from, int to) const  { return make_tensor(internal::make_ranged_slice(internal(),from,  to)); }
-          auto slice(int from, int to)              { return make_tensor(internal::make_ranged_slice(internal(),from,  to)); }
+          auto slice(int from, int to)        { return make_tensor(internal::make_ranged_slice(internal(),from,  to)); }
 
 
     const auto diag(int index = 0) const {

@@ -138,25 +138,29 @@ class Tensor_Algorithm<Tensor_Base<internal_t>> {
 
     auto begin_() { return this->as_derived().begin(); }
     auto end_() { return this->as_derived().end(); }
-    auto begin_() const { return this->as_derived().begin(); }
-    auto end_() const { return this->as_derived().end(); }
+    auto cbegin_() const { return this->as_derived().begin(); }
+    auto cend_() const { return this->as_derived().end(); }
 
 public:
 
     void fill(scalar_t value)   { BC::alg::fill(as_derived().begin_(), as_derived().end_(), value);}
     void zero()                 { fill(0); }
-    void ones()                    { fill(1); }
+    void ones()                 { fill(1); }
 
     template<class function>
     void for_each(function func) {
         BC::alg::for_each(this->begin_(), this->end_(), func);
     }
+    template<class function>
+	void for_each(function func) const {
+		BC::alg::for_each(this->cbegin_(), this->cend_(), func);
+	}
 
-       void randomize(scalar_t lb=0, scalar_t ub=1)  {
-           static_assert(internal_t::ITERATOR() == 0 || internal_t::ITERATOR() == 1,
-                   "randomize not available to non-continuous tensors");
-           allocator_t::randomize(this->as_derived().internal(), lb, ub);
-       }
+   void randomize(scalar_t lb=0, scalar_t ub=1)  {
+	   static_assert(internal_t::ITERATOR() == 0 || internal_t::ITERATOR() == 1,
+			   	   	   "randomize not available to non-continuous tensors");
+	   allocator_t::randomize(this->as_derived().internal(), lb, ub);
+   }
 
 }; //end__of class 'Tensor_Functions'
 

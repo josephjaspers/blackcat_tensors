@@ -9,11 +9,10 @@
 #ifndef BC_INTERNALS_BC_TENSOR_TENSOR_COMMON_H_
 #define BC_INTERNALS_BC_TENSOR_TENSOR_COMMON_H_
 
-#define BC_ARRAY_ONLY(literal) ;//static_assert(BC::is_array<internal_t>(), "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
+#define BC_ARRAY_ONLY(literal) static_assert(BC::internal::is_array<internal_t>(), "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
 
 #include <type_traits>
 namespace BC {
-
 
 #define __BCfinline__ inline __attribute__((always_inline)) __attribute__((hot))
 
