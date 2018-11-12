@@ -18,30 +18,31 @@ namespace stl {
 template<direction direction, class tensor_t>
 struct Coefficientwise_Iterator  : IteratorBase<Coefficientwise_Iterator<direction, tensor_t>, direction, tensor_t>{
 
+    static_assert(tensor_t::ITERATOR() == 0 || tensor_t::ITERATOR() == 1, "Elementwise-Iterator only available to continuous tensors");
+
     using self = Coefficientwise_Iterator<direction, tensor_t>;
     using parent = IteratorBase<self, direction, tensor_t>;
+
     using iterator_category = std::random_access_iterator_tag;
-    using value_type = std::decay_t<decltype(std::declval<tensor_t&>().memptr()[0])>;
+    using value_type = typename tensor_t::scalar_t;
     using difference_type = int;
-    using pointer = std::decay_t<value_type>*;
+    using pointer =  value_type*;
     using reference = value_type&;
 
     parent::operator=;
 
-//    static_assert(tensor_t::DIMS() > 0, "Iterator not defined for scalar_types");
-    static_assert(tensor_t::ITERATOR() == 0 || tensor_t::ITERATOR() == 1,
-            "Elementwise-Iterator only available to continuous tensors");
+    __BCinline__ Coefficientwise_Iterator(tensor_t tensor_, int index_=0)
+    	: parent(tensor_, index_) {}
 
-    Coefficientwise_Iterator(tensor_t& tensor_, int index_=0)
-    : parent(tensor_, index_) {
-    }
-
-    Coefficientwise_Iterator& operator =(const Coefficientwise_Iterator& iter) {
+    __BCinline__ Coefficientwise_Iterator& operator =(const Coefficientwise_Iterator& iter) {
         this->index = iter.index;
         return *this;
     }
 
-    reference operator*() const { return this->tensor.data()[this->index]; }
+    __BCinline__ auto& operator*() const { return this->tensor[this->index]; }
+    __BCinline__ auto& operator*() { return this->tensor[this->index]; }
+    __BCinline__ auto& operator [] (int i) const { return this->tensor[i]; }
+    __BCinline__ auto& operator [] (int i)       { return this->tensor[i]; }
 };
 
 template<class tensor_t>

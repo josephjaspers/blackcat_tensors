@@ -22,6 +22,8 @@ struct Array_View
 
     using scalar_t = scalar;
     using allocator_t = allocator;
+    using mathlib_t = typename allocator_t::mathlib_t;
+
     const scalar_t* array = nullptr;
 
     Array_View()                    = default;

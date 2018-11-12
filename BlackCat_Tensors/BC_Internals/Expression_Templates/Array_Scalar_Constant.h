@@ -21,6 +21,7 @@ struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<scalar_t_, allocat
 
     using scalar_t = scalar_t_;
     using allocator_t = allocator_t_;
+    using mathlib_t = typename allocator_t::mathlib_t;
 
     __BCinline__ static constexpr int ITERATOR() { return 0; }
     __BCinline__ static constexpr int DIMS()      { return 0; }

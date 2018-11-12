@@ -83,7 +83,7 @@ public:
     }
 
     const auto operator() (int i) const { return scalar(i); }
-          auto operator() (int i)         { return scalar(i); }
+          auto operator() (int i)       { return scalar(i); }
 
 };
 

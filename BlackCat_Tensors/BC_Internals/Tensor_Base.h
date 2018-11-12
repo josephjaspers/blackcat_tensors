@@ -43,7 +43,6 @@ public:
     template<class> friend class Tensor_Base;
     using internal_t::internal_t;
 
-
     using internal_t::DIMS; //required
     using scalar_t    = typename internal_t::scalar_t;
     using allocator_t = typename internal_t::allocator_t;
@@ -61,7 +60,7 @@ public:
     Tensor_Base(       parent&& param) : internal_t(param) {}
 
     template<class U> Tensor_Base(const Tensor_Base<U>&  tensor) : internal_t(tensor.internal()) {}
-    template<class U> Tensor_Base(        Tensor_Base<U>&&  tensor) : internal_t(tensor.internal()) {}
+    template<class U> Tensor_Base(      Tensor_Base<U>&& tensor) : internal_t(tensor.internal()) {}
 
 
     Tensor_Base(copy_parameter tensor) {

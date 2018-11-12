@@ -16,7 +16,8 @@ namespace module {
 namespace stl {
 
 template<direction direction, class tensor_t>
-struct Multidimensional_Iterator : IteratorBase<Multidimensional_Iterator<direction, tensor_t>, direction, tensor_t> {
+struct Multidimensional_Iterator :
+		IteratorBase<Multidimensional_Iterator<direction, tensor_t>, direction, tensor_t&> {
 
     using self =Multidimensional_Iterator<direction, tensor_t>;
     using parent = IteratorBase<self, direction, tensor_t>;
@@ -24,14 +25,15 @@ struct Multidimensional_Iterator : IteratorBase<Multidimensional_Iterator<direct
     using iterator_category = std::random_access_iterator_tag;
     using value_type = decltype(std::declval<tensor_t&>().slice(0));
     using difference_type = int;
-    using pointer = tensor_t&;
     using reference = value_type;
 
-    Multidimensional_Iterator(tensor_t& tensor_, int index_=0) :
+    __BCinline__ Multidimensional_Iterator(tensor_t& tensor_, int index_=0) :
         parent(tensor_, index_) {}
 
     using parent::operator=;
-    value_type operator*() const { return this->tensor[this->index]; }
+    __BCinline__ const value_type operator*() const { return this->tensor[this->index]; }
+    __BCinline__ value_type operator*() { return this->tensor[this->index]; }
+
 };
 
 

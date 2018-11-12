@@ -22,7 +22,7 @@ struct Array_Base : BC_internal_interface<derived>, BC_Array {
     __BCinline__ static constexpr int DIMS() { return DIMENSION; }
     __BCinline__ static constexpr int ITERATOR() { return 0; }
 
-    using self             = derived;
+    using self = derived;
 
 private:
 

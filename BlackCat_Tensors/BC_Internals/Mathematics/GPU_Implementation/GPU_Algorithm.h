@@ -14,17 +14,28 @@
 #include <cstdlib>
 
 
+//forwards methods to thrust implementation
 #define BC_GPU_ALGORITHM_FORWARDER_DEF(function) \
 template<class... args>\
 static auto function (args... parameters){\
-    return thrust:: function (parameters...);\
+    return thrust:: function (thrust::device, parameters...);\
 }
 
-
+//Gives an appropriate error (for algorithms not defined in thrust)
 #define BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(function) \
 template<class... args>  \
 static auto function (args... parameters){ \
     static_assert(sizeof...(args) == 100, "(CUDA) THRUST DOES NOT DEFINE: " #function );\
+}
+
+//Thrust is wonky with stl-style iterators and sorting.
+//For now just send it the pointers.
+//Will need to fix once multidimensional iterators are added.
+//This is simply a tmp-fix hack.
+#define BC_GPU_ALGORITHM_FORWARDER_DEF_2PTR_HACK(function) \
+template<class iter_begin, class iter_end>\
+static auto function (iter_begin begin, iter_end end){\
+    return thrust:: function (thrust::device, &begin[begin.index], &end[end.index]);\
 }
 
 
@@ -92,9 +103,10 @@ struct GPU_Algorithm {
     //do not define any part of partitioning
 
     //Sorting
-    BC_GPU_ALGORITHM_FORWARDER_DEF(is_sorted)
-    BC_GPU_ALGORITHM_FORWARDER_DEF(is_sorted_until)
-    BC_GPU_ALGORITHM_FORWARDER_DEF(sort)
+    BC_GPU_ALGORITHM_FORWARDER_DEF_2PTR_HACK(is_sorted)
+    BC_GPU_ALGORITHM_FORWARDER_DEF_2PTR_HACK(is_sorted_until)
+    BC_GPU_ALGORITHM_FORWARDER_DEF_2PTR_HACK(sort)
+
     BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(partial_sort)
     BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(partial_sort_copy)
     BC_GPU_ALGORITHM_FORWARDER_DEF(stable_sort)
@@ -107,9 +119,9 @@ struct GPU_Algorithm {
     //other
     //merge
     //inplace_merge
-    BC_GPU_ALGORITHM_FORWARDER_DEF(max)
+//    BC_GPU_ALGORITHM_FORWARDER_DEF(max)
     BC_GPU_ALGORITHM_FORWARDER_DEF(max_element)
-    BC_GPU_ALGORITHM_FORWARDER_DEF(min)
+//    BC_GPU_ALGORITHM_FORWARDER_DEF(min)
     BC_GPU_ALGORITHM_FORWARDER_DEF(min_element)
     BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(minmax)
     BC_GPU_ALGORITHM_FORWARDER_DEF(minmax_element)

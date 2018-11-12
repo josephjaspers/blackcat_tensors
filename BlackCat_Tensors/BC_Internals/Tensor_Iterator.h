@@ -67,41 +67,41 @@ namespace module {
         }
         //------------------------elementwise_iterator------------------------//
         auto begin() {
-            return stl::forward_cwise_iterator_begin(as_derived());
+            return stl::forward_cwise_iterator_begin(as_derived().internal());
         }
         auto end() {
-            return stl::forward_cwise_iterator_end(as_derived());
+            return stl::forward_cwise_iterator_end(as_derived().internal());
         }
         const auto cbegin() const {
-            return stl::forward_cwise_iterator_begin(as_derived());
+            return stl::forward_cwise_iterator_begin(as_derived().internal());
         }
         const auto cend() const {
-            return stl::forward_cwise_iterator_end(as_derived());
+            return stl::forward_cwise_iterator_end(as_derived().internal());
         }
         auto rbegin() {
-            return stl::reverse_cwise_iterator_begin(as_derived());
+            return stl::reverse_cwise_iterator_begin(as_derived().internal());
         }
         auto rend() {
-            return stl::reverse_cwise_iterator_end(as_derived());
+            return stl::reverse_cwise_iterator_end(as_derived().internal());
         }
         const auto crbegin() const {
-            return stl::reverse_cwise_iterator_begin(as_derived());
+            return stl::reverse_cwise_iterator_begin(as_derived().internal());
         }
         const auto crend() const {
-            return stl::reverse_cwise_iterator_end(as_derived());
+            return stl::reverse_cwise_iterator_end(as_derived().internal());
         }
         //const versions
         auto begin() const {
-            return stl::forward_cwise_iterator_begin(as_derived());
+            return stl::forward_cwise_iterator_begin(as_derived().internal());
         }
         auto end() const {
-            return stl::forward_cwise_iterator_end(as_derived());
+            return stl::forward_cwise_iterator_end(as_derived().internal());
         }
         auto rbegin() const {
-            return stl::reverse_cwise_iterator_begin(as_derived());
+            return stl::reverse_cwise_iterator_begin(as_derived().internal());
         }
         auto rend() const {
-            return stl::reverse_cwise_iterator_end(as_derived());
+            return stl::reverse_cwise_iterator_end(as_derived().internal());
         }
 
 
@@ -266,7 +266,7 @@ namespace module {
     template<class...params> auto iter(params... ps) {
         return _cwise_forward_iterator(as_derived(), ps...);
     }
-    template<class... params> auto reverse_iterator(params... ps) {
+    template<class... params> auto reverse_iter(params... ps) {
         return _cwise_reverse_iterator(as_derived(), ps...);
     }
 

@@ -20,7 +20,7 @@ struct Array : Array_Base<Array<dimension, T, allocator>, dimension>, public Sha
 
     using scalar_t = T;
     using allocator_t = allocator;
-
+    using mathlib_t =typename allocator_t::mathlib_t;
     __BCinline__ static constexpr int DIMS() { return dimension; }
 
     scalar_t* array = nullptr;
@@ -73,6 +73,7 @@ struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Sh
 
     using scalar_t = T;
     using allocator_t = allocator;
+    using mathlib_t =typename allocator_t::mathlib_t;
 
     __BCinline__ static constexpr int DIMS() { return 0; }
 
