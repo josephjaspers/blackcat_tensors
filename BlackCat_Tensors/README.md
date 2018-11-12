@@ -1,4 +1,4 @@
-Last Updated: Thursday, October 14, 2018
+Last Updated: Thursday, November 11, 2018
 
 BlackCat_Tensors (BCT) is a highly optimized Matrix library designed for NeuralNetwork construction. 
 BCT is designed to support GPU computing (CUDA) and CPU multi-threading (OpenMP).
@@ -332,7 +332,75 @@ https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/B
     tan
     tanh
 
+Supported STD algorithms (forwards to std or thrust implementation):
+        
+    example:
+        BC::Matrix<float> matrix; 
+        BC::max_element(mat.begin(), mat.end()); 
 
+    //--------------------------- find/searcj ---------------------------//
+    all_of
+    any_of
+    none_of
+    for_each
+    count
+    count_if
+    find
+    find_if
+    find_if_not
+    find_end
+    find_first_of
+    adjacent_find
+    search
+    search_n
+
+    //--------------------------- copy and utility ---------------------------//
+    copy
+    copy_if
+    copy_n
+    copy_backward
+    move
+    move_backward
+    fill
+    fill_n
+    transform
+    generate
+    generate_n
+    replace
+    replace_if
+    replace_copy
+    replace_copy_if
+    swap
+    swap_ranges
+    iter_swap
+    reverse
+    reverse_copy
+    rotate
+    rotate_copy
+    random_shuffle
+    //--------------------------- sorting ---------------------------//
+    is_sorted
+    is_sorted_until
+    sort
+    partial_sort
+    partial_sort_copy
+    stable_sort
+    nth_element
+    lower_bound
+    upper_bound
+    binary_search
+    equal_range
+
+    //--------------------------- min/max ---------------------------//
+    max_element
+    min_element
+    minmax_element
+    equal
+    lexicographical_compare
+
+    //--------------------------- numeric ---------------------------//
+    qsort
+    bsearch
 
 
 

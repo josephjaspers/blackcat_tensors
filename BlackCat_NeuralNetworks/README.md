@@ -1,6 +1,8 @@
 Last Updated: June 25th, 2018
 Author: Joseph Jaspers
 
+THIS PROJECT IS ON HOLD. BlackCat_Tensors is currently the primary project. THIS WILL BE REDEVELOPED IN THE FUTURE
+
 BlackCat_NeuralNetworks (BCNN) is a library built on BlackCat_Tensors built for efficiency and user simplicty.
 
 
