@@ -333,9 +333,10 @@ https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/B
     tanh
 
 Supported STD algorithms (forwards to std or thrust implementation):
-    Example
-    BC::Matrix<float> matrix; 
-    BC::max_element(mat.begin(), mat.end()); 
+        
+    example:
+        BC::Matrix<float> matrix; 
+        BC::max_element(mat.begin(), mat.end()); 
 
     //--------------------------- find/searcj ---------------------------//
     all_of
