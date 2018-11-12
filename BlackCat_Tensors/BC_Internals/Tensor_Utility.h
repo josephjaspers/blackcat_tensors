@@ -33,7 +33,7 @@ struct Tensor_Utility<Tensor_Base<internal_t>> {
     using derived = Tensor_Base<internal_t>;
     using scalar  = typename internal_t::scalar_t;
     using allocator_t = typename internal_t::allocator_t;
-    using allocator = typename allocator_t::mathlib_t;
+    using mathlib_t = typename allocator_t::mathlib_t;
 private:
     static constexpr int DIMS() { return derived::DIMS(); }
 
@@ -49,18 +49,18 @@ public:
 
     void print(int precision=8) const {
         BC_ARRAY_ONLY("void print(int precision=8) const");
-        allocator::print(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), DIMS(), precision);
+        allocator_t::print(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), DIMS(), precision);
     }
     void printSparse(int precision=8) const {
         BC_ARRAY_ONLY("void printSparse(int precision=8) const");
-        allocator::printSparse(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), DIMS(), precision);
+        allocator_t::printSparse(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), DIMS(), precision);
     }
 
     void write(std::ofstream& os) const {
         BC_ARRAY_ONLY("write(std::ofstream& os)");
 
         scalar* internal = new scalar[as_derived().size()];
-        allocator::DeviceToHost(internal, as_derived().internal().memptr(), as_derived().size());
+        allocator_t::DeviceToHost(internal, as_derived().internal().memptr(), as_derived().size());
 
         for (int i = 0; i < as_derived().size() - 1; ++i) {
             os << internal[i] << ',';
@@ -74,7 +74,7 @@ public:
         BC_ARRAY_ONLY("void write_tensor_data(std::ofstream& os)");
 
         scalar* internal = new scalar[as_derived().size()];
-        allocator::DeviceToHost(internal, as_derived().internal().memptr(), as_derived().size());
+        allocator_t::DeviceToHost(internal, as_derived().internal().memptr(), as_derived().size());
 
         os << as_derived().dims() << ',';
         for (int i = 0; i < as_derived().dims(); ++i) {
@@ -127,7 +127,7 @@ public:
             if (ss.peek() == ',')
                 ss.ignore();
         }
-            allocator::HostToDevice(as_derived().internal().memptr(), &file_data[0], (unsigned)as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
+            allocator_t::HostToDevice(as_derived().internal().memptr(), &file_data[0], (unsigned)as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
 
     }
 
@@ -176,10 +176,10 @@ public:
 
                 as_derived() = derived(shape);
             }
-            allocator::HostToDevice(as_derived().internal().memptr(), &file_data[file_data[0] + 1],
+            allocator_t::HostToDevice(as_derived().internal().memptr(), &file_data[file_data[0] + 1],
                     as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
         } else {
-            allocator::HostToDevice(as_derived().internal().memptr(), &file_data[0],
+            allocator_t::HostToDevice(as_derived().internal().memptr(), &file_data[0],
                     as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
         }
     }

@@ -46,6 +46,10 @@ struct Basic_Allocator : CPU {
     static void DeviceToHost(T* host_ptr, U* device_ptr, int size=1) {
         CPU::copy(host_ptr, device_ptr, size);
     }
+    template<class T>
+    static T extract(T* data_ptr, int index) {
+    	return data_ptr[index];
+    }
 
 };
 }

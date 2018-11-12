@@ -31,7 +31,7 @@ static auto function (args... parameters){ \
 //Thrust is wonky with stl-style iterators and sorting.
 //For now just send it the pointers.
 //Will need to fix once multidimensional iterators are added.
-//This is simply a tmp-fix hack.
+//This is simply a tmp-fix hence -hack
 #define BC_GPU_ALGORITHM_FORWARDER_DEF_2PTR_HACK(function) \
 template<class iter_begin, class iter_end>\
 static auto function (iter_begin begin, iter_end end){\

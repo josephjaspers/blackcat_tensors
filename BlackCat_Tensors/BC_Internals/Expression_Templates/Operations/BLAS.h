@@ -13,6 +13,7 @@ namespace BC {
 namespace internal {
 namespace oper {
 
+//tags, no definition
 template<class allocator> struct transpose;
 template<class allocator> struct gemm;
 template<class allocator> struct gemv;

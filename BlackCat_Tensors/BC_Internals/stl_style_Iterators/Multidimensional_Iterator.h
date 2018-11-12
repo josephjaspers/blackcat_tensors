@@ -39,7 +39,6 @@ struct Multidimensional_Iterator :
 
 template<class derived_t, typename=std::enable_if_t<derived_t::DIMS() != 1>>
 auto forward_iterator_begin(derived_t& derived) {
-//    std::cout << " iter begin " << derived.data() << std::endl;
      return Multidimensional_Iterator<direction::forward, derived_t>(derived, 0);
 }
 template<class derived_t, typename=std::enable_if_t<derived_t::DIMS() != 1>>

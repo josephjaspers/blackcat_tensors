@@ -13,6 +13,7 @@ namespace BC {
 
 template<class core_lib>
 struct GPU_Constants {
+
     static float* static_allocate(float value) {
         float* t;
         cudaMallocManaged((void**) &t, sizeof(float));

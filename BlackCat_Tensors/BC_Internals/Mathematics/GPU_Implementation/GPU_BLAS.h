@@ -11,16 +11,6 @@
 
 namespace BC{
 
-namespace constants {
-static float* static_allocate(int sz, float value) {
-    float* t;
-    cudaMallocManaged((void**) &t, sizeof(float));
-    cudaMemcpy(t, &value, sizeof(float), cudaMemcpyHostToDevice);
-    return t;
-}
-
-}
-
 template<class core_lib>
 struct GPU_BLAS {
 

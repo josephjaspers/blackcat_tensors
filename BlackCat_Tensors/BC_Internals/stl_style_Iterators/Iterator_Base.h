@@ -24,7 +24,7 @@ struct IteratorBase {
     __BCinline__ operator const derived&() const {
 		return static_cast<derived&>(*this);
 	}
-    __BCinline__ operator 	  derived&() 		{
+    __BCinline__ operator 	  derived&() {
 		return static_cast<derived&>(*this);
 	}
 
@@ -71,8 +71,8 @@ public:
     __BCinline__ Iterator& operator ++ () { index+=direction; return *this; }
     __BCinline__ Iterator& operator -- () { index-=direction; return *this; }
 
-    __BCinline__ Iterator operator ++ (int) { Iterator tmp = *this; index+=direction; return tmp; }
-    __BCinline__ Iterator operator -- (int) { Iterator tmp = *this; index-=direction; return tmp; }
+	__BCinline__ Iterator operator ++(int) { return Iterator(tensor, index++); }
+	__BCinline__ Iterator operator --(int) { return Iterator(tensor, index--); }
 
     __BCinline__ Iterator& operator += (int dist)    { index += dist*direction; return *this; }
     __BCinline__ Iterator& operator -= (int dist)    { index -= dist*direction; return *this; }
@@ -82,8 +82,8 @@ public:
 
     __BCinline__ Iterator& operator += (const Iterator& dist) const { index += dist.index*direction; return *this; }
     __BCinline__ Iterator& operator -= (const Iterator& dist) const { index -= dist.index*direction; return *this; }
-    __BCinline__ Iterator operator + (const Iterator& dist)  const { return Iterator(tensor, index + dist.index*direction); }
-    __BCinline__ Iterator operator - (const Iterator& dist)  const { return Iterator(tensor, index - dist.index*direction); }
+    __BCinline__ Iterator operator + (const Iterator& dist) const { return Iterator(tensor, index + dist.index*direction); }
+    __BCinline__ Iterator operator - (const Iterator& dist) const { return Iterator(tensor, index - dist.index*direction); }
 
 };
 

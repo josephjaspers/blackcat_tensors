@@ -134,7 +134,7 @@ class Tensor_Algorithm<Tensor_Base<internal_t>> {
     using allocator_t   = typename internal_t::allocator_t;
 
      const derived& as_derived() const { return static_cast<const derived&>(*this);  }
-            derived& as_derived()        { return static_cast<      derived&>(*this); }
+           derived& as_derived()       { return static_cast<      derived&>(*this); }
 
     auto begin_() { return this->as_derived().begin(); }
     auto end_() { return this->as_derived().end(); }
@@ -155,12 +155,34 @@ public:
 	void for_each(function func) const {
 		BC::alg::for_each(this->cbegin_(), this->cend_(), func);
 	}
-
+    void sort() {
+    	BC::alg::sort(this->begin_(), this->end_());
+    }
    void randomize(scalar_t lb=0, scalar_t ub=1)  {
 	   static_assert(internal_t::ITERATOR() == 0 || internal_t::ITERATOR() == 1,
 			   	   	   "randomize not available to non-continuous tensors");
 	   allocator_t::randomize(this->as_derived().internal(), lb, ub);
    }
+
+   scalar_t max() {
+	   auto max_index = BC::alg::max_element(this->cbegin_(), this->cend_());
+	   return allocator_t::extract(this->as_derived().memptr(), max_index);
+   }
+   scalar_t min() {
+	   auto min_index = BC::alg::min_element(this->cbegin_(), this->cend_());
+	   return allocator_t::extract(this->as_derived().memptr(), min_index);
+   }
+
+#define BC_TENSOR_ALGORITHM_MEMBER_DEF(function)				  \
+  auto function () const {										  \
+	  return BC::alg:: function (this->cbegin_(), this->cend_()); \
+  }
+
+   BC_TENSOR_ALGORITHM_MEMBER_DEF(all_of)
+   BC_TENSOR_ALGORITHM_MEMBER_DEF(any_of)
+   BC_TENSOR_ALGORITHM_MEMBER_DEF(none_of)
+   BC_TENSOR_ALGORITHM_MEMBER_DEF(max_element)
+   BC_TENSOR_ALGORITHM_MEMBER_DEF(min_element)
 
 }; //end__of class 'Tensor_Functions'
 

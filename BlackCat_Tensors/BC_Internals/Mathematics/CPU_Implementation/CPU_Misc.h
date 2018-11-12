@@ -10,16 +10,6 @@
 
 namespace BC {
 
-/*
- * Defines:
- *
- *     randomize
- *     fill
- *     zero
- *
- */
-
-//TODO DEPRECATE THIS, RANDOMIZATION SHOULD BE MOVED TOWARDS THE STD LIB
 template<class core_lib>
 struct CPU_Misc {
 
@@ -31,28 +21,6 @@ struct CPU_Misc {
         }
  __BC_omp_bar__
     }
-
-
-//    template<class scalar_t>
-//    struct rand_t {
-//
-//        struct rand_handle {
-//            scalar_t operator () (scalar_t lower_bound, scalar_t upper_bound) const {
-//                return ((scalar_t) (std::rand() / ((scalar_t) RAND_MAX + 1)) * (upper_bound - lower_bound)) + lower_bound;
-//            }
-//        };
-//
-//        scalar_t min;
-//        scalar_t max;
-//
-//        rand_handle rand_handle_obj;
-//        rand_t(scalar_t min_, scalar_t max_) : min(min_), max(max_) {}
-//        __BCinline__ auto operator () (scalar_t v) const {
-//
-//            return rand_handle_obj(min,max);
-//        }
-//    };
-
 };
 
 }

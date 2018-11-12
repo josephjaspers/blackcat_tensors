@@ -11,21 +11,20 @@
 
 
 #ifdef _OPENMP
-#ifndef BC_NO_OPENMP
-#define __BC_omp_for__ _Pragma("omp parallel for")
-#define __BC_omp_bar__ _Pragma("omp barrier")
-#endif
+	#ifndef BC_NO_OPENMP
+		#define __BC_omp_for__ _Pragma("omp parallel for")
+		#define __BC_omp_bar__ _Pragma("omp barrier")
+	#endif
 #else
-#define __BC_omp_for__
-#define __BC_omp_bar__
+	#define __BC_omp_for__
+	#define __BC_omp_bar__
 #endif
 
 #ifdef BC_CPP17
-#define BC_DEF_IF_CPP17(code) code
+	#define BC_DEF_IF_CPP17(code) code
 #else
-#define BC_DEF_IF_CPP17(code)
+	#define BC_DEF_IF_CPP17(code)
 #endif
-
 
 //multithreaded algorithms by default
 //#define BC_ALG_SINGLE_PARALLEL_DEFAULT

@@ -1,3 +1,4 @@
+
 /*  Project: BlackCat_Tensors
  *  Author: JosephJaspers
  *  Copyright 2018
@@ -38,8 +39,6 @@ struct CUDA_Allocator : GPU {
         //empty
     }
 
-
-
     template<class T>
     static void HostToDevice(T* t, const T* u, int size = 1) {
         cudaDeviceSynchronize();
@@ -50,6 +49,13 @@ struct CUDA_Allocator : GPU {
     static void DeviceToHost(T* t, const T* u, int size = 1) {
         cudaDeviceSynchronize();
         cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyDeviceToHost);
+        cudaDeviceSynchronize();
+    }
+    template<class T>
+    static T extract(T* data_ptr, int index) {
+    	T host_data;
+    	cudaDeviceSynchronize();
+        cudaMemcpy(host_data, &data_ptr[index], sizeof(T), cudaMemcpyDeviceToHost);
         cudaDeviceSynchronize();
     }
 };
