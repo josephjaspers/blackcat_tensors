@@ -12,7 +12,7 @@
 #include "Array_Base.h"
 
 namespace BC {
-namespace internal {
+namespace et     {
 /*
  * Represents a single_scalar value from a tensor
  */

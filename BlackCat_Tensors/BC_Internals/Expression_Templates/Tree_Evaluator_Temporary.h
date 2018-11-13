@@ -10,7 +10,7 @@
 #define PTEE_TEMPORARY_H_
 
 namespace BC {
-namespace internal {
+namespace et     {
 namespace tree {
 
 

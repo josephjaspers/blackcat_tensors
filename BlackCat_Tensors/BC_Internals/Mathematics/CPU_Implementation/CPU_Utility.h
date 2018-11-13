@@ -18,6 +18,16 @@ namespace BC {
 template<class core_lib>
 struct CPU_Utility {
 
+	template<class T, class U, class V>
+	static void copy(T* to, U* from, V size) {
+		__BC_omp_for__
+		for (int i = 0; i < size; ++i) {
+			to[i] = from[i];
+		}
+
+		__BC_omp_bar__
+	}
+
     template<class T, class is, class os>
     static void print(const T array_ptr, const is inner_shape, const os outer_shape, int numb_dimensions, int print_gap_length) {
         BC::IO::print(array_ptr, inner_shape, outer_shape, numb_dimensions, print_gap_length);

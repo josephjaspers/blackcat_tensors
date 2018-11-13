@@ -25,7 +25,7 @@
 
 
 namespace BC {
-namespace internal {
+namespace et     {
 namespace tree {
 
 

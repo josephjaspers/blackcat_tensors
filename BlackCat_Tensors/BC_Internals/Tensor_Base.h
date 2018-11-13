@@ -50,10 +50,10 @@ public:
     using shaping::operator[];
     using shaping::operator();
 
-    using move_parameter        = std::conditional_t<internal::BC_array_move_constructible<internal_t>(),       self&&, BC::DISABLED<0>>;
-    using copy_parameter        = std::conditional_t<internal::BC_array_copy_constructible<internal_t>(), const self&,  BC::DISABLED<1>>;
-    using move_assign_parameter = std::conditional_t<internal::BC_array_move_assignable<internal_t>(),       self&&, BC::DISABLED<0>>;
-    using copy_assign_parameter = std::conditional_t<internal::BC_array_copy_assignable<internal_t>(), const self&,  BC::DISABLED<1>>;
+    using move_parameter        = std::conditional_t<et::BC_array_move_constructible<internal_t>(),       self&&, BC::DISABLED<0>>;
+    using copy_parameter        = std::conditional_t<et::BC_array_copy_constructible<internal_t>(), const self&,  BC::DISABLED<1>>;
+    using move_assign_parameter = std::conditional_t<et::BC_array_move_assignable<internal_t>(),       self&&, BC::DISABLED<0>>;
+    using copy_assign_parameter = std::conditional_t<et::BC_array_copy_assignable<internal_t>(), const self&,  BC::DISABLED<1>>;
 
     Tensor_Base() = default;
     Tensor_Base(const parent&  param) : internal_t(param) {}

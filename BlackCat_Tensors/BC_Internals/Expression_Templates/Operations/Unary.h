@@ -11,7 +11,7 @@
 #include <cmath>
 
 namespace BC {
-namespace internal {
+namespace et     {
 namespace oper {
 
     struct negation {

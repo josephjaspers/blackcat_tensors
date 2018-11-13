@@ -10,7 +10,7 @@
 #define INJECTION_INFO_H_
 
 namespace BC {
-namespace internal {
+namespace et     {
 namespace tree {
 template<class tensor_core, int alpha_modifier_ = 1, int beta_modifier_= 0>
 struct injector {

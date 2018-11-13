@@ -12,7 +12,7 @@
 
 #include "Internal_Type_Interface.h"
 namespace BC {
-namespace internal {
+namespace et     {
 
 template<class derived>
 struct Expression_Base

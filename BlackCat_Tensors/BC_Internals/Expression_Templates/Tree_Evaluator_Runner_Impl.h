@@ -17,7 +17,7 @@
 #include "Tree_Evaluator_Temporary.h"
 
 namespace BC{
-namespace internal {
+namespace et     {
 namespace tree {
 
 struct Greedy_Evaluator {

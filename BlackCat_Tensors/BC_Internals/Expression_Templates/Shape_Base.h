@@ -12,7 +12,7 @@
 #include "Internal_Common.h"
 
 namespace BC {
-namespace internal {
+namespace et     {
 
 template<class derived>
 class Inner_Shape {

@@ -17,7 +17,7 @@ namespace BC{
 class CPU;
 class GPU;
 
-namespace internal {
+namespace et     {
 namespace tree {
 
 
@@ -28,31 +28,31 @@ template<class> struct scalar_modifer {
         beta = 0,
     };
 };
-template<> struct scalar_modifer<internal::oper::add> {
+template<> struct scalar_modifer<et::oper::add> {
     enum mod {
         alpha = 1,
         beta = 1,
     };
 };
-template<> struct scalar_modifer<internal::oper::sub> {
+template<> struct scalar_modifer<et::oper::sub> {
     enum mod {
         alpha = -1,
         beta = 1
     };
 };
-template<> struct scalar_modifer<internal::oper::add_assign> {
+template<> struct scalar_modifer<et::oper::add_assign> {
     enum mod {
         alpha = 1,
         beta = 1,
     };
 };
-template<> struct scalar_modifer<internal::oper::sub_assign> {
+template<> struct scalar_modifer<et::oper::sub_assign> {
     enum mod {
         alpha = -1,
         beta = 1,
     };
 };
-template<> struct scalar_modifer<internal::oper::assign> {
+template<> struct scalar_modifer<et::oper::assign> {
     enum mod {
         alpha = 1,
         beta = 0,
@@ -73,12 +73,12 @@ template<class T> static constexpr bool is_blas_func() {
 
 template<class T>
 static constexpr bool is_linear_op() {
-    return MTF::seq_contains<T, internal::oper::add, internal::oper::sub>;
+    return MTF::seq_contains<T, et::oper::add, et::oper::sub>;
 }
 
 template<class T>
 static constexpr bool is_nonlinear_op() {
-    return  !MTF::seq_contains<T, internal::oper::add, internal::oper::sub> && !is_blas_func<T>();
+    return  !MTF::seq_contains<T, et::oper::add, et::oper::sub> && !is_blas_func<T>();
 }
 template<class T>
 static constexpr int alpha_of() {

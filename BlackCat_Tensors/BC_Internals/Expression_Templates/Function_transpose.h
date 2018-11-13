@@ -12,7 +12,7 @@
 #include "Expression_Base.h"
 
 namespace BC {
-namespace internal {
+namespace et     {
 namespace oper {
 template<class>
  class transpose;

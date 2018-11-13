@@ -13,7 +13,7 @@
 #include "Array.h"
 
 namespace BC {
-namespace internal {
+namespace et     {
 
 template<int dimension, class scalar, class allocator>
 struct Array_Shared
@@ -61,17 +61,17 @@ struct Array_Shared
 };
 
     template<int x, class s, class a>
-    struct BC_array_move_constructible_overrider<internal::Array_Shared<x,s,a>> {
+    struct BC_array_move_constructible_overrider<et::Array_Shared<x,s,a>> {
         static constexpr bool boolean = true;
     };
 
     template<int x, class s, class a>
-    struct BC_array_copy_constructible_overrider<internal::Array_Shared<x,s,a>> {
+    struct BC_array_copy_constructible_overrider<et::Array_Shared<x,s,a>> {
         static constexpr bool boolean = true; //shared doesn't actually copy
     };
 
     template<int x, class s, class a>
-    struct BC_array_move_assignable_overrider<internal::Array_Shared<x,s,a>> {
+    struct BC_array_move_assignable_overrider<et::Array_Shared<x,s,a>> {
         static constexpr bool boolean = true;
     };
     template<int d, class s, class a> struct BC_lvalue_type_overrider<Array_Shared<d,s,a>> {

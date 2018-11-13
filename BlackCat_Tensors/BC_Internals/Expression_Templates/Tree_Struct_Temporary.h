@@ -10,7 +10,7 @@
 #define TEMPORARY_ARRAY_H_
 
 namespace BC {
-namespace internal {
+namespace et     {
 namespace tree {
 
 /*

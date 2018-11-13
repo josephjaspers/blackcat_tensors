@@ -13,7 +13,7 @@
 
 namespace BC {
 class CPU;
-namespace internal {
+namespace et     {
 
 //identical to Array_Scalar, though the scalar is allocated on the stack opposed to heap
 template<class scalar_t_, class allocator_t_>

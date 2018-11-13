@@ -12,7 +12,7 @@
 #include "Array_Base.h"
 
 namespace BC {
-namespace internal {
+namespace et     {
 
 template<class PARENT>
 struct Array_Strided_Vector : Array_Base<Array_Strided_Vector<PARENT>, 1>, Shape<1> {

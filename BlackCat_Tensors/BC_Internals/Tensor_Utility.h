@@ -169,7 +169,7 @@ public:
             }
             if (overrideDimensions) {
 
-                internal::Shape<derived::DIMS()> shape;
+                et::Shape<derived::DIMS()> shape;
                 for (int i = 0; i < derived::DIMS(); ++i) {
                     shape.is()[i] = (int) file_data[i + 1];
                 }

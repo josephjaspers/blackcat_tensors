@@ -12,7 +12,7 @@
 #include "Array_Base.h"
 
 namespace BC {
-namespace internal {
+namespace et     {
 
 //Floored decrement just returns the max(param - 1, 0)
 

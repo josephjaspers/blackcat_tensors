@@ -10,7 +10,7 @@
 #define BLAS_H_
 
 namespace BC {
-namespace internal {
+namespace et     {
 namespace oper {
 
 //tags, no definition

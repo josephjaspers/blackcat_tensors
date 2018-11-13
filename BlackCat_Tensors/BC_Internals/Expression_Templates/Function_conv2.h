@@ -17,7 +17,7 @@
 #include "Tree_Evaluator_Runner.h"
 
 namespace BC {
-namespace internal {
+namespace et     {
 namespace oper {
 template<int dimension, class ml> class conv : public BLAS_FUNCTION {};
 }

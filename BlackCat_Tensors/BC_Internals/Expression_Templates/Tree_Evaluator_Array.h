@@ -13,7 +13,7 @@
 #include "Array_Base.h"
 
 namespace BC {
-namespace internal {
+namespace et     {
 namespace tree {
 
 //disable default implementation (specialize for each type to ensure correct compilation)

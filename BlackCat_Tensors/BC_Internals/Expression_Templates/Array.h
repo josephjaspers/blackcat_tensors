@@ -14,7 +14,7 @@
 namespace BC {
 template<class> class Evaluator;
 
-namespace internal {
+namespace et     {
 template<int dimension, class T, class allocator>
 struct Array : Array_Base<Array<dimension, T, allocator>, dimension>, public Shape<dimension> {
 
@@ -121,7 +121,7 @@ template<class T> struct is_array_core_impl {
     static constexpr bool conditional = false;
 };
 template<int d, class T, class ml>
-struct is_array_core_impl<internal::Array<d, T, ml>> {
+struct is_array_core_impl<et::Array<d, T, ml>> {
     static constexpr bool conditional = true;
 };
 template<class T> static constexpr bool is_array_core() { return is_array_core_impl<T>::conditional; }

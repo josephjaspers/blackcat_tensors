@@ -29,7 +29,7 @@ struct Coefficientwise_Iterator  : IteratorBase<Coefficientwise_Iterator<directi
     using pointer =  value_type*;
     using reference = value_type&;
 
-    parent::operator=;
+    using parent::operator=;
 
     __BCinline__ Coefficientwise_Iterator(tensor_t tensor_, int index_=0)
     	: parent(tensor_, index_) {}

@@ -11,7 +11,7 @@
 //#include "Array_Base.h"
 //
 //namespace BC {
-//namespace internal {
+//namespace et     {
 //
 //enum upLo {
 //    up = 1,

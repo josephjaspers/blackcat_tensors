@@ -12,7 +12,7 @@
 
 #include "Array_Base.h"
 namespace BC {
-namespace internal {
+namespace et     {
 
 template<class PARENT>
 struct Array_Format

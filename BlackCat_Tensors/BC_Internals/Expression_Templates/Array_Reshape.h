@@ -12,7 +12,7 @@
 #include "Array_Base.h"
 
 namespace BC {
-namespace internal {
+namespace et     {
 /*
  * Accepts an a tensor_core type wrapped in the new_tensor
  *

@@ -12,7 +12,7 @@
 #include "Expression_Base.h"
 
 namespace BC {
-namespace internal {
+namespace et     {
 template<class lv, class rv, class operation>
 struct Binary_Expression : public Expression_Base<Binary_Expression<lv, rv, operation>>, public operation {
 

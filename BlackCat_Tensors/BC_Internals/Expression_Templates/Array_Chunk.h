@@ -12,7 +12,7 @@
 #include "Array_Base.h"
 
 namespace BC {
-namespace internal {
+namespace et     {
 
 template<int dimension>
 struct Array_Chunk  {
@@ -44,7 +44,7 @@ struct Array_Chunk  {
         __BCinline__ int leading_dimension(int i) const { return DIMS() == 0 ? 1 : parent.leading_dimension(i); }
 
         __BCinline__ const auto memptr() const { return array; }
-        __BCinline__       auto memptr()          { return array; }
+        __BCinline__       auto memptr()       { return array; }
     };
 };
 

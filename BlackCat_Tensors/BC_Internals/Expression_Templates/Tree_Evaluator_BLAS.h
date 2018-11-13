@@ -25,7 +25,7 @@ Project: BlackCat_Tensors
 #include "Expression_Binary.h"
 
 namespace BC {
-namespace internal {
+namespace et     {
 namespace tree {
 
 
@@ -50,7 +50,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
     //if no replacement is used yet, auto inject
     __BChot__
     static auto replacement(const Binary_Expression<lv, rv, op>& branch) {
-        auto tmp =  temporary<internal::Array<branch_t::DIMS(), scalar_of<branch_t>, allocator_of<branch_t>>>(branch.inner_shape());
+        auto tmp =  temporary<et::Array<branch_t::DIMS(), scalar_of<branch_t>, allocator_of<branch_t>>>(branch.inner_shape());
         branch.eval(injector<std::decay_t<decltype(tmp)>, 1, 0>(tmp));
         return tmp;
     }

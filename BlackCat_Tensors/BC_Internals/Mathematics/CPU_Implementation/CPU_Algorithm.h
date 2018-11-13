@@ -50,7 +50,7 @@ struct CPU_Algorithm {
     BC_CPU_ALGORITHM_FORWARDER_DEF(search_n)
 
     //modifying sequences
-    BC_CPU_ALGORITHM_FORWARDER_DEF(copy)
+//    BC_CPU_ALGORITHM_FORWARDER_DEF(copy)
     BC_CPU_ALGORITHM_FORWARDER_DEF(copy_if)
     BC_CPU_ALGORITHM_FORWARDER_DEF(copy_n)
     BC_CPU_ALGORITHM_FORWARDER_DEF(copy_backward)

@@ -14,7 +14,7 @@
 
 
 namespace BC {
-namespace internal {
+namespace et     {
 //identical to Array_Scalar, though the scalar is allocated on the stack opposed to heap
 template<class scalar_t_, class allocator_t_>
 struct Rand_Constant : Shape<0>, Array_Base<Rand_Constant<scalar_t_, allocator_t_>, 0>{

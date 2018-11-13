@@ -10,7 +10,7 @@
 #define BLACKCAT_INTERNAL_FORWARD_DECLS_H_
 #include <type_traits>
 namespace BC {
-namespace internal {
+namespace et     {
 
 template<class,class,class> class Binary_Expression;
 template<class,class>        class Unary_Expression;

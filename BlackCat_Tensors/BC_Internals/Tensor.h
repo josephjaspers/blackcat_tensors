@@ -36,7 +36,7 @@ using Basic_Allocator = module::stl::Basic_Allocator;
 #endif
 
 template<int dimension, class scalar_t, class allocator_t=alloc_t>
-using Tensor = Tensor_Base<internal::Array<dimension, scalar_t, allocator_t>>;
+using Tensor = Tensor_Base<et::Array<dimension, scalar_t, allocator_t>>;
 
 template<class scalar_t, class allocator_t = alloc_t> using Scalar = Tensor<0, scalar_t, allocator_t>;
 template<class scalar_t, class allocator_t = alloc_t> using Vector = Tensor<1, scalar_t, allocator_t>;
@@ -44,7 +44,7 @@ template<class scalar_t, class allocator_t = alloc_t> using Matrix = Tensor<2, s
 template<class scalar_t, class allocator_t = alloc_t> using Cube   = Tensor<3, scalar_t, allocator_t>;
 
 template<int dimension, class scalar_t, class allocator_t=alloc_t>
-using Tensor_View = Tensor_Base<internal::Array_View<dimension, scalar_t, allocator_t>>;
+using Tensor_View = Tensor_Base<et::Array_View<dimension, scalar_t, allocator_t>>;
 
 template<class scalar_t, class allocator_t = alloc_t> using Scalar_View = Tensor_View<0, scalar_t, allocator_t>;
 template<class scalar_t, class allocator_t = alloc_t> using Vector_View = Tensor_View<1, scalar_t, allocator_t>;
@@ -52,7 +52,7 @@ template<class scalar_t, class allocator_t = alloc_t> using Matrix_View = Tensor
 template<class scalar_t, class allocator_t = alloc_t> using Cube_View   = Tensor_View<3, scalar_t, allocator_t>;
 
 template<int dimension, class scalar_t, class allocator_t=alloc_t>
-using Tensor_Shared = Tensor_Base<internal::Array_Shared<dimension, scalar_t, allocator_t>>;
+using Tensor_Shared = Tensor_Base<et::Array_Shared<dimension, scalar_t, allocator_t>>;
 
 template<class scalar_t, class allocator_t = alloc_t> using Scalar_Shared = Tensor_Shared<0, scalar_t, allocator_t>;
 template<class scalar_t, class allocator_t = alloc_t> using Vector_Shared = Tensor_Shared<1, scalar_t, allocator_t>;

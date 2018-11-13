@@ -13,7 +13,7 @@
 #include "Shape_Base.h"
 
 namespace BC {
-namespace internal {
+namespace et     {
 template<int dims>
 struct Shape : Shape_Base<Shape<dims>> {
 

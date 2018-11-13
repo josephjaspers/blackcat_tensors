@@ -12,7 +12,7 @@
 #include "Tree_Evaluator_Common.h"
 
 namespace BC{
-namespace internal {
+namespace et     {
 namespace tree {
 
 template<class array_t, class op>
@@ -38,7 +38,7 @@ struct evaluator<Unary_Expression<array_t, op>>
     struct trivial {
         __BChot__ static auto impl(const Unary_Expression<array_t, op>& branch) {
             using branch_t = Unary_Expression<array_t, op>;
-            auto tmp =  temporary<internal::Array<branch_t::DIMS(), scalar_of<branch_t>, allocator_of<branch_t>>>(branch.inner_shape());
+            auto tmp =  temporary<et::Array<branch_t::DIMS(), scalar_of<branch_t>, allocator_of<branch_t>>>(branch.inner_shape());
             return injection(branch, tmp);
         }
     };

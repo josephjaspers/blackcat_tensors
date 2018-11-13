@@ -12,7 +12,7 @@
 #include "Expression_Base.h"
 
 namespace BC {
-namespace internal {
+namespace et     {
 template<class value, class operation>
 struct Unary_Expression : public Expression_Base<Unary_Expression<value, operation>>, public operation {
 

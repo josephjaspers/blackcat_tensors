@@ -12,7 +12,7 @@
 #include "../Internal_Common.h"
 
 namespace BC {
-namespace internal {
+namespace et     {
 namespace oper {
 template<class T> struct rm_const { using type = T; };
 template<class T> struct rm_const<const T&> { using type = T&; };

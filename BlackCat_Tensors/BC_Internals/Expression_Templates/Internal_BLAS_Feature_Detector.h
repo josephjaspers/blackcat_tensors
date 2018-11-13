@@ -12,7 +12,7 @@
 #include "Internal_Type_Traits.h"
 
 namespace BC {
-namespace internal {
+namespace et     {
 
 enum BLAS_format {
     std,
@@ -83,7 +83,7 @@ template<class deriv> struct blas_feature_detector<deriv, enable_if_core<deriv>>
 
 ////IF TRANSPOSE
 template<class deriv, class ml>
-struct blas_feature_detector<internal::Unary_Expression<deriv, oper::transpose<ml>>, enable_if_core<deriv>> {
+struct blas_feature_detector<et::Unary_Expression<deriv, oper::transpose<ml>>, enable_if_core<deriv>> {
     static constexpr bool evaluate = false;
     static constexpr bool transposed = true;
     static constexpr bool scalar = false;

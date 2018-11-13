@@ -22,7 +22,7 @@ auto gd(const tensor_t& tensor) {
 }
 
 
-static const BC::internal::Shape<0> NULL_TENSOR = BC::internal::Shape<0>();
+static const BC::et::Shape<0> NULL_TENSOR = BC::et::Shape<0>();
 
 //template<class derived>
 class Layer_Base {

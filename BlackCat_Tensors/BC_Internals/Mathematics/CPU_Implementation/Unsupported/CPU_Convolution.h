@@ -10,12 +10,12 @@
 //
 //namespace BC {
 //struct CPU;
-//namespace internal {
+//namespace et     {
 //template<int dimension, class scalar_t,class allocator> class Array;
 //}
 //
 //template<int dimension, class scalar_t>
-//using CPU_Array = BC::internal::Array<dimension, scalar_t, CPU>;
+//using CPU_Array = BC::et::Array<dimension, scalar_t, CPU>;
 //
 //
 //template<class core_lib>
