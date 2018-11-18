@@ -20,14 +20,14 @@ class GPU_Evaluator {
 
 public:
     template<int d>
-    struct dimension {
+    struct nd_evaluator_func {
         struct n1 { template<class T> static void eval(T to) { gpu_impl::eval<<<blocks(to.size()),threads()>>>(to);   }};
         struct n2 { template<class T> static void eval(T to) { gpu_impl::eval2d<<<blocks(to.size()),threads()>>>(to); }};
         struct n3 { template<class T> static void eval(T to) { gpu_impl::eval3d<<<blocks(to.size()),threads()>>>(to); }};
         struct n4 { template<class T> static void eval(T to) { gpu_impl::eval4d<<<blocks(to.size()),threads()>>>(to); }};
         struct n5 { template<class T> static void eval(T to) { gpu_impl::eval5d<<<blocks(to.size()),threads()>>>(to); }};
         using run = std::conditional_t<(d <= 1), n1,
-                        std::conditional_t< d ==2, n2,
+                        std::conditional_t< d == 2, n2,
                             std::conditional_t< d == 3, n3,
                                 std::conditional_t< d == 4, n4, n5>>>>;
 
@@ -41,7 +41,8 @@ public:
 
     template<int d, class expr_t>
     static void nd_evaluator(expr_t expr) {
-        dimension<d>::eval(expr);
+    	std::cout << " calling evaluate " << d << std::endl;
+    	nd_evaluator_func<d>::eval(expr);
     }
 
 

@@ -33,7 +33,7 @@ struct Array_Chunk  {
         PARENT parent;
         scalar_t* array;
 
-        template<class... integers>
+        template<class... integers> __BCinline__
         implementation(PARENT parent, BC::array<PARENT::DIMS(), int> index, BC::array<dimension, int> shape)
         :  Shape<dimension>(shape),
            parent(parent),

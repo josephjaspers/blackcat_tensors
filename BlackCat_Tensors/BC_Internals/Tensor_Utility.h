@@ -220,7 +220,11 @@ public:
         std::cout << std::endl;
     }
 };
+}
 
+template<class internal_t>
+std::iostream& operator << (std::iostream io, const Tensor_Base<internal_t>& tensor) {
+	std::string str_form;
 }
 }
 

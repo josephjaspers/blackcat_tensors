@@ -15,13 +15,12 @@ namespace BC {
 namespace module {
 namespace stl {
 
-template<direction direction, class tensor_t>
-struct Coefficientwise_Iterator  : IteratorBase<Coefficientwise_Iterator<direction, tensor_t>, direction, tensor_t>{
+template<direction direction, class tensor_t_>
+struct Coefficientwise_Iterator {
 
-    static_assert(tensor_t::ITERATOR() == 0 || tensor_t::ITERATOR() == 1, "Elementwise-Iterator only available to continuous tensors");
-
+	using tensor_t = tensor_t_;
     using self = Coefficientwise_Iterator<direction, tensor_t>;
-    using parent = IteratorBase<self, direction, tensor_t>;
+    using Iterator = self;
 
     using iterator_category = std::random_access_iterator_tag;
     using value_type = typename tensor_t::scalar_t;
@@ -29,15 +28,67 @@ struct Coefficientwise_Iterator  : IteratorBase<Coefficientwise_Iterator<directi
     using pointer =  value_type*;
     using reference = value_type&;
 
-    using parent::operator=;
 
-    __BCinline__ Coefficientwise_Iterator(tensor_t tensor_, int index_=0)
-    	: parent(tensor_, index_) {}
+    tensor_t tensor;
+    int index;
+
+    __BCinline__ Coefficientwise_Iterator(tensor_t tensor_, int index_=0) :
+	tensor(tensor_), index(index_) {}
 
     __BCinline__ Coefficientwise_Iterator& operator =(const Coefficientwise_Iterator& iter) {
         this->index = iter.index;
         return *this;
     }
+
+#define BC_Iter_Compare(sign, rev)                          \
+	__BCinline__											\
+    bool operator sign (const Iterator& iter) {             \
+        if (direction == direction::forward)                \
+            return index sign iter.index;                   \
+        else                                                \
+            return index rev iter.index;                    \
+    }                                                       \
+    __BCinline__ 											\
+    bool operator sign (int p_index) {                      \
+        if (direction == direction::forward)                \
+            return index sign p_index;                      \
+        else                                                \
+            return index rev  p_index;                      \
+    }
+
+    BC_Iter_Compare(<, >)
+    BC_Iter_Compare(>, <)
+    BC_Iter_Compare(<=, >=)
+    BC_Iter_Compare(>=, <=)
+
+    __BCinline__ operator int () const { return index; }
+
+    __BCinline__ bool operator == (const Iterator& iter) {
+        return index == iter.index;
+    }
+    __BCinline__ bool operator != (const Iterator& iter) {
+        return index != iter.index;
+    }
+
+    __BCinline__ Iterator& operator =  (int index_) { this->index = index_;  return *this; }
+
+    __BCinline__ Iterator& operator ++ () { index+=direction; return *this; }
+    __BCinline__ Iterator& operator -- () { index-=direction; return *this; }
+
+	__BCinline__ Iterator operator ++(int) { return Iterator(tensor, index++); }
+	__BCinline__ Iterator operator --(int) { return Iterator(tensor, index--); }
+
+    __BCinline__ Iterator& operator += (int dist)    { index += dist*direction; return *this; }
+    __BCinline__ Iterator& operator -= (int dist)    { index -= dist*direction; return *this; }
+
+    __BCinline__ Iterator operator + (int dist) const { return Iterator(tensor, index + dist*direction); }
+    __BCinline__ Iterator operator - (int dist) const { return Iterator(tensor, index - dist*direction); }
+
+    __BCinline__ Iterator& operator += (const Iterator& dist) const { index += dist.index*direction; return *this; }
+    __BCinline__ Iterator& operator -= (const Iterator& dist) const { index -= dist.index*direction; return *this; }
+    __BCinline__ Iterator operator + (const Iterator& dist) const { return Iterator(tensor, index + dist.index*direction); }
+    __BCinline__ Iterator operator - (const Iterator& dist) const { return Iterator(tensor, index - dist.index*direction); }
+
 
     __BCinline__ auto& operator*() const { return this->tensor[this->index]; }
     __BCinline__ auto& operator*() { return this->tensor[this->index]; }

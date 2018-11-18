@@ -78,7 +78,8 @@ template<typename T> __global__  static void eval2d(T t) {
 template<typename T> __global__ static void eval3d(T t) {
     int k = blockIdx.z * blockDim.z + threadIdx.z;
     for (; k < t.dimension(2); k += blockDim.z * gridDim.z) {
-        int n = blockIdx.y * blockDim.y + threadIdx.y;
+
+    	int n = blockIdx.y * blockDim.y + threadIdx.y;
         for (; n < t.cols(); n += blockDim.y * gridDim.y) {
 
             int m = blockIdx.x * blockDim.x + threadIdx.x;

@@ -15,13 +15,13 @@
 #include <cuda.h>
 
 #include "Print.h"
-#include "GPU_Implementation/GPU_impl.cu"
-#include "GPU_Implementation/GPU_BLAS.h"
-#include "GPU_Implementation/GPU_Misc.h"
-#include "GPU_Implementation/GPU_Utility.h"
-#include "GPU_Implementation/GPU_Constants.h"
-#include "GPU_Implementation/GPU_Evaluator.h"
-#include "GPU_Implementation/GPU_Algorithm.h"
+#include "gpu_implementation/GPU_impl.cu"
+#include "gpu_implementation/GPU_BLAS.h"
+#include "gpu_implementation/GPU_Misc.h"
+#include "gpu_implementation/GPU_Utility.h"
+#include "gpu_implementation/GPU_Constants.h"
+#include "gpu_implementation/GPU_Evaluator.h"
+#include "gpu_implementation/GPU_Algorithm.h"
 
 namespace BC {
 namespace module {

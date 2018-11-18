@@ -12,13 +12,13 @@
 #include "Print.h"
 
 #include "Math_Library_Directives.h"
-#include "CPU_Implementation/CPU_Utility.h"
-#include "CPU_Implementation/CPU_Misc.h"
-#include "CPU_Implementation/CPU_BLAS.h"
-#include "CPU_Implementation/CPU_BLAS.h"
-#include "CPU_Implementation/CPU_Constants.h"
-#include "CPU_Implementation/CPU_Evaluator.h"
-#include "CPU_Implementation/CPU_Algorithm.h"
+#include "cpu_implementation/CPU_Utility.h"
+#include "cpu_implementation/CPU_Misc.h"
+#include "cpu_implementation/CPU_BLAS.h"
+#include "cpu_implementation/CPU_BLAS.h"
+#include "cpu_implementation/CPU_Constants.h"
+#include "cpu_implementation/CPU_Evaluator.h"
+#include "cpu_implementation/CPU_Algorithm.h"
 
 
 namespace BC {
