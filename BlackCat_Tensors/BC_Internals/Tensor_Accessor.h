@@ -10,13 +10,13 @@
 #define TENSOR_SHAPING_H_
 
 #include "Tensor_Common.h"
-#include "Expression_Templates/Array_Slice.h"
-#include "Expression_Templates/Array_Slice_Range.h"
-#include "Expression_Templates/Array_Scalar.h"
-#include "Expression_Templates/Array_Chunk.h"
-#include "Expression_Templates/Array_Reshape.h"
-#include "Expression_Templates/Array_Format.h"
-#include "Expression_Templates/Array_Strided_Vector.h"
+#include "expression_templates/Array_Slice.h"
+#include "expression_templates/Array_Slice_Range.h"
+#include "expression_templates/Array_Scalar.h"
+#include "expression_templates/Array_Chunk.h"
+#include "expression_templates/Array_Reshape.h"
+#include "expression_templates/Array_Format.h"
+#include "expression_templates/Array_Strided_Vector.h"
 
 namespace BC {
 namespace module {
@@ -105,20 +105,23 @@ auto reshape(Tensor_Base<T>& tensor) {
 
 template<class T, class... integers>// class enabler = std::enable_if_t<MTF::seq_of<int, integers...>>>
 const auto chunk(const Tensor_Base<T>& tensor, integers... ints) {
-    return [&, ints...](auto... shape_indicies) {
+	auto index_point =  BC::make_array(ints...);
+
+    return [&, index_point](auto... shape_indicies) {
         return make_tensor(et::make_chunk(
                 tensor.internal(),
-                BC::make_array(ints...),
+                index_point,
                 BC::make_array(shape_indicies...)));
     };
 }
 
 template<class T, class... integers>// class enabler = std::enable_if_t<MTF::seq_of<int, integers...>>>
 auto chunk(Tensor_Base<T>& tensor, integers... ints) {
-    return [&, ints...](auto... shape_indicies) {
+	auto index_point =  BC::make_array(ints...);
+    return [&, index_point](auto... shape_indicies) {
         return make_tensor(et::make_chunk(
                 tensor.internal(),
-                BC::make_array(ints...),
+                index_point,
                 BC::make_array(shape_indicies...)));
     };
 }

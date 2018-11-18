@@ -11,11 +11,11 @@
 #define TENSOR_ALIASES_H_
 
 #include <type_traits>
-#include "Mathematics/CPU.h"
-#include "Mathematics/GPU.cu"
-#include "stl_style_Allocators/Basic_Allocator.h"
-#include "stl_style_Allocators/CUDA_Allocator.h"
-#include "stl_style_Allocators/CUDA_Managed_Allocator.h"
+#include "mathematics/CPU.h"
+#include "mathematics/GPU.cu"
+#include "allocators/Basic_Allocator.h"
+#include "allocators/CUDA_Allocator.h"
+#include "allocators/CUDA_Managed_Allocator.h"
 #include "Tensor_Base.h"
 #include "Tensor_Algorithm.h"//needs to be included after allocators
 

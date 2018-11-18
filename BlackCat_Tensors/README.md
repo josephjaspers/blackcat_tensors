@@ -219,7 +219,7 @@ https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/B
 ----------------------------------------------------tensor metadata methods------------------------------------------------
 
 **SOURCE:
-https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Shape.h
+https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/expression_templates/Shape.h
 
     int dims() const                //returns number of dimensions (scalar = 0, vector = 1, matrix = 2, etc)
     int size() const                //returns number of elements 
@@ -290,7 +290,7 @@ https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/B
 
 **SOURCE:
 https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Tensor_Functions.h
-(implementation) https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/Expression_Templates/Operations/Unary.h
+(implementation) https://github.com/josephjaspers/BlackCat_Tensors/blob/master/BlackCat_Tensors/BC_Internals/BC_Tensor/expression_templates/Operations/Unary.h
     
     Lazily_Support functions: 
     auto function_name(const _tensor_)                 //returns a lazy expression of the stated function, 

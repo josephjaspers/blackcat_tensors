@@ -10,8 +10,8 @@
 #define BC_INTERNAL_BASE_H_
 #include "Internal_Common.h"
 #include "Internal_BLAS_Feature_Detector.h"
-#include "Operations/Binary.h"
-#include "Operations/Unary.h"
+#include "operations/Binary.h"
+#include "operations/Unary.h"
 
 namespace BC {
 namespace et     {

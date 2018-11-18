@@ -16,10 +16,9 @@
 #include "Tensor_Algorithm.h"
 #include "Tensor_Iterator.h"
 #include "Tensor_CMath.h"
-#include "Expression_Templates/Array.h"
-#include "Expression_Templates/Array_View.h"
-#include "Expression_Templates/Array_Shared.h"
-
+#include "expression_templates/Array.h"
+#include "expression_templates/Array_View.h"
+#include "expression_templates/Array_Shared.h"
 
 namespace BC {
 

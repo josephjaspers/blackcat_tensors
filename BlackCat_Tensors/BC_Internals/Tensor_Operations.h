@@ -9,24 +9,24 @@
 #ifndef TENSOR_HEAD_H_
 #define TENSOR_HEAD_H_
 
-#include "Expression_Templates/Array_Scalar_Constant.h"
+#include "expression_templates/Array_Scalar_Constant.h"
 #include "Tensor_Common.h"
-#include "Expression_Templates/Operations/Binary.h"
-#include "Expression_Templates/Operations/Unary.h"
-#include "Expression_Templates/Operations/BLAS.h"
-#include "Expression_Templates/Expression_Unary.h"
-#include "Expression_Templates/Expression_Binary.h"
+#include "expression_templates/operations/Binary.h"
+#include "expression_templates/operations/Unary.h"
+#include "expression_templates/operations/BLAS.h"
+#include "expression_templates/Expression_Unary.h"
+#include "expression_templates/Expression_Binary.h"
 
-#include "Expression_Templates/Function_transpose.h"
-#include "Expression_Templates/Function_dot.h"
-#include "Expression_Templates/Function_ger.h"
-#include "Expression_Templates/Function_gemv.h"
-#include "Expression_Templates/Function_gemm.h"
+#include "expression_templates/Function_transpose.h"
+#include "expression_templates/Function_dot.h"
+#include "expression_templates/Function_ger.h"
+#include "expression_templates/Function_gemv.h"
+#include "expression_templates/Function_gemm.h"
 
-#include "Expression_Templates/Tree_Evaluator_Runner.h"
+#include "expression_templates/Tree_Evaluator_Runner.h"
 
-#include "stl_style_Iterators/Coefficientwise_Iterator.h"
-#include "stl_style_Iterators/Multidimensional_Iterator.h"
+#include "iterators/Coefficientwise_Iterator.h"
+#include "iterators/Multidimensional_Iterator.h"
 
 
 namespace BC {

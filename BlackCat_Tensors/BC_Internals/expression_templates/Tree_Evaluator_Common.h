@@ -10,15 +10,15 @@
 #define BC_INTERNALS_BC_TENSOR_EXPRESSION_TEMPLATES_TREE_EVALUATOR_COMMON_H_
 
 
-#include "Utility/MetaTemplateFunctions.h"
+#include "utility/MetaTemplateFunctions.h"
 #include <type_traits>
 
 #include "Tree_Struct_Temporary.h"
 #include "Tree_Struct_Injector.h"
 
-#include "Operations/Unary.h"
-#include "Operations/Binary.h"
-#include "Operations/BLAS.h"
+#include "operations/Unary.h"
+#include "operations/Binary.h"
+#include "operations/BLAS.h"
 
 #include "Tree_Functions.h"
 

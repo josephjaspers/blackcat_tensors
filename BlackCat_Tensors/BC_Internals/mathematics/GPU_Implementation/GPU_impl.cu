@@ -21,6 +21,7 @@ namespace gpu_impl {
 template<int i> __device__  int tid() { return 0; }
 
 //TODO SWITCH to recursive template iterator
+//BUG  -nvcc struggles to compile std::enable_if_t in kernels
 //template<> __device__ int tid<0>() { return blockIdx.x * blockDim.x + threadIdx.x; }
 //template<> __device__ int tid<1>() { return blockIdx.y * blockDim.y + threadIdx.y; }
 //template<> __device__ int tid<2>() { return blockIdx.z * blockDim.z + threadIdx.z; }
@@ -143,14 +144,6 @@ template<class T, class U, class V> __global__
 static void scalar_mul(T* t, U u, V v) {
     *t = u * v;
 }
-
-//
-//__global__ void init_curand_handle(curandState *state){
-//
-//  int idx = threadIdx.x+blockDim.x*blockIdx.x;
-//  curand_init(1234, idx, 0, &state[idx]);
-//}
-
 
 template<class T> __global__
 static void randomize(T t, float lower_bound, float upper_bound, int seed) {

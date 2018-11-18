@@ -31,8 +31,8 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<lv, rv, oper
         return lv::DIMS() != rv::DIMS() ? DIMS() : MTF::max(lv::ITERATOR(), rv::ITERATOR());
     }
 
-    template<class... args>
-    __BC_host_inline__ Binary_Expression(lv l, rv r, const args&... args_) :  operation(args_...), left(l), right(r) {}
+    template<class... args> __BChot__
+    Binary_Expression(lv l, rv r, const args&... args_) :  operation(args_...), left(l), right(r) {}
 
     __BCinline__  auto  operator [](int index) const { return oper(left[index], right[index]); }
     template<class... integers> __BCinline__  auto  operator ()(integers... ints) const { return oper(left(ints...), right(ints...)); }

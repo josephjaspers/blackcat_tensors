@@ -8,8 +8,8 @@
 #ifndef TENSOR_CMATH_H_
 #define TENSOR_CMATH_H_
 
-#include "Expression_Templates/Internal_Common.h"
-#include "Expression_Templates/Operations/Unary.h"
+#include "expression_templates/Internal_Common.h"
+#include "expression_templates/operations/Unary.h"
 namespace BC {
 
 //defines the functor object
