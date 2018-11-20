@@ -39,7 +39,7 @@ struct Tensor_Utility<Tensor_Base<internal_t>> {
     friend class Tensor_Utility;
 
 private:
-    static constexpr int DIMS() { return derived::DIMS(); }
+    static constexpr int DIMS() { return internal_t::DIMS(); }
 
     derived& as_derived() {
         return static_cast<derived&>(*this);

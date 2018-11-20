@@ -52,11 +52,12 @@ struct CUDA_Allocator : GPU {
         cudaDeviceSynchronize();
     }
     template<class T>
-    static T extract(T* data_ptr, int index) {
+    static T extract(const T* data_ptr, int index) {
     	T host_data;
     	cudaDeviceSynchronize();
-        cudaMemcpy(host_data, &data_ptr[index], sizeof(T), cudaMemcpyDeviceToHost);
+        cudaMemcpy(&host_data, &data_ptr[index], sizeof(T), cudaMemcpyDeviceToHost);
         cudaDeviceSynchronize();
+        return host_data;
     }
 };
 

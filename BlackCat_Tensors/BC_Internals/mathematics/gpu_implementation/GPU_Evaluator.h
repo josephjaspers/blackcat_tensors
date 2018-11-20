@@ -41,7 +41,6 @@ public:
 
     template<int d, class expr_t>
     static void nd_evaluator(expr_t expr) {
-    	std::cout << " calling evaluate " << d << std::endl;
     	nd_evaluator_func<d>::eval(expr);
     }
 

@@ -14,11 +14,9 @@
 #include <cuda_runtime_api.h>
 #include <cuda.h>
 
-#include "Print.h"
 #include "gpu_implementation/GPU_impl.cu"
 #include "gpu_implementation/GPU_BLAS.h"
 #include "gpu_implementation/GPU_Misc.h"
-#include "gpu_implementation/GPU_Utility.h"
 #include "gpu_implementation/GPU_Constants.h"
 #include "gpu_implementation/GPU_Evaluator.h"
 #include "gpu_implementation/GPU_Algorithm.h"
@@ -28,7 +26,6 @@ namespace module {
 
 class GPU :
     public GPU_Misc<GPU>,
-    public GPU_Utility<GPU>,
     public GPU_BLAS<GPU>,
     public GPU_Constants<GPU>,
     public GPU_Evaluator<GPU>,
