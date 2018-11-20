@@ -47,17 +47,14 @@ private:
     const derived& as_derived() const {
         return static_cast<const derived&>(*this);
     }
-
 public:
-
-
     void print(int precision=8) const {
     	this->print_impl<void>(precision);
     }
 private:
 
-    static std::string format_value(const scalar& s, int precision) {
-    	std::string fstr(std::to_string(s));
+    static std::string format_value(const scalar& s, int precision, bool sparse=false) {
+    	std::string fstr  = !sparse || std::abs(s) > .1 ? std::to_string(s) : "";
     	if (fstr.length() < (unsigned)precision)
     		return fstr.append(precision - fstr.length(), ' ');
     	else
@@ -72,21 +69,27 @@ private:
 
     template<class ADL=void>
     std::enable_if_t<std::is_void<ADL>::value && DIMS() == 1>
-    print_impl(int prec) const {
+    print_impl(int prec, bool sparse=false) const {
     	std::cout << "[ ";
-    	for (const auto& scalar : this->as_derived().iter())
-    		std::cout << format_value(allocator_t::extract(&scalar, 0), prec) << ", ";
+    	for (const auto& scalar : this->as_derived().iter()) {
+    		std::cout << format_value(allocator_t::extract(&scalar, 0), prec, sparse) << ", ";
+    	}
     	std::cout << "]" << std::endl;
     }
     template<class ADL=void>
     std::enable_if_t<std::is_void<ADL>::value && (DIMS() > 1)>
-    print_impl(int prec) const {
-    	for (const auto slice : this->as_derived().nd_iter())
-    		slice.print_impl(prec);
+    print_impl(int prec, bool sparse=false) const {
+    	std::string dim_header;
+    	dim_header.append(DIMS(), '-');
+
+    	std::cout <<  dim_header << std::endl;
+    	for (const auto slice : this->as_derived().nd_iter()) {
+        	slice.print_impl(prec, sparse);
+    	}
     }
 public:
     void printSparse(int precision=8) const {
-    	print_impl<void>(precision);
+    	print_impl<void>(precision, true);
     }
 
     void write(std::ofstream& os) const {

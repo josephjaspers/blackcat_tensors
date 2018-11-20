@@ -52,8 +52,8 @@ public:
     const auto slice(int i) const { return make_tensor(et::make_slice(internal(), i)); }
           auto slice(int i)       { return make_tensor(et::make_slice(internal(), i)); }
 
-    const auto slice(int from, int to) const  { return make_tensor(et::make_ranged_slice(internal(),from,  to)); }
-          auto slice(int from, int to)        { return make_tensor(et::make_ranged_slice(internal(),from,  to)); }
+    const auto slice(int from, int to) const  { return make_tensor(et::make_ranged_slice(internal(), from, to)); }
+          auto slice(int from, int to)        { return make_tensor(et::make_ranged_slice(internal(), from, to)); }
 
 
     const auto diag(int index = 0) const {
