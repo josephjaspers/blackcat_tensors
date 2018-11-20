@@ -34,6 +34,10 @@ struct Tensor_Utility<Tensor_Base<internal_t>> {
     using scalar  = typename internal_t::scalar_t;
     using allocator_t = typename internal_t::allocator_t;
     using mathlib_t = typename allocator_t::mathlib_t;
+
+    template<class>
+    friend class Tensor_Utility;
+
 private:
     static constexpr int DIMS() { return derived::DIMS(); }
 
@@ -48,12 +52,41 @@ public:
 
 
     void print(int precision=8) const {
-        BC_ARRAY_ONLY("void print(int precision=8) const");
-        allocator_t::print(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), DIMS(), precision);
+    	this->print_impl<void>(precision);
     }
+private:
+
+    static std::string format_value(const scalar& s, int precision) {
+    	std::string fstr(std::to_string(s));
+    	if (fstr.length() < (unsigned)precision)
+    		return fstr.append(precision - fstr.length(), ' ');
+    	else
+    		return fstr.substr(0, precision);
+    }
+
+    template<class ADL=void>
+    std::enable_if_t<std::is_void<ADL>::value && DIMS() == 0>
+    print_impl(int prec) const {
+    	std::cout << "[" << format_value(allocator_t::extract(as_derived().memptr(), 0), prec) << "]" << std::endl;
+    }
+
+    template<class ADL=void>
+    std::enable_if_t<std::is_void<ADL>::value && DIMS() == 1>
+    print_impl(int prec) const {
+    	std::cout << "[ ";
+    	for (const auto& scalar : this->as_derived().iter())
+    		std::cout << format_value(allocator_t::extract(&scalar, 0), prec) << ", ";
+    	std::cout << "]" << std::endl;
+    }
+    template<class ADL=void>
+    std::enable_if_t<std::is_void<ADL>::value && (DIMS() > 1)>
+    print_impl(int prec) const {
+    	for (const auto slice : this->as_derived().nd_iter())
+    		slice.print_impl(prec);
+    }
+public:
     void printSparse(int precision=8) const {
-        BC_ARRAY_ONLY("void printSparse(int precision=8) const");
-        allocator_t::printSparse(as_derived().internal().memptr(), as_derived().inner_shape(), as_derived().outer_shape(), DIMS(), precision);
+    	print_impl<void>(precision);
     }
 
     void write(std::ofstream& os) const {
@@ -220,11 +253,6 @@ public:
         std::cout << std::endl;
     }
 };
-}
-
-template<class internal_t>
-std::iostream& operator << (std::iostream io, const Tensor_Base<internal_t>& tensor) {
-	std::string str_form;
 }
 }
 

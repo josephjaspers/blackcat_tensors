@@ -10,12 +10,15 @@
 #define TENSOR_BASE_H_
 
 #include "Tensor_Common.h"
+
 #include "Tensor_Operations.h"
-#include "Tensor_Utility.h"
 #include "Tensor_Accessor.h"
 #include "Tensor_Algorithm.h"
 #include "Tensor_Iterator.h"
+#include "Tensor_Utility.h"
+
 #include "Tensor_CMath.h"
+
 #include "expression_templates/Array.h"
 #include "expression_templates/Array_View.h"
 #include "expression_templates/Array_Shared.h"

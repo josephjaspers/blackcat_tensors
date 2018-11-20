@@ -75,8 +75,8 @@ struct Multidimensional_Iterator {
     __BCinline__ Iterator operator + (int dist) const { return Iterator(tensor, index + dist*direction); }
     __BCinline__ Iterator operator - (int dist) const { return Iterator(tensor, index - dist*direction); }
 
-    __BCinline__ Iterator& operator += (const Iterator& dist) const { index += dist.index*direction; return *this; }
-    __BCinline__ Iterator& operator -= (const Iterator& dist) const { index -= dist.index*direction; return *this; }
+    __BCinline__ Iterator& operator += (const Iterator& dist) { index += dist.index*direction; return *this; }
+    __BCinline__ Iterator& operator -= (const Iterator& dist) { index -= dist.index*direction; return *this; }
     __BCinline__ Iterator operator + (const Iterator& dist) const { return Iterator(tensor, index + dist.index*direction); }
     __BCinline__ Iterator operator - (const Iterator& dist) const { return Iterator(tensor, index - dist.index*direction); }
 

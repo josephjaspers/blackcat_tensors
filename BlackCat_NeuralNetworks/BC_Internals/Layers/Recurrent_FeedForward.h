@@ -69,7 +69,7 @@ struct Recurrent_FeedForward : public Recurrent_Layer_Base {
     auto& inputs()  { return x; }
     auto& outputs() { return y; }
     auto& deltas()  { return dy;}
-    auto& weights()    { return w; }
+    auto& weights() { return w; }
     auto& bias()    { return b; }
 
 

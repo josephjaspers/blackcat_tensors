@@ -11,10 +11,15 @@
 
 
 #include <type_traits>
+#include "mathematics/CPU.h"
+#include "mathematics/GPU.cu"
+#include "allocators/Basic_Allocator.h"
+#include "allocators/CUDA_Allocator.h"
+#include "allocators/CUDA_Managed_Allocator.h"
+
 namespace BC {
-
+//Example of BC_PRIVATE_DEF  --> int main() { BC_PRIVATE_DEF(	add, (int x, int y)
 #define BC_ARRAY_ONLY(literal) static_assert(BC::et::is_array<internal_t>(), "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
-
 template<int>   class DISABLED;
 template<class> class Tensor_Base;
 

@@ -22,6 +22,9 @@ struct Coefficientwise_Iterator {
     using self = Coefficientwise_Iterator<direction, tensor_t>;
     using Iterator = self;
 
+    static constexpr bool ref_value_type
+    	= std::is_reference<decltype(std::declval<tensor_t>().internal()[0])>::value;
+
     using iterator_category = std::random_access_iterator_tag;
     using value_type = typename tensor_t::scalar_t;
     using difference_type = int;
@@ -84,8 +87,8 @@ struct Coefficientwise_Iterator {
     __BCinline__ Iterator operator + (int dist) const { return Iterator(tensor, index + dist*direction); }
     __BCinline__ Iterator operator - (int dist) const { return Iterator(tensor, index - dist*direction); }
 
-    __BCinline__ Iterator& operator += (const Iterator& dist) const { index += dist.index*direction; return *this; }
-    __BCinline__ Iterator& operator -= (const Iterator& dist) const { index -= dist.index*direction; return *this; }
+    __BCinline__ Iterator& operator += (const Iterator& dist) { index += dist.index*direction; return *this; }
+    __BCinline__ Iterator& operator -= (const Iterator& dist) { index -= dist.index*direction; return *this; }
     __BCinline__ Iterator operator + (const Iterator& dist) const { return Iterator(tensor, index + dist.index*direction); }
     __BCinline__ Iterator operator - (const Iterator& dist) const { return Iterator(tensor, index - dist.index*direction); }
 

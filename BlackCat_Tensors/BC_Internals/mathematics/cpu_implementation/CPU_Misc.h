@@ -8,6 +8,8 @@
 #ifndef MATHEMATICS_CPU_MISC_H_
 #define MATHEMATICS_CPU_MISC_H_
 
+#include <random>
+
 namespace BC {
 
 template<class core_lib>

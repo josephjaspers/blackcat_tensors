@@ -10,13 +10,6 @@
 #ifndef TENSOR_ALIASES_H_
 #define TENSOR_ALIASES_H_
 
-#include <type_traits>
-#include "mathematics/CPU.h"
-#include "mathematics/GPU.cu"
-#include "allocators/Basic_Allocator.h"
-#include "allocators/CUDA_Allocator.h"
-#include "allocators/CUDA_Managed_Allocator.h"
-#include "Tensor_Algorithm.h"//needs to be included after allocators
 #include "Tensor_Base.h"
 
 namespace BC {
@@ -38,10 +31,14 @@ using Basic_Allocator = module::stl::Basic_Allocator;
 template<int dimension, class scalar_t, class allocator_t=alloc_t>
 using Tensor = Tensor_Base<et::Array<dimension, scalar_t, allocator_t>>;
 
-template<class scalar_t, class allocator_t = alloc_t> using Scalar = Tensor<0, scalar_t, allocator_t>;
-template<class scalar_t, class allocator_t = alloc_t> using Vector = Tensor<1, scalar_t, allocator_t>;
-template<class scalar_t, class allocator_t = alloc_t> using Matrix = Tensor<2, scalar_t, allocator_t>;
-template<class scalar_t, class allocator_t = alloc_t> using Cube   = Tensor<3, scalar_t, allocator_t>;
+#define BC_TENSOR_ALIAS_CORE_DEF(index, name)\
+		template<class scalar_t, class allocator_t = alloc_t>\
+		using name = Tensor<index, scalar_t, allocator_t>;
+
+BC_TENSOR_ALIAS_CORE_DEF(0, Scalar)
+BC_TENSOR_ALIAS_CORE_DEF(1, Vector)
+BC_TENSOR_ALIAS_CORE_DEF(2, Matrix)
+BC_TENSOR_ALIAS_CORE_DEF(3, Cube)
 
 template<int dimension, class scalar_t, class allocator_t=alloc_t>
 using Tensor_View = Tensor_Base<et::Array_View<dimension, scalar_t, allocator_t>>;
