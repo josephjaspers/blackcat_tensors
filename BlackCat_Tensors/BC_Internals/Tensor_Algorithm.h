@@ -24,9 +24,6 @@ namespace BC{
         return mathlib_t :: function (begin_, end_, params...);\
     }
 
-//put into namespace alg
-//to force BC::prefix
-//(using namespace alg below)
 namespace alg {
 //---------------------------non-modifying sequences---------------------------//
 BC_TENSOR_ALGORITHM_DEF(all_of)
@@ -44,7 +41,6 @@ BC_TENSOR_ALGORITHM_DEF(find_first_of)
 BC_TENSOR_ALGORITHM_DEF(adjacent_find)
 BC_TENSOR_ALGORITHM_DEF(search)
 BC_TENSOR_ALGORITHM_DEF(search_n)
-
 //modifying sequences
 BC_TENSOR_ALGORITHM_DEF(copy)
 BC_TENSOR_ALGORITHM_DEF(copy_if)
@@ -57,8 +53,6 @@ BC_TENSOR_ALGORITHM_DEF(fill_n)
 BC_TENSOR_ALGORITHM_DEF(transform)
 BC_TENSOR_ALGORITHM_DEF(generate)
 BC_TENSOR_ALGORITHM_DEF(generate_n)
-//    BC_TENSOR_ALGORITHM_DEF(remove)
-//    BC_TENSOR_ALGORITHM_DEF(remove_if)
 BC_TENSOR_ALGORITHM_DEF(replace)
 BC_TENSOR_ALGORITHM_DEF(replace_if)
 BC_TENSOR_ALGORITHM_DEF(replace_copy)
@@ -75,9 +69,6 @@ BC_DEF_IF_CPP17(BC_TENSOR_ALGORITHM_DEF(shift_left))
 BC_DEF_IF_CPP17(BC_TENSOR_ALGORITHM_DEF(shift_right))
 BC_TENSOR_ALGORITHM_DEF(random_shuffle)
 BC_DEF_IF_CPP17(BC_TENSOR_ALGORITHM_DEF(sample))
-//    BC_TENSOR_ALGORITHM_DEF(unique)
-//    BC_TENSOR_ALGORITHM_DEF(unique_copy)
-
 //--------------------------- sorting ---------------------------//
 BC_TENSOR_ALGORITHM_DEF(is_sorted)
 BC_TENSOR_ALGORITHM_DEF(is_sorted_until)
@@ -116,6 +107,7 @@ BC_DEF_IF_CPP17(BC_TENSOR_ALGORITHM_DEF(transform_exclusive_scan))
 BC_DEF_IF_CPP17(BC_TENSOR_ALGORITHM_DEF(transform_inclusive_scan))
 BC_TENSOR_ALGORITHM_DEF(qsort)
 BC_TENSOR_ALGORITHM_DEF(bsearch)
+
 }//end of namespace alg
 
 using namespace alg;
@@ -143,39 +135,51 @@ class Tensor_Algorithm<Tensor_Base<internal_t>> {
 
 public:
 
-    void fill(scalar_t value)   { BC::alg::fill(as_derived().begin_(), as_derived().end_(), value);}
+    void fill(scalar_t value)   { BC::fill(as_derived().begin_(), as_derived().end_(), value);}
     void zero()                 { fill(0); }
     void ones()                 { fill(1); }
 
     template<class function>
     void for_each(function func) {
-        BC::alg::for_each(this->begin_(), this->end_(), func);
+    	as_derived() = as_derived().un_expr(func);
     }
     template<class function>
 	void for_each(function func) const {
-		BC::alg::for_each(this->cbegin_(), this->cend_(), func);
-	}
+    	as_derived() = as_derived().un_expr(func);
+    }
+
     void sort() {
     	BC::alg::sort(this->begin_(), this->end_());
     }
+
+    void rand(scalar_t lb=0, scalar_t ub=1) {
+    	randomize(lb, ub);
+	}
+
    void randomize(scalar_t lb=0, scalar_t ub=1)  {
 	   static_assert(internal_t::ITERATOR() == 0 || internal_t::ITERATOR() == 1,
 			   	   	   "randomize not available to non-continuous tensors");
 	   allocator_t::randomize(this->as_derived().internal(), lb, ub);
    }
 
-   scalar_t max() {
+   scalar_t max() const {
 	   auto max_index = BC::alg::max_element(this->cbegin_(), this->cend_());
 	   return allocator_t::extract(this->as_derived().memptr(), max_index);
    }
-   scalar_t min() {
+   scalar_t min() const {
 	   auto min_index = BC::alg::min_element(this->cbegin_(), this->cend_());
 	   return allocator_t::extract(this->as_derived().memptr(), min_index);
    }
+   BC_DEF_IF_CPP17(
+	   scalar_t sum() const {
+		   return BC::accumulate(this->begin_(), this->end_());
+	   }
+   )
 
-#define BC_TENSOR_ALGORITHM_MEMBER_DEF(function)				  \
-  auto function () const {										  \
-	  return BC::alg:: function (this->cbegin_(), this->cend_()); \
+#define BC_TENSOR_ALGORITHM_MEMBER_DEF(function)\
+  template<class... args>\
+  auto function (args... params) const {\
+	  return BC::alg:: function (this->cbegin_(), this->cend_(), params...);\
   }
 
    BC_TENSOR_ALGORITHM_MEMBER_DEF(all_of)
@@ -184,9 +188,9 @@ public:
    BC_TENSOR_ALGORITHM_MEMBER_DEF(max_element)
    BC_TENSOR_ALGORITHM_MEMBER_DEF(min_element)
 
-}; //end__of class 'Tensor_Functions'
+}; //end_of class 'Tensor_Functions'
 
-}  //end__of namespace 'module'
-}  //end__of namespace 'BC'
+}  //end_of namespace 'module'
+}  //end_of namespace 'BC'
 
 #endif /* TENSOR_FUNCTIONS_H_ */

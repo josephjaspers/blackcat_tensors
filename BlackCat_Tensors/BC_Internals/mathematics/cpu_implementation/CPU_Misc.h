@@ -23,6 +23,29 @@ struct CPU_Misc {
         }
  __BC_omp_bar__
     }
+
+	template<class scalar_t>
+    struct rand_handle {
+
+    	scalar_t lower_bound;
+    	scalar_t upper_bound;
+
+    	rand_handle(scalar_t lb, scalar_t ub)
+    		: lower_bound(lb), upper_bound(ub) {}
+
+        scalar_t operator () () const {
+           return (scalar_t(std::rand() / ((scalar_t)RAND_MAX)) * (upper_bound - lower_bound)) + lower_bound;
+        }
+
+        scalar_t operator [](unsigned i) {
+            return (scalar_t(std::rand() / ((scalar_t)RAND_MAX)) * (upper_bound - lower_bound)) + lower_bound;
+        }
+    };
+
+	template<class scalar_t>
+	static auto make_rand_gen(scalar_t lower, scalar_t upper) {
+		return rand_handle<scalar_t>(lower, upper);
+	}
 };
 
 }

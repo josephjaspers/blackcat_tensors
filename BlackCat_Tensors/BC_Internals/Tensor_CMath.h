@@ -8,13 +8,15 @@
 #ifndef TENSOR_CMATH_H_
 #define TENSOR_CMATH_H_
 
+#include <cmath>
 #include "expression_templates/Internal_Common.h"
 #include "expression_templates/operations/Unary.h"
+
 namespace BC {
 
 //defines the functor object
-#define BLACKCAT_MATH_DEF(func)                                  \
-namespace functor {													\
+#define BLACKCAT_MATH_DEF(func)                                     \
+namespace functor {												    \
 	struct func {                                                   \
 		template<class scalar_t> __BCinline__                       \
 		scalar_t operator () (scalar_t s) const { 					\
@@ -57,8 +59,6 @@ BLACKCAT_MATH_DEF(lround)
 BLACKCAT_MATH_DEF(modf)
 BLACKCAT_MATH_DEF(sqrt)
 BLACKCAT_MATH_DEF(tan)
-
-
 BLACKCAT_MATH_DEF(tanh)
 
 //defines a function with a user defined implementation (not part of std::cmath.h)
