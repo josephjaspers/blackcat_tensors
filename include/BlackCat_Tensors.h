@@ -9,7 +9,7 @@
 #ifndef BLACKCAT_TENSORS_H_
 #define BLACKCAT_TENSORS_H_
 
-#include "BC_Internals/Tensor_Base.h"
-#include "BC_Internals/Tensor_Aliases.h"
+#include "Tensor_Base.h"
+#include "Tensor_Aliases.h"
 
 #endif /* BLACKCAT_TENSORS_H_ */
