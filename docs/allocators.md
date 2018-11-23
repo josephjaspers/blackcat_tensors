@@ -7,11 +7,6 @@ BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two temp
 2) BC allocators are composed of entirely static methods. 
 3) BC allocators define certain methods that are essential 'boiler plate' for Cuda. IE each allocator (including Basic_Allocator) define `HostToDevice(device_ptr, host_ptr, size)` and `DeviceToHost(host_ptr, device_ptr, size)`. These methods essential to copying to and from device memory. 
 
-#### The primary allocators
-
-	Basic_Allocator
-	Cuda
-	Cuda_Managed
 	
 #### Overview
 
@@ -33,11 +28,11 @@ BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two temp
 	The memory is accessible from both host and device. 
 	Cuda_Managed is recommended if you are not familiar with Cuda programming.
 
-#### Choosing an allocator
-Example:
-```
-BC::Matrix<float> mat; 			    //defaults to Basic_Allocator
-BC::Matrix<float, BC::Basic_Allocator> mat; //identical to above   
-BC::Matrix<float, BC::Cuda> mat;	    //allocates memory on the GPU 
-BC::Matrix<float, BC::Cuda_Managed> mat;    //allocates memory on the GPU but data transfer is managed automatically. 
-```
+#### Choosing an allocator (example):
+
+	```
+	BC::Matrix<float> mat; 			    //defaults to Basic_Allocator
+	BC::Matrix<float, BC::Basic_Allocator> mat; //identical to above   
+	BC::Matrix<float, BC::Cuda> mat;	    //allocates memory on the GPU 
+	BC::Matrix<float, BC::Cuda_Managed> mat;    //allocates memory on the GPU but data transfer is managed automatically. 
+	```
