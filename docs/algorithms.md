@@ -4,19 +4,18 @@ BlackCat_Tensor's offer a wide range of the `std` library's algorithms. These me
 
 BlackCat_Tensor's does not implement any of these algorithms itself, instead forwarding to either the std implementation or thrust's implementation depending on how memory is allocated.
 
-Example:
-	```
-	BC::Matrix<float, BC::Cuda> dev_mat(3,3);
-	
-	//BC::for_each will forward to thrust's (Cuda) implementation.
-	BC::for_each(dev_mat.begin(), dev_mat.end(), your_function); 
+```
+BC::Matrix<float, BC::Cuda> dev_mat(3,3);
+
+//BC::for_each will forward to thrust's (Cuda) implementation.
+BC::for_each(dev_mat.begin(), dev_mat.end(), your_function); 
 
 
-	BC::Matrix<float, BC::Basic_Allocator> host_mat(3,3);
+BC::Matrix<float, BC::Basic_Allocator> host_mat(3,3);
 
-	//BC::for_each will forward to the standard lib's implementation.
-	BC::for_each(dev_mat.begin(), dev_mat.end(), your_function); 
-	```
+//BC::for_each will forward to the standard lib's implementation.
+BC::for_each(dev_mat.begin(), dev_mat.end(), your_function); 
+```
 
 Using BC::algortihms is preferable to directly using to std or thrust's implementation as it enables user's to write allocation-generic code. 
 
