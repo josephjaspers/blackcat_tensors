@@ -12,4 +12,6 @@
 /BlackCat_Tests/
 /_config.yml
 /.cproject
-/.project 
+/.project
+/.settings/
+/.settings/.*
