@@ -16,16 +16,28 @@ BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two temp
 #### Overview
 
 *Basic_Allocator*:
+
 	The standard allocator and default argument.
 	The Basic Allocator is comparable to the std::allocator.
 	It has no special properties.
 
 *Cuda*:
+
 	The generic allocator for CUDA. 
 	Allocates memory on the device. 
 	Memory allocated with Cuda cannot be accessed from the host.
 
 *Cuda_Managed*:
+
 	Cuda_Managed allocates memory via CudaMallocManaged. 
 	The memory is accessible from both host and device. 
 	Cuda_Managed is recommended if you are not familiar with Cuda programming.
+
+#### Choosing an allocator
+Example:
+```
+BC::Matrix<float> mat; 			    //defaults to Basic_Allocator
+BC::Matrix<float, BC::Basic_Allocator> mat; //identical to above   
+BC::Matrix<float, BC::Cuda> mat;	    //allocates memory on the GPU 
+BC::Matrix<float, BC::Cuda_Managed> mat;    //allocates memory on the GPU but data transfer is managed automatically. 
+```
