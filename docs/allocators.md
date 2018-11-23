@@ -2,18 +2,16 @@
 
 BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two template arguments. The first argument, is the scalar-type while the second is the allocator. This was designed to mimic `stl` library despite the fact that BCT's allocator's are NOT interchangeable to the standard libraries allocators. 
 
-Currently there are 3 allocators. 
+Currently there are 3 core allocators: 
 
-> Basic_Allocator
-> Cuda
-> Cuda_Managed
-
+	Basic_Allocator
+	Cuda
+	Cuda_Managed
 
 ## Differences between the std and BC allocators. 
 1) BC allocators unlike std do not accept a template argument. 
 2) BC allocators are composed of entirely static methods. 
 3) BC allocators define certain methods that are essential 'boiler plate' for Cuda. IE each allocator (including Basic_Allocator) define HostToDevice(device_ptr, host_ptr, size) and DeviceToHost(host_ptr, device_ptr, size). These methods essential to copying to and from device memory. 
-
 
 Basic_Allocator:
 	The standard allocator and default argument.
