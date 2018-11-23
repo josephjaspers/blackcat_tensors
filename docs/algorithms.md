@@ -1,6 +1,7 @@
 # Algorithms
 
-BlackCat_Tensor's offer a wide range of the standard library's algorithms. These methods are called through the `BC` namespace.
+BlackCat_Tensor's offer a wide range of the standard library's algorithms. 
+These methods are called through the `BC` namespace.
 
 BlackCat_Tensor's does not implement any of these algorithms itself, instead forwarding to either the std implementation or thrust's implementation depending on how memory is allocated.
 
