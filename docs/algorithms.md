@@ -5,34 +5,34 @@ These methods are called through the `BC` namespace.
 
 BlackCat_Tensor's does not implement any of these algorithms itself, instead forwarding to either the std implementation or thrust's implementation depending on how memory is allocated.
 
-##### Example:
 
-	BC::Matrix<float, BC::Cuda> dev_mat(3,3);
-	BC::for_each(dev_mat.begin(), dev_mat.end(), your_function);  //will call thrust::for_each
+```cpp
+BC::Matrix<float, BC::Cuda> dev_mat(3,3);
+BC::for_each(dev_mat.begin(), dev_mat.end(), your_function);  //will call thrust::for_each
 
-	BC::Matrix<float, BC::Basic_Allocator> host_mat(3,3);
-	BC::for_each(dev_mat.begin(), dev_mat.end(), your_function); //will call std::for_each
+BC::Matrix<float, BC::Basic_Allocator> host_mat(3,3);
+BC::for_each(dev_mat.begin(), dev_mat.end(), your_function); //will call std::for_each
+```
 
+Using BC::algortihms is preferable to directly using to std or thrust's implementation as it enables user's to write allocation-generic code. Here we created a method that applies the logistic function to each element of a matrix. 
 
-Using BC::algortihms is preferable to directly using to std or thrust's implementation as it enables user's to write allocation-generic code. 
+```cpp
+template<class alloc>
+void logistic_function(BC::Matrix<float, alloc>& mat) {
 
-##### Example:
+	struct logistic_functor {
+		__host__ __device__
+		void operator() (scalar_t& scalar) {
+			scalar =  1 / (1 + exp(-scalar));
+		}		
 
-	template<class alloc>
-	void logistic_function(BC::Matrix<float, alloc>& mat) {
+	} logistc; 
 
-		struct logistic_functor {
-			__host__ __device__
-			void operator() (scalar_t& scalar) {
-				scalar =  1 / (1 + exp(-scalar));
-			}		
-	
-		} logistc; 
+	BC::for_each(mat.begin(), mat.end(), logistic); 
+}
+```
 
-		BC::for_each(mat.begin(), mat.end(), logistic); 
-	}
-
-Here we created a method that applies the logistic function to each element of a matrix. This function can accept Tensors allocated on either the GPU or CPU. If we used std::for_each, or thrust::for_each, we would have to overload for_each (pun) allocator we may want to use. 
+This function can accept Tensors allocated on either the GPU or CPU. If we used std::for_each, or thrust::for_each, we would have to write two seperate methods for the host and device. 
 
 
 #####  The supported algorithms:
