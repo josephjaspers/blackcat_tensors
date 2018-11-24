@@ -25,9 +25,9 @@ BC::Vector<double>  myVec(sz);                     //defaults to BC::Basic_Alloc
 Non-numeric types are supported, though non-numeric types are not heavily tested in release. 
 
 #### Concept Index  
-1. [Core Types](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/aliases.md)
-2. [Allocators](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/allocators.md)
-3. [Iterators](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/iterators.md)
-4. [Expression Templates](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/expression_templates.md)
-5. [Algorithms](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/algorithms.md)
-6. [CMath Functions](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/cmath_functions.md)
+|Index| Concept | Brief |
+| 1. | [Core Types](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/aliases.md) | List of primary Tensor-Types |
+| 2. | [Allocators](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/allocators.md) | Overview of Allocators in BCT and their functionality |
+| 3. | [Iterators](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/iterators.md) | Overview of Iterators in BCT and their functionality |
+| 4. | [Algorithms](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/algorithms.md) | Brief overview of how algorithms are implemented, and a list of supported algorithms |
+| 5. | [CMath Functions](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/cmath_functions.md) | A list of CMath functions that BCT supports |
