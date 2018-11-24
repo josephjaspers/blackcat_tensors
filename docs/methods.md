@@ -63,6 +63,15 @@ Note: Many of the return types have been abreviated. The underlying implementati
 | --- | expression_t | un_expr | functor | returns a user-defined unary_expression object that will be laziliy evaluated. | --- |
 | --- | expression_t | bi_expr | functor, tensor or scalar | returns a user-defined binary_expression object that will be laziliy evaluated. | --- |
 
+#### Utility
+| static | return type | method name | parameters | const/non-const | documentation | alias-methods |
+| --- | --- | --- | --- | --- | --- | --- |
+| --- | void | print | --- | both | formatted print to console | --- |
+| --- | void | print_sparse | --- | both | formatted print to console, ignoring 0's. | --- |
+| --- | void | print_dimensions | --- | both | output dimensions of a tensor | --- |
+| --- | void | print_leading_dimensions | --- | both | output outer dimensions of a tensor (strides) | --- |
+| --- | void | print_block_dimensions | --- | both | output the block_dimensions of a tensor (IE a 3x4 matrix will output `[3][12]`) | --- |
+
 #### CMath
 The following Cmath functions are supported through the `BC` namespace. These expressions will automatically be scalarized. (lazy evaluated)
 ```
