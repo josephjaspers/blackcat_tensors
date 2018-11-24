@@ -13,6 +13,7 @@ a =  b + BC::sin(c); //will lazily evaluate to become a single for-loop. See: [e
 ```
 
 ##### Supported Functions
+```
 abs
 acos
 acosh
@@ -41,7 +42,6 @@ sqrt
 tan
 tanh
 
-//Other functions
 logistic              1 / (1 + exp(-x))
 dx_logistic,          x * (1 - logistic(x))
 cached_dx_logistic    x * (1 - x;
@@ -50,3 +50,4 @@ cached_dx_tanh        1 - pow(x, 2)
 relu                  max(0, x)
 dx_relu               x > 0 ? 1 : 0
 cached_dx_relu        x > 0 ? 1 : 0
+```
