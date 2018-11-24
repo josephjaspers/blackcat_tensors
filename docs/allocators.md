@@ -5,7 +5,7 @@ BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two temp
 #### Differences between `std` and `BC` allocators 
 1) BC allocators do not accept a template argument for the scalar_type. 
 2) BC allocators are composed of entirely static methods. 
-3) BC allocators define certain methods that are essential 'boiler plate' for Cuda. IE each allocator (including Basic_Allocator) define `HostToDevice(device_ptr, host_ptr, size)` and `DeviceToHost(host_ptr, device_ptr, size)`. These methods essential to copying to and from device memory. 
+3) BC allocators define certain methods that are essential 'boiler plate' for Cuda, the Basic_Allocator must define these methods as well to maintain a common interface. 
 
 	
 #### Overview
@@ -30,9 +30,9 @@ BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two temp
 
 #### Choosing an allocator (example):
 
-	```
-	BC::Matrix<float> mat; 			    //defaults to Basic_Allocator
-	BC::Matrix<float, BC::Basic_Allocator> mat; //identical to above   
-	BC::Matrix<float, BC::Cuda> mat;	    //allocates memory on the GPU 
-	BC::Matrix<float, BC::Cuda_Managed> mat;    //allocates memory on the GPU but data transfer is managed automatically. 
-	```
+```cpp
+BC::Matrix<float> mat; 			    //defaults to Basic_Allocator
+BC::Matrix<float, BC::Basic_Allocator> mat; //identical to above   
+BC::Matrix<float, BC::Cuda> mat;	    //allocates memory on the GPU 
+BC::Matrix<float, BC::Cuda_Managed> mat;    //allocates memory on the GPU but data transfer is managed automatically. 
+```
