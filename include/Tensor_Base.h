@@ -58,7 +58,8 @@ public:
 
     Tensor_Base() = default;
     Tensor_Base(const parent&  param) : internal_t(param) {}
-    Tensor_Base(       parent&& param) : internal_t(param) {}
+    Tensor_Base(
+    		parent&& param) : internal_t(param) {}
 
     template<class U> Tensor_Base(const Tensor_Base<U>&  tensor) : internal_t(tensor.internal()) {}
     template<class U> Tensor_Base(      Tensor_Base<U>&& tensor) : internal_t(tensor.internal()) {}
@@ -67,15 +68,18 @@ public:
     Tensor_Base(copy_parameter tensor) {
         this->copy_init(tensor);
     }
+
     Tensor_Base(move_parameter tensor) {
         this->swap_array(tensor);
         this->swap_shape(tensor);
     }
+
     Tensor_Base& operator =(move_assign_parameter tensor) {
         this->swap_shape(tensor);
         this->swap_array(tensor);
         return *this;
     }
+
     Tensor_Base& operator =(copy_assign_parameter tensor) {
          operations::operator=(tensor);
          return *this;

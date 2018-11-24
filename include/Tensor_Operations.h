@@ -170,7 +170,7 @@ public:
     }
 
     const auto transpose() const { return un_expr<et::oper::transpose<allocator_t>>(); }
-           auto transpose()          { return un_expr<et::oper::transpose<allocator_t>>(); }
+          auto transpose()          { return un_expr<et::oper::transpose<allocator_t>>(); }
 
     const auto t() const { return this->transpose(); }
           auto t()       { return this->transpose(); }
