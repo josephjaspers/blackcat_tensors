@@ -26,7 +26,7 @@ Non-numeric types are supported, though non-numeric types are not heavily tested
 
 #### Concept Index  
 
-BlackCat Tensors attempts to align itself with the design of the C++ standard library to facilitate predictable syntax, and integration with the standard template library. Its design and documentation is divided amongst module-like componenets that are frequently concepts of the standard library. 
+BlackCat Tensors attempts to align itself with the design of the C++ standard library to facilitate predictable syntax, and integration with the standard template library. Its design and documentation is divided amongst module-like components that are frequently concepts of the standard library. 
 
 |Index| Concept | Brief |
 | --- | --- | --- |
