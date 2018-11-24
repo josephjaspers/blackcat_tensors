@@ -25,8 +25,9 @@ BC::Vector<double>  myVec(sz);                     //defaults to BC::Basic_Alloc
 Non-numeric types are supported, though non-numeric types are not heavily tested in release. 
 
 #### Concept Index  
-1. [Allocators](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/allocators.md)
-2. [Iterators](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/iterators.md)
-3. [Expression Templates](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/expression_templates.md)
-4. [Algorithms](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/algorithms.md)
-5. [CMath Functions](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/cmath_functions.md)
+1. [Core Types](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/aliases.md)
+2. [Allocators](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/allocators.md)
+3. [Iterators](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/iterators.md)
+4. [Expression Templates](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/expression_templates.md)
+5. [Algorithms](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/algorithms.md)
+6. [CMath Functions](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/cmath_functions.md)
