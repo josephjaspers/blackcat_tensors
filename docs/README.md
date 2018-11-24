@@ -1,12 +1,11 @@
 # Documentation 
-# -------------
 
 
 
-## Functionality  
+#### Index  
 ## -------------
-[allocators](url)
-[iterators](url)
-[expression_templates](url)
-[algorithms](url)
-[cmath functions](url)
+* [Allocators](url)
+* [Iterators](url)
+* [Expression Templates](url)
+* [Algorithms](url)
+* [Cmath Functions](url)
