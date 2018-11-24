@@ -20,7 +20,7 @@ BC::Vector<double>  myVec(sz);                     //defaults to BC::Basic_Alloc
 ```
 
 #### Important: 
-  BCT must be linked to an apropriate BLAS implementation, and currently does not support any defaults. (__future__)  
+  BCT must be linked to an apropriate BLAS implementation, and currently does not support any defaults. 
   BLAS features currently only support double and float types, (Cuda currently only supports floats) (__future__, complex and integer support) 
 
 Non-numeric types are supported though they are considered to be a secondary concern. 
