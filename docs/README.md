@@ -8,7 +8,7 @@ BCT is a header only library that supports compilation with the NVCC and G++ BCT
 
 #### FAQ Fast Explanation:
 
-CPU multithreading? Simply link OpenMP
+CPU multithreading? Simply link OpenMP  
 GPU multithreading? Simply link CUDA 9
 
 How to choose allocation?
