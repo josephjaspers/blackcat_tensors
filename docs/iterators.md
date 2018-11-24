@@ -4,7 +4,7 @@ BlackCat_Tensors defines two types of iterators, coefficient-wise and n-dimensio
 
 ----------------------------------------------------------------------------------------------
 
-##### Coefficient-wise 
+##### Coefficient-Wise 
 The coefficient-wise iterator returns references of the `scalar_type` of the tensor.
 
 ```cpp
@@ -28,7 +28,7 @@ int main() {
   
     
    
-##### N-dimensional     
+##### N-Dimensional     
 The n-dimensional iterator returns slices of the current tensor.
 
 ```cpp
@@ -50,7 +50,7 @@ int main() {
 **Note** Calling `nd_iter()` on a Vector forwards to `iter()`. 
 
 ----------------------------------------------------------------------------------------------
-##### std-style iterators
+##### Std-Style Iterators
 
 Formal `std` style iterators are supported; using `begin` and `end`. 
 
@@ -67,7 +67,7 @@ BC::Matrix<float> mat;
   mat.nd_rbegin();
   mat.nd_rend();
 ```
-#### utility iterators
+#### Utility Iterators
 The Blackcat_Tensors defines convienant iterator proxies which support start and end ranges.
 
 ```cpp
