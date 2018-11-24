@@ -20,12 +20,12 @@ BC::Vector<double>  myVec(sz);                     //defaults to BC::Basic_Alloc
 ```
 
 #### Important: 
-  BCT must be linked to an apropriate BLAS implementation, and currently does not support any defaults. (__future__)
+  BCT must be linked to an apropriate BLAS implementation, and currently does not support any defaults. (__future__)  
   BLAS features currently only support double and float types, (Cuda currently only supports floats) (__future__, complex and integer support) 
 
 Non-numeric types are supported though they are considered to be a secondary concern. 
 
-#### Concept Index  
+#### Documentation Index  
 
 BlackCat Tensors attempts to align itself with the design of the C++ standard library to facilitate predictable syntax, and integration with the standard template library. Its design and documentation is divided amongst module-like components that are frequently concepts of the standard library. 
 
