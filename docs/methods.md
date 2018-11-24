@@ -72,7 +72,9 @@ modf
 sqrt
 tan
 tanh
-
+```
+#### Other functions
+```
 logistic              1 / (1 + exp(-x))
 dx_logistic,          x * (1 - logistic(x))
 cached_dx_logistic    x * (1 - x;
