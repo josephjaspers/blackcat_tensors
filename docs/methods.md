@@ -2,7 +2,7 @@
 
 `scalar_t` is used to denote the scalar-type of the tensor.  
 `allocator_t` is used to denote the allocator-template argument.  
-`expression_t` is used to represent any non-evaluated mathematical expression. 
+`expression_t` is used to represent any non-evaluated mathematical expression.   
 Note: Many of the return types have been abreviated. The underlying implementation of these is not relevant to the user. 
 
 #### Data Access 
@@ -41,6 +41,27 @@ Note: Many of the return types have been abreviated. The underlying implementati
 | --- | cw_iterator | nd_iter | int=0, int=size | both | returns an iterator proxy, used for range-convienance | --- |
 | --- | cw_iterator | reverse_iter | int=0, int=size | both | returns an iterator proxy, used for range-convienance | --- |
 | --- | cw_iterator | nd_reverse_iter | int=0, int=size | both | returns an iterator proxy, used for range-convienance | --- |
+
+#### Operations
+| static | return type | method name | parameters | const/non-const | documentation | alias-methods |
+| --- | --- | --- | --- | --- | --- | --- |
+| --- | tensor& | += | tensor or scalar | non-const | --- | --- |
+| --- | tensor& | -= | tensor or scalar | non-const | --- | --- |
+| --- | tensor& | %= | tensor or scalar | non-const | element-wise multiplication | --- |
+| --- | tensor& | /= | tensor or scalar | non-const | --- | --- |
+| --- | expression_t | + | tensor or scalar | both | --- | --- |
+| --- | expression_t | - | tensor or scalar | both | --- | --- |
+| --- | expression_t | % | tensor or scalar | both | element-wise multiplication | --- |
+| --- | expression_t | / | tensor or scalar | both | --- | --- |
+| --- | expression_t | == | tensor or scalar | both | --- | --- |
+| --- | expression_t | > | tensor or scalar | both | --- | --- |
+| --- | expression_t | < | tensor or scalar | both | --- | --- |
+| --- | expression_t | >= | tensor or scalar | both | --- | --- |
+| --- | expression_t | <= | tensor or scalar | both | --- | --- |
+| --- | expression_t | * | tensor or scalar | both | Executes one of the following BLAS calls gemm, gemv, ger, dot, or scalarmul depending upon the dimensionality of the parameters. This is detected at compile-time, and does not incur any branching | --- |
+| --- | expression_t | - | --- | both | negation of a tensor | --- |
+| --- | expression_t | un_expr | functor | returns a user-defined unary_expression object that will be laziliy evaluated. | --- |
+| --- | expression_t | bi_expr | functor, tensor or scalar | returns a user-defined binary_expression object that will be laziliy evaluated. | --- |
 
 #### CMath
 The following Cmath functions are supported through the `BC` namespace. These expressions will automatically be scalarized. (lazy evaluated)
