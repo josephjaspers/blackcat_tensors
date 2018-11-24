@@ -63,6 +63,17 @@ Note: Many of the return types have been abreviated. The underlying implementati
 | --- | expression_t | un_expr | functor | returns a user-defined unary_expression object that will be laziliy evaluated. | --- |
 | --- | expression_t | bi_expr | functor, tensor or scalar | returns a user-defined binary_expression object that will be laziliy evaluated. | --- |
 
+#### Functions 
+| static | return type | method name | parameters | const/non-const | documentation | alias-methods |
+| --- | --- | --- | --- | --- | --- | --- |
+| --- | scalar_t | min | --- | both | --- | --- |
+| --- | scalar_t | max | --- | both | --- | --- |
+| --- | void | rand | --- | --- | non-const | randomize |
+| --- | functor | for_each | functor | both | convient-definition of for_each. Identical to BC::for_each(tensor.begin(), tensor.end(), functor) | --- |
+| --- | void | sort | --- | non-const | Implemenation is dependent upon gpu vs cpu allocation and std and thrust's implementation | --- |
+
+
+
 #### Utility
 | static | return type | method name | parameters | const/non-const | documentation | alias-methods |
 | --- | --- | --- | --- | --- | --- | --- |
