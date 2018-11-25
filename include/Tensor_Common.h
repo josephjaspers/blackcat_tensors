@@ -11,8 +11,8 @@
 
 
 #include <type_traits>
-#include "mathematics/CPU.h"
-#include "mathematics/GPU.cu"
+#include "evaluator/Host.h"
+#include "evaluator/Device.cu"
 #include "allocators/Basic_Allocator.h"
 #include "allocators/CUDA_Allocator.h"
 #include "allocators/CUDA_Managed_Allocator.h"

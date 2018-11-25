@@ -13,10 +13,12 @@
 #include <thrust/random/uniform_real_distribution.h>
 
 namespace BC {
+namespace evaluator {
+namespace device_impl {
 
 //TODO deprecate this, move towards using thrust library
 template<class core_lib>
-class GPU_Misc {
+class Misc {
 
     static int blocks(int sz) { return core_lib::blocks(sz); }
     static int threads() { return core_lib::threads(); }
@@ -66,7 +68,7 @@ public:
 };// = gpu_impl::BC_curand_handle(
 
 }
-
-
+}
+}
 
 #endif /* GPU_MISC_H_ */

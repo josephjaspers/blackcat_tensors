@@ -9,12 +9,14 @@
 #ifndef GPU_EVALUATOR_H_
 #define GPU_EVALUATOR_H_
 
-#include "GPU_impl.cu"
+#include "Impl.cu"
 
-namespace BC{
-namespace gpu_impl {}
+namespace BC {
+namespace evaluator {
+namespace device_impl {
+
 template<class core_lib>
-class GPU_Evaluator {
+class Evaluator {
     static int blocks(int sz) { return core_lib::blocks(sz); }
     static int threads() { return core_lib::threads(); }
 
@@ -47,9 +49,9 @@ public:
 
 
 };
+
 }
-
-
-
+}
+}
 
 #endif /* GPU_EVALUATOR_H_ */

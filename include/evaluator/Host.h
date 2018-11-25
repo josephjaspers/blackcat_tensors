@@ -9,15 +9,15 @@
 #ifndef MATHEMATICS_CPU_H_
 #define MATHEMATICS_CPU_H_
 
-#include "Math_Library_Directives.h"
-#include "cpu_implementation/CPU_Misc.h"
-#include "cpu_implementation/CPU_BLAS.h"
-#include "cpu_implementation/CPU_BLAS.h"
-#include "cpu_implementation/CPU_Constants.h"
-#include "cpu_implementation/CPU_Evaluator.h"
+#include "Common.h"
+#include "host_impl/Misc.h"
+#include "host_impl/BLAS.h"
+#include "host_impl/Constants.h"
+#include "host_impl/Evaluator.h"
 
 
 namespace BC {
+namespace evaluator {
 
 /*
  * The core CPU library,
@@ -27,11 +27,11 @@ namespace BC {
  *
  */
 
-class CPU:
-        public CPU_Misc<CPU>,
-        public CPU_BLAS<CPU>,
-        public CPU_Constants<CPU>,
-        public CPU_Evaluator<CPU>
+class Host:
+        public host_impl::Misc<Host>,
+        public host_impl::BLAS<Host>,
+        public host_impl::Constants<Host>,
+        public host_impl::Evaluator<Host>
 {
 
 
@@ -50,6 +50,7 @@ public:
 	}
 
 };
+}
 }
 #endif
  /* MATHEMATICS_CPU_H_ */

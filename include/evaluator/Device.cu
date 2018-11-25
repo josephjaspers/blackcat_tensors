@@ -7,27 +7,27 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #ifdef __CUDACC__
-#ifndef MATHEMATICS_GPU_H_
-#define MATHEMATICS_GPU_H_
+#ifndef BC_MATHEMATICS_DEVICE_H_
+#define BC_MATHEMATICS_DEVICE_H_
 
 #include <cublas_v2.h>
 #include <cuda_runtime_api.h>
 #include <cuda.h>
 
-#include "gpu_implementation/GPU_impl.cu"
-#include "gpu_implementation/GPU_BLAS.h"
-#include "gpu_implementation/GPU_Misc.h"
-#include "gpu_implementation/GPU_Constants.h"
-#include "gpu_implementation/GPU_Evaluator.h"
+#include "device_impl/Impl.cu"
+#include "device_impl/BLAS.h"
+#include "device_impl/Misc.h"
+#include "device_impl/Constants.h"
+#include "device_impl/Evaluator.h"
 
 namespace BC {
-namespace module {
+namespace evaluator {
 
-class GPU :
-    public GPU_Misc<GPU>,
-    public GPU_BLAS<GPU>,
-    public GPU_Constants<GPU>,
-    public GPU_Evaluator<GPU> {
+class Device :
+    public device_impl::Misc<Device>,
+    public device_impl::BLAS<Device>,
+    public device_impl::Constants<Device>,
+    public device_impl::Evaluator<Device> {
 public:
 
     static constexpr int CUDA_BASE_THREADS = 256;

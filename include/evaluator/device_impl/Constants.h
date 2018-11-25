@@ -10,9 +10,11 @@
 #define GPU_CONSTANTS_H_
 
 namespace BC {
+namespace evaluator {
+namespace device_impl {
 
 template<class core_lib>
-struct GPU_Constants {
+struct Constants {
 
     static float* static_allocate(float value) {
         float* t;
@@ -44,6 +46,9 @@ struct GPU_Constants {
 
 };
 
+
+}
+}
 }
 
 

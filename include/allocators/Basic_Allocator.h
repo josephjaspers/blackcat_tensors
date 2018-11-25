@@ -11,15 +11,14 @@
 
 namespace BC {
 
-class CPU;
 class host_tag;
 
 namespace module {
 namespace stl  {
 
-struct Basic_Allocator : CPU {
+struct Basic_Allocator : BC::evaluator::Host {
 
-    using mathlib_t = CPU;
+    using mathlib_t = BC::evaluator::Host;
     using system_tag = host_tag;
 
     template<typename T>
@@ -28,9 +27,9 @@ struct Basic_Allocator : CPU {
         return internal_mem_ptr;
     }
     template<typename T>
-    static T*& unified_allocate(T*& intenral_mem_ptr, int size) {
-        intenral_mem_ptr = new T[size];
-        return intenral_mem_ptr;
+    static T*& unified_allocate(T*& memptr, int size) {
+    	memptr = new T[size];
+        return memptr;
     }
     template<typename T>
     static void deallocate(T* t) {
@@ -42,11 +41,11 @@ struct Basic_Allocator : CPU {
     }
     template<class T, class U>
     static void HostToDevice(T* device_ptr, U* host_ptr, int size=1) {
-        CPU::copy(device_ptr, host_ptr, size);
+        mathlib_t::copy(device_ptr, host_ptr, size);
     }
     template<class T, class U>
     static void DeviceToHost(T* host_ptr, U* device_ptr, int size=1) {
-        CPU::copy(host_ptr, device_ptr, size);
+        mathlib_t::copy(host_ptr, device_ptr, size);
     }
     template<class T>
     static T extract(T* data_ptr, int index) {

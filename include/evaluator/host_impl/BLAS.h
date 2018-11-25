@@ -11,7 +11,8 @@
 //#include <mkl_cblas.h> //TODO create/ifdef wrapper for MKL
 
 namespace BC {
-
+namespace evaluator {
+namespace host_impl {
 /*
  * creates a BLAS wrapper for BC_Tensors
  * -> uses generic function names but without the prefix of s/d for precision type.
@@ -21,7 +22,7 @@ namespace BC {
  */
 
 template<class core_lib>
-struct CPU_BLAS  {
+struct BLAS  {
 
     /*
      * a = M x K
@@ -96,7 +97,8 @@ struct CPU_BLAS  {
         *A = cblas_sdot(n, x, incX, y, incY);
     }
 };
-
+}
+}
 }
 
 #endif /* MATHEMATICS_CPU_BLAS_H_ */

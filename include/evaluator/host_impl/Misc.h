@@ -11,9 +11,10 @@
 #include <random>
 
 namespace BC {
-
+namespace evaluator {
+namespace host_impl {
 template<class core_lib>
-struct CPU_Misc {
+struct Misc {
 
     template<typename T, typename scalar_t>
     static void randomize(T& tensor, scalar_t lower_bound, scalar_t upper_bound) {
@@ -47,7 +48,8 @@ struct CPU_Misc {
 		return rand_handle<scalar_t>(lower, upper);
 	}
 };
-
+}
+}
 }
 
 #endif /* MATHEMATICS_CPU_MISC_H_ */

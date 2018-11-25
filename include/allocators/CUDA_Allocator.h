@@ -16,15 +16,14 @@
 
 namespace BC {
 
-class GPU;
 class device_tag;
 
 namespace module {
 namespace stl {
 
-struct CUDA_Allocator : GPU {
+struct CUDA_Allocator : evaluator::Device {
 
-    using mathlib_t = GPU;
+    using mathlib_t = evaluator::Device;
     using system_tag = device_tag;
 
     template<typename T>
