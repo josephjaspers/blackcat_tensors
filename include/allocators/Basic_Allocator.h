@@ -12,6 +12,7 @@
 namespace BC {
 
 class CPU;
+class host_tag;
 
 namespace module {
 namespace stl  {
@@ -19,6 +20,7 @@ namespace stl  {
 struct Basic_Allocator : CPU {
 
     using mathlib_t = CPU;
+    using system_tag = host_tag;
 
     template<typename T>
     static T*& allocate(T*& internal_mem_ptr, int size) {

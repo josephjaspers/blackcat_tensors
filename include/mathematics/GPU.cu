@@ -19,7 +19,6 @@
 #include "gpu_implementation/GPU_Misc.h"
 #include "gpu_implementation/GPU_Constants.h"
 #include "gpu_implementation/GPU_Evaluator.h"
-#include "gpu_implementation/GPU_Algorithm.h"
 
 namespace BC {
 namespace module {
@@ -28,8 +27,7 @@ class GPU :
     public GPU_Misc<GPU>,
     public GPU_BLAS<GPU>,
     public GPU_Constants<GPU>,
-    public GPU_Evaluator<GPU>,
-    public GPU_Algorithm<GPU> {
+    public GPU_Evaluator<GPU> {
 public:
 
     static constexpr int CUDA_BASE_THREADS = 256;

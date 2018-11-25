@@ -24,8 +24,8 @@ using Basic_Allocator = module::stl::Basic_Allocator;
 #endif
 
 #ifdef __CUDACC__
-	using CUDA = module::stl::CUDA_Allocator;
-	using CUDA_Managed = module::stl::CUDA_Managed_Allocator;
+	using Cuda = module::stl::CUDA_Allocator;
+	using Cuda_Managed = module::stl::CUDA_Managed_Allocator;
 #endif
 
 template<int dimension, class scalar_t, class allocator_t=alloc_t>

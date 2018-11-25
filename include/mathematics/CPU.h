@@ -15,7 +15,6 @@
 #include "cpu_implementation/CPU_BLAS.h"
 #include "cpu_implementation/CPU_Constants.h"
 #include "cpu_implementation/CPU_Evaluator.h"
-#include "cpu_implementation/CPU_Algorithm.h"
 
 
 namespace BC {
@@ -32,8 +31,7 @@ class CPU:
         public CPU_Misc<CPU>,
         public CPU_BLAS<CPU>,
         public CPU_Constants<CPU>,
-        public CPU_Evaluator<CPU>,
-        public CPU_Algorithm<CPU>
+        public CPU_Evaluator<CPU>
 {
 
 

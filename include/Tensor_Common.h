@@ -18,10 +18,12 @@
 #include "allocators/CUDA_Managed_Allocator.h"
 
 namespace BC {
-//Example of BC_PRIVATE_DEF  --> int main() { BC_PRIVATE_DEF(	add, (int x, int y)
 #define BC_ARRAY_ONLY(literal) static_assert(BC::et::is_array<internal_t>(), "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
 template<int>   class DISABLED;
 template<class> class Tensor_Base;
+
+class host_tag;
+class device_tag;
 
 #define BLACKCAT_TENSORS_ASSERT_VALID                            //Ensures basic checks
 

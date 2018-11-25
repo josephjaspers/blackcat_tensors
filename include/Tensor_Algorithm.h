@@ -11,17 +11,19 @@
 #define TENSOR_FUNCTIONS_H_
 
 #include <algorithm>
-
-namespace BC{
+#include "algorithms/Algorithms.h"
+namespace BC {
 
 #define BC_TENSOR_ALGORITHM_DEF(function)\
 \
     template<class iter_begin_, class iter_end_, class... args>\
     static auto function (iter_begin_ begin_, iter_end_ end_, args... params) {\
         using tensor_t = typename iter_end_::tensor_t;\
-        using mathlib_t = typename tensor_t::mathlib_t;\
+        using allocator_t = typename tensor_t::allocator_t;\
+        using system_tag  = typename allocator_t::system_tag;\
+        using implementation = typename BC::algorithms::template implementation<system_tag>;\
 \
-        return mathlib_t :: function (begin_, end_, params...);\
+        return implementation:: function (begin_, end_, params...);\
     }
 
 namespace alg {

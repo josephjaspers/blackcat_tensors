@@ -5,14 +5,16 @@
  *      Author: joseph
  */
 
-#ifndef GPU_ALGORITHMS_H_
-#define GPU_ALGORITHMS_H_
+#ifdef __CUDACC__
+#ifndef BC_ALGORITHMS_DEVICE_H_
+#define BC_ALGORITHMS_DEVICE_H_
 
 #include <thrust/generate.h>
 #include <thrust/sort.h>
 #include <thrust/copy.h>
 #include <cstdlib>
 
+#include "Common.h"
 
 //forwards methods to thrust implementation
 #define BC_GPU_ALGORITHM_FORWARDER_DEF(function) \
@@ -41,8 +43,8 @@ static auto function (iter_begin begin, iter_end end){\
 
 
 namespace BC {
-template<class core_lib>
-struct GPU_Algorithm {
+namespace algorithms {
+struct device {
 
     //non-modifying sequences
     BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(all_of)
@@ -146,10 +148,10 @@ struct GPU_Algorithm {
 
 
 };
-
+}
 }
 
 
 
 #endif /* GPU_ALGORITHMS_H_ */
-
+#endif

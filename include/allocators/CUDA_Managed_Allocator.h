@@ -7,7 +7,9 @@
 #ifdef __CUDACC__
 #ifndef CUDA_MANAGED_ALLOCATOR_H_
 #define CUDA_MANAGED_ALLOCATOR_H_
+
 #include "CUDA_Allocator.h"
+
 namespace BC {
 namespace module {
 namespace stl {
@@ -20,6 +22,7 @@ struct CUDA_Managed_Allocator : CUDA_Allocator {
         return t;
     }
 };
+
 }
 }
 }

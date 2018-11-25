@@ -20,22 +20,4 @@
 	#define __BC_omp_bar__
 #endif
 
-#ifdef BC_CPP17
-	#define BC_DEF_IF_CPP17(code) code
-#else
-	#define BC_DEF_IF_CPP17(code)
-#endif
-
-//multithreaded algorithms by default
-//#define BC_ALG_SINGLE_PARALLEL_DEFAULT
-#ifdef BC_CPP17
-    #ifdef BC_ALG_SINGLE_PARALLEL_DEFAULT
-        #define BC_CPU_ALGORITHM_EXECUTION std::execution::seq,
-    #else
-        #define BC_CPU_ALGORITHM_EXECUTION std::execution::par,
-    #endif
-#endif
-
-
-
 #endif /* MATH_LIBRARY_DIRECTIVES_H_ */

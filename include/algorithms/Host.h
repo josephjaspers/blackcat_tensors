@@ -5,10 +5,10 @@
  *      Author: joseph
  */
 
-#ifndef CPU_ALGORITHMS_H_
-#define CPU_ALGORITHMS_H_
+#ifndef BC_ALGORITHMS_HOST_H_
+#define BC_ALGORITHMS_HOST_H_
 #include <algorithm>
-
+#include "Common.h"
 #ifdef BC_CPU_ALGORITHM_EXECUTION
     #define BC_CPU_ALGORITHM_FORWARDER_DEF(function)\
     \
@@ -26,8 +26,8 @@
 #endif
 
 namespace BC {
-template<class core_lib>
-struct CPU_Algorithm {
+namespace algorithms {
+struct host {
 
     //non-modifying sequences
 
@@ -50,7 +50,7 @@ struct CPU_Algorithm {
     BC_CPU_ALGORITHM_FORWARDER_DEF(search_n)
 
     //modifying sequences
-//    BC_CPU_ALGORITHM_FORWARDER_DEF(copy)
+    BC_CPU_ALGORITHM_FORWARDER_DEF(copy)
     BC_CPU_ALGORITHM_FORWARDER_DEF(copy_if)
     BC_CPU_ALGORITHM_FORWARDER_DEF(copy_n)
     BC_CPU_ALGORITHM_FORWARDER_DEF(copy_backward)
@@ -129,7 +129,7 @@ struct CPU_Algorithm {
 
 
 };
-
+}
 }
 
 
