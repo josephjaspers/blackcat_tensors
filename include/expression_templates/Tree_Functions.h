@@ -13,14 +13,10 @@
 #include "Tree_Evaluator_Common.h"
 
 namespace BC{
-
-class CPU;
-class GPU;
-
 namespace et     {
 namespace tree {
 
-
+#define BC_ET_TREE_SCALAR_MODIFIER(oper, alpha, beta)
 
 template<class> struct scalar_modifer {
     enum mod {
@@ -60,14 +56,7 @@ template<> struct scalar_modifer<et::oper::assign> {
 };
 
 
-template<class T>
-struct is_blas_func_impl { static constexpr bool value = false; };
-template<> struct is_blas_func_impl<BC::CPU> { static constexpr bool value = true; };
-template<> struct is_blas_func_impl<BC::GPU> { static constexpr bool value = true; };
-
-
 template<class T> static constexpr bool is_blas_func() {
-//    return is_blas_func_impl<T>::value;
     return std::is_base_of<BC::BLAS_FUNCTION, T>::value;
 }
 
@@ -77,16 +66,23 @@ static constexpr bool is_linear_op() {
 }
 
 template<class T>
+static constexpr bool is_linear_assignment_op() {
+    return MTF::seq_contains<T, et::oper::add_assign, et::oper::sub_assign>;
+}
+
+
+
+template<class T>
 static constexpr bool is_nonlinear_op() {
     return  !MTF::seq_contains<T, et::oper::add, et::oper::sub> && !is_blas_func<T>();
 }
 template<class T>
 static constexpr int alpha_of() {
-    return scalar_modifer<std::decay_t<T>>::mod::alpha;
+    return scalar_modifer<std::decay_t<T>>::mod::beta;
 }
 template<class T>
 static constexpr int beta_of() {
-    return scalar_modifer<std::decay_t<T>>::mod::beta;
+    return scalar_modifer<std::decay_t<T>>::mod::alpha;
 }
 
 
@@ -94,7 +90,7 @@ static constexpr int beta_of() {
 template<class op, class core, int a, int b>//only apply update if right hand side branch
 auto update_injection(injector<core,a,b> tensor) {
     static constexpr int alpha = a != 0 ? a * alpha_of<op>() : 1;
-    static constexpr int beta = b != 0 ? b * beta_of<op>() : 1;
+    static constexpr int beta = b != 0 ? b * beta_of<op>() : beta_of<op>();
     return injector<core, alpha, beta>(tensor.data());
 }
 

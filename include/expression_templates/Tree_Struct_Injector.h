@@ -23,8 +23,13 @@ struct injector {
     operator         tensor_core& ()       { return array; }
 
     const tensor_core& data() const { return array; }
-          tensor_core& data()          { return array; }
+          tensor_core& data()       { return array; }
 };
+
+template<class core, int a, int b>
+auto make_injection(core& c) {
+	return injector<core, a, b>(c);
+}
 }
 }
 }
