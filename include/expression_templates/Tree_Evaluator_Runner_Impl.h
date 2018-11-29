@@ -42,7 +42,7 @@ template<class lv, class rv, class op> __BChot__
 static auto substitution_evaluate(Binary_Expression<lv, rv, op> expression) {
 
 #ifndef BC_NO_SUBSTITUTIONS
-    using impl = std::conditional_t<evaluator<Binary_Expression<lv, rv, op>>::non_trivial_blas_injection,
+    using impl = std::conditional_t<evaluator<Binary_Expression<lv, rv, op>>::nested_blas_expr,
                     sub_eval_recursion, sub_eval_terminate>;
     return impl::function(expression);
 #else
@@ -57,7 +57,7 @@ static void deallocate_temporaries(expression expr) {
 
 template<class lv, class rv> __BChot__
 static  auto evaluate(Binary_Expression<lv, rv, oper::add_assign> expression) {
-    constexpr bool fast_eval = tree::evaluator<rv>::trivial_blas_evaluation;
+    constexpr bool fast_eval = tree::evaluator<rv>::entirely_blas_expr;
     auto right = evaluator<rv>::linear_evaluation(expression.right, injector<lv, 1, 1>(expression.left));
 
     return MTF::constexpr_ternary<fast_eval>(
@@ -70,7 +70,7 @@ static  auto evaluate(Binary_Expression<lv, rv, oper::add_assign> expression) {
 template<class lv, class rv> __BChot__
 static auto evaluate(Binary_Expression<lv, rv, oper::sub_assign> expression) {
 
-    constexpr bool fast_eval = tree::evaluator<rv>::trivial_blas_evaluation;
+    constexpr bool fast_eval = tree::evaluator<rv>::entirely_blas_expr;
     auto right = evaluator<rv>::linear_evaluation(expression.right, injector<lv, -1, 1>(expression.left));
 
     return MTF::constexpr_ternary<fast_eval>(

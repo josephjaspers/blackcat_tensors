@@ -48,7 +48,7 @@ struct Lazy_Evaluator {
     template<class T> __BChot__
     static constexpr bool INJECTION() {
         //non-trivial is true even when it is trivial
-        return et::tree::evaluator<std::decay_t<T>>::non_trivial_blas_injection;
+        return et::tree::evaluator<std::decay_t<T>>::nested_blas_expr;
     }
 
     //------------------------------------------------Purely lazy evaluation----------------------------------//

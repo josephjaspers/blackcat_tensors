@@ -18,9 +18,9 @@ namespace tree {
 
 template<class lv, class rv, class op>
 struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op<op>()>> {
-    static constexpr bool trivial_blas_evaluation = false;
-    static constexpr bool trivial_blas_injection = false;
-    static constexpr bool non_trivial_blas_injection = evaluator<lv>::non_trivial_blas_injection || evaluator<rv>::non_trivial_blas_injection;
+    static constexpr bool entirely_blas_expr = false;
+    static constexpr bool partial_blas_expr = false;
+    static constexpr bool nested_blas_expr = evaluator<lv>::nested_blas_expr || evaluator<rv>::nested_blas_expr;
 
 
     template<class core, int a, int b> __BChot__
@@ -67,10 +67,10 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
             //dont need to update injection
             //trivial injection left_hand side (we attempt to prefer trivial injections opposed to non-trivial)
             using impl  =
-                std::conditional_t<evaluator<lv>::trivial_blas_injection,         left_trivial_injection,
-                std::conditional_t<evaluator<rv>::trivial_blas_injection,         right_trivial_injection,
-                std::conditional_t<evaluator<lv>::non_trivial_blas_injection,     left_nontrivial_injection,
-                std::conditional_t<evaluator<rv>::non_trivial_blas_injection,     right_nontrivial_injection, void>>>>;
+                std::conditional_t<evaluator<lv>::partial_blas_expr,         left_trivial_injection,
+                std::conditional_t<evaluator<rv>::partial_blas_expr,         right_trivial_injection,
+                std::conditional_t<evaluator<lv>::nested_blas_expr,     left_nontrivial_injection,
+                std::conditional_t<evaluator<rv>::nested_blas_expr,     right_nontrivial_injection, void>>>>;
 
             return impl::function(branch, tensor);
 
@@ -94,7 +94,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
 
     __BChot__
     static auto replacement(const Binary_Expression<lv,rv,op>& branch) {
-        using impl = std::conditional_t<non_trivial_blas_injection, replacement_required, replacement_not_required>;
+        using impl = std::conditional_t<nested_blas_expr, replacement_required, replacement_not_required>;
         return impl::function(branch);
     }
     __BChot__
