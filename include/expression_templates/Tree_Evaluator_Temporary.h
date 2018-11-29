@@ -17,9 +17,9 @@ namespace tree {
 template<class core>
 struct evaluator<temporary<core>>
 {
-    static constexpr bool trivial_blas_evaluation = false;
-    static constexpr bool trivial_blas_injection = false;
-    static constexpr bool non_trivial_blas_injection = false;
+    static constexpr bool entirely_blas_expr = false;
+    static constexpr bool partial_blas_expr = false;
+    static constexpr bool nested_blas_expr = false;
 
     template<int a, int b> __BChot__
     static auto linear_evaluation(const temporary<core>& branch, injector<core, a, b> tensor) {

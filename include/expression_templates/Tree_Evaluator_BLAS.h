@@ -31,9 +31,9 @@ namespace tree {
 
 template<class lv, class rv, class op>
 struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op>()>> {
-    static constexpr bool trivial_blas_evaluation = true;
-    static constexpr bool trivial_blas_injection = true;
-    static constexpr bool non_trivial_blas_injection = true;
+    static constexpr bool entirely_blas_expr = true;
+    static constexpr bool partial_blas_expr = true;
+    static constexpr bool nested_blas_expr = true;
     using branch_t = Binary_Expression<lv, rv, op>;
 
     template<class core, int a, int b> __BChot__
@@ -50,8 +50,9 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
     //if no replacement is used yet, auto inject
     __BChot__
     static auto replacement(const Binary_Expression<lv, rv, op>& branch) {
-        auto tmp =  temporary<et::Array<branch_t::DIMS(), scalar_of<branch_t>, allocator_of<branch_t>>>(branch.inner_shape());
-        branch.eval(injector<std::decay_t<decltype(tmp)>, 1, 0>(tmp));
+    	using tmp_t = temporary<et::Array<branch_t::DIMS(), scalar_of<branch_t>, allocator_of<branch_t>>>;
+        tmp_t tmp(branch.inner_shape());
+        branch.eval(injector<tmp_t, 1, 0>(tmp));
         return tmp;
     }
     __BChot__

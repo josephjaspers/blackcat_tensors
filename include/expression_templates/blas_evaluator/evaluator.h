@@ -1,22 +1,21 @@
-/*  Project: BlackCat_Tensors
- *  Author: JosephJaspers
- *  Copyright 2018
+/*
+ * evaluator.h
  *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ *  Created on: Nov 28, 2018
+ *      Author: joseph
+ */
 
-
-#ifndef EXPRESSION_TREE_FUNCTIONS_H_
-#define EXPRESSION_TREE_FUNCTIONS_H_
-
-#include "Tree_Evaluator_Common.h"
+#ifndef EVALU2ATOR_H_
+#define EVALU2ATOR_H_
 
 namespace BC{
-namespace et     {
-namespace tree {
+namespace et {
+namespace evaluator {
 
-#define BC_ET_TREE_SCALAR_MODIFIER(oper, alpha, beta)
+#define BC_ET_INNER_FUNC(funcname) 															\
+struct funcname##_t { int operator () (); };	\
+ int funcname::operator () () \
+
 
 template<class> struct scalar_modifer {
     enum mod {
@@ -27,13 +26,13 @@ template<class> struct scalar_modifer {
 template<> struct scalar_modifer<et::oper::add> {
     enum mod {
         alpha = 1,
-        beta = 1,
+        beta = 0,
     };
 };
 template<> struct scalar_modifer<et::oper::sub> {
     enum mod {
         alpha = -1,
-        beta = 1
+        beta = 0
     };
 };
 template<> struct scalar_modifer<et::oper::add_assign> {
@@ -44,8 +43,8 @@ template<> struct scalar_modifer<et::oper::add_assign> {
 };
 template<> struct scalar_modifer<et::oper::sub_assign> {
     enum mod {
-        alpha = 1,
-        beta = -1,
+        alpha = -1,
+        beta = 1,
     };
 };
 template<> struct scalar_modifer<et::oper::assign> {
@@ -86,20 +85,49 @@ static constexpr int beta_of() {
 }
 
 
-//entirely_blas_expr -- detects if the tree is entirely +/- operations with blas functions, --> y = a * b + c * d - e * f  --> true, y = a + b * c --> false
-template<class op, class core, int a, int b, bool eval=false>//only apply update if right hand side branch
-auto update_injection(injector<core,a,b> tensor) {
-    static constexpr int alpha = a != 0 ? a * alpha_of<op>() : 1;
-    static constexpr int beta = !eval ? b : b != 0 ? b * beta_of<op>() : beta_of<op>();
-    return injector<core, alpha, beta>(tensor.data());
+
+template<class output, int alpha, int beta, class... scalars> class OutputWrapper;
+
+template<class output, int a, int b, class... scalars>
+auto make_wrapper(output o, scalars... s) {
+	return OutputWrapper<output, a, b, scalars...>(o, s...);
 }
 
 
+	struct evaluator {
+
+		template<class expression_t, class output_t>
+		static void impl(expression_t expr, const OutputWrapper& output) {
+
+			if (is_linear_op<expression_t>()) {
+				if (is_scalar_mul<expression_t>()) {
+					auto output = make_wrapper(output, expr.scalar);
+					return evaluator(expr.branch, output);
+
+				} else if (is_blas_func<decltype(expr.left)>() && is_blas_func<decltype(expr.right)>()) {
+					expr.left.evaluate(output);
+					expr.right.evaluate(update_injection(output));
+					return output;
+				} else if (is_blas_func<decltype(expr.left)>()) {
+					expr.right.evaluate(output);
+//					return bin_func(exp)
+				}
+
+			}
+
+
+		}
+
+	};
+
+
+
+
+
 }
 }
 }
 
 
 
-
-#endif /* EXPRESSION_TREE_FUNCTIONS_H_ */
+#endif /* EVALUATOR_H_ */
