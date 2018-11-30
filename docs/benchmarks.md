@@ -7,6 +7,10 @@ OS: Ubuntu 18.04.
 ----------------------------------------------------------------------------------------
 Time represents the total sum of each rep.
 
+
+BC time represents the performance of BC::Vector<double>.  
+The baseline time is performance of the hardcoded implementation.  
+  
 Operation: `a = b + c - d / e`  
 Repetitions: 10
 
