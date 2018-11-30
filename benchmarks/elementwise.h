@@ -11,13 +11,9 @@
 #include <chrono>
 #include "../../BlackCat_Tensors/include/BlackCat_Tensors.h"
 
-
-
 auto benchmark_forloop(int size, int iters, bool stdout=false) {
 
-	using clock = std::chrono::duration<double>;
-
-    using vec = BC::Vector<double>;
+    using clock = std::chrono::duration<double>;
 
     clock bc_time;
     clock cptr_time;
@@ -39,18 +35,16 @@ auto benchmark_forloop(int size, int iters, bool stdout=false) {
     double* d_ = d.data();
     double* e_ = e.data();
 
-
-
     {
         auto wcts = std::chrono::system_clock::now();
 
         for (int i = 0; i < iters; ++i)
             a = b + c - d / e;
 
-
         bc_time = clock(std::chrono::system_clock::now() - wcts);
-        if (stdout)
-        std::cout << "BlackCat_Expression a = b + c - d / e \n" << bc_time.count() << " seconds [Wall Clock]\n\n" << std::endl;
+        
+	    if (stdout)
+                std::cout << "BlackCat_Expression a = b + c - d / e \n" << bc_time.count() << " seconds [Wall Clock]\n\n" << std::endl;
     }
 
     {
@@ -63,8 +57,9 @@ auto benchmark_forloop(int size, int iters, bool stdout=false) {
             }
 #pragma omp barrier
         cptr_time = clock(std::chrono::system_clock::now() - wcts);
-        if (stdout)
-        std::cout << "For Loop  a = b + c - d / e \n" << cptr_time.count() << " seconds [Wall Clock]\n\n" << std::endl;
+        
+	if (stdout)
+            std::cout << "For Loop  a = b + c - d / e \n" << cptr_time.count() << " seconds [Wall Clock]\n\n" << std::endl;
 
     }
 
