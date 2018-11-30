@@ -37,6 +37,8 @@ BlackCat Tensors attempts to align itself with the design of the C++ standard li
 | 4 | [Iterators](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/iterators.md) | Overview of iterators in BCT and their functionality |
 | 5 | [Algorithms](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/algorithms.md) | Brief overview of how algorithms are implemented, and a list of supported algorithms |
 | 6 | [CMath Functions](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/cmath_functions.md) | A list of supported CMath functions |
+| 7 | [Benchmarks](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/benchmarks.md) | Performance Testing |
+
 
 #### License
 ```
