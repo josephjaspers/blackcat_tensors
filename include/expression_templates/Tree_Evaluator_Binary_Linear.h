@@ -23,57 +23,61 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
     static constexpr bool partial_blas_expr = evaluator<lv>::partial_blas_expr || evaluator<rv>::partial_blas_expr;
     static constexpr bool nested_blas_expr = partial_blas_expr;
 
+
+    //--------------------------------------------Linear evaluation branches----------------------------------------------//
     struct full_eval {
         template<class core, int a, int b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
-        	branch.left.eval(tensor);
-        	branch.right.eval(update_injection<op>(tensor));
-            return tensor.data();
+        	evaluator<lv>::linear_evaluation(branch.left, tensor);
+        	evaluator<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor));
+        	return tensor.data();
         }
     };
     struct left_eval {
         template<class core, int a, int b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
             evaluator<lv>::linear_evaluation(branch.left, tensor);
-            return evaluator<rv>::linear_evaluation(branch.right, update_injection<op, partial_blas_expr>(tensor));
+            return evaluator<rv>::linear_evaluation(branch.right, tensor);
         }
     };
     struct right_eval {
         template<class core, int a, int b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
-            evaluator<rv>::linear_evaluation(branch.right, update_injection<op>(tensor));
+            evaluator<rv>::linear_evaluation(branch.right, update_injection<op, b != 0>(tensor));
             return evaluator<lv>::linear_evaluation(branch.left, tensor);
         }
     };
-
     template<class core, int a, int b> __BChot__
     static auto linear_evaluation(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
-        static constexpr bool double_eval = evaluator<lv>::entirely_blas_expr && evaluator<rv>::entirely_blas_expr;
-
-        using impl = std::conditional_t<double_eval, full_eval,
+        using impl = std::conditional_t<entirely_blas_expr, full_eval,
             std::conditional_t<evaluator<lv>::entirely_blas_expr, left_eval, right_eval>>;
 
         return impl::function(branch, tensor);
     }
 
-    //------------------------------------------------------------------------
-    struct left_trivial_injection {
+    //-----------------------------------partial blas expr branches -----------------------------------------//
+    struct left_blas_expr {
+
         struct trivial_injection {
             template<class l, class r> __BChot__
             static auto function(const l& left, const r& right) {
                 return left;
             }
         };
-        struct non_trivial_injection {
-                template<class l, class r> __BChot__
-                static auto function(const l& left, const r& right) {
-                    return Binary_Expression<std::decay_t<decltype(left)>, std::decay_t<decltype(right)>, op>(left, right);
-                }
-            };
+
+		struct non_trivial_injection {
+			template<class LeftVal, class RightVal> __BChot__
+			static auto function(const LeftVal& left, const RightVal& right) {
+				return Binary_Expression<LeftVal, RightVal, op>(left, right);
+			}
+		};
+
         template<class core, int a, int b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
             auto left = evaluator<lv>::injection(branch.left, tensor);
-            auto right = evaluator<rv>::linear_evaluation(branch.right, update_injection<op>(tensor));
+
+            //check this ?
+            auto right = evaluator<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor));
 
             using impl = std::conditional_t<evaluator<rv>::entirely_blas_expr,
                     trivial_injection, non_trivial_injection>;
@@ -81,7 +85,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
             return impl::function(left, right);
         }
     };
-    struct right_trivial_injection {
+    struct right_blas_expr {
         struct trivial_injection {
             template<class l, class r> __BChot__
             static auto function(const l& left, const r& right) {
@@ -97,42 +101,46 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
         template<class core, int a, int b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
             auto left = evaluator<lv>::linear_evaluation(branch.left, tensor);
-            auto right = evaluator<rv>::injection(branch.right, update_injection<op>(tensor));
+            auto right = evaluator<rv>::injection(branch.right, tensor);
 
             using impl = std::conditional_t<evaluator<lv>::entirely_blas_expr,
                     trivial_injection, non_trivial_injection>;
 
-            return impl::function(left, right);        }
+            return impl::function(left, right);
+        }
     };
 
-    struct left_nontrivial_injection {
+    //------------nontrivial injections, DO NOT UPDATE, scalars-mods will enact during elementwise-evaluator----------------//
+    struct left_nested_blas_expr {
         template<class core, int a, int b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
             auto left = evaluator<lv>::injection(branch.left, tensor);
-            auto right = branch.right; //rv
+            rv right = branch.right; //rv
             return Binary_Expression<std::decay_t<decltype(left)>, rv, op>(left, right);
         }
     };
-    struct right_nontrivial_injection {
+    struct right_nested_blas_expr {
         template<class core, int a, int b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
-            auto left = branch.left; //lv
+            lv left = branch.left; //lv
             auto right = evaluator<rv>::injection(branch.right, tensor);
             return Binary_Expression<lv, std::decay_t<decltype(right)>, op>(left, right);
         }
     };
     template<class core, int a, int b> __BChot__
     static auto injection(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
-        static constexpr bool full_eval_b= evaluator<lv>::entirely_blas_expr && evaluator<rv>::entirely_blas_expr;
 
         using impl =
-                std::conditional_t<full_eval_b, full_eval,
-                std::conditional_t<evaluator<lv>::partial_blas_expr, left_trivial_injection,
-                std::conditional_t<evaluator<rv>::partial_blas_expr, right_trivial_injection,
-                std::conditional_t<evaluator<lv>::nested_blas_expr, left_nontrivial_injection,
-                std::conditional_t<evaluator<rv>::nested_blas_expr, right_nontrivial_injection, void>>>>>;
+                std::conditional_t<entirely_blas_expr, full_eval,
+                std::conditional_t<evaluator<lv>::partial_blas_expr, left_blas_expr,
+                std::conditional_t<evaluator<rv>::partial_blas_expr, right_blas_expr,
+                std::conditional_t<evaluator<lv>::nested_blas_expr, left_nested_blas_expr,
+                std::conditional_t<evaluator<rv>::nested_blas_expr, right_nested_blas_expr, void>>>>>;
         return impl::function(branch, tensor);
     }
+
+
+    //----------------------------------------------------substitution implementation-------------------------------------------//
     struct replacement_required {
         __BChot__
         static auto function(const Binary_Expression<lv,rv,op>& branch) {

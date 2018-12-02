@@ -14,7 +14,8 @@ namespace et     {
 namespace tree {
 
 /*
- * used as a wrapper for BC_Arrays, enalbes the expression tree to traverse through and delete the correct
+ *Tag for BC::Array to flag for deletion after using the tree-evaluator
+ *
  */
 
 template<class data_t>

@@ -16,15 +16,8 @@ namespace BC{
 namespace et     {
 namespace tree {
 
-#define BC_ET_TREE_SCALAR_MODIFIER(oper, alpha, beta)
-
+//default
 template<class> struct scalar_modifer {
-    enum mod {
-        alpha = 0,
-        beta = 0,
-    };
-};
-template<> struct scalar_modifer<et::oper::add> {
     enum mod {
         alpha = 1,
         beta = 1,
@@ -36,16 +29,10 @@ template<> struct scalar_modifer<et::oper::sub> {
         beta = 1
     };
 };
-template<> struct scalar_modifer<et::oper::add_assign> {
-    enum mod {
-        alpha = 1,
-        beta = 1,
-    };
-};
 template<> struct scalar_modifer<et::oper::sub_assign> {
     enum mod {
-        alpha = 1,
-        beta = -1,
+        alpha = -1,
+        beta = 1,
     };
 };
 template<> struct scalar_modifer<et::oper::assign> {
@@ -54,7 +41,6 @@ template<> struct scalar_modifer<et::oper::assign> {
         beta = 0,
     };
 };
-
 
 template<class T> static constexpr bool is_blas_func() {
     return std::is_base_of<BC::BLAS_FUNCTION, T>::value;
@@ -78,19 +64,19 @@ static constexpr bool is_nonlinear_op() {
 }
 template<class T>
 static constexpr int alpha_of() {
-    return scalar_modifer<std::decay_t<T>>::mod::beta;
+    return scalar_modifer<std::decay_t<T>>::mod::alpha;
 }
 template<class T>
 static constexpr int beta_of() {
-    return scalar_modifer<std::decay_t<T>>::mod::alpha;
+    return scalar_modifer<std::decay_t<T>>::mod::beta;
 }
 
 
 //entirely_blas_expr -- detects if the tree is entirely +/- operations with blas functions, --> y = a * b + c * d - e * f  --> true, y = a + b * c --> false
-template<class op, class core, int a, int b, bool eval=false>//only apply update if right hand side branch
+template<class op, bool prior_eval, class core, int a, int b>//only apply update if right hand side branch
 auto update_injection(injector<core,a,b> tensor) {
-    static constexpr int alpha = a != 0 ? a * alpha_of<op>() : 1;
-    static constexpr int beta = !eval ? b : b != 0 ? b * beta_of<op>() : beta_of<op>();
+    static constexpr int alpha = a * alpha_of<op>();
+    static constexpr int beta  = prior_eval ? 1 : 0;
     return injector<core, alpha, beta>(tensor.data());
 }
 

@@ -15,6 +15,8 @@ namespace tree {
 template<class tensor_core, int alpha_modifier_ = 1, int beta_modifier_= 0>
 struct injector {
 
+	static constexpr int ALPHA = alpha_modifier_;
+	static constexpr int BETA = beta_modifier_;
     injector(tensor_core& array_) : array(array_) {}
 
     tensor_core& array;

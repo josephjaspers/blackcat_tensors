@@ -174,8 +174,14 @@ public:
    }
    BC_DEF_IF_CPP17(
 	   scalar_t sum() const {
-		   return BC::accumulate(this->begin_(), this->end_());
+		   return BC::accumulate(this->cbegin_(), this->cend_(), scalar_t(0));
 	   }
+   )
+
+   BC_DEF_IF_CPP17(
+   scalar_t prod() const {
+	   return BC::accumulate(this->cbegin_(), this->cend_(), scalar_t(1), BC::et::oper::mul());
+   }
    )
 
 #define BC_TENSOR_ALGORITHM_MEMBER_DEF(function)\

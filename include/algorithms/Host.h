@@ -7,14 +7,15 @@
 
 #ifndef BC_ALGORITHMS_HOST_H_
 #define BC_ALGORITHMS_HOST_H_
+#include <numeric>
 #include <algorithm>
 #include "Common.h"
-#ifdef BC_CPU_ALGORITHM_EXECUTION
+#if  defined(BC_CPP17_EXECUTION) && defined(BC_CPP_EXECUTION_POLICIES)
     #define BC_CPU_ALGORITHM_FORWARDER_DEF(function)\
     \
         template<class... args>\
         static auto function (args... parameters){\
-            return std:: function (BC_CPU_ALGORITHM_EXECUTION, parameters...);\
+            return std:: function (BC_CPP17_EXECUTION, parameters...);\
         }
 #else
     #define BC_CPU_ALGORITHM_FORWARDER_DEF(function)\
@@ -24,6 +25,14 @@
             return std:: function (parameters...);\
         }
 #endif
+
+
+#define BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF(function) \
+template<class... args>  \
+static auto function (args... parameters){ \
+    static_assert(sizeof...(args) == 100, "BC::Host::Algorithms DOES NOT DEFINE: " #function );\
+}
+
 
 namespace BC {
 namespace algorithms {
@@ -36,7 +45,7 @@ struct host {
     BC_CPU_ALGORITHM_FORWARDER_DEF(none_of)
     BC_CPU_ALGORITHM_FORWARDER_DEF(for_each)
 
-    BC_DEF_IF_CPP17(BC_CPU_ALGORITHM_FORWARDER_DEF(for_each_n) )
+    BC_DEF_IF_CPP17(BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF(for_each_n) )
 
     BC_CPU_ALGORITHM_FORWARDER_DEF(count)
     BC_CPU_ALGORITHM_FORWARDER_DEF(count_if)
@@ -75,10 +84,10 @@ struct host {
     BC_CPU_ALGORITHM_FORWARDER_DEF(rotate)
     BC_CPU_ALGORITHM_FORWARDER_DEF(rotate_copy)
 
-    BC_DEF_IF_CPP17(BC_CPU_ALGORITHM_FORWARDER_DEF(shift_left))
-    BC_DEF_IF_CPP17(BC_CPU_ALGORITHM_FORWARDER_DEF(shift_right))
+    BC_DEF_IF_CPP17(BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF(shift_left))
+    BC_DEF_IF_CPP17(BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF(shift_right))
     BC_CPU_ALGORITHM_FORWARDER_DEF(random_shuffle)
-    BC_DEF_IF_CPP17(BC_CPU_ALGORITHM_FORWARDER_DEF(sample))
+    BC_DEF_IF_CPP17(BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF(sample))
 //  BC_will not define removing
 //    BC_CPU_ALGORITHM_FORWARDER_DEF(unique)
 //    BC_CPU_ALGORITHM_FORWARDER_DEF(unique_copy)
@@ -108,7 +117,7 @@ struct host {
     BC_CPU_ALGORITHM_FORWARDER_DEF(min_element)
     BC_CPU_ALGORITHM_FORWARDER_DEF(minmax)
     BC_CPU_ALGORITHM_FORWARDER_DEF(minmax_element)
-    BC_DEF_IF_CPP17(BC_CPU_ALGORITHM_FORWARDER_DEF(clamp))
+    BC_DEF_IF_CPP17(BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF(clamp))
     BC_CPU_ALGORITHM_FORWARDER_DEF(equal)
     BC_CPU_ALGORITHM_FORWARDER_DEF(lexicographical_compare)
 
@@ -118,12 +127,12 @@ struct host {
     BC_DEF_IF_CPP17(BC_CPU_ALGORITHM_FORWARDER_DEF(inner_product))
     BC_DEF_IF_CPP17(BC_CPU_ALGORITHM_FORWARDER_DEF(adjacent_difference))
     BC_DEF_IF_CPP17(BC_CPU_ALGORITHM_FORWARDER_DEF(partial_sum))
-    BC_DEF_IF_CPP17(BC_CPU_ALGORITHM_FORWARDER_DEF(reduce))
-    BC_DEF_IF_CPP17(BC_CPU_ALGORITHM_FORWARDER_DEF(exclusive_scan))
-    BC_DEF_IF_CPP17(BC_CPU_ALGORITHM_FORWARDER_DEF(inclusive_scan))
-    BC_DEF_IF_CPP17(BC_CPU_ALGORITHM_FORWARDER_DEF(transform_reduce))
-    BC_DEF_IF_CPP17(BC_CPU_ALGORITHM_FORWARDER_DEF(transform_exclusive_scan))
-    BC_DEF_IF_CPP17(BC_CPU_ALGORITHM_FORWARDER_DEF(transform_inclusive_scan))
+    BC_DEF_IF_CPP17(BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF(reduce))
+    BC_DEF_IF_CPP17(BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF(exclusive_scan))
+    BC_DEF_IF_CPP17(BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF(inclusive_scan))
+    BC_DEF_IF_CPP17(BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF(transform_reduce))
+    BC_DEF_IF_CPP17(BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF(transform_exclusive_scan))
+    BC_DEF_IF_CPP17(BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF(transform_inclusive_scan))
     BC_CPU_ALGORITHM_FORWARDER_DEF(qsort)
     BC_CPU_ALGORITHM_FORWARDER_DEF(bsearch)
 

@@ -14,13 +14,9 @@
 	#define BC_DEF_IF_CPP17(code)
 #endif
 
-//multithreaded algorithms by default
-//#define BC_ALG_SINGLE_PARALLEL_DEFAULT
 #ifdef BC_CPP17
-    #ifdef BC_ALG_SINGLE_PARALLEL_DEFAULT
-        #define BC_CPU_ALGORITHM_EXECUTION std::execution::seq,
-    #else
-        #define BC_CPU_ALGORITHM_EXECUTION std::execution::par,
+    #ifndef BC_CPP17_EXECUTION
+        #define BC_CPP17_EXECUTION std::execution::par,
     #endif
 #endif
 

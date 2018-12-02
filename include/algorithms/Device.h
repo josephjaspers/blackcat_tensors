@@ -132,17 +132,24 @@ struct device {
     BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(lexicographical_compare)
 
     //numeric--------------------------
-//    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_FORWARDER_DEF(iota))
-//    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_FORWARDER_DEF(accumulate))
-//    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_FORWARDER_DEF(inner_product))
-//    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_FORWARDER_DEF(adjacent_difference))
-//    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_FORWARDER_DEF(partial_sum))
-//    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_FORWARDER_DEF(reduce))
-//    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_FORWARDER_DEF(exclusive_scan))
-//    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_FORWARDER_DEF(inclusive_scan))
-//    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_FORWARDER_DEF(transform_reduce))
-//    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_FORWARDER_DEF(transform_exclusive_scan))
-//    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_FORWARDER_DEF(transform_inclusive_scan))
+    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(iota))
+//    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(accumulate))
+
+    template<class... args>\
+    static auto accumulate (args... parameters){\
+        return thrust:: reduce (thrust::device, parameters...);\
+    }
+
+
+    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(inner_product))
+    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_FORWARDER_DEF(adjacent_difference))
+    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(partial_sum))
+    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_FORWARDER_DEF(reduce))
+    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_FORWARDER_DEF(exclusive_scan))
+    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_FORWARDER_DEF(inclusive_scan))
+    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_FORWARDER_DEF(transform_reduce))
+    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(transform_exclusive_scan))
+    BC_DEF_IF_CPP17(BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(transform_inclusive_scan))
 //    BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(qsort)
 //    BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(bsearch)
 
