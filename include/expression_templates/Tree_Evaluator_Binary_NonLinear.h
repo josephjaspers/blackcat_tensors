@@ -94,7 +94,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
     };
 
     __BChot__
-    static auto replacement(const Binary_Expression<lv,rv,op>& branch) {
+    static auto temporary_injection(const Binary_Expression<lv,rv,op>& branch) {
         using impl = std::conditional_t<requires_greedy_eval, replacement_required, replacement_not_required>;
         return impl::function(branch);
     }

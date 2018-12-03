@@ -9,31 +9,15 @@
 #ifndef PTEE_TEMPORARY_H_
 #define PTEE_TEMPORARY_H_
 
+#include "Tree_Evaluator_Default.h"
+
 namespace BC {
 namespace et     {
 namespace tree {
 
+template<class T> struct evaluator<temporary<T>> :evaluator_default<temporary<T>> {
 
-template<class core>
-struct evaluator<temporary<core>>
-{
-    static constexpr bool entirely_blas_expr = false;
-    static constexpr bool partial_blas_expr = false;
-    static constexpr bool nested_blas_expr = false;
-    static constexpr bool requires_greedy_eval = false;
-
-    template<int a, int b> __BChot__
-    static auto linear_evaluation(const temporary<core>& branch, injector<core, a, b> tensor) {
-        return branch;
-    }
-    template<int a, int b> __BChot__
-    static auto injection(const temporary<core>& branch, injector<core, a, b> tensor) {
-        return branch;
-    }
-    __BChot__ static auto replacement(const temporary<core>& branch) {
-        return branch;
-    }
-    __BChot__ static void deallocate_temporaries(temporary<core> tmp) {
+    static void deallocate_temporaries(temporary<T> tmp) {
         tmp.deallocate();
     }
 };

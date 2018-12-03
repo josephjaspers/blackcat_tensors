@@ -4,7 +4,8 @@
 #include "Tree_Evaluator_Runner_Impl.h"
 
 namespace BC {
-namespace et     {
+namespace et  {
+
 template<class allocator_type>
 struct Lazy_Evaluator {
     template<class T> __BChot__
@@ -46,7 +47,7 @@ struct Lazy_Evaluator {
     evaluate_aliased(const expression& expr) {
         static constexpr int iterator_dimension = expression::ITERATOR();    //the iterator for the evaluation of post inject_t
 
-        auto greedy_evaluated_expr = et::tree::Greedy_Evaluator::substitution_evaluate(expr);        //evaluate the internal tensor_type
+        auto greedy_evaluated_expr = et::tree::Greedy_Evaluator::evaluate_aliased(expr);        //evaluate the internal tensor_type
         if (is_expr<decltype(greedy_evaluated_expr)>()) {
             allocator_type::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
         }
@@ -76,14 +77,14 @@ struct CacheEvaluator {
 };
 
 template<class array_t, class expression_t>__BChot__
-void evaluate_to(array_t array, expression_t expr) {
+auto evaluate_to(array_t array, expression_t expr) {
     static_assert(is_array<array_t>(), "MAY ONLY EVALUATE TO ARRAYS");
-    Lazy_Evaluator<et::allocator_of<array_t>>::evaluate(et::Binary_Expression<array_t, expression_t, et::oper::assign>(array, expr));
+    return Lazy_Evaluator<et::allocator_of<array_t>>::evaluate(et::Binary_Expression<array_t, expression_t, et::oper::assign>(array, expr));
 }
 
 template<class expression_t>__BChot__
-void evaluate(expression_t expr) {
-    Lazy_Evaluator<allocator_of<expression_t>>::evaluate(expr);
+auto evaluate(expression_t expr) {
+    return Lazy_Evaluator<allocator_of<expression_t>>::evaluate(expr);
 }
 
 

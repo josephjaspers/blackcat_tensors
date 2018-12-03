@@ -52,7 +52,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
 
     //if no replacement is used yet, auto inject
     __BChot__
-    static auto replacement(const Binary_Expression<lv, rv, op>& branch) {
+    static auto temporary_injection(const Binary_Expression<lv, rv, op>& branch) {
     	using tmp_t = temporary<et::Array<branch_t::DIMS(), scalar_of<branch_t>, allocator_of<branch_t>>>;
         tmp_t tmp(branch.inner_shape());
         branch.eval(injector<tmp_t, 1, 0>(tmp));

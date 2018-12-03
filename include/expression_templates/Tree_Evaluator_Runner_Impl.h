@@ -9,12 +9,13 @@
 #ifndef PARSE_TREE_COMPLEX_EVALUATOR_H_
 #define PARSE_TREE_COMPLEX_EVALUATOR_H_
 
+#include "Tree_Evaluator_Common.h"
 #include "Tree_Evaluator_Array.h"
+#include "Tree_Evaluator_Temporary.h"
 #include "Tree_Evaluator_Binary_Linear.h"
 #include "Tree_Evaluator_Binary_NonLinear.h"
 #include "Tree_Evaluator_Unary.h"
 #include "Tree_Evaluator_BLAS.h"
-#include "Tree_Evaluator_Temporary.h"
 
 namespace BC{
 namespace et     {
@@ -22,83 +23,51 @@ namespace tree {
 
 struct Greedy_Evaluator {
 
-//template<class lv, class rv, class op>
-//static auto substitution_evaluate(Binary_Expression<lv, rv, op> expression);
+	template<class lv, class rv> __BChot__
+	static  auto evaluate(Binary_Expression<lv, rv, oper::add_assign> expression) {
+		auto right = evaluator<rv>::linear_evaluation(expression.right, injector<lv, 1, 1>(expression.left));
+//		auto right_eval =  evaluator<decltype(right)>::temporary_injection(right);
+		return make_bin_expr<oper::add_assign>(expression.left, right);
+	}
 
-struct sub_eval_recursion {
-    template<class lv, class rv, class op> __BChot__
-    static auto function(Binary_Expression<lv, rv, op> expression) {
-        return substitution_evaluate(evaluator<Binary_Expression<lv, rv, op>>::replacement(expression));
-    }
-};
-struct sub_eval_terminate {
-    template<class lv, class rv, class op> __BChot__
-    static auto function(Binary_Expression<lv, rv, op> expression) {
-        return expression;
-    }
-};
+	template<class lv, class rv> __BChot__
+	static auto evaluate(Binary_Expression<lv, rv, oper::sub_assign> expression) {
+		auto right = evaluator<rv>::linear_evaluation(expression.right, injector<lv, -1, 1>(expression.left));
+//		auto right_eval = evaluator<decltype(right)>::temporary_injection(right);
+		return make_bin_expr<oper::add_assign>(expression.left, right);
+	}
 
-template<class lv, class rv, class op> __BChot__
-static auto substitution_evaluate(Binary_Expression<lv, rv, op> expression) {
+	template<class lv, class rv> __BChot__
+	static auto evaluate(Binary_Expression<lv, rv, oper::assign> expression) {
+		auto right = evaluator<rv>::injection(expression.right, injector<lv, 1, 0>(expression.left));
+//		auto right_eval =  evaluator<decltype(right)>::temporary_injection(right);
+		return make_bin_expr<oper::assign>(expression.left, right);
 
-#ifndef BC_NO_SUBSTITUTIONS
-    using impl = std::conditional_t<evaluator<Binary_Expression<lv, rv, op>>::requires_greedy_eval,
-                    sub_eval_recursion, sub_eval_terminate>;
-    return impl::function(expression);
-#else
-    return expression;
-#endif
-}
+	}
 
-template<class expression> __BChot__
-static void deallocate_temporaries(expression expr) {
-    evaluator<expression>::deallocate_temporaries(expr);
-}
+	template<class lv, class rv> __BChot__
+	static auto evaluate(Binary_Expression<lv, rv, oper::mul_assign> expression) {
+		auto right_eval =  evaluator<rv>::temporary_injection(expression.right);
+		return make_bin_expr<oper::mul_assign>(expression.left, right_eval);
 
-template<class lv, class rv> __BChot__
-static  auto evaluate(Binary_Expression<lv, rv, oper::add_assign> expression) {
-    constexpr bool fast_eval = tree::evaluator<rv>::entirely_blas_expr;
-    auto right = evaluator<rv>::linear_evaluation(expression.right, injector<lv, 1, 1>(expression.left));
+	}
 
-    return MTF::constexpr_ternary<fast_eval>(
-            [&]() { return expression.left;},
-            [&]() {
-                return substitution_evaluate(Binary_Expression<lv, std::decay_t<decltype(right)>, oper::add_assign>
-                                    (expression.left, right));
-            });
-}
-template<class lv, class rv> __BChot__
-static auto evaluate(Binary_Expression<lv, rv, oper::sub_assign> expression) {
+	template<class lv, class rv>__BChot__
+	static auto evaluate(Binary_Expression<lv, rv, oper::div_assign> expression) {
+		auto right_eval = evaluator<rv>::temporary_injection(expression.right);
+		return make_bin_expr<oper::div_assign>(expression.left, right_eval);
 
-    constexpr bool fast_eval = tree::evaluator<rv>::entirely_blas_expr;
-    auto right = evaluator<rv>::linear_evaluation(expression.right, injector<lv, -1, 1>(expression.left));
+	}
 
-    return MTF::constexpr_ternary<fast_eval>(
-            [&]() { return expression.left;},
-            [&]() {
-                return substitution_evaluate(Binary_Expression<lv, std::decay_t<decltype(right)>, oper::sub_assign>(expression.left, right));
-            });
-}
-template<class lv, class rv> __BChot__
-static auto evaluate(Binary_Expression<lv, rv, oper::assign> expression) {
-    auto right = evaluator<rv>::injection(expression.right, injector<lv, 1, 0>(expression.left));
+	template<class expression_t>__BChot__
+	static auto evaluate_aliased(expression_t expression) {
+		return evaluator<expression_t>::temporary_injection(expression.right);
+	}
 
-    constexpr bool fast_eval = std::is_same<std::decay_t<decltype(right)>, lv>::value;
-
-    return MTF::constexpr_ternary<fast_eval>(
-            [&]() { return expression.left;},
-            [&]() {
-                return substitution_evaluate(Binary_Expression<lv, std::decay_t<decltype(right)>, oper::assign>(expression.left, right));
-            });
-}
-template<class lv, class rv> __BChot__
-static auto evaluate(Binary_Expression<lv, rv, oper::mul_assign> expression) {
-    return substitution_evaluate(expression);
-}
-template<class lv, class rv>__BChot__
-static auto evaluate(Binary_Expression<lv, rv, oper::div_assign> expression) {
-    return substitution_evaluate(expression);
-}
+	template<class expression> __BChot__
+	static void deallocate_temporaries(expression expr) {
+		evaluator<expression>::deallocate_temporaries(expr);
+	}
 };
 
 }
