@@ -34,7 +34,10 @@ struct evaluator<Unary_Expression<array_t, op>>
     }
 
     __BChot__ static auto temporary_injection(const Unary_Expression<array_t, op>& branch) {
-    	evaluator<array_t>::temporary_injection(branch.array);
+
+    	auto expr = evaluator<array_t>::temporary_injection(branch.array);
+    	return Unary_Expression<std::decay_t<decltype(expr)>, op>(expr);
+
     }
     __BChot__ static void deallocate_temporaries(const Unary_Expression<array_t, op>& branch) {
         evaluator<array_t>::deallocate_temporaries(branch.array);

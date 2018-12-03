@@ -95,8 +95,9 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
 
     __BChot__
     static auto temporary_injection(const Binary_Expression<lv,rv,op>& branch) {
-        using impl = std::conditional_t<requires_greedy_eval, replacement_required, replacement_not_required>;
-        return impl::function(branch);
+    	auto left  = evaluator<lv>::temporary_injection(branch.left);
+    	auto right = evaluator<rv>::temporary_injection(branch.right);
+    	return make_bin_expr<op>(left, right);
     }
     __BChot__
     static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch) {

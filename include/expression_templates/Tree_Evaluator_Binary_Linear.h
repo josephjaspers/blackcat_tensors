@@ -199,8 +199,9 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
     //----------------------------------------------------substitution implementation-------------------------------------------//
 
     static auto temporary_injection(const Binary_Expression<lv,rv,op>& branch) {
-    	evaluator<lv>::temporary_injection(branch.left);
-    	evaluator<rv>::temporary_injection(branch.right);
+    	auto left  = evaluator<lv>::temporary_injection(branch.left);
+    	auto right = evaluator<rv>::temporary_injection(branch.right);
+    	return make_bin_expr<op>(left, right);
     }
 
     __BChot__
