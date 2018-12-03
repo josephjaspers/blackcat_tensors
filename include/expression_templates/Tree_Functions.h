@@ -75,7 +75,7 @@ static constexpr int beta_of() {
 //entirely_blas_expr -- detects if the tree is entirely +/- operations with blas functions, --> y = a * b + c * d - e * f  --> true, y = a + b * c --> false
 template<class op, bool prior_eval, class core, int a, int b>//only apply update if right hand side branch
 auto update_injection(injector<core,a,b> tensor) {
-    static constexpr int alpha = a * alpha_of<op>();
+    static constexpr int alpha =  a * alpha_of<op>();
     static constexpr int beta  = prior_eval ? 1 : 0;
     return injector<core, alpha, beta>(tensor.data());
 }

@@ -30,7 +30,7 @@ namespace tree {
 
 
 //initial forward decl
-template<class T, class enabler = void>
+template<class T, class=void>
 struct evaluator;
 
 }

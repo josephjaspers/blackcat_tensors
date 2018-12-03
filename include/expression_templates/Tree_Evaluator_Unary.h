@@ -18,9 +18,10 @@ namespace tree {
 template<class array_t, class op>
 struct evaluator<Unary_Expression<array_t, op>>
 {
-    static constexpr bool entirely_blas_expr = false;
-    static constexpr bool partial_blas_expr = false;
-    static constexpr bool nested_blas_expr = evaluator<array_t>::nested_blas_expr;
+    static constexpr bool entirely_blas_expr 	= false;
+    static constexpr bool partial_blas_expr 	= false;
+    static constexpr bool nested_blas_expr 		= evaluator<array_t>::nested_blas_expr;
+    static constexpr bool requires_greedy_eval 	= evaluator<array_t>::requires_greedy_eval;
 
     template<class core, int a, int b> __BChot__
     static auto linear_evaluation(const Unary_Expression<array_t, op>& branch, injector<core, a, b> tensor) {
@@ -29,28 +30,14 @@ struct evaluator<Unary_Expression<array_t, op>>
     template<class core, int a, int b> __BChot__
     static auto injection(const Unary_Expression<array_t, op>& branch, injector<core, a, b> tensor) {
         auto array =  evaluator<array_t>::injection(branch.array, tensor);
-        using array_t_evaluated = std::decay_t<decltype(array)>;
-
-        return Unary_Expression<array_t_evaluated, op>(array);
+        return Unary_Expression<decltype(array), op>(array);
     }
-    //keep calling replacement till all the replacements are needed
 
-    struct trivial {
-        __BChot__ static auto impl(const Unary_Expression<array_t, op>& branch) {
-            using branch_t = Unary_Expression<array_t, op>;
-            auto tmp =  temporary<et::Array<branch_t::DIMS(), scalar_of<branch_t>, allocator_of<branch_t>>>(branch.inner_shape());
-            return injection(branch, tmp);
-        }
-    };
-    struct nontrivial {
-        __BChot__ static auto impl(const Unary_Expression<array_t, op>& branch) {
-            return branch;
-        };
-    };
-    __BChot__ static auto replacement(const Unary_Expression<array_t, op>& branch) {
+    __BChot__ static auto temporary_injection(const Unary_Expression<array_t, op>& branch) {
 
-        using function = std::conditional_t<nested_blas_expr, trivial, nontrivial>;
-        return function::impl(branch);
+    	auto expr = evaluator<array_t>::temporary_injection(branch.array);
+    	return Unary_Expression<std::decay_t<decltype(expr)>, op>(expr);
+
     }
     __BChot__ static void deallocate_temporaries(const Unary_Expression<array_t, op>& branch) {
         evaluator<array_t>::deallocate_temporaries(branch.array);

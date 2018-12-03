@@ -46,8 +46,15 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<lv, rv, oper
     __BCinline__ const auto inner_shape() const { return shape().inner_shape(); }
     __BCinline__ const auto block_shape() const { return shape().block_shape(); }
 };
+
+template<class op, class lv, class rv>
+auto make_bin_expr(lv left, rv right) {
+	return Binary_Expression<lv, rv, op>(left, right);
+}
+
 }
 }
+
 
 #endif /* EXPRESSION_BINARY_POINTWISE_SAME_H_ */
 
