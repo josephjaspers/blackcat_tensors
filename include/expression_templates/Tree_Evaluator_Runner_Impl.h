@@ -26,22 +26,19 @@ struct Greedy_Evaluator {
 	template<class lv, class rv> __BChot__
 	static  auto evaluate(Binary_Expression<lv, rv, oper::add_assign> expression) {
 		auto right = evaluator<rv>::linear_evaluation(expression.right, injector<lv, 1, 1>(expression.left));
-//		auto right_eval =  evaluator<decltype(right)>::temporary_injection(right);
-		return make_bin_expr<oper::add_assign>(expression.left, right);
+		return make_bin_expr<oper::add_assign>(expression.left, evaluate_temporaries(right));
 	}
 
 	template<class lv, class rv> __BChot__
 	static auto evaluate(Binary_Expression<lv, rv, oper::sub_assign> expression) {
 		auto right = evaluator<rv>::linear_evaluation(expression.right, injector<lv, -1, 1>(expression.left));
-//		auto right_eval = evaluator<decltype(right)>::temporary_injection(right);
-		return make_bin_expr<oper::add_assign>(expression.left, right);
+		return make_bin_expr<oper::add_assign>(expression.left, evaluate_temporaries(right));
 	}
 
 	template<class lv, class rv> __BChot__
 	static auto evaluate(Binary_Expression<lv, rv, oper::assign> expression) {
 		auto right = evaluator<rv>::injection(expression.right, injector<lv, 1, 0>(expression.left));
-//		auto right_eval =  evaluator<decltype(right)>::temporary_injection(right);
-		return make_bin_expr<oper::assign>(expression.left, right);
+		return make_bin_expr<oper::assign>(expression.left, evaluate_temporaries(right));
 
 	}
 
@@ -68,7 +65,12 @@ struct Greedy_Evaluator {
 	static void deallocate_temporaries(expression expr) {
 		evaluator<expression>::deallocate_temporaries(expr);
 	}
-};
+
+private:
+	template<class expression_t>__BChot__
+	static auto evaluate_temporaries(expression_t expression) {
+		return evaluator<expression_t>::temporary_injection(expression);
+	}};
 
 }
 }
