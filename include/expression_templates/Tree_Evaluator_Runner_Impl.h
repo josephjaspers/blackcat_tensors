@@ -42,7 +42,7 @@ template<class lv, class rv, class op> __BChot__
 static auto substitution_evaluate(Binary_Expression<lv, rv, op> expression) {
 
 #ifndef BC_NO_SUBSTITUTIONS
-    using impl = std::conditional_t<evaluator<Binary_Expression<lv, rv, op>>::nested_blas_expr,
+    using impl = std::conditional_t<evaluator<Binary_Expression<lv, rv, op>>::requires_greedy_eval,
                     sub_eval_recursion, sub_eval_terminate>;
     return impl::function(expression);
 #else

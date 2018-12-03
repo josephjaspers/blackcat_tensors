@@ -22,7 +22,7 @@ struct injector {
     tensor_core& array;
 
     operator const tensor_core& () const { return array; }
-    operator         tensor_core& ()       { return array; }
+    operator       tensor_core& ()       { return array; }
 
     const tensor_core& data() const { return array; }
           tensor_core& data()       { return array; }

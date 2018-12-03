@@ -20,6 +20,7 @@ struct evaluator<temporary<core>>
     static constexpr bool entirely_blas_expr = false;
     static constexpr bool partial_blas_expr = false;
     static constexpr bool nested_blas_expr = false;
+    static constexpr bool requires_greedy_eval = false;
 
     template<int a, int b> __BChot__
     static auto linear_evaluation(const temporary<core>& branch, injector<core, a, b> tensor) {

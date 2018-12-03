@@ -21,6 +21,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
     static constexpr bool entirely_blas_expr = false;
     static constexpr bool partial_blas_expr = false;
     static constexpr bool nested_blas_expr = evaluator<lv>::nested_blas_expr || evaluator<rv>::nested_blas_expr;
+    static constexpr bool requires_greedy_eval = evaluator<lv>::requires_greedy_eval || evaluator<rv>::requires_greedy_eval;
 
 
     template<class core, int a, int b> __BChot__
@@ -94,7 +95,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
 
     __BChot__
     static auto replacement(const Binary_Expression<lv,rv,op>& branch) {
-        using impl = std::conditional_t<nested_blas_expr, replacement_required, replacement_not_required>;
+        using impl = std::conditional_t<requires_greedy_eval, replacement_required, replacement_not_required>;
         return impl::function(branch);
     }
     __BChot__

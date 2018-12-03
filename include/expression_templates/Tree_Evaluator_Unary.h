@@ -21,6 +21,7 @@ struct evaluator<Unary_Expression<array_t, op>>
     static constexpr bool entirely_blas_expr = false;
     static constexpr bool partial_blas_expr = false;
     static constexpr bool nested_blas_expr = evaluator<array_t>::nested_blas_expr;
+    static constexpr bool requires_greedy_eval = evaluator<array_t>::requires_greedy_eval;
 
     template<class core, int a, int b> __BChot__
     static auto linear_evaluation(const Unary_Expression<array_t, op>& branch, injector<core, a, b> tensor) {
@@ -49,7 +50,7 @@ struct evaluator<Unary_Expression<array_t, op>>
     };
     __BChot__ static auto replacement(const Unary_Expression<array_t, op>& branch) {
 
-        using function = std::conditional_t<nested_blas_expr, trivial, nontrivial>;
+        using function = std::conditional_t<requires_greedy_eval, trivial, nontrivial>;
         return function::impl(branch);
     }
     __BChot__ static void deallocate_temporaries(const Unary_Expression<array_t, op>& branch) {

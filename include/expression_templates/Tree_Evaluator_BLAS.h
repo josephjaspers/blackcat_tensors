@@ -34,6 +34,9 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
     static constexpr bool entirely_blas_expr = true;
     static constexpr bool partial_blas_expr = true;
     static constexpr bool nested_blas_expr = true;
+    static constexpr bool requires_greedy_eval = true;
+
+
     using branch_t = Binary_Expression<lv, rv, op>;
 
     template<class core, int a, int b> __BChot__
