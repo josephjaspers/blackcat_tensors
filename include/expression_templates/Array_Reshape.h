@@ -12,17 +12,11 @@
 #include "Array_Base.h"
 
 namespace BC {
-namespace et     {
+namespace et {
 /*
  * Accepts an a tensor_core type wrapped in the new_tensor
  *
- * IE if you have a Vector<Array<Vector<float, ml>, ml>  and wish to Reshape to a Matrix
- * The resulting reshape will be-- Matrix<Array_Reshape<Matrix<Array<Vector<float, ml>,ml>>>>
- *
- * This is somewhat awkward and atypical of the other Array traits, but it is essential to be able to pass
- * the constexpr int DIMS in some form. The choice to utilize this method opposed to expanding the number of template arguments
- * was to ensure consistency across the determiners.h which are imperative to the template-metaprogramming.
- */
+ /
 
 template<int dimension>
 struct Array_Reshape {
