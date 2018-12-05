@@ -76,7 +76,7 @@ private:
     	}
     	std::cout << "]" << std::endl;
     }
-    template<class ADL=void>
+    template<class ADL=void, class second=void>
     std::enable_if_t<std::is_void<ADL>::value && (DIMS() > 1)>
     print_impl(int prec, bool sparse=false) const {
     	std::string dim_header;

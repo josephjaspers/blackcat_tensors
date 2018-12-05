@@ -16,7 +16,7 @@
 
 namespace BC {
 namespace random {
-
+namespace device_impl {
 template<class T> __global__
 static void randomize(T t, float lower_bound, float upper_bound, int seed) {
 
@@ -35,7 +35,7 @@ static void randomize(T t, float lower_bound, float upper_bound, int seed) {
         t[i] += lower_bound;
     }
 }
-
+}
 }
 }
 #endif

@@ -10,6 +10,7 @@
 
 #include "Host.h"
 #include "Device.h"
+#include "Device_Managed.h"
 
 namespace BC {
 

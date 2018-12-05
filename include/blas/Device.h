@@ -26,22 +26,22 @@ struct Device {
 
 		static void scalar_mul(float* eval, float* a, float* b) {
 
-			scalar_mul<<<1, 1>>>(eval, a, b);
+			device_impl::scalar_mul<<<1, 1>>>(eval, a, b);
 			cudaDeviceSynchronize();
 		}
 		static void scalar_mul(float* eval, float a, float* b) {
 
-			scalar_mul<<<1, 1>>>(eval, a, b);
+			device_impl::scalar_mul<<<1, 1>>>(eval, a, b);
 			cudaDeviceSynchronize();
 		}
 		static void scalar_mul(float* eval, float* a, float b) {
 
-			scalar_mul<<<1, 1>>>(eval, a, b);
+			device_impl::scalar_mul<<<1, 1>>>(eval, a, b);
 			cudaDeviceSynchronize();
 		}
 		static void scalar_mul(float* eval, float a, float b) {
 
-			scalar_mul<<<1, 1>>>(eval, a, b);
+			device_impl::scalar_mul<<<1, 1>>>(eval, a, b);
 			cudaDeviceSynchronize();
 		}
 

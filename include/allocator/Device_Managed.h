@@ -13,7 +13,7 @@
 namespace BC {
 namespace allocator {
 
-struct Device_Managed : CUDA_Allocator {
+struct Device_Managed : Device {
 
     template<typename T>
     static T*& allocate(T*& t, int sz=1) {

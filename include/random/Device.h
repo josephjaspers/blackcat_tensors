@@ -21,12 +21,12 @@ namespace random {
 struct Device {
     template<typename T>
     static void randomize(T t, float lower_bound, float upper_bound) {
-        randomize<<<blocks(t.size()),threads()>>>(t, lower_bound, upper_bound, std::rand());
+    	device_impl::randomize<<<blocks(t.size()),threads()>>>(t, lower_bound, upper_bound, std::rand());
         cudaDeviceSynchronize();
     }
     template<template<class...> class T, class...set>
     static void randomize(T<set...> t, float lower_bound, float upper_bound) {
-        randomize<<<blocks(t.size()),threads()>>>(t, lower_bound, upper_bound, std::rand());
+    	device_impl::randomize<<<blocks(t.size()),threads()>>>(t, lower_bound, upper_bound, std::rand());
         cudaDeviceSynchronize();
     }
 

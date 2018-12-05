@@ -23,8 +23,8 @@ using Basic_Allocator = allocator::Host;
 #endif
 
 #ifdef __CUDACC__
-	using Cuda = allocator::CUDA_Allocator;
-	using Cuda_Managed = allocator::CUDA_Managed_Allocator;
+	using Cuda = allocator::Device;
+	using Cuda_Managed = allocator::Device_Managed;
 #endif
 
 template<int dimension, class scalar_t, class allocator_t=alloc_t>
