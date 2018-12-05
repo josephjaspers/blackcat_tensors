@@ -36,7 +36,7 @@ static auto function (args... parameters){ \
 
 namespace BC {
 namespace algorithms {
-struct host {
+struct Host {
 
     //non-modifying sequences
 

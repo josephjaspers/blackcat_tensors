@@ -25,7 +25,7 @@ class BC_internal_interface : BC_Type {
 
 public:
 
-    operator        derived&()       { return as_derived(); }
+    operator       derived&()       { return as_derived(); }
     operator const derived&() const { return as_derived(); }
 
     __BCinline__ BC_internal_interface() {

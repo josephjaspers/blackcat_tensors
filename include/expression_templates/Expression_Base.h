@@ -11,6 +11,10 @@
 #define EXPRESSION_BASE_H_
 
 #include "Internal_Type_Interface.h"
+#include "operations/Binary.h"
+#include "operations/Unary.h"
+#include "operations/BLAS.h"
+
 namespace BC {
 namespace et     {
 

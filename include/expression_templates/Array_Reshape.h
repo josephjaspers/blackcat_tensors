@@ -32,7 +32,7 @@ struct Array_Reshape {
 
     using scalar_t = typename PARENT::scalar_t;
     using allocator_t = typename PARENT::allocator_t;
-    using mathlib_t = typename allocator_t::mathlib_t;
+    using system_tag = typename PARENT::system_tag;
 
     __BCinline__ static constexpr int DIMS() { return dimension; };
     __BCinline__ static constexpr int ITERATOR() { return dimension; }

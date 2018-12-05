@@ -12,8 +12,7 @@
 #include "Array_Base.h"
 
 namespace BC {
-class CPU;
-namespace et     {
+namespace et {
 
 //identical to Array_Scalar, though the scalar is allocated on the stack opposed to heap
 template<class scalar_t_, class allocator_t_>
@@ -21,7 +20,7 @@ struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<scalar_t_, allocat
 
     using scalar_t = scalar_t_;
     using allocator_t = allocator_t_;
-    using mathlib_t = typename allocator_t::mathlib_t;
+    using system_tag = typename allocator_t_::system_tag;
 
     __BCinline__ static constexpr int ITERATOR() { return 0; }
     __BCinline__ static constexpr int DIMS()      { return 0; }

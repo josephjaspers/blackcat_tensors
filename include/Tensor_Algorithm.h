@@ -161,7 +161,9 @@ public:
    void randomize(scalar_t lb=0, scalar_t ub=1)  {
 	   static_assert(internal_t::ITERATOR() == 0 || internal_t::ITERATOR() == 1,
 			   	   	   "randomize not available to non-continuous tensors");
-	   allocator_t::randomize(this->as_derived().internal(), lb, ub);
+
+	   using impl = random::implementation<typename allocator_t::system_tag>;
+	   impl::randomize(this->as_derived().internal(), lb, ub);
    }
 
    scalar_t max() const {

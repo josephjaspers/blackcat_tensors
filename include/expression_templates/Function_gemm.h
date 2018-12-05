@@ -14,26 +14,18 @@
 #include "Tree_Evaluator_Runner.h"
 
 namespace BC {
-namespace et     {
-namespace oper {
-template<class ml> class gemm : public BLAS_FUNCTION {};
-template<class>class gemv;
-}
+namespace et {
 
-/*
- * a = M x K
- * b = K x N
- * c = M x N
- */
-
-
-template<class lv, class rv, class allocator>
-struct Binary_Expression<lv, rv, oper::gemm<allocator>>
-: Expression_Base<Binary_Expression<lv, rv,  oper::gemm<allocator>>>, BLAS_FUNCTION {
+template<class lv, class rv, class system_tag_>
+struct Binary_Expression<lv, rv, oper::gemm<system_tag_>>
+: Expression_Base<Binary_Expression<lv, rv,  oper::gemm<system_tag_>>>, BLAS_FUNCTION {
 
 
     using scalar_t  = typename lv::scalar_t;
-    using allocator_t = allocator;
+    using allocator_t = typename lv::allocator_t;
+    using system_tag = system_tag_;
+    using impl_l  = typename blas::implementation<system_tag>;
+
 
     static constexpr bool transA = blas_feature_detector<lv>::transposed;
     static constexpr bool transB = blas_feature_detector<rv>::transposed;
@@ -42,7 +34,8 @@ struct Binary_Expression<lv, rv, oper::gemm<allocator>>
     static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
     static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
 
-    static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
+    static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,\
+    		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
 
     __BCinline__ static constexpr int DIMS() { return rv::DIMS(); }
     __BCinline__ static constexpr int ITERATOR() { return 0; }
@@ -52,8 +45,16 @@ struct Binary_Expression<lv, rv, oper::gemm<allocator>>
 
      Binary_Expression(lv left, rv right) : left(left), right(right) {}
 
-    __BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.cols() : 1; }); }
-    __BCinline__ const auto block_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? size() : 1; });}
+    __BCinline__ const auto inner_shape() const {
+    	return l_array<DIMS()>([&](int i) {
+    		return i == 0 ? left.rows() : i == 1 ? right.cols() : 1;
+    	});
+    }
+    __BCinline__ const auto block_shape() const {
+    	return l_array<DIMS()>([&](int i) {
+    		return i == 0 ? left.rows() : i == 1 ? size() : 1;
+    	});
+    }
 
     __BCinline__ int size() const { return left.rows() * right.cols(); }
     __BCinline__ int rows() const { return left.rows(); }
@@ -72,32 +73,32 @@ struct Binary_Expression<lv, rv, oper::gemm<allocator>>
         auto& injection = injection_values.data();
 
         //evaluate the left and right branches (computes only if necessary)
-        auto A = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left));
-        auto B = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right));
+        auto A = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<lv>::get_array(left));
+        auto B = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<rv>::get_array(right));
 
         //get the left and right side scalar values
         auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
         auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 
         //allocate the alpha and beta scalars,
-        auto alpha = allocator::static_allocate((scalar_t)alpha_mod);
-        auto beta = allocator::static_allocate((scalar_t)beta_mod);
+        auto alpha = allocator_t::static_allocate((scalar_t)alpha_mod);
+        auto beta = allocator_t::static_allocate((scalar_t)beta_mod);
 
         //compute the scalar values if need be
         if (lv_scalar)
-            allocator::scalar_mul(alpha, alpha, alpha_lv);
+        	allocator_t::scalar_mul(alpha, alpha, alpha_lv);
         if (rv_scalar)
-            allocator::scalar_mul(alpha, alpha, alpha_rv);
+        	allocator_t::scalar_mul(alpha, alpha, alpha_rv);
 
         //call matrix_mul
-        allocator::gemm(transA, transB,  M(), N(), K(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), beta, injection, injection.leading_dimension(0));
+        impl_l::gemm(transA, transB,  M(), N(), K(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), beta, injection, injection.leading_dimension(0));
 
 
         //deallocate all the temporaries
         if (lv_eval) cc(A).deallocate();
         if (rv_eval) cc(B).deallocate();
-        allocator::deallocate(beta);
-        allocator::deallocate(alpha);
+        allocator_t::deallocate(beta);
+        allocator_t::deallocate(alpha);
     }
 };
 

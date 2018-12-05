@@ -13,10 +13,9 @@ namespace BC {
 
 class host_tag;
 
-namespace module {
-namespace stl  {
+namespace allocator {
 
-struct Basic_Allocator : BC::evaluator::Host {
+struct Host : BC::evaluator::Host {
 
     using mathlib_t = BC::evaluator::Host;
     using system_tag = host_tag;
@@ -55,7 +54,7 @@ struct Basic_Allocator : BC::evaluator::Host {
 };
 }
 }
-}
+
 
 
 

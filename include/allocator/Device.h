@@ -18,10 +18,9 @@ namespace BC {
 
 class device_tag;
 
-namespace module {
-namespace stl {
+namespace allocator {
 
-struct CUDA_Allocator : evaluator::Device {
+struct Device : evaluator::Device {
 
     using mathlib_t = evaluator::Device;
     using system_tag = device_tag;
@@ -65,7 +64,7 @@ struct CUDA_Allocator : evaluator::Device {
 
 }
 }
-}
+
 
 
 

@@ -18,6 +18,7 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<value, operati
 
     using scalar_t  = decltype(std::declval<operation>()(std::declval<typename value::scalar_t>()));
     using allocator_t = typename value::allocator_t;
+    using system_tag  = typename value::system_tag;
 
     __BCinline__ static constexpr int DIMS() { return value::DIMS(); }
     __BCinline__ static constexpr int ITERATOR() { return value::ITERATOR(); }

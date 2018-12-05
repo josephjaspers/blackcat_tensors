@@ -16,7 +16,6 @@
 
 #include "device_impl/Impl.cu"
 #include "device_impl/BLAS.h"
-#include "device_impl/Misc.h"
 #include "device_impl/Constants.h"
 #include "device_impl/Evaluator.h"
 
@@ -24,7 +23,6 @@ namespace BC {
 namespace evaluator {
 
 class Device :
-    public device_impl::Misc<Device>,
     public device_impl::BLAS<Device>,
     public device_impl::Constants<Device>,
     public device_impl::Evaluator<Device> {

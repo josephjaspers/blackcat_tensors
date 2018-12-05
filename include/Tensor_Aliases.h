@@ -14,18 +14,17 @@
 
 namespace BC {
 
-using Basic_Allocator = module::stl::Basic_Allocator;
+using Basic_Allocator = allocator::Host;
 
 #ifndef BC_GPU_DEFAULT
-	using alloc_t = module::stl::Basic_Allocator;
+	using alloc_t = allocator::Host;
 #else
-	class GPU;
-	using alloc_t = module::stl::CUDA_Allocator;
+	using alloc_t = allocator::Device;
 #endif
 
 #ifdef __CUDACC__
-	using Cuda = module::stl::CUDA_Allocator;
-	using Cuda_Managed = module::stl::CUDA_Managed_Allocator;
+	using Cuda = allocator::CUDA_Allocator;
+	using Cuda_Managed = allocator::CUDA_Managed_Allocator;
 #endif
 
 template<int dimension, class scalar_t, class allocator_t=alloc_t>

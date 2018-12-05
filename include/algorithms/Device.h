@@ -44,7 +44,7 @@ static auto function (iter_begin begin, iter_end end){\
 
 namespace BC {
 namespace algorithms {
-struct device {
+struct Device {
 
     //non-modifying sequences
     BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(all_of)

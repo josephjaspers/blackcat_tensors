@@ -43,7 +43,6 @@ struct Constants {
         gpu_impl::scalar_mul<<<1, 1>>>(eval, a, b);
         cudaDeviceSynchronize();
     }
-
 };
 
 

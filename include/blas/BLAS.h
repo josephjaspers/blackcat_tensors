@@ -1,14 +1,14 @@
+
 /*
- * algorithms.h
+ * blas.h
  *
- *  Created on: Nov 25, 2018
+ *  Created on: Dec 3, 2018
  *      Author: joseph
  */
 
-#ifndef BC_AGORITHMS_ALGORITHMS_H_
-#define BC_AGORITHMS_ALGORITHMS_H_
+#ifndef BC_BLAS_BLAS_H_
+#define BC_BLAS_BLAS_H_
 
-#include <type_traits>
 #include "Device.h"
 #include "Host.h"
 
@@ -17,7 +17,7 @@ namespace BC {
 class host_tag;
 class device_tag;
 
-namespace algorithms {
+namespace blas {
 
 #ifdef __CUDACC__
 	template<class system_tag>
@@ -37,4 +37,4 @@ namespace algorithms {
 
 
 
-#endif /* ALGORITHMS_H_ */
+#endif /* BLAS_H_ */

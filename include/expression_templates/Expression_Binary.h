@@ -18,6 +18,7 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<lv, rv, oper
 
     using scalar_t = decltype(std::declval<operation>()(std::declval<typename lv::scalar_t&>(), std::declval<typename lv::scalar_t&>()));
     using allocator_t = typename lv::allocator_t;
+    using system_tag  = typename lv::system_tag;
 
     lv left;
     rv right;

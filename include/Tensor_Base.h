@@ -47,6 +47,8 @@ public:
     using internal_t::DIMS; //required
     using scalar_t    = typename internal_t::scalar_t;
     using allocator_t = typename internal_t::allocator_t;
+    using system_tag  = typename allocator_t::system_tag;
+
     using operations::operator=;
     using shaping::operator[];
     using shaping::operator();

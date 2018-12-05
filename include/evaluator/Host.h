@@ -9,8 +9,6 @@
 #ifndef MATHEMATICS_CPU_H_
 #define MATHEMATICS_CPU_H_
 
-#include "Common.h"
-#include "host_impl/Misc.h"
 #include "host_impl/BLAS.h"
 #include "host_impl/Constants.h"
 #include "host_impl/Evaluator.h"
@@ -28,7 +26,6 @@ namespace evaluator {
  */
 
 class Host:
-        public host_impl::Misc<Host>,
         public host_impl::BLAS<Host>,
         public host_impl::Constants<Host>,
         public host_impl::Evaluator<Host>

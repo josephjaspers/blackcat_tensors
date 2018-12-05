@@ -15,25 +15,16 @@
 #include "Tree_Evaluator_Runner.h"
 
 namespace BC {
-namespace et     {
-namespace oper {
-template<class ml> class gemv : public BLAS_FUNCTION {};
-template<class ml> class dot;
-}
+namespace et {
 
-/*
- * a = M x K
- * b = K x N
- * c = M x N
- */
+template<class lv, class rv, class system_tag_>
+struct Binary_Expression<lv, rv, oper::gemv<system_tag_>>
+: Expression_Base<Binary_Expression<lv, rv,  oper::gemv<system_tag_>>>, BLAS_FUNCTION {
 
-
-template<class lv, class rv, class allocator>
-struct Binary_Expression<lv, rv, oper::gemv<allocator>>
-: Expression_Base<Binary_Expression<lv, rv,  oper::gemv<allocator>>>, BLAS_FUNCTION {
-
-    using scalar_t  = typename lv::scalar_t;
-    using allocator_t = allocator;
+    using scalar_t    = typename lv::scalar_t;
+    using allocator_t = allocator::implementation<system_tag_>;
+    using system_tag  = system_tag_;
+    using impl_l      = typename blas::implementation<system_tag>;
 
     static constexpr bool transA = blas_feature_detector<lv>::transposed;
     static constexpr bool transB = blas_feature_detector<rv>::transposed;
@@ -68,35 +59,35 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
     auto& injection = injection_values.data();
 
     //evaluate the left and right branches (computes only if necessary)
-    auto A = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left));
-    auto X = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right));
+    auto A = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<lv>::get_array(left));
+    auto X = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<rv>::get_array(right));
 
     //allocate the alpha and beta scalars,
-    auto alpha = allocator::static_allocate((scalar_t)alpha_mod);
-    auto beta  = allocator::static_allocate((scalar_t)beta_mod);
+    auto alpha = allocator_t::static_allocate((scalar_t)alpha_mod);
+    auto beta  = allocator_t::static_allocate((scalar_t)beta_mod);
 
     //get the left and right side scalar values and
     //compute the scalar values if need be
     if (lv_scalar) {
         auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-        allocator::scalar_mul(alpha, alpha, alpha_lv);
+        allocator_t::scalar_mul(alpha, alpha, alpha_lv);
     }
     if (rv_scalar) {
         auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-        allocator::scalar_mul(alpha, alpha, alpha_rv);
+        allocator_t::scalar_mul(alpha, alpha, alpha_rv);
     }
 
     //call matrix_mul ///for gemm we always use M, N, K regardless of transpose, but for gemv we always use pre-trans dimensions ???
     int m = A.rows();
     int n = A.cols();
 
-    allocator::gemv(transA,  m, n, alpha, A, A.leading_dimension(0), X, X.leading_dimension(0)/*inc_X*/, beta, injection/*Y*/, injection.leading_dimension(0)/*incy*/);
+    impl_l::gemv(transA,  m, n, alpha, A, A.leading_dimension(0), X, X.leading_dimension(0)/*inc_X*/, beta, injection/*Y*/, injection.leading_dimension(0)/*incy*/);
 
     //deallocate all the temporaries
     if (lv_eval) cc(A).deallocate();
     if (rv_eval) cc(X).deallocate();
-    allocator::deallocate(beta);
-    allocator::deallocate(alpha);
+    allocator_t::deallocate(beta);
+    allocator_t::deallocate(alpha);
 }
 };
 

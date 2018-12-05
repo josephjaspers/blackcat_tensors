@@ -9,17 +9,16 @@
 #ifndef BLAS_H_
 #define BLAS_H_
 
-namespace BC {
-namespace et     {
+namespace BC   {
+namespace et   {
 namespace oper {
 
 //tags, no definition
-template<class allocator> struct transpose;
-template<class allocator> struct gemm;
-template<class allocator> struct gemv;
-template<class allocator> struct ger;
-template<class allocator> struct dot;
-template<int x,class allocator> struct conv;
+template<class allocator> struct transpose  {};
+template<class allocator> struct gemm : BLAS_FUNCTION {};
+template<class allocator> struct gemv : BLAS_FUNCTION {};
+template<class allocator> struct ger : BLAS_FUNCTION {};
+template<class allocator> struct dot : BLAS_FUNCTION {};
 
 
 

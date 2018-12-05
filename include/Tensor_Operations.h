@@ -45,7 +45,7 @@ struct Tensor_Operations<Tensor_Base<internal_type>> {
     using internal_t     = internal_type;
     using scalar_t         = typename internal_t::scalar_t;
     using allocator_t     = typename internal_t::allocator_t;
-    using mathlib_t        = typename allocator_t::mathlib_t;
+    using system_tag      = typename internal_t::system_tag;
 
 private:
 
@@ -150,20 +150,20 @@ public:
     template<class param_deriv>
     auto operator *(const Tensor_Operations<param_deriv>& param) const {
 
-        static constexpr bool lv_trans  = et::blas_feature_detector<derived>::transposed;
-        static constexpr bool rv_trans  = et::blas_feature_detector<param_deriv>::transposed;
+        static constexpr bool lv_trans  = et::blas_feature_detector<internal_t>::transposed;
+        static constexpr bool rv_trans  = et::blas_feature_detector<internal_t_of<param_deriv>>::transposed;
 
         static constexpr bool scalmul    = derived::DIMS() == 0 || param_deriv::DIMS() == 0;
         static constexpr bool gemm         = derived::DIMS() == 2 && param_deriv::DIMS() == 2;
         static constexpr bool gemv         = derived::DIMS() == 2 && param_deriv::DIMS() == 1;
         static constexpr bool ger          = derived::DIMS() == 1 && param_deriv::DIMS() == 1 && !lv_trans && rv_trans;
-        static constexpr bool dot          = derived::DIMS() == 1 && param_deriv::DIMS() == 1 && !ger;
+        static constexpr bool dot          = derived::DIMS() == 1 && param_deriv::DIMS() == 1 && !lv_trans && !rv_trans;
         using matmul_t =
                      std::conditional_t<scalmul, Binary_Expression_t<internal_t_of<param_deriv>, et::oper::scalar_mul>,
-                     std::conditional_t<gemm,      Binary_Expression_t<internal_t_of<param_deriv>, et::oper::gemm<allocator_t>>,
-                     std::conditional_t<gemv,      Binary_Expression_t<internal_t_of<param_deriv>, et::oper::gemv<allocator_t>>,
-                     std::conditional_t<ger,      Binary_Expression_t<internal_t_of<param_deriv>, et::oper::ger<allocator_t>>,
-                     std::conditional_t<dot,     Binary_Expression_t<internal_t_of<param_deriv>, et::oper::dot<allocator_t>>, void>>>>>;
+                     std::conditional_t<gemm,    Binary_Expression_t<internal_t_of<param_deriv>, et::oper::gemm<system_tag>>,
+                     std::conditional_t<gemv,    Binary_Expression_t<internal_t_of<param_deriv>, et::oper::gemv<system_tag>>,
+                     std::conditional_t<ger,     Binary_Expression_t<internal_t_of<param_deriv>, et::oper::ger<system_tag>>,
+                     std::conditional_t<dot,     Binary_Expression_t<internal_t_of<param_deriv>, et::oper::dot<system_tag>>, void>>>>>;
 
         static_assert(!std::is_same<matmul_t, void>::value, "INVALID USE OF OPERATOR *");
         return matmul_t(as_derived().internal(), param.as_derived().internal());
@@ -287,7 +287,7 @@ public:
 
     template<class deriv>
     void assert_same_ml(const Tensor_Operations<deriv>& tensor) const {
-        static_assert(std::is_same<mathlib_t, mathlib_t_of<deriv>>::value,
+        static_assert(std::is_same<allocator_t, allocator_t_of<deriv>>::value,
                 "TENSOR OPERATIONS BETWEEN THE CPU/GPU ARE PROHIBITED");
     }
 public:

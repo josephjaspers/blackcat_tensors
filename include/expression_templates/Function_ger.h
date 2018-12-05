@@ -15,10 +15,7 @@
 #include "Tree_Evaluator_Runner.h"
 
 namespace BC {
-namespace et     {
-namespace oper {
-template<class ml> class ger : public BLAS_FUNCTION {};
-}
+namespace et {
 
 /*
  * a = M x K
@@ -27,12 +24,15 @@ template<class ml> class ger : public BLAS_FUNCTION {};
  */
 
 
-template<class lv, class rv, class allocator>
-struct Binary_Expression<lv, rv, oper::ger<allocator>>
-    : Expression_Base<Binary_Expression<lv, rv,  oper::ger<allocator>>>, BLAS_FUNCTION {
+template<class lv, class rv, class system_tag_>
+struct Binary_Expression<lv, rv, oper::ger<system_tag_>>
+    : Expression_Base<Binary_Expression<lv, rv,  oper::ger<system_tag_>>>, BLAS_FUNCTION {
 
     using scalar_t  = typename lv::scalar_t;
-    using allocator_t = allocator;
+    using system_tag = system_tag_;
+    using allocator_t = typename allocator::implementation<system_tag>;
+    using impl_l     = typename blas::implementation<system_tag>;
+
 
     static constexpr bool transA = blas_feature_detector<lv>::transposed;
     static constexpr bool transB = blas_feature_detector<rv>::transposed;
@@ -54,6 +54,8 @@ struct Binary_Expression<lv, rv, oper::ger<allocator>>
     __BCinline__ int rows() const { return left.rows(); }
     __BCinline__ int cols() const { return right.cols(); }
     __BCinline__ int dimension(int i) const { return i == 0 ? rows() : i == 1 ? cols() : 1; }
+    __BCinline__ int block_dimension(int i) const { return this->block_shape()(i); }
+
     __BCinline__ int outer_dimension() const { return rows(); }
 
     __BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.rows() : 1; });}
@@ -69,30 +71,30 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
     auto& injection = injection_values.data();
 
     //evaluate the left and right branches (computes only if necessary)
-    auto A = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left));
-    auto B = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right));
+    auto A = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<lv>::get_array(left));
+    auto B = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<rv>::get_array(right));
 
     //get the left and right side scalar values
     auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
     auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 
     //allocate the alpha and beta scalars,
-    auto alpha = allocator::static_allocate((scalar_t)alpha_mod);
+    auto alpha = allocator_t::static_allocate((scalar_t)alpha_mod);
 
     //compute the scalar values if need be
     if (lv_scalar)
-        allocator::scalar_mul(alpha, alpha, alpha_lv);
+    	impl_l::scalar_mul(alpha, alpha, alpha_lv);
     if (rv_scalar)
-        allocator::scalar_mul(alpha, alpha, alpha_rv);
+    	impl_l::scalar_mul(alpha, alpha, alpha_rv);
 
     //call outer product
-    allocator::ger(M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
+    impl_l::ger(M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
 
 
     //deallocate all the temporaries
     if (lv_eval) cc(A).deallocate();
     if (rv_eval) cc(B).deallocate();
-    allocator::deallocate(alpha);
+    allocator_t::deallocate(alpha);
 }
 };
 }

@@ -20,7 +20,10 @@ struct Array : Array_Base<Array<dimension, T, allocator>, dimension>, public Sha
 
     using scalar_t = T;
     using allocator_t = allocator;
-    using mathlib_t =typename allocator_t::mathlib_t;
+    using system_tag = typename allocator_t::system_tag;
+
+    using tags = typeinfo<scalar_t, allocator_t, allocator_t>;
+
     __BCinline__ static constexpr int DIMS() { return dimension; }
 
     scalar_t* array = nullptr;
@@ -73,7 +76,7 @@ struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Sh
 
     using scalar_t = T;
     using allocator_t = allocator;
-    using mathlib_t =typename allocator_t::mathlib_t;
+    using system_tag = typename allocator_t::system_tag;
 
     __BCinline__ static constexpr int DIMS() { return 0; }
 
@@ -84,7 +87,11 @@ struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Sh
     Array(Shape<DIMS()> shape_, scalar_t* array_) : array(array_), Shape<0>(shape_) {}
 
     template<class U>
-    Array(U param) : Shape<DIMS()>(param) { allocator_t::allocate(array, this->size()); }
+    Array(U param) {
+    	allocator_t::allocate(array, this->size());
+    	evaluate_to(*this, param);
+
+    }
 
     template<class U>
     Array(U param, scalar_t* array_) : array(array_), Shape<DIMS()>(param) {}

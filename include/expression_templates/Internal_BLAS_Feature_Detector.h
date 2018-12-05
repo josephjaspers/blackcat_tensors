@@ -10,7 +10,9 @@
 #define EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
 
 #include "Internal_Type_Traits.h"
-
+#include "operations/BLAS.h"
+#include "operations/Unary.h"
+#include "operations/Binary.h"
 namespace BC {
 namespace et     {
 
@@ -41,14 +43,9 @@ struct BLAS_traits {
     BLAS_trans trans     = transp;
 };
 
-namespace oper {
-    template<class ml>
-    class transpose;
-    class scalar_mul;
-}
 
-template<class T>            using enable_if_core = std::enable_if_t<std::is_base_of<BC_Array, T>::value>;
-template<class T, class U> using enable_if_cores = std::enable_if_t<std::is_base_of<BC_Array, T>::value && std::is_base_of<BC_Array, U>::value>;
+template<class T>           using enable_if_core = std::enable_if_t<std::is_base_of<BC_Array, T>::value>;
+template<class T, class U>  using enable_if_cores = std::enable_if_t<std::is_base_of<BC_Array, T>::value && std::is_base_of<BC_Array, U>::value>;
 template<class T>           using enable_if_blas = std::enable_if_t<std::is_base_of<BLAS_FUNCTION, T>::value>;
 
 template<class T> T&  cc(const T&  param) { return const_cast<T&> (param); }
@@ -83,7 +80,7 @@ template<class deriv> struct blas_feature_detector<deriv, enable_if_core<deriv>>
 
 ////IF TRANSPOSE
 template<class deriv, class ml>
-struct blas_feature_detector<et::Unary_Expression<deriv, oper::transpose<ml>>, enable_if_core<deriv>> {
+struct blas_feature_detector<et::Unary_Expression<deriv, et::oper::transpose<ml>>, enable_if_core<deriv>> {
     static constexpr bool evaluate = false;
     static constexpr bool transposed = true;
     static constexpr bool scalar = false;

@@ -13,9 +13,10 @@
 #include <type_traits>
 #include "evaluator/Host.h"
 #include "evaluator/Device.cu"
-#include "allocators/Basic_Allocator.h"
-#include "allocators/CUDA_Allocator.h"
-#include "allocators/CUDA_Managed_Allocator.h"
+
+#include "allocator/Allocator.h"
+#include "random/Random.h"
+#include "blas/BLAS.h"
 
 namespace BC {
 #define BC_ARRAY_ONLY(literal) static_assert(BC::et::is_array<internal_t>(), "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")

@@ -8,13 +8,12 @@
 #ifndef CUDA_MANAGED_ALLOCATOR_H_
 #define CUDA_MANAGED_ALLOCATOR_H_
 
-#include "CUDA_Allocator.h"
+#include "Device.h"
 
 namespace BC {
-namespace module {
-namespace stl {
+namespace allocator {
 
-struct CUDA_Managed_Allocator : CUDA_Allocator {
+struct Device_Managed : CUDA_Allocator {
 
     template<typename T>
     static T*& allocate(T*& t, int sz=1) {
@@ -23,7 +22,6 @@ struct CUDA_Managed_Allocator : CUDA_Allocator {
     }
 };
 
-}
 }
 }
 

@@ -12,19 +12,15 @@
 #include "Expression_Base.h"
 
 namespace BC {
-namespace et     {
-namespace oper {
-template<class>
- class transpose;
-}
+namespace et {
 
-template<class functor_type, class ml>
-struct Unary_Expression<functor_type, oper::transpose<ml>>
-    : Expression_Base<Unary_Expression<functor_type, oper::transpose<ml>>> {
-
+template<class functor_type, class system_tag_>
+struct Unary_Expression<functor_type, oper::transpose<system_tag_>>
+    : Expression_Base<Unary_Expression<functor_type, oper::transpose<system_tag_>>> {
 
     using scalar_t  = typename functor_type::scalar_t;
-    using allocator_t = typename functor_type::allocator_t;
+    using system_tag = system_tag_;
+    using allocator_t = allocator::implementation<system_tag>;
 
     __BCinline__ static constexpr int DIMS() { return functor_type::DIMS(); }
     __BCinline__ static constexpr int ITERATOR() { return DIMS() > 1? DIMS() :0; }

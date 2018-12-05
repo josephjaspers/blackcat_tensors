@@ -10,6 +10,7 @@
 #define BLACKCAT_COMPILERDEFINITIONS_H_
 
 #include <type_traits>
+#include "TypeInfo.h"
 #include "Internal_Type_Traits.h"
 #include "utility/MetaTemplateFunctions.h"
 #include "utility/ShapeHierarchy.h"

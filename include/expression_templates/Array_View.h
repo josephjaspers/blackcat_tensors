@@ -22,9 +22,12 @@ struct Array_View
 
     using scalar_t = scalar;
     using allocator_t = allocator;
-    using mathlib_t = typename allocator_t::mathlib_t;
+    using system_tag = typename allocator_t::system_tag;
+
+    using tags = typeinfo<scalar, allocator, typename allocator::system_tag>;
 
     const scalar_t* array = nullptr;
+
 
     Array_View()                    = default;
     Array_View(const Array_View& ) = default;

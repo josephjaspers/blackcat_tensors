@@ -22,7 +22,7 @@ struct Array_Shared
 
     using scalar_t = scalar;
     using allocator_t = allocator;
-    using mathlib_t = typename allocator_t::mathlib_t;
+    using system_tag = typename allocator_t::system_tag;
 
     scalar_t* array = nullptr;
 
