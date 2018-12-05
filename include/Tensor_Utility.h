@@ -33,7 +33,6 @@ struct Tensor_Utility<Tensor_Base<internal_t>> {
     using derived = Tensor_Base<internal_t>;
     using scalar  = typename internal_t::scalar_t;
     using allocator_t = typename internal_t::allocator_t;
-    using mathlib_t = typename allocator_t::mathlib_t;
 
     template<class>
     friend class Tensor_Utility;

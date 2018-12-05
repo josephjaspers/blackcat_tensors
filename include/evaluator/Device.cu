@@ -14,28 +14,36 @@
 #include <cuda_runtime_api.h>
 #include <cuda.h>
 
-#include "device_impl/Impl.cu"
-#include "device_impl/BLAS.h"
-#include "device_impl/Constants.h"
-#include "device_impl/Evaluator.h"
+#include "Device_Impl.cu"
 
 namespace BC {
 namespace evaluator {
 
-class Device :
-    public device_impl::BLAS<Device>,
-    public device_impl::Constants<Device>,
-    public device_impl::Evaluator<Device> {
-public:
+struct Device {
 
-    static constexpr int CUDA_BASE_THREADS = 256;
+	 template<int d>
+	    struct nd_evaluator_func {
+	        struct n1 { template<class T> static void eval(T to) { gpu_impl::eval<<<blocks(to.size()),threads()>>>(to);   }};
+	        struct n2 { template<class T> static void eval(T to) { gpu_impl::eval2d<<<blocks(to.size()),threads()>>>(to); }};
+	        struct n3 { template<class T> static void eval(T to) { gpu_impl::eval3d<<<blocks(to.size()),threads()>>>(to); }};
+	        struct n4 { template<class T> static void eval(T to) { gpu_impl::eval4d<<<blocks(to.size()),threads()>>>(to); }};
+	        struct n5 { template<class T> static void eval(T to) { gpu_impl::eval5d<<<blocks(to.size()),threads()>>>(to); }};
+	        using run = std::conditional_t<(d <= 1), n1,
+	                        std::conditional_t< d == 2, n2,
+	                            std::conditional_t< d == 3, n3,
+	                                std::conditional_t< d == 4, n4, n5>>>>;
 
-    static int blocks(int size) {
-        return 1 + (int)(size / CUDA_BASE_THREADS);
-    }
-    static int threads(int sz = CUDA_BASE_THREADS) {
-        return sz > CUDA_BASE_THREADS ? CUDA_BASE_THREADS : sz;
-    }
+	        template<class T>
+	        static void eval(T to) {
+	            run::eval(to);
+	            cudaDeviceSynchronize();
+	        }
+	    };
+
+	    template<int d, class expr_t>
+	    static void nd_evaluator(expr_t expr) {
+	    	nd_evaluator_func<d>::eval(expr);
+	    }
 
 };
 

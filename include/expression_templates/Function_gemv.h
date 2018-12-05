@@ -22,9 +22,9 @@ struct Binary_Expression<lv, rv, oper::gemv<system_tag_>>
 : Expression_Base<Binary_Expression<lv, rv,  oper::gemv<system_tag_>>>, BLAS_FUNCTION {
 
     using scalar_t    = typename lv::scalar_t;
-    using allocator_t = allocator::implementation<system_tag_>;
     using system_tag  = system_tag_;
-    using impl_l      = typename blas::implementation<system_tag>;
+    using allocator_t = allocator::implementation<system_tag>;
+    using impl_l      = blas::implementation<system_tag>;
 
     static constexpr bool transA = blas_feature_detector<lv>::transposed;
     static constexpr bool transB = blas_feature_detector<rv>::transposed;
@@ -70,11 +70,11 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
     //compute the scalar values if need be
     if (lv_scalar) {
         auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-        allocator_t::scalar_mul(alpha, alpha, alpha_lv);
+        impl_l::scalar_mul(alpha, alpha, alpha_lv);
     }
     if (rv_scalar) {
         auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-        allocator_t::scalar_mul(alpha, alpha, alpha_rv);
+        impl_l::scalar_mul(alpha, alpha, alpha_rv);
     }
 
     //call matrix_mul ///for gemm we always use M, N, K regardless of transpose, but for gemv we always use pre-trans dimensions ???

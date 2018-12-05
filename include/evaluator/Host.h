@@ -9,41 +9,54 @@
 #ifndef MATHEMATICS_CPU_H_
 #define MATHEMATICS_CPU_H_
 
-#include "host_impl/BLAS.h"
-#include "host_impl/Constants.h"
-#include "host_impl/Evaluator.h"
-
-
 namespace BC {
 namespace evaluator {
 
-/*
- * The core CPU library,
- *
- * defines:
- *     dimensional evaluations
- *
- */
+template<int dim>
+struct evaluator_impl {
+    template<class expression, class... indexes>
+    static void impl(expression expr, indexes... indicies) {
+        __BC_omp_for__
+        for (int i = 0; i < expr.dimension(dim-1); ++i) {
+        	evaluator_impl<dim-1>::impl(expr, i, indicies...);
+        }
+    }
+};
+template<>
+struct evaluator_impl<1> {
+    template<class expression, class... indexes>
+    static void impl(expression expr, indexes... indicies) {
+        __BC_omp_for__
+        for (int i = 0; i < expr.dimension(0); ++i) {
+            expr(i, indicies...);
+        }
+    }
+    template<class expression>
+    static void impl(expression expr) {
+        __BC_omp_for__
+        for (int i = 0; i < expr.size(); ++i) {
+            expr[i];
+        }
+    }
+};
+template<>
+struct evaluator_impl<0> {
+    template<class expression>
+    static void impl(expression expr) {
+        __BC_omp_for__
+        for (int i = 0; i < expr.size(); ++i) {
+            expr[i];
+        }
+    }
+};
 
-class Host:
-        public host_impl::BLAS<Host>,
-        public host_impl::Constants<Host>,
-        public host_impl::Evaluator<Host>
-{
 
+struct Host {
 
-public:
-
-    static constexpr int SINGLE_THREAD_THRESHOLD = 8192;
-
-	template<class T, class U, class V>
-	static void copy(T* to, U* from, V size) {
-		__BC_omp_for__
-		for (int i = 0; i < size; ++i) {
-			to[i] = from[i];
-		}
-
-		__BC_omp_bar__
+	template<int d, class expr_t>
+	static void nd_evaluator(expr_t expr) {
+		evaluator_impl<d>::impl(expr);
+		 __BC_omp_bar__
 	}
 
 };

@@ -20,11 +20,18 @@ class device_tag;
 
 namespace allocator {
 
-struct Device : evaluator::Device {
+struct Device {
 
-    using mathlib_t = evaluator::Device;
     using system_tag = device_tag;
 
+
+
+    static float* static_allocate(float value) {
+        float* t;
+        cudaMallocManaged((void**) &t, sizeof(float));
+        cudaMemcpy(t, &value, sizeof(float), cudaMemcpyHostToDevice);
+        return t;
+    }
     template<typename T>
     static T*& allocate(T*& t, int sz=1) {
         cudaMalloc((void**) &t, sizeof(T) * sz);

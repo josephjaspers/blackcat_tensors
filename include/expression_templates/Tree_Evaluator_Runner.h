@@ -8,9 +8,11 @@ namespace et  {
 
 template<class allocator_type>
 struct Lazy_Evaluator {
+
+	using impl = typename evaluator::template implementation<allocator_type>;
+
     template<class T> __BChot__
     static constexpr bool INJECTION() {
-        //non-trivial is true even when it is trivial
         return et::tree::evaluator<std::decay_t<T>>::nested_blas_expr;
     }
 
@@ -19,14 +21,14 @@ struct Lazy_Evaluator {
     static std::enable_if_t<!INJECTION<expression>()>
     evaluate(const expression& expr) {
         static constexpr int iterator_dimension = expression::ITERATOR();
-        allocator_type::template nd_evaluator<iterator_dimension>(expr);
+        impl::template nd_evaluator<iterator_dimension>(expr);
     }
     //------------------------------------------------Purely lazy alias evaluation----------------------------------//
     template< class expression>
     static std::enable_if_t<!INJECTION<expression>()>
     evaluate_aliased(const expression& expr) {
         static constexpr int iterator_dimension = expression::ITERATOR();
-        allocator_type::template nd_evaluator<iterator_dimension>(expr);
+        impl:: nd_evaluator<iterator_dimension>(expr);
     }
     //------------------------------------------------Greedy evaluation (BLAS function call detected)----------------------------------//
     template< class expression>
@@ -36,7 +38,7 @@ struct Lazy_Evaluator {
 
         if (is_expr<decltype(greedy_evaluated_expr)>()) {
             static constexpr int iterator_dimension = expression::ITERATOR();
-            allocator_type::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
+            impl::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
         }
         //deallocate any temporaries made by the tree
         et::tree::Greedy_Evaluator::deallocate_temporaries(greedy_evaluated_expr);
@@ -49,7 +51,7 @@ struct Lazy_Evaluator {
 
         auto greedy_evaluated_expr = et::tree::Greedy_Evaluator::evaluate_aliased(expr);        //evaluate the internal tensor_type
         if (is_expr<decltype(greedy_evaluated_expr)>()) {
-            allocator_type::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
+        	impl:: nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
         }
         //deallocate any temporaries made by the tree
         et::tree::Greedy_Evaluator::deallocate_temporaries(greedy_evaluated_expr);
@@ -79,12 +81,12 @@ struct CacheEvaluator {
 template<class array_t, class expression_t>__BChot__
 auto evaluate_to(array_t array, expression_t expr) {
     static_assert(is_array<array_t>(), "MAY ONLY EVALUATE TO ARRAYS");
-    return Lazy_Evaluator<et::allocator_of<array_t>>::evaluate(et::Binary_Expression<array_t, expression_t, et::oper::assign>(array, expr));
+    return Lazy_Evaluator<typename expression_t::system_tag>::evaluate(et::Binary_Expression<array_t, expression_t, et::oper::assign>(array, expr));
 }
 
 template<class expression_t>__BChot__
 auto evaluate(expression_t expr) {
-    return Lazy_Evaluator<allocator_of<expression_t>>::evaluate(expr);
+    return Lazy_Evaluator<typename expression_t::system_tag>::evaluate(expr);
 }
 
 

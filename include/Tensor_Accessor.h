@@ -10,9 +10,10 @@
 #define TENSOR_SHAPING_H_
 
 #include "Tensor_Common.h"
+#include "expression_templates/Array.h"
+#include "expression_templates/Array_Scalar.h"
 #include "expression_templates/Array_Slice.h"
 #include "expression_templates/Array_Slice_Range.h"
-#include "expression_templates/Array_Scalar.h"
 #include "expression_templates/Array_Chunk.h"
 #include "expression_templates/Array_Reshape.h"
 #include "expression_templates/Array_Format.h"
@@ -103,7 +104,7 @@ auto reshape(Tensor_Base<T>& tensor) {
     };
 }
 
-template<class T, class... integers>// class enabler = std::enable_if_t<MTF::seq_of<int, integers...>>>
+template<class T, class... integers, class enabler = std::enable_if_t<MTF::seq_of<int, integers...>>>
 const auto chunk(const Tensor_Base<T>& tensor, integers... ints) {
 	auto index_point =  BC::make_array(ints...);
 
@@ -115,7 +116,7 @@ const auto chunk(const Tensor_Base<T>& tensor, integers... ints) {
     };
 }
 
-template<class T, class... integers>// class enabler = std::enable_if_t<MTF::seq_of<int, integers...>>>
+template<class T, class... integers, class enabler = std::enable_if_t<MTF::seq_of<int, integers...>>>
 auto chunk(Tensor_Base<T>& tensor, integers... ints) {
 	auto index_point =  BC::make_array(ints...);
     return [&, index_point](auto... shape_indicies) {

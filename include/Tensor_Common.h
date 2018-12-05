@@ -11,9 +11,7 @@
 
 
 #include <type_traits>
-#include "evaluator/Host.h"
-#include "evaluator/Device.cu"
-
+#include "evaluator/Evaluator.h"
 #include "allocator/Allocator.h"
 #include "random/Random.h"
 #include "blas/BLAS.h"

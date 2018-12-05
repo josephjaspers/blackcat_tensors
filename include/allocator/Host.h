@@ -15,9 +15,8 @@ class host_tag;
 
 namespace allocator {
 
-struct Host : BC::evaluator::Host {
+struct Host {
 
-    using mathlib_t = BC::evaluator::Host;
     using system_tag = host_tag;
 
     template<typename T>
@@ -25,6 +24,11 @@ struct Host : BC::evaluator::Host {
         internal_mem_ptr = new T[size];
         return internal_mem_ptr;
     }
+    template<class T>
+       static T static_allocate(T value) {
+           return T(value);
+       }
+
     template<typename T>
     static T*& unified_allocate(T*& memptr, int size) {
     	memptr = new T[size];
@@ -38,13 +42,24 @@ struct Host : BC::evaluator::Host {
     static void deallocate(T t) {
         //empty
     }
+
+	template<class T, class U, class V>
+	static void copy(T* to, U* from, V size) {
+		__BC_omp_for__
+		for (int i = 0; i < size; ++i) {
+			to[i] = from[i];
+		}
+
+		__BC_omp_bar__
+	}
+
     template<class T, class U>
     static void HostToDevice(T* device_ptr, U* host_ptr, int size=1) {
-        mathlib_t::copy(device_ptr, host_ptr, size);
+        copy(device_ptr, host_ptr, size);
     }
     template<class T, class U>
     static void DeviceToHost(T* host_ptr, U* device_ptr, int size=1) {
-        mathlib_t::copy(host_ptr, device_ptr, size);
+        copy(host_ptr, device_ptr, size);
     }
     template<class T>
     static T extract(T* data_ptr, int index) {

@@ -86,9 +86,9 @@ struct Binary_Expression<lv, rv, oper::gemm<system_tag_>>
 
         //compute the scalar values if need be
         if (lv_scalar)
-        	allocator_t::scalar_mul(alpha, alpha, alpha_lv);
+        	impl_l::scalar_mul(alpha, alpha, alpha_lv);
         if (rv_scalar)
-        	allocator_t::scalar_mul(alpha, alpha, alpha_rv);
+        	impl_l::scalar_mul(alpha, alpha, alpha_rv);
 
         //call matrix_mul
         impl_l::gemm(transA, transB,  M(), N(), K(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), beta, injection, injection.leading_dimension(0));
