@@ -22,11 +22,9 @@
 //BC_CPP17_EXECUTION std::execution::seq  //defines default execution as sequential
 
 //BlackCat_Tensors openmp macro.
-#ifdef _OPENMP
-	#ifndef BC_NO_OPENMP
-		#define __BC_omp_for__ _Pragma("omp parallel for")
-		#define __BC_omp_bar__ _Pragma("omp barrier")
-	#endif
+#if defined(_OPENMP) && !defined(BC_NO_OPENMP)
+	#define __BC_omp_for__ _Pragma("omp parallel for")
+	#define __BC_omp_bar__ _Pragma("omp barrier")
 #else
 	#define __BC_omp_for__
 	#define __BC_omp_bar__
