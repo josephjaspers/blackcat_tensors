@@ -18,9 +18,8 @@ namespace stl {
 template<direction direction, class tensor_t_>
 struct Coefficientwise_Iterator {
 
-	using tensor_t = tensor_t_;
-    using self = Coefficientwise_Iterator<direction, tensor_t>;
-    using Iterator = self;
+    using Iterator = Coefficientwise_Iterator<direction, tensor_t>;
+    using tensor_t = tensor_t_;
 
     static constexpr bool ref_value_type
     	= std::is_reference<decltype(std::declval<tensor_t>().internal()[0])>::value;
@@ -44,14 +43,14 @@ struct Coefficientwise_Iterator {
     }
 
 #define BC_Iter_Compare(sign, rev)                          \
-	__BCinline__											\
+	__BCinline__				            \
     bool operator sign (const Iterator& iter) {             \
         if (direction == direction::forward)                \
             return index sign iter.index;                   \
         else                                                \
             return index rev iter.index;                    \
     }                                                       \
-    __BCinline__ 											\
+    __BCinline__ 					    \
     bool operator sign (int p_index) {                      \
         if (direction == direction::forward)                \
             return index sign p_index;                      \
@@ -75,26 +74,30 @@ struct Coefficientwise_Iterator {
 
     __BCinline__ Iterator& operator =  (int index_) { this->index = index_;  return *this; }
 
-    __BCinline__ Iterator& operator ++ () { index+=direction; return *this; }
-    __BCinline__ Iterator& operator -- () { index-=direction; return *this; }
+    __BCinline__ Iterator& operator ++ ()    { index += direction; return *this; }
+    __BCinline__ Iterator& operator -- ()    { index -= direction; return *this; }
 
-	__BCinline__ Iterator operator ++(int) { return Iterator(tensor, index++); }
-	__BCinline__ Iterator operator --(int) { return Iterator(tensor, index--); }
+    __BCinline__ Iterator  operator ++ (int) { return Iterator(tensor, index++); }
+    __BCinline__ Iterator  operator -- (int) { return Iterator(tensor, index--); }
 
-    __BCinline__ Iterator& operator += (int dist)    { index += dist*direction; return *this; }
-    __BCinline__ Iterator& operator -= (int dist)    { index -= dist*direction; return *this; }
 
-    __BCinline__ Iterator operator + (int dist) const { return Iterator(tensor, index + dist*direction); }
-    __BCinline__ Iterator operator - (int dist) const { return Iterator(tensor, index - dist*direction); }
+    __BCinline__ Iterator& operator += (int dist)       { index += dist*direction; return *this; }
+    __BCinline__ Iterator& operator -= (int dist)       { index -= dist*direction; return *this; }
 
-    __BCinline__ Iterator& operator += (const Iterator& dist) { index += dist.index*direction; return *this; }
-    __BCinline__ Iterator& operator -= (const Iterator& dist) { index -= dist.index*direction; return *this; }
-    __BCinline__ Iterator operator + (const Iterator& dist) const { return Iterator(tensor, index + dist.index*direction); }
-    __BCinline__ Iterator operator - (const Iterator& dist) const { return Iterator(tensor, index - dist.index*direction); }
+    __BCinline__ Iterator  operator +  (int dist) const { return Iterator(tensor, index + dist*direction); }
+    __BCinline__ Iterator  operator -  (int dist) const { return Iterator(tensor, index - dist*direction); }
+
+
+    __BCinline__ Iterator& operator += (const Iterator& dist)       { index += dist.index * direction; return *this; }
+    __BCinline__ Iterator& operator -= (const Iterator& dist)       { index -= dist.index * direction; return *this; }
+    
+    __BCinline__ Iterator  operator +  (const Iterator& dist) const { return Iterator(tensor, index + dist.index*direction); }
+    __BCinline__ Iterator  operator -  (const Iterator& dist) const { return Iterator(tensor, index - dist.index*direction); }
 
 
     __BCinline__ auto& operator*() const { return this->tensor[this->index]; }
-    __BCinline__ auto& operator*() { return this->tensor[this->index]; }
+    __BCinline__ auto& operator*() 	 { return this->tensor[this->index]; }
+    
     __BCinline__ auto& operator [] (int i) const { return this->tensor[i]; }
     __BCinline__ auto& operator [] (int i)       { return this->tensor[i]; }
 };
