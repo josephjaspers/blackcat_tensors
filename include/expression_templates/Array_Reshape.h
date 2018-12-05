@@ -15,8 +15,7 @@ namespace BC {
 namespace et {
 /*
  * Accepts an a tensor_core type wrapped in the new_tensor
- *
- /
+*/
 
 template<int dimension>
 struct Array_Reshape {
