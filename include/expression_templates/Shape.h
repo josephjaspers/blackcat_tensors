@@ -118,7 +118,7 @@ struct Shape<0> {
     __BCinline__ int block_dimension(int i) const { return 1; }
 
     template<class deriv> void copy_shape(const Shape_Base<deriv>& shape) {}
-    static void swap_shape(Shape& a, Shape& b) {}
+    static void swap_shape(Shape& a) {}
 };
 
 template<>

@@ -26,7 +26,7 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<lv, rv, oper
     template<class L, class R> __BCinline__ const auto oper(const L& l, const R& r) const { return static_cast<const operation&>(*this)(l,r); }
     template<class L, class R> __BCinline__       auto oper(const L& l, const R& r)        { return static_cast<      operation&>(*this)(l,r); }
 
-    __BCinline__ static constexpr int DIMS() { return MTF::max(lv::DIMS(),rv::DIMS());}
+    __BCinline__ static constexpr int DIMS() { return lv::DIMS() > rv::DIMS() ?  lv::DIMS() : rv::DIMS(); }
     __BCinline__ static constexpr int ITERATOR() {
         //if dimension mismatch choose the max dimension as iterator, else choose the max iterator
         return lv::DIMS() != rv::DIMS() ? DIMS() : MTF::max(lv::ITERATOR(), rv::ITERATOR());

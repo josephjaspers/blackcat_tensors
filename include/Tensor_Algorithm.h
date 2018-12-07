@@ -174,9 +174,13 @@ public:
 	   auto min_index = BC::alg::min_element(this->cbegin_(), this->cend_());
 	   return allocator_t::extract(this->as_derived().memptr(), min_index);
    }
+
+   //if bool flip the output of sum to an integer
+   using sum_t = std::conditional_t<std::is_same<bool, scalar_t>::value, int, scalar_t>;
+
    BC_DEF_IF_CPP17(
-	   scalar_t sum() const {
-		   return BC::accumulate(this->cbegin_(), this->cend_(), scalar_t(0));
+		sum_t sum() const {
+		   return BC::accumulate(this->cbegin_(), this->cend_(), sum_t(0));
 	   }
    )
 
@@ -201,6 +205,34 @@ public:
 }; //end_of class 'Tensor_Functions'
 
 }  //end_of namespace 'module'
+
+template<class internal_t>
+static bool all(const Tensor_Base<internal_t>& tensor) {
+	constexpr int dims = internal_t::DIMS();
+	using allocator_t  = typename allocator::template implementation<typename internal_t::system_tag>;
+
+	Tensor_Base<BC::et::Array<dims, bool, allocator_t>> bool_tensor(tensor.inner_shape());
+	bool_tensor = logical(tensor);
+
+	return bool_tensor.sum() == bool_tensor.size();
+}
+template<class internal_t>
+static bool any(const Tensor_Base<internal_t>& tensor) {
+	constexpr int dims = internal_t::DIMS();
+	using allocator_t  = typename allocator::template implementation<typename internal_t::system_tag>;
+
+	Tensor_Base<BC::et::Array<dims, bool, allocator_t>>
+	bool_tensor(tensor.inner_shape());
+	bool_tensor = logical(tensor);
+
+	return bool_tensor.sum()!= 0;
+}
+
+
+
+
+
+
 }  //end_of namespace 'BC'
 
 #endif /* TENSOR_FUNCTIONS_H_ */

@@ -90,6 +90,7 @@ BLACKCAT_BC_FUNCTOR_DEF(cached_dx_tanh, 1 - std::pow(x, 2));
 BLACKCAT_BC_FUNCTOR_DEF(relu,std::max(0, x));
 BLACKCAT_BC_FUNCTOR_DEF(dx_relu, x > 0 ? 1 : 0);
 BLACKCAT_BC_FUNCTOR_DEF(cached_dx_relu, x > 0 ? 1 : 0); //same as dx_relu
+BLACKCAT_BC_FUNCTOR_DEF(logical, x > 0 ? 1 : 0); //same as dx_relu
 
 
 //--------------------------------------------not actually cmath--------------------------------------//

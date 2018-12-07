@@ -10,6 +10,7 @@
 #define SHAPE_H_
 
 #include "Array_Base.h"
+#include "Shape.h"
 
 namespace BC {
 template<class> class Evaluator;
@@ -113,6 +114,11 @@ struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Sh
         allocator_t::allocate(array, this->size());
         evaluate_to(*this, array_copy);
     }
+
+    void swap_array(Array& param) {
+        std::swap(this->array, param.array);
+    }
+
 
     void deallocate() {
         allocator_t::deallocate(array);

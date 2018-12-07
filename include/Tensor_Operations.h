@@ -106,6 +106,11 @@ public:
     BC_OPER_COEFFICIENTWISE_DEF( >= , greater_equal)
     BC_OPER_COEFFICIENTWISE_DEF( <= , lesser_equal )
 
+    template<class pDeriv>
+    auto approx_equal (const Tensor_Operations<pDeriv>& param) const {
+        assert_valid(param);
+        return bi_expr< et::oper:: approx_equal >(param);
+    }
 
 //----------------------------------------------scalar assignment operations--------------------------------------------------//
     template<class p_scalar_t>
@@ -169,8 +174,8 @@ public:
         return matmul_t(as_derived().internal(), param.as_derived().internal());
     }
 
-    const auto transpose() const { return un_expr<et::oper::transpose<allocator_t>>(); }
-          auto transpose()          { return un_expr<et::oper::transpose<allocator_t>>(); }
+    const auto transpose() const { return un_expr<et::oper::transpose<system_tag>>(); }
+          auto transpose()          { return un_expr<et::oper::transpose<system_tag>>(); }
 
     const auto t() const { return this->transpose(); }
           auto t()       { return this->transpose(); }
@@ -287,7 +292,7 @@ public:
 
     template<class deriv>
     void assert_same_ml(const Tensor_Operations<deriv>& tensor) const {
-        static_assert(std::is_same<allocator_t, allocator_t_of<deriv>>::value,
+        static_assert(std::is_same<typename deriv::system_tag, system_tag>::value,
                 "TENSOR OPERATIONS BETWEEN THE CPU/GPU ARE PROHIBITED");
     }
 public:

@@ -18,7 +18,7 @@ namespace stl {
 template<direction direction, class tensor_t_>
 struct Coefficientwise_Iterator {
 
-    using Iterator = Coefficientwise_Iterator<direction, tensor_t>;
+    using Iterator = Coefficientwise_Iterator<direction, tensor_t_>;
     using tensor_t = tensor_t_;
 
     static constexpr bool ref_value_type
