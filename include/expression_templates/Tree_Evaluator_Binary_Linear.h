@@ -75,9 +75,6 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
             }
         };
 
-
-
-        std::cout << " linear evaluation " << std::endl;
         using impl =
         		std::conditional_t<entirely_blas_expr, remove_branch,
         		std::conditional_t<evaluator<lv>::entirely_blas_expr, remove_left_branch,

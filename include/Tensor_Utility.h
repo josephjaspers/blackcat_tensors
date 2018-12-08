@@ -61,13 +61,13 @@ private:
     }
 
     template<class ADL=void>
-    std::enable_if_t<std::is_void<ADL>::value && DIMS() == 0>
+    std::enable_if_t<std::is_void<ADL>::value && (DIMS() == 0)>
     print_impl(int prec) const {
     	std::cout << "[" << format_value(allocator_t::extract(as_derived().memptr(), 0), prec) << "]" << std::endl;
     }
 
-    template<class ADL=void>
-    std::enable_if_t<std::is_void<ADL>::value && DIMS() == 1>
+    template<class ADL=void, class v1=void>
+    std::enable_if_t<std::is_void<ADL>::value && (DIMS() == 1)>
     print_impl(int prec, bool sparse=false) const {
     	std::cout << "[ ";
     	for (const auto& scalar : this->as_derived().iter()) {
@@ -75,7 +75,7 @@ private:
     	}
     	std::cout << "]" << std::endl;
     }
-    template<class ADL=void, class second=void>
+    template<class ADL=void, class v1=void, class v2=void>
     std::enable_if_t<std::is_void<ADL>::value && (DIMS() > 1)>
     print_impl(int prec, bool sparse=false) const {
     	std::string dim_header;
@@ -237,10 +237,14 @@ public:
     }
 
     void print_dimensions() const {
-        for (int i = 0; i < DIMS(); ++i) {
-            std::cout << "[" << as_derived().dimension(i) << "]";
-        }
-        std::cout << std::endl;
+    	if (DIMS() == 0) {
+    		std::cout << "[1]" << std::endl;
+    	} else {
+			for (int i = 0; i < DIMS(); ++i) {
+				std::cout << "[" << as_derived().dimension(i) << "]";
+			}
+			std::cout << std::endl;
+    	}
     }
     void print_leading_dimensions() const {
         for (int i = 0; i < DIMS(); ++i) {

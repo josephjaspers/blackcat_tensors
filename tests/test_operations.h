@@ -5,29 +5,16 @@
  *      Author: joseph
  */
 
-#ifndef BLAS_FUNCTION_TESTING_H_
-#define BLAS_FUNCTION_TESTING_H_
+#ifndef BC_BLAS_FUNCTION_TESTING_H_
+#define BC_BLAS_FUNCTION_TESTING_H_
 
-#include "../include/BlackCat_Tensors.h"
+#include "test_common.h"
 
 namespace BC {
 namespace tests {
 
-
-#define BC_TEST_DEF(code)\
-	{\
-		auto test = [&]() { code };\
-		if (!test()) {\
-			std::cout << "TEST FAILURE: " #code  << std::endl;\
-			errors++; \
-		} else {\
-			std::cout << "TEST SUCCESS: " #code  << std::endl;\
-		}\
-	}
-
-
 template<class scalar_t, class alloc_t=BC::Basic_Allocator>
-int test_operations(int sz=4) {
+int test_operations(int sz=128) {
 
 	using mat = BC::Matrix<scalar_t, alloc_t>;
 	using vec = BC::Vector<scalar_t, alloc_t>;
@@ -87,7 +74,7 @@ int test_operations(int sz=4) {
 	return errors;
 }
 template<class scalar_t, class alloc_t=BC::Basic_Allocator>
-int test_matrix_muls(int sz=4) {
+int test_matrix_muls(int sz=128) {
 
 	using mat = BC::Matrix<scalar_t, alloc_t>;
 	using vec = BC::Vector<scalar_t, alloc_t>;
@@ -177,42 +164,16 @@ int test_matrix_muls(int sz=4) {
 		return BC::all(validation);
 	)
 
-//	//lv trans
-//	BC_TEST_DEF(
-//		mat atrans = a.t();
-//		validation = (atrans.t() * b * 2) == (b * a * 2);
+	BC_TEST_DEF(
+			//TODO FIX ME, CAUSES COMPILATION FAILURE
+//		mat atrans(a.t());
+//		c = atrans * b * 2.0f + 8.0f + atrans * b * 2.0f + 8.0f;
+//		d = (3 + 2 * atrans * b + 5) * 2;
+//
+//		validation = c.approx_equal(d);
 //		return BC::all(validation);
-//	)
-//	//lv trans
-//	BC_TEST_DEF(
-//		mat atrans = a.t();
-//		validation = (atrans.t() * 2 * b) == (b * a * 2);
-//		return BC::all(validation);
-//	)
-//	//lv trans
-//	BC_TEST_DEF(
-//		mat atrans = a.t();
-//		validation = (2 * atrans.t() * b) == (b * a * 2);
-//		return BC::all(validation);
-//	)
-//	//lv trans
-//	BC_TEST_DEF(
-//		mat atrans = a.t();
-//		validation = (atrans.t() * b * alpha2) == (b * a * 2);
-//		return BC::all(validation);
-//	)
-//	//lv trans
-//	BC_TEST_DEF(
-//		mat atrans = a.t();
-//		validation = (atrans.t() * alpha2 * b) == (b * a * 2);
-//		return BC::all(validation);
-//	)
-//	//lv trans
-//	BC_TEST_DEF(
-//		mat atrans = a.t();
-//		validation = (alpha2 * atrans.t() * b) == (b * a * 2);
-//		return BC::all(validation);
-//	)
+		return 0;
+	)
 
 	return errors;
 }

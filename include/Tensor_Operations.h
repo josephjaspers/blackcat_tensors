@@ -86,6 +86,15 @@ public:
     BC_OPER_ASSIGNMENT_DEF(%=, mul_assign)
     BC_OPER_ASSIGNMENT_DEF(/=, div_assign)
 
+    //specialization for explicit copy operator
+    derived& operator = (const derived& param) {
+        BC_ASSERT_ASSIGNABLE("derived& operator = (const derived& param)");
+        assert_valid(param);
+        evaluate(bi_expr< et::oper:: assign >(param));
+        return as_derived();
+    }
+
+
     //--------------------------------------pointwise operators-------------------------------//
 
 #define BC_OPER_COEFFICIENTWISE_DEF(op, op_functor)                            \

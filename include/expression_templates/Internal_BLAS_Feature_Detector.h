@@ -13,36 +13,9 @@
 #include "operations/BLAS.h"
 #include "operations/Unary.h"
 #include "operations/Binary.h"
+
 namespace BC {
-namespace et     {
-
-enum BLAS_format {
-    std,
-    upTri,
-    loTri,
-    upSym,
-    loSym,
-};
-enum BLAS_layout {
-    dense,
-    packed,
-    sparse,
-};
-enum BLAS_trans {
-    trans,
-    notrans,
-};
-template<
-BLAS_format form = std,
-BLAS_layout lay  = dense,
-BLAS_trans transp = notrans>
-
-struct BLAS_traits {
-    BLAS_format format     = form;
-    BLAS_layout layout     = lay;
-    BLAS_trans trans     = transp;
-};
-
+namespace et {
 
 template<class T>           using enable_if_core = std::enable_if_t<std::is_base_of<BC_Array, T>::value>;
 template<class T, class U>  using enable_if_cores = std::enable_if_t<std::is_base_of<BC_Array, T>::value && std::is_base_of<BC_Array, U>::value>;
