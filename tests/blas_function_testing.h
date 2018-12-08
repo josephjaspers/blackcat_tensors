@@ -13,6 +13,19 @@
 namespace BC {
 namespace tests {
 
+
+#define BC_TEST_DEF(code)\
+	{\
+		auto test = [&]() { code };\
+		if (!test()) {\
+			std::cout << "TEST FAILURE: " #code  << std::endl;\
+			errors++; \
+		} else {\
+			std::cout << "TEST SUCCESS: " #code  << std::endl;\
+		}\
+	}
+
+
 template<class scalar_t, class alloc_t=BC::Basic_Allocator>
 int test_operations(int sz=4) {
 
@@ -30,46 +43,46 @@ int test_operations(int sz=4) {
 	a.randomize(0, 10);
 	b.randomize(0, 10);
 
-	{
+	BC_TEST_DEF(
 		mat c(a);
 		validation = (c + b).approx_equal(a += b);
-		errors += !BC::all(validation);
-	}
-	{
+		return BC::all(validation);
+	)
+	BC_TEST_DEF(
 		mat c(a);
 		validation = (c - b).approx_equal(a -= b);
-		errors += !BC::all(validation);
-	}
-	{
+		return BC::all(validation);
+	)
+	BC_TEST_DEF(
 		mat c(a);
 		validation = (c / b).approx_equal(a /= b);
-		errors += !BC::all(validation);
-	}
-	{
+		return BC::all(validation);
+	)
+	BC_TEST_DEF(
 		mat c(a);
 		validation = (c % b).approx_equal(a %= b);
-		errors += !BC::all(validation);
-	}
-	{
+		return BC::all(validation);
+	)
+	BC_TEST_DEF(
 		mat c(a);
 		validation = (c + 1) >= a;
-		errors += !BC::all(validation);
-	}
-	{
+		return BC::all(validation);
+	)
+	BC_TEST_DEF(
 		mat c(a);
 		validation = (c - 1) <= a;
-		errors += !BC::all(validation);
-	}
-	{
+		return BC::all(validation);
+	)
+	BC_TEST_DEF(
 		mat c(a);
 		validation = c == a;
-		errors += !BC::all(validation);
-	}
-	{
+		return BC::all(validation);
+	)
+	BC_TEST_DEF(
 		mat c(a);
 		validation = c*-1 == -a;
-		errors += !BC::all(validation);
-	}
+		return BC::all(validation);
+	)
 
 	return errors;
 }
@@ -97,17 +110,8 @@ int test_matrix_muls(int sz=4) {
 	b.randomize(0, 10);
 
 
-#define BC_TEST_MATMUL(code)\
-	{\
-		auto test = [&]() { code };\
-		if (!test()) {\
-			std::cout << "TEST FAILURE: " #code  << std::endl;\
-			errors++; \
-		}\
-	}
-
 	//lv trans
-	BC_TEST_MATMUL(
+	BC_TEST_DEF(
 		mat atrans = a.t();
 		c = atrans.t() * b;
 		d = a * b;
@@ -115,7 +119,7 @@ int test_matrix_muls(int sz=4) {
 		return BC::all(validation);
 	)
 
-	BC_TEST_MATMUL(
+	BC_TEST_DEF(
 		mat atrans = a.t();
 		c = atrans.t() * b;
 		d = a * b;
@@ -124,7 +128,7 @@ int test_matrix_muls(int sz=4) {
 	)
 
 	//rv trans
-	BC_TEST_MATMUL(
+	BC_TEST_DEF(
 		mat atrans = a.t();
 		c=(b * a);
 		d=(b * atrans.t());
@@ -132,7 +136,7 @@ int test_matrix_muls(int sz=4) {
 		return BC::all(validation);
 	)
 
-	BC_TEST_MATMUL(
+	BC_TEST_DEF(
 		c = a * b * 2;
 		d = 2 * a * b;
 
@@ -141,14 +145,14 @@ int test_matrix_muls(int sz=4) {
 	)
 
 
-	BC_TEST_MATMUL(
+	BC_TEST_DEF(
 		c = a.t() * b * 2;
 		d = 2 * a.t() * b;
 
 		validation = c.approx_equal(d);
 		return BC::all(validation);
 	)
-	BC_TEST_MATMUL(
+	BC_TEST_DEF(
 		mat atrans(a.t());
 		c = atrans * b * 2;
 		d = 2 * a.t() * b;
@@ -156,7 +160,7 @@ int test_matrix_muls(int sz=4) {
 		validation = c.approx_equal(d);
 		return BC::all(validation);
 	)
-	BC_TEST_MATMUL(
+	BC_TEST_DEF(
 		mat atrans(a.t());
 		c = atrans * b * 2;
 		d = 2 * atrans * b;
@@ -164,47 +168,47 @@ int test_matrix_muls(int sz=4) {
 		validation = c.approx_equal(d);
 		return BC::all(validation);
 	)
-	BC_TEST_MATMUL(
+	BC_TEST_DEF(
 		mat atrans(a.t());
-		c = atrans * b * 2 + 8;
-//		d = 3 + 2 * atrans * b + 5;
+		c = atrans * b * 2.0f + 8.0f;
+		d = 3 + 2 * atrans * b + 5;
 
 		validation = c.approx_equal(d);
 		return BC::all(validation);
 	)
 
 //	//lv trans
-//	BC_TEST_MATMUL(
+//	BC_TEST_DEF(
 //		mat atrans = a.t();
 //		validation = (atrans.t() * b * 2) == (b * a * 2);
 //		return BC::all(validation);
 //	)
 //	//lv trans
-//	BC_TEST_MATMUL(
+//	BC_TEST_DEF(
 //		mat atrans = a.t();
 //		validation = (atrans.t() * 2 * b) == (b * a * 2);
 //		return BC::all(validation);
 //	)
 //	//lv trans
-//	BC_TEST_MATMUL(
+//	BC_TEST_DEF(
 //		mat atrans = a.t();
 //		validation = (2 * atrans.t() * b) == (b * a * 2);
 //		return BC::all(validation);
 //	)
 //	//lv trans
-//	BC_TEST_MATMUL(
+//	BC_TEST_DEF(
 //		mat atrans = a.t();
 //		validation = (atrans.t() * b * alpha2) == (b * a * 2);
 //		return BC::all(validation);
 //	)
 //	//lv trans
-//	BC_TEST_MATMUL(
+//	BC_TEST_DEF(
 //		mat atrans = a.t();
 //		validation = (atrans.t() * alpha2 * b) == (b * a * 2);
 //		return BC::all(validation);
 //	)
 //	//lv trans
-//	BC_TEST_MATMUL(
+//	BC_TEST_DEF(
 //		mat atrans = a.t();
 //		validation = (alpha2 * atrans.t() * b) == (b * a * 2);
 //		return BC::all(validation);

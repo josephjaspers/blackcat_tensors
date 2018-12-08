@@ -69,7 +69,13 @@ struct Greedy_Evaluator {
 private:
 	template<class expression_t>__BChot__
 	static auto evaluate_temporaries(expression_t expression) {
+
+//Use to check if a temporary is created
+#ifdef BC_DISABLE_TEMPORARIES
+		return expression;
+#else
 		return evaluator<expression_t>::temporary_injection(expression);
+#endif
 	}};
 
 }

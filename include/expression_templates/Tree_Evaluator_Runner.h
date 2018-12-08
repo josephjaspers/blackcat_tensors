@@ -13,7 +13,7 @@ struct Lazy_Evaluator {
 
     template<class T> __BChot__
     static constexpr bool INJECTION() {
-        return et::tree::evaluator<std::decay_t<T>>::nested_blas_expr;
+        return et::tree::evaluator<std::decay_t<T>>::requires_greedy_eval;
     }
 
     //------------------------------------------------Purely lazy evaluation----------------------------------//
