@@ -60,7 +60,7 @@ static constexpr bool is_linear_assignment_op() {
 
 template<class T>
 static constexpr bool is_nonlinear_op() {
-    return  !MTF::seq_contains<T, et::oper::add, et::oper::sub> && !is_blas_func<T>();
+    return  !is_linear_op<T>() && !is_blas_func<T>();
 }
 template<class T>
 static constexpr int alpha_of() {

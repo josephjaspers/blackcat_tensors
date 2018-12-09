@@ -28,7 +28,7 @@ template<class T> struct rm_const<const T&> { using type = T&; };
 class assignment {};
 class matrix_oper {};
 
-    struct scalar_mul : matrix_oper {
+    struct scalar_mul {
         //this is just a flag for gemm, it is the same as multiplication though
         template<class lv, class rv> __BCinline__ auto operator ()(lv l, rv r) const {
             return l * r;

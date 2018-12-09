@@ -166,13 +166,12 @@ int test_matrix_muls(int sz=128) {
 
 	BC_TEST_DEF(
 			//TODO FIX ME, CAUSES COMPILATION FAILURE
-//		mat atrans(a.t());
-//		c = atrans * b * 2.0f + 8.0f + atrans * b * 2.0f + 8.0f;
-//		d = (3 + 2 * atrans * b + 5) * 2;
-//
-//		validation = c.approx_equal(d);
-//		return BC::all(validation);
-		return 0;
+		mat atrans(a.t());
+		c = (atrans * b * 2.0f + 8.0f) + (atrans * b * 2.0f + 8.0f);
+		d = (3 + 2 * atrans * b + 5) * 2;
+
+		validation = c.approx_equal(d);
+		return BC::all(validation);
 	)
 
 	return errors;
