@@ -20,7 +20,7 @@
 //#define NDEBUG 		                  //Disables runtime checks
 //BC_CPP17_EXECUTION std::execution::par  //defines default execution as parallel
 //BC_CPP17_EXECUTION std::execution::seq  //defines default execution as sequential
-
+//#define BC_TREE_OPTIMIZER_DEBUG	      //enables print statements for the tree evaluator. (For developers)
 //BlackCat_Tensors openmp macro.
 #if defined(_OPENMP) && !defined(BC_NO_OPENMP)
 	#define __BC_omp_for__ _Pragma("omp parallel for")

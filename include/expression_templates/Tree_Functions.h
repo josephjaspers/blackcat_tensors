@@ -12,8 +12,8 @@
 
 #include "Tree_Evaluator_Common.h"
 
-namespace BC{
-namespace et     {
+namespace BC {
+namespace et {
 namespace tree {
 
 //default

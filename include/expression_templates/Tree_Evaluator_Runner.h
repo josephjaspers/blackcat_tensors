@@ -9,6 +9,9 @@ namespace et  {
 template<class allocator_type>
 struct Lazy_Evaluator {
 
+	template<class lv, class rv>
+	static constexpr bool decay_same = std::is_same<std::decay_t<lv>, std::decay_t<rv>>::value;
+
 	using impl = typename evaluator::template implementation<allocator_type>;
 
     template<class T> __BChot__
@@ -36,7 +39,7 @@ struct Lazy_Evaluator {
     evaluate(const expression& expr) {
         auto greedy_evaluated_expr = et::tree::Greedy_Evaluator::evaluate(expr);
 
-        if (is_expr<decltype(greedy_evaluated_expr)>()) {
+        if (!decay_same<decltype(greedy_evaluated_expr.right), decltype(expr.left)>) {
             static constexpr int iterator_dimension = expression::ITERATOR();
             impl::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
         }
@@ -50,7 +53,7 @@ struct Lazy_Evaluator {
         static constexpr int iterator_dimension = expression::ITERATOR();    //the iterator for the evaluation of post inject_t
 
         auto greedy_evaluated_expr = et::tree::Greedy_Evaluator::evaluate_aliased(expr);        //evaluate the internal tensor_type
-        if (is_expr<decltype(greedy_evaluated_expr)>()) {
+        if (!decay_same<decltype(greedy_evaluated_expr.right), decltype(expr.left)>) {
         	impl:: nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
         }
         //deallocate any temporaries made by the tree

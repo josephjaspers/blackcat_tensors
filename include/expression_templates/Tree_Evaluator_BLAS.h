@@ -41,11 +41,14 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
 
     template<class core, int a, int b> __BChot__
     static auto linear_evaluation(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
-        branch.eval(tensor);
+    	BC_TREE_OPTIMIZER_STDOUT("BLAS_EXPR: linear_evaluation" << "alpha=" << a << "beta=" << b);
+
+    	branch.eval(tensor);
         return tensor.data();
     }
     template<class core, int a, int b> __BChot__
     static auto injection(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
+    	BC_TREE_OPTIMIZER_STDOUT("BLAS_EXPR: injection");
         branch.eval(tensor);
         return tensor.data();
     }
@@ -53,6 +56,8 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
     //if no replacement is used yet, auto inject
     __BChot__
     static auto temporary_injection(const Binary_Expression<lv, rv, op>& branch) {
+    	BC_TREE_OPTIMIZER_STDOUT("BLAS_EXPR: temporary_injection");
+
     	using tmp_t = temporary<et::Array<branch_t::DIMS(), scalar_of<branch_t>, allocator_of<branch_t>>>;
         tmp_t tmp(branch.inner_shape());
         branch.eval(injector<tmp_t, 1, 0>(tmp));
@@ -60,6 +65,8 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
     }
     __BChot__
     static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch) {
+    	BC_TREE_OPTIMIZER_STDOUT("BLAS_EXPR: deallocate_temporaries");
+
         evaluator<lv>::deallocate_temporaries(branch.left);
         evaluator<rv>::deallocate_temporaries(branch.right);
     }

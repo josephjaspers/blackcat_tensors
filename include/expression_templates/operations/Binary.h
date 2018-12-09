@@ -167,6 +167,21 @@ class matrix_oper {};
             return l < r ? l : r;
         }
     };
+    struct AND {
+        template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
+            return l && r;
+        }
+    };
+    struct OR {
+        template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
+            return l || r;
+        }
+    };
+    struct XOR {
+        template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
+            return l ^ r;
+        }
+    };
 }
 }
 }

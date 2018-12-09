@@ -22,12 +22,15 @@
 
 #include "Tree_Functions.h"
 
-
+#ifdef BC_TREE_OPTIMIZER_DEBUG
+#define BC_TREE_OPTIMIZER_STDOUT(literal) std::cout << literal << std::endl;
+#else
+#define BC_TREE_OPTIMIZER_STDOUT(literal)
+#endif
 
 namespace BC {
-namespace et     {
+namespace et {
 namespace tree {
-
 
 //initial forward decl
 template<class T, class=void>

@@ -114,6 +114,9 @@ public:
     BC_OPER_COEFFICIENTWISE_DEF( <  , lesser)
     BC_OPER_COEFFICIENTWISE_DEF( >= , greater_equal)
     BC_OPER_COEFFICIENTWISE_DEF( <= , lesser_equal )
+    BC_OPER_COEFFICIENTWISE_DEF( && , AND )
+    BC_OPER_COEFFICIENTWISE_DEF( || , OR )
+
 
     template<class pDeriv>
     auto approx_equal (const Tensor_Operations<pDeriv>& param) const {
@@ -328,14 +331,14 @@ public:
         auto& operator += (const Tensor_Operations<derived_t>& param) {
             tensor.assert_valid(param);
             evaluate(tensor.bi_expr(et::oper::add_assign(), param));
-            return tensor.as_derived();
+            return tensor;
         }
 
         template<class derived_t>
         auto& operator -= (const Tensor_Operations<derived_t>& param) {
             tensor.assert_valid(param);
             evaluate(tensor.bi_expr(et::oper::sub_assign(), param));
-            return tensor.as_derived();
+            return tensor();
         }
     };
 

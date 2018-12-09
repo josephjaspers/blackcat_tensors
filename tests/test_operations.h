@@ -165,12 +165,21 @@ int test_matrix_muls(int sz=128) {
 	)
 
 	BC_TEST_DEF(
-			//TODO FIX ME, CAUSES COMPILATION FAILURE
+		//TODO FIX ME, CAUSES COMPILATION FAILURE
 		mat atrans(a.t());
 		c = (atrans * b * 2.0f + 8.0f) + (atrans * b * 2.0f + 8.0f);
-		d = (3 + 2 * atrans * b + 5) * 2;
 
-		validation = c.approx_equal(d);
+		d = (3 + 2 * atrans * b + 5) * 2;
+		mat e(sz, sz);
+		e = (3 + 2 * atrans * b + 5);
+		e += 2 * atrans * b;
+		e += 8;
+
+		mat f(sz, sz);
+		f = (3 + 2 * atrans * b + 5);
+		f += f;
+
+		validation = (c.approx_equal(d) && c.approx_equal(e) && c.approx_equal(f));
 		return BC::all(validation);
 	)
 
