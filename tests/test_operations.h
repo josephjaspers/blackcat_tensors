@@ -93,8 +93,8 @@ int test_matrix_muls(int sz=128) {
 	scal alpha2;
 	alpha2 = 2.0;
 
-	a.randomize(0, 10);
-	b.randomize(0, 10);
+	a.randomize(0, 12);
+	b.randomize(0, 12);
 
 
 	//lv trans
@@ -164,8 +164,9 @@ int test_matrix_muls(int sz=128) {
 		return BC::all(validation);
 	)
 
+
+#ifndef BC_DISABLE_TEMPORARIES //This test requires temporaries (Though in the future this should be fixed)
 	BC_TEST_DEF(
-		//TODO FIX ME, CAUSES COMPILATION FAILURE
 		mat atrans(a.t());
 		c = (atrans * b * 2.0f + 8.0f) + (atrans * b * 2.0f + 8.0f);
 
@@ -182,7 +183,32 @@ int test_matrix_muls(int sz=128) {
 		validation = (c.approx_equal(d) && c.approx_equal(e) && c.approx_equal(f));
 		return BC::all(validation);
 	)
+	BC_TEST_DEF(
+		mat atrans(a.t());
 
+		c = (atrans * b * 2.0f - 8.0f) - (atrans * b * 2.0f - 8.0f);
+		d = (3 - 2 * atrans * b - 5) - (3 - 2 * atrans * b - 5);
+
+		mat e(sz, sz);
+		e = (3 - 2 * atrans * b - 5) + 0;
+		e -= (-2 * atrans * b);
+		e -= -2;
+
+
+		mat f(sz, sz);
+		f = (3 - 2 * atrans * b - 5);
+		f -= f;
+
+		mat g(sz, sz);
+		g =  (atrans * 5 * b - 5);
+		g -= (atrans * 5 * b - 5);
+
+		mat h = (a.t() * b * 2.0f - 8.0f) - (atrans * b * 2.0f - 8.0f);
+
+		validation = (c.approx_equal(d) && c.approx_equal(e) && c.approx_equal(f)  && c.approx_equal(g) && c.approx_equal(h));
+		return BC::all(validation);
+	)
+#endif
 	return errors;
 }
 }

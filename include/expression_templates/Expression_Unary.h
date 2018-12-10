@@ -45,6 +45,12 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<value, operati
     __BCinline__ int dimension(int i) const { return array.dimension(i); }
     __BCinline__ int block_dimension(int i) const { return array.block_dimension(i); }
 };
+
+template<class op, class expr>
+auto make_un_expr(expr e) {
+	return Unary_Expression<expr, op>(e);
+}
+
 }
 }
 #endif /* EXPRESSION_UNARY_POINTWISE_CU_ */

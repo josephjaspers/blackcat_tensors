@@ -10,6 +10,7 @@
 #define PTEE_BINARY_LINEAR_H_
 
 #include "Tree_Evaluator_Common.h"
+#include "Expression_Unary.h"
 #include "Expression_Binary.h"
 #include "Array.h"
 
@@ -21,7 +22,7 @@ template<class lv, class rv, class op>
 struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op>()>> {
     static constexpr bool entirely_blas_expr 	= evaluator<lv>::entirely_blas_expr && evaluator<rv>::entirely_blas_expr;
     static constexpr bool partial_blas_expr 	= evaluator<lv>::partial_blas_expr || evaluator<rv>::partial_blas_expr;
-    static constexpr bool nested_blas_expr 		= partial_blas_expr;
+    static constexpr bool nested_blas_expr 		= evaluator<lv>::nested_blas_expr || evaluator<rv>::nested_blas_expr;
     static constexpr bool requires_greedy_eval 	= evaluator<lv>::requires_greedy_eval || evaluator<rv>::requires_greedy_eval;
 
 
@@ -49,7 +50,8 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 
         	auto left  = evaluator<lv>::linear_evaluation(branch.left, tensor);
             auto right = evaluator<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor));
-            return Binary_Expression<decltype(left), decltype(right), op>(left, right);
+            return right;
+            //            return Binary_Expression<decltype(left), decltype(right), op>(left, right);
         }
     };
 
@@ -63,7 +65,8 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 
     		auto left  = evaluator<lv>::linear_evaluation(branch.left, tensor);
             auto right = evaluator<rv>::linear_evaluation(branch.right, update_injection<op, b != 0>(tensor));
-            return Binary_Expression<decltype(left), decltype(right), op>(left, right);
+            return left;
+            //            return Binary_Expression<decltype(left), decltype(right), op>(left, right);
         }
     };
 
@@ -205,10 +208,12 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 
         using impl =
           		std::conditional_t<entirely_blas_expr, remove_branch,
-        		std::conditional_t<evaluator<lv>::entirely_blas_expr, remove_left_branch,
-        		std::conditional_t<evaluator<rv>::entirely_blas_expr, remove_right_branch,
-                std::conditional_t<evaluator<lv>::nested_blas_expr, left_nested_blas_expr,
-                std::conditional_t<evaluator<rv>::nested_blas_expr, right_nested_blas_expr, basic_eval>>>>>;
+          		//check this
+//        		std::conditional_t<evaluator<lv>::entirely_blas_expr, remove_left_branch,
+//        		std::conditional_t<evaluator<rv>::entirely_blas_expr, remove_right_branch,
+        		std::conditional_t<evaluator<rv>::partial_blas_expr && evaluator<lv>::partial_blas_expr, basic_eval,
+        		std::conditional_t<evaluator<lv>::nested_blas_expr, left_nested_blas_expr,
+                std::conditional_t<evaluator<rv>::nested_blas_expr, right_nested_blas_expr, basic_eval>>>>;
 
         static_assert(!std::is_same<void, impl>::value, "EXPRESSION_REORDERING COMPILATION FAILURE, USE 'ALIAS' AS A WORKAROUND");
         return impl::function(branch, tensor);

@@ -11,6 +11,7 @@
 
 
 #include "utility/MetaTemplateFunctions.h"
+#include "Internal_Common.h"
 #include <type_traits>
 
 #include "Tree_Struct_Temporary.h"
