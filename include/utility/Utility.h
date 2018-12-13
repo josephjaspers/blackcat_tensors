@@ -1,23 +1,23 @@
 /*
- * Allocators.h
+ * Utility.h
  *
- *  Created on: Dec 4, 2018
+ *  Created on: Dec 12, 2018
  *      Author: joseph
  */
 
-#ifndef BC_ALLOCATOR_ALLOCATOR_H_
-#define BC_ALLOCATOR_ALLOCATOR_H_
+#ifndef BC_UTILITY_UTILITY_H_
+#define BC_UTILITY_UTILITY_H_
+
 
 #include "Host.h"
 #include "Device.h"
-#include "Device_Managed.h"
 
 namespace BC {
 
 class host_tag;
 class device_tag;
 
-namespace allocator {
+namespace utility {
 
 
 #ifdef __CUDACC__
@@ -38,4 +38,5 @@ namespace allocator {
 
 
 
-#endif /* ALLOCATORS_H_ */
+
+#endif /* UTILITY_H_ */

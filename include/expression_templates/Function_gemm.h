@@ -25,7 +25,7 @@ struct Binary_Expression<lv, rv, oper::gemm<system_tag_>>
     using allocator_t = typename lv::allocator_t;
     using system_tag = system_tag_;
     using impl_l  = typename blas::implementation<system_tag>;
-
+    using utility_l   = utility::implementation<system_tag>;
 
     static constexpr bool transA = blas_feature_detector<lv>::transposed;
     static constexpr bool transB = blas_feature_detector<rv>::transposed;
@@ -81,8 +81,8 @@ struct Binary_Expression<lv, rv, oper::gemm<system_tag_>>
         auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 
         //allocate the alpha and beta scalars,
-        auto alpha = allocator_t::static_allocate((scalar_t)alpha_mod);
-        auto beta = allocator_t::static_allocate((scalar_t)beta_mod);
+        auto alpha = utility_l::stack_allocate((scalar_t)alpha_mod);
+        auto beta = utility_l::stack_allocate((scalar_t)beta_mod);
 
         //compute the scalar values if need be
         if (lv_scalar)
@@ -97,8 +97,8 @@ struct Binary_Expression<lv, rv, oper::gemm<system_tag_>>
         //deallocate all the temporaries
         if (lv_eval) cc(A).deallocate();
         if (rv_eval) cc(B).deallocate();
-        allocator_t::deallocate(beta);
-        allocator_t::deallocate(alpha);
+        utility_l::deallocate(beta);
+        utility_l::deallocate(alpha);
     }
 };
 

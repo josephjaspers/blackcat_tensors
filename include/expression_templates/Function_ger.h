@@ -31,7 +31,8 @@ struct Binary_Expression<lv, rv, oper::ger<system_tag_>>
     using scalar_t  = typename lv::scalar_t;
     using system_tag = system_tag_;
     using allocator_t = typename allocator::implementation<system_tag>;
-    using impl_l     = typename blas::implementation<system_tag>;
+    using blas_lib     = typename blas::implementation<system_tag>;
+    using utility_lib  = typename utility::implementation<system_tag>;
 
 
     static constexpr bool transA = blas_feature_detector<lv>::transposed;
@@ -79,22 +80,22 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
     auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 
     //allocate the alpha and beta scalars,
-    auto alpha = allocator_t::static_allocate((scalar_t)alpha_mod);
+    auto alpha = utility_lib::stack_allocate((scalar_t)alpha_mod);
 
     //compute the scalar values if need be
     if (lv_scalar)
-    	impl_l::scalar_mul(alpha, alpha, alpha_lv);
+    	blas_lib::scalar_mul(alpha, alpha, alpha_lv);
     if (rv_scalar)
-    	impl_l::scalar_mul(alpha, alpha, alpha_rv);
+    	blas_lib::scalar_mul(alpha, alpha, alpha_rv);
 
     //call outer product
-    impl_l::ger(M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
+    blas_lib::ger(M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
 
 
     //deallocate all the temporaries
     if (lv_eval) cc(A).deallocate();
     if (rv_eval) cc(B).deallocate();
-    allocator_t::deallocate(alpha);
+    utility_lib::deallocate(alpha);
 }
 };
 }
