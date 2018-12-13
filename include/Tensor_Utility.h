@@ -30,9 +30,11 @@ struct Tensor_Utility;
 template<class internal_t>
 struct Tensor_Utility<Tensor_Base<internal_t>> {
 
+	using system_tag = typename internal_t::system_tag;
     using derived = Tensor_Base<internal_t>;
     using scalar  = typename internal_t::scalar_t;
     using allocator_t = typename internal_t::allocator_t;
+    using utility_l = utility::implementation<system_tag>;
 
     template<class>
     friend class Tensor_Utility;
@@ -63,7 +65,7 @@ private:
     template<class ADL=void>
     std::enable_if_t<std::is_void<ADL>::value && (DIMS() == 0)>
     print_impl(int prec) const {
-    	std::cout << "[" << format_value(allocator_t::extract(as_derived().memptr(), 0), prec) << "]" << std::endl;
+    	std::cout << "[" << format_value(utility_l::extract(as_derived().memptr(), 0), prec) << "]" << std::endl;
     }
 
     template<class ADL=void, class v1=void>
@@ -71,7 +73,7 @@ private:
     print_impl(int prec, bool sparse=false) const {
     	std::cout << "[ ";
     	for (const auto& scalar : this->as_derived().iter()) {
-    		std::cout << format_value(allocator_t::extract(&scalar, 0), prec, sparse) << ", ";
+    		std::cout << format_value(utility_l::extract(&scalar, 0), prec, sparse) << ", ";
     	}
     	std::cout << "]" << std::endl;
     }
@@ -95,7 +97,7 @@ public:
         BC_ARRAY_ONLY("write(std::ofstream& os)");
 
         scalar* internal = new scalar[as_derived().size()];
-        allocator_t::DeviceToHost(internal, as_derived().internal().memptr(), as_derived().size());
+        utility_l::DeviceToHost(internal, as_derived().internal().memptr(), as_derived().size());
 
         for (int i = 0; i < as_derived().size() - 1; ++i) {
             os << internal[i] << ',';
@@ -109,7 +111,7 @@ public:
         BC_ARRAY_ONLY("void write_tensor_data(std::ofstream& os)");
 
         scalar* internal = new scalar[as_derived().size()];
-        allocator_t::DeviceToHost(internal, as_derived().internal().memptr(), as_derived().size());
+        utility_l::DeviceToHost(internal, as_derived().internal().memptr(), as_derived().size());
 
         os << as_derived().dims() << ',';
         for (int i = 0; i < as_derived().dims(); ++i) {
@@ -162,7 +164,7 @@ public:
             if (ss.peek() == ',')
                 ss.ignore();
         }
-            allocator_t::HostToDevice(as_derived().internal().memptr(), &file_data[0], (unsigned)as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
+            utility_l::HostToDevice(as_derived().internal().memptr(), &file_data[0], (unsigned)as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
 
     }
 
@@ -211,10 +213,10 @@ public:
 
                 as_derived() = derived(shape);
             }
-            allocator_t::HostToDevice(as_derived().internal().memptr(), &file_data[file_data[0] + 1],
+            utility_l::HostToDevice(as_derived().internal().memptr(), &file_data[file_data[0] + 1],
                     as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
         } else {
-            allocator_t::HostToDevice(as_derived().internal().memptr(), &file_data[0],
+            utility_l::HostToDevice(as_derived().internal().memptr(), &file_data[0],
                     as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
         }
     }
