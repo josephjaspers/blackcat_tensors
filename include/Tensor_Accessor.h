@@ -42,7 +42,7 @@ public:
     const auto operator [] (int i) const { return slice(i); }
           auto operator [] (int i)       { return slice(i); }
 
-    struct range { int from, to; };
+    struct range { int from, to; };	//enables syntax: `tensor[{start, end}]`
     const auto operator [] (range r) const { return slice(r.from, r.to); }
           auto operator [] (range r)       { return slice(r.from, r.to); }
 

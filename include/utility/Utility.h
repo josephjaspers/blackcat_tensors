@@ -12,31 +12,7 @@
 #include "Host.h"
 #include "Device.h"
 
-namespace BC {
-
-class host_tag;
-class device_tag;
-
-namespace utility {
-
-
-#ifdef __CUDACC__
-	template<class system_tag>
-	using implementation =
-			std::conditional_t<
-				std::is_same<host_tag, system_tag>::value,
-					Host,
-					Device>;
-#else
-	template<class system_tag>
-	using implementation = Host;
-#endif
-
-
-}
-}
-
-
+BC_DEFAULT_MODULE_BODY(utility)
 
 
 #endif /* UTILITY_H_ */
