@@ -23,7 +23,7 @@ struct Binary_Expression<lv, rv, oper::gemv<system_tag_>>
 
     using scalar_t    = typename lv::scalar_t;
     using system_tag  = system_tag_;
-    using allocator_t = allocator::implementation<system_tag>;
+    using allocator_t = allocator::implementation<system_tag, scalar_t>;
     using impl_l      = blas::implementation<system_tag>;
     using utility_l   = utility::implementation<system_tag>;
 

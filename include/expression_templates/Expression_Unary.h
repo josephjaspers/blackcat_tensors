@@ -17,8 +17,9 @@ template<class value, class operation>
 struct Unary_Expression : public Expression_Base<Unary_Expression<value, operation>>, public operation {
 
     using scalar_t  = decltype(std::declval<operation>()(std::declval<typename value::scalar_t>()));
-    using allocator_t = typename value::allocator_t;
     using system_tag  = typename value::system_tag;
+    using allocator_t = allocator::implementation<system_tag, scalar_t>;
+    using utility_t	  = utility::implementation<system_tag>;
 
     __BCinline__ static constexpr int DIMS() { return value::DIMS(); }
     __BCinline__ static constexpr int ITERATOR() { return value::ITERATOR(); }

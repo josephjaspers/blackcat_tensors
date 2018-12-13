@@ -20,7 +20,7 @@ struct Unary_Expression<functor_type, oper::transpose<system_tag_>>
 
     using scalar_t  = typename functor_type::scalar_t;
     using system_tag = system_tag_;
-    using allocator_t = allocator::implementation<system_tag>;
+    using allocator_t = allocator::implementation<system_tag, scalar_t>;
 
     __BCinline__ static constexpr int DIMS() { return functor_type::DIMS(); }
     __BCinline__ static constexpr int ITERATOR() { return DIMS() > 1? DIMS() :0; }

@@ -15,18 +15,16 @@ class host_tag;
 
 namespace allocator {
 
-struct Host {
+template<class T, class derived=void>
+struct Host : AllocatorBase<std::conditional_t<std::is_void<derived>::value, Host<T>, derived>> {
 
     using system_tag = host_tag;
 
-    template<typename T>
-    static T*& allocate(T*& internal_mem_ptr, int size) {
-        internal_mem_ptr = new T[size];
-        return internal_mem_ptr;
+    T* allocate(int size) {
+        return new T[size];
     }
 
-    template<typename T>
-    static void deallocate(T* t) {
+    void deallocate(T* t) {
         delete[] t;
     }
 

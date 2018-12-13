@@ -17,7 +17,7 @@ template<class> class Evaluator;
 
 namespace et     {
 template<int dimension, class T, class allocator>
-struct Array : Array_Base<Array<dimension, T, allocator>, dimension>, public Shape<dimension> {
+struct Array : Array_Base<Array<dimension, T, allocator>, dimension>, public Shape<dimension>, private allocator {
 
     using scalar_t = T;
     using allocator_t = allocator;
@@ -33,16 +33,16 @@ struct Array : Array_Base<Array<dimension, T, allocator>, dimension>, public Sha
     Array(Shape<DIMS()> shape_, scalar_t* array_) : array(array_), Shape<DIMS()>(shape_) {}
 
     template<class U,typename = std::enable_if_t<not std::is_base_of<BC_internal_interface<U>, U>::value>>
-    Array(U param) : Shape<DIMS()>(param) { allocator_t::allocate(array, this->size()); }
+    Array(U param) : Shape<DIMS()>(param), array( allocator_t::allocate(this->size())) {}
 
     template<class... integers>//CAUSES FAILURE WITH NVCC 9.2, typename = std::enable_if_t<MTF::is_integer_sequence<integers...>>>
-    Array(integers... ints) : Shape<DIMS()>(ints...) {
+    Array(integers... ints) : Shape<DIMS()>(ints...), array(allocator_t::allocate(this->size())) {
         static_assert(MTF::seq_of<int, integers...>,"PARAMETER LIST MUST BE INTEGER_SEQUNCE");
-        allocator_t::allocate(array, this->size()); }
+    }
 
     template<class deriv_expr, typename = std::enable_if_t<std::is_base_of<BC_internal_interface<deriv_expr>, deriv_expr>::value>>
-    Array(const deriv_expr& expr) : Shape<DIMS()>(static_cast<const deriv_expr&>(expr).inner_shape()) {
-        allocator_t::allocate(array, this->size());
+    Array(const deriv_expr& expr) : Shape<DIMS()>(static_cast<const deriv_expr&>(expr).inner_shape()),
+    array(allocator_t::allocate(this->size())){
         evaluate_to(*this, expr);
     }
 
@@ -53,7 +53,7 @@ protected:
 
     void copy_init(const Array& array_copy) {
         this->copy_shape(array_copy);
-        allocator_t::allocate(array, this->size());
+        this->array = allocator_t::allocate(this->size());
         evaluate_to(*this, array_copy);
     }
 public:
@@ -73,7 +73,7 @@ public:
 
 //specialization for scalar --------------------------------------------------------------------------------------------------------
 template<class T, class allocator>
-struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Shape<0> {
+struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Shape<0>, private allocator {
 
     using scalar_t = T;
     using allocator_t = allocator;
@@ -82,9 +82,7 @@ struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Sh
     __BCinline__ static constexpr int DIMS() { return 0; }
 
     scalar_t* array = nullptr;
-    Array() {
-        allocator_t::allocate(array, this->size());
-    }
+    Array() : array(allocator_t::allocate(this->size())) {}
     Array(Shape<DIMS()> shape_, scalar_t* array_) : array(array_), Shape<0>(shape_) {}
 
     template<class U>

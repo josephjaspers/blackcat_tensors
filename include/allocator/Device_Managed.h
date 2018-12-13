@@ -13,10 +13,10 @@
 namespace BC {
 namespace allocator {
 
-struct Device_Managed : Device {
+template<class T>
+struct Device_Managed : Device<T> {
 
-    template<typename T>
-    static T*& allocate(T*& t, int sz=1) {
+    T*& allocate(T*& t, int sz=1) {
         cudaMallocManaged((void**) &t, sizeof(T) * sz);
         return t;
     }

@@ -13,10 +13,10 @@
 namespace BC {
 namespace tests {
 
-template<class scalar_t, class alloc_t=BC::Basic_Allocator>
+template<class scalar_t, template<class> class allocator>
 int test_constructors(int sz=128) {
 
-
+	using alloc_t = allocator<scalar_t>;
 	using scal = BC::Scalar<scalar_t, alloc_t>;
 	using vec = BC::Vector<scalar_t, alloc_t>;
 	using mat = BC::Matrix<scalar_t, alloc_t>;

@@ -36,7 +36,7 @@ namespace BC { 													\
 class host_tag;													\
 class device_tag;												\
 																\
-namespace namespace_name {									   		\
+namespace namespace_name {									   	\
 																\
 	template<class system_tag>									\
 	using implementation =										\
@@ -61,7 +61,7 @@ namespace namespace_name {										 \
 																 \
 	template<													 \
 		class system_tag,										 \
-		class=std::enable_if<std::is_same<system_tag, Host_Tag>> \
+		class=std::enable_if<std::is_same<system_tag, host_tag>::value> \
 	>															 \
 	using implementation = Host;								 \
 																 \

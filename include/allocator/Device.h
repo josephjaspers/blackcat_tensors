@@ -18,19 +18,19 @@ class device_tag;
 
 namespace allocator {
 
-struct Device {
+template<class T, class derived=void>
+struct Device : AllocatorBase<std::conditional_t<std::is_void<derived>::value, Device<T>, derived>> {
 
     using system_tag = device_tag;
 
-    template<typename T>
-    static T*& allocate(T*& t, int sz=1) {
-        cudaMalloc((void**) &t, sizeof(T) * sz);
-        return t;
+    T* allocate(int sz=1) const {
+    	T* data_ptr;
+        cudaMalloc((void**) &data_ptr, sizeof(T) * sz);
+        return data_ptr;
     }
 
-    template<typename T>
-    static void deallocate(T* t) {
-        cudaFree((void*)t);
+    void deallocate(T* data_ptr) const {
+        cudaFree((void*)data_ptr);
     }
 
 };

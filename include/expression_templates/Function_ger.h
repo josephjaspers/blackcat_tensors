@@ -30,7 +30,7 @@ struct Binary_Expression<lv, rv, oper::ger<system_tag_>>
 
     using scalar_t  = typename lv::scalar_t;
     using system_tag = system_tag_;
-    using allocator_t = typename allocator::implementation<system_tag>;
+    using allocator_t = typename allocator::implementation<system_tag, scalar_t>;
     using blas_lib     = typename blas::implementation<system_tag>;
     using utility_lib  = typename utility::implementation<system_tag>;
 
