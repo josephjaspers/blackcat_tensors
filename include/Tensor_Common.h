@@ -14,6 +14,7 @@
 #include "evaluator/Evaluator.h"
 #include "allocator/Allocator.h"
 #include "random/Random.h"
+#include "utility/Utility.h"
 #include "blas/BLAS.h"
 
 namespace BC {

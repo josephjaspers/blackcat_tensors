@@ -16,7 +16,6 @@
 #include "expression_templates/Array_Slice_Range.h"
 #include "expression_templates/Array_Chunk.h"
 #include "expression_templates/Array_Reshape.h"
-#include "expression_templates/Array_Format.h"
 #include "expression_templates/Array_Strided_Vector.h"
 
 namespace BC {
@@ -126,15 +125,5 @@ auto chunk(Tensor_Base<T>& tensor, integers... ints) {
                 BC::make_array(shape_indicies...)));
     };
 }
-
-template<class T, class... integers>
-auto format_as(Tensor_Base<T>& tensor,  int zero, integers... ints) {
-    return make_tensor(et::make_format(tensor.internal(), BC::make_array(ints...)));
-}
-template<class T, class... integers>
-const auto format_as(const Tensor_Base<T>& tensor, int zero, integers... ints) {
-    return make_tensor(et::make_format(tensor.internal(), BC::make_array(ints...)));
-}
-
 }
 #endif /* TENSOR_SHAPING_H_ */

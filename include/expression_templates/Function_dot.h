@@ -24,6 +24,7 @@ struct Binary_Expression<lv, rv, oper::dot<system_tag_>>
     using allocator_t = typename lv::allocator_t;
     using system_tag = system_tag_;
     using impl_l  = typename blas::implementation<system_tag>;
+    using utility_l = utility::implementation<system_tag>;
 
     static constexpr bool transA = blas_feature_detector<lv>::transposed;
     static constexpr bool transB = blas_feature_detector<rv>::transposed;
@@ -53,7 +54,7 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
     auto Y = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<rv>::get_array(right));
 
     //allocate the alpha and beta scalars,
-    auto alpha = allocator_t::static_allocate((scalar_t)alpha_mod);
+    auto alpha = utility_l::stack_allocate((scalar_t)alpha_mod);
 
     //call outer product
     impl_l::dot(X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
@@ -67,7 +68,7 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
         impl_l::scalar_mul(injection.memptr(), alpha, alpha_rv);
     }
     if (beta_mod) {
-        auto beta = allocator_t::static_allocate((scalar_t)alpha_mod);
+        auto beta = utility_l::stack_allocate((scalar_t)alpha_mod);
         impl_l::scalar_mul(alpha, alpha, beta);
         allocator_t::deallocate(beta);
     }
@@ -76,7 +77,7 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
     //deallocate all the temporaries
     if (lv_eval) cc(X).deallocate();
     if (rv_eval) cc(Y).deallocate();
-    allocator_t::deallocate(alpha);
+    utility_l::deallocate(alpha);
 }
 };
 

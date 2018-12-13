@@ -25,6 +25,7 @@ struct Binary_Expression<lv, rv, oper::gemv<system_tag_>>
     using system_tag  = system_tag_;
     using allocator_t = allocator::implementation<system_tag>;
     using impl_l      = blas::implementation<system_tag>;
+    using utility_l   = utility::implementation<system_tag>;
 
     static constexpr bool transA = blas_feature_detector<lv>::transposed;
     static constexpr bool transB = blas_feature_detector<rv>::transposed;
@@ -63,8 +64,8 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
     auto X = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<rv>::get_array(right));
 
     //allocate the alpha and beta scalars,
-    auto alpha = allocator_t::static_allocate((scalar_t)alpha_mod);
-    auto beta  = allocator_t::static_allocate((scalar_t)beta_mod);
+    auto alpha = utility_l::stack_allocate((scalar_t)alpha_mod);
+    auto beta  = utility_l::stack_allocate((scalar_t)beta_mod);
 
     //get the left and right side scalar values and
     //compute the scalar values if need be
@@ -86,8 +87,8 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
     //deallocate all the temporaries
     if (lv_eval) cc(A).deallocate();
     if (rv_eval) cc(X).deallocate();
-    allocator_t::deallocate(beta);
-    allocator_t::deallocate(alpha);
+    utility_l::deallocate(beta);
+    utility_l::deallocate(alpha);
 }
 };
 
