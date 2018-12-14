@@ -22,15 +22,15 @@ namespace functor {												    \
 		scalar_t operator () (scalar_t s) const { 					\
 			return std::func(s); 									\
 	}   															\
-																		 \
-	  template<class scalar_t> __BCinline__                              \
-	  static scalar_t impl(scalar_t s) {  return std::func(s); }         \
-	};															     \
-}																	 \
-                                                                     \
-    template<class internal_t>                                       \
-        static auto func(const Tensor_Base<internal_t>& tensor) {    \
-            return tensor.un_expr( functor:: func () );              \
+																	\
+	  template<class scalar_t> __BCinline__                         \
+	  static scalar_t impl(scalar_t s) {  return std::func(s); }    \
+	};															    \
+}																	\
+                                                                    \
+    template<class internal_t>                                      \
+        static auto func(const Tensor_Base<internal_t>& tensor) {   \
+            return tensor.un_expr( functor:: func () );             \
         }
 
 BLACKCAT_MATH_DEF(abs)

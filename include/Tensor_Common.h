@@ -17,6 +17,7 @@
 #include "utility/Utility.h"
 #include "blas/BLAS.h"
 
+
 namespace BC {
 #define BC_ARRAY_ONLY(literal) static_assert(BC::et::is_array<internal_t>(), "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
 template<int>   class DISABLED;

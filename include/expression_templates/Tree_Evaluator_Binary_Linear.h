@@ -48,7 +48,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
         	BC_TREE_OPTIMIZER_STDOUT("- remove_left_branch");
 
-        	auto left  = evaluator<lv>::linear_evaluation(branch.left, tensor);
+        	/*auto left = */ evaluator<lv>::linear_evaluation(branch.left, tensor);
             auto right = evaluator<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor));
             return right;
             //            return Binary_Expression<decltype(left), decltype(right), op>(left, right);
@@ -64,7 +64,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
         	BC_TREE_OPTIMIZER_STDOUT("- remove_right_branch");
 
     		auto left  = evaluator<lv>::linear_evaluation(branch.left, tensor);
-            auto right = evaluator<rv>::linear_evaluation(branch.right, update_injection<op, b != 0>(tensor));
+          /*auto right = */ evaluator<rv>::linear_evaluation(branch.right, update_injection<op, b != 0>(tensor));
             return left;
             //            return Binary_Expression<decltype(left), decltype(right), op>(left, right);
         }

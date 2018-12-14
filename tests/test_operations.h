@@ -18,7 +18,6 @@ int test_operations(int sz=128) {
 
 	using alloc_t = allocator<scalar_t>;
 	using mat = BC::Matrix<scalar_t, alloc_t>;
-	using vec = BC::Vector<scalar_t, alloc_t>;
 	using bmat = BC::Matrix<bool, allocator<bool>>;
 
 	int errors = 0;
@@ -80,7 +79,6 @@ int test_matrix_muls(int sz=128) {
 	using alloc_t = allocator<scalar_t>;
 
 	using mat = BC::Matrix<scalar_t, alloc_t>;
-	using vec = BC::Vector<scalar_t, alloc_t>;
 	using scal = BC::Scalar<scalar_t, alloc_t>;
 	using bmat = BC::Matrix<bool, allocator<bool>>;
 
@@ -193,9 +191,8 @@ int test_matrix_muls(int sz=128) {
 		d = (3 - 2 * atrans * b - 5) - (3 - 2 * atrans * b - 5);
 
 		mat e(sz, sz);
-		e = (3 - 2 * atrans * b - 5) + 0;
-		e -= (-2 * atrans * b);
-		e -= -2;
+		e = (3 - 2 * atrans * b - 5);
+		e -= (-2 * atrans * b) - 2;
 
 		mat f(sz, sz);
 		f = (3 - 2 * atrans * b - 5);
@@ -207,8 +204,7 @@ int test_matrix_muls(int sz=128) {
 
 		mat h = (a.t() * b * 2.0f - 8.0f) - (atrans * b * 2.0f - 8.0f);
 
-
-		validation = (c.approx_equal(d) && c.approx_equal(e) && c.approx_equal(f)  && c.approx_equal(g) && c.approx_equal(h));
+		validation = c.approx_equal(d) && e.approx_equal(f) && g.approx_equal(h);
 		return BC::all(validation);
 	)
 #endif

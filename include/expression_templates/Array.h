@@ -19,6 +19,8 @@ namespace et     {
 template<int dimension, class T, class allocator>
 struct Array : Array_Base<Array<dimension, T, allocator>, dimension>, public Shape<dimension>, private allocator {
 
+	static_assert(std::is_trivially_copyable<allocator>::value, "BC_TENSOR_ALLOCATOR MUST BE TRIVIALLY COPYABLE");
+
     using scalar_t = T;
     using allocator_t = allocator;
     using system_tag = typename allocator_t::system_tag;
@@ -58,7 +60,7 @@ protected:
     }
 public:
     __BCinline__ const scalar_t* memptr() const { return array; }
-    __BCinline__       scalar_t* memptr()          { return array; }
+    __BCinline__       scalar_t* memptr()       { return array; }
 
     void swap_array(Array& param) {
         std::swap(this->array, param.array);

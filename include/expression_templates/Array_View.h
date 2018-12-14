@@ -24,14 +24,11 @@ struct Array_View
     using allocator_t = allocator;
     using system_tag = typename allocator_t::system_tag;
 
-    using tags = typeinfo<scalar, allocator, typename allocator::system_tag>;
-
     const scalar_t* array = nullptr;
 
-
-    Array_View()                    = default;
+    Array_View()                   = default;
     Array_View(const Array_View& ) = default;
-    Array_View(         Array_View&&) = default;
+    Array_View(      Array_View&&) = default;
 
     auto& operator = (scalar_t* move_array) {
         this->array = move_array;

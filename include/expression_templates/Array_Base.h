@@ -27,12 +27,12 @@ struct Array_Base : BC_internal_interface<derived>, BC_Array {
 private:
 
     __BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }
-    __BCinline__        derived& as_derived()        { return static_cast<      derived&>(*this); }
+    __BCinline__       derived& as_derived()       { return static_cast<      derived&>(*this); }
 
 public:
 
-    operator        auto*()       { return as_derived().memptr(); }
-    operator const auto*() const { return as_derived().memptr(); }
+    __BCinline__ operator const auto*() const { return as_derived().memptr(); }
+    __BCinline__ operator       auto*()       { return as_derived().memptr(); }
 
     __BCinline__
     const auto& operator [](int index) const {
@@ -44,24 +44,24 @@ public:
     }
 
     template<class ... integers>
-    __BCinline__ auto& operator ()(integers ... ints) {
-        return as_derived()    [this->dims_to_index(ints...)];
-    }
-
-    template<class ... integers>
     __BCinline__ const auto& operator ()(integers ... ints) const {
         return as_derived()[this->dims_to_index(ints...)];
     }
+    template<class ... integers>
+    __BCinline__ auto& operator ()(integers ... ints) {
+        return as_derived()[this->dims_to_index(ints...)];
+    }
+
 
     template<int length>
     __BCinline__ auto& operator ()(const BC::array<length, int>& index) {
-        static_assert(length >= DIMS());
-        return as_derived()    [this->dims_to_index(index)];
+        static_assert(length >= DIMS(), "POINT MUST HAVE AT LEAST THE SAME NUMBER OF INDICIES AS THE TENSOR");
+        return as_derived()[this->dims_to_index(index)];
     }
 
     template<int length>
     __BCinline__ const auto& operator ()(const BC::array<length, int>& index) const {
-        static_assert(length >= DIMS());
+        static_assert(length >= DIMS(), "POINT MUST HAVE AT LEAST THE SAME NUMBER OF INDICIES AS THE TENSOR");
         return as_derived()[this->dims_to_index(index)];
     }
 

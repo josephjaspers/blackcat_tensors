@@ -16,8 +16,8 @@
 #include "Tensor_Iterator.h"
 #include "Tensor_Algorithm.h"
 #include "Tensor_Utility.h"
-
 #include "Tensor_CMath.h"
+
 #include "expression_templates/Array.h"
 #include "expression_templates/Array_View.h"
 #include "expression_templates/Array_Shared.h"
@@ -39,7 +39,7 @@ public:
     using self          = Tensor_Base<internal_t>;
     using operations    = module::Tensor_Operations<Tensor_Base<internal_t>>;
     using utility       = module::Tensor_Utility<Tensor_Base<internal_t>>;
-    using shaping       = module::Tensor_Accessor<Tensor_Base<internal_t>>;
+    using accessor      = module::Tensor_Accessor<Tensor_Base<internal_t>>;
 
     template<class> friend class Tensor_Base;
     using internal_t::internal_t;
@@ -50,8 +50,23 @@ public:
     using system_tag  = typename allocator_t::system_tag;
 
     using operations::operator=;
-    using shaping::operator[];
-    using shaping::operator();
+	using operations::operator+;
+	using operations::operator-;
+	using operations::operator/;
+	using operations::operator*;
+	using operations::operator%;
+	using operations::operator+=;
+	using operations::operator-=;
+	using operations::operator/=;
+	using operations::operator%=;
+	using operations::operator>;
+	using operations::operator<;
+	using operations::operator>=;
+	using operations::operator<=;
+	using operations::operator==;
+
+	using accessor::operator[];
+    using accessor::operator();
 
     using move_parameter        = std::conditional_t<et::BC_array_move_constructible<internal_t>(),       self&&, BC::DISABLED<0>>;
     using copy_parameter        = std::conditional_t<et::BC_array_copy_constructible<internal_t>(), const self&,  BC::DISABLED<1>>;
