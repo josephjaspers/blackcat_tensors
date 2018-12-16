@@ -12,8 +12,9 @@
 #include "Array_Base.h"
 #include "Array.h"
 
-namespace BC{
-namespace et     {
+namespace BC {
+namespace et {
+
 
 template<int dimension, class scalar, class allocator>
 struct Array_View
@@ -29,11 +30,6 @@ struct Array_View
     Array_View()                   = default;
     Array_View(const Array_View& ) = default;
     Array_View(      Array_View&&) = default;
-
-    auto& operator = (scalar_t* move_array) {
-        this->array = move_array;
-        return *this;
-    }
 
     void swap_array(Array_View& tensor) {
         std::swap(array, tensor.array);
@@ -59,6 +55,15 @@ struct Array_View
 };
 //------------------------------------------------type traits--------------------------------------------------------------//
 
+	template<int x, class s, class a>
+	struct BC_array_copy_assignable_overrider<et::Array_View<x,s,a>> {
+		static constexpr bool boolean = false;
+	};
+	template<int x, class s, class a>
+	struct BC_array_move_assignable_overrider<et::Array_View<x,s,a>> {
+		static constexpr bool boolean = true;
+	};
+
     template<int x, class s, class a>
     struct BC_array_move_constructible_overrider<et::Array_View<x,s,a>> {
         static constexpr bool boolean = true;
@@ -67,19 +72,6 @@ struct Array_View
     template<int x, class s, class a>
     struct BC_array_copy_constructible_overrider<et::Array_View<x,s,a>> {
         static constexpr bool boolean = true; //view doesn't actually copy
-    };
-
-    template<int x, class s, class a>
-    struct BC_array_move_assignable_overrider<et::Array_View<x,s,a>> {
-        static constexpr bool boolean = true;
-    };
-
-    template<int x, class s, class a>
-    struct BC_array_copy_assignable_overrider<et::Array_View<x,s,a>,  std::enable_if_t<is_array<et::Array_View<x,s,a>>()>> {
-        static constexpr bool boolean = false;
-    };
-    template<int d, class s, class a> struct BC_lvalue_type_overrider<Array_View<d,s,a>> {
-        static constexpr bool boolean = true;
     };
 
 

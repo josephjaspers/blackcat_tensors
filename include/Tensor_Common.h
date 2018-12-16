@@ -20,27 +20,16 @@
 
 namespace BC {
 #define BC_ARRAY_ONLY(literal) static_assert(BC::et::is_array<internal_t>(), "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
+
 template<int>   class DISABLED;
 template<class> class Tensor_Base;
 
 class host_tag;
 class device_tag;
 
-#define BLACKCAT_TENSORS_ASSERT_VALID                            //Ensures basic checks
-
-#ifdef __CUDACC__
-	#define __BChd__ __host__ __device__
-#else
-	#define __BChd__
-#endif
-
-#define __BCinline__ __BChd__  inline __attribute__((always_inline)) __attribute__((hot))  //host_device inline
-#define __BChot__   		   inline __attribute__((always_inline)) __attribute__((hot))  //device-only inline
-
 class BC_Type {}; //a type inherited by expressions and tensor_cores, it is used a flag and lacks a "genuine" implementation
 class BC_Array {};
 class BLAS_FUNCTION {};
-
 
 template<class internal_t>
 auto make_tensor(internal_t internal) {

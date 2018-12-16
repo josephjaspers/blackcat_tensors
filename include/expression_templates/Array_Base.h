@@ -101,13 +101,13 @@ template<class T> static constexpr bool is_array() { return std::is_base_of<et::
 template<class T> static constexpr bool is_expr()  { return !is_array<T>(); };
 
 template<class T>
-struct BC_array_copy_assignable_overrider<T, std::enable_if_t<is_array<T>()>> {
-    static constexpr bool boolean = true;
+struct BC_array_copy_assignable_overrider<T> {
+    static constexpr bool boolean = is_array<T>();
 };
 
 template<class T>
-struct BC_iterable_overrider<T, std::enable_if_t<is_array<T>()>> {
-    static constexpr bool boolean = true;
+struct BC_iterable_overrider<T> {
+    static constexpr bool boolean = is_array<T>();
 };
 
 

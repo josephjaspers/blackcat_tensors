@@ -86,6 +86,9 @@ int test_constructors(int sz=128) {
 
 		b = a;
 
+		b.print();
+		a.print();
+
 		return BC::all(b.approx_equal(a));
 	)
 //	//-----------------------------------Move Oper-----------------------------//

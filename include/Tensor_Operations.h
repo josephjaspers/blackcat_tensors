@@ -41,11 +41,11 @@ struct Tensor_Operations<Tensor_Base<internal_type>> {
 
     template<class> friend class Tensor_Operations;
 
-    using derived         = Tensor_Base<internal_type>;
-    using internal_t     = internal_type;
-    using scalar_t         = typename internal_t::scalar_t;
-    using allocator_t     = typename internal_t::allocator_t;
-    using system_tag      = typename internal_t::system_tag;
+    using derived      = Tensor_Base<internal_type>;
+    using internal_t   = internal_type;
+    using scalar_t     = typename internal_t::scalar_t;
+    using allocator_t  = typename internal_t::allocator_t;
+    using system_tag   = typename internal_t::system_tag;
 
 private:
 
@@ -53,14 +53,14 @@ private:
     template<class deriv> using allocator_t_of = typename Tensor_Operations<deriv>::allocator_t;
     template<class deriv> using mathlib_t_of = typename Tensor_Operations<deriv>::mathlib_t;
 
-    static constexpr bool    copy_assignable = et::BC_array_copy_assignable<internal_type>();
+    static constexpr bool copy_assignable = et::BC_array_copy_assignable<internal_type>();
     #define BC_ASSERT_ASSIGNABLE(literal) static_assert(copy_assignable, "ASSERT COPY ASSIGNABLE: " literal)
 
-    template<class expr>            using Unary_Expression_t  = BC::Tensor_Base<et::Unary_Expression<internal_t, expr>>;
+    template<class expr>           using Unary_Expression_t  = BC::Tensor_Base<et::Unary_Expression<internal_t, expr>>;
     template<class rv, class expr> using Binary_Expression_t = BC::Tensor_Base<et::Binary_Expression<internal_t, rv, expr>>;
 
     const derived& as_derived() const { return static_cast<const derived&>(*this); }
-           derived& as_derived()       { return static_cast<         derived&>(*this); }
+           derived& as_derived()      { return static_cast<         derived&>(*this); }
 
     //--------------------------------------evaluation implementation-----------------------------------------------//
 public:
@@ -87,7 +87,8 @@ public:
     BC_OPER_ASSIGNMENT_DEF(/=, div_assign)
 
     //specialization for explicit copy operator
-    derived& operator = (const derived& param) {
+    struct DISABLED;
+    derived& operator = (const std::conditional_t<copy_assignable, derived, DISABLED>& param) {
         BC_ASSERT_ASSIGNABLE("derived& operator = (const derived& param)");
         assert_valid(param);
         evaluate(bi_expr< et::oper:: assign >(param));
@@ -288,7 +289,7 @@ public:
 
     template<class deriv>
     void assert_valid(const Tensor_Operations<deriv>& tensor) const {
-//#ifdef NDEBUG
+#ifdef NDEBUG
         assert_same_ml(tensor);                        //static_assert same allocation (gpu/cpu)
         if (non_scalar_op(tensor)) {                //check if a tensor by scalar operation
             if (same_rank(tensor)) {                //else check is same dimension (element-wise function) (
@@ -299,7 +300,7 @@ public:
                 }
         }
 
-//#endif
+#endif
     }
 
     template<class deriv>

@@ -23,6 +23,21 @@
 //BC_CPP17_EXECUTION std::execution::par  //defines default execution as parallel
 //BC_CPP17_EXECUTION std::execution::seq  //defines default execution as sequential
 //#define BC_TREE_OPTIMIZER_DEBUG	      //enables print statements for the tree evaluator. (For developers)
+// --------------------------------- inline macros -----------------------------------------//
+
+#ifdef __CUDACC__
+	#define __BChd__ __host__ __device__
+#else
+	#define __BChd__
+#endif
+
+#ifdef BC_USE_MSVC_INLINE
+#define __BCinline__ __BChd__  inline //host_device inline
+#else
+#define __BCinline__ __BChd__  inline __attribute__((always_inline)) __attribute__((hot))  //host_device inline
+#endif
+
+#define __BChot__   		   inline __attribute__((always_inline)) __attribute__((hot))  //device-only inline
 
 // --------------------------------- module body macro --------------------------------- //
 
@@ -82,8 +97,11 @@ namespace namespace_name {										 \
 
 // --------------------------------- constants --------------------------------- //
 
-#ifdef __CUDACC__
 namespace BC {
+
+static constexpr int MULTITHREAD_THRESHOLD = 16384;
+
+#ifdef __CUDACC__
     static constexpr int CUDA_BASE_THREADS = 256;
 
     static int blocks(int size) {
@@ -92,11 +110,9 @@ namespace BC {
     static int threads(int sz = CUDA_BASE_THREADS) {
         return sz > CUDA_BASE_THREADS ? CUDA_BASE_THREADS : sz;
     }
-}
 #endif
 
-
-
+}
 
 #include "Tensor_Base.h"
 #include "Tensor_Aliases.h"
