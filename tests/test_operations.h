@@ -17,7 +17,7 @@ template<class scalar_t, template<class> class allocator=BC::Basic_Allocator>
 int test_operations(int sz=128) {
 
 	using alloc_t = allocator<scalar_t>;
-	using mat = BC::Matrix<scalar_t, alloc_t>;
+	using mat =  BC::Matrix<scalar_t, alloc_t>;
 	using bmat = BC::Matrix<bool, allocator<bool>>;
 
 	int errors = 0;
@@ -201,6 +201,9 @@ int test_matrix_muls(int sz=128) {
 		mat g(sz, sz);
 		g =  (atrans * 5 * b - 5);
 		g -= (atrans * 5 * b - 5);
+
+		e.print();
+		f.print();
 
 		mat h = (a.t() * b * 2.0f - 8.0f) - (atrans * b * 2.0f - 8.0f);
 
