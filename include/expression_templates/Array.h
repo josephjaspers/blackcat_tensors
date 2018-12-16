@@ -25,7 +25,10 @@ struct Array : Array_Base<Array<dimension, T, allocator>, dimension>, public Sha
     using allocator_t = allocator;
     using system_tag = typename allocator_t::system_tag;
 
-    using tags = typeinfo<scalar_t, allocator_t, allocator_t>;
+    static constexpr bool copy_constructible = true;
+    static constexpr bool move_constructible = true;
+    static constexpr bool copy_assignable    = true;
+    static constexpr bool move_assignable    = true;
 
     __BCinline__ static constexpr int DIMS() { return dimension; }
 
@@ -108,7 +111,7 @@ struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Sh
     }
 
     __BCinline__ const scalar_t* memptr() const { return array; }
-    __BCinline__       scalar_t* memptr()         { return array; }
+    __BCinline__       scalar_t* memptr()       { return array; }
 
     void copy_init(const Array& array_copy) {
         allocator_t::allocate(array, this->size());
@@ -138,27 +141,6 @@ struct is_array_core_impl<et::Array<d, T, ml>> {
     static constexpr bool conditional = true;
 };
 template<class T> static constexpr bool is_array_core() { return is_array_core_impl<T>::conditional; }
-
-
-template<class T>
-struct BC_array_move_assignable_overrider<T, std::enable_if_t<is_array_core<T>()>> {
-    static constexpr bool boolean = true;
-};
-
-template<class T>
-struct BC_array_move_constructible_overrider<T, std::enable_if_t<is_array_core<T>()>> {
-    static constexpr bool boolean = true;
-};
-
-template<class T>
-struct BC_array_copy_constructible_overrider<T, std::enable_if_t<is_array_core<T>()>> {
-    static constexpr bool boolean = true;
-};
-
-template<int d, class s, class a> struct BC_lvalue_type_overrider<Array<d,s,a>> {
-    static constexpr bool boolean = false;
-};
-
 
 }
 }

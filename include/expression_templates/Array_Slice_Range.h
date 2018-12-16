@@ -50,14 +50,14 @@ struct Array_Slice_Range
     }
 
     __BCinline__ const scalar_t* memptr() const { return array_slice; }
-    __BCinline__        scalar_t* memptr()         { return array_slice; }
+    __BCinline__       scalar_t* memptr()       { return array_slice; }
 
 };
 
-        template<class internal_t>
-        auto make_ranged_slice(internal_t parent, int from, int to) {
-            return Array_Slice_Range<internal_t>(parent, from, to);
-        }
+	template<class internal_t>
+	auto make_ranged_slice(internal_t parent, int from, int to) {
+		return Array_Slice_Range<internal_t>(parent, from, to);
+	}
 
 }
 }

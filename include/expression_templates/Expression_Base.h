@@ -21,13 +21,13 @@ namespace et     {
 template<class derived>
 struct Expression_Base
         : BC_internal_interface<derived>{
-};
 
-template<class derived>
-struct Function_Interface
-        : BC_internal_interface<derived> {
-};
+	static constexpr bool copy_constructible = false;
+	static constexpr bool move_constructible = false;
+	static constexpr bool copy_assignable    = false;
+	static constexpr bool move_assignable    = false;
 
+};
 }
 }
 

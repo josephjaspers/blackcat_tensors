@@ -17,6 +17,8 @@ namespace et     {
 template<int dims>
 struct Shape : Shape_Base<Shape<dims>> {
 
+	static_assert(dims >= 0, "BC: SHAPE OBJECT MUST HAVE AT LEAST 0 OR MORE DIMENSIONS");
+
     BC::array<dims, int> m_inner_shape = {0};
     BC::array<dims, int> m_outer_shape = {0};
 
@@ -141,7 +143,7 @@ struct Shape<1> {
 
     template<int x>
     __BCinline__ Shape(const Shape<x>& shape) {
-        static_assert(x >= 1);
+        static_assert(x >= 1, "BC: CANNOT CONSTRUCT A VECTOR SHAPE FROM A SCALAR SHAPE");
         m_inner_shape[0] = shape.m_inner_shape[0];
         m_outer_shape[0] = 1; //shape.m_outer_shape[0];
     }

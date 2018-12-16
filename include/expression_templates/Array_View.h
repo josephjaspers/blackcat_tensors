@@ -25,6 +25,11 @@ struct Array_View
     using allocator_t = allocator;
     using system_tag = typename allocator_t::system_tag;
 
+    static constexpr bool copy_constructible = true;
+    static constexpr bool move_constructible = true;
+    static constexpr bool copy_assignable    = false;
+    static constexpr bool move_assignable    = true;
+
     const scalar_t* array = nullptr;
 
     Array_View()                   = default;
@@ -53,29 +58,6 @@ struct Array_View
 
     void deallocate() {}
 };
-//------------------------------------------------type traits--------------------------------------------------------------//
-
-	template<int x, class s, class a>
-	struct BC_array_copy_assignable_overrider<et::Array_View<x,s,a>> {
-		static constexpr bool boolean = false;
-	};
-	template<int x, class s, class a>
-	struct BC_array_move_assignable_overrider<et::Array_View<x,s,a>> {
-		static constexpr bool boolean = true;
-	};
-
-    template<int x, class s, class a>
-    struct BC_array_move_constructible_overrider<et::Array_View<x,s,a>> {
-        static constexpr bool boolean = true;
-    };
-
-    template<int x, class s, class a>
-    struct BC_array_copy_constructible_overrider<et::Array_View<x,s,a>> {
-        static constexpr bool boolean = true; //view doesn't actually copy
-    };
-
-
-
 }
 }
 

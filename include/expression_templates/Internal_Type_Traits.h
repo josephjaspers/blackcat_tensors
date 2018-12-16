@@ -10,63 +10,25 @@
 #define BLACKCAT_INTERNAL_FORWARD_DECLS_H_
 #include <type_traits>
 namespace BC {
-namespace et     {
+namespace et {
 
 template<class,class,class> class Binary_Expression;
-template<class,class>        class Unary_Expression;
+template<class,class>       class Unary_Expression;
 
 template<class T> using allocator_of = std::decay_t<typename T::allocator_t>;
-template<class T> using scalar_of  = std::decay_t<typename T::scalar_t>;
-
-
-template<class T, class enabler=void>
-struct BC_array_move_constructible_overrider {
-    static constexpr bool boolean = false;
-};
-template<class T, class enabler=void>
-struct BC_array_copy_constructible_overrider {
-    static constexpr bool boolean = false;
-};
-template<class T, class enabler=void>
-struct BC_array_move_assignable_overrider {
-    static constexpr bool boolean = false;
-};
-template<class T, class enabler=void>
-struct BC_array_copy_assignable_overrider {
-    static constexpr bool boolean = false;
-};
-
-//all expressions and 'views' (slices/reshape/chunk etc) are 'rvalues'
-//anything that owns the internal memptr is an 'lvalue'.
-template<class T, class enabler=void>
-struct BC_lvalue_type_overrider {
-    static constexpr bool boolean = false;
-};
-
-template<class T, class enabler=void>
-struct BC_iterable_overrider : std::false_type {};
+template<class T> using scalar_of    = std::decay_t<typename T::scalar_t>;
 
 template<class T> constexpr bool BC_array_move_constructible() {
-    return BC_array_move_constructible_overrider<std::decay_t<T>>::boolean;
+    return T::move_constructible;
 }
 template<class T> constexpr bool BC_array_copy_constructible() {
-    return BC_array_copy_constructible_overrider<std::decay_t<T>>::boolean;
+    return T::copy_constructible;
 }
 template<class T> constexpr bool BC_array_move_assignable() {
-    return BC_array_move_assignable_overrider<std::decay_t<T>>::boolean;
+    return T::move_assignable;
 }
 template<class T> constexpr bool BC_array_copy_assignable()    {
-    return BC_array_copy_assignable_overrider<std::decay_t<T>>::boolean;
-}
-template<class T> constexpr bool BC_lvalue_type()    {
-    return BC_lvalue_type_overrider<std::decay_t<T>>::boolean;
-}
-template<class T> constexpr bool BC_rvalue_type()    {
-    return !BC_lvalue_type<T>();
-}
-
-template<class T> constexpr bool BC_iterable() {
-    return BC_iterable_overrider<T>::boolean;
+    return T::copy_assignable;
 }
 }
 

@@ -31,6 +31,11 @@ private:
 
 public:
 
+    static constexpr bool copy_constructible = false;
+    static constexpr bool move_constructible = false;
+    static constexpr bool copy_assignable    = true;
+    static constexpr bool move_assignable    = false;
+
     __BCinline__ operator const auto*() const { return as_derived().memptr(); }
     __BCinline__ operator       auto*()       { return as_derived().memptr(); }
 
@@ -99,17 +104,6 @@ private:
 
 template<class T> static constexpr bool is_array() { return std::is_base_of<et::Array_Base<T, T::DIMS()>, T>::value; };
 template<class T> static constexpr bool is_expr()  { return !is_array<T>(); };
-
-template<class T>
-struct BC_array_copy_assignable_overrider<T> {
-    static constexpr bool boolean = is_array<T>();
-};
-
-template<class T>
-struct BC_iterable_overrider<T> {
-    static constexpr bool boolean = is_array<T>();
-};
-
 
 }
 }

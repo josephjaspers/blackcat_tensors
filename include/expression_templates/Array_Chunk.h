@@ -12,7 +12,7 @@
 #include "Array_Base.h"
 
 namespace BC {
-namespace et     {
+namespace et {
 
 template<int dimension>
 struct Array_Chunk  {

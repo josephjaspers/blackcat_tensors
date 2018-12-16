@@ -24,6 +24,11 @@ struct Array_Shared
     using allocator_t = allocator;
     using system_tag = typename allocator_t::system_tag;
 
+    static constexpr bool copy_constructible = true;
+    static constexpr bool move_constructible = true;
+    static constexpr bool copy_assignable    = true;
+    static constexpr bool move_assignable    = true;
+
     scalar_t* array = nullptr;
 
     Array_Shared()                    = default;
@@ -59,25 +64,6 @@ struct Array_Shared
 
     void deallocate() {}
 };
-
-    template<int x, class s, class a>
-    struct BC_array_move_constructible_overrider<et::Array_Shared<x,s,a>> {
-        static constexpr bool boolean = true;
-    };
-
-    template<int x, class s, class a>
-    struct BC_array_copy_constructible_overrider<et::Array_Shared<x,s,a>> {
-        static constexpr bool boolean = true; //shared doesn't actually copy
-    };
-
-    template<int x, class s, class a>
-    struct BC_array_move_assignable_overrider<et::Array_Shared<x,s,a>> {
-        static constexpr bool boolean = true;
-    };
-    template<int d, class s, class a> struct BC_lvalue_type_overrider<Array_Shared<d,s,a>> {
-        static constexpr bool boolean = true;
-    };
-
 }
 }
 

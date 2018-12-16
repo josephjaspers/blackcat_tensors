@@ -8,33 +8,10 @@
 #ifndef BC_AGORITHMS_ALGORITHMS_H_
 #define BC_AGORITHMS_ALGORITHMS_H_
 
-#include <type_traits>
 #include "Device.h"
 #include "Host.h"
 
-namespace BC {
-
-class host_tag;
-class device_tag;
-
-namespace algorithms {
-
-#ifdef __CUDACC__
-	template<class system_tag>
-	using implementation =
-			std::conditional_t<
-				std::is_same<host_tag, system_tag>::value,
-					Host,
-					Device>;
-#else
-	template<class system_tag>
-	using implementation = Host;
-#endif
-
-
-}
-}
-
+BC_DEFAULT_MODULE_BODY(algorithms)
 
 
 #endif /* ALGORITHMS_H_ */
