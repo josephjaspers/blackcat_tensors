@@ -22,8 +22,8 @@ struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<scalar_t_, allocat
     using allocator_t = allocator_t_;
     using system_tag = typename allocator_t_::system_tag;
 
-    __BCinline__ static constexpr int ITERATOR() { return 0; }
-    __BCinline__ static constexpr int DIMS()      { return 0; }
+    __BCinline__ static constexpr BC::size_t  ITERATOR() { return 0; }
+    __BCinline__ static constexpr BC::size_t  DIMS()      { return 0; }
 
     scalar_t scalar;
 

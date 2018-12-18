@@ -208,7 +208,7 @@ public:
 
 template<class internal_t>
 static bool all(const Tensor_Base<internal_t>& tensor) {
-	constexpr int dims = internal_t::DIMS();
+	constexpr BC::size_t  dims = internal_t::DIMS();
 	using scalar_t = typename internal_t::scalar_t;
 	using allocator_t  = typename allocator::template implementation<typename internal_t::system_tag, scalar_t>;
 
@@ -219,7 +219,7 @@ static bool all(const Tensor_Base<internal_t>& tensor) {
 }
 template<class internal_t>
 static bool any(const Tensor_Base<internal_t>& tensor) {
-	constexpr int dims = internal_t::DIMS();
+	constexpr BC::size_t  dims = internal_t::DIMS();
 	using scalar_t = typename internal_t::scalar_t;
 	using allocator_t  = typename allocator::template implementation<typename internal_t::system_tag, scalar_t>;
 

@@ -63,20 +63,20 @@ static constexpr bool is_nonlinear_op() {
     return  !is_linear_op<T>() && !is_blas_func<T>();
 }
 template<class T>
-static constexpr int alpha_of() {
+static constexpr BC::size_t  alpha_of() {
     return scalar_modifer<std::decay_t<T>>::mod::alpha;
 }
 template<class T>
-static constexpr int beta_of() {
+static constexpr BC::size_t  beta_of() {
     return scalar_modifer<std::decay_t<T>>::mod::beta;
 }
 
 
 //entirely_blas_expr -- detects if the tree is entirely +/- operations with blas functions, --> y = a * b + c * d - e * f  --> true, y = a + b * c --> false
-template<class op, bool prior_eval, class core, int a, int b>//only apply update if right hand side branch
+template<class op, bool prior_eval, class core, BC::size_t  a, BC::size_t  b>//only apply update if right hand side branch
 auto update_injection(injector<core,a,b> tensor) {
-    static constexpr int alpha =  a * alpha_of<op>();
-    static constexpr int beta  = prior_eval ? 1 : 0;
+    static constexpr BC::size_t  alpha =  a * alpha_of<op>();
+    static constexpr BC::size_t  beta  = prior_eval ? 1 : 0;
     return injector<core, alpha, beta>(tensor.data());
 }
 

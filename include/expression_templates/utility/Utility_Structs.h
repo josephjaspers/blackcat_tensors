@@ -24,7 +24,7 @@ namespace BC {
 
         __BCinline__ const T& operator [] (int i) const { return value[i]; }
         __BCinline__        T& operator [] (int i)         { return value[i]; }
-        __BCinline__ static constexpr int size()         { return size_; }
+        __BCinline__ static constexpr BC::size_t  size()         { return size_; }
     };
 
     //---------------------base_case----------------------//

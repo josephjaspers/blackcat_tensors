@@ -24,14 +24,14 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
     static constexpr bool requires_greedy_eval = evaluator<lv>::requires_greedy_eval || evaluator<rv>::requires_greedy_eval;
 
 
-    template<class core, int a, int b> __BChot__
+    template<class core, BC::size_t  a, BC::size_t  b> __BChot__
     static auto linear_evaluation(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
         return branch;
     }
 
 
     struct left_trivial_injection {
-        template<class core, int a, int b> __BChot__
+        template<class core, BC::size_t  a, BC::size_t  b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
             auto left = evaluator<lv>::injection(branch.left, tensor);
             auto right = branch.right;
@@ -39,7 +39,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
         }
     };
     struct right_trivial_injection {
-        template<class core, int a, int b> __BChot__
+        template<class core, BC::size_t  a, BC::size_t  b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
             auto left = branch.left;
             auto right = evaluator<rv>::injection(branch.right, tensor);
@@ -47,7 +47,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
         }
     };
     struct left_nontrivial_injection {
-        template<class core, int a, int b> __BChot__
+        template<class core, BC::size_t  a, BC::size_t  b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
             auto left = evaluator<lv>::injection(branch.left, tensor);
             auto right = branch.right; //rv
@@ -55,7 +55,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
         }
     };
     struct right_nontrivial_injection {
-        template<class core, int a, int b> __BChot__
+        template<class core, BC::size_t  a, BC::size_t  b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
             auto left = branch.left; //lv
             auto right = evaluator<rv>::injection(branch.right, tensor);
@@ -63,7 +63,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
         }
     };
 
-    template<class core, int a, int b> __BChot__
+    template<class core, BC::size_t  a, BC::size_t  b> __BChot__
     static auto injection(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
             //dont need to update injection
             //trivial injection left_hand side (we attempt to prefer trivial injections opposed to non-trivial)

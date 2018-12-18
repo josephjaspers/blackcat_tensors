@@ -1,21 +1,21 @@
 
 template<typename T, typename J> __global__  static void copy2d(T t, const J j) {
-    int n = blockIdx.y * blockDim.y + threadIdx.y;
+    BC::size_t  n = blockIdx.y * blockDim.y + threadIdx.y;
     for (; n < j.cols(); n += blockDim.y * gridDim.y) {
 
-        int m = blockIdx.x * blockDim.x + threadIdx.x;
+        BC::size_t  m = blockIdx.x * blockDim.x + threadIdx.x;
         for (; m < j.rows(); m += blockDim.x * gridDim.x) {
             t(m, n) = j(m, n);
         }
     }
 }
 template<typename T, typename J> __global__ static void copy3d(T t, const J j) {
-    int k = blockIdx.z * blockDim.z + threadIdx.z;
+    BC::size_t  k = blockIdx.z * blockDim.z + threadIdx.z;
     for (; k < j.dimension(2); k += blockDim.z * gridDim.z) {
-        int n = blockIdx.y * blockDim.y + threadIdx.y;
+        BC::size_t  n = blockIdx.y * blockDim.y + threadIdx.y;
         for (; n < j.cols(); n += blockDim.y * gridDim.y) {
 
-            int m = blockIdx.x * blockDim.x + threadIdx.x;
+            BC::size_t  m = blockIdx.x * blockDim.x + threadIdx.x;
             for (; m < j.rows(); m += blockDim.x * gridDim.x) {
                 t(m,n,k) = j(m,n,k);
             }

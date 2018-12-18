@@ -270,7 +270,7 @@ public:
 
     //ensures that the smaller tensor is a same-dimensioned "slice" of the other
     template<class deriv>  bool valid_slice(const Tensor_Operations<deriv>& tensor) const {
-        constexpr int DIM_MIN = MTF::min(derived::DIMS(), deriv::DIMS());
+        constexpr BC::size_t  DIM_MIN = MTF::min(derived::DIMS(), deriv::DIMS());
         for (int i = 0; i < DIM_MIN; ++i)
             if (tensor.as_derived().dimension(i) != as_derived().dimension(i))
                 return false;

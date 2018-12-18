@@ -85,10 +85,6 @@ int test_constructors(int sz=128) {
 		mat b(5,5);
 
 		b = a;
-
-		b.print();
-		a.print();
-
 		return BC::all(b.approx_equal(a));
 	)
 //	//-----------------------------------Move Oper-----------------------------//

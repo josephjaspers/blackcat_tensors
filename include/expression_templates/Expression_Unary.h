@@ -21,8 +21,8 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<value, operati
     using allocator_t = allocator::implementation<system_tag, scalar_t>;
     using utility_t	  = utility::implementation<system_tag>;
 
-    __BCinline__ static constexpr int DIMS() { return value::DIMS(); }
-    __BCinline__ static constexpr int ITERATOR() { return value::ITERATOR(); }
+    __BCinline__ static constexpr BC::size_t  DIMS() { return value::DIMS(); }
+    __BCinline__ static constexpr BC::size_t  ITERATOR() { return value::ITERATOR(); }
 
     value array;
 
@@ -40,11 +40,11 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<value, operati
 
     __BCinline__  const auto inner_shape() const { return array.inner_shape(); }
     __BCinline__  const auto block_shape() const { return array.block_shape(); }
-    __BCinline__ int size() const { return array.size(); }
-    __BCinline__ int rows() const { return array.rows(); }
-    __BCinline__ int cols() const { return array.cols(); }
-    __BCinline__ int dimension(int i) const { return array.dimension(i); }
-    __BCinline__ int block_dimension(int i) const { return array.block_dimension(i); }
+    __BCinline__ BC::size_t  size() const { return array.size(); }
+    __BCinline__ BC::size_t  rows() const { return array.rows(); }
+    __BCinline__ BC::size_t  cols() const { return array.cols(); }
+    __BCinline__ BC::size_t  dimension(int i) const { return array.dimension(i); }
+    __BCinline__ BC::size_t  block_dimension(int i) const { return array.block_dimension(i); }
 };
 
 template<class op, class expr>
@@ -66,7 +66,7 @@ auto make_un_expr(expr e) {
 //    using scalar_t = decltype(array._scalar(i));
 //    return Unary_Expression<scalar_t, operation>(array._scalar(i),  static_cast<const operation&>(*this));
 //}
-//__BCinline__ const auto _slice_range(int from, int to) const {
+//__BCinline__ const auto _slice_range(int from, BC::size_t  to) const {
 //    using scalar_t = decltype(array._slice_range(from, to));
 //    return Unary_Expression<scalar_t, operation>(array._slice_range(from,to),  static_cast<const operation&>(*this));
 //}

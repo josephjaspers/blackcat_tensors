@@ -24,7 +24,7 @@ namespace module {
 template<class derived>
 struct Tensor_Accessor {
 
-    static constexpr int DIMS() { return derived::DIMS(); }
+    static constexpr BC::size_t  DIMS() { return derived::DIMS(); }
 
 private:
 
@@ -42,7 +42,7 @@ public:
     const auto operator [] (int i) const { return slice(i); }
           auto operator [] (int i)       { return slice(i); }
 
-    struct range { int from, to; };	//enables syntax: `tensor[{start, end}]`
+    struct range { BC::size_t  from, to; };	//enables syntax: `tensor[{start, end}]`
     const auto operator [] (range r) const { return slice(r.from, r.to); }
           auto operator [] (range r)       { return slice(r.from, r.to); }
 
@@ -52,8 +52,8 @@ public:
     const auto slice(int i) const { return make_tensor(et::make_slice(internal(), i)); }
           auto slice(int i)       { return make_tensor(et::make_slice(internal(), i)); }
 
-    const auto slice(int from, int to) const  { return make_tensor(et::make_ranged_slice(internal(), from, to)); }
-          auto slice(int from, int to)        { return make_tensor(et::make_ranged_slice(internal(), from, to)); }
+    const auto slice(int from, BC::size_t  to) const  { return make_tensor(et::make_ranged_slice(internal(), from, to)); }
+          auto slice(int from, BC::size_t  to)        { return make_tensor(et::make_ranged_slice(internal(), from, to)); }
 
 
     const auto diag(int index = 0) const {

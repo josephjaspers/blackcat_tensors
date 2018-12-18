@@ -23,7 +23,7 @@
 //
 //    //2d tensor for 2d conv
 //    template<class img_out, class img_in>
-//    static std::enable_if_t<img_in::DIMS() == 2> img2col(img_out out, img_in in, int padding = 0,  int stride = 1) {
+//    static std::enable_if_t<img_in::DIMS() == 2> img2col(img_out out, img_in in, BC::size_t  padding = 0,  BC::size_t  stride = 1) {
 //        static_assert(img_out::DIMS() == 4 && img_in::DIMS() == 2, "img2col 2d requires a 4d and 2d tensors");
 //
 //        if (padding == 0)
@@ -38,8 +38,8 @@
 //                    for (int c = 0; c < out.dimension(1); ++c)                 //number of kernel cols
 //                        for (int r = 0; r < out.dimension(0); ++r)     {                //number of kernel rows
 //
-//                            int r_index = r + rp * stride - padding;
-//                            int c_index = c + cp * stride - padding;
+//                            BC::size_t  r_index = r + rp * stride - padding;
+//                            BC::size_t  c_index = c + cp * stride - padding;
 //
 //                            if ((r_index >= 0) && (c_index >= 0) && (r_index < in.rows()) && (c_index < in.cols()))
 //                                out(r, c, rp, cp) = in(r_index, c_index);
@@ -51,7 +51,7 @@
 //
 //    //3d tensor for 2d conv
 //    template<class img_out, class img_in>
-//    static std::enable_if_t<img_in::DIMS() == 3> img2col(img_out out, img_in in, int padding = 0,  int stride = 1) {
+//    static std::enable_if_t<img_in::DIMS() == 3> img2col(img_out out, img_in in, BC::size_t  padding = 0,  BC::size_t  stride = 1) {
 //        static_assert(img_out::DIMS() == 5 && img_in::DIMS() == 2, "img2col 2d requires a 4d and 2d tensors");
 //
 //        if (padding == 0)
@@ -68,8 +68,8 @@
 //                        for (int c = 0; c < out.dimension(1); ++c)                 //number of kernel cols
 //                            for (int r = 0; r < out.dimension(0); ++r)     {                //number of kernel rows
 //
-//                                int r_index = r + rp * stride - padding;
-//                                int c_index = c + cp * stride - padding;
+//                                BC::size_t  r_index = r + rp * stride - padding;
+//                                BC::size_t  c_index = c + cp * stride - padding;
 //
 //                                if ((r_index >= 0) && (c_index >= 0) && (r_index < in.rows()) && (c_index < in.cols()))
 //                                    out(r, c, d, rp, cp) = in(r_index, c_index, d);
@@ -81,10 +81,10 @@
 //
 //
 //    template<class scalar_t>
-//    static void conv2(CPU_Array<2, scalar_t> out, CPU_Array<2, scalar_t> in, CPU_Array<2, scalar_t> filter, int padding = 0, int stride = 1) {
-//        int rpos = (in.rows() - filter.rows()) / stride + 1 + padding * 2;
-//        int cpos = (in.cols() - filter.cols()) / stride + 1 + padding * 2;
-//        int k_length = rpos * cpos;
+//    static void conv2(CPU_Array<2, scalar_t> out, CPU_Array<2, scalar_t> in, CPU_Array<2, scalar_t> filter, BC::size_t  padding = 0, BC::size_t  stride = 1) {
+//        BC::size_t  rpos = (in.rows() - filter.rows()) / stride + 1 + padding * 2;
+//        BC::size_t  cpos = (in.cols() - filter.cols()) / stride + 1 + padding * 2;
+//        BC::size_t  k_length = rpos * cpos;
 //
 //        //assert_valid_dims
 //        if (rpos != out.rows()) {
@@ -111,10 +111,10 @@
 //
 //
 //    template<class scalar_t>
-//        static void conv2(CPU_Array<2, scalar_t> out, CPU_Array<3, scalar_t> in, CPU_Array<3, scalar_t> filter, int padding = 0, int stride = 1) {
-//            int rpos = (in.rows() - filter.rows()) / stride + 1 + padding * 2;
-//            int cpos = (in.cols() - filter.cols()) / stride + 1 + padding * 2;
-//            int k_length = rpos * cpos * filter.dimension(2);
+//        static void conv2(CPU_Array<2, scalar_t> out, CPU_Array<3, scalar_t> in, CPU_Array<3, scalar_t> filter, BC::size_t  padding = 0, BC::size_t  stride = 1) {
+//            BC::size_t  rpos = (in.rows() - filter.rows()) / stride + 1 + padding * 2;
+//            BC::size_t  cpos = (in.cols() - filter.cols()) / stride + 1 + padding * 2;
+//            BC::size_t  k_length = rpos * cpos * filter.dimension(2);
 //
 //            //assert_valid_dims
 //            if (rpos != out.rows()) {

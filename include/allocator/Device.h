@@ -40,7 +40,7 @@ struct Device : AllocatorBase<std::conditional_t<std::is_void<derived>::value, D
         return data_ptr;
     }
 
-    void deallocate(T* data_ptr) const {
+    void deallocate(T* data_ptr, BC::size_t  size) const {
         cudaFree((void*)data_ptr);
     }
 

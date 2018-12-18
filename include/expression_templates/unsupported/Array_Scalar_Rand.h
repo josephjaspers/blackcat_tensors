@@ -23,8 +23,8 @@ struct Rand_Constant : Shape<0>, Array_Base<Rand_Constant<scalar_t_, allocator_t
     using allocator_t = allocator_t_;
     using mathlib_t = typename allocator_t::mathlib_t;
 
-    __BCinline__ static constexpr int ITERATOR() { return 0; }
-    __BCinline__ static constexpr int DIMS()      { return 0; }
+    __BCinline__ static constexpr BC::size_t  ITERATOR() { return 0; }
+    __BCinline__ static constexpr BC::size_t  DIMS()      { return 0; }
 
     operator scalar_t () { return value(); }
 

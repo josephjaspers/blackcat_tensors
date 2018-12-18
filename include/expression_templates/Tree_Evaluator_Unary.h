@@ -23,11 +23,11 @@ struct evaluator<Unary_Expression<array_t, op>>
     static constexpr bool nested_blas_expr 		= evaluator<array_t>::nested_blas_expr;
     static constexpr bool requires_greedy_eval 	= evaluator<array_t>::requires_greedy_eval;
 
-    template<class core, int a, int b> __BChot__
+    template<class core, BC::size_t  a, BC::size_t  b> __BChot__
     static auto linear_evaluation(const Unary_Expression<array_t, op>& branch, injector<core, a, b> tensor) {
         return branch;
     }
-    template<class core, int a, int b> __BChot__
+    template<class core, BC::size_t  a, BC::size_t  b> __BChot__
     static auto injection(const Unary_Expression<array_t, op>& branch, injector<core, a, b> tensor) {
         auto array =  evaluator<array_t>::injection(branch.array, tensor);
         return Unary_Expression<decltype(array), op>(array);

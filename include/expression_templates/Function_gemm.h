@@ -37,8 +37,8 @@ struct Binary_Expression<lv, rv, oper::gemm<system_tag_>>
     static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,\
     		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
 
-    __BCinline__ static constexpr int DIMS() { return rv::DIMS(); }
-    __BCinline__ static constexpr int ITERATOR() { return 0; }
+    __BCinline__ static constexpr BC::size_t  DIMS() { return rv::DIMS(); }
+    __BCinline__ static constexpr BC::size_t  ITERATOR() { return 0; }
 
     lv left;
     rv right;
@@ -56,17 +56,17 @@ struct Binary_Expression<lv, rv, oper::gemm<system_tag_>>
     	});
     }
 
-    __BCinline__ int size() const { return left.rows() * right.cols(); }
-    __BCinline__ int rows() const { return left.rows(); }
-    __BCinline__ int cols() const { return right.cols(); }
-    __BCinline__ int dimension(int i) const { return inner_shape()[i]; }
-    __BCinline__ int block_dimension(int i) const { return block_shape()[i]; }
+    __BCinline__ BC::size_t  size() const { return left.rows() * right.cols(); }
+    __BCinline__ BC::size_t  rows() const { return left.rows(); }
+    __BCinline__ BC::size_t  cols() const { return right.cols(); }
+    __BCinline__ BC::size_t  dimension(int i) const { return inner_shape()[i]; }
+    __BCinline__ BC::size_t  block_dimension(int i) const { return block_shape()[i]; }
 
-    __BCinline__ int M() const { return left.rows();  }
-    __BCinline__ int N() const { return right.cols(); }
-    __BCinline__ int K() const { return left.cols();  }
+    __BCinline__ BC::size_t  M() const { return left.rows();  }
+    __BCinline__ BC::size_t  N() const { return right.cols(); }
+    __BCinline__ BC::size_t  K() const { return left.cols();  }
 
-    template<class core, int alpha_mod, int beta_mod>
+    template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod>
     void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 
         //get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
@@ -122,7 +122,7 @@ struct Binary_Expression<lv, rv, oper::gemm<system_tag_>>
 //__BCinline__ auto _slice(int i) {
 //    return Binary_Expression<lv, decltype(right._slice(i)), oper::gemv<allocator_t>>(left, right._slice(i));
 //}
-//__BCinline__ auto _slice_range(int from, int to) {
+//__BCinline__ auto _slice_range(int from, BC::size_t  to) {
 //    return Binary_Expression<lv, decltype(right._slice_range(from, to)), oper::gemm<allocator_t>>(left, right._slice_range(from, to));
 //}
 

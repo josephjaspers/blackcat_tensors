@@ -44,28 +44,28 @@ struct Binary_Expression<lv, rv, oper::ger<system_tag_>>
 
     static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
     static_assert(lv::DIMS() == 1 && rv::DIMS() == 1 && transB, "GER DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
-    __BCinline__ static constexpr int DIMS() { return 2; }
-    __BCinline__ static constexpr int ITERATOR() { return 0; }
+    __BCinline__ static constexpr BC::size_t  DIMS() { return 2; }
+    __BCinline__ static constexpr BC::size_t  ITERATOR() { return 0; }
 
     lv left;
     rv right;
 
      Binary_Expression(lv left, rv right) : left(left), right(right) {}
-    __BCinline__ int size() const { return left.size() * right.size(); }
-    __BCinline__ int rows() const { return left.rows(); }
-    __BCinline__ int cols() const { return right.cols(); }
-    __BCinline__ int dimension(int i) const { return i == 0 ? rows() : i == 1 ? cols() : 1; }
-    __BCinline__ int block_dimension(int i) const { return this->block_shape()(i); }
+    __BCinline__ BC::size_t  size() const { return left.size() * right.size(); }
+    __BCinline__ BC::size_t  rows() const { return left.rows(); }
+    __BCinline__ BC::size_t  cols() const { return right.cols(); }
+    __BCinline__ BC::size_t  dimension(int i) const { return i == 0 ? rows() : i == 1 ? cols() : 1; }
+    __BCinline__ BC::size_t  block_dimension(int i) const { return this->block_shape()(i); }
 
-    __BCinline__ int outer_dimension() const { return rows(); }
+    __BCinline__ BC::size_t  outer_dimension() const { return rows(); }
 
     __BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.rows() : 1; });}
     __BCinline__ const auto block_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? size() : 1; });}
-    __BCinline__ int M() const { return left.rows();  }
-    __BCinline__ int N() const { return right.rows(); }
+    __BCinline__ BC::size_t  M() const { return left.rows();  }
+    __BCinline__ BC::size_t  N() const { return right.rows(); }
 
 
-template<class core, int alpha_mod, int beta_mod>
+template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod>
 void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 
     //get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
@@ -118,7 +118,7 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 //__BCinline__ auto _slice(int i) {
 //    return Binary_Expression<lv, decltype(right._scalar(i)), oper::scalar_mul>(left, right._scalar(i));
 //}
-//__BCinline__ auto _slice_range(int from, int to) {
+//__BCinline__ auto _slice_range(int from, BC::size_t  to) {
 //    return Binary_Expression<lv, decltype(right._slice_range(from, to)), oper::ger<allocator_t>>(left, right._slice_range(from, to));
 //}
 //

@@ -32,15 +32,15 @@ struct Host {
 	}
 
     template<class T, class U>
-    static void HostToDevice(T* device_ptr, U* host_ptr, int size=1) {
+    static void HostToDevice(T* device_ptr, U* host_ptr, BC::size_t  size=1) {
         copy(device_ptr, host_ptr, size);
     }
     template<class T, class U>
-    static void DeviceToHost(T* host_ptr, U* device_ptr, int size=1) {
+    static void DeviceToHost(T* host_ptr, U* device_ptr, BC::size_t  size=1) {
         copy(host_ptr, device_ptr, size);
     }
     template<class T>
-    static T extract(T* data_ptr, int index) {
+    static T extract(T* data_ptr, BC::size_t  index) {
     	return data_ptr[index];
     }
 };

@@ -19,7 +19,7 @@ namespace et     {
 template<class derived>
 class BC_internal_interface : BC_Type {
 
-    __BCinline__ static constexpr int  DIMS()       { return derived::DIMS(); }
+    __BCinline__ static constexpr BC::size_t   DIMS()       { return derived::DIMS(); }
     __BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }
     __BCinline__       derived& as_derived()        { return static_cast<      derived&>(*this); }
 

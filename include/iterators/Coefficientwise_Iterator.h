@@ -32,9 +32,9 @@ struct Coefficientwise_Iterator {
 
 
     tensor_t tensor;
-    int index;
+    BC::size_t  index;
 
-    __BCinline__ Coefficientwise_Iterator(tensor_t tensor_, int index_=0) :
+    __BCinline__ Coefficientwise_Iterator(tensor_t tensor_, BC::size_t  index_=0) :
 	tensor(tensor_), index(index_) {}
 
     __BCinline__ Coefficientwise_Iterator& operator =(const Coefficientwise_Iterator& iter) {
@@ -63,7 +63,7 @@ struct Coefficientwise_Iterator {
     BC_Iter_Compare(<=, >=)
     BC_Iter_Compare(>=, <=)
 
-    __BCinline__ operator int () const { return index; }
+    __BCinline__ operator BC::size_t  () const { return index; }
 
     __BCinline__ bool operator == (const Iterator& iter) {
         return index == iter.index;

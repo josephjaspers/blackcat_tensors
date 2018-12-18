@@ -23,8 +23,8 @@
 //        : Array_Base<Array_Packed_Triangle<upLo, scalar_t_, allocator_t_>, 2>,
 //          Shape<2> {
 //
-//    static constexpr int DIMS()     { return 2; }
-//    static constexpr int ITERATOR() { return 2; }
+//    static constexpr BC::size_t  DIMS()     { return 2; }
+//    static constexpr BC::size_t  ITERATOR() { return 2; }
 //
 //    using scalar_t = scalar_t_;
 //    using allocator_t = allocator_t_;
@@ -35,10 +35,10 @@
 //        allocator_t::allocate(array, this->size() / 2);
 //    }
 ////I would like to thank stack overflow for its contribution
-//    scalar_t& operator () (int row, int col) {
+//    scalar_t& operator () (int row, BC::size_t  col) {
 //
 //    }
-//    const scalar_t& operator () (int row, int col) const {
+//    const scalar_t& operator () (int row, BC::size_t  col) const {
 //
 //    }
 //

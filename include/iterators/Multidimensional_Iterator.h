@@ -26,9 +26,9 @@ struct Multidimensional_Iterator {
     using reference = value_type;
 
     tensor_t& tensor;
-    int index;
+    BC::size_t  index;
 
-    __BCinline__ Multidimensional_Iterator(tensor_t& tensor_, int index_=0) :
+    __BCinline__ Multidimensional_Iterator(tensor_t& tensor_, BC::size_t  index_=0) :
 			tensor(tensor_), index(index_) {}
 
 #define BC_ND_Iter_Compare(sign, rev)                          \
@@ -52,7 +52,7 @@ struct Multidimensional_Iterator {
     BC_ND_Iter_Compare(<=, >=)
     BC_ND_Iter_Compare(>=, <=)
 
-    __BCinline__ operator int () const { return index; }
+    __BCinline__ operator BC::size_t  () const { return index; }
 
     __BCinline__ bool operator == (const Iterator& iter) {
         return index == iter.index;

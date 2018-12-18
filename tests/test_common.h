@@ -25,7 +25,7 @@ namespace tests {
 		}\
 } catch (...) { std::cout << "TEST ERROR: " #code  << std::endl; errors++; } }\
 
-#define BC_TEST_BODY_HEAD int errors = 0;
+#define BC_TEST_BODY_HEAD BC::size_t  errors = 0;
 #define BC_TEST_BODY_TAIL return errors;
 }
 }

@@ -24,12 +24,12 @@ struct Array_Scalar : Array_Base<Array_Scalar<PARENT>, 0>, Shape<0> {
     using allocator_t = typename PARENT::allocator_t;
     using system_tag = typename PARENT::system_tag;
 
-    __BCinline__ static constexpr int ITERATOR() { return 0; }
-    __BCinline__ static constexpr int DIMS()      { return 0; }
+    __BCinline__ static constexpr BC::size_t  ITERATOR() { return 0; }
+    __BCinline__ static constexpr BC::size_t  DIMS()      { return 0; }
 
     scalar_t* array;
 
-    __BCinline__ Array_Scalar(PARENT parent_, int index) : array(const_cast<scalar_t*>(&(parent_.memptr()[index]))) {}
+    __BCinline__ Array_Scalar(PARENT parent_, BC::size_t  index) : array(const_cast<scalar_t*>(&(parent_.memptr()[index]))) {}
 
     __BCinline__ const auto& operator [] (int index) const { return array[0]; }
     __BCinline__        auto& operator [] (int index)        { return array[0]; }
@@ -48,7 +48,7 @@ struct Array_Scalar : Array_Base<Array_Scalar<PARENT>, 0>, Shape<0> {
 };
 
 template<class internal_t>
-auto make_scalar(internal_t internal, int i) {
+auto make_scalar(internal_t internal, BC::size_t  i) {
     return Array_Scalar<internal_t>(internal, i);
 }
 }

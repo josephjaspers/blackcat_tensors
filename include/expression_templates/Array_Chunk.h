@@ -25,8 +25,8 @@ struct Array_Chunk  {
         using allocator_t = typename PARENT::allocator_t;
         using system_tag = typename PARENT::system_tag;
 
-        __BCinline__ static constexpr int DIMS()     { return dimension; };
-        __BCinline__ static constexpr int ITERATOR() { return dimension; }
+        __BCinline__ static constexpr BC::size_t  DIMS()     { return dimension; };
+        __BCinline__ static constexpr BC::size_t  ITERATOR() { return dimension; }
 
         operator const PARENT() const    { return parent; }
 
@@ -41,14 +41,14 @@ struct Array_Chunk  {
 
         __BCinline__ const auto block_shape() const     { return Shape<dimension>::outer_shape(); }
         __BCinline__ const auto outer_shape() const     { return parent.outer_shape(); }
-        __BCinline__ int leading_dimension(int i) const { return DIMS() == 0 ? 1 : parent.leading_dimension(i); }
+        __BCinline__ BC::size_t  leading_dimension(int i) const { return DIMS() == 0 ? 1 : parent.leading_dimension(i); }
 
         __BCinline__ const auto memptr() const { return array; }
         __BCinline__       auto memptr()       { return array; }
     };
 };
 
-template<class internal_t, int parent_dims, int dims>
+template<class internal_t, BC::size_t  parent_dims, BC::size_t  dims>
 auto make_chunk(internal_t internal, BC::array<parent_dims, int> index, BC::array<dims, int> shape) {
     return typename Array_Chunk<dims>::template implementation<internal_t>(internal, index, shape);
 }

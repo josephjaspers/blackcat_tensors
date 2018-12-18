@@ -27,8 +27,8 @@ struct Array_Reshape {
     using allocator_t = typename PARENT::allocator_t;
     using system_tag = typename PARENT::system_tag;
 
-    __BCinline__ static constexpr int DIMS() { return dimension; };
-    __BCinline__ static constexpr int ITERATOR() { return dimension; }
+    __BCinline__ static constexpr BC::size_t  DIMS() { return dimension; };
+    __BCinline__ static constexpr BC::size_t  ITERATOR() { return dimension; }
 
     static_assert(PARENT::ITERATOR() == 0, "RESHAPE IS NOT SUPPORTED ON NON-CONTINUOUS TENSORS");
 
@@ -44,7 +44,7 @@ struct Array_Reshape {
     };
 };
 
-template<class internal_t, int dimension>
+template<class internal_t, BC::size_t  dimension>
 auto make_reshape(internal_t internal, BC::array<dimension,int> shape) {
     return typename Array_Reshape<dimension>::template implementation<internal_t>(internal, shape);
 }

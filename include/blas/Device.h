@@ -45,10 +45,10 @@ struct Device {
 			cudaDeviceSynchronize();
 		}
 
-    static void gemm(bool transA, bool transB, int m, int n, int k,
-            const float* alpha, const float* A, int lda,
-                                const float* B, int ldb,
-            const float* beta,           float* C, int ldc) {
+    static void gemm(bool transA, bool transB, BC::size_t  m, BC::size_t  n, BC::size_t  k,
+            const float* alpha, const float* A, BC::size_t  lda,
+                                const float* B, BC::size_t  ldb,
+            const float* beta,           float* C, BC::size_t  ldc) {
         auto TRANS_A = transA ? CUBLAS_OP_T : CUBLAS_OP_N;
         auto TRANS_B = transB ? CUBLAS_OP_T : CUBLAS_OP_N;
 
@@ -61,10 +61,10 @@ struct Device {
     }
 
 	//y := alpha*A*x + beta*y,   or   y := alpha*A**T*x + beta*y,
-	static void gemv(bool transA, int m, int n,
-			const float* alpha, const float* A, int lda,
-								 const float* X, int incX,
-			const float* beta,        float* Y, int incY) {
+	static void gemv(bool transA, BC::size_t  m, BC::size_t  n,
+			const float* alpha, const float* A, BC::size_t  lda,
+								 const float* X, BC::size_t  incX,
+			const float* beta,        float* Y, BC::size_t  incY) {
 
 
 		auto TRANS_A =  transA ? CUBLAS_OP_T : CUBLAS_OP_N;
@@ -77,11 +77,11 @@ struct Device {
 		cublasDestroy(handle);
 	}
 
-	static void ger(int m, int n,
+	static void ger(int m, BC::size_t  n,
 			const float* alpha,
-								 const float* X, int incX,
-								 const float* Y, int incY,
-								  float* A, int lda) {
+								 const float* X, BC::size_t  incX,
+								 const float* Y, BC::size_t  incY,
+								  float* A, BC::size_t  lda) {
 
 		cublasHandle_t handle;
 		cublasCreate(&handle);
@@ -91,7 +91,7 @@ struct Device {
 		cublasDestroy(handle);
 	}
 
-	static void dot(int n, float* A, const float* x, int incX, const float* y, int incY) {
+	static void dot(int n, float* A, const float* x, BC::size_t  incX, const float* y, BC::size_t  incY) {
 		cublasHandle_t handle;
 		cublasCreate(&handle);
 		cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);

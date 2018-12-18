@@ -39,14 +39,14 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
 
     using branch_t = Binary_Expression<lv, rv, op>;
 
-    template<class core, int a, int b> __BChot__
+    template<class core, BC::size_t  a, BC::size_t  b> __BChot__
     static auto linear_evaluation(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
     	BC_TREE_OPTIMIZER_STDOUT("BLAS_EXPR: linear_evaluation" << "alpha=" << a << "beta=" << b);
 
     	branch.eval(tensor);
         return tensor.data();
     }
-    template<class core, int a, int b> __BChot__
+    template<class core, BC::size_t  a, BC::size_t  b> __BChot__
     static auto injection(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
     	BC_TREE_OPTIMIZER_STDOUT("BLAS_EXPR: injection");
         branch.eval(tensor);

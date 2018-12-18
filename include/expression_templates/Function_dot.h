@@ -35,15 +35,15 @@ struct Binary_Expression<lv, rv, oper::dot<system_tag_>>
 
     static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
     static_assert(lv::DIMS() == 1 && (rv::DIMS() == 1 || rv::DIMS() ==0), "DOT DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
-    __BCinline__ static constexpr int DIMS() { return 0; }
-    __BCinline__ static constexpr int ITERATOR() { return 0; }
+    __BCinline__ static constexpr BC::size_t  DIMS() { return 0; }
+    __BCinline__ static constexpr BC::size_t  ITERATOR() { return 0; }
 
     lv left;
     rv right;
 
      Binary_Expression(lv left, rv right) : left(left), right(right) {}
 
-template<class core, int alpha_mod, int beta_mod>
+template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod>
 void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 
     //get the data of the injection --> injector simply stores the alpha/beta scalar modifiers

@@ -11,7 +11,7 @@
 #include <chrono>
 #include "../../BlackCat_Tensors/include/BlackCat_Tensors.h"
 
-auto benchmark_forloop(int size, int iters, bool stdout=false) {
+auto benchmark_forloop(int size, BC::size_t  iters, bool stdout=false) {
 
     using clock = std::chrono::duration<double>;
 

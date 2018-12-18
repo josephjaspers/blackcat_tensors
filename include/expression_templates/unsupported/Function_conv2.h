@@ -43,9 +43,9 @@ struct Binary_Expression<lv, rv, oper::conv<2, allocator>>
 
     static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
 
-    __BCinline__ static constexpr int DIMS() { return 2; }
-    __BCinline__ static constexpr int ITERATOR() { return 0; }
-    int size() const {
+    __BCinline__ static constexpr BC::size_t  DIMS() { return 2; }
+    __BCinline__ static constexpr BC::size_t  ITERATOR() { return 0; }
+    BC::size_t  size() const {
         return inner_shape()[0] * inner_shape()[1];
     }
     lv left;
@@ -66,13 +66,13 @@ struct Binary_Expression<lv, rv, oper::conv<2, allocator>>
     __BCinline__ const auto block_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? size() : 1; });}
 
 
-    __BCinline__ int M() const { return left.rows();  }
-    __BCinline__ int N() const { return right.cols(); }
-    __BCinline__ int K() const { return left.cols();  }
+    __BCinline__ BC::size_t  M() const { return left.rows();  }
+    __BCinline__ BC::size_t  N() const { return right.cols(); }
+    __BCinline__ BC::size_t  K() const { return left.cols();  }
 
 
 
-template<class core, int alpha_mod, int beta_mod>
+template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod>
 void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 
     //get the data of the injection --> injector simply stores the alpha/beta scalar modifiers

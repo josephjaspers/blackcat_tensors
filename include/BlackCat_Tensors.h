@@ -95,19 +95,26 @@ namespace namespace_name {										 \
 #endif
 
 
+//#define BC_SIZE_T_OVERRIDE unsigned
 // --------------------------------- constants --------------------------------- //
 
 namespace BC {
 
-static constexpr int MULTITHREAD_THRESHOLD = 16384;
+#ifndef BC_SIZE_T_OVERRIDE
+using  size_t   = int;
+#else
+using  size_t   = BC_SIZE_T_OVERRIDE;
+#endif
+
+static constexpr  BC::size_t   MULTITHREAD_THRESHOLD = 16384;
 
 #ifdef __CUDACC__
-    static constexpr int CUDA_BASE_THREADS = 256;
+    static constexpr  BC::size_t   CUDA_BASE_THREADS = 256;
 
-    static int blocks(int size) {
+    static  BC::size_t   blocks(int size) {
         return 1 + (int)(size / CUDA_BASE_THREADS);
     }
-    static int threads(int sz = CUDA_BASE_THREADS) {
+    static  BC::size_t   threads(int sz = CUDA_BASE_THREADS) {
         return sz > CUDA_BASE_THREADS ? CUDA_BASE_THREADS : sz;
     }
 #endif

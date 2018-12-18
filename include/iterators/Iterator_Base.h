@@ -31,10 +31,10 @@ struct IteratorBase {
 public:
 
     tensor_t tensor;
-    mutable int index= 0;
+    mutable BC::size_t  index= 0;
 
     __BCinline__
-    IteratorBase(tensor_t tensor_, int index_=0)
+    IteratorBase(tensor_t tensor_, BC::size_t  index_=0)
     : 	tensor(tensor_), index(index_) {}
 
 #define BC_Iter_Compare(sign, rev)\
@@ -58,7 +58,7 @@ public:
     BC_Iter_Compare(<=, >=)
     BC_Iter_Compare(>=, <=)
 
-    __BCinline__ operator int () const { return index; }
+    __BCinline__ operator BC::size_t  () const { return index; }
 
     __BCinline__ bool operator == (const Iterator& iter) {
         return index == iter.index;

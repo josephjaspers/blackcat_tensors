@@ -24,12 +24,12 @@ struct Array_Slice
     using allocator_t = typename PARENT::allocator_t;
     using system_tag = typename PARENT::system_tag;
 
-    __BCinline__ static constexpr int ITERATOR() { return MTF::max(PARENT::ITERATOR() - 1, 0); }
-    __BCinline__ static constexpr int DIMS() { return PARENT::DIMS() - 1; }
+    __BCinline__ static constexpr BC::size_t  ITERATOR() { return MTF::max(PARENT::ITERATOR() - 1, 0); }
+    __BCinline__ static constexpr BC::size_t  DIMS() { return PARENT::DIMS() - 1; }
 
     scalar_t* array_slice;
 
-    __BCinline__ Array_Slice(PARENT parent_, int index)
+    __BCinline__ Array_Slice(PARENT parent_, BC::size_t  index)
     : Shape<PARENT::DIMS() - 1> (parent_.as_shape()),
       array_slice(const_cast<scalar_t*>(parent_.slice_ptr(index))) {}
 
@@ -39,7 +39,7 @@ struct Array_Slice
     };
 
     template<class internal_t>
-    auto make_slice(internal_t internal, int index) {
+    auto make_slice(internal_t internal, BC::size_t  index) {
         return Array_Slice<internal_t>(internal, index);
     }
 }

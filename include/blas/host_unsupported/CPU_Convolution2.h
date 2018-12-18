@@ -18,16 +18,16 @@ namespace BC {
  * @parma n -> img_length : n will be updated to the floor of n / m
  * @inc_y, inc_x -> must be '1' else error will be thrown
  */
-void conv1(int m, int n,
-            float* alpha, float* A, int inc_a,
-                          float* X, int inc_x,
-            float* beta,  float* Y, int inc_y,
-            int padding=0, int stride=1) {
+void conv1(int m, BC::size_t  n,
+            float* alpha, float* A, BC::size_t  inc_a,
+                          float* X, BC::size_t  inc_x,
+            float* beta,  float* Y, BC::size_t  inc_y,
+            BC::size_t  padding=0, BC::size_t  stride=1) {
 
     if (inc_y != 1 || inc_x != 1 || inc_a != 1)
         throw std::invalid_argument("BC_CONV1 implementation is only supported by vectors");
 
-    int lda = m;
+    BC::size_t  lda = m;
 
     for (int i = 0; i < m; ++i) {
         //(int)((m-i)/n) --> the number of 'row positions' (we are converting our 1d vector img to a matrix)

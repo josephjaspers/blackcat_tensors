@@ -12,11 +12,11 @@
 namespace BC {
 namespace et     {
 namespace tree {
-template<class tensor_core, int alpha_modifier_ = 1, int beta_modifier_= 0>
+template<class tensor_core, BC::size_t  alpha_modifier_ = 1, BC::size_t  beta_modifier_= 0>
 struct injector {
 
-	static constexpr int ALPHA = alpha_modifier_;
-	static constexpr int BETA = beta_modifier_;
+	static constexpr BC::size_t  ALPHA = alpha_modifier_;
+	static constexpr BC::size_t  BETA = beta_modifier_;
     injector(tensor_core& array_) : array(array_) {}
 
     tensor_core& array;
@@ -28,7 +28,7 @@ struct injector {
           tensor_core& data()       { return array; }
 };
 
-template<class core, int a, int b>
+template<class core, BC::size_t  a, BC::size_t  b>
 auto make_injection(core& c) {
 	return injector<core, a, b>(c);
 }

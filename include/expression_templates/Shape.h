@@ -62,13 +62,13 @@ struct Shape : Shape_Base<Shape<dims>> {
     __BCinline__ const auto& outer_shape() const { return m_outer_shape; }
     __BCinline__ const auto& block_shape() const { return outer_shape(); }
 
-    __BCinline__ int size() const { return m_outer_shape[dims - 1]; }
-    __BCinline__ int rows() const { return m_inner_shape[0]; }
-    __BCinline__ int cols() const { return m_inner_shape[1]; }
-    __BCinline__ int dimension(int i) const { return m_inner_shape[i]; }
-    __BCinline__ int outer_dimension() const { return m_inner_shape[dims - 2]; }
-    __BCinline__ int leading_dimension(int i) const { return i < dims ? m_outer_shape[i] : 0; }
-    __BCinline__ int block_dimension(int i) const  { return leading_dimension(i); }
+    __BCinline__ BC::size_t  size() const { return m_outer_shape[dims - 1]; }
+    __BCinline__ BC::size_t  rows() const { return m_inner_shape[0]; }
+    __BCinline__ BC::size_t  cols() const { return m_inner_shape[1]; }
+    __BCinline__ BC::size_t  dimension(int i) const { return m_inner_shape[i]; }
+    __BCinline__ BC::size_t  outer_dimension() const { return m_inner_shape[dims - 2]; }
+    __BCinline__ BC::size_t  leading_dimension(int i) const { return i < dims ? m_outer_shape[i] : 0; }
+    __BCinline__ BC::size_t  block_dimension(int i) const  { return leading_dimension(i); }
 
 protected:
 
@@ -111,13 +111,13 @@ struct Shape<0> {
     __BCinline__ const auto inner_shape() const { return l_array<0>([&](auto x) { return 1; });}
     __BCinline__ const auto outer_shape() const { return l_array<0>([&](auto x) { return 0; });}
     __BCinline__ const auto block_shape() const { return l_array<0>([&](auto x) { return 1; });}
-    __BCinline__ int size() const { return 1; }
-    __BCinline__ int rows() const { return 1; }
-    __BCinline__ int cols() const { return 1; }
-    __BCinline__ int dimension(int i) const { return 1; }
-    __BCinline__ int outer_dimension() const { return 1; }
-    __BCinline__ int leading_dimension(int i) const { return 0; }
-    __BCinline__ int block_dimension(int i) const { return 1; }
+    __BCinline__ BC::size_t  size() const { return 1; }
+    __BCinline__ BC::size_t  rows() const { return 1; }
+    __BCinline__ BC::size_t  cols() const { return 1; }
+    __BCinline__ BC::size_t  dimension(int i) const { return 1; }
+    __BCinline__ BC::size_t  outer_dimension() const { return 1; }
+    __BCinline__ BC::size_t  leading_dimension(int i) const { return 0; }
+    __BCinline__ BC::size_t  block_dimension(int i) const { return 1; }
 
     template<class deriv> void copy_shape(const Shape_Base<deriv>& shape) {}
     static void swap_shape(Shape& a) {}
@@ -148,19 +148,19 @@ struct Shape<1> {
         m_outer_shape[0] = 1; //shape.m_outer_shape[0];
     }
 
-    __BCinline__ Shape(int length, int leading_dimension) {
+    __BCinline__ Shape(int length, BC::size_t  leading_dimension) {
         m_inner_shape[0] = length;
         m_outer_shape[0] = leading_dimension;
     }
 
     __BCinline__ Shape(int length_) : m_inner_shape { length_ }, m_outer_shape {1} {}
-    __BCinline__ int size() const { return m_inner_shape[0]; }
-    __BCinline__ int rows() const { return m_inner_shape[0]; }
-    __BCinline__ int cols() const { return 1; }
-    __BCinline__ int dimension(int i) const { return i == 0 ? m_inner_shape[0] : 1; }
-    __BCinline__ int outer_dimension() const { return m_inner_shape[0]; }
-    __BCinline__ int leading_dimension(int i) const { return i == 0 ? m_outer_shape[0] : 0; }
-    __BCinline__ int block_dimension(int i)   const { return leading_dimension(i); }
+    __BCinline__ BC::size_t  size() const { return m_inner_shape[0]; }
+    __BCinline__ BC::size_t  rows() const { return m_inner_shape[0]; }
+    __BCinline__ BC::size_t  cols() const { return 1; }
+    __BCinline__ BC::size_t  dimension(int i) const { return i == 0 ? m_inner_shape[0] : 1; }
+    __BCinline__ BC::size_t  outer_dimension() const { return m_inner_shape[0]; }
+    __BCinline__ BC::size_t  leading_dimension(int i) const { return i == 0 ? m_outer_shape[0] : 0; }
+    __BCinline__ BC::size_t  block_dimension(int i)   const { return leading_dimension(i); }
     __BCinline__ const auto& inner_shape() const { return m_inner_shape; }
     __BCinline__ const auto& outer_shape() const { return m_outer_shape; }
     __BCinline__ const auto& block_shape() const { return m_inner_shape; }

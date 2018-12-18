@@ -40,7 +40,7 @@ struct Tensor_Utility<Tensor_Base<internal_t>> {
     friend class Tensor_Utility;
 
 private:
-    static constexpr int DIMS() { return internal_t::DIMS(); }
+    static constexpr  BC::size_t   DIMS() { return internal_t::DIMS(); }
 
     derived& as_derived() {
         return static_cast<derived&>(*this);
@@ -54,7 +54,7 @@ public:
     }
 private:
 
-    static std::string format_value(const scalar& s, int precision, bool sparse=false) {
+    static std::string format_value(const scalar& s,  BC::size_t   precision, bool sparse=false) {
     	std::string fstr  = !sparse || std::abs(s) > .1 ? std::to_string(s) : "";
     	if (fstr.length() < (unsigned)precision)
     		return fstr.append(precision - fstr.length(), ' ');
@@ -220,8 +220,8 @@ public:
                     as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
         }
     }
-    void read_tensor_data_as_one_hot(std::ifstream& is, int sz) {
-        BC_ARRAY_ONLY("void read_tensor_data_as_one_hot(std::ifstream& is, int sz)");
+    void read_tensor_data_as_one_hot(std::ifstream& is,  BC::size_t   sz) {
+        BC_ARRAY_ONLY("void read_tensor_data_as_one_hot(std::ifstream& is,  BC::size_t   sz)");
         if (derived::DIMS() != 1)
             throw std::invalid_argument("one_hot only supported by vectors");
 

@@ -22,8 +22,8 @@ struct Unary_Expression<functor_type, oper::transpose<system_tag_>>
     using system_tag = system_tag_;
     using allocator_t = allocator::implementation<system_tag, scalar_t>;
 
-    __BCinline__ static constexpr int DIMS() { return functor_type::DIMS(); }
-    __BCinline__ static constexpr int ITERATOR() { return DIMS() > 1? DIMS() :0; }
+    __BCinline__ static constexpr BC::size_t  DIMS() { return functor_type::DIMS(); }
+    __BCinline__ static constexpr BC::size_t  ITERATOR() { return DIMS() > 1? DIMS() :0; }
 
     functor_type array;
 
@@ -49,15 +49,15 @@ struct Unary_Expression<functor_type, oper::transpose<system_tag_>>
     __BCinline__ auto operator [] (int i) const -> decltype(array[0]) {
         return array[i];
     }
-    __BCinline__ int size() const { return array.size(); }
-    __BCinline__ int rows() const { return array.cols(); }
-    __BCinline__ int cols() const { return array.rows(); }
+    __BCinline__ BC::size_t  size() const { return array.size(); }
+    __BCinline__ BC::size_t  rows() const { return array.cols(); }
+    __BCinline__ BC::size_t  cols() const { return array.rows(); }
 
-    __BCinline__ int dimension(int i) const { return i == 0 ? array.cols() : i == 1 ? array.rows() : array.dimension(i); }
-    __BCinline__ int block_dimension(int i) const { return block_shape()[i]; }
+    __BCinline__ BC::size_t  dimension(int i) const { return i == 0 ? array.cols() : i == 1 ? array.rows() : array.dimension(i); }
+    __BCinline__ BC::size_t  block_dimension(int i) const { return block_shape()[i]; }
 
     template<class... ints>
-    __BCinline__ auto operator ()(int m, int n, ints... integers) const -> decltype(array(n,m)) {
+    __BCinline__ auto operator ()(int m, BC::size_t  n, ints... integers) const -> decltype(array(n,m)) {
         return array(n,m, integers...);
     }
 

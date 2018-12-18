@@ -8,13 +8,13 @@ Note: Many of the return types have been abreviated. The underlying implementati
 #### Data Access 
 | static | return type | method name | parameters | const/non-const | documentation | alias-methods |
 | --- | --- | --- | --- | --- | --- | --- |
-| --- | slice | operator[] | int | both | Returns a slice of the tensor. IE Cube returns a matrix slice, Matrix returns a column, etc | slice |
-| --- | scalar_obj | operator() | int | both | Returns a scalar object. Access to this data is safe. | scalar | 
+| --- | slice | operator[] | BC::size_t  | both | Returns a slice of the tensor. IE Cube returns a matrix slice, Matrix returns a column, etc | slice |
+| --- | scalar_obj | operator() | BC::size_t  | both | Returns a scalar object. Access to this data is safe. | scalar | 
 | --- | vector | diag | int=0 | both | Returns the diagnol of a matrix. A positive integer will have the diagnol start from the top left corner. A negative integer will have the diagnol end n from the bottom right |
-| --- | slice | col | int | both | Returns a column of a matrix. |
+| --- | slice | col | BC::size_t  | both | Returns a column of a matrix. |
 | --- | transpose_view | transpose | --- | both | returns a transpose view of a Matrix or Vector. Cannot transpose in place. Matrix = Matrix.transpose() is undefined. | t |
-| --- | vector | row | int | both | returns a row of a matrix. |
-| --- | view | transpose | int | both | returns a row of a matrix. |
+| --- | vector | row | BC::size_t  | both | returns a row of a matrix. |
+| --- | view | transpose | BC::size_t  | both | returns a row of a matrix. |
 | X | reshape | reshape | tensor, and ints... | both | returns a reshaped view of the tensor parameter. Does not modify the original tensor |
 | X | chunk | chunk | tensor, and ints... | both | returns a reshaped view of the tensor parameter. Does not modify the original tensor |
 

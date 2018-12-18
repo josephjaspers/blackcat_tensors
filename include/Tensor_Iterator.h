@@ -124,12 +124,12 @@ namespace module {
                 tensor(tensor_) {                                \
         }                                                        \
                                                                  \
-        iterator_name(der_t& tensor_, int start) :               \
+        iterator_name(der_t& tensor_, BC::size_t  start) :               \
                 tensor(tensor_) {                                \
                                                                  \
             _begin += start;                                     \
         }                                                        \
-        iterator_name(der_t& tensor_, int start, int end) :      \
+        iterator_name(der_t& tensor_, BC::size_t  start, BC::size_t  end) :      \
                 tensor(tensor_) {                                \
             _begin += start;                                     \
             _end = end;                                          \

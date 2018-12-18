@@ -30,7 +30,7 @@ struct Array : Array_Base<Array<dimension, T, allocator>, dimension>, public Sha
     static constexpr bool copy_assignable    = true;
     static constexpr bool move_assignable    = true;
 
-    __BCinline__ static constexpr int DIMS() { return dimension; }
+    __BCinline__ static constexpr BC::size_t  DIMS() { return dimension; }
 
     scalar_t* array = nullptr;
     Array() = default;
@@ -70,7 +70,7 @@ public:
     }
 
     void deallocate() {
-        allocator_t::deallocate(array);
+        allocator_t::deallocate(array, this->size());
         array = nullptr;
     }
 };
@@ -84,7 +84,7 @@ struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Sh
     using allocator_t = allocator;
     using system_tag = typename allocator_t::system_tag;
 
-    __BCinline__ static constexpr int DIMS() { return 0; }
+    __BCinline__ static constexpr BC::size_t  DIMS() { return 0; }
 
     scalar_t* array = nullptr;
     Array() : array(allocator_t::allocate(this->size())) {}
@@ -124,7 +124,7 @@ struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Sh
 
 
     void deallocate() {
-        allocator_t::deallocate(array);
+        allocator_t::deallocate(array, this->size());
         array = nullptr;
     }
 

@@ -30,12 +30,12 @@ struct evaluator_default
     static constexpr bool nested_blas_expr  = false;			//An expression containing a BLAS expression nested in a unary_functor IE abs(w * x)
     static constexpr bool requires_greedy_eval = false;			//Basic check if any BLAS call exists at all
 
-    template<class core, int a, int b>
+    template<class core, BC::size_t  a, BC::size_t  b>
     static auto linear_evaluation(const T& branch, injector<core, a, b> tensor) {
         return branch;
     }
 
-    template<class core, int a, int b>
+    template<class core, BC::size_t  a, BC::size_t  b>
     static auto injection(const T& branch, injector<core, a, b> tensor) {
         return branch;
     }

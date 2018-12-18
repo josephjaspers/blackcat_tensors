@@ -16,11 +16,11 @@
 namespace BC {
 namespace et     {
 
-template<class derived, int DIMENSION>
+template<class derived, BC::size_t  DIMENSION>
 struct Array_Base : BC_internal_interface<derived>, BC_Array {
 
-    __BCinline__ static constexpr int DIMS() { return DIMENSION; }
-    __BCinline__ static constexpr int ITERATOR() { return 0; }
+    __BCinline__ static constexpr BC::size_t  DIMS() { return DIMENSION; }
+    __BCinline__ static constexpr BC::size_t  ITERATOR() { return 0; }
 
     using self = derived;
 
@@ -87,13 +87,13 @@ public:
 private:
 
     template<class... integers> __BCinline__
-    int dims_to_index(integers... ints) const {
+    BC::size_t  dims_to_index(integers... ints) const {
         return dims_to_index(BC::make_array(ints...));
     }
 
     template<int D> __BCinline__
-    int dims_to_index(const BC::array<D, int>& var) const {
-        int index = var[0];
+    BC::size_t  dims_to_index(const BC::array<D, int>& var) const {
+        BC::size_t  index = var[0];
         for(int i = 1; i < DIMS(); ++i) {
             index += this->as_derived().leading_dimension(i - 1) * var[i];
         }

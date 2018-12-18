@@ -22,8 +22,8 @@ struct Array_Format
     using allocator_t = typename PARENT::allocator_t;
     using system_tag = typename PARENT::system_tag;
 
-    __BCinline__ static constexpr int DIMS()          { return PARENT::DIMS(); }
-    __BCinline__ static constexpr int ITERATOR()     { return DIMS(); }
+    __BCinline__ static constexpr BC::size_t  DIMS()          { return PARENT::DIMS(); }
+    __BCinline__ static constexpr BC::size_t  ITERATOR()     { return DIMS(); }
 
     scalar_t* array_slice;
 
@@ -42,7 +42,7 @@ struct Array_Format
 
 };
 
-template<class internal_t, int dims>
+template<class internal_t, BC::size_t  dims>
 auto make_format(internal_t internal, BC::array<dims, int> format) {
     return Array_Format<internal_t>(internal, format);
 }

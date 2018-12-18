@@ -202,9 +202,6 @@ int test_matrix_muls(int sz=128) {
 		g =  (atrans * 5 * b - 5);
 		g -= (atrans * 5 * b - 5);
 
-		e.print();
-		f.print();
-
 		mat h = (a.t() * b * 2.0f - 8.0f) - (atrans * b * 2.0f - 8.0f);
 
 		validation = c.approx_equal(d) && e.approx_equal(f) && g.approx_equal(h);

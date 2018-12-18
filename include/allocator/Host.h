@@ -35,7 +35,7 @@ struct Host : AllocatorBase<std::conditional_t<std::is_void<derived>::value, Hos
         return new T[size];
     }
 
-    void deallocate(T* t) {
+    void deallocate(T* t, BC::size_t  size) {
         delete[] t;
     }
 
