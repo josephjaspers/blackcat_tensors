@@ -5,7 +5,7 @@ BlackCat_Tensors defines two types of iterators, coefficient-wise and n-dimensio
 ----------------------------------------------------------------------------------------------
 
 ##### Coefficient-Wise 
-The coefficient-wise iterator returns references of the `scalar_type` of the tensor.
+The coefficient-wise iterator returns references of the `value_typeype` of the tensor.
 
 ```cpp
 int main() {

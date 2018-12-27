@@ -14,35 +14,35 @@
 namespace BC {
 namespace et {
 
-template<class functor_type, class system_tag_>
-struct Unary_Expression<functor_type, oper::transpose<system_tag_>>
-    : Expression_Base<Unary_Expression<functor_type, oper::transpose<system_tag_>>> {
+template<class Value, class System_Tag>
+struct Unary_Expression<Value, oper::transpose<System_Tag>>
+    : Expression_Base<Unary_Expression<Value, oper::transpose<System_Tag>>> {
 
-    using scalar_t  = typename functor_type::scalar_t;
-    using system_tag = system_tag_;
-    using allocator_t = allocator::implementation<system_tag, scalar_t>;
+    using value_type  = typename Value::value_type;
+    using system_tag = System_Tag;
+    using allocator_t = allocator::implementation<system_tag, value_type>;
 
-    __BCinline__ static constexpr BC::size_t  DIMS() { return functor_type::DIMS(); }
-    __BCinline__ static constexpr BC::size_t  ITERATOR() { return DIMS() > 1? DIMS() :0; }
+    static constexpr int DIMS = Value::DIMS;
+    static constexpr int ITERATOR = DIMS > 1? DIMS :0;
 
-    functor_type array;
+    Value array;
 
-    Unary_Expression(functor_type p) : array(p) {}
+    Unary_Expression(Value p) : array(p) {}
 
     __BCinline__ const auto inner_shape() const {
-        return l_array<DIMS()>([=](int i) {
-            if (DIMS() >= 2)
+        return l_array<DIMS>([=](int i) {
+            if (DIMS >= 2)
                 return i == 0 ? array.cols() : i == 1 ? array.rows() : array.dimension(i);
-            else if (DIMS() == 2)
+            else if (DIMS == 2)
                 return i == 0 ? array.cols() : i == 1 ? array.rows() : 1;
-            else if (DIMS() == 1)
+            else if (DIMS == 1)
                 return i == 0 ? array.rows() : 1;
             else
                 return 1;
         });
     }
     __BCinline__ const auto block_shape() const {
-        return l_array<DIMS()>([=](int i) {
+        return l_array<DIMS>([=](int i) {
             return i == 0 ? array.cols() : 1 == 1 ? array.rows() : array.block_dimension(i);
         });
     }

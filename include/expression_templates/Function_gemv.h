@@ -17,13 +17,18 @@
 namespace BC {
 namespace et {
 
-template<class lv, class rv, class system_tag_>
-struct Binary_Expression<lv, rv, oper::gemv<system_tag_>>
-: Expression_Base<Binary_Expression<lv, rv,  oper::gemv<system_tag_>>>, BLAS_FUNCTION {
+template<class lv, class rv, class System_Tag>
+struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
+: Expression_Base<Binary_Expression<lv, rv,  oper::gemv<System_Tag>>>, BLAS_FUNCTION {
 
-    using scalar_t    = typename lv::scalar_t;
-    using system_tag  = system_tag_;
-    using allocator_t = allocator::implementation<system_tag, scalar_t>;
+    static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,
+    		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
+    static_assert(lv::DIMS == 2 && rv::DIMS == 1,
+    		"GEMV DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
+
+    using value_type    = typename lv::value_type;
+    using system_tag  = System_Tag;
+    using allocator_t = allocator::implementation<system_tag, value_type>;
     using impl_l      = blas::implementation<system_tag>;
     using utility_l   = utility::implementation<system_tag>;
 
@@ -34,10 +39,8 @@ struct Binary_Expression<lv, rv, oper::gemv<system_tag_>>
     static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
     static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
 
-    static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
-    static_assert(lv::DIMS() == 2 && rv::DIMS() == 1, "GEMV DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
-    __BCinline__ static constexpr BC::size_t  DIMS() { return 1; }
-    __BCinline__ static constexpr BC::size_t  ITERATOR() { return 0; }
+    static constexpr int DIMS = 1;
+    static constexpr int ITERATOR = 1;
 
     lv left;
     rv right;
@@ -50,8 +53,8 @@ struct Binary_Expression<lv, rv, oper::gemv<system_tag_>>
     __BCinline__ BC::size_t  dimension(int i) const { return i == 0 ? rows() : 1; }
     __BCinline__ BC::size_t  block_dimension(int i) const { return i == 0 ? rows() : 1; }
 
-    __BCinline__ const auto inner_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : 1; });}
-    __BCinline__ const auto block_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? rows() : 1; });}
+    __BCinline__ const auto inner_shape() const { return l_array<DIMS>([&](int i) { return i == 0 ? left.rows() : 1; });}
+    __BCinline__ const auto block_shape() const { return l_array<DIMS>([&](int i) { return i == 0 ? rows() : 1; });}
 
 template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod>
 void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
@@ -64,8 +67,8 @@ void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
     auto X = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<rv>::get_array(right));
 
     //allocate the alpha and beta scalars,
-    auto alpha = utility_l::stack_allocate((scalar_t)alpha_mod);
-    auto beta  = utility_l::stack_allocate((scalar_t)beta_mod);
+    auto alpha = utility_l::stack_allocate((value_type)alpha_mod);
+    auto beta  = utility_l::stack_allocate((value_type)beta_mod);
 
     //get the left and right side scalar values and
     //compute the scalar values if need be

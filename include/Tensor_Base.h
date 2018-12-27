@@ -44,7 +44,7 @@ public:
     using internal_t::internal_t;
 
     using internal_t::DIMS; //required
-    using scalar_t    = typename internal_t::scalar_t;
+    using value_type    = typename internal_t::value_type;
     using allocator_t = typename internal_t::allocator_t;
     using system_tag  = typename allocator_t::system_tag;
 
@@ -101,8 +101,8 @@ public:
          return *this;
     }
 
-    Tensor_Base(scalar_t scalar) {
-        static_assert(DIMS() == 0, "SCALAR_INITIALIZATION ONLY AVAILABLE TO SCALARS");
+    Tensor_Base(value_type scalar) {
+        static_assert(DIMS == 0, "SCALAR_INITIALIZATION ONLY AVAILABLE TO SCALARS");
         this->fill(scalar);
     }
 

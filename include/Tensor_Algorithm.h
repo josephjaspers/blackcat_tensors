@@ -124,7 +124,7 @@ class Tensor_Algorithm<Tensor_Base<internal_t>> {
     template<class> friend class Tensor_Algorithm;
 
     using derived        = Tensor_Base<internal_t>;
-    using scalar_t         = typename internal_t::scalar_t;
+    using value_type         = typename internal_t::value_type;
     using allocator_t   = typename internal_t::allocator_t;
 
      const derived& as_derived() const { return static_cast<const derived&>(*this);  }
@@ -137,7 +137,7 @@ class Tensor_Algorithm<Tensor_Base<internal_t>> {
 
 public:
 
-    void fill(scalar_t value)   { BC::fill(as_derived().begin_(), as_derived().end_(), value);}
+    void fill(value_type value)   { BC::fill(as_derived().begin_(), as_derived().end_(), value);}
     void zero()                 { fill(0); }
     void ones()                 { fill(1); }
 
@@ -154,29 +154,29 @@ public:
     	BC::alg::sort(this->begin_(), this->end_());
     }
 
-    void rand(scalar_t lb=0, scalar_t ub=1) {
+    void rand(value_type lb=0, value_type ub=1) {
     	randomize(lb, ub);
 	}
 
-   void randomize(scalar_t lb=0, scalar_t ub=1)  {
-	   static_assert(internal_t::ITERATOR() == 0 || internal_t::ITERATOR() == 1,
+   void randomize(value_type lb=0, value_type ub=1)  {
+	   static_assert(internal_t::ITERATOR == 0 || internal_t::ITERATOR == 1,
 			   	   	   "randomize not available to non-continuous tensors");
 
 	   using impl = random::implementation<typename allocator_t::system_tag>;
 	   impl::randomize(this->as_derived().internal(), lb, ub);
    }
 
-   scalar_t max() const {
+   value_type max() const {
 	   auto max_index = BC::alg::max_element(this->cbegin_(), this->cend_());
 	   return allocator_t::extract(this->as_derived().memptr(), max_index);
    }
-   scalar_t min() const {
+   value_type min() const {
 	   auto min_index = BC::alg::min_element(this->cbegin_(), this->cend_());
 	   return allocator_t::extract(this->as_derived().memptr(), min_index);
    }
 
    //if bool flip the output of sum to an integer
-   using sum_t = std::conditional_t<std::is_same<bool, scalar_t>::value, int, scalar_t>;
+   using sum_t = std::conditional_t<std::is_same<bool, value_type>::value, int, value_type>;
 
    BC_DEF_IF_CPP17(
 		sum_t sum() const {
@@ -185,8 +185,8 @@ public:
    )
 
    BC_DEF_IF_CPP17(
-   scalar_t prod() const {
-	   return BC::accumulate(this->cbegin_(), this->cend_(), scalar_t(1), BC::et::oper::mul());
+   value_type prod() const {
+	   return BC::accumulate(this->cbegin_(), this->cend_(), value_type(1), BC::et::oper::mul());
    }
    )
 
@@ -208,9 +208,9 @@ public:
 
 template<class internal_t>
 static bool all(const Tensor_Base<internal_t>& tensor) {
-	constexpr BC::size_t  dims = internal_t::DIMS();
-	using scalar_t = typename internal_t::scalar_t;
-	using allocator_t  = typename allocator::template implementation<typename internal_t::system_tag, scalar_t>;
+	constexpr BC::size_t  dims = internal_t::DIMS;
+	using value_type = typename internal_t::value_type;
+	using allocator_t  = typename allocator::template implementation<typename internal_t::system_tag, value_type>;
 
 	Tensor_Base<BC::et::Array<dims, bool, allocator_t>> bool_tensor(tensor.inner_shape());
 	bool_tensor = logical(tensor);
@@ -219,9 +219,9 @@ static bool all(const Tensor_Base<internal_t>& tensor) {
 }
 template<class internal_t>
 static bool any(const Tensor_Base<internal_t>& tensor) {
-	constexpr BC::size_t  dims = internal_t::DIMS();
-	using scalar_t = typename internal_t::scalar_t;
-	using allocator_t  = typename allocator::template implementation<typename internal_t::system_tag, scalar_t>;
+	constexpr BC::size_t  dims = internal_t::DIMS;
+	using value_type = typename internal_t::value_type;
+	using allocator_t  = typename allocator::template implementation<typename internal_t::system_tag, value_type>;
 
 	Tensor_Base<BC::et::Array<dims, bool, allocator_t>>
 	bool_tensor(tensor.inner_shape());

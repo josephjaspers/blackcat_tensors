@@ -14,26 +14,25 @@
 namespace BC {
 namespace et     {
 
-template<class PARENT>
-struct Array_Strided_Vector : Array_Base<Array_Strided_Vector<PARENT>, 1>, Shape<1> {
+template<class Parent>
+struct Array_Strided_Vector : Array_Base<Array_Strided_Vector<Parent>, 1>, Shape<1> {
 
-    using scalar_t = typename PARENT::scalar_t;
-    using allocator_t = typename PARENT::allocator_t;
-    using system_tag = typename PARENT::system_tag;
+    static_assert(Parent::DIMS == 2, "A ROW VIEW MAY ONLY BE CONSTRUCTED FROM A MATRIX");
 
+	using value_type = typename Parent::value_type;
+    using allocator_t = typename Parent::allocator_t;
+    using system_tag = typename Parent::system_tag;
+    static constexpr int  ITERATOR = MTF::max(Parent::ITERATOR - 1, 1);
+    static constexpr int DIMS = 1;
 
-    static_assert(PARENT::DIMS() == 2, "A ROW VIEW MAY ONLY BE CONSTRUCTED FROM A MATRIX");
+    value_type* array_slice;
 
-    __BCinline__ static constexpr BC::size_t  ITERATOR() { return MTF::max(PARENT::ITERATOR() - 1, 0); }
-    __BCinline__ static constexpr BC::size_t  DIMS() { return MTF::max(PARENT::DIMS() - 1, 0); }
-
-    scalar_t* array_slice;
-
-    __BCinline__ Array_Strided_Vector(const scalar_t* array_slice_, BC::size_t  length, BC::size_t  stride) :
+    __BCinline__ Array_Strided_Vector(const value_type* array_slice_, BC::size_t  length, BC::size_t  stride) :
         Shape<1>(length, stride),
-        array_slice(const_cast<scalar_t*>(array_slice_)) {}
+        array_slice(const_cast<value_type*>(array_slice_)) {}
+
     __BCinline__ const auto& operator [] (int i) const { return array_slice[this->leading_dimension(0) * i]; }
-    __BCinline__        auto& operator [] (int i)        { return array_slice[this->leading_dimension(0) * i]; }
+    __BCinline__       auto& operator [] (int i)       { return array_slice[this->leading_dimension(0) * i]; }
 
     template<class... seq> __BCinline__
     const auto& operator () (int i, seq... indexes) const { return *this[i]; }
@@ -41,8 +40,8 @@ struct Array_Strided_Vector : Array_Base<Array_Strided_Vector<PARENT>, 1>, Shape
     template<class... seq> __BCinline__
     auto& operator () (int i, seq... indexes)        { return *this[i]; }
 
-    __BCinline__ const scalar_t* memptr() const { return array_slice; }
-    __BCinline__       scalar_t* memptr()       { return array_slice; }
+    __BCinline__ const value_type* memptr() const { return array_slice; }
+    __BCinline__       value_type* memptr()       { return array_slice; }
 
 };
 

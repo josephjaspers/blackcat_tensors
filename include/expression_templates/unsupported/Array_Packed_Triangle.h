@@ -18,27 +18,27 @@
 //    lo = 0
 //};
 //
-//template<upLo upper, class scalar_t_, class allocator_t_>
+//template<upLo upper, class value_type_, class allocator_t_>
 //struct Array_Packed_Triangle
-//        : Array_Base<Array_Packed_Triangle<upLo, scalar_t_, allocator_t_>, 2>,
+//        : Array_Base<Array_Packed_Triangle<upLo, value_type_, allocator_t_>, 2>,
 //          Shape<2> {
 //
-//    static constexpr BC::size_t  DIMS()     { return 2; }
-//    static constexpr BC::size_t  ITERATOR() { return 2; }
+//    static constexpr BC::size_t  DIMS     { return 2; }
+//    static constexpr BC::size_t  ITERATOR { return 2; }
 //
-//    using scalar_t = scalar_t_;
+//    using value_type = value_type_;
 //    using allocator_t = allocator_t_;
 //
-//    scalar_t* array;
+//    value_type* array;
 //
 //    Array_Packed_Triangle(int N) : Shape<2>(N, N) {
 //        allocator_t::allocate(array, this->size() / 2);
 //    }
 ////I would like to thank stack overflow for its contribution
-//    scalar_t& operator () (int row, BC::size_t  col) {
+//    value_type& operator () (int row, BC::size_t  col) {
 //
 //    }
-//    const scalar_t& operator () (int row, BC::size_t  col) const {
+//    const value_type& operator () (int row, BC::size_t  col) const {
 //
 //    }
 //

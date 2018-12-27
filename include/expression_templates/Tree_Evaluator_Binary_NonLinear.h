@@ -81,7 +81,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
         __BChot__
         static auto function(const Binary_Expression<lv,rv,op>& branch) {
             using branch_t = Binary_Expression<lv,rv,op>;
-            auto tmp =  temporary<et::Array<branch_t::DIMS(), scalar_of<branch_t>, allocator_of<branch_t>>>(branch.inner_shape());
+            auto tmp =  temporary<et::Array<branch_t::DIMS, scalar_of<branch_t>, allocator_of<branch_t>>>(branch.inner_shape());
             auto inject_tmp = injector<std::decay_t<decltype(tmp)>, 1, 0>(tmp);
             return injection(branch, inject_tmp);
         }

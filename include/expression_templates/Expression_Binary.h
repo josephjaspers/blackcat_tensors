@@ -13,32 +13,30 @@
 
 namespace BC {
 namespace et     {
-template<class lv, class rv, class operation>
-struct Binary_Expression : public Expression_Base<Binary_Expression<lv, rv, operation>>, public operation {
+template<class Lv, class Rv, class Operation>
+struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Operation>>, public Operation {
 
-    using scalar_t = decltype(std::declval<operation>()(std::declval<typename lv::scalar_t&>(), std::declval<typename lv::scalar_t&>()));
-    using allocator_t = typename lv::allocator_t;
-    using system_tag  = typename lv::system_tag;
+    using value_type = decltype(std::declval<Operation>()(std::declval<typename Lv::value_type&>(), std::declval<typename Lv::value_type&>()));
+    using allocator_t = typename Lv::allocator_t;
+    using system_tag  = typename Lv::system_tag;
 
-    lv left;
-    rv right;
+    Lv left;
+    Rv right;
 
-    template<class L, class R> __BCinline__ const auto oper(const L& l, const R& r) const { return static_cast<const operation&>(*this)(l,r); }
-    template<class L, class R> __BCinline__       auto oper(const L& l, const R& r)        { return static_cast<      operation&>(*this)(l,r); }
+    template<class L, class R> __BCinline__ const auto oper(const L& l, const R& r) const { return static_cast<const Operation&>(*this)(l,r); }
+    template<class L, class R> __BCinline__       auto oper(const L& l, const R& r)        { return static_cast<      Operation&>(*this)(l,r); }
 
-    __BCinline__ static constexpr BC::size_t  DIMS() { return lv::DIMS() > rv::DIMS() ?  lv::DIMS() : rv::DIMS(); }
-    __BCinline__ static constexpr BC::size_t  ITERATOR() {
-        //if dimension mismatch choose the max dimension as iterator, else choose the max iterator
-        return lv::DIMS() != rv::DIMS() ? DIMS() : MTF::max(lv::ITERATOR(), rv::ITERATOR());
-    }
+    static constexpr int DIMS = Lv::DIMS > Rv::DIMS ?  Lv::DIMS : Rv::DIMS;
+    static constexpr int ITERATOR = Lv::DIMS != Rv::DIMS ? DIMS : MTF::max(Lv::ITERATOR, Rv::ITERATOR);
+
 
     template<class... args> __BChot__
-    Binary_Expression(lv l, rv r, const args&... args_) :  operation(args_...), left(l), right(r) {}
+    Binary_Expression(Lv l, Rv r, const args&... args_) :  Operation(args_...), left(l), right(r) {}
 
     __BCinline__  auto  operator [](int index) const { return oper(left[index], right[index]); }
     template<class... integers> __BCinline__  auto  operator ()(integers... ints) const { return oper(left(ints...), right(ints...)); }
 
-    __BCinline__ const auto& shape() const { return dominant_type<lv, rv>::shape(left, right); }
+    __BCinline__ const auto& shape() const { return dominant_type<Lv, Rv>::shape(left, right); }
     __BCinline__ BC::size_t  size() const { return shape().size(); }
     __BCinline__ BC::size_t  rows() const { return shape().rows(); }
     __BCinline__ BC::size_t  cols() const { return shape().cols(); }
@@ -48,9 +46,9 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<lv, rv, oper
     __BCinline__ const auto block_shape() const { return shape().block_shape(); }
 };
 
-template<class op, class lv, class rv>
-auto make_bin_expr(lv left, rv right) {
-	return Binary_Expression<lv, rv, op>(left, right);
+template<class op, class Lv, class Rv>
+auto make_bin_expr(Lv left, Rv right) {
+	return Binary_Expression<Lv, Rv, op>(left, right);
 }
 
 }
@@ -59,25 +57,4 @@ auto make_bin_expr(lv left, rv right) {
 
 #endif /* EXPRESSION_BINARY_POINTWISE_SAME_H_ */
 
-//
-//private:
-//    template<class l, class r>
-//    auto make_binexpr(l l_, r r_, const operation& op) {
-//        return Binary_Expression<l, r, operation>(l_, r_, op);
-//    }
-//
-//    const operation& as_op() {
-//        return static_cast<const operation&>(*this);
-//    }
-//public:
-//
-//    __BCinline__ const auto _slice(int i) const {
-//        return make_binexpr(left._slice(i), right._slice(i), this->as_op());
-//    }
-//    __BCinline__ const auto _scalar(int i) const {
-//        return make_binexpr(left._scalar(i), right._scalar(i), this->as_op());
-//    }
-//    __BCinline__ const auto _slice_range(int from, BC::size_t  to) {
-//        return make_binexpr(left._slice_range(from, to), right._slice_range(from, to),  this->as_op());
-//    }
 

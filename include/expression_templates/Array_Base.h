@@ -16,25 +16,25 @@
 namespace BC {
 namespace et     {
 
-template<class derived, BC::size_t  DIMENSION>
-struct Array_Base : BC_internal_interface<derived>, BC_Array {
-
-    __BCinline__ static constexpr BC::size_t  DIMS() { return DIMENSION; }
-    __BCinline__ static constexpr BC::size_t  ITERATOR() { return 0; }
-
-    using self = derived;
-
-private:
-
-    __BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }
-    __BCinline__       derived& as_derived()       { return static_cast<      derived&>(*this); }
-
-public:
+template<class Derived, BC::dim_t Dimension>
+struct Array_Base : BC_internal_interface<Derived>, BC_Array {
 
     static constexpr bool copy_constructible = false;
     static constexpr bool move_constructible = false;
     static constexpr bool copy_assignable    = true;
     static constexpr bool move_assignable    = false;
+
+    static constexpr int DIMS 		= Dimension;
+    static constexpr int ITERATOR   = 0;
+
+    using self = Derived;
+
+private:
+
+    __BCinline__ const Derived& as_derived() const { return static_cast<const Derived&>(*this); }
+    __BCinline__       Derived& as_derived()       { return static_cast<      Derived&>(*this); }
+
+public:
 
     __BCinline__ operator const auto*() const { return as_derived().memptr(); }
     __BCinline__ operator       auto*()       { return as_derived().memptr(); }
@@ -60,13 +60,13 @@ public:
 
     template<int length>
     __BCinline__ auto& operator ()(const BC::array<length, int>& index) {
-        static_assert(length >= DIMS(), "POINT MUST HAVE AT LEAST THE SAME NUMBER OF INDICIES AS THE TENSOR");
+        static_assert(length >= DIMS, "POINT MUST HAVE AT LEAST THE SAME NUMBER OF INDICIES AS THE TENSOR");
         return as_derived()[this->dims_to_index(index)];
     }
 
     template<int length>
     __BCinline__ const auto& operator ()(const BC::array<length, int>& index) const {
-        static_assert(length >= DIMS(), "POINT MUST HAVE AT LEAST THE SAME NUMBER OF INDICIES AS THE TENSOR");
+        static_assert(length >= DIMS, "POINT MUST HAVE AT LEAST THE SAME NUMBER OF INDICIES AS THE TENSOR");
         return as_derived()[this->dims_to_index(index)];
     }
 
@@ -76,22 +76,22 @@ public:
 
     __BCinline__
     auto slice_ptr(int i) const {
-        if (DIMS() == 0)
+        if (DIMS == 0)
             return &as_derived()[0];
-        else if (DIMS() == 1)
+        else if (DIMS == 1)
             return &as_derived()[i];
         else
-            return &as_derived()[as_derived().leading_dimension(DIMENSION - 2) * i];
+            return &as_derived()[as_derived().leading_dimension(Dimension - 2) * i];
     }
 
     __BCinline__
     auto slice_ptr_index(int i) const {
-        if (DIMS() == 0)
+        if (DIMS == 0)
             return 0;
-        else if (DIMS() == 1)
+        else if (DIMS == 1)
             return i;
         else
-            return as_derived().leading_dimension(DIMENSION - 2) * i;
+            return as_derived().leading_dimension(Dimension - 2) * i;
     }
 
     template<class... integers> __BCinline__
@@ -102,7 +102,7 @@ public:
     template<int D> __BCinline__
     BC::size_t  dims_to_index(const BC::array<D, int>& var) const {
         BC::size_t  index = var[0];
-        for(int i = 1; i < DIMS(); ++i) {
+        for(int i = 1; i < DIMS; ++i) {
             index += this->as_derived().leading_dimension(i - 1) * var[i];
         }
         return index;
@@ -110,7 +110,7 @@ public:
 };
 //------------------------------------------------type traits--------------------------------------------------------------//
 
-template<class T> static constexpr bool is_array() { return std::is_base_of<et::Array_Base<T, T::DIMS()>, T>::value; };
+template<class T> static constexpr bool is_array() { return std::is_base_of<et::Array_Base<T, T::DIMS>, T>::value; };
 template<class T> static constexpr bool is_expr()  { return !is_array<T>(); };
 
 }

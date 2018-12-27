@@ -23,14 +23,14 @@ struct Lazy_Evaluator {
     template< class expression>
     static std::enable_if_t<!INJECTION<expression>()>
     evaluate(const expression& expr) {
-        static constexpr BC::size_t  iterator_dimension = expression::ITERATOR();
+        static constexpr BC::size_t  iterator_dimension = expression::ITERATOR;
         impl::template nd_evaluator<iterator_dimension>(expr);
     }
     //------------------------------------------------Purely lazy alias evaluation----------------------------------//
     template< class expression>
     static std::enable_if_t<!INJECTION<expression>()>
     evaluate_aliased(const expression& expr) {
-        static constexpr BC::size_t  iterator_dimension = expression::ITERATOR();
+        static constexpr BC::size_t  iterator_dimension = expression::ITERATOR;
         impl:: nd_evaluator<iterator_dimension>(expr);
     }
     //------------------------------------------------Greedy evaluation (BLAS function call detected)----------------------------------//
@@ -40,7 +40,7 @@ struct Lazy_Evaluator {
         auto greedy_evaluated_expr = et::tree::Greedy_Evaluator::evaluate(expr);
 
         if (!decay_same<decltype(greedy_evaluated_expr.right), decltype(expr.left)>) {
-            static constexpr BC::size_t  iterator_dimension = expression::ITERATOR();
+            static constexpr BC::size_t  iterator_dimension = expression::ITERATOR;
             impl::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
         }
         //deallocate any temporaries made by the tree
@@ -50,7 +50,7 @@ struct Lazy_Evaluator {
     template< class expression>
     static std::enable_if_t<INJECTION<expression>()>
     evaluate_aliased(const expression& expr) {
-        static constexpr BC::size_t  iterator_dimension = expression::ITERATOR();    //the iterator for the evaluation of post inject_t
+        static constexpr BC::size_t  iterator_dimension = expression::ITERATOR;    //the iterator for the evaluation of post inject_t
 
         auto greedy_evaluated_expr = et::tree::Greedy_Evaluator::evaluate_aliased(expr);        //evaluate the internal tensor_type
         if (!decay_same<decltype(greedy_evaluated_expr.right), decltype(expr.left)>) {
@@ -63,7 +63,7 @@ struct Lazy_Evaluator {
 
 template<class allocator>
 struct CacheEvaluator {
-    template<class branch> using sub_t     = BC::et::Array<branch::DIMS(), BC::et::scalar_of<branch>, allocator>;
+    template<class branch> using sub_t     = BC::et::Array<branch::DIMS, BC::et::scalar_of<branch>, allocator>;
     template<class branch> using eval_t = BC::et::Binary_Expression<sub_t<branch>, branch, BC::et::oper::assign>;
 
     template<class branch>__BChot__ //The branch is an array, no evaluation required

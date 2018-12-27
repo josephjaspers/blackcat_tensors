@@ -13,13 +13,13 @@
 namespace BC {
 namespace tests {
 
-template<class scalar_t, template<class> class allocator>
+template<class value_type, template<class> class allocator>
 int test_accessors(int sz=128) {
 
 	BC_TEST_BODY_HEAD
 
-	using mat = BC::Matrix<scalar_t, allocator<scalar_t>>;
-	using vec = BC::Vector<scalar_t, allocator<scalar_t>>;
+	using mat = BC::Matrix<value_type, allocator<value_type>>;
+	using vec = BC::Vector<value_type, allocator<value_type>>;
 	using bmat = BC::Matrix<bool, allocator<bool>>;
 
 

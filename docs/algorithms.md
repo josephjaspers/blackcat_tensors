@@ -22,7 +22,7 @@ void logistic_function(BC::Matrix<float, alloc>& mat) {
 
 	struct logistic_functor {
 		__host__ __device__
-		void operator() (scalar_t& scalar) {
+		void operator() (value_type& scalar) {
 			scalar =  1 / (1 + exp(-scalar));
 		}		
 

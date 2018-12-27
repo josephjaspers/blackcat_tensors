@@ -13,11 +13,11 @@
 namespace BC {
 namespace tests {
 
-template<class scalar_t, template<class> class allocator=BC::Basic_Allocator>
+template<class value_type, template<class> class allocator=BC::Basic_Allocator>
 int test_operations(int sz=128) {
 
-	using alloc_t = allocator<scalar_t>;
-	using mat =  BC::Matrix<scalar_t, alloc_t>;
+	using alloc_t = allocator<value_type>;
+	using mat =  BC::Matrix<value_type, alloc_t>;
 	using bmat = BC::Matrix<bool, allocator<bool>>;
 
 	int errors = 0;
@@ -73,13 +73,13 @@ int test_operations(int sz=128) {
 
 	return errors;
 }
-template<class scalar_t, template<class> class allocator=BC::Basic_Allocator>
+template<class value_type, template<class> class allocator=BC::Basic_Allocator>
 int test_matrix_muls(int sz=128) {
 
-	using alloc_t = allocator<scalar_t>;
+	using alloc_t = allocator<value_type>;
 
-	using mat = BC::Matrix<scalar_t, alloc_t>;
-	using scal = BC::Scalar<scalar_t, alloc_t>;
+	using mat = BC::Matrix<value_type, alloc_t>;
+	using scal = BC::Scalar<value_type, alloc_t>;
 	using bmat = BC::Matrix<bool, allocator<bool>>;
 
 	int errors = 0;
@@ -103,6 +103,7 @@ int test_matrix_muls(int sz=128) {
 		mat atrans = a.t();
 		c = atrans.t() * b;
 		d = a * b;
+
 		validation =  c.approx_equal(d);
 		return BC::all(validation);
 	)

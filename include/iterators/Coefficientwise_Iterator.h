@@ -25,7 +25,7 @@ struct Coefficientwise_Iterator {
     	= std::is_reference<decltype(std::declval<tensor_t>().internal()[0])>::value;
 
     using iterator_category = std::random_access_iterator_tag;
-    using value_type = typename tensor_t::scalar_t;
+    using value_type = typename tensor_t::value_type;
     using difference_type = int;
     using pointer =  value_type*;
     using reference = value_type&;

@@ -18,13 +18,13 @@ namespace BC {
 #define BLACKCAT_MATH_DEF(func)                                     \
 namespace functor {												    \
 	struct func {                                                   \
-		template<class scalar_t> __BCinline__                       \
-		scalar_t operator () (scalar_t s) const { 					\
+		template<class value_type> __BCinline__                       \
+		value_type operator () (value_type s) const { 					\
 			return std::func(s); 									\
 	}   															\
 																	\
-	  template<class scalar_t> __BCinline__                         \
-	  static scalar_t impl(scalar_t s) {  return std::func(s); }    \
+	  template<class value_type> __BCinline__                         \
+	  static value_type impl(value_type s) {  return std::func(s); }    \
 	};															    \
 }																	\
                                                                     \
@@ -67,12 +67,12 @@ namespace module {										 \
 														 \
 	struct funcName {									 \
 														 \
-	  template<class scalar_t> __BCinline__    			 \
-	  scalar_t operator () (scalar_t x) const { 	     \
+	  template<class value_type> __BCinline__    			 \
+	  value_type operator () (value_type x) const { 	     \
 		return func_math; 								 \
 	  } 											     \
-	  template<class scalar_t> __BCinline__    			 \
-	  static scalar_t impl(scalar_t x) { 				 \
+	  template<class value_type> __BCinline__    			 \
+	  static value_type impl(value_type x) { 				 \
 		return func_math; 								 \
 	  }													 \
 	};													 \
@@ -108,8 +108,8 @@ struct norm {
 
 template<class internal_t, class min_, class max_>
 static auto normalize(const Tensor_Base<internal_t>& tensor, min_ min, max_ max) {
-    using scalar_t = typename internal_t::scalar_t;
-    return tensor.un_expr(norm<scalar_t>(scalar_t(min), scalar_t(max)));
+    using value_type = typename internal_t::value_type;
+    return tensor.un_expr(norm<value_type>(value_type(min), value_type(max)));
 }
 
 

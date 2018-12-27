@@ -27,7 +27,7 @@ public:
      BC::size_t  rows() const { return is()[0]; }
      BC::size_t  cols() const { return is()[1]; }
      BC::size_t  dimension(int i) const { return is()[i]; }
-     BC::size_t  outer_dimension() const { return is()[derived::DIMS() - 2]; }
+     BC::size_t  outer_dimension() const { return is()[derived::DIMS - 2]; }
 };
 
 template<class derived>
@@ -40,7 +40,7 @@ class Block_Shape {
         return as_derived().block_shape();
     }
 public:
-     BC::size_t  size() const { return bs()[derived::DIMS() - 1]; }
+     BC::size_t  size() const { return bs()[derived::DIMS - 1]; }
      BC::size_t  block_dimension(int i) const { return bs()[i]; }
 };
 
@@ -55,7 +55,7 @@ class Outer_Shape {
     }
 public:
      BC::size_t  leading_dimension(int i) const {
-         if (derived::DIMS() == 1)
+         if (derived::DIMS == 1)
              if (i == 1)
                  return 1;
          return os()[i];
@@ -77,8 +77,7 @@ class Function_Shape
 		  public Block_Shape<Function_Shape<dimensions, lamba_inner_shape, lambda_block_shape>>
   {
 
-	__BCinline__
-	static constexpr BC::size_t  DIMS() { return dimensions; }
+	static constexpr int DIMS = dimensions;
 
 	__BCinline__
 	auto inner_shape() {

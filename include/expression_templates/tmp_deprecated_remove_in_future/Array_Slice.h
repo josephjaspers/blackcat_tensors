@@ -18,23 +18,23 @@ namespace et     {
 
 template<class PARENT>
 struct Array_Slice
-        : Array_Base<Array_Slice<PARENT>, PARENT::DIMS() - 1>, Shape<PARENT::DIMS() - 1> {
+        : Array_Base<Array_Slice<PARENT>, PARENT::DIMS - 1>, Shape<PARENT::DIMS - 1> {
 
-    using scalar_t = typename PARENT::scalar_t;
+    using value_type = typename PARENT::value_type;
     using allocator_t = typename PARENT::allocator_t;
     using system_tag = typename PARENT::system_tag;
 
-    __BCinline__ static constexpr BC::size_t  ITERATOR() { return MTF::max(PARENT::ITERATOR() - 1, 0); }
-    __BCinline__ static constexpr BC::size_t  DIMS() { return PARENT::DIMS() - 1; }
+    __BCinline__ static constexpr BC::size_t  ITERATOR { return MTF::max(PARENT::ITERATOR - 1, 0); }
+    __BCinline__ static constexpr BC::size_t  DIMS { return PARENT::DIMS - 1; }
 
-    scalar_t* array_slice;
+    value_type* array_slice;
 
     __BCinline__ Array_Slice(PARENT parent_, BC::size_t  index)
-    : Shape<PARENT::DIMS() - 1> (parent_.as_shape()),
-      array_slice(const_cast<scalar_t*>(parent_.slice_ptr(index))) {}
+    : Shape<PARENT::DIMS - 1> (parent_.as_shape()),
+      array_slice(const_cast<value_type*>(parent_.slice_ptr(index))) {}
 
-    __BCinline__ const scalar_t* memptr() const { return array_slice; }
-    __BCinline__       scalar_t* memptr()       { return array_slice; }
+    __BCinline__ const value_type* memptr() const { return array_slice; }
+    __BCinline__       value_type* memptr()       { return array_slice; }
 
     };
 

@@ -15,13 +15,14 @@ namespace BC {
 template<class> class Evaluator;
 
 namespace et     {
-template<int dimension, class T, class allocator>
-struct Array : Array_Base<Array<dimension, T, allocator>, dimension>, public Shape<dimension>, private allocator {
+template<int Dimension, class Scalar, class Allocator>
+struct Array : Array_Base<Array<Dimension, Scalar, Allocator>, Dimension>, public Shape<Dimension>, private Allocator {
 
-	static_assert(std::is_trivially_copyable<allocator>::value, "BC_TENSOR_ALLOCATOR MUST BE TRIVIALLY COPYABLE");
+	static_assert(std::is_trivially_copyable<Allocator>::value,
+			"BC_TENSOR_ALLOCATOR MUST BE TRIVIALLY COPYABLE");
 
-    using scalar_t = T;
-    using allocator_t = allocator;
+    using value_type = Scalar;
+    using allocator_t = Allocator;
     using system_tag = typename allocator_t::system_tag;
 
     static constexpr bool copy_constructible = true;
@@ -29,30 +30,31 @@ struct Array : Array_Base<Array<dimension, T, allocator>, dimension>, public Sha
     static constexpr bool copy_assignable    = true;
     static constexpr bool move_assignable    = true;
 
-    __BCinline__ static constexpr BC::size_t  DIMS() { return dimension; }
+    static constexpr int  DIMS = Dimension;
+    static constexpr int ITERATOR = 1;
 
-    scalar_t* array = nullptr;
+    value_type* array = nullptr;
     Array() = default;
 
-    Array(Shape<DIMS()> shape_, scalar_t* array_) : array(array_), Shape<DIMS()>(shape_) {}
+    Array(Shape<DIMS> shape_, value_type* array_) : array(array_), Shape<DIMS>(shape_) {}
 
     template<class U,typename = std::enable_if_t<not std::is_base_of<BC_internal_interface<U>, U>::value>>
-    Array(U param) : Shape<DIMS()>(param), array( allocator_t::allocate(this->size())) {}
+    Array(U param) : Shape<DIMS>(param), array( allocator_t::allocate(this->size())) {}
 
     template<class... integers>//CAUSES FAILURE WITH NVCC 9.2, typename = std::enable_if_t<MTF::is_integer_sequence<integers...>>>
-    Array(integers... ints) : Shape<DIMS()>(ints...), array(allocator_t::allocate(this->size())) {
+    Array(integers... ints) : Shape<DIMS>(ints...), array(allocator_t::allocate(this->size())) {
         static_assert(MTF::seq_of<int, integers...>,"PARAMETER LIST MUST BE INTEGER_SEQUNCE");
     }
 
     template<class deriv_expr, typename = std::enable_if_t<std::is_base_of<BC_internal_interface<deriv_expr>, deriv_expr>::value>>
-    Array(const deriv_expr& expr) : Shape<DIMS()>(static_cast<const deriv_expr&>(expr).inner_shape()),
+    Array(const deriv_expr& expr) : Shape<DIMS>(static_cast<const deriv_expr&>(expr).inner_shape()),
     array(allocator_t::allocate(this->size())){
         evaluate_to(*this, expr);
     }
 
 protected:
-    template<class U> Array(U param, scalar_t* array_) : array(array_), Shape<DIMS()>(param) {}
-    Array(scalar_t* array_) : array(array_) {}
+    template<class U> Array(U param, value_type* array_) : array(array_), Shape<DIMS>(param) {}
+    Array(value_type* array_) : array(array_) {}
 
 
     void copy_init(const Array& array_copy) {
@@ -61,8 +63,8 @@ protected:
         evaluate_to(*this, array_copy);
     }
 public:
-    __BCinline__ const scalar_t* memptr() const { return array; }
-    __BCinline__       scalar_t* memptr()       { return array; }
+    __BCinline__ const value_type* memptr() const { return array; }
+    __BCinline__       value_type* memptr()       { return array; }
 
     void swap_array(Array& param) {
         std::swap(this->array, param.array);
@@ -79,15 +81,16 @@ public:
 template<class T, class allocator>
 struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Shape<0>, private allocator {
 
-    using scalar_t = T;
+    using value_type = T;
     using allocator_t = allocator;
     using system_tag = typename allocator_t::system_tag;
 
-    __BCinline__ static constexpr BC::size_t  DIMS() { return 0; }
+    static constexpr int DIMS = 0;
+    static constexpr int ITERATOR = 0;
 
-    scalar_t* array = nullptr;
+    value_type* array = nullptr;
     Array() : array(allocator_t::allocate(this->size())) {}
-    Array(Shape<DIMS()> shape_, scalar_t* array_) : array(array_), Shape<0>(shape_) {}
+    Array(Shape<DIMS> shape_, value_type* array_) : array(array_), Shape<0>(shape_) {}
 
     template<class U>
     Array(U param) {
@@ -97,7 +100,7 @@ struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Sh
     }
 
     template<class U>
-    Array(U param, scalar_t* array_) : array(array_), Shape<DIMS()>(param) {}
+    Array(U param, value_type* array_) : array(array_), Shape<DIMS>(param) {}
 
     __BCinline__ const auto& operator [] (int index) const { return array[0]; }
     __BCinline__        auto& operator [] (int index)        { return array[0]; }
@@ -109,8 +112,8 @@ struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Sh
         return array[0];
     }
 
-    __BCinline__ const scalar_t* memptr() const { return array; }
-    __BCinline__       scalar_t* memptr()       { return array; }
+    __BCinline__ const value_type* memptr() const { return array; }
+    __BCinline__       value_type* memptr()       { return array; }
 
     void copy_init(const Array& array_copy) {
         allocator_t::allocate(array, this->size());

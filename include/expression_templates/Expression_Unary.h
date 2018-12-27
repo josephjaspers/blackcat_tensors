@@ -13,22 +13,22 @@
 
 namespace BC {
 namespace et     {
-template<class value, class operation>
-struct Unary_Expression : public Expression_Base<Unary_Expression<value, operation>>, public operation {
+template<class Value, class operation>
+struct Unary_Expression : public Expression_Base<Unary_Expression<Value, operation>>, public operation {
 
-    using scalar_t  = decltype(std::declval<operation>()(std::declval<typename value::scalar_t>()));
-    using system_tag  = typename value::system_tag;
-    using allocator_t = allocator::implementation<system_tag, scalar_t>;
+    using value_type  = decltype(std::declval<operation>()(std::declval<typename Value::value_type>()));
+    using system_tag  = typename Value::system_tag;
+    using allocator_t = allocator::implementation<system_tag, value_type>;
     using utility_t	  = utility::implementation<system_tag>;
 
-    __BCinline__ static constexpr BC::size_t  DIMS() { return value::DIMS(); }
-    __BCinline__ static constexpr BC::size_t  ITERATOR() { return value::ITERATOR(); }
+    static constexpr int DIMS  = Value::DIMS;
+    static constexpr int ITERATOR = Value::ITERATOR;
 
-    value array;
+    Value array;
 
 
     template<class... args> __BCinline__
-    Unary_Expression(value v, const args&... args_) : operation(args_...) , array(v) {}
+    Unary_Expression(Value v, const args&... args_) : operation(args_...) , array(v) {}
 
     __BCinline__ auto operator [](int index) const {
         return static_cast<const operation&>(*this)(array[index]);
@@ -63,11 +63,11 @@ auto make_un_expr(expr e) {
 //    return Unary_Expression<slice_t, operation>(array._slice(i), static_cast<const operation&>(*this));
 //}
 //__BCinline__ const auto _scalar(int i) const {
-//    using scalar_t = decltype(array._scalar(i));
-//    return Unary_Expression<scalar_t, operation>(array._scalar(i),  static_cast<const operation&>(*this));
+//    using value_type = decltype(array._scalar(i));
+//    return Unary_Expression<value_type, operation>(array._scalar(i),  static_cast<const operation&>(*this));
 //}
 //__BCinline__ const auto _slice_range(int from, BC::size_t  to) const {
-//    using scalar_t = decltype(array._slice_range(from, to));
-//    return Unary_Expression<scalar_t, operation>(array._slice_range(from,to),  static_cast<const operation&>(*this));
+//    using value_type = decltype(array._slice_range(from, to));
+//    return Unary_Expression<value_type, operation>(array._slice_range(from,to),  static_cast<const operation&>(*this));
 //}
 //

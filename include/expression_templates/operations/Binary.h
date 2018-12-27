@@ -129,7 +129,7 @@ class matrix_oper {};
     };
     struct approx_equal {
 
-    	static constexpr float epsilon = .0001;
+    	static constexpr float epsilon = .01;
 
         template<class lv, class rv> __BCinline__  auto operator ()(lv l, rv r) const {
             return abs(l - r) < epsilon;

@@ -13,14 +13,14 @@
 namespace BC {
 namespace tests {
 
-template<class scalar_t, template<class> class allocator>
+template<class value_type, template<class> class allocator>
 int test_constructors(int sz=128) {
 
-	using alloc_t = allocator<scalar_t>;
-	using scal = BC::Scalar<scalar_t, alloc_t>;
-	using vec = BC::Vector<scalar_t, alloc_t>;
-	using mat = BC::Matrix<scalar_t, alloc_t>;
-	using cube = BC::Cube<scalar_t, alloc_t>;
+	using alloc_t = allocator<value_type>;
+	using scal = BC::Scalar<value_type, alloc_t>;
+	using vec = BC::Vector<value_type, alloc_t>;
+	using mat = BC::Matrix<value_type, alloc_t>;
+	using cube = BC::Cube<value_type, alloc_t>;
 
 	int errors = 0;
 	//Need to cover

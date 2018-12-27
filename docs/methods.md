@@ -1,6 +1,6 @@
 # Methods
 
-`scalar_t` is used to denote the scalar-type of the tensor.  
+`value_type` is used to denote the scalar-type of the tensor.  
 `allocator_t` is used to denote the allocator-template argument.  
 `expression_t` is used to represent any non-evaluated mathematical expression.   
 Note: Many of the return types have been abreviated. The underlying implementation of these is not relevant to the user. 
@@ -66,8 +66,8 @@ Note: Many of the return types have been abreviated. The underlying implementati
 #### Functions 
 | static | return type | method name | parameters | const/non-const | documentation | alias-methods |
 | --- | --- | --- | --- | --- | --- | --- |
-| --- | scalar_t | min | --- | both | --- | --- |
-| --- | scalar_t | max | --- | both | --- | --- |
+| --- | value_type | min | --- | both | --- | --- |
+| --- | value_type | max | --- | both | --- | --- |
 | --- | void | rand | --- | --- | non-const | randomize |
 | --- | functor | for_each | functor | both | Convenient-definition of for_each. Identical to BC::for_each(tensor.begin(), tensor.end(), functor) | --- |
 | --- | void | sort | --- | non-const | Implemenation is dependent upon gpu vs cpu allocation and std and thrust's implementation. | --- |

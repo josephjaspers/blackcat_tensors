@@ -16,27 +16,27 @@
 namespace BC {
 namespace et     {
 //identical to Array_Scalar, though the scalar is allocated on the stack opposed to heap
-template<class scalar_t_, class allocator_t_>
-struct Rand_Constant : Shape<0>, Array_Base<Rand_Constant<scalar_t_, allocator_t_>, 0>{
+template<class value_type_, class allocator_t_>
+struct Rand_Constant : Shape<0>, Array_Base<Rand_Constant<value_type_, allocator_t_>, 0>{
 
-    using scalar_t = scalar_t_;
+    using value_type = value_type_;
     using allocator_t = allocator_t_;
     using mathlib_t = typename allocator_t::mathlib_t;
 
-    __BCinline__ static constexpr BC::size_t  ITERATOR() { return 0; }
-    __BCinline__ static constexpr BC::size_t  DIMS()      { return 0; }
+    __BCinline__ static constexpr BC::size_t  ITERATOR { return 0; }
+    __BCinline__ static constexpr BC::size_t  DIMS      { return 0; }
 
-    operator scalar_t () { return value(); }
+    operator value_type () { return value(); }
 
-    scalar_t lower_bound, upper_bound;
+    value_type lower_bound, upper_bound;
 
-    scalar_t value() const {
+    value_type value() const {
         return allocator_t::rand(lower_bound, upper_bound);
     }
 
 
 
-    Rand_Constant(scalar_t lower_bound_, scalar_t upper_bound_)
+    Rand_Constant(value_type lower_bound_, value_type upper_bound_)
     : lower_bound(lower_bound_), upper_bound(upper_bound_) {}
 
 
@@ -44,7 +44,7 @@ struct Rand_Constant : Shape<0>, Array_Base<Rand_Constant<scalar_t_, allocator_t
     auto operator()  (const integers&...) const{ return value(); }
     auto operator [] (int i ) { return value(); }
 
-    const scalar_t* memptr() const { return nullptr; }
+    const value_type* memptr() const { return nullptr; }
 };
 }
 }

@@ -15,23 +15,23 @@ namespace BC {
 namespace et {
 
 //identical to Array_Scalar, though the scalar is allocated on the stack opposed to heap
-template<class scalar_t_, class allocator_t_>
-struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<scalar_t_, allocator_t_>, 0>{
+template<class Scalar, class Allocator>
+struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, Allocator>, 0>{
 
-    using scalar_t = scalar_t_;
-    using allocator_t = allocator_t_;
-    using system_tag = typename allocator_t_::system_tag;
+    using value_type = Scalar;
+    using allocator_t = Allocator;
+    using system_tag = typename Allocator::system_tag;
 
-    __BCinline__ static constexpr BC::size_t  ITERATOR() { return 0; }
-    __BCinline__ static constexpr BC::size_t  DIMS()      { return 0; }
+    static constexpr int ITERATOR = 0;
+    static constexpr int DIMS     = 0;
 
-    scalar_t scalar;
+    value_type scalar;
 
-    __BCinline__ operator scalar_t () const {
+    __BCinline__ operator value_type () const {
         return scalar;
     }
 
-    __BCinline__ Scalar_Constant(scalar_t scalar_) : scalar(scalar_) {}
+    __BCinline__ Scalar_Constant(value_type scalar_) : scalar(scalar_) {}
 
 
     template<class... integers> __BCinline__ auto operator()  (const integers&...) const{ return scalar; }
@@ -40,14 +40,14 @@ struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<scalar_t_, allocat
     __BCinline__ auto operator [] (int i ) const { return scalar; }
     __BCinline__ auto operator [] (int i )  { return scalar; }
 
-    __BCinline__ const scalar_t* memptr() const { return &scalar; }
+    __BCinline__ const value_type* memptr() const { return &scalar; }
 
     void swap_array(Scalar_Constant&) {}
 };
 
-template<class allocator_t, class scalar_t>
-auto scalar_constant(scalar_t scalar) {
-    return Scalar_Constant<scalar_t, allocator_t>(scalar);
+template<class allocator_t, class value_type>
+auto scalar_constant(value_type scalar) {
+    return Scalar_Constant<value_type, allocator_t>(scalar);
 }
 }
 }

@@ -36,28 +36,28 @@ using Basic_Allocator = allocator::Host<T>;
 	using CustomAllocator = allocator::CustomAllocator<args...>;
 
 
-template<int dimension, class scalar_t, class allocator_t=alloc_t<scalar_t>>
-using Tensor = Tensor_Base<et::Array<dimension, scalar_t, allocator_t>>;
+template<int dimension, class value_type, class allocator_t=alloc_t<value_type>>
+using Tensor = Tensor_Base<et::Array<dimension, value_type, allocator_t>>;
 
 #define BC_TENSOR_ALIAS_CORE_DEF(index, name)\
-		template<class scalar_t, class allocator_t = alloc_t<scalar_t>>\
-		using name = Tensor<index, scalar_t, allocator_t>;
+		template<class value_type, class allocator_t = alloc_t<value_type>>\
+		using name = Tensor<index, value_type, allocator_t>;
 
 BC_TENSOR_ALIAS_CORE_DEF(0, Scalar)
 BC_TENSOR_ALIAS_CORE_DEF(1, Vector)
 BC_TENSOR_ALIAS_CORE_DEF(2, Matrix)
 BC_TENSOR_ALIAS_CORE_DEF(3, Cube)
 
-template<int dimension, class scalar_t, class allocator_t=alloc_t<scalar_t>>
-using Tensor_View = Tensor_Base<et::Array_View<dimension, scalar_t, allocator_t>>;
+template<int dimension, class value_type, class allocator_t=alloc_t<value_type>>
+using Tensor_View = Tensor_Base<et::Array_View<dimension, value_type, allocator_t>>;
 
-template<class scalar_t, class allocator_t = alloc_t<scalar_t>> using Scalar_View = Tensor_View<0, scalar_t, allocator_t>;
-template<class scalar_t, class allocator_t = alloc_t<scalar_t>> using Vector_View = Tensor_View<1, scalar_t, allocator_t>;
-template<class scalar_t, class allocator_t = alloc_t<scalar_t>> using Matrix_View = Tensor_View<2, scalar_t, allocator_t>;
-template<class scalar_t, class allocator_t = alloc_t<scalar_t>> using Cube_View   = Tensor_View<3, scalar_t, allocator_t>;
+template<class value_type, class allocator_t = alloc_t<value_type>> using Scalar_View = Tensor_View<0, value_type, allocator_t>;
+template<class value_type, class allocator_t = alloc_t<value_type>> using Vector_View = Tensor_View<1, value_type, allocator_t>;
+template<class value_type, class allocator_t = alloc_t<value_type>> using Matrix_View = Tensor_View<2, value_type, allocator_t>;
+template<class value_type, class allocator_t = alloc_t<value_type>> using Cube_View   = Tensor_View<3, value_type, allocator_t>;
 
 namespace expr {
-template<int x, class iterator_t, typename = std::enable_if_t<iterator_t::DIMS() == x>>
+template<int x, class iterator_t, typename = std::enable_if_t<iterator_t::DIMS == x>>
 using tensor = Tensor_Base<iterator_t>;
 
 template<class iterator_t> using scal = tensor<0, iterator_t>;

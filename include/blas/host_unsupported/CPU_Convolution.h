@@ -11,11 +11,11 @@
 //namespace BC {
 //struct CPU;
 //namespace et     {
-//template<int dimension, class scalar_t,class allocator> class Array;
+//template<int dimension, class value_type,class allocator> class Array;
 //}
 //
-//template<int dimension, class scalar_t>
-//using CPU_Array = BC::et::Array<dimension, scalar_t, CPU>;
+//template<int dimension, class value_type>
+//using CPU_Array = BC::et::Array<dimension, value_type, CPU>;
 //
 //
 //template<class core_lib>
@@ -23,8 +23,8 @@
 //
 //    //2d tensor for 2d conv
 //    template<class img_out, class img_in>
-//    static std::enable_if_t<img_in::DIMS() == 2> img2col(img_out out, img_in in, BC::size_t  padding = 0,  BC::size_t  stride = 1) {
-//        static_assert(img_out::DIMS() == 4 && img_in::DIMS() == 2, "img2col 2d requires a 4d and 2d tensors");
+//    static std::enable_if_t<img_in::DIMS == 2> img2col(img_out out, img_in in, BC::size_t  padding = 0,  BC::size_t  stride = 1) {
+//        static_assert(img_out::DIMS == 4 && img_in::DIMS == 2, "img2col 2d requires a 4d and 2d tensors");
 //
 //        if (padding == 0)
 //            for (int cp = 0; cp < out.dimension(3); ++cp)         //number of column positions
@@ -51,8 +51,8 @@
 //
 //    //3d tensor for 2d conv
 //    template<class img_out, class img_in>
-//    static std::enable_if_t<img_in::DIMS() == 3> img2col(img_out out, img_in in, BC::size_t  padding = 0,  BC::size_t  stride = 1) {
-//        static_assert(img_out::DIMS() == 5 && img_in::DIMS() == 2, "img2col 2d requires a 4d and 2d tensors");
+//    static std::enable_if_t<img_in::DIMS == 3> img2col(img_out out, img_in in, BC::size_t  padding = 0,  BC::size_t  stride = 1) {
+//        static_assert(img_out::DIMS == 5 && img_in::DIMS == 2, "img2col 2d requires a 4d and 2d tensors");
 //
 //        if (padding == 0)
 //            for (int cp = 0; cp < out.dimension(4); ++cp)         //number of column positions
@@ -80,8 +80,8 @@
 //
 //
 //
-//    template<class scalar_t>
-//    static void conv2(CPU_Array<2, scalar_t> out, CPU_Array<2, scalar_t> in, CPU_Array<2, scalar_t> filter, BC::size_t  padding = 0, BC::size_t  stride = 1) {
+//    template<class value_type>
+//    static void conv2(CPU_Array<2, value_type> out, CPU_Array<2, value_type> in, CPU_Array<2, value_type> filter, BC::size_t  padding = 0, BC::size_t  stride = 1) {
 //        BC::size_t  rpos = (in.rows() - filter.rows()) / stride + 1 + padding * 2;
 //        BC::size_t  cpos = (in.cols() - filter.cols()) / stride + 1 + padding * 2;
 //        BC::size_t  k_length = rpos * cpos;
@@ -100,18 +100,18 @@
 //            throw std::invalid_argument("incorrect parameter");
 //        }
 //
-//        CPU_Array<4, scalar_t> toeplitz(BC::Shape<4>(filter.rows(), filter.cols(), rpos, cpos));
+//        CPU_Array<4, value_type> toeplitz(BC::Shape<4>(filter.rows(), filter.cols(), rpos, cpos));
 //        img2col(toeplitz, in, padding, stride);
 //
-//        static constexpr scalar_t alpha_mod = 1;
-//        static constexpr scalar_t beta_mod = 0;
+//        static constexpr value_type alpha_mod = 1;
+//        static constexpr value_type beta_mod = 0;
 //
 //        core_lib::gemv(true, filter.size(), k_length, &alpha_mod, toeplitz, in.leading_dimension(1), filter, 1, &beta_mod, out, 1);
 //    }
 //
 //
-//    template<class scalar_t>
-//        static void conv2(CPU_Array<2, scalar_t> out, CPU_Array<3, scalar_t> in, CPU_Array<3, scalar_t> filter, BC::size_t  padding = 0, BC::size_t  stride = 1) {
+//    template<class value_type>
+//        static void conv2(CPU_Array<2, value_type> out, CPU_Array<3, value_type> in, CPU_Array<3, value_type> filter, BC::size_t  padding = 0, BC::size_t  stride = 1) {
 //            BC::size_t  rpos = (in.rows() - filter.rows()) / stride + 1 + padding * 2;
 //            BC::size_t  cpos = (in.cols() - filter.cols()) / stride + 1 + padding * 2;
 //            BC::size_t  k_length = rpos * cpos * filter.dimension(2);
@@ -130,11 +130,11 @@
 //                throw std::invalid_argument("incorrect parameter");
 //            }
 //
-//            CPU_Array<5, scalar_t> toeplitz(BC::Shape<4>(filter.rows(), filter.cols(), filter.dimension(2), rpos, cpos));
+//            CPU_Array<5, value_type> toeplitz(BC::Shape<4>(filter.rows(), filter.cols(), filter.dimension(2), rpos, cpos));
 //            img2col(toeplitz, in, padding, stride);
 //
-//            static constexpr scalar_t alpha_mod = 1;
-//            static constexpr scalar_t beta_mod = 0;
+//            static constexpr value_type alpha_mod = 1;
+//            static constexpr value_type beta_mod = 0;
 //
 //            core_lib::gemv(true, filter.size(), k_length, &alpha_mod, toeplitz, in.leading_dimension(1), filter, 1, &beta_mod, out, 1);
 //        }

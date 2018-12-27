@@ -14,36 +14,36 @@ namespace BC {
 namespace random {
 
 struct Host {
-	 template<typename T, typename scalar_t>
-	    static void randomize(T& tensor, scalar_t lower_bound, scalar_t upper_bound) {
+	 template<typename T, typename value_type>
+	    static void randomize(T& tensor, value_type lower_bound, value_type upper_bound) {
 	 __BC_omp_for__
 	        for (int i = 0; i < tensor.size(); ++i) {
-	            tensor[i] = ((scalar_t) (std::rand() / ((scalar_t) RAND_MAX + 1)) * (upper_bound - lower_bound)) + lower_bound;
+	            tensor[i] = ((value_type) (std::rand() / ((value_type) RAND_MAX + 1)) * (upper_bound - lower_bound)) + lower_bound;
 	        }
 	 __BC_omp_bar__
 	    }
 
-		template<class scalar_t>
+		template<class value_type>
 	    struct rand_handle {
 
-	    	scalar_t lower_bound;
-	    	scalar_t upper_bound;
+	    	value_type lower_bound;
+	    	value_type upper_bound;
 
-	    	rand_handle(scalar_t lb, scalar_t ub)
+	    	rand_handle(value_type lb, value_type ub)
 	    		: lower_bound(lb), upper_bound(ub) {}
 
-	        scalar_t operator () () const {
-	           return (scalar_t(std::rand() / ((scalar_t)RAND_MAX)) * (upper_bound - lower_bound)) + lower_bound;
+	        value_type operator () () const {
+	           return (value_type(std::rand() / ((value_type)RAND_MAX)) * (upper_bound - lower_bound)) + lower_bound;
 	        }
 
-	        scalar_t operator [](unsigned i) {
-	            return (scalar_t(std::rand() / ((scalar_t)RAND_MAX)) * (upper_bound - lower_bound)) + lower_bound;
+	        value_type operator [](unsigned i) {
+	            return (value_type(std::rand() / ((value_type)RAND_MAX)) * (upper_bound - lower_bound)) + lower_bound;
 	        }
 	    };
 
-		template<class scalar_t>
-		static auto make_rand_gen(scalar_t lower, scalar_t upper) {
-			return rand_handle<scalar_t>(lower, upper);
+		template<class value_type>
+		static auto make_rand_gen(value_type lower, value_type upper) {
+			return rand_handle<value_type>(lower, upper);
 		}
 };
 

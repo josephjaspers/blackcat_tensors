@@ -16,13 +16,13 @@ namespace BC {
 namespace et {
 
 
-template<int dimension, class scalar, class allocator>
+template<int Dimension, class Scalar, class Allocator>
 struct Array_View
-        : Array_Base<Array_View<dimension, scalar, allocator>, dimension>,
-          Shape<dimension> {
+        : Array_Base<Array_View<Dimension, Scalar, Allocator>, Dimension>,
+          Shape<Dimension> {
 
-    using scalar_t = scalar;
-    using allocator_t = allocator;
+    using value_type = Scalar;
+    using allocator_t = Allocator;
     using system_tag = typename allocator_t::system_tag;
 
     static constexpr bool copy_constructible = true;
@@ -30,7 +30,7 @@ struct Array_View
     static constexpr bool copy_assignable    = false;
     static constexpr bool move_assignable    = true;
 
-    const scalar_t* array = nullptr;
+    const value_type* array = nullptr;
 
     Array_View()                   = default;
     Array_View(const Array_View& ) = default;
@@ -45,16 +45,16 @@ struct Array_View
         this->array = view.array;
     }
 
-    template<class tensor_t, typename = std::enable_if_t<tensor_t::DIMS() == dimension>>
-    Array_View(const Array_Base<tensor_t, dimension>& tensor)
+    template<class tensor_t, typename = std::enable_if_t<tensor_t::DIMS == Dimension>>
+    Array_View(const Array_Base<tensor_t, Dimension>& tensor)
         :  array(tensor) {
 
         this->copy_shape(static_cast<const tensor_t&>(tensor));
     }
 
     template<class... integers>
-    Array_View(int x, integers... ints) :Shape<dimension>(x, ints...) {}
-    __BCinline__ const scalar_t* memptr() const  { return array; }
+    Array_View(int x, integers... ints) :Shape<Dimension>(x, ints...) {}
+    __BCinline__ const value_type* memptr() const  { return array; }
 
     void deallocate() {}
 };

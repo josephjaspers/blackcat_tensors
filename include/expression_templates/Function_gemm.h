@@ -16,14 +16,16 @@
 namespace BC {
 namespace et {
 
-template<class lv, class rv, class system_tag_>
-struct Binary_Expression<lv, rv, oper::gemm<system_tag_>>
-: Expression_Base<Binary_Expression<lv, rv,  oper::gemm<system_tag_>>>, BLAS_FUNCTION {
+template<class lv, class rv, class System_Tag>
+struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
+: Expression_Base<Binary_Expression<lv, rv,  oper::gemm<System_Tag>>>, BLAS_FUNCTION {
 
+    static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,\
+    		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
 
-    using scalar_t  = typename lv::scalar_t;
+    using value_type  = typename lv::value_type;
     using allocator_t = typename lv::allocator_t;
-    using system_tag = system_tag_;
+    using system_tag = System_Tag;
     using impl_l  = typename blas::implementation<system_tag>;
     using utility_l   = utility::implementation<system_tag>;
 
@@ -34,11 +36,8 @@ struct Binary_Expression<lv, rv, oper::gemm<system_tag_>>
     static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
     static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
 
-    static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,\
-    		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
-
-    __BCinline__ static constexpr BC::size_t  DIMS() { return rv::DIMS(); }
-    __BCinline__ static constexpr BC::size_t  ITERATOR() { return 0; }
+    static constexpr int DIMS 	   = rv::DIMS;
+    static constexpr int ITERATOR  = 1;
 
     lv left;
     rv right;
@@ -46,12 +45,12 @@ struct Binary_Expression<lv, rv, oper::gemm<system_tag_>>
      Binary_Expression(lv left, rv right) : left(left), right(right) {}
 
     __BCinline__ const auto inner_shape() const {
-    	return l_array<DIMS()>([&](int i) {
+    	return l_array<DIMS>([&](int i) {
     		return i == 0 ? left.rows() : i == 1 ? right.cols() : 1;
     	});
     }
     __BCinline__ const auto block_shape() const {
-    	return l_array<DIMS()>([&](int i) {
+    	return l_array<DIMS>([&](int i) {
     		return i == 0 ? left.rows() : i == 1 ? size() : 1;
     	});
     }
@@ -81,8 +80,8 @@ struct Binary_Expression<lv, rv, oper::gemm<system_tag_>>
         auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 
         //allocate the alpha and beta scalars,
-        auto alpha = utility_l::stack_allocate((scalar_t)alpha_mod);
-        auto beta = utility_l::stack_allocate((scalar_t)beta_mod);
+        auto alpha = utility_l::stack_allocate((value_type)alpha_mod);
+        auto beta = utility_l::stack_allocate((value_type)beta_mod);
 
         //compute the scalar values if need be
         if (lv_scalar)

@@ -20,7 +20,7 @@ struct Array_Shared
         : Array_Base<Array_Shared<dimension, scalar, allocator>, dimension>,
           Shape<dimension> {
 
-    using scalar_t = scalar;
+    using value_type = scalar;
     using allocator_t = allocator;
     using system_tag = typename allocator_t::system_tag;
 
@@ -29,13 +29,13 @@ struct Array_Shared
     static constexpr bool copy_assignable    = true;
     static constexpr bool move_assignable    = true;
 
-    scalar_t* array = nullptr;
+    value_type* array = nullptr;
 
     Array_Shared()                    = default;
     Array_Shared(const Array_Shared& ) = default;
     Array_Shared(       Array_Shared&&) = default;
 
-    auto& operator = (scalar_t* move_array) {
+    auto& operator = (value_type* move_array) {
         this->array = move_array;
         return *this;
     }
@@ -44,7 +44,7 @@ struct Array_Shared
         std::swap(array, tensor.array);
     }
 
-    template<class tensor_t, typename = std::enable_if_t<tensor_t::DIMS() == dimension>>
+    template<class tensor_t, typename = std::enable_if_t<tensor_t::DIMS == dimension>>
     Array_Shared(Array_Base<tensor_t, dimension>& tensor)
         :  Shape<dimension>(), array(tensor) {
 
@@ -59,8 +59,8 @@ struct Array_Shared
     template<class... integers>
     Array_Shared(int dim1, integers... dims) : Shape<dimension>(dim1, dims...) {}
 
-    __BCinline__  const scalar_t* memptr() const  { return array; }
-    __BCinline__          scalar_t* memptr()        { return array; }
+    __BCinline__  const value_type* memptr() const  { return array; }
+    __BCinline__          value_type* memptr()        { return array; }
 
     void deallocate() {}
 };

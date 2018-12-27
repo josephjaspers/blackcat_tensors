@@ -17,19 +17,19 @@ namespace et     {
  * Represents a single_scalar value from a tensor
  */
 
-template<class PARENT>
-struct Array_Scalar : Array_Base<Array_Scalar<PARENT>, 0>, Shape<0> {
+template<class Parent>
+struct Array_Scalar : Array_Base<Array_Scalar<Parent>, 0>, Shape<0> {
 
-    using scalar_t = typename PARENT::scalar_t;
-    using allocator_t = typename PARENT::allocator_t;
-    using system_tag = typename PARENT::system_tag;
+    using value_type = typename Parent::value_type;
+    using allocator_t = typename Parent::allocator_t;
+    using system_tag = typename Parent::system_tag;
 
-    __BCinline__ static constexpr BC::size_t  ITERATOR() { return 0; }
-    __BCinline__ static constexpr BC::size_t  DIMS()      { return 0; }
+    static constexpr int ITERATOR = 0;
+    static constexpr int DIMS = 0;
 
-    scalar_t* array;
+    value_type* array;
 
-    __BCinline__ Array_Scalar(PARENT parent_, BC::size_t  index) : array(const_cast<scalar_t*>(&(parent_.memptr()[index]))) {}
+    __BCinline__ Array_Scalar(Parent parent_, BC::size_t  index) : array(const_cast<value_type*>(&(parent_.memptr()[index]))) {}
 
     __BCinline__ const auto& operator [] (int index) const { return array[0]; }
     __BCinline__        auto& operator [] (int index)        { return array[0]; }
@@ -43,8 +43,8 @@ struct Array_Scalar : Array_Base<Array_Scalar<PARENT>, 0>, Shape<0> {
         return array[0];
     }
 
-    __BCinline__ const scalar_t* memptr() const { return array; }
-    __BCinline__       scalar_t* memptr()          { return array; }
+    __BCinline__ const value_type* memptr() const { return array; }
+    __BCinline__       value_type* memptr()          { return array; }
 };
 
 template<class internal_t>

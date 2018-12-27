@@ -14,9 +14,9 @@ namespace i2c {
 
 
 
-template<class scalar_t>
-void img2col(int dims, scalat_t* A, scalar_t alpha,int* dimsA, int* lda,
-        scalat_t* B, int* dimsB, int* ldb, scalar_t* C) {
+template<class value_type>
+void img2col(int dims, scalat_t* A, value_type alpha,int* dimsA, int* lda,
+        scalat_t* B, int* dimsB, int* ldb, value_type* C) {
     img2col_packed(dims, A, alpha, dim_
 }
 

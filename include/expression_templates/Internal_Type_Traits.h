@@ -16,7 +16,7 @@ template<class,class,class> class Binary_Expression;
 template<class,class>       class Unary_Expression;
 
 template<class T> using allocator_of = std::decay_t<typename T::allocator_t>;
-template<class T> using scalar_of    = std::decay_t<typename T::scalar_t>;
+template<class T> using scalar_of    = std::decay_t<typename T::value_type>;
 
 template<class T> constexpr bool BC_array_move_constructible() {
     return T::move_constructible;

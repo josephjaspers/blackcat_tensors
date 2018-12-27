@@ -41,19 +41,19 @@ class device_tag;
 namespace allocator {
 
 #ifdef __CUDACC__
-	template<class system_tag, class scalar_t>
+	template<class system_tag, class value_type>
 	using implementation =
 			std::conditional_t<
 				std::is_same<host_tag, system_tag>::value,
-					Host<scalar_t>,
-					Device<scalar_t>>;
+					Host<value_type>,
+					Device<value_type>>;
 
 #else
 	template<
-		class system_tag, class scalar_t,
+		class system_tag, class value_type,
 		class=std::enable_if<std::is_same<system_tag, host_tag>::value>
 	>
-	using implementation = Host<scalar_t>;
+	using implementation = Host<value_type>;
 #endif
 
 

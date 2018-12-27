@@ -16,20 +16,20 @@ namespace et     {
 
 template<class PARENT>
 struct Array_Format
-        : Array_Base<Array_Format<PARENT>, PARENT::DIMS()>, Shape<PARENT::DIMS()> {
+        : Array_Base<Array_Format<PARENT>, PARENT::DIMS>, Shape<PARENT::DIMS> {
 
-    using scalar_t = typename PARENT::scalar_t;
+    using value_type = typename PARENT::value_type;
     using allocator_t = typename PARENT::allocator_t;
     using system_tag = typename PARENT::system_tag;
 
-    __BCinline__ static constexpr BC::size_t  DIMS()          { return PARENT::DIMS(); }
-    __BCinline__ static constexpr BC::size_t  ITERATOR()     { return DIMS(); }
+    __BCinline__ static constexpr BC::size_t  DIMS          { return PARENT::DIMS; }
+    __BCinline__ static constexpr BC::size_t  ITERATOR     { return DIMS; }
 
-    scalar_t* array_slice;
+    value_type* array_slice;
 
      __BCinline__
-    Array_Format(PARENT parent_, BC::array<DIMS() - 1, int> format)
-    : Shape<PARENT::DIMS()> (parent_.as_shape()), array_slice(const_cast<scalar_t*>(parent_.memptr())) {
+    Array_Format(PARENT parent_, BC::array<DIMS - 1, int> format)
+    : Shape<PARENT::DIMS> (parent_.as_shape()), array_slice(const_cast<value_type*>(parent_.memptr())) {
 
         for (int i = 0; i < format.size(); ++i) {
             this->m_inner_shape[i] = parent_.dimension(format[i] - 1);
@@ -37,8 +37,8 @@ struct Array_Format
         }
     }
 
-    __BCinline__ const scalar_t* memptr() const { return array_slice; }
-    __BCinline__       scalar_t* memptr()       { return array_slice; }
+    __BCinline__ const value_type* memptr() const { return array_slice; }
+    __BCinline__       value_type* memptr()       { return array_slice; }
 
 };
 

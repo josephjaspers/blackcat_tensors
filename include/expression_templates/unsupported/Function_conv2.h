@@ -33,7 +33,7 @@ template<class lv, class rv, class allocator>
 struct Binary_Expression<lv, rv, oper::conv<2, allocator>>
 : Expression_Base<Binary_Expression<lv, rv,  oper::conv<2, allocator>>>, BLAS_FUNCTION {
 
-    using scalar_type = scalar_of<lv>;
+    using value_typeype = scalar_of<lv>;
     static constexpr bool transA = blas_feature_detector<lv>::transposed;
     static constexpr bool transB = blas_feature_detector<rv>::transposed;
     static constexpr bool lv_scalar = blas_feature_detector<lv>::scalar;
@@ -43,8 +43,8 @@ struct Binary_Expression<lv, rv, oper::conv<2, allocator>>
 
     static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
 
-    __BCinline__ static constexpr BC::size_t  DIMS() { return 2; }
-    __BCinline__ static constexpr BC::size_t  ITERATOR() { return 0; }
+    __BCinline__ static constexpr BC::size_t  DIMS { return 2; }
+    __BCinline__ static constexpr BC::size_t  ITERATOR { return 0; }
     BC::size_t  size() const {
         return inner_shape()[0] * inner_shape()[1];
     }
@@ -54,7 +54,7 @@ struct Binary_Expression<lv, rv, oper::conv<2, allocator>>
      Binary_Expression(lv left, rv right) : left(left), right(right) {}
 
     __BCinline__ const auto inner_shape() const {
-        return l_array<DIMS()>([&](int i) {
+        return l_array<DIMS>([&](int i) {
                     if (i == 0 )
                         return (left.rows() - right.rows() + 1);
                     else if (i == 1)
@@ -63,7 +63,7 @@ struct Binary_Expression<lv, rv, oper::conv<2, allocator>>
                         return 1;
                 });
     }
-    __BCinline__ const auto block_shape() const { return l_array<DIMS()>([&](int i) { return i == 0 ? left.rows() : i == 1 ? size() : 1; });}
+    __BCinline__ const auto block_shape() const { return l_array<DIMS>([&](int i) { return i == 0 ? left.rows() : i == 1 ? size() : 1; });}
 
 
     __BCinline__ BC::size_t  M() const { return left.rows();  }

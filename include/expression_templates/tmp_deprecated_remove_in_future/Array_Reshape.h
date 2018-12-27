@@ -23,20 +23,20 @@ struct Array_Reshape {
     template<class PARENT>
     struct implementation : Array_Base<implementation<PARENT>, dimension>, Shape<dimension> {
 
-    using scalar_t = typename PARENT::scalar_t;
+    using value_type = typename PARENT::value_type;
     using allocator_t = typename PARENT::allocator_t;
     using system_tag = typename PARENT::system_tag;
 
-    __BCinline__ static constexpr BC::size_t  DIMS() { return dimension; };
-    __BCinline__ static constexpr BC::size_t  ITERATOR() { return dimension; }
+    __BCinline__ static constexpr BC::size_t  DIMS { return dimension; };
+    __BCinline__ static constexpr BC::size_t  ITERATOR { return dimension; }
 
-    static_assert(PARENT::ITERATOR() <= 1, "RESHAPE IS NOT SUPPORTED ON NON-CONTINUOUS TENSORS");
+    static_assert(PARENT::ITERATOR <= 1, "RESHAPE IS NOT SUPPORTED ON NON-CONTINUOUS TENSORS");
 
-    scalar_t* array;
+    value_type* array;
 
     template<class... integers>
     implementation(PARENT parent, BC::array<dimension,int> shape)
-    : Shape<dimension>(shape),  array(const_cast<scalar_t*>(parent.memptr())) {}
+    : Shape<dimension>(shape),  array(const_cast<value_type*>(parent.memptr())) {}
 
     __BCinline__ const auto memptr() const { return array; }
     __BCinline__       auto memptr()          { return array; }
