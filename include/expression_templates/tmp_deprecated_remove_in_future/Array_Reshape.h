@@ -30,7 +30,7 @@ struct Array_Reshape {
     __BCinline__ static constexpr BC::size_t  DIMS() { return dimension; };
     __BCinline__ static constexpr BC::size_t  ITERATOR() { return dimension; }
 
-    static_assert(PARENT::ITERATOR() == 0, "RESHAPE IS NOT SUPPORTED ON NON-CONTINUOUS TENSORS");
+    static_assert(PARENT::ITERATOR() <= 1, "RESHAPE IS NOT SUPPORTED ON NON-CONTINUOUS TENSORS");
 
     scalar_t* array;
 

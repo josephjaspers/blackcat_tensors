@@ -106,6 +106,12 @@ using  size_t   = int;
 using  size_t   = BC_SIZE_T_OVERRIDE;
 #endif
 
+#ifndef BC_DIM_T_OVERRIDE
+using dim_t = int;
+#else
+using dim_t = BC_DIM_T_OVERRIDE
+#endif
+
 static constexpr  BC::size_t   MULTITHREAD_THRESHOLD = 16384;
 
 #ifdef __CUDACC__

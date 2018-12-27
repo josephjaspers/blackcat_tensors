@@ -20,7 +20,6 @@
 
 #include "expression_templates/Array.h"
 #include "expression_templates/Array_View.h"
-#include "expression_templates/Array_Shared.h"
 
 namespace BC {
 

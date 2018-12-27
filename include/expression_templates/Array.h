@@ -10,7 +10,6 @@
 #define SHAPE_H_
 
 #include "Array_Base.h"
-#include "Shape.h"
 
 namespace BC {
 template<class> class Evaluator;

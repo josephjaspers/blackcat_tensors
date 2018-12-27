@@ -84,7 +84,15 @@ public:
             return &as_derived()[as_derived().leading_dimension(DIMENSION - 2) * i];
     }
 
-private:
+    __BCinline__
+    auto slice_ptr_index(int i) const {
+        if (DIMS() == 0)
+            return 0;
+        else if (DIMS() == 1)
+            return i;
+        else
+            return as_derived().leading_dimension(DIMENSION - 2) * i;
+    }
 
     template<class... integers> __BCinline__
     BC::size_t  dims_to_index(integers... ints) const {

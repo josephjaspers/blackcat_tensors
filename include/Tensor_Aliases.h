@@ -56,14 +56,6 @@ template<class scalar_t, class allocator_t = alloc_t<scalar_t>> using Vector_Vie
 template<class scalar_t, class allocator_t = alloc_t<scalar_t>> using Matrix_View = Tensor_View<2, scalar_t, allocator_t>;
 template<class scalar_t, class allocator_t = alloc_t<scalar_t>> using Cube_View   = Tensor_View<3, scalar_t, allocator_t>;
 
-template<int dimension, class scalar_t, class allocator_t=alloc_t<scalar_t>>
-using Tensor_Shared = Tensor_Base<et::Array_Shared<dimension, scalar_t, allocator_t>>;
-
-template<class scalar_t, class allocator_t = alloc_t<scalar_t>> using Scalar_Shared = Tensor_Shared<0, scalar_t, allocator_t>;
-template<class scalar_t, class allocator_t = alloc_t<scalar_t>> using Vector_Shared = Tensor_Shared<1, scalar_t, allocator_t>;
-template<class scalar_t, class allocator_t = alloc_t<scalar_t>> using Matrix_Shared = Tensor_Shared<2, scalar_t, allocator_t>;
-template<class scalar_t, class allocator_t = alloc_t<scalar_t>> using Cube_Shared   = Tensor_Shared<3, scalar_t, allocator_t>;
-
 namespace expr {
 template<int x, class iterator_t, typename = std::enable_if_t<iterator_t::DIMS() == x>>
 using tensor = Tensor_Base<iterator_t>;

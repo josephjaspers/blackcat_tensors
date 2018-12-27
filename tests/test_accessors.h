@@ -86,7 +86,6 @@ int test_accessors(int sz=128) {
 
 		auto block_of_a = chunk(a,1,1)(4,3); //a 3x3 matrix starting at point 1,1
 
-
 		bool ensure_correct_size = block_of_a.size() == 4 * 3;
 		bool ensure_correct_rows = block_of_a.rows() == 4;
 		bool ensure_correct_cols = block_of_a.cols() == 3;

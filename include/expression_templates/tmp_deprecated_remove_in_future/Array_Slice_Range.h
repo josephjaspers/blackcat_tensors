@@ -40,7 +40,7 @@ struct Array_Slice_Range
         BC::size_t  range = to - from;
         BC::size_t  size = parent_.leading_dimension(DIMS() - 2) * range;
         this->m_inner_shape[DIMS() - 1] = range; //setting the outer_dimension
-        this->m_outer_shape[DIMS() - 1] = size;  //adjusting the size
+        this->m_block_shape[DIMS() - 1] = size;  //adjusting the size
     }
 
     __BCinline__ //specialization if vector

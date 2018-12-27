@@ -14,18 +14,17 @@
 
 namespace BC {
 namespace et     {
-template<int dims>
-struct Shape : Shape_Base<Shape<dims>> {
+template<int dims, class derived=void>
+struct Shape : Shape_Base<std::conditional_t<std::is_void<derived>::value, Shape<dims, derived>, derived>> {
 
 	static_assert(dims >= 0, "BC: SHAPE OBJECT MUST HAVE AT LEAST 0 OR MORE DIMENSIONS");
+	using self = std::conditional_t<std::is_void<derived>::value, Shape<dims, derived>, derived>;
 
     BC::array<dims, int> m_inner_shape = {0};
-    BC::array<dims, int> m_outer_shape = {0};
+    BC::array<dims, int> m_block_shape = {0};
 
-    __BCinline__ Shape& as_shape() { return *this; }
-    __BCinline__ const Shape& as_shape() const { return *this; }
-
-
+    __BCinline__ self& as_shape() { return static_cast<self&>(*this); }
+    __BCinline__ const self& as_shape() const { return static_cast<const self&>(*this); }
     __BCinline__ Shape() {}
 
     template<class... integers>
@@ -37,17 +36,13 @@ struct Shape : Shape_Base<Shape<dims>> {
 
     template<int x> __BCinline__
     Shape(const Shape<x>& shape) {
-        static_assert(x >= dims);
+        static_assert(x >= dims, "Shape Construction internal error");
         for (int i = 0; i < dims; ++i) {
             m_inner_shape[i] = shape.m_inner_shape[i];
-            m_outer_shape[i] = shape.m_outer_shape[i];
+            m_block_shape[i] = shape.m_block_shape[i];
         }
     }
 
-    template<class is_deriv>
-    __BCinline__ Shape(const Inner_Shape<is_deriv> param) {
-        init(param);
-    }
     template<int dim, class int_t>
     __BCinline__ Shape (BC::array<dim, int_t> param) {
         static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
@@ -59,15 +54,15 @@ struct Shape : Shape_Base<Shape<dims>> {
         init(param);
     }
     __BCinline__ const auto& inner_shape() const { return m_inner_shape; }
-    __BCinline__ const auto& outer_shape() const { return m_outer_shape; }
+    __BCinline__ const auto& outer_shape() const { return m_block_shape; }
     __BCinline__ const auto& block_shape() const { return outer_shape(); }
 
-    __BCinline__ BC::size_t  size() const { return m_outer_shape[dims - 1]; }
+    __BCinline__ BC::size_t  size() const { return m_block_shape[dims - 1]; }
     __BCinline__ BC::size_t  rows() const { return m_inner_shape[0]; }
     __BCinline__ BC::size_t  cols() const { return m_inner_shape[1]; }
     __BCinline__ BC::size_t  dimension(int i) const { return m_inner_shape[i]; }
     __BCinline__ BC::size_t  outer_dimension() const { return m_inner_shape[dims - 2]; }
-    __BCinline__ BC::size_t  leading_dimension(int i) const { return i < dims ? m_outer_shape[i] : 0; }
+    __BCinline__ BC::size_t  leading_dimension(int i) const { return i < dims ? m_block_shape[i] : 0; }
     __BCinline__ BC::size_t  block_dimension(int i) const  { return leading_dimension(i); }
 
 protected:
@@ -76,12 +71,12 @@ protected:
     void copy_shape(const Shape_Base<T>& shape) {
         for (int i = 0; i < dims; ++i) {
             m_inner_shape[i] = shape.dimension(i);
-            m_outer_shape[i] = shape.block_dimension(i);
+            m_block_shape[i] = shape.block_dimension(i);
         }
     }
     void swap_shape(Shape& b) {
         std::swap(m_inner_shape, b.m_inner_shape);
-        std::swap(m_outer_shape, b.m_outer_shape);
+        std::swap(m_block_shape, b.m_block_shape);
     }
 
 private:
@@ -89,10 +84,10 @@ private:
     template<class shape_t> __BCinline__
     void init(const shape_t& param) {
         m_inner_shape[0] = param[0];
-        m_outer_shape[0] = m_inner_shape[0];
+        m_block_shape[0] = m_inner_shape[0];
         for (int i = 1; i < dims; ++i) {
             m_inner_shape[i] = param[i];
-            m_outer_shape[i] = m_outer_shape[i - 1] * m_inner_shape[i];
+            m_block_shape[i] = m_block_shape[i - 1] * m_inner_shape[i];
         }
     }
 
@@ -129,60 +124,82 @@ struct Shape<1> {
     __BCinline__ Shape& as_shape() { return *this; }
     __BCinline__ const Shape& as_shape() const { return *this; }
     BC::array<1, int> m_inner_shape = {0};
-    BC::array<1, int> m_outer_shape = {1};
+    BC::array<1, int> m_block_shape = {1};
 
     __BCinline__ Shape() {};
-    __BCinline__ Shape (BC::array<1, int> param) : m_inner_shape {param}, m_outer_shape { 1 }  {}
+    __BCinline__ Shape (BC::array<1, int> param) : m_inner_shape {param}, m_block_shape { 1 }  {}
 
     template<int dim, class f, class int_t> __BCinline__
     Shape (lambda_array<dim, int_t, f> param) {
         static_assert(dim >= 1, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
         m_inner_shape[0] = param[0];
-        m_outer_shape[0] = 1;
+        m_block_shape[0] = 1;
     }
 
     template<int x>
     __BCinline__ Shape(const Shape<x>& shape) {
         static_assert(x >= 1, "BC: CANNOT CONSTRUCT A VECTOR SHAPE FROM A SCALAR SHAPE");
         m_inner_shape[0] = shape.m_inner_shape[0];
-        m_outer_shape[0] = 1; //shape.m_outer_shape[0];
+        m_block_shape[0] = 1; //shape.m_block_shape[0];
     }
 
     __BCinline__ Shape(int length, BC::size_t  leading_dimension) {
         m_inner_shape[0] = length;
-        m_outer_shape[0] = leading_dimension;
+        m_block_shape[0] = leading_dimension;
     }
 
-    __BCinline__ Shape(int length_) : m_inner_shape { length_ }, m_outer_shape {1} {}
+    __BCinline__ Shape(int length_) : m_inner_shape { length_ }, m_block_shape {1} {}
     __BCinline__ BC::size_t  size() const { return m_inner_shape[0]; }
     __BCinline__ BC::size_t  rows() const { return m_inner_shape[0]; }
     __BCinline__ BC::size_t  cols() const { return 1; }
     __BCinline__ BC::size_t  dimension(int i) const { return i == 0 ? m_inner_shape[0] : 1; }
     __BCinline__ BC::size_t  outer_dimension() const { return m_inner_shape[0]; }
-    __BCinline__ BC::size_t  leading_dimension(int i) const { return i == 0 ? m_outer_shape[0] : 0; }
+    __BCinline__ BC::size_t  leading_dimension(int i) const { return i == 0 ? m_block_shape[0] : 0; }
     __BCinline__ BC::size_t  block_dimension(int i)   const { return leading_dimension(i); }
     __BCinline__ const auto& inner_shape() const { return m_inner_shape; }
-    __BCinline__ const auto& outer_shape() const { return m_outer_shape; }
+    __BCinline__ const auto& outer_shape() const { return m_block_shape; }
     __BCinline__ const auto& block_shape() const { return m_inner_shape; }
 
     void copy_shape(const Shape<1>& shape) {
         this->m_inner_shape = shape.m_inner_shape;
-        this->m_outer_shape = shape.m_outer_shape;
+        this->m_block_shape = shape.m_block_shape;
     }
 
     template<class deriv> void copy_shape(const Shape_Base<deriv>& shape) {
         this->m_inner_shape[0] = shape.dimension(0);
-        this->m_outer_shape[0] = shape.dimension(0);
+        this->m_block_shape[0] = shape.dimension(0);
     }
 
     void swap_shape(Shape<1>& shape){
         std::swap(m_inner_shape, shape.m_inner_shape);
-        std::swap(m_outer_shape, shape.m_outer_shape);
+        std::swap(m_block_shape, shape.m_block_shape);
     }
 
 
 };
 
+template<int ndims>
+struct SubShape : Shape<ndims> {
+
+	BC::array<ndims, BC::size_t> m_outer_shape;
+
+	SubShape(const BC::array<ndims, BC::size_t>& new_shape, const Shape<ndims>& parent_shape)
+	: Shape<ndims>(new_shape) {
+		for (int i = 0; i < 2; ++i ) {
+			m_outer_shape[i] = parent_shape.leading_dimension(i);
+		}
+	}
+
+    __BCinline__ const auto& outer_shape() const { return m_outer_shape; }
+    __BCinline__ BC::size_t  leading_dimension(int i) const { return m_outer_shape[i]; }
+
+
+
+private:
+	//hide from external sources
+	using Shape<ndims>::swap_shape;
+	using Shape<ndims>::copy_shape;
+};
 
 }
 }

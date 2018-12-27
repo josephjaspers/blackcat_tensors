@@ -256,7 +256,7 @@ public:
     }
     void print_block_dimensions() const {
         for (int i = 0; i < DIMS(); ++i) {
-            std::cout << "[" << as_derived().block_dimensions(i) << "]";
+            std::cout << "[" << as_derived().block_dimension(i) << "]";
         }
         std::cout << std::endl;
     }
