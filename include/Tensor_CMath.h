@@ -18,13 +18,13 @@ namespace BC {
 #define BLACKCAT_MATH_DEF(func)                                     \
 namespace functor {												    \
 	struct func {                                                   \
-		template<class value_type> __BCinline__                       \
-		value_type operator () (value_type s) const { 					\
+		template<class value_type> __BCinline__                     \
+		value_type operator () (value_type s) const { 				\
 			return std::func(s); 									\
 	}   															\
 																	\
-	  template<class value_type> __BCinline__                         \
-	  static value_type impl(value_type s) {  return std::func(s); }    \
+	  template<class value_type> __BCinline__                       \
+	  static value_type impl(value_type s) { return std::func(s); } \
 	};															    \
 }																	\
                                                                     \
@@ -67,12 +67,12 @@ namespace module {										 \
 														 \
 	struct funcName {									 \
 														 \
-	  template<class value_type> __BCinline__    			 \
-	  value_type operator () (value_type x) const { 	     \
+	  template<class value_type> __BCinline__    	     \
+	  value_type operator () (value_type x) const { 	 \
 		return func_math; 								 \
 	  } 											     \
-	  template<class value_type> __BCinline__    			 \
-	  static value_type impl(value_type x) { 				 \
+	  template<class value_type> __BCinline__    	     \
+	  static value_type impl(value_type x) { 		     \
 		return func_math; 								 \
 	  }													 \
 	};													 \
@@ -90,7 +90,7 @@ BLACKCAT_BC_FUNCTOR_DEF(cached_dx_tanh, 1 - std::pow(x, 2));
 BLACKCAT_BC_FUNCTOR_DEF(relu,std::max(0, x));
 BLACKCAT_BC_FUNCTOR_DEF(dx_relu, x > 0 ? 1 : 0);
 BLACKCAT_BC_FUNCTOR_DEF(cached_dx_relu, x > 0 ? 1 : 0); //same as dx_relu
-BLACKCAT_BC_FUNCTOR_DEF(logical, x > 0 ? 1 : 0); //same as dx_relu
+BLACKCAT_BC_FUNCTOR_DEF(logical, x > 0 ? 1 : 0);
 
 
 //--------------------------------------------not actually cmath--------------------------------------//

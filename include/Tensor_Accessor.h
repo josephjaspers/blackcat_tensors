@@ -19,11 +19,7 @@ namespace BC {
 namespace module {
 
 template<class derived>
-struct Tensor_Accessor {
-
-    static constexpr int DIMS = derived::DIMS;
-
-private:
+class Tensor_Accessor {
 
     const auto& as_derived() const { return static_cast<const derived&>(*this); }
           auto& as_derived()       { return static_cast<      derived&>(*this); }
@@ -49,6 +45,7 @@ public:
 	const auto slice(BC::size_t i) const {
 		return make_tensor(et::make_slice(internal(), i));
 	}
+
 	auto slice(BC::size_t i) {
 		return make_tensor(et::make_slice(internal(), i));
 	}
@@ -56,6 +53,7 @@ public:
 	const auto slice(BC::size_t from, BC::size_t to) const {
 		return make_tensor(et::make_ranged_slice(internal(), from, to));
 	}
+
 	auto slice(BC::size_t from, BC::size_t to) {
 		return make_tensor(et::make_ranged_slice(internal(), from, to));
 	}
@@ -65,25 +63,29 @@ public:
         static_assert(derived::DIMS  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
         return make_tensor(et::make_diagnol(internal(),index));
     }
+
     auto diag(BC::size_t index = 0) {
         static_assert(derived::DIMS  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
         return make_tensor(et::make_diagnol(internal(),index));
     }
 
     const auto col(BC::size_t i) const {
-        static_assert(DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+        static_assert(derived::DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
         return slice(i);
     }
+
     auto col(BC::size_t i) {
-        static_assert(DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+        static_assert(derived::DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
         return slice(i);
     }
+
     const auto row(BC::size_t i) const {
-        static_assert(DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+        static_assert(derived::DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
         return make_tensor(et::make_row(internal(), i));
     }
+
     auto row(BC::size_t i) {
-        static_assert(DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+        static_assert(derived::DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
         return make_tensor(et::make_row(internal(), i));
     }
 

@@ -29,10 +29,11 @@ struct Array_Scalar : Array_Base<Array_Scalar<Parent>, 0>, Shape<0> {
 
     value_type* array;
 
-    __BCinline__ Array_Scalar(Parent parent_, BC::size_t  index) : array(const_cast<value_type*>(&(parent_.memptr()[index]))) {}
+    __BCinline__ Array_Scalar(Parent parent_, BC::size_t  index)
+    : array(&(parent_.memptr()[index])) {}
 
     __BCinline__ const auto& operator [] (int index) const { return array[0]; }
-    __BCinline__        auto& operator [] (int index)        { return array[0]; }
+    __BCinline__       auto& operator [] (int index)       { return array[0]; }
 
     template<class... integers> __BCinline__
     auto& operator ()(integers ... ints) {

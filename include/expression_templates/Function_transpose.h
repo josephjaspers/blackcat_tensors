@@ -11,8 +11,10 @@
 #include <vector>
 #include "Expression_Base.h"
 
+
 namespace BC {
 namespace et {
+
 
 template<class Value, class System_Tag>
 struct Unary_Expression<Value, oper::transpose<System_Tag>>
@@ -41,27 +43,47 @@ struct Unary_Expression<Value, oper::transpose<System_Tag>>
                 return 1;
         });
     }
-    __BCinline__ const auto block_shape() const {
+
+    __BCinline__
+    const auto block_shape() const {
         return l_array<DIMS>([=](int i) {
             return i == 0 ? array.cols() : 1 == 1 ? array.rows() : array.block_dimension(i);
         });
     }
-    __BCinline__ auto operator [] (int i) const -> decltype(array[0]) {
+
+    __BCinline__
+    auto operator [] (int i) const -> decltype(array[0]) {
         return array[i];
     }
+
     __BCinline__ BC::size_t  size() const { return array.size(); }
     __BCinline__ BC::size_t  rows() const { return array.cols(); }
     __BCinline__ BC::size_t  cols() const { return array.rows(); }
 
-    __BCinline__ BC::size_t  dimension(int i) const { return i == 0 ? array.cols() : i == 1 ? array.rows() : array.dimension(i); }
-    __BCinline__ BC::size_t  block_dimension(int i) const { return block_shape()[i]; }
+    __BCinline__ BC::size_t  dimension(int i) const {
+    	if (i == 0)
+    		return array.cols();
+    	else if (i == 1)
+    		return array.rows();
+    	else
+    		return array.dimension(i);
+    }
 
-    template<class... ints>
-    __BCinline__ auto operator ()(int m, BC::size_t  n, ints... integers) const -> decltype(array(n,m)) {
+    __BCinline__
+    BC::size_t  block_dimension(int i) const {
+    	return block_shape()[i];
+    }
+
+    template<class... ints> __BCinline__
+    auto operator ()(BC::size_t m, BC::size_t n, ints... integers) const -> decltype(array(n,m)) {
         return array(n,m, integers...);
     }
 
 };
+
+
 }
 }
+
+
 #endif /* EXPRESSION_UNARY_MATRIXTRANSPOSITION_H_ */

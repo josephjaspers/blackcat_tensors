@@ -38,7 +38,7 @@ struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, Allocator>
     template<class... integers> __BCinline__ auto operator()  (const integers&...) { return scalar; }
 
     __BCinline__ auto operator [] (int i ) const { return scalar; }
-    __BCinline__ auto operator [] (int i )  { return scalar; }
+    __BCinline__ auto operator [] (int i )  	 { return scalar; }
 
     __BCinline__ const value_type* memptr() const { return &scalar; }
 

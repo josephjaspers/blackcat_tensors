@@ -23,6 +23,12 @@
 //BC_CPP17_EXECUTION std::execution::par  //defines default execution as parallel
 //BC_CPP17_EXECUTION std::execution::seq  //defines default execution as sequential
 //#define BC_TREE_OPTIMIZER_DEBUG	      //enables print statements for the tree evaluator. (For developers)
+
+
+// --------------------------------- override macro-options --------------------------------- //
+//#define BC_INLINE_OVERRIDER <compiler_attribute>       //overloads the default inline attribute
+//#define BC_SIZE_T_OVERRIDE  <integer_type>			 //overloads the default size_t (default is signed int)
+
 // --------------------------------- inline macros -----------------------------------------//
 
 #ifdef __CUDACC__
@@ -31,8 +37,8 @@
 	#define __BChd__
 #endif
 
-#ifdef BC_USE_MSVC_INLINE
-#define __BCinline__ __BChd__  inline //host_device inline
+#ifdef BC_INLINE_OVERRIDER
+#define __BCinline__ __BChd__  BC_INLINE_OVERRIDER
 #else
 #define __BCinline__ __BChd__  inline __attribute__((always_inline)) __attribute__((hot))  //host_device inline
 #endif
@@ -112,15 +118,15 @@ using dim_t = int;
 using dim_t = BC_DIM_T_OVERRIDE
 #endif
 
-static constexpr  BC::size_t   MULTITHREAD_THRESHOLD = 16384;
+static constexpr  BC::size_t MULTITHREAD_THRESHOLD = 16384;
 
 #ifdef __CUDACC__
-    static constexpr  BC::size_t   CUDA_BASE_THREADS = 256;
+    static constexpr BC::size_t CUDA_BASE_THREADS = 256;
 
-    static  BC::size_t   blocks(int size) {
+    static  BC::size_t blocks(int size) {
         return 1 + (int)(size / CUDA_BASE_THREADS);
     }
-    static  BC::size_t   threads(int sz = CUDA_BASE_THREADS) {
+    static  BC::size_t threads(int sz = CUDA_BASE_THREADS) {
         return sz > CUDA_BASE_THREADS ? CUDA_BASE_THREADS : sz;
     }
 #endif

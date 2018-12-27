@@ -27,9 +27,10 @@ struct Array_Strided_Vector : Array_Base<Array_Strided_Vector<Parent>, 1>, Shape
 
     value_type* array_slice;
 
-    __BCinline__ Array_Strided_Vector(const value_type* array_slice_, BC::size_t  length, BC::size_t  stride) :
-        Shape<1>(length, stride),
-        array_slice(const_cast<value_type*>(array_slice_)) {}
+    __BCinline__
+    Array_Strided_Vector(value_type* array_slice_, BC::size_t length, BC::size_t stride)
+     : Shape<1>(length, stride),
+       array_slice(array_slice_) {}
 
     __BCinline__ const auto& operator [] (int i) const { return array_slice[this->leading_dimension(0) * i]; }
     __BCinline__       auto& operator [] (int i)       { return array_slice[this->leading_dimension(0) * i]; }

@@ -13,15 +13,19 @@
 #include "Internal_BLAS_Feature_Detector.h"
 #include "Tree_Evaluator_Runner.h"
 
+
 namespace BC {
 namespace et {
+
 
 template<class lv, class rv, class System_Tag>
 struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
 : Expression_Base<Binary_Expression<lv, rv,  oper::dot<System_Tag>>>, BLAS_FUNCTION, Shape<0> {
 
-	static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value, "MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
-    static_assert(lv::DIMS == 1 && (rv::DIMS == 1 || rv::DIMS ==0), "DOT DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
+	static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,
+			"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
+    static_assert(lv::DIMS == 1 && (rv::DIMS == 1 || rv::DIMS ==0),
+    		"DOT DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
 
     using value_type  = typename lv::value_type;
     using allocator_t = typename lv::allocator_t;
@@ -38,47 +42,49 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
     static constexpr int  DIMS  = 0;
     static constexpr int ITERATOR = 0;
 
+
     lv left;
     rv right;
 
-     Binary_Expression(lv left, rv right) : left(left), right(right) {}
 
-template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod>
-void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
+    Binary_Expression(lv left, rv right) : left(left), right(right) {}
 
-    //get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
-    auto& injection = injection_values.data();
+    template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod>
+    void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 
-    //evaluate the left and right branches (computes only if necessary)
-    auto X = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<lv>::get_array(left));
-    auto Y = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<rv>::get_array(right));
+		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
+		auto& injection = injection_values.data();
 
-    //allocate the alpha and beta scalars,
-    auto alpha = utility_l::stack_allocate((value_type)alpha_mod);
+		//evaluate the left and right branches (computes only if necessary)
+		auto X = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<lv>::get_array(left));
+		auto Y = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<rv>::get_array(right));
 
-    //call outer product
-    impl_l::dot(X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
+		//allocate the alpha and beta scalars,
+		auto alpha = utility_l::stack_allocate((value_type)alpha_mod);
 
-    if (lv_scalar) {
-        auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-        impl_l::scalar_mul(injection.memptr(), alpha, alpha_lv);
-    }
-    if (rv_scalar) {
-        auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-        impl_l::scalar_mul(injection.memptr(), alpha, alpha_rv);
-    }
-    if (beta_mod) {
-        auto beta = utility_l::stack_allocate((value_type)alpha_mod);
-        impl_l::scalar_mul(alpha, alpha, beta);
-        allocator_t::deallocate(beta);
-    }
+		//call outer product
+		impl_l::dot(X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
+
+		if (lv_scalar) {
+			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
+			impl_l::scalar_mul(injection.memptr(), alpha, alpha_lv);
+		}
+		if (rv_scalar) {
+			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
+			impl_l::scalar_mul(injection.memptr(), alpha, alpha_rv);
+		}
+		if (beta_mod) {
+			auto beta = utility_l::stack_allocate((value_type)alpha_mod);
+			impl_l::scalar_mul(alpha, alpha, beta);
+			allocator_t::deallocate(beta);
+		}
 
 
-    //deallocate all the temporaries
-    if (lv_eval) cc(X).deallocate();
-    if (rv_eval) cc(Y).deallocate();
-    utility_l::deallocate(alpha);
-}
+		//deallocate all the temporaries
+		if (lv_eval) cc(X).deallocate();
+		if (rv_eval) cc(Y).deallocate();
+		utility_l::deallocate(alpha);
+	}
 };
 
 }

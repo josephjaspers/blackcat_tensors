@@ -12,7 +12,9 @@
 #include "Expression_Base.h"
 
 namespace BC {
-namespace et     {
+namespace et {
+
+
 template<class Value, class operation>
 struct Unary_Expression : public Expression_Base<Unary_Expression<Value, operation>>, public operation {
 
@@ -26,14 +28,15 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Value, operati
 
     Value array;
 
-
     template<class... args> __BCinline__
-    Unary_Expression(Value v, const args&... args_) : operation(args_...) , array(v) {}
+    Unary_Expression(Value v, const args&... args_)
+    : operation(args_...) , array(v) {}
 
-    __BCinline__ auto operator [](int index) const {
+    __BCinline__
+    auto operator [](int index) const {
         return static_cast<const operation&>(*this)(array[index]);
     }
-    template<class... integers>__BCinline__
+    template<class... integers> __BCinline__
     auto operator ()(integers... index) const {
         return static_cast<const operation&>(*this)(array(index...));
     }
@@ -47,27 +50,15 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Value, operati
     __BCinline__ BC::size_t  block_dimension(int i) const { return array.block_dimension(i); }
 };
 
+
 template<class op, class expr>
 auto make_un_expr(expr e) {
 	return Unary_Expression<expr, op>(e);
 }
 
+
 }
 }
+
+
 #endif /* EXPRESSION_UNARY_POINTWISE_CU_ */
-
-
-
-//__BCinline__ const auto _slice(int i) const {
-//    using slice_t = decltype(array._slice(i));
-//    return Unary_Expression<slice_t, operation>(array._slice(i), static_cast<const operation&>(*this));
-//}
-//__BCinline__ const auto _scalar(int i) const {
-//    using value_type = decltype(array._scalar(i));
-//    return Unary_Expression<value_type, operation>(array._scalar(i),  static_cast<const operation&>(*this));
-//}
-//__BCinline__ const auto _slice_range(int from, BC::size_t  to) const {
-//    using value_type = decltype(array._slice_range(from, to));
-//    return Unary_Expression<value_type, operation>(array._slice_range(from,to),  static_cast<const operation&>(*this));
-//}
-//

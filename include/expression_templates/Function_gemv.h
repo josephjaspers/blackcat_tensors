@@ -42,10 +42,13 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
     static constexpr int DIMS = 1;
     static constexpr int ITERATOR = 1;
 
+
     lv left;
     rv right;
 
-     Binary_Expression(lv left, rv right) : left(left), right(right) {}
+
+     Binary_Expression(lv left, rv right)
+    : left(left), right(right) {}
 
     __BCinline__ BC::size_t  size() const { return left.rows(); }
     __BCinline__ BC::size_t  rows() const { return left.rows(); }
@@ -56,56 +59,48 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
     __BCinline__ const auto inner_shape() const { return l_array<DIMS>([&](int i) { return i == 0 ? left.rows() : 1; });}
     __BCinline__ const auto block_shape() const { return l_array<DIMS>([&](int i) { return i == 0 ? rows() : 1; });}
 
-template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod>
-void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
+	template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod>
+	void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
 
-    //get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
-    auto& injection = injection_values.data();
+		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
+		auto& injection = injection_values.data();
 
-    //evaluate the left and right branches (computes only if necessary)
-    auto A = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<lv>::get_array(left));
-    auto X = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<rv>::get_array(right));
+		//evaluate the left and right branches (computes only if necessary)
+		auto A = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<lv>::get_array(left));
+		auto X = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<rv>::get_array(right));
 
-    //allocate the alpha and beta scalars,
-    auto alpha = utility_l::stack_allocate((value_type)alpha_mod);
-    auto beta  = utility_l::stack_allocate((value_type)beta_mod);
+		//allocate the alpha and beta scalars,
+		auto alpha = utility_l::stack_allocate((value_type)alpha_mod);
+		auto beta  = utility_l::stack_allocate((value_type)beta_mod);
 
-    //get the left and right side scalar values and
-    //compute the scalar values if need be
-    if (lv_scalar) {
-        auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-        impl_l::scalar_mul(alpha, alpha, alpha_lv);
-    }
-    if (rv_scalar) {
-        auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-        impl_l::scalar_mul(alpha, alpha, alpha_rv);
-    }
+		//get the left and right side scalar values and
+		//compute the scalar values if need be
+		if (lv_scalar) {
+			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
+			impl_l::scalar_mul(alpha, alpha, alpha_lv);
+		}
+		if (rv_scalar) {
+			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
+			impl_l::scalar_mul(alpha, alpha, alpha_rv);
+		}
 
-    //call matrix_mul ///for gemm we always use M, N, K regardless of transpose, but for gemv we always use pre-trans dimensions ???
-    BC::size_t  m = A.rows();
-    BC::size_t  n = A.cols();
+		//call matrix_mul ///for gemm we always use M, N, K regardless of transpose, but for gemv we always use pre-trans dimensions ???
+		BC::size_t  m = A.rows();
+		BC::size_t  n = A.cols();
 
-    impl_l::gemv(transA,  m, n, alpha, A, A.leading_dimension(0), X, X.leading_dimension(0)/*inc_X*/, beta, injection/*Y*/, injection.leading_dimension(0)/*incy*/);
+		impl_l::gemv(transA,  m, n, alpha, A, A.leading_dimension(0), X, X.leading_dimension(0)/*inc_X*/, beta, injection/*Y*/, injection.leading_dimension(0)/*incy*/);
 
-    //deallocate all the temporaries
-    if (lv_eval) cc(A).deallocate();
-    if (rv_eval) cc(X).deallocate();
-    utility_l::deallocate(beta);
-    utility_l::deallocate(alpha);
-}
+		//deallocate all the temporaries
+		if (lv_eval) cc(A).deallocate();
+		if (rv_eval) cc(X).deallocate();
+		utility_l::deallocate(beta);
+		utility_l::deallocate(alpha);
+	}
 };
 
+
 }
 }
+
 
 #endif /* EXPRESSION_BINARY_DOTPRODUCT_CU_ */
-
-/*
- *     __BCinline__ auto _slice(int i) {
-        return Binary_Expression<decltype(left._row(i)), decltype(right._slice(i)), oper::dot<allocator_t>>(left._row(i), right._slice(i));
-    }
-    __BCinline__ auto _slice_range(int from, BC::size_t  to) {
-        return Binary_Expression<lv, decltype(right._slice_range(from, to)), oper::gemv<allocator_t>>(left, right._slice_range(from, to));
-    }
- *
- */

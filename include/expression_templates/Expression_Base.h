@@ -15,8 +15,10 @@
 #include "operations/Unary.h"
 #include "operations/BLAS.h"
 
+
 namespace BC {
-namespace et     {
+namespace et {
+
 
 template<class derived>
 struct Expression_Base
@@ -28,7 +30,10 @@ struct Expression_Base
 	static constexpr bool move_assignable    = false;
 
 };
+
+
 }
 }
+
 
 #endif /* EXPRESSION_BASE_H_ */

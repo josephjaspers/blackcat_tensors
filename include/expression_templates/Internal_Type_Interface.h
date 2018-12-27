@@ -22,7 +22,7 @@ class BC_internal_interface : BC_Type {
     static constexpr int  DIMS = derived::DIMS;
 
     __BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }
-    __BCinline__       derived& as_derived()        { return static_cast<      derived&>(*this); }
+    __BCinline__       derived& as_derived()       { return static_cast<      derived&>(*this); }
 
 public:
 
