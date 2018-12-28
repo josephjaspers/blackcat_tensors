@@ -31,9 +31,6 @@ int test_accessors(int sz=128) {
 	}
 
 
-
-
-
 	//test slice
 	BC_TEST_DEF(
 		vec a0(a[0]);
@@ -85,6 +82,32 @@ int test_accessors(int sz=128) {
 		vec a3(a[3]);
 
 		auto block_of_a = chunk(a,1,1)(4,3); //a 3x3 matrix starting at point 1,1
+
+		bool ensure_correct_size = block_of_a.size() == 4 * 3;
+		bool ensure_correct_rows = block_of_a.rows() == 4;
+		bool ensure_correct_cols = block_of_a.cols() == 3;
+
+		validation =
+				block_of_a[0].approx_equal(a1.slice(1, 5)) &&
+				block_of_a[1].approx_equal(a2.slice(1, 5)) &&
+				block_of_a[2].approx_equal(a3.slice(1, 5));
+
+		return BC::all(validation) && ensure_correct_size && ensure_correct_cols && ensure_correct_rows;
+	)
+
+
+	//test chunk of chunk
+	BC_TEST_DEF(
+
+		bmat validationmat(4,1);
+		auto validation = validationmat[0];
+
+		vec a1(a[1]);
+		vec a2(a[2]);
+		vec a3(a[3]);
+
+		auto primary_block_of_a = chunk(a, 0, 0)(5,5);
+		auto block_of_a = chunk(primary_block_of_a ,1,1)(4,3); //a 3x3 matrix starting at point 1,1
 
 		bool ensure_correct_size = block_of_a.size() == 4 * 3;
 		bool ensure_correct_rows = block_of_a.rows() == 4;

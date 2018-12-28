@@ -19,7 +19,7 @@
 
 
 namespace BC {
-#define BC_ARRAY_ONLY(literal) static_assert(BC::et::is_array<internal_t>(), "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
+#define BC_ARRAY_ONLY(literal) static_assert(BC::is_array<internal_t>(), "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
 
 template<int>   class DISABLED;
 template<class> class Tensor_Base;
@@ -29,7 +29,14 @@ class device_tag;
 
 class BC_Type {}; //a type inherited by expressions and tensor_cores, it is used a flag and lacks a "genuine" implementation
 class BC_Array {};
+class BC_Expr  {};
 class BLAS_FUNCTION {};
+
+template<class T> static constexpr bool is_bc_type() { return std::is_base_of<BC_Type, T>::value; }
+template<class T> static constexpr bool is_array() { return std::is_base_of<BC_Array, T>::value; }
+template<class T> static constexpr bool is_expr()  { return std::is_base_of<BC_Expr, T>::value; }
+
+
 
 template<class internal_t>
 auto make_tensor(internal_t internal) {

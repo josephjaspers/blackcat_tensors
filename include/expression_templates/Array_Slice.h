@@ -83,6 +83,7 @@ struct Array_Slice :
 	auto make_chunk(parent_t parent, BC::array<parent_t::DIMS, int> index_points, BC::array<ndims, int> shape) {
 		static_assert(ndims > 1, "TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, USE SCALAR OR RANGED_SLICE OTHERWISE");
 		BC::size_t index = parent.dims_to_index(index_points);
+
 		SubShape<ndims> chunk_shape = SubShape<ndims>(shape, parent.as_shape());
 		return Array_Slice<parent_t, ndims, false>(parent, chunk_shape, index);
 	}

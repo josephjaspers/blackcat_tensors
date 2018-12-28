@@ -150,22 +150,6 @@ struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Sh
 };
 
 
-//-----------------------------------------------type traits--------------------------------------------------------------//
-
-template<class T> struct is_array_core_impl {
-    static constexpr bool conditional = false;
-};
-
-template<int d, class T, class ml>
-struct is_array_core_impl<et::Array<d, T, ml>> {
-    static constexpr bool conditional = true;
-};
-
-template<class T> static constexpr bool is_array_core() {
-	return is_array_core_impl<T>::conditional;
-}
-
-
 }
 }
 

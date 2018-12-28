@@ -56,6 +56,19 @@ namespace MTF {
         static constexpr bool value = std::is_same<T,U>::value || seq_of_impl<T,Ts...>::value;
     };
 
+
+
+    template<template<class> class function, class... Ts>
+    struct seq_is : std::true_type {};
+
+    template<template<class> class function, class T, class... Ts>
+        struct seq_is<function, T, Ts...> :
+        std::conditional_t<function<T>::value && seq_is<function, Ts...>::value, std::true_type, std::false_type> {};
+
+
+
+
+
     template<class T, class U, class... Ts> static constexpr bool seq_of = seq_of_impl<T,U,Ts...>::value;
 
     template<class... Ts> static constexpr bool seq_contains = seq_contains_impl<Ts...>::value;

@@ -45,7 +45,7 @@ struct Array_Scalar : Array_Base<Array_Scalar<Parent>, 0>, Shape<0> {
     }
 
     __BCinline__ const value_type* memptr() const { return array; }
-    __BCinline__       value_type* memptr()          { return array; }
+    __BCinline__       value_type* memptr()       { return array; }
 };
 
 template<class internal_t>

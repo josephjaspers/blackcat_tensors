@@ -108,11 +108,6 @@ public:
         return index;
     }
 };
-//------------------------------------------------type traits--------------------------------------------------------------//
-
-template<class T> static constexpr bool is_array() { return std::is_base_of<et::Array_Base<T, T::DIMS>, T>::value; };
-template<class T> static constexpr bool is_expr()  { return !is_array<T>(); };
-
 }
 }
 

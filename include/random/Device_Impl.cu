@@ -17,8 +17,9 @@
 namespace BC {
 namespace random {
 namespace device_impl {
+
 template<class T> __global__
-static void randomize(T t, float lower_bound, float upper_bound, BC::size_t  seed) {
+static void randomize(T t, float lower_bound, float upper_bound, int seed) {
 
      curandState_t state;
       curand_init(seed, /* the seed controls the sequence of random values that are produced */

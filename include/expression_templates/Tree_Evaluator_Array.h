@@ -14,11 +14,13 @@
 #include "Array_Base.h"
 
 namespace BC {
-namespace et     {
+namespace et {
 namespace tree {
 
 
-template<class T> struct evaluator<T, std::enable_if_t<is_array<T>()>> : evaluator_default<T> {};
+template<class T> struct
+evaluator<T, std::enable_if_t<is_array<T>() && !is_temporary<T>::value>>
+: evaluator_default<T> {};
 
 
 }

@@ -12,10 +12,12 @@
 #include "Tree_Evaluator_Default.h"
 
 namespace BC {
-namespace et     {
+namespace et {
 namespace tree {
 
-template<class T> struct evaluator<temporary<T>> :evaluator_default<temporary<T>> {
+template<class T>
+struct evaluator<temporary<T>, std::enable_if_t<is_array<T>()>>
+ : evaluator_default<temporary<T>> {
 
     static void deallocate_temporaries(temporary<T> tmp) {
         tmp.deallocate();

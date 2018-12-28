@@ -22,7 +22,8 @@ namespace et {
 
 template<class derived>
 struct Expression_Base
-        : BC_internal_interface<derived>{
+        : BC_internal_interface<derived>,
+          BC_Expr {
 
 	static constexpr bool copy_constructible = false;
 	static constexpr bool move_constructible = false;

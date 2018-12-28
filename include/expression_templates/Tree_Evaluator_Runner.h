@@ -67,11 +67,11 @@ struct CacheEvaluator {
     template<class branch> using eval_t = BC::et::Binary_Expression<sub_t<branch>, branch, BC::et::oper::assign>;
 
     template<class branch>__BChot__ //The branch is an array, no evaluation required
-    static std::enable_if_t<BC::et::is_array<std::decay_t<branch>>(), const branch&> evaluate(const branch& expression) { return expression; }
+    static std::enable_if_t<BC::is_array<std::decay_t<branch>>(), const branch&> evaluate(const branch& expression) { return expression; }
 
 
     template<class branch>__BChot__ //Create and return an array_core created from the expression
-    static std::enable_if_t<!BC::et::is_array<std::decay_t<branch>>(), sub_t<std::decay_t<branch>>> evaluate(const branch& expression)
+    static std::enable_if_t<!BC::is_array<std::decay_t<branch>>(), sub_t<std::decay_t<branch>>> evaluate(const branch& expression)
     {
         sub_t<std::decay_t<branch>> cached_branch(expression.inner_shape());
         eval_t<std::decay_t<branch>> assign_to_expression(cached_branch, expression);

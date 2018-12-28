@@ -77,6 +77,7 @@ private:
     	}
     	std::cout << "]" << std::endl;
     }
+
     template<class ADL=void, class v1=void, class v2=void>
     std::enable_if_t<std::is_void<ADL>::value && (DIMS > 1)>
     print_impl(int prec, bool sparse=false) const {
@@ -88,7 +89,9 @@ private:
         	slice.print_impl(prec, sparse);
     	}
     }
+
 public:
+
     void printSparse(int precision=8) const {
     	print_impl<void>(precision, true);
     }
@@ -107,6 +110,7 @@ public:
 
         delete[] internal;
     }
+
     void write_tensor_data(std::ofstream& os) const {
         BC_ARRAY_ONLY("void write_tensor_data(std::ofstream& os)");
 
@@ -125,6 +129,7 @@ public:
 
         delete[] internal;
     }
+
     void read_as_one_hot(std::ifstream& is) {
         BC_ARRAY_ONLY("void read_as_one_hot(std::ifstream& is)");
 
@@ -139,6 +144,7 @@ public:
         as_derived()(std::stoi(tmp)) = 1;
 
     }
+
     void read(std::ifstream& is) {
         BC_ARRAY_ONLY("void read(std::ifstream& is)");
 
@@ -220,6 +226,7 @@ public:
                     as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
         }
     }
+
     void read_tensor_data_as_one_hot(std::ifstream& is,  BC::size_t   sz) {
         BC_ARRAY_ONLY("void read_tensor_data_as_one_hot(std::ifstream& is,  BC::size_t   sz)");
         if (derived::DIMS != 1)
@@ -248,12 +255,14 @@ public:
 			std::cout << std::endl;
     	}
     }
+
     void print_leading_dimensions() const {
         for (int i = 0; i < DIMS; ++i) {
             std::cout << "[" << as_derived().leading_dimension(i) << "]";
         }
         std::cout << std::endl;
     }
+
     void print_block_dimensions() const {
         for (int i = 0; i < DIMS; ++i) {
             std::cout << "[" << as_derived().block_dimension(i) << "]";

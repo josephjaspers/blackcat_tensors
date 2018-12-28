@@ -23,6 +23,13 @@ struct temporary : data_t {
     using data_t::data_t;
 };
 
+template<class T>
+struct is_temporary : std::false_type {};
+
+template<class T>
+struct is_temporary<temporary<T>> : std::true_type {};
+
+
 }
 }
 }

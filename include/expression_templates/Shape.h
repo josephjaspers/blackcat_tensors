@@ -136,8 +136,8 @@ struct Shape<1> {
         m_block_shape[0] = 1;
     }
 
-    template<int x>
-    __BCinline__ Shape(const Shape<x>& shape) {
+    template<int x, class der>
+    __BCinline__ Shape(const Shape<x, der>& shape) {
         static_assert(x >= 1, "BC: CANNOT CONSTRUCT A VECTOR SHAPE FROM A SCALAR SHAPE");
         m_inner_shape[0] = shape.m_inner_shape[0];
         m_block_shape[0] = 1; //shape.m_block_shape[0];
@@ -179,16 +179,25 @@ struct Shape<1> {
 };
 
 template<int ndims>
-struct SubShape : Shape<ndims> {
+struct SubShape : Shape<ndims, SubShape<ndims>> {
 
+	using parent = Shape<ndims, SubShape<ndims>>;
 	BC::array<ndims, BC::size_t> m_outer_shape;
 
-	SubShape(const BC::array<ndims, BC::size_t>& new_shape, const Shape<ndims>& parent_shape)
-	: Shape<ndims>(new_shape) {
-		for (int i = 0; i < 2; ++i ) {
+	template<class der>
+	SubShape(const BC::array<ndims, BC::size_t>& new_shape, const Shape<ndims, der>& parent_shape)
+	: parent(new_shape) {
+		for (int i = 0; i < ndims; ++i ) {
 			m_outer_shape[i] = parent_shape.leading_dimension(i);
 		}
 	}
+	SubShape(const BC::array<ndims, BC::size_t>& new_shape, const SubShape<ndims>& parent_shape)
+	: parent(new_shape) {
+		for (int i = 0; i < ndims; ++i ) {
+			m_outer_shape[i] = parent_shape.m_outer_shape[i];
+		}
+	}
+
 
     __BCinline__ const auto& outer_shape() const { return m_outer_shape; }
     __BCinline__ BC::size_t  leading_dimension(int i) const { return m_outer_shape[i]; }
@@ -197,8 +206,8 @@ struct SubShape : Shape<ndims> {
 
 private:
 	//hide from external sources
-	using Shape<ndims>::swap_shape;
-	using Shape<ndims>::copy_shape;
+	using Shape<ndims, SubShape<ndims>>::swap_shape;
+	using Shape<ndims, SubShape<ndims>>::copy_shape;
 };
 
 }

@@ -133,6 +133,7 @@ static constexpr  BC::size_t MULTITHREAD_THRESHOLD = 16384;
 
 }
 
+#include "Tensor_Common.h"
 #include "Tensor_Base.h"
 #include "Tensor_Aliases.h"
 
