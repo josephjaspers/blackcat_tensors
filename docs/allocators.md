@@ -1,11 +1,8 @@
 # Allocators 
 
-BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two template arguments. The first argument, is the scalar-type while the second is the allocator. This was designed to mimic `stl` library despite the fact that BCT's allocator's are NOT interchangeable to the standard libraries allocators. 
+BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two template arguments. The first argument, is the scalar-type while the second is the allocator. This was designed to mimic `stl` library.
 
-#### Differences between `std` and `BC` allocators 
-1) BC allocators do not accept a template argument for the value_typeype. 
-2) BC allocators are composed of entirely static methods. 
-3) BC allocators define certain methods that are essential 'boiler plate' for Cuda, the Basic_Allocator must define these methods as well to maintain a common interface. 
+#### Note: Currently allocators must be trivially copyable. (This will be changed in the future).
 
 	
 #### Overview
@@ -31,8 +28,8 @@ BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two temp
 #### Choosing an allocator (example):
 
 ```cpp
-BC::Matrix<float> mat; 			    //defaults to Basic_Allocator
-BC::Matrix<float, BC::Basic_Allocator> mat; //identical to above   
-BC::Matrix<float, BC::Cuda> mat;	    //allocates memory on the GPU 
-BC::Matrix<float, BC::Cuda_Managed> mat;    //allocates memory on the GPU but data transfer is managed automatically. 
+BC::Matrix<float> mat; 			    	   //defaults to Basic_Allocator<float>
+BC::Matrix<float, BC::Basic_Allocator<float>> mat; //identical to above   
+BC::Matrix<float, BC::Cuda<float>> mat;	    	   //allocates memory on the GPU 
+BC::Matrix<float, BC::Cuda_Managed<float>> mat;    //allocates memory on the GPU but data transfer is managed automatically. 
 ```
