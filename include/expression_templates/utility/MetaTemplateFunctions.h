@@ -9,7 +9,7 @@
 #ifndef SIMPLE_H_
 #define SIMPLE_H_
 #include <type_traits>
-#include "../Internal_Common.h"
+
 namespace BC {
 namespace MTF {
 

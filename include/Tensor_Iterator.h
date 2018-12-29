@@ -5,10 +5,9 @@
  *      Author: joseph
  */
 
-#ifndef TENSOR_STL_INTERFACE_H_
-#define TENSOR_STL_INTERFACE_H_
+#ifndef BLACKCAT_TENSOR_ITERATOR_H_
+#define BLACKCAT_TENSOR_ITERATOR_H_
 
-#include "Tensor_Common.h"
 #include "iterators/Multidimensional_Iterator.h"
 #include "iterators/Coefficientwise_Iterator.h"
 

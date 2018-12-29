@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
-#define EXPRESSION_BINARY_DOTPRODUCT_IMPL2_H_
+#ifndef BC_EXPRESSION_TEMPLATES_BLAS_FEATURE_DETECTOR_H_
+#define BC_EXPRESSION_TEMPLATES_BLAS_FEATURE_DETECTOR_H_
 
 #include "Internal_Type_Traits.h"
 #include "operations/BLAS.h"

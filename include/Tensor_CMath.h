@@ -5,12 +5,10 @@
  *      Author: joseph
  */
 
-#ifndef TENSOR_CMATH_H_
-#define TENSOR_CMATH_H_
+#ifndef BLACKCAT_TENSOR_CMATH_H_
+#define BLACKCAT_TENSOR_CMATH_H_
 
 #include <cmath>
-#include "expression_templates/Internal_Common.h"
-#include "expression_templates/operations/Unary.h"
 
 namespace BC {
 

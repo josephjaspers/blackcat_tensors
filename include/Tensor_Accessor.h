@@ -6,14 +6,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef TENSOR_SHAPING_H_
-#define TENSOR_SHAPING_H_
+#ifndef BLACKCAT_TENSOR_ACCESSOR_H_
+#define BLACKCAT_TENSOR_ACCESSOR_H_
 
-#include "Tensor_Common.h"
+
 #include "expression_templates/Array.h"
 #include "expression_templates/Array_Scalar.h"
 #include "expression_templates/Array_Slice.h"
 #include "expression_templates/Array_Strided_Vector.h"
+
 
 namespace BC {
 namespace module {

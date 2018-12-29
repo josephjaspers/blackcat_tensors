@@ -6,10 +6,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef TENSOR_BASE_H_
-#define TENSOR_BASE_H_
+#ifndef BLACKCAT_TENSOR_BASE_H_
+#define BLACKCAT_TENSOR_BASE_H_
 
-#include "Tensor_Common.h"
 
 #include "Tensor_Operations.h"
 #include "Tensor_Accessor.h"

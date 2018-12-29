@@ -6,11 +6,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef TENSOR_CORE_BASE_H_
-#define TENSOR_CORE_BASE_H_
+#ifndef BLACKCAT_EXPRESSION_TEMPLATES_ARRAY_BASE_H_
+#define BLACKCAT_EXPRESSION_TEMPLATES_ARRAY_BASE_H_
 
 #include "Internal_Type_Interface.h"
-#include "Internal_Common.h"
+#include "Common.h"
 #include "Shape.h"
 
 namespace BC {

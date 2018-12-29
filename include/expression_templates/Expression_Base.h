@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 
-#ifndef EXPRESSION_BASE_H_
-#define EXPRESSION_BASE_H_
+#ifndef BC_EXPRESSION_TEMPLATES_EXPRESSION_BASE_H_
+#define BC_EXPRESSION_TEMPLATES_EXPRESSION_BASE_H_
 
 #include "Internal_Type_Interface.h"
 #include "operations/Binary.h"

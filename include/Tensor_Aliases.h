@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 
-#ifndef TENSOR_ALIASES_H_
-#define TENSOR_ALIASES_H_
+#ifndef BLACKCAT_TENSOR_ALIASES_H_
+#define BLACKCAT_TENSOR_ALIASES_H_
 
 #include "Tensor_Base.h"
 

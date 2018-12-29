@@ -8,8 +8,8 @@
 
 #ifndef BC_INTERNAL_BASE_H_
 #define BC_INTERNAL_BASE_H_
-#include "Internal_Common.h"
-#include "Internal_BLAS_Feature_Detector.h"
+
+#include "Common.h"
 #include "operations/Binary.h"
 #include "operations/Unary.h"
 

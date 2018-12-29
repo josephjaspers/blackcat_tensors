@@ -6,11 +6,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef FUNCTION_DOT_H_
-#define FUNCTION_DOT_H_
+#ifndef BC_EXPRESSION_TEMPLATES_FUNCTION_DOT_H_
+#define BC_EXPRESSION_TEMPLATES_FUNCTION_DOT_H_
 
 #include "Expression_Base.h"
-#include "Internal_BLAS_Feature_Detector.h"
+#include "BLAS_Feature_Detector.h"
 #include "Tree_Evaluator_Runner.h"
 
 
@@ -39,7 +39,8 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
     static constexpr bool rv_scalar = blas_feature_detector<rv>::scalar;
     static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
     static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
-    static constexpr int  DIMS  = 0;
+
+    static constexpr int DIMS  = 0;
     static constexpr int ITERATOR = 0;
 
 

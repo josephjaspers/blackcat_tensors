@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 
-#ifndef TENSOR_FUNCTIONS_H_
-#define TENSOR_FUNCTIONS_H_
+#ifndef BLACKCAT_TENSOR_ALGORITHMS_H_
+#define BLACKCAT_TENSOR_ALGORITHMS_H_
 
 #include <algorithm>
 #include "algorithms/Algorithms.h"

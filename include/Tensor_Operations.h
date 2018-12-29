@@ -6,11 +6,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef TENSOR_HEAD_H_
-#define TENSOR_HEAD_H_
+#ifndef BLACKCAT_TENSOR_OPERATIONS_H_
+#define BLACKCAT_TENSOR_OPERATIONS_H_
 
 #include "expression_templates/Array_Scalar_Constant.h"
-#include "Tensor_Common.h"
 #include "expression_templates/operations/Binary.h"
 #include "expression_templates/operations/Unary.h"
 #include "expression_templates/operations/BLAS.h"

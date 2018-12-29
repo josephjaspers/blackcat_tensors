@@ -6,15 +6,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef TENSOR_LV2_CORE_IMPL_H_
-#define TENSOR_LV2_CORE_IMPL_H_
+#ifndef BLACKCAT_TENSOR_UTILITY_H_
+#define BLACKCAT_TENSOR_UTILITY_H_
 
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 #include <sstream>
-#include "Tensor_Common.h"
 
 namespace BC {
 template<class> class Tensor_Base;
@@ -27,20 +26,23 @@ namespace module {
 template<class derived>
 struct Tensor_Utility;
 
-template<class internal_t>
-struct Tensor_Utility<Tensor_Base<internal_t>> {
+template<class Derived>
+struct Tensor_Utility<Tensor_Base<Derived>> {
 
-	using system_tag = typename internal_t::system_tag;
-    using derived = Tensor_Base<internal_t>;
-    using scalar  = typename internal_t::value_type;
-    using allocator_t = typename internal_t::allocator_t;
+	#define BC_ASSERT_ARRAY_ONLY(literal)\
+	static_assert(BC::is_array<Derived>(), "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
+
+	using system_tag = typename Derived::system_tag;
+    using derived = Tensor_Base<Derived>;
+    using scalar  = typename Derived::value_type;
+    using allocator_t = typename Derived::allocator_t;
     using utility_l = utility::implementation<system_tag>;
 
     template<class>
     friend class Tensor_Utility;
 
 private:
-    static constexpr int DIMS = internal_t::DIMS;
+    static constexpr int DIMS = Derived::DIMS;
 
     derived& as_derived() {
         return static_cast<derived&>(*this);
@@ -97,7 +99,7 @@ public:
     }
 
     void write(std::ofstream& os) const {
-        BC_ARRAY_ONLY("write(std::ofstream& os)");
+        BC_ASSERT_ARRAY_ONLY("write(std::ofstream& os)");
 
         scalar* internal = new scalar[as_derived().size()];
         utility_l::DeviceToHost(internal, as_derived().internal().memptr(), as_derived().size());
@@ -112,7 +114,7 @@ public:
     }
 
     void write_tensor_data(std::ofstream& os) const {
-        BC_ARRAY_ONLY("void write_tensor_data(std::ofstream& os)");
+        BC_ASSERT_ARRAY_ONLY("void write_tensor_data(std::ofstream& os)");
 
         scalar* internal = new scalar[as_derived().size()];
         utility_l::DeviceToHost(internal, as_derived().internal().memptr(), as_derived().size());
@@ -131,7 +133,7 @@ public:
     }
 
     void read_as_one_hot(std::ifstream& is) {
-        BC_ARRAY_ONLY("void read_as_one_hot(std::ifstream& is)");
+        BC_ASSERT_ARRAY_ONLY("void read_as_one_hot(std::ifstream& is)");
 
         if (derived::DIMS != 1)
             throw std::invalid_argument("one_hot only supported by vectors");
@@ -146,7 +148,7 @@ public:
     }
 
     void read(std::ifstream& is) {
-        BC_ARRAY_ONLY("void read(std::ifstream& is)");
+        BC_ASSERT_ARRAY_ONLY("void read(std::ifstream& is)");
 
         if (!is.good()) {
             std::cout << "File open error - returning " << std::endl;
@@ -175,7 +177,7 @@ public:
     }
 
     void read_tensor_data(std::ifstream& is, bool read_dimensions = true, bool overrideDimensions = true) {
-        BC_ARRAY_ONLY("void read_tensor_data(std::ifstream& is, bool read_dimensions = true, bool overrideDimensions = true)");
+        BC_ASSERT_ARRAY_ONLY("void read_tensor_data(std::ifstream& is, bool read_dimensions = true, bool overrideDimensions = true)");
 
         if (!is.good()) {
             std::cout << "File open error - returning " << std::endl;
@@ -228,7 +230,7 @@ public:
     }
 
     void read_tensor_data_as_one_hot(std::ifstream& is,  BC::size_t   sz) {
-        BC_ARRAY_ONLY("void read_tensor_data_as_one_hot(std::ifstream& is,  BC::size_t   sz)");
+        BC_ASSERT_ARRAY_ONLY("void read_tensor_data_as_one_hot(std::ifstream& is,  BC::size_t   sz)");
         if (derived::DIMS != 1)
             throw std::invalid_argument("one_hot only supported by vectors");
 

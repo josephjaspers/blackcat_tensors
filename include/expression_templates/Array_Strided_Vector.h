@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef ARRAY_ROW_H_
-#define ARRAY_ROW_H_
+#ifndef BC_EXPRESSION_TEMPLATES_ARRAY_STRIDED_VECTOR_H_
+#define BC_EXPRESSION_TEMPLATES_ARRAY_STRIDED_VECTOR_H_
 
 #include "Array_Base.h"
 

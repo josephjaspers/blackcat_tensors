@@ -9,7 +9,6 @@
 #ifndef INTERNAL_SHAPES_H_
 #define INTERNAL_SHAPES_H_
 
-#include "../Internal_Common.h"
 /*
  * Defines stack array and lambda array
  * These are just two trivially classes used for storing small amounts of homogenous internal types, generally ints

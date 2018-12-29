@@ -9,11 +9,10 @@
 #ifndef EXPRESSION_BINARY_FUNCTORS_H_
 #define EXPRESSION_BINARY_FUNCTORS_H_
 
-#include "../Internal_Common.h"
-
 namespace BC {
-namespace et     {
+namespace et {
 namespace oper {
+
 template<class T> struct rm_const { using type = T; };
 template<class T> struct rm_const<const T&> { using type = T&; };
 

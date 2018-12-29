@@ -6,11 +6,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef EXPRESSION_BINARY_GEMM_H_
-#define EXPRESSION_BINARY_GEMM_H_
+#ifndef BC_EXPRESSION_TEMPLATES_FUNCTION_GEMM_H_
+#define BC_EXPRESSION_TEMPLATES_FUNCTION_GEMM_H_
 
 #include "Expression_Base.h"
-#include "Internal_BLAS_Feature_Detector.h"
+#include "BLAS_Feature_Detector.h"
 #include "Tree_Evaluator_Runner.h"
 
 namespace BC {

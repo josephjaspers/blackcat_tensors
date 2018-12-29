@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef BC_INTERNALS_BC_TENSOR_TENSOR_COMMON_H_
-#define BC_INTERNALS_BC_TENSOR_TENSOR_COMMON_H_
+#ifndef BLACKCAT_BLACKCAT_COMMON_H_
+#define BLACKCAT_BLACKCAT_COMMON_H_
 
 
 #include <type_traits>
@@ -19,7 +19,6 @@
 
 
 namespace BC {
-#define BC_ARRAY_ONLY(literal) static_assert(BC::is_array<internal_t>(), "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
 
 template<int>   class DISABLED;
 template<class> class Tensor_Base;

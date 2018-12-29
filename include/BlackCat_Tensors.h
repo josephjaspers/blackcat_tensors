@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef BLACKCAT_TENSORS_H_
-#define BLACKCAT_TENSORS_H_
+#ifndef BLACKCAT_BLACKCAT_TENSORS_H_
+#define BLACKCAT_BLACKCAT_TENSORS_H_
 
 /*
  * This file defines all global macros and compilation switches.
@@ -133,7 +133,7 @@ static constexpr  BC::size_t MULTITHREAD_THRESHOLD = 16384;
 
 }
 
-#include "Tensor_Common.h"
+#include "BlackCat_Common.h"
 #include "Tensor_Base.h"
 #include "Tensor_Aliases.h"
 

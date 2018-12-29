@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef EXPRESSION_UNARY_MATRIXTRANSPOSITION_H_
-#define EXPRESSION_UNARY_MATRIXTRANSPOSITION_H_
+#ifndef BC_EXPRESSION_TEMPLATES_FUNCTION_TRANSPOSE_H_
+#define BC_EXPRESSION_TEMPLATES_FUNCTION_TRANSPOSE_H_
 #include <vector>
 #include "Expression_Base.h"
 

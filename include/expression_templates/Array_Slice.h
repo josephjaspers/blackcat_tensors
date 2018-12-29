@@ -5,10 +5,10 @@
  *      Author: joseph
  */
 
-#ifndef Array_Slice_H_
-#define Array_Slice_H_
+#ifndef BC_EXPRESSION_TEMPLATES_ARRAY_SLICE_H_
+#define BC_EXPRESSION_TEMPLATES_ARRAY_SLICE_H_
 
-#include "Internal_Common.h"
+#include "Common.h"
 #include "Array_Base.h"
 #include "Shape.h"
 

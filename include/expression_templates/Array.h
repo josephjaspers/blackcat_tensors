@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef SHAPE_H_
-#define SHAPE_H_
+#ifndef BC_EXPRESSION_TEMPLATES_ARRAY_H_
+#define BC_EXPRESSION_TEMPLATES_ARRAY_H_
 
 #include "Array_Base.h"
 

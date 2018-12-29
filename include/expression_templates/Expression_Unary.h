@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef EXPRESSION_UNARY_POINTWISE_CU_
-#define EXPRESSION_UNARY_POINTWISE_CU_
+#ifndef BC_EXPRESSION_TEMPLATES_EXPRESSION_UNARY_H_
+#define BC_EXPRESSION_TEMPLATES_EXPRESSION_UNARY_H_
 
 #include "Expression_Base.h"
 

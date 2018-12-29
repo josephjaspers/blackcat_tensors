@@ -9,7 +9,7 @@
 #ifndef INTERNAL_SHAPE_H_
 #define INTERNAL_SHAPE_H_
 
-#include "Internal_Common.h"
+#include "Common.h"
 #include "Shape_Base.h"
 
 namespace BC {
