@@ -81,6 +81,12 @@ struct Unary_Expression<Value, oper::transpose<System_Tag>>
 
 };
 
+template<class expr_t>
+auto make_transpose(expr_t expr) {
+	using internal_t = std::decay_t<decltype(expr.internal())>;
+	using system_tag = typename internal_t::system_tag;
+	return Unary_Expression<internal_t, oper::transpose<system_tag>>(expr.internal());
+}
 
 }
 }

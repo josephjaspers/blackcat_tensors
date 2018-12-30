@@ -48,18 +48,11 @@ struct Tensor_Operations<Tensor_Base<internal_type>> {
 
 private:
 
-    template<class deriv> using internal_t_of  = typename Tensor_Operations<deriv>::internal_t;
-    template<class deriv> using allocator_t_of = typename Tensor_Operations<deriv>::allocator_t;
-    template<class deriv> using mathlib_t_of = typename Tensor_Operations<deriv>::mathlib_t;
-
     static constexpr bool copy_assignable = et::BC_array_copy_assignable<internal_type>();
     #define BC_ASSERT_ASSIGNABLE(literal) static_assert(copy_assignable, "ASSERT COPY ASSIGNABLE: " literal)
 
-    template<class expr>           using Unary_Expression_t  = BC::Tensor_Base<et::Unary_Expression<internal_t, expr>>;
-    template<class rv, class expr> using Binary_Expression_t = BC::Tensor_Base<et::Binary_Expression<internal_t, rv, expr>>;
-
     const derived& as_derived() const { return static_cast<const derived&>(*this); }
-           derived& as_derived()      { return static_cast<         derived&>(*this); }
+          derived& as_derived()       { return static_cast<      derived&>(*this); }
 
     //--------------------------------------evaluation implementation-----------------------------------------------//
 public:
@@ -167,8 +160,9 @@ public:
     template<class param_deriv>
     auto operator *(const Tensor_Operations<param_deriv>& param) const {
 
+    	using rv_internal_t = typename Tensor_Operations<param_deriv>::internal_t;
         static constexpr bool lv_trans  = et::blas_feature_detector<internal_t>::transposed;
-        static constexpr bool rv_trans  = et::blas_feature_detector<internal_t_of<param_deriv>>::transposed;
+        static constexpr bool rv_trans  = et::blas_feature_detector<rv_internal_t>::transposed;
 
         static constexpr bool scalmul    = derived::DIMS == 0 || param_deriv::DIMS == 0;
         static constexpr bool gemm         = derived::DIMS == 2 && param_deriv::DIMS == 2;
@@ -176,18 +170,18 @@ public:
         static constexpr bool ger          = derived::DIMS == 1 && param_deriv::DIMS == 1 && !lv_trans && rv_trans;
         static constexpr bool dot          = derived::DIMS == 1 && param_deriv::DIMS == 1 && !lv_trans && !rv_trans;
         using matmul_t =
-                     std::conditional_t<scalmul, Binary_Expression_t<internal_t_of<param_deriv>, et::oper::scalar_mul>,
-                     std::conditional_t<gemm,    Binary_Expression_t<internal_t_of<param_deriv>, et::oper::gemm<system_tag>>,
-                     std::conditional_t<gemv,    Binary_Expression_t<internal_t_of<param_deriv>, et::oper::gemv<system_tag>>,
-                     std::conditional_t<ger,     Binary_Expression_t<internal_t_of<param_deriv>, et::oper::ger<system_tag>>,
-                     std::conditional_t<dot,     Binary_Expression_t<internal_t_of<param_deriv>, et::oper::dot<system_tag>>, void>>>>>;
+                     std::conditional_t<scalmul, et::oper::scalar_mul,
+                     std::conditional_t<gemm,    et::oper::gemm<system_tag>,
+                     std::conditional_t<gemv,    et::oper::gemv<system_tag>,
+                     std::conditional_t<ger,     et::oper::ger<system_tag>,
+                     std::conditional_t<dot,      et::oper::dot<system_tag>, void>>>>>;
 
         static_assert(!std::is_same<matmul_t, void>::value, "INVALID USE OF OPERATOR *");
-        return matmul_t(as_derived().internal(), param.as_derived().internal());
+        return make_tensor(et::make_bin_expr<matmul_t>(as_derived().internal(), param.as_derived().internal()));
     }
 
-    const auto transpose() const { return un_expr<et::oper::transpose<system_tag>>(); }
-          auto transpose()          { return un_expr<et::oper::transpose<system_tag>>(); }
+    const auto transpose() const { return make_tensor(make_transpose(as_derived().internal())); }
+          auto transpose()       { return make_tensor(make_transpose(as_derived().internal())); }
 
     const auto t() const { return this->transpose(); }
           auto t()       { return this->transpose(); }
@@ -231,29 +225,30 @@ public:
                                                     !std::is_base_of<BC_Type, param_scalar>::value>;
 
     //-----------------------------------expression_factory--------------------------------------------------//
+
     template<class functor>
     auto un_expr(functor f) const {
-        return Unary_Expression_t<functor>(as_derived().internal(), f);
+        return make_tensor(et::make_un_expr<functor>(as_derived().internal(), f));
     }
     template<class functor>
     const auto un_expr() const {
-        return Unary_Expression_t<functor>(as_derived().internal());
+        return make_tensor(et::make_un_expr<functor>(as_derived().internal()));
     }
     template<class functor, class right_value>
     const auto bi_expr(functor f, const Tensor_Operations<right_value>& rv) const {
-        return Binary_Expression_t<internal_t_of<right_value>, functor>(as_derived().internal(), rv.as_derived().internal());
+        return make_tensor(et::make_bin_expr<functor>(as_derived().internal(), rv.as_derived().internal()));
     }
     template<class functor, class right_value>
     const auto bi_expr(const Tensor_Operations<right_value>& rv) const {
-        return Binary_Expression_t<internal_t_of<right_value>, functor>(as_derived().internal(), rv.as_derived().internal());
+        return make_tensor(et::make_bin_expr<functor>(as_derived().internal(), rv.as_derived().internal()));
     }
     template<class functor, class right_value>
     const auto bi_expr_internal(functor f, const right_value& rv) const {
-        return Binary_Expression_t<right_value, functor>(as_derived().internal(), rv, f);
+        return make_tensor(et::make_bin_expr<functor>(as_derived().internal(), rv, f));
     }
     template<class functor, class right_value>
     const auto bi_expr_internal(const right_value& rv) const {
-        return Binary_Expression_t<right_value, functor>(as_derived().internal(), rv);
+        return make_tensor(et::make_bin_expr<functor>(as_derived().internal(), rv));
     }
 
     //----------------------------------------------validity checks--------------------------------------------------//

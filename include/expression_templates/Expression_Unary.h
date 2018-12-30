@@ -51,9 +51,9 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Value, operati
 };
 
 
-template<class op, class expr>
-auto make_un_expr(expr e) {
-	return Unary_Expression<std::decay_t<decltype(e.internal())>, op>(e.internal());
+template<class op, class expr> __BChot__
+auto make_un_expr(expr e, op oper =op()) {
+	return Unary_Expression<std::decay_t<decltype(e.internal())>, op>(e.internal(), oper);
 }
 
 

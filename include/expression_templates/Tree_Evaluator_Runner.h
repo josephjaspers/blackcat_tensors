@@ -84,7 +84,7 @@ struct CacheEvaluator {
 template<class array_t, class expression_t>__BChot__
 auto evaluate_to(array_t array, expression_t expr) {
     static_assert(is_array<array_t>(), "MAY ONLY EVALUATE TO ARRAYS");
-    return Lazy_Evaluator<typename expression_t::system_tag>::evaluate(et::Binary_Expression<array_t, expression_t, et::oper::assign>(array, expr));
+    return Lazy_Evaluator<typename expression_t::system_tag>::evaluate(et::make_bin_expr<et::oper::assign>(array, expr));
 }
 
 template<class expression_t>__BChot__

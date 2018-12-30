@@ -66,7 +66,7 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
 };
 
 
-template<class op, class Lv, class Rv>
+template<class op, class Lv, class Rv> __BChot__
 auto make_bin_expr(Lv left, Rv right) {
 	return Binary_Expression<
 			std::decay_t<decltype(left.internal())>,
