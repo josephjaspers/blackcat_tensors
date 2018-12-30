@@ -2,8 +2,6 @@
 
 BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two template arguments. The first argument, is the scalar-type while the second is the allocator. This was designed to mimic `stl` library.
 
-#### Note: Currently allocators must be trivially copyable. (This will be changed in the future).
-
 	
 #### Overview
 
