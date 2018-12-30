@@ -14,19 +14,16 @@
 namespace BC {
 namespace et {
 
+template<int, class, class> class Array;
 
-template<int Dimension, class Scalar, class Allocator>
-struct Array
-		: Array_Base<Array<Dimension, Scalar, Allocator>, Dimension>,
-		  Shape<Dimension>,
-		  private Allocator {
-
-	static_assert(std::is_trivially_copyable<Allocator>::value,
-			"BC_TENSOR_ALLOCATOR MUST BE TRIVIALLY COPYABLE");
+template<int Dimension, class Scalar, class Allocator, class AllocatorBase>
+struct ArrayExpression
+		: Array_Base<ArrayExpression<Dimension, Scalar, Allocator, AllocatorBase>, Dimension>,
+		  Shape<Dimension> {
 
     using value_type = Scalar;
     using allocator_t = Allocator;
-    using system_tag = typename allocator_t::system_tag;
+    using system_tag = typename Allocator::system_tag;
 
     static constexpr bool copy_constructible = true;
     static constexpr bool move_constructible = true;
@@ -36,79 +33,170 @@ struct Array
     static constexpr int  DIMS = Dimension;
     static constexpr int ITERATOR = 1;
 
+private:
+    const auto& as_derived() const { return static_cast<const AllocatorBase&>(*this); }
+          auto& as_derived()  	   { return static_cast<	  AllocatorBase&>(*this); }
+
+    const auto& get_allocator() const { return static_cast<const Allocator&>(as_derived()); }
+          auto& get_allocator() 	  { return static_cast<	     Allocator&>(as_derived()); }
+public:
     value_type* array = nullptr;
-    Array() = default;
+    ArrayExpression() = default;
 
-    Array(Shape<DIMS> shape_, value_type* array_) : array(array_), Shape<DIMS>(shape_) {}
+    ArrayExpression(Shape<DIMS> shape_, value_type* array_) : array(array_), Shape<DIMS>(shape_) {}
 
-    template<class U,typename = std::enable_if_t<not std::is_base_of<BC_internal_interface<U>, U>::value>>
-    Array(U param) : Shape<DIMS>(param), array( allocator_t::allocate(this->size())) {}
+    template<class U,typename = std::enable_if_t<! std::is_base_of<BC_internal_interface<U>, U>::value>>
+	ArrayExpression(U param) : Shape<DIMS>(param), array(get_allocator().allocate(this->size())) {}
 
     template<class... integers>//CAUSES FAILURE WITH NVCC 9.2, typename = std::enable_if_t<MTF::is_integer_sequence<integers...>>>
-    Array(integers... ints) : Shape<DIMS>(ints...), array(allocator_t::allocate(this->size())) {
+    ArrayExpression(integers... ints) : Shape<DIMS>(ints...), array(get_allocator().allocate(this->size())) {
         static_assert(MTF::seq_of<int, integers...>,"PARAMETER LIST MUST BE INTEGER_SEQUNCE");
     }
 
     template<class deriv_expr, typename = std::enable_if_t<std::is_base_of<BC_internal_interface<deriv_expr>, deriv_expr>::value>>
-    Array(const deriv_expr& expr) : Shape<DIMS>(static_cast<const deriv_expr&>(expr).inner_shape()),
-    array(allocator_t::allocate(this->size())){
+    ArrayExpression(const deriv_expr& expr) : Shape<DIMS>(static_cast<const deriv_expr&>(expr).inner_shape()),
+    array(get_allocator().allocate(this->size())){
         evaluate_to(*this, expr);
     }
 
 protected:
-    template<class U> Array(U param, value_type* array_) : array(array_), Shape<DIMS>(param) {}
-    Array(value_type* array_) : array(array_) {}
+    template<class U>
+    ArrayExpression(U param, value_type* array_) : array(array_), Shape<DIMS>(param) {}
+    ArrayExpression(value_type* array_) : array(array_) {}
 
 
-    void copy_init(const Array& array_copy) {
+    void copy_init(const ArrayExpression& array_copy) {
         this->copy_shape(array_copy);
-        this->array = allocator_t::allocate(this->size());
+        this->array = get_allocator().allocate(this->size());
         evaluate_to(*this, array_copy);
     }
 public:
     __BCinline__ const value_type* memptr() const { return array; }
     __BCinline__       value_type* memptr()       { return array; }
 
-    void swap_array(Array& param) {
+    void swap_array(ArrayExpression& param) {
         std::swap(this->array, param.array);
     }
 
     void deallocate() {
-        allocator_t::deallocate(array, this->size());
+        get_allocator().deallocate(array, this->size());
         array = nullptr;
     }
 };
 
+template<int Dimension, class Scalar, class Allocator>
+class Array :
+		private std::conditional_t<
+			allocator::has_system_tag<Allocator>::value,
+			Allocator,
+			allocator::CustomAllocator<Allocator>>,
+
+			public ArrayExpression<Dimension, Scalar, std::conditional_t<
+														allocator::has_system_tag<Allocator>::value,
+														Allocator,
+														allocator::CustomAllocator<Allocator>>, Array<Dimension, Scalar, Allocator>>
+	{
+
+	template<int, class, class, class>
+	friend class ArrayExpression;
+
+
+public:
+
+	using self = Array<Dimension, Scalar, Allocator>;
+	using allocator_t = std::conditional_t<allocator::has_system_tag<Allocator>::value, Allocator, allocator::CustomAllocator<Allocator>>;
+	using internal_t = ArrayExpression<Dimension, Scalar, allocator_t, self>;
+	using value_type = Scalar;
+	using system_tag = typename allocator_t::system_tag;
+
+	using ArrayExpression<Dimension, Scalar, allocator_t, self>::deallocate;
+
+	Array() = default;
+
+	template<class... args>
+	Array(Allocator alloc, const args&... params)
+	: allocator_t(alloc), internal_t(params...) {}
+
+	template<class... args>
+	Array(const args&... params)
+	: allocator_t(allocator_t()), internal_t(params...) {}
+};
+
+
+
+template<int Dimension, class Scalar, class Allocator>
+class Temporary :
+		private std::conditional_t<
+			allocator::has_system_tag<Allocator>::value,
+			Allocator,
+			allocator::CustomAllocator<Allocator>>,
+
+			public ArrayExpression<Dimension, Scalar, std::conditional_t<
+														allocator::has_system_tag<Allocator>::value,
+														Allocator,
+														allocator::CustomAllocator<Allocator>>, Temporary<Dimension, Scalar, Allocator>>
+	{
+
+	template<int, class, class, class>
+	friend class ArrayExpression;
+
+
+public:
+
+	using self = Temporary<Dimension, Scalar, Allocator>;
+	using allocator_t = std::conditional_t<allocator::has_system_tag<Allocator>::value, Allocator, allocator::CustomAllocator<Allocator>>;
+	using internal_t = ArrayExpression<Dimension, Scalar, allocator_t, self>;
+	using value_type = Scalar;
+	using system_tag = typename allocator_t::system_tag;
+
+	using ArrayExpression<Dimension, Scalar, allocator_t, self>::deallocate;
+
+	Temporary() = default;
+
+	template<class... args>
+	Temporary(Allocator alloc, const args&... params)
+	: allocator_t(alloc), internal_t(params...) {}
+
+	template<class... args>
+	Temporary(const args&... params)
+	: allocator_t(allocator_t()), internal_t(params...) {}
+};
 
 //specialization for scalar --------------------------------------------------------------------------------------------------------
-template<class T, class allocator>
-struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Shape<0>, private allocator {
+template<class T, class Allocator, class AllocatorBase>
+struct ArrayExpression<0, T, Allocator, AllocatorBase> : Array_Base<ArrayExpression<0, T, Allocator, AllocatorBase>, 0>, public Shape<0> {
 
     using value_type = T;
-    using allocator_t = allocator;
-    using system_tag = typename allocator_t::system_tag;
+    using allocator_t = Allocator;
+    using system_tag = typename Allocator::system_tag;
 
     static constexpr int DIMS = 0;
     static constexpr int ITERATOR = 0;
 
-
     value_type* array = nullptr;
 
+private:
+    const auto& as_derived() const { return static_cast<const AllocatorBase&>(*this); }
+          auto& as_derived()  	   { return static_cast<	  AllocatorBase&>(*this); }
 
-    Array()
-     : array(allocator_t::allocate(this->size())) {}
+    const auto& get_allocator() const { return static_cast<const Allocator&>(as_derived()); }
+          auto& get_allocator() 	  { return static_cast<	     Allocator&>(as_derived()); }
+public:
 
-    Array(Shape<DIMS> shape_, value_type* array_)
+    ArrayExpression()
+     : array(get_allocator().allocate(this->size())) {}
+
+    ArrayExpression(Shape<DIMS> shape_, value_type* array_)
     : array(array_), Shape<0>(shape_) {}
 
     template<class U>
-    Array(U param) {
-    	allocator_t::allocate(array, this->size());
+    ArrayExpression(U param) {
+    	array = get_allocator().allocate(this->size());
     	evaluate_to(*this, param);
     }
 
     template<class U>
-    Array(U param, value_type* array_) : array(array_), Shape<DIMS>(param) {}
+    ArrayExpression(U param, value_type* array_) : array(array_), Shape<DIMS>(param) {}
 
     __BCinline__
     const auto& operator [] (int index) const {
@@ -133,17 +221,17 @@ struct Array<0, T, allocator> : Array_Base<Array<0, T, allocator>, 0>, public Sh
     __BCinline__ const value_type* memptr() const { return array; }
     __BCinline__       value_type* memptr()       { return array; }
 
-    void copy_init(const Array& array_copy) {
-        allocator_t::allocate(array, this->size());
+    void copy_init(const ArrayExpression& array_copy) {
+        array = get_allocator().allocate(this->size());
         evaluate_to(*this, array_copy);
     }
 
-    void swap_array(Array& param) {
+    void swap_array(ArrayExpression& param) {
         std::swap(this->array, param.array);
     }
 
     void deallocate() {
-        allocator_t::deallocate(array, this->size());
+        get_allocator().deallocate(this->array, this->size());
         array = nullptr;
     }
 

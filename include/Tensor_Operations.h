@@ -41,8 +41,8 @@ struct Tensor_Operations<Tensor_Base<internal_type>> {
     template<class> friend class Tensor_Operations;
 
     using derived      = Tensor_Base<internal_type>;
-    using internal_t   = internal_type;
-    using value_type     = typename internal_t::value_type;
+    using internal_t   = std::decay_t<decltype(std::declval<internal_type>().internal())>;
+    using value_type   = typename internal_t::value_type;
     using allocator_t  = typename internal_t::allocator_t;
     using system_tag   = typename internal_t::system_tag;
 
@@ -338,7 +338,7 @@ public:
         auto& operator -= (const Tensor_Operations<derived_t>& param) {
             tensor.assert_valid(param);
             evaluate(tensor.bi_expr(et::oper::sub_assign(), param));
-            return tensor();
+            return tensor;
         }
     };
 

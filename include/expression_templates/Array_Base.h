@@ -43,6 +43,7 @@ public:
     const auto& operator [](int index) const {
         return as_derived().memptr()[index];
     }
+
     __BCinline__
     auto& operator [](int index) {
         return as_derived().memptr()[index];
@@ -52,6 +53,7 @@ public:
     __BCinline__ const auto& operator ()(integers ... ints) const {
         return as_derived()[this->dims_to_index(ints...)];
     }
+
     template<class ... integers>
     __BCinline__ auto& operator ()(integers ... ints) {
         return as_derived()[this->dims_to_index(ints...)];
@@ -71,6 +73,7 @@ public:
     }
 
     void deallocate() {}
+
     //------------------------------------------Implementation Details---------------------------------------//
 public:
 
@@ -107,7 +110,10 @@ public:
         }
         return index;
     }
+
 };
+
+
 }
 }
 

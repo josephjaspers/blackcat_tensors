@@ -10,7 +10,10 @@
 #define TEMPORARY_ARRAY_H_
 
 namespace BC {
-namespace et     {
+namespace et {
+template<int,class,class> struct Temporary;
+template<int,class,class, class> struct ArrayExpression;
+
 namespace tree {
 
 /*
@@ -18,16 +21,16 @@ namespace tree {
  *
  */
 
-template<class data_t>
-struct temporary : data_t {
-    using data_t::data_t;
-};
+//template<class data_t>
+//struct temporary : data_t {
+//    using data_t::data_t;
+//};
 
 template<class T>
 struct is_temporary : std::false_type {};
 
-template<class T>
-struct is_temporary<temporary<T>> : std::true_type {};
+template<int dims, class Scalar, class Allocator>
+struct is_temporary<ArrayExpression<dims, Scalar, Allocator, Temporary<dims, Scalar, Allocator>>> : std::true_type {};
 
 
 }

@@ -15,11 +15,13 @@ namespace BC {
 namespace et {
 namespace tree {
 
-template<class T>
-struct evaluator<temporary<T>, std::enable_if_t<is_array<T>()>>
- : evaluator_default<temporary<T>> {
+template<int x, class Scalar, class Allocator>
+struct evaluator<
+	ArrayExpression<x, Scalar, Allocator, Temporary<x, Scalar, Allocator>>,
+	std::enable_if_t<is_array<ArrayExpression<x, Scalar, Allocator, Temporary<x, Scalar, Allocator>>>()>>
+ : evaluator_default<ArrayExpression<x, Scalar, Allocator, Temporary<x, Scalar, Allocator>>> {
 
-    static void deallocate_temporaries(temporary<T> tmp) {
+    static void deallocate_temporaries(ArrayExpression<x, Scalar, Allocator, Temporary<x, Scalar, Allocator>> tmp) {
         tmp.deallocate();
     }
 };

@@ -51,7 +51,6 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
         	/*auto left = */ evaluator<lv>::linear_evaluation(branch.left, tensor);
             auto right = evaluator<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor));
             return right;
-            //            return Binary_Expression<decltype(left), decltype(right), op>(left, right);
         }
     };
 
@@ -66,7 +65,6 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
     		auto left  = evaluator<lv>::linear_evaluation(branch.left, tensor);
           /*auto right = */ evaluator<rv>::linear_evaluation(branch.right, update_injection<op, b != 0>(tensor));
             return left;
-            //            return Binary_Expression<decltype(left), decltype(right), op>(left, right);
         }
     };
 
@@ -79,7 +77,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
         	static constexpr bool left_evaluated = evaluator<lv>::partial_blas_expr || b != 0;
         	auto left = evaluator<lv>::linear_evaluation(branch.left, tensor);
             auto right = evaluator<rv>::linear_evaluation(branch.right, update_injection<op, left_evaluated>(tensor));
-            return Binary_Expression<decltype(left), decltype(right), op>(left, right);
+            return make_bin_expr<op>(left, right);
         }
     };
 
@@ -104,7 +102,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
         	BC_TREE_OPTIMIZER_STDOUT("- evaluate_branch");
         	auto left = evaluator<lv>::linear_evaluation(branch.left, tensor);
         	auto right = evaluator<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor));
-        	return Binary_Expression<std::decay_t<decltype(left)>, std::decay_t<decltype(right)>, op>(left, right);
+            return make_bin_expr<op>(left, right);
         }
     };
 
@@ -123,7 +121,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 			template<class LeftVal, class RightVal> __BChot__
 			static auto function(const LeftVal& left, const RightVal& right) {
 	        	BC_TREE_OPTIMIZER_STDOUT("-- non_trivial_injection");
-				return Binary_Expression<LeftVal, RightVal, op>(left, right);
+	            return make_bin_expr<op>(left, right);
 			}
 		};
 
@@ -154,7 +152,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
                 template<class l, class r> __BChot__
                 static auto function(const l& left, const r& right) {
                 	BC_TREE_OPTIMIZER_STDOUT("-- non_trivial_injection");
-                    return Binary_Expression<std::decay_t<decltype(left)>, std::decay_t<decltype(right)>, op>(left, right);
+                    return make_bin_expr<op>(left, right);
                 }
             };
         template<class core, BC::size_t  a, BC::size_t  b> __BChot__
@@ -179,7 +177,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 
             auto left = evaluator<lv>::injection(branch.left, tensor);
             rv right = branch.right; //rv
-            return Binary_Expression<std::decay_t<decltype(left)>, rv, op>(left, right);
+            return make_bin_expr<op>(left, right);
         }
     };
     struct right_nested_blas_expr {
@@ -189,7 +187,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 
             lv left = branch.left; //lv
             auto right = evaluator<rv>::injection(branch.right, tensor);
-            return Binary_Expression<lv, std::decay_t<decltype(right)>, op>(left, right);
+            return make_bin_expr<op>(left, right);
         }
     };
 

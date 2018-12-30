@@ -35,7 +35,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
             auto left = evaluator<lv>::injection(branch.left, tensor);
             auto right = branch.right;
-            return Binary_Expression<std::decay_t<decltype(left)>, std::decay_t<decltype(right)>, op>(left, right);
+            return make_bin_expr<op>(left, right);
         }
     };
     struct right_trivial_injection {
@@ -43,7 +43,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
             auto left = branch.left;
             auto right = evaluator<rv>::injection(branch.right, tensor);
-            return Binary_Expression<std::decay_t<decltype(left)>, std::decay_t<decltype(right)>, op>(left, right);
+            return make_bin_expr<op>(left, right);
         }
     };
     struct left_nontrivial_injection {
@@ -51,7 +51,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
             auto left = evaluator<lv>::injection(branch.left, tensor);
             auto right = branch.right; //rv
-            return Binary_Expression<std::decay_t<decltype(left)>, rv, op>(left, right);
+            return make_bin_expr<op>(left, right);
         }
     };
     struct right_nontrivial_injection {
@@ -59,7 +59,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
             auto left = branch.left; //lv
             auto right = evaluator<rv>::injection(branch.right, tensor);
-            return Binary_Expression<lv, std::decay_t<decltype(right)>, op>(left, right);
+            return make_bin_expr<op>(left, right);
         }
     };
 
@@ -81,8 +81,8 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
         __BChot__
         static auto function(const Binary_Expression<lv,rv,op>& branch) {
             using branch_t = Binary_Expression<lv,rv,op>;
-            auto tmp =  temporary<et::Array<branch_t::DIMS, scalar_of<branch_t>, allocator_of<branch_t>>>(branch.inner_shape());
-            auto inject_tmp = injector<std::decay_t<decltype(tmp)>, 1, 0>(tmp);
+            auto tmp =  Temporary<branch_t::DIMS, scalar_of<branch_t>, allocator_of<branch_t>>(branch.inner_shape());
+            auto inject_tmp = injector<std::decay_t<decltype(tmp)>, 1, 0>(tmp.internal());
             return injection(branch, inject_tmp);
         }
     };

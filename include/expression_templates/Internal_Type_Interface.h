@@ -26,6 +26,10 @@ class BC_internal_interface : BC_Type {
 
 public:
 
+    __BCinline__ const auto& internal() const { return as_derived(); }
+    __BCinline__       auto& internal()       { return as_derived(); }
+
+
     using copy_constructible = std::false_type;
     using move_constructible = std::false_type;
     using copy_assignable    = std::false_type;

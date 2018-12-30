@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #ifndef BLACKCAT_BLACKCAT_COMMON_H_
-#define BLACKCAT_BLACKCAT_COMMON_H_
+#define BLACKCAT_BLACKCAT_COMMON_H
 
 
 #include <type_traits>

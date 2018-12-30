@@ -63,7 +63,7 @@ struct Lazy_Evaluator {
 
 template<class allocator>
 struct CacheEvaluator {
-    template<class branch> using sub_t     = BC::et::Array<branch::DIMS, BC::et::scalar_of<branch>, allocator>;
+    template<class branch> using sub_t  = BC::et::Temporary<branch::DIMS, BC::et::scalar_of<branch>, allocator>;
     template<class branch> using eval_t = BC::et::Binary_Expression<sub_t<branch>, branch, BC::et::oper::assign>;
 
     template<class branch>__BChot__ //The branch is an array, no evaluation required
@@ -74,7 +74,7 @@ struct CacheEvaluator {
     static std::enable_if_t<!BC::is_array<std::decay_t<branch>>(), sub_t<std::decay_t<branch>>> evaluate(const branch& expression)
     {
         sub_t<std::decay_t<branch>> cached_branch(expression.inner_shape());
-        eval_t<std::decay_t<branch>> assign_to_expression(cached_branch, expression);
+        eval_t<std::decay_t<branch>> assign_to_expression(cached_branch.internal(), expression);
         Lazy_Evaluator<allocator>::evaluate(assign_to_expression);
         return cached_branch;
     }

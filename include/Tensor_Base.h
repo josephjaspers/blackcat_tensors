@@ -41,6 +41,7 @@ public:
 
     template<class> friend class Tensor_Base;
     using internal_t::internal_t;
+    using internal_t::internal;
 
     using internal_t::DIMS; //required
     using value_type    = typename internal_t::value_type;
@@ -108,10 +109,6 @@ public:
     ~Tensor_Base() {
         this->deallocate();
     }
-
-     const parent& internal() const { return static_cast<const parent&>(*this); }
-           parent& internal()       { return static_cast<       parent&>(*this); }
-
 };
 
 }

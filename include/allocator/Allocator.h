@@ -14,8 +14,6 @@ namespace allocator {
 template<class derived>
 struct AllocatorBase {
 	AllocatorBase() {
-        static_assert(std::is_trivially_copy_constructible<derived>::value, "BC ALLOCATORS TYPES MUST BE TRIVIALLY COPYABLE");
-        static_assert(std::is_trivially_copyable<derived>::value, "BC ALLOCATORS MUST BE TRIVIALLY COPYABLE");
 	}
 };
 
@@ -24,7 +22,18 @@ struct CustomAllocator
 		: custom_allocator,
 		  AllocatorBase<CustomAllocator<custom_allocator>> {
 			using system_tag = _system_tag;
+
+			CustomAllocator() = default;
+			using custom_allocator::custom_allocator;
 		};
+
+template<class allocator, class=void>
+struct has_system_tag : std::false_type {};
+
+template<class allocator>
+struct has_system_tag<allocator, std::enable_if_t<!std::is_void<typename allocator::system_tag>::value>> : std::true_type {};
+
+
 }
 }
 
