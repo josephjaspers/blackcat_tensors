@@ -9,14 +9,7 @@
 #ifndef PARSE_TREE_COMPLEX_EVALUATOR_H_
 #define PARSE_TREE_COMPLEX_EVALUATOR_H_
 
-#include "Tree_Evaluator_Common.h"
-#include "Tree_Evaluator_Array.h"
-#include "Tree_Evaluator_Temporary.h"
-#include "Tree_Evaluator_Binary_Linear.h"
-#include "Tree_Evaluator_Binary_NonLinear.h"
-#include "Tree_Evaluator_Unary.h"
-
-#include "Tree_Evaluator_BLAS.h"
+#include "Tree_Evaluator.h"
 
 namespace BC{
 namespace et     {

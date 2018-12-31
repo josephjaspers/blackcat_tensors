@@ -10,8 +10,6 @@
 #ifndef EXPRESSION_TREE_FUNCTIONS_H_
 #define EXPRESSION_TREE_FUNCTIONS_H_
 
-#include "Tree_Evaluator_Common.h"
-
 namespace BC {
 namespace et {
 namespace tree {
