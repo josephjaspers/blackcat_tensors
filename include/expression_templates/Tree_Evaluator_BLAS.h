@@ -58,7 +58,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
     static auto temporary_injection(const Binary_Expression<lv, rv, op>& branch) {
     	BC_TREE_OPTIMIZER_STDOUT("BLAS_EXPR: temporary_injection");
 
-    	using tmp_t = Temporary<branch_t::DIMS, scalar_of<branch_t>, allocator_of<branch_t>>;
+    	using tmp_t = Array<branch_t::DIMS, scalar_of<branch_t>, allocator_of<branch_t>, BC_Temporary>;
         tmp_t tmp(branch.inner_shape());
         branch.eval(injector<tmp_t, 1, 0>(tmp.internal()));
         return tmp;

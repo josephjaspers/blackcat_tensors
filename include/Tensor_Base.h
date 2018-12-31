@@ -44,9 +44,9 @@ public:
     using internal_t::internal;
 
     using internal_t::DIMS; //required
-    using value_type    = typename internal_t::value_type;
+    using value_type  = typename internal_t::value_type;
     using allocator_t = typename internal_t::allocator_t;
-	using system_tag = typename BC::allocator_traits<allocator_t>::system_tag;
+	using system_tag  = typename BC::allocator_traits<allocator_t>::system_tag;
 
     using operations::operator=;
 	using operations::operator+;
@@ -74,8 +74,7 @@ public:
 
     Tensor_Base() = default;
     Tensor_Base(const parent&  param) : internal_t(param) {}
-    Tensor_Base(
-    		parent&& param) : internal_t(param) {}
+    Tensor_Base(parent&& param) : internal_t(param) {}
 
     template<class U> Tensor_Base(const Tensor_Base<U>&  tensor) : internal_t(tensor.internal()) {}
     template<class U> Tensor_Base(      Tensor_Base<U>&& tensor) : internal_t(tensor.internal()) {}

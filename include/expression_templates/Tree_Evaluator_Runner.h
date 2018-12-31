@@ -63,7 +63,7 @@ struct Lazy_Evaluator {
 
 template<class allocator>
 struct CacheEvaluator {
-    template<class branch> using sub_t  = BC::et::Temporary<branch::DIMS, BC::et::scalar_of<branch>, allocator>;
+    template<class branch> using sub_t  = BC::et::Array<branch::DIMS, BC::et::scalar_of<branch>, allocator, BC_Temporary>;
     template<class branch> using eval_t = BC::et::Binary_Expression<sub_t<branch>, branch, BC::et::oper::assign>;
 
     template<class branch>__BChot__ //The branch is an array, no evaluation required

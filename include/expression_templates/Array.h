@@ -13,14 +13,14 @@
 
 namespace BC {
 namespace et {
+template<int,class,class,class...> class Array; //derived
 
-template<int, class, class> class Array;
-
-template<int Dimension, class Scalar, class Allocator, class AllocatorBase>
+template<int Dimension, class Scalar, class Allocator, class... Tags>
 struct ArrayExpression
-		: Array_Base<ArrayExpression<Dimension, Scalar, Allocator, AllocatorBase>, Dimension>,
+		: Array_Base<ArrayExpression<Dimension, Scalar, Allocator, Tags...>, Dimension>,
 		  Shape<Dimension> {
 
+	using derived_t = Array<Dimension, Scalar, Allocator, Tags...>;
     using value_type = Scalar;
     using allocator_t = Allocator;
     using system_tag = typename allocator_traits<Allocator>::system_tag;
@@ -34,8 +34,8 @@ struct ArrayExpression
     static constexpr int ITERATOR = 1;
 
 private:
-    const auto& as_derived() const { return static_cast<const AllocatorBase&>(*this); }
-          auto& as_derived()  	   { return static_cast<	  AllocatorBase&>(*this); }
+    const auto& as_derived() const { return static_cast<const derived_t&>(*this); }
+          auto& as_derived()  	   { return static_cast<	  derived_t&>(*this); }
 
     const auto& get_allocator() const { return static_cast<const Allocator&>(as_derived()); }
           auto& get_allocator() 	  { return static_cast<	     Allocator&>(as_derived()); }
@@ -87,24 +87,25 @@ public:
     }
 };
 
-template<int Dimension, class Scalar, class Allocator>
+template<int Dimension, class Scalar, class Allocator, class... Tags>
 class Array :
 			private Allocator,
-			public ArrayExpression<Dimension, Scalar, Allocator, Array<Dimension, Scalar, Allocator>> {
+			public ArrayExpression<Dimension, Scalar, Allocator, Tags...> {
 
-	template<int, class, class, class>
+	template<int, class, class, class...>
 	friend class ArrayExpression;
 
 
 public:
 
-	using self = Array<Dimension, Scalar, Allocator>;
+	using self = Array<Dimension, Scalar, Allocator, Tags...>;
+	using parent = ArrayExpression<Dimension, Scalar, Allocator, Array<Dimension, Scalar, Allocator>>;
 	using allocator_t = Allocator;
-	using internal_t = ArrayExpression<Dimension, Scalar, allocator_t, self>;
+	using internal_t = ArrayExpression<Dimension, Scalar, Allocator, Tags...>;
 	using value_type = Scalar;
 	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
 
-	using ArrayExpression<Dimension, Scalar, allocator_t, self>::deallocate;
+	using ArrayExpression<Dimension, Scalar, Allocator, Tags...>::deallocate;
 
 	Array() = default;
 
@@ -115,45 +116,16 @@ public:
 	template<class... args>
 	Array(const args&... params)
 	: allocator_t(allocator_t()), internal_t(params...) {}
+
 };
 
-
-
-template<int Dimension, class Scalar, class Allocator>
-class Temporary :
-			Allocator,
-			public ArrayExpression<Dimension, Scalar, Allocator, Temporary<Dimension, Scalar, Allocator>>
-	{
-
-	template<int, class, class, class>
-	friend class ArrayExpression;
-
-
-public:
-
-	using self = Temporary<Dimension, Scalar, Allocator>;
-	using allocator_t = Allocator;
-	using internal_t = ArrayExpression<Dimension, Scalar, allocator_t, self>;
-	using value_type = Scalar;
-	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
-
-	using ArrayExpression<Dimension, Scalar, allocator_t, self>::deallocate;
-
-	Temporary() = default;
-
-	template<class... args>
-	Temporary(Allocator alloc, const args&... params)
-	: allocator_t(alloc), internal_t(params...) {}
-
-	template<class... args>
-	Temporary(const args&... params)
-	: allocator_t(allocator_t()), internal_t(params...) {}
-};
 
 //specialization for scalar --------------------------------------------------------------------------------------------------------
-template<class T, class Allocator, class AllocatorBase>
-struct ArrayExpression<0, T, Allocator, AllocatorBase> : Array_Base<ArrayExpression<0, T, Allocator, AllocatorBase>, 0>, public Shape<0> {
+template<class T, class Allocator, class... Tags>
+struct ArrayExpression<0, T, Allocator, Tags...>
+: Array_Base<ArrayExpression<0, T, Allocator, Tags...>, 0>, public Shape<0> {
 
+	using derived_t = Array<0, T, Allocator, Tags...>;
     using value_type = T;
     using allocator_t = Allocator;
 	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
@@ -164,8 +136,8 @@ struct ArrayExpression<0, T, Allocator, AllocatorBase> : Array_Base<ArrayExpress
     value_type* array = nullptr;
 
 private:
-    const auto& as_derived() const { return static_cast<const AllocatorBase&>(*this); }
-          auto& as_derived()  	   { return static_cast<	  AllocatorBase&>(*this); }
+    const auto& as_derived() const { return static_cast<const derived_t&>(*this); }
+          auto& as_derived()  	   { return static_cast<	  derived_t&>(*this); }
 
     const auto& get_allocator() const { return static_cast<const Allocator&>(as_derived()); }
           auto& get_allocator() 	  { return static_cast<	     Allocator&>(as_derived()); }

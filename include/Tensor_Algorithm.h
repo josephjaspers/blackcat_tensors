@@ -170,6 +170,7 @@ public:
 	   auto max_index = BC::alg::max_element(this->cbegin_(), this->cend_());
 	   return allocator_t::extract(this->as_derived().memptr(), max_index);
    }
+
    value_type min() const {
 	   auto min_index = BC::alg::min_element(this->cbegin_(), this->cend_());
 	   return allocator_t::extract(this->as_derived().memptr(), min_index);

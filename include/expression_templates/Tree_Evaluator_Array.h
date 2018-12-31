@@ -11,7 +11,7 @@
 
 #include "Tree_Evaluator_Common.h"
 #include "Tree_Evaluator_Default.h"
-#include "Array_Base.h"
+#include "Array.h"
 
 namespace BC {
 namespace et {
@@ -19,7 +19,7 @@ namespace tree {
 
 
 template<class T> struct
-evaluator<T, std::enable_if_t<is_array<T>() && !is_temporary<T>::value>>
+evaluator<T, std::enable_if_t<is_array<T>() && !is_temporary<T>()>>
 : evaluator_default<T> {};
 
 

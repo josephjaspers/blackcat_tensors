@@ -11,21 +11,12 @@
 
 namespace BC {
 namespace et {
-template<int,class,class> struct Temporary;
-template<int,class,class, class> struct ArrayExpression;
-
 namespace tree {
 
 /*
  *Tag for BC::Array to flag for deletion after using the tree-evaluator
  *
  */
-
-template<class T>
-struct is_temporary : std::false_type {};
-
-template<int dims, class Scalar, class Allocator>
-struct is_temporary<ArrayExpression<dims, Scalar, Allocator, Temporary<dims, Scalar, Allocator>>> : std::true_type {};
 
 
 }
