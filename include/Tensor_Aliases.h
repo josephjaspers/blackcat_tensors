@@ -32,9 +32,6 @@ using Basic_Allocator = allocator::Host<T>;
 	using Cuda_Managed = allocator::Device_Managed<T>;
 #endif
 
-	template<class... args>
-	using CustomAllocator = allocator::CustomAllocator<args...>;
-
 
 template<int dimension, class value_type, class allocator_t=alloc_t<value_type>>
 using Tensor = Tensor_Base<et::Array<dimension, value_type, allocator_t>>;

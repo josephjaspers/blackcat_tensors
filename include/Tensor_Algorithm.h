@@ -20,7 +20,7 @@ namespace BC {
     static auto function (iter_begin_ begin_, iter_end_ end_, args... params) {\
         using tensor_t = typename iter_end_::tensor_t;\
         using allocator_t = typename tensor_t::allocator_t;\
-        using system_tag  = typename allocator_t::system_tag;\
+        using system_tag  = typename BC::allocator_traits<allocator_t>::system_tag;\
         using implementation = typename BC::algorithms::template implementation<system_tag>;\
 \
         return implementation:: function (begin_, end_, params...);\
@@ -162,7 +162,7 @@ public:
 	   static_assert(internal_t::ITERATOR == 0 || internal_t::ITERATOR == 1,
 			   	   	   "randomize not available to non-continuous tensors");
 
-	   using impl = random::implementation<typename allocator_t::system_tag>;
+	   using impl = random::implementation<typename BC::allocator_traits<allocator_t>::system_tag>;
 	   impl::randomize(this->as_derived().internal(), lb, ub);
    }
 

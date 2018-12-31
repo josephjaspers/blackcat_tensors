@@ -20,7 +20,7 @@ struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, Allocator>
 
     using value_type = Scalar;
     using allocator_t = Allocator;
-    using system_tag = typename Allocator::system_tag;
+    using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
 
     static constexpr int ITERATOR = 0;
     static constexpr int DIMS     = 0;

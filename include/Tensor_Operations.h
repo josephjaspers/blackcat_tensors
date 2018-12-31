@@ -24,9 +24,6 @@
 
 #include "expression_templates/Tree_Evaluator_Runner.h"
 
-#include "iterators/Coefficientwise_Iterator.h"
-#include "iterators/Multidimensional_Iterator.h"
-
 
 namespace BC {
 template<class internal_t> class Tensor_Base;

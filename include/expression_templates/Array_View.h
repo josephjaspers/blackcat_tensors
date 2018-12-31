@@ -23,7 +23,7 @@ struct Array_View
 
     using value_type = Scalar;
     using allocator_t = Allocator;
-    using system_tag = typename allocator_t::system_tag;
+    using system_tag = typename BC::allocator_traits<allocator_t>::system_tag;
 
     static constexpr bool copy_constructible = true;
     static constexpr bool move_constructible = true;
@@ -36,14 +36,15 @@ struct Array_View
     Array_View(const Array_View& ) = default;
     Array_View(      Array_View&&) = default;
 
-    void swap_array(Array_View& tensor) {
-        std::swap(array, tensor.array);
-    }
-
     void copy_init(const Array_View& view) {
         this->copy_shape(view);
         this->array = view.array;
     }
+
+    void swap_init(Array_View& array_move) {
+		std::swap(this->array, array_move.array);
+		this->swap_shape(array_move);
+	}
 
     template<class tensor_t, typename = std::enable_if_t<tensor_t::DIMS == Dimension>>
     Array_View(const Array_Base<tensor_t, Dimension>& tensor)

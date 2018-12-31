@@ -77,22 +77,6 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
 
     }
 
-    struct replacement_required {
-        __BChot__
-        static auto function(const Binary_Expression<lv,rv,op>& branch) {
-            using branch_t = Binary_Expression<lv,rv,op>;
-            auto tmp =  Temporary<branch_t::DIMS, scalar_of<branch_t>, allocator_of<branch_t>>(branch.inner_shape());
-            auto inject_tmp = injector<std::decay_t<decltype(tmp)>, 1, 0>(tmp.internal());
-            return injection(branch, inject_tmp);
-        }
-    };
-    struct replacement_not_required {
-        __BChot__
-        static auto function(const Binary_Expression<lv,rv,op>& branch) {
-            return branch;
-        }
-    };
-
     __BChot__
     static auto temporary_injection(const Binary_Expression<lv,rv,op>& branch) {
     	auto left  = evaluator<lv>::temporary_injection(branch.left);

@@ -26,8 +26,8 @@
 
 
 // --------------------------------- override macro-options --------------------------------- //
-//#define BC_INLINE_OVERRIDER <compiler_attribute>       //overloads the default inline attribute
-//#define BC_SIZE_T_OVERRIDE  <integer_type>			 //overloads the default size_t (default is signed int)
+//#define BC_INLINE_OVERRIDE <compiler_attribute>       //overloads the default inline attribute
+//#define BC_SIZE_T_OVERRIDE  <integer_type>			//overloads the default size_t (default is signed int)
 
 // --------------------------------- inline macros -----------------------------------------//
 

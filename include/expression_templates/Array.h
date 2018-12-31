@@ -23,7 +23,7 @@ struct ArrayExpression
 
     using value_type = Scalar;
     using allocator_t = Allocator;
-    using system_tag = typename Allocator::system_tag;
+    using system_tag = typename allocator_traits<Allocator>::system_tag;
 
     static constexpr bool copy_constructible = true;
     static constexpr bool move_constructible = true;
@@ -70,13 +70,16 @@ protected:
         this->array = get_allocator().allocate(this->size());
         evaluate_to(*this, array_copy);
     }
+
+    void swap_init(ArrayExpression& array_move) {
+    	std::swap(this->array, array_move.array);
+    	this->swap_shape(array_move);
+    }
+
 public:
     __BCinline__ const value_type* memptr() const { return array; }
     __BCinline__       value_type* memptr()       { return array; }
 
-    void swap_array(ArrayExpression& param) {
-        std::swap(this->array, param.array);
-    }
 
     void deallocate() {
         get_allocator().deallocate(array, this->size());
@@ -86,16 +89,8 @@ public:
 
 template<int Dimension, class Scalar, class Allocator>
 class Array :
-		private std::conditional_t<
-			allocator::has_system_tag<Allocator>::value,
-			Allocator,
-			allocator::CustomAllocator<Allocator>>,
-
-			public ArrayExpression<Dimension, Scalar, std::conditional_t<
-														allocator::has_system_tag<Allocator>::value,
-														Allocator,
-														allocator::CustomAllocator<Allocator>>, Array<Dimension, Scalar, Allocator>>
-	{
+			private Allocator,
+			public ArrayExpression<Dimension, Scalar, Allocator, Array<Dimension, Scalar, Allocator>> {
 
 	template<int, class, class, class>
 	friend class ArrayExpression;
@@ -104,10 +99,10 @@ class Array :
 public:
 
 	using self = Array<Dimension, Scalar, Allocator>;
-	using allocator_t = std::conditional_t<allocator::has_system_tag<Allocator>::value, Allocator, allocator::CustomAllocator<Allocator>>;
+	using allocator_t = Allocator;
 	using internal_t = ArrayExpression<Dimension, Scalar, allocator_t, self>;
 	using value_type = Scalar;
-	using system_tag = typename allocator_t::system_tag;
+	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
 
 	using ArrayExpression<Dimension, Scalar, allocator_t, self>::deallocate;
 
@@ -126,15 +121,8 @@ public:
 
 template<int Dimension, class Scalar, class Allocator>
 class Temporary :
-		private std::conditional_t<
-			allocator::has_system_tag<Allocator>::value,
 			Allocator,
-			allocator::CustomAllocator<Allocator>>,
-
-			public ArrayExpression<Dimension, Scalar, std::conditional_t<
-														allocator::has_system_tag<Allocator>::value,
-														Allocator,
-														allocator::CustomAllocator<Allocator>>, Temporary<Dimension, Scalar, Allocator>>
+			public ArrayExpression<Dimension, Scalar, Allocator, Temporary<Dimension, Scalar, Allocator>>
 	{
 
 	template<int, class, class, class>
@@ -144,10 +132,10 @@ class Temporary :
 public:
 
 	using self = Temporary<Dimension, Scalar, Allocator>;
-	using allocator_t = std::conditional_t<allocator::has_system_tag<Allocator>::value, Allocator, allocator::CustomAllocator<Allocator>>;
+	using allocator_t = Allocator;
 	using internal_t = ArrayExpression<Dimension, Scalar, allocator_t, self>;
 	using value_type = Scalar;
-	using system_tag = typename allocator_t::system_tag;
+	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
 
 	using ArrayExpression<Dimension, Scalar, allocator_t, self>::deallocate;
 
@@ -168,7 +156,7 @@ struct ArrayExpression<0, T, Allocator, AllocatorBase> : Array_Base<ArrayExpress
 
     using value_type = T;
     using allocator_t = Allocator;
-    using system_tag = typename Allocator::system_tag;
+	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
 
     static constexpr int DIMS = 0;
     static constexpr int ITERATOR = 0;
@@ -226,9 +214,10 @@ public:
         evaluate_to(*this, array_copy);
     }
 
-    void swap_array(ArrayExpression& param) {
-        std::swap(this->array, param.array);
-    }
+    void swap_init(const ArrayExpression& array_move) {
+        	std::swap(this->array, array_move.array);
+        	this->swap_shape(array_move);
+	}
 
     void deallocate() {
         get_allocator().deallocate(this->array, this->size());

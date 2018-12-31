@@ -22,7 +22,7 @@ struct Array_Shared
 
     using value_type = scalar;
     using allocator_t = allocator;
-    using system_tag = typename allocator_t::system_tag;
+    using system_tag = typename BC::allocator_traits<allocator_t>::system_tag;
 
     static constexpr bool copy_constructible = true;
     static constexpr bool move_constructible = true;

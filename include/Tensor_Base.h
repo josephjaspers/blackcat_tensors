@@ -46,7 +46,7 @@ public:
     using internal_t::DIMS; //required
     using value_type    = typename internal_t::value_type;
     using allocator_t = typename internal_t::allocator_t;
-    using system_tag  = typename allocator_t::system_tag;
+	using system_tag = typename BC::allocator_traits<allocator_t>::system_tag;
 
     using operations::operator=;
 	using operations::operator+;
@@ -86,13 +86,11 @@ public:
     }
 
     Tensor_Base(move_parameter tensor) {
-        this->swap_array(tensor);
-        this->swap_shape(tensor);
+        this->swap_init(tensor);
     }
 
     Tensor_Base& operator =(move_assign_parameter tensor) {
-        this->swap_shape(tensor);
-        this->swap_array(tensor);
+        this->swap_init(tensor);
         return *this;
     }
 

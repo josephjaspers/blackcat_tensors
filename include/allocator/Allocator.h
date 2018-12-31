@@ -8,6 +8,8 @@
 #ifndef BC_ALLOCATOR_ALLOCATOR_H_
 #define BC_ALLOCATOR_ALLOCATOR_H_
 
+#include <memory>
+
 namespace BC {
 namespace allocator {
 
@@ -17,25 +19,30 @@ struct AllocatorBase {
 	}
 };
 
-template<class custom_allocator, class _system_tag=host_tag>
-struct CustomAllocator
-		: custom_allocator,
-		  AllocatorBase<CustomAllocator<custom_allocator>> {
-			using system_tag = _system_tag;
+template<class alloc, class enabler=void>
+struct system_tag_of : std::false_type { using type = host_tag; };
 
-			CustomAllocator() = default;
-			using custom_allocator::custom_allocator;
-		};
+template<class alloc>
+struct system_tag_of<alloc, std::enable_if_t<!std::is_void<typename alloc::system_tag>::value>>
+: std::false_type { using type = typename alloc::system_tag; };
+
+
+
+template<class Allocator>
+struct allocator_traits : std::allocator_traits<Allocator> {
+	using system_tag = typename system_tag_of<Allocator>::type;
+};
 
 template<class allocator, class=void>
-struct has_system_tag : std::false_type {};
+struct has_system_tag : system_tag_of<allocator> {};
 
-template<class allocator>
-struct has_system_tag<allocator, std::enable_if_t<!std::is_void<typename allocator::system_tag>::value>> : std::true_type {};
+} //end of namespace allocator
 
+//Push allocator_traits into the BC namespace
+template<class Allocator_Type>
+using allocator_traits = allocator::allocator_traits<Allocator_Type>;
 
-}
-}
+} //end of namespace BC
 
 
 #include "Host.h"
