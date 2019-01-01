@@ -16,7 +16,7 @@ class host_tag;
 namespace allocator {
 
 template<class T, class derived=void>
-struct Host : AllocatorBase<std::conditional_t<std::is_void<derived>::value, Host<T>, derived>> {
+struct Host {
 
     using system_tag = host_tag;	//BC tag
     using propagate_to_expressions = std::false_type; //BC tag
@@ -43,9 +43,7 @@ struct Host : AllocatorBase<std::conditional_t<std::is_void<derived>::value, Hos
 };
 
 template<class T, int id=0, class derived=void>
-struct Host_Unsynced_Memory_Stack
-		: AllocatorBase<std::conditional_t<std::is_void<derived>::value, Host_Unsynced_Memory_Stack<T>, derived>> {
-
+struct Host_Unsynced_Memory_Stack {
 	static constexpr int ID = id; //The ID of the pool.
 
 	using system_tag = host_tag;	//BC tag

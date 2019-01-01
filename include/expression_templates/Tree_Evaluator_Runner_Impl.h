@@ -19,20 +19,26 @@ struct Greedy_Evaluator {
 
 	template<class lv, class rv> __BChot__
 	static  auto evaluate(Binary_Expression<lv, rv, oper::add_assign> expression) {
+		using allocator_t = typename lv::allocator_t;
+
 		auto right = evaluator<rv>::linear_evaluation(expression.right, injector<lv, 1, 1>(expression.left));
-		return make_bin_expr<oper::add_assign>(expression.left, evaluate_temporaries(right));
+		return make_bin_expr<oper::add_assign>(expression.left, evaluate_temporaries<allocator_t>(right));
 	}
 
 	template<class lv, class rv> __BChot__
 	static auto evaluate(Binary_Expression<lv, rv, oper::sub_assign> expression) {
+		using allocator_t = typename lv::allocator_t;
+
 		auto right = evaluator<rv>::linear_evaluation(expression.right, injector<lv, -1, 1>(expression.left));
-		return make_bin_expr<oper::add_assign>(expression.left, evaluate_temporaries(right));
+		return make_bin_expr<oper::add_assign>(expression.left, evaluate_temporaries<allocator_t>(right));
 	}
 
 	template<class lv, class rv> __BChot__
 	static auto evaluate(Binary_Expression<lv, rv, oper::assign> expression) {
+		using allocator_t = typename lv::allocator_t;
+
 		auto right = evaluator<rv>::injection(expression.right, injector<lv, 1, 0>(expression.left));
-		return make_bin_expr<oper::assign>(expression.left, evaluate_temporaries(right));
+		return make_bin_expr<oper::assign>(expression.left, evaluate_temporaries<allocator_t>(right));
 
 	}
 
@@ -61,14 +67,14 @@ struct Greedy_Evaluator {
 	}
 
 private:
-	template<class expression_t>__BChot__
+	template<class allocator, class expression_t>__BChot__
 	static auto evaluate_temporaries(expression_t expression) {
 
 //Use to check if a temporary is created
 #ifdef BC_DISABLE_TEMPORARIES
 		return expression;
 #else
-		return evaluator<expression_t>::temporary_injection(expression);
+		return evaluator<expression_t>::template temporary_injection<allocator>(expression);
 #endif
 	}};
 
