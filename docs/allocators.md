@@ -22,6 +22,33 @@ BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two temp
 	Cuda_Managed allocates memory via CudaMallocManaged. 
 	The memory is accessible from both host and device. 
 	Cuda_Managed is recommended if you are not familiar with Cuda programming.
+	
+	
+#### Additional Tags of BlackCat Allocators
+
+	BlackCat Allocators utilize 2 additional tags to achieve various modifiability. 
+	
+
+	`system_tag`
+
+	The system_tag, may be either BC::host_tag or BC::device_tag.
+	`system_tag` informs if the memory is allocated on the GPU or CPU. 
+	This enables compile time checking to make sure expressions are computed in the apropriate manner as well
+	as enabling querying for apropriate default behavior across the CPU and GPU. 
+
+	If system_tag is not supplied, it is defaulted to 'host_tag'.
+
+
+	`propagate_on_temporary_construction` 
+
+	The 'propagate_on_temporary_construction' enables the user to specify the behavior of memory allocation
+	when temporaries are needed. 
+	
+	if 'propagate_on_temporary_construction' is set to 'std::false_type', the default allocator is used.
+	if 'propagate_on_temporary_construction' is set to 'std::true_type', the same allocator is used.
+	if a different allocator is specified, that type will be used. 
+
+	-Currently the 'propagate_on_temporary_construction' will be need to be default constructed. 
 
 #### Choosing an allocator (example):
 
