@@ -4,7 +4,7 @@
 #include "Tree_Evaluator_Runner_Impl.h"
 
 namespace BC {
-namespace et  {
+namespace et {
 
 template<class allocator_type>
 struct Lazy_Evaluator {
