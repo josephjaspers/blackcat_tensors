@@ -12,8 +12,11 @@
 #include "Common.h"
 #include "Shape_Base.h"
 
+
 namespace BC {
-namespace et     {
+namespace et {
+
+
 template<int dims, class derived=void>
 struct Shape : Shape_Base<std::conditional_t<std::is_void<derived>::value, Shape<dims, derived>, derived>> {
 

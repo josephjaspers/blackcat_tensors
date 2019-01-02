@@ -12,6 +12,7 @@
 #include "Array_Base.h"
 #include "Array.h"
 
+
 namespace BC {
 namespace et {
 
@@ -55,10 +56,15 @@ struct Array_View
 
     template<class... integers>
     Array_View(int x, integers... ints) :Shape<Dimension>(x, ints...) {}
-    __BCinline__ const value_type* memptr() const  { return array; }
+
+    __BCinline__
+    const value_type* memptr() const  { return array; }
 
     void deallocate() {}
+
 };
+
+
 }
 }
 

@@ -11,9 +11,36 @@
 
 #include "Tree_Evaluator.h"
 
-namespace BC{
-namespace et     {
+
+/*
+ *
+ * 	This file defines the endpoints for the Tree_Evaluator. The Tree Evaluator
+ *  iterates through the tree and attempts use the the left-hand value as a cache (if possible)
+ *  and to reduce the need for temporaries when applicable.
+ *
+ *  After utilizing the left-hand value as cache, the tree is iterated through again, greedy-evaluating
+ *  any function calls when possible. A function call is generally any BLAS call.
+ *
+ *  Example: (assume matrices)
+ *  	y += a * b + c * d
+ *
+ *  	Naively, this expression may generate 2 temporaries, one for each matrix multplication.
+ *  	However, a more efficient way to evaluate this equation would be to make 2 gemm calls,
+ *  	gemm(y,a,b) and gemm(y, c, d).
+ *
+ *  This expression reordering works with more complex calls, such as....
+ *  	y = abs(a * b + c * d).
+ *
+ *  	Here we can apply... (the second gemm call updateing alpha to 1)
+ *  	gemm(y,a,b), gemm(y,c,d) followed by evaluationg y := abs(y).
+ *
+ */
+
+
+namespace BC {
+namespace et {
 namespace tree {
+
 
 struct Greedy_Evaluator {
 

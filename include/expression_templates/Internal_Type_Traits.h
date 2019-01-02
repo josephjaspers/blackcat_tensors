@@ -8,9 +8,13 @@
 
 #ifndef BLACKCAT_INTERNAL_FORWARD_DECLS_H_
 #define BLACKCAT_INTERNAL_FORWARD_DECLS_H_
+
 #include <type_traits>
+
+
 namespace BC {
 namespace et {
+
 
 template<class,class,class> class Binary_Expression;
 template<class,class>       class Unary_Expression;
@@ -18,19 +22,26 @@ template<class,class>       class Unary_Expression;
 template<class T> using allocator_of = std::decay_t<typename T::allocator_t>;
 template<class T> using scalar_of    = std::decay_t<typename T::value_type>;
 
+
 template<class T> constexpr bool BC_array_move_constructible() {
     return T::move_constructible;
 }
+
 template<class T> constexpr bool BC_array_copy_constructible() {
     return T::copy_constructible;
 }
+
 template<class T> constexpr bool BC_array_move_assignable() {
     return T::move_assignable;
 }
-template<class T> constexpr bool BC_array_copy_assignable()    {
+
+template<class T> constexpr bool BC_array_copy_assignable() {
     return T::copy_assignable;
+}
+
+
 }
 }
 
-}
+
 #endif /* BLACKCAT_INTERNAL_FORWARD_DECLS_H_ */

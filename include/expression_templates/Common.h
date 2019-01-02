@@ -9,6 +9,7 @@
 #ifndef BC_EXPRESSION_TEMPLATES_COMMON_H_
 #define BC_EXPRESSION_TEMPLATES_COMMON_H_
 
+
 #include <type_traits>
 #include "Internal_Type_Traits.h"
 #include "utility/MetaTemplateFunctions.h"
@@ -17,4 +18,6 @@
 #include "operations/Binary.h"
 #include "operations/BLAS.h"
 #include "BLAS_Feature_Detector.h"
+
+
 #endif /* BLACKCAT_COMPILERDEFINITIONS_H_ */

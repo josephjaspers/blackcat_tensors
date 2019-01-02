@@ -11,9 +11,30 @@
 
 #include "Array_Base.h"
 
+
 namespace BC {
 namespace et {
+
+
 template<int,class,class,class...> class Array; //derived
+
+
+/*
+ * 	Array is a class that inherits from ArrayExpression and the Allocator type.
+ *  The Array class is used to initialize and destruct the ArrayExpression object.
+ *
+ *  Array and ArrayExpression are two tightly coupled classes as expression-templates must be trivially copyable (to pass them to CUDA functions).
+ *  Separating these two enables the usage of non-trivially copyable allocators as well as the ability to define
+ *  non-default move and copy assignments/constructors.
+ *
+ *  The ArrayExpression class should never be instantiated normally. It should only be accessed by instantiating
+ *  an instance of the Array class, and calling 'my_array_object.internal()' to query it.
+ *
+ *  Additionally this design pattern (replicated in Array_View) enables expression-templates to
+ *  defines additional members that we do not want to pass to the GPU. (As they my be non-essential to the computation).
+ *
+ */
+
 
 template<int Dimension, class Scalar, class Allocator, class... Tags>
 struct ArrayExpression
@@ -86,6 +107,8 @@ public:
         array = nullptr;
     }
 };
+
+
 
 template<int Dimension, class Scalar, class Allocator, class... Tags>
 class Array :

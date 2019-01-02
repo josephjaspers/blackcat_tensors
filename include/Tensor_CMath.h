@@ -75,6 +75,7 @@ namespace module {										 \
 	  }													 \
 	};													 \
 }													 	 \
+														 \
 template<class internal_t>                                       \
 static auto funcName(const Tensor_Base<internal_t>& tensor) {    \
 	return tensor.un_expr( module:: funcName () );               \

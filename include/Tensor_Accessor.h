@@ -95,7 +95,7 @@ public:
 
 };
 
-}
+}//end of module name space
 
 
 template<class T>
@@ -133,5 +133,9 @@ auto chunk(Tensor_Base<T>& tensor, integers... ints) {
                 BC::make_array(shape_indicies...)));
     };
 }
-}
+
+
+}//end of BC name space
+
+
 #endif /* TENSOR_SHAPING_H_ */

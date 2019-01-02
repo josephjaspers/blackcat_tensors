@@ -11,8 +11,10 @@
 
 #include "Array_Base.h"
 
+
 namespace BC {
-namespace et     {
+namespace et {
+
 
 template<class Parent>
 struct Array_Strided_Vector : Array_Base<Array_Strided_Vector<Parent>, 1>, Shape<1> {
@@ -65,18 +67,16 @@ auto make_diagnol(internal_t internal, BC::size_t  index) {
         BC::size_t  location = index * internal.leading_dimension(0);
         return Array_Strided_Vector<internal_t>(&internal.memptr()[location], length, stride);
     }
+
     else { // (index < 0)  {
         BC::size_t  length = MTF::min(internal.rows(), internal.cols() + index);
         return Array_Strided_Vector<internal_t>(&internal.memptr()[std::abs(index)], length, stride);
     }
 }
 
-}
 
 }
-
-
-
+}
 
 
 #endif /* ARRAY_ROW_H_ */

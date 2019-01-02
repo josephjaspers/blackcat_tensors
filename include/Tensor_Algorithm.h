@@ -123,9 +123,12 @@ template<class internal_t>
 class Tensor_Algorithm<Tensor_Base<internal_t>> {
     template<class> friend class Tensor_Algorithm;
 
-    using derived        = Tensor_Base<internal_t>;
-    using value_type         = typename internal_t::value_type;
+    using derived       = Tensor_Base<internal_t>;
+    using value_type    = typename internal_t::value_type;
     using allocator_t   = typename internal_t::allocator_t;
+    using system_tag    = typename BC::allocator_traits<allocator_t>::system_tag;
+    using utility_t     = typename utility::implementation<system_tag>;
+
 
      const derived& as_derived() const { return static_cast<const derived&>(*this);  }
            derived& as_derived()       { return static_cast<      derived&>(*this); }
@@ -168,12 +171,12 @@ public:
 
    value_type max() const {
 	   auto max_index = BC::alg::max_element(this->cbegin_(), this->cend_());
-	   return allocator_t::extract(this->as_derived().memptr(), max_index);
+	   return utility_t::extract(this->as_derived().memptr(), max_index);
    }
 
    value_type min() const {
 	   auto min_index = BC::alg::min_element(this->cbegin_(), this->cend_());
-	   return allocator_t::extract(this->as_derived().memptr(), min_index);
+	   return utility_t::extract(this->as_derived().memptr(), min_index);
    }
 
    //if bool flip the output of sum to an integer
@@ -205,7 +208,9 @@ public:
 
 }; //end_of class 'Tensor_Functions'
 
+
 }  //end_of namespace 'module'
+
 
 template<class internal_t>
 static bool all(const Tensor_Base<internal_t>& tensor) {
@@ -218,6 +223,7 @@ static bool all(const Tensor_Base<internal_t>& tensor) {
 
 	return bool_tensor.sum() == bool_tensor.size();
 }
+
 template<class internal_t>
 static bool any(const Tensor_Base<internal_t>& tensor) {
 	constexpr BC::size_t  dims = internal_t::DIMS;
@@ -230,10 +236,6 @@ static bool any(const Tensor_Base<internal_t>& tensor) {
 
 	return bool_tensor.sum()!= 0;
 }
-
-
-
-
 
 
 }  //end_of namespace 'BC'

@@ -13,12 +13,15 @@
 #include "BLAS_Feature_Detector.h"
 #include "Tree_Evaluator_Runner.h"
 
+
 namespace BC {
 namespace et {
 
+
 template<class lv, class rv, class System_Tag>
 struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
-: Expression_Base<Binary_Expression<lv, rv,  oper::gemm<System_Tag>>>, BLAS_FUNCTION {
+: Expression_Base<Binary_Expression<lv, rv, oper::gemm<System_Tag>>>,
+  BLAS_FUNCTION {
 
     static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,\
     		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
@@ -69,6 +72,7 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
     __BCinline__ BC::size_t  M() const { return left.rows();  }
     __BCinline__ BC::size_t  N() const { return right.cols(); }
     __BCinline__ BC::size_t  K() const { return left.cols();  }
+
 
     template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod>
     void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {

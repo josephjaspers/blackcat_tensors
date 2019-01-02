@@ -14,8 +14,10 @@
 #include "BLAS_Feature_Detector.h"
 #include "Tree_Evaluator_Runner.h"
 
+
 namespace BC {
 namespace et {
+
 
 template<class lv, class rv, class System_Tag>
 struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>

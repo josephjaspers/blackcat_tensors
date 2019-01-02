@@ -38,7 +38,6 @@ template<class T> static constexpr bool is_expr()  { return std::is_base_of<BC_E
 template<class T> static constexpr bool is_temporary()  { return std::is_base_of<BC_Temporary, T>::value; }
 
 
-
 template<class internal_t>
 auto make_tensor(internal_t internal) {
     return Tensor_Base<internal_t>(internal);

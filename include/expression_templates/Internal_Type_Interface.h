@@ -13,8 +13,10 @@
 #include "operations/Binary.h"
 #include "operations/Unary.h"
 
+
 namespace BC {
-namespace et     {
+namespace et {
+
 
 template<class derived>
 class BC_internal_interface : BC_Type {
@@ -54,10 +56,10 @@ public:
     void deallocate() const {}
 
 };
-}
-}
 
 
+}
+}
 
 
 #endif /* BC_INTERNAL_BASE_H_ */

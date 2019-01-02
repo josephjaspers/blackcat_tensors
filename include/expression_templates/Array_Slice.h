@@ -12,8 +12,10 @@
 #include "Array_Base.h"
 #include "Shape.h"
 
+
 namespace BC {
 namespace et {
+
 
 template<class Parent, int Dimensions, bool Continuous=true>
 struct Array_Slice :
@@ -37,23 +39,25 @@ struct Array_Slice :
 	: shape_t(parent_.as_shape()),
 	  m_array(parent_.memptr() + index) {
 	}
+
 	__BCinline__
 	Array_Slice(Parent parent_, const shape_t& shape_, BC::size_t index)
 	: shape_t(shape_),
 	  m_array(parent_.memptr() + index) {
 	}
 
-
 	__BCinline__
 	const value_type* memptr() const {
 		return m_array;
 	}
+
 	__BCinline__
 	value_type* memptr() {
 		return m_array;
 	}
 
 };
+
 
 	template<class parent_t>
 	static auto make_slice(parent_t internal, BC::size_t index) {
@@ -88,7 +92,9 @@ struct Array_Slice :
 		return Array_Slice<parent_t, ndims, false>(parent, chunk_shape, index);
 	}
 
+
 }
 }
+
 
 #endif /* Array_Slice_H_ */

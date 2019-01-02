@@ -11,11 +11,10 @@
 
 #include "Array_Base.h"
 
+
 namespace BC {
-namespace et     {
-/*
- * Represents a single_scalar value from a tensor
- */
+namespace et {
+
 
 template<class Parent>
 struct Array_Scalar : Array_Base<Array_Scalar<Parent>, 0>, Shape<0> {
@@ -48,10 +47,13 @@ struct Array_Scalar : Array_Base<Array_Scalar<Parent>, 0>, Shape<0> {
     __BCinline__       value_type* memptr()       { return array; }
 };
 
+
 template<class internal_t>
 auto make_scalar(internal_t internal, BC::size_t  i) {
     return Array_Scalar<internal_t>(internal, i);
 }
+
+
 }
 }
 

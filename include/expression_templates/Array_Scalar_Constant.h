@@ -11,8 +11,10 @@
 
 #include "Array_Base.h"
 
+
 namespace BC {
 namespace et {
+
 
 //identical to Array_Scalar, though the scalar is allocated on the stack opposed to heap
 template<class Scalar, class Allocator>
@@ -34,8 +36,8 @@ struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, Allocator>
     __BCinline__ Scalar_Constant(value_type scalar_) : scalar(scalar_) {}
 
 
-    template<class... integers> __BCinline__ auto operator()  (const integers&...) const{ return scalar; }
-    template<class... integers> __BCinline__ auto operator()  (const integers&...) { return scalar; }
+    template<class... integers> __BCinline__ auto operator()  (const integers&...) const { return scalar; }
+    template<class... integers> __BCinline__ auto operator()  (const integers&...) 		 { return scalar; }
 
     __BCinline__ auto operator [] (int i ) const { return scalar; }
     __BCinline__ auto operator [] (int i )  	 { return scalar; }
@@ -45,13 +47,15 @@ struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, Allocator>
     void swap_array(Scalar_Constant&) {}
 };
 
+
 template<class allocator_t, class value_type>
 auto scalar_constant(value_type scalar) {
     return Scalar_Constant<value_type, allocator_t>(scalar);
 }
-}
-}
 
+
+}
+}
 
 
 

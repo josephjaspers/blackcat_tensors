@@ -9,9 +9,12 @@
 #ifndef INJECTION_INFO_H_
 #define INJECTION_INFO_H_
 
+
 namespace BC {
-namespace et     {
+namespace et {
 namespace tree {
+
+
 template<class tensor_core, BC::size_t  alpha_modifier_ = 1, BC::size_t  beta_modifier_= 0>
 struct injector {
 
@@ -28,10 +31,13 @@ struct injector {
           tensor_core& data()       { return array; }
 };
 
+
 template<class core, BC::size_t  a, BC::size_t  b>
 auto make_injection(core c) {
 	return injector<core, a, b>(c);
 }
+
+
 }
 }
 }

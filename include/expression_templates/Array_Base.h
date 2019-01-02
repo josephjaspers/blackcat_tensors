@@ -60,21 +60,26 @@ public:
     }
 
 
-    template<int length>
-    __BCinline__ auto& operator ()(const BC::array<length, int>& index) {
-        static_assert(length >= DIMS, "POINT MUST HAVE AT LEAST THE SAME NUMBER OF INDICIES AS THE TENSOR");
+    template<int length> __BCinline__
+    auto& operator ()(const BC::array<length, int>& index) {
+        static_assert(length >= DIMS,
+        		"POINT MUST HAVE AT LEAST THE SAME NUMBER OF INDICIES AS THE TENSOR");
+
         return as_derived()[this->dims_to_index(index)];
     }
 
-    template<int length>
-    __BCinline__ const auto& operator ()(const BC::array<length, int>& index) const {
-        static_assert(length >= DIMS, "POINT MUST HAVE AT LEAST THE SAME NUMBER OF INDICIES AS THE TENSOR");
+    template<int length> __BCinline__
+    auto& operator ()(const BC::array<length, int>& index) const {
+        static_assert(length >= DIMS,
+        		"POINT MUST HAVE AT LEAST THE SAME NUMBER OF INDICIES AS THE TENSOR");
+
         return as_derived()[this->dims_to_index(index)];
     }
 
     void deallocate() {}
 
     //------------------------------------------Implementation Details---------------------------------------//
+
 public:
 
     __BCinline__
@@ -97,13 +102,13 @@ public:
             return as_derived().leading_dimension(Dimension - 2) * i;
     }
 
-    template<class... integers> __BCinline__
-    BC::size_t  dims_to_index(integers... ints) const {
+    template<class... integers, typename=std::enable_if_t<MTF::seq_of<BC::size_t, integers...>>> __BCinline__
+    BC::size_t dims_to_index(integers... ints) const {
         return dims_to_index(BC::make_array(ints...));
     }
 
     template<int D> __BCinline__
-    BC::size_t  dims_to_index(const BC::array<D, int>& var) const {
+    BC::size_t dims_to_index(const BC::array<D, int>& var) const {
         BC::size_t  index = var[0];
         for(int i = 1; i < DIMS; ++i) {
             index += this->as_derived().leading_dimension(i - 1) * var[i];

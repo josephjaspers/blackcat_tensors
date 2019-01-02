@@ -51,7 +51,7 @@ template<class deriv> struct blas_feature_detector<deriv, enable_if_array<deriv>
     template<class param> static auto& get_array(const param& p) { return cc(p); }
 };
 
-////IF TRANSPOSE
+////IF TRANSPOSE - unary_expression(matrix^T)
 template<class deriv, class ml>
 struct blas_feature_detector<et::Unary_Expression<deriv, et::oper::transpose<ml>>, enable_if_array<deriv>> {
     static constexpr bool evaluate = false;
@@ -62,7 +62,7 @@ struct blas_feature_detector<et::Unary_Expression<deriv, et::oper::transpose<ml>
     template<class param> static auto& get_array(const param& p) { return cc(p.array); }
 };
 
-////IF A SCALAR BY TENSOR MUL OPERATION
+////IF A SCALAR BY TENSOR MUL OPERATION - scalar * matrix
 template<class d1, class d2>
 struct blas_feature_detector<Binary_Expression<d1, d2, oper::scalar_mul>, enable_if_arrays<d1, d2>> {
     using self = Binary_Expression<d1, d2, oper::scalar_mul>;
