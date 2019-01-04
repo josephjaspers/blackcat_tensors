@@ -54,59 +54,42 @@ struct ArrayExpression
     static constexpr int  DIMS = Dimension;
     static constexpr int ITERATOR = 1;
 
-private:
-    const auto& as_derived() const { return static_cast<const derived_t&>(*this); }
-          auto& as_derived()  	   { return static_cast<	  derived_t&>(*this); }
-public:
-    const auto& get_allocator() const { return static_cast<const Allocator&>(as_derived()); }
-          auto& get_allocator() 	  { return static_cast<	     Allocator&>(as_derived()); }
-public:
-    value_type* array = nullptr;
-    ArrayExpression() = default;
+     value_type* array = nullptr;
 
-    ArrayExpression(Shape<DIMS> shape_, value_type* array_) : array(array_), Shape<DIMS>(shape_) {}
-
-    template<class U,typename = std::enable_if_t<! std::is_base_of<BC_internal_interface<U>, U>::value>>
-	ArrayExpression(U param) : Shape<DIMS>(param), array(get_allocator().allocate(this->size())) {}
-
-    template<class... integers>//CAUSES FAILURE WITH NVCC 9.2, typename = std::enable_if_t<MTF::is_integer_sequence<integers...>>>
-    ArrayExpression(integers... ints) : Shape<DIMS>(ints...), array(get_allocator().allocate(this->size())) {
-        static_assert(MTF::seq_of<int, integers...>,"PARAMETER LIST MUST BE INTEGER_SEQUNCE");
-    }
-
-    template<class deriv_expr, typename = std::enable_if_t<std::is_base_of<BC_internal_interface<deriv_expr>, deriv_expr>::value>>
-    ArrayExpression(const deriv_expr& expr) : Shape<DIMS>(static_cast<const deriv_expr&>(expr).inner_shape()),
-    array(get_allocator().allocate(this->size())){
-        evaluate_to(*this, expr);
-    }
-
-protected:
-    template<class U>
-    ArrayExpression(U param, value_type* array_) : array(array_), Shape<DIMS>(param) {}
-    ArrayExpression(value_type* array_) : array(array_) {}
-
-
-    void copy_init(const ArrayExpression& array_copy) {
-        this->copy_shape(array_copy);
-        this->array = get_allocator().allocate(this->size());
-        evaluate_to(*this, array_copy);
-    }
-
-    void swap_init(ArrayExpression& array_move) {
-    	std::swap(this->array, array_move.array);
-    	this->swap_shape(array_move);
-    }
-
-public:
     __BCinline__ const value_type* memptr() const { return array; }
     __BCinline__       value_type* memptr()       { return array; }
 
-
-    void deallocate() {
-        get_allocator().deallocate(array, this->size());
-        array = nullptr;
-    }
 };
+
+//specialization for scalar --------------------------------------------------------------------------------------------------------
+template<class T, class Allocator, class... Tags>
+struct ArrayExpression<0, T, Allocator, Tags...>
+: Array_Base<ArrayExpression<0, T, Allocator, Tags...>, 0>, public Shape<0> {
+
+	using derived_t = Array<0, T, Allocator, Tags...>;
+	using value_type = T;
+	using allocator_t = Allocator;
+	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
+
+	static constexpr int DIMS = 0;
+	static constexpr int ITERATOR = 0;
+
+	value_type* array = nullptr;
+
+	__BCinline__ const auto& operator [] (int index) const { return array[0]; }
+	__BCinline__	   auto& operator [] (int index) 	   { return array[0]; }
+
+	template<class... integers> __BCinline__
+	const auto& operator () (integers... ints) const { return array[0]; }
+
+	template<class... integers> __BCinline__
+	      auto& operator () (integers... ints)      { return array[0]; }
+
+	__BCinline__ const value_type* memptr() const { return array; }
+	__BCinline__       value_type* memptr()       { return array; }
+
+};
+
 
 
 
@@ -130,102 +113,65 @@ public:
 
 	using ArrayExpression<Dimension, Scalar, Allocator, Tags...>::deallocate;
 
-	Array() = default;
-
-
-	Array(const Allocator& alloc)
-	: allocator_t(BC::allocator_traits<Allocator>::select_on_container_copy_construction(alloc)) {
+	Array() {
+		if (Dimension == 0) {
+			this->array = this->allocate(1);
+		}
 	}
 
-	template<class... args, typename=std::enable_if_t<MTF::seq_of<BC::size_t, args...>>>
-	Array(const args&... params)
-	: allocator_t(allocator_t()),
-	  parent(make_array(params...)){}
 
+	Array(const Allocator& tensor)
+	: allocator_t(BC::allocator_traits<Allocator>::select_on_container_copy_construction(tensor)) {
+	}
+
+
+    template<class U,typename = std::enable_if_t<! std::is_base_of<BC_internal_interface<U>, U>::value>>
+    Array(U param) {
+    	this->as_shape() = Shape<Dimension>(param);
+    	this->array = this->allocate(this->size());
+    }
+
+
+
+	//Constructor for integer sequence, IE Matrix(m, n)
+	template<class... args,
+	typename=std::enable_if_t<
+		MTF::seq_of<BC::size_t, args...> &&
+		sizeof...(args) == Dimension>>
+	Array(const args&... params) {
+		this->as_shape() = Shape<Dimension>(params...);
+		this->array      = this->allocate(this->size());
+	}
+
+	//Constructor for creating an Array from an expression, IE Matrix x(a + b)
+    template<class Expr, typename = std::enable_if_t<std::is_base_of<BC_internal_interface<Expr>, Expr>::value>>
+	Array(const Expr& expr_t) {
+		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
+		this->array = this->allocate(this->size());
+        evaluate_to(this->internal(), expr_t.internal());
+	}
+
+    void copy_init(const Array& array_copy) {
+        this->copy_shape(array_copy);
+        this->array = this->allocate(this->size());
+        evaluate_to(this->internal(), array_copy.internal());
+    }
+    void swap_init(Array& array_move) {
+    	std::swap(this->array, array_move.array);
+    	this->swap_shape(array_move);
+    }
 	Array(const parent& parent_)
 	: parent(parent_) {}
 
 	Array(parent&& parent_)
 	: parent(parent_) {}
-};
-
-
-//specialization for scalar --------------------------------------------------------------------------------------------------------
-template<class T, class Allocator, class... Tags>
-struct ArrayExpression<0, T, Allocator, Tags...>
-: Array_Base<ArrayExpression<0, T, Allocator, Tags...>, 0>, public Shape<0> {
-
-	using derived_t = Array<0, T, Allocator, Tags...>;
-    using value_type = T;
-    using allocator_t = Allocator;
-	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
-
-    static constexpr int DIMS = 0;
-    static constexpr int ITERATOR = 0;
-
-    value_type* array = nullptr;
-
-private:
-    const auto& as_derived() const { return static_cast<const derived_t&>(*this); }
-          auto& as_derived()  	   { return static_cast<	  derived_t&>(*this); }
-public:
-    const auto& get_allocator() const { return static_cast<const Allocator&>(as_derived()); }
-          auto& get_allocator() 	  { return static_cast<	     Allocator&>(as_derived()); }
-
-    ArrayExpression()
-     : array(get_allocator().allocate(this->size())) {}
-
-    ArrayExpression(Shape<DIMS> shape_, value_type* array_)
-    : array(array_), Shape<0>(shape_) {}
-
-    template<class U>
-    ArrayExpression(U param) {
-    	array = get_allocator().allocate(this->size());
-    	evaluate_to(*this, param);
-    }
-
-    template<class U>
-    ArrayExpression(U param, value_type* array_) : array(array_), Shape<DIMS>(param) {}
-
-    __BCinline__
-    const auto& operator [] (int index) const {
-    	return array[0];
-    }
-
-    __BCinline__
-    auto& operator [] (int index) {
-    	return array[0];
-    }
-
-    template<class... integers> __BCinline__
-    auto& operator () (integers... ints) {
-        return array[0];
-    }
-
-    template<class... integers> __BCinline__
-    const auto& operator () (integers... ints) const {
-        return array[0];
-    }
-
-    __BCinline__ const value_type* memptr() const { return array; }
-    __BCinline__       value_type* memptr()       { return array; }
-
-    void copy_init(const ArrayExpression& array_copy) {
-        array = get_allocator().allocate(this->size());
-        evaluate_to(*this, array_copy);
-    }
-
-    void swap_init(const ArrayExpression& array_move) {
-        	std::swap(this->array, array_move.array);
-        	this->swap_shape(array_move);
-	}
 
     void deallocate() {
-        get_allocator().deallocate(this->array, this->size());
-        array = nullptr;
+       Allocator::deallocate(this->array, this->size());
+       this->array = nullptr;
     }
-
 };
+
 
 
 }

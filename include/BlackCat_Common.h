@@ -18,7 +18,7 @@
 #include "blas/BLAS.h"
 
 
-#define BC_METHOD_FORWARD(func_name, member_name)\
+#define BC_FORWARD_METHOD(member_name, func_name)\
 template<class... args> auto func_name(const args&... args_) -> decltype(member_name.func_name(args_...))\
 { return member_name.func_name(args_...); } \
 template<class... args> auto func_name(const args&... args_) const -> decltype(member_name.func_name(args_...))\
