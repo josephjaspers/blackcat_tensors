@@ -80,13 +80,14 @@ public:
     template<class U> Tensor_Base(      Tensor_Base<U>&& tensor) : internal_t(tensor.internal()) {}
 
 
-    Tensor_Base(copy_parameter tensor) {
+    Tensor_Base(copy_parameter tensor) : parent(tensor.as_parent()) {
         this->copy_init(tensor);
     }
 
     Tensor_Base(move_parameter tensor) {
         this->swap_init(tensor);
     }
+
 
     Tensor_Base& operator =(move_assign_parameter tensor) {
         this->swap_init(tensor);
@@ -105,6 +106,13 @@ public:
 
     ~Tensor_Base() {
         this->deallocate();
+    }
+
+    parent& as_parent() {
+    	return static_cast<parent&>(*this);
+    }
+    const parent& as_parent() const {
+    	return static_cast<const parent&>(*this);
     }
 };
 

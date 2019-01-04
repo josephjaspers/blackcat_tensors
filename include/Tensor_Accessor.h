@@ -116,7 +116,7 @@ const auto chunk(const Tensor_Base<T>& tensor, integers... ints) {
 	auto index_point =  BC::make_array(ints...);
 
     return [&, index_point](auto... shape_indicies) {
-        return make_tensor(et::make_chunk<T, sizeof...(shape_indicies)>(
+        return make_tensor(et::make_chunk(
                 tensor.internal(),
                 index_point,
                 BC::make_array(shape_indicies...)));
@@ -127,7 +127,7 @@ template<class T, class... integers, class enabler = std::enable_if_t<MTF::seq_o
 auto chunk(Tensor_Base<T>& tensor, integers... ints) {
 	auto index_point =  BC::make_array(ints...);
     return [&, index_point](auto... shape_indicies) {
-        return make_tensor(et::make_chunk<T, sizeof...(shape_indicies)>(
+        return make_tensor(et::make_chunk(
                 tensor.internal(),
                 index_point,
                 BC::make_array(shape_indicies...)));

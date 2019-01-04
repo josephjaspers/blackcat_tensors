@@ -18,8 +18,8 @@ namespace et {
 
 
 template<int Dimension, class Scalar, class Allocator>
-struct Array_View
-        : Array_Base<Array_View<Dimension, Scalar, Allocator>, Dimension>,
+struct ArrayViewExpr
+        : Array_Base<ArrayViewExpr<Dimension, Scalar, Allocator>, Dimension>,
           Shape<Dimension> {
 
     using value_type = Scalar;
@@ -33,29 +33,29 @@ struct Array_View
 
     const value_type* array = nullptr;
 
-    Array_View()                   = default;
-    Array_View(const Array_View& ) = default;
-    Array_View(      Array_View&&) = default;
+    ArrayViewExpr()                   = default;
+    ArrayViewExpr(const ArrayViewExpr& ) = default;
+    ArrayViewExpr(      ArrayViewExpr&&) = default;
 
-    void copy_init(const Array_View& view) {
+    void copy_init(const ArrayViewExpr& view) {
         this->copy_shape(view);
         this->array = view.array;
     }
 
-    void swap_init(Array_View& array_move) {
+    void swap_init(ArrayViewExpr& array_move) {
 		std::swap(this->array, array_move.array);
 		this->swap_shape(array_move);
 	}
 
     template<class tensor_t, typename = std::enable_if_t<tensor_t::DIMS == Dimension>>
-    Array_View(const Array_Base<tensor_t, Dimension>& tensor)
+    ArrayViewExpr(const Array_Base<tensor_t, Dimension>& tensor)
         :  array(tensor) {
 
         this->copy_shape(static_cast<const tensor_t&>(tensor));
     }
 
     template<class... integers>
-    Array_View(int x, integers... ints) :Shape<Dimension>(x, ints...) {}
+    ArrayViewExpr(int x, integers... ints) :Shape<Dimension>(x, ints...) {}
 
     __BCinline__
     const value_type* memptr() const  { return array; }
@@ -64,6 +64,16 @@ struct Array_View
 
 };
 
+template<int Dimension, class Scalar, class Allocator>
+struct Array_View : ArrayViewExpr<Dimension, Scalar, Allocator> {
+	using parent = ArrayViewExpr<Dimension, Scalar, Allocator>;
+	using parent::parent;
+
+	Array_View() = default;
+	Array_View(const Array_View& av) {
+		parent::copy_init(av);
+	}
+};
 
 }
 }

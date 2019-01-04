@@ -57,7 +57,7 @@ struct ArrayExpression
 private:
     const auto& as_derived() const { return static_cast<const derived_t&>(*this); }
           auto& as_derived()  	   { return static_cast<	  derived_t&>(*this); }
-
+public:
     const auto& get_allocator() const { return static_cast<const Allocator&>(as_derived()); }
           auto& get_allocator() 	  { return static_cast<	     Allocator&>(as_derived()); }
 public:
@@ -118,11 +118,11 @@ class Array :
 	template<int, class, class, class...>
 	friend class ArrayExpression;
 
+	using self = Array<Dimension, Scalar, Allocator, Tags...>;
+	using parent = ArrayExpression<Dimension, Scalar, Allocator, Tags...>;
 
 public:
 
-	using self = Array<Dimension, Scalar, Allocator, Tags...>;
-	using parent = ArrayExpression<Dimension, Scalar, Allocator, Array<Dimension, Scalar, Allocator>>;
 	using allocator_t = Allocator;
 	using internal_t = ArrayExpression<Dimension, Scalar, Allocator, Tags...>;
 	using value_type = Scalar;
@@ -132,14 +132,21 @@ public:
 
 	Array() = default;
 
-	template<class... args>
-	Array(Allocator alloc, const args&... params)
-	: allocator_t(alloc), internal_t(params...) {}
 
-	template<class... args>
+	Array(const Allocator& alloc)
+	: allocator_t(BC::allocator_traits<Allocator>::select_on_container_copy_construction(alloc)) {
+	}
+
+	template<class... args, typename=std::enable_if_t<MTF::seq_of<BC::size_t, args...>>>
 	Array(const args&... params)
-	: allocator_t(allocator_t()), internal_t(params...) {}
+	: allocator_t(allocator_t()),
+	  parent(make_array(params...)){}
 
+	Array(const parent& parent_)
+	: parent(parent_) {}
+
+	Array(parent&& parent_)
+	: parent(parent_) {}
 };
 
 
@@ -161,10 +168,9 @@ struct ArrayExpression<0, T, Allocator, Tags...>
 private:
     const auto& as_derived() const { return static_cast<const derived_t&>(*this); }
           auto& as_derived()  	   { return static_cast<	  derived_t&>(*this); }
-
+public:
     const auto& get_allocator() const { return static_cast<const Allocator&>(as_derived()); }
           auto& get_allocator() 	  { return static_cast<	     Allocator&>(as_derived()); }
-public:
 
     ArrayExpression()
      : array(get_allocator().allocate(this->size())) {}
