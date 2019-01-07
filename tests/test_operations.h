@@ -205,6 +205,13 @@ int test_matrix_muls(int sz=128) {
 
 		mat h = (a.t() * b * 2.0f - 8.0f) - (atrans * b * 2.0f - 8.0f);
 
+//		c.print();
+//		d.print();
+//		e.print();
+//		f.print();
+//		g.print();
+//		h.print();
+
 		validation = c.approx_equal(d) && e.approx_equal(f) && g.approx_equal(h);
 		return BC::all(validation);
 	)

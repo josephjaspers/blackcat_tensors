@@ -15,7 +15,6 @@
 namespace BC {
 namespace et {
 
-
 template<int,class,class,class...> class Array; //derived
 
 
@@ -91,7 +90,7 @@ struct ArrayExpression<0, T, Allocator, Tags...>
 };
 
 
-
+template<class,int,bool> class Array_Slice;
 
 template<int Dimension, class Scalar, class Allocator, class... Tags>
 class Array :
@@ -103,6 +102,12 @@ class Array :
 
 	using self = Array<Dimension, Scalar, Allocator, Tags...>;
 	using parent = ArrayExpression<Dimension, Scalar, Allocator, Tags...>;
+
+	template<class,int,bool>
+	friend class Array_Slice;
+
+	Allocator& get_allocator() { return static_cast<Allocator&>(*this); }
+	const Allocator& get_allocator() const { return static_cast<const Allocator&>(*this); }
 
 public:
 
@@ -122,6 +127,17 @@ public:
 
 	Array(const Allocator& tensor)
 	: allocator_t(BC::allocator_traits<Allocator>::select_on_container_copy_construction(tensor)) {
+    	this->copy_construct(tensor.as_parent());
+	}
+	Array(const Array& array_)
+	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(*this)),
+	  parent(array_) {
+		this->copy_construct(array_);
+	}
+	Array(Array&& array_)
+	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(*this)),
+	  parent(array_) {
+		this->move_construct(std::move(array_));
 	}
 
 
@@ -151,20 +167,25 @@ public:
         evaluate_to(this->internal(), expr_t.internal());
 	}
 
-    void copy_init(const Array& array_copy) {
+    void copy_construct(const Array& array_copy) {
         this->copy_shape(array_copy);
         this->array = this->allocate(this->size());
         evaluate_to(this->internal(), array_copy.internal());
     }
-    void swap_init(Array& array_move) {
-    	std::swap(this->array, array_move.array);
-    	this->swap_shape(array_move);
-    }
-	Array(const parent& parent_)
-	: parent(parent_) {}
+    void move_construct(Array&& array_move) {
+    	this->array = array_move.array;
+    	this->m_inner_shape = array_move.m_inner_shape;
+    	this->m_block_shape = array_move.m_block_shape;
 
-	Array(parent&& parent_)
-	: parent(parent_) {}
+    	array_move.m_inner_shape = {0};
+    	array_move.m_block_shape = {0};
+    	array_move.array = nullptr;
+    }
+    void internal_swap(Array& swap) {
+    	std::swap(this->array, swap.array);
+    	std::swap(this->m_inner_shape, swap.m_inner_shape);
+    	std::swap(this->m_block_shape, swap.m_block_shape);
+    }
 
     void deallocate() {
        Allocator::deallocate(this->array, this->size());

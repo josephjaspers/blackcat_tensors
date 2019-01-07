@@ -82,16 +82,16 @@ public:
 
     Tensor_Base(copy_parameter tensor)
     : parent(tensor.as_parent()) {
-    	this->copy_init(tensor.as_parent());
     }
 
-    Tensor_Base(move_parameter tensor) {
-        this->swap_init(tensor);
+    Tensor_Base(move_parameter tensor)
+    : parent(std::move(tensor.as_parent())){
+    	std::cout << "calling move " << std::endl;
     }
 
 
     Tensor_Base& operator =(move_assign_parameter tensor) {
-        this->swap_init(tensor);
+        this->internal_swap(tensor.as_parent());
         return *this;
     }
 
@@ -109,6 +109,7 @@ public:
         this->deallocate();
     }
 
+private:
     parent& as_parent() {
     	return static_cast<parent&>(*this);
     }

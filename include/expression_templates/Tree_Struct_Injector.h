@@ -32,7 +32,7 @@ struct injector {
 };
 
 
-template<class core, BC::size_t  a, BC::size_t  b>
+template<BC::size_t  a, BC::size_t  b, class core>
 auto make_injection(core c) {
 	return injector<core, a, b>(c);
 }

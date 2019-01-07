@@ -51,7 +51,7 @@ struct Array_Shared
         this->copy_shape(static_cast<tensor_t&>(tensor));
     }
 
-    void copy_init(const Array_Shared& view) {
+    void copy_construct(const Array_Shared& view) {
         this->copy_shape(view);
         this->array = view.array;
     }

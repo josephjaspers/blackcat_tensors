@@ -125,7 +125,9 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
 
     	using tmp_t = Array<dims, value_type, allocator_t, BC_Temporary>;
         tmp_t tmp(branch.inner_shape());
-        branch.eval(injector<tmp_t, 1, 0>(tmp.internal()));
+
+        //ISSUE HERE
+        branch.eval(make_injection<1, 0>(tmp.internal()));
         return tmp;
     }
     __BChot__

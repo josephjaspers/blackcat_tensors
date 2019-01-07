@@ -37,15 +37,19 @@ struct ArrayViewExpr
     ArrayViewExpr(const ArrayViewExpr& ) = default;
     ArrayViewExpr(      ArrayViewExpr&&) = default;
 
-    void copy_init(const ArrayViewExpr& view) {
+    void copy_construct(const ArrayViewExpr& view) {
         this->copy_shape(view);
         this->array = view.array;
     }
 
-    void swap_init(ArrayViewExpr& array_move) {
-		std::swap(this->array, array_move.array);
-		this->swap_shape(array_move);
+    void internal_swap(ArrayViewExpr& swap) {
+		std::swap(this->array, swap.array);
+		this->swap_shape(swap);
 	}
+
+    void move_construct(ArrayViewExpr& array_move) {
+    	return this->internal_swap(array_move);
+    }
 
     template<class tensor_t, typename = std::enable_if_t<tensor_t::DIMS == Dimension>>
     ArrayViewExpr(const Array_Base<tensor_t, Dimension>& tensor)
@@ -71,8 +75,12 @@ struct Array_View : ArrayViewExpr<Dimension, Scalar, Allocator> {
 
 	Array_View() = default;
 	Array_View(const Array_View& av) {
-		parent::copy_init(av);
+		parent::copy_construct(av);
 	}
+
+	auto& internal_base() { return *this; }
+	const auto& internal_base() const { return *this; }
+
 };
 
 }
