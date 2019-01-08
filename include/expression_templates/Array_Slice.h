@@ -16,18 +16,16 @@
 namespace BC {
 namespace et {
 
-template<class,int,bool> class Array_Slice;
-
 template<class Parent, int Dimensions, bool Continuous=true>
 struct ArraySliceExpr :
 		Array_Base<ArraySliceExpr<Parent, Dimensions, Continuous>, Dimensions>,
 		std::conditional_t<Continuous, Shape<Dimensions>, SubShape<Dimensions>>
 	{
 
-	using value_type = typename Parent::value_type;
-	using pointer_t = decltype(std::declval<Parent>().memptr());
+	using value_type  = typename Parent::value_type;
+	using pointer_t   = decltype(std::declval<Parent>().memptr());
 	using allocator_t = typename Parent::allocator_t;
-	using system_tag = typename Parent::system_tag;
+	using system_tag  = typename Parent::system_tag;
 	using shape_t = std::conditional_t<Continuous, Shape<Dimensions>, SubShape<Dimensions>>;
 
 	static constexpr int ITERATOR =  (Parent::ITERATOR > 1 || !Continuous) ? Dimensions : 1;
@@ -55,11 +53,6 @@ struct ArraySliceExpr :
 	value_type* memptr() {
 		return m_array;
 	}
-
-	const auto& get_allocator() const {
-		return static_cast<const Array_Slice<Parent, Dimensions, Continuous>&>(*this).m_allocator;
-	}
-
 };
 
 

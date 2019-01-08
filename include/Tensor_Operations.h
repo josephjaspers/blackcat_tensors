@@ -45,7 +45,7 @@ struct Tensor_Operations<Tensor_Base<internal_type>> {
 
 private:
 
-    static constexpr bool copy_assignable = et::BC_array_copy_assignable<internal_type>();
+    static constexpr bool copy_assignable = BC::is_copy_assignable_v<internal_type>;
     #define BC_ASSERT_ASSIGNABLE(literal) static_assert(copy_assignable, "ASSERT COPY ASSIGNABLE: " literal)
 
     const derived& as_derived() const { return static_cast<const derived&>(*this); }

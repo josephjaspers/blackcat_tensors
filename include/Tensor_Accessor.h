@@ -25,8 +25,8 @@ class Tensor_Accessor {
     const auto& as_derived() const { return static_cast<const derived&>(*this); }
           auto& as_derived()       { return static_cast<      derived&>(*this); }
 
-    const auto& internal() const { return as_derived().internal(); }
-          auto& internal()       { return as_derived().internal(); }
+    const auto& internal() const { return as_derived().internal_base(); }
+          auto& internal()       { return as_derived().internal_base(); }
 
 public:
 
@@ -101,13 +101,13 @@ public:
 template<class T>
 const auto reshape(const Tensor_Base<T>& tensor) {
     return [&](auto... integers) {
-        return make_tensor(et::make_view(tensor.internal(), BC::make_array(integers...)));
+        return make_tensor(et::make_view(tensor.internal_base(), BC::make_array(integers...)));
     };
 }
 template<class T>
 auto reshape(Tensor_Base<T>& tensor) {
     return [&](auto... integers) {
-        return make_tensor(et::make_view(tensor.internal(), BC::make_array(integers...)));
+        return make_tensor(et::make_view(tensor.internal_base(), BC::make_array(integers...)));
     };
 }
 
@@ -117,7 +117,7 @@ const auto chunk(const Tensor_Base<T>& tensor, integers... ints) {
 
     return [&, index_point](auto... shape_indicies) {
         return make_tensor(et::make_chunk(
-                tensor.internal(),
+                tensor.internal_base(),
                 index_point,
                 BC::make_array(shape_indicies...)));
     };
@@ -128,7 +128,7 @@ auto chunk(Tensor_Base<T>& tensor, integers... ints) {
 	auto index_point =  BC::make_array(ints...);
     return [&, index_point](auto... shape_indicies) {
         return make_tensor(et::make_chunk(
-                tensor.internal(),
+                tensor.internal_base(),
                 index_point,
                 BC::make_array(shape_indicies...)));
     };

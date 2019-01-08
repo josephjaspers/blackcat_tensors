@@ -39,6 +39,10 @@ public:
     using utility       = module::Tensor_Utility<Tensor_Base<ExpressionTemplate>>;
     using accessor      = module::Tensor_Accessor<Tensor_Base<ExpressionTemplate>>;
 
+    friend class module::Tensor_Operations<Tensor_Base<ExpressionTemplate>>;
+    friend class module::Tensor_Utility<Tensor_Base<ExpressionTemplate>>;
+    friend class module::Tensor_Accessor<Tensor_Base<ExpressionTemplate>>;
+
     template<class> friend class Tensor_Base;
     using ExpressionTemplate::ExpressionTemplate;
     using ExpressionTemplate::internal;
@@ -67,10 +71,10 @@ public:
 	using accessor::operator[];
     using accessor::operator();
 
-    using move_parameter        = std::conditional_t<et::BC_array_move_constructible<ExpressionTemplate>(),       self&&, BC::DISABLED<0>>;
-    using copy_parameter        = std::conditional_t<et::BC_array_copy_constructible<ExpressionTemplate>(), const self&,  BC::DISABLED<1>>;
-    using move_assign_parameter = std::conditional_t<et::BC_array_move_assignable<ExpressionTemplate>(),       self&&, BC::DISABLED<0>>;
-    using copy_assign_parameter = std::conditional_t<et::BC_array_copy_assignable<ExpressionTemplate>(), const self&,  BC::DISABLED<1>>;
+    using move_parameter        = std::conditional_t<BC::is_move_constructible_v<ExpressionTemplate>,       self&&, BC::DISABLED<0>>;
+    using copy_parameter        = std::conditional_t<BC::is_copy_constructible_v<ExpressionTemplate>, const self&,  BC::DISABLED<1>>;
+    using move_assign_parameter = std::conditional_t<BC::is_move_assignable_v<ExpressionTemplate>,       self&&, BC::DISABLED<0>>;
+    using copy_assign_parameter = std::conditional_t<BC::is_copy_assignable_v<ExpressionTemplate>, const self&,  BC::DISABLED<1>>;
 
     Tensor_Base() = default;
     Tensor_Base(const parent&  param) : parent(param) {}
@@ -105,7 +109,9 @@ public:
         this->deallocate();
     }
 
+
 private:
+
     parent& as_parent() {
     	return static_cast<parent&>(*this);
     }

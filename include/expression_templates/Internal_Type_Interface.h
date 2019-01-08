@@ -40,6 +40,7 @@ public:
     __BCinline__       auto& internal()       { return as_derived(); }
 
     //default method - returns the mixin of Tensor_Base (may be different than internal())
+    //should be shadowed by classes that support non-trivial copy/move construction
     __BCinline__ const auto& internal_base() const { return as_derived(); }
     __BCinline__       auto& internal_base()       { return as_derived(); }
 

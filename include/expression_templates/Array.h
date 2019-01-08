@@ -103,9 +103,6 @@ class Array :
 	using self = Array<Dimension, Scalar, Allocator, Tags...>;
 	using parent = ArrayExpression<Dimension, Scalar, Allocator, Tags...>;
 
-	template<class,int,bool>
-	friend class Array_Slice;
-
 	Allocator& get_allocator() { return static_cast<Allocator&>(*this); }
 	const Allocator& get_allocator() const { return static_cast<const Allocator&>(*this); }
 
@@ -125,29 +122,26 @@ public:
 	}
 
 
-	Array(const Allocator& tensor)
-	: allocator_t(BC::allocator_traits<Allocator>::select_on_container_copy_construction(tensor)) {
-    	this->copy_construct(tensor.as_parent());
-	}
+	Array(const Allocator& alloc)
+	: allocator_t(BC::allocator_traits<Allocator>::select_on_container_copy_construction(alloc)) {}
+
 	Array(const Array& array_)
-	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(*this)),
+	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(array_)),
 	  parent(array_) {
 		this->copy_construct(array_);
 	}
 	Array(Array&& array_)
-	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(*this)),
+	: Allocator(std::move(array_.get_allocator())),
 	  parent(array_) {
 		this->move_construct(std::move(array_));
 	}
 
-
-    template<class U,typename = std::enable_if_t<! std::is_base_of<BC_internal_interface<U>, U>::value>>
+	//Construct via shape-like object
+    template<class U,typename = std::enable_if_t<!std::is_base_of<BC_internal_interface<U>, U>::value>>
     Array(U param) {
     	this->as_shape() = Shape<Dimension>(param);
     	this->array = this->allocate(this->size());
     }
-
-
 
 	//Constructor for integer sequence, IE Matrix(m, n)
 	template<class... args,

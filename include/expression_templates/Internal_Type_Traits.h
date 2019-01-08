@@ -15,32 +15,23 @@
 namespace BC {
 namespace et {
 
-
 template<class,class,class> class Binary_Expression;
 template<class,class>       class Unary_Expression;
 
+namespace bc_type_traits {
 template<class T> using allocator_of = std::decay_t<typename T::allocator_t>;
 template<class T> using scalar_of    = std::decay_t<typename T::value_type>;
 
 
-template<class T> constexpr bool BC_array_move_constructible() {
-    return T::move_constructible;
+template<class T> constexpr bool is_move_constructible_v= T::move_constructible;
+template<class T> constexpr bool is_copy_constructible_v= T::copy_constructible;
+template<class T> constexpr bool is_move_assignable_v = T::move_assignable;
+template<class T> constexpr bool is_copy_assignable_v = T::copy_assignable;
+}
 }
 
-template<class T> constexpr bool BC_array_copy_constructible() {
-    return T::copy_constructible;
-}
-
-template<class T> constexpr bool BC_array_move_assignable() {
-    return T::move_assignable;
-}
-
-template<class T> constexpr bool BC_array_copy_assignable() {
-    return T::copy_assignable;
-}
-
-
-}
+//push type_traits into BC_namespace
+using namespace et::bc_type_traits;
 }
 
 
