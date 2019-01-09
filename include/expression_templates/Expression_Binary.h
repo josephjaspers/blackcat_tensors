@@ -24,6 +24,7 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
     using value_type = decltype(std::declval<Operation>()(std::declval<lv_value_t&>(), std::declval<rv_value_t&>()));
     using allocator_t = typename Lv::allocator_t;
     using system_tag  = typename Lv::system_tag;
+    using function_t = Operation;
 
     static constexpr int DIMS = Lv::DIMS > Rv::DIMS ?  Lv::DIMS : Rv::DIMS;
     static constexpr int ITERATOR = Lv::DIMS != Rv::DIMS ? DIMS : MTF::max(Lv::ITERATOR, Rv::ITERATOR);
@@ -33,6 +34,7 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
 
     template<class... args> __BChot__
     Binary_Expression(Lv l, Rv r, const args&... args_) :  Operation(args_...), left(l), right(r) {}
+
 
 	template<class L, class R> __BCinline__
 	const auto oper(const L& l, const R& r) const {
@@ -64,7 +66,6 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
     __BCinline__ const auto inner_shape() const { return shape().inner_shape(); }
     __BCinline__ const auto block_shape() const { return shape().block_shape(); }
 };
-
 
 template<class op, class Lv, class Rv> __BChot__
 auto make_bin_expr(Lv left, Rv right) {

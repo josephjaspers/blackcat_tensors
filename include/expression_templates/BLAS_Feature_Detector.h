@@ -21,6 +21,22 @@ template<class T>           using enable_if_array = std::enable_if_t<BC::is_arra
 template<class T, class U>  using enable_if_arrays = std::enable_if_t<BC::is_array<T>() && BC::is_array<U>()>;
 template<class T>           using enable_if_blas = std::enable_if_t<std::is_base_of<BLAS_FUNCTION, T>::value>;
 
+
+
+template<class T>
+struct is_bin_expr : std::false_type {};
+
+template<class Lv, class Rv, template<class> class op, class system_tag>
+struct is_bin_expr<Binary_Expression<Lv, Rv, op<system_tag>>> : std::true_type {};
+
+template<class T>
+struct is_scalar_mul_bin_expr : std::false_type {};
+
+template<class Lv, class Rv>
+struct is_scalar_mul_bin_expr<Binary_Expression<Lv, Rv, et::oper::scalar_mul>> : std::true_type {};
+
+
+
 template<class T> T&  cc(const T&  param) { return const_cast<T&> (param); }
 template<class T> T&& cc(const T&& param) { return const_cast<T&&>(param); }
 template<class T> T*  cc(const T*  param) { return const_cast<T*> (param); }

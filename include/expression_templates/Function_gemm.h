@@ -31,6 +31,7 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
     using system_tag = System_Tag;
     using impl_l  = typename blas::implementation<system_tag>;
     using utility_l   = utility::implementation<system_tag>;
+    using function_t = oper::gemm<System_Tag>;
 
     static constexpr bool transA = blas_feature_detector<lv>::transposed;
     static constexpr bool transB = blas_feature_detector<rv>::transposed;

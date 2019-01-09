@@ -20,8 +20,6 @@ template<class allocator> struct gemv : BLAS_FUNCTION {};
 template<class allocator> struct ger : BLAS_FUNCTION {};
 template<class allocator> struct dot : BLAS_FUNCTION {};
 
-
-
 }
 }
 }

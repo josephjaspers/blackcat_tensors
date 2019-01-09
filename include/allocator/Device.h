@@ -18,8 +18,8 @@ class device_tag;
 
 namespace allocator {
 
-template<class T, class derived=void>
-struct Device : AllocatorBase<std::conditional_t<std::is_void<derived>::value, Device<T>, derived>> {
+template<class T>
+struct Device {
 
     using system_tag = device_tag;		//BC tag
     using propagate_to_expressions = std::false_type; //BC tag

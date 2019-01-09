@@ -178,6 +178,16 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
             return right;
         }
     };
+    struct remove_left_branch_and_negate {
+        template<class core, BC::size_t  a, BC::size_t  b> __BChot__
+        static auto function(const Binary_Expression<lv, rv, oper::sub>& branch, injector<core, a, b> tensor) {
+        	BC_TREE_OPTIMIZER_STDOUT("- remove_left_branch");
+
+        	/*auto left = */ evaluator<lv>::linear_evaluation(branch.left, tensor);
+            auto right = evaluator<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor));
+            return make_un_expr<oper::negation>(right);
+        }
+    };
 
     //if right is entirely blas_expr (or if no blas expr)
 
@@ -213,7 +223,8 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 
         using impl =
         		std::conditional_t<entirely_blas_expr, remove_branch,
-        		std::conditional_t<evaluator<lv>::entirely_blas_expr, remove_left_branch,
+        		std::conditional_t<evaluator<lv>::entirely_blas_expr,
+        		std::conditional_t<std::is_same<op, oper::sub>::value, remove_left_branch_and_negate, remove_left_branch>,
         		std::conditional_t<evaluator<rv>::entirely_blas_expr, remove_right_branch,
         		basic_eval>>>;
 

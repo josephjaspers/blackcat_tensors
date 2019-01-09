@@ -30,6 +30,7 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
     using allocator_t = typename allocator::implementation<system_tag, value_type>;
     using blas_lib     = typename blas::implementation<system_tag>;
     using utility_lib  = typename utility::implementation<system_tag>;
+    using function_t = oper::ger<System_Tag>;
 
     static constexpr int DIMS = 2;
     static constexpr int ITERATOR = 1;

@@ -57,17 +57,25 @@ struct Greedy_Evaluator {
 		using allocator_t = typename lv::allocator_t;
 
 		auto right = evaluator<rv>::linear_evaluation(expression.right, injector<lv, -1, 1>(expression.left));
-		return make_bin_expr<oper::add_assign>(expression.left, evaluate_temporaries<allocator_t>(right));
+		return make_bin_expr<oper::sub_assign>(expression.left, evaluate_temporaries<allocator_t>(right));
 	}
 
-	template<class lv, class rv> __BChot__
+	template<class lv, class rv, class=std::enable_if_t<!evaluator<rv>::partial_blas_expr>> __BChot__
 	static auto evaluate(Binary_Expression<lv, rv, oper::assign> expression) {
 		using allocator_t = typename lv::allocator_t;
 
 		auto right = evaluator<rv>::injection(expression.right, injector<lv, 1, 0>(expression.left));
 		return make_bin_expr<oper::assign>(expression.left, evaluate_temporaries<allocator_t>(right));
-
 	}
+
+	template<class lv, class rv, class=std::enable_if_t<evaluator<rv>::partial_blas_expr>, int=0> __BChot__
+	static auto evaluate(Binary_Expression<lv, rv, oper::assign> expression) {
+		using allocator_t = typename lv::allocator_t;
+
+		auto right = evaluator<rv>::linear_evaluation(expression.right, injector<lv, 1, 0>(expression.left));
+		return make_bin_expr<oper::add_assign>(expression.left, evaluate_temporaries<allocator_t>(right));
+	}
+
 
 	template<class lv, class rv> __BChot__
 	static auto evaluate(Binary_Expression<lv, rv, oper::mul_assign> expression) {

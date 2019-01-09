@@ -22,6 +22,7 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Value, operati
     using system_tag  = typename Value::system_tag;
     using allocator_t = allocator::implementation<system_tag, value_type>;
     using utility_t	  = utility::implementation<system_tag>;
+    using function_t  = operation;
 
     static constexpr int DIMS  = Value::DIMS;
     static constexpr int ITERATOR = Value::ITERATOR;

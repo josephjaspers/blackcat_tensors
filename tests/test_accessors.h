@@ -106,6 +106,7 @@ int test_accessors(int sz=128) {
 		vec a2(a[2]);
 		vec a3(a[3]);
 
+
 		auto primary_block_of_a = chunk(a, 0, 0)(5,5);
 		auto block_of_a = chunk(primary_block_of_a ,1,1)(4,3); //a 3x3 matrix starting at point 1,1
 
