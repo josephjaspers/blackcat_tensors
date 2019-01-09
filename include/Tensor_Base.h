@@ -80,8 +80,7 @@ public:
     Tensor_Base(const parent&  param) : parent(param) {}
     Tensor_Base(parent&& param) : parent(param) {}
 
-    template<class U> Tensor_Base(const Tensor_Base<U>&  tensor) : parent(tensor.internal()) {}
-    template<class U> Tensor_Base(      Tensor_Base<U>&& tensor) : parent(tensor.internal()) {}
+    template<class U> Tensor_Base(const Tensor_Base<U>&  tensor) : parent(tensor.as_parent()) {}
 
 
     Tensor_Base(copy_parameter tensor)

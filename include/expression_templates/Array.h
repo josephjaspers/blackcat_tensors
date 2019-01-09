@@ -137,7 +137,7 @@ public:
 	}
 
 	//Construct via shape-like object
-    template<class U,typename = std::enable_if_t<!std::is_base_of<BC_internal_interface<U>, U>::value>>
+    template<class U,typename = std::enable_if_t<!BC::is_array<U>() && !BC::is_expr<U>()>>
     Array(U param) {
     	this->as_shape() = Shape<Dimension>(param);
     	this->array = this->allocate(this->size());
@@ -154,7 +154,7 @@ public:
 	}
 
 	//Constructor for creating an Array from an expression, IE Matrix x(a + b)
-    template<class Expr, typename = std::enable_if_t<std::is_base_of<BC_internal_interface<Expr>, Expr>::value>>
+    template<class Expr,typename = std::enable_if_t<BC::is_array<Expr>() || BC::is_expr<Expr>()>>
 	Array(const Expr& expr_t) {
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());
