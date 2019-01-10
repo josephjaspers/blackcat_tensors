@@ -33,7 +33,7 @@ struct ArrayViewExpr
 
     const value_type* array = nullptr;
 
-    ArrayViewExpr()                   = default;
+    ArrayViewExpr()                      = default;
     ArrayViewExpr(const ArrayViewExpr& ) = default;
     ArrayViewExpr(      ArrayViewExpr&&) = default;
 

@@ -99,7 +99,6 @@ struct get_select_on_temporary_creation<
 
 };
 
-
 //----------------------------allocator_traits-------------------------------------//
 
 template<class Allocator>

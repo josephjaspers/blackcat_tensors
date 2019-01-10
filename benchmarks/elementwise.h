@@ -89,7 +89,7 @@ void benchmark_forloop_suite() {
 			std::cout << "|" << size \
 						<< "|" << bc.count() \
 					       << "|" << baseline.count() \
-					          <<"|"<< bc.count()/baseline.count() << "|" << std::endl;
+					          <<"|"<< baseline.count()/bc.count() << "|" << std::endl;
 
 		size *= multiplier;
 	}

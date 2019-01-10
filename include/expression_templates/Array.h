@@ -15,6 +15,7 @@
 namespace BC {
 namespace et {
 
+template<class, int, bool> class Array_Slice;
 template<int,class,class,class...> class Array; //derived
 
 
@@ -130,7 +131,7 @@ public:
 	  parent(array_) {
 		this->copy_construct(array_);
 	}
-	Array(Array&& array_)
+	Array(Array&& array_) //TODO handle propagate_on_container_move_assignment
 	: Allocator(std::move(array_.get_allocator())),
 	  parent(array_) {
 		this->move_construct(std::move(array_));
@@ -161,6 +162,25 @@ public:
         evaluate_to(this->internal(), expr_t.internal());
 	}
 
+
+	//If Copy-constructing from a slice, attempt to query the allocator
+    //Restrict to same value_type (obviously), same dimensions (for fast-copy)
+    //And restrict to continuous (as we should attempt to support Sparse matrices in the future)
+    template<
+    	class Parent,
+    	typename=
+    			std::enable_if_t<
+    			std::is_same<typename Parent::allocator_t, allocator_t>::value &&
+    			std::is_same<typename Parent::value_type, value_type>::value &&
+    		    Parent::DIMS() == Dimension>>
+	Array(const Array_Slice<Parent, Dimension, true>& expr_t)
+	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(expr_t))
+	{
+		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
+		this->array = this->allocate(this->size());
+        evaluate_to(this->internal(), expr_t.internal());
+	}
+
     void copy_construct(const Array& array_copy) {
         this->copy_shape(array_copy);
         this->array = this->allocate(this->size());
@@ -174,11 +194,19 @@ public:
     	array_move.m_inner_shape = {0};
     	array_move.m_block_shape = {0};
     	array_move.array = nullptr;
+
+    	if (BC::allocator_traits<Allocator>::propagate_on_container_move_assignment::value) {
+    	    this->get_allocator() = std::move(array_move.get_allocator());
+    	}
     }
     void internal_swap(Array& swap) {
     	std::swap(this->array, swap.array);
     	std::swap(this->m_inner_shape, swap.m_inner_shape);
     	std::swap(this->m_block_shape, swap.m_block_shape);
+
+    	if (BC::allocator_traits<Allocator>::propagate_on_container_swap::value) {
+    		std::swap(this->get_allocator(), swap.get_allocator());
+    	}
     }
 
     void deallocate() {
