@@ -98,20 +98,16 @@ class Array :
 			private Allocator,
 			public ArrayExpression<Dimension, Scalar, Allocator, Tags...> {
 
+	template<int, class, class, class...>
+	friend class ArrayExpression;
 
 	using self = Array<Dimension, Scalar, Allocator, Tags...>;
 	using parent = ArrayExpression<Dimension, Scalar, Allocator, Tags...>;
 
 	Allocator& get_allocator() { return static_cast<Allocator&>(*this); }
 	const Allocator& get_allocator() const { return static_cast<const Allocator&>(*this); }
+
 public:
-	template<class, int, bool> friend class Array_Slice; //ArraySlice needs access to 'get_allocator'
-
-	//Required for returning the 'lower half' of the Array Expression Template
-	//'internal' just returns the ArrayExpression object (with this class intentionally sliced-off
-	self& internal_base() { return *this; }
-	const self& internal_base() const { return * this; }
-
 
 	using allocator_t = Allocator;
 	using internal_t = ArrayExpression<Dimension, Scalar, Allocator, Tags...>;

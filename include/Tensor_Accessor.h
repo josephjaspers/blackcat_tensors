@@ -81,12 +81,12 @@ public:
     }
 
     const auto row(BC::size_t i) const {
-        static_assert(derived::DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+        static_assert(derived::DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
         return make_tensor(et::make_row(internal(), i));
     }
 
     auto row(BC::size_t i) {
-        static_assert(derived::DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+        static_assert(derived::DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
         return make_tensor(et::make_row(internal(), i));
     }
 

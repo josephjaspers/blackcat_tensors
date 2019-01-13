@@ -21,21 +21,18 @@ template<class> struct scalar_modifer {
         beta = 1,
     };
 };
-
 template<> struct scalar_modifer<et::oper::sub> {
     enum mod {
         alpha = -1,
         beta = 1
     };
 };
-
 template<> struct scalar_modifer<et::oper::sub_assign> {
     enum mod {
         alpha = -1,
         beta = 1,
     };
 };
-
 template<> struct scalar_modifer<et::oper::assign> {
     enum mod {
         alpha = 1,
@@ -57,16 +54,16 @@ static constexpr bool is_linear_assignment_op() {
     return MTF::seq_contains<T, et::oper::add_assign, et::oper::sub_assign>;
 }
 
+
+
 template<class T>
 static constexpr bool is_nonlinear_op() {
     return  !is_linear_op<T>() && !is_blas_func<T>();
 }
-
 template<class T>
 static constexpr BC::size_t  alpha_of() {
     return scalar_modifer<std::decay_t<T>>::mod::alpha;
 }
-
 template<class T>
 static constexpr BC::size_t  beta_of() {
     return scalar_modifer<std::decay_t<T>>::mod::beta;

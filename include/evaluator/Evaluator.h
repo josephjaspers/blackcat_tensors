@@ -11,7 +11,6 @@
 #include "Device.cu"
 #include "Host.h"
 
-
 BC_DEFAULT_MODULE_BODY(evaluator)
 
 

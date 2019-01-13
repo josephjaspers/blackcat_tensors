@@ -30,11 +30,6 @@ struct Host {
     using propagate_on_container_swap = std::false_type;
     using is_always_equal = std::true_type;
 
-	template<class scalar_t>
-    struct rebind {
-    	using other = Host<scalar_t>;
-    };
-
     T* allocate(int size) {
         return new T[size];
     }
@@ -43,7 +38,7 @@ struct Host {
         delete[] t;
     }
 
-    constexpr bool operator == (const Host&) { return true;  }
+    constexpr bool operator == (const Host&) { return true; }
     constexpr bool operator != (const Host&) { return false; }
 };
 

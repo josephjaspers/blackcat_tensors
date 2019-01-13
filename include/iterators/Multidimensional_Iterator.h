@@ -28,11 +28,10 @@ struct Multidimensional_Iterator {
     tensor_t& tensor;
     BC::size_t  index;
 
-    __BCinline__
-    Multidimensional_Iterator(tensor_t& tensor_, BC::size_t  index_=0)
-     : tensor(tensor_), index(index_) {}
+    __BCinline__ Multidimensional_Iterator(tensor_t& tensor_, BC::size_t  index_=0) :
+			tensor(tensor_), index(index_) {}
 
-#define BC_ND_Iter_Compare(sign, rev)                       \
+#define BC_ND_Iter_Compare(sign, rev)                          \
 	__BCinline__											\
     bool operator sign (const Iterator& iter) {             \
         if (direction == direction::forward)                \

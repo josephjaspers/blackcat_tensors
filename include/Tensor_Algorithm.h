@@ -12,20 +12,20 @@
 
 #include <algorithm>
 #include "algorithms/Algorithms.h"
+namespace BC {
 
-#define BC_TENSOR_ALGORITHM_DEF(function)                                                       \
-                                                                                                \
-    template<class iter_begin_, class iter_end_, class... args>                                 \
-    static auto function (iter_begin_ begin_, iter_end_ end_, args... params) {                 \
-        using tensor_t = typename iter_end_::tensor_t;                                          \
-        using allocator_t = typename tensor_t::allocator_t;                                     \
-        using system_tag  = typename BC::allocator_traits<allocator_t>::system_tag;             \
-        using implementation = typename BC::algorithms::template implementation<system_tag>;    \
-                                                                                                \
-        return implementation:: function (begin_, end_, params...);                             \
+#define BC_TENSOR_ALGORITHM_DEF(function)\
+\
+    template<class iter_begin_, class iter_end_, class... args>\
+    static auto function (iter_begin_ begin_, iter_end_ end_, args... params) {\
+        using tensor_t = typename iter_end_::tensor_t;\
+        using allocator_t = typename tensor_t::allocator_t;\
+        using system_tag  = typename BC::allocator_traits<allocator_t>::system_tag;\
+        using implementation = typename BC::algorithms::template implementation<system_tag>;\
+\
+        return implementation:: function (begin_, end_, params...);\
     }
 
-namespace BC {
 namespace alg {
 //---------------------------non-modifying sequences---------------------------//
 BC_TENSOR_ALGORITHM_DEF(all_of)
@@ -140,7 +140,7 @@ class Tensor_Algorithm<Tensor_Base<internal_t>> {
 
 public:
 
-    void fill(value_type value) { BC::fill(as_derived().begin_(), as_derived().end_(), value);}
+    void fill(value_type value)   { BC::fill(as_derived().begin_(), as_derived().end_(), value);}
     void zero()                 { fill(0); }
     void ones()                 { fill(1); }
 
@@ -226,7 +226,15 @@ static bool all(const Tensor_Base<internal_t>& tensor) {
 
 template<class internal_t>
 static bool any(const Tensor_Base<internal_t>& tensor) {
-	return tensor.sum() != 0;
+	constexpr BC::size_t  dims = internal_t::DIMS;
+	using value_type = typename internal_t::value_type;
+	using allocator_t  = typename allocator::template implementation<typename internal_t::system_tag, value_type>;
+
+	Tensor_Base<BC::et::Array<dims, bool, allocator_t>>
+	bool_tensor(tensor.inner_shape());
+	bool_tensor = logical(tensor);
+
+	return bool_tensor.sum()!= 0;
 }
 
 
