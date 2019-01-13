@@ -59,20 +59,33 @@ struct ArraySliceExpr :
 template<class Parent, int Dimensions, bool Continuous=true>
 struct Array_Slice : ArraySliceExpr<Parent, Dimensions, Continuous> {
 
+	using self = Array_Slice<Parent, Dimensions, Continuous>;
 	using super_t = ArraySliceExpr<Parent, Dimensions, Continuous>;
 	using shape_t = typename super_t::shape_t;
 	using allocator_t = typename Parent::allocator_t;
 
-//	const allocator_t& m_allocator;
+	template<class,int,bool> friend class Array_Slice;
+	template<int, class,class, class...> friend class Array;
 
-	__BCinline__
+	allocator_t& get_allocator() { return m_allocator; }
+	const allocator_t& get_allocator() const { return m_allocator; }
+
+private:
+	const allocator_t& m_allocator;
+public:
+
+
+	const self& internal_base() const { return *this; }
+	self& internal_base() { return *this; }
+
+
+	__BChot__
 	Array_Slice(const Parent& parent_, BC::size_t index)
-	: super_t(parent_, index) /*, m_allocator(parent_.get_allocator()) */{
-	}
+	: super_t(parent_, index), m_allocator(parent_.get_allocator()) {}
 
-	__BCinline__
+	__BChot__
 	Array_Slice(const Parent& parent_, const shape_t& shape_, BC::size_t index)
-	: super_t(parent_, shape_, index) /*, m_allocator(parent_.get_allocator())*/ {
+	: super_t(parent_, shape_, index),m_allocator(parent_.get_allocator()) {
 	}
 };
 

@@ -14,17 +14,17 @@ namespace BC {
 
 //defines the functor object
 #define BLACKCAT_MATH_DEF(func)                                     \
-namespace functor {												    \
-	struct func {                                                   \
-		template<class value_type> __BCinline__                     \
-		value_type operator () (value_type s) const { 				\
-			return std::func(s); 									\
-	}   															\
-																	\
-	  template<class value_type> __BCinline__                       \
-	  static value_type impl(value_type s) { return std::func(s); } \
-	};															    \
-}																	\
+namespace functor {                                                 \
+    struct func {                                                   \
+        template<class value_type> __BCinline__                     \
+        value_type operator () (value_type s) const {               \
+            return std::func(s);                                    \
+    }                                                               \
+                                                                    \
+      template<class value_type> __BCinline__                       \
+      static value_type impl(value_type s) { return std::func(s); } \
+    };                                                              \
+}                                                                   \
                                                                     \
     template<class internal_t>                                      \
         static auto func(const Tensor_Base<internal_t>& tensor) {   \
@@ -60,25 +60,25 @@ BLACKCAT_MATH_DEF(tan)
 BLACKCAT_MATH_DEF(tanh)
 
 //defines a function with a user defined implementation (not part of std::cmath.h)
-#define BLACKCAT_BC_FUNCTOR_DEF(funcName, func_math) 	 \
-namespace module {										 \
-														 \
-	struct funcName {									 \
-														 \
-	  template<class value_type> __BCinline__    	     \
-	  value_type operator () (value_type x) const { 	 \
-		return func_math; 								 \
-	  } 											     \
-	  template<class value_type> __BCinline__    	     \
-	  static value_type impl(value_type x) { 		     \
-		return func_math; 								 \
-	  }													 \
-	};													 \
-}													 	 \
-														 \
+#define BLACKCAT_BC_FUNCTOR_DEF(funcName, func_math)       \
+namespace module {                                         \
+                                                           \
+    struct funcName {                                      \
+                                                           \
+      template<class value_type> __BCinline__              \
+      value_type operator () (value_type x) const {        \
+        return func_math;                                  \
+      }                                                    \
+      template<class value_type> __BCinline__              \
+      static value_type impl(value_type x) {               \
+        return func_math;                                  \
+      }                                                    \
+    };                                                     \
+}                                                          \
+                                                           \
 template<class internal_t>                                       \
 static auto funcName(const Tensor_Base<internal_t>& tensor) {    \
-	return tensor.un_expr( module:: funcName () );               \
+    return tensor.un_expr( module:: funcName () );               \
 }
 
 BLACKCAT_BC_FUNCTOR_DEF(logistic, 1 / (1 + std::exp(-x)));

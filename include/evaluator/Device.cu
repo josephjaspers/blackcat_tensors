@@ -10,14 +10,16 @@
 #ifndef BC_MATHEMATICS_DEVICE_H_
 #define BC_MATHEMATICS_DEVICE_H_
 
+
 #include <cublas_v2.h>
 #include <cuda_runtime_api.h>
 #include <cuda.h>
-
 #include "Device_Impl.cu"
+
 
 namespace BC {
 namespace evaluator {
+
 
 struct Device {
 
@@ -47,9 +49,10 @@ struct Device {
 
 };
 
+
 }
 }
+
 
 #endif /* MATHEMATICS_CPU_H_ */
-
 #endif //if cudda cc defined

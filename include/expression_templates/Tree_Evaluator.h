@@ -56,11 +56,11 @@ struct evaluator_default {
     static auto temporary_injection(const T& branch) {
         return branch;
     }
+
     static void deallocate_temporaries(const T& tmp) {
         return;
     }
 };
-
 
 
 template<class T, class voider=void>
@@ -84,20 +84,18 @@ struct evaluator<
     }
 };
 
-
 //-----------------------------------------------BLAS----------------------------------------//
-
-
 
 template<class lv, class rv, class op>
 struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op>()>> {
-    static constexpr bool entirely_blas_expr = true;
+
+	static constexpr bool entirely_blas_expr = true;
     static constexpr bool partial_blas_expr = true;
     static constexpr bool nested_blas_expr = true;
     static constexpr bool requires_greedy_eval = true;
 
-
     using branch_t = Binary_Expression<lv, rv, op>;
+
 
     template<class core, BC::size_t  a, BC::size_t  b> __BChot__
     static auto linear_evaluation(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
@@ -106,6 +104,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
     	branch.eval(tensor);
         return tensor.data();
     }
+
     template<class core, BC::size_t  a, BC::size_t  b> __BChot__
     static auto injection(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
     	BC_TREE_OPTIMIZER_STDOUT("BLAS_EXPR: injection");
@@ -130,6 +129,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
         branch.eval(make_injection<1, 0>(tmp.internal()));
         return tmp;
     }
+
     __BChot__
     static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch) {
     	BC_TREE_OPTIMIZER_STDOUT("BLAS_EXPR: deallocate_temporaries");
@@ -145,14 +145,14 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
 
 template<class lv, class rv, class op>
 struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op>()>> {
-    static constexpr bool entirely_blas_expr 	= evaluator<lv>::entirely_blas_expr && evaluator<rv>::entirely_blas_expr;
+
+	static constexpr bool entirely_blas_expr 	= evaluator<lv>::entirely_blas_expr && evaluator<rv>::entirely_blas_expr;
     static constexpr bool partial_blas_expr 	= evaluator<lv>::partial_blas_expr || evaluator<rv>::partial_blas_expr;
     static constexpr bool nested_blas_expr 		= evaluator<lv>::nested_blas_expr || evaluator<rv>::nested_blas_expr;
     static constexpr bool requires_greedy_eval 	= evaluator<lv>::requires_greedy_eval || evaluator<rv>::requires_greedy_eval;
 
 
     //-------------Linear evaluation branches---------------------//
-
 
     //needed by injection and linear_evaluation
     struct remove_branch {
@@ -178,6 +178,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
             return right;
         }
     };
+
     struct remove_left_branch_and_negate {
         template<class core, BC::size_t  a, BC::size_t  b> __BChot__
         static auto function(const Binary_Expression<lv, rv, oper::sub>& branch, injector<core, a, b> tensor) {
@@ -190,7 +191,6 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
     };
 
     //if right is entirely blas_expr (or if no blas expr)
-
     struct remove_right_branch {
 
     	template<class core, BC::size_t  a, BC::size_t  b> __BChot__
@@ -276,7 +276,9 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
             return impl::function(left, right);
         }
     };
+
     struct right_blas_expr {
+
         struct trivial_injection {
             template<class l, class r> __BChot__
             static auto function(const l& left, const r& right) {
@@ -284,6 +286,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
                 return right;
             }
         };
+
         struct non_trivial_injection {
                 template<class l, class r> __BChot__
                 static auto function(const l& left, const r& right) {
@@ -291,6 +294,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
                     return make_bin_expr<op>(left, right);
                 }
             };
+
         template<class core, BC::size_t  a, BC::size_t  b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
         	BC_TREE_OPTIMIZER_STDOUT("- right_blas_expr");
@@ -307,7 +311,8 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 
     //------------nontrivial injections, DO NOT UPDATE, scalars-mods will enact during elementwise-evaluator----------------//
     struct left_nested_blas_expr {
-        template<class core, BC::size_t  a, BC::size_t  b> __BChot__
+
+    	template<class core, BC::size_t  a, BC::size_t  b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
         	BC_TREE_OPTIMIZER_STDOUT("- left_nested_blas_expr");
 
@@ -316,8 +321,10 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
             return make_bin_expr<op>(left, right);
         }
     };
+
     struct right_nested_blas_expr {
-        template<class core, BC::size_t  a, BC::size_t  b> __BChot__
+
+    	template<class core, BC::size_t  a, BC::size_t  b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
         	BC_TREE_OPTIMIZER_STDOUT("- right_nested_blas_expr");
 
@@ -396,6 +403,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
             return make_bin_expr<op>(left, right);
         }
     };
+
     struct right_trivial_injection {
         template<class core, BC::size_t  a, BC::size_t  b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
@@ -404,6 +412,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
             return make_bin_expr<op>(left, right);
         }
     };
+
     struct left_nontrivial_injection {
         template<class core, BC::size_t  a, BC::size_t  b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
@@ -412,6 +421,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
             return make_bin_expr<op>(left, right);
         }
     };
+
     struct right_nontrivial_injection {
         template<class core, BC::size_t  a, BC::size_t  b> __BChot__
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor) {
@@ -441,6 +451,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
     	auto right = evaluator<rv>::template temporary_injection<allocator>(branch.right);
     	return make_bin_expr<op>(left, right);
     }
+
     __BChot__
     static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch) {
         evaluator<lv>::deallocate_temporaries(branch.left);
@@ -448,11 +459,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op
     }
 };
 
-
-
-
 //--------------Unary Expression---------------------------------------------------------------------//
-
 
 template<class array_t, class op>
 struct evaluator<Unary_Expression<array_t, op>>
@@ -466,6 +473,7 @@ struct evaluator<Unary_Expression<array_t, op>>
     static auto linear_evaluation(const Unary_Expression<array_t, op>& branch, injector<core, a, b> tensor) {
         return branch;
     }
+
     template<class core, BC::size_t  a, BC::size_t  b> __BChot__
     static auto injection(const Unary_Expression<array_t, op>& branch, injector<core, a, b> tensor) {
         auto array =  evaluator<array_t>::injection(branch.array, tensor);
@@ -479,18 +487,17 @@ struct evaluator<Unary_Expression<array_t, op>>
     	return Unary_Expression<std::decay_t<decltype(expr)>, op>(expr);
 
     }
-    __BChot__ static void deallocate_temporaries(const Unary_Expression<array_t, op>& branch) {
+
+    __BChot__
+    static void deallocate_temporaries(const Unary_Expression<array_t, op>& branch) {
         evaluator<array_t>::deallocate_temporaries(branch.array);
     }
 };
 
 
-
-
 }
 }
 }
-
 
 
 #endif /* PTE_ARRAY_H_ */

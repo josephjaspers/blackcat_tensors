@@ -16,15 +16,7 @@
 #include "random/Random.h"
 #include "utility/Utility.h"
 #include "blas/BLAS.h"
-
-
-#define BC_FORWARD_METHOD(member_name, func_name)\
-template<class... args> auto func_name(const args&... args_) -> decltype(member_name.func_name(args_...))\
-{ return member_name.func_name(args_...); } \
-template<class... args> auto func_name(const args&... args_) const -> decltype(member_name.func_name(args_...))\
-{ return member_name.func_name(args_...); } \
-
-
+#include "streams/Streams.h"
 
 namespace BC {
 
@@ -40,9 +32,9 @@ class BC_Expr  {};
 class BC_Temporary {};
 class BLAS_FUNCTION {};
 
-template<class T> static constexpr bool is_bc_type() { return std::is_base_of<BC_Type, T>::value; }
-template<class T> static constexpr bool is_array() { return std::is_base_of<BC_Array, T>::value; }
-template<class T> static constexpr bool is_expr()  { return std::is_base_of<BC_Expr, T>::value; }
+template<class T> static constexpr bool is_bc_type()    { return std::is_base_of<BC_Type, T>::value; }
+template<class T> static constexpr bool is_array()      { return std::is_base_of<BC_Array, T>::value; }
+template<class T> static constexpr bool is_expr()       { return std::is_base_of<BC_Expr, T>::value; }
 template<class T> static constexpr bool is_temporary()  { return std::is_base_of<BC_Temporary, T>::value; }
 template<class T> static constexpr bool is_blas_func()  { return std::is_base_of<BLAS_FUNCTION, T>::value; }
 

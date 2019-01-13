@@ -15,7 +15,7 @@ namespace et {
 namespace tree {
 
 
-template<class tensor_core, BC::size_t  alpha_modifier_ = 1, BC::size_t  beta_modifier_= 0>
+template<class tensor_core, int alpha_modifier_=1, int beta_modifier_=0>
 struct injector {
 
 	static constexpr BC::size_t  ALPHA = alpha_modifier_;

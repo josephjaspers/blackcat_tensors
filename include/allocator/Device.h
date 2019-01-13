@@ -33,6 +33,10 @@ struct Device {
     using propagate_on_container_swap = std::false_type;
     using is_always_equal = std::true_type;
 
+	template<class scalar_t>
+    struct rebind {
+    	using other = Device<scalar_t>;
+    };
 
     T* allocate(int sz=1) const {
     	T* data_ptr;

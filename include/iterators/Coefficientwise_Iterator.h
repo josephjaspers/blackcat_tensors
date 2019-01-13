@@ -43,14 +43,14 @@ struct Coefficientwise_Iterator {
     }
 
 #define BC_Iter_Compare(sign, rev)                          \
-	__BCinline__				            \
+	__BCinline__				                            \
     bool operator sign (const Iterator& iter) {             \
         if (direction == direction::forward)                \
             return index sign iter.index;                   \
         else                                                \
             return index rev iter.index;                    \
     }                                                       \
-    __BCinline__ 					    \
+    __BCinline__ 					                        \
     bool operator sign (int p_index) {                      \
         if (direction == direction::forward)                \
             return index sign p_index;                      \

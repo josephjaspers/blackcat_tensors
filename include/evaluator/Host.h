@@ -9,8 +9,10 @@
 #ifndef MATHEMATICS_CPU_H_
 #define MATHEMATICS_CPU_H_
 
+
 namespace BC {
 namespace evaluator {
+
 
 template<int dim>
 struct evaluator_impl {
@@ -22,6 +24,7 @@ struct evaluator_impl {
         }
     }
 };
+
 template<>
 struct evaluator_impl<1> {
     template<class expression, class... indexes>
@@ -39,6 +42,7 @@ struct evaluator_impl<1> {
         }
     }
 };
+
 template<>
 struct evaluator_impl<0> {
     template<class expression>
@@ -58,9 +62,12 @@ struct Host {
 		evaluator_impl<d>::impl(expr);
 		 __BC_omp_bar__
 	}
-
 };
+
+
 }
 }
+
+
 #endif
  /* MATHEMATICS_CPU_H_ */
