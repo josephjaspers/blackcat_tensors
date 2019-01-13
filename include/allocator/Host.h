@@ -30,6 +30,10 @@ struct Host {
     using propagate_on_container_swap = std::false_type;
     using is_always_equal = std::true_type;
 
+
+	template<class altT>
+	struct rebind { using other = Host<altT>; };
+
     T* allocate(int size) {
         return new T[size];
     }

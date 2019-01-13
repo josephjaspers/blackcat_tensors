@@ -28,9 +28,10 @@
 namespace BC {
 template<class internal_t> class Tensor_Base;
 
+
 namespace module {
 template<class derived> class Tensor_Operations;
-//This is where the beautiful lazy expressions are created
+
 
 template<class internal_type>
 struct Tensor_Operations<Tensor_Base<internal_type>> {
@@ -59,7 +60,7 @@ public:
         et::evaluate(tensor.as_derived().internal());
     }
     //--------------------------------------assignment operators-----------------------------------------------//
-#define BC_OPER_ASSIGNMENT_DEF(op, op_functor)                                                    \
+#define BC_OPER_ASSIGNMENT_DEF(op, op_functor)                                                   \
                                                                                                 \
     template<class pDeriv> __BChot__                                                                        \
     derived& operator op (const Tensor_Operations<pDeriv>& param) {                                \
@@ -87,12 +88,12 @@ public:
 
     //--------------------------------------pointwise operators-------------------------------//
 
-#define BC_OPER_COEFFICIENTWISE_DEF(op, op_functor)                            \
-                                                                            \
-    template<class pDeriv> __BChot__                                                    \
-    auto operator op (const Tensor_Operations<pDeriv>& param) const {        \
-        assert_valid(param);                                                \
-        return bi_expr< et::oper:: op_functor >(param);                \
+#define BC_OPER_COEFFICIENTWISE_DEF(op, op_functor)                   \
+                                                                      \
+    template<class pDeriv> __BChot__                                  \
+    auto operator op (const Tensor_Operations<pDeriv>& param) const { \
+        assert_valid(param);                                          \
+        return bi_expr< et::oper:: op_functor >(param);               \
     }
 
     BC_OPER_COEFFICIENTWISE_DEF(+, add)
@@ -236,25 +237,25 @@ public:
      //specializations that upcast negation to a 'better' function
      //(ensures that y -= w * x is as good as y += -(w*x)
 
-     template<class internal_t>
-        derived& operator +=(const negated_t<internal_t>& param) {
-            BC_ASSERT_ASSIGNABLE("derived& operator +=(const Tensor_Operations<pDeriv>& param)");
-            assert_valid(param);
-            evaluate(bi_expr_internal<et::oper::sub_assign>(param.array));
-            return as_derived();
-        }
-        template<class internal_t>
-        derived& operator -=(const negated_t<internal_t>& param) {
-            BC_ASSERT_ASSIGNABLE("derived& operator -=(const Tensor_Operations<pDeriv>& param)");
-            assert_valid(param);
-            evaluate(bi_expr_internal<et::oper::add_assign>(param.array));
-            return as_derived();
-        }
-        template<class internal_t>
-        auto operator +(const negated_t<internal_t>& param) const {
-            assert_valid(param);
-            return bi_expr_internal<et::oper::sub>(param.array);
-        }
+    template<class internal_t>
+	derived& operator +=(const negated_t<internal_t>& param) {
+		BC_ASSERT_ASSIGNABLE("derived& operator +=(const Tensor_Operations<pDeriv>& param)");
+		assert_valid(param);
+		evaluate(bi_expr_internal<et::oper::sub_assign>(param.array));
+		return as_derived();
+	}
+	template<class internal_t>
+	derived& operator -=(const negated_t<internal_t>& param) {
+		BC_ASSERT_ASSIGNABLE("derived& operator -=(const Tensor_Operations<pDeriv>& param)");
+		assert_valid(param);
+		evaluate(bi_expr_internal<et::oper::add_assign>(param.array));
+		return as_derived();
+	}
+	template<class internal_t>
+	auto operator +(const negated_t<internal_t>& param) const {
+		assert_valid(param);
+		return bi_expr_internal<et::oper::sub>(param.array);
+	}
 
 
     template<class param_scalar>

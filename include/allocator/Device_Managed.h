@@ -16,9 +16,13 @@ namespace allocator {
 template<class T>
 struct Device_Managed : Device<T> {
 
-    T*& allocate(T*& t, BC::size_t  sz=1) {
-        cudaMallocManaged((void**) &t, sizeof(T) * sz);
-        return t;
+	template<class altT>
+	struct rebind { using other = Device_Managed<altT>; };
+
+    T*& allocate(BC::size_t  sz=1) {
+    	T* memptr = nullptr;
+        cudaMallocManaged((void**) &memptr, sizeof(T) * sz);
+        return memptr;
     }
 };
 

@@ -34,6 +34,10 @@ struct Device {
     using is_always_equal = std::true_type;
 
 
+
+	template<class altT>
+	struct rebind { using other = Device<altT>; };
+
     T* allocate(int sz=1) const {
     	T* data_ptr;
         cudaMalloc((void**) &data_ptr, sizeof(T) * sz);
