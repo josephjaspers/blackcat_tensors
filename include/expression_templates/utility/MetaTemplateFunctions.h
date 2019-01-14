@@ -138,6 +138,25 @@ namespace MTF {
     }
 
 
+
+    template<class arg>
+    auto get_last(const arg& value) -> decltype(value) {
+    	return value;
+    }
+    template<class arg>
+	auto get_last(arg& value) -> decltype(value) {
+		return value;
+	}
+
+    template<class head, class... args>
+    auto get_last(head&, args&... args_) -> decltype(get_last(args_...)) {
+    	return get_last(args_...);
+    }
+    template<class head, class... args>
+	auto get_last(const head&, const args&... args_) -> decltype(get_last(args_...)) {
+		return get_last(args_...);
+	}
+
     //---------------------
 
 }

@@ -66,6 +66,7 @@ struct Array_Slice : ArraySliceExpr<Parent, Dimensions, Continuous> {
 	const allocator_t& m_allocator;
 
 	template<class,int, bool> friend class Array_Slice;
+	template<int, class, class, class...> friend class Array;
 
 	__BCinline__
 	Array_Slice(Parent& parent_, BC::size_t index)
@@ -126,40 +127,6 @@ private:
 		SubShape<ndims> chunk_shape = SubShape<ndims>(shape, parent.as_shape());
 		return Array_Slice<Parent, ndims, false>(parent, chunk_shape, index);
 	}
-//--------------------- constversions -------------------- //
-//
-//	template<class Parent>
-//	static auto make_slice(const Parent& internal, BC::size_t index) {
-//		return Array_Slice<Parent, Parent::DIMS-1>(internal, internal.slice_ptr_index(index));
-//	}
-//	template<class Parent>
-//	static auto make_ranged_slice(const Parent& internal, BC::size_t from, BC::size_t to) {
-//		constexpr BC::size_t dim_id = Parent::DIMS;
-//		BC::size_t range = to - from;
-//		BC::size_t index = internal.slice_ptr_index(from);
-//
-//		BC::array<dim_id, BC::size_t> inner_shape = internal.inner_shape();
-//
-//		inner_shape[dim_id-1] = range;
-//		BC::et::Shape<dim_id> new_shape(inner_shape);
-//
-//		return Array_Slice<Parent, Parent::DIMS>(
-//				internal, new_shape, index);
-//	}
-//
-//	template<class Parent, int ndims>
-//	static auto make_view(const Parent& parent, BC::array<ndims, BC::size_t> shape) {
-//		return Array_Slice<Parent, ndims>(parent, shape, 0);
-//	}
-//
-//	template<class Parent, int ndims>
-//	auto make_chunk(const Parent& parent, BC::array<Parent::DIMS, int> index_points, BC::array<ndims, int> shape) {
-//		static_assert(ndims > 1, "TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, USE SCALAR OR RANGED_SLICE OTHERWISE");
-//		BC::size_t index = parent.dims_to_index(index_points);
-//
-//		SubShape<ndims> chunk_shape = SubShape<ndims>(shape, parent.as_shape());
-//		return Array_Slice<Parent, ndims, false>(parent, chunk_shape, index);
-//	}
 
 
 }

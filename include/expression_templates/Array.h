@@ -142,6 +142,14 @@ public:
     	this->array = this->allocate(this->size());
     }
 
+	//Construct via shape-like object and Allocator
+    template<class U,typename = std::enable_if_t<!BC::is_array<U>() && !BC::is_expr<U>()>>
+    Array(U param, Allocator alloc_) : Allocator(alloc_) {
+    	this->as_shape() = Shape<Dimension>(param);
+    	this->array = this->allocate(this->size());
+    }
+
+
 	//Constructor for integer sequence, IE Matrix(m, n)
 	template<class... args,
 	typename=std::enable_if_t<
@@ -151,6 +159,7 @@ public:
 		this->as_shape() = Shape<Dimension>(params...);
 		this->array      = this->allocate(this->size());
 	}
+
 
 	//Constructor for creating an Array from an expression, IE Matrix x(a + b)
     template<class Expr,typename = std::enable_if_t<BC::is_array<Expr>() || BC::is_expr<Expr>()>>
@@ -165,14 +174,14 @@ public:
     //Restrict to same value_type (obviously), same dimensions (for fast-copy)
     //And restrict to continuous (as we should attempt to support Sparse matrices in the future)
     template<
-    	class Parent,
+    	class Parent,//>//,
     	typename=
     			std::enable_if_t<
     			std::is_same<typename Parent::allocator_t, allocator_t>::value &&
     			std::is_same<typename Parent::value_type, value_type>::value &&
-    		    Parent::DIMS() == Dimension>>
+    			Array_Slice<Parent, Dimension, true>::DIMS == Dimension>>
 	Array(const Array_Slice<Parent, Dimension, true>& expr_t)
-	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(expr_t))
+	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(expr_t.get_allocator_ref()))
 	{
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());

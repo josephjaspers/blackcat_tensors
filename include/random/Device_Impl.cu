@@ -21,13 +21,13 @@ namespace device_impl {
 template<class T> __global__
 static void randomize(T t, float lower_bound, float upper_bound, int seed) {
 
-     curandState_t state;
-      curand_init(seed, /* the seed controls the sequence of random values that are produced */
+    curandState_t state;
+    curand_init(seed, /* the seed controls the sequence of random values that are produced */
                   seed, /* the sequence number is only important with multiple cores */
                   1, /* the offset is how much extra we advance in the sequence for each call, can be 0 */
                   &state);
 
-    constexpr BC::size_t  floating_point_decimal_length = 10000;
+    constexpr unsigned floating_point_decimal_length = 10000;
 
     for (int i = 0; i < t.size(); ++i) {
         t[i] = curand(&state) % floating_point_decimal_length;
