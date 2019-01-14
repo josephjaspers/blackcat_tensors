@@ -98,19 +98,17 @@ class Array :
 			private Allocator,
 			public ArrayExpression<Dimension, Scalar, Allocator, Tags...> {
 
-	template<int, class, class, class...>
-	friend class ArrayExpression;
+	template<class,int, bool> friend class Array_Slice;
 
 	using self = Array<Dimension, Scalar, Allocator, Tags...>;
 	using parent = ArrayExpression<Dimension, Scalar, Allocator, Tags...>;
 
-	Allocator& get_allocator() { return static_cast<Allocator&>(*this); }
-	const Allocator& get_allocator() const { return static_cast<const Allocator&>(*this); }
+	Allocator& get_allocator_ref() { return static_cast<Allocator&>(*this); }
+	const Allocator& get_allocator_ref() const { return static_cast<const Allocator&>(*this); }
 
 public:
 
 	using allocator_t = Allocator;
-	using internal_t = ArrayExpression<Dimension, Scalar, Allocator, Tags...>;
 	using value_type = Scalar;
 	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
 
@@ -132,7 +130,7 @@ public:
 		this->copy_construct(array_);
 	}
 	Array(Array&& array_) //TODO handle propagate_on_container_move_assignment
-	: Allocator(std::move(array_.get_allocator())),
+	: Allocator(std::move(array_.get_allocator_ref())),
 	  parent(array_) {
 		this->move_construct(std::move(array_));
 	}
@@ -196,7 +194,7 @@ public:
     	array_move.array = nullptr;
 
     	if (BC::allocator_traits<Allocator>::propagate_on_container_move_assignment::value) {
-    	    this->get_allocator() = std::move(array_move.get_allocator());
+    	    this->get_allocator_ref() = std::move(array_move.get_allocator_ref());
     	}
     }
     void internal_swap(Array& swap) {
@@ -205,7 +203,7 @@ public:
     	std::swap(this->m_block_shape, swap.m_block_shape);
 
     	if (BC::allocator_traits<Allocator>::propagate_on_container_swap::value) {
-    		std::swap(this->get_allocator(), swap.get_allocator());
+    		std::swap(this->get_allocator_ref(), swap.get_allocator_ref());
     	}
     }
 
@@ -213,6 +211,16 @@ public:
        Allocator::deallocate(this->array, this->size());
        this->array = nullptr;
     }
+
+    	self& internal_base() {
+    		return *this; }
+    	const self& internal_base() const {
+    		return *this; }
+
+
+	Allocator get_allocator() const {
+		return BC::allocator_traits<Allocator>::select_on_container_copy_construction(static_cast<const Allocator&>(*this));
+	}
 };
 
 
