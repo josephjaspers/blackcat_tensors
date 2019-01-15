@@ -57,7 +57,7 @@ public:
 
     template<class derived_t>
     void evaluate(const Tensor_Operations<derived_t>& tensor) {
-        et::evaluate(tensor.as_derived().internal());
+        et::evaluate(tensor.as_derived().internal(), this->as_derived().get_allocator_ref());
     }
     //--------------------------------------assignment operators-----------------------------------------------//
 #define BC_OPER_ASSIGNMENT_DEF(op, op_functor)                                                   \

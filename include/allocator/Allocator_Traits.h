@@ -38,7 +38,7 @@ template<class alloc, class enabler=void>
 struct propagate_on_temporary_construction_of : std::false_type {
 	using system_tag = typename system_tag_of<alloc>::type;
 	using value_type = typename alloc::value_type;  //mandatory
-	using type = typename allocator::implementation<system_tag, value_type>;
+	using type = std::false_type;//typename allocator::implementation<system_tag, value_type>;
 };
 
 //if defined and is 'false_type'
@@ -55,8 +55,8 @@ struct propagate_on_temporary_construction_of<
 	using value_type = typename alloc::value_type;  //mandatory
 	using default_type = typename allocator::implementation<system_tag, value_type>;
 
-	using type = std::conditional_t<std::is_same<std::true_type, prop_type>::value, alloc, //if true use same_type
-				 std::conditional_t<std::is_same<std::false_type, prop_type>::value, default_type, //if false use default
+	using type = std::conditional_t<std::is_same<std::true_type, prop_type>::value, std::true_type, //if true use same_type
+				 std::conditional_t<std::is_same<std::false_type, prop_type>::value, std::false_type, //if false use default
 				 	 	 	 	 	prop_type>>;	//else use the whatever type is used
 
 };
@@ -65,7 +65,7 @@ struct propagate_on_temporary_construction_of<
 //----------------------------select_on_temporary_creation-------------------------------------//
 //If the allocator does not define 'select_on_temporary_creation' default to host_tag
 template<class alloc, class enabler=void>
-struct get_select_on_temporary_creation : std::false_type {
+struct get_select_on_temporary_construction : std::false_type {
 
 	using prop_t = typename propagate_on_temporary_construction_of<alloc>::type;
 	static constexpr bool prop_t_is_same = std::is_same<prop_t, alloc>::value;
@@ -83,10 +83,9 @@ struct get_select_on_temporary_creation : std::false_type {
 	}
 };
 
-
 //if select on is defined
 template<class alloc>
-struct get_select_on_temporary_creation<
+struct get_select_on_temporary_construction<
 	alloc,
 	std::enable_if_t<
 		!std::is_void<decltype(std::declval<alloc>().select_on_temporary_creation())>::value
@@ -96,7 +95,6 @@ struct get_select_on_temporary_creation<
 	static auto get(const alloc& alloc_) {
 		return alloc_.select_on_temporary_creation();
 	}
-
 };
 
 //----------------------------allocator_traits-------------------------------------//
@@ -108,9 +106,14 @@ struct allocator_traits : std::allocator_traits<Allocator> {
 	using  propagate_on_temporary_construction
 			= typename propagate_on_temporary_construction_of<Allocator>::type;
 
-	static auto select_on_temporary_creation(const Allocator& alloc) {
-		return get_select_on_temporary_creation<Allocator>::get(alloc);
-	}
+//	static auto select_on_temporary_construction(const Allocator& alloc) {
+////		return get_select_on_temporary_construction<Allocator>::get(alloc);
+//		if (propagate_on_temporary_construction_of<Allocator>::type::value) {
+//			return std::allocator_traits<Allocator>::select_on_container_copy_construction(alloc);
+//		} else {
+//			return Allocator();
+//		}
+//	}
 };
 
 }

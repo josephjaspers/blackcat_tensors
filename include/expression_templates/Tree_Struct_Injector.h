@@ -20,9 +20,9 @@ struct injector {
 
 	static constexpr BC::size_t  ALPHA = alpha_modifier_;
 	static constexpr BC::size_t  BETA = beta_modifier_;
-    injector(tensor_core array_) : array(array_) {}
+    injector(tensor_core& array_) : array(array_) {}
 
-    tensor_core array;
+    tensor_core& array;
 
     operator const tensor_core& () const { return array; }
     operator       tensor_core& ()       { return array; }
@@ -32,8 +32,8 @@ struct injector {
 };
 
 
-template<BC::size_t  a, BC::size_t  b, class core>
-auto make_injection(core c) {
+template<int a, int b, class core>
+auto make_injection(core& c) {
 	return injector<core, a, b>(c);
 }
 
