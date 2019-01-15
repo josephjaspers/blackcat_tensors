@@ -39,7 +39,7 @@ template<int,class,class,class...> class Array; //derived
 template<int Dimension, class Scalar, class Allocator, class... Tags>
 struct ArrayExpression
 		: Array_Base<ArrayExpression<Dimension, Scalar, Allocator, Tags...>, Dimension>,
-		  Shape<Dimension> {
+		  Shape<Dimension>, public Tags... {
 
 	using derived_t = Array<Dimension, Scalar, Allocator, Tags...>;
     using value_type = Scalar;
@@ -64,7 +64,9 @@ struct ArrayExpression
 //specialization for scalar --------------------------------------------------------------------------------------------------------
 template<class T, class Allocator, class... Tags>
 struct ArrayExpression<0, T, Allocator, Tags...>
-: Array_Base<ArrayExpression<0, T, Allocator, Tags...>, 0>, public Shape<0> {
+: Array_Base<ArrayExpression<0, T, Allocator, Tags...>, 0>,
+  public Shape<0>,
+  public Tags... {
 
 	using derived_t = Array<0, T, Allocator, Tags...>;
 	using value_type = T;
@@ -103,10 +105,12 @@ class Array :
 	using self = Array<Dimension, Scalar, Allocator, Tags...>;
 	using parent = ArrayExpression<Dimension, Scalar, Allocator, Tags...>;
 
-	Allocator& get_allocator_ref() { return static_cast<Allocator&>(*this); }
-	const Allocator& get_allocator_ref() const { return static_cast<const Allocator&>(*this); }
 
 public:
+
+	Allocator& get_allocator_ref() { return static_cast<Allocator&>(*this); }
+		const Allocator& get_allocator_ref() const { return static_cast<const Allocator&>(*this); }
+
 
 	using allocator_t = Allocator;
 	using value_type = Scalar;
@@ -166,7 +170,7 @@ public:
 	Array(const Expr& expr_t) {
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());
-        evaluate_to(this->internal(), expr_t.internal());
+        evaluate_to(this->internal(), expr_t.internal(), this->get_allocator_ref());
 	}
 
 
@@ -185,13 +189,13 @@ public:
 	{
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());
-        evaluate_to(this->internal(), expr_t.internal());
+        evaluate_to(this->internal(), expr_t.internal(), this->get_allocator_ref());
 	}
 
     void copy_construct(const Array& array_copy) {
         this->copy_shape(array_copy);
         this->array = this->allocate(this->size());
-        evaluate_to(this->internal(), array_copy.internal());
+        evaluate_to(this->internal(), array_copy.internal(), this->get_allocator_ref());
     }
     void move_construct(Array&& array_move) {
     	this->array = array_move.array;
@@ -201,10 +205,6 @@ public:
     	array_move.m_inner_shape = {0};
     	array_move.m_block_shape = {0};
     	array_move.array = nullptr;
-
-    	if (BC::allocator_traits<Allocator>::propagate_on_container_move_assignment::value) {
-    	    this->get_allocator_ref() = std::move(array_move.get_allocator_ref());
-    	}
     }
     void internal_swap(Array& swap) {
     	std::swap(this->array, swap.array);

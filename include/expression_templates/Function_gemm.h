@@ -75,15 +75,15 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
     __BCinline__ BC::size_t  K() const { return left.cols();  }
 
 
-    template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod>
-    void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
+    template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class allocator>
+    void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, allocator& alloc) const {
 
         //get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
         auto& injection = injection_values.data();
 
         //evaluate the left and right branches (computes only if necessary)
-        auto A = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<lv>::get_array(left));
-        auto B = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<rv>::get_array(right));
+        auto A = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left), alloc);
+        auto B = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right), alloc);
 
         //get the left and right side scalar values
         auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);

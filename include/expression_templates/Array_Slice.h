@@ -16,6 +16,41 @@
 namespace BC {
 namespace et {
 
+
+template<class Parent>
+struct ArrayScalarExpr : Array_Base<ArrayScalarExpr<Parent>, 0>, Shape<0> {
+
+    using value_type = typename Parent::value_type;
+    using allocator_t = typename Parent::allocator_t;
+    using system_tag = typename Parent::system_tag;
+    using shape_t = Shape<0>;
+
+    static constexpr int ITERATOR = 0;
+    static constexpr int DIMS = 0;
+
+    value_type* array;
+
+    __BCinline__ ArrayScalarExpr(Parent parent_, BC::size_t index)
+    : array(&(parent_.memptr()[index])) {}
+
+    __BCinline__ const auto& operator [] (int index) const { return array[0]; }
+    __BCinline__       auto& operator [] (int index)       { return array[0]; }
+
+    template<class... integers> __BCinline__
+    auto& operator ()(integers ... ints) {
+        return array[0];
+    }
+    template<class... integers> __BCinline__
+    const auto& operator ()(integers ... ints) const {
+        return array[0];
+    }
+
+    __BCinline__ const value_type* memptr() const { return array; }
+    __BCinline__       value_type* memptr()       { return array; }
+};
+
+
+
 template<class Parent, int Dimensions, bool Continuous=true>
 struct ArraySliceExpr :
 		Array_Base<ArraySliceExpr<Parent, Dimensions, Continuous>, Dimensions>,
@@ -57,9 +92,15 @@ struct ArraySliceExpr :
 
 
 template<class Parent, int Dimensions, bool Continuous=true>
-struct Array_Slice : ArraySliceExpr<Parent, Dimensions, Continuous> {
+struct Array_Slice :
+		std::conditional_t<Dimensions == 0,
+		ArrayScalarExpr<Parent>,
+		ArraySliceExpr<Parent, Dimensions, Continuous>> {
 
-	using super_t = ArraySliceExpr<Parent, Dimensions, Continuous>;
+	using super_t = std::conditional_t<Dimensions == 0,
+			ArrayScalarExpr<Parent>,
+			ArraySliceExpr<Parent, Dimensions, Continuous>>;
+
 	using shape_t = typename super_t::shape_t;
 	using allocator_t = typename Parent::allocator_t;
 
@@ -68,12 +109,12 @@ struct Array_Slice : ArraySliceExpr<Parent, Dimensions, Continuous> {
 	template<class,int, bool> friend class Array_Slice;
 	template<int, class, class, class...> friend class Array;
 
-	__BCinline__
+	__BChot__
 	Array_Slice(Parent& parent_, BC::size_t index)
 	: super_t(parent_, index), m_allocator(parent_.get_allocator_ref()) {
 	}
 
-	__BCinline__
+	__BChot__
 	Array_Slice(Parent& parent_, const shape_t& shape_, BC::size_t index)
 	: super_t(parent_, shape_, index), m_allocator(parent_.get_allocator_ref()) {
 	}
@@ -85,12 +126,8 @@ struct Array_Slice : ArraySliceExpr<Parent, Dimensions, Continuous> {
 	auto& internal_base() { return *this; }
 	const auto& internal_base() const { return *this; }
 
-
-private:
 	auto get_allocator_ref() -> decltype(m_allocator) { return m_allocator; }
 	auto get_allocator_ref() const -> decltype(m_allocator) { return m_allocator; }
-
-
 };
 
 
@@ -118,6 +155,11 @@ private:
 	static auto make_view(Parent& parent, BC::array<ndims, BC::size_t> shape) {
 		return Array_Slice<Parent, ndims>(parent, shape, 0);
 	}
+
+	template<class Parent>
+		static auto make_scalar(Parent& parent, BC::size_t index) {
+			return Array_Slice<Parent, 0, true>(parent, index);
+		}
 
 	template<class Parent, int ndims>
 	auto make_chunk(Parent& parent, BC::array<Parent::DIMS, int> index_points, BC::array<ndims, int> shape) {
