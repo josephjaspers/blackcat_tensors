@@ -88,7 +88,6 @@ struct Greedy_Evaluator {
 	static auto evaluate(Binary_Expression<lv, rv, oper::div_assign> expression, Allocator& alloc) {
 		auto right_eval = evaluator<rv>::temporary_injection(expression.right, alloc);
 		return make_bin_expr<oper::div_assign>(expression.left, right_eval);
-
 	}
 
 	template<class expression_t, class Allocator>

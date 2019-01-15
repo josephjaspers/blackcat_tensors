@@ -13,32 +13,34 @@
 
 namespace BC {
 namespace tests {
+template<class allocator>
+struct log_allocator : allocator {
+
+	using propagate_on_temporary_construction = std::true_type;
+
+	std::shared_ptr<BC::size_t> total_allocated = std::shared_ptr<BC::size_t>(new BC::size_t());
+	std::shared_ptr<BC::size_t> total_deallocated = std::shared_ptr<BC::size_t>(new BC::size_t());
+
+
+	auto allocate(BC::size_t sz) {
+		(*total_allocated.get()) += sz;
+		return allocator::allocate(sz);
+	}
+	auto deallocate(typename allocator::value_type*& memptr, BC::size_t sz) {
+		(*total_deallocated.get()) += sz;
+		return allocator::deallocate(memptr, sz);
+
+	}
+};
 
 template<class value_type, template<class> class allocator>
 int test_allocators(int sz=128) {
 
 	BC_TEST_BODY_HEAD
 
-	struct log_allocator : allocator<value_type> {
 
-		using propagate_on_temporary_creation = std::true_type;
-
-		std::shared_ptr<BC::size_t> total_allocated = std::shared_ptr<BC::size_t>(new BC::size_t());
-		std::shared_ptr<BC::size_t> total_deallocated = std::shared_ptr<BC::size_t>(new BC::size_t());
-
-
-		auto allocate(BC::size_t sz) {
-			(*total_allocated.get()) += sz;
-			return allocator<value_type>::allocate(sz);
-		}
-		auto deallocate(value_type*& memptr, BC::size_t sz) {
-			(*total_deallocated.get()) += sz;
-			return allocator<value_type>::deallocate(memptr, sz);
-
-		}
-	};
-	using mat = BC::Matrix<value_type, log_allocator>;
-	using vec = BC::Vector<value_type, log_allocator>;
+	using mat = BC::Matrix<value_type, log_allocator<allocator<value_type>>>;
+	using vec = BC::Vector<value_type, log_allocator<allocator<value_type>>>;
 
 	BC_TEST_DEF(
 		mat a(5,5);

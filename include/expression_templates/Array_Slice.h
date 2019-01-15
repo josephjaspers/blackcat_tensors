@@ -109,12 +109,12 @@ struct Array_Slice :
 	template<class,int, bool> friend class Array_Slice;
 	template<int, class, class, class...> friend class Array;
 
-	__BCinline__
+	__BChot__
 	Array_Slice(Parent& parent_, BC::size_t index)
 	: super_t(parent_, index), m_allocator(parent_.get_allocator_ref()) {
 	}
 
-	__BCinline__
+	__BChot__
 	Array_Slice(Parent& parent_, const shape_t& shape_, BC::size_t index)
 	: super_t(parent_, shape_, index), m_allocator(parent_.get_allocator_ref()) {
 	}
