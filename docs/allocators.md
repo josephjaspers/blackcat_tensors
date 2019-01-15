@@ -45,10 +45,11 @@ BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two temp
 	when temporaries are needed. 
 	
 	if 'propagate_on_temporary_construction' is set to 'std::false_type', the default allocator is used.
-	if 'propagate_on_temporary_construction' is set to 'std::true_type', the same allocator is used.
-	if a different allocator is specified, that type will be used. 
+	if 'propagate_on_temporary_construction' is set to 'std::true_type', the same allocator is used,
+		the allocator will use "select_on_container_copy_construction" to generate the new allocator. 
+	
+	if 'propagate_on_temporary_construction' is not defined it is defaulted to be 'std::false_type' 
 
-	-Currently the 'propagate_on_temporary_construction' will be need to be default constructed. 
 
 #### Choosing an allocator (example):
 
