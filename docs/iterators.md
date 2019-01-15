@@ -82,11 +82,11 @@ BC::Matrix<float> mat;
   }
   
   //reverse iterators are also supported.
-  for (float& scalar : mat.reverse_iter(finish, start)) {
+  for (auto vec : mat.reverse_iter(finish, start)) {
     //do work
   }
   
-    for (float& scalar : mat.reverse_nd_iter(finish, start)) {
+    for (auto vec : mat.reverse_nd_iter(finish, start)) {
     //do work
   }
 
