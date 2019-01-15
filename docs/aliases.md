@@ -22,16 +22,9 @@ Two template arguments are commonly supplied, value_type, (scalar type) and allo
     Vector_View<value_type, allocator_t>
     Matrix_View<value_type, allocator_t>
     Cube_View<value_type, allocator_t>
+
 ```
-#### Shared Types:
-- Accepts a non-const Tensor to construct. Shares the internal_pointer but is mutable
-```cpp
-    Tensor_Shared<int x, value_type, allocator_t> 
-    Scalar_Shared<value_type, allocator_t> 
-    Vector_Shared<value_type, allocator_t>
-    Matrix_Shared<value_type, allocator_t>
-    Cube_Shared<value_type, allocator_t>
-```
+
 #### Expression Types:
 - Any tensor that is expression (non-memory owning) or Tensor (memory owning) of the apropriate dimensionality.
 - Cannot be constructed directly, used only for method parameters. 
