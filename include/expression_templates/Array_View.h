@@ -30,6 +30,7 @@ struct ArrayViewExpr
     static constexpr bool move_constructible = true;
     static constexpr bool copy_assignable    = false;
     static constexpr bool move_assignable    = true;
+
     static constexpr int DIMS = Dimension;
     static constexpr int ITERATOR = DIMS;
 
@@ -48,31 +49,19 @@ struct ArrayViewExpr
 
 template<int Dimension, class Scalar, class Allocator>
 struct Array_View : ArrayViewExpr<Dimension, Scalar, Allocator> {
+
 	using parent = ArrayViewExpr<Dimension, Scalar, Allocator>;
 	using parent::parent;
 
-
 	const Allocator* alloc = nullptr;
-	bool owns_allocator = false;
-
 
 	Array_View() = default;
-	Array_View(const Array_View& av) {
-		copy_construct(av);
-	}
-
-	void copy_construct(const Array_View& view) {
-		this->copy_shape(view);
-		this->array = view.array;
-	}
+	Array_View(const Array_View&) = default;
+	Array_View(Array_View&&) = default;
 
 	void internal_swap(Array_View& swap) {
 		std::swap(this->array, swap.array);
 		this->swap_shape(swap);
-	}
-
-	void move_construct(Array_View& array_move) {
-		this->internal_swap(array_move);
 	}
 
 	template<
@@ -97,11 +86,6 @@ struct Array_View : ArrayViewExpr<Dimension, Scalar, Allocator> {
 	auto& internal_base() { return *this; }
 	const auto& internal_base() const { return *this; }
 
-	void deallocate() {
-		if (owns_allocator) {
-			delete alloc;
-		}
-	}
 };
 
 }
