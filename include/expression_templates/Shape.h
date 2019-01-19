@@ -187,6 +187,9 @@ struct SubShape : Shape<ndims, SubShape<ndims>> {
 	using parent = Shape<ndims, SubShape<ndims>>;
 	BC::array<ndims, BC::size_t> m_outer_shape;
 
+	SubShape() = default;
+
+
 	template<class der>
 	SubShape(const BC::array<ndims, BC::size_t>& new_shape, const Shape<ndims, der>& parent_shape)
 	: parent(new_shape) {
@@ -213,6 +216,15 @@ private:
 	using Shape<ndims, SubShape<ndims>>::copy_shape;
 };
 
+}
+
+//push shape into BC namespace
+template<int x>
+using Shape = et::Shape<x>;
+
+template<class... integers, typename=std::enable_if_t<MTF::seq_of<BC::size_t, integers...>>>
+auto make_shape(integers... ints) {
+	return Shape<sizeof...(integers)>(ints...);
 }
 }
 
