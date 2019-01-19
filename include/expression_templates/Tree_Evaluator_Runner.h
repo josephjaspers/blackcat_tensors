@@ -54,7 +54,7 @@ struct Lazy_Evaluator {
 
         auto greedy_evaluated_expr = et::tree::Greedy_Evaluator::evaluate_aliased(expr, alloc);        //evaluate the internal tensor_type
         if (!decay_same<decltype(greedy_evaluated_expr.right), decltype(expr.left)>) {
-        	impl:: nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
+        	impl::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr);
         }
         //deallocate any temporaries made by the tree
         et::tree::Greedy_Evaluator::deallocate_temporaries(greedy_evaluated_expr, alloc);
@@ -96,6 +96,10 @@ auto evaluate_to(array_t array, expression_t expr, allocator& alloc) {
 template<class expression_t, class allocator>
 auto evaluate(expression_t expr, allocator& alloc) {
     return Lazy_Evaluator<typename expression_t::system_tag>::evaluate(expr, alloc);
+}
+template<class expression_t, class allocator>
+auto evaluate_aliased(expression_t expr, allocator& alloc) {
+    return Lazy_Evaluator<typename expression_t::system_tag>::evaluate_aliased(expr, alloc);
 }
 
 

@@ -90,9 +90,10 @@ struct Greedy_Evaluator {
 		return make_bin_expr<oper::div_assign>(expression.left, right_eval);
 	}
 
-	template<class expression_t, class Allocator>
-	static auto evaluate_aliased(expression_t expression, Allocator& alloc) {
-		return evaluator<expression_t>::temporary_injection(expression.right, alloc);
+	template<class lv, class rv, class op, class Allocator>
+	static auto evaluate_aliased(Binary_Expression<lv, rv, op> expression, Allocator& alloc) {
+		auto right = evaluator<rv>::temporary_injection(expression.right, alloc);
+		return make_bin_expr<op>(expression.left, right);
 	}
 
 	template<class expression, class Allocator>

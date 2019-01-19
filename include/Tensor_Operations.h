@@ -351,8 +351,9 @@ public:
         Alias(derived& tensor_) : tensor(tensor_) {}
 
         template<class derived_t>
-        void evaluate(const Tensor_Operations<derived_t>& param) {
-            et::Lazy_Evaluator<allocator_t>::evaluate_aliased(static_cast<const derived_t&>(param).internal());
+        void evaluate(const Tensor_Base<derived_t>& param) {
+        	using allocator_t = typename derived_t::allocator_t;
+            evaluate_aliased(param.internal(), tensor.get_allocator_ref());
         }
 
         template<class derived_t>

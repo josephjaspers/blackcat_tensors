@@ -67,13 +67,29 @@ int test_allocators(int sz=128) {
 		a %= a * a;	 //25 memory should be allocated for the a*a temporary
 					 //25 should be deallocated after using the a*a temporary
 
-		std::cout << " allocation = " << *(a.get_allocator().total_allocated.get()) << std::endl;
 		return *(a.get_allocator().total_allocated.get()) == 50 &&
 				*(a.get_allocator().total_deallocated.get()) == 25;
 	)
 
+	BC_TEST_DEF(
+		mat a(5,5);  //mem sz = 25
+		a = BC::logistic(a * a + a); // should not allocate any memory
+		return *(a.get_allocator().total_allocated.get()) == 25;
+	)
+
+	BC_TEST_DEF(
+		mat a(5,5);  //mem sz = 25
+		a.alias() = BC::logistic(a * a + a); //alias should disable expression re-ordering
+		return *(a.get_allocator().total_allocated.get()) == 50;
+	)
+
+
+
 	BC_TEST_BODY_TAIL
 	};
+
+
+
 
 
 }
