@@ -62,15 +62,15 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
     __BCinline__ const auto inner_shape() const { return l_array<DIMS>([&](int i) { return i == 0 ? left.rows() : 1; });}
     __BCinline__ const auto block_shape() const { return l_array<DIMS>([&](int i) { return i == 0 ? rows() : 1; });}
 
-	template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod>
-	void eval(tree::injector<core, alpha_mod, beta_mod> injection_values) const {
+    template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class allocator>
+    void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, allocator& alloc) const {
 
 		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
 		auto& injection = injection_values.data();
 
 		//evaluate the left and right branches (computes only if necessary)
-		auto A = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<lv>::get_array(left));
-		auto X = CacheEvaluator<allocator_t>::evaluate(blas_feature_detector<rv>::get_array(right));
+		auto A = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left), alloc);
+		auto X = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right), alloc);
 
 		//allocate the alpha and beta scalars,
 		auto alpha = utility_l::stack_allocate((value_type)alpha_mod);

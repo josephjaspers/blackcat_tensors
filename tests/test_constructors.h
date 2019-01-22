@@ -77,11 +77,6 @@ int test_constructors(int sz=128) {
 		bool ensure_diff = a.memptr() != original_ptr;
 		bool ensure_swap_dims = a.rows() ==0 && a.cols() ==0;
 
-
-		std::cout << ensure_move
-				<< ensure_diff
-				<<ensure_swap_dims<<std::endl;
-
 		return ensure_move && ensure_diff && ensure_swap_dims;
 	)
 	//-----------------------------------Copy Oper-----------------------------//
