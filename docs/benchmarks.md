@@ -8,6 +8,10 @@ OS: Ubuntu 16.04.
 BC time represents the performance of BC::Vector<float>.   
 C-impl and Cuda-impl are 'handcoded' baslines t bench against.   
 The timings are the sum of each computation.  
+
+
+The performance columns represent performance difference. (Greater than 1 is better, less than 1 is worse)  
+
 Operation: `a = b + c - d / e`   
 Repetitions: 1000  
 
