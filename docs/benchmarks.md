@@ -1,6 +1,6 @@
 # Benchmarks 
 
-Compiler: NVCC -O3 (no-openmp)
+Compiler: NVCC -O3 (no-openmp)  
 Machine: G751jy Asus  
 OS: Ubuntu 16.04.  
 
