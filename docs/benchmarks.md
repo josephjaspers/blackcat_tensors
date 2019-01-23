@@ -5,12 +5,17 @@ Machine: G751jy Asus
 OS: Ubuntu 16.04.  
 
 
+Note:
+The performance columns represent performance difference. (Greater than 1 is better, less than 1 is worse)  
+Under perfect benchmark conditions, the performance should almost always be equal to or worse than the 
+handcoded-C versions. The fact that BC-times showcase occasional performance increases should be interpreted that the cost of this abstraction has almost near-0 impact on the performance. 
+
+----------------------------------------------------------------------------------------
+
+
 BC time represents the performance of BC::Vector<float>.   
 C-impl and Cuda-impl are 'handcoded' baslines t bench against.   
 The timings are the sum of each computation.  
-
-
-The performance columns represent performance difference. (Greater than 1 is better, less than 1 is worse)  
 
 Operation: `a = b + c - d / e`   
 Repetitions: 1000  
