@@ -1,10 +1,33 @@
 # Benchmarks 
 
+Compiler: NVCC -O3 (no-openmp)
+Machine: G751jy Asus  
+OS: Ubuntu 16.04.  
+
+
+BC time represents the performance of BC::Vector<float>.  
+C-impl and Cuda-impl are 'handcoded' baslines t bench against. 
+The timings are the sum of each computation. 
+Operation: `a = b + c - d / e`  
+Repetitions: 1000
+
+
+| Size | C-impl | BC_host | Host-performance | Cuda-impl | BC_device | Device-Performance | 
+| ---  | --- | --- | --- | --- | --- | --- | 
+|100|6.0399e-05|5.0273e-05|0.832348|0.002082|0.00211177|1.01429|
+|500|0.000270116|0.000250762|0.928349|0.00211264|0.00214798|1.01673|
+|1000|0.000537945|0.000501332|0.931939|0.0020678|0.00204336|0.988179|
+|2500|0.00124771|0.00121844|0.976538|0.00210658|0.00206911|0.982214|
+|5000|0.00251752|0.00243656|0.967841|0.00222548|0.00204068|0.916959|
+|75000|0.0385873|0.0376435|0.975543|0.00216992|0.00228764|1.05425|
+|10000|0.0055627|0.00515221|0.926205|0.00210182|0.00244626|1.16387|
+
+
+----------------------------------------------------------------------------------------
 Compiler: GCC 8 -O3, -fopenmp  
 Machine: k5708d Asus  
 OS: Ubuntu 18.04.  
 
-----------------------------------------------------------------------------------------
 Time represents the total sum of each rep.
 
 
