@@ -36,7 +36,6 @@ struct Device {
 	        template<class T>
 	        static void eval(T to) {
 	            run::eval(to);
-	            cudaDeviceSynchronize();
 	        }
 	    };
 

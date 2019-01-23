@@ -27,22 +27,18 @@ struct Device {
 		static void scalar_mul(float* eval, float* a, float* b) {
 
 			device_impl::scalar_mul<<<1, 1>>>(eval, a, b);
-			cudaDeviceSynchronize();
 		}
 		static void scalar_mul(float* eval, float a, float* b) {
 
 			device_impl::scalar_mul<<<1, 1>>>(eval, a, b);
-			cudaDeviceSynchronize();
 		}
 		static void scalar_mul(float* eval, float* a, float b) {
 
 			device_impl::scalar_mul<<<1, 1>>>(eval, a, b);
-			cudaDeviceSynchronize();
 		}
 		static void scalar_mul(float* eval, float a, float b) {
 
 			device_impl::scalar_mul<<<1, 1>>>(eval, a, b);
-			cudaDeviceSynchronize();
 		}
 
     static void gemm(bool transA, bool transB, BC::size_t  m, BC::size_t  n, BC::size_t  k,
@@ -56,7 +52,6 @@ struct Device {
         cublasCreate(&handle);
         cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
         cublasSgemm(handle, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
-        cudaDeviceSynchronize();
         cublasDestroy(handle);
     }
 
@@ -73,7 +68,6 @@ struct Device {
 		cublasCreate(&handle);
 		cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
 		cublasSgemv(handle, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY);
-		cudaDeviceSynchronize();
 		cublasDestroy(handle);
 	}
 
@@ -87,7 +81,6 @@ struct Device {
 		cublasCreate(&handle);
 		cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
 		cublasSger(handle, m, n, alpha, X, incX, Y, incY, A, lda);
-		cudaDeviceSynchronize();
 		cublasDestroy(handle);
 	}
 
@@ -96,7 +89,6 @@ struct Device {
 		cublasCreate(&handle);
 		cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
 		cublasSdot(handle, n, x, incX, y, incY, A);
-		cudaDeviceSynchronize();
 		cublasDestroy(handle);
 	}
 };

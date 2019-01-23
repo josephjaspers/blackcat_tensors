@@ -24,14 +24,12 @@ namespace benchmarks {
 
 auto cwise_benchmark(int sz, int reps=10, bool stdout=false) {
 
-	auto bc_time = bc_cwise<float, BC::Basic_Allocator<float>>(sz, reps);
 	auto c_time  =  c_cwise<float, std::allocator<float>>(sz, reps);
+	auto bc_time = bc_cwise<float, BC::Basic_Allocator<float>>(sz, reps);
 
 #ifdef __CUDACC__
-	auto bc_cu_time = bc_cwise<float, BC::Cuda<float>>(sz, reps);
-	cudaDeviceSynchronize();
 	auto cu_time = cu_cwise<float, BC::Cuda<float>>(sz, reps);
-	cudaDeviceSynchronize();
+	auto bc_cu_time = bc_cwise<float, BC::Cuda<float>>(sz, reps);
 
 	if (stdout) {
 		std::cout << "bc_time: " << bc_time \
@@ -40,7 +38,7 @@ auto cwise_benchmark(int sz, int reps=10, bool stdout=false) {
 				<< "\ncu_time " << cu_time << std::endl;
 	}
 
-	return std::make_tuple(bc_time, c_time, cu_time);
+	return std::make_tuple(c_time, bc_time, cu_time, bc_cu_time);
 
 #else
 	if (stdout) {
@@ -49,7 +47,7 @@ auto cwise_benchmark(int sz, int reps=10, bool stdout=false) {
 	}
 
 
-	return std::make_tuple(bc_time, c_time);
+	return std::make_tuple(c_time, bc_time);
 #endif
 
 }
