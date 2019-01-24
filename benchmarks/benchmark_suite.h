@@ -27,8 +27,8 @@ void run(std::vector<int> sizes = {100, 500, 1000, 2500, 5000, 75000, 10000 }, i
 		auto times = cwise_benchmark(sz, reps, false);
 
 		std::cout << "|" << sz <<
-				"|" << std::get<0>(times) << "|" << std::get<1>(times) << "|" << std::get<1>(times)/std::get<0>(times) << \
-				"|" << std::get<2>(times) << "|" << std::get<3>(times) << "|" << std::get<3>(times)/std::get<2>(times) <<  "|" <<std::endl;
+				"|" << std::get<0>(times) << "|" << std::get<1>(times) << "|" << std::get<0>(times)/std::get<1>(times) << \
+				"|" << std::get<2>(times) << "|" << std::get<3>(times) << "|" << std::get<2>(times)/std::get<3>(times) <<  "|" <<std::endl;
 	}
 }
 

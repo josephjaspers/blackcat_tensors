@@ -124,10 +124,6 @@ public:
 		}
 	}
 
-
-	Array(const Allocator& alloc)
-	: allocator_t(BC::allocator_traits<Allocator>::select_on_container_copy_construction(alloc)) {}
-
 	Array(const Array& array_)
 	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(array_)),
 	  parent(array_) {
@@ -172,6 +168,12 @@ public:
 		this->array = this->allocate(this->size());
         evaluate_to(this->internal(), expr_t.internal(), this->get_allocator_ref());
 	}
+    template<class Expr,typename = std::enable_if_t<BC::is_array<Expr>() || BC::is_expr<Expr>()>>
+    	Array(const Expr& expr_t, const Allocator& alloc) : Allocator(alloc) {
+    		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
+    		this->array = this->allocate(this->size());
+            evaluate_to(this->internal(), expr_t.internal(), this->get_allocator_ref());
+    	}
 
 
 	//If Copy-constructing from a slice, attempt to query the allocator
