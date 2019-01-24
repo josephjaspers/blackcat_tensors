@@ -127,10 +127,9 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
     	using value_type = typename Allocator::value_type;
     	constexpr int dims = param::DIMS;
 
-    	using tmp_t = ArrayExpression<dims, value_type, Allocator, BC_Temporary>;
-        tmp_t tmp;
-        tmp.as_shape() = Shape<dims>(branch.inner_shape());
-        tmp.array = alloc.allocate(tmp.size());
+    	using tmp_t = Array<dims, value_type, Allocator, BC_Temporary>;
+        tmp_t tmp(branch.inner_shape(), alloc);
+
 
         //ISSUE HERE
         branch.eval(make_injection<1, 0>(tmp.internal()), alloc);

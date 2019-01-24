@@ -31,7 +31,7 @@ struct Array_SubTensor_View
 
     __BCinline__
     Array_SubTensor_View(PARENT parent_, BC::array<ndimensions, BC::size_t>& new_shape, BC::size_t index)
-    : m_shape(new_shape, parent_.as_shape()),
+    : m_shape(new_shape, parent_.get_shape()),
       array(const_cast<value_type*>(parent_.slice_ptr(index))) {}
 
     __BCinline__ const value_type* memptr() const { return array; }

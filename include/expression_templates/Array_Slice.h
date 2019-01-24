@@ -47,6 +47,8 @@ struct ArrayScalarExpr : Array_Base<ArrayScalarExpr<Parent>, 0>, Shape<0> {
 
     __BCinline__ const value_type* memptr() const { return array; }
     __BCinline__       value_type* memptr()       { return array; }
+    __BCinline__ const Shape<0>& get_shape() const { return static_cast<const Shape<0>&>(*this); }
+
 };
 
 
@@ -70,7 +72,7 @@ struct ArraySliceExpr :
 
 	__BCinline__
 	ArraySliceExpr(Parent& parent_, BC::size_t index)
-	: shape_t(parent_.as_shape()),
+	: shape_t(parent_.get_shape()),
 	  m_array(parent_.memptr() + index) {
 	}
 
@@ -88,6 +90,9 @@ struct ArraySliceExpr :
 	pointer_t memptr() {
 		return m_array;
 	}
+
+    __BCinline__ const shape_t& get_shape() const { return static_cast<const shape_t&>(*this); }
+
 };
 
 
@@ -166,7 +171,7 @@ struct Array_Slice :
 		static_assert(ndims > 1, "TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, USE SCALAR OR RANGED_SLICE OTHERWISE");
 		BC::size_t index = parent.dims_to_index(index_points);
 
-		SubShape<ndims> chunk_shape = SubShape<ndims>(shape, parent.as_shape());
+		SubShape<ndims> chunk_shape = SubShape<ndims>(shape, parent.get_shape());
 		return Array_Slice<Parent, ndims, false>(parent, chunk_shape, index);
 	}
 

@@ -26,8 +26,6 @@ struct Shape : Shape_Base<std::conditional_t<std::is_void<derived>::value, Shape
     BC::array<dims, int> m_inner_shape = {0};
     BC::array<dims, int> m_block_shape = {0};
 
-    __BCinline__ self& as_shape() { return static_cast<self&>(*this); }
-    __BCinline__ const self& as_shape() const { return static_cast<const self&>(*this); }
     __BCinline__ Shape() {}
 
     template<class... integers>
@@ -99,9 +97,6 @@ private:
 template<>
 struct Shape<0> {
 
-    __BCinline__ Shape& as_shape() { return *this; }
-    __BCinline__ const Shape& as_shape() const { return *this; }
-
     template<int x> __BCinline__
     Shape(const Shape<x>&) {} //empty
 
@@ -124,8 +119,6 @@ struct Shape<0> {
 template<>
 struct Shape<1> {
 
-    __BCinline__ Shape& as_shape() { return *this; }
-    __BCinline__ const Shape& as_shape() const { return *this; }
     BC::array<1, int> m_inner_shape = {0};
     BC::array<1, int> m_block_shape = {1};
 

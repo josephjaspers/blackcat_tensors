@@ -59,6 +59,8 @@ struct ArrayExpression
     __BCinline__ const value_type* memptr() const { return array; }
     __BCinline__       value_type* memptr()       { return array; }
 
+    __BCinline__ const Shape<Dimension>& get_shape() const { return static_cast<const Shape<Dimension>&>(*this); }
+
 };
 
 //specialization for scalar --------------------------------------------------------------------------------------------------------
@@ -90,6 +92,9 @@ struct ArrayExpression<0, T, Allocator, Tags...>
 	__BCinline__ const value_type* memptr() const { return array; }
 	__BCinline__       value_type* memptr()       { return array; }
 
+    __BCinline__ const Shape<0>& get_shape() const { return static_cast<const Shape<0>&>(*this); }
+
+
 };
 
 
@@ -104,6 +109,9 @@ class Array :
 
 	using self = Array<Dimension, Scalar, Allocator, Tags...>;
 	using parent = ArrayExpression<Dimension, Scalar, Allocator, Tags...>;
+
+
+	Shape<Dimension>& as_shape() { return static_cast<Shape<Dimension>&>(*this); }
 
 
 public:
@@ -144,7 +152,7 @@ public:
 
 	//Construct via shape-like object and Allocator
     template<class U,typename = std::enable_if_t<!BC::is_array<U>() && !BC::is_expr<U>()>>
-    Array(U param, Allocator alloc_) : Allocator(alloc_) {
+    Array(U param, const Allocator& alloc_) : Allocator(alloc_) {
     	this->as_shape() = Shape<Dimension>(param);
     	this->array = this->allocate(this->size());
     }
@@ -161,19 +169,12 @@ public:
 	}
 
 
-	//Constructor for creating an Array from an expression, IE Matrix x(a + b)
     template<class Expr,typename = std::enable_if_t<BC::is_array<Expr>() || BC::is_expr<Expr>()>>
-	Array(const Expr& expr_t) {
+	Array(const Expr& expr_t, const Allocator& alloc=Allocator()) : Allocator(alloc) {
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());
-        evaluate_to(this->internal(), expr_t.internal(), this->get_allocator_ref());
+		evaluate_to(this->internal(), expr_t.internal(), this->get_allocator_ref());
 	}
-    template<class Expr,typename = std::enable_if_t<BC::is_array<Expr>() || BC::is_expr<Expr>()>>
-    	Array(const Expr& expr_t, const Allocator& alloc) : Allocator(alloc) {
-    		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
-    		this->array = this->allocate(this->size());
-            evaluate_to(this->internal(), expr_t.internal(), this->get_allocator_ref());
-    	}
 
 
 	//If Copy-constructing from a slice, attempt to query the allocator

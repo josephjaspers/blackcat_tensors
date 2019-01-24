@@ -29,7 +29,7 @@ struct Array_Format
 
      __BCinline__
     Array_Format(PARENT parent_, BC::array<DIMS - 1, int> format)
-    : Shape<PARENT::DIMS> (parent_.as_shape()), array_slice(const_cast<value_type*>(parent_.memptr())) {
+    : Shape<PARENT::DIMS> (parent_.get_shape()), array_slice(const_cast<value_type*>(parent_.memptr())) {
 
         for (int i = 0; i < format.size(); ++i) {
             this->m_inner_shape[i] = parent_.dimension(format[i] - 1);

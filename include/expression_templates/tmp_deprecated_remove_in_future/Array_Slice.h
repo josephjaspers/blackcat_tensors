@@ -30,7 +30,7 @@ struct Array_Slice
     value_type* array_slice;
 
     __BCinline__ Array_Slice(PARENT parent_, BC::size_t  index)
-    : Shape<PARENT::DIMS - 1> (parent_.as_shape()),
+    : Shape<PARENT::DIMS - 1> (parent_.get_shape()),
       array_slice(const_cast<value_type*>(parent_.slice_ptr(index))) {}
 
     __BCinline__ const value_type* memptr() const { return array_slice; }

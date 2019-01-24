@@ -34,7 +34,7 @@ struct Array_Slice_Range
 
     __BCinline__ //specialization if not a vector
     Array_Slice_Range(PARENT parent_, BC::size_t  from, BC::size_t  to)
-        : Shape<DIMS>(parent_.as_shape()),
+        : Shape<DIMS>(parent_.get_shape()),
           array_slice(const_cast<value_type*>(parent_.slice_ptr(from))) {
 
         BC::size_t  range = to - from;
