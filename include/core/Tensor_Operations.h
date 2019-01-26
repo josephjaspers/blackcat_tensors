@@ -65,7 +65,7 @@ public:
     //--------------------------------------assignment operators-----------------------------------------------//
 #define BC_OPER_ASSIGNMENT_DEF(op, op_functor)                                                   \
                                                                                                 \
-    template<class pDeriv> __BChot__                                                                        \
+    template<class pDeriv> BCHOT                                                                        \
     derived& operator op (const Tensor_Operations<pDeriv>& param) {                                \
         BC_ASSERT_ASSIGNABLE("derived& operator " #op "(const Tensor_Operations<pDeriv>& param)");    \
         assert_valid(param);                                                                    \
@@ -93,7 +93,7 @@ public:
 
 #define BC_OPER_COEFFICIENTWISE_DEF(op, op_functor)                   \
                                                                       \
-    template<class pDeriv> __BChot__                                  \
+    template<class pDeriv> BCHOT                                  \
     auto operator op (const Tensor_Operations<pDeriv>& param) const { \
         assert_valid(param);                                          \
         return bi_expr< et::oper:: op_functor >(param);               \

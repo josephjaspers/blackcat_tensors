@@ -8,6 +8,8 @@
 #ifndef BC_BENCHMARKS_COMMON_H_
 #define BC_BENCHMARKS_COMMON_H_
 
+#include <chrono>
+
 namespace BC {
 namespace benchmarks {
 

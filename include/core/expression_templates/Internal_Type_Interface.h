@@ -21,8 +21,8 @@ namespace et {
 template<class derived>
 struct Internal_Base {
 
-    __BCinline__ const derived& internal_base() const { return static_cast<const derived&>(*this); }
-    __BCinline__       derived& internal_base()       { return static_cast<      derived&>(*this); }
+    BCINLINE const derived& internal_base() const { return static_cast<const derived&>(*this); }
+    BCINLINE       derived& internal_base()       { return static_cast<      derived&>(*this); }
 
 };
 
@@ -31,18 +31,18 @@ class BC_internal_interface : BC_Type {
 
     static constexpr int  DIMS = derived::DIMS;
 
-    __BCinline__ const derived& as_derived() const { return static_cast<const derived&>(*this); }
-    __BCinline__       derived& as_derived()       { return static_cast<      derived&>(*this); }
+    BCINLINE const derived& as_derived() const { return static_cast<const derived&>(*this); }
+    BCINLINE       derived& as_derived()       { return static_cast<      derived&>(*this); }
 
 public:
 
-    __BCinline__ const auto& internal() const { return as_derived(); }
-    __BCinline__       auto& internal()       { return as_derived(); }
+    BCINLINE const auto& internal() const { return as_derived(); }
+    BCINLINE       auto& internal()       { return as_derived(); }
 
     //default method - returns the mixin of Tensor_Base (may be different than internal())
     //should be shadowed by classes that support non-trivial copy/move construction
-    __BCinline__ const auto& internal_base() const { return as_derived(); }
-    __BCinline__       auto& internal_base()       { return as_derived(); }
+    BCINLINE const auto& internal_base() const { return as_derived(); }
+    BCINLINE       auto& internal_base()       { return as_derived(); }
 
 
     static constexpr bool copy_constructible = false;
@@ -53,7 +53,7 @@ public:
     operator       derived&()       { return as_derived(); }
     operator const derived&() const { return as_derived(); }
 
-    __BCinline__ BC_internal_interface() {
+    BCINLINE BC_internal_interface() {
 	static_assert(std::is_trivially_copy_constructible<derived>::value, "INTERNAL_TYPES TYPES MUST BE TRIVIALLY COPYABLE");
 	static_assert(std::is_trivially_copyable<derived>::value, "INTERNAL_TYPES MUST BE TRIVIALLY COPYABLE");
 	static_assert(!std::is_same<void, typename derived::value_type>::value, "INTERNAL_TYPES MUST HAVE A 'using value_type = some_Type'");

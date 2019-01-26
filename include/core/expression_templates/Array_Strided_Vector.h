@@ -29,22 +29,22 @@ struct Array_Strided_Vector : Array_Base<Array_Strided_Vector<Parent>, 1>, Shape
 
     value_type* array_slice;
 
-    __BCinline__
+    BCINLINE
     Array_Strided_Vector(value_type* array_slice_, BC::size_t length, BC::size_t stride)
      : Shape<1>(length, stride),
        array_slice(array_slice_) {}
 
-    __BCinline__ const auto& operator [] (int i) const { return array_slice[this->leading_dimension(0) * i]; }
-    __BCinline__       auto& operator [] (int i)       { return array_slice[this->leading_dimension(0) * i]; }
+    BCINLINE const auto& operator [] (int i) const { return array_slice[this->leading_dimension(0) * i]; }
+    BCINLINE       auto& operator [] (int i)       { return array_slice[this->leading_dimension(0) * i]; }
 
-    template<class... seq> __BCinline__
+    template<class... seq> BCINLINE
     const auto& operator () (int i, seq... indexes) const { return *this[i]; }
 
-    template<class... seq> __BCinline__
+    template<class... seq> BCINLINE
     auto& operator () (int i, seq... indexes)        { return *this[i]; }
 
-    __BCinline__ const value_type* memptr() const { return array_slice; }
-    __BCinline__       value_type* memptr()       { return array_slice; }
+    BCINLINE const value_type* memptr() const { return array_slice; }
+    BCINLINE       value_type* memptr()       { return array_slice; }
 
 };
 

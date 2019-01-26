@@ -28,18 +28,18 @@ struct Multidimensional_Iterator {
     tensor_t& tensor;
     BC::size_t  index;
 
-    __BCinline__ Multidimensional_Iterator(tensor_t& tensor_, BC::size_t  index_=0) :
+    BCINLINE Multidimensional_Iterator(tensor_t& tensor_, BC::size_t  index_=0) :
 			tensor(tensor_), index(index_) {}
 
 #define BC_ND_Iter_Compare(sign, rev)                          \
-	__BCinline__											\
+	BCINLINE											\
     bool operator sign (const Iterator& iter) {             \
         if (direction == direction::forward)                \
             return index sign iter.index;                   \
         else                                                \
             return index rev iter.index;                    \
     }                                                       \
-    __BCinline__ 											\
+    BCINLINE 											\
     bool operator sign (int p_index) {                      \
         if (direction == direction::forward)                \
             return index sign p_index;                      \
@@ -52,33 +52,33 @@ struct Multidimensional_Iterator {
     BC_ND_Iter_Compare(<=, >=)
     BC_ND_Iter_Compare(>=, <=)
 
-    __BCinline__ operator BC::size_t  () const { return index; }
+    BCINLINE operator BC::size_t  () const { return index; }
 
-    __BCinline__ bool operator == (const Iterator& iter) {
+    BCINLINE bool operator == (const Iterator& iter) {
         return index == iter.index;
     }
-    __BCinline__ bool operator != (const Iterator& iter) {
+    BCINLINE bool operator != (const Iterator& iter) {
         return index != iter.index;
     }
 
-    __BCinline__ Iterator& operator =  (int index_) { this->index = index_;  return *this; }
+    BCINLINE Iterator& operator =  (int index_) { this->index = index_;  return *this; }
 
-    __BCinline__ Iterator& operator ++ () { index+=direction; return *this; }
-    __BCinline__ Iterator& operator -- () { index-=direction; return *this; }
+    BCINLINE Iterator& operator ++ () { index+=direction; return *this; }
+    BCINLINE Iterator& operator -- () { index-=direction; return *this; }
 
-	__BCinline__ Iterator operator ++(int) { return Iterator(tensor, index++); }
-	__BCinline__ Iterator operator --(int) { return Iterator(tensor, index--); }
+	BCINLINE Iterator operator ++(int) { return Iterator(tensor, index++); }
+	BCINLINE Iterator operator --(int) { return Iterator(tensor, index--); }
 
-    __BCinline__ Iterator& operator += (int dist)    { index += dist*direction; return *this; }
-    __BCinline__ Iterator& operator -= (int dist)    { index -= dist*direction; return *this; }
+    BCINLINE Iterator& operator += (int dist)    { index += dist*direction; return *this; }
+    BCINLINE Iterator& operator -= (int dist)    { index -= dist*direction; return *this; }
 
-    __BCinline__ Iterator operator + (int dist) const { return Iterator(tensor, index + dist*direction); }
-    __BCinline__ Iterator operator - (int dist) const { return Iterator(tensor, index - dist*direction); }
+    BCINLINE Iterator operator + (int dist) const { return Iterator(tensor, index + dist*direction); }
+    BCINLINE Iterator operator - (int dist) const { return Iterator(tensor, index - dist*direction); }
 
-    __BCinline__ Iterator& operator += (const Iterator& dist) { index += dist.index*direction; return *this; }
-    __BCinline__ Iterator& operator -= (const Iterator& dist) { index -= dist.index*direction; return *this; }
-    __BCinline__ Iterator operator + (const Iterator& dist) const { return Iterator(tensor, index + dist.index*direction); }
-    __BCinline__ Iterator operator - (const Iterator& dist) const { return Iterator(tensor, index - dist.index*direction); }
+    BCINLINE Iterator& operator += (const Iterator& dist) { index += dist.index*direction; return *this; }
+    BCINLINE Iterator& operator -= (const Iterator& dist) { index -= dist.index*direction; return *this; }
+    BCINLINE Iterator operator + (const Iterator& dist) const { return Iterator(tensor, index + dist.index*direction); }
+    BCINLINE Iterator operator - (const Iterator& dist) const { return Iterator(tensor, index - dist.index*direction); }
 
     const value_type operator*() const { return this->tensor[this->index]; }
     value_type operator*() { return this->tensor[this->index]; }

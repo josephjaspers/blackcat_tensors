@@ -29,20 +29,20 @@ struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, Allocator>
 
     value_type scalar;
 
-    __BCinline__ operator value_type () const {
+    BCINLINE operator value_type () const {
         return scalar;
     }
 
-    __BCinline__ Scalar_Constant(value_type scalar_) : scalar(scalar_) {}
+    BCINLINE Scalar_Constant(value_type scalar_) : scalar(scalar_) {}
 
 
-    template<class... integers> __BCinline__ auto operator()  (const integers&...) const { return scalar; }
-    template<class... integers> __BCinline__ auto operator()  (const integers&...) 		 { return scalar; }
+    template<class... integers> BCINLINE auto operator()  (const integers&...) const { return scalar; }
+    template<class... integers> BCINLINE auto operator()  (const integers&...) 		 { return scalar; }
 
-    __BCinline__ auto operator [] (int i ) const { return scalar; }
-    __BCinline__ auto operator [] (int i )  	 { return scalar; }
+    BCINLINE auto operator [] (int i ) const { return scalar; }
+    BCINLINE auto operator [] (int i )  	 { return scalar; }
 
-    __BCinline__ const value_type* memptr() const { return &scalar; }
+    BCINLINE const value_type* memptr() const { return &scalar; }
 
     void swap_array(Scalar_Constant&) {}
 };

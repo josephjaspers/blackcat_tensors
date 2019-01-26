@@ -5,6 +5,7 @@
  *      Author: joseph
  */
 
+#ifdef __CUDACC__
 #ifndef BC_CONTEXT_DEVICE_H_
 #define BC_CONTEXT_DEVICE_H_
 
@@ -76,3 +77,4 @@ public:
 
 
 #endif /* DEVICE_H_ */
+#endif

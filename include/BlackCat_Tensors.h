@@ -32,18 +32,18 @@
 // --------------------------------- inline macros -----------------------------------------//
 
 #ifdef __CUDACC__
-	#define __BChd__ __host__ __device__
+	#define BCHOSTDEV __host__ __device__
 #else
-	#define __BChd__
+	#define BCHOSTDEV
 #endif
 
 #ifdef BC_INLINE_OVERRIDER
-#define __BCinline__ __BChd__  BC_INLINE_OVERRIDER
+#define BCINLINE BCHOSTDEV  BC_INLINE_OVERRIDER
 #else
-#define __BCinline__ __BChd__  inline __attribute__((always_inline)) __attribute__((hot))  //host_device inline
+#define BCINLINE BCHOSTDEV  inline __attribute__((always_inline)) __attribute__((hot))  //host_device inline
 #endif
 
-#define __BChot__   		   inline __attribute__((always_inline)) __attribute__((hot))  //device-only inline
+#define BCHOT   		   inline __attribute__((always_inline)) __attribute__((hot))  //device-only inline
 
 // --------------------------------- module body macro --------------------------------- //
 

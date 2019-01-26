@@ -32,42 +32,42 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
     Lv left;
     Rv right;
 
-    template<class... args> __BChot__
+    template<class... args> BCHOT
     Binary_Expression(Lv l, Rv r, const args&... args_) :  Operation(args_...), left(l), right(r) {}
 
 
-	template<class L, class R> __BCinline__
+	template<class L, class R> BCINLINE
 	const auto oper(const L& l, const R& r) const {
 		return static_cast<const Operation&>(*this)(l,r);
 	}
 
-	template<class L, class R> __BCinline__
+	template<class L, class R> BCINLINE
 	auto oper(const L& l, const R& r) {
 		return static_cast< Operation&>(*this)(l,r);
 	}
 
 
-    __BCinline__
+    BCINLINE
     auto  operator [](int index) const {
     	return oper(left[index], right[index]);
     }
 
-    template<class... integers> __BCinline__
+    template<class... integers> BCINLINE
     auto  operator ()(integers... ints) const {
     	return oper(left(ints...), right(ints...));
     }
 
-    __BCinline__ const auto& shape() const { return dominant_type<Lv, Rv>::shape(left, right); }
-    __BCinline__ BC::size_t  size() const { return shape().size(); }
-    __BCinline__ BC::size_t  rows() const { return shape().rows(); }
-    __BCinline__ BC::size_t  cols() const { return shape().cols(); }
-    __BCinline__ BC::size_t  dimension(int i) const { return shape().dimension(i); }
-    __BCinline__ BC::size_t  block_dimension(int i) const { return shape().block_dimension(i); }
-    __BCinline__ const auto inner_shape() const { return shape().inner_shape(); }
-    __BCinline__ const auto block_shape() const { return shape().block_shape(); }
+    BCINLINE const auto& shape() const { return dominant_type<Lv, Rv>::shape(left, right); }
+    BCINLINE BC::size_t  size() const { return shape().size(); }
+    BCINLINE BC::size_t  rows() const { return shape().rows(); }
+    BCINLINE BC::size_t  cols() const { return shape().cols(); }
+    BCINLINE BC::size_t  dimension(int i) const { return shape().dimension(i); }
+    BCINLINE BC::size_t  block_dimension(int i) const { return shape().block_dimension(i); }
+    BCINLINE const auto inner_shape() const { return shape().inner_shape(); }
+    BCINLINE const auto block_shape() const { return shape().block_shape(); }
 };
 
-template<class op, class Lv, class Rv> __BChot__
+template<class op, class Lv, class Rv> BCHOT
 auto make_bin_expr(Lv left, Rv right) {
 	return Binary_Expression<
 			std::decay_t<decltype(left.internal())>,

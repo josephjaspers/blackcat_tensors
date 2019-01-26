@@ -29,30 +29,30 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Value, operati
 
     Value array;
 
-    template<class... args> __BCinline__
+    template<class... args> BCINLINE
     Unary_Expression(Value v, const args&... args_)
     : operation(args_...) , array(v) {}
 
-    __BCinline__
+    BCINLINE
     auto operator [](int index) const {
         return static_cast<const operation&>(*this)(array[index]);
     }
-    template<class... integers> __BCinline__
+    template<class... integers> BCINLINE
     auto operator ()(integers... index) const {
         return static_cast<const operation&>(*this)(array(index...));
     }
 
-    __BCinline__  const auto inner_shape() const { return array.inner_shape(); }
-    __BCinline__  const auto block_shape() const { return array.block_shape(); }
-    __BCinline__ BC::size_t  size() const { return array.size(); }
-    __BCinline__ BC::size_t  rows() const { return array.rows(); }
-    __BCinline__ BC::size_t  cols() const { return array.cols(); }
-    __BCinline__ BC::size_t  dimension(int i) const { return array.dimension(i); }
-    __BCinline__ BC::size_t  block_dimension(int i) const { return array.block_dimension(i); }
+    BCINLINE const auto inner_shape() const { return array.inner_shape(); }
+    BCINLINE const auto block_shape() const { return array.block_shape(); }
+    BCINLINE BC::size_t  size() const { return array.size(); }
+    BCINLINE BC::size_t  rows() const { return array.rows(); }
+    BCINLINE BC::size_t  cols() const { return array.cols(); }
+    BCINLINE BC::size_t  dimension(int i) const { return array.dimension(i); }
+    BCINLINE BC::size_t  block_dimension(int i) const { return array.block_dimension(i); }
 };
 
 
-template<class op, class expr> __BChot__
+template<class op, class expr> BCHOT
 auto make_un_expr(expr e, op oper =op()) {
 	return Unary_Expression<std::decay_t<decltype(e.internal())>, op>(e.internal(), oper);
 }

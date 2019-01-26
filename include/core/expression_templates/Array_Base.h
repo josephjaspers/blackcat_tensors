@@ -31,36 +31,34 @@ struct Array_Base : BC_internal_interface<Derived>, BC_Array {
 
 private:
 
-    __BCinline__ const Derived& as_derived() const { return static_cast<const Derived&>(*this); }
-    __BCinline__       Derived& as_derived()       { return static_cast<      Derived&>(*this); }
+    BCINLINE const Derived& as_derived() const { return static_cast<const Derived&>(*this); }
+    BCINLINE       Derived& as_derived()       { return static_cast<      Derived&>(*this); }
 
 public:
 
-    __BCinline__ operator const auto*() const { return as_derived().memptr(); }
-    __BCinline__ operator       auto*()       { return as_derived().memptr(); }
+    BCINLINE operator const auto*() const { return as_derived().memptr(); }
+    BCINLINE operator       auto*()       { return as_derived().memptr(); }
 
-    __BCinline__
-    const auto& operator [](int index) const {
+    BCINLINE const auto& operator [](int index) const {
         return as_derived().memptr()[index];
     }
 
-    __BCinline__
-    auto& operator [](int index) {
+    BCINLINE auto& operator [](int index) {
         return as_derived().memptr()[index];
     }
 
     template<class ... integers>
-    __BCinline__ const auto& operator ()(integers ... ints) const {
+    BCINLINE const auto& operator ()(integers ... ints) const {
         return as_derived()[this->dims_to_index(ints...)];
     }
 
     template<class ... integers>
-    __BCinline__ auto& operator ()(integers ... ints) {
+    BCINLINE auto& operator ()(integers ... ints) {
         return as_derived()[this->dims_to_index(ints...)];
     }
 
 
-    template<int length> __BCinline__
+    template<int length> BCINLINE
     auto& operator ()(const BC::array<length, int>& index) {
         static_assert(length >= DIMS,
         		"POINT MUST HAVE AT LEAST THE SAME NUMBER OF INDICIES AS THE TENSOR");
@@ -68,7 +66,7 @@ public:
         return as_derived()[this->dims_to_index(index)];
     }
 
-    template<int length> __BCinline__
+    template<int length> BCINLINE
     auto& operator ()(const BC::array<length, int>& index) const {
         static_assert(length >= DIMS,
         		"POINT MUST HAVE AT LEAST THE SAME NUMBER OF INDICIES AS THE TENSOR");
@@ -82,7 +80,7 @@ public:
 
 public:
 
-    __BCinline__
+    BCINLINE
     auto slice_ptr(int i) const {
         if (DIMS == 0)
             return &as_derived()[0];
@@ -92,7 +90,7 @@ public:
             return &as_derived()[as_derived().leading_dimension(Dimension - 2) * i];
     }
 
-    __BCinline__
+    BCINLINE
     auto slice_ptr_index(int i) const {
         if (DIMS == 0)
             return 0;
@@ -102,12 +100,12 @@ public:
             return as_derived().leading_dimension(Dimension - 2) * i;
     }
 
-    template<class... integers, typename=std::enable_if_t<meta::seq_of<BC::size_t, integers...>>> __BCinline__
+    template<class... integers, typename=std::enable_if_t<meta::seq_of<BC::size_t, integers...>>> BCINLINE
     BC::size_t dims_to_index(integers... ints) const {
         return dims_to_index(BC::make_array(ints...));
     }
 
-    template<int D> __BCinline__
+    template<int D> BCINLINE
     BC::size_t dims_to_index(const BC::array<D, int>& var) const {
         BC::size_t  index = var[0];
         for(int i = 1; i < DIMS; ++i) {

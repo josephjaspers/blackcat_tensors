@@ -23,14 +23,14 @@ namespace et {
 
 template<class lv, class rv, class left = void>
 struct dominant_type {
-    __BCinline__ static const auto& shape(const lv& l, const rv& r) {
+    BCINLINE static const auto& shape(const lv& l, const rv& r) {
         return l;
     }
 };
 template<class lv, class rv>
 struct dominant_type<lv, rv, std::enable_if_t<(lv::DIMS < rv::DIMS)>> {
 
-    __BCinline__ static const auto& shape(const lv& l, const rv& r) {
+    BCINLINE static const auto& shape(const lv& l, const rv& r) {
         return r;
     }
 };
@@ -38,14 +38,14 @@ struct dominant_type<lv, rv, std::enable_if_t<(lv::DIMS < rv::DIMS)>> {
 //returns the class with the lower order rank
 template<class lv, class rv, class left = void>
 struct inferior_type {
-    __BCinline__ static const auto& shape(const lv& l, const rv& r) {
+    BCINLINE static const auto& shape(const lv& l, const rv& r) {
         return l;
     }
 };
 template<class lv, class rv>
 struct inferior_type<lv, rv, std::enable_if_t<(lv::DIMS > rv::DIMS)>> {
 
-    __BCinline__ static const auto& shape(const lv& l, const rv& r) {
+    BCINLINE static const auto& shape(const lv& l, const rv& r) {
         return r;
     }
 };

@@ -16,12 +16,12 @@ namespace BC {
 #define BLACKCAT_MATH_DEF(func)                                     \
 namespace functor {												    \
 	struct func {                                                   \
-		template<class value_type> __BCinline__                     \
+		template<class value_type> BCINLINE                     \
 		value_type operator () (value_type s) const { 				\
 			return std::func(s); 									\
 	}   															\
 																	\
-	  template<class value_type> __BCinline__                       \
+	  template<class value_type> BCINLINE                       \
 	  static value_type impl(value_type s) { return std::func(s); } \
 	};															    \
 }																	\
@@ -65,11 +65,11 @@ namespace module {										 \
 														 \
 	struct funcName {									 \
 														 \
-	  template<class value_type> __BCinline__    	     \
+	  template<class value_type> BCINLINE    	     \
 	  value_type operator () (value_type x) const { 	 \
 		return func_math; 								 \
 	  } 											     \
-	  template<class value_type> __BCinline__    	     \
+	  template<class value_type> BCINLINE    	     \
 	  static value_type impl(value_type x) { 		     \
 		return func_math; 								 \
 	  }													 \
@@ -100,7 +100,7 @@ struct norm {
 
     norm(scalar min_, scalar max_) : min(min_), max(max_) {}
 
-    __BCinline__ auto operator () (scalar v) const {
+    BCINLINE auto operator () (scalar v) const {
         return (v - min) / (max - min);
     }
 };

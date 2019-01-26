@@ -21,9 +21,9 @@ namespace BC {
     struct array {
         T value[size_] = { 0 } ;
 
-        __BCinline__ const T& operator [] (int i) const { return value[i]; }
-        __BCinline__        T& operator [] (int i)         { return value[i]; }
-        __BCinline__ static constexpr BC::size_t  size()         { return size_; }
+        BCINLINE const T& operator [] (int i) const { return value[i]; }
+        BCINLINE        T& operator [] (int i)         { return value[i]; }
+        BCINLINE static constexpr BC::size_t  size()         { return size_; }
     };
 
     //---------------------base_case----------------------//
@@ -31,7 +31,7 @@ namespace BC {
 
 
     //---------------------short_hand----------------------//
-    template<class T, class... vals> __BCinline__
+    template<class T, class... vals> BCINLINE
     auto make_array(T front, vals... values) {
     	return array<sizeof...(values) + 1, T> {front, values...};
     }
@@ -41,14 +41,14 @@ namespace BC {
     template<int dimension, class scalar, class ref>
     struct lambda_array{
         ref value;
-        __BCinline__ lambda_array(ref a) : value(a) {}
+        BCINLINE lambda_array(ref a) : value(a) {}
 
-        __BCinline__ const scalar operator [](int i) const { return value(i); }
-        __BCinline__        scalar operator [](int i)          { return value(i); }
+        BCINLINE const scalar operator [](int i) const { return value(i); }
+        BCINLINE        scalar operator [](int i)          { return value(i); }
     };
 
     //accepts a lambda that takes a single-integer parameter
-    template<int dimension, class func> __BChd__
+    template<int dimension, class func> BCHOSTDEV
     auto make_lambda_array(func internal) {
     	return lambda_array<dimension, decltype(internal(0)), func>(internal);
     }

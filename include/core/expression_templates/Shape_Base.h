@@ -79,11 +79,11 @@ class Function_Shape
 
 	static constexpr int DIMS = dimensions;
 
-	__BCinline__
+	BCINLINE
 	auto inner_shape() {
 		return static_cast<const lamba_inner_shape&>(*this)();
 	}
-	__BCinline__
+	BCINLINE
 	auto block_shape() {
 		return static_cast<const lambda_block_shape&>(*this)();
 	}

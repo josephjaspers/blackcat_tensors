@@ -17,14 +17,14 @@ namespace meta {
 
     template<class t,class u> static constexpr bool is_same = std::is_same<t,u>::value;
 
-    __BCinline__ static constexpr BC::size_t  max(int x) { return x; }
-    __BCinline__ static constexpr BC::size_t  min(int x) { return x; }
+    BCINLINE static constexpr BC::size_t  max(int x) { return x; }
+    BCINLINE static constexpr BC::size_t  min(int x) { return x; }
 
     template<class... integers>
-    __BCinline__ static constexpr BC::size_t  max(int x, integers... ints) { return x > max (ints...) ? x : max(ints...); }
+    BCINLINE static constexpr BC::size_t  max(int x, integers... ints) { return x > max (ints...) ? x : max(ints...); }
 
     template<class... integers>
-    __BCinline__ static constexpr BC::size_t  min(int x, integers... ints) { return x < min (ints...) ? x : min(ints...); }
+    BCINLINE static constexpr BC::size_t  min(int x, integers... ints) { return x < min (ints...) ? x : min(ints...); }
 
     static constexpr BC::size_t  sum(int x) { return x; }
 

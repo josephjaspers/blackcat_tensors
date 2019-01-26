@@ -30,24 +30,24 @@ struct ArrayScalarExpr : Array_Base<ArrayScalarExpr<Parent>, 0>, Shape<0> {
 
     value_type* array;
 
-    __BCinline__ ArrayScalarExpr(Parent parent_, BC::size_t index)
+    BCINLINE ArrayScalarExpr(Parent parent_, BC::size_t index)
     : array(&(parent_.memptr()[index])) {}
 
-    __BCinline__ const auto& operator [] (int index) const { return array[0]; }
-    __BCinline__       auto& operator [] (int index)       { return array[0]; }
+    BCINLINE const auto& operator [] (int index) const { return array[0]; }
+    BCINLINE       auto& operator [] (int index)       { return array[0]; }
 
-    template<class... integers> __BCinline__
+    template<class... integers> BCINLINE
     auto& operator ()(integers ... ints) {
         return array[0];
     }
-    template<class... integers> __BCinline__
+    template<class... integers> BCINLINE
     const auto& operator ()(integers ... ints) const {
         return array[0];
     }
 
-    __BCinline__ const value_type* memptr() const { return array; }
-    __BCinline__       value_type* memptr()       { return array; }
-    __BCinline__ const Shape<0>& get_shape() const { return static_cast<const Shape<0>&>(*this); }
+    BCINLINE const value_type* memptr() const { return array; }
+    BCINLINE       value_type* memptr()       { return array; }
+    BCINLINE const Shape<0>& get_shape() const { return static_cast<const Shape<0>&>(*this); }
 
 };
 
@@ -70,28 +70,28 @@ struct ArraySliceExpr :
 
 	pointer_t m_array;
 
-	__BCinline__
+	BCINLINE
 	ArraySliceExpr(Parent& parent_, BC::size_t index)
 	: shape_t(parent_.get_shape()),
 	  m_array(parent_.memptr() + index) {
 	}
 
-	__BCinline__
+	BCINLINE
 	ArraySliceExpr(Parent& parent_, const shape_t& shape_, BC::size_t index)
 	: shape_t(shape_),
 	  m_array(parent_.memptr() + index) {
 	}
 
-	__BCinline__
+	BCINLINE
 	const pointer_t memptr() const {
 		return m_array;
 	}
-	__BCinline__
+	BCINLINE
 	pointer_t memptr() {
 		return m_array;
 	}
 
-    __BCinline__ const shape_t& get_shape() const { return static_cast<const shape_t&>(*this); }
+    BCINLINE const shape_t& get_shape() const { return static_cast<const shape_t&>(*this); }
 
 };
 
@@ -114,12 +114,12 @@ struct Array_Slice :
 	template<class,int, bool> friend class Array_Slice;
 	template<int, class, class, class...> friend class Array;
 
-	__BChot__
+	BCHOT
 	Array_Slice(Parent& parent_, BC::size_t index)
 	: super_t(parent_, index), m_allocator(parent_.get_allocator_ref()) {
 	}
 
-	__BChot__
+	BCHOT
 	Array_Slice(Parent& parent_, const shape_t& shape_, BC::size_t index)
 	: super_t(parent_, shape_, index), m_allocator(parent_.get_allocator_ref()) {
 	}

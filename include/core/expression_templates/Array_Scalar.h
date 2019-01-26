@@ -28,23 +28,23 @@
 //
 //    value_type* array;
 //
-//    __BCinline__ Array_Scalar(Parent parent_, BC::size_t index)
+//    BCINLINE Array_Scalar(Parent parent_, BC::size_t index)
 //    : array(&(parent_.memptr()[index])) {}
 //
-//    __BCinline__ const auto& operator [] (int index) const { return array[0]; }
-//    __BCinline__       auto& operator [] (int index)       { return array[0]; }
+//    BCINLINE const auto& operator [] (int index) const { return array[0]; }
+//    BCINLINE       auto& operator [] (int index)       { return array[0]; }
 //
-//    template<class... integers> __BCinline__
+//    template<class... integers> BCINLINE
 //    auto& operator ()(integers ... ints) {
 //        return array[0];
 //    }
-//    template<class... integers> __BCinline__
+//    template<class... integers> BCINLINE
 //    const auto& operator ()(integers ... ints) const {
 //        return array[0];
 //    }
 //
-//    __BCinline__ const value_type* memptr() const { return array; }
-//    __BCinline__       value_type* memptr()       { return array; }
+//    BCINLINE const value_type* memptr() const { return array; }
+//    BCINLINE       value_type* memptr()       { return array; }
 //};
 //
 //

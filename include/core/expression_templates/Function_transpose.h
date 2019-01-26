@@ -31,7 +31,7 @@ struct Unary_Expression<Value, oper::transpose<System_Tag>>
 
     Unary_Expression(Value p) : array(p) {}
 
-    __BCinline__ const auto inner_shape() const {
+    BCINLINE const auto inner_shape() const {
         return make_lambda_array<DIMS>([=](int i) {
             if (DIMS >= 2)
                 return i == 0 ? array.cols() : i == 1 ? array.rows() : array.dimension(i);
@@ -44,23 +44,23 @@ struct Unary_Expression<Value, oper::transpose<System_Tag>>
         });
     }
 
-    __BCinline__
+    BCINLINE
     const auto block_shape() const {
         return make_lambda_array<DIMS>([=](int i) {
             return i == 0 ? array.cols() : 1 == 1 ? array.rows() : array.block_dimension(i);
         });
     }
 
-    __BCinline__
+    BCINLINE
     auto operator [] (int i) const -> decltype(array[0]) {
         return array[i];
     }
 
-    __BCinline__ BC::size_t  size() const { return array.size(); }
-    __BCinline__ BC::size_t  rows() const { return array.cols(); }
-    __BCinline__ BC::size_t  cols() const { return array.rows(); }
+    BCINLINE BC::size_t  size() const { return array.size(); }
+    BCINLINE BC::size_t  rows() const { return array.cols(); }
+    BCINLINE BC::size_t  cols() const { return array.rows(); }
 
-    __BCinline__ BC::size_t  dimension(int i) const {
+    BCINLINE BC::size_t  dimension(int i) const {
     	if (i == 0)
     		return array.cols();
     	else if (i == 1)
@@ -69,12 +69,12 @@ struct Unary_Expression<Value, oper::transpose<System_Tag>>
     		return array.dimension(i);
     }
 
-    __BCinline__
+    BCINLINE
     BC::size_t  block_dimension(int i) const {
     	return block_shape()[i];
     }
 
-    template<class... ints> __BCinline__
+    template<class... ints> BCINLINE
     auto operator ()(BC::size_t m, BC::size_t n, ints... integers) const -> decltype(array(n,m)) {
         return array(n,m, integers...);
     }

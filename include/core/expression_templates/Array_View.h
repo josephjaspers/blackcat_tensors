@@ -40,7 +40,7 @@ struct ArrayViewExpr
     ArrayViewExpr(const ArrayViewExpr& ) = default;
     ArrayViewExpr(      ArrayViewExpr&&) = default;
 
-    __BCinline__
+    BCINLINE
     const value_type* memptr() const  { return array; }
 
     void deallocate() {}
