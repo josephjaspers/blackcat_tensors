@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef INTERNAL_SHAPES_H_
-#define INTERNAL_SHAPES_H_
+#ifndef BC_CORE_STRUCTURES_H_
+#define BC_CORE_STRUCTURES_H_
 
 /*
  * Defines stack array and lambda array
@@ -16,7 +16,7 @@
 
 namespace BC {
 
-//-------------------------------Lightweight array, implemented as a homogeneous tuple-------------------------------//
+//-------------------------------Lightweight array -------------------------------//
     template<int size_, class T>
     struct array {
         T value[size_] = { 0 } ;
@@ -32,7 +32,9 @@ namespace BC {
 
     //---------------------short_hand----------------------//
     template<class T, class... vals> __BCinline__
-    auto make_array(T front, vals... values) { return array<sizeof...(values) + 1, T> {front, values...}; }//(front, values...); }
+    auto make_array(T front, vals... values) {
+    	return array<sizeof...(values) + 1, T> {front, values...};
+    }
 
 
 //-------------------------------Lightweight lambda-wrapper to enable usage of the bracket-operator-------------------------------//
@@ -46,7 +48,10 @@ namespace BC {
     };
 
     //accepts a lambda that takes a single-integer parameter
-    template<int dimension, class func> __BChd__ auto l_array(func internal) { return lambda_array<dimension, decltype(internal(0)), func>(internal); }
+    template<int dimension, class func> __BChd__
+    auto make_lambda_array(func internal) {
+    	return lambda_array<dimension, decltype(internal(0)), func>(internal);
+    }
 }
 
 

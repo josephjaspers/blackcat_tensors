@@ -59,8 +59,8 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 
     __BCinline__ BC::size_t  outer_dimension() const { return rows(); }
 
-    __BCinline__ const auto inner_shape() const { return l_array<DIMS>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.rows() : 1; });}
-    __BCinline__ const auto block_shape() const { return l_array<DIMS>([&](int i) { return i == 0 ? left.rows() : i == 1 ? size() : 1; });}
+    __BCinline__ const auto inner_shape() const { return make_lambda_array<DIMS>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.rows() : 1; });}
+    __BCinline__ const auto block_shape() const { return make_lambda_array<DIMS>([&](int i) { return i == 0 ? left.rows() : i == 1 ? size() : 1; });}
     __BCinline__ BC::size_t  M() const { return left.rows();  }
     __BCinline__ BC::size_t  N() const { return right.rows(); }
 

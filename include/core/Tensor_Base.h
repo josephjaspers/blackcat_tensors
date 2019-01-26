@@ -71,10 +71,10 @@ public:
 	using accessor::operator[];
     using accessor::operator();
 
-    using move_parameter        = std::conditional_t<BC::is_move_constructible_v<ExpressionTemplate>,       self&&, BC::DISABLED<0>>;
-    using copy_parameter        = std::conditional_t<BC::is_copy_constructible_v<ExpressionTemplate>, const self&,  BC::DISABLED<1>>;
-    using move_assign_parameter = std::conditional_t<BC::is_move_assignable_v<ExpressionTemplate>,       self&&, BC::DISABLED<0>>;
-    using copy_assign_parameter = std::conditional_t<BC::is_copy_assignable_v<ExpressionTemplate>, const self&,  BC::DISABLED<1>>;
+    using move_parameter        = BC::meta::only_if<BC::is_move_constructible_v<ExpressionTemplate>, self&&>;
+    using copy_parameter        = BC::meta::only_if<BC::is_copy_constructible_v<ExpressionTemplate>, const self&>;
+    using move_assign_parameter = BC::meta::only_if<BC::is_move_assignable_v<ExpressionTemplate>,       self&&>;
+    using copy_assign_parameter = BC::meta::only_if<BC::is_copy_assignable_v<ExpressionTemplate>, const self&>;
 
     Tensor_Base() = default;
     Tensor_Base(const parent&  param) : parent(param) {}

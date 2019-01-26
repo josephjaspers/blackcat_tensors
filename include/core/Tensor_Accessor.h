@@ -111,7 +111,7 @@ auto reshape(Tensor_Base<T>& tensor) {
     };
 }
 
-template<class T, class... integers, class enabler = std::enable_if_t<MTF::seq_of<BC::size_t, integers...>>>
+template<class T, class... integers, class enabler = std::enable_if_t<meta::seq_of<BC::size_t, integers...>>>
 const auto chunk(const Tensor_Base<T>& tensor, integers... ints) {
 	auto index_point =  BC::make_array(ints...);
 
@@ -123,7 +123,7 @@ const auto chunk(const Tensor_Base<T>& tensor, integers... ints) {
     };
 }
 
-template<class T, class... integers, class enabler = std::enable_if_t<MTF::seq_of<BC::size_t, integers...>>>
+template<class T, class... integers, class enabler = std::enable_if_t<meta::seq_of<BC::size_t, integers...>>>
 auto chunk(Tensor_Base<T>& tensor, integers... ints) {
 	auto index_point =  BC::make_array(ints...);
     return [&, index_point](auto... shape_indicies) {

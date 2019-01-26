@@ -46,12 +46,12 @@ template<class T> static constexpr bool is_blas_func() {
 
 template<class T>
 static constexpr bool is_linear_op() {
-    return MTF::seq_contains<T, et::oper::add, et::oper::sub>;
+    return meta::seq_contains<T, et::oper::add, et::oper::sub>;
 }
 
 template<class T>
 static constexpr bool is_linear_assignment_op() {
-    return MTF::seq_contains<T, et::oper::add_assign, et::oper::sub_assign>;
+    return meta::seq_contains<T, et::oper::add_assign, et::oper::sub_assign>;
 }
 
 

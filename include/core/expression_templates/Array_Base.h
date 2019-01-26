@@ -102,7 +102,7 @@ public:
             return as_derived().leading_dimension(Dimension - 2) * i;
     }
 
-    template<class... integers, typename=std::enable_if_t<MTF::seq_of<BC::size_t, integers...>>> __BCinline__
+    template<class... integers, typename=std::enable_if_t<meta::seq_of<BC::size_t, integers...>>> __BCinline__
     BC::size_t dims_to_index(integers... ints) const {
         return dims_to_index(BC::make_array(ints...));
     }

@@ -59,8 +59,8 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
     __BCinline__ BC::size_t  dimension(int i) const { return i == 0 ? rows() : 1; }
     __BCinline__ BC::size_t  block_dimension(int i) const { return i == 0 ? rows() : 1; }
 
-    __BCinline__ const auto inner_shape() const { return l_array<DIMS>([&](int i) { return i == 0 ? left.rows() : 1; });}
-    __BCinline__ const auto block_shape() const { return l_array<DIMS>([&](int i) { return i == 0 ? rows() : 1; });}
+    __BCinline__ const auto inner_shape() const { return make_lambda_array<DIMS>([&](int i) { return i == 0 ? left.rows() : 1; });}
+    __BCinline__ const auto block_shape() const { return make_lambda_array<DIMS>([&](int i) { return i == 0 ? rows() : 1; });}
 
     template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class allocator>
     void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, allocator& alloc) const {

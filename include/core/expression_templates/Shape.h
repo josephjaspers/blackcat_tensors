@@ -30,7 +30,7 @@ struct Shape : Shape_Base<std::conditional_t<std::is_void<derived>::value, Shape
 
     template<class... integers>
     Shape(integers... ints) {
-        static_assert(MTF::seq_of<int, integers...>, "INTEGER LIST OF SHAPE");
+        static_assert(meta::seq_of<int, integers...>, "INTEGER LIST OF SHAPE");
         static_assert(sizeof...(integers) == dims, "integer initialization must have the same number of dimensions");
         init(BC::make_array(ints...));
     }
@@ -101,9 +101,9 @@ struct Shape<0> {
     Shape(const Shape<x>&) {} //empty
 
     __BCinline__ Shape<0>() {}
-    __BCinline__ const auto inner_shape() const { return l_array<0>([&](auto x) { return 1; });}
-    __BCinline__ const auto outer_shape() const { return l_array<0>([&](auto x) { return 0; });}
-    __BCinline__ const auto block_shape() const { return l_array<0>([&](auto x) { return 1; });}
+    __BCinline__ const auto inner_shape() const { return make_lambda_array<0>([&](auto x) { return 1; });}
+    __BCinline__ const auto outer_shape() const { return make_lambda_array<0>([&](auto x) { return 0; });}
+    __BCinline__ const auto block_shape() const { return make_lambda_array<0>([&](auto x) { return 1; });}
     __BCinline__ BC::size_t  size() const { return 1; }
     __BCinline__ BC::size_t  rows() const { return 1; }
     __BCinline__ BC::size_t  cols() const { return 1; }
@@ -215,7 +215,7 @@ private:
 template<int x>
 using Shape = et::Shape<x>;
 
-template<class... integers, typename=std::enable_if_t<MTF::seq_of<BC::size_t, integers...>>>
+template<class... integers, typename=std::enable_if_t<meta::seq_of<BC::size_t, integers...>>>
 auto make_shape(integers... ints) {
 	return Shape<sizeof...(integers)>(ints...);
 }

@@ -133,8 +133,19 @@ static constexpr  BC::size_t MULTITHREAD_THRESHOLD = 16384;
 
 }
 
-#include "BlackCat_Common.h"
-#include "Tensor_Base.h"
-#include "Tensor_Aliases.h"
+#include "Meta.h"
+#include "Structures.h"
+
+/*
+ * Include Order:
+ * 	1) Dependencies of Core
+ * 	2) Core
+ * 	3) Things dependent upon core
+ *
+ */
+
+#include "core/BlackCat_Common.h"
+#include "core/Tensor_Base.h"
+#include "core/Tensor_Aliases.h"
 
 #endif /* BLACKCAT_TENSORS_H_ */

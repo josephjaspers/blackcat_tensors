@@ -27,7 +27,7 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
     using function_t = Operation;
 
     static constexpr int DIMS = Lv::DIMS > Rv::DIMS ?  Lv::DIMS : Rv::DIMS;
-    static constexpr int ITERATOR = Lv::DIMS != Rv::DIMS ? DIMS : MTF::max(Lv::ITERATOR, Rv::ITERATOR);
+    static constexpr int ITERATOR = Lv::DIMS != Rv::DIMS ? DIMS : meta::max(Lv::ITERATOR, Rv::ITERATOR);
 
     Lv left;
     Rv right;

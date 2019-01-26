@@ -20,14 +20,14 @@ namespace BC { 													\
 class host_tag;													\
 class device_tag;												\
 																\
-namespace streams {									   	\
+namespace streams {									   		    \
 																\
 	template<class system_tag>									\
 	using implementation =										\
 			std::conditional_t<									\
 				std::is_same<host_tag, system_tag>::value,		\
-					Stream<HostQueue>,										\
-					Stream<DeviceQueue>>;									\
+					Stream<HostQueue>,							\
+					Stream<DeviceQueue>>;						\
 																\
 	}															\
 }

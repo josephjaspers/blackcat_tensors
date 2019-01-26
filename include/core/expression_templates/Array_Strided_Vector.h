@@ -24,7 +24,7 @@ struct Array_Strided_Vector : Array_Base<Array_Strided_Vector<Parent>, 1>, Shape
 	using value_type = typename Parent::value_type;
     using allocator_t = typename Parent::allocator_t;
     using system_tag = typename Parent::system_tag;
-    static constexpr int  ITERATOR = MTF::max(Parent::ITERATOR - 1, 1);
+    static constexpr int  ITERATOR = meta::max(Parent::ITERATOR - 1, 1);
     static constexpr int DIMS = 1;
 
     value_type* array_slice;
@@ -58,18 +58,18 @@ auto make_diagnol(internal_t internal, BC::size_t  index) {
     BC::size_t  stride = internal.leading_dimension(0) + 1;
 
     if (index == 0) {
-        BC::size_t  length = MTF::min(internal.rows(), internal.cols());
+        BC::size_t  length = meta::min(internal.rows(), internal.cols());
         return Array_Strided_Vector<internal_t>(internal.memptr(), length, stride);
     }
 
     else if (index > 0) {
-        BC::size_t  length = MTF::min(internal.rows(), internal.cols() - index);
+        BC::size_t  length = meta::min(internal.rows(), internal.cols() - index);
         BC::size_t  location = index * internal.leading_dimension(0);
         return Array_Strided_Vector<internal_t>(&internal.memptr()[location], length, stride);
     }
 
     else { // (index < 0)  {
-        BC::size_t  length = MTF::min(internal.rows(), internal.cols() + index);
+        BC::size_t  length = meta::min(internal.rows(), internal.cols() + index);
         return Array_Strided_Vector<internal_t>(&internal.memptr()[std::abs(index)], length, stride);
     }
 }

@@ -6,12 +6,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef SIMPLE_H_
-#define SIMPLE_H_
+#ifndef BC_CORE_META_H_
+#define BC_CORE_META_H_
+
+
 #include <type_traits>
 
 namespace BC {
-namespace MTF {
+namespace meta {
 
     template<class t,class u> static constexpr bool is_same = std::is_same<t,u>::value;
 
@@ -156,6 +158,10 @@ namespace MTF {
 	auto get_last(const head&, const args&... args_) -> decltype(get_last(args_...)) {
 		return get_last(args_...);
 	}
+
+
+    template<class> struct DISABLE;
+    template<bool x,class T> using only_if = std::conditional_t<x, T, DISABLE<T>>;
 
     //---------------------
 

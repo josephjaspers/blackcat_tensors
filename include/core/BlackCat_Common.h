@@ -20,7 +20,6 @@
 
 namespace BC {
 
-template<int>   class DISABLED;
 template<class> class Tensor_Base;
 
 class host_tag;

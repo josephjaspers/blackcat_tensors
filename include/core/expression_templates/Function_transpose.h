@@ -32,7 +32,7 @@ struct Unary_Expression<Value, oper::transpose<System_Tag>>
     Unary_Expression(Value p) : array(p) {}
 
     __BCinline__ const auto inner_shape() const {
-        return l_array<DIMS>([=](int i) {
+        return make_lambda_array<DIMS>([=](int i) {
             if (DIMS >= 2)
                 return i == 0 ? array.cols() : i == 1 ? array.rows() : array.dimension(i);
             else if (DIMS == 2)
@@ -46,7 +46,7 @@ struct Unary_Expression<Value, oper::transpose<System_Tag>>
 
     __BCinline__
     const auto block_shape() const {
-        return l_array<DIMS>([=](int i) {
+        return make_lambda_array<DIMS>([=](int i) {
             return i == 0 ? array.cols() : 1 == 1 ? array.rows() : array.block_dimension(i);
         });
     }

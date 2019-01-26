@@ -133,7 +133,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
 
         //ISSUE HERE
         branch.eval(make_injection<1, 0>(tmp.internal()), alloc);
-        return tmp;
+        return tmp.internal();
     }
 
     template<class Allocator>

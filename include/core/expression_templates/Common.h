@@ -6,13 +6,21 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef EXPRESSION_UTILITY_STRUCTS_H_
-#define EXPRESSION_UTILITY_STRUCTS_H_
+#ifndef BC_EXPRESSION_TEMPLATES_COMMON_H_
+#define BC_EXPRESSION_TEMPLATES_COMMON_H_
 
-#include "Utility_Structs.h"
-#include <iostream>
 
-//returns the class with the higher_order rank
+#include <type_traits>
+#include "Internal_Type_Traits.h"
+#include "operations/Unary.h"
+#include "operations/Binary.h"
+#include "operations/BLAS.h"
+#include "BLAS_Feature_Detector.h"
+
+namespace BC {
+namespace et {
+
+
 template<class lv, class rv, class left = void>
 struct dominant_type {
     __BCinline__ static const auto& shape(const lv& l, const rv& r) {
@@ -43,5 +51,8 @@ struct inferior_type<lv, rv, std::enable_if_t<(lv::DIMS > rv::DIMS)>> {
 };
 
 
+}
+}
 
-#endif /* EXPRESSION_UTILITY_STRUCTS_H_ */
+
+#endif /* BLACKCAT_COMPILERDEFINITIONS_H_ */

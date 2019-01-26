@@ -161,7 +161,7 @@ public:
 	//Constructor for integer sequence, IE Matrix(m, n)
 	template<class... args,
 	typename=std::enable_if_t<
-		MTF::seq_of<BC::size_t, args...> &&
+		meta::seq_of<BC::size_t, args...> &&
 		sizeof...(args) == Dimension>>
 	Array(const args&... params) {
 		this->as_shape() = Shape<Dimension>(params...);

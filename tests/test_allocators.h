@@ -74,6 +74,9 @@ int test_allocators(int sz=128) {
 	BC_TEST_DEF(
 		mat a(5,5);  //mem sz = 25
 		a = BC::logistic(a * a + a); // should not allocate any memory
+
+
+
 		return *(a.get_allocator().total_allocated.get()) == 25;
 	)
 

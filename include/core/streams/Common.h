@@ -65,7 +65,6 @@ public:
 		return m_job_queue.get() && m_job_queue.get()->active();
 	}
 };
-
 }
 }
 

@@ -9,6 +9,7 @@
 #ifndef BLACKCAT_TENSOR_OPERATIONS_H_
 #define BLACKCAT_TENSOR_OPERATIONS_H_
 
+#include <iostream>
 #include "expression_templates/Array_Scalar_Constant.h"
 #include "expression_templates/operations/Binary.h"
 #include "expression_templates/operations/Unary.h"
@@ -304,7 +305,7 @@ public:
 
     //ensures that the smaller tensor is a same-dimensioned "slice" of the other
     template<class deriv>  bool valid_slice(const Tensor_Operations<deriv>& tensor) const {
-        constexpr BC::size_t  DIM_MIN = MTF::min(derived::DIMS, deriv::DIMS);
+        constexpr BC::size_t  DIM_MIN = meta::min(derived::DIMS, deriv::DIMS);
         for (int i = 0; i < DIM_MIN; ++i)
             if (tensor.as_derived().dimension(i) != as_derived().dimension(i))
                 return false;
