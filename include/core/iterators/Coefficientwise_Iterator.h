@@ -95,11 +95,11 @@ struct Coefficientwise_Iterator {
     BCINLINE Iterator  operator -  (const Iterator& dist) const { return Iterator(tensor, index - dist.index*direction); }
 
 
-    BCINLINE auto& operator*() const { return this->tensor[this->index]; }
-    BCINLINE auto& operator*() 	 { return this->tensor[this->index]; }
+    BCINLINE auto operator*() const -> decltype(this->tensor[this->index]) { return this->tensor[this->index]; }
+    BCINLINE auto operator*() 	 	-> decltype(this->tensor[this->index]) { return this->tensor[this->index]; }
     
-    BCINLINE auto& operator [] (int i) const { return this->tensor[i]; }
-    BCINLINE auto& operator [] (int i)       { return this->tensor[i]; }
+    BCINLINE auto operator [] (int i) const -> decltype(this->tensor[i]) { return this->tensor[i]; }
+    BCINLINE auto operator [] (int i)       -> decltype(this->tensor[i]){ return this->tensor[i]; }
 };
 
 template<class tensor_t>

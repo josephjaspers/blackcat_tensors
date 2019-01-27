@@ -27,7 +27,7 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
     using function_t = Operation;
 
     static constexpr int DIMS = Lv::DIMS > Rv::DIMS ?  Lv::DIMS : Rv::DIMS;
-    static constexpr int ITERATOR = Lv::DIMS != Rv::DIMS ? DIMS : meta::max(Lv::ITERATOR, Rv::ITERATOR);
+    static constexpr int ITERATOR = Lv::DIMS != Rv::DIMS ? DIMS : BC::meta::max(Lv::ITERATOR, Rv::ITERATOR);
 
     Lv left;
     Rv right;
@@ -56,13 +56,14 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
     auto  operator ()(integers... ints) const {
     	return oper(left(ints...), right(ints...));
     }
-
+private:
     BCINLINE const auto& shape() const { return dominant_type<Lv, Rv>::shape(left, right); }
-    BCINLINE BC::size_t  size() const { return shape().size(); }
-    BCINLINE BC::size_t  rows() const { return shape().rows(); }
-    BCINLINE BC::size_t  cols() const { return shape().cols(); }
-    BCINLINE BC::size_t  dimension(int i) const { return shape().dimension(i); }
-    BCINLINE BC::size_t  block_dimension(int i) const { return shape().block_dimension(i); }
+public:
+    BCINLINE BC::size_t size() const { return shape().size(); }
+    BCINLINE BC::size_t rows() const { return shape().rows(); }
+    BCINLINE BC::size_t cols() const { return shape().cols(); }
+    BCINLINE BC::size_t dimension(int i) const { return shape().dimension(i); }
+    BCINLINE BC::size_t block_dimension(int i) const { return shape().block_dimension(i); }
     BCINLINE const auto inner_shape() const { return shape().inner_shape(); }
     BCINLINE const auto block_shape() const { return shape().block_shape(); }
 };
