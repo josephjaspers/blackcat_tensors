@@ -169,16 +169,6 @@ public:
 	   impl::randomize(this->as_derived().internal(), lb, ub);
    }
 
-   value_type max() const {
-	   auto max_index = BC::alg::max_element(this->cbegin_(), this->cend_());
-	   return utility_t::extract(this->as_derived().memptr(), max_index);
-   }
-
-   value_type min() const {
-	   auto min_index = BC::alg::min_element(this->cbegin_(), this->cend_());
-	   return utility_t::extract(this->as_derived().memptr(), min_index);
-   }
-
 #define BC_TENSOR_ALGORITHM_MEMBER_DEF(function)\
   template<class... args>\
   auto function (args... params) const {\
@@ -221,6 +211,22 @@ template<class internal_t>
 static bool any(const Tensor_Base<internal_t>& tensor) {
 	return sum(logical(tensor)) != 0;
 }
+
+
+template<class internal_t>
+static auto max(const Tensor_Base<internal_t>& tensor) {
+	static_assert(BC::is_array<internal_t>(), "'max' is only available to Array types, max on 'Expressions' is prohibited");
+	auto max_index = BC::alg::max_element(tensor.cbegin(), tensor.cend());
+	return tensor(max_index);
+}
+
+template<class internal_t>
+static auto min(const Tensor_Base<internal_t>& tensor) {
+	static_assert(BC::is_array<internal_t>(), "'min' is only available to Array types, min on 'Expressions' is prohibited");
+	auto min_index = BC::alg::min_element(tensor.cbegin(), tensor.cend());
+	return tensor(min_index);
+}
+
 #endif //ifdef BC_CPP17 //------------------------------------------------------------------------------------------
 
 

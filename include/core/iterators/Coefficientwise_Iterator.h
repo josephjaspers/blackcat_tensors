@@ -27,8 +27,9 @@ struct Coefficientwise_Iterator {
     using iterator_category = std::random_access_iterator_tag;
     using value_type = typename tensor_t::value_type;
     using difference_type = int;
-    using pointer =  value_type*;
-    using reference = value_type&;
+    using reference = decltype(std::declval<tensor_t>()[0]);
+    using pointer   = std::conditional_t<std::is_same<reference, value_type>::value,
+    										decltype(std::declval<tensor_t>().internal()), value_type*>;
 
 
     tensor_t tensor;
@@ -99,7 +100,7 @@ struct Coefficientwise_Iterator {
     BCINLINE auto operator*() 	 	-> decltype(this->tensor[this->index]) { return this->tensor[this->index]; }
     
     BCINLINE auto operator [] (int i) const -> decltype(this->tensor[i]) { return this->tensor[i]; }
-    BCINLINE auto operator [] (int i)       -> decltype(this->tensor[i]){ return this->tensor[i]; }
+    BCINLINE auto operator [] (int i)       -> decltype(this->tensor[i]) { return this->tensor[i]; }
 };
 
 template<class tensor_t>

@@ -21,6 +21,7 @@ template<class Parent>
 struct ArrayScalarExpr : Array_Base<ArrayScalarExpr<Parent>, 0>, Shape<0> {
 
     using value_type = typename Parent::value_type;
+	using pointer_t   = decltype(std::declval<Parent>().memptr());
     using allocator_t = typename Parent::allocator_t;
     using system_tag = typename Parent::system_tag;
     using shape_t = Shape<0>;
@@ -28,7 +29,7 @@ struct ArrayScalarExpr : Array_Base<ArrayScalarExpr<Parent>, 0>, Shape<0> {
     static constexpr int ITERATOR = 0;
     static constexpr int DIMS = 0;
 
-    value_type* array;
+    pointer_t array;
 
     BCINLINE ArrayScalarExpr(Parent parent_, BC::size_t index)
     : array(&(parent_.memptr()[index])) {}
@@ -45,8 +46,8 @@ struct ArrayScalarExpr : Array_Base<ArrayScalarExpr<Parent>, 0>, Shape<0> {
         return array[0];
     }
 
-    BCINLINE const value_type* memptr() const { return array; }
-    BCINLINE       value_type* memptr()       { return array; }
+    BCINLINE const pointer_t memptr() const { return array; }
+    BCINLINE       pointer_t memptr()       { return array; }
     BCINLINE const Shape<0>& get_shape() const { return static_cast<const Shape<0>&>(*this); }
 
 };
