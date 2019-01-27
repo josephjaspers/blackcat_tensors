@@ -168,19 +168,6 @@ public:
 	   using impl = random::implementation<typename BC::allocator_traits<allocator_t>::system_tag>;
 	   impl::randomize(this->as_derived().internal(), lb, ub);
    }
-
-#define BC_TENSOR_ALGORITHM_MEMBER_DEF(function)\
-  template<class... args>\
-  auto function (args... params) const {\
-	  return BC::alg:: function (this->cbegin_(), this->cend_(), params...);\
-  }
-
-   BC_TENSOR_ALGORITHM_MEMBER_DEF(all_of)
-   BC_TENSOR_ALGORITHM_MEMBER_DEF(any_of)
-   BC_TENSOR_ALGORITHM_MEMBER_DEF(none_of)
-   BC_TENSOR_ALGORITHM_MEMBER_DEF(max_element)
-   BC_TENSOR_ALGORITHM_MEMBER_DEF(min_element)
-
 }; //end_of class 'Tensor_Functions'
 
 
