@@ -214,27 +214,12 @@ public:
 
 template<class internal_t>
 static bool all(const Tensor_Base<internal_t>& tensor) {
-	constexpr BC::size_t  dims = internal_t::DIMS;
-	using value_type = typename internal_t::value_type;
-	using allocator_t  = typename allocator::template implementation<typename internal_t::system_tag, value_type>;
-
-	Tensor_Base<BC::et::Array<dims, bool, allocator_t>> bool_tensor(tensor.inner_shape());
-	bool_tensor = logical(tensor);
-
-	return bool_tensor.sum() == bool_tensor.size();
+	return tensor.size() == logical(tensor).sum();
 }
 
 template<class internal_t>
 static bool any(const Tensor_Base<internal_t>& tensor) {
-	constexpr BC::size_t  dims = internal_t::DIMS;
-	using value_type = typename internal_t::value_type;
-	using allocator_t  = typename allocator::template implementation<typename internal_t::system_tag, value_type>;
-
-	Tensor_Base<BC::et::Array<dims, bool, allocator_t>>
-	bool_tensor(tensor.inner_shape());
-	bool_tensor = logical(tensor);
-
-	return bool_tensor.sum()!= 0;
+	return logical(tensor).sum() != 0;
 }
 
 
