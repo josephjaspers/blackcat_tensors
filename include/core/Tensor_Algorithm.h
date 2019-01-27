@@ -179,21 +179,6 @@ public:
 	   return utility_t::extract(this->as_derived().memptr(), min_index);
    }
 
-   //if bool flip the output of sum to an integer
-   using sum_t = std::conditional_t<std::is_same<bool, value_type>::value, int, value_type>;
-
-   BC_DEF_IF_CPP17(
-		sum_t sum() const {
-		   return BC::accumulate(this->cbegin_(), this->cend_(), sum_t(0));
-	   }
-   )
-
-   BC_DEF_IF_CPP17(
-   value_type prod() const {
-	   return BC::accumulate(this->cbegin_(), this->cend_(), value_type(1), BC::et::oper::mul());
-   }
-   )
-
 #define BC_TENSOR_ALGORITHM_MEMBER_DEF(function)\
   template<class... args>\
   auto function (args... params) const {\
@@ -211,18 +196,34 @@ public:
 
 }  //end_of namespace 'module'
 
+#ifdef BC_CPP17 //------------------------------------------------------------------------------------------
+
+template<class internal_t>
+static auto sum(const Tensor_Base<internal_t>& tensor) {
+	using p_value_type = typename internal_t::value_type;
+	using sum_value_type = std::conditional_t<std::is_same<p_value_type, bool>::value, BC::size_t, p_value_type>;
+
+	return BC::accumulate(tensor.cbegin(), tensor.cend(), sum_value_type(0));
+}
+
+template<class internal_t>
+static bool prod(const Tensor_Base<internal_t>& tensor) {
+	using value_type = typename internal_t::value_type;
+	return BC::accumulate(tensor.cbegin(), tensor.cend(), value_type(1), BC::et::oper::mul());
+}
 
 template<class internal_t>
 static bool all(const Tensor_Base<internal_t>& tensor) {
-	return tensor.size() == logical(tensor).sum();
+	return tensor.size() == sum(logical(tensor));
 }
 
 template<class internal_t>
 static bool any(const Tensor_Base<internal_t>& tensor) {
-	return logical(tensor).sum() != 0;
+	return sum(logical(tensor)) != 0;
 }
+#endif //ifdef BC_CPP17 //------------------------------------------------------------------------------------------
 
 
-}  //end_of namespace 'BC'
+} //end_of namespace 'BC'
 
 #endif /* TENSOR_FUNCTIONS_H_ */
