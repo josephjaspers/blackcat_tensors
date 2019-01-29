@@ -12,6 +12,7 @@
 /*
  * Defines stack array and lambda array
  * These are just two trivially classes used for storing small amounts of homogenous internal types, generally ints
+ * this array class is used instead of std::array as it must support usability in CUDA kernels  
  */
 
 namespace BC {
