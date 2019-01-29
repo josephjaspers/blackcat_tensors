@@ -42,6 +42,12 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
     static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
     static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
 
+    static constexpr bool host_pointer_mode = lv_scalar ?
+    								blas_feature_detector<lv>::host_pointer_mode :
+    								blas_feature_detector<rv>::host_pointer_mode;
+
+    static_assert(!(lv_scalar && rv_scalar), "BLAS FUNCTIONS LIMITED TO A SINGLE SCALAR ARGUMENT");
+
     static constexpr int DIMS = 1;
     static constexpr int ITERATOR = 1;
 
@@ -72,32 +78,23 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
 		auto A = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left), alloc);
 		auto X = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right), alloc);
 
-		//allocate the alpha and beta scalars,
-		auto alpha = utility_l::stack_allocate((value_type)alpha_mod);
-		auto beta  = utility_l::stack_allocate((value_type)beta_mod);
+        auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
+        auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 
-		//get the left and right side scalar values and
-		//compute the scalar values if need be
-		if (lv_scalar) {
-			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-			impl_l::scalar_mul(alpha, alpha, alpha_lv);
-		}
-		if (rv_scalar) {
-			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-			impl_l::scalar_mul(alpha, alpha, alpha_rv);
-		}
+        const value_type*  alpha =
+        		lv_scalar ? alpha_lv :
+        		rv_scalar ? alpha_rv :
+        				impl_l::template beta_constant<value_type, alpha_mod>();
 
-		//call matrix_mul ///for gemm we always use M, N, K regardless of transpose, but for gemv we always use pre-trans dimensions ???
+        auto beta = impl_l::template beta_constant<value_type, beta_mod>();
+
 		BC::size_t  m = A.rows();
 		BC::size_t  n = A.cols();
-
-		impl_l::gemv(transA,  m, n, alpha, A, A.leading_dimension(0), X, X.leading_dimension(0)/*inc_X*/, beta, injection/*Y*/, injection.leading_dimension(0)/*incy*/);
+		impl_l::template gemv<host_pointer_mode>(transA,  m, n, alpha, A, A.leading_dimension(0), X, X.leading_dimension(0)/*inc_X*/, beta, injection/*Y*/, injection.leading_dimension(0)/*incy*/);
 
 		//deallocate all the temporaries
-		if (lv_eval) cc(A).deallocate();
-		if (rv_eval) cc(X).deallocate();
-		utility_l::deallocate(beta);
-		utility_l::deallocate(alpha);
+		if (lv_eval) bc_const_cast(A).deallocate();
+		if (rv_eval) bc_const_cast(X).deallocate();
 	}
 };
 

@@ -37,6 +37,12 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
     static constexpr bool transB = blas_feature_detector<rv>::transposed;
     static constexpr bool lv_scalar = blas_feature_detector<lv>::scalar;
     static constexpr bool rv_scalar = blas_feature_detector<rv>::scalar;
+    static constexpr bool host_pointer_mode = lv_scalar ?
+    								blas_feature_detector<lv>::host_pointer_mode :
+    								blas_feature_detector<rv>::host_pointer_mode;
+
+    static_assert(!(lv_scalar && rv_scalar), "BLAS FUNCTIONS LIMITED TO A SINGLE SCALAR ARGUMENT");
+
     static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
     static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
 
@@ -89,28 +95,21 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
         auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
         auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 
-        //allocate the alpha and beta scalars,
-        auto alpha = utility_l::stack_allocate((value_type)alpha_mod);
-        auto beta = utility_l::stack_allocate((value_type)beta_mod);
-
-        //compute the scalar values if need be
-        if (lv_scalar)
-        	impl_l::scalar_mul(alpha, alpha, alpha_lv);
-        if (rv_scalar)
-        	impl_l::scalar_mul(alpha, alpha, alpha_rv);
+        const value_type*  alpha =
+        		lv_scalar ? alpha_lv :
+        		rv_scalar ? alpha_rv :
+        				impl_l::template beta_constant<value_type, alpha_mod>();
+        auto beta = impl_l::template beta_constant<value_type, beta_mod>();
 
         //call matrix_mul
-        impl_l::gemm(transA, transB,  M(), N(), K(),
+        impl_l::template gemm<host_pointer_mode>(transA, transB,  M(), N(), K(),
         		alpha, A, A.leading_dimension(0),
         		B, B.leading_dimension(0),
         		beta, injection, injection.leading_dimension(0));
 
-
         //deallocate all the temporaries
-        if (lv_eval) cc(A).deallocate();
-        if (rv_eval) cc(B).deallocate();
-        utility_l::deallocate(beta);
-        utility_l::deallocate(alpha);
+        if (lv_eval) bc_const_cast(A).deallocate();
+        if (rv_eval) bc_const_cast(B).deallocate();
     }
 };
 
