@@ -42,13 +42,6 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
     static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
     static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
 
-    static constexpr bool host_pointer_mode = lv_scalar ?
-    								blas_feature_detector<lv>::host_pointer_mode :
-    								blas_feature_detector<rv>::host_pointer_mode;
-
-    static_assert(!(lv_scalar && rv_scalar), "BLAS FUNCTIONS LIMITED TO A SINGLE SCALAR ARGUMENT");
-
-
     static_assert(lv::DIMS == 1 && rv::DIMS == 1 && transB,
     		"GER DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
 
@@ -82,24 +75,22 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 		auto A = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left), alloc);
 		auto B = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right), alloc);
 
-        //get the left and right side scalar values
-        auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-        auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
+		//get the left and right side scalar values
+		auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
+		auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 
-        const value_type*  alpha =
-        		lv_scalar ? alpha_lv :
-        		rv_scalar ? alpha_rv :
-        				blas_lib::template beta_constant<value_type, alpha_mod>();
+		//allocate the alpha and beta scalars,
+		auto alpha = utility_lib::stack_allocate((value_type)alpha_mod);
 
-        if (beta_mod != 1) {
-        	//ger does not accept a 'beta' scalar so we may need to manually zero/negate the output ourselves.
-        	//in CUDA it is still faster to pass a scalar by value opposed to passing it via pointer
-        	auto assign_expr = make_bin_expr<et::oper::assign>(injection.internal(), scalar_constant<allocator, value_type>(beta_mod));
-        	evaluate(assign_expr, alloc); //this won't cause an allocation
-        }
+		//compute the scalar values if need be
+		if (lv_scalar)
+			blas_lib::scalar_mul(alpha, alpha, alpha_lv);
+		if (rv_scalar)
+			blas_lib::scalar_mul(alpha, alpha, alpha_rv);
 
 		//call outer product
-		blas_lib::template ger<host_pointer_mode>(M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
+		blas_lib::ger(M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
+
 
 		//deallocate all the temporaries
 		if (lv_eval) cc(A).deallocate();

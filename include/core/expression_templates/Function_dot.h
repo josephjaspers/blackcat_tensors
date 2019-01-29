@@ -41,12 +41,6 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
     static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
     static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
 
-    static constexpr bool host_pointer_mode = lv_scalar ?
-    								blas_feature_detector<lv>::host_pointer_mode :
-    								blas_feature_detector<rv>::host_pointer_mode;
-
-    static_assert(!(lv_scalar && rv_scalar), "BLAS FUNCTIONS LIMITED TO A SINGLE SCALAR ARGUMENT");
-
     static constexpr int DIMS  = 0;
     static constexpr int ITERATOR = 0;
 
@@ -67,13 +61,8 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
 		auto X = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left), alloc);
 		auto Y = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right), alloc);
 
-        auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-        auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-
-        const value_type*  alpha =
-        		lv_scalar ? alpha_lv :
-        		rv_scalar ? alpha_rv :
-        				impl_l::template beta_constant<value_type, alpha_mod>();
+		//allocate the alpha and beta scalars,
+		auto alpha = utility_l::stack_allocate((value_type)alpha_mod);
 
 		//call outer product
 		impl_l::dot(X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
@@ -87,14 +76,16 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
 			impl_l::scalar_mul(injection.memptr(), alpha, alpha_rv);
 		}
 		if (beta_mod) {
-	        auto beta = impl_l::template beta_constant<value_type, beta_mod>();
+			auto beta = utility_l::stack_allocate((value_type)alpha_mod);
 			impl_l::scalar_mul(alpha, alpha, beta);
 			allocator_t::deallocate(beta);
 		}
 
+
 		//deallocate all the temporaries
-		if (lv_eval) bc_const_cast(X).deallocate();
-		if (rv_eval) bc_const_cast(Y).deallocate();
+		if (lv_eval) cc(X).deallocate();
+		if (rv_eval) cc(Y).deallocate();
+		utility_l::deallocate(alpha);
 	}
 };
 

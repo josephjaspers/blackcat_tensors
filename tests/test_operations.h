@@ -96,8 +96,6 @@ int test_matrix_muls(int sz=128) {
 
 	a.randomize(0, 12);
 	b.randomize(0, 12);
-	c.randomize(0, 10);
-	d.randomize(0, 10);
 
 
 	//lv trans

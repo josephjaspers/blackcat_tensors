@@ -18,10 +18,7 @@ namespace et {
 
 //identical to Array_Scalar, though the scalar is allocated on the stack opposed to heap
 template<class Scalar, class Allocator>
-struct Scalar_Constant
-		: Shape<0>,
-		  Array_Base<Scalar_Constant<Scalar, Allocator>, 0>,
-		  BC_Scalar_Constant {
+struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, Allocator>, 0>{
 
     using value_type = Scalar;
     using allocator_t = Allocator;
