@@ -11,30 +11,88 @@
 
 #include <cuda.h>
 #include <cuda_runtime.h>
+#include <memory>
+#include <mutex>
 
 namespace BC {
 namespace context {
+namespace device_globals {
+
+template<class value_type, int id> //buffer name should be either 'A' (for alpha) or 'B' (for beta)
+static value_type* constant_buffer() {
+
+	struct cuda_destroyer {
+		void operator () (value_type* val) {
+			cudaFree(val);
+		}
+	};
+
+	static std::unique_ptr<value_type, cuda_destroyer> buf;
+
+	if (!buf) {
+		std::mutex locker;
+		locker.lock();
+		if (!buf) { //second if statement is intentional
+			cudaMalloc((void**) &buf.get(), sizeof(value_type));
+		}
+		locker.unlock();
+	}
+	return buf.get();
+}
+
+
+cublasHandle_t DEFAULT_CUBLAS_HANDLE;
+//lapackHandle_t DEFAULT_LAPACK_HANDLE  //uncomment once we begin to support Lapack
+cudaStream_t   DEFAULT_STREAM;
+
+
+struct Default_Device_Context_Parameters {
+
+	std::shared_ptr<cublasHandle_t> cublas_handle;
+	std::shared_ptr<cudaStream_t>   stream_handle;
+
+	Default_Device_Context_Parameters() {
+
+		cublasCreate(&DEFAULT_CUBLAS_HANDLE);
+		cublas_handle = std::shared_ptr<cublasHandle_t>(&DEFAULT_CUBLAS_HANDLE, [](cublasHandle_t*) {});
+	}
+	~Default_Device_Context_Parameters() {
+		cublasDestroy(DEFAULT_CUBLAS_HANDLE);
+	}
+
+} default_context_parameters;
+
+
+} //end of namespace 'device globals'
 
 template<class Allocator>
-class Device : Allocator {
+struct  Device : public Allocator  {
 
-    cublasHandle_t m_cublas_handle = 0;
-    cudaStream_t   m_stream = 0;
+	using value_type = typename Allocator::value_type;
+
+private:
+	std::shared_ptr<cublasHandle_t> m_cublas_handle = device_globals::default_context_parameters.cublas_handle;
+	std::shared_ptr<cudaStream_t> m_stream 	        = device_globals::default_context_parameters.stream_handle;
+
+    //The temporary scalars used in BLAS calls,
+    //we allocate before hand as they cudaMalloc calls cudaDeviceSynchronize (which kills performance)
+    value_type*    alpha_buffer   = device_globals::constant_buffer<value_type, 0>();
+    value_type*    beta_buffer    = device_globals::constant_buffer<value_type, 1>();
 
 public:
 
-    const cublasHandle_t& get_blas_handle() const {
+    const auto& get_blas_handle() const {
     	return m_cublas_handle;
     }
 
-    cublasHandle_t& get_blas_handle() {
+    auto& get_blas_handle() {
     	return m_cublas_handle;
     }
 
-    const cudaStream_t& get_stream() const {
+    const auto& get_stream() const {
     	return m_stream;
     }
-    cudaStream_t& get_stream() {
+    auto& get_stream() {
     	return m_stream;
     }
 
@@ -46,28 +104,15 @@ public:
     	return static_cast<Allocator&>(*this);
     }
 
+    Device() = default;
+    Device(const Device& dev)
+     : Allocator(dev.m_allocator),
+       m_cublas_handle(dev.m_cublas_handle),
+       m_stream(dev.m_stream),
+       alpha_buffer(dev.alpha_buffer),
+       beta_buffer(dev.beta_buffer) {}
 
-    Device(const Allocator& alloc_) : m_allocator(alloc_) {
-        cublasCreate(&m_cublas_handle);
-        cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
-    }
-    Device(const Allocator& alloc_) : m_allocator(alloc_) {
-        cublasCreate(&m_cublas_handle);
-        cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
-    }
-    Device(Allocator&& alloc_) : m_allocator(std::move(alloc_)) {
-        cublasCreate(&m_cublas_handle);
-        cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
-    }
-    Device(Allocator&& alloc_) : m_allocator(std::move(alloc_)) {
-        cublasCreate(&m_cublas_handle);
-        cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
-    }
-
-    ~Device() {
-        cublasDestroy(handle);
-    }
-
+    Device(const Allocator& alloc_) : Allocator(alloc_) {}
 };
 
 

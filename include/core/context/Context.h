@@ -12,7 +12,33 @@
 #include "Device.h"
 
 
-BC_DEFAULT_MODULE_BODY(context)
+namespace BC {
+
+
+class host_tag;
+class device_tag;
+
+namespace context {
+
+#ifdef __CUDACC__
+	template<class Allocator>
+	using implementation =
+			std::conditional_t<
+				std::is_same<host_tag, typename BC::allocator_traits<Allocator>::system_tag>::value,
+					Host<Allocator>,
+					Device<Allocator>>;
+
+#else
+	template<
+		class allocator,
+		class=std::enable_if<std::is_same<host_tag, BC::allocator_traits<allocator>::system_tag>::value>
+	>
+	using implementation = Host<allocator>;
+#endif
+
+}
+}
+
 
 
 #endif /* CONTEXT_H_ */

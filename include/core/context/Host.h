@@ -14,20 +14,7 @@ namespace BC {
 namespace context {
 
 template<class Allocator>
-class Host : Allocator {
-
-	using stream_t = streams::Queue<streams::HostQueue>;
-
-	stream_t m_stream;
-
-public:
-
-    const stream_t& get_stream() const {
-    	return m_stream;
-    }
-    stream_t& get_stream() {
-    	return m_stream;
-    }
+struct Host : public Allocator  {
 
     const Allocator& get_allocator() const {
     	return static_cast<const Allocator&>(*this);
@@ -37,13 +24,10 @@ public:
     	return static_cast<Allocator&>(*this);
     }
 
-    Host() {}
-    Host(const Allocator& alloc_) : m_allocator(alloc_) {}
-    Host(Allocator&& alloc_) : m_allocator(std::move(alloc_)) {}
+    Host(const Host&) = default;
+    Host(Host&&) = default;
 
-    ~Host() {
-    }
-
+    Host(const Allocator& alloc_) : Allocator(alloc_) {}
 };
 
 
