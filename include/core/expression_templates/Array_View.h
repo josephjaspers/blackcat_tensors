@@ -73,7 +73,7 @@ struct Array_View : ArrayViewExpr<Dimension, Scalar, Allocator> {
 	Array_View(const tensor_t& tensor) {
 		this->array = tensor.memptr();
 		this->copy_shape(tensor);
-		this->alloc = &(tensor.get_allocator_ref());
+		this->alloc = &(tensor.get_full_context().get_allocator());
 	}
 
 	Allocator& get_allocator_ref() {

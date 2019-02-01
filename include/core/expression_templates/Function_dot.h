@@ -65,7 +65,7 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
 		auto alpha = utility_l::stack_allocate((value_type)alpha_mod);
 
 		//call outer product
-		impl_l::dot(X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
+		impl_l::dot(alloc, X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
 
 		if (lv_scalar) {
 			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);

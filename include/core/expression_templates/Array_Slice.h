@@ -107,33 +107,36 @@ struct Array_Slice :
 			ArrayScalarExpr<Parent>,
 			ArraySliceExpr<Parent, Dimensions, Continuous>>;
 
-	using shape_t = typename super_t::shape_t;
-	using allocator_t = typename Parent::allocator_t;
+	using shape_t 		 = typename super_t::shape_t;
+	using allocator_t 	 = typename Parent::allocator_t;
+	using context_t 	 = typename Parent::context_t;
+	using full_context_t = decltype(std::declval<Parent>().get_full_context());
 
-	const allocator_t& m_allocator;
+	full_context_t m_context;
 
 	template<class,int, bool> friend class Array_Slice;
 	template<int, class, class, class...> friend class Array;
 
 	BCHOT
 	Array_Slice(Parent& parent_, BC::size_t index)
-	: super_t(parent_, index), m_allocator(parent_.get_allocator_ref()) {
+	: super_t(parent_, index), m_context(parent_.get_full_context()) {
 	}
 
 	BCHOT
 	Array_Slice(Parent& parent_, const shape_t& shape_, BC::size_t index)
-	: super_t(parent_, shape_, index), m_allocator(parent_.get_allocator_ref()) {
+	: super_t(parent_, shape_, index), m_context(parent_.get_full_context()) {
 	}
 
 	allocator_t get_allocator() const {
-		return BC::allocator_traits<allocator_t>::select_on_container_copy_construction(m_allocator);
+		return BC::allocator_traits<allocator_t>::select_on_container_copy_construction(
+			m_context.get_allocator());
 	}
 
 	auto& internal_base() { return *this; }
 	const auto& internal_base() const { return *this; }
 
-	auto get_allocator_ref() -> decltype(m_allocator) { return m_allocator; }
-	auto get_allocator_ref() const -> decltype(m_allocator) { return m_allocator; }
+	auto get_full_context() -> decltype(m_context) { return m_context; }
+	auto get_full_context() const -> decltype(m_context) { return m_context; }
 };
 
 

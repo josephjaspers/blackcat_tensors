@@ -100,7 +100,7 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
         	impl_l::scalar_mul(alpha, alpha, alpha_rv);
 
         //call matrix_mul
-        impl_l::gemm(transA, transB,  M(), N(), K(),
+        impl_l::gemm(alloc, transA, transB,  M(), N(), K(),
         		alpha, A, A.leading_dimension(0),
         		B, B.leading_dimension(0),
         		beta, injection, injection.leading_dimension(0));

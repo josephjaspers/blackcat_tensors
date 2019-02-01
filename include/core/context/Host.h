@@ -8,26 +8,16 @@
 #ifndef BC_CONTEXT_HOST_H_
 #define BC_CONTEXT_HOST_H_
 
-#include "streams/Streams.h"
+#include "stream/Stream.h"
 
 namespace BC {
 namespace context {
 
-template<class Allocator>
-struct Host : public Allocator  {
+struct Host : Stream<HostQueue> {
 
-    const Allocator& get_allocator() const {
-    	return static_cast<const Allocator&>(*this);
-    }
-
-    Allocator& get_allocator() {
-    	return static_cast<Allocator&>(*this);
-    }
-
+    Host() = default;
     Host(const Host&) = default;
     Host(Host&&) = default;
-
-    Host(const Allocator& alloc_) : Allocator(alloc_) {}
 };
 
 

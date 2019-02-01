@@ -9,9 +9,9 @@
 #include <condition_variable>
 
 namespace BC {
-namespace streams {
+namespace context {
 
-class HostQueue : QueueInterface<HostQueue> {
+class HostQueue {
 
 	struct Job {
 

@@ -33,7 +33,9 @@ static value_type* constant_buffer() {
 		std::mutex locker;
 		locker.lock();
 		if (!buf) { //second if statement is intentional
-			cudaMalloc((void**) &buf.get(), sizeof(value_type));
+			value_type* dataptr = nullptr;
+			cudaMalloc((void**) &dataptr, sizeof(value_type));
+			buf = std::unique_ptr<value_type, cuda_destroyer>(dataptr);
 		}
 		locker.unlock();
 	}
@@ -65,54 +67,44 @@ struct Default_Device_Context_Parameters {
 
 } //end of namespace 'device globals'
 
-template<class Allocator>
-struct  Device : public Allocator  {
+#ifndef NDEBUG
+	#define BC_DEBUG_ASSERT(arg) if (!arg) throw std::invalid_argument(#arg " accessed failure")
+#else
+	#define BC_DEBUG_ASSERT(arg)
+#endif
 
-	using value_type = typename Allocator::value_type;
+
+struct  Device  {
 
 private:
 	std::shared_ptr<cublasHandle_t> m_cublas_handle = device_globals::default_context_parameters.cublas_handle;
 	std::shared_ptr<cudaStream_t> m_stream 	        = device_globals::default_context_parameters.stream_handle;
 
-    //The temporary scalars used in BLAS calls,
-    //we allocate before hand as they cudaMalloc calls cudaDeviceSynchronize (which kills performance)
-    value_type*    alpha_buffer   = device_globals::constant_buffer<value_type, 0>();
-    value_type*    beta_buffer    = device_globals::constant_buffer<value_type, 1>();
-
 public:
 
     const auto& get_blas_handle() const {
-    	return m_cublas_handle;
+    	BC_DEBUG_ASSERT(m_cublas_handle.get());
+    	return *(m_cublas_handle.get());
     }
 
     auto& get_blas_handle() {
-    	return m_cublas_handle;
+    	BC_DEBUG_ASSERT(m_cublas_handle.get());
+    	return *(m_cublas_handle.get());
     }
 
     const auto& get_stream() const {
-    	return m_stream;
+    	BC_DEBUG_ASSERT(m_stream.get());
+    	return *(m_stream.get());
     }
     auto& get_stream() {
-    	return m_stream;
-    }
-
-    const Allocator& get_allocator() const {
-    	return static_cast<const Allocator&>(*this);
-    }
-
-    Allocator& get_allocator() {
-    	return static_cast<Allocator&>(*this);
+    	BC_DEBUG_ASSERT(m_stream.get());
+    	return *(m_stream.get());
     }
 
     Device() = default;
     Device(const Device& dev)
-     : Allocator(dev.m_allocator),
-       m_cublas_handle(dev.m_cublas_handle),
-       m_stream(dev.m_stream),
-       alpha_buffer(dev.alpha_buffer),
-       beta_buffer(dev.beta_buffer) {}
-
-    Device(const Allocator& alloc_) : Allocator(alloc_) {}
+     : m_cublas_handle(dev.m_cublas_handle),
+       m_stream(dev.m_stream) {}
 };
 
 
@@ -120,6 +112,6 @@ public:
 }
 
 
-
+#undef BC_DEBUG_ASSERT
 #endif /* DEVICE_H_ */
 #endif

@@ -89,7 +89,7 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 			blas_lib::scalar_mul(alpha, alpha, alpha_rv);
 
 		//call outer product
-		blas_lib::ger(M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
+		blas_lib::ger(alloc, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
 
 
 		//deallocate all the temporaries

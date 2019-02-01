@@ -9,23 +9,9 @@
 #define BC_STREAMS_COMMON_H_
 
 #include <memory>
-
+#include "Host.h"
 namespace BC {
-namespace streams {
-
-template<class derived>
-struct QueueInterface {
-
-	QueueInterface() {
-		static_assert(!std::is_same<decltype(std::declval<derived>().init()), void>::value,
-				"Queue subclass must defined 'void init()'");
-		static_assert(!std::is_same<decltype(std::declval<derived>().synchronize()), void>::value,
-				"Queue subclass must defined 'void synchronize()'");
-		static_assert(!std::is_same<decltype(std::declval<derived>().active()), bool>::value,
-				"Queue subclass must defined 'bool active()'");
-	}
-};
-
+namespace context {
 
 template<class Queue>
 class Stream {
@@ -58,7 +44,11 @@ public:
 
 	template<class function_lambda>
 	void push_job(function_lambda functor) {
-		m_job_queue.get()->push(functor);
+		if (!m_job_queue.get()) {
+			functor();
+		} else {
+			m_job_queue.get()->push(functor);
+		}
 	}
 
 	bool active() {

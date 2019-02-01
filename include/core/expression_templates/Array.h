@@ -103,6 +103,7 @@ template<class,int,bool> class Array_Slice;
 template<int Dimension, class Scalar, class Allocator, class... Tags>
 class Array :
 			private Allocator,
+			public Context<typename BC::allocator_traits<Allocator>::system_tag>,
 			public ArrayExpression<Dimension, Scalar, Allocator, Tags...> {
 
 	template<class,int, bool> friend class Array_Slice;
@@ -110,21 +111,34 @@ class Array :
 	using self = Array<Dimension, Scalar, Allocator, Tags...>;
 	using parent = ArrayExpression<Dimension, Scalar, Allocator, Tags...>;
 
+public:
+
+	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
+	using allocator_t = Allocator;
+	using context_t   = Context<system_tag>;
+	using full_context_t = context::full_context_t<allocator_t, context_t>;
+	using value_type = Scalar;
+	using ArrayExpression<Dimension, Scalar, Allocator, Tags...>::deallocate;
+
+	const auto get_full_context() const {
+		return context::make_full_context(as_alloc(), as_context());
+	}
+
+	auto get_full_context() {
+		return context::make_full_context(as_alloc(), as_context());
+	}
+
+private:
 
 	Shape<Dimension>& as_shape() { return static_cast<Shape<Dimension>&>(*this); }
 
+	const Allocator& as_alloc() const { return static_cast<const Allocator&>(*this); }
+		  Allocator& as_alloc() 	  { return static_cast<		 Allocator&>(*this); }
+
+	const context_t& as_context() const { return static_cast<const context_t&>(*this); }
+          context_t& as_context() 	    { return static_cast<	   context_t&>(*this); }
 
 public:
-
-	Allocator& get_allocator_ref() { return static_cast<Allocator&>(*this); }
-		const Allocator& get_allocator_ref() const { return static_cast<const Allocator&>(*this); }
-
-
-	using allocator_t = Allocator;
-	using value_type = Scalar;
-	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
-
-	using ArrayExpression<Dimension, Scalar, Allocator, Tags...>::deallocate;
 
 	Array() {
 		if (Dimension == 0) {
@@ -138,7 +152,7 @@ public:
 		this->copy_construct(array_);
 	}
 	Array(Array&& array_) //TODO handle propagate_on_container_move_assignment
-	: Allocator(std::move(array_.get_allocator_ref())),
+	: Allocator(std::move(array_.as_alloc())),
 	  parent(array_) {
 		this->move_construct(std::move(array_));
 	}
@@ -173,7 +187,7 @@ public:
 	Array(const Expr& expr_t, const Allocator& alloc=Allocator()) : Allocator(alloc) {
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());
-		evaluate_to(this->internal(), expr_t.internal(), this->get_allocator_ref());
+		evaluate_to(this->internal(), expr_t.internal(), this->as_alloc());
 	}
 
 
@@ -188,17 +202,18 @@ public:
     			std::is_same<typename Parent::value_type, value_type>::value &&
     			Array_Slice<Parent, Dimension, true>::DIMS == Dimension>>
 	Array(const Array_Slice<Parent, Dimension, true>& expr_t)
-	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(expr_t.get_allocator_ref()))
+	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(
+			expr_t.get_full_context().get_allocator()))
 	{
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());
-        evaluate_to(this->internal(), expr_t.internal(), this->get_allocator_ref());
+        evaluate_to(this->internal(), expr_t.internal(), this->as_alloc());
 	}
 
     void copy_construct(const Array& array_copy) {
         this->copy_shape(array_copy);
         this->array = this->allocate(this->size());
-        evaluate_to(this->internal(), array_copy.internal(), this->get_allocator_ref());
+        evaluate_to(this->internal(), array_copy.internal(), this->as_alloc());
     }
     void move_construct(Array&& array_move) {
     	this->array = array_move.array;
@@ -215,7 +230,7 @@ public:
     	std::swap(this->m_block_shape, swap.m_block_shape);
 
     	if (BC::allocator_traits<Allocator>::propagate_on_container_swap::value) {
-    		std::swap(this->get_allocator_ref(), swap.get_allocator_ref());
+    		std::swap(this->as_alloc(), swap.as_alloc());
     	}
     }
 

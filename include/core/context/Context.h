@@ -11,32 +11,43 @@
 #include "Host.h"
 #include "Device.h"
 
+BC_DEFAULT_MODULE_BODY(context)
 
 namespace BC {
 
+template<class system_tag>  //push into BC namespace
+using Context = context::template implementation<system_tag>;
 
-class host_tag;
-class device_tag;
 
+template<class Allocator, class Context>
+struct Full_Context : Context {
+
+	using context_t = Context;
+	using allocator_t = Allocator;
+
+	Allocator& m_allocator;
+
+	Full_Context(const Full_Context&) = default;
+	Full_Context(Full_Context&&) = default;
+	Full_Context(Allocator& alloc_, const Context& context)
+	: Context(context), m_allocator(alloc_) {}
+
+	const Allocator& get_allocator() const { return m_allocator; }
+		  Allocator& get_allocator() 	   { return m_allocator; }
+
+};
 namespace context {
 
-#ifdef __CUDACC__
-	template<class Allocator>
-	using implementation =
-			std::conditional_t<
-				std::is_same<host_tag, typename BC::allocator_traits<Allocator>::system_tag>::value,
-					Host<Allocator>,
-					Device<Allocator>>;
-
-#else
-	template<
-		class allocator,
-		class=std::enable_if<std::is_same<host_tag, BC::allocator_traits<allocator>::system_tag>::value>
-	>
-	using implementation = Host<allocator>;
-#endif
-
+template<class Allocator, class Context>
+auto make_full_context(Allocator& alloc, Context& cont) {
+	return Full_Context<Allocator, Context>(alloc, cont);
 }
+
+template<class Allocator, class Context>
+using full_context_t = Full_Context<Allocator, Context>;
+
+} //end of context
+
 }
 
 

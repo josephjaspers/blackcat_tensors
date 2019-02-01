@@ -62,7 +62,9 @@ struct Host {
 		return T(value);
 	}
 
-    static void gemm(bool transA, bool transB, BC::size_t  m, BC::size_t  n, BC::size_t  k,
+
+	template<class Context>
+    static void gemm(Context context, bool transA, bool transB, BC::size_t  m, BC::size_t  n, BC::size_t  k,
             const float alpha, const float* A, BC::size_t  lda,
                                 const float* B, BC::size_t  ldb,
             const float beta,           float* C, BC::size_t  ldc) {
@@ -73,7 +75,8 @@ struct Host {
         cblas_sgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
     }
 
-    static void gemm(bool transA, bool transB, BC::size_t  m, BC::size_t  n, BC::size_t  k,
+	template<class Context>
+    static void gemm(Context context, bool transA, bool transB, BC::size_t  m, BC::size_t  n, BC::size_t  k,
             const double alpha, const double* A, BC::size_t  lda,
                                  const double* B, BC::size_t  ldb,
             const double beta,        double* C, BC::size_t  ldc) {
@@ -85,7 +88,8 @@ struct Host {
     }
 
     //y := alpha*A*x + beta*y,   or   y := alpha*A**T*x + beta*y,
-    static void gemv(bool transA, BC::size_t  m, BC::size_t  n,
+	template<class Context>
+	static void gemv(Context context, bool transA, BC::size_t  m, BC::size_t  n,
             const double alpha, const double* A, BC::size_t  lda,
                                  const double* X, BC::size_t  incX,
             const double beta,        double* Y, BC::size_t  incY) {
@@ -94,7 +98,8 @@ struct Host {
 
         cblas_dgemv(CblasColMajor, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY);
     }
-    static void gemv(bool transA, BC::size_t  m, BC::size_t  n,
+	template<class Context>
+    static void gemv(Context context, bool transA, BC::size_t  m, BC::size_t  n,
             const float alpha, const float* A, BC::size_t  lda,
                                 const float* X, BC::size_t  incX,
             const float beta,              float* Y, BC::size_t  incY) {
@@ -104,7 +109,8 @@ struct Host {
         cblas_sgemv(CblasColMajor, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY);
     }
 
-    static void ger(int m, BC::size_t  n,
+	template<class Context>
+    static void ger(Context context, int m, BC::size_t  n,
             const double alpha,
                                  const double* X, BC::size_t  incX,
                                  const double* Y, BC::size_t  incY,
@@ -112,7 +118,9 @@ struct Host {
 
         cblas_dger(CblasColMajor, m, n, alpha, X, incX, Y, incY, A, lda);
     }
-    static void ger(int m, BC::size_t  n,
+
+	template<class Context>
+    static void ger(Context context, int m, BC::size_t  n,
             const float alpha,
                                  const float* X, BC::size_t  incX,
                                  const float* Y, BC::size_t  incY,
@@ -121,11 +129,13 @@ struct Host {
         cblas_sger(CblasColMajor, m, n, alpha, X, incX, Y, incY, A, lda);
     }
 
-
-    static void dot(int n, double* A, const double* x, BC::size_t  incX, const double* y, BC::size_t  incY) {
+	template<class Context>
+    static void dot(Context context, int n, double* A, const double* x, BC::size_t  incX, const double* y, BC::size_t  incY) {
         *A = cblas_ddot(n, x, incX, y, incY);
     }
-    static void dot(int n, float* A, const float* x, BC::size_t  incX, const float* y, BC::size_t  incY) {
+
+	template<class Context>
+    static void dot(Context context, int n, float* A, const float* x, BC::size_t  incX, const float* y, BC::size_t  incY) {
         *A = cblas_sdot(n, x, incX, y, incY);
     }
 };
