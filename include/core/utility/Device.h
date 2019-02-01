@@ -29,6 +29,12 @@ struct Device {
 			float* val = scalar_recycler.back();
 			scalar_recycler.pop_back();
 			locker.unlock();
+
+
+			cudaDeviceSynchronize();
+			if (*val != value)
+				*val = value;
+
 			return val;
 		} else {
 
