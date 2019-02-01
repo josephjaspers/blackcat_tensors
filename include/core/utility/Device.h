@@ -55,22 +55,16 @@ struct Device {
 
 	template<class T>
 	static void HostToDevice(T* t, const T* u, BC::size_t  size = 1) {
-		cudaDeviceSynchronize();
 		cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyHostToDevice);
-		cudaDeviceSynchronize();
 	}
 	template<class T>
 	static void DeviceToHost(T* t, const T* u, BC::size_t  size = 1) {
-		cudaDeviceSynchronize();
 		cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyDeviceToHost);
-		cudaDeviceSynchronize();
 	}
 	template<class T>
 	static T extract(const T* data_ptr, BC::size_t  index) {
 		T host_data;
-		cudaDeviceSynchronize();
 		cudaMemcpy(&host_data, &data_ptr[index], sizeof(T), cudaMemcpyDeviceToHost);
-		cudaDeviceSynchronize();
 		return host_data;
 	}
 
