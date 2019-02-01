@@ -21,7 +21,7 @@ namespace et {
 
 template<class lv, class rv, class System_Tag>
 struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
-: Expression_Base<Binary_Expression<lv, rv,  oper::gemv<System_Tag>>>, BLAS_FUNCTION {
+: Expression_Base<Binary_Expression<lv, rv,  oper::gemv<System_Tag>>>, BLAS_Function {
 
     static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,
     		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
@@ -91,7 +91,7 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
 		BC::size_t  m = A.rows();
 		BC::size_t  n = A.cols();
 
-		impl_l::gemv(transA,  m, n, alpha, A, A.leading_dimension(0), X, X.leading_dimension(0)/*inc_X*/, beta, injection/*Y*/, injection.leading_dimension(0)/*incy*/);
+		impl_l::gemv(alloc, transA,  m, n, alpha, A, A.leading_dimension(0), X, X.leading_dimension(0)/*inc_X*/, beta, injection/*Y*/, injection.leading_dimension(0)/*incy*/);
 
 		//deallocate all the temporaries
 		if (lv_eval) cc(A).deallocate();

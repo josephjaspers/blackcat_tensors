@@ -5,8 +5,8 @@
  *      Author: joseph
  */
 
-#ifndef BC_BLAS_FUNCTION_TESTING_H_
-#define BC_BLAS_FUNCTION_TESTING_H_
+#ifndef BC_BLAS_Function_TESTING_H_
+#define BC_BLAS_Function_TESTING_H_
 
 #include "test_common.h"
 
@@ -214,4 +214,4 @@ int test_matrix_muls(int sz=128) {
 }
 }
 
-#endif /* BLAS_FUNCTION_TESTING_H_ */
+#endif /* BLAS_Function_TESTING_H_ */

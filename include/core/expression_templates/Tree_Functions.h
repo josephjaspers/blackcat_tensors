@@ -41,7 +41,7 @@ template<> struct scalar_modifer<et::oper::assign> {
 };
 
 template<class T> static constexpr bool is_blas_func() {
-    return std::is_base_of<BC::BLAS_FUNCTION, T>::value;
+    return std::is_base_of<BC::BLAS_Function, T>::value;
 }
 
 template<class T>

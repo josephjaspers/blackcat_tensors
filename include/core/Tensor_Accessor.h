@@ -11,7 +11,6 @@
 
 
 #include "expression_templates/Array.h"
-#include "expression_templates/Array_Scalar.h"
 #include "expression_templates/Array_Slice.h"
 #include "expression_templates/Array_Strided_Vector.h"
 

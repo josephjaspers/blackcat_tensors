@@ -20,7 +20,7 @@ namespace et {
 
 template<class lv, class rv, class System_Tag>
 struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
-: Expression_Base<Binary_Expression<lv, rv,  oper::dot<System_Tag>>>, BLAS_FUNCTION, Shape<0> {
+: Expression_Base<Binary_Expression<lv, rv,  oper::dot<System_Tag>>>, BLAS_Function, Shape<0> {
 
 	static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,
 			"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");

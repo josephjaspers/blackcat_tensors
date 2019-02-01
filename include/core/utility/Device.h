@@ -8,21 +8,43 @@
 #ifndef BC_UTILITY_DEVICE_H_
 #define BC_UTILITY_DEVICE_H_
 
+#include <memory>
+#include <vector>
+#include <mutex>
+
 namespace BC {
 namespace utility {
+static std::vector<float*> scalar_recycler;
 
 struct Device {
 
-    static float* stack_allocate(float value) {
-        float* t;
-        cudaMallocManaged((void**) &t, sizeof(float));
-        cudaMemcpy(t, &value, sizeof(float), cudaMemcpyHostToDevice);
-        return t;
+
+
+	static float* stack_allocate(float value) {
+
+		static std::mutex locker;
+
+		if (!scalar_recycler.empty()) {
+			locker.lock();
+			float* val = scalar_recycler.back();
+			scalar_recycler.pop_back();
+			locker.unlock();
+			return val;
+		} else {
+
+			float* t;
+			cudaMallocManaged((void**) &t, sizeof(float));
+			cudaMemcpy(t, &value, sizeof(float), cudaMemcpyHostToDevice);
+			return t;
+		}
     }
 
-   template<typename T>
-	static void deallocate(T* t) {
-		cudaFree(t);
+	static void deallocate(float* t) {
+		static std::mutex locker;
+		locker.lock();
+		scalar_recycler.push_back(t);
+		locker.unlock();
+
 	}
 
 	template<class T>

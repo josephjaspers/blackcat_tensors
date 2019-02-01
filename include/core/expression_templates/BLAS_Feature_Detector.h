@@ -19,7 +19,7 @@ namespace et {
 
 template<class T>           using enable_if_array = std::enable_if_t<BC::is_array<T>()>;
 template<class T, class U>  using enable_if_arrays = std::enable_if_t<BC::is_array<T>() && BC::is_array<U>()>;
-template<class T>           using enable_if_blas = std::enable_if_t<std::is_base_of<BLAS_FUNCTION, T>::value>;
+template<class T>           using enable_if_blas = std::enable_if_t<std::is_base_of<BLAS_Function, T>::value>;
 
 
 

@@ -15,10 +15,10 @@ namespace oper {
 
 //tags, no definition
 template<class allocator> struct transpose  {};
-template<class allocator> struct gemm : BLAS_FUNCTION {};
-template<class allocator> struct gemv : BLAS_FUNCTION {};
-template<class allocator> struct ger : BLAS_FUNCTION {};
-template<class allocator> struct dot : BLAS_FUNCTION {};
+template<class allocator> struct gemm : BLAS_Function {};
+template<class allocator> struct gemv : BLAS_Function {};
+template<class allocator> struct ger : BLAS_Function {};
+template<class allocator> struct dot : BLAS_Function {};
 
 }
 }

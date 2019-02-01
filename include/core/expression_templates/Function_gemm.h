@@ -21,7 +21,7 @@ namespace et {
 template<class lv, class rv, class System_Tag>
 struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
 : Expression_Base<Binary_Expression<lv, rv, oper::gemm<System_Tag>>>,
-  BLAS_FUNCTION {
+  BLAS_Function {
 
     static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,\
     		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
@@ -75,15 +75,15 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
     BCINLINE BC::size_t  K() const { return left.cols();  }
 
 
-    template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class allocator>
-    void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, allocator& alloc) const {
+    template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class Context>
+    void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, Context& alloc) const {
 
         //get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
         auto& injection = injection_values.data();
 
         //evaluate the left and right branches (computes only if necessary)
-        auto A = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left), alloc);
-        auto B = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right), alloc);
+        auto A = CacheEvaluator<Context>::evaluate(blas_feature_detector<lv>::get_array(left), alloc);
+        auto B = CacheEvaluator<Context>::evaluate(blas_feature_detector<rv>::get_array(right), alloc);
 
         //get the left and right side scalar values
         auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
