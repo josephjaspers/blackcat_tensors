@@ -45,6 +45,8 @@ BC_TENSOR_ALIAS_CORE_DEF(1, Vector)
 BC_TENSOR_ALIAS_CORE_DEF(2, Matrix)
 BC_TENSOR_ALIAS_CORE_DEF(3, Cube)
 
+#undef BC_TENSOR_ALIAS_CORE_DEF
+
 template<int dimension, class value_type, class allocator_t=alloc_t<value_type>>
 using Tensor_View = Tensor_Base<et::Array_View<dimension, value_type, allocator_t>>;
 

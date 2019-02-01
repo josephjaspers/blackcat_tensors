@@ -91,6 +91,8 @@ BLACKCAT_BC_FUNCTOR_DEF(dx_relu, x > 0 ? 1 : 0);
 BLACKCAT_BC_FUNCTOR_DEF(cached_dx_relu, x > 0 ? 1 : 0); //same as dx_relu
 BLACKCAT_BC_FUNCTOR_DEF(logical, x > 0 ? 1 : 0);
 
+#undef BLACKCAT_BC_FUNCTOR_DEF
+#undef BLACKCAT_MATH_DEF
 
 //--------------------------------------------not actually cmath--------------------------------------//
 template<class scalar>

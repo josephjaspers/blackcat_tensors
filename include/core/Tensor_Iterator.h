@@ -155,6 +155,8 @@ BC_TENSOR_ITERATOR_DEF(ND_ReverseIterator, nd_rbegin, nd_rend)
 BC_TENSOR_ITERATOR_DEF(CW_ForwardIterator, begin, end)
 BC_TENSOR_ITERATOR_DEF(CW_ReverseIterator, rbegin, rend)
 
+#undef BC_TENSOR_ITERATOR_DEF
+
 template<class... params> auto iter(params ... ps) {
     return make_CW_ForwardIterator(as_derived(), ps...);
 }

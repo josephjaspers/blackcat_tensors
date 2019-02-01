@@ -9,29 +9,6 @@
 #define BC_UTILITY_UTILITY_H_
 
 #include <sstream>
-
-namespace BC {
-namespace utility {
-
-//is inherited by both host and device structs
-struct Utility_Common {
-
-};
-}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "Host.h"
 #include "Device.h"
 

@@ -64,6 +64,8 @@ struct Coefficientwise_Iterator {
     BC_Iter_Compare(<=, >=)
     BC_Iter_Compare(>=, <=)
 
+#undef BC_Iter_Compare
+
     BCINLINE operator BC::size_t  () const { return index; }
 
     BCINLINE bool operator == (const Iterator& iter) {

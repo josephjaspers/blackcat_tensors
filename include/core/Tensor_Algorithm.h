@@ -110,6 +110,7 @@ BC_DEF_IF_CPP17(BC_TENSOR_ALGORITHM_DEF(transform_inclusive_scan))
 BC_TENSOR_ALGORITHM_DEF(qsort)
 BC_TENSOR_ALGORITHM_DEF(bsearch)
 
+#undef BC_TENSOR_ALGORITHM_DEF
 }//end of namespace alg
 
 using namespace alg;

@@ -80,6 +80,8 @@ public:
     BC_OPER_ASSIGNMENT_DEF(%=, mul_assign)
     BC_OPER_ASSIGNMENT_DEF(/=, div_assign)
 
+#undef BC_OPER_ASSIGNMENT_DEF
+
     //specialization for explicit copy operator
     struct DISABLED;
     derived& operator = (const std::conditional_t<copy_assignable, derived, DISABLED>& param) {
@@ -112,6 +114,7 @@ public:
     BC_OPER_COEFFICIENTWISE_DEF( && , AND )
     BC_OPER_COEFFICIENTWISE_DEF( || , OR )
 
+#undef BC_OPER_COEFFICIENTWISE_DEF
 
     template<class pDeriv>
     auto approx_equal (const Tensor_Operations<pDeriv>& param) const {
@@ -137,6 +140,8 @@ public:
     BC_OPER_SCALAR_ASSIGNMENT_DEF(/=, div_assign)
     BC_OPER_SCALAR_ASSIGNMENT_DEF(%=, mul_assign)
 
+#undef BC_OPER_SCALAR_ASSIGNMENT_DEF
+
 #define BC_OPER_SCALAR_BASIC_DEF(op, op_functor)                                                                            \
         template<class p_value_type, typename = enable_if_convertible<p_value_type>>                                            \
         auto operator op (const p_value_type& param) const {                                                                        \
@@ -153,7 +158,7 @@ public:
     BC_OPER_SCALAR_BASIC_DEF(<=, lesser_equal)
     BC_OPER_SCALAR_BASIC_DEF(==, equal)
 
-
+#undef BC_OPER_SCALAR_BASIC_DEF
 
 
     //specialized to upcast  matrix/scalar_value to matrix * (1/scalar_value)
@@ -412,6 +417,8 @@ using enable_if_convertible = std::enable_if_t<std::is_convertible<p_value_type,
     BC_OPER_LV_SCALAR_DEF(>=, greater_equal)
     BC_OPER_LV_SCALAR_DEF(<=, lesser_equal)
     BC_OPER_LV_SCALAR_DEF(==, equal)
+
+#undef BC_OPER_LV_SCALAR_DEF
 
 
     template<class p_value_type, class internal_t, typename = enable_if_convertible<p_value_type, typename internal_t::value_type>>

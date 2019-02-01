@@ -46,11 +46,11 @@ struct Multidimensional_Iterator {
         else                                                \
             return index rev  p_index;                      \
     }
-
     BC_ND_Iter_Compare(<, >)
     BC_ND_Iter_Compare(>, <)
     BC_ND_Iter_Compare(<=, >=)
     BC_ND_Iter_Compare(>=, <=)
+#undef BC_ND_Iter_Compare
 
     BCINLINE operator BC::size_t  () const { return index; }
 

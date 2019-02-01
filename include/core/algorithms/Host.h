@@ -88,13 +88,6 @@ struct Host {
     BC_DEF_IF_CPP17(BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF(shift_right))
     BC_CPU_ALGORITHM_FORWARDER_DEF(random_shuffle)
     BC_DEF_IF_CPP17(BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF(sample))
-//  BC_will not define removing
-//    BC_CPU_ALGORITHM_FORWARDER_DEF(unique)
-//    BC_CPU_ALGORITHM_FORWARDER_DEF(unique_copy)
-
-    //partition N/A-------------------
-    //do not define any part of partitioning
-
     //Sorting
     BC_CPU_ALGORITHM_FORWARDER_DEF(is_sorted)
     BC_CPU_ALGORITHM_FORWARDER_DEF(is_sorted_until)
@@ -108,9 +101,7 @@ struct Host {
     BC_CPU_ALGORITHM_FORWARDER_DEF(upper_bound)
     BC_CPU_ALGORITHM_FORWARDER_DEF(binary_search)
     BC_CPU_ALGORITHM_FORWARDER_DEF(equal_range)
-    //other
-    //merge
-    //inplace_merge
+
     BC_CPU_ALGORITHM_FORWARDER_DEF(max)
     BC_CPU_ALGORITHM_FORWARDER_DEF(max_element)
     BC_CPU_ALGORITHM_FORWARDER_DEF(min)
@@ -142,5 +133,7 @@ struct Host {
 }
 
 
+#undef BC_CPU_ALGORITHM_FORWARDER_DEF
+#undef BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF
 
 #endif /* CPU_ALGORITHMS_H_ */
