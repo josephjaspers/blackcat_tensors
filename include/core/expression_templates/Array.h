@@ -148,13 +148,18 @@ public:
 
 	Array(const Array& array_)
 	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(array_)),
+	  context_t(array_.as_context()),
 	  parent(array_) {
-		this->copy_construct(array_);
+        this->array = this->allocate(this->size());
+        evaluate_to(this->internal(), array_.internal(), this->get_full_context());
 	}
 	Array(Array&& array_) //TODO handle propagate_on_container_move_assignment
 	: Allocator(std::move(array_.as_alloc())),
+	  context_t(std::move(array_.as_context())),
 	  parent(array_) {
-		this->move_construct(std::move(array_));
+		array_.m_inner_shape = {0};
+		array_.m_block_shape = {0};
+		array_.array = nullptr;
 	}
 
 	//Construct via shape-like object
@@ -182,7 +187,7 @@ public:
 		this->array      = this->allocate(this->size());
 	}
 
-
+	//Shape-like object with maybe allocator
     template<class Expr,typename = std::enable_if_t<BC::is_array<Expr>() || BC::is_expr<Expr>()>>
 	Array(const Expr& expr_t, const Allocator& alloc=Allocator()) : Allocator(alloc) {
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
@@ -203,27 +208,15 @@ public:
     			Array_Slice<Parent, Dimension, true>::DIMS == Dimension>>
 	Array(const Array_Slice<Parent, Dimension, true>& expr_t)
 	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(
-			expr_t.get_full_context().get_allocator()))
+			expr_t.get_full_context().get_allocator())),
+	  context_t(expr_t.get_full_context())
 	{
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());
         evaluate_to(this->internal(), expr_t.internal(), this->as_alloc());
 	}
 
-    void copy_construct(const Array& array_copy) {
-        this->copy_shape(array_copy);
-        this->array = this->allocate(this->size());
-        evaluate_to(this->internal(), array_copy.internal(), this->as_alloc());
-    }
-    void move_construct(Array&& array_move) {
-    	this->array = array_move.array;
-    	this->m_inner_shape = array_move.m_inner_shape;
-    	this->m_block_shape = array_move.m_block_shape;
-
-    	array_move.m_inner_shape = {0};
-    	array_move.m_block_shape = {0};
-    	array_move.array = nullptr;
-    }
+public:
     void internal_swap(Array& swap) {
     	std::swap(this->array, swap.array);
     	std::swap(this->m_inner_shape, swap.m_inner_shape);

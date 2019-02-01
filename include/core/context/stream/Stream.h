@@ -25,7 +25,7 @@ public:
 	Stream(Stream&&)=default;
 
 	bool is_default_stream() {
-		return bool(m_job_queue);
+		return bool(m_job_queue.get());
 	}
 
 	void create_stream() {
@@ -49,10 +49,6 @@ public:
 		} else {
 			m_job_queue.get()->push(functor);
 		}
-	}
-
-	bool active() {
-		return m_job_queue.get() && m_job_queue.get()->active();
 	}
 };
 }

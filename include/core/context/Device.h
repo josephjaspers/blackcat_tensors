@@ -18,31 +18,6 @@ namespace BC {
 namespace context {
 namespace device_globals {
 
-template<class value_type, int id> //buffer name should be either 'A' (for alpha) or 'B' (for beta)
-static value_type* constant_buffer() {
-
-	struct cuda_destroyer {
-		void operator () (value_type* val) {
-			cudaFree(val);
-		}
-	};
-
-	static std::unique_ptr<value_type, cuda_destroyer> buf;
-
-	if (!buf) {
-		std::mutex locker;
-		locker.lock();
-		if (!buf) { //second if statement is intentional
-			value_type* dataptr = nullptr;
-			cudaMalloc((void**) &dataptr, sizeof(value_type));
-			buf = std::unique_ptr<value_type, cuda_destroyer>(dataptr);
-		}
-		locker.unlock();
-	}
-	return buf.get();
-}
-
-
 cublasHandle_t DEFAULT_CUBLAS_HANDLE;
 //lapackHandle_t DEFAULT_LAPACK_HANDLE  //uncomment once we begin to support Lapack
 cudaStream_t   DEFAULT_STREAM;
@@ -68,19 +43,21 @@ struct Default_Device_Context_Parameters {
 } //end of namespace 'device globals'
 
 #ifndef NDEBUG
-	#define BC_DEBUG_ASSERT(arg) if (!arg) throw std::invalid_argument(#arg " accessed failure")
+	#define BC_DEBUG_ASSERT(arg) if (!arg) throw std::invalid_argument(#arg " accessed failure ")
 #else
 	#define BC_DEBUG_ASSERT(arg)
 #endif
 
 
-struct  Device  {
+struct  Device {
 
 private:
 	std::shared_ptr<cublasHandle_t> m_cublas_handle = device_globals::default_context_parameters.cublas_handle;
 	std::shared_ptr<cudaStream_t> m_stream 	        = device_globals::default_context_parameters.stream_handle;
 
 public:
+
+	//Underscore represents 'dangerous method'
 
     const auto& get_blas_handle() const {
     	BC_DEBUG_ASSERT(m_cublas_handle.get());
@@ -99,6 +76,43 @@ public:
     auto& get_stream() {
     	BC_DEBUG_ASSERT(m_stream.get());
     	return *(m_stream.get());
+    }
+
+    bool is_default_stream() {
+    	return bool(m_stream.get());
+    }
+
+
+    void create_stream() {
+    	cudaStream_t* stream_ = nullptr;
+    	cudaStreamCreate(stream_);
+
+    	m_stream = std::shared_ptr<cudaStream_t>(
+    			stream_,
+    			[](cudaStream_t* del_stream_) { cudaStreamDestroy(*del_stream_); }
+    	);
+
+    	cublasHandle_t* handle_ = nullptr;
+    	cublasCreate(handle_);
+    	cublasSetStream(*handle_, *stream_);
+
+    	m_cublas_handle = std::shared_ptr<cublasHandle_t>(
+    			handle_,
+    			[](cublasHandle_t* del_handle_){ cublasDestroy(*del_handle_); }
+    	);
+
+
+
+    }
+    void delete_stream() {
+    	m_stream.reset();
+    	m_cublas_handle.reset();
+
+    }
+
+    void sync_stream() {
+    	if (!is_default_stream())
+    		cudaStreamSynchronize(*(this->m_stream.get()));
     }
 
     Device() = default;

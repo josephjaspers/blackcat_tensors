@@ -85,21 +85,21 @@ struct CacheEvaluator {
 
 };
 
-template<class array_t, class expression_t, class allocator>
-auto evaluate_to(array_t array, expression_t expr, allocator alloc) {
+template<class array_t, class expression_t, class Context>
+auto evaluate_to(array_t array, expression_t expr, Context context) {
     static_assert(is_array<array_t>(), "MAY ONLY EVALUATE TO ARRAYS");
     return Lazy_Evaluator<typename expression_t::system_tag>::evaluate(
     		et::make_bin_expr<et::oper::assign>(array, expr),
-    		alloc);
+    		context);
 }
 
-template<class expression_t, class allocator>
-auto evaluate(expression_t expr, allocator alloc) {
-    return Lazy_Evaluator<typename expression_t::system_tag>::evaluate(expr, alloc);
+template<class expression_t, class Context>
+auto evaluate(expression_t expr, Context context) {
+    return Lazy_Evaluator<typename expression_t::system_tag>::evaluate(expr, context);
 }
-template<class expression_t, class allocator>
-auto evaluate_aliased(expression_t expr, allocator alloc) {
-    return Lazy_Evaluator<typename expression_t::system_tag>::evaluate_aliased(expr, alloc);
+template<class expression_t, class Context>
+auto evaluate_aliased(expression_t expr, Context context) {
+    return Lazy_Evaluator<typename expression_t::system_tag>::evaluate_aliased(expr, context);
 }
 
 
