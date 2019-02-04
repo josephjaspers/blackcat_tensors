@@ -12,40 +12,40 @@
 namespace BC {
 namespace evaluator {
 
-template<int dim>
+template<int Dimension>
 struct evaluator_impl {
-    template<class expression, class... indexes>
-    static void impl(expression expr, indexes... indicies) {
+    template<class Expression, class... indexes>
+    static void impl(Expression expression, indexes... indicies) {
         __BC_omp_for__
-        for (int i = 0; i < expr.dimension(dim-1); ++i) {
-        	evaluator_impl<dim-1>::impl(expr, i, indicies...);
+        for (int i = 0; i < expression.dimension(Dimension-1); ++i) {
+        	evaluator_impl<Dimension-1>::impl(expression, i, indicies...);
         }
     }
 };
 template<>
 struct evaluator_impl<1> {
-    template<class expression, class... indexes>
-    static void impl(expression expr, indexes... indicies) {
+    template<class Expression, class... indexes>
+    static void impl(Expression expression, indexes... indicies) {
         __BC_omp_for__
-        for (int i = 0; i < expr.dimension(0); ++i) {
-            expr(i, indicies...);
+        for (int i = 0; i < expression.dimension(0); ++i) {
+            expression(i, indicies...);
         }
     }
-    template<class expression>
-    static void impl(expression expr) {
+    template<class Expression>
+    static void impl(Expression expression) {
         __BC_omp_for__
-        for (int i = 0; i < expr.size(); ++i) {
-            expr[i];
+        for (int i = 0; i < expression.size(); ++i) {
+            expression[i];
         }
     }
 };
 template<>
 struct evaluator_impl<0> {
-    template<class expression>
-    static void impl(expression expr) {
+    template<class Expression>
+    static void impl(Expression expression) {
         __BC_omp_for__
-        for (int i = 0; i < expr.size(); ++i) {
-            expr[i];
+        for (int i = 0; i < expression.size(); ++i) {
+            expression[i];
         }
     }
 };
@@ -53,9 +53,19 @@ struct evaluator_impl<0> {
 
 struct Host {
 
-	template<int d, class expr_t>
-	static void nd_evaluator(expr_t expr) {
-		evaluator_impl<d>::impl(expr);
+//	template<int Dimension, class Expression>
+//	static void nd_evaluator(Expression expression) {
+//		evaluator_impl<Dimension>::impl(expression);
+//		 __BC_omp_bar__
+//	}
+
+	template<int Dimension, class Expression, class Context>
+	static void nd_evaluator(Expression expression, Context context) {
+		auto job = [=]() {
+			evaluator_impl<Dimension>::impl(expression);
+		};
+		context.push_job(job);
+
 		 __BC_omp_bar__
 	}
 

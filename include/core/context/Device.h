@@ -13,112 +13,148 @@
 #include <cuda_runtime.h>
 #include <memory>
 #include <mutex>
+#include <vector>
 
 namespace BC {
 namespace context {
 namespace device_globals {
 
-cublasHandle_t DEFAULT_CUBLAS_HANDLE;
-//lapackHandle_t DEFAULT_LAPACK_HANDLE  //uncomment once we begin to support Lapack
-cudaStream_t   DEFAULT_STREAM;
+struct Alpha_Beta_Pair_Recycler {
+	std::vector<float*> recycler;
+	std::mutex locker;
 
+	float* allocate() {
 
-struct Default_Device_Context_Parameters {
-
-	std::shared_ptr<cublasHandle_t> cublas_handle;
-	std::shared_ptr<cudaStream_t>   stream_handle;
-
-	Default_Device_Context_Parameters() {
-
-		cublasCreate(&DEFAULT_CUBLAS_HANDLE);
-		cublas_handle = std::shared_ptr<cublasHandle_t>(&DEFAULT_CUBLAS_HANDLE, [](cublasHandle_t*) {});
+		float* data_ptr;
+		if (recycler.empty()) {
+	        cudaMallocManaged((void**) &data_ptr, sizeof(float));
+		} else {
+			locker.lock();
+			data_ptr = recycler.back();
+			recycler.pop_back();
+			locker.unlock();
+		}
+		return data_ptr;
 	}
-	~Default_Device_Context_Parameters() {
-		cublasDestroy(DEFAULT_CUBLAS_HANDLE);
+	void deallocate(float* data_ptr) {
+		locker.lock();
+		recycler.push_back(data_ptr);
+		locker.unlock();
 	}
+} alpha_beta_pair_recycler;
 
-} default_context_parameters;
+}
 
+struct Device_Stream_Contents {
+	 cublasHandle_t m_cublas_handle;
+	 cudaStream_t   m_stream_handle;
+	 float*         m_scalar_buffer=nullptr;
 
-} //end of namespace 'device globals'
+	 Device_Stream_Contents(bool init_stream=false, bool init_scalars=true) {
+		 cublasCreate(&m_cublas_handle);
+		 if (init_stream) {
+			 cudaStreamCreate(&m_stream_handle);
+		 }
+		 if (init_scalars) {
+			 m_scalar_buffer = device_globals::alpha_beta_pair_recycler.allocate();
+		 }
+	 }
 
-#ifndef NDEBUG
-	#define BC_DEBUG_ASSERT(arg) if (!arg) throw std::invalid_argument(#arg " accessed failure ")
-#else
-	#define BC_DEBUG_ASSERT(arg)
-#endif
+	 template<class T>
+	 T* get_scalar_buffer() {
+		 static_assert(sizeof(T)<=sizeof(float), "MAXIMUM OF 32 BITS");
+		 return reinterpret_cast<T*>(m_scalar_buffer);
+	 }
+
+	 ~Device_Stream_Contents() {
+		 cublasDestroy(m_cublas_handle);
+		 cudaStreamDestroy(m_stream_handle);
+
+		 //remember we only need to deallocate alpha
+		 device_globals::alpha_beta_pair_recycler.deallocate(m_scalar_buffer);
+	 }
+};
+
+namespace device_globals {
+	std::shared_ptr<Device_Stream_Contents> default_contents =
+			std::shared_ptr<Device_Stream_Contents>(new Device_Stream_Contents());
+}
 
 
 struct  Device {
 
-private:
-	std::shared_ptr<cublasHandle_t> m_cublas_handle = device_globals::default_context_parameters.cublas_handle;
-	std::shared_ptr<cudaStream_t> m_stream 	        = device_globals::default_context_parameters.stream_handle;
+	template<class scalar_t, int value>
+	static const scalar_t* scalar_constant() {
+		static scalar_t* scalar_constant_ = nullptr;
 
+		if (!scalar_constant_) {
+			std::mutex locker;
+			locker.lock();
+			if (!scalar_constant_){
+				scalar_t tmp_val = value;
+				cudaMallocManaged((void**) &scalar_constant_, sizeof(scalar_t));
+				cudaMemcpy(scalar_constant_, &tmp_val, sizeof(scalar_t), cudaMemcpyHostToDevice);
+			}
+			locker.unlock();
+		}
+		return scalar_constant_;
+	}
+
+
+private:
+	std::shared_ptr<Device_Stream_Contents> device_contents =
+			device_globals::default_contents;
 public:
 
-	//Underscore represents 'dangerous method'
+	template<class T>
+	T* scalar_alpha(T alpha_value) {
+		T* buffer = device_contents.get()->get_scalar_buffer<T>();
+		cudaMemcpyAsync(buffer, &alpha_value, sizeof(T), cudaMemcpyHostToDevice, device_contents.get()->m_stream_handle);
+		return buffer;
+	}
 
-    const auto& get_blas_handle() const {
-    	BC_DEBUG_ASSERT(m_cublas_handle.get());
-    	return *(m_cublas_handle.get());
+    const cublasHandle_t& get_cublas_handle() const {
+    	return device_contents.get()->m_cublas_handle;
     }
 
-    auto& get_blas_handle() {
-    	BC_DEBUG_ASSERT(m_cublas_handle.get());
-    	return *(m_cublas_handle.get());
+    cublasHandle_t& get_cublas_handle() {
+    	return device_contents.get()->m_cublas_handle;
     }
 
-    const auto& get_stream() const {
-    	BC_DEBUG_ASSERT(m_stream.get());
-    	return *(m_stream.get());
+    const cudaStream_t& get_cuda_stream() const {
+    	return device_contents.get()->m_stream_handle;
     }
-    auto& get_stream() {
-    	BC_DEBUG_ASSERT(m_stream.get());
-    	return *(m_stream.get());
+    cudaStream_t& get_cuda_stream() {
+    	return device_contents.get()->m_stream_handle;
+    }
+
+    void set_context(Device& dev) {
+    	device_contents = dev.device_contents;
     }
 
     bool is_default_stream() {
-    	return bool(m_stream.get());
+    	return device_contents.get()->m_stream_handle == 0;
     }
 
 
     void create_stream() {
-    	cudaStream_t* stream_ = nullptr;
-    	cudaStreamCreate(stream_);
-
-    	m_stream = std::shared_ptr<cudaStream_t>(
-    			stream_,
-    			[](cudaStream_t* del_stream_) { cudaStreamDestroy(*del_stream_); }
-    	);
-
-    	cublasHandle_t* handle_ = nullptr;
-    	cublasCreate(handle_);
-    	cublasSetStream(*handle_, *stream_);
-
-    	m_cublas_handle = std::shared_ptr<cublasHandle_t>(
-    			handle_,
-    			[](cublasHandle_t* del_handle_){ cublasDestroy(*del_handle_); }
-    	);
-
-
-
+    	device_contents = std::shared_ptr<Device_Stream_Contents>(
+    			new Device_Stream_Contents(true));
     }
     void delete_stream() {
-    	m_stream.reset();
-    	m_cublas_handle.reset();
-
+    	//'reset' to default
+    	std::shared_ptr<Device_Stream_Contents> device_contents =
+    			device_globals::default_contents;
     }
 
     void sync_stream() {
     	if (!is_default_stream())
-    		cudaStreamSynchronize(*(this->m_stream.get()));
+    		cudaStreamSynchronize(device_contents.get()->m_stream_handle);
     }
 
     Device() = default;
-    Device(const Device& dev)
-     : m_cublas_handle(dev.m_cublas_handle),
-       m_stream(dev.m_stream) {}
+    Device(const Device& dev) = default;
+    Device(Device&&) = default;
 };
 
 
@@ -126,6 +162,5 @@ public:
 }
 
 
-#undef BC_DEBUG_ASSERT
 #endif /* DEVICE_H_ */
 #endif

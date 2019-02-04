@@ -14,44 +14,8 @@
 
 namespace BC {
 namespace utility {
-static std::vector<float*> scalar_recycler;
 
 struct Device {
-
-
-
-	static float* stack_allocate(float value) {
-
-		static std::mutex locker;
-
-		if (!scalar_recycler.empty()) {
-			locker.lock();
-			float* val = scalar_recycler.back();
-			scalar_recycler.pop_back();
-			locker.unlock();
-
-
-			cudaDeviceSynchronize();
-			if (*val != value)
-				*val = value;
-
-			return val;
-		} else {
-
-			float* t;
-			cudaMallocManaged((void**) &t, sizeof(float));
-			cudaMemcpy(t, &value, sizeof(float), cudaMemcpyHostToDevice);
-			return t;
-		}
-    }
-
-	static void deallocate(float* t) {
-		static std::mutex locker;
-		locker.lock();
-		scalar_recycler.push_back(t);
-		locker.unlock();
-
-	}
 
 	template<class T>
 	static void HostToDevice(T* t, const T* u, BC::size_t  size = 1) {

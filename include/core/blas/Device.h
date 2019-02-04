@@ -24,21 +24,28 @@ struct Device {
 			return t;
 		}
 
-		static void scalar_mul(float* eval, float* a, float* b) {
+		template<class Context>
+		static void scalar_mul(float* eval, float* a, float* b, Context context) {
 
-			device_impl::scalar_mul<<<1, 1>>>(eval, a, b);
+			device_impl::scalar_mul<<<1, 1, 0, context.get_cuda_stream()>>>(eval, a, b);
 		}
-		static void scalar_mul(float* eval, float a, float* b) {
 
-			device_impl::scalar_mul<<<1, 1>>>(eval, a, b);
+		template<class Context>
+		static void scalar_mul(float* eval, float a, float* b, Context context) {
+
+			device_impl::scalar_mul<<<1, 1, 0, context.get_cuda_stream()>>>(eval, a, b);
 		}
-		static void scalar_mul(float* eval, float* a, float b) {
 
-			device_impl::scalar_mul<<<1, 1>>>(eval, a, b);
+		template<class Context>
+		static void scalar_mul(float* eval, float* a, float b, Context context) {
+
+			device_impl::scalar_mul<<<1, 1, 0, context.get_cuda_stream()>>>(eval, a, b);
 		}
-		static void scalar_mul(float* eval, float a, float b) {
 
-			device_impl::scalar_mul<<<1, 1>>>(eval, a, b);
+		template<class Context>
+		static void scalar_mul(float* eval, float a, float b, Context context) {
+
+			device_impl::scalar_mul<<<1, 1, 0, context.get_cuda_stream()>>>(eval, a, b);
 		}
 
 	template<class Context>
@@ -49,7 +56,7 @@ struct Device {
         auto TRANS_A = transA ? CUBLAS_OP_T : CUBLAS_OP_N;
         auto TRANS_B = transB ? CUBLAS_OP_T : CUBLAS_OP_N;
 
-		cublasHandle_t& handle = context.get_blas_handle();
+		cublasHandle_t& handle = context.get_cublas_handle();
         cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
         cublasSgemm(handle, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
     }
@@ -64,7 +71,7 @@ struct Device {
 
 		auto TRANS_A =  transA ? CUBLAS_OP_T : CUBLAS_OP_N;
 
-		cublasHandle_t& handle = context.get_blas_handle();
+		cublasHandle_t& handle = context.get_cublas_handle();
 		cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
 		cublasSgemv(handle, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY);
 	}
@@ -76,14 +83,14 @@ struct Device {
 								 const float* Y, BC::size_t  incY,
 								  float* A, BC::size_t  lda) {
 
-		cublasHandle_t& handle = context.get_blas_handle();
+		cublasHandle_t& handle = context.get_cublas_handle();
 		cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
 		cublasSger(handle, m, n, alpha, X, incX, Y, incY, A, lda);
 	}
 
 	template<class Context>
 	static void dot(Context context, int n, float* A, const float* x, BC::size_t  incX, const float* y, BC::size_t  incY) {
-		cublasHandle_t& handle = context.get_blas_handle();
+		cublasHandle_t& handle = context.get_cublas_handle();
 		cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
 		cublasSdot(handle, n, x, incX, y, incY, A);
 	}

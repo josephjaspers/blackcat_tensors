@@ -151,7 +151,7 @@ public:
 	  context_t(array_.as_context()),
 	  parent(array_) {
         this->array = this->allocate(this->size());
-        evaluate_to(this->internal(), array_.internal(), this->get_full_context());
+        evaluate_to(this->internal(), array_.internal(), get_full_context());
 	}
 	Array(Array&& array_) //TODO handle propagate_on_container_move_assignment
 	: Allocator(std::move(array_.as_alloc())),
@@ -192,7 +192,7 @@ public:
 	Array(const Expr& expr_t, const Allocator& alloc=Allocator()) : Allocator(alloc) {
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());
-		evaluate_to(this->internal(), expr_t.internal(), this->as_alloc());
+		evaluate_to(this->internal(), expr_t.internal(), get_full_context());
 	}
 
 
@@ -213,7 +213,7 @@ public:
 	{
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());
-        evaluate_to(this->internal(), expr_t.internal(), this->as_alloc());
+        evaluate_to(this->internal(), expr_t.internal(), this->get_full_context());
 	}
 
 public:

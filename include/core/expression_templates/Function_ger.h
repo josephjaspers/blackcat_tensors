@@ -80,13 +80,13 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 		auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 
 		//allocate the alpha and beta scalars,
-		auto alpha = utility_lib::stack_allocate((value_type)alpha_mod);
+        auto alpha = alloc.scalar_alpha((value_type)alpha_mod);
 
 		//compute the scalar values if need be
 		if (lv_scalar)
-			blas_lib::scalar_mul(alpha, alpha, alpha_lv);
+			blas_lib::scalar_mul(alpha, alpha, alpha_lv, alloc);
 		if (rv_scalar)
-			blas_lib::scalar_mul(alpha, alpha, alpha_rv);
+			blas_lib::scalar_mul(alpha, alpha, alpha_rv, alloc);
 
 		//call outer product
 		blas_lib::ger(alloc, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));

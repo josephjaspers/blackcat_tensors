@@ -18,6 +18,23 @@ struct Host : Stream<HostQueue> {
     Host() = default;
     Host(const Host&) = default;
     Host(Host&&) = default;
+
+    template<class scalar_t, int value>
+    static scalar_t scalar_constant() {
+    	return value;
+    }
+
+	 template<class scalar_t>
+	 scalar_t scalar_alpha(scalar_t val) {
+		 return val;
+	 }
+
+
+    //These get buffers exist to ensure they match the CUDA interface
+
+	void set_context(Stream<HostQueue>& stream) {
+		this->set_stream(stream);
+	}
 };
 
 

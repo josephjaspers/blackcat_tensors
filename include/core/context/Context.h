@@ -35,6 +35,8 @@ struct Full_Context : Context {
 	const Allocator& get_allocator() const { return m_allocator; }
 		  Allocator& get_allocator() 	   { return m_allocator; }
 
+    operator const Allocator& () const  { return get_allocator(); }
+    operator Allocator& () { return get_allocator(); }
 };
 namespace context {
 

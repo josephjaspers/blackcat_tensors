@@ -9,7 +9,8 @@
 #define BC_STREAMS_COMMON_H_
 
 #include <memory>
-#include "Host.h"
+#include <iostream>
+#include "HostQueue.h"
 namespace BC {
 namespace context {
 
@@ -40,6 +41,10 @@ public:
 	void sync_stream() {
 		//** Pushing a job while syncing is undefined behavior.
 		m_job_queue.get()->synchronize();
+	}
+
+	void set_stream(Stream<Queue>& stream_) {
+		this->m_job_queue = stream_.m_job_queue;
 	}
 
 	template<class function_lambda>

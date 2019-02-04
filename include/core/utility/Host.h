@@ -12,15 +12,6 @@ namespace BC {
 namespace utility {
 
 struct Host {
-   template<typename T>
-	static T stack_allocate(T t) {
-		return t;
-	}
-
-    template<typename T>
-    static void deallocate(T t) {
-        //empty
-    }
 
 	template<class T, class U, class V>
 	static void copy(T* to, U* from, V size) {

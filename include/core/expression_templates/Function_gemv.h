@@ -73,18 +73,18 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
 		auto X = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right), alloc);
 
 		//allocate the alpha and beta scalars,
-		auto alpha = utility_l::stack_allocate((value_type)alpha_mod);
-		auto beta  = utility_l::stack_allocate((value_type)beta_mod);
+        auto alpha = alloc.scalar_alpha((value_type)alpha_mod);
+		auto beta = alloc.scalar_constant<value_type, beta_mod>();
 
 		//get the left and right side scalar values and
 		//compute the scalar values if need be
 		if (lv_scalar) {
 			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-			impl_l::scalar_mul(alpha, alpha, alpha_lv);
+			impl_l::scalar_mul(alpha, alpha, alpha_lv, alloc);
 		}
 		if (rv_scalar) {
 			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-			impl_l::scalar_mul(alpha, alpha, alpha_rv);
+			impl_l::scalar_mul(alpha, alpha, alpha_rv, alloc);
 		}
 
 		//call matrix_mul ///for gemm we always use M, N, K regardless of transpose, but for gemv we always use pre-trans dimensions ???
@@ -96,8 +96,6 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
 		//deallocate all the temporaries
 		if (lv_eval) cc(A).deallocate();
 		if (rv_eval) cc(X).deallocate();
-		utility_l::deallocate(beta);
-		utility_l::deallocate(alpha);
 	}
 };
 

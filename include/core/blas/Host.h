@@ -47,21 +47,14 @@ struct Host {
 		return get_value_impl<T>::impl(scalar);
 	}
 
-	template<class U, class T, class V>
-	static void scalar_mul(U& eval, const T& a, const V& b) {
+	template<class U, class T, class V, class Context>
+	static void scalar_mul(U& eval, const T& a, const V& b, Context) {
 		eval = get_value(a) * get_value(b);
 	}
-	template<class U, class T, class V>
-	static void scalar_mul(U* eval, const T& a, const V& b) {
+	template<class U, class T, class V, class Context>
+	static void scalar_mul(U* eval, const T& a, const V& b, Context) {
 		eval[0] = get_value(a) * get_value(b);
 	}
-
-
-	template<class T>
-	static T static_allocate(T value) {
-		return T(value);
-	}
-
 
 	template<class Context>
     static void gemm(Context context, bool transA, bool transB, BC::size_t  m, BC::size_t  n, BC::size_t  k,
@@ -72,7 +65,9 @@ struct Host {
         auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
         auto TRANS_B =  transB ? CblasTrans : CblasNoTrans;
 
-        cblas_sgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+        context.get_stream().push_job([=]() {
+                cblas_sgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+		});
     }
 
 	template<class Context>
@@ -84,8 +79,11 @@ struct Host {
         auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
         auto TRANS_B =  transB ? CblasTrans : CblasNoTrans;
 
-        cblas_dgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
-    }
+        context.push_job([=]() {
+        	cblas_dgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+    	});
+
+	}
 
     //y := alpha*A*x + beta*y,   or   y := alpha*A**T*x + beta*y,
 	template<class Context>
@@ -96,8 +94,11 @@ struct Host {
 
         auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
 
-        cblas_dgemv(CblasColMajor, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY);
-    }
+        context.push_job([=]() {
+        	cblas_dgemv(CblasColMajor, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY);
+    	});
+	}
+
 	template<class Context>
     static void gemv(Context context, bool transA, BC::size_t  m, BC::size_t  n,
             const float alpha, const float* A, BC::size_t  lda,
@@ -106,8 +107,10 @@ struct Host {
 
         auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
 
-        cblas_sgemv(CblasColMajor, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY);
-    }
+        context.push_job([=]() {
+        	cblas_sgemv(CblasColMajor, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY);
+    	});
+	}
 
 	template<class Context>
     static void ger(Context context, int m, BC::size_t  n,
@@ -116,8 +119,10 @@ struct Host {
                                  const double* Y, BC::size_t  incY,
                                   double* A, BC::size_t  lda) {
 
-        cblas_dger(CblasColMajor, m, n, alpha, X, incX, Y, incY, A, lda);
-    }
+        context.push_job([=]() {
+        	cblas_dger(CblasColMajor, m, n, alpha, X, incX, Y, incY, A, lda);
+        });
+	}
 
 	template<class Context>
     static void ger(Context context, int m, BC::size_t  n,
@@ -126,18 +131,24 @@ struct Host {
                                  const float* Y, BC::size_t  incY,
                                   float* A, BC::size_t  lda) {
 
-        cblas_sger(CblasColMajor, m, n, alpha, X, incX, Y, incY, A, lda);
-    }
+        context.push_job([=]() {
+        	cblas_sger(CblasColMajor, m, n, alpha, X, incX, Y, incY, A, lda);
+        });
+	}
 
 	template<class Context>
     static void dot(Context context, int n, double* A, const double* x, BC::size_t  incX, const double* y, BC::size_t  incY) {
-        *A = cblas_ddot(n, x, incX, y, incY);
+        context.push_job([=]() {
+        	*A = cblas_ddot(n, x, incX, y, incY);
+        });
     }
 
 	template<class Context>
     static void dot(Context context, int n, float* A, const float* x, BC::size_t  incX, const float* y, BC::size_t  incY) {
-        *A = cblas_sdot(n, x, incX, y, incY);
-    }
+        context.push_job([=]() {
+        	*A = cblas_sdot(n, x, incX, y, incY);
+        });
+	}
 };
 }
 

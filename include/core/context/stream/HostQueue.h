@@ -49,7 +49,7 @@ class HostQueue {
 
 		while (!m_final_terminate) {
 			std::unique_lock<std::mutex> unq_stream_lock(m_stream_lock);
-			cv.wait(unq_stream_lock, [&](){ return !m_queue.empty();});
+			cv.wait(unq_stream_lock, [&](){ return !m_queue.empty() || m_final_terminate;});
 
 			while (!m_queue.empty()) {
 				m_queue_lock.lock();
@@ -59,6 +59,12 @@ class HostQueue {
 
 				curr_job_.get()->run();
 			}
+		}
+		//finally finish all the jobs
+		while (!m_queue.empty()) {
+			std::unique_ptr<Job> curr_job_ = std::move(m_queue.front());
+			m_queue.pop();
+			curr_job_.get()->run();
 		}
 	}
 
@@ -75,7 +81,7 @@ public:
 	template<class function>
 	void push(function functor) {
 		m_queue_lock.lock();
-		m_queue.push(job_handle_t(new JobInstance<function>(functor)));
+		m_queue.push(std::unique_ptr<Job>(new JobInstance<function>(functor)));
 		m_queue_lock.unlock();
 		cv.notify_one();
 	}
@@ -90,6 +96,7 @@ public:
 
 	void terminate() {
 		this->m_final_terminate = true;
+		cv.notify_one();
 	}
 
 	void synchronize() {

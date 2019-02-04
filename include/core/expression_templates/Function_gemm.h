@@ -90,14 +90,14 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
         auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 
         //allocate the alpha and beta scalars,
-        auto alpha = utility_l::stack_allocate((value_type)alpha_mod);
-        auto beta = utility_l::stack_allocate((value_type)beta_mod);
+        auto alpha = alloc.scalar_alpha((value_type)alpha_mod);
+        auto beta = alloc.scalar_constant<value_type, beta_mod>();
 
         //compute the scalar values if need be
         if (lv_scalar)
-        	impl_l::scalar_mul(alpha, alpha, alpha_lv);
+        	impl_l::scalar_mul(alpha, alpha, alpha_lv, alloc);
         if (rv_scalar)
-        	impl_l::scalar_mul(alpha, alpha, alpha_rv);
+        	impl_l::scalar_mul(alpha, alpha, alpha_rv, alloc);
 
         //call matrix_mul
         impl_l::gemm(alloc, transA, transB,  M(), N(), K(),
@@ -109,8 +109,7 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
         //deallocate all the temporaries
         if (lv_eval) cc(A).deallocate();
         if (rv_eval) cc(B).deallocate();
-        utility_l::deallocate(beta);
-        utility_l::deallocate(alpha);
+//        utility_l::deallocate(alpha);
     }
 };
 

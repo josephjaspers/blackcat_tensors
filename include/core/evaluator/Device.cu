@@ -15,34 +15,75 @@
 #include <cuda.h>
 
 #include "Device_Impl.cu"
+#include <iostream>
 
 namespace BC {
 namespace evaluator {
 
 struct Device {
 
-	 template<int d>
-	    struct nd_evaluator_func {
-	        struct n1 { template<class T> static void eval(T to) { gpu_impl::eval<<<blocks(to.size()),threads()>>>(to);   }};
-	        struct n2 { template<class T> static void eval(T to) { gpu_impl::eval2d<<<blocks(to.size()),threads()>>>(to); }};
-	        struct n3 { template<class T> static void eval(T to) { gpu_impl::eval3d<<<blocks(to.size()),threads()>>>(to); }};
-	        struct n4 { template<class T> static void eval(T to) { gpu_impl::eval4d<<<blocks(to.size()),threads()>>>(to); }};
-	        struct n5 { template<class T> static void eval(T to) { gpu_impl::eval5d<<<blocks(to.size()),threads()>>>(to); }};
-	        using run = std::conditional_t<(d <= 1), n1,
-	                        std::conditional_t< d == 2, n2,
-	                            std::conditional_t< d == 3, n3,
-	                                std::conditional_t< d == 4, n4, n5>>>>;
+	 template<int Dimensions>
+	 struct nd_evaluator_func {
 
-	        template<class T>
-	        static void eval(T to) {
-	            run::eval(to);
-	        }
-	    };
+		struct n1 {
+			template<class Expression>
+			static void eval(Expression expression, cudaStream_t stream=cudaStream_t()) {
+				gpu_impl::eval<<<blocks(expression.size()), threads(), 0, stream>>>(expression);
+			}
+		};
+		struct n2 {
+			template<class Expression>
+			static void eval(Expression expression, cudaStream_t stream=cudaStream_t()) {
+				gpu_impl::eval2d<<<blocks(expression.size()), threads(), 0, stream>>>(expression);
+			}
+		};
+		struct n3 {
+			template<class Expression>
+			static void eval(Expression expression, cudaStream_t stream=cudaStream_t()) {
+				gpu_impl::eval3d<<<blocks(expression.size()), threads(), 0, stream>>>(expression);
+			}
+		};
+		struct n4 {
+			template<class Expression>
+			static void eval(Expression expression, cudaStream_t stream=cudaStream_t()) {
+				gpu_impl::eval4d<<<blocks(expression.size()), threads(), 0, stream>>>(expression);
+			}
+		};
+		struct n5 {
+			template<class Expression>
+			static void eval(Expression expression, cudaStream_t stream=cudaStream_t()) {
+				gpu_impl::eval5d<<<blocks(expression.size()), threads(), 0, stream>>>(expression);
+			}
+		};
 
-	    template<int d, class expr_t>
-	    static void nd_evaluator(expr_t expr) {
-	    	nd_evaluator_func<d>::eval(expr);
-	    }
+		using run = std::conditional_t<(Dimensions <= 1), n1,
+						std::conditional_t<(Dimensions == 2), n2,
+							std::conditional_t<(Dimensions == 3), n3,
+								std::conditional_t<(Dimensions == 4), n4, n5>>>>;
+
+		template<class Expression>
+		static void eval(Expression expression) {
+			run::eval(expression);
+		}
+
+		template<class Expression, class Context>
+		static void eval(Expression expression, Context context) {
+			if (context.is_default_stream()) {
+				run::eval(expression);
+			} else {
+				run::eval(expression, context.get_cuda_stream());
+			}
+		}
+	};
+
+	template<int dimensions, class Expression>
+	static void nd_evaluator(Expression expression) {
+		nd_evaluator_func<dimensions>::eval(expression);
+	}
+	template<int dimensions, class Expression, class Context>
+	static void nd_evaluator(Expression expression, Context context) {
+		nd_evaluator_func<dimensions>::eval(expression, context);
+	}
 
 };
 

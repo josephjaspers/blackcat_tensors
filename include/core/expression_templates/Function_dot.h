@@ -62,23 +62,22 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
 		auto Y = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right), alloc);
 
 		//allocate the alpha and beta scalars,
-		auto alpha = utility_l::stack_allocate((value_type)alpha_mod);
+        auto alpha = alloc.scalar_alpha((value_type)alpha_mod);
 
 		//call outer product
 		impl_l::dot(alloc, X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
 
 		if (lv_scalar) {
 			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-			impl_l::scalar_mul(injection.memptr(), alpha, alpha_lv);
+			impl_l::scalar_mul(injection.memptr(), alpha, alpha_lv, alloc);
 		}
 		if (rv_scalar) {
 			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-			impl_l::scalar_mul(injection.memptr(), alpha, alpha_rv);
+			impl_l::scalar_mul(injection.memptr(), alpha, alpha_rv, alloc);
 		}
 		if (beta_mod) {
-			auto beta = utility_l::stack_allocate((value_type)alpha_mod);
-			impl_l::scalar_mul(alpha, alpha, beta);
-			allocator_t::deallocate(beta);
+			auto beta = alloc.scalar_constant<value_type, beta_mod>();
+			impl_l::scalar_mul(alpha, alpha, beta, alloc);
 		}
 
 
