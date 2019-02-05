@@ -12,7 +12,7 @@
 #include "Expression_Base.h"
 #include "BLAS_Feature_Detector.h"
 #include "Tree_Evaluator_Runner.h"
-
+#include "Array_Scalar_Constant.h"
 
 namespace BC {
 namespace et {
@@ -75,18 +75,26 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 		auto A = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left), alloc);
 		auto B = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right), alloc);
 
-		//get the left and right side scalar values
-		auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-		auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-
 		//allocate the alpha and beta scalars,
         auto alpha = alloc.scalar_alpha((value_type)alpha_mod);
 
+        //if we need to negate or zero the output
+		if (beta_mod != 1) {
+			auto expr = make_bin_expr<et::oper::assign>(injection, scalar_constant<value_type>(beta_mod));
+			evaluate(expr, alloc);
+		}
+
 		//compute the scalar values if need be
-		if (lv_scalar)
+		if (lv_scalar) {
+			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
 			blas_lib::scalar_mul(alpha, alpha, alpha_lv, alloc);
-		if (rv_scalar)
+		}
+		if (rv_scalar) {
+			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 			blas_lib::scalar_mul(alpha, alpha, alpha_rv, alloc);
+		}
+
+
 
 		//call outer product
 		blas_lib::ger(alloc, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));

@@ -76,7 +76,7 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
 			impl_l::scalar_mul(injection.memptr(), alpha, alpha_rv, alloc);
 		}
 		if (beta_mod) {
-			auto beta = alloc.scalar_constant<value_type, beta_mod>();
+			auto beta = alloc.template scalar_constant<value_type, beta_mod>();
 			impl_l::scalar_mul(alpha, alpha, beta, alloc);
 		}
 

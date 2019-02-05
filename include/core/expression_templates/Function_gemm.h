@@ -91,7 +91,7 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
 
         //allocate the alpha and beta scalars,
         auto alpha = alloc.scalar_alpha((value_type)alpha_mod);
-        auto beta = alloc.scalar_constant<value_type, beta_mod>();
+        auto beta = alloc.template scalar_constant<value_type, beta_mod>();
 
         //compute the scalar values if need be
         if (lv_scalar)
