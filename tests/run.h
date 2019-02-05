@@ -34,7 +34,7 @@ int run(int sz=64) {
 	errors += test_all<double, std::allocator>(sz);
 
 #ifdef __CUDACC__ //remember to change filename to main.cu
-	errors += test_all<float, BC::Cuda>(sz);
+	errors += test_all<float, BC::Cuda_Allocator>(sz);
 #endif
 
 	return errors;

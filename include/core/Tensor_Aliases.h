@@ -27,7 +27,7 @@ using Basic_Allocator = allocator::Host<T>;
 
 #ifdef __CUDACC__
 	template<class T>
-	using Cuda = allocator::Device<T>;
+	using Cuda_Allocator = allocator::Device<T>;
 	template<class T>
 	using Cuda_Managed = allocator::Device_Managed<T>;
 #endif
@@ -62,7 +62,7 @@ using tensor = Tensor_Base<iterator_t>;
 template<class iterator_t> using scal = tensor<0, iterator_t>;
 template<class iterator_t> using vec  = tensor<1, iterator_t>;
 template<class iterator_t> using mat  = tensor<2, iterator_t>;
-template<class iterator_t> using cube  = tensor<3, iterator_t>;
+template<class iterator_t> using cube = tensor<3, iterator_t>;
 }
 }
 
