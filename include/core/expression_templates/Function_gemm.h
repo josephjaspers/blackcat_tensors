@@ -109,7 +109,6 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
         //deallocate all the temporaries
         if (lv_eval) cc(A).deallocate();
         if (rv_eval) cc(B).deallocate();
-//        utility_l::deallocate(alpha);
     }
 };
 
