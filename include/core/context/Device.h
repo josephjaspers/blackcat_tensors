@@ -15,6 +15,8 @@
 #include <mutex>
 #include <vector>
 
+#include "Context_Impl.cu"
+
 namespace BC {
 namespace context {
 namespace device_globals {
@@ -109,7 +111,7 @@ public:
 	template<class T>
 	T* scalar_alpha(T alpha_value) {
 		T* buffer = device_contents.get()->get_scalar_buffer<T>();
-		cudaMemcpyAsync(buffer, &alpha_value, sizeof(T), cudaMemcpyHostToDevice, device_contents.get()->m_stream_handle);
+		set_scalar_value(buffer, alpha_value, device_contents.get()->m_stream_handle);
 		return buffer;
 	}
 
