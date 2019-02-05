@@ -6,6 +6,7 @@
 #include "test_common.h"
 #include "test_constructors.h"
 #include "test_operations.h"
+#include "test_streams.h"
 
 namespace BC {
 namespace tests {
@@ -21,6 +22,7 @@ int test_all(int sz) {
 	errors += test_accessors<scalar_type, allocator>(sz);
 	errors += test_constructors<scalar_type, allocator>(sz);
 	errors += test_operations<scalar_type, allocator>(sz);
+	errors += test_streams<scalar_type, allocator>(sz);
 
 	return errors;
 }

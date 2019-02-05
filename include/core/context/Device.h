@@ -130,7 +130,7 @@ public:
     	return device_contents.get()->m_stream_handle;
     }
 
-    void set_context(Device& dev) {
+    void set_stream(Device& dev) {
     	device_contents = dev.device_contents;
     }
 
@@ -143,16 +143,23 @@ public:
     	device_contents = std::shared_ptr<Device_Stream_Contents>(
     			new Device_Stream_Contents(true));
     }
-    void delete_stream() {
+    void destroy_stream() {
     	//'reset' to default
-    	std::shared_ptr<Device_Stream_Contents> device_contents =
-    			device_globals::default_contents;
+    	device_contents = device_globals::default_contents;
     }
 
     void sync_stream() {
     	if (!is_default_stream())
     		cudaStreamSynchronize(device_contents.get()->m_stream_handle);
     }
+
+    bool operator == (const Device& dev) {
+    	return device_contents == dev.device_contents;
+    }
+
+    bool operator != (const Device& dev) {
+		return device_contents != dev.device_contents;
+	}
 
     Device() = default;
     Device(const Device& dev) = default;

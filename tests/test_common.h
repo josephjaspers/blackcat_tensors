@@ -27,6 +27,18 @@ namespace tests {
 
 #define BC_TEST_BODY_HEAD BC::size_t  errors = 0;
 #define BC_TEST_BODY_TAIL return errors;
+
+template<class arg>
+void print(const arg& arg_) {
+	std::cout << arg_ << "\n";
+}
+
+template<class arg, class... args>
+void print(const arg& a, const args&... arg_) {
+	std::cout << a << " ";
+	print(arg_...);
+}
+
 }
 }
 

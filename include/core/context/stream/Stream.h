@@ -1,4 +1,5 @@
 /*
+
  * Common.h
  *
  *  Created on: Jan 13, 2019
@@ -26,7 +27,7 @@ public:
 	Stream(Stream&&)=default;
 
 	bool is_default_stream() {
-		return bool(m_job_queue.get());
+		return m_job_queue.get() == nullptr;
 	}
 
 	void create_stream() {
@@ -34,7 +35,7 @@ public:
 		m_job_queue.get()->init();
 	}
 
-	void delete_stream() {
+	void destroy_stream() {
 		m_job_queue = std::shared_ptr<Queue>(nullptr);
 	}
 
@@ -49,12 +50,19 @@ public:
 
 	template<class function_lambda>
 	void push_job(function_lambda functor) {
-		if (!m_job_queue.get()) {
+		if (this->is_default_stream()) {
 			functor();
 		} else {
 			m_job_queue.get()->push(functor);
 		}
 	}
+
+    bool operator == (const Stream& dev) {
+    	return m_job_queue == dev.m_job_queue;
+    }
+    bool operator != (const Stream& dev) {
+    	return m_job_queue != dev.m_job_queue;
+    }
 };
 }
 }

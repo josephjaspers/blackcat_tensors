@@ -24,7 +24,8 @@ namespace BC {
         using implementation = typename BC::algorithms::template implementation<system_tag>;\
 \
         return implementation:: function (begin_, end_, params...);\
-    }
+    }\
+
 
 namespace alg {
 //---------------------------non-modifying sequences---------------------------//
@@ -167,7 +168,7 @@ public:
 			   	   	   "randomize not available to non-continuous tensors");
 
 	   using impl = random::implementation<typename BC::allocator_traits<allocator_t>::system_tag>;
-	   impl::randomize(this->as_derived().internal(), lb, ub);
+	   impl::randomize(this->as_derived().get_full_context(), this->as_derived().internal(), lb, ub);
    }
 }; //end_of class 'Tensor_Functions'
 
