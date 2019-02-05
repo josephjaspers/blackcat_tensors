@@ -17,7 +17,7 @@ GPU multithreading? Simply link CUDA 9
 How to choose allocation?
 
 ```cpp
-BC::Vector<float, BC::Cuda<float>> myVec(sz);             //Allocates data on the gpu
+BC::Vector<float, BC::Cuda_Allocator<float>> myVec(sz);             //Allocates data on the gpu
 BC::Vector<double, BC::Basic_Allocator<double>> myVec(sz); //Allocates data on the cpu
 BC::Vector<double>  myVec(sz);                     //defaults to BC::Basic_Allocator
 ```
