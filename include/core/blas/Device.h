@@ -27,25 +27,25 @@ struct Device {
 		template<class Context>
 		static void scalar_mul(float* eval, float* a, float* b, Context context) {
 
-			device_impl::scalar_mul<<<1, 1, 0, context.get_cuda_stream()>>>(eval, a, b);
+			device_impl::scalar_mul<<<1, 1, 0, context.get_stream()>>>(eval, a, b);
 		}
 
 		template<class Context>
 		static void scalar_mul(float* eval, float a, float* b, Context context) {
 
-			device_impl::scalar_mul<<<1, 1, 0, context.get_cuda_stream()>>>(eval, a, b);
+			device_impl::scalar_mul<<<1, 1, 0, context.get_stream()>>>(eval, a, b);
 		}
 
 		template<class Context>
 		static void scalar_mul(float* eval, float* a, float b, Context context) {
 
-			device_impl::scalar_mul<<<1, 1, 0, context.get_cuda_stream()>>>(eval, a, b);
+			device_impl::scalar_mul<<<1, 1, 0, context.get_stream()>>>(eval, a, b);
 		}
 
 		template<class Context>
 		static void scalar_mul(float* eval, float a, float b, Context context) {
 
-			device_impl::scalar_mul<<<1, 1, 0, context.get_cuda_stream()>>>(eval, a, b);
+			device_impl::scalar_mul<<<1, 1, 0, context.get_stream()>>>(eval, a, b);
 		}
 
 	template<class Context>

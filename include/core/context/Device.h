@@ -123,10 +123,10 @@ public:
     	return device_contents.get()->m_cublas_handle;
     }
 
-    const cudaStream_t& get_cuda_stream() const {
+    const cudaStream_t& get_stream() const {
     	return device_contents.get()->m_stream_handle;
     }
-    cudaStream_t& get_cuda_stream() {
+    cudaStream_t& get_stream() {
     	return device_contents.get()->m_stream_handle;
     }
 

@@ -27,6 +27,7 @@ namespace BC {
     }\
 
 
+
 namespace alg {
 //---------------------------non-modifying sequences---------------------------//
 BC_TENSOR_ALGORITHM_DEF(all_of)

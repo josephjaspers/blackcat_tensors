@@ -71,7 +71,7 @@ struct Device {
 			if (context.is_default_stream()) {
 				run::eval(expression);
 			} else {
-				run::eval(expression, context.get_cuda_stream());
+				run::eval(expression, context.get_stream());
 			}
 		}
 	};

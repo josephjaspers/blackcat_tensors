@@ -30,6 +30,14 @@ struct Host : Stream<HostQueue> {
 	 }
 
 
+
+	 Stream<HostQueue>& get_stream() {
+		 return *this;
+	 }
+	 const Stream<HostQueue>& get_stream() const {
+		 return *this;
+	 }
+
     //These get buffers exist to ensure they match the CUDA interface
 
 	void set_context(Stream<HostQueue>& stream) {

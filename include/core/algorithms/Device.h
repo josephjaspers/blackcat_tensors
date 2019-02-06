@@ -17,6 +17,12 @@
 #include "Common.h"
 
 //forwards methods to thrust implementation
+
+#define BC_GPU_ALGORITHM_FORWARDER_DEF_WITH_STREAM(function) \
+template<class... args>\
+static auto function (cudaStream_t stream, args... parameters){\
+    return thrust:: function (thrust::cuda::par(stream), thrust::device, parameters...);\
+}
 #define BC_GPU_ALGORITHM_FORWARDER_DEF(function) \
 template<class... args>\
 static auto function (args... parameters){\
@@ -34,7 +40,18 @@ static auto function (args... parameters){ \
 //For now just send it the pointers.
 //Will need to fix once multidimensional iterators are added.
 //This is simply a tmp-fix hence -hack
+#define BC_GPU_ALGORITHM_FORWARDER_DEF_2PTR_HACK_WITH_STREAM(function) \
+template<class iter_begin, class iter_end>\
+static auto function (cudaStream_t stream, iter_begin begin, iter_end end){\
+    return thrust:: function (thrust::cuda::par(stream), thrust::device, &begin[begin.index], &end[end.index]);\
+}
+
+//Thrust is wonky with stl-style iterators and sorting.
+//For now just send it the pointers.
+//Will need to fix once multidimensional iterators are added.
+//This is simply a tmp-fix hence -hack
 #define BC_GPU_ALGORITHM_FORWARDER_DEF_2PTR_HACK(function) \
+BC_GPU_ALGORITHM_FORWARDER_DEF_2PTR_HACK_WITH_STREAM(function)\
 template<class iter_begin, class iter_end>\
 static auto function (iter_begin begin, iter_end end){\
     return thrust:: function (thrust::device, &begin[begin.index], &end[end.index]);\

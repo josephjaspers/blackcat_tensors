@@ -21,7 +21,7 @@ namespace random {
 struct Device {
     template<class Context, typename T>
     static void randomize(Context context, T t, float lower_bound, float upper_bound) {
-    	device_impl::randomize<<<blocks(t.size()),threads(), 0, context.get_cuda_stream()>>>(t, lower_bound, upper_bound, std::rand());
+    	device_impl::randomize<<<blocks(t.size()),threads(), 0, context.get_stream()>>>(t, lower_bound, upper_bound, std::rand());
     }
 };
 
