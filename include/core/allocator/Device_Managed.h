@@ -19,9 +19,10 @@ struct Device_Managed : Device<T> {
 	template<class altT>
 	struct rebind { using other = Device_Managed<altT>; };
 
-    T*& allocate(BC::size_t  sz=1) {
+    T* allocate(BC::size_t sz) {
     	T* memptr = nullptr;
         cudaMallocManaged((void**) &memptr, sizeof(T) * sz);
+        cudaDeviceSynchronize(); //This is only required for MallocManagedMemory
         return memptr;
     }
 };

@@ -8,6 +8,7 @@
 #ifndef TEST_COMMON_H_
 #define TEST_COMMON_H_
 
+#include <string>
 #include "../include/BlackCat_Tensors.h"
 
 namespace BC {
@@ -24,6 +25,22 @@ namespace tests {
 			std::cout << "TEST SUCCESS: " #code  << std::endl;\
 		}\
 } catch (...) { std::cout << "TEST ERROR: " #code  << std::endl; errors++; } }\
+
+
+#define BC_TEST_START\
+	{\
+		auto test = [&]()
+#define BC_TEST_END(msg)\
+		;try { \
+		if (!test()) {\
+			std::cout << "TEST FAILURE: " << msg  << std::endl;\
+			errors++; \
+		} else {\
+			std::cout << "TEST SUCCESS: " << msg  << std::endl;\
+		}\
+} catch (...) { std::cout << "TEST ERROR: " << msg  << std::endl; errors++; } }\
+
+
 
 #define BC_TEST_BODY_HEAD BC::size_t  errors = 0;
 #define BC_TEST_BODY_TAIL return errors;

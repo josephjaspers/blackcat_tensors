@@ -18,7 +18,6 @@ namespace BC {
 template<class system_tag>  //push into BC namespace
 using Context = context::template implementation<system_tag>;
 
-
 template<class Allocator, class Context>
 struct Full_Context : Context {
 
