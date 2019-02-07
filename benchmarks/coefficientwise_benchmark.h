@@ -28,8 +28,8 @@ auto cwise_benchmark(int sz, int reps=10, bool stdout=false) {
 	auto bc_time = bc_cwise<float, BC::Basic_Allocator<float>>(sz, reps);
 
 #ifdef __CUDACC__
-	auto cu_time = cu_cwise<float, BC::Cuda<float>>(sz, reps);
-	auto bc_cu_time = bc_cwise<float, BC::Cuda<float>>(sz, reps);
+	auto cu_time = cu_cwise<float, BC::Cuda_Allocator<float>>(sz, reps);
+	auto bc_cu_time = bc_cwise<float, BC::Cuda_Allocator<float>>(sz, reps);
 
 	if (stdout) {
 		std::cout << "bc_time: " << bc_time \

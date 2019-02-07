@@ -20,7 +20,6 @@ int test_streams(int sz=128) {
 	BC_TEST_BODY_HEAD
 
 	using mat = BC::Matrix<value_type, log_allocator<allocator<value_type>>>;
-	using vec = BC::Vector<value_type, log_allocator<allocator<value_type>>>;
 
 
 

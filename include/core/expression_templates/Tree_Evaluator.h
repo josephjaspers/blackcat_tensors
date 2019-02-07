@@ -167,8 +167,8 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
         	BC_TREE_OPTIMIZER_STDOUT("- remove_branch (entire)");
 
-        	evaluator<lv>::linear_evaluation(branch.left, tensor);
-        	evaluator<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor, alloc));
+        	evaluator<lv>::linear_evaluation(branch.left, tensor, alloc);
+        	evaluator<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
         	return tensor.data();
         }
     };

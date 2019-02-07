@@ -39,9 +39,13 @@ int test_blas(int sz=128) {
 		return 0;
 	}
 
+#ifdef __CUDACC__
 	using host_allocator = std::conditional_t<std::is_same<host_tag, system_tag>::value,
 												BC::Basic_Allocator<value_type>,
 												BC::Cuda_Managed<value_type>>;
+#else
+	using host_allocator = BC::Basic_Allocator<value_type>;
+#endif
 
 	using vec = BC::Vector<value_type, alloc_t>;
 	using mat = BC::Matrix<value_type, alloc_t>;
@@ -89,7 +93,91 @@ int test_blas(int sz=128) {
 
 			return BC::all(h_y == y);
 
-	} BC_TEST_END("BasicBlas test")
+	} BC_TEST_END("y = a * b")
+
+	BC_TEST_START {
+		y = a * b + a * b;
+
+		blas::gemm(context, false, false,  sz, sz, sz,
+				2, h_a.data(), sz,
+				h_b.data(), sz,
+				0, h_y.data(), sz);
+
+			return BC::all(h_y == y);
+
+	} BC_TEST_END("y = a * b + a * b")
+
+	BC_TEST_START {
+		y = 1;
+		h_y = 1;
+		y += a * b + a * b;
+
+		blas::gemm(context, false, false,  sz, sz, sz,
+				2, h_a.data(), sz,
+				h_b.data(), sz,
+				1, h_y.data(), sz);
+
+			return BC::all(h_y == y);
+
+	} BC_TEST_END("y (set to 1)  += a * b + a * b")
+
+	BC_TEST_START {
+		y = 1;
+		h_y = 1;
+		y -= a * b - a * b;
+		return BC::all(h_y == y);
+
+	} BC_TEST_END("y (set to 1)  -= a * b - a * b")
+
+	BC_TEST_START {
+		y = 1;
+		h_y = 2;
+		y += a * b + a * b + 1;
+
+		blas::gemm(context, false, false,  sz, sz, sz,
+				2, h_a.data(), sz,
+				h_b.data(), sz,
+				1, h_y.data(), sz);
+
+			return BC::all(h_y == y);
+
+	} BC_TEST_END("y (set to 1)  += a * b + a * b")
+
+	BC_TEST_START {
+		y = 1;
+		h_y = 2;
+		y -= a * b - a * b - 1;
+		return BC::all(h_y == y);
+
+	} BC_TEST_END("y (set to 1)  -= a * b - a * b")
+
+//	BC_TEST_START {
+//		a.randomize(1, 10);
+//		b.randomize(1, 10);
+//		y = 1;
+//		h_y = 1;
+//		y -= a * b / a * b;
+//		return BC::all(h_y == y);
+//
+//	} BC_TEST_END("y -= a * b / a * b")
+
+
+//	BC_TEST_START {
+//		y = 1;
+//		h_y = 1;
+//		y += a * b / a * b;
+//
+//		blas::gemm(context, false, false,  sz, sz, sz,
+//				-2, h_a.data(), sz,
+//				h_b.data(), sz,
+//				1, h_y.data(), sz);
+//
+//			return BC::all(h_y == y);
+//
+//	} BC_TEST_END("y (set to 1)  -= a * b / a * b")
+
+
+
 
 
 
