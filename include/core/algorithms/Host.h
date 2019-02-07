@@ -7,23 +7,39 @@
 
 #ifndef BC_ALGORITHMS_HOST_H_
 #define BC_ALGORITHMS_HOST_H_
+
 #include <numeric>
 #include <algorithm>
 #include "Common.h"
+
+namespace BC {
+namespace context {
+struct Host;
+}
+}
+
 #if  defined(BC_CPP17_EXECUTION) && defined(BC_CPP_EXECUTION_POLICIES)
     #define BC_CPU_ALGORITHM_FORWARDER_DEF(function)\
     \
         template<class... args>\
         static auto function (args... parameters){\
             return std:: function (BC_CPP17_EXECUTION, parameters...);\
-        }
+        }\
+		template<class... args>\
+		static auto function (BC::context::Host& stream, args... parameters){\
+			stream.push_job([=](){ std:: function (BC_CPP17_EXECUTION, parameters...); });\
+		}
 #else
     #define BC_CPU_ALGORITHM_FORWARDER_DEF(function)\
     \
         template<class... args>\
         static auto function (args... parameters){\
             return std:: function (parameters...);\
-        }
+        }\
+		template<class... args>\
+		static void function (BC::context::Host& stream, args... parameters){\
+			stream.push_job([=](){ std:: function (parameters...); });\
+		}
 #endif
 
 

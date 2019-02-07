@@ -21,9 +21,10 @@
 #define BC_GPU_ALGORITHM_FORWARDER_DEF_WITH_STREAM(function) \
 template<class... args>\
 static auto function (cudaStream_t stream, args... parameters){\
-    return thrust:: function (thrust::cuda::par(stream), thrust::device, parameters...);\
+    return thrust:: function (thrust::cuda::par.on(stream), parameters...);\
 }
 #define BC_GPU_ALGORITHM_FORWARDER_DEF(function) \
+BC_GPU_ALGORITHM_FORWARDER_DEF_WITH_STREAM(function)\
 template<class... args>\
 static auto function (args... parameters){\
     return thrust:: function (thrust::device, parameters...);\
@@ -43,7 +44,7 @@ static auto function (args... parameters){ \
 #define BC_GPU_ALGORITHM_FORWARDER_DEF_2PTR_HACK_WITH_STREAM(function) \
 template<class iter_begin, class iter_end>\
 static auto function (cudaStream_t stream, iter_begin begin, iter_end end){\
-    return thrust:: function (thrust::cuda::par(stream), thrust::device, &begin[begin.index], &end[end.index]);\
+    return thrust:: function (thrust::cuda::par.on(stream), &begin[begin.index], &end[end.index]);\
 }
 
 //Thrust is wonky with stl-style iterators and sorting.

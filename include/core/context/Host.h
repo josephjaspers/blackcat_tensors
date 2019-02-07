@@ -31,10 +31,10 @@ struct Host : Stream<HostQueue> {
 
 
 
-	 Stream<HostQueue>& get_stream() {
+	 Host& get_stream() {
 		 return *this;
 	 }
-	 const Stream<HostQueue>& get_stream() const {
+	 const Host& get_stream() const {
 		 return *this;
 	 }
 

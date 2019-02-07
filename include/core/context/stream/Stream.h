@@ -41,7 +41,8 @@ public:
 
 	void sync_stream() {
 		//** Pushing a job while syncing is undefined behavior.
-		m_job_queue.get()->synchronize();
+		if (m_job_queue.get())
+			m_job_queue.get()->synchronize();
 	}
 
 	void set_stream(Stream<Queue>& stream_) {
