@@ -64,7 +64,7 @@ struct Lazy_Evaluator {
 template<class Context>
 struct CacheEvaluator {
     template<class branch> using sub_t  = BC::et::Array<branch::DIMS, BC::scalar_of<branch>, Context, BC_Temporary>;
-    template<class branch> using eval_t = BC::et::Binary_Expression<sub_t<branch>, branch, BC::et::oper::assign>;
+    template<class branch> using eval_t = BC::et::Binary_Expression<sub_t<branch>, branch, BC::oper::assign>;
 
     template<class branch> //The branch is an array, no evaluation required
     static std::enable_if_t<BC::is_array<std::decay_t<branch>>(), const branch&>
@@ -89,7 +89,7 @@ template<class array_t, class expression_t, class Context>
 auto evaluate_to(array_t array, expression_t expr, Context context) {
     static_assert(is_array<array_t>(), "MAY ONLY EVALUATE TO ARRAYS");
     return Lazy_Evaluator<typename expression_t::system_tag>::evaluate(
-    		et::make_bin_expr<et::oper::assign>(array, expr), context);
+    		et::make_bin_expr<oper::assign>(array, expr), context);
 }
 
 template<class expression_t, class Context>

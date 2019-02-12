@@ -10,9 +10,6 @@
 #define BC_EXPRESSION_TEMPLATES_BLAS_FEATURE_DETECTOR_H_
 
 #include "Internal_Type_Traits.h"
-#include "operations/BLAS.h"
-#include "operations/Unary.h"
-#include "operations/Binary.h"
 
 namespace BC {
 namespace et {
@@ -33,7 +30,7 @@ template<class T>
 struct is_scalar_mul_bin_expr : std::false_type {};
 
 template<class Lv, class Rv>
-struct is_scalar_mul_bin_expr<Binary_Expression<Lv, Rv, et::oper::scalar_mul>> : std::true_type {};
+struct is_scalar_mul_bin_expr<Binary_Expression<Lv, Rv, oper::scalar_mul>> : std::true_type {};
 
 
 
@@ -69,7 +66,7 @@ template<class deriv> struct blas_feature_detector<deriv, enable_if_array<deriv>
 
 ////IF TRANSPOSE - unary_expression(matrix^T)
 template<class deriv, class ml>
-struct blas_feature_detector<et::Unary_Expression<deriv, et::oper::transpose<ml>>, enable_if_array<deriv>> {
+struct blas_feature_detector<et::Unary_Expression<deriv, oper::transpose<ml>>, enable_if_array<deriv>> {
     static constexpr bool evaluate = false;
     static constexpr bool transposed = true;
     static constexpr bool scalar = false;

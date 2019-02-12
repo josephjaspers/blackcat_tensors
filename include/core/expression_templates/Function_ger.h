@@ -80,7 +80,7 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 
         //if we need to negate or zero the output
 		if (beta_mod != 1) {
-			auto expr = make_bin_expr<et::oper::assign>(injection, scalar_constant<value_type>(beta_mod));
+			auto expr = make_bin_expr<oper::assign>(injection, scalar_constant<value_type>(beta_mod));
 			evaluate(expr, alloc);
 		}
 

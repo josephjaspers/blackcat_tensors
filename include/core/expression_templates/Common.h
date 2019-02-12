@@ -12,9 +12,6 @@
 
 #include <type_traits>
 #include "Internal_Type_Traits.h"
-#include "operations/Unary.h"
-#include "operations/Binary.h"
-#include "operations/BLAS.h"
 #include "BLAS_Feature_Detector.h"
 
 namespace BC {

@@ -10,7 +10,6 @@
 #define EXPRESSION_BINARY_FUNCTORS_H_
 
 namespace BC {
-namespace et {
 namespace oper {
 
 template<class T> struct rm_const { using type = T; };
@@ -181,7 +180,6 @@ class matrix_oper {};
             return l ^ r;
         }
     };
-}
 }
 }
 

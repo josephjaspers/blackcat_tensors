@@ -11,7 +11,6 @@
 #include <cmath>
 
 namespace BC {
-namespace et     {
 namespace oper {
 
     struct negation {
@@ -25,7 +24,6 @@ namespace oper {
         }
     };
 
-}
 }
 }
 

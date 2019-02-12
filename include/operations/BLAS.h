@@ -10,7 +10,6 @@
 #define BLAS_H_
 
 namespace BC   {
-namespace et   {
 namespace oper {
 
 //tags, no definition
@@ -20,7 +19,6 @@ template<class allocator> struct gemv : BLAS_Function {};
 template<class allocator> struct ger : BLAS_Function {};
 template<class allocator> struct dot : BLAS_Function {};
 
-}
 }
 }
 

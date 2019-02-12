@@ -21,19 +21,19 @@ template<class> struct scalar_modifer {
         beta = 1,
     };
 };
-template<> struct scalar_modifer<et::oper::sub> {
+template<> struct scalar_modifer<oper::sub> {
     enum mod {
         alpha = -1,
         beta = 1
     };
 };
-template<> struct scalar_modifer<et::oper::sub_assign> {
+template<> struct scalar_modifer<oper::sub_assign> {
     enum mod {
         alpha = -1,
         beta = 1,
     };
 };
-template<> struct scalar_modifer<et::oper::assign> {
+template<> struct scalar_modifer<oper::assign> {
     enum mod {
         alpha = 1,
         beta = 0,
@@ -46,12 +46,12 @@ template<class T> static constexpr bool is_blas_func() {
 
 template<class T>
 static constexpr bool is_linear_op() {
-    return meta::seq_contains<T, et::oper::add, et::oper::sub>;
+    return meta::seq_contains<T, oper::add, oper::sub>;
 }
 
 template<class T>
 static constexpr bool is_linear_assignment_op() {
-    return meta::seq_contains<T, et::oper::add_assign, et::oper::sub_assign>;
+    return meta::seq_contains<T, oper::add_assign, oper::sub_assign>;
 }
 
 

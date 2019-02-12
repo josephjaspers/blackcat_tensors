@@ -189,7 +189,7 @@ static auto sum(const Tensor_Base<internal_t>& tensor) {
 template<class internal_t>
 static bool prod(const Tensor_Base<internal_t>& tensor) {
 	using value_type = typename internal_t::value_type;
-	return BC::accumulate(tensor.cbegin(), tensor.cend(), value_type(1), BC::et::oper::mul());
+	return BC::accumulate(tensor.cbegin(), tensor.cend(), value_type(1), BC::oper::mul());
 }
 
 template<class internal_t>
