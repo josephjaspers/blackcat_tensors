@@ -21,29 +21,37 @@ namespace BC {
 namespace context {
 namespace device_globals {
 
-struct Alpha_Beta_Pair_Recycler {
-	std::vector<float*> recycler;
-	std::mutex locker;
+struct Scalar_Recycler {
 
-	float* allocate() {
+
+	static std::vector<float*>& get_recycler() {
+		static std::vector<float*> recycler_instance;
+		return recycler_instance;
+	}
+	static std::mutex& get_locker() {
+		static std::mutex locker_instance;
+		return locker_instance;
+	}
+
+	static float* allocate() {
 
 		float* data_ptr;
-		if (recycler.empty()) {
+		if (get_recycler().empty()) {
 	        cudaMallocManaged((void**) &data_ptr, sizeof(float));
 		} else {
-			locker.lock();
-			data_ptr = recycler.back();
-			recycler.pop_back();
-			locker.unlock();
+			get_locker().lock();
+			data_ptr = get_recycler().back();
+			get_recycler().pop_back();
+			get_locker().unlock();
 		}
 		return data_ptr;
 	}
-	void deallocate(float* data_ptr) {
-		locker.lock();
-		recycler.push_back(data_ptr);
-		locker.unlock();
+	static void deallocate(float* data_ptr) {
+		get_locker().lock();
+		get_recycler().push_back(data_ptr);
+		get_locker().unlock();
 	}
-} alpha_beta_pair_recycler;
+};
 
 }
 
@@ -58,7 +66,7 @@ struct Device_Stream_Contents {
 			 cudaStreamCreate(&m_stream_handle);
 		 }
 		 if (init_scalars) {
-			 m_scalar_buffer = device_globals::alpha_beta_pair_recycler.allocate();
+			 m_scalar_buffer = device_globals::Scalar_Recycler::allocate();
 		 }
 	 }
 
@@ -73,7 +81,7 @@ struct Device_Stream_Contents {
 		 cudaStreamDestroy(m_stream_handle);
 
 		 //remember we only need to deallocate alpha
-		 device_globals::alpha_beta_pair_recycler.deallocate(m_scalar_buffer);
+		 device_globals::Scalar_Recycler::deallocate(m_scalar_buffer);
 	 }
 };
 

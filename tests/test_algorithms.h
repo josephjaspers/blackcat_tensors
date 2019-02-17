@@ -19,9 +19,9 @@ int test_algorithms(int sz=128) {
 	BC_TEST_BODY_HEAD
 
 	using alloc_t = allocator<value_type>;
-	using vec = BC::Vector<value_type, alloc_t>;
+//	using vec = BC::Vector<value_type, alloc_t>;
 	using mat = BC::Matrix<value_type, alloc_t>;
-	using scalar = BC::Scalar<value_type, alloc_t>;
+//	using scalar = BC::Scalar<value_type, alloc_t>;
 
 	BC_TEST_DEF(
 		mat a(sz, sz);

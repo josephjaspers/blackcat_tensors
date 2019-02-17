@@ -18,7 +18,6 @@
 #include <type_traits>
 #include "Common.h"
 #include "Tree_Struct_Injector.h"
-#include "Tree_Functions.h"
 #include "Array.h"
 #include "Expression_Binary.h"
 #include "Expression_Unary.h"
@@ -27,7 +26,15 @@
 namespace BC {
 namespace et {
 namespace tree {
+using namespace oper;
 
+//entirely_blas_expr -- detects if the tree is entirely +/- operations with blas functions, --> y = a * b + c * d - e * f  --> true, y = a + b * c --> false
+template<class op, bool prior_eval, class core, BC::size_t  a, BC::size_t  b>//only apply update if right hand side branch
+auto update_injection(injector<core,a,b> tensor) {
+    static constexpr BC::size_t  alpha =  a * BC::oper::operation_traits<op>::alpha_modifier;
+    static constexpr BC::size_t  beta  = prior_eval ? 1 : 0;
+    return injector<core, alpha, beta>(tensor.data());
+}
 
 template<class T>
 struct evaluator_default {
@@ -68,6 +75,25 @@ struct evaluator_default {
 
 template<class T, class voider=void>
 struct evaluator;
+
+template<class Expression, class Context>
+auto evaluate_linear(Expression expr, Context context) {
+	return evaluator<Expression>::linear_evaluation(expr, context);
+}
+template<class Expression, class Context>
+auto evaluate_temporary_destruction(Expression expr, Context context) {
+	return evaluator<Expression>::linear_evaluation(expr, context);
+}
+template<class Expression, class Context>
+auto evaluate_injection(Expression expr, Context context) {
+	return evaluator<Expression>::injection(expr, context);
+}
+template<class Expression, class Context>
+auto evaluate_temporary_injection(Expression expr, Context context) {
+	return evaluator<Expression>::temporary_injection(expr, context);
+}
+
+
 
 //-------------------------------- Array ----------------------------------------------------//
 template<class T>
@@ -151,7 +177,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
 
 
 template<class lv, class rv, class op>
-struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op>()>> {
+struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_traits<op>::is_linear_operation>> {
     static constexpr bool entirely_blas_expr 	= evaluator<lv>::entirely_blas_expr && evaluator<rv>::entirely_blas_expr;
     static constexpr bool partial_blas_expr 	= evaluator<lv>::partial_blas_expr || evaluator<rv>::partial_blas_expr;
     static constexpr bool nested_blas_expr 		= evaluator<lv>::nested_blas_expr || evaluator<rv>::nested_blas_expr;
@@ -383,7 +409,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_linear_op<op
 //------------------------------Non linear-------------------------------------------//
 
 template<class lv, class rv, class op>
-struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_nonlinear_op<op>()>> {
+struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_traits<op>::is_nonlinear_operation >> {
     static constexpr bool entirely_blas_expr = false;
     static constexpr bool partial_blas_expr = false;
     static constexpr bool nested_blas_expr = evaluator<lv>::nested_blas_expr || evaluator<rv>::nested_blas_expr;

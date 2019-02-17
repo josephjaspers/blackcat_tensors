@@ -20,6 +20,8 @@ namespace BC {
 //-------------------------------Lightweight array -------------------------------//
     template<int size_, class T>
     struct array {
+    	static constexpr int DIMS = size_;
+
         T value[size_] = { 0 } ;
 
         BCINLINE const T& operator [] (int i) const { return value[i]; }
@@ -41,6 +43,7 @@ namespace BC {
 //-------------------------------Lightweight lambda-wrapper to enable usage of the bracket-operator-------------------------------//
     template<int dimension, class scalar, class ref>
     struct lambda_array{
+    	static constexpr int DIMS = dimension;
         ref value;
         BCINLINE lambda_array(ref a) : value(a) {}
 

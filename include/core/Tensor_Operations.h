@@ -55,9 +55,6 @@ public:
 
     template<class derived_t>
     void evaluate(const Tensor_Operations<derived_t>& tensor) {
-//    	auto allocator =
-//    			BC::allocator_traits<allocator_t>::select_on_temporary_construction(this->as_derived().get_allocator_ref());
-//        et::evaluate(tensor.as_derived().internal(), allocator);
         et::evaluate(tensor.as_derived().internal(), this->as_derived().get_full_context());
     }
     //--------------------------------------assignment operators-----------------------------------------------//

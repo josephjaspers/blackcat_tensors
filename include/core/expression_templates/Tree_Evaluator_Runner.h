@@ -63,8 +63,8 @@ struct Lazy_Evaluator {
 
 template<class Context>
 struct CacheEvaluator {
-    template<class branch> using sub_t  = BC::et::Array<branch::DIMS, BC::scalar_of<branch>, Context, BC_Temporary>;
-    template<class branch> using eval_t = BC::et::Binary_Expression<sub_t<branch>, branch, BC::oper::assign>;
+    template<class branch> using sub_t  = BC::et::Array<branch::DIMS, BC::scalar_of<branch>, typename Context::allocator_t, BC_Temporary>;
+//    template<class branch> using eval_t = BC::et::Binary_Expression<sub_t<branch>, branch, BC::oper::assign>;
 
     template<class branch> //The branch is an array, no evaluation required
     static std::enable_if_t<BC::is_array<std::decay_t<branch>>(), const branch&>
@@ -75,11 +75,12 @@ struct CacheEvaluator {
     static std::enable_if_t<!BC::is_array<std::decay_t<branch>>(), sub_t<std::decay_t<branch>>>
     evaluate(const branch& expression, Context context_)
     {
-        sub_t<std::decay_t<branch>> cached_branch(
+        auto cached_branch = make_tensor_array(
         		expression.inner_shape(),			//context 'get_allocator' returns a referenec not a copy
         		BC::allocator_traits<typename Context::allocator_t>::select_on_temporary_construction(context_.get_allocator()));
-        eval_t<std::decay_t<branch>> assign_to_expression(cached_branch.internal(), expression);
-        Lazy_Evaluator<Context>::evaluate(assign_to_expression, context_);
+
+        auto expr = make_bin_expr<BC::oper::assign>(cached_branch.internal(), expression);
+        Lazy_Evaluator<Context>::evaluate(expr, context_);
         return cached_branch;
     }
 

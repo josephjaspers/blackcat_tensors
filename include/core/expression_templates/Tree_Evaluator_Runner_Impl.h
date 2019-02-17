@@ -40,7 +40,30 @@
 namespace BC {
 namespace et {
 namespace tree {
+namespace detail {
 
+template<class expression_t, class voider=void>
+struct temporary_evaluator;
+
+template<class expression_t>
+struct temporary_evaluator<expression_t, std::enable_if_t<!evaluator<expression_t>::requires_greedy_eval>> {
+	template<class Allocator>
+	static auto evaluate_temporaries(expression_t expression, Allocator& alloc) {
+		return expression;
+	}
+};
+
+
+template<class expression_t>
+struct temporary_evaluator<expression_t, std::enable_if_t<evaluator<expression_t>::requires_greedy_eval>> {
+	template<class Allocator>
+	static auto evaluate_temporaries(expression_t expression, Allocator& alloc) {
+		auto expr = evaluator<expression_t>::template temporary_injection(expression, alloc);
+		return temporary_evaluator<std::decay_t<decltype(expr)>>::evaluate_temporaries(expr, alloc);
+	}
+};
+
+}
 
 struct Greedy_Evaluator {
 
@@ -94,16 +117,14 @@ struct Greedy_Evaluator {
 	}
 
 private:
+
 	template<class expression_t, class Allocator>
 	static auto evaluate_temporaries(expression_t expression, Allocator& alloc) {
+		return detail::temporary_evaluator<expression_t>::evaluate_temporaries(expression, alloc);
 
-//Use to check if a temporary is created
-#ifdef BC_DISABLE_TEMPORARIES
-		return expression;
-#else
-		return evaluator<expression_t>::template temporary_injection(expression, alloc);
-#endif
-	}};
+	}
+
+};
 
 }
 }

@@ -9,174 +9,168 @@
 #ifndef EXPRESSION_BINARY_FUNCTORS_H_
 #define EXPRESSION_BINARY_FUNCTORS_H_
 
+#include <type_traits>
+#include <cmath>
+
+#include "Tags.h"
+
 namespace BC {
 namespace oper {
+namespace detail {
 
-template<class T> struct rm_const { using type = T; };
-template<class T> struct rm_const<const T&> { using type = T&; };
+template<class T> BCINLINE T&  cc(const T&  param) { return const_cast<T&> (param); }
+template<class T> BCINLINE T&& cc(const T&& param) { return const_cast<T&&>(param); }
+template<class T> BCINLINE T*  cc(const T*  param) { return const_cast<T*> (param); }
 
-/*
- * 0 = a Tensor (base case)
- * 1 = function
- * 2 = Multiplication/division
- * 3 = addition/subtraction
- * 4 = assignments
- *
- */
-class assignment {};
-class matrix_oper {};
+}
 
     struct scalar_mul {
-        //this is just a flag for gemm, it is the same as multiplication though
-        template<class lv, class rv> BCINLINE auto operator ()(lv l, rv r) const {
+        template<class lv, class rv>
+        BCINLINE auto operator ()(lv l, rv r) const {
             return l * r;
         }
     };
 
 
-    struct add : matrix_oper {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv l, rv r) const {
+    struct add : linear_operation, alpha_modifier<1> {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv l, rv r) const {
             return l + r;
         }
     };
 
     struct mul {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv l, rv r) const {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv l, rv r) const {
             return l * r;
         }
     };
 
-    struct sub : matrix_oper {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv l, rv r) const {
+    struct sub : linear_operation, alpha_modifier<-1> {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv l, rv r) const {
             return l - r;
         }
     };
 
     struct div {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv l, rv r) const {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv l, rv r) const {
             return l / r;
         }
     };
-    struct combine {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv l, rv r) const {
-            return l;
-        }
-    };
-    struct assign : matrix_oper {
-        template<class lv, class rv> BCINLINE auto& operator ()(lv& l, rv r) const {
-            return (const_cast<typename rm_const<lv&>::type>(l) = r);
+
+    struct assign : assignment_operation, beta_modifier<0>, alpha_modifier<1> {
+        template<class lv, class rv>
+		BCINLINE auto& operator ()(lv& l, rv r) const {
+            return detail::cc(l) = r;
         }
     };
 
-    struct add_assign : matrix_oper, assignment {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv& l, rv r) const {
-            return (const_cast<typename rm_const<lv&>::type>(l) += r);
+    struct add_assign : linear_assignment_operation, beta_modifier<1>, alpha_modifier<1> {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv& l, rv r) const {
+            return detail::cc(l) += r;
         }
     };
 
-    struct mul_assign : assignment {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv& l, rv r) const {
-            return (const_cast<typename rm_const<lv&>::type>(l) *= r);
+    struct mul_assign : assignment_operation {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv& l, rv r) const {
+            return detail::cc(l) *= r;
         }
     };
 
-    struct sub_assign : matrix_oper, assignment {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv& l, rv r) const {
-            return (const_cast<typename rm_const<lv&>::type>(l) -= r);
+    struct sub_assign : linear_assignment_operation, beta_modifier<1>, alpha_modifier<-1> {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv& l, rv r) const {
+            return detail::cc(l) -= r;
         }
     };
 
-    struct div_assign : assignment {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv& l, rv r) const {
-            return (const_cast<typename rm_const<lv&>::type>(l) /= r);
-        }
-    };
-    struct alias_assign : assignment {
-        template<class lv, class rv> BCINLINE auto& operator ()(lv& l, rv r) const {
-            return (const_cast<typename rm_const<lv&>::type>(l) = r);
+    struct div_assign : assignment_operation {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv& l, rv r) const {
+            return detail::cc(l) /= r;
         }
     };
 
-    struct alias_add_assign : assignment {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv& l, rv r) const {
-            return (const_cast<typename rm_const<lv&>::type>(l) += r);
-        }
-    };
-
-    struct alias_mul_assign : assignment {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv& l, rv r) const {
-            return (const_cast<typename rm_const<lv&>::type>(l) *= r);
-        }
-    };
-
-    struct alias_sub_assign : assignment {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv& l, rv r) const {
-            return (const_cast<typename rm_const<lv&>::type>(l) -= r);
-        }
-    };
-
-    struct alias_div_assign : assignment {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv& l, rv r) const {
-            return (const_cast<typename rm_const<lv&>::type>(l) /= r);
-        }
-    };
     struct equal {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv l, rv r) const {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv l, rv r) const {
             return l == r;
         }
     };
+
     struct approx_equal {
 
     	static constexpr float epsilon = .01;
 
-        template<class lv, class rv> BCINLINE  auto operator ()(lv l, rv r) const {
-            return abs(l - r) < epsilon;
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv l, rv r) const {
+            return std::abs(l - r) < epsilon;
         }
     };
 
-
     struct greater {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv l, rv r) const {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv l, rv r) const {
             return l > r;
         }
     };
+
     struct lesser {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv l, rv r) const {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv l, rv r) const {
             return l < r;
         }
     };
+
     struct greater_equal {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv l, rv r) const {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv l, rv r) const {
             return l >= r;
         }
     };
+
     struct lesser_equal {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv l, rv r) const {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv l, rv r) const {
             return l <= r;
         }
     };
+
     struct max {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv l, rv r) const {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv l, rv r) const {
             return l > r ? l : r;
         }
     };
+
     struct min {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv l, rv r) const {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv l, rv r) const {
             return l < r ? l : r;
         }
     };
+
     struct AND {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv l, rv r) const {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv l, rv r) const {
             return l && r;
         }
     };
+
     struct OR {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv l, rv r) const {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv l, rv r) const {
             return l || r;
         }
     };
+
     struct XOR {
-        template<class lv, class rv> BCINLINE  auto operator ()(lv l, rv r) const {
+        template<class lv, class rv>
+		BCINLINE auto operator ()(lv l, rv r) const {
             return l ^ r;
         }
     };

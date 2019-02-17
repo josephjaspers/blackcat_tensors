@@ -244,6 +244,11 @@ public:
 };
 
 
+template<class Shape, class Allocator>
+auto make_tensor_array(Shape shape, Allocator alloc) {
+	return Array<Shape::DIMS, typename Allocator::value_type, Allocator>(shape, alloc);
+}
+
 
 }
 }

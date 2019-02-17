@@ -8,7 +8,9 @@
 
 #ifndef EXPRESSION_UNARY_FUNCTORS_H_
 #define EXPRESSION_UNARY_FUNCTORS_H_
+
 #include <cmath>
+#include "Tags.h"
 
 namespace BC {
 namespace oper {

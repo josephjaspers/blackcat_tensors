@@ -47,11 +47,11 @@ int test_blas(int sz=128) {
 	using host_allocator = BC::Basic_Allocator<value_type>;
 #endif
 
-	using vec = BC::Vector<value_type, alloc_t>;
+//	using vec = BC::Vector<value_type, alloc_t>;
 	using mat = BC::Matrix<value_type, alloc_t>;
 	using scalar = BC::Scalar<value_type, alloc_t>;
 
-	using host_vec = BC::Vector<value_type, host_allocator>;
+//	using host_vec = BC::Vector<value_type, host_allocator>;
 	using host_mat = BC::Matrix<value_type, host_allocator>;
 
 	//gets the 'host' (cpu) wrapper for BLAS calls.
@@ -153,32 +153,28 @@ int test_blas(int sz=128) {
 		y -= a * b - a * b - 1;
 		return BC::all(h_y.approx_equal(y));
 
-	} BC_TEST_END("y (set to 1)  -= a * b - a * b")
-
-//	BC_TEST_START {
-//		a.randomize(1, 10);
-//		b.randomize(1, 10);
-//		y = 1;
-//		h_y = 1;
-//		y -= a * b / a * b;
-//		return BC::all(h_y.approx_equal(y);
-//
-//	} BC_TEST_END("y -= a * b / a * b")
+	} BC_TEST_END("y = 1; y -= a * b - a * b")
 
 
-//	BC_TEST_START {
-//		y = 1;
-//		h_y = 1;
-//		y += a * b / a * b;
-//
-//		blas::gemm(context, false, false,  sz, sz, sz,
-//				-2, h_a.data(), sz,
-//				h_b.data(), sz,
-//				1, h_y.data(), sz);
-//
-//			return BC::all(h_y.approx_equal(y);
-//
-//	} BC_TEST_END("y (set to 1)  -= a * b / a * b")
+	BC_TEST_START {
+		y = 1;
+		h_y = 2;
+		y += (a * b) / (a * b);
+
+		return BC::all(y.approx_equal(h_y));
+
+	} BC_TEST_END("y = 1; y  += a * b / a * b")
+
+	BC_TEST_START {
+		y = 1;
+		h_y = 0;
+		y -= (a * b) / (a * b);
+
+		return BC::all(y.approx_equal(h_y));
+
+	} BC_TEST_END("y = 1; y  -= a * b / a * b")
+
+
 
 
 

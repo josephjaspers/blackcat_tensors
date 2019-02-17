@@ -11,5 +11,6 @@
 #include "operations/Binary.h"
 #include "operations/Unary.h"
 #include "operations/BLAS.h"
+#include "operations/Operation_Traits.h"
 
 #endif /* OPERATIONS_H_ */
