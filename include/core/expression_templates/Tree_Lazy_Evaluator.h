@@ -1,7 +1,7 @@
 #ifndef TRIVIAL_EVALUATOR_H_
 #define TRIVIAL_EVALUATOR_H_
 
-#include "Tree_Evaluator_Runner_Impl.h"
+#include "Tree_Greedy_Evaluator.h"
 
 namespace BC {
 namespace et {
@@ -16,7 +16,7 @@ struct Lazy_Evaluator {
 
     template<class T>
     static constexpr bool INJECTION() {
-        return et::tree::evaluator<std::decay_t<T>>::requires_greedy_eval;
+        return et::tree::optimizer<std::decay_t<T>>::requires_greedy_eval;
     }
 
     //------------------------------------------------Purely lazy evaluation----------------------------------//

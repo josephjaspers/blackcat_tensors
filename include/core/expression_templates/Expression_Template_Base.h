@@ -14,17 +14,8 @@
 namespace BC {
 namespace et {
 
-
 template<class derived>
-struct Internal_Base {
-
-    BCINLINE const derived& internal_base() const { return static_cast<const derived&>(*this); }
-    BCINLINE       derived& internal_base()       { return static_cast<      derived&>(*this); }
-
-};
-
-template<class derived>
-class BC_internal_interface : BC_Type {
+class Expression_Template_Base : BC_Type {
 
     static constexpr int  DIMS = derived::DIMS;
 
@@ -50,7 +41,7 @@ public:
     operator       derived&()       { return as_derived(); }
     operator const derived&() const { return as_derived(); }
 
-    BCINLINE BC_internal_interface() {
+    BCINLINE Expression_Template_Base() {
 	static_assert(std::is_trivially_copy_constructible<derived>::value, "INTERNAL_TYPES TYPES MUST BE TRIVIALLY COPYABLE");
 	static_assert(std::is_trivially_copyable<derived>::value, "INTERNAL_TYPES MUST BE TRIVIALLY COPYABLE");
 	static_assert(!std::is_same<void, typename derived::value_type>::value, "INTERNAL_TYPES MUST HAVE A 'using value_type = some_Type'");

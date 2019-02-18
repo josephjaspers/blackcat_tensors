@@ -37,7 +37,7 @@ auto update_injection(injector<core,a,b> tensor) {
 }
 
 template<class T>
-struct evaluator_default {
+struct optimizer_default {
 	/*
 	 * entirely_blas_expr -- if we may replace this branch entirely with a temporary/cache
 	 * partial_blas_expr  -- if part of this branch contains a replaceable branch nested inside it
@@ -74,39 +74,39 @@ struct evaluator_default {
 
 
 template<class T, class voider=void>
-struct evaluator;
+struct optimizer;
 
 template<class Expression, class Context>
 auto evaluate_linear(Expression expr, Context context) {
-	return evaluator<Expression>::linear_evaluation(expr, context);
+	return optimizer<Expression>::linear_evaluation(expr, context);
 }
 template<class Expression, class Context>
 auto evaluate_temporary_destruction(Expression expr, Context context) {
-	return evaluator<Expression>::linear_evaluation(expr, context);
+	return optimizer<Expression>::linear_evaluation(expr, context);
 }
 template<class Expression, class Context>
 auto evaluate_injection(Expression expr, Context context) {
-	return evaluator<Expression>::injection(expr, context);
+	return optimizer<Expression>::injection(expr, context);
 }
 template<class Expression, class Context>
 auto evaluate_temporary_injection(Expression expr, Context context) {
-	return evaluator<Expression>::temporary_injection(expr, context);
+	return optimizer<Expression>::temporary_injection(expr, context);
 }
 
 
 
 //-------------------------------- Array ----------------------------------------------------//
 template<class T>
-struct evaluator<T, std::enable_if_t<is_array<T>() && !is_temporary<T>()>>
-: evaluator_default<T> {};
+struct optimizer<T, std::enable_if_t<is_array<T>() && !is_temporary<T>()>>
+: optimizer_default<T> {};
 
 //--------------Temporary---------------------------------------------------------------------//
 
 template<int x, class Scalar, class Context>
-struct evaluator<
+struct optimizer<
 	ArrayExpression<x, Scalar, Context, BC_Temporary>,
 	std::enable_if_t<BC::is_temporary<ArrayExpression<x, Scalar, Context, BC_Temporary>>()>>
- : evaluator_default<ArrayExpression<x, Scalar, Context, BC_Temporary>> {
+ : optimizer_default<ArrayExpression<x, Scalar, Context, BC_Temporary>> {
 
 
 	template<class Context_>
@@ -121,7 +121,7 @@ struct evaluator<
 
 
 template<class lv, class rv, class op>
-struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op>()>> {
+struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op>()>> {
     static constexpr bool entirely_blas_expr = true;
     static constexpr bool partial_blas_expr = true;
     static constexpr bool nested_blas_expr = true;
@@ -167,8 +167,8 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
     static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch, Context alloc) {
     	BC_TREE_OPTIMIZER_STDOUT("BLAS_EXPR: deallocate_temporaries");
 
-        evaluator<lv>::deallocate_temporaries(branch.left, alloc);
-        evaluator<rv>::deallocate_temporaries(branch.right, alloc);
+        optimizer<lv>::deallocate_temporaries(branch.left, alloc);
+        optimizer<rv>::deallocate_temporaries(branch.right, alloc);
     }
 };
 
@@ -177,11 +177,11 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op
 
 
 template<class lv, class rv, class op>
-struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_traits<op>::is_linear_operation>> {
-    static constexpr bool entirely_blas_expr 	= evaluator<lv>::entirely_blas_expr && evaluator<rv>::entirely_blas_expr;
-    static constexpr bool partial_blas_expr 	= evaluator<lv>::partial_blas_expr || evaluator<rv>::partial_blas_expr;
-    static constexpr bool nested_blas_expr 		= evaluator<lv>::nested_blas_expr || evaluator<rv>::nested_blas_expr;
-    static constexpr bool requires_greedy_eval 	= evaluator<lv>::requires_greedy_eval || evaluator<rv>::requires_greedy_eval;
+struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_traits<op>::is_linear_operation>> {
+    static constexpr bool entirely_blas_expr 	= optimizer<lv>::entirely_blas_expr && optimizer<rv>::entirely_blas_expr;
+    static constexpr bool partial_blas_expr 	= optimizer<lv>::partial_blas_expr || optimizer<rv>::partial_blas_expr;
+    static constexpr bool nested_blas_expr 		= optimizer<lv>::nested_blas_expr || optimizer<rv>::nested_blas_expr;
+    static constexpr bool requires_greedy_eval 	= optimizer<lv>::requires_greedy_eval || optimizer<rv>::requires_greedy_eval;
 
 
     //-------------Linear evaluation branches---------------------//
@@ -193,8 +193,8 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
         	BC_TREE_OPTIMIZER_STDOUT("- remove_branch (entire)");
 
-        	evaluator<lv>::linear_evaluation(branch.left, tensor, alloc);
-        	evaluator<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
+        	optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
+        	optimizer<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
         	return tensor.data();
         }
     };
@@ -206,8 +206,8 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
         	BC_TREE_OPTIMIZER_STDOUT("- remove_left_branch");
 
-        	/*auto left = */ evaluator<lv>::linear_evaluation(branch.left, tensor, alloc);
-            auto right = evaluator<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
+        	/*auto left = */ optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
+            auto right = optimizer<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
             return right;
         }
     };
@@ -216,8 +216,8 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
         static auto function(const Binary_Expression<lv, rv, oper::sub>& branch, injector<core, a, b> tensor, Context alloc) {
         	BC_TREE_OPTIMIZER_STDOUT("- remove_left_branch");
 
-        	/*auto left = */ evaluator<lv>::linear_evaluation(branch.left, tensor, alloc);
-            auto right = evaluator<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
+        	/*auto left = */ optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
+            auto right = optimizer<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
             return make_un_expr<oper::negation>(right);
         }
     };
@@ -230,8 +230,8 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
     	static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
         	BC_TREE_OPTIMIZER_STDOUT("- remove_right_branch");
 
-    		auto left  = evaluator<lv>::linear_evaluation(branch.left, tensor, alloc);
-          /*auto right = */ evaluator<rv>::linear_evaluation(branch.right, update_injection<op, b != 0>(tensor), alloc);
+    		auto left  = optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
+          /*auto right = */ optimizer<rv>::linear_evaluation(branch.right, update_injection<op, b != 0>(tensor), alloc);
             return left;
         }
     };
@@ -242,9 +242,9 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
     	static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
         	BC_TREE_OPTIMIZER_STDOUT("- basic_eval");
 
-        	static constexpr bool left_evaluated = evaluator<lv>::partial_blas_expr || b != 0;
-        	auto left = evaluator<lv>::linear_evaluation(branch.left, tensor, alloc);
-            auto right = evaluator<rv>::linear_evaluation(branch.right, update_injection<op, left_evaluated>(tensor), alloc);
+        	static constexpr bool left_evaluated = optimizer<lv>::partial_blas_expr || b != 0;
+        	auto left = optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
+            auto right = optimizer<rv>::linear_evaluation(branch.right, update_injection<op, left_evaluated>(tensor), alloc);
             return make_bin_expr<op>(left, right);
         }
     };
@@ -256,9 +256,9 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
 
         using impl =
         		std::conditional_t<entirely_blas_expr, remove_branch,
-        		std::conditional_t<evaluator<lv>::entirely_blas_expr,
+        		std::conditional_t<optimizer<lv>::entirely_blas_expr,
         		std::conditional_t<std::is_same<op, oper::sub>::value, remove_left_branch_and_negate, remove_left_branch>,
-        		std::conditional_t<evaluator<rv>::entirely_blas_expr, remove_right_branch,
+        		std::conditional_t<optimizer<rv>::entirely_blas_expr, remove_right_branch,
         		basic_eval>>>;
 
         return impl::function(branch, tensor, alloc);
@@ -269,8 +269,8 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
         template<class core, int a, int b, class Context>
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
         	BC_TREE_OPTIMIZER_STDOUT("- evaluate_branch");
-        	auto left = evaluator<lv>::linear_evaluation(branch.left, tensor);
-        	auto right = evaluator<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor));
+        	auto left = optimizer<lv>::linear_evaluation(branch.left, tensor);
+        	auto right = optimizer<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor));
             return make_bin_expr<op>(left, right);
         }
     };
@@ -298,12 +298,12 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
         	BC_TREE_OPTIMIZER_STDOUT("- left_blas_expr");
 
-            auto left = evaluator<lv>::injection(branch.left, tensor, alloc);
+            auto left = optimizer<lv>::injection(branch.left, tensor, alloc);
 
             //check this ?
-            auto right = evaluator<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
+            auto right = optimizer<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
 
-            using impl = std::conditional_t<evaluator<rv>::entirely_blas_expr,
+            using impl = std::conditional_t<optimizer<rv>::entirely_blas_expr,
                     trivial_injection, non_trivial_injection>;
 
             return impl::function(left, right, alloc);
@@ -328,10 +328,10 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
         	BC_TREE_OPTIMIZER_STDOUT("- right_blas_expr");
 
-            auto left = evaluator<lv>::linear_evaluation(branch.left, tensor, alloc);
-            auto right = evaluator<rv>::injection(branch.right, tensor, alloc);
+            auto left = optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
+            auto right = optimizer<rv>::injection(branch.right, tensor, alloc);
 
-            using impl = std::conditional_t<evaluator<lv>::entirely_blas_expr,
+            using impl = std::conditional_t<optimizer<lv>::entirely_blas_expr,
                     trivial_injection, non_trivial_injection>;
 
             return impl::function(left, right, alloc);
@@ -344,7 +344,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
         	BC_TREE_OPTIMIZER_STDOUT("- left_nested_blas_expr");
 
-            auto left = evaluator<lv>::injection(branch.left, tensor, alloc);
+            auto left = optimizer<lv>::injection(branch.left, tensor, alloc);
             rv right = branch.right; //rv
             return make_bin_expr<op>(left, right);
         }
@@ -355,7 +355,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
         	BC_TREE_OPTIMIZER_STDOUT("- right_nested_blas_expr");
 
             lv left = branch.left; //lv
-            auto right = evaluator<rv>::injection(branch.right, tensor, alloc);
+            auto right = optimizer<rv>::injection(branch.right, tensor, alloc);
             return make_bin_expr<op>(left, right);
         }
     };
@@ -375,9 +375,9 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
 
         using impl =
           		std::conditional_t<entirely_blas_expr, remove_branch,
-        		std::conditional_t<evaluator<rv>::partial_blas_expr && evaluator<lv>::partial_blas_expr, basic_eval,
-        		std::conditional_t<evaluator<lv>::nested_blas_expr, left_nested_blas_expr,
-                std::conditional_t<evaluator<rv>::nested_blas_expr, right_nested_blas_expr, basic_eval>>>>;
+        		std::conditional_t<optimizer<rv>::partial_blas_expr && optimizer<lv>::partial_blas_expr, basic_eval,
+        		std::conditional_t<optimizer<lv>::nested_blas_expr, left_nested_blas_expr,
+                std::conditional_t<optimizer<rv>::nested_blas_expr, right_nested_blas_expr, basic_eval>>>>;
 
         static_assert(!std::is_same<void, impl>::value, "EXPRESSION_REORDERING COMPILATION FAILURE, USE 'ALIAS' AS A WORKAROUND");
         return impl::function(branch, tensor, alloc);
@@ -390,8 +390,8 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
     static auto temporary_injection(const Binary_Expression<lv,rv,op>& branch, Context alloc) {
     	BC_TREE_OPTIMIZER_STDOUT("Binary Linear: Temporary Injection");
 
-    	auto left  = evaluator<lv>::template temporary_injection<Context>(branch.left, alloc);
-    	auto right = evaluator<rv>::template temporary_injection<Context>(branch.right, alloc);
+    	auto left  = optimizer<lv>::template temporary_injection<Context>(branch.left, alloc);
+    	auto right = optimizer<rv>::template temporary_injection<Context>(branch.right, alloc);
     	return make_bin_expr<op>(left, right);
     }
 
@@ -400,8 +400,8 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
     static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch, Context alloc) {
     	BC_TREE_OPTIMIZER_STDOUT("Binary Linear: Deallocate Temporaries");
 
-        evaluator<lv>::deallocate_temporaries(branch.left, alloc);
-        evaluator<rv>::deallocate_temporaries(branch.right, alloc);
+        optimizer<lv>::deallocate_temporaries(branch.left, alloc);
+        optimizer<rv>::deallocate_temporaries(branch.right, alloc);
     }
 
 };
@@ -409,11 +409,11 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
 //------------------------------Non linear-------------------------------------------//
 
 template<class lv, class rv, class op>
-struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_traits<op>::is_nonlinear_operation >> {
+struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_traits<op>::is_nonlinear_operation >> {
     static constexpr bool entirely_blas_expr = false;
     static constexpr bool partial_blas_expr = false;
-    static constexpr bool nested_blas_expr = evaluator<lv>::nested_blas_expr || evaluator<rv>::nested_blas_expr;
-    static constexpr bool requires_greedy_eval = evaluator<lv>::requires_greedy_eval || evaluator<rv>::requires_greedy_eval;
+    static constexpr bool nested_blas_expr = optimizer<lv>::nested_blas_expr || optimizer<rv>::nested_blas_expr;
+    static constexpr bool requires_greedy_eval = optimizer<lv>::requires_greedy_eval || optimizer<rv>::requires_greedy_eval;
 
 
     template<class core, int a, int b, class Context>
@@ -425,7 +425,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
     struct left_trivial_injection {
         template<class core, int a, int b, class Context>
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
-            auto left = evaluator<lv>::injection(branch.left, tensor, alloc);
+            auto left = optimizer<lv>::injection(branch.left, tensor, alloc);
             auto right = branch.right;
             return make_bin_expr<op>(left, right);
         }
@@ -434,14 +434,14 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
         template<class core, int a, int b, class Context>
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
             auto left = branch.left;
-            auto right = evaluator<rv>::injection(branch.right, tensor, alloc);
+            auto right = optimizer<rv>::injection(branch.right, tensor, alloc);
             return make_bin_expr<op>(left, right);
         }
     };
     struct left_nontrivial_injection {
         template<class core, int a, int b, class Context>
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
-            auto left = evaluator<lv>::injection(branch.left, tensor, alloc);
+            auto left = optimizer<lv>::injection(branch.left, tensor, alloc);
             auto right = branch.right; //rv
             return make_bin_expr<op>(left, right);
         }
@@ -450,7 +450,7 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
         template<class core, int a, int b, class Context>
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
             auto left = branch.left; //lv
-            auto right = evaluator<rv>::injection(branch.right, tensor, alloc);
+            auto right = optimizer<rv>::injection(branch.right, tensor, alloc);
             return make_bin_expr<op>(left, right);
         }
     };
@@ -460,10 +460,10 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
             //dont need to update injection
             //trivial injection left_hand side (we attempt to prefer trivial injections opposed to non-trivial)
             using impl  =
-                std::conditional_t<evaluator<lv>::partial_blas_expr,         left_trivial_injection,
-                std::conditional_t<evaluator<rv>::partial_blas_expr,         right_trivial_injection,
-                std::conditional_t<evaluator<lv>::nested_blas_expr,     left_nontrivial_injection,
-                std::conditional_t<evaluator<rv>::nested_blas_expr,     right_nontrivial_injection, void>>>>;
+                std::conditional_t<optimizer<lv>::partial_blas_expr,         left_trivial_injection,
+                std::conditional_t<optimizer<rv>::partial_blas_expr,         right_trivial_injection,
+                std::conditional_t<optimizer<lv>::nested_blas_expr,     left_nontrivial_injection,
+                std::conditional_t<optimizer<rv>::nested_blas_expr,     right_nontrivial_injection, void>>>>;
 
             return impl::function(branch, tensor, alloc);
 
@@ -471,16 +471,16 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
 
     template<class Context>
     static auto temporary_injection(const Binary_Expression<lv,rv,op>& branch, Context& alloc) {
-    	auto left  = evaluator<lv>::template temporary_injection<Context>(branch.left, alloc);
-    	auto right = evaluator<rv>::template temporary_injection<Context>(branch.right, alloc);
+    	auto left  = optimizer<lv>::template temporary_injection<Context>(branch.left, alloc);
+    	auto right = optimizer<rv>::template temporary_injection<Context>(branch.right, alloc);
     	return make_bin_expr<op>(left, right);
     }
 
     template<class Context>
     static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch, Context alloc) {
     	BC_TREE_OPTIMIZER_STDOUT("Binary NonLinear: DEALLOCATE TEMPORARIES");
-        evaluator<lv>::deallocate_temporaries(branch.left, alloc);
-        evaluator<rv>::deallocate_temporaries(branch.right, alloc);
+        optimizer<lv>::deallocate_temporaries(branch.left, alloc);
+        optimizer<rv>::deallocate_temporaries(branch.right, alloc);
     }
 };
 
@@ -491,12 +491,12 @@ struct evaluator<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
 
 
 template<class array_t, class op>
-struct evaluator<Unary_Expression<array_t, op>>
+struct optimizer<Unary_Expression<array_t, op>>
 {
     static constexpr bool entirely_blas_expr 	= false;
     static constexpr bool partial_blas_expr 	= false;
-    static constexpr bool nested_blas_expr 		= evaluator<array_t>::nested_blas_expr;
-    static constexpr bool requires_greedy_eval 	= evaluator<array_t>::requires_greedy_eval;
+    static constexpr bool nested_blas_expr 		= optimizer<array_t>::nested_blas_expr;
+    static constexpr bool requires_greedy_eval 	= optimizer<array_t>::requires_greedy_eval;
 
     template<class core, int a, int b, class Context>
     static auto linear_evaluation(const Unary_Expression<array_t, op>& branch, injector<core, a, b> tensor, Context) {
@@ -504,21 +504,21 @@ struct evaluator<Unary_Expression<array_t, op>>
     }
     template<class core, int a, int b, class Context>
     static auto injection(const Unary_Expression<array_t, op>& branch, injector<core, a, b> tensor, Context alloc) {
-        auto array =  evaluator<array_t>::injection(branch.array, tensor, alloc);
+        auto array =  optimizer<array_t>::injection(branch.array, tensor, alloc);
         return Unary_Expression<decltype(array), op>(array);
     }
 
     template<class Context>
     static auto temporary_injection(const Unary_Expression<array_t, op>& branch, Context& alloc) {
 
-    	auto expr = evaluator<array_t>::template temporary_injection<Context>(branch.array, alloc);
+    	auto expr = optimizer<array_t>::template temporary_injection<Context>(branch.array, alloc);
     	return Unary_Expression<std::decay_t<decltype(expr)>, op>(expr);
 
     }
     template<class Context>
      static void deallocate_temporaries(const Unary_Expression<array_t, op>& branch, Context alloc) {
     	BC_TREE_OPTIMIZER_STDOUT("Unary Expression: Deallocate Temporaries");
-        evaluator<array_t>::deallocate_temporaries(branch.array, alloc);
+        optimizer<array_t>::deallocate_temporaries(branch.array, alloc);
     }
 };
 

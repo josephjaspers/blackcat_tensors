@@ -11,7 +11,7 @@
 
 #include "Expression_Base.h"
 #include "BLAS_Feature_Detector.h"
-#include "Tree_Evaluator_Runner.h"
+#include "Tree_Lazy_Evaluator.h"
 
 
 namespace BC {
@@ -107,8 +107,8 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
 
 
         //deallocate all the temporaries
-        if (lv_eval) cc(A).deallocate();
-        if (rv_eval) cc(B).deallocate();
+        if (lv_eval) meta::bc_const_cast(A).deallocate();
+        if (rv_eval) meta::bc_const_cast(B).deallocate();
     }
 };
 

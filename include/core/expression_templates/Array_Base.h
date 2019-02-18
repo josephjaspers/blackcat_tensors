@@ -9,7 +9,7 @@
 #ifndef BLACKCAT_EXPRESSION_TEMPLATES_ARRAY_BASE_H_
 #define BLACKCAT_EXPRESSION_TEMPLATES_ARRAY_BASE_H_
 
-#include "Internal_Type_Interface.h"
+#include "Expression_Template_Base.h"
 #include "Common.h"
 #include "Shape.h"
 
@@ -17,7 +17,7 @@ namespace BC {
 namespace et     {
 
 template<class Derived, BC::dim_t Dimension>
-struct Array_Base : BC_internal_interface<Derived>, BC_Array {
+struct Array_Base : Expression_Template_Base<Derived>, BC_Array {
 
     static constexpr bool copy_constructible = false;
     static constexpr bool move_constructible = false;

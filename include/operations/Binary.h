@@ -16,13 +16,7 @@
 
 namespace BC {
 namespace oper {
-namespace detail {
 
-template<class T> BCINLINE T&  cc(const T&  param) { return const_cast<T&> (param); }
-template<class T> BCINLINE T&& cc(const T&& param) { return const_cast<T&&>(param); }
-template<class T> BCINLINE T*  cc(const T*  param) { return const_cast<T*> (param); }
-
-}
 
     struct scalar_mul {
         template<class lv, class rv>
@@ -63,35 +57,35 @@ template<class T> BCINLINE T*  cc(const T*  param) { return const_cast<T*> (para
     struct assign : assignment_operation, beta_modifier<0>, alpha_modifier<1> {
         template<class lv, class rv>
 		BCINLINE auto& operator ()(lv& l, rv r) const {
-            return detail::cc(l) = r;
+            return meta::bc_const_cast(l) = r;
         }
     };
 
     struct add_assign : linear_assignment_operation, beta_modifier<1>, alpha_modifier<1> {
         template<class lv, class rv>
 		BCINLINE auto operator ()(lv& l, rv r) const {
-            return detail::cc(l) += r;
+            return meta::bc_const_cast(l) += r;
         }
     };
 
     struct mul_assign : assignment_operation {
         template<class lv, class rv>
 		BCINLINE auto operator ()(lv& l, rv r) const {
-            return detail::cc(l) *= r;
+            return meta::bc_const_cast(l) *= r;
         }
     };
 
     struct sub_assign : linear_assignment_operation, beta_modifier<1>, alpha_modifier<-1> {
         template<class lv, class rv>
 		BCINLINE auto operator ()(lv& l, rv r) const {
-            return detail::cc(l) -= r;
+            return meta::bc_const_cast(l) -= r;
         }
     };
 
     struct div_assign : assignment_operation {
         template<class lv, class rv>
 		BCINLINE auto operator ()(lv& l, rv r) const {
-            return detail::cc(l) /= r;
+            return meta::bc_const_cast(l) /= r;
         }
     };
 

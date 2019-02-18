@@ -9,10 +9,7 @@
 #ifndef BC_EXPRESSION_TEMPLATES_COMMON_H_
 #define BC_EXPRESSION_TEMPLATES_COMMON_H_
 
-
 #include <type_traits>
-#include "Internal_Type_Traits.h"
-#include "BLAS_Feature_Detector.h"
 
 namespace BC {
 namespace et {

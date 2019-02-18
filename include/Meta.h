@@ -31,9 +31,6 @@ namespace meta {
     template<class... integers>
     static constexpr BC::size_t  sum(int x, integers... ints) { return x + sum(ints...); }
 
-        //short_hand for const cast
-    template<class T> auto& cc(const T& var) { return const_cast<T&>(var); }
-
     template<class T, class... Ts> using head_t = T;
 
     template<class T, class... Ts>
@@ -164,6 +161,22 @@ namespace meta {
     template<bool x,class T> using only_if = std::conditional_t<x, T, DISABLE<T>>;
 
     //---------------------
+
+	template<class T> BCINLINE
+	T& bc_const_cast(const T& param) {
+		return const_cast<T&>(param);
+	}
+
+	template<class T> BCINLINE
+	T&& bc_const_cast(const T&& param) {
+		return const_cast<T&&>(param);
+	}
+
+	template<class T> BCINLINE
+	T* bc_const_cast(const T* param) {
+		return const_cast<T*>(param);
+	}
+
 
 }
 }

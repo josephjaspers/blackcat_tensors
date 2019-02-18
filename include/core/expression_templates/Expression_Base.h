@@ -10,7 +10,7 @@
 #ifndef BC_EXPRESSION_TEMPLATES_EXPRESSION_BASE_H_
 #define BC_EXPRESSION_TEMPLATES_EXPRESSION_BASE_H_
 
-#include "Internal_Type_Interface.h"
+#include "Expression_Template_Base.h"
 
 
 namespace BC {
@@ -19,7 +19,7 @@ namespace et {
 
 template<class derived>
 struct Expression_Base
-        : BC_internal_interface<derived>,
+        : Expression_Template_Base<derived>,
           BC_Expr {
 
 	static constexpr bool copy_constructible = false;

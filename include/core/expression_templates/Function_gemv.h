@@ -12,7 +12,7 @@
 #include "Function_dot.h"
 #include "Expression_Base.h"
 #include "BLAS_Feature_Detector.h"
-#include "Tree_Evaluator_Runner.h"
+#include "Tree_Lazy_Evaluator.h"
 
 
 namespace BC {
@@ -94,8 +94,8 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
 		impl_l::gemv(alloc, transA,  m, n, alpha, A, A.leading_dimension(0), X, X.leading_dimension(0)/*inc_X*/, beta, injection/*Y*/, injection.leading_dimension(0)/*incy*/);
 
 		//deallocate all the temporaries
-		if (lv_eval) cc(A).deallocate();
-		if (rv_eval) cc(X).deallocate();
+		if (lv_eval) meta::bc_const_cast(A).deallocate();
+		if (rv_eval) meta::bc_const_cast(X).deallocate();
 	}
 };
 

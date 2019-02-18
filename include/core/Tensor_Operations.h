@@ -20,7 +20,7 @@
 #include "expression_templates/Function_gemv.h"
 #include "expression_templates/Function_gemm.h"
 
-#include "expression_templates/Tree_Evaluator_Runner.h"
+#include "expression_templates/Tree_Lazy_Evaluator.h"
 
 
 namespace BC {

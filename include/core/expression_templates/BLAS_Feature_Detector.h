@@ -9,7 +9,7 @@
 #ifndef BC_EXPRESSION_TEMPLATES_BLAS_FEATURE_DETECTOR_H_
 #define BC_EXPRESSION_TEMPLATES_BLAS_FEATURE_DETECTOR_H_
 
-#include "Internal_Type_Traits.h"
+#include "Expression_Template_Traits.h"
 
 namespace BC {
 namespace et {
@@ -17,26 +17,6 @@ namespace et {
 template<class T>           using enable_if_array = std::enable_if_t<BC::is_array<T>()>;
 template<class T, class U>  using enable_if_arrays = std::enable_if_t<BC::is_array<T>() && BC::is_array<U>()>;
 template<class T>           using enable_if_blas = std::enable_if_t<std::is_base_of<BLAS_Function, T>::value>;
-
-
-
-template<class T>
-struct is_bin_expr : std::false_type {};
-
-template<class Lv, class Rv, template<class> class op, class system_tag>
-struct is_bin_expr<Binary_Expression<Lv, Rv, op<system_tag>>> : std::true_type {};
-
-template<class T>
-struct is_scalar_mul_bin_expr : std::false_type {};
-
-template<class Lv, class Rv>
-struct is_scalar_mul_bin_expr<Binary_Expression<Lv, Rv, oper::scalar_mul>> : std::true_type {};
-
-
-
-template<class T> T&  cc(const T&  param) { return const_cast<T&> (param); }
-template<class T> T&& cc(const T&& param) { return const_cast<T&&>(param); }
-template<class T> T*  cc(const T*  param) { return const_cast<T*> (param); }
 
 template<class> class front;
 template<template<class...> class param, class first, class... set>
@@ -61,7 +41,7 @@ template<class deriv> struct blas_feature_detector<deriv, enable_if_array<deriv>
     static constexpr bool scalar = false;
 
     template<class param> static scalar_of<param>* get_scalar(const param& p) { return nullptr; }
-    template<class param> static auto& get_array(const param& p) { return cc(p); }
+    template<class param> static auto& get_array(const param& p) { return meta::bc_const_cast(p); }
 };
 
 ////IF TRANSPOSE - unary_expression(matrix^T)
@@ -72,7 +52,7 @@ struct blas_feature_detector<et::Unary_Expression<deriv, oper::transpose<ml>>, e
     static constexpr bool scalar = false;
 
     template<class param> static scalar_of<param>* get_scalar(const param& p) { return nullptr; }
-    template<class param> static auto& get_array(const param& p) { return cc(p.array); }
+    template<class param> static auto& get_array(const param& p) { return meta::bc_const_cast(p.array); }
 };
 
 ////IF A SCALAR BY TENSOR MUL OPERATION - scalar * matrix
@@ -91,10 +71,10 @@ struct blas_feature_detector<Binary_Expression<d1, d2, oper::scalar_mul>, enable
     using left_scal_t  = std::conditional_t<left_scal,  self, DISABLE>;
     using right_scal_t = std::conditional_t<right_scal, self, DISABLE>;
 
-    static auto&  get_array(const left_scal_t& p) { return cc(p.right);  }
-    static auto& get_array(const right_scal_t& p) { return cc(p.left);   }
-    static auto&  get_scalar(const left_scal_t& p) { return cc(p.left);  }
-    static auto& get_scalar(const right_scal_t& p) { return cc(p.right); }
+    static auto& get_array(const left_scal_t& p) { return meta::bc_const_cast(p.right);   }
+    static auto& get_array(const right_scal_t& p) { return meta::bc_const_cast(p.left);   }
+    static auto& get_scalar(const left_scal_t& p) { return meta::bc_const_cast(p.left);   }
+    static auto& get_scalar(const right_scal_t& p) { return meta::bc_const_cast(p.right); }
 };
 
 //IF A SCALAR BY TENSOR MUL OPERATION R + TRANSPOSED
@@ -104,8 +84,8 @@ struct blas_feature_detector<Binary_Expression<Unary_Expression<trans_t, oper::t
     static constexpr bool transposed = true;
     static constexpr bool scalar = true;
 
-    template<class param> static auto& get_scalar(const param& p) { return cc(p.right); }
-    template<class param> static auto& get_array(const param& p) { return cc(p.left.array); }
+    template<class param> static auto& get_scalar(const param& p) { return meta::bc_const_cast(p.right); }
+    template<class param> static auto& get_array(const param& p) { return meta::bc_const_cast(p.left.array); }
 };
 
 //IF A SCALAR BY TENSOR MUL OPERATION L + TRANSPOSED
@@ -115,8 +95,8 @@ struct blas_feature_detector<Binary_Expression<value_type, Unary_Expression<tran
     static constexpr bool transposed = true;
     static constexpr bool scalar = true;
 
-    template<class param> static auto& get_scalar(const param& p) { return cc(p.left); }
-    template<class param> static auto& get_array(const param& p) { return cc(p.right.array); }
+    template<class param> static auto& get_scalar(const param& p) { return meta::bc_const_cast(p.left); }
+    template<class param> static auto& get_array(const param& p) { return meta::bc_const_cast(p.right.array); }
 
 };
 }
