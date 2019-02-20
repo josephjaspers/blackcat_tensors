@@ -9,6 +9,8 @@
 #define BLACKCAT_TENSORS_OPERATIONS_H_
 
 #include "operations/Binary.h"
+#include "operations/Binary_Broadcasted.h"
+
 #include "operations/Unary.h"
 #include "operations/BLAS.h"
 #include "operations/Operation_Traits.h"

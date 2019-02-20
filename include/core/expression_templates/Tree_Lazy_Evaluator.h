@@ -15,46 +15,42 @@ struct Lazy_Evaluator {
 	using impl = typename evaluator::template implementation<context_type>;
 
     template<class T>
-    static constexpr bool INJECTION() {
+    static constexpr bool requires_greedy_eval() {
         return et::tree::optimizer<std::decay_t<T>>::requires_greedy_eval;
     }
 
     //------------------------------------------------Purely lazy evaluation----------------------------------//
     template< class expression, class FullContext>
-    static std::enable_if_t<!INJECTION<expression>()>
+    static std::enable_if_t<!requires_greedy_eval<expression>()>
     evaluate(const expression& expr, FullContext context_) {
-        static constexpr int iterator_dimension = expression::ITERATOR;
-        impl::template nd_evaluator<iterator_dimension>(expr, context_);
+        impl::template nd_evaluator<expression::ITERATOR>(expr, context_);
     }
     //------------------------------------------------Purely lazy alias evaluation----------------------------------//
     template< class expression, class FullContext>
-    static std::enable_if_t<!INJECTION<expression>()>
+    static std::enable_if_t<!requires_greedy_eval<expression>()>
     evaluate_aliased(const expression& expr, FullContext context_) {
-        static constexpr int iterator_dimension = expression::ITERATOR;
-        impl:: nd_evaluator<iterator_dimension>(expr, context_);
+        impl:: nd_evaluator<expression::ITERATOR>(expr, context_);
     }
     //------------------------------------------------Greedy evaluation (BLAS function call detected)----------------------------------//
     template< class expression, class FullContext>
-    static std::enable_if_t<INJECTION<expression>()>
+    static std::enable_if_t<requires_greedy_eval<expression>()>
     evaluate(const expression& expr, FullContext context_) {
         auto greedy_evaluated_expr = et::tree::Greedy_Evaluator::evaluate(expr, context_);
 
         if (!decay_same<decltype(greedy_evaluated_expr.right), decltype(expr.left)>) {
-            static constexpr int iterator_dimension = expression::ITERATOR;
-            impl::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr, context_);
+            impl::template nd_evaluator<expression::ITERATOR>(greedy_evaluated_expr, context_);
         }
         //decontext_ate any temporaries made by the tree
         et::tree::Greedy_Evaluator::deallocate_temporaries(greedy_evaluated_expr, context_);
     }
     //------------------------------------------------Greedy evaluation (BLAS function call detected), skip injection optimization--------------------//
     template< class expression, class FullContext>
-    static std::enable_if_t<INJECTION<expression>()>
+    static std::enable_if_t<requires_greedy_eval<expression>()>
     evaluate_aliased(const expression& expr, FullContext context_) {
-        static constexpr int iterator_dimension = expression::ITERATOR;    //the iterator for the evaluation of post inject_t
 
         auto greedy_evaluated_expr = et::tree::Greedy_Evaluator::evaluate_aliased(expr, context_);        //evaluate the internal tensor_type
         if (!decay_same<decltype(greedy_evaluated_expr.right), decltype(expr.left)>) {
-        	impl::template nd_evaluator<iterator_dimension>(greedy_evaluated_expr, context_);
+        	impl::template nd_evaluator<expression::ITERATOR>(greedy_evaluated_expr, context_);
         }
         //decontext_ate any temporaries made by the tree
         et::tree::Greedy_Evaluator::deallocate_temporaries(greedy_evaluated_expr, context_);

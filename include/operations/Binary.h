@@ -89,6 +89,8 @@ namespace oper {
         }
     };
 
+
+
     struct equal {
         template<class lv, class rv>
 		BCINLINE auto operator ()(lv l, rv r) const {

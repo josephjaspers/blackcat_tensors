@@ -19,8 +19,8 @@ struct Device {
 
 	static float* static_allocate(float value) {
 			float* t;
-			cudaMallocManaged((void**) &t, sizeof(float));
-			cudaMemcpy(t, &value, sizeof(float), cudaMemcpyHostToDevice);
+			BC_CUDA_ASSERT(cudaMallocManaged((void**) &t, sizeof(float)));
+			BC_CUDA_ASSERT(cudaMemcpy(t, &value, sizeof(float), cudaMemcpyHostToDevice));
 			return t;
 		}
 
@@ -57,8 +57,8 @@ struct Device {
         auto TRANS_B = transB ? CUBLAS_OP_T : CUBLAS_OP_N;
 
 		cublasHandle_t& handle = context.get_cublas_handle();
-        cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
-        cublasSgemm(handle, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+		BC_CUDA_ASSERT((cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE)));
+		BC_CUDA_ASSERT((cublasSgemm(handle, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc)));
     }
 
 	//y := alpha*A*x + beta*y,   or   y := alpha*A**T*x + beta*y,
@@ -72,8 +72,8 @@ struct Device {
 		auto TRANS_A =  transA ? CUBLAS_OP_T : CUBLAS_OP_N;
 
 		cublasHandle_t& handle = context.get_cublas_handle();
-		cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
-		cublasSgemv(handle, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY);
+		BC_CUDA_ASSERT((cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE)));
+		BC_CUDA_ASSERT((cublasSgemv(handle, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY)));
 	}
 
 	template<class Context>
@@ -84,15 +84,15 @@ struct Device {
 								  float* A, BC::size_t  lda) {
 
 		cublasHandle_t& handle = context.get_cublas_handle();
-		cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
-		cublasSger(handle, m, n, alpha, X, incX, Y, incY, A, lda);
+		BC_CUDA_ASSERT((cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE)));
+		BC_CUDA_ASSERT((cublasSger(handle, m, n, alpha, X, incX, Y, incY, A, lda)));
 	}
 
 	template<class Context>
 	static void dot(Context context, int n, float* A, const float* x, BC::size_t  incX, const float* y, BC::size_t  incY) {
 		cublasHandle_t& handle = context.get_cublas_handle();
-		cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE);
-		cublasSdot(handle, n, x, incX, y, incY, A);
+		BC_CUDA_ASSERT((cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE)));
+		BC_CUDA_ASSERT((cublasSdot(handle, n, x, incX, y, incY, A)));
 	}
 };
 

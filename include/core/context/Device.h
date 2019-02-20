@@ -37,7 +37,7 @@ struct Scalar_Recycler {
 
 		float* data_ptr;
 		if (get_recycler().empty()) {
-	        cudaMallocManaged((void**) &data_ptr, sizeof(float));
+			BC_CUDA_ASSERT(cudaMallocManaged((void**) &data_ptr, sizeof(float)));
 		} else {
 			get_locker().lock();
 			data_ptr = get_recycler().back();
@@ -57,13 +57,13 @@ struct Scalar_Recycler {
 
 struct Device_Stream_Contents {
 	 cublasHandle_t m_cublas_handle;
-	 cudaStream_t   m_stream_handle;
+	 cudaStream_t   m_stream_handle=nullptr;
 	 float*         m_scalar_buffer=nullptr;
 
 	 Device_Stream_Contents(bool init_stream=false, bool init_scalars=true) {
 		 cublasCreate(&m_cublas_handle);
 		 if (init_stream) {
-			 cudaStreamCreate(&m_stream_handle);
+			 BC_CUDA_ASSERT(cudaStreamCreate(&m_stream_handle));
 		 }
 		 if (init_scalars) {
 			 m_scalar_buffer = device_globals::Scalar_Recycler::allocate();
@@ -77,8 +77,10 @@ struct Device_Stream_Contents {
 	 }
 
 	 ~Device_Stream_Contents() {
-		 cublasDestroy(m_cublas_handle);
-		 cudaStreamDestroy(m_stream_handle);
+		 BC_CUDA_ASSERT(cublasDestroy(m_cublas_handle));
+
+		 if (m_stream_handle)
+			 BC_CUDA_ASSERT(cudaStreamDestroy(m_stream_handle));
 
 		 //remember we only need to deallocate alpha
 		 device_globals::Scalar_Recycler::deallocate(m_scalar_buffer);
@@ -86,7 +88,7 @@ struct Device_Stream_Contents {
 };
 
 namespace device_globals {
-	std::shared_ptr<Device_Stream_Contents> default_contents =
+	static std::shared_ptr<Device_Stream_Contents> default_contents =
 			std::shared_ptr<Device_Stream_Contents>(new Device_Stream_Contents());
 }
 
@@ -102,8 +104,8 @@ struct  Device {
 			locker.lock();
 			if (!scalar_constant_){
 				scalar_t tmp_val = value;
-				cudaMallocManaged((void**) &scalar_constant_, sizeof(scalar_t));
-				cudaMemcpy(scalar_constant_, &tmp_val, sizeof(scalar_t), cudaMemcpyHostToDevice);
+				BC_CUDA_ASSERT(cudaMallocManaged((void**) &scalar_constant_, sizeof(scalar_t)));
+				BC_CUDA_ASSERT(cudaMemcpy(scalar_constant_, &tmp_val, sizeof(scalar_t), cudaMemcpyHostToDevice));
 			}
 			locker.unlock();
 		}

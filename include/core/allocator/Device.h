@@ -40,12 +40,12 @@ struct Device {
 
     T* allocate(int sz=1) const {
     	T* data_ptr;
-        cudaMalloc((void**) &data_ptr, sizeof(T) * sz);
+    	BC_CUDA_ASSERT((cudaMalloc((void**) &data_ptr, sizeof(T) * sz)));
         return data_ptr;
     }
 
     void deallocate(T* data_ptr, BC::size_t  size) const {
-        cudaFree((void*)data_ptr);
+    	BC_CUDA_ASSERT((cudaFree((void*)data_ptr)));
     }
 
     constexpr bool operator == (const Device&) { return true; }

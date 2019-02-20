@@ -45,6 +45,36 @@
 
 #define BCHOT   		   inline __attribute__((always_inline)) __attribute__((hot))  //device-only inline
 
+#ifdef __CUDACC__
+#include <cublas.h>
+#include <iostream>
+namespace BC {
+#define BC_CUDA_ASSERT(ans) { BC_cuda_assert((ans), __FILE__, __LINE__); }
+inline void BC_cuda_assert(cudaError_t code, const char *file, int line)
+{
+   if (code != cudaSuccess)
+   {
+	   std::cout << "BC_CUDA CALL_FAILURE: " <<
+	   cudaGetErrorString(code) <<
+	   "\nfile: " << file <<
+	   "line: " << line << std::endl;
+	   throw code;
+   }
+}
+inline void BC_cuda_assert(cublasStatus_t code, const char *file, int line)
+{
+   if (code != CUBLAS_STATUS_SUCCESS)
+   {
+	   std::cout << "BC_CUBLAS CALL_FAILURE: " <<
+	   "\nfile: " << file <<
+	   "line: " << line << std::endl;
+	   throw code;
+   }
+}
+}
+
+#endif
+
 // --------------------------------- module body macro --------------------------------- //
 
 
@@ -93,9 +123,12 @@ namespace namespace_name {										 \
 // --------------------------------- openmp macros --------------------------------- //
 
 #if defined(_OPENMP) && !defined(BC_NO_OPENMP)
+	#define BC_OPENMP
+	#define __BC_omp_atomic__ _Pragma("omp atomic")
 	#define __BC_omp_for__ _Pragma("omp parallel for")
 	#define __BC_omp_bar__ _Pragma("omp barrier")
 #else
+	#define __BC_omp_atomic__
 	#define __BC_omp_for__
 	#define __BC_omp_bar__
 #endif

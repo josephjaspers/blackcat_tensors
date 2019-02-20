@@ -58,13 +58,17 @@ public:
         et::evaluate(tensor.as_derived().internal(), this->as_derived().get_full_context());
     }
     //--------------------------------------assignment operators-----------------------------------------------//
-#define BC_OPER_ASSIGNMENT_DEF(op, op_functor)                                                   \
+#define BC_OPER_ASSIGNMENT_DEF(op, op_functor)                                                  \
                                                                                                 \
-    template<class pDeriv> BCHOT                                                                        \
-    derived& operator op (const Tensor_Operations<pDeriv>& param) {                                \
+    template<class pDeriv> BCHOT                                                                \
+    derived& operator op (const Tensor_Operations<pDeriv>& param) {                             \
         BC_ASSERT_ASSIGNABLE("derived& operator " #op "(const Tensor_Operations<pDeriv>& param)");    \
         assert_valid(param);                                                                    \
-        evaluate(bi_expr< oper:: op_functor >(param));                                \
+		using operation = std::conditional_t<(derived::DIMS >= pDeriv::DIMS), 					\
+    				oper::op_functor, 															\
+    				oper::broadcasted_##op_functor<system_tag>										\
+    	>;																						\
+		evaluate(bi_expr< operation >(param));                                					\
         return as_derived();                                                                    \
     }
 

@@ -21,8 +21,8 @@ struct Device_Managed : Device<T> {
 
     T* allocate(BC::size_t sz) {
     	T* memptr = nullptr;
-        cudaMallocManaged((void**) &memptr, sizeof(T) * sz);
-        cudaDeviceSynchronize(); //This is only required for MallocManagedMemory
+    	BC_CUDA_ASSERT((cudaMallocManaged((void**) &memptr, sizeof(T) * sz)));
+    	BC_CUDA_ASSERT((cudaDeviceSynchronize())); //This is only required for MallocManagedMemory
         return memptr;
     }
 };
