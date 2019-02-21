@@ -88,8 +88,11 @@ struct Device_Stream_Contents {
 };
 
 namespace device_globals {
+auto get_default_contents() {
 	static std::shared_ptr<Device_Stream_Contents> default_contents =
 			std::shared_ptr<Device_Stream_Contents>(new Device_Stream_Contents());
+	return default_contents;
+}
 }
 
 
@@ -115,7 +118,7 @@ struct  Device {
 
 private:
 	std::shared_ptr<Device_Stream_Contents> device_contents =
-			device_globals::default_contents;
+			device_globals::get_default_contents();
 public:
 
 	template<class T>
@@ -155,7 +158,7 @@ public:
     }
     void destroy_stream() {
     	//'reset' to default
-    	device_contents = device_globals::default_contents;
+    	device_contents = device_globals::get_default_contents();
     }
 
     void sync_stream() {
