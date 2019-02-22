@@ -99,7 +99,7 @@ public:
          return *this;
     }
 
-    Tensor_Base(value_type scalar) {
+    Tensor_Base(BC::meta::only_if<DIMS==0, value_type> scalar) {
         static_assert(DIMS == 0, "SCALAR_INITIALIZATION ONLY AVAILABLE TO SCALARS");
         this->fill(scalar);
     }

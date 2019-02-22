@@ -72,7 +72,16 @@ public:
         return as_derived();                                                                    \
     }
 
-    BC_OPER_ASSIGNMENT_DEF(=, assign)
+    template<class pDeriv> BCHOT
+    derived& operator = (const Tensor_Operations<pDeriv>& param) {
+        BC_ASSERT_ASSIGNABLE("derived& operator = (const Tensor_Operations<pDeriv>& param)");
+        static_assert(derived::DIMS >= pDeriv::DIMS,
+        		"BlackCat_Tensors: Operator= is not a valid operation for (reduction) broadcasting");
+        assert_valid(param);
+		evaluate(bi_expr< BC::oper::assign >(param));
+        return as_derived();
+    }
+
     BC_OPER_ASSIGNMENT_DEF(+=, add_assign)
     BC_OPER_ASSIGNMENT_DEF(-=, sub_assign)
     BC_OPER_ASSIGNMENT_DEF(%=, mul_assign)
@@ -81,8 +90,7 @@ public:
 #undef BC_OPER_ASSIGNMENT_DEF
 
     //specialization for explicit copy operator
-    struct DISABLED;
-    derived& operator = (const std::conditional_t<copy_assignable, derived, DISABLED>& param) {
+    derived& operator = (const BC::meta::only_if<copy_assignable, derived>& param) {
         BC_ASSERT_ASSIGNABLE("derived& operator = (const derived& param)");
         assert_valid(param);
         evaluate(bi_expr< oper:: assign >(param));
