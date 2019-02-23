@@ -16,7 +16,7 @@
 
 
 namespace BC {
-namespace expression_template {
+namespace expression_templates {
 
 
 template<class lv, class rv, class System_Tag>

@@ -14,7 +14,7 @@
 #include "Shape.h"
 
 namespace BC {
-namespace expression_template     {
+namespace expression_templates     {
 
 template<class Derived, BC::dim_t Dimension>
 struct Array_Base : Expression_Template_Base<Derived>, BC_Array {

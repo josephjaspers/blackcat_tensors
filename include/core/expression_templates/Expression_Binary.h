@@ -13,7 +13,7 @@
 
 
 namespace BC {
-namespace expression_template {
+namespace expression_templates {
 
 
 template<class Lv, class Rv, class Operation>

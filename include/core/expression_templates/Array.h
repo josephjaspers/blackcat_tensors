@@ -13,7 +13,7 @@
 
 
 namespace BC {
-namespace expression_template {
+namespace expression_templates {
 
 template<class, int, bool> class Array_Slice;
 template<int,class,class,class...> class Array; //derived

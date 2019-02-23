@@ -12,7 +12,7 @@
 #include "Common.h"
 
 namespace BC {
-namespace expression_template {
+namespace expression_templates {
 
 template<class derived>
 class Expression_Template_Base : BC_Type {

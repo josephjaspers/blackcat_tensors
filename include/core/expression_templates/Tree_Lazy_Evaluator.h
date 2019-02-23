@@ -4,7 +4,7 @@
 #include "Tree_Greedy_Evaluator.h"
 
 namespace BC {
-namespace expression_template {
+namespace expression_templates {
 
 template<class context_type>
 struct Lazy_Evaluator {
@@ -16,7 +16,7 @@ struct Lazy_Evaluator {
 
     template<class T>
     static constexpr bool requires_greedy_eval() {
-        return expression_template::tree::optimizer<std::decay_t<T>>::requires_greedy_eval;
+        return expression_templates::tree::optimizer<std::decay_t<T>>::requires_greedy_eval;
     }
 
     //------------------------------------------------Purely lazy evaluation----------------------------------//
@@ -35,32 +35,32 @@ struct Lazy_Evaluator {
     template< class expression, class FullContext>
     static std::enable_if_t<requires_greedy_eval<expression>()>
     evaluate(const expression& expr, FullContext context_) {
-        auto greedy_evaluated_expr = expression_template::tree::Greedy_Evaluator::evaluate(expr, context_);
+        auto greedy_evaluated_expr = expression_templates::tree::Greedy_Evaluator::evaluate(expr, context_);
 
         if (!decay_same<decltype(greedy_evaluated_expr.right), decltype(expr.left)>) {
             impl::template nd_evaluator<expression::ITERATOR>(greedy_evaluated_expr, context_);
         }
         //decontext_ate any temporaries made by the tree
-        expression_template::tree::Greedy_Evaluator::deallocate_temporaries(greedy_evaluated_expr, context_);
+        expression_templates::tree::Greedy_Evaluator::deallocate_temporaries(greedy_evaluated_expr, context_);
     }
     //------------------------------------------------Greedy evaluation (BLAS function call detected), skip injection optimization--------------------//
     template< class expression, class FullContext>
     static std::enable_if_t<requires_greedy_eval<expression>()>
     evaluate_aliased(const expression& expr, FullContext context_) {
 
-        auto greedy_evaluated_expr = expression_template::tree::Greedy_Evaluator::evaluate_aliased(expr, context_);        //evaluate the internal tensor_type
+        auto greedy_evaluated_expr = expression_templates::tree::Greedy_Evaluator::evaluate_aliased(expr, context_);        //evaluate the internal tensor_type
         if (!decay_same<decltype(greedy_evaluated_expr.right), decltype(expr.left)>) {
         	impl::template nd_evaluator<expression::ITERATOR>(greedy_evaluated_expr, context_);
         }
         //decontext_ate any temporaries made by the tree
-        expression_template::tree::Greedy_Evaluator::deallocate_temporaries(greedy_evaluated_expr, context_);
+        expression_templates::tree::Greedy_Evaluator::deallocate_temporaries(greedy_evaluated_expr, context_);
     }
 };
 
 template<class Context>
 struct CacheEvaluator {
-    template<class branch> using sub_t  = BC::expression_template::Array<branch::DIMS, typename expression_template::expression_traits<branch>::scalar_t, typename Context::allocator_t, BC_Temporary>;
-//    template<class branch> using eval_t = BC::expression_template::Binary_Expression<sub_t<branch>, branch, BC::oper::assign>;
+    template<class branch> using sub_t  = BC::expression_templates::Array<branch::DIMS, typename expression_templates::expression_traits<branch>::scalar_t, typename Context::allocator_t, BC_Temporary>;
+//    template<class branch> using eval_t = BC::expression_templates::Binary_Expression<sub_t<branch>, branch, BC::oper::assign>;
 
     template<class branch> //The branch is an array, no evaluation required
     static std::enable_if_t<expression_traits<branch>::is_array, const branch&>
@@ -86,7 +86,7 @@ template<class array_t, class expression_t, class Context>
 auto evaluate_to(array_t array, expression_t expr, Context context) {
     static_assert(expression_traits<array_t>::is_array, "MAY ONLY EVALUATE TO ARRAYS");
     return Lazy_Evaluator<typename expression_t::system_tag>::evaluate(
-    		expression_template::make_bin_expr<oper::assign>(array, expr), context);
+    		expression_templates::make_bin_expr<oper::assign>(array, expr), context);
 }
 
 template<class expression_t, class Context>

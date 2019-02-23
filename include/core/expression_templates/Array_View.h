@@ -14,7 +14,7 @@
 
 
 namespace BC {
-namespace expression_template {
+namespace expression_templates {
 
 
 template<int Dimension, class Scalar, class Allocator>

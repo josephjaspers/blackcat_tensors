@@ -13,7 +13,7 @@
 #include "Expression_Template_Traits.h"
 
 namespace BC {
-namespace expression_template {
+namespace expression_templates {
 
 
 template<class lv, class rv, class left = void>

@@ -71,10 +71,10 @@ public:
 	using accessor::operator[];
     using accessor::operator();
 
-    using move_parameter        = BC::meta::only_if<expression_template::expression_traits<ExpressionTemplate>::is_move_constructible_v, self&&>;
-    using copy_parameter        = BC::meta::only_if<expression_template::expression_traits<ExpressionTemplate>::is_copy_constructible_v, const self&>;
-    using move_assign_parameter = BC::meta::only_if<expression_template::expression_traits<ExpressionTemplate>::is_move_assignable_v,       self&&>;
-    using copy_assign_parameter = BC::meta::only_if<expression_template::expression_traits<ExpressionTemplate>::is_copy_assignable_v, const self&>;
+    using move_parameter        = BC::meta::only_if<expression_templates::expression_traits<ExpressionTemplate>::is_move_constructible_v, self&&>;
+    using copy_parameter        = BC::meta::only_if<expression_templates::expression_traits<ExpressionTemplate>::is_copy_constructible_v, const self&>;
+    using move_assign_parameter = BC::meta::only_if<expression_templates::expression_traits<ExpressionTemplate>::is_move_assignable_v,       self&&>;
+    using copy_assign_parameter = BC::meta::only_if<expression_templates::expression_traits<ExpressionTemplate>::is_copy_assignable_v, const self&>;
 
     Tensor_Base() = default;
     Tensor_Base(const parent&  param) : parent(param) {}
