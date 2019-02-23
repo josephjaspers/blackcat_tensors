@@ -92,17 +92,17 @@ struct Greedy_Evaluator {
 	}
 
 
-	template<class lv, class rv, class Allocator>
-	static auto evaluate(Binary_Expression<lv, rv, oper::mul_assign> expression, Allocator& alloc) {
+	template<
+		class lv,
+		class rv,
+		class Allocator,
+		class assignment_oper,
+		class=std::enable_if_t<BC::oper::operation_traits<assignment_oper>::is_assignment_operation>
+	>
+	static auto evaluate(Binary_Expression<lv, rv, assignment_oper> expression, Allocator& alloc) {
 		auto right_eval =  optimizer<rv>::temporary_injection(expression.right,  alloc);
-		return make_bin_expr<oper::mul_assign>(expression.left, right_eval);
+		return make_bin_expr<assignment_oper>(expression.left, right_eval);
 
-	}
-
-	template<class lv, class rv, class Allocator>
-	static auto evaluate(Binary_Expression<lv, rv, oper::div_assign> expression, Allocator& alloc) {
-		auto right_eval = optimizer<rv>::temporary_injection(expression.right, alloc);
-		return make_bin_expr<oper::div_assign>(expression.left, right_eval);
 	}
 
 	template<class lv, class rv, class op, class Allocator>
