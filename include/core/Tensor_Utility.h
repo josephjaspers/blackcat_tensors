@@ -15,6 +15,8 @@
 #include <string>
 #include <sstream>
 
+#include "expression_templates/Expression_Template_Traits.h"
+
 namespace BC {
 template<class> class Tensor_Base;
 namespace module {
@@ -30,7 +32,8 @@ template<class Derived>
 struct Tensor_Utility<Tensor_Base<Derived>> {
 
 	#define BC_ASSERT_ARRAY_ONLY(literal)\
-	static_assert(BC::is_array<Derived>(), "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
+	static_assert(expression_template::expression_traits<Derived>::is_array\
+			, "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
 
 	using system_tag = typename Derived::system_tag;
     using derived = Tensor_Base<Derived>;
@@ -218,7 +221,7 @@ public:
             }
             if (overrideDimensions) {
 
-                et::Shape<derived::DIMS> shape;
+                expression_template::Shape<derived::DIMS> shape;
                 for (int i = 0; i < derived::DIMS; ++i) {
                     shape.is()[i] = (int) file_data[i + 1];
                 }
@@ -279,4 +282,5 @@ public:
 }
 }
 
+#undef BC_ASSERT_ARRAY_ONLY
 #endif /* TENSOR_LV2_CORE_IMPL_H_ */

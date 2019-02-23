@@ -13,7 +13,7 @@
 
 
 namespace BC {
-namespace et {
+namespace expression_template {
 
 template<class, int, bool> class Array_Slice;
 template<int,class,class,class...> class Array; //derived
@@ -163,14 +163,14 @@ public:
 	}
 
 	//Construct via shape-like object
-    template<class U,typename = std::enable_if_t<!BC::is_array<U>() && !BC::is_expr<U>()>>
+    template<class U,typename = std::enable_if_t<!expression_traits<U>::is_array && !expression_traits<U>::is_expr>>
     Array(U param) {
     	this->as_shape() = Shape<Dimension>(param);
     	this->array = this->allocate(this->size());
     }
 
 	//Construct via shape-like object and Allocator
-    template<class U,typename = std::enable_if_t<!BC::is_array<U>() && !BC::is_expr<U>()>>
+    template<class U,typename = std::enable_if_t<!expression_traits<U>::is_array && !expression_traits<U>::is_expr>>
     Array(U param, const Allocator& alloc_) : Allocator(alloc_) {
     	this->as_shape() = Shape<Dimension>(param);
     	this->array = this->allocate(this->size());
@@ -188,7 +188,7 @@ public:
 	}
 
 	//Shape-like object with maybe allocator
-    template<class Expr,typename = std::enable_if_t<BC::is_array<Expr>() || BC::is_expr<Expr>()>>
+    template<class Expr,typename = std::enable_if_t<expression_traits<Expr>::is_array || expression_traits<Expr>::is_expr>>
 	Array(const Expr& expr_t, const Allocator& alloc=Allocator()) : Allocator(alloc) {
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());

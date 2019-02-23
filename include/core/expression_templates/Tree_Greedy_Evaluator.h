@@ -38,7 +38,7 @@
 
 
 namespace BC {
-namespace et {
+namespace expression_template {
 namespace tree {
 namespace detail {
 

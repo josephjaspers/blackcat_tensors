@@ -12,7 +12,7 @@
 #include "Expression_Base.h"
 
 namespace BC {
-namespace et {
+namespace expression_template {
 
 
 template<class Value, class operation>

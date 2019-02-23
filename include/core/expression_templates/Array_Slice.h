@@ -14,7 +14,7 @@
 
 
 namespace BC {
-namespace et {
+namespace expression_template {
 
 
 template<class Parent>
@@ -154,7 +154,7 @@ struct Array_Slice :
 		BC::array<dim_id, BC::size_t> inner_shape = internal.inner_shape();
 
 		inner_shape[dim_id-1] = range;
-		BC::et::Shape<dim_id> new_shape(inner_shape);
+		BC::expression_template::Shape<dim_id> new_shape(inner_shape);
 
 		return Array_Slice<Parent, Parent::DIMS>(
 				internal, new_shape, index);

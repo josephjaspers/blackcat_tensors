@@ -12,11 +12,11 @@
 #include "Expression_Template_Traits.h"
 
 namespace BC {
-namespace et {
+namespace expression_template {
 
-template<class T>           using enable_if_array = std::enable_if_t<BC::is_array<T>()>;
-template<class T, class U>  using enable_if_arrays = std::enable_if_t<BC::is_array<T>() && BC::is_array<U>()>;
-template<class T>           using enable_if_blas = std::enable_if_t<std::is_base_of<BLAS_Function, T>::value>;
+template<class T>           using enable_if_array = std::enable_if_t<expression_traits<T>::is_array>;
+template<class T, class U>  using enable_if_arrays = std::enable_if_t<expression_traits<T>::is_array && expression_traits<U>::is_array>;
+template<class T>           using enable_if_blas = std::enable_if_t<expression_traits<T>::is_blas_function>;
 
 template<class> class front;
 template<template<class...> class param, class first, class... set>
@@ -30,7 +30,7 @@ template<class T, class voider = void> struct blas_feature_detector {
     static constexpr bool transposed = false;
     static constexpr bool scalar = false;
 
-    template<class param> static scalar_of<param>* get_scalar(const param& p) { return nullptr; }
+    template<class param> static typename expression_traits<param>::scalar_t* get_scalar(const param& p) { return nullptr; }
     template<class param> static auto& get_array (const param& p)  { return p; }
 };
 
@@ -46,7 +46,7 @@ template<class deriv> struct blas_feature_detector<deriv, enable_if_array<deriv>
 
 ////IF TRANSPOSE - unary_expression(matrix^T)
 template<class deriv, class ml>
-struct blas_feature_detector<et::Unary_Expression<deriv, oper::transpose<ml>>, enable_if_array<deriv>> {
+struct blas_feature_detector<expression_template::Unary_Expression<deriv, oper::transpose<ml>>, enable_if_array<deriv>> {
     static constexpr bool evaluate = false;
     static constexpr bool transposed = true;
     static constexpr bool scalar = false;

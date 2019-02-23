@@ -15,6 +15,24 @@
 namespace BC {
 namespace meta {
 
+	template<class... Ts> using void_t = void;
+
+	template<template<class> class func, class T, class voider=void>
+	struct is_detected : std::false_type { };
+
+	template<template<class> class func, class T>
+	struct is_detected<func, T, std::enable_if_t<std::is_void<void_t<func<T>>>::value>> : std::true_type { };
+
+	/*
+	 * example -- has allocator --> template<class t> using allocator = typename allocator_t;
+	 *  --> is_detected<allocator, type_argument>::value
+	 *
+	 */
+
+	template<template<class> class func, class T>
+	static constexpr bool is_detected_v = is_detected<func, T>::value;
+
+
     template<class t,class u> static constexpr bool is_same = std::is_same<t,u>::value;
 
     BCINLINE static constexpr BC::size_t  max(int x) { return x; }

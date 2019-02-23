@@ -22,7 +22,7 @@ template<int x> struct beta_modifier  : beta_modifier_base  { static constexpr i
 struct assignment_operation {};
 struct linear_operation {};
 struct linear_assignment_operation : linear_operation, assignment_operation {};
-using BLAS_Function = BC::BLAS_Function;
+struct BLAS_Function {};
 
 
 }

@@ -20,7 +20,7 @@ struct operation_traits {
 	static constexpr bool is_linear_operation = std::is_base_of<linear_operation,T>::value;
 	static constexpr bool is_linear_assignment_operation = std::is_base_of<linear_assignment_operation, T>::value;
 	static constexpr bool is_assignment_operation        = std::is_base_of<assignment_operation, T>::value;
-	static constexpr bool is_blas_function               = std::is_base_of<BC::BLAS_Function, T>::value;
+	static constexpr bool is_blas_function               = std::is_base_of<BLAS_Function, T>::value;
 	static constexpr bool is_nonlinear_operation 		 = !is_blas_function && !is_linear_operation;
 };
 

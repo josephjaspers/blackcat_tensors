@@ -14,7 +14,7 @@
 
 
 namespace BC {
-namespace et {
+namespace expression_template {
 
 
 template<int Dimension, class Scalar, class Allocator>
@@ -68,7 +68,7 @@ struct Array_View : ArrayViewExpr<Dimension, Scalar, Allocator> {
 		class tensor_t,
 		typename = std::enable_if_t<
 			tensor_t::DIMS == Dimension &&
-			BC::is_array<tensor_t>()>
+			expression_traits<tensor_t>::is_array>
 	>
 	Array_View(const tensor_t& tensor) {
 		this->array = tensor.memptr();

@@ -15,14 +15,14 @@
 #include "Array_Scalar_Constant.h"
 
 namespace BC {
-namespace et {
+namespace expression_template {
 
 
 template<class lv, class rv, class System_Tag>
 struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
-    : Expression_Base<Binary_Expression<lv, rv,  oper::ger<System_Tag>>>, BLAS_Function {
+    : Expression_Base<Binary_Expression<lv, rv,  oper::ger<System_Tag>>>, oper::ger<System_Tag> {
 
-    static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,
+	static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,
     		"GER ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
 
     using value_type  = typename lv::value_type;

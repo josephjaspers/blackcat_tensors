@@ -10,9 +10,10 @@
 #define BC_EXPRESSION_TEMPLATES_COMMON_H_
 
 #include <type_traits>
+#include "Expression_Template_Traits.h"
 
 namespace BC {
-namespace et {
+namespace expression_template {
 
 
 template<class lv, class rv, class left = void>

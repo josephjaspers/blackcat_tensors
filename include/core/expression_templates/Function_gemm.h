@@ -15,15 +15,15 @@
 
 
 namespace BC {
-namespace et {
+namespace expression_template {
 
 
 template<class lv, class rv, class System_Tag>
 struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
 : Expression_Base<Binary_Expression<lv, rv, oper::gemm<System_Tag>>>,
-  BLAS_Function {
+  oper::gemm<System_Tag> {
 
-    static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,\
+	static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,
     		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
 
     using value_type  = typename lv::value_type;

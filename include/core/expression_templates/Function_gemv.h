@@ -16,14 +16,14 @@
 
 
 namespace BC {
-namespace et {
+namespace expression_template {
 
 
 template<class lv, class rv, class System_Tag>
 struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
-: Expression_Base<Binary_Expression<lv, rv,  oper::gemv<System_Tag>>>, BLAS_Function {
+: Expression_Base<Binary_Expression<lv, rv,  oper::gemv<System_Tag>>>, oper::gemv<System_Tag> {
 
-    static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,
+	static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,
     		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
     static_assert(lv::DIMS == 2 && rv::DIMS == 1,
     		"GEMV DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");

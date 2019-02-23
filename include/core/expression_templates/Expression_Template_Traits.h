@@ -13,25 +13,40 @@
 
 
 namespace BC {
-namespace et {
+namespace expression_template {
+
+class BC_Type {}; //a type inherited by expressions and tensor_cores, it is used a flag and lacks a "genuine" implementation
+class BC_Array {};
+class BC_Expr  {};
+class BC_Temporary {};
+class BC_Scalar_Constant {};
+class BC_Constant {};
 
 template<class,class,class> class Binary_Expression;
 template<class,class>       class Unary_Expression;
 
-namespace bc_type_traits {
-template<class T> using allocator_of = std::decay_t<typename T::allocator_t>;
-template<class T> using scalar_of    = std::decay_t<typename T::value_type>;
+template<class T> using allocator_of  = typename T::allocator_t;
+template<class T> using scalar_of     = typename T::value_type;
 
 
-template<class T> constexpr bool is_move_constructible_v= T::move_constructible;
-template<class T> constexpr bool is_copy_constructible_v= T::copy_constructible;
-template<class T> constexpr bool is_move_assignable_v = T::move_assignable;
-template<class T> constexpr bool is_copy_assignable_v = T::copy_assignable;
+template<class T>
+struct expression_traits {
+
+	static constexpr bool is_move_constructible_v= T::move_constructible;
+	static constexpr bool is_copy_constructible_v= T::copy_constructible;
+	static constexpr bool is_move_assignable_v = T::move_assignable;
+	static constexpr bool is_copy_assignable_v = T::copy_assignable;
+
+	 static constexpr bool is_bc_type  = std::is_base_of<BC_Type, T>::value;
+	 static constexpr bool is_array  = std::is_base_of<BC_Array, T>::value;
+	 static constexpr bool is_expr  = std::is_base_of<BC_Expr, T>::value;
+	 static constexpr bool is_temporary  = std::is_base_of<BC_Temporary, T>::value;
+	 static constexpr bool is_constant  = std::is_base_of<BC_Constant, T>::value;
+};
+
+
 }
-}
 
-//push type_traits into BC_namespace
-using namespace et::bc_type_traits;
 }
 
 

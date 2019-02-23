@@ -24,7 +24,7 @@
 
 
 namespace BC {
-namespace et {
+namespace expression_template {
 namespace tree {
 using namespace oper;
 
@@ -97,7 +97,7 @@ auto evaluate_temporary_injection(Expression expr, Context context) {
 
 //-------------------------------- Array ----------------------------------------------------//
 template<class T>
-struct optimizer<T, std::enable_if_t<is_array<T>() && !is_temporary<T>()>>
+struct optimizer<T, std::enable_if_t<expression_traits<T>::is_array && !expression_traits<T>::is_temporary>>
 : optimizer_default<T> {};
 
 //--------------Temporary---------------------------------------------------------------------//
@@ -105,7 +105,7 @@ struct optimizer<T, std::enable_if_t<is_array<T>() && !is_temporary<T>()>>
 template<int x, class Scalar, class Context>
 struct optimizer<
 	ArrayExpression<x, Scalar, Context, BC_Temporary>,
-	std::enable_if_t<BC::is_temporary<ArrayExpression<x, Scalar, Context, BC_Temporary>>()>>
+	std::enable_if_t<expression_traits<ArrayExpression<x, Scalar, Context, BC_Temporary>>::is_temporary>>
  : optimizer_default<ArrayExpression<x, Scalar, Context, BC_Temporary>> {
 
 
@@ -121,7 +121,7 @@ struct optimizer<
 
 
 template<class lv, class rv, class op>
-struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<is_blas_func<op>()>> {
+struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation_traits<op>::is_blas_function>> {
     static constexpr bool entirely_blas_expr = true;
     static constexpr bool partial_blas_expr = true;
     static constexpr bool nested_blas_expr = true;
