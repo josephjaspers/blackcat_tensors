@@ -9,21 +9,6 @@
 #ifndef BLACKCAT_TENSOR_OPERATIONS_H_
 #define BLACKCAT_TENSOR_OPERATIONS_H_
 
-#include <iostream>
-
-#include "expression_templates/Array_Scalar_Constant.h"
-#include "expression_templates/Expression_Unary.h"
-#include "expression_templates/Expression_Binary.h"
-
-#include "expression_templates/Function_transpose.h"
-#include "expression_templates/Function_dot.h"
-#include "expression_templates/Function_ger.h"
-#include "expression_templates/Function_gemv.h"
-#include "expression_templates/Function_gemm.h"
-
-#include "expression_templates/Tree_Lazy_Evaluator.h"
-
-
 namespace BC {
 template<class internal_t> class Tensor_Base;
 

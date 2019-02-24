@@ -15,8 +15,6 @@
 #include <string>
 #include <sstream>
 
-#include "expression_templates/Expression_Template_Traits.h"
-
 namespace BC {
 template<class> class Tensor_Base;
 namespace module {

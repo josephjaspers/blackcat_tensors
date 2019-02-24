@@ -9,12 +9,6 @@
 #ifndef BLACKCAT_TENSOR_ACCESSOR_H_
 #define BLACKCAT_TENSOR_ACCESSOR_H_
 
-
-#include "expression_templates/Array.h"
-#include "expression_templates/Array_Slice.h"
-#include "expression_templates/Array_Strided_Vector.h"
-
-
 namespace BC {
 namespace module {
 

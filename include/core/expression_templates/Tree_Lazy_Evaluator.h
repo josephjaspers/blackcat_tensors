@@ -1,6 +1,7 @@
 #ifndef TRIVIAL_EVALUATOR_H_
 #define TRIVIAL_EVALUATOR_H_
 
+#include "nd_evaluator/Evaluator.h"
 #include "Tree_Greedy_Evaluator.h"
 
 namespace BC {
