@@ -22,7 +22,6 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
 	using lv_value_t = typename Lv::value_type;
 	using rv_value_t = typename Rv::value_type;
     using value_type = decltype(std::declval<Operation>()(std::declval<lv_value_t&>(), std::declval<rv_value_t&>()));
-//    using allocator_t = typename Lv::allocator_t;
     using system_tag  = typename Lv::system_tag;
     using function_t = Operation;
 
