@@ -11,8 +11,7 @@
 
 #include "Tensor_Operations.h"
 #include "Tensor_Accessor.h"
-#include "Tensor_Iterator.h"
-#include "Tensor_Algorithm.h"
+#include "Tensor_IterAlgos.h"
 #include "Tensor_Utility.h"
 #include "Tensor_CMath.h"
 
@@ -22,10 +21,9 @@ template<class ExpressionTemplate>
 class Tensor_Base :
         public ExpressionTemplate,
         public module::Tensor_Operations<Tensor_Base<ExpressionTemplate>>,
-        public module::Tensor_Algorithm<Tensor_Base<ExpressionTemplate>>,
         public module::Tensor_Utility<Tensor_Base<ExpressionTemplate>>,
         public module::Tensor_Accessor<Tensor_Base<ExpressionTemplate>>,
-        public module::Tensor_Iterator<Tensor_Base<ExpressionTemplate>> {
+        public module::Tensor_IterAlgos<Tensor_Base<ExpressionTemplate>> {
 
 public:
 
@@ -45,8 +43,7 @@ public:
 
     using ExpressionTemplate::DIMS; //required
     using value_type  = typename ExpressionTemplate::value_type;
-    using allocator_t = typename ExpressionTemplate::allocator_t;
-	using system_tag  = typename BC::allocator_traits<allocator_t>::system_tag;
+	using system_tag  = typename ExpressionTemplate::system_tag;
 
     using operations::operator=;
 	using operations::operator+;

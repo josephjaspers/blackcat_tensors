@@ -22,7 +22,6 @@ struct Unary_Expression<Value, oper::transpose<System_Tag>>
 
     using value_type  = typename Value::value_type;
     using system_tag = System_Tag;
-    using allocator_t = allocator::implementation<system_tag, value_type>;
 
     static constexpr int DIMS = Value::DIMS;
     static constexpr int ITERATOR = DIMS > 1? DIMS :0;

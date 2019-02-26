@@ -10,15 +10,14 @@
 #define STL_ITERATOR_COMMON_H_
 
 namespace BC {
-namespace module {
-namespace stl {
+namespace iterators {
 
 enum direction {
     forward = 1,
     reverse = -1
 };
 
-}
+
 }
 }
 

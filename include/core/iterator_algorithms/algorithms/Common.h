@@ -21,4 +21,17 @@
 #endif
 
 
+namespace BC {
+namespace algorithms {
+
+template<class Context>
+struct Parallize {
+
+
+
+};
+
+}
+}
+
 #endif /* COMMON_H_ */

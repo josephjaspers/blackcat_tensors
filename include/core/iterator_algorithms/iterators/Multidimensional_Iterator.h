@@ -9,11 +9,10 @@
 #ifndef ITERATOR_H_
 #define ITERATOR_H_
 
-#include "Iterator_Base.h"
-#include "Coefficientwise_Iterator.h"
+#include "Common.h"
+
 namespace BC {
-namespace module {
-namespace stl {
+namespace iterators {
 
 template<direction direction, class tensor_t>
 struct Multidimensional_Iterator {
@@ -130,7 +129,6 @@ reverse_iterator_end(derived_t& derived) {
 }
 
 
-}
 }
 }
 

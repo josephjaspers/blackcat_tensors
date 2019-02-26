@@ -27,7 +27,6 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 
     using value_type  = typename lv::value_type;
     using system_tag = System_Tag;
-    using allocator_t = typename allocator::implementation<system_tag, value_type>;
     using blas_lib     = typename blas::implementation<system_tag>;
     using utility_lib  = typename utility::implementation<system_tag>;
     using function_t = oper::ger<System_Tag>;

@@ -30,7 +30,6 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
 
     using value_type    = typename lv::value_type;
     using system_tag  = System_Tag;
-    using allocator_t = allocator::implementation<system_tag, value_type>;
     using impl_l      = blas::implementation<system_tag>;
     using utility_l   = utility::implementation<system_tag>;
     using function_t = oper::gemv<System_Tag>;

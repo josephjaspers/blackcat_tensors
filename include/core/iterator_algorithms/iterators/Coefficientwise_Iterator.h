@@ -9,11 +9,10 @@
 #ifndef ELEMENTWISE_Coefficientwise_Iterator_H_
 #define ELEMENTWISE_Coefficientwise_Iterator_H_
 
-#include "Iterator_Base.h"
+#include "Common.h"
 
 namespace BC {
-namespace module {
-namespace stl {
+namespace iterators {
 
 template<direction direction, class tensor_t_>
 struct Coefficientwise_Iterator {
@@ -121,8 +120,10 @@ template<class tensor_t>
 auto reverse_cwise_iterator_end(tensor_t& tensor) {
     return Coefficientwise_Iterator<direction::reverse, tensor_t>(tensor, -1);
 }
+
+
 }
 }
-}
+
 
 #endif /* ELEMENTWISE_Coefficientwise_Iterator_H_ */

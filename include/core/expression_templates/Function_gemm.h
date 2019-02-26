@@ -27,7 +27,6 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
     		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
 
     using value_type  = typename lv::value_type;
-    using allocator_t = typename lv::allocator_t;
     using system_tag = System_Tag;
     using impl_l  = typename blas::implementation<system_tag>;
     using utility_l   = utility::implementation<system_tag>;

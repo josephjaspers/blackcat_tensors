@@ -17,12 +17,11 @@ namespace expression_templates {
 
 
 //identical to Array_Scalar, though the scalar is allocated on the stack opposed to heap
-template<class Scalar, class Allocator>
-struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, Allocator>, 0>{
+template<class Scalar, class SystemTag>
+struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, SystemTag>, 0>{
 
     using value_type = Scalar;
-    using allocator_t = Allocator;
-    using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
+    using system_tag = SystemTag;
 
     static constexpr int ITERATOR = 0;
     static constexpr int DIMS     = 0;
@@ -48,9 +47,9 @@ struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, Allocator>
 };
 
 
-template<class allocator_t, class value_type>
+template<class SystemTag, class value_type>
 auto scalar_constant(value_type scalar) {
-    return Scalar_Constant<value_type, allocator_t>(scalar);
+    return Scalar_Constant<value_type, SystemTag>(scalar);
 }
 
 

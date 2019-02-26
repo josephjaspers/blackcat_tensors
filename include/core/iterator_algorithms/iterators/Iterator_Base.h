@@ -11,8 +11,7 @@
 #include "STL_Iterator_Common.h"
 
 namespace BC {
-namespace module {
-namespace stl {
+namespace iterators {
 
 template<class derived, direction direction, class tensor_t_>
 struct IteratorBase {
@@ -89,7 +88,6 @@ public:
 };
 
 
-}
 }
 }
 

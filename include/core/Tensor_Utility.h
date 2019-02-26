@@ -36,7 +36,6 @@ struct Tensor_Utility<Tensor_Base<Derived>> {
 	using system_tag = typename Derived::system_tag;
     using derived = Tensor_Base<Derived>;
     using scalar  = typename Derived::value_type;
-    using allocator_t = typename Derived::allocator_t;
     using utility_l = utility::implementation<system_tag>;
 
     template<class>

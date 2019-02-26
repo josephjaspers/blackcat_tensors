@@ -49,52 +49,9 @@ struct propagate_on_temporary_construction_of<
 : std::true_type {
 
 	using type = std::true_type;
-//	using prop_type = typename alloc::propagate_on_temporary_construction;
-//	using system_tag = typename system_tag_of<alloc>::type;
-//	using value_type = typename alloc::value_type;  //mandatory
-//	using default_type = typename allocator::implementation<system_tag, value_type>;
-//
-//	using type = std::conditional_t<std::is_same<std::true_type, prop_type>::value, std::true_type, //if true use same_type
-//				 std::conditional_t<std::is_same<std::false_type, prop_type>::value, std::false_type, //if false use default
-//				 	 	 	 	 	prop_type>>;	//else use the whatever type is used
 
 };
 
-
-////----------------------------select_on_temporary_creation-------------------------------------//
-////If the allocator does not define 'select_on_temporary_creation' default to host_tag
-//template<class alloc, class enabler=void>
-//struct get_select_on_temporary_construction : std::false_type {
-//
-//	using prop_t = typename propagate_on_temporary_construction_of<alloc>::type;
-//	static constexpr bool prop_t_is_same = std::is_same<prop_t, alloc>::value;
-//
-//	//the function to be called if an alternate allocator is not specified
-//	template<class ADL=void> //ensures two phase lookup
-//	static std::enable_if_t<std::is_void<ADL>::value && prop_t_is_same, alloc> get(const alloc& alloc_) {
-//		return std::allocator_traits<alloc>::select_on_copy_construction(alloc_);
-//	}
-//
-//	//if a different allocator_type is specified, but select_on is not defined
-//	template<class ADL=void, class ADL2=void> //ADL2 ensures this counts as a seperate instantiation
-//	static std::enable_if_t<std::is_void<ADL>::value && prop_t_is_same, alloc> get(const alloc& alloc_) {
-//		return prop_t();
-//	}
-//};
-//
-////if select on is defined
-//template<class alloc>
-//struct get_select_on_temporary_construction<
-//	alloc,
-//	std::enable_if_t<
-//		!std::is_void<decltype(std::declval<alloc>().select_on_temporary_creation())>::value
-//	>
-//> : std::true_type {
-//
-//	static auto get(const alloc& alloc_) {
-//		return alloc_.select_on_temporary_creation();
-//	}
-//};
 
 
 template<bool, class enabler=void>
@@ -122,29 +79,9 @@ struct allocator_traits : std::allocator_traits<Allocator> {
 			= typename propagate_on_temporary_construction_of<Allocator>::type; //true_type or false_type
 
 	static auto select_on_temporary_construction(const Allocator & alloc) {
-		struct select_on {
-			static auto impl(const Allocator& alloc) {
-				return get_select_on_temporary_construction<propagate_on_temporary_construction::value>::get(alloc);
-			}
-		};
-		struct default_alloc {
-			static auto impl(const Allocator& alloc) {
-				return implementation<system_tag, typename Allocator::value_type>();
-			}
-		};
-
-		using func = std::conditional_t<propagate_on_temporary_construction::value, select_on, default_alloc>;
-		return func::impl(alloc);
+		return get_select_on_temporary_construction<propagate_on_temporary_construction::value>::get(alloc);
 	}
 
-//	static auto select_on_temporary_construction(const Allocator& alloc) {
-////		return get_select_on_temporary_construction<Allocator>::get(alloc);
-//		if (propagate_on_temporary_construction_of<Allocator>::type::value) {
-//			return std::allocator_traits<Allocator>::select_on_container_copy_construction(alloc);
-//		} else {
-//			return Allocator();
-//		}
-//	}
 };
 
 }
