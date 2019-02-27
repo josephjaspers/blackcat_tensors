@@ -34,7 +34,7 @@ using Basic_Allocator = allocator::Host<T>;
 
 
 template<int dimension, class value_type, class allocator_t=alloc_t<value_type>>
-using Tensor = Tensor_Base<expression_templates::Array<dimension, value_type, allocator_t>>;
+using Tensor = Tensor_Base<exprs::Array<dimension, value_type, allocator_t>>;
 
 #define BC_TENSOR_ALIAS_CORE_DEF(index, name)\
 		template<class value_type, class allocator_t = alloc_t<value_type>>\
@@ -48,7 +48,7 @@ BC_TENSOR_ALIAS_CORE_DEF(3, Cube)
 #undef BC_TENSOR_ALIAS_CORE_DEF
 
 template<int dimension, class value_type, class allocator_t=alloc_t<value_type>>
-using Tensor_View = Tensor_Base<expression_templates::Array_View<dimension, value_type, allocator_t>>;
+using Tensor_View = Tensor_Base<exprs::Array_View<dimension, value_type, allocator_t>>;
 
 template<class value_type, class allocator_t = alloc_t<value_type>> using Scalar_View = Tensor_View<0, value_type, allocator_t>;
 template<class value_type, class allocator_t = alloc_t<value_type>> using Vector_View = Tensor_View<1, value_type, allocator_t>;

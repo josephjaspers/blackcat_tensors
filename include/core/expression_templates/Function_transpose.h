@@ -13,7 +13,7 @@
 
 
 namespace BC {
-namespace expression_templates {
+namespace exprs {
 
 
 template<class Value, class System_Tag>

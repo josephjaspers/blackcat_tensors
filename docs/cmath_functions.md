@@ -9,7 +9,7 @@ BC::Matrix<float> a(m,n);
 BC::Matrix<float> b(m,n);
 BC::Matrix<float> c(m,n);
 
-a =  b + BC::sin(c); //will lazily evaluate to become a single for-loop. See: [expression_templates](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/algorithms.md)
+a =  b + BC::sin(c); //will lazily evaluate to become a single for-loop. See: [exprs](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/algorithms.md)
 ```
 
 ##### Supported Functions

@@ -169,7 +169,7 @@ static constexpr  BC::size_t MULTITHREAD_THRESHOLD = 16384;
 #include "Meta.h"
 #include "Structures.h"
 #include "Tags.h"
-#include "Operations.h"
+
 /*
  * Include Order:
  * 	1) Dependencies of Core

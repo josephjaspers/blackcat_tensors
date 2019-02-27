@@ -8,6 +8,8 @@
 #ifndef EXPRESSION_TEMPLATES_H_
 #define EXPRESSION_TEMPLATES_H_
 
+#include "operations/Operations.h"
+
 #include "Array.h"
 #include "Array_Slice.h"
 #include "Array_Strided_Vector.h"

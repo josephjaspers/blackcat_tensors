@@ -30,7 +30,7 @@ template<class Derived>
 struct Tensor_Utility<Tensor_Base<Derived>> {
 
 	#define BC_ASSERT_ARRAY_ONLY(literal)\
-	static_assert(expression_templates::expression_traits<Derived>::is_array\
+	static_assert(exprs::expression_traits<Derived>::is_array\
 			, "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
 
 	using system_tag = typename Derived::system_tag;
@@ -218,7 +218,7 @@ public:
             }
             if (overrideDimensions) {
 
-                expression_templates::Shape<derived::DIMS> shape;
+                exprs::Shape<derived::DIMS> shape;
                 for (int i = 0; i < derived::DIMS; ++i) {
                     shape.is()[i] = (int) file_data[i + 1];
                 }

@@ -12,7 +12,7 @@
 #include "Expression_Template_Traits.h"
 
 namespace BC {
-namespace expression_templates {
+namespace exprs {
 
 template<class T>           using enable_if_array = std::enable_if_t<expression_traits<T>::is_array>;
 template<class T, class U>  using enable_if_arrays = std::enable_if_t<expression_traits<T>::is_array && expression_traits<U>::is_array>;
@@ -46,7 +46,7 @@ template<class deriv> struct blas_feature_detector<deriv, enable_if_array<deriv>
 
 ////IF TRANSPOSE - unary_expression(matrix^T)
 template<class deriv, class ml>
-struct blas_feature_detector<expression_templates::Unary_Expression<deriv, oper::transpose<ml>>, enable_if_array<deriv>> {
+struct blas_feature_detector<exprs::Unary_Expression<deriv, oper::transpose<ml>>, enable_if_array<deriv>> {
     static constexpr bool evaluate = false;
     static constexpr bool transposed = true;
     static constexpr bool scalar = false;

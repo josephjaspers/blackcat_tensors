@@ -24,7 +24,7 @@
 
 
 namespace BC {
-namespace expression_templates {
+namespace exprs {
 namespace tree {
 using namespace oper;
 

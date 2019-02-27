@@ -12,7 +12,7 @@
 #include "Common.h"
 
 namespace BC {
-namespace expression_templates {
+namespace exprs {
 
 template<class derived>
 class Inner_Shape {

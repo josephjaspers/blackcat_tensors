@@ -13,7 +13,7 @@
 
 
 namespace BC {
-namespace expression_templates {
+namespace exprs {
 
 
 //identical to Array_Scalar, though the scalar is allocated on the stack opposed to heap

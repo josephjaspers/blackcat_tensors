@@ -29,7 +29,7 @@ struct Tensor_Operations<Tensor_Base<internal_type>> {
 
 private:
 
-    static constexpr bool copy_assignable = expression_templates::expression_traits<internal_type>::is_copy_assignable_v;
+    static constexpr bool copy_assignable = exprs::expression_traits<internal_type>::is_copy_assignable_v;
     #define BC_ASSERT_ASSIGNABLE(literal) static_assert(copy_assignable, "ASSERT COPY ASSIGNABLE: " literal)
 
     const derived& as_derived() const { return static_cast<const derived&>(*this); }
@@ -40,7 +40,7 @@ public:
 
     template<class derived_t>
     void evaluate(const Tensor_Operations<derived_t>& tensor) {
-        expression_templates::evaluate(tensor.as_derived().internal(), this->as_derived().get_full_context());
+        exprs::evaluate(tensor.as_derived().internal(), this->as_derived().get_full_context());
     }
     //--------------------------------------assignment operators-----------------------------------------------//
 #define BC_OPER_ASSIGNMENT_DEF(op, op_functor)                                                  \
@@ -121,7 +121,7 @@ public:
     template<class p_value_type, typename = enable_if_convertible<p_value_type>>                                                \
     derived& operator  op (const p_value_type& param) {                                                                            \
         BC_ASSERT_ASSIGNABLE("derived& operator " #op " (const Tensor_Operations<pDeriv>& param)");                                \
-        evaluate(bi_expr_internal<oper:: op_functor >(expression_templates::scalar_constant<system_tag>((value_type)param)));        \
+        evaluate(bi_expr_internal<oper:: op_functor >(exprs::scalar_constant<system_tag>((value_type)param)));        \
         return as_derived();                                                                                                \
     }
 
@@ -136,7 +136,7 @@ public:
 #define BC_OPER_SCALAR_BASIC_DEF(op, op_functor)                                                                            \
         template<class p_value_type, typename = enable_if_convertible<p_value_type>>                                            \
         auto operator op (const p_value_type& param) const {                                                                        \
-            return bi_expr_internal<oper:: op_functor >(expression_templates::scalar_constant<system_tag>((value_type)param));    \
+            return bi_expr_internal<oper:: op_functor >(exprs::scalar_constant<system_tag>((value_type)param));    \
         }
 
     //----------------------------------------------scalar element-wise operations--------------------------------------------------//
@@ -155,7 +155,7 @@ public:
     //specialized to upcast  matrix/scalar_value to matrix * (1/scalar_value)
     template<class p_value_type, typename = enable_if_convertible<p_value_type>>
     auto operator /(const p_value_type& param) {
-        return bi_expr_internal<oper::scalar_mul>(expression_templates::scalar_constant<system_tag>((value_type)(1/param)));
+        return bi_expr_internal<oper::scalar_mul>(exprs::scalar_constant<system_tag>((value_type)(1/param)));
     }
 
 
@@ -167,15 +167,15 @@ public:
     	//lv_t in this instance must be a binary-blas expression
     	template<class matmul_t, class lv_t, class rv_t>
     	static auto impl(lv_t lv, rv_t rv) {
-    		auto lv_sub = expression_templates::make_bin_expr<oper::scalar_mul>(rv, lv.left);
-    		auto expr   = expression_templates::make_bin_expr<typename lv_t::function_t>(lv_sub, lv.right);
+    		auto lv_sub = exprs::make_bin_expr<oper::scalar_mul>(rv, lv.left);
+    		auto expr   = exprs::make_bin_expr<typename lv_t::function_t>(lv_sub, lv.right);
     		return make_tensor(expr);
     	}
     };
     struct default_impl {
     	template<class matmul_t, class lv_t, class rv_t>
     	static auto impl(lv_t lv, rv_t rv) {
-    		return make_tensor(expression_templates::make_bin_expr<matmul_t>(lv, rv));
+    		return make_tensor(exprs::make_bin_expr<matmul_t>(lv, rv));
     	}
     };
 
@@ -183,7 +183,7 @@ public:
     auto operator * (const p_value_type& param) const {
         static constexpr bool lv_blas  = oper::operation_traits<internal_type>::is_blas_function;
 
-    	auto scalar_constant = expression_templates::scalar_constant<system_tag>((value_type)param);
+    	auto scalar_constant = exprs::scalar_constant<system_tag>((value_type)param);
 
         using func = std::conditional_t<lv_blas, reorder_scalar_mul, default_impl>;
         return func::template impl<oper::scalar_mul>(as_derived().internal(), scalar_constant);
@@ -195,8 +195,8 @@ public:
     auto operator *(const Tensor_Operations<param_deriv>& param) const {
 
     	using rv_internal_t = typename Tensor_Operations<param_deriv>::internal_t;
-        static constexpr bool lv_trans = expression_templates::blas_feature_detector<internal_t>::transposed;
-        static constexpr bool rv_trans = expression_templates::blas_feature_detector<rv_internal_t>::transposed;
+        static constexpr bool lv_trans = exprs::blas_feature_detector<internal_t>::transposed;
+        static constexpr bool rv_trans = exprs::blas_feature_detector<rv_internal_t>::transposed;
         static constexpr bool lv_blas  = oper::operation_traits<internal_type>::is_blas_function;
 
         static constexpr bool scalmul = derived::DIMS == 0 || param_deriv::DIMS == 0;
@@ -232,7 +232,7 @@ public:
 
 private:
      template<class internal_t>
-     using negated_t = Tensor_Base<expression_templates::Unary_Expression<internal_t, oper::negation>>;
+     using negated_t = Tensor_Base<exprs::Unary_Expression<internal_t, oper::negation>>;
 public:
      //specializations that upcast negation to a 'better' function
      //(ensures that y -= w * x is as good as y += -(w*x)
@@ -260,33 +260,33 @@ public:
 
     template<class param_scalar>
     using enable_if_scalar_mul_t = std::enable_if_t<std::is_convertible<param_scalar, value_type>::value &&
-    		expression_templates::expression_traits<param_scalar>::is_bc_type>;
+    		exprs::expression_traits<param_scalar>::is_bc_type>;
 //                                                    !std::is_base_of<BC_Type, param_scalar>::value>;
     //-----------------------------------expression_factory--------------------------------------------------//
 
     template<class functor>
     auto un_expr(functor f) const {
-        return make_tensor(expression_templates::make_un_expr<functor>(as_derived().internal(), f));
+        return make_tensor(exprs::make_un_expr<functor>(as_derived().internal(), f));
     }
     template<class functor>
     const auto un_expr() const {
-        return make_tensor(expression_templates::make_un_expr<functor>(as_derived().internal()));
+        return make_tensor(exprs::make_un_expr<functor>(as_derived().internal()));
     }
     template<class functor, class right_value>
     const auto bi_expr(functor f, const Tensor_Operations<right_value>& rv) const {
-        return make_tensor(expression_templates::make_bin_expr<functor>(as_derived().internal(), rv.as_derived().internal()));
+        return make_tensor(exprs::make_bin_expr<functor>(as_derived().internal(), rv.as_derived().internal()));
     }
     template<class functor, class right_value>
     const auto bi_expr(const Tensor_Operations<right_value>& rv) const {
-        return make_tensor(expression_templates::make_bin_expr<functor>(as_derived().internal(), rv.as_derived().internal()));
+        return make_tensor(exprs::make_bin_expr<functor>(as_derived().internal(), rv.as_derived().internal()));
     }
     template<class functor, class right_value>
     const auto bi_expr_internal(functor f, const right_value& rv) const {
-        return make_tensor(expression_templates::make_bin_expr<functor>(as_derived().internal(), rv, f));
+        return make_tensor(exprs::make_bin_expr<functor>(as_derived().internal(), rv, f));
     }
     template<class functor, class right_value>
     const auto bi_expr_internal(const right_value& rv) const {
-        return make_tensor(expression_templates::make_bin_expr<functor>(as_derived().internal(), rv));
+        return make_tensor(exprs::make_bin_expr<functor>(as_derived().internal(), rv));
     }
 
     //----------------------------------------------validity checks--------------------------------------------------//
@@ -396,7 +396,7 @@ using enable_if_convertible = std::enable_if_t<std::is_convertible<p_value_type,
         template<class p_value_type, class internal_t, typename = enable_if_convertible<p_value_type, typename internal_t::value_type>>        \
          auto operator op (const p_value_type& param, const module::Tensor_Operations<internal_t>& tensor) {                                \
             using value_type = typename internal_t::value_type;                                                                                \
-            auto scalar_obj = expression_templates::scalar_constant<typename internal_t::system_tag>((value_type)param);                                \
+            auto scalar_obj = exprs::scalar_constant<typename internal_t::system_tag>((value_type)param);                                \
             return make_tensor(scalar_obj).bi_expr(oper:: op_functor (), tensor);                                                \
         }
 
@@ -415,7 +415,7 @@ using enable_if_convertible = std::enable_if_t<std::is_convertible<p_value_type,
     template<class p_value_type, class internal_t, typename = enable_if_convertible<p_value_type, typename internal_t::value_type>>
      auto operator / (const p_value_type& param, const module::Tensor_Operations<internal_t>& tensor) {
         using value_type = typename internal_t::value_type;
-        auto scalar_obj = expression_templates::scalar_constant<typename internal_t::system_tag>((value_type)(1/param));
+        auto scalar_obj = exprs::scalar_constant<typename internal_t::system_tag>((value_type)(1/param));
         return make_tensor(scalar_obj).bi_expr(oper::scalar_mul(), tensor);                                                        \
     }
 

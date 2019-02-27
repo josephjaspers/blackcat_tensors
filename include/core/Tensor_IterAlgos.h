@@ -253,7 +253,7 @@ static bool any(const Tensor_Base<internal_t>& tensor) {
 
 template<class internal_t>
 static auto max(const Tensor_Base<internal_t>& tensor) {
-	static_assert(expression_templates::expression_traits<internal_t>::is_array,
+	static_assert(exprs::expression_traits<internal_t>::is_array,
 			"'max' is only available to Array types, max on 'Expressions' is prohibited");
 	auto max_index = BC::alg::max_element(tensor.cbegin(), tensor.cend());
 	return tensor(max_index);
@@ -261,7 +261,7 @@ static auto max(const Tensor_Base<internal_t>& tensor) {
 
 template<class internal_t>
 static auto min(const Tensor_Base<internal_t>& tensor) {
-	static_assert(expression_templates::expression_traits<internal_t>::is_array,
+	static_assert(exprs::expression_traits<internal_t>::is_array,
 			"'min' is only available to Array types, min on 'Expressions' is prohibited");
 	auto min_index = BC::alg::min_element(tensor.cbegin(), tensor.cend());
 	return tensor(min_index);

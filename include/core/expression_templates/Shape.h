@@ -14,7 +14,7 @@
 
 
 namespace BC {
-namespace expression_templates {
+namespace exprs {
 
 
 template<int dims, class derived=void>
@@ -213,7 +213,7 @@ private:
 
 //push shape into BC namespace
 template<int x>
-using Shape = expression_templates::Shape<x>;
+using Shape = exprs::Shape<x>;
 
 template<class... integers, typename=std::enable_if_t<meta::seq_of<BC::size_t, integers...>>>
 auto make_shape(integers... ints) {
