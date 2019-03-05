@@ -57,7 +57,7 @@ inline void BC_cuda_assert(cudaError_t code, const char *file, int line)
 	   std::cout << "BC_CUDA CALL_FAILURE: " <<
 	   cudaGetErrorString(code) <<
 	   "\nfile: " << file <<
-	   "line: " << line << std::endl;
+	   "\tline: " << line << std::endl;
 	   throw code;
    }
 }
@@ -67,7 +67,7 @@ inline void BC_cuda_assert(cublasStatus_t code, const char *file, int line)
    {
 	   std::cout << "BC_CUBLAS CALL_FAILURE: " <<
 	   "\nfile: " << file <<
-	   "line: " << line << std::endl;
+	   "\tline: " << line << std::endl;
 	   throw code;
    }
 }
@@ -145,16 +145,18 @@ using  size_t   = int;
 using  size_t   = BC_SIZE_T_OVERRIDE;
 #endif
 
-#ifndef BC_DIM_T_OVERRIDE
-using dim_t = int;
-#else
-using dim_t = BC_DIM_T_OVERRIDE
-#endif
-
 static constexpr  BC::size_t MULTITHREAD_THRESHOLD = 16384;
 
 #ifdef __CUDACC__
-    static constexpr BC::size_t CUDA_BASE_THREADS = 256;
+    static BC::size_t CUDA_BASE_THREADS = 256;
+
+    static void set_cuda_base_threads(BC::size_t nthreads) {
+    	CUDA_BASE_THREADS = nthreads;
+    }
+
+    static BC::size_t get_cuda_base_threads() {
+    	return CUDA_BASE_THREADS;
+    }
 
     static  BC::size_t blocks(int size) {
         return 1 + (int)(size / CUDA_BASE_THREADS);

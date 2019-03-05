@@ -40,7 +40,7 @@ public:
 
     template<class derived_t>
     void evaluate(const Tensor_Operations<derived_t>& tensor) {
-        exprs::evaluate(tensor.as_derived().internal(), this->as_derived().get_full_context());
+        exprs::evaluate(tensor.as_derived().internal(), this->as_derived().get_context());
     }
     //--------------------------------------assignment operators-----------------------------------------------//
 #define BC_OPER_ASSIGNMENT_DEF(op, op_functor)                                                  \
@@ -350,7 +350,7 @@ public:
 
         template<class derived_t>
         void evaluate(const Tensor_Base<derived_t>& param) {
-            evaluate_aliased(param.internal(), tensor.get_full_context());
+            evaluate_aliased(param.internal(), tensor.get_context());
         }
 
         template<class derived_t>

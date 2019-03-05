@@ -14,8 +14,15 @@
 
 namespace BC {
 namespace meta {
+template<class... Ts> using void_t = void;
 
-	template<class... Ts> using void_t = void;
+
+template<class T>
+using has_context = std::enable_if_t<
+		std::is_void<
+		void_t<decltype(std::declval<T>().get_context())>>::value>;
+
+
 
 	template<template<class> class func, class T, class voider=void>
 	struct is_detected : std::false_type { };

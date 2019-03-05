@@ -120,11 +120,11 @@ public:
 	using value_type = Scalar;
 	using ArrayExpression<Dimension, Scalar, Allocator, Tags...>::deallocate;
 
-	const auto get_full_context() const {
+	const auto get_context() const {
 		return context::make_full_context(as_alloc(), as_context());
 	}
 
-	auto get_full_context() {
+	auto get_context() {
 		return context::make_full_context(as_alloc(), as_context());
 	}
 
@@ -151,7 +151,7 @@ public:
 	  context_t(array_.as_context()),
 	  parent(array_) {
         this->array = this->allocate(this->size());
-        evaluate_to(this->internal(), array_.internal(), get_full_context());
+        evaluate_to(this->internal(), array_.internal(), get_context());
 	}
 	Array(Array&& array_) //TODO handle propagate_on_container_move_assignment
 	: Allocator(std::move(array_.as_alloc())),
@@ -192,7 +192,7 @@ public:
 	Array(const Expr& expr_t, const Allocator& alloc=Allocator()) : Allocator(alloc) {
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());
-		evaluate_to(this->internal(), expr_t.internal(), get_full_context());
+		evaluate_to(this->internal(), expr_t.internal(), get_context());
 	}
 
 
@@ -208,12 +208,12 @@ public:
     			Array_Slice<Parent, Dimension, true>::DIMS == Dimension>>
 	Array(const Array_Slice<Parent, Dimension, true>& expr_t)
 	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(
-			expr_t.get_full_context().get_allocator())),
-	  context_t(expr_t.get_full_context())
+			expr_t.get_context().get_allocator())),
+	  context_t(expr_t.get_context())
 	{
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());
-        evaluate_to(this->internal(), expr_t.internal(), this->get_full_context());
+        evaluate_to(this->internal(), expr_t.internal(), this->get_context());
 	}
 
 public:

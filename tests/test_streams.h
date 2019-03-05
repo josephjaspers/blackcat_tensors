@@ -62,7 +62,7 @@ int test_streams(int sz=128) {
 
 		a.create_stream();
 
-		return a.get_full_context() != b.get_full_context();
+		return a.get_context() != b.get_context();
 	)
 
 	BC_TEST_DEF(
@@ -72,7 +72,7 @@ int test_streams(int sz=128) {
 		a.create_stream();
 		b.set_stream(a);
 
-		return a.get_full_context() == b.get_full_context() && !a.is_default_stream() && !b.is_default_stream();
+		return a.get_context() == b.get_context() && !a.is_default_stream() && !b.is_default_stream();
 	)
 
 	BC_TEST_DEF(
@@ -83,8 +83,8 @@ int test_streams(int sz=128) {
 	    auto scal_0 = col_0[0];
 
 		return !a.is_default_stream() &&
-				a.get_full_context() == col_0.get_full_context() &&
-				a.get_full_context() == scal_0.get_full_context();
+				a.get_context() == col_0.get_context() &&
+				a.get_context() == scal_0.get_context();
 	)
 
 	BC_TEST_DEF(
@@ -97,9 +97,9 @@ int test_streams(int sz=128) {
 	    a.destroy_stream();
 
 		return a.is_default_stream() &&
-				a.get_full_context() != col_0.get_full_context() &&
-				a.get_full_context() != scal_0.get_full_context() &&
-				col_0.get_full_context() == scal_0.get_full_context();
+				a.get_context() != col_0.get_context() &&
+				a.get_context() != scal_0.get_context() &&
+				col_0.get_context() == scal_0.get_context();
 	)
 
 

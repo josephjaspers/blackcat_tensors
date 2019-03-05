@@ -110,7 +110,7 @@ struct Array_Slice :
 	using shape_t 		 = typename super_t::shape_t;
 	using allocator_t 	 = typename Parent::allocator_t;
 	using context_t 	 = typename Parent::context_t;
-	using full_context_t = decltype(std::declval<Parent>().get_full_context());
+	using full_context_t = decltype(std::declval<Parent>().get_context());
 
 	full_context_t m_context;
 
@@ -119,12 +119,12 @@ struct Array_Slice :
 
 	BCHOT
 	Array_Slice(Parent& parent_, BC::size_t index)
-	: super_t(parent_, index), m_context(parent_.get_full_context()) {
+	: super_t(parent_, index), m_context(parent_.get_context()) {
 	}
 
 	BCHOT
 	Array_Slice(Parent& parent_, const shape_t& shape_, BC::size_t index)
-	: super_t(parent_, shape_, index), m_context(parent_.get_full_context()) {
+	: super_t(parent_, shape_, index), m_context(parent_.get_context()) {
 	}
 
 	allocator_t get_allocator() const {
@@ -135,8 +135,8 @@ struct Array_Slice :
 	auto& internal_base() { return *this; }
 	const auto& internal_base() const { return *this; }
 
-	auto get_full_context() -> decltype(m_context) { return m_context; }
-	auto get_full_context() const -> decltype(m_context) { return m_context; }
+	auto get_context() -> decltype(m_context) { return m_context; }
+	auto get_context() const -> decltype(m_context) { return m_context; }
 };
 
 

@@ -16,7 +16,7 @@
 namespace BC {
 namespace exprs     {
 
-template<class Derived, BC::dim_t Dimension>
+template<class Derived, int Dimension>
 struct Array_Base : Expression_Template_Base<Derived>, BC_Array {
 
     static constexpr bool copy_constructible = false;

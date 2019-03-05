@@ -102,6 +102,17 @@ public:
     }
 
 
+
+    //template<int=0> is to ensure ADL occur
+    template<int=0>
+    auto get_stream() {
+    	return this->get_context().get_stream();
+    }
+    template<int=0>
+    auto get_stream() const {
+        return this->get_context().get_stream();
+    }
+
 private:
 
     parent& as_parent() {
