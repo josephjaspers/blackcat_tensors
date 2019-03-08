@@ -64,7 +64,7 @@ struct Host {
 		auto job = [=]() {
 			evaluator_impl<Dimension>::impl(expression);
 		};
-		context.push_job(job);
+		context.get_stream().push_job(job);
 
 		 __BC_omp_bar__
 	}

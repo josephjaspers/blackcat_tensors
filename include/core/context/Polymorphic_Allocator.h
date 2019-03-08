@@ -16,13 +16,13 @@ struct Polymorphic_Allocator {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	using default_allocator_t = BC::allocator::implementation<value_type, system_tag>;
+	using default_allocator_t = BC::allocator::implementation<system_tag, value_type>;
 
 private:
 
 	struct Virtual_Allocator {
 		virtual value_type* allocate(std::size_t sz) = 0;
-		virtual void deallocate(void* memptr, std::size_t sz) = 0;
+		virtual void deallocate(value_type* memptr, std::size_t sz) = 0;
 	};
 
 	template<class Allocator>
@@ -49,7 +49,7 @@ private:
 		auto& retrieve_allocator(Alloc_t* this_allocator) {
 			return *this_allocator;
 		}
-
+		Derived_Allocator() = default;
 		Derived_Allocator(const Allocator& alloc)
 		: m_allocator(alloc) {}
 		Derived_Allocator(Allocator&& alloc)
@@ -75,6 +75,9 @@ public:
 
 	Polymorphic_Allocator()
 	: m_allocator(std::unique_ptr<Virtual_Allocator>(new Derived_Allocator<default_allocator_t>())) {}
+
+//	Polymorphic_Allocator(const Polymorphic_Allocator&) : std::unique_ptr<Virtual_Allocator>(new (m_allocator.get())) {}
+	Polymorphic_Allocator(Polymorphic_Allocator&) = default;
 
 	value_type* allocate(std::size_t sz) {
 		return m_allocator.allocate(sz);

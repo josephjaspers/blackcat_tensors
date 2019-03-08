@@ -49,24 +49,27 @@
 #include <cublas.h>
 #include <iostream>
 namespace BC {
-#define BC_CUDA_ASSERT(ans) { BC_cuda_assert((ans), __FILE__, __LINE__); }
-inline void BC_cuda_assert(cudaError_t code, const char *file, int line)
+#define BC_CUDA_ASSERT(ans) { BC_cuda_assert((ans), __FILE__, __PRETTY_FUNCTION__, __LINE__); }
+inline void BC_cuda_assert(cudaError_t code, const char *file, const char* function, int line)
 {
    if (code != cudaSuccess)
    {
 	   std::cout << "BC_CUDA CALL_FAILURE: " <<
 	   cudaGetErrorString(code) <<
 	   "\nfile: " << file <<
+	   "\nfunction: " << function <<
 	   "\tline: " << line << std::endl;
 	   throw code;
    }
 }
-inline void BC_cuda_assert(cublasStatus_t code, const char *file, int line)
+inline void BC_cuda_assert(cublasStatus_t code, const char *file, const char* function,  int line)
 {
    if (code != CUBLAS_STATUS_SUCCESS)
    {
 	   std::cout << "BC_CUBLAS CALL_FAILURE: " <<
+	   "cublas error: " << code <<
 	   "\nfile: " << file <<
+	   "\nfunction: " << function <<
 	   "\tline: " << line << std::endl;
 	   throw code;
    }

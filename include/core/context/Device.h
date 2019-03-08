@@ -121,6 +121,9 @@ private:
 			device_globals::get_default_contents();
 public:
 
+
+//	Polymorphic_Allocator<char, device_tag> m_allocator;
+
 	template<class T>
 	T* scalar_alpha(T alpha_value) {
 		T* buffer = device_contents.get()->get_scalar_buffer<T>();
