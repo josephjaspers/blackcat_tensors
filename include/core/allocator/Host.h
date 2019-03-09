@@ -15,7 +15,7 @@ class host_tag;
 
 namespace allocator {
 
-template<class T, class derived=void>
+template<class T>
 struct Host {
 
     using system_tag = host_tag;	//BC tag
@@ -33,6 +33,15 @@ struct Host {
 
 	template<class altT>
 	struct rebind { using other = Host<altT>; };
+
+	template<class U>
+	Host(const Host<U>&) {}
+	Host() = default;
+	Host(const Host&) = default;
+	Host(Host&&) = default;
+
+	Host& operator = (const Host&) = default;
+	Host& operator = (Host&&) = default;
 
     T* allocate(int size) {
         return new T[size];

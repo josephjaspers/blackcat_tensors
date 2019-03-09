@@ -130,17 +130,35 @@ namespace namespace_name {										 \
 	#define __BC_omp_atomic__ _Pragma("omp atomic")
 	#define __BC_omp_for__ _Pragma("omp parallel for")
 	#define __BC_omp_bar__ _Pragma("omp barrier")
+	#define __BC_omp_for_reduction__(oper, value) __BC_omp_for__ reduction(oper:value)
 #else
 	#define __BC_omp_atomic__
 	#define __BC_omp_for__
 	#define __BC_omp_bar__
+	#define __BC_omp_for_reduction__(oper, value)
 #endif
 
 
-//#define BC_SIZE_T_OVERRIDE unsigned
 // --------------------------------- constants --------------------------------- //
 
 namespace BC {
+
+inline void host_sync() {
+#if defined(_OPENMP) && !defined(BC_NO_OPENMP) //if openmp is defined
+	__BC_omp_bar__
+#endif
+}
+
+inline void device_sync() {
+#ifdef __CUDACC__
+	cudaDeviceSynchronize();
+#endif
+}
+
+inline void synchronize() {
+	host_sync();
+	device_sync();
+}
 
 #ifndef BC_SIZE_T_OVERRIDE
 using  size_t   = int;

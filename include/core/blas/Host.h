@@ -47,13 +47,19 @@ struct Host {
 		return get_value_impl<T>::impl(scalar);
 	}
 
-	template<class U, class T, class V, class Context>
-	static void scalar_mul(U& eval, const T& a, const V& b, Context) {
-		eval = get_value(a) * get_value(b);
+	template<class Scalar>
+	static auto scalar_mul_impl(Scalar head) {
+		return get_value(head);
 	}
-	template<class U, class T, class V, class Context>
-	static void scalar_mul(U* eval, const T& a, const V& b, Context) {
-		eval[0] = get_value(a) * get_value(b);
+
+	template<class Scalar, class... Scalars>
+	static auto scalar_mul_impl(Scalar head, Scalars... tails) {
+		return get_value(head) * scalar_mul_impl(tails...);
+	}
+
+	template<class Context, class OutputScalar, class... Scalars>
+	static void scalar_mul(Context, OutputScalar& eval, Scalars... scalars) {
+		eval = scalar_mul_impl(scalars...);
 	}
 
 	template<class Context>

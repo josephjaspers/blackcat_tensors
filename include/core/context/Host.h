@@ -24,8 +24,6 @@ class Host {
 	using Queue = HostQueue;
 	std::shared_ptr<Queue> m_job_queue;
 
-//	Polymorphic_Allocator<void, BC::host_tag> allocator;
-
 public:
 
 	Host() : m_job_queue(nullptr) {}

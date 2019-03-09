@@ -19,6 +19,18 @@ struct Device_Managed : Device<T> {
 	template<class altT>
 	struct rebind { using other = Device_Managed<altT>; };
 
+
+	Device_Managed() = default;
+	Device_Managed(const Device_Managed&)=default;
+	Device_Managed(Device_Managed&&) = default;
+
+	Device_Managed& operator = (const Device_Managed&) = default;
+	Device_Managed& operator = (Device_Managed&&) = default;
+
+
+	template<class U>
+	Device_Managed(const Device_Managed<U>&) {}
+
     T* allocate(BC::size_t sz) {
     	T* memptr = nullptr;
     	BC_CUDA_ASSERT((cudaMallocManaged((void**) &memptr, sizeof(T) * sz)));

@@ -9,8 +9,47 @@
 #ifndef MATHEMATICS_CPU_H_
 #define MATHEMATICS_CPU_H_
 
+#include <future>
+
 namespace BC {
 namespace evaluator {
+
+#define BC_OPENMP_REDUCTION_FUNCTION(oper, name, base_value)						\
+template<class Expression, class... indexes> static									\
+typename Expression::value_type name(Expression value, indexes... indicies) {		\
+	using value_type = typename Expression::value_type;								\
+																					\
+	value_type total = base_value;													\
+	__BC_omp_for_reduction__(oper, name)											\
+	for (BC::size_t i = 0; i < value.dimension(Dimension-1); ++i) {					\
+		total oper##= evaluator_impl<Dimension-1>::name(value, i, indicies...);		\
+	}																				\
+	return total;																	\
+}
+#define BC_OPENMP_REDUCTION_BASE_CASE_FUNCTION(oper, name, base_value)				\
+template<class Expression, class... indexes> static									\
+typename Expression::value_type name(Expression value, indexes... indicies) {		\
+	using value_type = typename Expression::value_type;								\
+																					\
+	value_type total = base_value;													\
+	__BC_omp_for_reduction__(oper, name)											\
+	for (BC::size_t i = 0; i < value.dimension(0); ++i) {							\
+		total oper##= value(i, indicies...);										\
+	}																				\
+	return total;																	\
+}
+#define BC_OPENMP_REDUCTION_ITERATOR0_CASE_FUNCTION(oper, name, base_value)			\
+template<class Expression> static													\
+typename Expression::value_type name(Expression value) {							\
+	using value_type = typename Expression::value_type;								\
+																					\
+	value_type total = base_value;													\
+	__BC_omp_for_reduction__(oper, name)											\
+	for (BC::size_t i = 0; i < value.size; ++i) {									\
+		total oper##= value[i];														\
+	}																				\
+	return total;																	\
+}
 
 template<int Dimension>
 struct evaluator_impl {
@@ -21,6 +60,9 @@ struct evaluator_impl {
         	evaluator_impl<Dimension-1>::impl(expression, i, indicies...);
         }
     }
+    BC_OPENMP_REDUCTION_FUNCTION(+, sum, 0)
+    BC_OPENMP_REDUCTION_FUNCTION(*, prod, 1)
+
 };
 template<>
 struct evaluator_impl<1> {
@@ -38,6 +80,13 @@ struct evaluator_impl<1> {
             expression[i];
         }
     }
+
+    BC_OPENMP_REDUCTION_BASE_CASE_FUNCTION(+, sum, 0)
+    BC_OPENMP_REDUCTION_BASE_CASE_FUNCTION(*, prod, 0)
+
+    BC_OPENMP_REDUCTION_ITERATOR0_CASE_FUNCTION(+, sum, 0)
+    BC_OPENMP_REDUCTION_ITERATOR0_CASE_FUNCTION(*, prod, 0)
+
 };
 template<>
 struct evaluator_impl<0> {
@@ -48,16 +97,14 @@ struct evaluator_impl<0> {
             expression[i];
         }
     }
+
+
+    BC_OPENMP_REDUCTION_ITERATOR0_CASE_FUNCTION(+, sum, 0)
+    BC_OPENMP_REDUCTION_ITERATOR0_CASE_FUNCTION(*, prod, 0)
 };
 
 
 struct Host {
-
-//	template<int Dimension, class Expression>
-//	static void nd_evaluator(Expression expression) {
-//		evaluator_impl<Dimension>::impl(expression);
-//		 __BC_omp_bar__
-//	}
 
 	template<int Dimension, class Expression, class Context>
 	static void nd_evaluator(Expression expression, Context context) {
@@ -65,8 +112,46 @@ struct Host {
 			evaluator_impl<Dimension>::impl(expression);
 		};
 		context.get_stream().push_job(job);
+	}
 
-		 __BC_omp_bar__
+
+	//!!!!ScalarOutput should be a TensorBase type
+	template<int Dimension, class ScalarOutput, class Expression, class Context>
+	static std::future<ScalarOutput> reduce_sum(ScalarOutput scalar, Expression expression, Context context) {
+		std::promise<ScalarOutput>* promise = new std::promise<ScalarOutput>();
+
+		auto job = [=]() {
+			scalar.internal()[0] = evaluator_impl<Dimension>::sum(expression);
+			promise->set_value(scalar);
+			delete promise;
+		};
+
+		context.get_stream().push_job(job);
+		return promise->get_future();
+	}
+	template<int Dimension, class ScalarOutput, class Expression, class Context>
+	static std::future<ScalarOutput> reduce_prod(ScalarOutput scalar, Expression expression, Context context) {
+		std::promise<ScalarOutput>* promise = new std::promise<ScalarOutput>();
+
+		auto job = [=]() {
+			scalar.internal()[0] = evaluator_impl<Dimension>::sum(expression);
+			promise->set_value(scalar);
+			delete promise;
+		};
+		context.get_stream().push_job(job);
+		return promise->get_future();
+	}
+	template<int Dimension, class ScalarOutput, class Expression, class Context>
+	static std::future<ScalarOutput> reduce_mean(ScalarOutput scalar, Expression expression, Context context) {
+		std::promise<ScalarOutput>* promise = new std::promise<ScalarOutput>();
+
+		auto job = [=]() {
+			scalar.internal()[0] = evaluator_impl<Dimension>::sum(expression) / expression.size();
+			promise->set_value(scalar);
+			delete promise;
+		};
+		context.get_stream().push_job(job);
+		return promise->get_future();
 	}
 
 };

@@ -24,29 +24,10 @@ struct Device {
 			return t;
 		}
 
-		template<class Context>
-		static void scalar_mul(float* eval, float* a, float* b, Context context) {
-
-			device_impl::scalar_mul<<<1, 1, 0, context.get_stream()>>>(eval, a, b);
-		}
-
-		template<class Context>
-		static void scalar_mul(float* eval, float a, float* b, Context context) {
-
-			device_impl::scalar_mul<<<1, 1, 0, context.get_stream()>>>(eval, a, b);
-		}
-
-		template<class Context>
-		static void scalar_mul(float* eval, float* a, float b, Context context) {
-
-			device_impl::scalar_mul<<<1, 1, 0, context.get_stream()>>>(eval, a, b);
-		}
-
-		template<class Context>
-		static void scalar_mul(float* eval, float a, float b, Context context) {
-
-			device_impl::scalar_mul<<<1, 1, 0, context.get_stream()>>>(eval, a, b);
-		}
+	template<class Context, class Scalar, class... Scalars>
+	static void scalar_mul(Context context, Scalar output, Scalars... vals) {
+		device_impl::scalar_mul<<<1, 1, 0, context.get_stream()>>>(output, vals...);
+	}
 
 	template<class Context>
     static void gemm(Context context, bool transA, bool transB, BC::size_t  m, BC::size_t  n, BC::size_t  k,
