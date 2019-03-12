@@ -86,10 +86,8 @@ int test_allocators(int sz=128) {
 		return *(a.get_allocator().total_allocated.get()) == 50;
 	)
 
-
-
 	BC_TEST_BODY_TAIL
-	};
+};
 
 
 

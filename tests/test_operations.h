@@ -20,7 +20,7 @@ int test_operations(int sz=128) {
 	using mat =  BC::Matrix<value_type, alloc_t>;
 	using bmat = BC::Matrix<bool, allocator<bool>>;
 
-	int errors = 0;
+	BC_TEST_BODY_HEAD
 
 	bmat validation(sz, sz);
 
@@ -71,18 +71,19 @@ int test_operations(int sz=128) {
 		return BC::all(validation);
 	)
 
-	return errors;
+	BC_TEST_BODY_TAIL
 }
+
 template<class value_type, template<class> class allocator=BC::Basic_Allocator>
 int test_matrix_muls(int sz=128) {
+
+	BC_TEST_BODY_HEAD
 
 	using alloc_t = allocator<value_type>;
 
 	using mat = BC::Matrix<value_type, alloc_t>;
 	using scal = BC::Scalar<value_type, alloc_t>;
 	using bmat = BC::Matrix<bool, allocator<bool>>;
-
-	int errors = 0;
 
 	bmat validation(sz, sz);
 
@@ -166,8 +167,6 @@ int test_matrix_muls(int sz=128) {
 		return BC::all(validation);
 	)
 
-
-//#ifndef BC_DISABLE_TEMPORARIES //This test requires temporaries (Though in the future this should be fixed)
 	BC_TEST_DEF(
 		mat atrans(a.t());
 		c = (atrans * b * 2.0f + 8.0f) + (atrans * b * 2.0f + 8.0f);
@@ -209,8 +208,10 @@ int test_matrix_muls(int sz=128) {
 		validation = c.approx_equal(d) && e.approx_equal(f) && g.approx_equal(h);
 		return BC::all(validation);
 	)
-	return errors;
+	BC_TEST_BODY_TAIL
 }
+
+
 }
 }
 

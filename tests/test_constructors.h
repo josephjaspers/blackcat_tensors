@@ -22,7 +22,7 @@ int test_constructors(int sz=128) {
 	using mat = BC::Matrix<value_type, alloc_t>;
 	using cube = BC::Cube<value_type, alloc_t>;
 
-	int errors = 0;
+	BC_TEST_BODY_HEAD
 	//Need to cover
 	//Default
 	//Standard
@@ -99,8 +99,7 @@ int test_constructors(int sz=128) {
 		return BC::all(b.approx_equal(c)) && a.memptr() != b.memptr() && b.memptr() == original_ptr;
 	)
 
-	return errors;
-
+	BC_TEST_BODY_TAIL
 }
 
 }

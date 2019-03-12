@@ -83,7 +83,7 @@ int test_blas(int sz=128) {
 //	value_type zero = 0;
 
 
-	BC_TEST_START {
+	BC_TEST_DEF(
 		y = a * b;
 
 		blas::gemm(context, false, false,  sz, sz, sz,
@@ -92,10 +92,9 @@ int test_blas(int sz=128) {
 				0, h_y.data(), sz);
 
 			return BC::all(h_y.approx_equal(y));
+	)
 
-	} BC_TEST_END("y = a * b")
-
-	BC_TEST_START {
+	BC_TEST_DEF(
 		y = a * b + a * b;
 
 		blas::gemm(context, false, false,  sz, sz, sz,
@@ -104,10 +103,9 @@ int test_blas(int sz=128) {
 				0, h_y.data(), sz);
 
 		return BC::all(h_y.approx_equal(y));
+	)
 
-	} BC_TEST_END("y = a * b + a * b")
-
-	BC_TEST_START {
+	BC_TEST_DEF(
 		y = 1;
 		h_y = 1;
 		y += a * b + a * b;
@@ -118,18 +116,16 @@ int test_blas(int sz=128) {
 				1, h_y.data(), sz);
 
 		return BC::all(h_y.approx_equal(y));
+	)
 
-	} BC_TEST_END("y (set to 1)  += a * b + a * b")
-
-	BC_TEST_START {
+	BC_TEST_DEF(
 		y = 1;
 		h_y = 1;
 		y -= a * b - a * b;
 		return BC::all(h_y.approx_equal(y));
+	)
 
-	} BC_TEST_END("y (set to 1)  -= a * b - a * b")
-
-	BC_TEST_START {
+	BC_TEST_DEF(
 		y = 1;
 		h_y = 2;
 		y += a * b + a * b + 1;
@@ -140,42 +136,30 @@ int test_blas(int sz=128) {
 				1, h_y.data(), sz);
 
 			return BC::all(h_y.approx_equal(y));
+	)
 
-	} BC_TEST_END("y (set to 1)  += a * b + a * b")
-
-	BC_TEST_START {
+	BC_TEST_DEF(
 		y = 1;
 		h_y = 2;
 		y -= a * b - a * b - 1;
 		return BC::all(h_y.approx_equal(y));
+	)
 
-	} BC_TEST_END("y = 1; y -= a * b - a * b")
-
-
-	BC_TEST_START {
+	BC_TEST_DEF(
 		y = 1;
 		h_y = 2;
 		y += (a * b) / (a * b);
 
 		return BC::all(y.approx_equal(h_y));
+	)
 
-	} BC_TEST_END("y = 1; y  += a * b / a * b")
-
-	BC_TEST_START {
+	BC_TEST_DEF(
 		y = 1;
 		h_y = 0;
 		y -= (a * b) / (a * b);
 
 		return BC::all(y.approx_equal(h_y));
-
-	} BC_TEST_END("y = 1; y  -= a * b / a * b")
-
-
-
-
-
-
-
+	)
 
 	BC_TEST_BODY_TAIL
 }

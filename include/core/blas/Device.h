@@ -17,13 +17,6 @@ namespace blas {
 
 struct Device {
 
-	static float* static_allocate(float value) {
-			float* t;
-			BC_CUDA_ASSERT(cudaMallocManaged((void**) &t, sizeof(float)));
-			BC_CUDA_ASSERT(cudaMemcpy(t, &value, sizeof(float), cudaMemcpyHostToDevice));
-			return t;
-		}
-
 	template<class Context, class Scalar, class... Scalars>
 	static void calculate_alpha(Context context, Scalar output, Scalars... vals) {
 		device_impl::calculate_alpha<<<1, 1, 0, context.get_stream()>>>(output, vals...);
