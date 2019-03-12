@@ -169,7 +169,7 @@ using  size_t   = BC_SIZE_T_OVERRIDE;
 static constexpr  BC::size_t MULTITHREAD_THRESHOLD = 16384;
 
 #ifdef __CUDACC__
-    static BC::size_t CUDA_BASE_THREADS = 256;
+    static BC::size_t CUDA_BASE_THREADS = 128;
 
     static void set_cuda_base_threads(BC::size_t nthreads) {
     	CUDA_BASE_THREADS = nthreads;

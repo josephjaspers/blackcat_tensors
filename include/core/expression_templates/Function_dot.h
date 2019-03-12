@@ -69,15 +69,15 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
 
 		if (lv_scalar) {
 			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-			impl_l::scalar_mul(alloc, injection.memptr(), alpha, alpha_lv);
+			impl_l::calculate_alpha(alloc, injection.memptr(), alpha, alpha_lv);
 		}
 		if (rv_scalar) {
 			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-			impl_l::scalar_mul(alloc, injection.memptr(), alpha, alpha_rv);
+			impl_l::calculate_alpha(alloc, injection.memptr(), alpha, alpha_rv);
 		}
 		if (beta_mod) {
 			auto beta = alloc.template scalar_constant<value_type, beta_mod>();
-			impl_l::scalar_mul(alloc, alpha, alpha, beta);
+			impl_l::calculate_alpha(alloc, alpha, alpha, beta);
 		}
 
 

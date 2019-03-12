@@ -10,6 +10,7 @@
 
 #include <cblas.h>
 //#include <mkl_cblas.h> //TODO create/ifdef wrapper for MKL
+#include "Host_Impl.h"
 
 namespace BC {
 namespace blas {
@@ -42,24 +43,11 @@ struct Host {
 	    }
 	};
 
-	template<class T>
-	static auto get_value(T scalar) {
-		return get_value_impl<T>::impl(scalar);
-	}
 
-	template<class Scalar>
-	static auto scalar_mul_impl(Scalar head) {
-		return get_value(head);
-	}
-
-	template<class Scalar, class... Scalars>
-	static auto scalar_mul_impl(Scalar head, Scalars... tails) {
-		return get_value(head) * scalar_mul_impl(tails...);
-	}
 
 	template<class Context, class OutputScalar, class... Scalars>
-	static void scalar_mul(Context, OutputScalar& eval, Scalars... scalars) {
-		eval = scalar_mul_impl(scalars...);
+	static void calculate_alpha(Context, OutputScalar& eval, Scalars... scalars) {
+		eval = host_impl::calculate_alpha(scalars...);
 	}
 
 	template<class Context>

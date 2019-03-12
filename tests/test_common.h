@@ -42,7 +42,7 @@ namespace tests {
 
 
 
-#define BC_TEST_BODY_HEAD BC::size_t  errors = 0;
+#define BC_TEST_BODY_HEAD std::cout << '\n' << __PRETTY_FUNCTION__ << '\n'; BC::size_t  errors = 0;
 #define BC_TEST_BODY_TAIL return errors;
 
 template<class arg>

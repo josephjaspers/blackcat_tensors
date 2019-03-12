@@ -25,8 +25,8 @@ struct Device {
 		}
 
 	template<class Context, class Scalar, class... Scalars>
-	static void scalar_mul(Context context, Scalar output, Scalars... vals) {
-		device_impl::scalar_mul<<<1, 1, 0, context.get_stream()>>>(output, vals...);
+	static void calculate_alpha(Context context, Scalar output, Scalars... vals) {
+		device_impl::calculate_alpha<<<1, 1, 0, context.get_stream()>>>(output, vals...);
 	}
 
 	template<class Context>

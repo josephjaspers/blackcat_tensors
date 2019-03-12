@@ -28,8 +28,7 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
 
     using value_type  = typename lv::value_type;
     using system_tag = System_Tag;
-    using impl_l  = typename blas::implementation<system_tag>;
-    using utility_l   = utility::implementation<system_tag>;
+    using blas_l  = typename blas::implementation<system_tag>;
     using function_t = oper::gemm<System_Tag>;
 
     static constexpr bool transA = blas_feature_detector<lv>::transposed;
@@ -93,13 +92,10 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
         auto beta = alloc.template scalar_constant<value_type, beta_mod>();
 
         //compute the scalar values if need be
-        if (lv_scalar)
-        	impl_l::scalar_mul(alloc, alpha, alpha, alpha_lv);
-        if (rv_scalar)
-        	impl_l::scalar_mul(alloc, alpha, alpha, alpha_rv);
+		blas_l::calculate_alpha(alloc, alpha, alpha, alpha_lv, alpha_rv);
 
         //call matrix_mul
-        impl_l::gemm(alloc, transA, transB,  M(), N(), K(),
+        blas_l::gemm(alloc, transA, transB,  M(), N(), K(),
         		alpha, A, A.leading_dimension(0),
         		B, B.leading_dimension(0),
         		beta, injection, injection.leading_dimension(0));

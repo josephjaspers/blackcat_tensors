@@ -86,11 +86,11 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 		//compute the scalar values if need be
 		if (lv_scalar) {
 			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-			blas_lib::scalar_mul(alloc, alpha, alpha, alpha_lv);
+			blas_lib::calculate_alpha(alloc, alpha, alpha, alpha_lv);
 		}
 		if (rv_scalar) {
 			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-			blas_lib::scalar_mul(alloc, alpha, alpha, alpha_rv);
+			blas_lib::calculate_alpha(alloc, alpha, alpha, alpha_rv);
 		}
 
 

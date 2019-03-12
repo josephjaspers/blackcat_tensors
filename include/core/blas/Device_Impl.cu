@@ -6,14 +6,26 @@ namespace device_impl {
 template<class T, class enabler = void>
 struct get_value_impl {
 	__device__
-    static auto impl(T scalar) {
+    static T& impl(T& scalar) {
         return scalar;
+    }
+	__device__
+	static const T& impl(const T& scalar) {
+		return scalar;
+	}
+};
+template<class T>
+struct get_value_impl<T*, void> {
+	__device__
+    static auto impl(const T* scalar) -> decltype(scalar[0]) {
+		static constexpr T one = 1;
+        return scalar == nullptr ? one : scalar[0];
     }
 };
 template<class T>
-struct get_value_impl<T, std::enable_if_t<!std::is_same<decltype(std::declval<T&>()[0]), void>::value>>  {
+struct get_value_impl<T, std::enable_if_t<T::ITERATOR==0>>  {
 	__device__
-	static auto impl(T scalar) {
+	static auto impl(T scalar) -> decltype(scalar[0]) {
         return scalar[0];
     }
 };
@@ -24,17 +36,17 @@ static auto get_value(T scalar) {
 }
 
 template<class Scalar> __device__
-static auto scalar_mul_impl(Scalar value) {
+static auto calculate_alpha_impl(Scalar value) {
 	return get_value(value);
 }
 template<class ScalarFirst, class... Scalars>__device__
-static auto scalar_mul_impl(ScalarFirst value, Scalars... vals) {
-	return get_value(value) * scalar_mul_impl(vals...);
+static auto calculate_alpha_impl(ScalarFirst value, Scalars... vals) {
+	return get_value(value) * calculate_alpha_impl(vals...);
 }
 
 template<class ScalarOut, class... Scalars> __global__
-static void scalar_mul(ScalarOut output, Scalars... vals) {
-	output[0] = scalar_mul_impl(vals...);
+static void calculate_alpha(ScalarOut output, Scalars... vals) {
+	output[0] = calculate_alpha_impl(vals...);
 }
 
 }

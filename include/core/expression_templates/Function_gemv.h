@@ -79,11 +79,11 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
 		//compute the scalar values if need be
 		if (lv_scalar) {
 			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-			impl_l::scalar_mul(alloc, alpha, alpha, alpha_lv);
+			impl_l::calculate_alpha(alloc, alpha, alpha, alpha_lv);
 		}
 		if (rv_scalar) {
 			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-			impl_l::scalar_mul(alloc, alpha, alpha, alpha_rv);
+			impl_l::calculate_alpha(alloc, alpha, alpha, alpha_rv);
 		}
 
 		//call matrix_mul ///for gemm we always use M, N, K regardless of transpose, but for gemv we always use pre-trans dimensions ???
