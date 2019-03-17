@@ -15,6 +15,7 @@
 #include <mutex>
 #include <vector>
 
+#include "HostQueue.h"
 #include "Context_Impl.cu"
 
 namespace BC {
@@ -22,8 +23,6 @@ namespace context {
 namespace device_globals {
 
 struct Scalar_Recycler {
-
-
 	static std::vector<float*>& get_recycler() {
 		static std::vector<float*> recycler_instance;
 		return recycler_instance;
@@ -32,7 +31,6 @@ struct Scalar_Recycler {
 		static std::mutex locker_instance;
 		return locker_instance;
 	}
-
 	static float* allocate() {
 
 		float* data_ptr;
@@ -55,48 +53,59 @@ struct Scalar_Recycler {
 
 }
 
-struct Device_Stream_Contents {
-	 cublasHandle_t m_cublas_handle;
-	 cudaStream_t   m_stream_handle=nullptr;
-	 float*         m_scalar_buffer=nullptr;
+class  Device {
 
-	 Device_Stream_Contents(bool init_stream=false, bool init_scalars=true) {
-		 cublasCreate(&m_cublas_handle);
-		 if (init_stream) {
-			 BC_CUDA_ASSERT(cudaStreamCreate(&m_stream_handle));
+	struct Device_Stream_Contents {
+		using Byte = BC::context::Byte;
+
+		HostQueue	   m_host_stream;
+		cublasHandle_t m_cublas_handle;
+		cudaStream_t   m_stream_handle=nullptr;
+		cudaEvent_t    m_event		  =nullptr;
+		float*         m_scalar_buffer=nullptr;
+
+		BC::size_t     m_workspace_size = 0;
+		Byte*          m_workspace    =nullptr;
+		Polymorphic_Allocator<Byte, device_tag> m_allocator;
+
+		Device_Stream_Contents(bool init_stream=false, bool init_scalars=true) {
+			 cublasCreate(&m_cublas_handle);
+			 if (init_stream) {
+				 m_host_stream.init();
+				 BC_CUDA_ASSERT(cudaStreamCreate(&m_stream_handle));
+			 }
+			 if (init_scalars) {
+				 m_scalar_buffer = device_globals::Scalar_Recycler::allocate();
+			 }
 		 }
-		 if (init_scalars) {
-			 m_scalar_buffer = device_globals::Scalar_Recycler::allocate();
+
+		 template<class T>
+		 T* get_scalar_buffer() {
+			 static_assert(sizeof(T)<=sizeof(float), "MAXIMUM OF 32 BITS");
+			 return reinterpret_cast<T*>(m_scalar_buffer);
 		 }
-	 }
 
-	 template<class T>
-	 T* get_scalar_buffer() {
-		 static_assert(sizeof(T)<=sizeof(float), "MAXIMUM OF 32 BITS");
-		 return reinterpret_cast<T*>(m_scalar_buffer);
-	 }
+		 ~Device_Stream_Contents() {
+			 BC_CUDA_ASSERT(cublasDestroy(m_cublas_handle));
+			 device_globals::Scalar_Recycler::deallocate(m_scalar_buffer);
 
-	 ~Device_Stream_Contents() {
-		 BC_CUDA_ASSERT(cublasDestroy(m_cublas_handle));
+			 if (m_stream_handle)
+				 BC_CUDA_ASSERT(cudaStreamDestroy(m_stream_handle));
 
-		 if (m_stream_handle)
-			 BC_CUDA_ASSERT(cudaStreamDestroy(m_stream_handle));
+			 if (m_event)
+				 BC_CUDA_ASSERT(cudaEventDestroy(m_event));
+		 }
+	};
 
-		 //remember we only need to deallocate alpha
-		 device_globals::Scalar_Recycler::deallocate(m_scalar_buffer);
-	 }
-};
+	static std::shared_ptr<Device_Stream_Contents> get_default_contents() {
+		static std::shared_ptr<Device_Stream_Contents> default_contents =
+				std::shared_ptr<Device_Stream_Contents>(new Device_Stream_Contents());
+		return default_contents;
+	}
 
-namespace device_globals {
-auto get_default_contents() {
-	static std::shared_ptr<Device_Stream_Contents> default_contents =
-			std::shared_ptr<Device_Stream_Contents>(new Device_Stream_Contents());
-	return default_contents;
-}
-}
+	std::shared_ptr<Device_Stream_Contents> device_contents = get_default_contents();
 
-
-struct  Device {
+public:
 
 	template<class scalar_t, int value>
 	static const scalar_t* scalar_constant() {
@@ -107,22 +116,13 @@ struct  Device {
 			locker.lock();
 			if (!scalar_constant_){
 				scalar_t tmp_val = value;
-				BC_CUDA_ASSERT(cudaMallocManaged((void**) &scalar_constant_, sizeof(scalar_t)));
+				BC_CUDA_ASSERT(cudaMalloc((void**) &scalar_constant_, sizeof(scalar_t)));
 				BC_CUDA_ASSERT(cudaMemcpy(scalar_constant_, &tmp_val, sizeof(scalar_t), cudaMemcpyHostToDevice));
 			}
 			locker.unlock();
 		}
 		return scalar_constant_;
 	}
-
-
-private:
-	std::shared_ptr<Device_Stream_Contents> device_contents =
-			device_globals::get_default_contents();
-public:
-
-
-//	Polymorphic_Allocator<char, device_tag> m_allocator;
 
 	template<class T>
 	T* scalar_alpha(T alpha_value) {
@@ -161,12 +161,28 @@ public:
     }
     void destroy_stream() {
     	//'reset' to default
-    	device_contents = device_globals::get_default_contents();
+    	device_contents = get_default_contents();
     }
 
     void sync_stream() {
     	if (!is_default_stream())
     		cudaStreamSynchronize(device_contents.get()->m_stream_handle);
+    }
+
+    template<class function>
+    void push_job(function func) {
+
+    	if (is_default_stream()){
+    		func();
+    	}
+
+    	cudaEventRecord(device_contents.get()->m_event, device_contents.get()->m_stream_handle);
+    	device_contents.get()->m_host_stream.push(
+    			[&, func]() {
+    				cudaEventSynchronize(device_contents.get()->m_event);
+    				func();
+    			}
+    	);
     }
 
     bool operator == (const Device& dev) {

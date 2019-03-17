@@ -28,7 +28,7 @@ namespace exprs {
 namespace tree {
 using namespace oper;
 
-//entirely_blas_expr -- detects if the tree is entirely +/- operations with blas functions, --> y = a * b + c * d - e * f  --> true, y = a + b * c --> false
+//pure_linear_expr -- detects if the tree is entirely +/- operations with blas functions, --> y = a * b + c * d - e * f  --> true, y = a + b * c --> false
 template<class op, bool prior_eval, class core, BC::size_t  a, BC::size_t  b>//only apply update if right hand side branch
 auto update_injection(injector<core,a,b> tensor) {
     static constexpr BC::size_t  alpha =  a * BC::oper::operation_traits<op>::alpha_modifier;
@@ -39,15 +39,16 @@ auto update_injection(injector<core,a,b> tensor) {
 template<class T>
 struct optimizer_default {
 	/*
-	 * entirely_blas_expr -- if we may replace this branch entirely with a temporary/cache
-	 * partial_blas_expr  -- if part of this branch contains a replaceable branch nested inside it
-	 * nested_blas_expr   -- if a replaceable branch is inside a function (+=/-= won't work but basic assign = can work)
+	 * pure_linear_expr -- if we may replace this branch entirely with a temporary/cache
+	 * linear_expr  -- if part of this branch contains a replaceable branch nested inside it
+	 * nested_linear_expr   -- if a replaceable branch is inside a function (+=/-= won't work but basic assign = can work)
 	 */
 
-    static constexpr bool entirely_blas_expr = false;			//An expression of all +/- operands and BLAS calls				IE w*x + y*z
-    static constexpr bool partial_blas_expr = false;			//An expression of element-wise +/- operations and BLAS calls	IE w + x*y
-    static constexpr bool nested_blas_expr  = false;			//An expression containing a BLAS expression nested in a unary_functor IE abs(w * x)
-    static constexpr bool requires_greedy_eval = false;			//Basic check if any BLAS call exists at all
+	//REMEMBER TO UPDATE TREE_GREEDY_EVALUATOR.H && TREE_LAZY_EVALUATOR.H IF THESE ARE REFACTORED
+    template<int output_dimension> static constexpr bool pure_linear_expr = false;		//An expression of all +/- operands and BLAS calls				IE w*x + y*z
+    template<int output_dimension> static constexpr bool linear_expr = false;			//An expression of element-wise +/- operations and BLAS calls	IE w + x*y
+    template<int output_dimension> static constexpr bool nested_linear_expr  = false;	//An expression containing a BLAS expression nested in a unary_functor IE abs(w * x)
+    static constexpr bool contains_blas_function = false;			//Basic check if any BLAS call exists at all
 
     template<class core, int a, int b, class Context>
     static auto linear_evaluation(const T& branch, injector<core, a, b> tensor, Context) {
@@ -122,10 +123,10 @@ struct optimizer<
 
 template<class lv, class rv, class op>
 struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation_traits<op>::is_blas_function>> {
-    static constexpr bool entirely_blas_expr = true;
-    static constexpr bool partial_blas_expr = true;
-    static constexpr bool nested_blas_expr = true;
-    static constexpr bool requires_greedy_eval = true;
+	template<int output_dimension> static constexpr bool pure_linear_expr 		= output_dimension == op::DIMS;
+	template<int output_dimension> static constexpr bool linear_expr 			= output_dimension == op::DIMS;
+	template<int output_dimension> static constexpr bool nested_linear_expr 	= output_dimension == op::DIMS;
+	static constexpr bool contains_blas_function = true;
 
 
     using branch_t = Binary_Expression<lv, rv, op>;
@@ -178,10 +179,21 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
 
 template<class lv, class rv, class op>
 struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_traits<op>::is_linear_operation>> {
-    static constexpr bool entirely_blas_expr 	= optimizer<lv>::entirely_blas_expr && optimizer<rv>::entirely_blas_expr;
-    static constexpr bool partial_blas_expr 	= optimizer<lv>::partial_blas_expr || optimizer<rv>::partial_blas_expr;
-    static constexpr bool nested_blas_expr 		= optimizer<lv>::nested_blas_expr || optimizer<rv>::nested_blas_expr;
-    static constexpr bool requires_greedy_eval 	= optimizer<lv>::requires_greedy_eval || optimizer<rv>::requires_greedy_eval;
+
+	template<int output_dim>
+    static constexpr bool pure_linear_expr 	= optimizer<lv>::template pure_linear_expr<output_dim> &&
+    											optimizer<rv>::template pure_linear_expr<output_dim>;
+
+    template<int output_dim>
+    static constexpr bool linear_expr = optimizer<lv>::template linear_expr<output_dim> ||
+    										optimizer<rv>::template linear_expr<output_dim>;
+
+    template<int output_dim>
+    static constexpr bool nested_linear_expr = optimizer<lv>::template nested_linear_expr<output_dim> ||
+    											optimizer<rv>::template nested_linear_expr<output_dim>;
+
+    static constexpr bool contains_blas_function 	= optimizer<lv>::contains_blas_function ||
+    													optimizer<rv>::contains_blas_function;
 
 
     //-------------Linear evaluation branches---------------------//
@@ -242,7 +254,7 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
     	static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
         	BC_TREE_OPTIMIZER_STDOUT("- basic_eval");
 
-        	static constexpr bool left_evaluated = optimizer<lv>::partial_blas_expr || b != 0;
+        	static constexpr bool left_evaluated = optimizer<lv>::template linear_expr<core::DIMS> || b != 0;
         	auto left = optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
             auto right = optimizer<rv>::linear_evaluation(branch.right, update_injection<op, left_evaluated>(tensor), alloc);
             return make_bin_expr<op>(left, right);
@@ -255,10 +267,10 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
     	BC_TREE_OPTIMIZER_STDOUT("Binary Linear: linear_evaluation");
 
         using impl =
-        		std::conditional_t<entirely_blas_expr, remove_branch,
-        		std::conditional_t<optimizer<lv>::entirely_blas_expr,
+        		std::conditional_t<pure_linear_expr<core::DIMS>, remove_branch,
+        		std::conditional_t<optimizer<lv>::template pure_linear_expr<core::DIMS>,
         		std::conditional_t<std::is_same<op, oper::sub>::value, remove_left_branch_and_negate, remove_left_branch>,
-        		std::conditional_t<optimizer<rv>::entirely_blas_expr, remove_right_branch,
+        		std::conditional_t<optimizer<rv>::template pure_linear_expr<core::DIMS>, remove_right_branch,
         		basic_eval>>>;
 
         return impl::function(branch, tensor, alloc);
@@ -303,7 +315,7 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
             //check this ?
             auto right = optimizer<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
 
-            using impl = std::conditional_t<optimizer<rv>::entirely_blas_expr,
+            using impl = std::conditional_t<optimizer<rv>::template pure_linear_expr<core::DIMS>,
                     trivial_injection, non_trivial_injection>;
 
             return impl::function(left, right, alloc);
@@ -331,7 +343,7 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
             auto left = optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
             auto right = optimizer<rv>::injection(branch.right, tensor, alloc);
 
-            using impl = std::conditional_t<optimizer<lv>::entirely_blas_expr,
+            using impl = std::conditional_t<optimizer<lv>::template pure_linear_expr<core::DIMS>,
                     trivial_injection, non_trivial_injection>;
 
             return impl::function(left, right, alloc);
@@ -339,20 +351,20 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
     };
 
     //------------nontrivial injections, DO NOT UPDATE, scalars-mods will enact during elementwise-evaluator----------------//
-    struct left_nested_blas_expr {
+    struct left_nested_linear_expr {
         template<class core, int a, int b, class Context>
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
-        	BC_TREE_OPTIMIZER_STDOUT("- left_nested_blas_expr");
+        	BC_TREE_OPTIMIZER_STDOUT("- left_nested_linear_expr");
 
             auto left = optimizer<lv>::injection(branch.left, tensor, alloc);
             rv right = branch.right; //rv
             return make_bin_expr<op>(left, right);
         }
     };
-    struct right_nested_blas_expr {
+    struct right_nested_linear_expr {
         template<class core, int a, int b, class Context>
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
-        	BC_TREE_OPTIMIZER_STDOUT("- right_nested_blas_expr");
+        	BC_TREE_OPTIMIZER_STDOUT("- right_nested_linear_expr");
 
             lv left = branch.left; //lv
             auto right = optimizer<rv>::injection(branch.right, tensor, alloc);
@@ -374,10 +386,10 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
     	};
 
         using impl =
-          		std::conditional_t<entirely_blas_expr, remove_branch,
-        		std::conditional_t<optimizer<rv>::partial_blas_expr && optimizer<lv>::partial_blas_expr, basic_eval,
-        		std::conditional_t<optimizer<lv>::nested_blas_expr, left_nested_blas_expr,
-                std::conditional_t<optimizer<rv>::nested_blas_expr, right_nested_blas_expr, basic_eval>>>>;
+          		std::conditional_t<pure_linear_expr<core::DIMS>, remove_branch,
+        		std::conditional_t<optimizer<rv>::template linear_expr<core::DIMS> && optimizer<lv>::template linear_expr<core::DIMS>, basic_eval,
+        		std::conditional_t<optimizer<lv>::template nested_linear_expr<core::DIMS>, left_nested_linear_expr,
+                std::conditional_t<optimizer<rv>::template nested_linear_expr<core::DIMS>, right_nested_linear_expr, basic_eval>>>>;
 
         static_assert(!std::is_same<void, impl>::value, "EXPRESSION_REORDERING COMPILATION FAILURE, USE 'ALIAS' AS A WORKAROUND");
         return impl::function(branch, tensor, alloc);
@@ -410,10 +422,14 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
 
 template<class lv, class rv, class op>
 struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_traits<op>::is_nonlinear_operation >> {
-    static constexpr bool entirely_blas_expr = false;
-    static constexpr bool partial_blas_expr = false;
-    static constexpr bool nested_blas_expr = optimizer<lv>::nested_blas_expr || optimizer<rv>::nested_blas_expr;
-    static constexpr bool requires_greedy_eval = optimizer<lv>::requires_greedy_eval || optimizer<rv>::requires_greedy_eval;
+    template<int output_dim> static constexpr bool pure_linear_expr = false;
+    template<int output_dim> static constexpr bool linear_expr = false;
+
+    template<int output_dim>
+    static constexpr bool nested_linear_expr = optimizer<lv>::template nested_linear_expr<output_dim> ||
+    											optimizer<rv>::template nested_linear_expr<output_dim>;
+
+    static constexpr bool contains_blas_function = optimizer<lv>::contains_blas_function || optimizer<rv>::contains_blas_function;
 
 
     template<class core, int a, int b, class Context>
@@ -460,10 +476,10 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
             //dont need to update injection
             //trivial injection left_hand side (we attempt to prefer trivial injections opposed to non-trivial)
             using impl  =
-                std::conditional_t<optimizer<lv>::partial_blas_expr,         left_trivial_injection,
-                std::conditional_t<optimizer<rv>::partial_blas_expr,         right_trivial_injection,
-                std::conditional_t<optimizer<lv>::nested_blas_expr,     left_nontrivial_injection,
-                std::conditional_t<optimizer<rv>::nested_blas_expr,     right_nontrivial_injection, void>>>>;
+                std::conditional_t<optimizer<lv>::template linear_expr<lv::DIMS>,         left_trivial_injection,
+                std::conditional_t<optimizer<rv>::template linear_expr<lv::DIMS>,         right_trivial_injection,
+                std::conditional_t<optimizer<lv>::template nested_linear_expr<lv::DIMS>,     left_nontrivial_injection,
+                std::conditional_t<optimizer<rv>::template nested_linear_expr<lv::DIMS>,     right_nontrivial_injection, void>>>>;
 
             return impl::function(branch, tensor, alloc);
 
@@ -493,10 +509,11 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
 template<class array_t, class op>
 struct optimizer<Unary_Expression<array_t, op>>
 {
-    static constexpr bool entirely_blas_expr 	= false;
-    static constexpr bool partial_blas_expr 	= false;
-    static constexpr bool nested_blas_expr 		= optimizer<array_t>::nested_blas_expr;
-    static constexpr bool requires_greedy_eval 	= optimizer<array_t>::requires_greedy_eval;
+	template<int output_dim> static constexpr bool pure_linear_expr   = false;
+	template<int output_dim> static constexpr bool linear_expr 		  = false;
+	template<int output_dim> static constexpr bool nested_linear_expr
+	= optimizer<array_t>::template nested_linear_expr<output_dim>;
+    static constexpr bool contains_blas_function 	= optimizer<array_t>::contains_blas_function;
 
     template<class core, int a, int b, class Context>
     static auto linear_evaluation(const Unary_Expression<array_t, op>& branch, injector<core, a, b> tensor, Context) {

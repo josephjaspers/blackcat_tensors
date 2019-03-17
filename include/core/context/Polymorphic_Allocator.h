@@ -23,6 +23,7 @@ private:
 	struct Virtual_Allocator {
 		virtual value_type* allocate(std::size_t sz) = 0;
 		virtual void deallocate(value_type* memptr, std::size_t sz) = 0;
+		virtual Virtual_Allocator* clone() const = 0;
 	};
 
 	template<class Allocator>
@@ -40,6 +41,10 @@ private:
 
 		public:
 
+
+		Virtual_Allocator* clone() const {
+			return new Derived_Allocator(m_allocator);
+		}
 		//This allows the allocator to be a pointer to an allocator
 		template<class Alloc_t>
 		auto& retrieve_allocator(Alloc_t& this_allocator) {
@@ -76,7 +81,8 @@ public:
 	Polymorphic_Allocator()
 	: m_allocator(std::unique_ptr<Virtual_Allocator>(new Derived_Allocator<default_allocator_t>())) {}
 
-//	Polymorphic_Allocator(const Polymorphic_Allocator&) : std::unique_ptr<Virtual_Allocator>(new (m_allocator.get())) {}
+	Polymorphic_Allocator(const Polymorphic_Allocator& pa)
+	: std::unique_ptr<Virtual_Allocator>(pa.m_allocator.get()->clone()) {}
 	Polymorphic_Allocator(Polymorphic_Allocator&) = default;
 
 	value_type* allocate(std::size_t sz) {

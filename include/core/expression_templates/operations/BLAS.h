@@ -15,11 +15,11 @@ namespace BC   {
 namespace oper {
 
 //tags, no definition
-template<class system_tag> struct transpose  {};
-template<class system_tag> struct gemm : BLAS_Function {};
-template<class system_tag> struct gemv : BLAS_Function {};
-template<class system_tag> struct ger : BLAS_Function {};
-template<class system_tag> struct dot : BLAS_Function {};
+template<class system_tag> struct transpose  { };
+template<class system_tag> struct gemm : BLAS_Function { static constexpr int DIMS = 2; };
+template<class system_tag> struct gemv : BLAS_Function { static constexpr int DIMS = 1; };
+template<class system_tag> struct ger : BLAS_Function  { static constexpr int DIMS = 2; };
+template<class system_tag> struct dot : BLAS_Function  { static constexpr int DIMS = 0; };
 
 }
 }

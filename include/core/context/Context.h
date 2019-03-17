@@ -8,6 +8,12 @@
 #ifndef BC_CONTEXT_CONTEXT_H_
 #define BC_CONTEXT_CONTEXT_H_
 
+namespace BC{
+namespace context {
+	class Byte {};//TODO  move common code to common.h (not created yet)
+}
+}
+
 #include "Host.h"
 #include "Device.h"
 

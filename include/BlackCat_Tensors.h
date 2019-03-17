@@ -49,6 +49,20 @@
 #include <cublas.h>
 #include <iostream>
 namespace BC {
+
+#define BC_ASSERT(condition, message) { bc_assert(condition, message, __FILE__, __PRETTY_FUNCTION__, __LINE__); }
+inline void bc_assert(bool condition, const char* msg, const char* file, const char* function, int line) {
+	   if (!condition) {
+			std::cout << "BC_ASSERT FAILURE: " <<
+		   "\nfile: " << file <<
+		   "\nfunction: " << function <<
+		   "\tline: " << line <<
+		   "\terror: " << msg << std::endl;
+
+		   throw 1;
+	   }
+}
+
 #define BC_CUDA_ASSERT(ans) { BC_cuda_assert((ans), __FILE__, __PRETTY_FUNCTION__, __LINE__); }
 inline void BC_cuda_assert(cudaError_t code, const char *file, const char* function, int line)
 {
@@ -130,14 +144,15 @@ namespace namespace_name {										 \
 	#define __BC_omp_atomic__ _Pragma("omp atomic")
 	#define __BC_omp_for__ _Pragma("omp parallel for")
 	#define __BC_omp_bar__ _Pragma("omp barrier")
-	#define __BC_omp_for_reduction__(oper, value) __BC_omp_for__ reduction(oper:value)
+
+	#define __BC_CONCAT_REDUCTION_LITERAL(oper, value) omp parallel for reduction(oper:value)
+	#define __BC_omp_reduction__(oper, value) __BC_omp_for__ reduction(oper:value)
 #else
 	#define __BC_omp_atomic__
 	#define __BC_omp_for__
 	#define __BC_omp_bar__
 	#define __BC_omp_for_reduction__(oper, value)
 #endif
-
 
 // --------------------------------- constants --------------------------------- //
 

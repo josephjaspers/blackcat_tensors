@@ -26,9 +26,12 @@ int test_accessors(int sz=128) {
 	mat a(sz,sz);
 	bmat validation(sz,sz);
 
-	for (int i = 0; i < sz*sz; ++i) {
-		a(i) = i;
+
+	value_type val= 0;
+	for (auto col : a.nd_iter()) {
+		col = val++;
 	}
+
 
 
 	//test slice
@@ -37,6 +40,7 @@ int test_accessors(int sz=128) {
 		vec a1(a[1]);
 
 		validation = a[0].approx_equal(a0) && a[1].approx_equal(a1);
+
 		return BC::all(validation);
 	)
 

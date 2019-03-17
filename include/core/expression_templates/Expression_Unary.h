@@ -43,11 +43,12 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Value, operati
 
     BCINLINE const auto inner_shape() const { return array.inner_shape(); }
     BCINLINE const auto block_shape() const { return array.block_shape(); }
-    BCINLINE BC::size_t  size() const { return array.size(); }
-    BCINLINE BC::size_t  rows() const { return array.rows(); }
-    BCINLINE BC::size_t  cols() const { return array.cols(); }
-    BCINLINE BC::size_t  dimension(int i) const { return array.dimension(i); }
-    BCINLINE BC::size_t  block_dimension(int i) const { return array.block_dimension(i); }
+    BCINLINE BC::size_t size() const { return array.size(); }
+    BCINLINE BC::size_t rows() const { return array.rows(); }
+    BCINLINE BC::size_t cols() const { return array.cols(); }
+    BCINLINE BC::size_t dimension(int i) const { return array.dimension(i); }
+    BCINLINE BC::size_t block_dimension(int i) const { return array.block_dimension(i); }
+
 };
 
 
