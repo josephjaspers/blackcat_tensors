@@ -17,7 +17,7 @@ struct Lazy_Evaluator {
 
     template<class T>
     static constexpr bool requires_greedy_eval() {
-        return exprs::tree::optimizer<std::decay_t<T>>::contains_blas_function;
+        return exprs::tree::optimizer<std::decay_t<T>>::requires_greedy_eval;
     }
 
     //------------------------------------------------Purely lazy evaluation----------------------------------//
@@ -38,10 +38,6 @@ struct Lazy_Evaluator {
     evaluate(const expression& expr, FullContext context_) {
         auto greedy_evaluated_expr = exprs::tree::Greedy_Evaluator::evaluate(expr, context_);
 
-        //greedy_evaluated_expr will be the same assignmet type ie bin_expr<lv::add_assign>
-        //Temporary Arrays will have an additional template argument,
-        //ergo y.alias() = w*x (where w*x will become a Array<dim, value_type, allocator, BC_Temporary)
-        //and y could be Array<dim, value_type, allocator> (IE no BC_Temporary argument)
         if (!decay_same<decltype(greedy_evaluated_expr.right), decltype(expr.left)>) {
             impl::template nd_evaluator<expression::ITERATOR>(greedy_evaluated_expr, context_);
         }
