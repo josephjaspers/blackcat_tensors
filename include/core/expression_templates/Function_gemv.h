@@ -93,9 +93,9 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
 		impl_l::gemv(alloc, transA,  m, n, alpha, A, A.leading_dimension(0), X, X.leading_dimension(0)/*inc_X*/, beta, injection/*Y*/, injection.leading_dimension(0)/*incy*/);
 
 		//deallocate all the temporaries
-		if (lv_eval) meta::bc_const_cast(A).deallocate();
 		if (rv_eval) meta::bc_const_cast(X).deallocate();
-	}
+		if (lv_eval) meta::bc_const_cast(A).deallocate();
+    }
 };
 
 

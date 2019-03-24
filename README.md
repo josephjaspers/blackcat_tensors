@@ -43,6 +43,16 @@ BlackCat Tensors attempts to align itself with the design of the C++ standard li
 | 7 | [Benchmarks](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/benchmarks.md) | Performance Testing |
 
 
+#### Dependencies 
+
+	cublas
+	curand
+	gomp
+	cblas
+
+	The cuda libraries are only required if the user wants to utilize GPU operations.
+	gomp (or another openmp library) is only required for multithreading certain operations, though it is not required. 
+
 #### License
 ```
 /*  Project: BlackCat_Tensors

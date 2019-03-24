@@ -100,8 +100,9 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 
 
 		//deallocate all the temporaries
-		if (lv_eval) meta::bc_const_cast(A).deallocate();
 		if (rv_eval) meta::bc_const_cast(B).deallocate();
+		if (lv_eval) meta::bc_const_cast(A).deallocate();
+
 	}
 };
 

@@ -82,9 +82,10 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
 
 
 		//deallocate all the temporaries
-		if (lv_eval) meta::bc_const_cast(X).deallocate();
 		if (rv_eval) meta::bc_const_cast(Y).deallocate();
-	}
+		if (lv_eval) meta::bc_const_cast(X).deallocate();
+
+    }
 };
 
 
