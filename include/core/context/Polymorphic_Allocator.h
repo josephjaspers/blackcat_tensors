@@ -8,6 +8,8 @@
 #ifndef BC_CORE_CONTEXT_MEMORY_MANAGER_POLYMORPHIC_ALLOCATOR_H_
 #define BC_CORE_CONTEXT_MEMORY_MANAGER_POLYMORPHIC_ALLOCATOR_H_
 
+#include <memory>
+
 namespace BC {
 namespace context {
 
@@ -45,7 +47,13 @@ private:
 		Virtual_Allocator* clone() const {
 			return new Derived_Allocator(m_allocator);
 		}
-		//This allows the allocator to be a pointer to an allocator
+
+		template<class Alloc_t>
+		auto& retrieve_allocator(std::shared_ptr<Alloc_t>& this_allocator) {
+			BC_ASSERT(this_allocator.get(),
+					"Attempting to retrieve allocator from shared_ptr resulted in nullptr");
+			return *(this_allocator.get());
+		}
 		template<class Alloc_t>
 		auto& retrieve_allocator(Alloc_t& this_allocator) {
 			return this_allocator;
@@ -82,19 +90,20 @@ public:
 	: m_allocator(std::unique_ptr<Virtual_Allocator>(new Derived_Allocator<default_allocator_t>())) {}
 
 	Polymorphic_Allocator(const Polymorphic_Allocator& pa)
-	: std::unique_ptr<Virtual_Allocator>(pa.m_allocator.get()->clone()) {}
-	Polymorphic_Allocator(Polymorphic_Allocator&) = default;
+	: m_allocator(pa.m_allocator.get()->clone()) {}
 
 	value_type* allocate(std::size_t sz) {
-		return m_allocator.allocate(sz);
+		return m_allocator.get()->allocate(sz);
 	}
 	void deallocate(value_type* memptr, std::size_t sz) {
-		m_allocator.deallocate(memptr, sz);
+		m_allocator.get()->deallocate(memptr, sz);
 	}
 
 	template<class Allocator>
 	void set_allocator(const Allocator& alloc) {
-		m_allocator = std::unique_ptr<Virtual_Allocator>(new Allocator(alloc));
+		using allocator_t = typename Allocator::template rebind<BC::context::Byte>::other;
+		m_allocator = std::unique_ptr<Virtual_Allocator>(
+				new Derived_Allocator<allocator_t>(alloc));
 	}
 
 	auto& get_allocator() {

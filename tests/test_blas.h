@@ -31,45 +31,29 @@ int test_blas(int sz=128) {
 
 	BC_TEST_BODY_HEAD
 
-	using alloc_t = allocator<value_type>;
-	using system_tag = typename BC::allocator_traits<alloc_t>::system_tag;
+	using allocator_t = allocator<value_type>;
+	using system_tag = typename BC::allocator_traits<allocator_t>::system_tag;
+	using compare_allocator = BC::allocator::implementation<system_tag, value_type>;
+	using blas = BC::blas::implementation<system_tag>;
 
-	if (std::is_same<system_tag, BC::device_tag>::value) {
-		std::cout << "BLAS test limited CPU" << std::endl;
-		return 0;
-	}
+	using mat = BC::Matrix<value_type, allocator_t>;
+	using scalar = BC::Scalar<value_type, allocator_t>;
 
-#ifdef __CUDACC__
-	using host_allocator = std::conditional_t<std::is_same<host_tag, system_tag>::value,
-												BC::Basic_Allocator<value_type>,
-												BC::Cuda_Managed<value_type>>;
-#else
-	using host_allocator = BC::Basic_Allocator<value_type>;
-#endif
+	using default_mat = BC::Matrix<value_type, compare_allocator>;
 
-//	using vec = BC::Vector<value_type, alloc_t>;
-	using mat = BC::Matrix<value_type, alloc_t>;
-	using scalar = BC::Scalar<value_type, alloc_t>;
+	BC::Context<system_tag> context;
 
-//	using host_vec = BC::Vector<value_type, host_allocator>;
-	using host_mat = BC::Matrix<value_type, host_allocator>;
-
-	//gets the 'host' (cpu) wrapper for BLAS calls.
-	using blas = BC::blas::Host;
-
-	//default cpu context (used in the BC-blas wrapper')
-	//this should be ignored if it just boiler-plate
-	BC::Context<BC::host_tag> context;
+	//Initialize the memory pool
+	context.get_allocator().reserve(sz*sz*2 * sizeof(value_type));
 
 	scalar A(value_type(2));
 	mat a(sz, sz);
 	mat b(sz, sz);
 	mat y(sz, sz);
 
-//	value_type host_A = 2;
-	host_mat h_a(sz, sz);
-	host_mat h_b(sz, sz);
-	host_mat h_y(sz, sz);
+	default_mat h_a(sz, sz);
+	default_mat h_b(sz, sz);
+	default_mat h_y(sz, sz);
 
 	a.randomize(0,10);
 	b.randomize(0,10);
@@ -79,17 +63,17 @@ int test_blas(int sz=128) {
 	h_b = b;
 	h_y = y;
 
-//	value_type one = 1;
-//	value_type zero = 0;
-
+	scalar one = 1;
+	scalar two = 2;
+	scalar zero = 0;
 
 	BC_TEST_DEF(
 		y = a * b;
 
 		blas::gemm(context, false, false,  sz, sz, sz,
-				1, h_a.data(), sz,
+				one, h_a.data(), sz,
 				h_b.data(), sz,
-				0, h_y.data(), sz);
+				zero, h_y.data(), sz);
 
 			return BC::all(h_y.approx_equal(y));
 	)
@@ -98,9 +82,9 @@ int test_blas(int sz=128) {
 		y = a * b + a * b;
 
 		blas::gemm(context, false, false,  sz, sz, sz,
-				2, h_a.data(), sz,
+				two, h_a.data(), sz,
 				h_b.data(), sz,
-				0, h_y.data(), sz);
+				zero, h_y.data(), sz);
 
 		return BC::all(h_y.approx_equal(y));
 	)
@@ -111,9 +95,9 @@ int test_blas(int sz=128) {
 		y += a * b + a * b;
 
 		blas::gemm(context, false, false,  sz, sz, sz,
-				2, h_a.data(), sz,
+				two, h_a.data(), sz,
 				h_b.data(), sz,
-				1, h_y.data(), sz);
+				one, h_y.data(), sz);
 
 		return BC::all(h_y.approx_equal(y));
 	)
@@ -131,9 +115,9 @@ int test_blas(int sz=128) {
 		y += a * b + a * b + 1;
 
 		blas::gemm(context, false, false,  sz, sz, sz,
-				2, h_a.data(), sz,
+				two, h_a.data(), sz,
 				h_b.data(), sz,
-				1, h_y.data(), sz);
+				one, h_y.data(), sz);
 
 			return BC::all(h_y.approx_equal(y));
 	)

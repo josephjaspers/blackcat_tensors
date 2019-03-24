@@ -63,9 +63,8 @@ class  Device {
 		cudaStream_t   m_stream_handle=nullptr;
 		cudaEvent_t    m_event		  =nullptr;
 		float*         m_scalar_buffer=nullptr;
+		Workspace<device_tag> m_workspace;
 
-		BC::size_t     m_workspace_size = 0;
-		Byte*          m_workspace    =nullptr;
 		Polymorphic_Allocator<Byte, device_tag> m_allocator;
 
 		Device_Stream_Contents(bool init_stream=false, bool init_scalars=true) {
@@ -107,6 +106,8 @@ class  Device {
 
 public:
 
+	using system_tag = device_tag;
+
 	template<class scalar_t, int value>
 	static const scalar_t* scalar_constant() {
 		static scalar_t* scalar_constant_ = nullptr;
@@ -130,6 +131,10 @@ public:
 		set_scalar_value(buffer, alpha_value, device_contents.get()->m_stream_handle);
 		return buffer;
 	}
+
+    Workspace<device_tag>& get_allocator() {
+    	return device_contents.get()->m_workspace;
+    }
 
     const cublasHandle_t& get_cublas_handle() const {
     	return device_contents.get()->m_cublas_handle;

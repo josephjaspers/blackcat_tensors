@@ -37,7 +37,7 @@ struct Host;
             return std:: function (parameters...);\
         }\
 		template<class... args>\
-		static void function (BC::context::Host& stream, args... parameters){\
+		static void function (BC::context::Host stream, args... parameters){\
 			stream.push_job([=](){ std:: function (parameters...); });\
 		}
 #endif
@@ -46,7 +46,7 @@ struct Host;
 #define BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF(function) \
 template<class... args>  \
 static auto function (args... parameters){ \
-    static_assert(sizeof...(args) == 100, "BC::Host::Algorithms DOES NOT DEFINE: " #function );\
+    static_assert(sizeof...(args) == 999, "BC::Host::Algorithms DOES NOT DEFINE: " #function );\
 }
 
 

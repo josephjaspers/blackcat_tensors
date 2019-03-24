@@ -150,25 +150,27 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
     	BC_TREE_OPTIMIZER_STDOUT("BLAS_EXPR: temporary_injection");
 
     	using param = Binary_Expression<lv, rv, op>;
-    	using allocator_t = typename Context::allocator_t; //refactor allocator to context!!
-    	using value_type = typename allocator_t::value_type;
+    	using value_type = typename Binary_Expression<lv, rv, op>::value_type;
     	constexpr int dims = param::DIMS;
 
-    	using tmp_t = Array<dims, value_type, allocator_t, BC_Temporary>;
-        tmp_t tmp(branch.inner_shape(), alloc.get_allocator());
+    	using array_t = ArrayExpression<dims, value_type, typename Context::system_tag, BC_Temporary>;
+    	array_t temporary; //(branch.inner_shape());
 
+    	auto shape = Shape<dims>(branch.inner_shape());
+    	temporary.m_inner_shape = shape.m_inner_shape;
+    	temporary.m_block_shape = shape.m_block_shape;
+    	temporary.array = alloc.get_allocator().template allocate<value_type>(temporary.size());
 
         //ISSUE HERE
-        branch.eval(make_injection<1, 0>(tmp.internal()), alloc);
-        return tmp.internal();
+        branch.eval(make_injection<1, 0>(temporary), alloc);
+        return temporary;
     }
 
     template<class Context>
     static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch, Context alloc) {
     	BC_TREE_OPTIMIZER_STDOUT("BLAS_EXPR: deallocate_temporaries");
-
-        optimizer<lv>::deallocate_temporaries(branch.left, alloc);
         optimizer<rv>::deallocate_temporaries(branch.right, alloc);
+        optimizer<lv>::deallocate_temporaries(branch.left, alloc);
     }
 };
 
@@ -399,9 +401,8 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
     template<class Context>
     static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch, Context alloc) {
     	BC_TREE_OPTIMIZER_STDOUT("Binary Linear: Deallocate Temporaries");
-
-        optimizer<lv>::deallocate_temporaries(branch.left, alloc);
         optimizer<rv>::deallocate_temporaries(branch.right, alloc);
+        optimizer<lv>::deallocate_temporaries(branch.left, alloc);
     }
 
 };
@@ -421,52 +422,32 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
         return branch;
     }
 
-
-    struct left_trivial_injection {
-        template<class core, int a, int b, class Context>
-        static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
-            auto left = optimizer<lv>::injection(branch.left, tensor, alloc);
-            auto right = branch.right;
-            return make_bin_expr<op>(left, right);
-        }
-    };
-    struct right_trivial_injection {
-        template<class core, int a, int b, class Context>
-        static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
-            auto left = branch.left;
-            auto right = optimizer<rv>::injection(branch.right, tensor, alloc);
-            return make_bin_expr<op>(left, right);
-        }
-    };
-    struct left_nontrivial_injection {
-        template<class core, int a, int b, class Context>
-        static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
-            auto left = optimizer<lv>::injection(branch.left, tensor, alloc);
-            auto right = branch.right; //rv
-            return make_bin_expr<op>(left, right);
-        }
-    };
-    struct right_nontrivial_injection {
-        template<class core, int a, int b, class Context>
-        static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
-            auto left = branch.left; //lv
-            auto right = optimizer<rv>::injection(branch.right, tensor, alloc);
-            return make_bin_expr<op>(left, right);
-        }
-    };
-
     template<class core, int a, int b, class Context>
     static auto injection(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
             //dont need to update injection
             //trivial injection left_hand side (we attempt to prefer trivial injections opposed to non-trivial)
-            using impl  =
-                std::conditional_t<optimizer<lv>::partial_blas_expr,         left_trivial_injection,
-                std::conditional_t<optimizer<rv>::partial_blas_expr,         right_trivial_injection,
-                std::conditional_t<optimizer<lv>::nested_blas_expr,     left_nontrivial_injection,
-                std::conditional_t<optimizer<rv>::nested_blas_expr,     right_nontrivial_injection, void>>>>;
+        struct left {
+            static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
+                auto left = optimizer<lv>::injection(branch.left, tensor, alloc);
+                auto right = branch.right;
+                return make_bin_expr<op>(left, right);
+            }
+        };
+        struct right {
+            static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
+                auto left = branch.left;
+                auto right = optimizer<rv>::injection(branch.right, tensor, alloc);
+                return make_bin_expr<op>(left, right);
+            }
+        };
+
+    	using impl  =
+                std::conditional_t<optimizer<lv>::partial_blas_expr, left,
+                std::conditional_t<optimizer<lv>::nested_blas_expr,  left,
+                std::conditional_t<optimizer<rv>::partial_blas_expr, right,
+                std::conditional_t<optimizer<rv>::nested_blas_expr,  right, void>>>>;
 
             return impl::function(branch, tensor, alloc);
-
     }
 
     template<class Context>
@@ -479,8 +460,8 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<operation_trait
     template<class Context>
     static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch, Context alloc) {
     	BC_TREE_OPTIMIZER_STDOUT("Binary NonLinear: DEALLOCATE TEMPORARIES");
-        optimizer<lv>::deallocate_temporaries(branch.left, alloc);
         optimizer<rv>::deallocate_temporaries(branch.right, alloc);
+    	optimizer<lv>::deallocate_temporaries(branch.left, alloc);
     }
 };
 

@@ -36,15 +36,14 @@ template<int,class,class,class...> class Array; //derived
  */
 
 
-template<int Dimension, class Scalar, class Allocator, class... Tags>
+template<int Dimension, class ValueType, class SystemTag, class... Tags>
 struct ArrayExpression
-		: Array_Base<ArrayExpression<Dimension, Scalar, Allocator, Tags...>, Dimension>,
+		: Array_Base<ArrayExpression<Dimension, ValueType, SystemTag, Tags...>, Dimension>,
 		  Shape<Dimension>, public Tags... {
 
-	using derived_t = Array<Dimension, Scalar, Allocator, Tags...>;
-    using value_type = Scalar;
-    using allocator_t = Allocator;
-    using system_tag = typename allocator_traits<Allocator>::system_tag;
+	using derived_t = Array<Dimension, ValueType, SystemTag, Tags...>;
+    using value_type = ValueType;
+    using system_tag = SystemTag;
 
     static constexpr bool copy_constructible = true;
     static constexpr bool move_constructible = true;
@@ -64,16 +63,15 @@ struct ArrayExpression
 };
 
 //specialization for scalar --------------------------------------------------------------------------------------------------------
-template<class T, class Allocator, class... Tags>
-struct ArrayExpression<0, T, Allocator, Tags...>
-: Array_Base<ArrayExpression<0, T, Allocator, Tags...>, 0>,
+template<class ValueType, class SystemTag, class... Tags>
+struct ArrayExpression<0, ValueType, SystemTag, Tags...>
+: Array_Base<ArrayExpression<0, ValueType, SystemTag, Tags...>, 0>,
   public Shape<0>,
   public Tags... {
 
-	using derived_t = Array<0, T, Allocator, Tags...>;
-	using value_type = T;
-	using allocator_t = Allocator;
-	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
+	using derived_t = Array<0, ValueType, SystemTag, Tags...>;
+	using system_tag = SystemTag;
+	using value_type = ValueType;
 
 	static constexpr int DIMS = 0;
 	static constexpr int ITERATOR = 0;
@@ -95,6 +93,12 @@ struct ArrayExpression<0, T, Allocator, Tags...>
     BCINLINE const Shape<0>& get_shape() const { return static_cast<const Shape<0>&>(*this); }
 
 
+    operator BC::meta::only_if<std::is_same<host_tag, system_tag>::value, value_type&> () {
+    	return array[0];
+    }
+    operator BC::meta::only_if<std::is_same<host_tag, system_tag>::value, const value_type&> () const {
+		return array[0];
+	}
 };
 
 
@@ -104,12 +108,12 @@ template<int Dimension, class Scalar, class Allocator, class... Tags>
 class Array :
 			private Allocator,
 			public Context<typename BC::allocator_traits<Allocator>::system_tag>,
-			public ArrayExpression<Dimension, Scalar, Allocator, Tags...> {
+			public ArrayExpression<Dimension, Scalar, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
 
 	template<class,int, bool> friend class Array_Slice;
 
 	using self = Array<Dimension, Scalar, Allocator, Tags...>;
-	using parent = ArrayExpression<Dimension, Scalar, Allocator, Tags...>;
+	using parent = ArrayExpression<Dimension, Scalar,  typename BC::allocator_traits<Allocator>::system_tag, Tags...>;
 
 public:
 
@@ -118,27 +122,21 @@ public:
 	using context_t   = Context<system_tag>;
 	using full_context_t = context::full_context_t<allocator_t, context_t>;
 	using value_type = Scalar;
-	using ArrayExpression<Dimension, Scalar, Allocator, Tags...>::deallocate;
 
-	const auto get_context() const {
-		return context::make_full_context(as_alloc(), as_context());
-	}
-
-	auto get_context() {
-		return context::make_full_context(as_alloc(), as_context());
-	}
 
 private:
 
 	Shape<Dimension>& as_shape() { return static_cast<Shape<Dimension>&>(*this); }
 
-	const Allocator& as_alloc() const { return static_cast<const Allocator&>(*this); }
-		  Allocator& as_alloc() 	  { return static_cast<		 Allocator&>(*this); }
-
-	const context_t& as_context() const { return static_cast<const context_t&>(*this); }
-          context_t& as_context() 	    { return static_cast<	   context_t&>(*this); }
 
 public:
+	const context_t& get_context() const { return static_cast<const context_t&>(*this); }
+          context_t& get_context() 	    { return static_cast<	   context_t&>(*this); }
+
+
+      	const Allocator& get_allocator() const { return static_cast<const Allocator&>(*this); }
+      		  Allocator& get_allocator() 	  { return static_cast<		 Allocator&>(*this); }
+
 
 	Array() {
 		if (Dimension == 0) {
@@ -148,14 +146,14 @@ public:
 
 	Array(const Array& array_)
 	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(array_)),
-	  context_t(array_.as_context()),
+	  context_t(array_.get_context()),
 	  parent(array_) {
         this->array = this->allocate(this->size());
         evaluate_to(this->internal(), array_.internal(), get_context());
 	}
 	Array(Array&& array_) //TODO handle propagate_on_container_move_assignment
-	: Allocator(std::move(array_.as_alloc())),
-	  context_t(std::move(array_.as_context())),
+	: Allocator(std::move(array_.get_allocator())),
+	  context_t(std::move(array_.get_context())),
 	  parent(array_) {
 		array_.m_inner_shape = {0};
 		array_.m_block_shape = {0};
@@ -163,7 +161,9 @@ public:
 	}
 
 	//Construct via shape-like object
-    template<class U,typename = std::enable_if_t<!expression_traits<U>::is_array && !expression_traits<U>::is_expr>>
+    template<class U,typename = std::enable_if_t<!expression_traits<U>::is_array &&
+    												!expression_traits<U>::is_expr &&
+    													Dimension != 0>>
     Array(U param) {
     	this->as_shape() = Shape<Dimension>(param);
     	this->array = this->allocate(this->size());
@@ -208,7 +208,7 @@ public:
     			Array_Slice<Parent, Dimension, true>::DIMS == Dimension>>
 	Array(const Array_Slice<Parent, Dimension, true>& expr_t)
 	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(
-			expr_t.get_context().get_allocator())),
+			expr_t.get_allocator())),
 	  context_t(expr_t.get_context())
 	{
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
@@ -217,15 +217,49 @@ public:
 	}
 
 public:
-    void internal_swap(Array& swap) {
-    	std::swap(this->array, swap.array);
-    	std::swap(this->m_inner_shape, swap.m_inner_shape);
-    	std::swap(this->m_block_shape, swap.m_block_shape);
+    void internal_move(Array& swap) {
+    		if (BC::allocator_traits<Allocator>::is_always_equal::value ||
+    			swap.get_allocator() == this->get_allocator()) {
+			std::swap(this->array, swap.array);
+			std::swap(this->m_inner_shape, swap.m_inner_shape);
+			std::swap(this->m_block_shape, swap.m_block_shape);
 
-    	if (BC::allocator_traits<Allocator>::propagate_on_container_swap::value) {
-    		std::swap(this->as_alloc(), swap.as_alloc());
+	    	if (BC::allocator_traits<Allocator>::propagate_on_container_move_assignment::value) {
+				std::swap(this->get_allocator(), swap.get_allocator());
+			}
+    	} else {
+    		get_allocator().deallocate(this->array, this->size());
+
+			this->m_inner_shape = swap.m_inner_shape;
+			this->m_block_shape = swap.m_block_shape;
+			this->array = get_allocator().allocate(this->size());
+			evaluate_to(this->internal(), swap.internal(), this->get_context());
     	}
     }
+
+//    Array& operator =(Array&& move) {
+//
+//     	bool equal_allocators = BC::allocator_traits<Allocator>::is_always_equal::value ||
+//     								this->get_allocator() == move.get_allocator();
+//
+//     	if (BC::allocator_traits<Allocator>::propagate_on_container_move_assignment::value
+//     			&& equal_allocators)
+//     	{
+//     		std::swap(this->get_allocator(), move.get_allocator());
+//         	std::swap(this->array, move.array);
+//         	std::swap(this->m_inner_shape, move.m_inner_shape);
+//         	std::swap(this->m_block_shape, move.m_block_shape);
+//     	} else {
+//     		get_allocator().deallocate(this->array, this->size());
+//     		this->m_inner_shape = move.m_inner_shape;
+//     		this->m_inner_shape = move.m_inner_shape;
+//     		evaluate_to(this->internal(), move.internal(), get_context());
+//     	}
+//
+//
+//
+//     	return *this;
+//     }
 
     void deallocate() {
        Allocator::deallocate(this->array, this->size());
@@ -236,11 +270,6 @@ public:
     		return *this; }
     	const self& internal_base() const {
     		return *this; }
-
-
-	Allocator get_allocator() const {
-		return BC::allocator_traits<Allocator>::select_on_container_copy_construction(static_cast<const Allocator&>(*this));
-	}
 };
 
 

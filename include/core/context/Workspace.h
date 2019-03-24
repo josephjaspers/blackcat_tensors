@@ -24,22 +24,14 @@ class Workspace {
 
 	Byte* m_memptr=nullptr;
 
-	static Polymorphic_Allocator<Byte, SystemTag> default_allocator;
+	static Polymorphic_Allocator<Byte, SystemTag>& get_default_allocator() {
+		static Polymorphic_Allocator<Byte, SystemTag> default_allocator;
+		return default_allocator;
+	}
 
-	Polymorphic_Allocator<Byte, SystemTag> m_allocator =
-			Polymorphic_Allocator<Byte, SystemTag>(default_allocator);
+	Polymorphic_Allocator<Byte, SystemTag> m_allocator = get_default_allocator();
 
 public:
-	template<class Allocator>
-	static void set_default_allocator(Allocator& alloc) {
-		default_allocator.set_allocator(alloc);
-	}
-	template<class Allocator>
-	static void set_default_allocator(const Allocator& alloc) {
-		default_allocator.set_allocator(alloc);
-	}
-
-
 	Workspace(std::size_t sz=0) : m_memptr_sz(sz){
 		if (sz)
 			m_memptr = m_allocator.allocate(sz);
@@ -48,12 +40,20 @@ public:
 		BC_ASSERT(m_curr_index==0,
 				"Workspace reserve called while memory is still allocated");
 
-		if (!(m_memptr_sz > sz)) {
+		if (m_memptr_sz < sz) {
 			m_allocator.deallocate(m_memptr, m_memptr_sz);
 			m_memptr = m_allocator.allocate(sz);
-
+			m_memptr_sz = sz;
 		}
 	}
+	void free() {
+		BC_ASSERT(m_curr_index==0,
+				"Workspace free called while memory is still allocated");
+		m_allocator.deallocate(m_memptr, m_memptr_sz);
+		m_memptr_sz = 0;
+		m_memptr = nullptr;
+	}
+
 	template<class Allocator>
 	void set_allocator(Allocator alloc) {
 		BC_ASSERT(m_curr_index==0,
@@ -62,7 +62,7 @@ public:
 	}
 
 	Byte* allocate(std::size_t sz) {
-		BC_ASSERT(m_curr_index + sz < m_memptr_sz,
+		BC_ASSERT(m_curr_index + sz <= m_memptr_sz,
 				"BC_Memory Allocation failure, attempting to allocate memory larger that workspace size");
 
 		Byte* mem = m_memptr + m_curr_index;
@@ -75,6 +75,28 @@ public:
 				"\nWorkspace memory functions as a stack, deallocations must be in reverse order of allocations.");
 
 		m_curr_index -= sz;
+	}
+
+	template<class T>
+	T* allocate(std::size_t sz) {
+		BC_ASSERT(m_curr_index + (sz * sizeof(T)) <= m_memptr_sz,
+				"BC_Memory Allocation failure, attempting to allocate memory larger that workspace size" \
+				"\ncurr_size: " + std::to_string(m_memptr_sz)+
+				"\ncurr_index: " + std::to_string(m_curr_index) +
+				+"\nallocation_request_sz: " + std::to_string(sz * sizeof(T)));
+
+		Byte* mem = m_memptr + m_curr_index;
+		m_curr_index += sz * sizeof(T);
+		return reinterpret_cast<T*>(mem);
+	}
+
+	template<class T>
+	void deallocate(T* memptr, std::size_t sz) {
+		BC_ASSERT(reinterpret_cast<Byte*>(memptr) == (m_memptr + m_curr_index - sz * sizeof(T)),
+				"BC_Memory Deallocation failure, attempting to deallocate memory out of order,"
+				"\nWorkspace memory functions as a stack, deallocations must be in reverse order of allocations.");
+
+		m_curr_index -= sz * sizeof(T);
 	}
 
 	~Workspace(){

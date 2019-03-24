@@ -22,7 +22,6 @@ struct ArrayScalarExpr : Array_Base<ArrayScalarExpr<Parent>, 0>, Shape<0> {
 
     using value_type = typename Parent::value_type;
 	using pointer_t   = decltype(std::declval<Parent>().memptr());
-    using allocator_t = typename Parent::allocator_t;
     using system_tag = typename Parent::system_tag;
     using shape_t = Shape<0>;
 
@@ -62,7 +61,6 @@ struct ArraySliceExpr :
 
 	using value_type  = typename Parent::value_type;
 	using pointer_t   = decltype(std::declval<Parent>().memptr());
-	using allocator_t = typename Parent::allocator_t;
 	using system_tag  = typename Parent::system_tag;
 	using shape_t = std::conditional_t<Continuous, Shape<Dimensions>, SubShape<Dimensions>>;
 
@@ -107,36 +105,52 @@ struct Array_Slice :
 			ArrayScalarExpr<Parent>,
 			ArraySliceExpr<Parent, Dimensions, Continuous>>;
 
+private:
+	template<class T>
+	using const_if_parent_is_const = std::conditional_t<std::is_const<Parent>::value, const T, T>;
+
 	using shape_t 		 = typename super_t::shape_t;
 	using allocator_t 	 = typename Parent::allocator_t;
 	using context_t 	 = typename Parent::context_t;
-	using full_context_t = decltype(std::declval<Parent>().get_context());
 
-	full_context_t m_context;
+	using m_allocator_t  = const_if_parent_is_const<allocator_t>;
+	using m_context_t 	 = const_if_parent_is_const<context_t>;
+
+
+	public:
+
+	m_context_t m_context;
+	m_allocator_t& m_allocator;
 
 	template<class,int, bool> friend class Array_Slice;
 	template<int, class, class, class...> friend class Array;
 
 	BCHOT
 	Array_Slice(Parent& parent_, BC::size_t index)
-	: super_t(parent_, index), m_context(parent_.get_context()) {
+	: super_t(parent_, index),
+	  m_context(parent_.get_context()),
+	  m_allocator(parent_.get_allocator()) {
 	}
 
 	BCHOT
 	Array_Slice(Parent& parent_, const shape_t& shape_, BC::size_t index)
-	: super_t(parent_, shape_, index), m_context(parent_.get_context()) {
+	: super_t(parent_, shape_, index),
+	  m_context(parent_.get_context()),
+	  m_allocator(parent_.get_allocator()) {
 	}
 
-	allocator_t get_allocator() const {
-		return BC::allocator_traits<allocator_t>::select_on_container_copy_construction(
-			m_context.get_allocator());
+	const m_allocator_t& get_allocator() const {
+		return m_allocator;
+	}
+	m_allocator_t& get_allocator() {
+		return m_allocator;
 	}
 
 	auto& internal_base() { return *this; }
 	const auto& internal_base() const { return *this; }
 
-	auto get_context() -> decltype(m_context) { return m_context; }
-	auto get_context() const -> decltype(m_context) { return m_context; }
+	m_context_t& get_context()  { return m_context; }
+	const m_context_t& get_context() const  { return m_context; }
 };
 
 

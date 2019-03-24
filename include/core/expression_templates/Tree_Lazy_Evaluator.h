@@ -60,7 +60,7 @@ struct Lazy_Evaluator {
 
 template<class Context>
 struct CacheEvaluator {
-    template<class branch> using sub_t  = BC::exprs::Array<branch::DIMS, typename exprs::expression_traits<branch>::scalar_t, typename Context::allocator_t, BC_Temporary>;
+    template<class branch> using sub_t  = BC::exprs::ArrayExpression<branch::DIMS, typename exprs::expression_traits<branch>::scalar_t, typename Context::system_tag, BC_Temporary>;
 //    template<class branch> using eval_t = BC::exprs::Binary_Expression<sub_t<branch>, branch, BC::oper::assign>;
 
     template<class branch> //The branch is an array, no evaluation required
@@ -70,15 +70,24 @@ struct CacheEvaluator {
 
     template<class branch> //Create and return an array_core created from the expression
     static std::enable_if_t<!expression_traits<branch>::is_array, sub_t<std::decay_t<branch>>>
-    evaluate(const branch& expression, Context context_)
+    evaluate(const branch& expression, Context context)
     {
-        auto cached_branch = make_tensor_array(
-        		expression.inner_shape(),			//context 'get_allocator' returns a referenec not a copy
-        		BC::allocator_traits<typename Context::allocator_t>::select_on_temporary_construction(context_.get_allocator()));
+//        auto cached_branch = make_tensor_array(
+//        		expression.inner_shape(),			//context 'get_allocator' returns a referenec not a copy
+//        		BC::allocator_traits<typename Context::allocator_t>::select_on_temporary_construction(context_.get_allocator()));
 
-        auto expr = make_bin_expr<BC::oper::assign>(cached_branch.internal(), expression);
-        Lazy_Evaluator<Context>::evaluate(expr, context_);
-        return cached_branch;
+    	using value_type = typename branch::value_type;
+    	sub_t<branch> temporary; //(branch.inner_shape());
+    	static constexpr int dims = branch::DIMS;
+    	auto shape = Shape<dims>(expression.inner_shape());
+    	temporary.m_inner_shape = shape.m_inner_shape;
+    	temporary.m_block_shape = shape.m_block_shape;
+    	temporary.array = context.get_allocator().template allocate<value_type>(temporary.size());
+
+
+        auto expr = make_bin_expr<BC::oper::assign>(temporary, expression);
+        Lazy_Evaluator<Context>::evaluate(expr, context);
+        return temporary;
     }
 
 };

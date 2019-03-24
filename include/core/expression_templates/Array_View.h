@@ -59,7 +59,7 @@ struct Array_View : ArrayViewExpr<Dimension, Scalar, Allocator> {
 	Array_View(const Array_View&) = default;
 	Array_View(Array_View&&) = default;
 
-	void internal_swap(Array_View& swap) {
+	void internal_move(Array_View& swap) {
 		std::swap(this->array, swap.array);
 		this->swap_shape(swap);
 	}
@@ -73,7 +73,7 @@ struct Array_View : ArrayViewExpr<Dimension, Scalar, Allocator> {
 	Array_View(const tensor_t& tensor) {
 		this->array = tensor.memptr();
 		this->copy_shape(tensor);
-		this->alloc = &(tensor.get_context().get_allocator());
+		this->alloc = &(tensor.get_allocator());
 	}
 
 	Allocator& get_allocator_ref() {

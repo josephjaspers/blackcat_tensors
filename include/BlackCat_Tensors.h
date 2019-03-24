@@ -45,13 +45,13 @@
 
 #define BCHOT   		   inline __attribute__((always_inline)) __attribute__((hot))  //device-only inline
 
-#ifdef __CUDACC__
-#include <cublas.h>
 #include <iostream>
+
 namespace BC {
 
 #define BC_ASSERT(condition, message) { bc_assert(condition, message, __FILE__, __PRETTY_FUNCTION__, __LINE__); }
-inline void bc_assert(bool condition, const char* msg, const char* file, const char* function, int line) {
+template<class str_type>
+inline void bc_assert(bool condition, str_type msg, const char* file, const char* function, int line) {
 	   if (!condition) {
 			std::cout << "BC_ASSERT FAILURE: " <<
 		   "\nfile: " << file <<
@@ -62,6 +62,14 @@ inline void bc_assert(bool condition, const char* msg, const char* file, const c
 		   throw 1;
 	   }
 }
+}
+
+#ifdef __CUDACC__
+#include <cublas.h>
+namespace BC {
+
+#define BC_STRING_VALUE(value) (std::string(#value) + std::string(": ") + std::to_string(value))
+
 
 #define BC_CUDA_ASSERT(ans) { BC_cuda_assert((ans), __FILE__, __PRETTY_FUNCTION__, __LINE__); }
 inline void BC_cuda_assert(cudaError_t code, const char *file, const char* function, int line)
@@ -176,16 +184,18 @@ inline void synchronize() {
 }
 
 #ifndef BC_SIZE_T_OVERRIDE
+//Using a signed integer is preferable
 using  size_t   = int;
 #else
 using  size_t   = BC_SIZE_T_OVERRIDE;
 #endif
 
-static constexpr  BC::size_t MULTITHREAD_THRESHOLD = 16384;
 
 #ifdef __CUDACC__
-    static BC::size_t CUDA_BASE_THREADS = 128;
-
+	namespace {
+    	static BC::size_t CUDA_BASE_THREADS = 128;
+    	static constexpr  BC::size_t MULTITHREAD_THRESHOLD = 16384;
+	}
     static void set_cuda_base_threads(BC::size_t nthreads) {
     	CUDA_BASE_THREADS = nthreads;
     }

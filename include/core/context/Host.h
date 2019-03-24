@@ -13,7 +13,7 @@
 #include <iostream>
 #include "Polymorphic_Allocator.h"
 #include "HostQueue.h"
-
+#include "Workspace.h"
 
 namespace BC {
 namespace context {
@@ -21,18 +21,34 @@ namespace context {
 
 class Host {
 
-	using Queue = HostQueue;
-	std::shared_ptr<Queue> m_job_queue;
+	struct Contents {
+		HostQueue m_stream;
+		Workspace<host_tag> m_workspace;
+	};
+
+	static std::shared_ptr<Contents> get_default_contents() {
+		static std::shared_ptr<Contents> default_contents =
+					std::shared_ptr<Contents>(new Contents());
+
+		return default_contents;
+	}
+	std::shared_ptr<Contents> m_contents = get_default_contents();
 
 public:
 
-	Host() : m_job_queue(nullptr) {}
+	using system_tag = host_tag;
+
+	Host() =default;
 	Host(const Host&)=default;
 	Host(Host&&)=default;
 
     template<class scalar_t, int value>
     static scalar_t scalar_constant() {
     	return value;
+    }
+
+    Workspace<host_tag>& get_allocator() {
+    	return m_contents.get()->m_workspace;
     }
 
 	 template<class scalar_t>
@@ -48,26 +64,26 @@ public:
 	 }
 
 	bool is_default_stream() {
-		return m_job_queue.get() == nullptr;
+		return m_contents == get_default_contents();
 	}
 
 	void create_stream() {
-		m_job_queue = std::shared_ptr<Queue>(new Queue());
-		m_job_queue.get()->init();
+		m_contents = std::shared_ptr<Contents>(new Contents());
+		m_contents.get()->m_stream.init();
 	}
 
 	void destroy_stream() {
-		m_job_queue = std::shared_ptr<Queue>(nullptr);
+		m_contents = get_default_contents();
 	}
 
 	void sync_stream() {
 		//** Pushing a job while syncing is undefined behavior.
-		if (m_job_queue.get())
-			m_job_queue.get()->synchronize();
+		if (!is_default_stream())
+			m_contents.get()->m_stream.synchronize();
 	}
 
 	void set_stream(Host& stream_) {
-		this->m_job_queue = stream_.m_job_queue;
+		this->m_contents = stream_.m_contents;
 	}
 
 	template<class function_lambda>
@@ -75,15 +91,15 @@ public:
 		if (this->is_default_stream()) {
 			functor();
 		} else {
-			m_job_queue.get()->push(functor);
+			m_contents.get()->m_stream.push(functor);
 		}
 	}
 
     bool operator == (const Host& dev) {
-    	return m_job_queue == dev.m_job_queue;
+    	return m_contents == dev.m_contents;
     }
     bool operator != (const Host& dev) {
-    	return m_job_queue != dev.m_job_queue;
+    	return m_contents != dev.m_contents;
     }
 };
 

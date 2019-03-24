@@ -49,13 +49,13 @@ int test_algorithms(int sz=128) {
 		a.sync_stream();
 		b.sync_stream();
 
-
 		return BC::all(a == 5) && BC::all(b == 7);
 	)
 
 
 	//same test as above except B is using the default stream
 	BC_TEST_DEF(
+
 		mat a(sz, sz);
 		mat b(sz, sz);
 
