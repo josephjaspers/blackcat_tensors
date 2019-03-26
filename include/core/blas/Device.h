@@ -22,6 +22,24 @@ struct Device {
 		device_impl::calculate_alpha<<<1, 1, 0, context.get_stream()>>>(output, vals...);
 	}
 
+	template<class scalar_t, int value>
+	static const scalar_t* scalar_constant() {
+
+		struct scalar_constant_initialize {
+			static scalar_t* init() {
+				scalar_t tmp_val = value;
+				scalar_t* scalar_constant_ = nullptr;
+				BC_CUDA_ASSERT(cudaMalloc((void**)&scalar_constant_, sizeof(scalar_t)));
+				BC_CUDA_ASSERT(cudaMemcpy(scalar_constant_, &tmp_val, sizeof(scalar_t), cudaMemcpyHostToDevice));
+				return scalar_constant_;
+			}
+		};
+
+		static scalar_t* scalar_constant_ = scalar_constant_initialize::init();
+		return scalar_constant_;
+
+	}
+
 	template<class Context>
     static void gemm(Context context, bool transA, bool transB, BC::size_t  m, BC::size_t  n, BC::size_t  k,
             const float* alpha, const float* A, BC::size_t  lda,

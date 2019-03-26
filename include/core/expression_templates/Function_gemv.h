@@ -29,10 +29,8 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
     		"GEMV DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
 
     using value_type    = typename lv::value_type;
-    using system_tag  = System_Tag;
-    using impl_l      = blas::implementation<system_tag>;
-    using utility_l   = utility::implementation<system_tag>;
-    using function_t = oper::gemv<System_Tag>;
+    using system_tag  	= System_Tag;
+    using blas      	= blas::implementation<system_tag>;
 
     static constexpr bool transA = blas_feature_detector<lv>::transposed;
     static constexpr bool transB = blas_feature_detector<rv>::transposed;
@@ -73,24 +71,24 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
 
 		//allocate the alpha and beta scalars,
         auto alpha = alloc.scalar_alpha((value_type)alpha_mod);
-		auto beta = alloc.template scalar_constant<value_type, beta_mod>();
+		auto beta = blas::template scalar_constant<value_type, beta_mod>();
 
 		//get the left and right side scalar values and
 		//compute the scalar values if need be
 		if (lv_scalar) {
 			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-			impl_l::calculate_alpha(alloc, alpha, alpha, alpha_lv);
+			blas::calculate_alpha(alloc, alpha, alpha, alpha_lv);
 		}
 		if (rv_scalar) {
 			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-			impl_l::calculate_alpha(alloc, alpha, alpha, alpha_rv);
+			blas::calculate_alpha(alloc, alpha, alpha, alpha_rv);
 		}
 
 		//call matrix_mul ///for gemm we always use M, N, K regardless of transpose, but for gemv we always use pre-trans dimensions ???
 		BC::size_t  m = A.rows();
 		BC::size_t  n = A.cols();
 
-		impl_l::gemv(alloc, transA,  m, n, alpha, A, A.leading_dimension(0), X, X.leading_dimension(0)/*inc_X*/, beta, injection/*Y*/, injection.leading_dimension(0)/*incy*/);
+		blas::gemv(alloc, transA,  m, n, alpha, A, A.leading_dimension(0), X, X.leading_dimension(0)/*inc_X*/, beta, injection/*Y*/, injection.leading_dimension(0)/*incy*/);
 
 		//deallocate all the temporaries
 		if (rv_eval) meta::bc_const_cast(X).deallocate();

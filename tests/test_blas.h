@@ -77,6 +77,31 @@ int test_blas(int sz=128) {
 
 			return BC::all(h_y.approx_equal(y));
 	)
+	BC_TEST_DEF(
+		y[0].zero();
+		h_y[0].zero();
+
+		y[0] = a * b[0];
+
+		blas::gemv(context, false,  sz, sz,
+				one, h_a.data(), sz,
+				h_b.data(), 1,
+				zero, h_y.data(), 1);
+
+			return BC::all(h_y[0].approx_equal(y[0]));
+	)
+	BC_TEST_DEF(
+		y.zero();
+		h_y.zero();
+		y = a[0] * b[0].t();
+
+		blas::ger(context,  sz, sz,
+				one, h_a[0], 1,
+				h_b[0], 1,
+				h_y.data(), sz);
+
+			return BC::all(h_y.approx_equal(y));
+	)
 
 	BC_TEST_DEF(
 		y = a * b + a * b;
@@ -101,6 +126,15 @@ int test_blas(int sz=128) {
 
 		return BC::all(h_y.approx_equal(y));
 	)
+//	BC_TEST_DEF(
+//			//test dot
+//		y[0][0] = a[0] * b[0];
+//
+//		y[0][0].print();
+//
+//		std::cout << " sum= " << (BC::sum(a[0] % b[0])) <<std::endl;
+//		return BC::all(y[0][0].approx_equal(BC::sum(a[0] % b[0])));
+//	)
 
 	BC_TEST_DEF(
 		y = 1;

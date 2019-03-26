@@ -28,11 +28,8 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
     		"DOT DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
 
     using value_type  = typename lv::value_type;
-    using allocator_t = typename lv::allocator_t;
     using system_tag = System_Tag;
-    using impl_l  = typename blas::implementation<system_tag>;
-    using utility_l = utility::implementation<system_tag>;
-    using function_t = oper::dot<System_Tag>;
+    using blas  = typename blas::implementation<system_tag>;
 
     static constexpr bool transA = blas_feature_detector<lv>::transposed;
     static constexpr bool transB = blas_feature_detector<rv>::transposed;
@@ -54,6 +51,7 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
     template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class allocator>
     void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, allocator& alloc) const {
 
+    	static_assert(std::is_same<core, void>::value, "BLACKCAT_TENSORS DOES NOT SUPPORT DOT YET");
 		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
 		auto& injection = injection_values.data();
 
@@ -61,24 +59,18 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
 		auto X = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left), alloc);
 		auto Y = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right), alloc);
 
-		//allocate the alpha and beta scalars,
-        auto alpha = alloc.scalar_alpha((value_type)alpha_mod);
-
 		//call outer product
-		impl_l::dot(alloc, X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
+		blas::dot(alloc, X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
+		static constexpr int beta_value = beta_mod == 0 ? 1 : beta_mod;
 
-		if (lv_scalar) {
+		if (lv_scalar || rv_scalar) {
 			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-			impl_l::calculate_alpha(alloc, injection.memptr(), alpha, alpha_lv);
-		}
-		if (rv_scalar) {
 			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-			impl_l::calculate_alpha(alloc, injection.memptr(), alpha, alpha_rv);
+			blas::calculate_alpha(alloc, injection.memptr(), alpha_mod, beta_value, alpha_lv, alpha_rv);
+		} else {
+			blas::calculate_alpha(alloc, injection.memptr(), alpha_mod, beta_value);
 		}
-		if (beta_mod) {
-			auto beta = alloc.template scalar_constant<value_type, beta_mod>();
-			impl_l::calculate_alpha(alloc, alpha, alpha, beta);
-		}
+
 
 
 		//deallocate all the temporaries

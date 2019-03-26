@@ -112,16 +112,24 @@ public:
         assert_valid(param);
         return bi_expr< oper:: approx_equal >(param);
     }
-
-//----------------------------------------------scalar assignment operations--------------------------------------------------//
+private:
     template<class p_value_type>
     using enable_if_convertible = std::enable_if_t<std::is_convertible<p_value_type, value_type>::value>;
+public:
+
+    template<class p_value_type, typename = enable_if_convertible<p_value_type>>                                                \
+    auto approx_equal (const p_value_type& param) {                                                                            \
+        return bi_expr_internal< oper:: approx_equal >(exprs::make_scalar_constant<value_type>(param));
+    }
+
+
+//----------------------------------------------scalar assignment operations--------------------------------------------------//
 
 #define BC_OPER_SCALAR_ASSIGNMENT_DEF(op, op_functor)                                                                        \
     template<class p_value_type, typename = enable_if_convertible<p_value_type>>                                                \
     derived& operator  op (const p_value_type& param) {                                                                            \
         BC_ASSERT_ASSIGNABLE("derived& operator " #op " (const Tensor_Operations<pDeriv>& param)");                                \
-        evaluate(bi_expr_internal<oper:: op_functor >(exprs::scalar_constant<system_tag>((value_type)param)));        \
+        evaluate(bi_expr_internal<oper:: op_functor >(exprs::make_scalar_constant<system_tag>((value_type)param)));        \
         return as_derived();                                                                                                \
     }
 
@@ -136,7 +144,7 @@ public:
 #define BC_OPER_SCALAR_BASIC_DEF(op, op_functor)                                                                            \
         template<class p_value_type, typename = enable_if_convertible<p_value_type>>                                            \
         auto operator op (const p_value_type& param) const {                                                                        \
-            return bi_expr_internal<oper:: op_functor >(exprs::scalar_constant<system_tag>((value_type)param));    \
+            return bi_expr_internal<oper:: op_functor >(exprs::make_scalar_constant<system_tag>((value_type)param));    \
         }
 
     //----------------------------------------------scalar element-wise operations--------------------------------------------------//
@@ -155,7 +163,7 @@ public:
     //specialized to upcast  matrix/scalar_value to matrix * (1/scalar_value)
     template<class p_value_type, typename = enable_if_convertible<p_value_type>>
     auto operator /(const p_value_type& param) {
-        return bi_expr_internal<oper::scalar_mul>(exprs::scalar_constant<system_tag>((value_type)(1/param)));
+        return bi_expr_internal<oper::scalar_mul>(exprs::make_scalar_constant<system_tag>((value_type)(1/param)));
     }
 
 
@@ -183,7 +191,7 @@ public:
     auto operator * (const p_value_type& param) const {
         static constexpr bool lv_blas  = oper::operation_traits<internal_type>::is_blas_function;
 
-    	auto scalar_constant = exprs::scalar_constant<system_tag>((value_type)param);
+    	auto scalar_constant = exprs::make_scalar_constant<system_tag>((value_type)param);
 
         using func = std::conditional_t<lv_blas, reorder_scalar_mul, default_impl>;
         return func::template impl<oper::scalar_mul>(as_derived().internal(), scalar_constant);
@@ -396,7 +404,7 @@ using enable_if_convertible = std::enable_if_t<std::is_convertible<p_value_type,
         template<class p_value_type, class internal_t, typename = enable_if_convertible<p_value_type, typename internal_t::value_type>>        \
          auto operator op (const p_value_type& param, const module::Tensor_Operations<internal_t>& tensor) {                                \
             using value_type = typename internal_t::value_type;                                                                                \
-            auto scalar_obj = exprs::scalar_constant<typename internal_t::system_tag>((value_type)param);                                \
+            auto scalar_obj = exprs::make_scalar_constant<typename internal_t::system_tag>((value_type)param);                                \
             return make_tensor(scalar_obj).bi_expr(oper:: op_functor (), tensor);                                                \
         }
 
@@ -415,7 +423,7 @@ using enable_if_convertible = std::enable_if_t<std::is_convertible<p_value_type,
     template<class p_value_type, class internal_t, typename = enable_if_convertible<p_value_type, typename internal_t::value_type>>
      auto operator / (const p_value_type& param, const module::Tensor_Operations<internal_t>& tensor) {
         using value_type = typename internal_t::value_type;
-        auto scalar_obj = exprs::scalar_constant<typename internal_t::system_tag>((value_type)(1/param));
+        auto scalar_obj = exprs::make_scalar_constant<typename internal_t::system_tag>((value_type)(1/param));
         return make_tensor(scalar_obj).bi_expr(oper::scalar_mul(), tensor);                                                        \
     }
 

@@ -25,11 +25,9 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 	static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,
     		"GER ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
 
-    using value_type  = typename lv::value_type;
+    using value_type = typename lv::value_type;
     using system_tag = System_Tag;
-    using blas_lib     = typename blas::implementation<system_tag>;
-    using utility_lib  = typename utility::implementation<system_tag>;
-    using function_t = oper::ger<System_Tag>;
+    using blas       = typename blas::implementation<system_tag>;
 
     static constexpr int DIMS = 2;
     static constexpr int ITERATOR = 1;
@@ -61,43 +59,39 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
     BCINLINE const auto inner_shape() const { return make_lambda_array<DIMS>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.rows() : 1; });}
     BCINLINE const auto block_shape() const { return make_lambda_array<DIMS>([&](int i) { return i == 0 ? left.rows() : i == 1 ? size() : 1; });}
     BCINLINE BC::size_t  M() const { return left.rows();  }
-    BCINLINE BC::size_t  N() const { return right.rows(); }
+    BCINLINE BC::size_t  N() const { return right.cols(); }
 
 
-	template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class allocator>
-	void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, allocator& alloc) const {
+	template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class Context>
+	void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, Context& context) const {
 
 		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
 		auto& injection = injection_values.data();
 
 		//evaluate the left and right branches (computes only if necessary)
-		auto A = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left), alloc);
-		auto B = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right), alloc);
+		auto A = CacheEvaluator<Context>::evaluate(blas_feature_detector<lv>::get_array(left), context);
+		auto B = CacheEvaluator<Context>::evaluate(blas_feature_detector<rv>::get_array(right), context);
 
 		//allocate the alpha and beta scalars,
-        auto alpha = alloc.scalar_alpha((value_type)alpha_mod);
 
         //if we need to negate or zero the output
+		//If beta_mod != 1 consider using gemm (to enable zeroing/modifying the output)
 		if (beta_mod != 1) {
-			auto expr = make_bin_expr<oper::assign>(injection, scalar_constant<value_type>(beta_mod));
-			evaluate(expr, alloc);
+			auto expr = make_bin_expr<oper::assign>(injection, make_scalar_constant<value_type>(beta_mod));
+			evaluate(expr, context);
 		}
 
 		//compute the scalar values if need be
-		if (lv_scalar) {
+		if (lv_scalar || rv_scalar) {
+	        auto alpha = context.scalar_alpha((value_type)alpha_mod);
 			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-			blas_lib::calculate_alpha(alloc, alpha, alpha, alpha_lv);
-		}
-		if (rv_scalar) {
 			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-			blas_lib::calculate_alpha(alloc, alpha, alpha, alpha_rv);
+			blas::calculate_alpha(context, alpha, alpha_mod, alpha_lv, alpha_rv);
+			blas::ger(context, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
+		} else {
+			auto alpha = blas::template scalar_constant<value_type, (alpha_mod == 0 ? 1 : alpha_mod)>();
+			blas::ger(context, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
 		}
-
-
-
-		//call outer product
-		blas_lib::ger(alloc, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
-
 
 		//deallocate all the temporaries
 		if (rv_eval) meta::bc_const_cast(B).deallocate();

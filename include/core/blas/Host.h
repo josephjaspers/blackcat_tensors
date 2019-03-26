@@ -30,24 +30,19 @@ struct Host {
      * c = M x N
      */
 
-	template<class T, class enabler = void>
-	struct get_value_impl {
-	    static auto impl(T scalar) {
-	        return scalar;
-	    }
-	};
-	template<class T>
-	struct get_value_impl<T, std::enable_if_t<!std::is_same<decltype(std::declval<T&>()[0]), void>::value>>  {
-	    static auto impl(T scalar) {
-	        return scalar[0];
-	    }
-	};
-
-
-
 	template<class Context, class OutputScalar, class... Scalars>
 	static void calculate_alpha(Context, OutputScalar& eval, Scalars... scalars) {
 		eval = host_impl::calculate_alpha(scalars...);
+	}
+	template<class Context, class OutputScalar, class... Scalars>
+	static void calculate_alpha(Context, OutputScalar* eval, Scalars... scalars) {
+		eval[0] = host_impl::calculate_alpha(scalars...);
+	}
+
+	template<class value_type, int value>
+	static const value_type& scalar_constant() {
+		static value_type val = value;
+		return val;
 	}
 
 	template<class Context>

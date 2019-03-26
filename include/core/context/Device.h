@@ -97,7 +97,7 @@ class  Device {
 	};
 
 	static std::shared_ptr<Device_Stream_Contents> get_default_contents() {
-		static std::shared_ptr<Device_Stream_Contents> default_contents =
+		thread_local std::shared_ptr<Device_Stream_Contents> default_contents =
 				std::shared_ptr<Device_Stream_Contents>(new Device_Stream_Contents());
 		return default_contents;
 	}
@@ -107,23 +107,6 @@ class  Device {
 public:
 
 	using system_tag = device_tag;
-
-	template<class scalar_t, int value>
-	static const scalar_t* scalar_constant() {
-		static scalar_t* scalar_constant_ = nullptr;
-
-		if (!scalar_constant_) {
-			std::mutex locker;
-			locker.lock();
-			if (!scalar_constant_){
-				scalar_t tmp_val = value;
-				BC_CUDA_ASSERT(cudaMalloc((void**) &scalar_constant_, sizeof(scalar_t)));
-				BC_CUDA_ASSERT(cudaMemcpy(scalar_constant_, &tmp_val, sizeof(scalar_t), cudaMemcpyHostToDevice));
-			}
-			locker.unlock();
-		}
-		return scalar_constant_;
-	}
 
 	template<class T>
 	T* scalar_alpha(T alpha_value) {

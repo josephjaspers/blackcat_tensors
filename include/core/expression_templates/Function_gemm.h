@@ -26,10 +26,9 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
 	static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,
     		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
 
-    using value_type  = typename lv::value_type;
-    using system_tag = System_Tag;
-    using blas_l  = typename blas::implementation<system_tag>;
-    using function_t = oper::gemm<System_Tag>;
+    using value_type	= typename lv::value_type;
+    using system_tag	= System_Tag;
+    using blas			= typename blas::implementation<system_tag>;
 
     static constexpr bool transA = blas_feature_detector<lv>::transposed;
     static constexpr bool transB = blas_feature_detector<rv>::transposed;
@@ -89,17 +88,16 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
 
         //allocate the alpha and beta scalars,
         auto alpha = alloc.scalar_alpha((value_type)alpha_mod);
-        auto beta = alloc.template scalar_constant<value_type, beta_mod>();
+        auto beta  = blas::template scalar_constant<value_type, beta_mod>();
 
         //compute the scalar values if need be
-		blas_l::calculate_alpha(alloc, alpha, alpha, alpha_lv, alpha_rv);
+		blas::calculate_alpha(alloc, alpha, alpha_mod, alpha_lv, alpha_rv);
 
         //call matrix_mul
-        blas_l::gemm(alloc, transA, transB,  M(), N(), K(),
+        blas::gemm(alloc, transA, transB,  M(), N(), K(),
         		alpha, A, A.leading_dimension(0),
         		B, B.leading_dimension(0),
         		beta, injection, injection.leading_dimension(0));
-
 
         //deallocate all the temporaries
         if (rv_eval) meta::bc_const_cast(B).deallocate();

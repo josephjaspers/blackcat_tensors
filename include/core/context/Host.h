@@ -27,7 +27,7 @@ class Host {
 	};
 
 	static std::shared_ptr<Contents> get_default_contents() {
-		static std::shared_ptr<Contents> default_contents =
+		thread_local std::shared_ptr<Contents> default_contents =
 					std::shared_ptr<Contents>(new Contents());
 
 		return default_contents;

@@ -48,7 +48,7 @@ struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, SystemTag>
 
 
 template<class SystemTag, class value_type>
-auto scalar_constant(value_type scalar) {
+auto make_scalar_constant(value_type scalar) {
     return Scalar_Constant<value_type, SystemTag>(scalar);
 }
 
