@@ -19,8 +19,8 @@ class Workspace {
 
 	using system_tag = SystemTag;
 
-	BC::size_t m_memptr_sz=0;
-	BC::size_t m_curr_index=0;
+	std::size_t m_memptr_sz=0;
+	std::size_t m_curr_index=0;
 
 	Byte* m_memptr=nullptr;
 

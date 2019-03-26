@@ -13,43 +13,6 @@
 
 namespace BC {
 namespace evaluator {
-//
-//#define BC_OPENMP_REDUCTION_FUNCTION(oper, name, base_value)						\
-//template<class Expression, class... indexes> static									\
-//typename Expression::value_type name(Expression value, indexes... indicies) {		\
-//	using value_type = typename Expression::value_type;								\
-//																					\
-//	value_type total = base_value;													\
-//	__BC_omp_for__ __BC_omp_reduction__(oper, name)											\
-//	for (BC::size_t i = 0; i < value.dimension(Dimension-1); ++i) {					\
-//		total oper##= evaluator_impl<Dimension-1>::name(value, i, indicies...);		\
-//	}																				\
-//	return total;																	\
-//}
-//#define BC_OPENMP_REDUCTION_BASE_CASE_FUNCTION(oper, name, base_value)				\
-//template<class Expression, class... indexes> static									\
-//typename Expression::value_type name(Expression value, indexes... indicies) {		\
-//	using value_type = typename Expression::value_type;								\
-//																					\
-//	value_type total = base_value;													\
-//	__BC_omp_for__ __BC_omp_reduction__(oper, name)											\
-//	for (BC::size_t i = 0; i < value.dimension(0); ++i) {							\
-//		total oper##= value(i, indicies...);										\
-//	}																				\
-//	return total;																	\
-//}
-//#define BC_OPENMP_REDUCTION_ITERATOR0_CASE_FUNCTION(oper, name, base_value)			\
-//template<class Expression> static													\
-//typename Expression::value_type name(Expression value) {							\
-//	using value_type = typename Expression::value_type;								\
-//																					\
-//	value_type total = base_value;													\
-//	__BC_omp_for__ __BC_omp_reduction__(oper, name)											\
-//	for (BC::size_t i = 0; i < value.size; ++i) {									\
-//		total oper##= value[i];														\
-//	}																				\
-//	return total;																	\
-//}
 
 template<int Dimension>
 struct evaluator_impl {
@@ -60,9 +23,6 @@ struct evaluator_impl {
         	evaluator_impl<Dimension-1>::impl(expression, i, indicies...);
         }
     }
-//    BC_OPENMP_REDUCTION_FUNCTION(+, sum, 0)
-//    BC_OPENMP_REDUCTION_FUNCTION(*, prod, 1)
-
 };
 template<>
 struct evaluator_impl<1> {
@@ -80,13 +40,6 @@ struct evaluator_impl<1> {
             expression[i];
         }
     }
-
-//    BC_OPENMP_REDUCTION_BASE_CASE_FUNCTION(+, sum, 0)
-//    BC_OPENMP_REDUCTION_BASE_CASE_FUNCTION(*, prod, 0)
-
-//    BC_OPENMP_REDUCTION_ITERATOR0_CASE_FUNCTION(+, sum, 0)
-//    BC_OPENMP_REDUCTION_ITERATOR0_CASE_FUNCTION(*, prod, 0)
-
 };
 template<>
 struct evaluator_impl<0> {
@@ -97,10 +50,6 @@ struct evaluator_impl<0> {
             expression[i];
         }
     }
-
-
-//    BC_OPENMP_REDUCTION_ITERATOR0_CASE_FUNCTION(+, sum, 0)
-//    BC_OPENMP_REDUCTION_ITERATOR0_CASE_FUNCTION(*, prod, 0)
 };
 
 
