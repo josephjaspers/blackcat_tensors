@@ -36,6 +36,16 @@ int test_blas(int sz=128) {
 	using compare_allocator = BC::allocator::implementation<system_tag, value_type>;
 	using blas = BC::blas::implementation<system_tag>;
 
+	//BC::Basic_Allocator //cpu_host
+	//BC::Cuda_Allocator //
+	//BC::Cuda_Managed  //
+
+	//BC::context::Workspace<system_tag> workspace;
+	//workspace.set_allocator(BC::Cuda_Managed);
+
+	//BC::context::Workspace<system_tag> workspace_sub;
+	//workspace_sub.set_allocator(main_pool);
+
 	using mat = BC::Matrix<value_type, allocator_t>;
 	using scalar = BC::Scalar<value_type, allocator_t>;
 
@@ -126,15 +136,12 @@ int test_blas(int sz=128) {
 
 		return BC::all(h_y.approx_equal(y));
 	)
-//	BC_TEST_DEF(
-//			//test dot
-//		y[0][0] = a[0] * b[0];
-//
-//		y[0][0].print();
-//
-//		std::cout << " sum= " << (BC::sum(a[0] % b[0])) <<std::endl;
-//		return BC::all(y[0][0].approx_equal(BC::sum(a[0] % b[0])));
-//	)
+	BC_TEST_DEF(
+			//test dot
+		y[0][0] = a[0] * b[0];
+
+		return BC::all(y[0][0].approx_equal(BC::sum(a[0] % b[0])));
+	)
 
 	BC_TEST_DEF(
 		y = 1;

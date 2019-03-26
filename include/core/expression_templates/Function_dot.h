@@ -51,24 +51,25 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
     template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class allocator>
     void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, allocator& alloc) const {
 
-    	static_assert(std::is_same<core, void>::value, "BLACKCAT_TENSORS DOES NOT SUPPORT DOT YET");
 		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
 		auto& injection = injection_values.data();
 
 		//evaluate the left and right branches (computes only if necessary)
-		auto X = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left), alloc);
-		auto Y = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right), alloc);
+		//Note: dot does not accept a scalar Alpha, therefor we don't extract the array from left/right
+		//The CacheEvaluator will generate a temporary if need be
+		auto X = CacheEvaluator<allocator>::evaluate(left, alloc);
+		auto Y = CacheEvaluator<allocator>::evaluate(right, alloc);
 
 		//call outer product
 		blas::dot(alloc, X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
-		static constexpr int beta_value = beta_mod == 0 ? 1 : beta_mod;
 
+		static constexpr int beta_value = beta_mod == 0 ? 1 : beta_mod;
 		if (lv_scalar || rv_scalar) {
 			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
 			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-			blas::calculate_alpha(alloc, injection.memptr(), alpha_mod, beta_value, alpha_lv, alpha_rv);
-		} else {
-			blas::calculate_alpha(alloc, injection.memptr(), alpha_mod, beta_value);
+			blas::calculate_alpha(alloc, injection.memptr(), beta_value, alpha_lv, alpha_rv);
+		} else if (beta_value != 1) {
+			blas::calculate_alpha(alloc, injection.memptr(), injection.memptr(), beta_value);
 		}
 
 

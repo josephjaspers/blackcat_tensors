@@ -87,18 +87,29 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
         auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 
         //allocate the alpha and beta scalars,
-        auto alpha = alloc.scalar_alpha((value_type)alpha_mod);
-        auto beta  = blas::template scalar_constant<value_type, beta_mod>();
 
         //compute the scalar values if need be
-		blas::calculate_alpha(alloc, alpha, alpha_mod, alpha_lv, alpha_rv);
 
-        //call matrix_mul
-        blas::gemm(alloc, transA, transB,  M(), N(), K(),
-        		alpha, A, A.leading_dimension(0),
-        		B, B.leading_dimension(0),
-        		beta, injection, injection.leading_dimension(0));
+        if (lv_scalar || rv_scalar) {
+			auto alpha = alloc.template scalar_alpha<value_type>();
+	        auto beta  = blas::template scalar_constant<value_type, beta_mod>();
+			blas::calculate_alpha(alloc, alpha, alpha_mod, alpha_lv, alpha_rv);
 
+			//call matrix_mul
+			blas::gemm(alloc, transA, transB,  M(), N(), K(),
+					alpha, A, A.leading_dimension(0),
+					B, B.leading_dimension(0),
+					beta, injection, injection.leading_dimension(0));
+        } else {
+			auto alpha = blas::template scalar_constant<value_type, alpha_mod>();
+	        auto beta  = blas::template scalar_constant<value_type, beta_mod>();
+
+			//call matrix_mul
+			blas::gemm(alloc, transA, transB,  M(), N(), K(),
+					alpha, A, A.leading_dimension(0),
+					B, B.leading_dimension(0),
+					beta, injection, injection.leading_dimension(0));
+        }
         //deallocate all the temporaries
         if (rv_eval) meta::bc_const_cast(B).deallocate();
         if (lv_eval) meta::bc_const_cast(A).deallocate();

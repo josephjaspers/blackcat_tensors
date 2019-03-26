@@ -52,8 +52,8 @@ public:
     }
 
 	 template<class scalar_t>
-	 scalar_t scalar_alpha(scalar_t val) {
-		 return val;
+	 scalar_t scalar_alpha() {
+		 return scalar_t();
 	 }
 
 	 Host& get_stream() {

@@ -83,7 +83,7 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 
 		//compute the scalar values if need be
 		if (lv_scalar || rv_scalar) {
-	        auto alpha = context.scalar_alpha((value_type)alpha_mod);
+	        auto alpha = context.template scalar_alpha<value_type>();
 			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
 			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 			blas::calculate_alpha(context, alpha, alpha_mod, alpha_lv, alpha_rv);

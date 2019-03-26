@@ -37,7 +37,6 @@ struct Device {
 
 		static scalar_t* scalar_constant_ = scalar_constant_initialize::init();
 		return scalar_constant_;
-
 	}
 
 	template<class Context>
@@ -49,7 +48,6 @@ struct Device {
         auto TRANS_B = transB ? CUBLAS_OP_T : CUBLAS_OP_N;
 
 		cublasHandle_t& handle = context.get_cublas_handle();
-		BC_CUDA_ASSERT((cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE)));
 		BC_CUDA_ASSERT((cublasSgemm(handle, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc)));
     }
 
@@ -64,7 +62,6 @@ struct Device {
 		auto TRANS_A =  transA ? CUBLAS_OP_T : CUBLAS_OP_N;
 
 		cublasHandle_t& handle = context.get_cublas_handle();
-		BC_CUDA_ASSERT((cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE)));
 		BC_CUDA_ASSERT((cublasSgemv(handle, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY)));
 	}
 
@@ -76,14 +73,12 @@ struct Device {
 								  float* A, BC::size_t  lda) {
 
 		cublasHandle_t& handle = context.get_cublas_handle();
-		BC_CUDA_ASSERT((cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE)));
 		BC_CUDA_ASSERT((cublasSger(handle, m, n, alpha, X, incX, Y, incY, A, lda)));
 	}
 
 	template<class Context>
 	static void dot(Context context, int n, float* A, const float* x, BC::size_t  incX, const float* y, BC::size_t  incY) {
 		cublasHandle_t& handle = context.get_cublas_handle();
-		BC_CUDA_ASSERT((cublasSetPointerMode(handle, CUBLAS_POINTER_MODE_DEVICE)));
 		BC_CUDA_ASSERT((cublasSdot(handle, n, x, incX, y, incY, A)));
 	}
 };

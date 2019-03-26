@@ -68,7 +68,9 @@ class  Device {
 		Polymorphic_Allocator<Byte, device_tag> m_allocator;
 
 		Device_Stream_Contents(bool init_stream=false, bool init_scalars=true) {
-			 cublasCreate(&m_cublas_handle);
+			cublasCreate(&m_cublas_handle);
+			BC_CUDA_ASSERT((cublasSetPointerMode(m_cublas_handle, CUBLAS_POINTER_MODE_DEVICE)));
+
 			 if (init_stream) {
 				 m_host_stream.init();
 				 BC_CUDA_ASSERT(cudaStreamCreate(&m_stream_handle));
@@ -109,10 +111,10 @@ public:
 	using system_tag = device_tag;
 
 	template<class T>
-	T* scalar_alpha(T alpha_value) {
-		T* buffer = device_contents.get()->get_scalar_buffer<T>();
-		set_scalar_value(buffer, alpha_value, device_contents.get()->m_stream_handle);
-		return buffer;
+	T* scalar_alpha() {
+		return device_contents.get()->get_scalar_buffer<T>();
+//		set_scalar_value(buffer, alpha_value, device_contents.get()->m_stream_handle);
+//		return buffer;
 	}
 
     Workspace<device_tag>& get_allocator() {

@@ -50,11 +50,13 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
      Binary_Expression(lv left, rv right)
     : left(left), right(right) {}
 
-    BCINLINE BC::size_t  size() const { return left.rows(); }
-    BCINLINE BC::size_t  rows() const { return left.rows(); }
-    BCINLINE BC::size_t  cols() const { return 1; }
-    BCINLINE BC::size_t  dimension(int i) const { return i == 0 ? rows() : 1; }
-    BCINLINE BC::size_t  block_dimension(int i) const { return i == 0 ? rows() : 1; }
+    BCINLINE BC::size_t size() const { return left.rows(); }
+    BCINLINE BC::size_t rows() const { return left.rows(); }
+    BCINLINE BC::size_t cols() const { return 1; }
+    BCINLINE BC::size_t dimension(int i) const { return i == 0 ? rows() : 1; }
+    BCINLINE BC::size_t block_dimension(int i) const { return i == 0 ? rows() : 1; }
+    BCINLINE BC::size_t M() const { return left.rows(); }
+    BCINLINE BC::size_t N() const { return left.cols(); }
 
     BCINLINE const auto inner_shape() const { return make_lambda_array<DIMS>([&](int i) { return i == 0 ? left.rows() : 1; });}
     BCINLINE const auto block_shape() const { return make_lambda_array<DIMS>([&](int i) { return i == 0 ? rows() : 1; });}
@@ -69,26 +71,30 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
 		auto A = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left), alloc);
 		auto X = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right), alloc);
 
-		//allocate the alpha and beta scalars,
-        auto alpha = alloc.scalar_alpha((value_type)alpha_mod);
-		auto beta = blas::template scalar_constant<value_type, beta_mod>();
-
 		//get the left and right side scalar values and
 		//compute the scalar values if need be
-		if (lv_scalar) {
-			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-			blas::calculate_alpha(alloc, alpha, alpha, alpha_lv);
-		}
-		if (rv_scalar) {
+		if (lv_scalar || rv_scalar) {
+	        auto alpha = alloc.template scalar_alpha<value_type>();
+			auto beta = blas::template scalar_constant<value_type, beta_mod>();
 			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-			blas::calculate_alpha(alloc, alpha, alpha, alpha_rv);
+			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
+			blas::calculate_alpha(alloc, alpha, alpha, alpha_rv, alpha_rv);
+
+			blas::gemv(alloc, transA,  M(), N(),
+					alpha, A, A.leading_dimension(0),
+					X, X.leading_dimension(0)/*inc_X*/,
+					beta,
+					injection/*Y*/, injection.leading_dimension(0)/*incy*/);
+		} else {
+	        auto alpha = blas::template scalar_constant<value_type, alpha_mod>();
+			auto beta  = blas::template scalar_constant<value_type, beta_mod>();
+
+			blas::gemv(alloc, transA,  M(), N(),
+					alpha, A, A.leading_dimension(0),
+					X, X.leading_dimension(0)/*inc_X*/,
+					beta,
+					injection/*Y*/, injection.leading_dimension(0)/*incy*/);
 		}
-
-		//call matrix_mul ///for gemm we always use M, N, K regardless of transpose, but for gemv we always use pre-trans dimensions ???
-		BC::size_t  m = A.rows();
-		BC::size_t  n = A.cols();
-
-		blas::gemv(alloc, transA,  m, n, alpha, A, A.leading_dimension(0), X, X.leading_dimension(0)/*inc_X*/, beta, injection/*Y*/, injection.leading_dimension(0)/*incy*/);
 
 		//deallocate all the temporaries
 		if (rv_eval) meta::bc_const_cast(X).deallocate();
