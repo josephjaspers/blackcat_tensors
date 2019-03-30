@@ -114,6 +114,108 @@ int test_blas(int sz=128) {
 	)
 
 	BC_TEST_DEF(
+			//test dot
+		y[0][0] = a[0] * b[0];
+
+		return BC::all(y[0][0].approx_equal(BC::sum(a[0] % b[0])));
+	)
+
+	//scalar left test -------------------
+	BC_TEST_DEF(
+		y = two * a * b;
+
+		blas::gemm(context, false, false,  sz, sz, sz,
+				two, h_a.data(), sz,
+				h_b.data(), sz,
+				zero, h_y.data(), sz);
+
+			return BC::all(h_y.approx_equal(y));
+	)
+	BC_TEST_DEF(
+		y[0].zero();
+		h_y[0].zero();
+
+		y[0] = two * a * b[0];
+
+		blas::gemv(context, false,  sz, sz,
+				two, h_a.data(), sz,
+				h_b.data(), 1,
+				zero, h_y.data(), 1);
+
+			return BC::all(h_y[0].approx_equal(y[0]));
+	)
+	BC_TEST_DEF(
+		y.zero();
+		h_y.zero();
+		y = two * a[0] * b[0].t();
+
+		blas::ger(context,  sz, sz,
+				two, h_a[0], 1,
+				h_b[0], 1,
+				h_y.data(), sz);
+
+			return BC::all(h_y.approx_equal(y));
+	)
+
+	BC_TEST_DEF(
+			//test dot
+		y[0][0] = a[0] * b[0];
+
+		return BC::all(y[0][0].approx_equal(BC::sum(a[0] % b[0])));
+	)
+
+
+	// scalar right test -------------------------------------------
+
+	BC_TEST_DEF(
+			y =  a * two * b;
+
+			blas::gemm(context, false, false,  sz, sz, sz,
+					two, h_a.data(), sz,
+					h_b.data(), sz,
+					zero, h_y.data(), sz);
+
+				return BC::all(h_y.approx_equal(y));
+		)
+		BC_TEST_DEF(
+			y[0].zero();
+			h_y[0].zero();
+
+			y[0] =   a * two * b[0];
+
+			blas::gemv(context, false,  sz, sz,
+					two, h_a.data(), sz,
+					h_b.data(), 1,
+					zero, h_y.data(), 1);
+
+				return BC::all(h_y[0].approx_equal(y[0]));
+		)
+		BC_TEST_DEF(
+			y.zero();
+			h_y.zero();
+			y =  a[0]* two * b[0].t();
+
+			blas::ger(context,  sz, sz,
+					two, h_a[0], 1,
+					h_b[0], 1,
+					h_y.data(), sz);
+
+				return BC::all(h_y.approx_equal(y));
+		)
+
+		BC_TEST_DEF(
+				//test dot
+			y[0][0] = a[0] * b[0];
+
+			return BC::all(y[0][0].approx_equal(BC::sum(a[0] % b[0])));
+		)
+
+
+
+	//--------------------------------------------------------------
+
+
+	BC_TEST_DEF(
 		y = a * b + a * b;
 
 		blas::gemm(context, false, false,  sz, sz, sz,
@@ -136,13 +238,6 @@ int test_blas(int sz=128) {
 
 		return BC::all(h_y.approx_equal(y));
 	)
-	BC_TEST_DEF(
-			//test dot
-		y[0][0] = a[0] * b[0];
-
-		return BC::all(y[0][0].approx_equal(BC::sum(a[0] % b[0])));
-	)
-
 	BC_TEST_DEF(
 		y = 1;
 		h_y = 1;

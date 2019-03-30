@@ -397,7 +397,8 @@ public:
 
 
 template<class p_value_type, class p_value_type2>
-using enable_if_convertible = std::enable_if_t<std::is_convertible<p_value_type, p_value_type2>::value>;
+using enable_if_convertible = std::enable_if_t<std::is_convertible<p_value_type, p_value_type2>::value &&
+												!BC::exprs::expression_traits<p_value_type>::is_bc_type>;
 
 //----------------------------------------------scalar element-wise operations--------------------------------------------------//
 #define BC_OPER_LV_SCALAR_DEF(op, op_functor)                                                                                \
