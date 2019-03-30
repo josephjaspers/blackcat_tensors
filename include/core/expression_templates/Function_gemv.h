@@ -78,7 +78,7 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
 			auto beta = blas::template scalar_constant<value_type, beta_mod>();
 			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-			blas::calculate_alpha(alloc, alpha, alpha, alpha_rv, alpha_rv);
+			blas::calculate_alpha(alloc, alpha, alpha, alpha_lv, alpha_rv);
 
 			blas::gemv(alloc, transA,  M(), N(),
 					alpha, A, A.leading_dimension(0),
