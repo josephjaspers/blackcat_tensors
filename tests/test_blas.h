@@ -36,16 +36,6 @@ int test_blas(int sz=128) {
 	using compare_allocator = BC::allocator::implementation<system_tag, value_type>;
 	using blas = BC::blas::implementation<system_tag>;
 
-	//BC::Basic_Allocator //cpu_host
-	//BC::Cuda_Allocator //
-	//BC::Cuda_Managed  //
-
-	//BC::context::Workspace<system_tag> workspace;
-	//workspace.set_allocator(BC::Cuda_Managed);
-
-	//BC::context::Workspace<system_tag> workspace_sub;
-	//workspace_sub.set_allocator(main_pool);
-
 	using mat = BC::Matrix<value_type, allocator_t>;
 	using scalar = BC::Scalar<value_type, allocator_t>;
 
@@ -53,8 +43,9 @@ int test_blas(int sz=128) {
 
 	BC::Context<system_tag> context;
 
-	//Initialize the memory pool
-	context.get_allocator().reserve(sz*sz*2 * sizeof(value_type));
+	//The default allocator uses a global allocator, we free it to ensure that the next computations do not
+	//Use any temporaries
+	context.get_allocator().free();
 
 	scalar A(value_type(2));
 	mat a(sz, sz);
@@ -213,6 +204,7 @@ int test_blas(int sz=128) {
 
 
 	//--------------------------------------------------------------
+		context.get_allocator().reserve(sz*sz*2 * sizeof(value_type));
 
 
 	BC_TEST_DEF(

@@ -71,30 +71,17 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
 		auto A = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left), alloc);
 		auto X = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right), alloc);
 
-		//get the left and right side scalar values and
-		//compute the scalar values if need be
-		if (lv_scalar || rv_scalar) {
-	        auto alpha = alloc.template scalar_alpha<value_type>();
-			auto beta = blas::template scalar_constant<value_type, beta_mod>();
-			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-			blas::calculate_alpha(alloc, alpha, alpha_mod, alpha_lv, alpha_rv);
+		auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
+		auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
+		auto alpha = blas::template calculate_alpha<value_type, alpha_mod, lv_scalar, rv_scalar>(alloc, alpha_lv, alpha_rv);
+		auto beta = blas::template scalar_constant<value_type, beta_mod>();
 
-			blas::gemv(alloc, transA,  M(), N(),
-					alpha, A, A.leading_dimension(0),
-					X, X.leading_dimension(0)/*inc_X*/,
-					beta,
-					injection/*Y*/, injection.leading_dimension(0)/*incy*/);
-		} else {
-	        auto alpha = blas::template scalar_constant<value_type, alpha_mod>();
-			auto beta  = blas::template scalar_constant<value_type, beta_mod>();
+		blas::gemv(alloc, transA,  M(), N(),
+				alpha, A, A.leading_dimension(0),
+				X, X.leading_dimension(0)/*inc_X*/,
+				beta,
+				injection/*Y*/, injection.leading_dimension(0)/*incy*/);
 
-			blas::gemv(alloc, transA,  M(), N(),
-					alpha, A, A.leading_dimension(0),
-					X, X.leading_dimension(0)/*inc_X*/,
-					beta,
-					injection/*Y*/, injection.leading_dimension(0)/*incy*/);
-		}
 
 		//deallocate all the temporaries
 		if (rv_eval) meta::bc_const_cast(X).deallocate();

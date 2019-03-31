@@ -39,6 +39,21 @@ struct Host {
 		eval[0] = host_impl::calculate_alpha(scalars...);
 	}
 
+	template<class Scalar_t, int alpha_mod, bool lv_scalar, bool rv_scalar, class Context,  class lv_scalar_t, class rv_scalar_t>
+	static Scalar_t calculate_alpha(Context context, lv_scalar_t lv, rv_scalar_t rv) {
+		if (!(lv_scalar || rv_scalar)) {
+			return scalar_constant<Scalar_t, alpha_mod>();
+		}
+		else if (alpha_mod ==1 && (lv_scalar != rv_scalar)) {
+			return lv_scalar ? lv[0] : rv[0];
+		} else {
+			auto scalar =  context.template scalar_alpha<Scalar_t>();
+			calculate_alpha(context, scalar, alpha_mod, lv, rv);
+			return scalar;
+		}
+
+	}
+
 	template<class value_type, int value>
 	static const value_type& scalar_constant() {
 		static value_type val = value;

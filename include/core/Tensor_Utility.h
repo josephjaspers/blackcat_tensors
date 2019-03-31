@@ -85,7 +85,24 @@ private:
     }
 
     template<class ADL=void, class v1=void, class v2=void>
-    std::enable_if_t<std::is_void<ADL>::value && (DIMS > 1)>
+    std::enable_if_t<std::is_void<ADL>::value && (DIMS == 2)>
+    print_impl(int prec, bool sparse=false) const {
+    	std::string dim_header;
+    	dim_header.append(DIMS, '-');
+
+    	std::cout <<  dim_header << std::endl;
+    	auto trans = this->as_derived().transpose();
+    	for (int i = 0; i < trans.dimension(1); ++i) {
+        	std::cout << "[ ";
+        	for (int j = 0; j< trans.dimension(0); ++j) {
+        		std::cout << format_value(utility_l::extract(&trans.internal()(j,i), 0), prec, sparse) << ", ";
+        	}
+        	std::cout << "]" << std::endl;
+    	}
+    }
+
+    template<class ADL=void, class v1=void, class v2=void, class v3=void>
+    std::enable_if_t<std::is_void<ADL>::value && (DIMS > 2)>
     print_impl(int prec, bool sparse=false) const {
     	std::string dim_header;
     	dim_header.append(DIMS, '-');
