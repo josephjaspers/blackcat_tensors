@@ -67,13 +67,14 @@ class  Device {
 
 		Polymorphic_Allocator<Byte, device_tag> m_allocator;
 
-		Device_Stream_Contents(bool init_stream=false, bool init_scalars=true) {
+		Device_Stream_Contents(bool init_stream=true, bool init_scalars=true) {
 			cublasCreate(&m_cublas_handle);
 			BC_CUDA_ASSERT((cublasSetPointerMode(m_cublas_handle, CUBLAS_POINTER_MODE_DEVICE)));
 
 			 if (init_stream) {
 				 m_host_stream.init();
 				 BC_CUDA_ASSERT(cudaStreamCreate(&m_stream_handle));
+				 cublasSetStream(m_cublas_handle, m_stream_handle);
 			 }
 			 if (init_scalars) {
 				 m_scalar_buffer = device_globals::Scalar_Recycler::allocate();
@@ -100,7 +101,7 @@ class  Device {
 
 	static std::shared_ptr<Device_Stream_Contents> get_default_contents() {
 		thread_local std::shared_ptr<Device_Stream_Contents> default_contents =
-				std::shared_ptr<Device_Stream_Contents>(new Device_Stream_Contents());
+				std::shared_ptr<Device_Stream_Contents>(new Device_Stream_Contents(false));
 		return default_contents;
 	}
 

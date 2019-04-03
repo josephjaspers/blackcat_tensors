@@ -95,21 +95,26 @@ public:
 	}
 
 	void terminate() {
-		this->m_final_terminate = true;
-		cv.notify_one();
+			if (m_stream.get()) {
+
+			m_final_terminate = true;
+			cv.notify_one();
+
+			if (m_stream.get() && m_stream.get()->joinable()) {
+				m_stream.get()->join();
+			}
+		}
 	}
 
 	void synchronize() {
 		if (this->active()) {
 			terminate();
-			m_stream.get()->join();
 			init();
 		}
 	}
 
 	~HostQueue() {
 		terminate();
-		m_stream.get()->join();
 	}
 
 }; //End of Queue object
