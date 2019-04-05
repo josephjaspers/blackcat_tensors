@@ -11,7 +11,45 @@
 namespace BC {
 namespace context {
 
-class HostQueue {
+class HostEvent {
+
+	struct contents {
+		bool recorded = false;
+		std::condition_variable cv;
+		std::mutex m;
+	};
+	struct waiting_functor {
+		std::shared_ptr<contents> m_contents;
+		void operator () () const {
+			if (!m_contents.get()->recorded) {
+				std::unique_lock<std::mutex> lock = std::unique_lock<std::mutex>(m_contents.get()->m);
+
+				//check again in case recorded was written to inbetween accessing the lock
+				if (!m_contents.get()->recorded) {
+					m_contents.get()->cv.wait(lock, [&](){ return m_contents.get()->recorded; });
+				}
+			}
+		}
+	};
+	struct recording_functor {
+		std::shared_ptr<contents> m_contents;
+
+		void operator () () const {
+			m_contents.get()->recorded = true;
+			m_contents.get()->cv.notify_all();
+		}
+	};
+	std::shared_ptr<contents> m_contents = std::shared_ptr<contents>(new contents);
+public:
+	recording_functor get_recorder() {
+		return {m_contents};
+	}
+	waiting_functor get_waiter() {
+		return {m_contents};
+	}
+};
+
+class HostStream {
 
 	struct Job {
 
@@ -74,7 +112,7 @@ public:
 
 	void init() {
 		this->m_final_terminate = false;
-		m_stream = std::unique_ptr<std::thread>(new std::thread(&HostQueue::run, this));
+		m_stream = std::unique_ptr<std::thread>(new std::thread(&HostStream::run, this));
 	}
 
 
@@ -113,7 +151,7 @@ public:
 		}
 	}
 
-	~HostQueue() {
+	~HostStream() {
 		terminate();
 	}
 

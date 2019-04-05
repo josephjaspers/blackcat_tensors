@@ -12,7 +12,7 @@
 #include <memory>
 #include <iostream>
 #include "Polymorphic_Allocator.h"
-#include "HostQueue.h"
+#include "HostStream.h"
 #include "Workspace.h"
 
 namespace BC {
@@ -22,7 +22,8 @@ namespace context {
 class Host {
 
 	struct Contents {
-		HostQueue m_stream;
+		std::unique_ptr<HostEvent> m_event;
+		HostStream m_stream;
 		Workspace<host_tag> m_workspace;
 	};
 
@@ -85,6 +86,30 @@ public:
 	void set_stream(Host& stream_) {
 		this->m_contents = stream_.m_contents;
 	}
+
+    void stream_record_event() {
+    	if (!is_default_stream()) {
+        	std::mutex locker;
+        	locker.lock();
+        	m_contents.get()->m_event = std::unique_ptr<HostEvent>(new HostEvent());
+    		this->push_job(m_contents.get()->m_event.get()->get_recorder());
+    		locker.unlock();
+    	}
+    }
+    void stream_wait_event(Host& stream) {
+    	if (!stream.is_default_stream()) {
+			std::mutex locker;
+			locker.lock();
+			BC_ASSERT(stream.m_contents.get()->m_event.get(), "Attempting to wait on an event that was never recorded");
+			this->push_job(stream.m_contents.get()->m_event.get()->get_waiter());
+			locker.unlock();
+    	}
+	}
+
+    void stream_wait_stream(Host& stream) {
+    	stream.stream_record_event();
+    	this->stream_wait_event(stream);
+    }
 
 	template<class function_lambda>
 	void push_job(function_lambda functor) {

@@ -14,12 +14,6 @@
 namespace BC {
 namespace context {
 
-
-template<class SystemTag>
-class WorkspaceInternal {
-
-};
-
 template<class SystemTag>
 class Workspace {
 

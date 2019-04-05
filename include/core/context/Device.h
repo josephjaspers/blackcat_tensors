@@ -61,7 +61,7 @@ class  Device {
 		HostQueue	   m_host_stream;
 		cublasHandle_t m_cublas_handle;
 		cudaStream_t   m_stream_handle=nullptr;
-		cudaEvent_t    m_event		  =nullptr;
+		cudaEvent_t    m_event_handle		  =nullptr;
 		float*         m_scalar_buffer=nullptr;
 		Workspace<device_tag> m_workspace;
 
@@ -94,8 +94,8 @@ class  Device {
 			 if (m_stream_handle)
 				 BC_CUDA_ASSERT(cudaStreamDestroy(m_stream_handle));
 
-			 if (m_event)
-				 BC_CUDA_ASSERT(cudaEventDestroy(m_event));
+			 if (m_event_handle)
+				 BC_CUDA_ASSERT(cudaEventDestroy(m_event_handle));
 		 }
 	};
 
@@ -114,8 +114,6 @@ public:
 	template<class T>
 	T* scalar_alpha() {
 		return device_contents.get()->get_scalar_buffer<T>();
-//		set_scalar_value(buffer, alpha_value, device_contents.get()->m_stream_handle);
-//		return buffer;
 	}
 
     Workspace<device_tag>& get_allocator() {
@@ -140,6 +138,30 @@ public:
     void set_stream(Device& dev) {
     	device_contents = dev.device_contents;
     }
+
+    void stream_record_event() {
+    	cudaEventRecord(
+    			device_contents.get()->m_event_handle,
+    			device_contents.get()->m_stream_handle
+    			);
+    }
+
+    void stream_wait_event(Device& stream) {
+    	cudaStreamWaitEvent(device_contents.get()->m_stream_handle,
+    						stream.device_contents.get()->m_event_handle);
+    }
+
+    void stream_wait_stream(Device& stream) {
+    	stream.stream_record_event();
+    	cudaStreamWaitEvent(device_contents.get()->m_stream_handle,
+    						stream.device_contents.get()->m_event_handle);
+    }
+
+
+    void stream_wait_event(cudaEvent_t event) {
+    	cudaStreamWaitEvent(device_contents.get()->m_stream_handle, event);
+    }
+
 
     bool is_default_stream() {
     	return device_contents.get()->m_stream_handle == 0;
@@ -167,10 +189,10 @@ public:
     		func();
     	}
 
-    	cudaEventRecord(device_contents.get()->m_event, device_contents.get()->m_stream_handle);
+    	cudaEventRecord(device_contents.get()->m_event_handle, device_contents.get()->m_stream_handle);
     	device_contents.get()->m_host_stream.push(
     			[&, func]() {
-    				cudaEventSynchronize(device_contents.get()->m_event);
+    				cudaEventSynchronize(device_contents.get()->m_event_handle);
     				func();
     			}
     	);
