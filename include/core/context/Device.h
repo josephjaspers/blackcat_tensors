@@ -68,13 +68,14 @@ class  Device {
 		Polymorphic_Allocator<Byte, device_tag> m_allocator;
 
 		Device_Stream_Contents(bool init_stream=true, bool init_scalars=true) {
-			cublasCreate(&m_cublas_handle);
+			BC_CUDA_ASSERT(cublasCreate(&m_cublas_handle));
+			BC_CUDA_ASSERT(cudaEventCreate(&m_event_handle));
 			BC_CUDA_ASSERT((cublasSetPointerMode(m_cublas_handle, CUBLAS_POINTER_MODE_DEVICE)));
 
 			 if (init_stream) {
 				 m_host_stream.init();
 				 BC_CUDA_ASSERT(cudaStreamCreate(&m_stream_handle));
-				 cublasSetStream(m_cublas_handle, m_stream_handle);
+				 BC_CUDA_ASSERT(cublasSetStream(m_cublas_handle, m_stream_handle));
 			 }
 			 if (init_scalars) {
 				 m_scalar_buffer = device_globals::Scalar_Recycler::allocate();
@@ -89,13 +90,11 @@ class  Device {
 
 		 ~Device_Stream_Contents() {
 			 BC_CUDA_ASSERT(cublasDestroy(m_cublas_handle));
+			 BC_CUDA_ASSERT(cudaEventDestroy(m_event_handle));
 			 device_globals::Scalar_Recycler::deallocate(m_scalar_buffer);
 
 			 if (m_stream_handle)
 				 BC_CUDA_ASSERT(cudaStreamDestroy(m_stream_handle));
-
-			 if (m_event_handle)
-				 BC_CUDA_ASSERT(cudaEventDestroy(m_event_handle));
 		 }
 	};
 
@@ -140,26 +139,26 @@ public:
     }
 
     void stream_record_event() {
-    	cudaEventRecord(
+    	BC_CUDA_ASSERT(cudaEventRecord(
     			device_contents.get()->m_event_handle,
     			device_contents.get()->m_stream_handle
-    			);
+    			));
     }
 
     void stream_wait_event(Device& stream) {
-    	cudaStreamWaitEvent(device_contents.get()->m_stream_handle,
-    						stream.device_contents.get()->m_event_handle, 0);
+    	BC_CUDA_ASSERT(cudaStreamWaitEvent(device_contents.get()->m_stream_handle,
+    						stream.device_contents.get()->m_event_handle, 0));
     }
 
     void stream_wait_stream(Device& stream) {
     	stream.stream_record_event();
-    	cudaStreamWaitEvent(device_contents.get()->m_stream_handle,
-    						stream.device_contents.get()->m_event_handle, 0);
+    	BC_CUDA_ASSERT(cudaStreamWaitEvent(device_contents.get()->m_stream_handle,
+    						stream.device_contents.get()->m_event_handle, 0));
     }
 
 
     void stream_wait_event(cudaEvent_t event) {
-    	cudaStreamWaitEvent(device_contents.get()->m_stream_handle, event, 0);
+    	BC_CUDA_ASSERT(cudaStreamWaitEvent(device_contents.get()->m_stream_handle, event, 0));
     }
 
 
@@ -179,7 +178,7 @@ public:
 
     void sync_stream() {
     	if (!is_default_stream())
-    		cudaStreamSynchronize(device_contents.get()->m_stream_handle);
+    		BC_CUDA_ASSERT(cudaStreamSynchronize(device_contents.get()->m_stream_handle));
     }
 
     template<class function>
@@ -189,7 +188,7 @@ public:
     		func();
     	}
 
-    	cudaEventRecord(device_contents.get()->m_event_handle, device_contents.get()->m_stream_handle);
+    	BC_CUDA_ASSERT(cudaEventRecord(device_contents.get()->m_event_handle, device_contents.get()->m_stream_handle));
     	device_contents.get()->m_host_stream.push(
     			[&, func]() {
     				cudaEventSynchronize(device_contents.get()->m_event_handle);
