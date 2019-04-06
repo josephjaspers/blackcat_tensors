@@ -15,7 +15,7 @@
 #include <mutex>
 #include <vector>
 
-#include "HostQueue.h"
+#include "HostStream.h"
 #include "Context_Impl.cu"
 
 namespace BC {
@@ -58,7 +58,7 @@ class  Device {
 	struct Device_Stream_Contents {
 		using Byte = BC::context::Byte;
 
-		HostQueue	   m_host_stream;
+		HostStream	   m_host_stream;
 		cublasHandle_t m_cublas_handle;
 		cudaStream_t   m_stream_handle=nullptr;
 		cudaEvent_t    m_event_handle		  =nullptr;
@@ -148,18 +148,18 @@ public:
 
     void stream_wait_event(Device& stream) {
     	cudaStreamWaitEvent(device_contents.get()->m_stream_handle,
-    						stream.device_contents.get()->m_event_handle);
+    						stream.device_contents.get()->m_event_handle, 0);
     }
 
     void stream_wait_stream(Device& stream) {
     	stream.stream_record_event();
     	cudaStreamWaitEvent(device_contents.get()->m_stream_handle,
-    						stream.device_contents.get()->m_event_handle);
+    						stream.device_contents.get()->m_event_handle, 0);
     }
 
 
     void stream_wait_event(cudaEvent_t event) {
-    	cudaStreamWaitEvent(device_contents.get()->m_stream_handle, event);
+    	cudaStreamWaitEvent(device_contents.get()->m_stream_handle, event, 0);
     }
 
 
