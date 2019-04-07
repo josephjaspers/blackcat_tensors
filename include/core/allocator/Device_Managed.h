@@ -5,8 +5,8 @@
  *      Author: joseph
  */
 #ifdef __CUDACC__
-#ifndef CUDA_MANAGED_ALLOCATOR_H_
-#define CUDA_MANAGED_ALLOCATOR_H_
+#ifndef BC_ALLOCATOR_DEVICE_MANAGED_H_
+#define BC_ALLOCATOR_DEVICE_MANAGED_H_
 
 #include "Device.h"
 
@@ -19,14 +19,12 @@ struct Device_Managed : Device<T> {
 	template<class altT>
 	struct rebind { using other = Device_Managed<altT>; };
 
-
 	Device_Managed() = default;
 	Device_Managed(const Device_Managed&)=default;
 	Device_Managed(Device_Managed&&) = default;
 
 	Device_Managed& operator = (const Device_Managed&) = default;
 	Device_Managed& operator = (Device_Managed&&) = default;
-
 
 	template<class U>
 	Device_Managed(const Device_Managed<U>&) {}

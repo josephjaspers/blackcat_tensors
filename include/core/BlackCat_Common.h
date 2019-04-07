@@ -9,7 +9,6 @@
 #ifndef BLACKCAT_BLACKCAT_COMMON_H_
 #define BLACKCAT_BLACKCAT_COMMON_H_
 
-
 #include <type_traits>
 #include "utility/Utility.h"
 #include "allocator/Allocator.h"
@@ -26,6 +25,9 @@ template<class> class Tensor_Base;
 
 template<class internal_t>
 auto make_tensor(internal_t internal) {
+	static_assert(BC::exprs::expression_traits<internal_t>::is_bc_type,
+			"Make Tensor can only be used with BC_Types");
+
     return Tensor_Base<internal_t>(internal);
 }
 

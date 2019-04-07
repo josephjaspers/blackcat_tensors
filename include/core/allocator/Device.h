@@ -9,8 +9,8 @@
 
 
 #ifdef __CUDACC__
-#ifndef CUDA_ALLOCATOR_H_
-#define CUDA_ALLOCATOR_H_
+#ifndef BC_ALLOCATOR_DEVICE_H_
+#define BC_ALLOCATOR_DEVICE_H_
 
 namespace BC {
 
@@ -46,13 +46,13 @@ struct Device {
 	Device& operator = (const Device&) = default;
 	Device& operator = (Device&&) = default;
 
-    T* allocate(int sz=1) const {
+    T* allocate(std::size_t sz) const {
     	T* data_ptr;
     	BC_CUDA_ASSERT((cudaMalloc((void**) &data_ptr, sizeof(T) * sz)));
         return data_ptr;
     }
 
-    void deallocate(T* data_ptr, BC::size_t  size) const {
+    void deallocate(T* data_ptr, std::size_t size) const {
     	BC_CUDA_ASSERT((cudaFree((void*)data_ptr)));
     }
 

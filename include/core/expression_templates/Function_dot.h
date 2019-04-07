@@ -27,9 +27,9 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
     static_assert(lv::DIMS == 1 && (rv::DIMS == 1 || rv::DIMS ==0),
     		"DOT DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
 
-    using value_type  = typename lv::value_type;
+    using value_type = typename lv::value_type;
     using system_tag = System_Tag;
-    using blas  = typename blas::implementation<system_tag>;
+    using blas_impl  = typename blas::implementation<system_tag>;
 
     static constexpr bool transA = blas_feature_detector<lv>::transposed;
     static constexpr bool transB = blas_feature_detector<rv>::transposed;
@@ -61,15 +61,15 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
 		auto Y = CacheEvaluator<allocator>::evaluate(right, alloc);
 
 		//call outer product
-		blas::dot(alloc, X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
+		blas_impl::dot(alloc, X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
 
 		static constexpr int beta_value = beta_mod == 0 ? 1 : beta_mod;
 		if (lv_scalar || rv_scalar) {
 			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
 			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-			blas::calculate_alpha(alloc, injection.memptr(), beta_value, alpha_lv, alpha_rv);
+			blas_impl::calculate_alpha(alloc, injection.memptr(), beta_value, alpha_lv, alpha_rv);
 		} else if (beta_value != 1) {
-			blas::calculate_alpha(alloc, injection.memptr(), injection.memptr(), beta_value);
+			blas_impl::calculate_alpha(alloc, injection.memptr(), injection.memptr(), beta_value);
 		}
 
 

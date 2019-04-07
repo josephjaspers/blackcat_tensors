@@ -32,15 +32,15 @@ template<class T> using scalar_of     = typename T::value_type;
 template<class T>
 struct expression_traits {
 
-	static constexpr bool is_move_constructible_v= T::move_constructible;
-	static constexpr bool is_copy_constructible_v= T::copy_constructible;
-	static constexpr bool is_move_assignable_v = T::move_assignable;
-	static constexpr bool is_copy_assignable_v = T::copy_assignable;
+	static constexpr bool is_move_constructible = T::move_constructible;
+	static constexpr bool is_copy_constructible = T::copy_constructible;
+	static constexpr bool is_move_assignable 	= T::move_assignable;
+	static constexpr bool is_copy_assignable 	= T::copy_assignable;
 
-	 static constexpr bool is_bc_type  = std::is_base_of<BC_Type, T>::value;
-	 static constexpr bool is_array  = std::is_base_of<BC_Array, T>::value;
-	 static constexpr bool is_expr  = std::is_base_of<BC_Expr, T>::value;
-	 static constexpr bool is_temporary  = std::is_base_of<BC_Temporary, T>::value;
+	 static constexpr bool is_bc_type  	= std::is_base_of<BC_Type, T>::value;
+	 static constexpr bool is_array  	= std::is_base_of<BC_Array, T>::value;
+	 static constexpr bool is_expr  	= std::is_base_of<BC_Expr, T>::value;
+	 static constexpr bool is_temporary = std::is_base_of<BC_Temporary, T>::value;
 	 static constexpr bool is_constant  = std::is_base_of<BC_Constant, T>::value;
 };
 

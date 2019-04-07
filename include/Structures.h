@@ -48,7 +48,7 @@ namespace BC {
         BCINLINE lambda_array(ref a) : value(a) {}
 
         BCINLINE const scalar operator [](int i) const { return value(i); }
-        BCINLINE        scalar operator [](int i)          { return value(i); }
+        BCINLINE       scalar operator [](int i)       { return value(i); }
     };
 
     //accepts a lambda that takes a single-integer parameter

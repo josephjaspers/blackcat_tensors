@@ -40,6 +40,7 @@ struct ArrayScalarExpr : Array_Base<ArrayScalarExpr<Parent>, 0>, Shape<0> {
     auto& operator ()(integers ... ints) {
         return array[0];
     }
+
     template<class... integers> BCINLINE
     const auto& operator ()(integers ... ints) const {
         return array[0];
@@ -69,24 +70,21 @@ struct ArraySliceExpr :
 
 	pointer_t m_array;
 
-	BCINLINE
-	ArraySliceExpr(Parent& parent_, BC::size_t index)
+	BCINLINE ArraySliceExpr(Parent& parent_, BC::size_t index)
 	: shape_t(parent_.get_shape()),
 	  m_array(parent_.memptr() + index) {
 	}
 
-	BCINLINE
-	ArraySliceExpr(Parent& parent_, const shape_t& shape_, BC::size_t index)
+	BCINLINE ArraySliceExpr(Parent& parent_, const shape_t& shape_, BC::size_t index)
 	: shape_t(shape_),
 	  m_array(parent_.memptr() + index) {
 	}
 
-	BCINLINE
-	const pointer_t memptr() const {
+	BCINLINE const pointer_t memptr() const {
 		return m_array;
 	}
-	BCINLINE
-	pointer_t memptr() {
+
+	BCINLINE pointer_t memptr() {
 		return m_array;
 	}
 
@@ -116,8 +114,7 @@ private:
 	using m_allocator_t  = const_if_parent_is_const<allocator_t>;
 	using m_context_t 	 = const_if_parent_is_const<context_t>;
 
-
-	public:
+public:
 
 	m_context_t m_context;
 	m_allocator_t& m_allocator;
@@ -125,73 +122,67 @@ private:
 	template<class,int, bool> friend class Array_Slice;
 	template<int, class, class, class...> friend class Array;
 
-	BCHOT
-	Array_Slice(Parent& parent_, BC::size_t index)
+	BCHOT Array_Slice(Parent& parent_, BC::size_t index)
 	: super_t(parent_, index),
 	  m_context(parent_.get_context()),
 	  m_allocator(parent_.get_allocator()) {
 	}
 
-	BCHOT
-	Array_Slice(Parent& parent_, const shape_t& shape_, BC::size_t index)
+	BCHOT Array_Slice(Parent& parent_, const shape_t& shape_, BC::size_t index)
 	: super_t(parent_, shape_, index),
 	  m_context(parent_.get_context()),
 	  m_allocator(parent_.get_allocator()) {
 	}
 
-	const m_allocator_t& get_allocator() const {
-		return m_allocator;
-	}
-	m_allocator_t& get_allocator() {
-		return m_allocator;
-	}
+	const m_allocator_t& get_allocator() const { return m_allocator; }
+		  m_allocator_t& get_allocator() 	   { return m_allocator; }
 
-	auto& internal_base() { return *this; }
 	const auto& internal_base() const { return *this; }
+		  auto& internal_base() 	  { return *this; }
 
-	m_context_t& get_context()  { return m_context; }
 	const m_context_t& get_context() const  { return m_context; }
+		  m_context_t& get_context()  		{ return m_context; }
 };
 
 
 
-	template<class Parent>
-	static auto make_slice(Parent& internal, BC::size_t index) {
-		return Array_Slice<Parent, Parent::DIMS-1>(internal, internal.slice_ptr_index(index));
+template<class Parent>
+static auto make_slice(Parent& internal, BC::size_t index) {
+	return Array_Slice<Parent, Parent::DIMS-1>(internal, internal.slice_ptr_index(index));
+}
+template<class Parent>
+static auto make_ranged_slice(Parent& internal, BC::size_t from, BC::size_t to) {
+	constexpr BC::size_t dim_id = Parent::DIMS;
+	BC::size_t range = to - from;
+	BC::size_t index = internal.slice_ptr_index(from);
+
+	BC::array<dim_id, BC::size_t> inner_shape = internal.inner_shape();
+
+	inner_shape[dim_id-1] = range;
+	BC::exprs::Shape<dim_id> new_shape(inner_shape);
+
+	return Array_Slice<Parent, Parent::DIMS>(
+			internal, new_shape, index);
+}
+
+template<class Parent, int ndims>
+static auto make_view(Parent& parent, BC::array<ndims, BC::size_t> shape) {
+	return Array_Slice<Parent, ndims>(parent, shape, 0);
+}
+
+template<class Parent>
+	static auto make_scalar(Parent& parent, BC::size_t index) {
+		return Array_Slice<Parent, 0, true>(parent, index);
 	}
-	template<class Parent>
-	static auto make_ranged_slice(Parent& internal, BC::size_t from, BC::size_t to) {
-		constexpr BC::size_t dim_id = Parent::DIMS;
-		BC::size_t range = to - from;
-		BC::size_t index = internal.slice_ptr_index(from);
 
-		BC::array<dim_id, BC::size_t> inner_shape = internal.inner_shape();
+template<class Parent, int ndims>
+auto make_chunk(Parent& parent, BC::array<Parent::DIMS, int> index_points, BC::array<ndims, int> shape) {
+	static_assert(ndims > 1, "TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, USE SCALAR OR RANGED_SLICE OTHERWISE");
+	BC::size_t index = parent.dims_to_index(index_points);
 
-		inner_shape[dim_id-1] = range;
-		BC::exprs::Shape<dim_id> new_shape(inner_shape);
-
-		return Array_Slice<Parent, Parent::DIMS>(
-				internal, new_shape, index);
-	}
-
-	template<class Parent, int ndims>
-	static auto make_view(Parent& parent, BC::array<ndims, BC::size_t> shape) {
-		return Array_Slice<Parent, ndims>(parent, shape, 0);
-	}
-
-	template<class Parent>
-		static auto make_scalar(Parent& parent, BC::size_t index) {
-			return Array_Slice<Parent, 0, true>(parent, index);
-		}
-
-	template<class Parent, int ndims>
-	auto make_chunk(Parent& parent, BC::array<Parent::DIMS, int> index_points, BC::array<ndims, int> shape) {
-		static_assert(ndims > 1, "TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, USE SCALAR OR RANGED_SLICE OTHERWISE");
-		BC::size_t index = parent.dims_to_index(index_points);
-
-		SubShape<ndims> chunk_shape = SubShape<ndims>(shape, parent.get_shape());
-		return Array_Slice<Parent, ndims, false>(parent, chunk_shape, index);
-	}
+	SubShape<ndims> chunk_shape = SubShape<ndims>(shape, parent.get_shape());
+	return Array_Slice<Parent, ndims, false>(parent, chunk_shape, index);
+}
 
 
 }

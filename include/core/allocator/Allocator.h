@@ -18,7 +18,6 @@ namespace allocator {
 
 class Byte {};
 
-
 #ifdef __CUDACC__
 template<class SystemTag, class ValueType>
 using implementation = std::conditional_t<std::is_same<host_tag, SystemTag>::value, Host<ValueType>, Device<ValueType>>;
@@ -26,8 +25,6 @@ using implementation = std::conditional_t<std::is_same<host_tag, SystemTag>::val
 template<class SystemTag, class ValueType>
 using implementation = std::conditional_t<std::is_same<host_tag, SystemTag>::value, Host<ValueType>, void>;
 #endif
-
-
 
 }
 

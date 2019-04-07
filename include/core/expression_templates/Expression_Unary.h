@@ -9,19 +9,18 @@
 #ifndef BC_EXPRESSION_TEMPLATES_EXPRESSION_UNARY_H_
 #define BC_EXPRESSION_TEMPLATES_EXPRESSION_UNARY_H_
 
+
 #include "Expression_Base.h"
+
 
 namespace BC {
 namespace exprs {
-
 
 template<class Value, class operation>
 struct Unary_Expression : public Expression_Base<Unary_Expression<Value, operation>>, public operation {
 
     using value_type  = decltype(std::declval<operation>()(std::declval<typename Value::value_type>()));
     using system_tag  = typename Value::system_tag;
-    using utility_t	  = utility::implementation<system_tag>;
-    using function_t  = operation;
 
     static constexpr int DIMS  = Value::DIMS;
     static constexpr int ITERATOR = Value::ITERATOR;

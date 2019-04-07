@@ -29,8 +29,7 @@ struct Array_Strided_Vector : Array_Base<Array_Strided_Vector<Parent>, 1>, Shape
 
     value_type* array_slice;
 
-    BCINLINE
-    Array_Strided_Vector(value_type* array_slice_, BC::size_t length, BC::size_t stride)
+    BCINLINE Array_Strided_Vector(value_type* array_slice_, BC::size_t length, BC::size_t stride)
      : Shape<1>(length, stride),
        array_slice(array_slice_) {}
 

@@ -11,6 +11,4 @@
 #include "iterators/Iterators.h"
 #include "algorithms/Algorithms.h"
 
-
-
 #endif /* ITERATOR_ALGORITHMS_H_ */

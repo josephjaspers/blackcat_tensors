@@ -1,4 +1,3 @@
-
 namespace BC {
 namespace blas {
 namespace device_impl {

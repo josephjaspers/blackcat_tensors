@@ -9,6 +9,7 @@
 #ifndef BC_EXPRESSION_TEMPLATES_ARRAY_SCALAR_CONSTANT_H_
 #define BC_EXPRESSION_TEMPLATES_ARRAY_SCALAR_CONSTANT_H_
 
+
 #include "Array_Base.h"
 
 
@@ -28,12 +29,7 @@ struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, SystemTag>
 
     value_type scalar;
 
-    BCINLINE operator value_type () const {
-        return scalar;
-    }
-
     BCINLINE Scalar_Constant(value_type scalar_) : scalar(scalar_) {}
-
 
     template<class... integers> BCINLINE auto operator()  (const integers&...) const { return scalar; }
     template<class... integers> BCINLINE auto operator()  (const integers&...) 		 { return scalar; }
@@ -42,8 +38,6 @@ struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, SystemTag>
     BCINLINE auto operator [] (int i )  	 { return scalar; }
 
     BCINLINE const value_type* memptr() const { return &scalar; }
-
-    void swap_array(Scalar_Constant&) {}
 };
 
 

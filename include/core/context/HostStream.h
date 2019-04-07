@@ -3,8 +3,8 @@
 #define HOST_H_
 
 #include <thread>
-#include <mutex>
 #include <queue>
+#include <mutex>
 #include <memory>
 #include <condition_variable>
 
@@ -18,6 +18,7 @@ class HostEvent {
 		std::condition_variable cv;
 		std::mutex m;
 	};
+
 	struct waiting_functor {
 		std::shared_ptr<contents> m_contents;
 		void operator () () const {
@@ -31,6 +32,7 @@ class HostEvent {
 			}
 		}
 	};
+
 	struct recording_functor {
 		std::shared_ptr<contents> m_contents;
 
@@ -39,8 +41,11 @@ class HostEvent {
 			m_contents.get()->cv.notify_all();
 		}
 	};
+
 	std::shared_ptr<contents> m_contents = std::shared_ptr<contents>(new contents);
+
 public:
+
 	recording_functor get_recorder() {
 		return {m_contents};
 	}

@@ -11,5 +11,4 @@
 #include "Coefficientwise_Iterator.h"
 #include "Multidimensional_Iterator.h"
 
-
 #endif /* ITERATORS_H_ */

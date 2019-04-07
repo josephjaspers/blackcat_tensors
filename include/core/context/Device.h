@@ -12,11 +12,8 @@
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include <memory>
-#include <mutex>
-#include <vector>
 
 #include "HostStream.h"
-#include "Context_Impl.cu"
 
 namespace BC {
 namespace context {

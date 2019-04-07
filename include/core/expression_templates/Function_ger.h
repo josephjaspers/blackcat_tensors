@@ -27,7 +27,7 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 
     using value_type = typename lv::value_type;
     using system_tag = System_Tag;
-    using blas       = typename blas::implementation<system_tag>;
+    using blas_impl  = typename blas::implementation<system_tag>;
 
     static constexpr int DIMS = 2;
     static constexpr int ITERATOR = 1;
@@ -86,11 +86,11 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 	        auto alpha = context.get_allocator().template get_alpha_buffer<value_type>();
 			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
 			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
-			blas::calculate_alpha(context, alpha, alpha_mod, alpha_lv, alpha_rv);
-			blas::ger(context, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
+			blas_impl::calculate_alpha(context, alpha, alpha_mod, alpha_lv, alpha_rv);
+			blas_impl::ger(context, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
 		} else {
-			auto alpha = blas::template scalar_constant<value_type, (alpha_mod == 0 ? 1 : alpha_mod)>();
-			blas::ger(context, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
+			auto alpha = blas_impl::template scalar_constant<value_type, (alpha_mod == 0 ? 1 : alpha_mod)>();
+			blas_impl::ger(context, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
 		}
 
 		//deallocate all the temporaries

@@ -153,17 +153,6 @@ struct Host {
         });
 	}
 
-
-
-
-
-
-
-
-
-
-
-
 //------------------------ pointer argument versions ----------------------- //
 
 	template<class Context>

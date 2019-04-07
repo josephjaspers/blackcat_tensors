@@ -14,6 +14,7 @@
 #include <cuda.h>
 #include <curand.h>
 #include <curand_kernel.h>
+
 namespace BC {
 namespace random {
 namespace device_impl {
@@ -39,5 +40,6 @@ static void randomize(T t, float lower_bound, float upper_bound, int seed) {
 }
 }
 }
+
 #endif
 #endif /* DEVICE_IMPL_H_ */

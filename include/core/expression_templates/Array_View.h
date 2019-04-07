@@ -43,7 +43,6 @@ struct ArrayViewExpr
     BCINLINE
     const value_type* memptr() const  { return array; }
 
-    void deallocate() {}
 
 };
 
@@ -83,8 +82,8 @@ struct Array_View : ArrayViewExpr<Dimension, Scalar, Allocator> {
 		return *alloc;
 	}
 
-	auto& internal_base() { return *this; }
 	const auto& internal_base() const { return *this; }
+		  auto& internal_base()       { return *this; }
 
 };
 

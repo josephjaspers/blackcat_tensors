@@ -9,15 +9,12 @@
 #ifndef BC_EXPRESSION_TEMPLATES_ARRAY_H_
 #define BC_EXPRESSION_TEMPLATES_ARRAY_H_
 
+
 #include "Array_Base.h"
 
 
 namespace BC {
 namespace exprs {
-
-template<class, int, bool> class Array_Slice;
-template<int,class,class,class...> class Array; //derived
-
 
 /*
  * 	Array is a class that inherits from ArrayExpression and the Allocator type.
@@ -41,7 +38,6 @@ struct ArrayExpression
 		: Array_Base<ArrayExpression<Dimension, ValueType, SystemTag, Tags...>, Dimension>,
 		  Shape<Dimension>, public Tags... {
 
-	using derived_t = Array<Dimension, ValueType, SystemTag, Tags...>;
     using value_type = ValueType;
     using system_tag = SystemTag;
 
@@ -69,7 +65,6 @@ struct ArrayExpression<0, ValueType, SystemTag, Tags...>
   public Shape<0>,
   public Tags... {
 
-	using derived_t = Array<0, ValueType, SystemTag, Tags...>;
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 
@@ -229,39 +224,15 @@ public:
     	}
     }
 
-//    Array& operator =(Array&& move) {
-//
-//     	bool equal_allocators = BC::allocator_traits<Allocator>::is_always_equal::value ||
-//     								this->get_allocator() == move.get_allocator();
-//
-//     	if (BC::allocator_traits<Allocator>::propagate_on_container_move_assignment::value
-//     			&& equal_allocators)
-//     	{
-//     		std::swap(this->get_allocator(), move.get_allocator());
-//         	std::swap(this->array, move.array);
-//         	std::swap(this->m_inner_shape, move.m_inner_shape);
-//         	std::swap(this->m_block_shape, move.m_block_shape);
-//     	} else {
-//     		get_allocator().deallocate(this->array, this->size());
-//     		this->m_inner_shape = move.m_inner_shape;
-//     		this->m_inner_shape = move.m_inner_shape;
-//     		evaluate_to(this->internal(), move.internal(), get_context());
-//     	}
-//
-//
-//
-//     	return *this;
-//     }
-
     void deallocate() {
        Allocator::deallocate(this->array, this->size());
        this->array = nullptr;
-    }
+	}
 
-    	self& internal_base() {
-    		return *this; }
-    	const self& internal_base() const {
-    		return *this; }
+	self& internal_base() {
+		return *this;}
+	const self& internal_base() const {
+		return *this;}
 };
 
 

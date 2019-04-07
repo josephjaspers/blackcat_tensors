@@ -16,19 +16,12 @@ namespace BC {
 namespace meta {
 template<class... Ts> using void_t = void;
 
-
-template<class T>
-using has_context = std::enable_if_t<
-		std::is_void<
-		void_t<decltype(std::declval<T>().get_context())>>::value>;
-
-
-
 	template<template<class> class func, class T, class voider=void>
 	struct is_detected : std::false_type { };
 
 	template<template<class> class func, class T>
 	struct is_detected<func, T, std::enable_if_t<std::is_void<void_t<func<T>>>::value>> : std::true_type { };
+
 
 	/*
 	 * example -- has allocator --> template<class t> using allocator = typename allocator_t;

@@ -242,21 +242,6 @@ auto prod(const Tensor_Base<internal_t>& tensor) {
 	using value_type = typename internal_t::value_type;
 	return BC::accumulate(tensor.cbegin(), tensor.cend(), value_type(1), BC::oper::mul());
 }
-//
-//template<class internal_t>
-//static std::enable_if_t<BC::exprs::expression_traits<internal_t>::is_expr, BC_sum_t<internal_t>>
-//sum(const Tensor_Base<internal_t>& tensor) {
-//	using sum_value_type = BC_sum_t<internal_t>;
-//	return BC::accumulate(tensor.cbegin(), tensor.cend(), sum_value_type(0));
-//}
-//
-//template<class internal_t>
-//static std::enable_if_t<BC::exprs::expression_traits<internal_t>::is_expr, typename internal_t::value_type>
-//prod(const Tensor_Base<internal_t>& tensor) {
-//	using value_type = typename internal_t::value_type;
-//	return BC::accumulate(tensor.cbegin(), tensor.cend(), value_type(1), BC::oper::mul());
-//}
-
 
 template<class internal_t>
 static bool all(const Tensor_Base<internal_t>& tensor) {

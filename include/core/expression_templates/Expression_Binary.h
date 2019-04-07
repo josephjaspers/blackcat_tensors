@@ -23,7 +23,6 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
 	using rv_value_t = typename Rv::value_type;
     using value_type = decltype(std::declval<Operation>()(std::declval<lv_value_t&>(), std::declval<rv_value_t&>()));
     using system_tag  = typename Lv::system_tag;
-    using function_t = Operation;
 
     static constexpr int DIMS = Lv::DIMS > Rv::DIMS ?  Lv::DIMS : Rv::DIMS;
     static constexpr int ITERATOR = Lv::DIMS != Rv::DIMS ? DIMS : BC::meta::max(Lv::ITERATOR, Rv::ITERATOR);
@@ -67,12 +66,19 @@ public:
     BCINLINE const auto block_shape() const { return shape().block_shape(); }
 };
 
-template<class op, class Lv, class Rv> BCHOT
-auto make_bin_expr(Lv left, Rv right) {
+template<class Op, class Lv, class Rv, class... Args> BCHOT
+auto make_bin_expr(Lv left, Rv right, const Args&... args) {
 	return Binary_Expression<
 			std::decay_t<decltype(left.internal())>,
 			std::decay_t<decltype(right.internal())>,
-			op>(left.internal(), right.internal());
+			Op>(left.internal(), right.internal(), args...);
+}
+template<class Lv, class Rv, class Op> BCHOT
+auto make_bin_expr(Lv left, Rv right, Op oper) {
+	return Binary_Expression<
+			std::decay_t<decltype(left.internal())>,
+			std::decay_t<decltype(right.internal())>,
+			Op>(left.internal(), right.internal(), oper);
 }
 
 
