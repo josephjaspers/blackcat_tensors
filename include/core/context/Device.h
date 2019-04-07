@@ -132,7 +132,7 @@ public:
     }
 
     template<class function>
-    void push_job(function func) {
+    void stream_enqueue_callback(function func) {
 
     	if (is_default_stream()){
     		func();

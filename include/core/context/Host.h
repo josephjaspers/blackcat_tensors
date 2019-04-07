@@ -99,13 +99,17 @@ public:
     	this->stream_wait_event(stream);
     }
 
-	template<class function_lambda>
-	void push_job(function_lambda functor) {
+	template<class Functor>
+	void push_job(Functor functor) {
 		if (this->is_default_stream()) {
 			functor();
 		} else {
 			m_contents.get()->m_stream.push(functor);
 		}
+	}
+	template<class Functor>
+	void stream_enqueue_callback(Functor functor) {
+		push_job(functor);
 	}
 
     bool operator == (const Host& dev) {
