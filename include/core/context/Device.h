@@ -20,54 +20,19 @@
 
 namespace BC {
 namespace context {
-namespace device_globals {
-
-struct Scalar_Recycler {
-	static std::vector<float*>& get_recycler() {
-		static std::vector<float*> recycler_instance;
-		return recycler_instance;
-	}
-	static std::mutex& get_locker() {
-		static std::mutex locker_instance;
-		return locker_instance;
-	}
-	static float* allocate() {
-
-		float* data_ptr;
-		if (get_recycler().empty()) {
-			BC_CUDA_ASSERT(cudaMallocManaged((void**) &data_ptr, sizeof(float)));
-		} else {
-			get_locker().lock();
-			data_ptr = get_recycler().back();
-			get_recycler().pop_back();
-			get_locker().unlock();
-		}
-		return data_ptr;
-	}
-	static void deallocate(float* data_ptr) {
-		get_locker().lock();
-		get_recycler().push_back(data_ptr);
-		get_locker().unlock();
-	}
-};
-
-}
 
 class  Device {
 
 	struct Device_Stream_Contents {
-		using Byte = BC::context::Byte;
 
 		HostStream	   m_host_stream;
 		cublasHandle_t m_cublas_handle;
-		cudaStream_t   m_stream_handle=nullptr;
-		cudaEvent_t    m_event_handle		  =nullptr;
-		float*         m_scalar_buffer=nullptr;
-		Workspace<device_tag> m_workspace;
+		cudaStream_t   m_stream_handle =nullptr;
+		cudaEvent_t    m_event_handle  =nullptr;
 
-		Polymorphic_Allocator<Byte, device_tag> m_allocator;
+		BC::allocator::fancy::Scalar_Recycled_Workspace<device_tag> m_workspace;
 
-		Device_Stream_Contents(bool init_stream=true, bool init_scalars=true) {
+		Device_Stream_Contents(bool init_stream=true) {
 			BC_CUDA_ASSERT(cublasCreate(&m_cublas_handle));
 			BC_CUDA_ASSERT(cudaEventCreate(&m_event_handle));
 			BC_CUDA_ASSERT((cublasSetPointerMode(m_cublas_handle, CUBLAS_POINTER_MODE_DEVICE)));
@@ -77,21 +42,11 @@ class  Device {
 				 BC_CUDA_ASSERT(cudaStreamCreate(&m_stream_handle));
 				 BC_CUDA_ASSERT(cublasSetStream(m_cublas_handle, m_stream_handle));
 			 }
-			 if (init_scalars) {
-				 m_scalar_buffer = device_globals::Scalar_Recycler::allocate();
-			 }
-		 }
-
-		 template<class T>
-		 T* get_scalar_buffer() {
-			 static_assert(sizeof(T)<=sizeof(float), "MAXIMUM OF 32 BITS");
-			 return reinterpret_cast<T*>(m_scalar_buffer);
 		 }
 
 		 ~Device_Stream_Contents() {
 			 BC_CUDA_ASSERT(cublasDestroy(m_cublas_handle));
 			 BC_CUDA_ASSERT(cudaEventDestroy(m_event_handle));
-			 device_globals::Scalar_Recycler::deallocate(m_scalar_buffer);
 
 			 if (m_stream_handle)
 				 BC_CUDA_ASSERT(cudaStreamDestroy(m_stream_handle));
@@ -110,12 +65,7 @@ public:
 
 	using system_tag = device_tag;
 
-	template<class T>
-	T* scalar_alpha() {
-		return device_contents.get()->get_scalar_buffer<T>();
-	}
-
-    Workspace<device_tag>& get_allocator() {
+	BC::allocator::fancy::Scalar_Recycled_Workspace<device_tag>& get_allocator() {
     	return device_contents.get()->m_workspace;
     }
 
@@ -141,31 +91,31 @@ public:
     void stream_record_event() {
     	BC_CUDA_ASSERT(cudaEventRecord(
     			device_contents.get()->m_event_handle,
-    			device_contents.get()->m_stream_handle
-    			));
+    			device_contents.get()->m_stream_handle));
     }
 
     void stream_wait_event(Device& stream) {
-    	BC_CUDA_ASSERT(cudaStreamWaitEvent(device_contents.get()->m_stream_handle,
-    						stream.device_contents.get()->m_event_handle, 0));
+    	BC_CUDA_ASSERT(cudaStreamWaitEvent(
+    			device_contents.get()->m_stream_handle,
+    			stream.device_contents.get()->m_event_handle, 0));
     }
 
     void stream_wait_stream(Device& stream) {
     	stream.stream_record_event();
-    	BC_CUDA_ASSERT(cudaStreamWaitEvent(device_contents.get()->m_stream_handle,
-    						stream.device_contents.get()->m_event_handle, 0));
+    	BC_CUDA_ASSERT(cudaStreamWaitEvent(
+    			device_contents.get()->m_stream_handle,
+    			stream.device_contents.get()->m_event_handle, 0));
     }
-
 
     void stream_wait_event(cudaEvent_t event) {
-    	BC_CUDA_ASSERT(cudaStreamWaitEvent(device_contents.get()->m_stream_handle, event, 0));
+    	BC_CUDA_ASSERT(cudaStreamWaitEvent(
+    			device_contents.get()->m_stream_handle,
+    			event, 0));
     }
-
 
     bool is_default_stream() {
     	return device_contents.get()->m_stream_handle == 0;
     }
-
 
     void create_stream() {
     	device_contents = std::shared_ptr<Device_Stream_Contents>(
@@ -188,7 +138,10 @@ public:
     		func();
     	}
 
-    	BC_CUDA_ASSERT(cudaEventRecord(device_contents.get()->m_event_handle, device_contents.get()->m_stream_handle));
+    	BC_CUDA_ASSERT(cudaEventRecord(
+    			device_contents.get()->m_event_handle,
+    			device_contents.get()->m_stream_handle));
+
     	device_contents.get()->m_host_stream.push(
     			[&, func]() {
     				cudaEventSynchronize(device_contents.get()->m_event_handle);

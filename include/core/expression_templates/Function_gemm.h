@@ -72,7 +72,7 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
     BCINLINE BC::size_t  K() const { return left.cols();  }
 
 
-    template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class Context>
+    template<class core, int alpha_mod, int beta_mod, class Context>
     void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, Context& alloc) const {
 
         //get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
@@ -95,7 +95,7 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
 					B, B.leading_dimension(0),
 					beta, injection, injection.leading_dimension(0));
 
-//        //deallocate all the temporaries
+        //deallocate all the temporaries
         if (rv_eval) meta::bc_const_cast(B).deallocate();
         if (lv_eval) meta::bc_const_cast(A).deallocate();
     }

@@ -16,6 +16,8 @@
 namespace BC {
 namespace allocator {
 
+class Byte {};
+
 
 #ifdef __CUDACC__
 template<class SystemTag, class ValueType>
@@ -41,7 +43,18 @@ template<class value_type>
 using Cuda_Managed = allocator::Device_Managed<value_type>;
 #endif
 
+template<class value_type>
+using Basic_Allocator = allocator::Host<value_type>;
 
-}
+} //ns BC
+
+// --- Include "fancy allocators" below here --- //
+// Fancy allocators are included below as they more depend upon the
+//	 default allocator and/or BC::Allocator_Traits
+
+#include "fancy/Polymorphic_Allocator.h"
+#include "fancy/Workspace.h"
+#include "fancy/Scalar_Recycled_Workspace.h"
+
 
 #endif

@@ -12,7 +12,8 @@
 #include <vector>
 
 namespace BC {
-namespace context {
+namespace allocator {
+namespace fancy {
 
 template<class SystemTag>
 class Workspace {
@@ -69,8 +70,9 @@ public:
 		m_curr_index += sz;
 		return mem;
 	}
+
 	void deallocate(Byte* memptr, std::size_t sz) {
-		BC_ASSERT(memptr == m_memptr + m_curr_index - sz,
+		BC_ASSERT(memptr == (m_memptr + m_curr_index - sz),
 				"BC_Memory Deallocation failure, attempting to deallocate memory out of order,"
 				"\nWorkspace memory functions as a stack, deallocations must be in reverse order of allocations.");
 
@@ -79,24 +81,12 @@ public:
 
 	template<class T>
 	T* allocate(std::size_t sz) {
-		BC_ASSERT(m_curr_index + (sz * sizeof(T)) <= m_memptr_sz,
-				"BC_Memory Allocation failure, attempting to allocate memory larger that workspace size" \
-				"\ncurr_size: " + std::to_string(m_memptr_sz)+
-				"\ncurr_index: " + std::to_string(m_curr_index) +
-				+"\nallocation_request_sz: " + std::to_string(sz * sizeof(T)));
-
-		Byte* mem = m_memptr + m_curr_index;
-		m_curr_index += sz * sizeof(T);
-		return reinterpret_cast<T*>(mem);
+		return reinterpret_cast<T*>(allocate(sz * sizeof(T)));
 	}
 
 	template<class T>
 	void deallocate(T* memptr, std::size_t sz) {
-		BC_ASSERT(reinterpret_cast<Byte*>(memptr) == (m_memptr + m_curr_index - sz * sizeof(T)),
-				"BC_Memory Deallocation failure, attempting to deallocate memory out of order,"
-				"\nWorkspace memory functions as a stack, deallocations must be in reverse order of allocations.");
-
-		m_curr_index -= sz * sizeof(T);
+		deallocate(reinterpret_cast<Byte*>(memptr), sz * sizeof(T));
 	}
 
 	~Workspace(){
@@ -111,8 +101,6 @@ public:
 
 }
 }
-
-
-
+}
 
 #endif /* WORKSPACE_H_ */

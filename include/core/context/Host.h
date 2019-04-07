@@ -11,9 +11,7 @@
 
 #include <memory>
 #include <iostream>
-#include "Polymorphic_Allocator.h"
 #include "HostStream.h"
-#include "Workspace.h"
 
 namespace BC {
 namespace context {
@@ -24,7 +22,7 @@ class Host {
 	struct Contents {
 		std::unique_ptr<HostEvent> m_event;
 		HostStream m_stream;
-		Workspace<host_tag> m_workspace;
+		BC::allocator::fancy::Scalar_Recycled_Workspace<host_tag> m_workspace;
 	};
 
 	static std::shared_ptr<Contents> get_default_contents() {
@@ -43,19 +41,9 @@ public:
 	Host(const Host&)=default;
 	Host(Host&&)=default;
 
-    template<class scalar_t, int value>
-    static scalar_t scalar_constant() {
-    	return value;
-    }
-
-    Workspace<host_tag>& get_allocator() {
+    BC::allocator::fancy::Scalar_Recycled_Workspace<host_tag>& get_allocator() {
     	return m_contents.get()->m_workspace;
     }
-
-	 template<class scalar_t>
-	 scalar_t scalar_alpha() {
-		 return scalar_t();
-	 }
 
 	 Host& get_stream() {
 		 return *this;

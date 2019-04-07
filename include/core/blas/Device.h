@@ -22,15 +22,15 @@ struct Device {
 		device_impl::calculate_alpha<<<1, 1, 0, context.get_stream()>>>(output, vals...);
 	}
 
-	template<class Scalar_t,  int alpha_mod, bool lv_scalar, bool rv_scalar, class Context,  class lv_scalar_t, class rv_scalar_t>
+	template<class Scalar_t, int alpha_mod, bool lv_scalar, bool rv_scalar, class Context,  class lv_scalar_t, class rv_scalar_t>
 	static const Scalar_t* calculate_alpha(Context context, lv_scalar_t lv, rv_scalar_t rv) {
-		if (!(lv_scalar || rv_scalar)) {
+		if (alpha_mod==0 || (!lv_scalar && !rv_scalar)) {
 			return scalar_constant<Scalar_t, alpha_mod>();
 		}
 		else if (alpha_mod ==1 && (lv_scalar != rv_scalar)) {
 			return lv_scalar ? lv : rv;
 		} else {
-			Scalar_t* scalar =  context.template scalar_alpha<Scalar_t>();
+			auto scalar =  context.get_allocator().template get_alpha_buffer<Scalar_t>();
 			calculate_alpha(context, scalar, alpha_mod, lv, rv);
 			return scalar;
 		}

@@ -11,8 +11,8 @@
 #include <memory>
 
 namespace BC {
-namespace context {
-
+namespace allocator {
+namespace fancy {
 template<class ValueType, class SystemTag>
 struct Polymorphic_Allocator {
 
@@ -101,7 +101,7 @@ public:
 
 	template<class Allocator>
 	void set_allocator(const Allocator& alloc) {
-		using allocator_t = typename Allocator::template rebind<BC::context::Byte>::other;
+		using allocator_t = typename Allocator::template rebind<BC::allocator::Byte>::other;
 		m_allocator = std::unique_ptr<Virtual_Allocator>(
 				new Derived_Allocator<allocator_t>(alloc));
 	}
@@ -116,6 +116,7 @@ public:
 
 };
 
+}
 }
 }
 

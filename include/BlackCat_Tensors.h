@@ -68,9 +68,6 @@ inline void bc_assert(bool condition, str_type msg, const char* file, const char
 #include <cublas.h>
 namespace BC {
 
-#define BC_STRING_VALUE(value) (std::string(#value) + std::string(": ") + std::to_string(value))
-
-
 #define BC_CUDA_ASSERT(ans) { BC_cuda_assert((ans), __FILE__, __PRETTY_FUNCTION__, __LINE__); }
 inline void BC_cuda_assert(cudaError_t code, const char *file, const char* function, int line)
 {

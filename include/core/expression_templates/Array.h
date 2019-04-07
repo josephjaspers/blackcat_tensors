@@ -92,13 +92,6 @@ struct ArrayExpression<0, ValueType, SystemTag, Tags...>
 
     BCINLINE const Shape<0>& get_shape() const { return static_cast<const Shape<0>&>(*this); }
 
-
-    operator BC::meta::only_if<std::is_same<host_tag, system_tag>::value, value_type&> () {
-    	return array[0];
-    }
-    operator BC::meta::only_if<std::is_same<host_tag, system_tag>::value, const value_type&> () const {
-		return array[0];
-	}
 };
 
 
@@ -120,7 +113,6 @@ public:
 	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
 	using allocator_t = Allocator;
 	using context_t   = Context<system_tag>;
-	using full_context_t = context::full_context_t<allocator_t, context_t>;
 	using value_type = Scalar;
 
 
