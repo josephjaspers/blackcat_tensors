@@ -235,6 +235,21 @@ public:
 		return *this;}
 };
 
+template<class ValueType, int dims, class Context>
+auto make_temporary_tensor_array(BC::Shape<dims> shape, Context context) {
+	using system_tag = typename Context::system_tag;
+	using Array = ArrayExpression<dims, ValueType, system_tag, BC_Temporary>;
+	Array temporary;
+	temporary.m_block_shape = shape.m_block_shape;
+	temporary.m_inner_shape = shape.m_inner_shape;
+	temporary.array = context.get_allocator().template allocate<ValueType>(temporary.size());
+	return temporary;
+}
+template<int Dimension, class ValueType, class SystemTag, class... Tags, class=std::enable_if_t<BC::meta::seq_contains<BC_Temporary, Tags...>>>
+void destroy_temporary_tensor_array(ArrayExpression<Dimension, ValueType, SystemTag, Tags...> temporary, BC::Context<SystemTag> context) {
+	context.get_allocator().deallocate(temporary.array, temporary.size());
+}
+
 
 template<class Shape, class Allocator>
 auto make_tensor_array(Shape shape, Allocator alloc) {

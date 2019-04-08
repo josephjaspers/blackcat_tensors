@@ -13,8 +13,9 @@
 namespace BC {
 namespace allocator {
 namespace fancy {
-namespace device_globals {
 
+#ifdef __CUDACC__
+namespace device_globals {
 struct Scalar_Recycler {
 
 	template<class T>
@@ -47,8 +48,9 @@ struct Scalar_Recycler {
 		locker.unlock();
 	}
 };
-
 }
+#endif
+
 #ifndef BC_DEVICE_BUFFER_SIZE
 #define BC_DEVICE_BUFFER_SIZE 32
 #endif

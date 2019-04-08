@@ -111,7 +111,7 @@ struct optimizer<
 
 	template<class Context_>
     static void deallocate_temporaries(ArrayExpression<x, Scalar, Context, BC_Temporary> tmp, Context_ alloc) {
-        alloc.get_allocator().deallocate(tmp.array, tmp.size());
+        destroy_temporary_tensor_array(tmp, alloc);
     }
 };
 
@@ -149,19 +149,8 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
     static auto temporary_injection(const Binary_Expression<lv, rv, op>& branch, Context alloc) {
     	BC_TREE_OPTIMIZER_STDOUT("BLAS_EXPR: temporary_injection");
 
-    	using param = Binary_Expression<lv, rv, op>;
     	using value_type = typename Binary_Expression<lv, rv, op>::value_type;
-    	constexpr int dims = param::DIMS;
-
-    	using array_t = ArrayExpression<dims, value_type, typename Context::system_tag, BC_Temporary>;
-    	array_t temporary; //(branch.inner_shape());
-
-    	auto shape = Shape<dims>(branch.inner_shape());
-    	temporary.m_inner_shape = shape.m_inner_shape;
-    	temporary.m_block_shape = shape.m_block_shape;
-    	temporary.array = alloc.get_allocator().template allocate<value_type>(temporary.size());
-
-        //ISSUE HERE
+    	auto temporary = make_temporary_tensor_array<value_type>(make_shape(branch.inner_shape()), alloc);
         branch.eval(make_injection<1, 0>(temporary), alloc);
         return temporary;
     }

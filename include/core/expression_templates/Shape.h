@@ -219,6 +219,12 @@ template<class... integers, typename=std::enable_if_t<meta::seq_of<BC::size_t, i
 auto make_shape(integers... ints) {
 	return Shape<sizeof...(integers)>(ints...);
 }
+
+template<class InnerShape, typename=std::enable_if_t<!meta::seq_of<BC::size_t, InnerShape>>>
+auto make_shape(InnerShape is) {
+	return Shape<InnerShape::DIMS>(is);
+}
+
 }
 
 
