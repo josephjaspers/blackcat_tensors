@@ -52,8 +52,9 @@ public:
 	}
 
 	void create_stream() {
-		m_contents = std::shared_ptr<Contents>(new Contents());
-		m_contents.get()->m_stream.init();
+		//Temporary disable host streams, something is seriously wrong
+//		m_contents = std::shared_ptr<Contents>(new Contents());
+//		m_contents.get()->m_stream.init();
 	}
 
 	void destroy_stream() {

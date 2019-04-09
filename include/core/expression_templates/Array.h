@@ -136,7 +136,7 @@ public:
 	  context_t(array_.get_context()),
 	  parent(array_) {
         this->array = this->allocate(this->size());
-        evaluate_to(this->internal(), array_.internal(), get_context());
+        greedy_evaluate(this->internal(), array_.internal(), get_context());
 	}
 	Array(Array&& array_) //TODO handle propagate_on_container_move_assignment
 	: Allocator(std::move(array_.get_allocator())),
@@ -179,7 +179,7 @@ public:
 	Array(const Expr& expr_t, const Allocator& alloc=Allocator()) : Allocator(alloc) {
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());
-		evaluate_to(this->internal(), expr_t.internal(), get_context());
+		greedy_evaluate(this->internal(), expr_t.internal(), get_context());
 	}
 
 
@@ -200,27 +200,27 @@ public:
 	{
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());
-        evaluate_to(this->internal(), expr_t.internal(), this->get_context());
+		greedy_evaluate(this->internal(), expr_t.internal(), this->get_context());
 	}
 
 public:
-    void internal_move(Array& swap) {
+    void internal_move(Array& array) {
     		if (BC::allocator_traits<Allocator>::is_always_equal::value ||
-    			swap.get_allocator() == this->get_allocator()) {
-			std::swap(this->array, swap.array);
-			std::swap(this->m_inner_shape, swap.m_inner_shape);
-			std::swap(this->m_block_shape, swap.m_block_shape);
+    			array.get_allocator() == this->get_allocator()) {
+			std::swap(this->array, array.array);
+			std::swap(this->m_inner_shape, array.m_inner_shape);
+			std::swap(this->m_block_shape, array.m_block_shape);
 
 	    	if (BC::allocator_traits<Allocator>::propagate_on_container_move_assignment::value) {
-				std::swap(this->get_allocator(), swap.get_allocator());
+				std::swap(this->get_allocator(), array.get_allocator());
 			}
     	} else {
     		get_allocator().deallocate(this->array, this->size());
 
-			this->m_inner_shape = swap.m_inner_shape;
-			this->m_block_shape = swap.m_block_shape;
+			this->m_inner_shape = array.m_inner_shape;
+			this->m_block_shape = array.m_block_shape;
 			this->array = get_allocator().allocate(this->size());
-			evaluate_to(this->internal(), swap.internal(), this->get_context());
+			greedy_evaluate(this->internal(), array.internal(), this->get_context());
     	}
     }
 
