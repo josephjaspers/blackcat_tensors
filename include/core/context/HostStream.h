@@ -16,20 +16,16 @@ class HostEvent {
 	struct contents {
 		bool recorded = false;
 		std::condition_variable cv;
-		std::mutex m;
+		std::mutex m_mutex;
 	};
 
 	struct waiting_functor {
 		std::shared_ptr<contents> m_contents;
 		void operator () () const {
-			if (!m_contents.get()->recorded) {
-				std::unique_lock<std::mutex> lock = std::unique_lock<std::mutex>(m_contents.get()->m);
+			std::unique_lock<std::mutex> locker(m_contents.get()->m_mutex);
 
-				//check again in case recorded was written to inbetween accessing the lock
-				if (!m_contents.get()->recorded) {
-					m_contents.get()->cv.wait(lock, [&](){ return m_contents.get()->recorded; });
-				}
-			}
+			if (!m_contents.get()->recorded)
+				m_contents.get()->cv.wait(locker, [&](){ return m_contents.get()->recorded; });
 		}
 	};
 
@@ -42,7 +38,7 @@ class HostEvent {
 		}
 	};
 
-	std::shared_ptr<contents> m_contents = std::shared_ptr<contents>(new contents);
+	std::shared_ptr<contents> m_contents = std::shared_ptr<contents>(new contents());
 
 public:
 
@@ -80,34 +76,41 @@ class HostStream {
 		}
 	};
 
+
+	using scoped_lock = std::unique_lock<std::mutex>;
 	bool m_final_terminate = false;
 	std::condition_variable cv;
 
-	std::mutex m_stream_lock;
 	std::mutex m_queue_lock;
+	std::mutex m_stream_lock;
 	std::queue<std::unique_ptr<Job>> m_queue;
 	std::unique_ptr<std::thread> m_stream;
 
 	void run() {
 
 		while (!m_final_terminate) {
-			std::unique_lock<std::mutex> unq_stream_lock(m_stream_lock);
-			cv.wait(unq_stream_lock, [&](){ return !m_queue.empty() || m_final_terminate;});
-
+			{
+				scoped_lock lock(m_stream_lock);
+				cv.wait(lock, [&](){ return !m_queue.empty() || m_final_terminate;});
+			}
 			while (!m_queue.empty()) {
-				m_queue_lock.lock();
-				std::unique_ptr<Job> curr_job_ = std::move(m_queue.front());
-				m_queue.pop();
-				m_queue_lock.unlock();
-
+				std::unique_ptr<Job> curr_job_;
+				{
+					scoped_lock lock(m_queue_lock);
+					curr_job_ = std::move(m_queue.front());
+					m_queue.pop();
+				}
 				curr_job_.get()->run();
 			}
 		}
 		//finally finish all the jobs
-		while (!m_queue.empty()) {
-			std::unique_ptr<Job> curr_job_ = std::move(m_queue.front());
-			m_queue.pop();
-			curr_job_.get()->run();
+		m_queue_lock.lock();
+		std::queue<std::unique_ptr<Job>> queue_ = std::move(m_queue);
+		m_queue_lock.unlock();
+
+		while (!queue_.empty()) {
+			queue_.front().get()->run();
+			queue_.pop();
 		}
 	}
 
@@ -116,8 +119,11 @@ class HostStream {
 public:
 
 	void init() {
-		this->m_final_terminate = false;
-		m_stream = std::unique_ptr<std::thread>(new std::thread(&HostStream::run, this));
+		scoped_lock lock(m_queue_lock);
+		if (m_stream.get() == nullptr) {
+			this->m_final_terminate = false;
+			m_stream = std::unique_ptr<std::thread>(new std::thread(&HostStream::run, this));
+		}
 	}
 
 
@@ -146,13 +152,6 @@ public:
 			if (m_stream.get() && m_stream.get()->joinable()) {
 				m_stream.get()->join();
 			}
-		}
-	}
-
-	void synchronize() {
-		if (this->active()) {
-			terminate();
-			init();
 		}
 	}
 

@@ -36,10 +36,6 @@ public:
 
 	using system_tag = host_tag;
 
-	Host() =default;
-	Host(const Host&)=default;
-	Host(Host&&)=default;
-
     BC::allocator::fancy::Scalar_Recycled_Workspace<host_tag>& get_allocator() {
     	return m_contents.get()->m_workspace;
     }
@@ -66,8 +62,12 @@ public:
 
 	void sync_stream() {
 		//** Pushing a job while syncing is undefined behavior.
-		if (!is_default_stream())
-			m_contents.get()->m_stream.synchronize();
+		if (!is_default_stream()) {
+			if (!m_contents.get()->m_stream.empty()) {
+				stream_record_event();
+				this->m_contents.get()->m_event.get()->get_waiter().operator ()();
+			}
+		}
 	}
 
 	void set_stream(Host& stream_) {
