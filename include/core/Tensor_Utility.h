@@ -52,12 +52,10 @@ private:
     }
 public:
     void print(int precision=8) const {
+    	const_cast<derived&>(this->as_derived()).get_context().sync_stream();
     	this->print_impl<void>(precision);
     }
 
-    void repr() const {
-    	print();
-    }
 private:
 
     static std::string format_value(const scalar& s,  BC::size_t   precision, bool sparse=false) {
