@@ -29,6 +29,7 @@ struct Unary_Expression<Value, oper::transpose<System_Tag>>
     Value array;
 
     Unary_Expression(Value p) : array(p) {}
+    Unary_Expression(Value p, const oper::transpose<System_Tag>&) : array(p) {}
 
     BCINLINE const auto inner_shape() const {
         return make_lambda_array<DIMS>([=](int i) {

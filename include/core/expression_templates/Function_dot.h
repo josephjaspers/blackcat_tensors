@@ -57,8 +57,8 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
 		//evaluate the left and right branches (computes only if necessary)
 		//Note: dot does not accept a scalar Alpha, therefor we don't extract the array from left/right
 		//The CacheEvaluator will generate a temporary if need be
-		auto X = CacheEvaluator<allocator>::evaluate(left, alloc);
-		auto Y = CacheEvaluator<allocator>::evaluate(right, alloc);
+		auto X = greedy_evaluate(left, alloc);
+		auto Y = greedy_evaluate(right, alloc);
 
 		//call outer product
 		blas_impl::dot(alloc, X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));

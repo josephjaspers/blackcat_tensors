@@ -68,8 +68,8 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
 		auto& injection = injection_values.data();
 
 		//evaluate the left and right branches (computes only if necessary)
-		auto A = CacheEvaluator<allocator>::evaluate(blas_feature_detector<lv>::get_array(left), alloc);
-		auto X = CacheEvaluator<allocator>::evaluate(blas_feature_detector<rv>::get_array(right), alloc);
+		auto A = greedy_evaluate(blas_feature_detector<lv>::get_array(left), alloc);
+		auto X = greedy_evaluate(blas_feature_detector<rv>::get_array(right), alloc);
 
 		auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
 		auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
