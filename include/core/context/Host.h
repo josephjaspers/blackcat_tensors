@@ -31,23 +31,6 @@ class Host {
 		return default_contents;
 	}
 
-//	Maybe add later to better emulate Cuda streams
-//	struct Contents_Global {
-//		static std::vector<std::shared_ptr<Contents>>& get_contents_list() {
-//			static std::vector<std::shared_ptr<Contents>> list;
-//			return list;
-//		}
-//
-//		static void add_host_stream(std::shared_ptr<Contents> contents) {
-//			get_contents_list().push_back(contents);
-//		}
-//
-//		static void synchronize_all(){
-//
-//		}
-//	};
-
-
 	std::shared_ptr<Contents> m_contents = get_default_contents();
 
 public:
@@ -72,7 +55,7 @@ public:
 	void create_stream() {
 		//Temporary disable host streams, something is seriously wrong
 		m_contents = std::shared_ptr<Contents>(new Contents());
-		m_contents.get()->m_stream.init();
+//		m_contents.get()->m_stream.init();
 	}
 
 	void destroy_stream() {
@@ -120,6 +103,7 @@ public:
 	template<class Functor>
 	void push_job(Functor functor) {
 		if (this->is_default_stream()) {
+			host_sync();
 			functor();
 		} else {
 			m_contents.get()->m_stream.push(functor);

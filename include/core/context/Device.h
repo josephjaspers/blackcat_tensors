@@ -35,7 +35,6 @@ class  Device {
 			BC_CUDA_ASSERT((cublasSetPointerMode(m_cublas_handle, CUBLAS_POINTER_MODE_DEVICE)));
 
 			 if (init_stream) {
-				 m_host_stream.init();
 				 BC_CUDA_ASSERT(cudaStreamCreate(&m_stream_handle));
 				 BC_CUDA_ASSERT(cublasSetStream(m_cublas_handle, m_stream_handle));
 			 }

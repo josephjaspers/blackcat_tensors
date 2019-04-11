@@ -146,17 +146,20 @@ namespace namespace_name {										 \
 
 #if defined(_OPENMP) && !defined(BC_NO_OPENMP)
 	#define BC_OPENMP
-	#define __BC_omp_atomic__ _Pragma("omp atomic")
-	#define __BC_omp_for__ _Pragma("omp parallel for")
-	#define __BC_omp_bar__ _Pragma("omp barrier")
-
+	#define BC_omp_parallel__		_Pragma("omp parallel")
+	#define BC_omp_async__(...)    	BC_omp_parallel__ {_Pragma("omp single nowait") {__VA_ARGS__ } }
+	#define BC_omp_atomic__ 		_Pragma("omp atomic")
+	#define BC_omp_for__ 			_Pragma("omp parallel for")
+	#define BC_omp_bar__ 			_Pragma("omp barrier")
 	#define __BC_CONCAT_REDUCTION_LITERAL(oper, value) omp parallel for reduction(oper:value)
-	#define __BC_omp_reduction__(oper, value) __BC_omp_for__ reduction(oper:value)
+	#define BC_omp_reduction__(oper, value) BC_omp_for__ reduction(oper:value)
 #else
-	#define __BC_omp_atomic__
-	#define __BC_omp_for__
-	#define __BC_omp_bar__
-	#define __BC_omp_for_reduction__(oper, value)
+	#define BC_omp_async__(...) __VA_ARGS__
+	#define BC_omp_parallel__
+	#define BC_omp_atomic__
+	#define BC_omp_for__
+	#define BC_omp_bar__
+	#define BC_omp_for_reduction__(oper, value)
 #endif
 
 // --------------------------------- constants --------------------------------- //
@@ -165,7 +168,7 @@ namespace BC {
 
 inline void host_sync() {
 #if defined(_OPENMP) && !defined(BC_NO_OPENMP) //if openmp is defined
-	__BC_omp_bar__
+	BC_omp_bar__
 #endif
 }
 

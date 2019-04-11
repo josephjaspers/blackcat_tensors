@@ -1,11 +1,12 @@
 
-#ifndef HOST_H_
-#define HOST_H_
+#ifndef BC_CONTEXT_HOSTSTREAM_H_
+#define BC_CONTEXT_HOSTSTREAM_H_
 
 #include <thread>
 #include <queue>
 #include <mutex>
 #include <memory>
+#include <atomic>
 #include <condition_variable>
 
 namespace BC {
@@ -14,7 +15,7 @@ namespace context {
 class HostEvent {
 
 	struct contents {
-		bool recorded = false;
+		std::atomic_bool recorded{false};
 		std::condition_variable cv;
 		std::mutex m_mutex;
 	};
@@ -24,8 +25,8 @@ class HostEvent {
 		void operator () () const {
 			std::unique_lock<std::mutex> locker(m_contents.get()->m_mutex);
 
-			if (!m_contents.get()->recorded)
-				m_contents.get()->cv.wait(locker, [&](){ return m_contents.get()->recorded; });
+			if (!m_contents.get()->recorded.load())
+				m_contents.get()->cv.wait(locker, [&](){ return m_contents.get()->recorded.load(); });
 		}
 	};
 
@@ -33,7 +34,7 @@ class HostEvent {
 		std::shared_ptr<contents> m_contents;
 
 		void operator () () const {
-			m_contents.get()->recorded = true;
+			m_contents.get()->recorded.store(true);
 			m_contents.get()->cv.notify_all();
 		}
 	};
@@ -53,86 +54,50 @@ public:
 class HostStream {
 
 	struct Job {
-
 		virtual void operator () () const = 0;
 		virtual void run () const = 0;
-
 		virtual ~Job() {};
 	};
 
 	template<class function>
 	struct JobInstance : Job {
-
 		function f;
-
 		JobInstance(function f) : f(f) {}
-
-		void operator () () const override {
-			f();
-		}
-
-		virtual void run() const override  {
-			f();
-		}
+		virtual void operator () () const override final { f(); }
+		virtual void run() 			const override final { f(); }
 	};
 
-
-	using scoped_lock = std::unique_lock<std::mutex>;
-	bool m_final_terminate = false;
-	std::condition_variable cv;
-
-	std::mutex m_queue_lock;
-	std::mutex m_stream_lock;
+	mutable std::mutex m_queue_lock;
 	std::queue<std::unique_ptr<Job>> m_queue;
-	std::unique_ptr<std::thread> m_stream;
 
-	void run() {
+private:
 
-		while (!m_final_terminate) {
-			{
-				scoped_lock lock(m_stream_lock);
-				cv.wait(lock, [&](){ return !m_queue.empty() || m_final_terminate;});
-			}
-			while (!m_queue.empty()) {
-				std::unique_ptr<Job> curr_job_;
-				{
-					scoped_lock lock(m_queue_lock);
-					curr_job_ = std::move(m_queue.front());
-					m_queue.pop();
-				}
-				curr_job_.get()->run();
-			}
+	void execute_queue() {
+		m_queue_lock.lock();		//lock while checking if empty
+		while (!m_queue.empty()){
+			std::unique_ptr<Job> curr_job = std::move(m_queue.front()); //move the current job
+			m_queue.pop();												//remove from queue
+			m_queue_lock.unlock();	//unlock  while executing
+			curr_job.get()->run();	//this allows more jobs to be added while executing
+			m_queue_lock.lock();	//reacquire mutex (while we check if its empty)
 		}
-		//finally finish all the jobs
-		m_queue_lock.lock();
-		std::queue<std::unique_ptr<Job>> queue_ = std::move(m_queue);
-		m_queue_lock.unlock();
-
-		while (!queue_.empty()) {
-			queue_.front().get()->run();
-			queue_.pop();
-		}
+		m_queue_lock.unlock();		//unlock
 	}
-
-
 
 public:
-
-	void init() {
-		scoped_lock lock(m_queue_lock);
-		if (m_stream.get() == nullptr) {
-			this->m_final_terminate = false;
-			m_stream = std::unique_ptr<std::thread>(new std::thread(&HostStream::run, this));
-		}
-	}
-
-
 	template<class function>
 	void push(function functor) {
 		m_queue_lock.lock();
-		m_queue.push(std::unique_ptr<Job>(new JobInstance<function>(functor)));
-		m_queue_lock.unlock();
-		cv.notify_one();
+		if (m_queue.empty()) {
+			m_queue_lock.unlock();
+				BC_omp_async__(
+					functor();
+					execute_queue();
+				)
+		} else {
+			m_queue.push(std::unique_ptr<Job>(new JobInstance<function>(functor)));
+			m_queue_lock.unlock();
+		}
 	}
 
 	bool empty() const {
@@ -140,25 +105,12 @@ public:
 	}
 
 	bool active() const {
-		return m_stream && !m_final_terminate;
+		bool is_active;
+		m_queue_lock.lock();
+		is_active = m_queue.empty();
+		m_queue_lock.unlock();
+		return is_active;
 	}
-
-	void terminate() {
-			if (m_stream.get()) {
-
-			m_final_terminate = true;
-			cv.notify_one();
-
-			if (m_stream.get() && m_stream.get()->joinable()) {
-				m_stream.get()->join();
-			}
-		}
-	}
-
-	~HostStream() {
-		terminate();
-	}
-
 }; //End of Queue object
 
 

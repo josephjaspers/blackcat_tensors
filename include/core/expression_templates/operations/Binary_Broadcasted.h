@@ -32,7 +32,7 @@ struct broadcasted_add_assign<BC::host_tag>
 : linear_assignment_operation, beta_modifier<1>, alpha_modifier<1> {
         template<class lv, class rv> BCINLINE
 		auto& operator ()(lv& l, rv r) const {
-        	__BC_omp_atomic__
+        	BC_omp_atomic__
         	meta::bc_const_cast(l) += r;
         	return l;
         }
@@ -45,7 +45,7 @@ template<>
 struct broadcasted_mul_assign<host_tag> : assignment_operation {
 	template<class lv, class rv> BCINLINE
 	 auto operator ()(lv& l, rv r) const {
-		__BC_omp_atomic__
+		BC_omp_atomic__
 		meta::bc_const_cast(l) *= r;
 		return l;
 	}
@@ -58,7 +58,7 @@ template<>
 struct broadcasted_sub_assign<BC::host_tag> : linear_assignment_operation, beta_modifier<1>, alpha_modifier<-1> {
 	template<class lv, class rv> BCINLINE
 	 auto operator ()(lv& l, rv r) const {
-		__BC_omp_atomic__
+		BC_omp_atomic__
 		meta::bc_const_cast(l) -= r;
 		return l;
 	}
@@ -71,7 +71,7 @@ template<>
 struct broadcasted_div_assign<BC::host_tag> : assignment_operation {
 	template<class lv, class rv> BCINLINE
 	 auto operator ()(lv& l, rv r) const {
-		__BC_omp_atomic__
+		BC_omp_atomic__
 		meta::bc_const_cast(l) /= r;
 		return l;
 	}

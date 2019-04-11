@@ -15,11 +15,11 @@ struct Host {
 
 	template<class T, class U, class V>
 	static void copy(T* to, U* from, V size) {
-		__BC_omp_for__
+		BC_omp_for__
 		for (int i = 0; i < size; ++i) {
 			to[i] = from[i];
 		}
-		__BC_omp_bar__
+		BC_omp_bar__
 	}
 
     template<class T, class U>
