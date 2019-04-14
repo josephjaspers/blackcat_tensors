@@ -16,7 +16,7 @@
 // --------------------------------- compile options --------------------------------- //
 
 //#define BC_NO_OPENMP                    //Disables automatic multi-threading of element-wise operations (if openmp is linked)
-#define BC_CPP17                          //Enables C++17 features
+#define BC_CPP17                          //Enables C++17 features -- Note: constexpr if is not supported by NVCC
 //#define BC_DISABLE_TEMPORARIES		  //Disables the creation of temporaries in expressions
 //#define BC_EXECUTION_POLICIES           //Enables execution policies
 //#define NDEBUG 		                  //Disables runtime checks

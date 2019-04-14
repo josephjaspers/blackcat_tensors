@@ -69,8 +69,7 @@ struct Unary_Expression<Value, oper::transpose<System_Tag>>
     		return array.dimension(i);
     }
 
-    BCINLINE
-    BC::size_t  block_dimension(int i) const {
+    BCINLINE BC::size_t block_dimension(int i) const {
     	return block_shape()[i];
     }
 
@@ -87,6 +86,12 @@ auto make_transpose(expr_t expr) {
 	using system_tag = typename internal_t::system_tag;
 	return Unary_Expression<internal_t, oper::transpose<system_tag>>(expr.internal());
 }
+
+template<class Array, class SystemTag>
+auto make_transpose(Unary_Expression<Array, oper::transpose<SystemTag>> expression) {
+	return expression.array;
+}
+
 
 }
 }

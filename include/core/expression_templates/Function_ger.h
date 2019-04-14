@@ -10,7 +10,6 @@
 #define BC_EXPRESSION_TEMPLATES_FUNCTION_GER_H_
 
 #include "Expression_Base.h"
-#include "BLAS_Feature_Detector.h"
 #include "Tree_Lazy_Evaluator.h"
 #include "Array_Scalar_Constant.h"
 
@@ -22,22 +21,20 @@ template<class lv, class rv, class System_Tag>
 struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
     : Expression_Base<Binary_Expression<lv, rv,  oper::ger<System_Tag>>>, oper::ger<System_Tag> {
 
-	static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,
+	static_assert(std::is_same<typename lv::value_type, typename rv::value_type>::value,
     		"GER ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
 
     using value_type = typename lv::value_type;
     using system_tag = System_Tag;
     using blas_impl  = typename blas::implementation<system_tag>;
 
+    static constexpr bool transA = expression_traits<lv>::is_transposed;
+    static constexpr bool transB = expression_traits<rv>::is_transposed;
+    static constexpr bool lv_scalar = expression_traits<lv>::is_scalar_multiplied;
+    static constexpr bool rv_scalar = expression_traits<rv>::is_scalar_multiplied;
+
     static constexpr int DIMS = 2;
     static constexpr int ITERATOR = 1;
-
-    static constexpr bool transA = blas_feature_detector<lv>::transposed;
-    static constexpr bool transB = blas_feature_detector<rv>::transposed;
-    static constexpr bool lv_scalar = blas_feature_detector<lv>::scalar;
-    static constexpr bool rv_scalar = blas_feature_detector<rv>::scalar;
-    static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
-    static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
 
     static_assert(lv::DIMS == 1 && rv::DIMS == 1 && transB,
     		"GER DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
@@ -69,8 +66,8 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 		auto& injection = injection_values.data();
 
 		//evaluate the left and right branches (computes only if necessary)
-		auto A = greedy_evaluate(blas_feature_detector<lv>::get_array(left), context);
-		auto B = greedy_evaluate(blas_feature_detector<rv>::get_array(right), context);
+		auto A = greedy_evaluate(expression_traits<lv>::remove_blas_modifiers(left), context);
+		auto B = greedy_evaluate(expression_traits<rv>::remove_blas_modifiers(right), context);
 
 		//allocate the alpha and beta scalars,
 
@@ -84,19 +81,14 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 		//compute the scalar values if need be
 		if (lv_scalar || rv_scalar) {
 	        auto alpha = context.get_allocator().template get_alpha_buffer<value_type>();
-			auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-			auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
+			auto alpha_lv = expression_traits<lv>::get_scalar(left);
+			auto alpha_rv = expression_traits<rv>::get_scalar(right);
 			blas_impl::calculate_alpha(context, alpha, alpha_mod, alpha_lv, alpha_rv);
 			blas_impl::ger(context, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
 		} else {
 			auto alpha = blas_impl::template scalar_constant<value_type, (alpha_mod == 0 ? 1 : alpha_mod)>();
 			blas_impl::ger(context, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
 		}
-
-		//deallocate all the temporaries
-		if (rv_eval) meta::bc_const_cast(B).deallocate();
-		if (lv_eval) meta::bc_const_cast(A).deallocate();
-
 	}
 };
 

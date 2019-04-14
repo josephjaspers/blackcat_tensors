@@ -150,7 +150,6 @@ public:
     //----------------------------------------------scalar element-wise operations--------------------------------------------------//
     BC_OPER_SCALAR_BASIC_DEF(+, add)
     BC_OPER_SCALAR_BASIC_DEF(-, sub)
-//    BC_OPER_SCALAR_BASIC_DEF(*, scalar_mul)
     BC_OPER_SCALAR_BASIC_DEF(>, greater)
     BC_OPER_SCALAR_BASIC_DEF(<, lesser)
     BC_OPER_SCALAR_BASIC_DEF(>=, greater_equal)
@@ -203,8 +202,8 @@ public:
     auto operator *(const Tensor_Operations<param_deriv>& param) const {
 
     	using rv_internal_t = typename Tensor_Operations<param_deriv>::internal_t;
-        static constexpr bool lv_trans = exprs::blas_feature_detector<internal_t>::transposed;
-        static constexpr bool rv_trans = exprs::blas_feature_detector<rv_internal_t>::transposed;
+        static constexpr bool lv_trans = exprs::expression_traits<internal_t>::is_transposed;
+        static constexpr bool rv_trans = exprs::expression_traits<rv_internal_t>::is_transposed;
         static constexpr bool lv_blas  = oper::operation_traits<internal_type>::is_blas_function;
 
         static constexpr bool scalmul = derived::DIMS == 0 || param_deriv::DIMS == 0;

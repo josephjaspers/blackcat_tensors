@@ -10,7 +10,6 @@
 #define BC_EXPRESSION_TEMPLATES_FUNCTION_GEMM_H_
 
 #include "Expression_Base.h"
-#include "BLAS_Feature_Detector.h"
 #include "Tree_Lazy_Evaluator.h"
 
 
@@ -23,19 +22,17 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
 : Expression_Base<Binary_Expression<lv, rv, oper::gemm<System_Tag>>>,
   oper::gemm<System_Tag> {
 
-	static_assert(std::is_same<scalar_of<lv>, scalar_of<rv>>::value,
+	static_assert(std::is_same<typename lv::value_type, typename rv::value_type>::value,
     		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
 
     using value_type	= typename lv::value_type;
     using system_tag	= System_Tag;
     using blas_impl		= typename blas::implementation<system_tag>;
 
-    static constexpr bool transA = blas_feature_detector<lv>::transposed;
-    static constexpr bool transB = blas_feature_detector<rv>::transposed;
-    static constexpr bool lv_scalar = blas_feature_detector<lv>::scalar;
-    static constexpr bool rv_scalar = blas_feature_detector<rv>::scalar;
-    static constexpr bool lv_eval = blas_feature_detector<lv>::evaluate;
-    static constexpr bool rv_eval = blas_feature_detector<rv>::evaluate;
+    static constexpr bool transA = expression_traits<lv>::is_transposed;
+    static constexpr bool transB = expression_traits<rv>::is_transposed;
+    static constexpr bool lv_scalar = expression_traits<lv>::is_scalar_multiplied;
+    static constexpr bool rv_scalar = expression_traits<rv>::is_scalar_multiplied;
 
     static constexpr int DIMS 	   = rv::DIMS;
     static constexpr int ITERATOR  = 1;
@@ -79,12 +76,12 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
         auto& injection = injection_values.data();
 
         //evaluate the left and right branches (computes only if necessary)
-        auto A = greedy_evaluate(blas_feature_detector<lv>::get_array(left), alloc);
-        auto B = greedy_evaluate(blas_feature_detector<rv>::get_array(right), alloc);
+        auto A = greedy_evaluate(expression_traits<lv>::remove_blas_modifiers(left), alloc);
+        auto B = greedy_evaluate(expression_traits<rv>::remove_blas_modifiers(right), alloc);
 
         //get the left and right side scalar values
-        auto alpha_lv = blas_feature_detector<lv>::get_scalar(left);
-        auto alpha_rv = blas_feature_detector<rv>::get_scalar(right);
+        auto alpha_lv = expression_traits<lv>::get_scalar(left);
+		auto alpha_rv = expression_traits<rv>::get_scalar(right);
 
 		auto alpha = blas_impl::template calculate_alpha<value_type, alpha_mod, lv_scalar, rv_scalar>(alloc, alpha_lv, alpha_rv);
         auto beta  = blas_impl::template scalar_constant<value_type, beta_mod>();
@@ -94,10 +91,6 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
 					alpha, A, A.leading_dimension(0),
 					B, B.leading_dimension(0),
 					beta, injection, injection.leading_dimension(0));
-
-        //deallocate all the temporaries
-        if (rv_eval) meta::bc_const_cast(B).deallocate();
-        if (lv_eval) meta::bc_const_cast(A).deallocate();
     }
 };
 

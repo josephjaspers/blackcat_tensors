@@ -21,7 +21,8 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
 
 	using lv_value_t = typename Lv::value_type;
 	using rv_value_t = typename Rv::value_type;
-    using value_type = decltype(std::declval<Operation>()(std::declval<lv_value_t&>(), std::declval<rv_value_t&>()));
+    using return_type = decltype(std::declval<Operation>()(std::declval<lv_value_t&>(), std::declval<rv_value_t&>()));
+    using value_type  = std::remove_reference_t<std::decay_t<return_type>>;
     using system_tag  = typename Lv::system_tag;
 
     static constexpr int DIMS = Lv::DIMS > Rv::DIMS ?  Lv::DIMS : Rv::DIMS;

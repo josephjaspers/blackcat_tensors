@@ -22,6 +22,15 @@ template<class... Ts> using void_t = void;
 	template<template<class> class func, class T>
 	struct is_detected<func, T, std::enable_if_t<std::is_void<void_t<func<T>>>::value>> : std::true_type { };
 
+	template<template<class> class func, class TestType, class DefaultType, class enabler=void>
+	struct conditional_detected {
+		using type = DefaultType;
+	};
+	template<template<class> class func, class TestType, class DefaultType>
+	struct conditional_detected<func, TestType, DefaultType, std::enable_if_t<is_detected<func,TestType>::value>> {
+		using type = func<TestType>;
+	};
+
 
 	/*
 	 * example -- has allocator --> template<class t> using allocator = typename allocator_t;

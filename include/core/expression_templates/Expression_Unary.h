@@ -19,7 +19,9 @@ namespace exprs {
 template<class Value, class operation>
 struct Unary_Expression : public Expression_Base<Unary_Expression<Value, operation>>, public operation {
 
-    using value_type  = decltype(std::declval<operation>()(std::declval<typename Value::value_type>()));
+    using return_type  = decltype(std::declval<operation>()(std::declval<typename Value::value_type>()));
+    using value_type  = std::remove_reference_t<std::decay_t<return_type>>;
+
     using system_tag  = typename Value::system_tag;
 
     static constexpr int DIMS  = Value::DIMS;
