@@ -29,10 +29,10 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
     using system_tag	= System_Tag;
     using blas_impl		= typename blas::implementation<system_tag>;
 
-    static constexpr bool transA = expression_traits<lv>::is_transposed;
-    static constexpr bool transB = expression_traits<rv>::is_transposed;
-    static constexpr bool lv_scalar = expression_traits<lv>::is_scalar_multiplied;
-    static constexpr bool rv_scalar = expression_traits<rv>::is_scalar_multiplied;
+    static constexpr bool transA = blas_expression_traits<lv>::is_transposed;
+    static constexpr bool transB = blas_expression_traits<rv>::is_transposed;
+    static constexpr bool lv_scalar = blas_expression_traits<lv>::is_scalar_multiplied;
+    static constexpr bool rv_scalar = blas_expression_traits<rv>::is_scalar_multiplied;
 
     static constexpr int DIMS 	   = rv::DIMS;
     static constexpr int ITERATOR  = 1;
@@ -76,12 +76,12 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
         auto& injection = injection_values.data();
 
         //evaluate the left and right branches (computes only if necessary)
-        auto A = greedy_evaluate(expression_traits<lv>::remove_blas_modifiers(left), alloc);
-        auto B = greedy_evaluate(expression_traits<rv>::remove_blas_modifiers(right), alloc);
+        auto A = greedy_evaluate(blas_expression_traits<lv>::remove_blas_modifiers(left), alloc);
+        auto B = greedy_evaluate(blas_expression_traits<rv>::remove_blas_modifiers(right), alloc);
 
         //get the left and right side scalar values
-        auto alpha_lv = expression_traits<lv>::get_scalar(left);
-		auto alpha_rv = expression_traits<rv>::get_scalar(right);
+        auto alpha_lv = blas_expression_traits<lv>::get_scalar(left);
+		auto alpha_rv = blas_expression_traits<rv>::get_scalar(right);
 
 		auto alpha = blas_impl::template calculate_alpha<value_type, alpha_mod, lv_scalar, rv_scalar>(alloc, alpha_lv, alpha_rv);
         auto beta  = blas_impl::template scalar_constant<value_type, beta_mod>();

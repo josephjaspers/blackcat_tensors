@@ -30,10 +30,10 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
     using system_tag = System_Tag;
     using blas_impl  = typename blas::implementation<system_tag>;
 
-    static constexpr bool transA = expression_traits<lv>::is_transposed;
-    static constexpr bool transB = expression_traits<rv>::is_transposed;
-    static constexpr bool lv_scalar = expression_traits<lv>::is_scalar_multiplied;
-    static constexpr bool rv_scalar = expression_traits<rv>::is_scalar_multiplied;
+    static constexpr bool transA = blas_expression_traits<lv>::is_transposed;
+    static constexpr bool transB = blas_expression_traits<rv>::is_transposed;
+    static constexpr bool lv_scalar = blas_expression_traits<lv>::is_scalar_multiplied;
+    static constexpr bool rv_scalar = blas_expression_traits<rv>::is_scalar_multiplied;
 
     static constexpr int DIMS  = 0;
     static constexpr int ITERATOR = 0;
@@ -62,8 +62,8 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
 
 		static constexpr int beta_value = beta_mod == 0 ? 1 : beta_mod;
 		if (lv_scalar || rv_scalar) {
-			auto alpha_lv = expression_traits<lv>::get_scalar(left);
-			auto alpha_rv = expression_traits<rv>::get_scalar(right);
+			auto alpha_lv = blas_expression_traits<lv>::get_scalar(left);
+			auto alpha_rv = blas_expression_traits<rv>::get_scalar(right);
 			blas_impl::calculate_alpha(alloc, injection.memptr(), beta_value, alpha_lv, alpha_rv);
 		} else if (beta_value != 1) {
 			blas_impl::calculate_alpha(alloc, injection.memptr(), injection.memptr(), beta_value);

@@ -45,7 +45,7 @@ struct Host {
 			return scalar_constant<Scalar_t, alpha_mod>();
 		}
 		else if (alpha_mod ==1 && (lv_scalar != rv_scalar)) {
-			return lv_scalar ? lv : rv;
+			return lv_scalar ? (Scalar_t*)lv : (Scalar_t*)rv;
 		} else {
 			auto scalar =  context.get_allocator().template get_alpha_buffer<Scalar_t>();
 			calculate_alpha(context, scalar, alpha_mod, lv, rv);

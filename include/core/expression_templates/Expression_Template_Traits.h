@@ -113,6 +113,10 @@ struct expression_traits {
 	 static constexpr bool is_expr  	= std::is_base_of<BC_Expr, T>::value;
 	 static constexpr bool is_temporary = std::is_base_of<BC_Temporary, T>::value;
 	 static constexpr bool is_constant  = std::is_base_of<BC_Constant, T>::value;
+};
+
+template<class T>
+struct blas_expression_traits : expression_traits<T> {
 
 	 using remove_scalar_mul_type		= typename detail::remove_scalar_mul<T>::type;
 	 using remove_transpose_type		= typename detail::remove_transpose<T>::type;
@@ -131,7 +135,6 @@ struct expression_traits {
 	 static auto get_scalar(const T&  expression)
 	 -> decltype(detail::remove_scalar_mul<T>::get_scalar(expression))
 	 { return detail::remove_scalar_mul<T>::get_scalar(expression); }
-
 };
 
 }

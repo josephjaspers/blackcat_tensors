@@ -28,10 +28,10 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
     using system_tag = System_Tag;
     using blas_impl  = typename blas::implementation<system_tag>;
 
-    static constexpr bool transA = expression_traits<lv>::is_transposed;
-    static constexpr bool transB = expression_traits<rv>::is_transposed;
-    static constexpr bool lv_scalar = expression_traits<lv>::is_scalar_multiplied;
-    static constexpr bool rv_scalar = expression_traits<rv>::is_scalar_multiplied;
+    static constexpr bool transA = blas_expression_traits<lv>::is_transposed;
+    static constexpr bool transB = blas_expression_traits<rv>::is_transposed;
+    static constexpr bool lv_scalar = blas_expression_traits<lv>::is_scalar_multiplied;
+    static constexpr bool rv_scalar = blas_expression_traits<rv>::is_scalar_multiplied;
 
     static constexpr int DIMS = 2;
     static constexpr int ITERATOR = 1;
@@ -66,8 +66,8 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 		auto& injection = injection_values.data();
 
 		//evaluate the left and right branches (computes only if necessary)
-		auto A = greedy_evaluate(expression_traits<lv>::remove_blas_modifiers(left), context);
-		auto B = greedy_evaluate(expression_traits<rv>::remove_blas_modifiers(right), context);
+		auto A = greedy_evaluate(blas_expression_traits<lv>::remove_blas_modifiers(left), context);
+		auto B = greedy_evaluate(blas_expression_traits<rv>::remove_blas_modifiers(right), context);
 
 		//allocate the alpha and beta scalars,
 
@@ -81,8 +81,8 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 		//compute the scalar values if need be
 		if (lv_scalar || rv_scalar) {
 	        auto alpha = context.get_allocator().template get_alpha_buffer<value_type>();
-			auto alpha_lv = expression_traits<lv>::get_scalar(left);
-			auto alpha_rv = expression_traits<rv>::get_scalar(right);
+			auto alpha_lv = blas_expression_traits<lv>::get_scalar(left);
+			auto alpha_rv = blas_expression_traits<rv>::get_scalar(right);
 			blas_impl::calculate_alpha(context, alpha, alpha_mod, alpha_lv, alpha_rv);
 			blas_impl::ger(context, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
 		} else {
