@@ -20,33 +20,8 @@ namespace BC {
 namespace exprs {
 namespace tree {
 
-//entirely_blas_expr -- detects if the tree is entirely +/- operations with blas functions, --> y = a * b + c * d - e * f  --> true, y = a + b * c --> false
-template<class op, bool prior_eval, class core, int a, int b>//only apply update if right hand side branch
-auto update_injection(injector<core,a,b> tensor) {
-    static constexpr int alpha =  a * BC::oper::operation_traits<op>::alpha_modifier;
-    static constexpr int beta  = prior_eval ? 1 : 0;
-    return injector<core, alpha, beta>(tensor.data());
-}
-
 template<class T, class voider=void>
 struct optimizer;
-
-template<class Expression, class Context>
-auto evaluate_linear(Expression expr, Context context) {
-	return optimizer<Expression>::linear_evaluation(expr, context);
-}
-template<class Expression, class Context>
-auto evaluate_temporary_destruction(Expression expr, Context context) {
-	return optimizer<Expression>::linear_evaluation(expr, context);
-}
-template<class Expression, class Context>
-auto evaluate_injection(Expression expr, Context context) {
-	return optimizer<Expression>::injection(expr, context);
-}
-template<class Expression, class Context>
-auto evaluate_temporary_injection(Expression expr, Context context) {
-	return optimizer<Expression>::temporary_injection(expr, context);
-}
 
 template<class T>
 struct optimizer_default {
@@ -151,7 +126,6 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
 
 
     //-------------Linear evaluation branches---------------------//
-    //needed by injection and linear_evaluation
     struct remove_branch {
         template<class core, int a, int b, class Context>
         static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
@@ -160,38 +134,7 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
         	return tensor.data();
         }
     };
-
-    //if left is entirely blas_expr
-    struct remove_left_branch {
-        template<class core, int a, int b, class Context>
-        static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
-        	/*auto left = */ optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
-            auto right = optimizer<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
-            return right;
-        }
-    };
-
-    struct remove_left_branch_and_negate {
-        template<class core, int a, int b, class Context>
-        static auto function(const Binary_Expression<lv, rv, oper::sub>& branch, injector<core, a, b> tensor, Context alloc) {
-        	/*auto left = */ optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
-            auto right = optimizer<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
-            return make_un_expr<oper::negation>(right);
-        }
-    };
-
-    //if right is entirely blas_expr (or if no blas expr)
-    struct remove_right_branch {
-    	template<class core, int a, int b, class Context>
-    	static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
-    		auto left  = optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
-          /*auto right = */ optimizer<rv>::linear_evaluation(branch.right, update_injection<op, b != 0>(tensor), alloc);
-            return left;
-        }
-    };
-
     struct basic_eval {
-
         template<class core, int a, int b, class Context>
     	static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
         	static constexpr bool left_evaluated = optimizer<lv>::partial_blas_expr || b != 0;
@@ -201,9 +144,30 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
         }
     };
 
-
     template<class core, int a, int b, class Context>
     static auto linear_evaluation(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
+        struct remove_left_branch {
+            static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
+            	/*auto left = */ optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
+                auto right = optimizer<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
+                return right;
+            }
+        };
+        struct remove_left_branch_and_negate {
+            static auto function(const Binary_Expression<lv, rv, oper::sub>& branch, injector<core, a, b> tensor, Context alloc) {
+            	/*auto left = */ optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
+                auto right = optimizer<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
+                return make_un_expr<oper::negation>(right);
+            }
+        };
+        struct remove_right_branch {
+        	static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
+        		auto left  = optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
+              /*auto right = */ optimizer<rv>::linear_evaluation(branch.right, update_injection<op, b != 0>(tensor), alloc);
+                return left;
+            }
+        };
+
         using impl =
         		std::conditional_t<entirely_blas_expr, remove_branch,
         		std::conditional_t<optimizer<lv>::entirely_blas_expr,
@@ -224,60 +188,6 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
         }
     };
 
-
-    struct left_blas_expr {
-
-        struct trivial_injection {
-            template<class l, class r, class Context>
-            static auto function(const l& left, const r& right, Context) {
-            	return left;
-            }
-        };
-
-		struct non_trivial_injection {
-			template<class LeftVal, class RightVal, class Context>
-			static auto function(const LeftVal& left, const RightVal& right, Context) {
-	            return make_bin_expr<op>(left, right);
-			}
-		};
-
-        template<class core, int a, int b, class Context>
-        static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
-            auto left = optimizer<lv>::injection(branch.left, tensor, alloc);
-
-            //check this ?
-            auto right = optimizer<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
-
-            using impl = std::conditional_t<optimizer<rv>::entirely_blas_expr,
-                    trivial_injection, non_trivial_injection>;
-
-            return impl::function(left, right, alloc);
-        }
-    };
-    struct right_blas_expr {
-        struct trivial_injection {
-            template<class l, class r, class Context>
-            static auto function(const l& left, const r& right, Context alloc) {
-                return right;
-            }
-        };
-        struct non_trivial_injection {
-                template<class l, class r, class Context>
-                static auto function(const l& left, const r& right, Context alloc) {
-                    return make_bin_expr<op>(left, right);
-                }
-            };
-        template<class core, int a, int b, class Context>
-        static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
-            auto left = optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
-            auto right = optimizer<rv>::injection(branch.right, tensor, alloc);
-
-            using impl = std::conditional_t<optimizer<lv>::entirely_blas_expr,
-                    trivial_injection, non_trivial_injection>;
-
-            return impl::function(left, right, alloc);
-        }
-    };
 
     //------------nontrivial injections, DO NOT UPDATE, scalars-mods will enact during elementwise-evaluator----------------//
     struct left_nested_blas_expr {

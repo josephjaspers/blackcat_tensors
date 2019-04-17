@@ -11,6 +11,7 @@
 
 
 #include <type_traits>
+#include <tuple>
 
 namespace BC {
 namespace meta {
@@ -162,8 +163,109 @@ template<class... Ts> using void_t = void;
     auto constexpr_if(f path) {
         return constexpr_if_impl<b>::impl(path);
     }
+    template<bool cond, class f1, class f2>
+    auto constexpr_if(f1 true_path, f2 false_path) {
+        return constexpr_ternary_impl<cond>::impl(true_path, false_path);
+    }
 
+    template<bool, class...>
+    struct Else_If;
 
+    template<class function>
+    struct Else_If<false, function>  {
+		const function& f;
+		Else_If(const function& f_) : f(f_) { }
+		void operator () () const {}
+    };
+    template<class function>
+    struct Else_If<true, function>  {
+		function f;
+		Else_If(function f_) : f(f_) { }
+
+		template<int ADL=0>
+		auto operator () () const {
+			return f();
+		}
+		template<int ADL=0>
+		auto operator () () {
+			return f();
+		}
+    };
+    template<class TruePath, class FalsePath>
+    struct Else_If<false, TruePath, FalsePath>  {
+    	TruePath f1;
+    	FalsePath f2;
+    	Else_If(TruePath f1_, FalsePath f2_)
+    		: f1(f1_), f2(f2_) {}
+
+		template<int ADL=0>
+		auto operator () () const -> decltype(f2()){
+			return f2();
+		}
+		template<int ADL=0>
+		auto operator () () -> decltype(f2()){
+			return f2();
+		}
+
+    };
+    template<class TruePath, class FalsePath>
+    struct Else_If<true, TruePath, FalsePath>  {
+    	mutable TruePath f1;
+    	mutable FalsePath f2;
+    	Else_If(TruePath f1_, FalsePath f2_)
+    		: f1(f1_), f2(f2_) {}
+
+		template<int ADL=0>
+		auto operator () () const {
+			return f1();
+		}
+		template<int ADL=0>
+		auto operator () ()  {
+			return f1();
+		}
+    };
+
+    template<bool cond, class... funcs>
+    auto else_if(funcs... fs) {
+    	return Else_If<cond,funcs...>(fs...);
+    }
+
+    //just for readability
+    template<class function>
+    auto else_(function f) {
+    	return f;
+    }
+
+    template<class function, class... args>
+    struct Bind {
+    	mutable function f;
+    	std::tuple<args...> m_args;
+
+    	Bind(function f_, args... args_): f(f_), m_args(args_...) {}
+
+    	template<int ADL=0>
+    	auto operator () () const {
+    		return call();
+    	}
+    	template<int ADL=0>
+    	auto operator () () {
+    		return call();
+    	}
+    private:
+    	auto call(args... args_) const {
+    		return f(args_...);
+    	}
+
+    	template<class... xargs>
+    	auto call(xargs... args_)const {
+    		return call(args_..., std::get<sizeof...(xargs)>(m_args));
+    	}
+    };
+
+    template<class function, class... args>
+    Bind<function, args...> bind(function f, args... args_) {
+    	return  Bind<function,args...>(f, std::forward<args>(args_)...);
+    }
 
     template<class arg>
     auto get_last(const arg& value) -> decltype(value) {

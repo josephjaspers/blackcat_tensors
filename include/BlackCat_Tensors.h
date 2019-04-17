@@ -97,6 +97,17 @@ inline void BC_cuda_assert(cublasStatus_t code, const char *file, const char* fu
 
 #endif
 
+// --------------------------------- bc constexpr if (NVCC doesn't support cpp17) --------------------------------- //
+
+#define BC_CONSTEXPR_IF(conditional)\
+BC::meta::constexpr_if<conditional>([&]()
+
+#define BC_CONSTEXPR_ELSE_IF(conditional) \
+, BC::meta::constexpr_if<conditional>([&]()\
+
+
+#define BC_CONSTEXPR_IF_END );
+
 // --------------------------------- module body macro --------------------------------- //
 
 
