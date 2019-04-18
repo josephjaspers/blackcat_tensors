@@ -43,6 +43,9 @@ using Cuda_Managed = allocator::Device_Managed<value_type>;
 template<class value_type>
 using Basic_Allocator = allocator::Host<value_type>;
 
+template<class system_tag, class value_type>
+using Allocator = BC::allocator::implementation<system_tag, value_type>;
+
 } //ns BC
 
 // --- Include "fancy allocators" below here --- //

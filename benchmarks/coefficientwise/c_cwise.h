@@ -37,13 +37,15 @@ auto c_cwise(int size, int reps) {
 
 
 	auto f = [&]() {
-#pragma omp parallel for
+		for (int i = 0; i < reps; ++i) {
+		#pragma omp parallel for
             for (int j = 0; j < size; ++j) {
                 a_[j] = b_[j] + c_[j] - d_[j] / e_[j];
             }
 #pragma omp barrier
+		}
 	};
-	return timeit(f, reps);
+	return timeit(f, 1);
 
 }
 

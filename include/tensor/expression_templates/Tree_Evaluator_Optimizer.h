@@ -208,21 +208,11 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
 
     template<class core, int a, int b, class Context>
     static auto injection(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
-
-    	struct to_linear_eval {
-    		static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
-    			return linear_evaluation(branch, tensor, alloc);
-    		}
-    	};
-
         using impl =
           		std::conditional_t<entirely_blas_expr, remove_branch,
         		std::conditional_t<optimizer<rv>::partial_blas_expr && optimizer<lv>::partial_blas_expr, basic_eval,
         		std::conditional_t<optimizer<lv>::nested_blas_expr, left_nested_blas_expr,
                 std::conditional_t<optimizer<rv>::nested_blas_expr, right_nested_blas_expr, basic_eval>>>>;
-
-        static_assert(!std::is_same<void, impl>::value,
-        		"EXPRESSION_REORDERING COMPILATION FAILURE REPORT BUG, USE 'ALIAS' AS A WORKAROUND");
         return impl::function(branch, tensor, alloc);
     }
 

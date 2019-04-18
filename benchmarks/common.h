@@ -24,6 +24,10 @@ float timeit (function& func, int iters=10) {
     	func();
     }
 
+#ifdef __CUDACC__
+    cudaDeviceSynchronize();
+#endif
+
     auto end = std::chrono::system_clock::now();
     clock total = clock(end - start);
     return total.count();

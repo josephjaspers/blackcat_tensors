@@ -22,7 +22,6 @@ template<class T>
 struct Device {
 
     using system_tag = device_tag;		//BC tag
-    using propagate_to_expressions = std::false_type; //BC tag
 
     using value_type = T;
     using pointer = T*;

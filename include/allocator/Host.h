@@ -20,7 +20,6 @@ template<class T>
 struct Host {
 
     using system_tag = host_tag;	//BC tag
-    using propagate_to_expressions = std::false_type; //BC tag
 
     using value_type = T;
     using pointer = T*;

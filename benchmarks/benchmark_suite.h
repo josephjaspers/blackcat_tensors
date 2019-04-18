@@ -17,7 +17,7 @@ namespace benchmarks {
 
 //Requires Cuda to run
 
-void run(std::vector<int> sizes = {100, 500, 1000, 2500, 5000, 75000, 10000 }, int reps=1000) {
+void run(std::vector<int> sizes = {100, 500, 1000, 2500, 5000, 75000, 10000, 20000, 40000 }, int reps=1000) {
 
 
 	std::cout << "| Size | C-impl | BC_host | Host-performance | Cuda-impl | BC_device | Device-Performance | \n";

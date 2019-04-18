@@ -10,12 +10,7 @@
 #define BLACKCAT_BLACKCAT_COMMON_H_
 
 #include <type_traits>
-#include "utility/Utility.h"
-#include "allocator/Allocator.h"
 
-#include "random/Random.h"
-#include "blas/BLAS.h"
-#include "context/Context.h" //depends upon Utility.h
 #include "expression_templates/Expression_Templates.h" //depends on Context.h
 #include "iterator_algorithms/Iterator_Algorithms.h"   //depends on Context.h
 

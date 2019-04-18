@@ -9,6 +9,8 @@
 #ifndef BC_CORE_STRUCTURES_H_
 #define BC_CORE_STRUCTURES_H_
 
+#include "BlackCat_Common.h"
+
 /*
  * Defines stack array and lambda array
  * These are just two trivially classes used for storing small amounts of homogenous internal types, generally ints

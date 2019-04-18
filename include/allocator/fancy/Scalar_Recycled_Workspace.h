@@ -8,6 +8,7 @@
 #ifndef SCALAR_RECYCLED_WORKSPACE_H_
 #define SCALAR_RECYCLED_WORKSPACE_H_
 
+#include <mutex>
 #include "Workspace.h"
 
 namespace BC {

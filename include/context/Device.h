@@ -11,8 +11,10 @@
 
 #include <cuda.h>
 #include <cuda_runtime.h>
-#include <memory>
+#include <cublas_v2.h>
+#include <cublas.h>
 
+#include <memory>
 #include "HostStream.h"
 
 namespace BC {

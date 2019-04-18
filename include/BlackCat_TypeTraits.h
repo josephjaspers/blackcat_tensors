@@ -9,7 +9,7 @@
 #ifndef BC_CORE_META_H_
 #define BC_CORE_META_H_
 
-
+#include "BlackCat_Common.h"
 #include <type_traits>
 #include <tuple>
 
