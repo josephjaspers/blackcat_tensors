@@ -18,71 +18,32 @@
 namespace BC {
 namespace gpu_impl {
 
-template<int i> __device__  BC::size_t  tid() { return 0; }
-
-//TODO SWITCH to recursive template iterator
-//BUG  -nvcc struggles to compile std::enable_if_t in kernels
-//template<> __device__ BC::size_t  tid<0>() { return blockIdx.x * blockDim.x + threadIdx.x; }
-//template<> __device__ BC::size_t  tid<1>() { return blockIdx.y * blockDim.y + threadIdx.y; }
-//template<> __device__ BC::size_t  tid<2>() { return blockIdx.z * blockDim.z + threadIdx.z; }
-//
-//template<int t> __device__ BC::size_t  tid_inc() { return 1; }
-//template<> __device__ BC::size_t  tid_inc<0>() { return blockDim.x * gridDim.x; }
-//template<> __device__ BC::size_t  tid_inc<1>() { return blockDim.y * gridDim.y; }
-//template<> __device__ BC::size_t  tid_inc<2>() { return blockDim.z * gridDim.z; }
-//
-//
-//
-//template<int dim, BC::size_t  tid_x, class expression_t, class... indexes> __device__
-//static std::enable_if_t<(dim == 0)> dev_evaluate(expression_t expr, indexes... ids) {
-//    for (int i = tid<tid_x>(); i < expr.dimension(dim); i += tid_inc<tid_x>())
-//        expr(i, ids...);
-//}
-//template<int dim, BC::size_t  tid_x, class expression_t, class... indexes> __device__
-//static std::enable_if_t<(dim > 0)> dev_evaluate(expression_t expr, indexes... ids) {
-//    for (int i = tid<tid_x>(); i < expr.dimension(dim); i += tid_inc<tid_x>())
-//    return dev_evaluate<dim - 1, tid_x + 1>(expr, i, ids...);
-//}
-//
-//    template<int dim, BC::size_t  tid_x, class expression_t, class... indexes> __global__
-//    static std::enable_if_t<(dim > 0)> evaluate(expression_t expr, indexes... ids) {
-//        for (int i = tid<tid_x>(); i < expr.dimension(dim); i += tid_inc<tid_x>())
-//        return dev_evaluate<dim - 1, tid_x + 1>(expr, i, ids...);
-//    }
-//    template<int dim, BC::size_t  tid_x, class expression_t, class... indexes> __global__
-//    static std::enable_if_t<(dim == 0)> evaluate(expression_t expr, indexes... ids) {
-//        for (int i = tid<tid_x>(); i < expr.dimension(dim); i += tid_inc<tid_x>())
-//            expr(i, ids...);
-//    }
-
-//};
-//
 template<class T> __global__
 static void eval(T t) {
-    BC::size_t  i = blockIdx.x * blockDim.x + threadIdx.x;
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
     for (; i < t.size(); i += blockDim.x * gridDim.x) {
         t[i];
     }
 }
 
 template<typename T> __global__  static void eval2d(T t) {
-    BC::size_t  n = blockIdx.y * blockDim.y + threadIdx.y;
+    int n = blockIdx.y * blockDim.y + threadIdx.y;
     for (; n < t.cols(); n += blockDim.y * gridDim.y) {
 
-        BC::size_t  m = blockIdx.x * blockDim.x + threadIdx.x;
+        int m = blockIdx.x * blockDim.x + threadIdx.x;
         for (; m < t.rows(); m += blockDim.x * gridDim.x) {
             t(m, n);
         }
     }
 }
 template<typename T> __global__ static void eval3d(T t) {
-    BC::size_t  k = blockIdx.z * blockDim.z + threadIdx.z;
+    int k = blockIdx.z * blockDim.z + threadIdx.z;
     for (; k < t.dimension(2); k += blockDim.z * gridDim.z) {
 
     	int n = blockIdx.y * blockDim.y + threadIdx.y;
         for (; n < t.cols(); n += blockDim.y * gridDim.y) {
 
-            BC::size_t  m = blockIdx.x * blockDim.x + threadIdx.x;
+            int m = blockIdx.x * blockDim.x + threadIdx.x;
             for (; m < t.rows(); m += blockDim.x * gridDim.x) {
                 t(m,n,k);
             }
@@ -91,13 +52,13 @@ template<typename T> __global__ static void eval3d(T t) {
 }
 //dont know how to do this
 template<typename T> __global__ static void eval4d(T t) {
-    BC::size_t  l = blockIdx.z * blockDim.z + threadIdx.z;
+    int l = blockIdx.z * blockDim.z + threadIdx.z;
     for (; l < t.dimension(3); l += blockDim.z * gridDim.z) {
 
-        BC::size_t  k = blockIdx.y * blockDim.y + threadIdx.y;
+        int k = blockIdx.y * blockDim.y + threadIdx.y;
         for (;k < t.dimension(2); k += blockDim.y * gridDim.y) {
 
-            BC::size_t  n = blockIdx.x * blockDim.x + threadIdx.x;
+            int n = blockIdx.x * blockDim.x + threadIdx.x;
             for (; n < t.cols(); n += blockDim.x * gridDim.x) {
 
                 for (int m = 0; m < t.rows(); ++m) {
@@ -109,13 +70,13 @@ template<typename T> __global__ static void eval4d(T t) {
 }
 //don't know how to do this
 template<typename T> __global__ static void eval5d(T t) {
-    BC::size_t  p = blockIdx.z * blockDim.z + threadIdx.z;
+    int p = blockIdx.z * blockDim.z + threadIdx.z;
     for (; p < t.dimension(4); p += blockDim.z * gridDim.z) {
 
-        BC::size_t  l = blockIdx.y * blockDim.y + threadIdx.y;
+        int l = blockIdx.y * blockDim.y + threadIdx.y;
         for (; l < t.dimension(3); l += blockDim.y * gridDim.y) {
 
-            BC::size_t  k = blockIdx.x * blockDim.x + threadIdx.x;
+            int k = blockIdx.x * blockDim.x + threadIdx.x;
             for (; k < t.dimension(2); k += blockDim.x * gridDim.x) {
 
                 for (int n = 0; n < t.dimension(1); ++n) {
@@ -147,7 +108,7 @@ static void scalar_mul(T* t, U u, V v) {
 }
 
 template<class T> __global__
-static void randomize(T t, float lower_bound, float upper_bound, BC::size_t  seed) {
+static void randomize(T t, float lower_bound, float upper_bound, int seed) {
 
      curandState_t state;
       curand_init(seed, /* the seed controls the sequence of random values that are produced */
@@ -155,7 +116,7 @@ static void randomize(T t, float lower_bound, float upper_bound, BC::size_t  see
                   1, /* the offset is how much extra we advance in the sequence for each call, can be 0 */
                   &state);
 
-    constexpr BC::size_t  floating_point_decimal_length = 10000;
+    constexpr int floating_point_decimal_length = 10000;
 
     for (int i = 0; i < t.size(); ++i) {
         t[i] = curand(&state) % floating_point_decimal_length;
