@@ -79,7 +79,7 @@ public:
 	template<class p_value_type, class=std::enable_if_t<std::is_convertible<p_value_type, value_type>::value>>       \
 	derived& operator  op (const p_value_type& param) {                                                              \
 		BC_ASSERT_ASSIGNABLE("derived& operator " #op " (const Tensor_Operations<pDeriv>& param)");                  \
-		evaluate(bi_expr_internal<oper:: op_functor >(exprs::make_scalar_constant<system_tag>((value_type)param)));  \
+		evaluate(bi_expr<oper:: op_functor >(exprs::make_scalar_constant<system_tag>((value_type)param)));  \
 		return as_derived();                                                                                         \
 	}
 
@@ -109,7 +109,7 @@ public:
 #define BC_SCALAR_COEFFICIENTWISE_DEF(op, op_functor)                                                                   \
         template<class p_value_type, typename = std::enable_if_t<std::is_convertible<p_value_type, value_type>::value>>                                    \
         auto op (const p_value_type& param) const {                                                                     \
-            return bi_expr_internal<oper:: op_functor >(exprs::make_scalar_constant<system_tag>((value_type)param));    \
+            return bi_expr<oper:: op_functor >(exprs::make_scalar_constant<system_tag>((value_type)param));    \
         }
 
 #define BC_COEFFICIENTWISE_DEF(op, op_functor)\
@@ -135,32 +135,12 @@ public:
     BC_COEFFICIENTWISE_DEF(approx_equal, approx_equal)
     BC_COEFFICIENTWISE_DEF(max_value, max)
     BC_COEFFICIENTWISE_DEF(min_value, min)
+    BC_SCALAR_COEFFICIENTWISE_DEF(operator *, scalar_mul)
 
 #undef BC_BASIC_COEFFICIENTWISE_DEF
 #undef BC_SCALAR_COEFFICIENTWISE_DEF
 #undef BC_OPER_COEFFICIENTWISE_DEF
 #undef BC_COEFFICIENTWISE_DEF
-
-    //----------------------------------------------------------------------------------------------
-    //These two functions assist in reordering (or not) a function that is A <Blas_funciton> B * scalar_mul
-    //This reorders the scalar mul to be next to the left-value (which allows it to be detected in a BLAS expression-template
-private:
-
-    struct reorder_scalar_mul {
-    	//lv_t in this instance must be a binary-blas expression
-    	template<class matmul_t, class lv_t, class rv_t>
-    	static auto impl(lv_t lv, rv_t rv) {
-    		auto lv_sub = exprs::make_bin_expr<oper::scalar_mul>(rv, lv.left);
-    		auto expr   = exprs::make_bin_expr<typename lv_t::function_t>(lv_sub, lv.right);
-    		return make_tensor(expr);
-    	}
-    };
-    struct default_impl {
-    	template<class matmul_t, class lv_t, class rv_t>
-    	static auto impl(lv_t lv, rv_t rv) {
-    		return make_tensor(exprs::make_bin_expr<matmul_t>(lv, rv));
-    	}
-    };
 
 public:
 
@@ -171,7 +151,6 @@ public:
     	using rv_expression_t = typename Tensor_Operations<param_deriv>::expression_t;
         static constexpr bool lv_trans = exprs::blas_expression_traits<expression_t>::is_transposed;
         static constexpr bool rv_trans = exprs::blas_expression_traits<rv_expression_t>::is_transposed;
-        static constexpr bool lv_blas  = oper::operation_traits<Expression>::is_blas_function;
 
         static constexpr bool scalmul = derived::DIMS == 0 || param_deriv::DIMS == 0;
         static constexpr bool gemm    = derived::DIMS == 2 && param_deriv::DIMS == 2;
@@ -187,23 +166,8 @@ public:
                      std::conditional_t<dot,     oper::dot<system_tag>, void>>>>>;
 
         static_assert(!std::is_void<matmul_t>::value, "INVALID USE OF OPERATOR *");
-
-        using func = std::conditional_t<lv_blas && scalmul, reorder_scalar_mul, default_impl>;
-        return func::template impl<matmul_t>(as_derived().internal(), param.as_derived().internal());
+        return bi_expr<matmul_t>(param);
     }
-
-
-    template<class p_value_type,class=std::enable_if_t<std::is_convertible<p_value_type, value_type>::value>>
-    auto operator * (const p_value_type& param) const {
-        static constexpr bool lv_blas  = oper::operation_traits<expression_t>::is_blas_function;
-
-    	auto scalar_constant = exprs::make_scalar_constant<system_tag>((value_type)param);
-
-        using func = std::conditional_t<lv_blas, reorder_scalar_mul, default_impl>;
-        return func::template impl<oper::scalar_mul>(as_derived().internal(), scalar_constant);
-
-    }
-
 
     //-------------------------------- Unary Expressions ------------------------------//
 
@@ -229,7 +193,7 @@ public:
 	derived& operator +=(const negated_t<expression_t>& param) {
 		BC_ASSERT_ASSIGNABLE("derived& operator +=(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
-		evaluate(bi_expr_internal<oper::sub_assign>(param.array));
+		evaluate(bi_expr<oper::sub_assign>(param.array));
 		return as_derived();
 	}
 
@@ -237,14 +201,14 @@ public:
 	derived& operator -=(const negated_t<expression_t>& param) {
 		BC_ASSERT_ASSIGNABLE("derived& operator -=(const Tensor_Operations<pDeriv>& param)");
 		assert_valid(param);
-		evaluate(bi_expr_internal<oper::add_assign>(param.array));
+		evaluate(bi_expr<oper::add_assign>(param.array));
 		return as_derived();
 	}
 
 	template<class expression_t>
 	auto operator +(const negated_t<expression_t>& param) const {
 		assert_valid(param);
-		return bi_expr_internal<oper::sub>(param.array);
+		return bi_expr<oper::sub>(param.array);
 	}
 
     //-----------------------------------expression_factory--------------------------------------------------//
@@ -269,11 +233,11 @@ public:
 private:
 
     template<class functor, class right_value>
-    const auto bi_expr_internal(functor f, const right_value& rv) const {
+    const auto bi_expr(functor f, const right_value& rv) const {
         return make_tensor(exprs::make_bin_expr<functor>(as_derived().internal(), rv, f));
     }
     template<class functor, class right_value>
-    const auto bi_expr_internal(const right_value& rv) const {
+    const auto bi_expr(const right_value& rv) const {
         return make_tensor(exprs::make_bin_expr<functor>(as_derived().internal(), rv));
     }
 
@@ -315,13 +279,13 @@ private:
     template<class deriv>
     void assert_valid(const Tensor_Operations<deriv>& tensor) const {
 #ifdef NDEBUG
-    	assert_same_system(tensor);                        //static_assert same allocation (gpu/cpu)
+    	assert_same_system(tensor);                 //static_assert same allocation (gpu/cpu)
         if (non_scalar_op(tensor)) {                //check if a tensor by scalar operation
             if (same_rank(tensor)) {                //else check is same dimension (element-wise function) (
-                if (!same_size(tensor))                    //if is same dimension, ensure same size
-                    error_message(tensor);                //else error
-                } else if (!valid_slice(tensor)) {    //if not same dimension check if valid slice operation
-                    error_message(tensor);            //else error
+                if (!same_size(tensor))             //if is same dimension, ensure same size
+                    error_message(tensor);          //else error
+                } else if (!valid_slice(tensor)) {  //if not same dimension check if valid slice operation
+                    error_message(tensor);          //else error
                 }
         }
 
@@ -400,6 +364,7 @@ public:
     BC_OPER_LV_SCALAR_DEF(==, equal)
 
 #undef BC_OPER_LV_SCALAR_DEF
+#undef BC_ASSERT_ASSIGNABLE
 
 }
 
