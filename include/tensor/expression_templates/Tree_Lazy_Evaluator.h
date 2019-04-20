@@ -16,7 +16,7 @@ static void nd_evaluate(const Expression expr, Context context) {
 
 template<class T>
 static constexpr bool requires_greedy_eval() {
-	return BC::exprs::tree::optimizer<std::decay_t<T>>::requires_greedy_eval;
+	return BC::exprs::tree::optimizer<T>::requires_greedy_eval;
 }
 
 //------------------------------------------------Purely lazy evaluation----------------------------------//
