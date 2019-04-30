@@ -73,6 +73,12 @@ class Scalar_Recycled_Workspace<host_tag> : public Workspace<host_tag> {
 public:
 
 	template<class T>
+	struct rebind {
+		using other = Workspace<host_tag, T>;
+	};
+
+
+	template<class T>
 	T* get_alpha_buffer() {
 		static_assert(sizeof(T) <= sizeof(buffer_type), "MAX SCALAR SIZE == 32");
 		return reinterpret_cast<T*>(buffer);
@@ -87,6 +93,11 @@ class Scalar_Recycled_Workspace<device_tag> : public Workspace<device_tag> {
 	buffer_type* buffer = device_globals::Scalar_Recycler::template allocate<buffer_type>();
 
 public:
+
+	template<class T>
+	struct rebind {
+		using other = Workspace<device_tag, T>;
+	};
 
 	template<class T>
 	T* get_alpha_buffer() {

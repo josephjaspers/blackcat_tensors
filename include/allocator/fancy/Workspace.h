@@ -16,7 +16,7 @@ namespace allocator {
 namespace fancy {
 
 template<class SystemTag>
-class Workspace {
+class Workspace_Core {
 
 	using system_tag = SystemTag;
 
@@ -25,15 +25,15 @@ class Workspace {
 
 	Byte* m_memptr=nullptr;
 
-	static Polymorphic_Allocator<Byte, SystemTag>& get_default_allocator() {
-		static Polymorphic_Allocator<Byte, SystemTag> default_allocator;
+	static Polymorphic_Allocator<BC::allocator::Byte, SystemTag>& get_default_allocator() {
+		static Polymorphic_Allocator<BC::allocator::Byte, SystemTag> default_allocator;
 		return default_allocator;
 	}
 
 	Polymorphic_Allocator<Byte, SystemTag> m_allocator = get_default_allocator();
 
 public:
-	Workspace(std::size_t sz=0) : m_memptr_sz(sz){
+	Workspace_Core(std::size_t sz=0) : m_memptr_sz(sz){
 		if (sz)
 			m_memptr = m_allocator.allocate(sz);
 	}
@@ -89,16 +89,58 @@ public:
 		deallocate(reinterpret_cast<Byte*>(memptr), sz * sizeof(T));
 	}
 
-	~Workspace(){
+	~Workspace_Core(){
 		BC_ASSERT(m_curr_index==0,
 				"Workspace Destructor called while memory is still allocated, Memory Leak Detected");
 		m_allocator.deallocate(m_memptr, m_memptr_sz);
 	}
-
-
-
 };
 
+template<class SystemTag, class ValueType=BC::allocator::Byte>
+class Workspace {
+
+	template<class, class>
+	friend class Workspace;
+
+	using ws_core_t = Workspace_Core<SystemTag>;
+
+	std::shared_ptr<ws_core_t> ws_ptr;
+
+public:
+
+	using system_tag = SystemTag;
+	using value_type = ValueType;
+	using propagate_on_container_copy_construction = std::false_type;
+
+	template<class T>
+	struct rebind {
+		using other = Workspace<SystemTag,  T>;
+	};
+
+	Workspace(int sz=0)
+	: ws_ptr(new ws_core_t(sz)) {}
+
+	template<class T>
+	Workspace(const Workspace<SystemTag, T>& ws) : ws_ptr(ws.ws_ptr) {}
+
+	Workspace(const Workspace&)=default;
+	Workspace(Workspace&&)=default;
+
+	void reserve(std::size_t sz)  { ws_ptr.get()->reserve(sz); }
+	void free() { ws_ptr.get()->free(); }
+
+	template<class Allocator>
+	void set_allocator(Allocator alloc) {
+		ws_ptr->set_allocator(alloc);
+	}
+
+	ValueType* allocate(std::size_t sz) {
+		return ws_ptr->template allocate<ValueType>(sz);
+	}
+	void deallocate(ValueType* memptr, std::size_t sz) {
+		ws_ptr->template deallocate<ValueType>(memptr, sz);
+	}
+};
 }
 }
 }

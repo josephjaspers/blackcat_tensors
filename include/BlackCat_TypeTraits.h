@@ -232,6 +232,51 @@ template<class... Ts> using void_t = void;
     template<class> struct DISABLE;
     template<bool x,class T> using only_if = std::conditional_t<x, T, DISABLE<T>>;
 
+    template<class Function, class... args>
+    struct Bind : std::tuple<args...> {
+    	Function f;
+
+    	Bind(Function f, args... args_)
+    	: f(f), std::tuple<args...>(args_...) {}
+
+    	template<int ADL=0>
+    	auto operator () () {
+    		return call(std::conditional_t<sizeof...(args) == 0, std::true_type, std::false_type>());
+    	}
+    	template<int ADL=0>
+    	auto operator () () const {
+    		return call(std::conditional_t<sizeof...(args) == 0, std::true_type, std::false_type>());
+    	}
+    private:
+    	template<class... args_>
+    	auto call(std::true_type, args_... params) {
+    		return f(params...);
+    	}
+    	template<class... args_>
+    	auto call(std::false_type, args_... params) {
+    		return call(
+    				std::conditional_t<sizeof...(args_) + 1 == sizeof...(args), std::true_type, std::false_type>(),
+    				std::forward<args_>(params)...,
+    				std::get<sizeof...(args_)>(static_cast<std::tuple<args...>&>(*this)));
+    	}
+    	template<class... args_>
+    	auto call(std::true_type, args_... params) const {
+    		return f(std::forward<args_>(params)...);
+    	}
+    	template<class... args_>
+    	auto call(std::false_type, args_... params) const {
+    		return call(
+    				std::conditional_t<sizeof...(args_) + 1 == sizeof...(args), std::true_type, std::false_type>(),
+    				std::forward<args_>(params)...,
+    				std::get<sizeof...(args_)>(static_cast<std::tuple<args...>&>(*this)));
+    	}
+
+    };
+    template<class Function, class... Args>
+    Bind<Function, Args...> bind(Function f, Args... args) {
+    	return {f, args...};
+    }
+
     //---------------------
 
 	template<class T> BCINLINE

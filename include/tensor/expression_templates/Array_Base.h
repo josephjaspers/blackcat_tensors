@@ -36,8 +36,8 @@ private:
 
 public:
 
-    BCINLINE operator const auto*() const { return as_derived().memptr(); }
-    BCINLINE operator       auto*()       { return as_derived().memptr(); }
+    BCHOT operator const auto*() const { return as_derived().memptr(); }
+    BCHOT operator       auto*()       { return as_derived().memptr(); }
 
     BCINLINE const auto& operator [](int index) const {
         return as_derived().memptr()[index];

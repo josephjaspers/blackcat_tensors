@@ -20,12 +20,14 @@ template<class,class>		struct Unary_Expression;
 
 namespace detail {
 template<class T> using func_value_type = typename T::value_type;
+template<class T> using system_tag_type = typename T::system_tag;
 
 
 
 template<class T>
 struct remove_scalar_mul {
 	using type = T;
+	using scalar_type = typename BC::meta::conditional_detected<func_value_type, T, T>::type *;
 
 
 	static T rm(T expression) {
@@ -33,9 +35,7 @@ struct remove_scalar_mul {
 	}
 
 	//TODO fix me, a value_type should never be a reference type
-	static
-	typename BC::meta::conditional_detected<func_value_type, T, T>::type*
-	get_scalar(const T& expression) {
+	static scalar_type get_scalar(const T& expression) {
 		return nullptr;
 	};
 };
@@ -97,7 +97,7 @@ class BC_Array {};
 class BC_Expr  {};
 class BC_Temporary {};
 class BC_Scalar_Constant {};
-class BC_Constant {};
+class BC_Stack_Allocated {};
 
 
 template<class T>
@@ -112,7 +112,7 @@ struct expression_traits {
 	 static constexpr bool is_array  	= std::is_base_of<BC_Array, T>::value;
 	 static constexpr bool is_expr  	= std::is_base_of<BC_Expr, T>::value;
 	 static constexpr bool is_temporary = std::is_base_of<BC_Temporary, T>::value;
-	 static constexpr bool is_constant  = std::is_base_of<BC_Constant, T>::value;
+	 static constexpr bool is_constant  = std::is_base_of<BC_Stack_Allocated, T>::value;
 };
 
 template<class T>
@@ -121,6 +121,9 @@ struct blas_expression_traits : expression_traits<T> {
 	 using remove_scalar_mul_type		= typename detail::remove_scalar_mul<T>::type;
 	 using remove_transpose_type		= typename detail::remove_transpose<T>::type;
 	 using remove_blas_features_type	= typename detail::remove_transpose<remove_scalar_mul_type>::type;
+	 using scalar_multiplier_type		= typename detail::remove_scalar_mul<T>::scalar_type;
+	 using value_type					= typename T::value_type;
+	 using system_tag					= typename BC::meta::conditional_detected<detail::system_tag_type, T, host_tag>::type;
 
 	 static constexpr bool is_scalar_multiplied = !std::is_same<remove_scalar_mul_type, T>::value;
 	 static constexpr bool is_transposed 		= !std::is_same<remove_transpose_type,  T>::value;
@@ -132,13 +135,13 @@ struct blas_expression_traits : expression_traits<T> {
 	 }
 
 	 //If an expression with a scalar, returns the scalar, else returns a nullpointer of the valuetype == to T::value_type
-	 static auto get_scalar(const T&  expression)
-	 -> decltype(detail::remove_scalar_mul<T>::get_scalar(expression))
-	 { return detail::remove_scalar_mul<T>::get_scalar(expression); }
+	static auto get_scalar(const T& expression)
+		-> decltype(detail::remove_scalar_mul<T>::get_scalar(expression)) {
+		return detail::remove_scalar_mul<T>::get_scalar(expression);
+	}
 };
 
 }
 }
-
 
 #endif /* BLACKCAT_INTERNAL_FORWARD_DECLS_H_ */

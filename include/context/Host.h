@@ -36,10 +36,16 @@ class Host {
 public:
 
 	using system_tag = host_tag;
+	using allocator_t = BC::allocator::fancy::Scalar_Recycled_Workspace<host_tag>;
 
     BC::allocator::fancy::Scalar_Recycled_Workspace<host_tag>& get_allocator() {
     	return m_contents.get()->m_workspace;
     }
+    template<class RebindType>
+    auto get_allocator_rebound() {
+    	return typename allocator_t::template rebind<RebindType>::other(m_contents->m_workspace);
+    }
+
 
 	 Host& get_stream() {
 		 return *this;

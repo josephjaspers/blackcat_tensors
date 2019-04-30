@@ -62,9 +62,15 @@ class  Device {
 public:
 
 	using system_tag = device_tag;
+	using allocator_t = BC::allocator::fancy::Scalar_Recycled_Workspace<device_tag>;
 
 	BC::allocator::fancy::Scalar_Recycled_Workspace<device_tag>& get_allocator() {
     	return device_contents.get()->m_workspace;
+    }
+
+    template<class RebindType>
+    auto get_allocator_rebound() {
+    	return typename allocator_t::template rebind<RebindType>::other(get_allocator());
     }
 
     const cublasHandle_t& get_cublas_handle() const {

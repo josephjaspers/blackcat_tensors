@@ -47,6 +47,31 @@ auto make_scalar_constant(value_type scalar) {
 }
 
 
+template<int Value, class Scalar>
+struct Constexpr_Scalar_Constant : Shape<0>, Array_Base<Constexpr_Scalar_Constant<Value, Scalar>, 0>{
+
+    using value_type = Scalar;
+    using system_tag = BC::host_tag;
+
+    static constexpr int ITERATOR = 0;
+    static constexpr int DIMS     = 0;
+
+    Scalar value = Scalar(Value);
+
+    template<class... integers> BCINLINE auto operator()  (const integers&...) const { return Value; }
+    template<class... integers> BCINLINE auto operator()  (const integers&...) 		 { return Value; }
+
+    BCINLINE auto operator [] (int i ) const { return Value; }
+    BCINLINE auto operator [] (int i )  	 { return Value; }
+
+    BCHOT const Scalar* memptr() const { return &value; }
+};
+
+template<int Value, class Scalar>
+auto make_constexpr_scalar() {
+	return Constexpr_Scalar_Constant<Value, Scalar>();
+}
+
 }
 }
 

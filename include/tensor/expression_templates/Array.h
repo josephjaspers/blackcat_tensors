@@ -156,6 +156,8 @@ public:
     	this->array = this->allocate(this->size());
     }
 
+    Array(const Allocator& alloc_) : Allocator(alloc_) {}
+
 	//Construct via shape-like object and Allocator
     template<class U,typename = std::enable_if_t<!expression_traits<U>::is_array && !expression_traits<U>::is_expr>>
     Array(U param, const Allocator& alloc_) : Allocator(alloc_) {
@@ -237,17 +239,27 @@ public:
 
 template<class ValueType, int dims, class Context>
 auto make_temporary_tensor_array(BC::Shape<dims> shape, Context context) {
+	static_assert(dims >= 1, "make_temporary_tensor_array: assumes dimension is 1 or greater");
 	using system_tag = typename Context::system_tag;
 	using Array = ArrayExpression<dims, ValueType, system_tag, BC_Temporary>;
 	Array temporary;
 	temporary.m_block_shape = shape.m_block_shape;
 	temporary.m_inner_shape = shape.m_inner_shape;
-	temporary.array = context.get_allocator().template allocate<ValueType>(temporary.size());
+	temporary.array = context.template get_allocator_rebound<ValueType>().allocate(temporary.size());
 	return temporary;
 }
+template<class ValueType, class Context>
+auto make_temporary_scalar(Context context) {
+	using system_tag = typename Context::system_tag;
+	using Array = ArrayExpression<0, ValueType, system_tag, BC_Temporary>;
+	Array temporary;
+	temporary.array = context.template get_allocator_rebound<ValueType>().allocate(1);
+	return temporary;
+}
+
 template<int Dimension, class ValueType, class SystemTag, class... Tags, class=std::enable_if_t<BC::meta::seq_contains<BC_Temporary, Tags...>>>
 void destroy_temporary_tensor_array(ArrayExpression<Dimension, ValueType, SystemTag, Tags...> temporary, BC::Context<SystemTag> context) {
-	context.get_allocator().deallocate(temporary.array, temporary.size());
+	context.template get_allocator_rebound<ValueType>().deallocate(temporary.array, temporary.size());
 }
 
 
