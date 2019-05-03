@@ -4,7 +4,7 @@
  *  Created on: Apr 24, 2019
  *      Author: joseph
  */
-
+#ifdef __CUDACC__
 #ifndef BLACKCAT_EXPRESSION_TEMPLATES_BLAS_TOOLS_DEVICE_H_
 #define BLACKCAT_EXPRESSION_TEMPLATES_BLAS_TOOLS_DEVICE_H_
 
@@ -49,3 +49,4 @@ struct Device : Common_Tools<Device> {
 
 
 #endif /* DEVICE_H_ */
+#endif

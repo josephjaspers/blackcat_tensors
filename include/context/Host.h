@@ -21,7 +21,7 @@ class Host {
 	struct Contents {
 		std::unique_ptr<HostEvent> m_event;
 		HostStream m_stream;
-		BC::allocator::fancy::Scalar_Recycled_Workspace<host_tag> m_workspace;
+		BC::allocator::fancy::Workspace<host_tag> m_workspace;
 	};
 
 	static std::shared_ptr<Contents> get_default_contents() {
@@ -36,15 +36,20 @@ class Host {
 public:
 
 	using system_tag = host_tag;
-	using allocator_t = BC::allocator::fancy::Scalar_Recycled_Workspace<host_tag>;
+	using allocator_t = BC::allocator::fancy::Workspace<host_tag>;
 
-    BC::allocator::fancy::Scalar_Recycled_Workspace<host_tag>& get_allocator() {
+    BC::allocator::fancy::Workspace<host_tag>& get_allocator() {
     	return m_contents.get()->m_workspace;
     }
     template<class RebindType>
     auto get_allocator_rebound() {
     	return typename allocator_t::template rebind<RebindType>::other(m_contents->m_workspace);
     }
+    auto set_blas_pointer_mode_host() {
+    }
+    auto set_blas_pointer_mode_device() {
+	}
+
 
 
 	 Host& get_stream() {

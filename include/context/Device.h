@@ -9,13 +9,14 @@
 #ifndef BC_CONTEXT_DEVICE_H_
 #define BC_CONTEXT_DEVICE_H_
 
+#include "HostStream.h"
+
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 #include <cublas.h>
 
 #include <memory>
-#include "HostStream.h"
 
 namespace BC {
 namespace context {
@@ -29,7 +30,7 @@ class  Device {
 		cudaStream_t   m_stream_handle =nullptr;
 		cudaEvent_t    m_event_handle  =nullptr;
 
-		BC::allocator::fancy::Scalar_Recycled_Workspace<device_tag> m_workspace;
+		BC::allocator::fancy::Workspace<device_tag> m_workspace;
 
 		Device_Stream_Contents(bool init_stream=true) {
 			BC_CUDA_ASSERT(cublasCreate(&m_cublas_handle));
@@ -62,15 +63,22 @@ class  Device {
 public:
 
 	using system_tag = device_tag;
-	using allocator_t = BC::allocator::fancy::Scalar_Recycled_Workspace<device_tag>;
+	using allocator_t = BC::allocator::fancy::Workspace<device_tag>;
 
-	BC::allocator::fancy::Scalar_Recycled_Workspace<device_tag>& get_allocator() {
+	BC::allocator::fancy::Workspace<device_tag>& get_allocator() {
     	return device_contents.get()->m_workspace;
     }
 
     template<class RebindType>
     auto get_allocator_rebound() {
     	return typename allocator_t::template rebind<RebindType>::other(get_allocator());
+    }
+
+    auto set_blas_pointer_mode_host() {
+    	cublasSetPointerMode(device_contents.get()->m_cublas_handle, CUBLAS_POINTER_MODE_HOST);
+    }
+    auto set_blas_pointer_mode_device() {
+        cublasSetPointerMode(device_contents.get()->m_cublas_handle, CUBLAS_POINTER_MODE_DEVICE);
     }
 
     const cublasHandle_t& get_cublas_handle() const {

@@ -10,7 +10,6 @@
 
 #include <cblas.h>
 //#include <mkl_cblas.h> //TODO create/ifdef wrapper for MKL
-#include "Host_Impl.h"
 
 namespace BC {
 namespace blas {
@@ -29,35 +28,6 @@ struct Host {
      * b = K x N
      * c = M x N
      */
-
-	template<class Context, class OutputScalar, class... Scalars>
-	static void calculate_alpha(Context, OutputScalar& eval, Scalars... scalars) {
-		eval = host_impl::calculate_alpha(scalars...);
-	}
-	template<class Context, class OutputScalar, class... Scalars>
-	static void calculate_alpha(Context, OutputScalar* eval, Scalars... scalars) {
-		eval[0] = host_impl::calculate_alpha(scalars...);
-	}
-
-	template<class Scalar_t, int alpha_mod, bool lv_scalar, bool rv_scalar, class Context,  class lv_scalar_t, class rv_scalar_t>
-	static const Scalar_t* calculate_alpha(Context context, lv_scalar_t lv, rv_scalar_t rv) {
-		if (alpha_mod==0 || (!lv_scalar && !rv_scalar)) {
-			return scalar_constant<Scalar_t, alpha_mod>();
-		}
-		else if (alpha_mod ==1 && (lv_scalar != rv_scalar)) {
-			return lv_scalar ? (Scalar_t*)lv : (Scalar_t*)rv;
-		} else {
-			auto scalar =  context.get_allocator().template get_alpha_buffer<Scalar_t>();
-			calculate_alpha(context, scalar, alpha_mod, lv, rv);
-			return scalar;
-		}
-	}
-
-	template<class value_type, int value>
-	static const value_type* scalar_constant() {
-		static value_type val = value;
-		return &val;
-	}
 
 	template<class Context>
     static void gemm(Context context, bool transA, bool transB, BC::size_t  m, BC::size_t  n, BC::size_t  k,

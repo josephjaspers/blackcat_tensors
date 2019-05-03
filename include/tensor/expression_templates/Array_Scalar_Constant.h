@@ -19,10 +19,11 @@ namespace exprs {
 
 //identical to Array_Scalar, though the scalar is allocated on the stack opposed to heap
 template<class Scalar, class SystemTag>
-struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, SystemTag>, 0>{
+struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, SystemTag>, 0>, BC::exprs::BC_Stack_Allocated {
 
     using value_type = Scalar;
     using system_tag = SystemTag;
+    using allocation_tag = BC::host_tag;
 
     static constexpr int ITERATOR = 0;
     static constexpr int DIMS     = 0;
@@ -47,11 +48,17 @@ auto make_scalar_constant(value_type scalar) {
 }
 
 
+template<int Value, class Scalar, class SystemTag>
+struct Constexpr_Scalar_Constant;
+
 template<int Value, class Scalar>
-struct Constexpr_Scalar_Constant : Shape<0>, Array_Base<Constexpr_Scalar_Constant<Value, Scalar>, 0>{
+struct Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>
+: Shape<0>,
+  Array_Base<Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>, 0>{
 
     using value_type = Scalar;
     using system_tag = BC::host_tag;
+    using allocation_tag = BC::host_tag;
 
     static constexpr int ITERATOR = 0;
     static constexpr int DIMS     = 0;
@@ -67,9 +74,50 @@ struct Constexpr_Scalar_Constant : Shape<0>, Array_Base<Constexpr_Scalar_Constan
     BCHOT const Scalar* memptr() const { return &value; }
 };
 
+
+#ifdef __CUDACC__
 template<int Value, class Scalar>
+struct Constexpr_Scalar_Constant<Value, Scalar, BC::device_tag>
+: Shape<0>,
+  Array_Base<Constexpr_Scalar_Constant<Value, Scalar, BC::device_tag>, 0>{
+
+    using value_type = Scalar;
+    using system_tag = BC::host_tag;
+    using allocation_tag = BC::host_tag;
+
+    static constexpr int ITERATOR = 0;
+    static constexpr int DIMS     = 0;
+
+    const Scalar* value = cuda_constexpr_scalar_ptr();
+
+    template<class... integers> BCINLINE auto operator()  (const integers&...) const { return Value; }
+    template<class... integers> BCINLINE auto operator()  (const integers&...) 		 { return Value; }
+
+    BCINLINE auto operator [] (int i ) const { return Value; }
+    BCINLINE auto operator [] (int i )  	 { return Value; }
+
+    BCHOT const Scalar* memptr() const { return value; }
+
+
+  private:
+	static const Scalar* cuda_constexpr_scalar_ptr() {
+
+		static Scalar* scalar_constant_  = [](){
+			Scalar tmp_val = Value;
+			Scalar* scalar_constant_ = nullptr;
+			BC_CUDA_ASSERT(cudaMalloc((void**)&scalar_constant_, sizeof(Scalar)));
+			BC_CUDA_ASSERT(cudaMemcpy(scalar_constant_, &tmp_val, sizeof(Scalar), cudaMemcpyHostToDevice));
+			return scalar_constant_;
+		}();
+
+		return scalar_constant_;
+	}
+};
+#endif
+
+template<class SystemTag, int Value, class Scalar>
 auto make_constexpr_scalar() {
-	return Constexpr_Scalar_Constant<Value, Scalar>();
+	return Constexpr_Scalar_Constant<Value, Scalar, SystemTag>();
 }
 
 }

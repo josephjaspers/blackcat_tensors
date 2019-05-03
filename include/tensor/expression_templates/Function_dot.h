@@ -11,6 +11,7 @@
 
 #include "Expression_Base.h"
 #include "Tree_Lazy_Evaluator.h"
+#include "blas_tools/Blas_tools.h"
 
 
 namespace BC {
@@ -28,7 +29,8 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
 
     using value_type = typename lv::value_type;
     using system_tag = System_Tag;
-    using blas_impl  = typename blas::implementation<system_tag>;
+    using blas_impl  = BC::blas::implementation<system_tag>;
+    using blas_util	 = BC::exprs::blas_tools::implementation<system_tag>;
 
     static constexpr bool transA = blas_expression_traits<lv>::is_transposed;
     static constexpr bool transB = blas_expression_traits<rv>::is_transposed;
@@ -64,9 +66,9 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
 		if (lv_scalar || rv_scalar) {
 			auto alpha_lv = blas_expression_traits<lv>::get_scalar(left);
 			auto alpha_rv = blas_expression_traits<rv>::get_scalar(right);
-			blas_impl::calculate_alpha(alloc, injection.memptr(), beta_value, alpha_lv, alpha_rv);
+			blas_util::scalar_multiply(alloc, injection.memptr(), beta_value, alpha_lv, alpha_rv);
 		} else if (beta_value != 1) {
-			blas_impl::calculate_alpha(alloc, injection.memptr(), injection.memptr(), beta_value);
+			blas_util::scalar_multiply(alloc, injection.memptr(), injection.memptr(), beta_value);
 		}
     }
 };

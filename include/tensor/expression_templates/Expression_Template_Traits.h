@@ -20,7 +20,19 @@ template<class,class>		struct Unary_Expression;
 
 namespace detail {
 template<class T> using func_value_type = typename T::value_type;
+template<class T> using allocation_tag_type = typename T::allocation_tag;
 template<class T> using system_tag_type = typename T::system_tag;
+
+
+
+//template<class T, class voider=void> struct  allocation_tag_type;
+
+//template<class T>
+//struct  allocation_tag_type<T, std::enable_if_t<BC::meta::true_v<typename T::allocation_tag>>> {;
+//using type = typename T::allocation_tag;
+//};
+
+
 
 
 
@@ -103,6 +115,10 @@ class BC_Stack_Allocated {};
 template<class T>
 struct expression_traits {
 
+	 using system_tag					= typename BC::meta::conditional_detected<detail::system_tag_type, T, host_tag>::type;
+	 using allocation_tag				= typename BC::meta::conditional_detected<detail::allocation_tag_type, T, system_tag>::type;
+
+
 	static constexpr bool is_move_constructible = T::move_constructible;
 	static constexpr bool is_copy_constructible = T::copy_constructible;
 	static constexpr bool is_move_assignable 	= T::move_assignable;
@@ -123,7 +139,7 @@ struct blas_expression_traits : expression_traits<T> {
 	 using remove_blas_features_type	= typename detail::remove_transpose<remove_scalar_mul_type>::type;
 	 using scalar_multiplier_type		= typename detail::remove_scalar_mul<T>::scalar_type;
 	 using value_type					= typename T::value_type;
-	 using system_tag					= typename BC::meta::conditional_detected<detail::system_tag_type, T, host_tag>::type;
+
 
 	 static constexpr bool is_scalar_multiplied = !std::is_same<remove_scalar_mul_type, T>::value;
 	 static constexpr bool is_transposed 		= !std::is_same<remove_transpose_type,  T>::value;

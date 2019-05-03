@@ -12,10 +12,10 @@
 #include "Expression_Base.h"
 #include "Tree_Lazy_Evaluator.h"
 #include "Array_Scalar_Constant.h"
+#include "blas_tools/Blas_tools.h"
 
 namespace BC {
 namespace exprs {
-
 
 template<class lv, class rv, class System_Tag>
 struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
@@ -26,7 +26,8 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 
     using value_type = typename lv::value_type;
     using system_tag = System_Tag;
-    using blas_impl  = typename blas::implementation<system_tag>;
+    using blas_impl  = BC::blas::implementation<system_tag>;
+    using blas_util	 = BC::exprs::blas_tools::implementation<system_tag>;
 
     static constexpr bool transA = blas_expression_traits<lv>::is_transposed;
     static constexpr bool transB = blas_expression_traits<rv>::is_transposed;
@@ -80,13 +81,17 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 
 		//compute the scalar values if need be
 		if (lv_scalar || rv_scalar) {
-	        auto alpha = context.get_allocator().template get_alpha_buffer<value_type>();
 			auto alpha_lv = blas_expression_traits<lv>::get_scalar(left);
 			auto alpha_rv = blas_expression_traits<rv>::get_scalar(right);
-			blas_impl::calculate_alpha(context, alpha, alpha_mod, alpha_lv, alpha_rv);
+			auto alpha 	  = blas_util::template calculate_alpha<value_type, alpha_mod, lv_scalar, rv_scalar>(context, alpha_lv, alpha_rv);
 			blas_impl::ger(context, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
+			BC::meta::constexpr_if<(BC::exprs::expression_traits<decltype(alpha)>::is_temporary)>(
+	            BC::meta::bind([&](auto alpha) {
+	        		context.template get_allocator_rebound<value_type>().deallocate(alpha, 1);
+	        	}, 	alpha));
 		} else {
-			auto alpha = blas_impl::template scalar_constant<value_type, (alpha_mod == 0 ? 1 : alpha_mod)>();
+			auto alpha = make_constexpr_scalar<BC::host_tag, (alpha_mod == 0 ? 1 : alpha_mod), value_type>();
+			context.set_blas_pointer_mode_host();
 			blas_impl::ger(context, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
 		}
 	}

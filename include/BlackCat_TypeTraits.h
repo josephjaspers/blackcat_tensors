@@ -15,13 +15,17 @@
 
 namespace BC {
 namespace meta {
+
+	template<class T>
+	static constexpr bool true_v = true;
+
 template<class... Ts> using void_t = void;
 
 	template<template<class> class func, class T, class voider=void>
 	struct is_detected : std::false_type { };
 
 	template<template<class> class func, class T>
-	struct is_detected<func, T, std::enable_if_t<std::is_void<void_t<func<T>>>::value>> : std::true_type { };
+	struct is_detected<func, T, std::enable_if_t<true_v<func<T>>>> : std::true_type { };
 
 	template<template<class> class func, class T>
 	static constexpr bool is_detected_v = is_detected<func, T>::value;

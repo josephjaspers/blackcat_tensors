@@ -11,7 +11,7 @@
 
 #include "Expression_Base.h"
 #include "Tree_Lazy_Evaluator.h"
-
+#include "blas_tools/Blas_tools.h"
 
 namespace BC {
 namespace exprs {
@@ -27,7 +27,8 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
 
     using value_type	= typename lv::value_type;
     using system_tag	= System_Tag;
-    using blas_impl		= typename blas::implementation<system_tag>;
+    using blas_impl		= BC::blas::implementation<system_tag>;
+    using blas_util	    = BC::exprs::blas_tools::implementation<system_tag>;
 
     static constexpr bool transA = blas_expression_traits<lv>::is_transposed;
     static constexpr bool transB = blas_expression_traits<rv>::is_transposed;
@@ -83,14 +84,20 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
         auto alpha_lv = blas_expression_traits<lv>::get_scalar(left);
 		auto alpha_rv = blas_expression_traits<rv>::get_scalar(right);
 
-		auto alpha = blas_impl::template calculate_alpha<value_type, alpha_mod, lv_scalar, rv_scalar>(alloc, alpha_lv, alpha_rv);
-        auto beta  = blas_impl::template scalar_constant<value_type, beta_mod>();
+		auto alpha = blas_util::template calculate_alpha<value_type, alpha_mod, lv_scalar, rv_scalar>(alloc, alpha_lv, alpha_rv);
+        auto beta  = make_constexpr_scalar<typename expression_traits<decltype(alpha)>::allocation_tag, beta_mod, value_type>();//blas_impl::template scalar_constant<value_type, beta_mod>();
 
 			//call matrix_mul
         blas_impl::gemm(alloc, transA, transB,  M(), N(), K(),
 					alpha, A, A.leading_dimension(0),
 					B, B.leading_dimension(0),
 					beta, injection, injection.leading_dimension(0));
+//
+        BC::meta::constexpr_if<(BC::exprs::expression_traits<decltype(alpha)>::is_temporary)>(
+            BC::meta::bind([&](auto alpha) {
+        		alloc.template get_allocator_rebound<value_type>().deallocate(alpha, 1);
+        	}, 	alpha));
+
     }
 };
 
