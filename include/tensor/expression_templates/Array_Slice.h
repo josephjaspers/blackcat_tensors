@@ -164,9 +164,8 @@ public:
 	template<class... Args>
 	BCHOT Array_Slice(Parent& parent_, Args... args_)
 	: ViewType(parent_, args_...),
-	  m_allocator(parent_.get_allocator()),
-	  m_context(parent_.get_context()) {
-	}
+	  m_context(parent_.get_context()),
+	  m_allocator(parent_.get_allocator()) {}
 
 	BCHOT Array_Slice(const Array_Slice&) = default;
 	BCHOT Array_Slice(Array_Slice&&) = default;

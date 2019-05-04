@@ -12,9 +12,9 @@
 
 #include "Array.h"
 #include "Array_Slice.h"
-#include "Array_Strided_Vector.h"
-#include "Array_Scalar_Constant.h"
 #include "Array_View.h"
+
+#include "Array_Scalar_Constant.h"
 
 #include "Expression_Unary.h"
 #include "Expression_Binary.h"
