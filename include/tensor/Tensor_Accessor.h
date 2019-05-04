@@ -52,16 +52,16 @@ public:
 		return make_tensor(exprs::make_ranged_slice(internal(), from, to));
 	}
 
-
-    const auto diag(BC::size_t index = 0) const {
-        static_assert(derived::DIMS  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
-        return make_tensor(exprs::make_diagnol(internal(),index));
-    }
-
-    auto diag(BC::size_t index = 0) {
-        static_assert(derived::DIMS  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
-        return make_tensor(exprs::make_diagnol(internal(),index));
-    }
+// TODO FIX
+//    const auto diagnol(BC::size_t index = 0) const {
+//        static_assert(derived::DIMS  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
+//        return make_tensor(exprs::make_diagnol(internal(),index));
+//    }
+//
+//    auto diagnol(BC::size_t index = 0) {
+//        static_assert(derived::DIMS  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
+//        return make_tensor(exprs::make_diagnol(internal(),index));
+//    }
 
     const auto col(BC::size_t i) const {
         static_assert(derived::DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");

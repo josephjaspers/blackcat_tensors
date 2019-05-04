@@ -19,13 +19,21 @@ namespace meta {
 	template<class T>
 	static constexpr bool true_v = true;
 
-template<class... Ts> using void_t = void;
+	template<class... Ts> using void_t = void;
 
 	template<template<class> class func, class T, class voider=void>
 	struct is_detected : std::false_type { };
 
 	template<template<class> class func, class T>
 	struct is_detected<func, T, std::enable_if_t<true_v<func<T>>>> : std::true_type { };
+
+	template<class T, class U>
+	using propagate_const_t = std::conditional_t<std::is_const<T>::value,
+													std::conditional_t<std::is_const<U>::value, U, const U>,
+													U>;
+
+	template<class T>
+	using apply_const_t = std::conditional_t<std::is_const<T>::value, T, const T>;
 
 	template<template<class> class func, class T>
 	static constexpr bool is_detected_v = is_detected<func, T>::value;
@@ -241,7 +249,7 @@ template<class... Ts> using void_t = void;
     	Function f;
 
     	Bind(Function f, args... args_)
-    	: f(f), std::tuple<args...>(args_...) {}
+    	: std::tuple<args...>(args_...), f(f) {}
 
     	template<int ADL=0>
     	auto operator () () {

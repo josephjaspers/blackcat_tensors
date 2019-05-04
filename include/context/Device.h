@@ -173,6 +173,14 @@ public:
     Device() = default;
     Device(const Device& dev) = default;
     Device(Device&&) = default;
+    Device & operator = (const Device& device) {
+    	this->device_contents = device.device_contents;
+    	return *this;
+    }
+    Device & operator = (Device&& device) {
+    	this->device_contents = std::move(device.device_contents);
+    	return *this;
+    }
 };
 
 

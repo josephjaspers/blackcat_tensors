@@ -90,7 +90,7 @@ struct ArrayExpression<0, ValueType, SystemTag, Tags...>
 };
 
 
-template<class,int,bool> class Array_Slice;
+template<class,class> class Array_Slice;
 
 template<int Dimension, class Scalar, class Allocator, class... Tags>
 class Array :
@@ -98,7 +98,7 @@ class Array :
 			public Context<typename BC::allocator_traits<Allocator>::system_tag>,
 			public ArrayExpression<Dimension, Scalar, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
 
-	template<class,int, bool> friend class Array_Slice;
+	template<class,class> friend class Array_Slice;
 
 	using self = Array<Dimension, Scalar, Allocator, Tags...>;
 	using parent = ArrayExpression<Dimension, Scalar,  typename BC::allocator_traits<Allocator>::system_tag, Tags...>;
@@ -189,13 +189,13 @@ public:
     //Restrict to same value_type (obviously), same dimensions (for fast-copy)
     //And restrict to continuous (as we should attempt to support Sparse matrices in the future)
     template<
-    	class Parent,//>//,
+    	class Parent, class ViewType,//>//,
     	typename=
     			std::enable_if_t<
     			std::is_same<typename Parent::allocator_t, allocator_t>::value &&
     			std::is_same<typename Parent::value_type, value_type>::value &&
-    			Array_Slice<Parent, Dimension, true>::DIMS == Dimension>>
-	Array(const Array_Slice<Parent, Dimension, true>& expr_t)
+    			Array_Slice<Parent, ViewType>::DIMS == Dimension>>
+	Array(const Array_Slice<Parent, ViewType>& expr_t)
 	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(
 			expr_t.get_allocator())),
 	  context_t(expr_t.get_context())

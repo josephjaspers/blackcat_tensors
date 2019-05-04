@@ -15,14 +15,14 @@
 
 namespace BC {
 namespace exprs {
+namespace array_view {
 
+template<class ValueType, class SystemTag>
+struct Scalar : Array_Base<Scalar<ValueType, SystemTag>, 0>, Shape<0> {
 
-template<class Parent>
-struct ArrayScalarExpr : Array_Base<ArrayScalarExpr<Parent>, 0>, Shape<0> {
-
-    using value_type = typename Parent::value_type;
-	using pointer_t   = decltype(std::declval<Parent>().memptr());
-    using system_tag = typename Parent::system_tag;
+    using value_type = ValueType;
+    using system_tag = SystemTag;
+    using pointer_t  = value_type*;
     using shape_t = Shape<0>;
 
     static constexpr int ITERATOR = 0;
@@ -30,8 +30,9 @@ struct ArrayScalarExpr : Array_Base<ArrayScalarExpr<Parent>, 0>, Shape<0> {
 
     pointer_t array;
 
-    BCINLINE ArrayScalarExpr(Parent parent_, BC::size_t index)
-    : array(&(parent_.memptr()[index])) {}
+    template<class Parent>
+    BCINLINE Scalar(Parent, pointer_t memptr_)
+    : array(memptr_) {}
 
     BCINLINE const auto& operator [] (int index) const { return array[0]; }
     BCINLINE       auto& operator [] (int index)       { return array[0]; }
@@ -46,7 +47,7 @@ struct ArrayScalarExpr : Array_Base<ArrayScalarExpr<Parent>, 0>, Shape<0> {
         return array[0];
     }
 
-    BCINLINE const pointer_t memptr() const { return array; }
+    BCINLINE BC::meta::apply_const_t<pointer_t> memptr() const { return array; }
     BCINLINE       pointer_t memptr()       { return array; }
     BCINLINE const Shape<0>& get_shape() const { return static_cast<const Shape<0>&>(*this); }
 
@@ -55,27 +56,27 @@ struct ArrayScalarExpr : Array_Base<ArrayScalarExpr<Parent>, 0>, Shape<0> {
 
 
 template<class Parent, int Dimensions, bool Continuous=true>
-struct ArraySliceExpr :
-		Array_Base<ArraySliceExpr<Parent, Dimensions, Continuous>, Dimensions>,
-		std::conditional_t<Continuous, Shape<Dimensions>, SubShape<Dimensions>>
+struct Slice :
+		Array_Base<Slice<Parent, Dimensions, Continuous>, Dimensions>,
+		std::conditional_t<Continuous || Dimensions==1, Shape<Dimensions>, SubShape<Dimensions>>
 	{
 
 	using value_type  = typename Parent::value_type;
 	using pointer_t   = decltype(std::declval<Parent>().memptr());
 	using system_tag  = typename Parent::system_tag;
-	using shape_t = std::conditional_t<Continuous, Shape<Dimensions>, SubShape<Dimensions>>;
+	using shape_t = std::conditional_t<Continuous || Dimensions==1, Shape<Dimensions>, SubShape<Dimensions>>;
 
 	static constexpr int ITERATOR =  (Parent::ITERATOR > 1 || !Continuous) ? Dimensions : 1;
 	static constexpr int DIMS 	  = Dimensions;
 
 	pointer_t m_array;
 
-	BCINLINE ArraySliceExpr(Parent& parent_, BC::size_t index)
+	BCINLINE Slice(Parent& parent_, BC::size_t index)
 	: shape_t(parent_.get_shape()),
 	  m_array(parent_.memptr() + index) {
 	}
 
-	BCINLINE ArraySliceExpr(Parent& parent_, const shape_t& shape_, BC::size_t index)
+	BCINLINE Slice(Parent& parent_, const shape_t& shape_, BC::size_t index)
 	: shape_t(shape_),
 	  m_array(parent_.memptr() + index) {
 	}
@@ -87,29 +88,70 @@ struct ArraySliceExpr :
 	BCINLINE pointer_t memptr() {
 		return m_array;
 	}
-
     BCINLINE const shape_t& get_shape() const { return static_cast<const shape_t&>(*this); }
-
 };
 
 
-template<class Parent, int Dimensions, bool Continuous=true>
-struct Array_Slice :
-		std::conditional_t<Dimensions == 0,
-		ArrayScalarExpr<Parent>,
-		ArraySliceExpr<Parent, Dimensions, Continuous>> {
+template<class Parent>
+struct Strided_Vector : Array_Base<Strided_Vector<Parent>, 1>, Shape<1> {
 
-	using super_t = std::conditional_t<Dimensions == 0,
-			ArrayScalarExpr<Parent>,
-			ArraySliceExpr<Parent, Dimensions, Continuous>>;
+    static_assert(Parent::DIMS == 2, "A ROW VIEW MAY ONLY BE CONSTRUCTED FROM A MATRIX");
+
+	using value_type = typename Parent::value_type;
+    using allocator_t = typename Parent::allocator_t;
+    using system_tag = typename Parent::system_tag;
+    static constexpr int ITERATOR = 1;
+    static constexpr int DIMS = 1;
+
+    value_type* array_slice;
+
+    BCINLINE Strided_Vector(Parent, value_type* array_slice_, BC::size_t length, BC::size_t stride)
+     : Shape<1>(length, stride),
+       array_slice(array_slice_) {}
+
+    BCINLINE const auto& operator [] (int i) const {
+    	return array_slice[this->leading_dimension(0) * i]; }
+    BCINLINE       auto& operator [] (int i)       {
+    	return array_slice[this->leading_dimension(0) * i]; }
+
+    template<class... seq> BCINLINE
+    const auto& operator () (int i, seq... indexes) const { return *this[i]; }
+
+    template<class... seq> BCINLINE
+    auto& operator () (int i, seq... indexes) { return *this[i]; }
+
+    BCINLINE const value_type* memptr() const { return array_slice; }
+    BCINLINE       value_type* memptr()       { return array_slice; }
+
+};
+}
+
+template<class Parent>
+auto make_row(Parent parent, BC::size_t  index) {
+    return Array_Slice<Parent, array_view::Strided_Vector<Parent>>(parent, &parent.memptr()[index], parent.dimension(0), parent.leading_dimension(0));
+}
+
+template<class Parent>
+auto make_diagnol(Parent parent, BC::size_t diagnol_index) {
+    BC::size_t stride = parent.leading_dimension(0) + 1;
+    BC::size_t length = BC::meta::min(parent.rows(), parent.cols() - diagnol_index);
+    BC::size_t ptr_index = diagnol_index > 0 ? parent.leading_dimension(0) * diagnol_index : std::abs(diagnol_index);
+    return Array_Slice<Parent, array_view::Strided_Vector<Parent>>(parent, &parent[ptr_index], length, stride);
+}
+
+
+
+
+template<class Parent, class ViewType>
+struct Array_Slice : ViewType {
+
+	using allocator_t 	 = typename Parent::allocator_t;
+	using context_t 	 = typename Parent::context_t;
 
 private:
 	template<class T>
 	using const_if_parent_is_const = std::conditional_t<std::is_const<Parent>::value, const T, T>;
 
-	using shape_t 		 = typename super_t::shape_t;
-	using allocator_t 	 = typename Parent::allocator_t;
-	using context_t 	 = typename Parent::context_t;
 
 	using m_allocator_t  = const_if_parent_is_const<allocator_t>;
 	using m_context_t 	 = const_if_parent_is_const<context_t>;
@@ -119,20 +161,15 @@ public:
 	m_context_t m_context;
 	m_allocator_t& m_allocator;
 
-	template<class,int, bool> friend class Array_Slice;
-	template<int, class, class, class...> friend class Array;
-
-	BCHOT Array_Slice(Parent& parent_, BC::size_t index)
-	: super_t(parent_, index),
-	  m_context(parent_.get_context()),
-	  m_allocator(parent_.get_allocator()) {
+	template<class... Args>
+	BCHOT Array_Slice(Parent& parent_, Args... args_)
+	: ViewType(parent_, args_...),
+	  m_allocator(parent_.get_allocator()),
+	  m_context(parent_.get_context()) {
 	}
 
-	BCHOT Array_Slice(Parent& parent_, const shape_t& shape_, BC::size_t index)
-	: super_t(parent_, shape_, index),
-	  m_context(parent_.get_context()),
-	  m_allocator(parent_.get_allocator()) {
-	}
+	BCHOT Array_Slice(const Array_Slice&) = default;
+	BCHOT Array_Slice(Array_Slice&&) = default;
 
 	const m_allocator_t& get_allocator() const { return m_allocator; }
 		  m_allocator_t& get_allocator() 	   { return m_allocator; }
@@ -148,7 +185,8 @@ public:
 
 template<class Parent>
 static auto make_slice(Parent& internal, BC::size_t index) {
-	return Array_Slice<Parent, Parent::DIMS-1>(internal, internal.slice_ptr_index(index));
+	return Array_Slice<Parent, array_view::Slice<Parent, Parent::DIMS-1>>(
+			internal, internal.slice_ptr_index(index));
 }
 template<class Parent>
 static auto make_ranged_slice(Parent& internal, BC::size_t from, BC::size_t to) {
@@ -161,18 +199,21 @@ static auto make_ranged_slice(Parent& internal, BC::size_t from, BC::size_t to) 
 	inner_shape[dim_id-1] = range;
 	BC::exprs::Shape<dim_id> new_shape(inner_shape);
 
-	return Array_Slice<Parent, Parent::DIMS>(
+	return Array_Slice<Parent, array_view::Slice<Parent, Parent::DIMS>>(
 			internal, new_shape, index);
 }
 
 template<class Parent, int ndims>
 static auto make_view(Parent& parent, BC::array<ndims, BC::size_t> shape) {
-	return Array_Slice<Parent, ndims>(parent, shape, 0);
+	return Array_Slice<Parent, array_view::Slice<Parent, ndims>>(parent, shape, 0);
 }
 
 template<class Parent>
 	static auto make_scalar(Parent& parent, BC::size_t index) {
-		return Array_Slice<Parent, 0, true>(parent, index);
+		using value_type = BC::meta::propagate_const_t<Parent, typename Parent::value_type>;
+		using system_tag = typename Parent::system_tag;
+
+		return Array_Slice<Parent, array_view::Scalar<value_type, system_tag>>(parent, &parent[index]);
 	}
 
 template<class Parent, int ndims>
@@ -181,7 +222,7 @@ auto make_chunk(Parent& parent, BC::array<Parent::DIMS, int> index_points, BC::a
 	BC::size_t index = parent.dims_to_index(index_points);
 
 	SubShape<ndims> chunk_shape = SubShape<ndims>(shape, parent.get_shape());
-	return Array_Slice<Parent, ndims, false>(parent, chunk_shape, index);
+	return Array_Slice<Parent,  array_view::Slice<Parent, ndims, false>>(parent, chunk_shape, index);
 }
 
 

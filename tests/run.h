@@ -21,7 +21,6 @@ int test_all(int sz) {
 	int errors = 0;
 	errors += test_accessors<scalar_type, allocator>(sz);
 	errors += test_allocators<scalar_type, allocator>(sz);
-	errors += test_accessors<scalar_type, allocator>(sz);
 	errors += test_constructors<scalar_type, allocator>(sz);
 	errors += test_operations<scalar_type, allocator>(sz);
 	errors += test_streams<scalar_type, allocator>(sz);
@@ -36,11 +35,11 @@ int run(int sz=64) {
 
 	int errors = 0;
 
-	errors += test_all<double, BC::Basic_Allocator>(sz);
+//	errors += test_all<double, BC::Basic_Allocator>(sz);
 	errors += test_all<double, std::allocator>(sz);
 
 #ifdef __CUDACC__ //remember to change filename to main.cu
-	errors += test_all<float, BC::Cuda_Allocator>(sz);
+//	errors += test_all<float, BC::Cuda_Allocator>(sz);
 #endif
 
 	return errors;
