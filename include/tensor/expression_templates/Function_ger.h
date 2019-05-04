@@ -62,15 +62,7 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 
 	template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class Context>
 	void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, Context& context) const {
-
-		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
 		auto& injection = injection_values.data();
-
-		//evaluate the left and right branches (computes only if necessary)
-		auto A = greedy_evaluate(blas_expression_traits<lv>::remove_blas_modifiers(left), context);
-		auto B = greedy_evaluate(blas_expression_traits<rv>::remove_blas_modifiers(right), context);
-
-		//allocate the alpha and beta scalars,
 
         //if we need to negate or zero the output
 		//If beta_mod != 1 consider using gemm (to enable zeroing/modifying the output)
@@ -79,18 +71,17 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 			evaluate(expr, context);
 		}
 
-		//compute the scalar values if need be
 		if (lv_scalar || rv_scalar) {
-			auto alpha_lv = blas_expression_traits<lv>::get_scalar(left);
-			auto alpha_rv = blas_expression_traits<rv>::get_scalar(right);
-			auto alpha 	  = blas_util::template calculate_alpha<value_type, alpha_mod, lv_scalar, rv_scalar>(context, alpha_lv, alpha_rv);
+	        auto contents = blas_util::template parse_expression<alpha_mod, beta_mod>(context, left, right);
+	        auto A = contents.left;
+	        auto B = contents.right;
+	        auto alpha = contents.alpha;
 			blas_impl::ger(context, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
-			BC::meta::constexpr_if<(BC::exprs::expression_traits<decltype(alpha)>::is_temporary)>(
-	            BC::meta::bind([&](auto alpha) {
-	        		context.template get_allocator_rebound<value_type>().deallocate(alpha, 1);
-	        	}, 	alpha));
+	        blas_util::post_parse_expression_evaluation(context, contents);
 		} else {
 			auto alpha = make_constexpr_scalar<BC::host_tag, (alpha_mod == 0 ? 1 : alpha_mod), value_type>();
+			auto A = greedy_evaluate(blas_expression_traits<lv>::remove_blas_modifiers(left), context);
+			auto B = greedy_evaluate(blas_expression_traits<rv>::remove_blas_modifiers(right), context);
 			context.set_blas_pointer_mode_host();
 			blas_impl::ger(context, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
 		}

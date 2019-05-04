@@ -67,13 +67,11 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
 		auto& injection = injection_values.data();
 
 		//evaluate the left and right branches (computes only if necessary)
-		auto A = greedy_evaluate(blas_expression_traits<lv>::remove_blas_modifiers(left), alloc);
-		auto X = greedy_evaluate(blas_expression_traits<rv>::remove_blas_modifiers(right), alloc);
-
-		auto alpha_rv = blas_expression_traits<rv>::get_scalar(right);
-		auto alpha_lv = blas_expression_traits<lv>::get_scalar(left);
-		auto alpha 	  = blas_util::template calculate_alpha<value_type, alpha_mod, lv_scalar, rv_scalar>(alloc, alpha_lv, alpha_rv);
-        auto beta  = make_constexpr_scalar<typename expression_traits<decltype(alpha)>::allocation_tag, beta_mod, value_type>();//blas_impl::template scalar_constant<value_type, beta_mod>();
+        auto contents = blas_util::template parse_expression<alpha_mod, beta_mod>(alloc, left, right);
+        auto A = contents.left;
+        auto X = contents.right;
+        auto alpha = contents.alpha;
+        auto beta  = contents.beta;
 
 		blas_impl::gemv(alloc, transA,  M(), N(),
 				alpha, A, A.leading_dimension(0),
@@ -81,10 +79,8 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
 				beta,
 				injection/*Y*/, injection.leading_dimension(0)/*incy*/);
 
-		BC::meta::constexpr_if<(BC::exprs::expression_traits<decltype(alpha)>::is_temporary)>(
-            BC::meta::bind([&](auto alpha) {
-        		alloc.template get_allocator_rebound<value_type>().deallocate(alpha, 1);
-        	}, 	alpha));
+        blas_util::post_parse_expression_evaluation(alloc, contents);
+
     }
 };
 

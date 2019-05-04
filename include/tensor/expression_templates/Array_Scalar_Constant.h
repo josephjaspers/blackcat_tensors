@@ -9,9 +9,8 @@
 #ifndef BC_EXPRESSION_TEMPLATES_ARRAY_SCALAR_CONSTANT_H_
 #define BC_EXPRESSION_TEMPLATES_ARRAY_SCALAR_CONSTANT_H_
 
-
 #include "Array_Base.h"
-
+#include "Shape.h"
 
 namespace BC {
 namespace exprs {

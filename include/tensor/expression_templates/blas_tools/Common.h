@@ -12,6 +12,8 @@
 
 namespace BC {
 namespace exprs {
+template<class,class,class> struct Binary_Expression;
+
 namespace blas_tools {
 
 template<class derived>
@@ -76,8 +78,54 @@ struct Common_Tools {
 						})
 				)));
 	}
+
+	template<int alpha_mod, int beta_mod, class Context, class Lv, class Rv>
+	static auto parse_expression(Context context, Lv left, Rv right) {
+	    static constexpr bool lv_scalar = blas_expression_traits<Lv>::is_scalar_multiplied;
+	    static constexpr bool rv_scalar = blas_expression_traits<Rv>::is_scalar_multiplied;
+	    using value_type = typename Lv::value_type;
+
+		auto left_ = greedy_evaluate(blas_expression_traits<Lv>::remove_blas_modifiers(left), context);
+	    auto right_ = greedy_evaluate(blas_expression_traits<Rv>::remove_blas_modifiers(right), context);
+
+	    auto alpha_lv = blas_expression_traits<Lv>::get_scalar(left);
+		auto alpha_rv = blas_expression_traits<Rv>::get_scalar(right);
+
+		auto alpha_ = calculate_alpha<value_type, alpha_mod, lv_scalar, rv_scalar>(context, alpha_lv, alpha_rv);
+	    auto beta_  = make_constexpr_scalar<typename expression_traits<decltype(alpha_)>::allocation_tag, beta_mod, value_type>();//blas_impl::template scalar_constant<value_type, beta_mod>();
+
+	    using left_t = std::remove_reference_t<decltype(left_)>;
+	    using right_t = std::remove_reference_t<decltype(right_)>;
+	    using alpha_t = std::remove_reference_t<decltype(alpha_)>;
+	    using beta_t = std::remove_reference_t<decltype(beta_)>;
+
+		struct contents {
+			left_t left;
+			right_t right;
+			alpha_t alpha;
+			beta_t beta;
+		};
+
+	    return contents { left_, right_, alpha_, beta_ };
+	}
+	template<class Context, class Contents>
+	static void post_parse_expression_evaluation(Context context, Contents contents) {
+		using value_type = typename decltype(contents.alpha)::value_type;
+        BC::meta::constexpr_if<(BC::exprs::expression_traits<decltype(contents.alpha)>::is_temporary)>(
+            BC::meta::bind([&](auto alpha) {
+        		context.template get_allocator_rebound<value_type>().deallocate(alpha, 1);
+        	}, 	contents.alpha));
+
+	}
 };
 
-}}}
+
+
+
+}
+
+
+
+}}
 
 #endif

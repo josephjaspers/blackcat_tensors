@@ -30,30 +30,22 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
     using blas_impl		= BC::blas::implementation<system_tag>;
     using blas_util	    = BC::exprs::blas_tools::implementation<system_tag>;
 
-    static constexpr bool transA = blas_expression_traits<lv>::is_transposed;
-    static constexpr bool transB = blas_expression_traits<rv>::is_transposed;
-    static constexpr bool lv_scalar = blas_expression_traits<lv>::is_scalar_multiplied;
-    static constexpr bool rv_scalar = blas_expression_traits<rv>::is_scalar_multiplied;
-
     static constexpr int DIMS 	   = rv::DIMS;
     static constexpr int ITERATOR  = 1;
-
 
     lv left;
     rv right;
 
-
-     Binary_Expression(lv left, rv right)
+    BCHOT Binary_Expression(lv left, rv right)
      : left(left), right(right) {}
 
-    BCINLINE
-    const auto inner_shape() const {
+    BCINLINE const auto inner_shape() const {
     	return make_lambda_array<DIMS>([&](int i) {
     		return i == 0 ? left.rows() : i == 1 ? right.cols() : 1;
     	});
     }
-    BCINLINE
-    const auto block_shape() const {
+
+    BCINLINE const auto block_shape() const {
     	return make_lambda_array<DIMS>([&](int i) {
     		return i == 0 ? left.rows() : i == 1 ? size() : 1;
     	});
@@ -65,38 +57,28 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
     BCINLINE BC::size_t  dimension(int i) const { return inner_shape()[i]; }
     BCINLINE BC::size_t  block_dimension(int i) const { return block_shape()[i]; }
 
-    BCINLINE BC::size_t  M() const { return left.rows();  }
-    BCINLINE BC::size_t  N() const { return right.cols(); }
-    BCINLINE BC::size_t  K() const { return left.cols();  }
-
-
     template<class core, int alpha_mod, int beta_mod, class Context>
     void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, Context& alloc) const {
+        static constexpr bool transA = blas_expression_traits<lv>::is_transposed;
+        static constexpr bool transB = blas_expression_traits<rv>::is_transposed;
 
         //get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
         auto& injection = injection_values.data();
 
-        //evaluate the left and right branches (computes only if necessary)
-        auto A = greedy_evaluate(blas_expression_traits<lv>::remove_blas_modifiers(left), alloc);
-        auto B = greedy_evaluate(blas_expression_traits<rv>::remove_blas_modifiers(right), alloc);
+        auto contents = blas_util::template parse_expression<alpha_mod, beta_mod>(alloc, left, right);
+        auto A = contents.left;
+        auto B = contents.right;
+        auto alpha = contents.alpha;
+        auto beta  = contents.beta;
 
-        //get the left and right side scalar values
-        auto alpha_lv = blas_expression_traits<lv>::get_scalar(left);
-		auto alpha_rv = blas_expression_traits<rv>::get_scalar(right);
-
-		auto alpha = blas_util::template calculate_alpha<value_type, alpha_mod, lv_scalar, rv_scalar>(alloc, alpha_lv, alpha_rv);
-        auto beta  = make_constexpr_scalar<typename expression_traits<decltype(alpha)>::allocation_tag, beta_mod, value_type>();//blas_impl::template scalar_constant<value_type, beta_mod>();
-
-			//call matrix_mul
-        blas_impl::gemm(alloc, transA, transB,  M(), N(), K(),
+		//call matrix_mul
+        blas_impl::gemm(alloc, transA, transB,  left.rows(), right.cols(), left.cols(),
 					alpha, A, A.leading_dimension(0),
 					B, B.leading_dimension(0),
 					beta, injection, injection.leading_dimension(0));
-//
-        BC::meta::constexpr_if<(BC::exprs::expression_traits<decltype(alpha)>::is_temporary)>(
-            BC::meta::bind([&](auto alpha) {
-        		alloc.template get_allocator_rebound<value_type>().deallocate(alpha, 1);
-        	}, 	alpha));
+
+        blas_util::post_parse_expression_evaluation(alloc, contents);
+
 
     }
 };
