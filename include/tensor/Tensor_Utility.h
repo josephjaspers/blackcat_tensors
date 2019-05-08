@@ -16,33 +16,33 @@
 #include <sstream>
 
 namespace BC {
-template<class> class Tensor_Base;
+
+template<class>
+class Tensor_Base;
+
 namespace module {
 
 /*
  * Defines standard utility methods related to I/O
  */
 
-template<class derived>
-struct Tensor_Utility;
-
-template<class Derived>
-struct Tensor_Utility<Tensor_Base<Derived>> {
+template<class ExpressionTemplate>
+struct Tensor_Utility {
 
 	#define BC_ASSERT_ARRAY_ONLY(literal)\
-	static_assert(exprs::expression_traits<Derived>::is_array\
+	static_assert(exprs::expression_traits<ExpressionTemplate>::is_array\
 			, "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
 
-	using system_tag = typename Derived::system_tag;
-    using derived = Tensor_Base<Derived>;
-    using scalar  = typename Derived::value_type;
+	using system_tag = typename ExpressionTemplate::system_tag;
+    using derived = Tensor_Base<ExpressionTemplate>;
+    using scalar  = typename ExpressionTemplate::value_type;
     using utility_l = utility::implementation<system_tag>;
 
     template<class>
     friend class Tensor_Utility;
 
 private:
-    static constexpr int DIMS = Derived::DIMS;
+    static constexpr int DIMS = ExpressionTemplate::DIMS;
 
     derived& as_derived() {
         return static_cast<derived&>(*this);

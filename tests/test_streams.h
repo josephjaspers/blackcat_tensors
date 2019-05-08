@@ -27,21 +27,21 @@ int test_streams(int sz=128) {
 	BC_TEST_DEF(
 			mat a;
 			mat b;
-		return a.is_default_stream() && b.is_default_stream();
+		return a.get_context().is_default_stream() && b.get_context().is_default_stream();
 	)
 
 	BC_TEST_DEF(
 		mat a;
 		mat b;
 
-		a.create_stream();
-		b.create_stream();
-		bool new_stream =  !a.is_default_stream() && !b.is_default_stream();
+		a.get_context().create_stream();
+		b.get_context().create_stream();
+		bool new_stream =  !a.get_context().is_default_stream() && !b.get_context().is_default_stream();
 
-		a.destroy_stream();
-		b.destroy_stream();
+		a.get_context().destroy_stream();
+		b.get_context().destroy_stream();
 
-		bool destroy_stream = a.is_default_stream() && b.is_default_stream();
+		bool destroy_stream = a.get_context().is_default_stream() && b.get_context().is_default_stream();
 
 		return new_stream && destroy_stream;
 	)
@@ -60,7 +60,7 @@ int test_streams(int sz=128) {
 		mat a;
 		mat b;
 
-		a.create_stream();
+		a.get_context().create_stream();
 
 		return a.get_context() != b.get_context();
 	)
@@ -69,34 +69,34 @@ int test_streams(int sz=128) {
 		mat a;
 		mat b;
 
-		a.create_stream();
-		b.set_stream(a);
+		a.get_context().create_stream();
+		b.get_context().set_stream(a.get_context());
 
-		return a.get_context() == b.get_context() && !a.is_default_stream() && !b.is_default_stream();
+		return a.get_context() == b.get_context() && !a.get_context().is_default_stream() && !b.get_context().is_default_stream();
 	)
 
 	BC_TEST_DEF(
 		mat a(4,4);
-		a.create_stream();
+		a.get_context().create_stream();
 
 	    auto col_0 = a[0];
 	    auto scal_0 = col_0[0];
 
-		return !a.is_default_stream() &&
+		return !a.get_context().is_default_stream() &&
 				a.get_context() == col_0.get_context() &&
 				a.get_context() == scal_0.get_context();
 	)
 
 	BC_TEST_DEF(
 		mat a(4,4);
-		a.create_stream();
+		a.get_context().create_stream();
 
 	    auto col_0 = a[0];
 	    auto scal_0 = col_0[0];
 
-	    a.destroy_stream();
+	    a.get_context().destroy_stream();
 
-		return a.is_default_stream() &&
+		return a.get_context().is_default_stream() &&
 				a.get_context() != col_0.get_context() &&
 				a.get_context() != scal_0.get_context() &&
 				col_0.get_context() == scal_0.get_context();

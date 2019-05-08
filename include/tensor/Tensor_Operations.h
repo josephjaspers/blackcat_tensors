@@ -10,15 +10,14 @@
 #define BLACKCAT_TENSOR_OPERATIONS_H_
 
 namespace BC {
-template<class expression_t> class Tensor_Base;
 
+template<class>
+class Tensor_Base;
 
 namespace module {
-template<class derived> class Tensor_Operations;
-
 
 template<class Expression>
-struct Tensor_Operations<Tensor_Base<Expression>> {
+struct Tensor_Operations {
 
     template<class> friend class Tensor_Operations;
 

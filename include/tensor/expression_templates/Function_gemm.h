@@ -30,6 +30,9 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
     using blas_impl		= BC::blas::implementation<system_tag>;
     using blas_util	    = BC::exprs::blas_tools::implementation<system_tag>;
 
+    static constexpr bool transA = blas_expression_traits<lv>::is_transposed;
+    static constexpr bool transB = blas_expression_traits<rv>::is_transposed;
+
     static constexpr int DIMS 	   = rv::DIMS;
     static constexpr int ITERATOR  = 1;
 
@@ -59,8 +62,6 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
 
     template<class core, int alpha_mod, int beta_mod, class Context>
     void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, Context& alloc) const {
-        static constexpr bool transA = blas_expression_traits<lv>::is_transposed;
-        static constexpr bool transB = blas_expression_traits<rv>::is_transposed;
 
         //get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
         auto& injection = injection_values.data();

@@ -17,3 +17,6 @@
 /.settings/.*
 /Debug/
 /Debug/.*
+/Release/
+/BlackCat_Tensors/autograd/
+/BlackCat_Tensors/BlackCat_Autograd.h/

@@ -20,24 +20,29 @@ namespace BC {
 template<class ExpressionTemplate>
 class Tensor_Base :
         public ExpressionTemplate,
-        public module::Tensor_Operations<Tensor_Base<ExpressionTemplate>>,
-        public module::Tensor_Utility<Tensor_Base<ExpressionTemplate>>,
-        public module::Tensor_Accessor<Tensor_Base<ExpressionTemplate>>,
-        public module::Tensor_IterAlgos<Tensor_Base<ExpressionTemplate>> {
+        public module::Tensor_Operations<ExpressionTemplate>,
+        public module::Tensor_Utility<ExpressionTemplate>,
+        public module::Tensor_Accessor<ExpressionTemplate>,
+        public module::Tensor_IterAlgos<ExpressionTemplate> {
 
-public:
+    template<class> friend class Tensor_Base;
+    friend class module::Tensor_Operations<ExpressionTemplate>;
+    friend class module::Tensor_Utility<ExpressionTemplate>;
+    friend class module::Tensor_Accessor<ExpressionTemplate>;
 
     using parent        = ExpressionTemplate;
     using self          = Tensor_Base<ExpressionTemplate>;
-    using operations    = module::Tensor_Operations<Tensor_Base<ExpressionTemplate>>;
-    using utility       = module::Tensor_Utility<Tensor_Base<ExpressionTemplate>>;
-    using accessor      = module::Tensor_Accessor<Tensor_Base<ExpressionTemplate>>;
+    using operations    = module::Tensor_Operations<ExpressionTemplate>;
+    using utility       = module::Tensor_Utility<ExpressionTemplate>;
+    using accessor      = module::Tensor_Accessor<ExpressionTemplate>;
 
-    friend class module::Tensor_Operations<Tensor_Base<ExpressionTemplate>>;
-    friend class module::Tensor_Utility<Tensor_Base<ExpressionTemplate>>;
-    friend class module::Tensor_Accessor<Tensor_Base<ExpressionTemplate>>;
+    using move_parameter        = BC::meta::only_if<exprs::expression_traits<ExpressionTemplate>::is_move_constructible, self&&>;
+    using copy_parameter        = BC::meta::only_if<exprs::expression_traits<ExpressionTemplate>::is_copy_constructible, const self&>;
+    using move_assign_parameter = BC::meta::only_if<exprs::expression_traits<ExpressionTemplate>::is_move_assignable,       self&&>;
+    using copy_assign_parameter = BC::meta::only_if<exprs::expression_traits<ExpressionTemplate>::is_copy_assignable, const self&>;
 
-    template<class> friend class Tensor_Base;
+public:
+
     using ExpressionTemplate::ExpressionTemplate;
     using ExpressionTemplate::internal;
 
@@ -63,11 +68,6 @@ public:
 
 	using accessor::operator[];
     using accessor::operator();
-
-    using move_parameter        = BC::meta::only_if<exprs::expression_traits<ExpressionTemplate>::is_move_constructible, self&&>;
-    using copy_parameter        = BC::meta::only_if<exprs::expression_traits<ExpressionTemplate>::is_copy_constructible, const self&>;
-    using move_assign_parameter = BC::meta::only_if<exprs::expression_traits<ExpressionTemplate>::is_move_assignable,       self&&>;
-    using copy_assign_parameter = BC::meta::only_if<exprs::expression_traits<ExpressionTemplate>::is_copy_assignable, const self&>;
 
     Tensor_Base() = default;
     Tensor_Base(const parent&  param) : parent(param) {}

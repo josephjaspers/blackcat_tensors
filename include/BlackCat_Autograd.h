@@ -10,7 +10,6 @@
 
 #include "BlackCat_Allocator.h"
 #include "BlackCat_Tensors.h"
-static_assert(false, "BLACKCAT_AUTOGRAD NOT YET IMPLEMENTED");
-
+#include "autograd/Autograd.h"
 
 #endif /* BLACKCAT_AUTOGRAD_H_ */

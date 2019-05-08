@@ -48,6 +48,10 @@ int test_accessors(int sz=128) {
 //	BC_TEST_DEF(
 //		a.diagnol() = 3;
 //		vec a3(a.diagnol());
+//		vec b3(sz);
+//		b3 = a;
+//
+//		std::cout << " " << std::endl;
 //		return BC::all(a3.approx_equal(a.diagnol())) && BC::all(a.diagnol().approx_equal(3)) && a3.size() == sz;
 //	)
 

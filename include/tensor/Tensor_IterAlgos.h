@@ -8,7 +8,6 @@
 #ifndef BLACKCAT_TENSOR_ITERATOR_H_
 #define BLACKCAT_TENSOR_ITERATOR_H_
 
-
 namespace BC {
 
 template<class internal>
@@ -16,12 +15,8 @@ class Tensor_Base;
 
 namespace module {
 
-template<class derived>
-class Tensor_IterAlgos;
-
-
 template<class internal_t>
-class Tensor_IterAlgos<Tensor_Base<internal_t>> {
+class Tensor_IterAlgos {
 
 	Tensor_Base<internal_t>& as_derived() {
 		return static_cast<Tensor_Base<internal_t>&>(*this);

@@ -32,18 +32,14 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
     using blas_impl  = BC::blas::implementation<system_tag>;
     using blas_util	 = BC::exprs::blas_tools::implementation<system_tag>;
 
-    static constexpr bool transA = blas_expression_traits<lv>::is_transposed;
-    static constexpr bool transB = blas_expression_traits<rv>::is_transposed;
     static constexpr bool lv_scalar = blas_expression_traits<lv>::is_scalar_multiplied;
     static constexpr bool rv_scalar = blas_expression_traits<rv>::is_scalar_multiplied;
 
     static constexpr int DIMS  = 0;
     static constexpr int ITERATOR = 0;
 
-
     lv left;
     rv right;
-
 
     Binary_Expression(lv left, rv right) : left(left), right(right) {}
 

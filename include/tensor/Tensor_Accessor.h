@@ -10,13 +10,17 @@
 #define BLACKCAT_TENSOR_ACCESSOR_H_
 
 namespace BC {
+
+template<class>
+class Tensor_Base;
+
 namespace module {
 
-template<class derived>
+template<class ExpressionTemplate>
 class Tensor_Accessor {
 
-    const auto& as_derived() const { return static_cast<const derived&>(*this); }
-          auto& as_derived()       { return static_cast<      derived&>(*this); }
+    const auto& as_derived() const { return static_cast<const Tensor_Base<ExpressionTemplate>&>(*this); }
+          auto& as_derived()       { return static_cast<      Tensor_Base<ExpressionTemplate>&>(*this); }
 
     const auto& internal() const { return as_derived().internal_base(); }
           auto& internal()       { return as_derived().internal_base(); }
@@ -64,22 +68,22 @@ public:
 //    }
 
     const auto col(BC::size_t i) const {
-        static_assert(derived::DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+        static_assert(ExpressionTemplate::DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
         return slice(i);
     }
 
     auto col(BC::size_t i) {
-        static_assert(derived::DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+        static_assert(ExpressionTemplate::DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
         return slice(i);
     }
 
     const auto row(BC::size_t i) const {
-        static_assert(derived::DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+        static_assert(ExpressionTemplate::DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
         return make_tensor(exprs::make_row(internal(), i));
     }
 
     auto row(BC::size_t i) {
-        static_assert(derived::DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+        static_assert(ExpressionTemplate::DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
         return make_tensor(exprs::make_row(internal(), i));
     }
 

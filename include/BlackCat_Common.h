@@ -29,7 +29,7 @@ class device_tag;
 //BC_CPP17_EXECUTION std::execution::par  //defines default execution as parallel
 //BC_CPP17_EXECUTION std::execution::seq  //defines default execution as sequential
 //#define BC_TREE_OPTIMIZER_DEBUG	      //enables print statements for the tree evaluator. (For developers)
-
+//#define BC_CPP20						  //enables C++20 features -- None: this is reserved for future, NVCC does not support cpp20 features
 
 // --------------------------------- override macro-option s --------------------------------- //
 //#define BC_INLINE_OVERRIDE <compiler_attribute>       //overloads the default inline attribute
@@ -50,6 +50,18 @@ class device_tag;
 #endif
 
 #define BCHOT   		   inline __attribute__((always_inline)) __attribute__((hot))  //device-only inline
+
+// --------------------------------- unique address -----------------------------------------//
+
+
+#ifdef BC_CPP20
+#define BC_NO_UNIQUE_ADDRESS [[no_unique_address]]
+#else
+#define BC_NO_UNIQUE_ADDRESS
+#endif
+
+// --------------------------------- asserts -----------------------------------------//
+
 
 #include <iostream>
 

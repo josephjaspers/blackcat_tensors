@@ -21,7 +21,7 @@
 namespace BC {
 namespace context {
 
-class  Device {
+class Device {
 
 	struct Device_Stream_Contents {
 
