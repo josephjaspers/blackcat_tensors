@@ -42,6 +42,11 @@ int run(int sz=64) {
 	errors += test_all<float, BC::Cuda_Allocator>(sz);
 #endif
 
+	if (!errors) {
+		std::cout << "All Tests Successful" << std::endl;
+	} else {
+		std::cout << "BC Tests failure: " << errors << " tests failed" << std::endl;
+	}
 	return errors;
 }
 

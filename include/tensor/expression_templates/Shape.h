@@ -10,15 +10,13 @@
 #define INTERNAL_SHAPE_H_
 
 #include "Common.h"
-#include "Shape_Base.h"
-
 
 namespace BC {
 namespace exprs {
 
 
 template<int dims, class derived=void>
-struct Shape : Shape_Base<std::conditional_t<std::is_void<derived>::value, Shape<dims, derived>, derived>> {
+struct Shape {
 
 	static_assert(dims >= 0, "BC: SHAPE OBJECT MUST HAVE AT LEAST 0 OR MORE DIMENSIONS");
 	using self = std::conditional_t<std::is_void<derived>::value, Shape<dims, derived>, derived>;
@@ -28,7 +26,7 @@ struct Shape : Shape_Base<std::conditional_t<std::is_void<derived>::value, Shape
 
     BCINLINE Shape() {}
 
-    template<class... integers>
+    template<class... integers, class = std::enable_if_t<BC::meta::seq_of<BC::size_t, integers...>>>
     Shape(integers... ints) {
         static_assert(meta::seq_of<int, integers...>, "INTEGER LIST OF SHAPE");
         static_assert(sizeof...(integers) == dims, "integer initialization must have the same number of dimensions");
@@ -44,7 +42,7 @@ struct Shape : Shape_Base<std::conditional_t<std::is_void<derived>::value, Shape
         }
     }
 
-    template<int dim, class int_t>
+    template<int dim, class int_t, class=std::enable_if_t<(dim>=dims)>>
     BCINLINE Shape (BC::array<dim, int_t> param) {
         static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
         init(param);
@@ -66,15 +64,22 @@ struct Shape : Shape_Base<std::conditional_t<std::is_void<derived>::value, Shape
     BCINLINE BC::size_t  leading_dimension(int i) const { return i < dims ? m_block_shape[i] : 0; }
     BCINLINE BC::size_t  block_dimension(int i) const  { return leading_dimension(i); }
 
+    template<class... integers, typename=std::enable_if_t<BC::meta::seq_of<BC::size_t, integers...>>>
+    BCINLINE BC::size_t dims_to_index(integers... ints) const {
+        return dims_to_index(BC::make_array(ints...));
+    }
+
+    template<int D> BCINLINE
+    BC::size_t dims_to_index(const BC::array<D, int>& var) const {
+        BC::size_t  index = var[0];
+        for(int i = 1; i < dims; ++i) {
+            index += leading_dimension(i - 1) * var[i];
+        }
+        return index;
+    }
+
 protected:
 
-    template<class T>
-    void copy_shape(const Shape_Base<T>& shape) {
-        for (int i = 0; i < dims; ++i) {
-            m_inner_shape[i] = shape.dimension(i);
-            m_block_shape[i] = shape.block_dimension(i);
-        }
-    }
     void swap_shape(Shape& b) {
         std::swap(m_inner_shape, b.m_inner_shape);
         std::swap(m_block_shape, b.m_block_shape);
@@ -112,8 +117,12 @@ struct Shape<0> {
     BCINLINE BC::size_t  leading_dimension(int i) const { return 0; }
     BCINLINE BC::size_t  block_dimension(int i) const { return 1; }
 
-    template<class deriv> void copy_shape(const Shape_Base<deriv>& shape) {}
     static void swap_shape(Shape& a) {}
+
+    template<class... integers>
+    BCINLINE BC::size_t dims_to_index(integers... ints) const {
+    	return 0;
+    }
 };
 
 template<>
@@ -156,21 +165,16 @@ struct Shape<1> {
     BCINLINE const auto& outer_shape() const { return m_block_shape; }
     BCINLINE const auto& block_shape() const { return m_inner_shape; }
 
-    void copy_shape(const Shape<1>& shape) {
-        this->m_inner_shape = shape.m_inner_shape;
-        this->m_block_shape = shape.m_block_shape;
-    }
-
-    template<class deriv> void copy_shape(const Shape_Base<deriv>& shape) {
-        this->m_inner_shape[0] = shape.dimension(0);
-        this->m_block_shape[0] = shape.dimension(0);
-    }
-
     void swap_shape(Shape<1>& shape){
         std::swap(m_inner_shape, shape.m_inner_shape);
         std::swap(m_block_shape, shape.m_block_shape);
     }
 
+
+    template<class... integers>
+    BCINLINE constexpr BC::size_t dims_to_index(BC::size_t i, integers... ints) const {
+    	return m_block_shape[0] * i;
+    }
 
 };
 
@@ -196,7 +200,29 @@ struct SubShape : Shape<ndims, SubShape<ndims>> {
 			m_outer_shape[i] = parent_shape.m_outer_shape[i];
 		}
 	}
+	template<int Dims, class=std::enable_if_t<(Dims>=ndims)>>
+	SubShape(SubShape<Dims>& parent_shape) {
+		for (int i = 0; i < ndims; ++i ) {
+			this->m_outer_shape[i] = parent_shape.m_outer_shape[i];
+			this->m_inner_shape[i] = parent_shape.m_inner_shape[i];
+			this->m_block_shape[i] = parent_shape.m_block_shape[i];
+		}
+	}
 
+
+    template<class... integers, typename=std::enable_if_t<BC::meta::seq_of<BC::size_t, integers...>>>
+    BCINLINE BC::size_t dims_to_index(integers... ints) const {
+        return dims_to_index(BC::make_array(ints...));
+    }
+
+    template<int D> BCINLINE
+    BC::size_t dims_to_index(const BC::array<D, int>& var) const {
+        BC::size_t  index = var[0];
+        for(int i = 1; i < ndims; ++i) {
+            index += leading_dimension(i - 1) * var[i];
+        }
+        return index;
+    }
 
     BCINLINE const auto& outer_shape() const { return m_outer_shape; }
     BCINLINE BC::size_t  leading_dimension(int i) const { return m_outer_shape[i]; }
@@ -206,11 +232,15 @@ struct SubShape : Shape<ndims, SubShape<ndims>> {
 private:
 	//hide from external sources
 	using Shape<ndims, SubShape<ndims>>::swap_shape;
-	using Shape<ndims, SubShape<ndims>>::copy_shape;
+};
+
+template<>
+struct SubShape<1> : Shape<1, SubShape<1>> {
+	using parent= Shape<1, SubShape<1>>;
+	using parent::parent;
 };
 
 }
-
 //push shape into BC namespace
 template<int x>
 using Shape = exprs::Shape<x>;

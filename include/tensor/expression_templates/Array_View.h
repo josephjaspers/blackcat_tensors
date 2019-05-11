@@ -24,6 +24,7 @@ struct Const_View
 
     using value_type = Scalar;
     using system_tag = SystemTag;
+    using shape_type = Shape<Dimension>;
 
     static constexpr bool copy_constructible = true;
     static constexpr bool move_constructible = true;
@@ -39,13 +40,16 @@ struct Const_View
     Const_View(const Const_View& ) = default;
     Const_View(      Const_View&&) = default;
 
-    BCINLINE
-    const value_type* memptr() const  { return array; }
+    BCINLINE const value_type* memptr() const  { return array; }
 
 	template<class Tensor>
-	Const_View(Tensor& tensor, BC::exprs::Shape<Dimension> shape, int index)
-	: BC::exprs::Shape<Dimension>(shape),
-	  array(&tensor[index]) {}
+	BCINLINE Const_View(Tensor& tensor)
+	: shape_type(tensor.get_shape()),
+	  array(tensor.memptr()) {}
+
+	BCINLINE const shape_type& get_shape() const {
+		return static_cast<const shape_type&>(*this);
+	}
 };
 }
 
@@ -82,12 +86,7 @@ struct Array_Const_View
 			tensor_t::DIMS == Dimension &&
 			expression_traits<tensor_t>::is_array>
 	>
-	Array_Const_View(const tensor_t& tensor) {
-		this->array = tensor.memptr();
-		this->copy_shape(tensor);
-		this->alloc = &(tensor.get_allocator());
-		this->context = tensor.get_context();
-	}
+	Array_Const_View(const tensor_t& tensor) : parent(tensor) {}
 
 	const Allocator& get_allocator() {
 		return *alloc;

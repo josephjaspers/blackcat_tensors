@@ -19,27 +19,14 @@ template<class,class>		struct Unary_Expression;
 
 
 namespace detail {
-template<class T> using func_value_type = typename T::value_type;
-template<class T> using allocation_tag_type = typename T::allocation_tag;
-template<class T> using system_tag_type = typename T::system_tag;
-
-
-
-//template<class T, class voider=void> struct  allocation_tag_type;
-
-//template<class T>
-//struct  allocation_tag_type<T, std::enable_if_t<BC::meta::true_v<typename T::allocation_tag>>> {;
-//using type = typename T::allocation_tag;
-//};
-
-
-
-
+template<class T> using query_value_type = typename T::value_type;
+template<class T> using query_allocation_type = typename T::allocation_tag;
+template<class T> using query_system_tag = typename T::system_tag;
 
 template<class T>
 struct remove_scalar_mul {
 	using type = T;
-	using scalar_type = typename BC::meta::conditional_detected<func_value_type, T, T>::type *;
+	using scalar_type = typename BC::meta::conditional_detected<query_value_type, T, T>::type *;
 
 
 	static T rm(T expression) {
@@ -110,13 +97,20 @@ class BC_Expr  {};
 class BC_Temporary {};
 class BC_Scalar_Constant {};
 class BC_Stack_Allocated {};
+class BC_View {};
+class BC_Noncontinuous {};
+
+//forward declare
+template<int> class SubShape;
+template<int,class> class Shape;
 
 
 template<class T>
 struct expression_traits {
 
-	 using system_tag					= typename BC::meta::conditional_detected<detail::system_tag_type, T, host_tag>::type;
-	 using allocation_tag				= typename BC::meta::conditional_detected<detail::allocation_tag_type, T, system_tag>::type;
+	 using system_tag	  = typename BC::meta::conditional_detected<detail::query_system_tag, T, host_tag>::type;
+	 using allocation_tag = typename BC::meta::conditional_detected<detail::query_allocation_type, T, system_tag>::type;
+	 using value_type	  = typename BC::meta::conditional_detected<detail::query_value_type, T, void>::type;
 
 
 	static constexpr bool is_move_constructible = T::move_constructible;
@@ -124,8 +118,11 @@ struct expression_traits {
 	static constexpr bool is_move_assignable 	= T::move_assignable;
 	static constexpr bool is_copy_assignable 	= T::copy_assignable;
 
-	 static constexpr bool is_bc_type  	= std::is_base_of<BC_Type, T>::value;
-	 static constexpr bool is_array  	= std::is_base_of<BC_Array, T>::value;
+	 static constexpr bool is_bc_type  	 = std::is_base_of<BC_Type, T>::value;
+	 static constexpr bool is_array  	 = std::is_base_of<BC_Array, T>::value;
+	 static constexpr bool is_view 		 = std::is_base_of<BC_View, T>::value;
+	 static constexpr bool is_continuous = !std::is_base_of<BC_Noncontinuous, T>::value;
+
 	 static constexpr bool is_expr  	= std::is_base_of<BC_Expr, T>::value;
 	 static constexpr bool is_temporary = std::is_base_of<BC_Temporary, T>::value;
 	 static constexpr bool is_constant  = std::is_base_of<BC_Stack_Allocated, T>::value;

@@ -36,56 +36,50 @@ namespace exprs {
 template<int Dimension, class ValueType, class SystemTag, class... Tags>
 struct ArrayExpression
 		: Array_Base<ArrayExpression<Dimension, ValueType, SystemTag, Tags...>, Dimension>,
-		  Shape<Dimension>, public Tags... {
+		  std::conditional_t<BC::meta::seq_contains<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>,
+		  public Tags... {
 
     using value_type = ValueType;
     using system_tag = SystemTag;
+    using shape_type = std::conditional_t<BC::meta::seq_contains<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>;
+    using self_type  = ArrayExpression<Dimension, ValueType, SystemTag, Tags...>;
 
-    static constexpr bool copy_constructible = true;
-    static constexpr bool move_constructible = true;
+    static constexpr bool copy_constructible = !expression_traits<self_type>::is_view;
+    static constexpr bool move_constructible = !expression_traits<self_type>::is_view;
     static constexpr bool copy_assignable    = true;
-    static constexpr bool move_assignable    = true;
+    static constexpr bool move_assignable    = !expression_traits<self_type>::is_view;
 
-    static constexpr int  DIMS = Dimension;
-    static constexpr int ITERATOR = 1;
+    static constexpr int DIMS = Dimension;
+    static constexpr int ITERATOR = expression_traits<self_type>::is_continuous ? 1 : DIMS;
 
-     value_type* array = nullptr;
+    value_type* array = nullptr;
+
+    ArrayExpression()=default;
+    ArrayExpression(const ArrayExpression&)=default;
+    ArrayExpression(ArrayExpression&&)=default;
+    ArrayExpression(shape_type shape, value_type* ptr)
+    	: shape_type(shape), array(ptr) {};
 
     BCINLINE const value_type* memptr() const { return array; }
     BCINLINE       value_type* memptr()       { return array; }
 
-    BCINLINE const Shape<Dimension>& get_shape() const { return static_cast<const Shape<Dimension>&>(*this); }
+    BCINLINE const shape_type& get_shape() const { return static_cast<const shape_type&>(*this); }
 
-};
+    BCINLINE const auto& operator [](int index) const {
+    	if (!expression_traits<self_type>::is_continuous && DIMS==1) {
+    		return array[this->leading_dimension(0) * index];
+    	} else {
+    		return array[index];
+    	}
+    }
 
-//specialization for scalar --------------------------------------------------------------------------------------------------------
-template<class ValueType, class SystemTag, class... Tags>
-struct ArrayExpression<0, ValueType, SystemTag, Tags...>
-: Array_Base<ArrayExpression<0, ValueType, SystemTag, Tags...>, 0>,
-  public Shape<0>,
-  public Tags... {
-
-	using system_tag = SystemTag;
-	using value_type = ValueType;
-
-	static constexpr int DIMS = 0;
-	static constexpr int ITERATOR = 0;
-
-	value_type* array = nullptr;
-
-	BCINLINE const auto& operator [] (int index) const { return array[0]; }
-	BCINLINE	   auto& operator [] (int index) 	   { return array[0]; }
-
-	template<class... integers> BCINLINE
-	const auto& operator () (integers... ints) const { return array[0]; }
-
-	template<class... integers> BCINLINE
-	      auto& operator () (integers... ints)      { return array[0]; }
-
-	BCINLINE const value_type* memptr() const { return array; }
-	BCINLINE       value_type* memptr()       { return array; }
-
-    BCINLINE const Shape<0>& get_shape() const { return static_cast<const Shape<0>&>(*this); }
+    BCINLINE auto& operator [](int index) {
+    	if (!expression_traits<self_type>::is_continuous && DIMS==1) {
+    		return array[this->leading_dimension(0) * index];
+    	} else {
+    		return array[index];
+    	}
+    }
 
 };
 
@@ -109,7 +103,6 @@ public:
 	using allocator_t = Allocator;
 	using context_t   = Context<system_tag>;
 	using value_type = Scalar;
-
 
 private:
 
@@ -142,9 +135,9 @@ public:
 	: Allocator(std::move(array_.get_allocator())),
 	  context_t(std::move(array_.get_context())),
 	  parent(array_) {
-		array_.m_inner_shape = {0};
-		array_.m_block_shape = {0};
 		array_.array = nullptr;
+		//This causes segmentation fault with NVCC currently
+//		array_.as_shape() = BC::Shape<Dimension>(); //resets the shape
 	}
 
 	//Construct via shape-like object

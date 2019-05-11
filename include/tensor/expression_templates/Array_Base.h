@@ -49,12 +49,12 @@ public:
 
     template<class ... integers>
     BCINLINE const auto& operator ()(integers ... ints) const {
-        return as_derived()[this->dims_to_index(ints...)];
+        return as_derived()[this->as_derived().dims_to_index(ints...)];
     }
 
     template<class ... integers>
     BCINLINE auto& operator ()(integers ... ints) {
-        return as_derived()[this->dims_to_index(ints...)];
+        return as_derived()[this->as_derived().dims_to_index(ints...)];
     }
 
 
@@ -99,21 +99,6 @@ public:
         else
             return as_derived().leading_dimension(Dimension - 2) * i;
     }
-
-    template<class... integers, typename=std::enable_if_t<meta::seq_of<BC::size_t, integers...>>> BCINLINE
-    BC::size_t dims_to_index(integers... ints) const {
-        return dims_to_index(BC::make_array(ints...));
-    }
-
-    template<int D> BCINLINE
-    BC::size_t dims_to_index(const BC::array<D, int>& var) const {
-        BC::size_t  index = var[0];
-        for(int i = 1; i < DIMS; ++i) {
-            index += this->as_derived().leading_dimension(i - 1) * var[i];
-        }
-        return index;
-    }
-
 };
 
 
