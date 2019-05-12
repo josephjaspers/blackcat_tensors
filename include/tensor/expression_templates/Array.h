@@ -84,15 +84,13 @@ struct ArrayExpression
 };
 
 
-template<class,class> class Array_Slice;
+template<int ,class,class, class...> class Array_Slice;
 
 template<int Dimension, class Scalar, class Allocator, class... Tags>
 class Array :
 			private Allocator,
 			public Context<typename BC::allocator_traits<Allocator>::system_tag>,
 			public ArrayExpression<Dimension, Scalar, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
-
-	template<class,class> friend class Array_Slice;
 
 	using self = Array<Dimension, Scalar, Allocator, Tags...>;
 	using parent = ArrayExpression<Dimension, Scalar,  typename BC::allocator_traits<Allocator>::system_tag, Tags...>;
@@ -111,12 +109,10 @@ private:
 
 public:
 	const context_t& get_context() const { return static_cast<const context_t&>(*this); }
-          context_t& get_context() 	    { return static_cast<	   context_t&>(*this); }
+          context_t& get_context() 	     { return static_cast<	    context_t&>(*this); }
 
-
-      	const Allocator& get_allocator() const { return static_cast<const Allocator&>(*this); }
-      		  Allocator& get_allocator() 	  { return static_cast<		 Allocator&>(*this); }
-
+	const Allocator& get_allocator() const { return static_cast<const Allocator&>(*this); }
+		  Allocator& get_allocator() 	   { return static_cast<		  Allocator&>(*this); }
 
 	Array() {
 		if (Dimension == 0) {
@@ -149,15 +145,12 @@ public:
     	this->array = this->allocate(this->size());
     }
 
-    Array(const Allocator& alloc_) : Allocator(alloc_) {}
-
 	//Construct via shape-like object and Allocator
     template<class U,typename = std::enable_if_t<!expression_traits<U>::is_array && !expression_traits<U>::is_expr>>
     Array(U param, const Allocator& alloc_) : Allocator(alloc_) {
     	this->as_shape() = Shape<Dimension>(param);
     	this->array = this->allocate(this->size());
     }
-
 
 	//Constructor for integer sequence, IE Matrix(m, n)
 	template<class... args,
@@ -181,14 +174,8 @@ public:
 	//If Copy-constructing from a slice, attempt to query the allocator
     //Restrict to same value_type (obviously), same dimensions (for fast-copy)
     //And restrict to continuous (as we should attempt to support Sparse matrices in the future)
-    template<
-    	class Parent, class ViewType,//>//,
-    	typename=
-    			std::enable_if_t<
-    			std::is_same<typename Parent::allocator_t, allocator_t>::value &&
-    			std::is_same<typename Parent::value_type, value_type>::value &&
-    			Array_Slice<Parent, ViewType>::DIMS == Dimension>>
-	Array(const Array_Slice<Parent, ViewType>& expr_t)
+    template<class... SliceTags>
+	Array(const Array_Slice<Dimension, value_type, allocator_t, SliceTags...>& expr_t)
 	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(
 			expr_t.get_allocator())),
 	  context_t(expr_t.get_context())
