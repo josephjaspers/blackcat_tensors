@@ -9,7 +9,7 @@
 #ifndef BC_EXPRESSION_TEMPLATES_FUNCTION_GER_H_
 #define BC_EXPRESSION_TEMPLATES_FUNCTION_GER_H_
 
-#include "Expression_Base.h"
+#include "Expression_Template_Base.h"
 #include "Tree_Lazy_Evaluator.h"
 #include "Array_Scalar_Constant.h"
 #include "blas_tools/Blas_tools.h"

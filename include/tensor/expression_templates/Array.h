@@ -10,7 +10,7 @@
 #define BC_EXPRESSION_TEMPLATES_ARRAY_H_
 
 
-#include "Array_Base.h"
+#include "Expression_Template_Base.h"
 
 
 namespace BC {
@@ -41,6 +41,7 @@ struct ArrayExpression
 
     using value_type = ValueType;
     using system_tag = SystemTag;
+    using pointer_type = std::conditional_t<BC::meta::seq_contains<BC_Immutable, Tags...>,  BC::meta::apply_const_t<value_type>*, value_type*>;
     using shape_type = std::conditional_t<BC::meta::seq_contains<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>;
     using self_type  = ArrayExpression<Dimension, ValueType, SystemTag, Tags...>;
 
@@ -52,16 +53,16 @@ struct ArrayExpression
     static constexpr int DIMS = Dimension;
     static constexpr int ITERATOR = expression_traits<self_type>::is_continuous ? 1 : DIMS;
 
-    value_type* array = nullptr;
+    pointer_type array = nullptr;
 
     ArrayExpression()=default;
     ArrayExpression(const ArrayExpression&)=default;
     ArrayExpression(ArrayExpression&&)=default;
-    ArrayExpression(shape_type shape, value_type* ptr)
+    ArrayExpression(shape_type shape, pointer_type ptr)
     	: shape_type(shape), array(ptr) {};
 
-    BCINLINE const value_type* memptr() const { return array; }
-    BCINLINE       value_type* memptr()       { return array; }
+    BCINLINE BC::meta::apply_const_t<pointer_type> memptr() const { return array; }
+    BCINLINE       pointer_type memptr()       { return array; }
 
     BCINLINE const shape_type& get_shape() const { return static_cast<const shape_type&>(*this); }
 
@@ -79,6 +80,25 @@ struct ArrayExpression
     	} else {
     		return array[index];
     	}
+    }
+
+    template<class ... integers>
+    BCINLINE const auto& operator ()(integers ... ints) const {
+        return array[this->dims_to_index(ints...)];
+    }
+
+    template<class ... integers>
+    BCINLINE auto& operator ()(integers ... ints) {
+        return array[this->dims_to_index(ints...)];
+    }
+
+    BCINLINE auto slice_ptr_index(int i) const {
+        if (DIMS == 0)
+            return 0;
+        else if (DIMS == 1)
+            return i;
+        else
+            return this->leading_dimension(Dimension - 2) * i;
     }
 
 };
@@ -186,7 +206,7 @@ public:
 	}
 
 public:
-    void internal_move(Array& array) {
+    void internal_move(Array&& array) {
     		if (BC::allocator_traits<Allocator>::is_always_equal::value ||
     			array.get_allocator() == this->get_allocator()) {
 			std::swap(this->array, array.array);
@@ -218,7 +238,7 @@ public:
 };
 
 template<class ValueType, int dims, class Context>
-auto make_temporary_tensor_array(BC::Shape<dims> shape, Context context) {
+auto make_temporary_tensor_array(Shape<dims> shape, Context context) {
 	static_assert(dims >= 1, "make_temporary_tensor_array: assumes dimension is 1 or greater");
 	using system_tag = typename Context::system_tag;
 	using Array = ArrayExpression<dims, ValueType, system_tag, BC_Temporary>;

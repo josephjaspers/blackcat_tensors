@@ -201,11 +201,20 @@ struct SubShape : Shape<ndims, SubShape<ndims>> {
 		}
 	}
 	template<int Dims, class=std::enable_if_t<(Dims>=ndims)>>
-	SubShape(SubShape<Dims>& parent_shape) {
+	SubShape(SubShape<Dims> parent_shape) {
 		for (int i = 0; i < ndims; ++i ) {
 			this->m_outer_shape[i] = parent_shape.m_outer_shape[i];
 			this->m_inner_shape[i] = parent_shape.m_inner_shape[i];
 			this->m_block_shape[i] = parent_shape.m_block_shape[i];
+		}
+	}
+
+	template<int Dims, class=std::enable_if_t<(Dims>=ndims)>>
+	SubShape(Shape<Dims> parent_shape) {
+		for (int i = 0; i < ndims; ++i ) {
+			this->m_outer_shape[i] = parent_shape.leading_dimension(i);
+			this->m_inner_shape[i] = parent_shape.dimension(i);
+			this->m_block_shape[i] = parent_shape.block_dimension(i);
 		}
 	}
 

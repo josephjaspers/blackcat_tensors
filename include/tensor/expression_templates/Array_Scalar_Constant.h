@@ -9,7 +9,7 @@
 #ifndef BC_EXPRESSION_TEMPLATES_ARRAY_SCALAR_CONSTANT_H_
 #define BC_EXPRESSION_TEMPLATES_ARRAY_SCALAR_CONSTANT_H_
 
-#include "Array_Base.h"
+#include "Expression_Template_Base.h"
 #include "Shape.h"
 
 namespace BC {
@@ -26,6 +26,12 @@ struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, SystemTag>
 
     static constexpr int ITERATOR = 0;
     static constexpr int DIMS     = 0;
+
+    static constexpr bool copy_constructible = true;
+    static constexpr bool move_constructible = true;
+    static constexpr bool copy_assignable    = true;
+    static constexpr bool move_assignable    = true;
+
 
     value_type scalar;
 
@@ -62,6 +68,11 @@ struct Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>
     static constexpr int ITERATOR = 0;
     static constexpr int DIMS     = 0;
 
+    static constexpr bool copy_constructible = false;
+    static constexpr bool move_constructible = false;
+    static constexpr bool copy_assignable    = false;
+    static constexpr bool move_assignable    = false;
+
     Scalar value = Scalar(Value);
 
     template<class... integers> BCINLINE auto operator()  (const integers&...) const { return Value; }
@@ -86,6 +97,11 @@ struct Constexpr_Scalar_Constant<Value, Scalar, BC::device_tag>
 
     static constexpr int ITERATOR = 0;
     static constexpr int DIMS     = 0;
+
+    static constexpr bool copy_constructible = true;
+    static constexpr bool move_constructible = true;
+    static constexpr bool copy_assignable    = true;
+    static constexpr bool move_assignable    = true;
 
     const Scalar* value = cuda_constexpr_scalar_ptr();
 

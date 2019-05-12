@@ -9,22 +9,23 @@
 #ifndef BC_EXPRESSION_TEMPLATES_ARRAY_VIEW_H_
 #define BC_EXPRESSION_TEMPLATES_ARRAY_VIEW_H_
 
-#include "Array_Base.h"
+#include "Expression_Template_Base.h"
+#include "Shape.h"
 #include "Array.h"
 
 
 namespace BC {
 namespace exprs {
-namespace array_view {
 
-template<int Dimension, class Scalar, class SystemTag>
-struct Const_View
-        : Array_Base<Const_View<Dimension, Scalar, SystemTag>, Dimension>,
-          Shape<Dimension> {
+template<int Dimension, class Scalar, class Allocator>
+struct Array_Const_View
+		: ArrayExpression<Dimension,
+						  Scalar,
+						  typename BC::allocator_traits<Allocator>::system_tag, BC_Noncontinuous> {
 
-    using value_type = Scalar;
-    using system_tag = SystemTag;
-    using shape_type = Shape<Dimension>;
+	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
+	using context_type = BC::Context<system_tag>;
+	using parent =  ArrayExpression<Dimension, Scalar, system_tag, BC_Noncontinuous>;
 
     static constexpr bool copy_constructible = true;
     static constexpr bool move_constructible = true;
@@ -34,37 +35,6 @@ struct Const_View
     static constexpr int DIMS = Dimension;
     static constexpr int ITERATOR = DIMS;
 
-    const value_type* array = nullptr;
-
-    Const_View()                      = default;
-    Const_View(const Const_View& ) = default;
-    Const_View(      Const_View&&) = default;
-
-    BCINLINE const value_type* memptr() const  { return array; }
-
-	template<class Tensor>
-	BCINLINE Const_View(Tensor& tensor)
-	: shape_type(tensor.get_shape()),
-	  array(tensor.memptr()) {}
-
-	BCINLINE const shape_type& get_shape() const {
-		return static_cast<const shape_type&>(*this);
-	}
-};
-}
-
-
-template<int Dimension, class Scalar, class Allocator>
-struct Array_Const_View
-		: array_view::Const_View<Dimension,
-		  	  	  	  	  	  	  Scalar,
-		  	  	  	  	  	  	  typename BC::allocator_traits<Allocator>::system_tag> {
-
-	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
-	using context_type = BC::Context<system_tag>;
-	using parent =  array_view::Const_View<Dimension, Scalar, system_tag>;
-	using parent::parent;
-
 	context_type context;
 	const Allocator* alloc = nullptr;
 
@@ -72,12 +42,11 @@ struct Array_Const_View
 	Array_Const_View(const Array_Const_View&) = default;
 	Array_Const_View(Array_Const_View&&) = default;
 
-	void internal_move(Array_Const_View& swap) {
+	void internal_move(Array_Const_View&& swap) {
 		this->context = swap.context;
 		this->alloc   = & swap.get_allocator();
-
-		std::swap(this->array, swap.array);
-		this->swap_shape(swap);
+		this->array   = swap.array;
+		static_cast<SubShape<Dimension>&>(*this) = SubShape<Dimension>(swap);
 	}
 
 	template<
@@ -86,7 +55,10 @@ struct Array_Const_View
 			tensor_t::DIMS == Dimension &&
 			expression_traits<tensor_t>::is_array>
 	>
-	Array_Const_View(const tensor_t& tensor) : parent(tensor) {}
+	Array_Const_View(const tensor_t& tensor)
+	: parent(typename parent::shape_type(tensor.get_shape()), tensor.memptr()),
+	  context(tensor.get_context()),
+	  alloc(&tensor.get_allocator()) {}
 
 	const Allocator& get_allocator() {
 		return *alloc;

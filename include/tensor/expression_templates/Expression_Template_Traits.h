@@ -99,6 +99,7 @@ class BC_Scalar_Constant {};
 class BC_Stack_Allocated {};
 class BC_View {};
 class BC_Noncontinuous {};
+class BC_Immutable {};
 
 //forward declare
 template<int> class SubShape;
@@ -126,6 +127,8 @@ struct expression_traits {
 	 static constexpr bool is_expr  	= std::is_base_of<BC_Expr, T>::value;
 	 static constexpr bool is_temporary = std::is_base_of<BC_Temporary, T>::value;
 	 static constexpr bool is_constant  = std::is_base_of<BC_Stack_Allocated, T>::value;
+	 static constexpr bool is_immutable  = std::is_base_of<BC_Immutable, T>::value;
+
 };
 
 template<class T>

@@ -9,8 +9,7 @@
 #ifndef BC_EXPRESSION_TEMPLATES_FUNCTION_GEMV_H_
 #define BC_EXPRESSION_TEMPLATES_FUNCTION_GEMV_H_
 
-#include "Function_dot.h"
-#include "Expression_Base.h"
+#include "Expression_Template_Base.h"
 #include "Tree_Lazy_Evaluator.h"
 #include "blas_tools/Blas_tools.h"
 

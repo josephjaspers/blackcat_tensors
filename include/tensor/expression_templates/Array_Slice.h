@@ -8,10 +8,8 @@
 #ifndef BC_EXPRESSION_TEMPLATES_ARRAY_SLICE_H_
 #define BC_EXPRESSION_TEMPLATES_ARRAY_SLICE_H_
 
-#include "Common.h"
-#include "Array_Base.h"
+#include "Expression_Template_Base.h"
 #include "Shape.h"
-
 
 namespace BC {
 namespace exprs {

@@ -9,8 +9,8 @@
 #ifndef BC_EXPRESSION_TEMPLATES_EXPRESSION_BINARY_H_
 #define BC_EXPRESSION_TEMPLATES_EXPRESSION_BINARY_H_
 
-#include "Expression_Base.h"
-
+#include "Expression_Template_Base.h"
+#include "Shape.h"
 
 namespace BC {
 namespace exprs {
