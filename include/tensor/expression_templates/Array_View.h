@@ -36,7 +36,7 @@ struct Array_Const_View
     static constexpr int ITERATOR = DIMS;
 
 	context_type context;
-	const Allocator* alloc = nullptr;
+	Allocator alloc;
 
 	Array_Const_View() = default;
 	Array_Const_View(const Array_Const_View&) = default;
@@ -44,7 +44,7 @@ struct Array_Const_View
 
 	void internal_move(Array_Const_View&& swap) {
 		this->context = swap.context;
-		this->alloc   = & swap.get_allocator();
+		this->alloc   = swap.get_allocator();
 		this->array   = swap.array;
 		static_cast<SubShape<Dimension>&>(*this) = SubShape<Dimension>(swap);
 	}
@@ -58,13 +58,13 @@ struct Array_Const_View
 	Array_Const_View(const tensor_t& tensor)
 	: parent(typename parent::shape_type(tensor.get_shape()), tensor.memptr()),
 	  context(tensor.get_context()),
-	  alloc(&tensor.get_allocator()) {}
+	  alloc(tensor.get_allocator()) {}
 
 	const Allocator& get_allocator() {
-		return *alloc;
+		return alloc;
 	}
 	const Allocator& get_allocator() const {
-		return *alloc;
+		return alloc;
 	}
 
 	const auto& internal_base() const { return *this; }

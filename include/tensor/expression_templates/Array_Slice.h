@@ -24,10 +24,10 @@ struct Array_Slice : ArrayExpression<Dimensions, ValueType, typename BC::allocat
 public:
 
 	context_t m_context;
-	allocator_t& m_allocator;
+	allocator_t m_allocator;
 
 	template<class... Args>
-	BCHOT Array_Slice(context_t context_, allocator_t& allocator_, Args... args_)
+	BCHOT Array_Slice(context_t context_, allocator_t allocator_, Args... args_)
 	: parent(args_...),
 	  m_context(context_),
 	  m_allocator(allocator_) {}
@@ -114,7 +114,7 @@ static auto make_ranged_slice(Parent& parent, BC::size_t from, BC::size_t to) {
 	using slice_type = Array_Slice<
 									Dimension,
 									value_type,
-									BC::meta::propagate_const_t<Parent, typename Parent::allocator_t>>;
+									typename Parent::allocator_t>;
 
 	BC::size_t range = to - from;
 	BC::size_t index = parent.slice_ptr_index(from);
@@ -133,7 +133,7 @@ static auto make_view(Parent& parent, BC::array<ndims, BC::size_t> shape) {
 	using slice_type = Array_Slice<
 			ndims,
 			value_type,
-			BC::meta::propagate_const_t<Parent, typename Parent::allocator_t>>;
+			typename Parent::allocator_t>;
 
 	return slice_type(parent.get_context(), parent.get_allocator(), BC::Shape<ndims>(shape), parent.memptr());
 }
@@ -146,7 +146,7 @@ template<class Parent>
 				Array_Slice<
 							0,
 							value_type,
-							BC::meta::propagate_const_t<Parent, typename Parent::allocator_t>>;
+							typename Parent::allocator_t>;
 
 		return slice_type(parent.get_context(), parent.get_allocator(), BC::Shape<0>(), parent.memptr() + index);
 	}
