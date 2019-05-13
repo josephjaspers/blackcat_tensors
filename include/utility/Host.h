@@ -31,7 +31,7 @@ struct Host {
         copy(host_ptr, device_ptr, size);
     }
     template<class T>
-    static T extract(T* data_ptr, BC::size_t  index) {
+    static T extract(T* data_ptr, BC::size_t index=0) {
     	return data_ptr[index];
     }
 };

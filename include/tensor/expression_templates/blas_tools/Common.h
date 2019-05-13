@@ -22,8 +22,8 @@ struct Common_Tools {
 	template<class Scalar_t, int alpha_mod, bool lv_scalar, bool rv_scalar, class Context,  class lv_scalar_t, class rv_scalar_t>
 	static auto calculate_alpha(Context context, lv_scalar_t lv, rv_scalar_t rv) {
 
-		static constexpr bool lv_host_mode = (BC::exprs::expression_traits<lv_scalar_t>::is_constant);
-		static constexpr bool rv_host_mode = (BC::exprs::expression_traits<rv_scalar_t>::is_constant);
+		static constexpr bool lv_host_mode = (BC::exprs::expression_traits<lv_scalar_t>::is_stack_allocated);
+		static constexpr bool rv_host_mode = (BC::exprs::expression_traits<rv_scalar_t>::is_stack_allocated);
 		static_assert(lv_host_mode == rv_host_mode || lv_scalar != rv_scalar,
 				"Host and Device Scalars may not be mixed Blas calculations");
 		static constexpr bool host_mode    = lv_host_mode || rv_host_mode;

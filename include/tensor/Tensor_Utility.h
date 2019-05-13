@@ -51,71 +51,104 @@ private:
         return static_cast<const derived&>(*this);
     }
 public:
-    void print(int precision=8) const {
+    std::string to_string(int precision=5, bool sparse=false, bool pretty=false) const{
     	const_cast<derived&>(this->as_derived()).get_context().sync_stream();
-    	this->print_impl<void>(precision);
+    	std::stringstream ss;
+    	std::string data =  this->print_impl<void>(ss, precision, sparse, pretty).str();
+    	return data;
+    }
+
+    std::string to_pretty_string(int precision=5, bool sparse=false) const {
+    	return to_string(precision, sparse, true);
+    }
+
+    void print(int precision=8, bool sparse=false, bool pretty=false) const {
+    	std::cout << this->to_string(precision, sparse, pretty) << '\n';
+    }
+
+    void printSparse(int precision=8, bool pretty=true) const {
+    	const_cast<derived&>(this->as_derived()).get_context().sync_stream();
+    	std::cout << this->to_string(precision, true, pretty) << '\n';
     }
 
 private:
 
-    static std::string format_value(const scalar& s,  BC::size_t   precision, bool sparse=false) {
+    static std::string format_value(const scalar& s, BC::size_t precision, bool sparse=false) {
     	std::string fstr  = !sparse || std::abs(s) > .1 ? std::to_string(s) : "";
     	if (fstr.length() < (unsigned)precision)
     		return fstr.append(precision - fstr.length(), ' ');
     	else
     		return fstr.substr(0, precision);
     }
+    static std::string only_if(std::string msg, bool pretty) {
+    	return pretty ? msg : "";
+    }
 
     template<class ADL=void>
-    std::enable_if_t<std::is_void<ADL>::value && (DIMS == 0)>
-    print_impl(int prec) const {
-    	std::cout << "[" << format_value(utility_l::extract(as_derived().memptr(), 0), prec) << "]" << std::endl;
+    std::enable_if_t<std::is_void<ADL>::value && (DIMS == 0), std::stringstream&>
+    print_impl(std::stringstream& ss, int prec, bool sparse, bool pretty) const {
+    	return ss << only_if("]", pretty)
+    				<< format_value(utility_l::extract(as_derived().memptr(), 0), prec)
+    				<< only_if("]", pretty) << '\n';
     }
 
     template<class ADL=void, class v1=void>
-    std::enable_if_t<std::is_void<ADL>::value && (DIMS == 1)>
-    print_impl(int prec, bool sparse=false) const {
-    	std::cout << "[ ";
+    std::enable_if_t<std::is_void<ADL>::value && (DIMS == 1), std::stringstream&>
+    print_impl(std::stringstream& ss, int prec, bool sparse, bool pretty) const {
+    	bool first = true;
+
+    	ss << only_if("]", pretty);
     	for (const auto& scalar : this->as_derived().iter()) {
-    		std::cout << format_value(utility_l::extract(&scalar, 0), prec, sparse) << ", ";
+    		if (first) {
+    			first = false;
+    			ss << format_value(utility_l::extract(&scalar, 0), prec, sparse);
+    		} else {
+    			ss << ", " << format_value(utility_l::extract(&scalar, 0), prec, sparse);
+    		}
     	}
-    	std::cout << "]" << std::endl;
+    	ss << only_if(" ]", pretty) << '\n';
+    	return ss;
     }
 
     template<class ADL=void, class v1=void, class v2=void>
-    std::enable_if_t<std::is_void<ADL>::value && (DIMS == 2)>
-    print_impl(int prec, bool sparse=false) const {
+    std::enable_if_t<std::is_void<ADL>::value && (DIMS == 2), std::stringstream&>
+    print_impl(std::stringstream& ss, int prec, bool sparse, bool pretty) const {
     	std::string dim_header;
     	dim_header.append(DIMS, '-');
 
-    	std::cout <<  dim_header << std::endl;
+    	ss <<  only_if(dim_header, pretty) << '\n';
     	auto trans = this->as_derived().transpose();
     	for (int i = 0; i < trans.dimension(1); ++i) {
-        	std::cout << "[ ";
+        	ss << only_if("[ ", pretty);
+    		bool first=true;
         	for (int j = 0; j< trans.dimension(0); ++j) {
-        		std::cout << format_value(utility_l::extract(&trans.internal()(j,i), 0), prec, sparse) << ", ";
-        	}
-        	std::cout << "]" << std::endl;
+        		if (first) {
+        			first = false;
+        			ss << format_value(utility_l::extract(&trans.internal()(j,i), 0), prec, sparse);
+        		} else {
+        			ss << ", " << format_value(utility_l::extract(&trans.internal()(j,i), 0), prec, sparse);
+        		}
+        		        	}
+        	ss << only_if(" ]", pretty) << '\n';
     	}
+    	return ss;
     }
 
     template<class ADL=void, class v1=void, class v2=void, class v3=void>
-    std::enable_if_t<std::is_void<ADL>::value && (DIMS > 2)>
-    print_impl(int prec, bool sparse=false) const {
+    std::enable_if_t<std::is_void<ADL>::value && (DIMS > 2), std::stringstream&>
+    print_impl(std::stringstream& ss, int prec, bool sparse, bool pretty) const {
     	std::string dim_header;
     	dim_header.append(DIMS, '-');
 
-    	std::cout <<  dim_header << std::endl;
+    	ss <<  only_if(dim_header, pretty) << '\n';
     	for (const auto slice : this->as_derived().nd_iter()) {
-        	slice.print_impl(prec, sparse);
+        	slice.print_impl(ss, prec, sparse, false);
     	}
+    	return ss;
     }
 
 public:
 
-    void printSparse(int precision=8) const {
-    	print_impl<void>(precision, true);
-    }
 
     void write(std::ofstream& os) const {
         BC_ASSERT_ARRAY_ONLY("write(std::ofstream& os)");

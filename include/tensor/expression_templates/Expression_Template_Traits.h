@@ -124,10 +124,10 @@ struct expression_traits {
 	 static constexpr bool is_view 		 = std::is_base_of<BC_View, T>::value;
 	 static constexpr bool is_continuous = !std::is_base_of<BC_Noncontinuous, T>::value;
 
-	 static constexpr bool is_expr  	= std::is_base_of<BC_Expr, T>::value;
-	 static constexpr bool is_temporary = std::is_base_of<BC_Temporary, T>::value;
-	 static constexpr bool is_constant  = std::is_base_of<BC_Stack_Allocated, T>::value;
-	 static constexpr bool is_immutable  = std::is_base_of<BC_Immutable, T>::value;
+	 static constexpr bool is_expr  		   = std::is_base_of<BC_Expr, T>::value;
+	 static constexpr bool is_temporary 	   = std::is_base_of<BC_Temporary, T>::value;
+	 static constexpr bool is_stack_allocated  = std::is_base_of<BC_Stack_Allocated, T>::value;
+	 static constexpr bool is_immutable  	   = std::is_base_of<BC_Immutable, T>::value;
 
 };
 

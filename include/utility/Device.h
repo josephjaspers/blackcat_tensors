@@ -26,7 +26,7 @@ struct Device {
 		cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyDeviceToHost);
 	}
 	template<class T>
-	static T extract(const T* data_ptr, BC::size_t  index) {
+	static T extract(const T* data_ptr, BC::size_t index=0) {
 		T host_data;
 		cudaMemcpy(&host_data, &data_ptr[index], sizeof(T), cudaMemcpyDeviceToHost);
 		return host_data;
