@@ -54,7 +54,6 @@ using Allocator = BC::allocator::implementation<system_tag, value_type>;
 
 #include "fancy/Polymorphic_Allocator.h"
 #include "fancy/Workspace.h"
-#include "fancy/Scalar_Recycled_Workspace.h"
 
 
 #endif

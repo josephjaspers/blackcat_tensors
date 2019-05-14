@@ -128,11 +128,10 @@ private:
 
 
 public:
-	const context_t& get_context() const { return static_cast<const context_t&>(*this); }
-          context_t& get_context() 	     { return static_cast<	    context_t&>(*this); }
+	const context_t& get_context()   const { return static_cast<const context_t&>(*this); }
+	context_t& get_context()   { return static_cast<context_t&>(*this); }
 
-	const Allocator& get_allocator() const { return static_cast<const Allocator&>(*this); }
-		  Allocator& get_allocator() 	   { return static_cast<		  Allocator&>(*this); }
+	Allocator get_allocator() const { return static_cast<const Allocator&>(*this); }
 
 	Array() {
 		if (Dimension == 0) {
@@ -148,8 +147,8 @@ public:
         greedy_evaluate(this->internal(), array_.internal(), get_context());
 	}
 	Array(Array&& array_) //TODO handle propagate_on_container_move_assignment
-	: Allocator(std::move(array_.get_allocator())),
-	  context_t(std::move(array_.get_context())),
+	: Allocator(array_.get_allocator()),
+	  context_t(array_.get_context()),
 	  parent(array_) {
 		array_.array = nullptr;
 		//This causes segmentation fault with NVCC currently
@@ -191,6 +190,7 @@ public:
 	}
 
 
+
 	//If Copy-constructing from a slice, attempt to query the allocator
     //Restrict to same value_type (obviously), same dimensions (for fast-copy)
     //And restrict to continuous (as we should attempt to support Sparse matrices in the future)
@@ -214,7 +214,7 @@ public:
 			std::swap(this->m_block_shape, array.m_block_shape);
 
 	    	if (BC::allocator_traits<Allocator>::propagate_on_container_move_assignment::value) {
-				std::swap(this->get_allocator(), array.get_allocator());
+				static_cast<Allocator&>(*this) = static_cast<Allocator&&>(array);
 			}
     	} else {
     		get_allocator().deallocate(this->array, this->size());

@@ -60,12 +60,11 @@ struct Array_Const_View
 	  context(tensor.get_context()),
 	  alloc(tensor.get_allocator()) {}
 
-	const Allocator& get_allocator() {
+	const Allocator get_allocator() const {
 		return alloc;
 	}
-	const Allocator& get_allocator() const {
-		return alloc;
-	}
+	const context_type& get_context()   const { return context; }
+	context_type& get_context()   { return context; }
 
 	const auto& internal_base() const { return *this; }
 		  auto& internal_base()       { return *this; }

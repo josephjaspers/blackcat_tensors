@@ -81,7 +81,7 @@ public:
 		}
 	}
 
-	void set_stream(Host& stream_) {
+	void set_stream(Host stream_) {
 		this->m_contents = stream_.m_contents;
 	}
 

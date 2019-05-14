@@ -96,7 +96,7 @@ public:
     	return device_contents.get()->m_stream_handle;
     }
 
-    void set_stream(Device& dev) {
+    void set_stream(Device dev) {
     	device_contents = dev.device_contents;
     }
 
