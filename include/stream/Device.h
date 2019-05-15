@@ -19,7 +19,7 @@
 #include <memory>
 
 namespace BC {
-namespace context {
+namespace stream {
 
 class Device {
 
@@ -89,64 +89,63 @@ public:
     	return device_contents.get()->m_cublas_handle;
     }
 
-    const cudaStream_t& get_stream() const {
+
+   operator cudaStream_t() const {
     	return device_contents.get()->m_stream_handle;
     }
-    cudaStream_t& get_stream() {
-    	return device_contents.get()->m_stream_handle;
-    }
+
 
     void set_stream(Device dev) {
     	device_contents = dev.device_contents;
     }
 
-    void stream_record_event() {
+    void record_event() {
     	BC_CUDA_ASSERT(cudaEventRecord(
     			device_contents.get()->m_event_handle,
     			device_contents.get()->m_stream_handle));
     }
 
-    void stream_wait_event(Device& stream) {
+    void wait_event(Device& stream) {
     	BC_CUDA_ASSERT(cudaStreamWaitEvent(
     			device_contents.get()->m_stream_handle,
     			stream.device_contents.get()->m_event_handle, 0));
     }
 
-    void stream_wait_stream(Device& stream) {
-    	stream.stream_record_event();
+    void wait_stream(Device& stream) {
+    	stream.record_event();
     	BC_CUDA_ASSERT(cudaStreamWaitEvent(
     			device_contents.get()->m_stream_handle,
     			stream.device_contents.get()->m_event_handle, 0));
     }
 
-    void stream_wait_event(cudaEvent_t event) {
+    void wait_event(cudaEvent_t event) {
     	BC_CUDA_ASSERT(cudaStreamWaitEvent(
     			device_contents.get()->m_stream_handle,
     			event, 0));
     }
 
-    bool is_default_stream() {
+    bool is_default() {
     	return device_contents.get()->m_stream_handle == 0;
     }
 
-    void create_stream() {
+    void create() {
     	device_contents = std::shared_ptr<Device_Stream_Contents>(
     			new Device_Stream_Contents(true));
     }
-    void destroy_stream() {
+    void destroy() {
     	//'reset' to default
     	device_contents = get_default_contents();
     }
 
-    void sync_stream() {
-    	if (!is_default_stream())
+    void sync() {
+    	if (!is_default())
     		BC_CUDA_ASSERT(cudaStreamSynchronize(device_contents.get()->m_stream_handle));
     }
 
     template<class function>
-    void stream_enqueue_callback(function func) {
+    void enqueue_callback(function func) {
 
-    	if (is_default_stream()){
+    	if (is_default()){
     		func();
     	}
 

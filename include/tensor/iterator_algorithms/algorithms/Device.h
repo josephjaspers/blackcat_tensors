@@ -20,7 +20,7 @@
 
 #define BC_GPU_ALGORITHM_FORWARDER_DEF_WITH_STREAM(function) \
 template<class... args>\
-static auto function (cudaStream_t stream, args... parameters){\
+static auto function (BC::Stream<BC::device_tag> stream, args... parameters){\
     return thrust:: function (thrust::cuda::par.on(stream), parameters...);\
 }
 #define BC_GPU_ALGORITHM_FORWARDER_DEF(function) \
@@ -43,7 +43,7 @@ static auto function (args... parameters){ \
 //This is simply a tmp-fix hence -hack
 #define BC_GPU_ALGORITHM_FORWARDER_DEF_2PTR_HACK_WITH_STREAM(function) \
 template<class iter_begin, class iter_end>\
-static auto function (cudaStream_t stream, iter_begin begin, iter_end end){\
+static auto function (BC::Stream<BC::device_tag> stream, iter_begin begin, iter_end end){\
     return thrust:: function (thrust::cuda::par.on(stream), &begin[begin.index], &end[end.index]);\
 }
 

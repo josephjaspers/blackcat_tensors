@@ -52,7 +52,7 @@ private:
     }
 public:
     std::string to_string(int precision=5, bool sparse=false, bool pretty=false) const{
-    	const_cast<derived&>(this->as_derived()).get_context().sync_stream();
+    	const_cast<derived&>(this->as_derived()).get_stream().sync();
     	std::stringstream ss;
     	std::string data =  this->print_impl<void>(ss, precision, sparse, pretty).str();
     	return data;
@@ -67,7 +67,7 @@ public:
     }
 
     void printSparse(int precision=8, bool pretty=true) const {
-    	const_cast<derived&>(this->as_derived()).get_context().sync_stream();
+    	const_cast<derived&>(this->as_derived()).get_stream().sync();
     	std::cout << this->to_string(precision, true, pretty) << '\n';
     }
 

@@ -18,18 +18,18 @@ template<int Dimensions, class ValueType, class Allocator, class... Tags>
 struct Array_Slice : ArrayExpression<Dimensions, ValueType, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
 
 	using allocator_t 	 = Allocator;
-	using context_t 	 = BC::Context<typename BC::allocator_traits<Allocator>::system_tag>;
+	using stream_t 	 = BC::Stream<typename BC::allocator_traits<Allocator>::system_tag>;
 	using parent = ArrayExpression<Dimensions, ValueType, typename BC::allocator_traits<Allocator>::system_tag, Tags...>;
 
 public:
 
-	context_t m_context;
+	stream_t m_stream;
 	allocator_t m_allocator;
 
 	template<class... Args>
-	BCHOT Array_Slice(context_t context_, allocator_t allocator_, Args... args_)
+	BCHOT Array_Slice(stream_t stream_, allocator_t allocator_, Args... args_)
 	: parent(args_...),
-	  m_context(context_),
+	  m_stream(stream_),
 	  m_allocator(allocator_) {}
 
 	BCHOT Array_Slice(const Array_Slice&) = default;
@@ -41,8 +41,8 @@ public:
 	const auto& internal_base() const { return *this; }
 		  auto& internal_base() 	  { return *this; }
 
-	const context_t& get_context() const  { return m_context; }
-		  context_t& get_context()  		{ return m_context; }
+	const stream_t& get_stream() const  { return m_stream; }
+		  stream_t& get_stream()  		{ return m_stream; }
 };
 
 
@@ -56,7 +56,7 @@ auto make_row(Parent& parent, BC::size_t index) {
 			BC_View,
 			BC_Noncontinuous>;
 
-	return slice_type(parent.get_context(), parent.get_allocator(),
+	return slice_type(parent.get_stream(), parent.get_allocator(),
 						Shape<1>(parent.cols(), parent.leading_dimension(0) + 1),
 						parent.memptr() + index);
 }
@@ -73,7 +73,7 @@ auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
     					BC::meta::propagate_const_t<Parent, typename Parent::allocator_t>,
     					BC_View, BC_Noncontinuous>;
 
-	return slice_type(parent.get_context(), parent.get_allocator(),
+	return slice_type(parent.get_stream(), parent.get_allocator(),
 						Shape<1>(length, stride),
 						parent.memptr() + ptr_index);
 }
@@ -89,7 +89,7 @@ static auto make_slice(Parent& parent, BC::size_t index) {
 			BC_View,
 			BC_Noncontinuous>;
 
-	return slice_type(parent.get_context(), parent.get_allocator(),
+	return slice_type(parent.get_stream(), parent.get_allocator(),
 						parent.get_shape(),
 						parent.memptr() + parent.slice_ptr_index(index));
 }
@@ -103,7 +103,7 @@ static auto make_slice(Parent& parent, BC::size_t index) {
 			BC::meta::propagate_const_t<Parent, typename Parent::allocator_t>,
 			BC_View>;
 
-	return slice_type(parent.get_context(), parent.get_allocator(),
+	return slice_type(parent.get_stream(), parent.get_allocator(),
 						parent.get_shape(),
 						parent.memptr() + parent.slice_ptr_index(index));
 }
@@ -122,7 +122,7 @@ static auto make_ranged_slice(Parent& parent, BC::size_t from, BC::size_t to) {
 	inner_shape[Dimension-1] = range;
 
 	BC::exprs::Shape<Dimension> new_shape(inner_shape);
-	return slice_type(parent.get_context(), parent.get_allocator(),
+	return slice_type(parent.get_stream(), parent.get_allocator(),
 						new_shape,
 						parent.memptr() + index);
 }
@@ -135,7 +135,7 @@ static auto make_view(Parent& parent, BC::array<ndims, BC::size_t> shape) {
 			value_type,
 			typename Parent::allocator_t>;
 
-	return slice_type(parent.get_context(), parent.get_allocator(), BC::Shape<ndims>(shape), parent.memptr());
+	return slice_type(parent.get_stream(), parent.get_allocator(), BC::Shape<ndims>(shape), parent.memptr());
 }
 
 template<class Parent>
@@ -148,7 +148,7 @@ template<class Parent>
 							value_type,
 							typename Parent::allocator_t>;
 
-		return slice_type(parent.get_context(), parent.get_allocator(), BC::Shape<0>(), parent.memptr() + index);
+		return slice_type(parent.get_stream(), parent.get_allocator(), BC::Shape<0>(), parent.memptr() + index);
 	}
 
 template<class Parent, int ndims>
@@ -165,7 +165,7 @@ auto make_chunk(Parent& parent, BC::array<Parent::DIMS, int> index_points, BC::a
 
 	BC::size_t index = parent.dims_to_index(index_points);
 	SubShape<ndims> chunk_shape = SubShape<ndims>(shape, parent.get_shape());
-	return slice_type(parent.get_context(), parent.get_allocator(), chunk_shape, parent.memptr() + index);
+	return slice_type(parent.get_stream(), parent.get_allocator(), chunk_shape, parent.memptr() + index);
 }
 
 

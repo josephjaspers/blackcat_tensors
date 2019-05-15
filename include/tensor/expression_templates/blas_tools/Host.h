@@ -16,12 +16,12 @@ namespace blas_tools {
 
 struct Host : Common_Tools<Host> {
 
-	template<class Context, class OutputScalar, class... Scalars>
-	static void scalar_multiply(Context, OutputScalar& eval, Scalars... scalars) {
+	template<class Stream, class OutputScalar, class... Scalars>
+	static void scalar_multiply(Stream, OutputScalar& eval, Scalars... scalars) {
 		eval[0] = BC::exprs::blas_tools::host_impl::calculate_alpha(scalars...);
 	}
-	template<class Context, class OutputScalar, class... Scalars>
-	static void scalar_multiply(Context, OutputScalar* eval, Scalars... scalars) {
+	template<class Stream, class OutputScalar, class... Scalars>
+	static void scalar_multiply(Stream, OutputScalar* eval, Scalars... scalars) {
 		eval[0] = BC::exprs::blas_tools::host_impl::calculate_alpha(scalars...);
 	}
 

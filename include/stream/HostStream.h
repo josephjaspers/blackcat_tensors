@@ -10,7 +10,7 @@
 #include <condition_variable>
 
 namespace BC {
-namespace context {
+namespace stream {
 
 class HostEvent {
 

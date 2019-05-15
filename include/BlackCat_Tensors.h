@@ -12,7 +12,7 @@
 #include "BlackCat_Common.h"
 #include "BlackCat_TypeTraits.h"
 #include "BlackCat_Allocator.h"
-#include "BlackCat_Context.h"
+#include "BlackCat_Stream.h"
 #include "BlackCat_Blas.h"
 #include "BlackCat_Array.h"
 

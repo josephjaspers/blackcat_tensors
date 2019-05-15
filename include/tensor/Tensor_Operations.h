@@ -37,7 +37,7 @@ private:
 
     template<class derived_t>
     void evaluate(const Tensor_Operations<derived_t>& tensor) {
-        exprs::evaluate(tensor.as_derived().internal(), this->as_derived().get_context());
+        exprs::evaluate(tensor.as_derived().internal(), this->as_derived().get_stream());
     }
 public:
     //--------------------------------------assignment operators-----------------------------------------------//
@@ -302,7 +302,7 @@ public:
 
         template<class derived_t>
         void evaluate(const Tensor_Base<derived_t>& param) {
-            evaluate_aliased(param.internal(), tensor.get_context());
+            evaluate_aliased(param.internal(), tensor.get_stream());
         }
 
         template<class derived_t>

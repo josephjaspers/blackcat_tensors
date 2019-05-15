@@ -23,9 +23,9 @@ struct Host {
 	 BC_omp_bar__
 	    }
 
-	 template<class Context, typename T, typename value_type>
-	    static void randomize(Context context, T& tensor, value_type lower_bound, value_type upper_bound) {
-		 context.push_job([&](){
+	 template<class Stream, typename T, typename value_type>
+	    static void randomize(Stream stream, T& tensor, value_type lower_bound, value_type upper_bound) {
+		 stream.push_job([&](){
 			 randomize_kernel(tensor, lower_bound, upper_bound);
 		 });
 	    }

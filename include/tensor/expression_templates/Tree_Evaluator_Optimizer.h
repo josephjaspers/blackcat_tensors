@@ -36,23 +36,23 @@ struct optimizer_default {
     static constexpr bool nested_blas_expr  = false;			//An expression containing a BLAS expression nested in a unary_functor IE abs(w * x)
     static constexpr bool requires_greedy_eval = false;			//Basic check if any BLAS call exists at all
 
-    template<class core, int a, int b, class Context>
-    static auto linear_evaluation(const T& branch, injector<core, a, b> tensor, Context) {
+    template<class core, int a, int b, class Stream>
+    static auto linear_evaluation(const T& branch, injector<core, a, b> tensor, Stream) {
         return branch;
     }
 
-    template<class core, int a, int b, class Context>
-    static auto injection(const T& branch, injector<core, a, b> tensor, Context) {
+    template<class core, int a, int b, class Stream>
+    static auto injection(const T& branch, injector<core, a, b> tensor, Stream) {
         return branch;
     }
 
-    template<class Context>
-    static auto temporary_injection(const T& branch, Context alloc) {
+    template<class Stream>
+    static auto temporary_injection(const T& branch, Stream alloc) {
         return branch;
     }
 
-    template<class Context>
-    static void deallocate_temporaries(const T, Context alloc) {
+    template<class Stream>
+    static void deallocate_temporaries(const T, Stream alloc) {
         return;
     }
 };
@@ -68,8 +68,8 @@ template<class Array>
 struct optimizer<Array, std::enable_if_t<expression_traits<Array>::is_temporary>>
  : optimizer_default<Array> {
 
-	template<class Context>
-    static void deallocate_temporaries(Array tmp, Context alloc) {
+	template<class Stream>
+    static void deallocate_temporaries(Array tmp, Stream alloc) {
         destroy_temporary_tensor_array(tmp, alloc);
     }
 };
@@ -87,28 +87,28 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
 
     using branch_t = Binary_Expression<lv, rv, op>;
 
-    template<class core, int a, int b, class Context>
-    static auto linear_evaluation(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
+    template<class core, int a, int b, class Stream>
+    static auto linear_evaluation(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Stream alloc) {
     	branch.eval(tensor, alloc);
         return tensor.data();
     }
-    template<class core, int a, int b, class Context>
-    static auto injection(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
+    template<class core, int a, int b, class Stream>
+    static auto injection(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Stream alloc) {
         branch.eval(tensor, alloc);
         return tensor.data();
     }
 
     //if no replacement is used yet, auto inject
-    template<class Context>
-    static auto temporary_injection(const Binary_Expression<lv, rv, op>& branch, Context alloc) {
+    template<class Stream>
+    static auto temporary_injection(const Binary_Expression<lv, rv, op>& branch, Stream alloc) {
     	using value_type = typename Binary_Expression<lv, rv, op>::value_type;
     	auto temporary = make_temporary_tensor_array<value_type>(make_shape(branch.inner_shape()), alloc);
         branch.eval(make_injection<1, 0>(temporary), alloc);
         return temporary;
     }
 
-    template<class Context>
-    static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch, Context alloc) {
+    template<class Stream>
+    static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch, Stream alloc) {
         optimizer<rv>::deallocate_temporaries(branch.right, alloc);
         optimizer<lv>::deallocate_temporaries(branch.left, alloc);
     }
@@ -125,8 +125,8 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
     static constexpr bool requires_greedy_eval 	= optimizer<lv>::requires_greedy_eval || optimizer<rv>::requires_greedy_eval;
 
 
-    template<class core, int a, int b, class Context>
-    static auto linear_evaluation(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
+    template<class core, int a, int b, class Stream>
+    static auto linear_evaluation(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Stream alloc) {
         return
         		BC::meta::constexpr_if<entirely_blas_expr>(
         				[&](){
@@ -173,8 +173,8 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
 
     //---------------partial blas expr branches-------------------------//
     struct evaluate_branch {
-        template<class core, int a, int b, class Context>
-        static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
+        template<class core, int a, int b, class Stream>
+        static auto function(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Stream alloc) {
         	auto left = optimizer<lv>::linear_evaluation(branch.left, tensor);
         	auto right = optimizer<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor));
             return make_bin_expr<op>(left, right);
@@ -182,8 +182,8 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
     };
 
 
-    template<class core, int a, int b, class Context>
-    static auto injection(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
+    template<class core, int a, int b, class Stream>
+    static auto injection(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Stream alloc) {
 
     	auto basic_eval = [&](auto adl=0) {
         	static constexpr bool left_evaluated = optimizer<lv>::partial_blas_expr || b != 0;
@@ -220,16 +220,16 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
 
     //---------substitution implementation---------//
 
-    template<class Context>
-    static auto temporary_injection(const Binary_Expression<lv,rv,op>& branch, Context alloc) {
-    	auto left  = optimizer<lv>::template temporary_injection<Context>(branch.left, alloc);
-    	auto right = optimizer<rv>::template temporary_injection<Context>(branch.right, alloc);
+    template<class Stream>
+    static auto temporary_injection(const Binary_Expression<lv,rv,op>& branch, Stream alloc) {
+    	auto left  = optimizer<lv>::template temporary_injection<Stream>(branch.left, alloc);
+    	auto right = optimizer<rv>::template temporary_injection<Stream>(branch.right, alloc);
     	return make_bin_expr<op>(left, right);
     }
 
 
-    template<class Context>
-    static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch, Context alloc) {
+    template<class Stream>
+    static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch, Stream alloc) {
         optimizer<rv>::deallocate_temporaries(branch.right, alloc);
         optimizer<lv>::deallocate_temporaries(branch.left, alloc);
     }
@@ -246,13 +246,13 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
     static constexpr bool requires_greedy_eval = optimizer<lv>::requires_greedy_eval || optimizer<rv>::requires_greedy_eval;
 
 
-    template<class core, int a, int b, class Context>
-    static auto linear_evaluation(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context) {
+    template<class core, int a, int b, class Stream>
+    static auto linear_evaluation(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Stream) {
         return branch;
     }
 
-    template<class core, int a, int b, class Context>
-    static auto injection(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Context alloc) {
+    template<class core, int a, int b, class Stream>
+    static auto injection(const Binary_Expression<lv, rv, op>& branch, injector<core, a, b> tensor, Stream alloc) {
     	return BC::meta::constexpr_ternary<optimizer<lv>::partial_blas_expr || optimizer<lv>::nested_blas_expr>(
 					[&]() {
 						auto left = optimizer<lv>::injection(branch.left, tensor, alloc);
@@ -267,15 +267,15 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
     	);
     }
 
-    template<class Context>
-    static auto temporary_injection(const Binary_Expression<lv,rv,op>& branch, Context& alloc) {
-    	auto left  = optimizer<lv>::template temporary_injection<Context>(branch.left, alloc);
-    	auto right = optimizer<rv>::template temporary_injection<Context>(branch.right, alloc);
+    template<class Stream>
+    static auto temporary_injection(const Binary_Expression<lv,rv,op>& branch, Stream& alloc) {
+    	auto left  = optimizer<lv>::template temporary_injection<Stream>(branch.left, alloc);
+    	auto right = optimizer<rv>::template temporary_injection<Stream>(branch.right, alloc);
     	return make_bin_expr<op>(left, right);
     }
 
-    template<class Context>
-    static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch, Context alloc) {
+    template<class Stream>
+    static void deallocate_temporaries(const Binary_Expression<lv, rv, op>& branch, Stream alloc) {
         optimizer<rv>::deallocate_temporaries(branch.right, alloc);
     	optimizer<lv>::deallocate_temporaries(branch.left, alloc);
     }
@@ -294,24 +294,24 @@ struct optimizer<Unary_Expression<array_t, op>>
     static constexpr bool nested_blas_expr 		= optimizer<array_t>::nested_blas_expr;
     static constexpr bool requires_greedy_eval 	= optimizer<array_t>::requires_greedy_eval;
 
-    template<class core, int a, int b, class Context>
-    static auto linear_evaluation(const Unary_Expression<array_t, op>& branch, injector<core, a, b> tensor, Context) {
+    template<class core, int a, int b, class Stream>
+    static auto linear_evaluation(const Unary_Expression<array_t, op>& branch, injector<core, a, b> tensor, Stream) {
         return branch;
     }
-    template<class core, int a, int b, class Context>
-    static auto injection(const Unary_Expression<array_t, op>& branch, injector<core, a, b> tensor, Context alloc) {
+    template<class core, int a, int b, class Stream>
+    static auto injection(const Unary_Expression<array_t, op>& branch, injector<core, a, b> tensor, Stream alloc) {
         auto array =  optimizer<array_t>::injection(branch.array, tensor, alloc);
         return Unary_Expression<decltype(array), op>(array);
     }
 
-    template<class Context>
-    static auto temporary_injection(const Unary_Expression<array_t, op>& branch, Context& alloc) {
-    	auto expr = optimizer<array_t>::template temporary_injection<Context>(branch.array, alloc);
+    template<class Stream>
+    static auto temporary_injection(const Unary_Expression<array_t, op>& branch, Stream& alloc) {
+    	auto expr = optimizer<array_t>::template temporary_injection<Stream>(branch.array, alloc);
     	return Unary_Expression<std::decay_t<decltype(expr)>, op>(expr);
 
     }
-    template<class Context>
-     static void deallocate_temporaries(const Unary_Expression<array_t, op>& branch, Context alloc) {
+    template<class Stream>
+     static void deallocate_temporaries(const Unary_Expression<array_t, op>& branch, Stream alloc) {
         optimizer<array_t>::deallocate_temporaries(branch.array, alloc);
     }
 };

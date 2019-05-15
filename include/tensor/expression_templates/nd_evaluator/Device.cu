@@ -66,13 +66,10 @@ struct Device {
 			run::eval(expression);
 		}
 
-		template<class Expression, class Context>
-		static void eval(Expression expression, Context context) {
-			if (context.is_default_stream()) {
-				run::eval(expression);
-			} else {
-				run::eval(expression, context.get_stream());
-			}
+		template<class Expression, class Stream>
+		static void eval(Expression expression, Stream stream) {
+				run::eval(expression, stream);
+
 		}
 	};
 
@@ -80,9 +77,9 @@ struct Device {
 	static void nd_evaluator(Expression expression) {
 		nd_evaluator_func<dimensions>::eval(expression);
 	}
-	template<int dimensions, class Expression, class Context>
-	static void nd_evaluator(Expression expression, Context context) {
-		nd_evaluator_func<dimensions>::eval(expression, context);
+	template<int dimensions, class Expression, class Stream>
+	static void nd_evaluator(Expression expression, Stream stream) {
+		nd_evaluator_func<dimensions>::eval(expression, stream);
 	}
 
 };

@@ -35,9 +35,9 @@ struct Device {
 		return bc_state.state;
 	}
 
-    template<class Context, typename T>
-    static void randomize(Context context, T t, float lower_bound, float upper_bound) {
-    	device_impl::randomize<<<blocks(t.size()),threads(), 0, context.get_stream()>>>(
+    template<class Stream, typename T>
+    static void randomize(Stream stream, T t, float lower_bound, float upper_bound) {
+    	device_impl::randomize<<<blocks(t.size()),threads(), 0, stream>>>(
     			bc_curand_state(), t, lower_bound, upper_bound, std::rand());
     }
 };

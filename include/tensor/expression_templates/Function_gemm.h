@@ -60,8 +60,8 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
     BCINLINE BC::size_t  dimension(int i) const { return inner_shape()[i]; }
     BCINLINE BC::size_t  block_dimension(int i) const { return block_shape()[i]; }
 
-    template<class core, int alpha_mod, int beta_mod, class Context>
-    void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, Context& alloc) const {
+    template<class core, int alpha_mod, int beta_mod, class Stream>
+    void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, Stream& alloc) const {
 
         //get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
         auto& injection = injection_values.data();

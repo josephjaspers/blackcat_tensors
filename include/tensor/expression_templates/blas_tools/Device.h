@@ -17,9 +17,9 @@ namespace blas_tools {
 
 struct Device : Common_Tools<Device> {
 
-	template<class Context, class Scalar, class... Scalars>
-	static void scalar_multiply(Context context, Scalar output, Scalars... vals) {
-		device_impl::calculate_alpha<<<1, 1, 0, context.get_stream()>>>(output, vals...);
+	template<class Stream, class Scalar, class... Scalars>
+	static void scalar_multiply(Stream stream, Scalar output, Scalars... vals) {
+		device_impl::calculate_alpha<<<1, 1, 0, stream>>>(output, vals...);
 	}
 
 	template<class scalar_t, int value>

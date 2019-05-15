@@ -109,7 +109,7 @@ template<int ,class,class, class...> class Array_Slice;
 template<int Dimension, class Scalar, class Allocator, class... Tags>
 class Array :
 			private Allocator,
-			public Context<typename BC::allocator_traits<Allocator>::system_tag>,
+			public Stream<typename BC::allocator_traits<Allocator>::system_tag>,
 			public ArrayExpression<Dimension, Scalar, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
 
 	using self = Array<Dimension, Scalar, Allocator, Tags...>;
@@ -119,7 +119,7 @@ public:
 
 	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
 	using allocator_t = Allocator;
-	using context_t   = Context<system_tag>;
+	using stream_t   = Stream<system_tag>;
 	using value_type = Scalar;
 
 private:
@@ -128,8 +128,8 @@ private:
 
 
 public:
-	const context_t& get_context()   const { return static_cast<const context_t&>(*this); }
-	context_t& get_context()   { return static_cast<context_t&>(*this); }
+	const stream_t& get_stream()   const { return static_cast<const stream_t&>(*this); }
+	stream_t& get_stream()   { return static_cast<stream_t&>(*this); }
 
 	Allocator get_allocator() const { return static_cast<const Allocator&>(*this); }
 
@@ -141,14 +141,14 @@ public:
 
 	Array(const Array& array_)
 	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(array_)),
-	  context_t(array_.get_context()),
+	  stream_t(array_.get_stream()),
 	  parent(array_) {
         this->array = this->allocate(this->size());
-        greedy_evaluate(this->internal(), array_.internal(), get_context());
+        greedy_evaluate(this->internal(), array_.internal(), get_stream());
 	}
 	Array(Array&& array_) //TODO handle propagate_on_container_move_assignment
 	: Allocator(array_.get_allocator()),
-	  context_t(array_.get_context()),
+	  stream_t(array_.get_stream()),
 	  parent(array_) {
 		array_.array = nullptr;
 		//This causes segmentation fault with NVCC currently
@@ -186,7 +186,7 @@ public:
 	Array(const Expr& expr_t, const Allocator& alloc=Allocator()) : Allocator(alloc) {
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());
-		greedy_evaluate(this->internal(), expr_t.internal(), get_context());
+		greedy_evaluate(this->internal(), expr_t.internal(), get_stream());
 	}
 
 
@@ -198,11 +198,11 @@ public:
 	Array(const Array_Slice<Dimension, value_type, allocator_t, SliceTags...>& expr_t)
 	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(
 			expr_t.get_allocator())),
-	  context_t(expr_t.get_context())
+	  stream_t(expr_t.get_stream())
 	{
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
 		this->array = this->allocate(this->size());
-		greedy_evaluate(this->internal(), expr_t.internal(), this->get_context());
+		greedy_evaluate(this->internal(), expr_t.internal(), this->get_stream());
 	}
 
 public:
@@ -222,7 +222,7 @@ public:
 			this->m_inner_shape = array.m_inner_shape;
 			this->m_block_shape = array.m_block_shape;
 			this->array = get_allocator().allocate(this->size());
-			greedy_evaluate(this->internal(), array.internal(), this->get_context());
+			greedy_evaluate(this->internal(), array.internal(), this->get_stream());
     	}
     }
 
@@ -237,29 +237,29 @@ public:
 		return *this;}
 };
 
-template<class ValueType, int dims, class Context>
-auto make_temporary_tensor_array(Shape<dims> shape, Context context) {
+template<class ValueType, int dims, class Stream>
+auto make_temporary_tensor_array(Shape<dims> shape, Stream stream) {
 	static_assert(dims >= 1, "make_temporary_tensor_array: assumes dimension is 1 or greater");
-	using system_tag = typename Context::system_tag;
+	using system_tag = typename Stream::system_tag;
 	using Array = ArrayExpression<dims, ValueType, system_tag, BC_Temporary>;
 	Array temporary;
 	temporary.m_block_shape = shape.m_block_shape;
 	temporary.m_inner_shape = shape.m_inner_shape;
-	temporary.array = context.template get_allocator_rebound<ValueType>().allocate(temporary.size());
+	temporary.array = stream.template get_allocator_rebound<ValueType>().allocate(temporary.size());
 	return temporary;
 }
-template<class ValueType, class Context>
-auto make_temporary_scalar(Context context) {
-	using system_tag = typename Context::system_tag;
+template<class ValueType, class Stream>
+auto make_temporary_scalar(Stream stream) {
+	using system_tag = typename Stream::system_tag;
 	using Array = ArrayExpression<0, ValueType, system_tag, BC_Temporary>;
 	Array temporary;
-	temporary.array = context.template get_allocator_rebound<ValueType>().allocate(1);
+	temporary.array = stream.template get_allocator_rebound<ValueType>().allocate(1);
 	return temporary;
 }
 
 template<int Dimension, class ValueType, class SystemTag, class... Tags, class=std::enable_if_t<BC::meta::seq_contains<BC_Temporary, Tags...>>>
-void destroy_temporary_tensor_array(ArrayExpression<Dimension, ValueType, SystemTag, Tags...> temporary, BC::Context<SystemTag> context) {
-	context.template get_allocator_rebound<ValueType>().deallocate(temporary.array, temporary.size());
+void destroy_temporary_tensor_array(ArrayExpression<Dimension, ValueType, SystemTag, Tags...> temporary, BC::Stream<SystemTag> stream) {
+	stream.template get_allocator_rebound<ValueType>().deallocate(temporary.array, temporary.size());
 }
 
 

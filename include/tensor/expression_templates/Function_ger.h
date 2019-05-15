@@ -60,30 +60,30 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
     BCINLINE BC::size_t  N() const { return right.cols(); }
 
 
-	template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class Context>
-	void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, Context& context) const {
+	template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class Stream>
+	void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, Stream& stream) const {
 		auto& injection = injection_values.data();
 
         //if we need to negate or zero the output
 		//If beta_mod != 1 consider using gemm (to enable zeroing/modifying the output)
 		if (beta_mod != 1) {
 			auto expr = make_bin_expr<oper::assign>(injection, make_scalar_constant<value_type>(beta_mod));
-			evaluate(expr, context);
+			evaluate(expr, stream);
 		}
 
 		if (lv_scalar || rv_scalar) {
-	        auto contents = blas_util::template parse_expression<alpha_mod, beta_mod>(context, left, right);
+	        auto contents = blas_util::template parse_expression<alpha_mod, beta_mod>(stream, left, right);
 	        auto A = contents.left;
 	        auto B = contents.right;
 	        auto alpha = contents.alpha;
-			blas_impl::ger(context, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
-	        blas_util::post_parse_expression_evaluation(context, contents);
+			blas_impl::ger(stream, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
+	        blas_util::post_parse_expression_evaluation(stream, contents);
 		} else {
 			auto alpha = make_constexpr_scalar<BC::host_tag, (alpha_mod == 0 ? 1 : alpha_mod), value_type>();
-			auto A = greedy_evaluate(blas_expression_traits<lv>::remove_blas_modifiers(left), context);
-			auto B = greedy_evaluate(blas_expression_traits<rv>::remove_blas_modifiers(right), context);
-			context.set_blas_pointer_mode_host();
-			blas_impl::ger(context, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
+			auto A = greedy_evaluate(blas_expression_traits<lv>::remove_blas_modifiers(left), stream);
+			auto B = greedy_evaluate(blas_expression_traits<rv>::remove_blas_modifiers(right), stream);
+			stream.set_blas_pointer_mode_host();
+			blas_impl::ger(stream, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
 		}
 	}
 };

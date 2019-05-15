@@ -60,16 +60,16 @@ int test_allocators(int sz=128) {
 
 	using system_tag = typename BC::allocator_traits<allocator<value_type>>::system_tag;
 
-	//A context by default references the default stream and the default global memory_pool
-	//(Use 'create_context' to initialize a new stream and a new memory_pool
-	Context<system_tag> context;
+	//A stream by default references the default stream and the default global memory_pool
+	//(Use 'create_stream' to initialize a new stream and a new memory_pool
+	Stream<system_tag> stream;
 
-	context.get_allocator().free();
-	context.get_allocator().set_allocator(log_allocator<allocator<value_type>>());
+	stream.get_allocator().free();
+	stream.get_allocator().set_allocator(log_allocator<allocator<value_type>>());
 
 
 	mat tmp;
-	tmp.get_context().get_allocator().set_allocator(log_allocator<allocator<value_type>>());
+	tmp.get_stream().get_allocator().set_allocator(log_allocator<allocator<value_type>>());
 
 	BC_TEST_DEF(
 		mat a(5,5);
@@ -95,7 +95,7 @@ int test_allocators(int sz=128) {
 //	//Allocators can be passed from slices
 //	BC_TEST_DEF(
 //		mat a(5,5);  //mem sz = 25
-//		a.get_context().get_allocator().reserve(25 * sizeof(value_type));
+//		a.get_stream().get_allocator().reserve(25 * sizeof(value_type));
 //
 //		a %= a * a;	 //25 memory should be allocated for the a*a temporary
 //					 //25 should be deallocated after using the a*a temporary
@@ -106,7 +106,7 @@ int test_allocators(int sz=128) {
 
 	BC_TEST_DEF(
 		mat a(5,5);  //mem sz = 25
-		a.get_context().get_allocator().reserve(30 * sizeof(value_type));
+		a.get_stream().get_allocator().reserve(30 * sizeof(value_type));
 		a = BC::logistic(a * a + a); // should not allocate any memory
 		return *(a.get_allocator().total_allocated.get()) == 25 * sizeof(value_type);
 	)

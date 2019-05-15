@@ -15,21 +15,21 @@ namespace blas {
 
 struct Device {
 
-	template<class Context>
-    static void gemm(Context context, bool transA, bool transB, BC::size_t  m, BC::size_t  n, BC::size_t  k,
+	template<class Stream>
+    static void gemm(Stream stream, bool transA, bool transB, BC::size_t  m, BC::size_t  n, BC::size_t  k,
             const float* alpha, const float* A, BC::size_t  lda,
                                 const float* B, BC::size_t  ldb,
             const float* beta,           float* C, BC::size_t  ldc) {
         auto TRANS_A = transA ? CUBLAS_OP_T : CUBLAS_OP_N;
         auto TRANS_B = transB ? CUBLAS_OP_T : CUBLAS_OP_N;
 
-		cublasHandle_t& handle = context.get_cublas_handle();
+		cublasHandle_t& handle = stream.get_cublas_handle();
 		BC_CUDA_ASSERT((cublasSgemm(handle, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc)));
     }
 
 	//y := alpha*A*x + beta*y,   or   y := alpha*A**T*x + beta*y,
-	template<class Context>
-	static void gemv(Context context, bool transA, BC::size_t  m, BC::size_t  n,
+	template<class Stream>
+	static void gemv(Stream stream, bool transA, BC::size_t  m, BC::size_t  n,
 			const float* alpha, const float* A, BC::size_t  lda,
 								 const float* X, BC::size_t  incX,
 			const float* beta,        float* Y, BC::size_t  incY) {
@@ -37,24 +37,24 @@ struct Device {
 
 		auto TRANS_A =  transA ? CUBLAS_OP_T : CUBLAS_OP_N;
 
-		cublasHandle_t& handle = context.get_cublas_handle();
+		cublasHandle_t& handle = stream.get_cublas_handle();
 		BC_CUDA_ASSERT((cublasSgemv(handle, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY)));
 	}
 
-	template<class Context>
-	static void ger(Context context, int m, BC::size_t  n,
+	template<class Stream>
+	static void ger(Stream stream, int m, BC::size_t  n,
 			const float* alpha,
 								 const float* X, BC::size_t  incX,
 								 const float* Y, BC::size_t  incY,
 								  float* A, BC::size_t  lda) {
 
-		cublasHandle_t& handle = context.get_cublas_handle();
+		cublasHandle_t& handle = stream.get_cublas_handle();
 		BC_CUDA_ASSERT((cublasSger(handle, m, n, alpha, X, incX, Y, incY, A, lda)));
 	}
 
-	template<class Context>
-	static void dot(Context context, int n, float* A, const float* x, BC::size_t  incX, const float* y, BC::size_t  incY) {
-		cublasHandle_t& handle = context.get_cublas_handle();
+	template<class Stream>
+	static void dot(Stream stream, int n, float* A, const float* x, BC::size_t  incX, const float* y, BC::size_t  incY) {
+		cublasHandle_t& handle = stream.get_cublas_handle();
 		BC_CUDA_ASSERT((cublasSdot(handle, n, x, incX, y, incY, A)));
 	}
 };

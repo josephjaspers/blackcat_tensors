@@ -55,18 +55,18 @@ struct evaluator_impl<0> {
 
 struct Host {
 
-	template<int Dimension, class Expression, class Context>
-	static void nd_evaluator(Expression expression, Context context) {
+	template<int Dimension, class Expression, class Stream>
+	static void nd_evaluator(Expression expression, Stream stream) {
 		auto job = [=]() {
 			evaluator_impl<Dimension>::impl(expression);
 		};
-		context.get_stream().push_job(job);
+		stream.push_job(job);
 	}
 
 
 	//!!!!ScalarOutput should be a TensorBase type
-	template<int Dimension, class ScalarOutput, class Expression, class Context>
-	static std::future<ScalarOutput> reduce_sum(ScalarOutput scalar, Expression expression, Context context) {
+	template<int Dimension, class ScalarOutput, class Expression, class Stream>
+	static std::future<ScalarOutput> reduce_sum(ScalarOutput scalar, Expression expression, Stream stream) {
 		std::promise<ScalarOutput>* promise = new std::promise<ScalarOutput>();
 
 		auto job = [=]() {
@@ -75,11 +75,11 @@ struct Host {
 			delete promise;
 		};
 
-		context.get_stream().push_job(job);
+		stream.push_job(job);
 		return promise->get_future();
 	}
-	template<int Dimension, class ScalarOutput, class Expression, class Context>
-	static std::future<ScalarOutput> reduce_prod(ScalarOutput scalar, Expression expression, Context context) {
+	template<int Dimension, class ScalarOutput, class Expression, class Stream>
+	static std::future<ScalarOutput> reduce_prod(ScalarOutput scalar, Expression expression, Stream stream) {
 		std::promise<ScalarOutput>* promise = new std::promise<ScalarOutput>();
 
 		auto job = [=]() {
@@ -87,11 +87,11 @@ struct Host {
 			promise->set_value(scalar);
 			delete promise;
 		};
-		context.get_stream().push_job(job);
+		stream.push_job(job);
 		return promise->get_future();
 	}
-	template<int Dimension, class ScalarOutput, class Expression, class Context>
-	static std::future<ScalarOutput> reduce_mean(ScalarOutput scalar, Expression expression, Context context) {
+	template<int Dimension, class ScalarOutput, class Expression, class Stream>
+	static std::future<ScalarOutput> reduce_mean(ScalarOutput scalar, Expression expression, Stream stream) {
 		std::promise<ScalarOutput>* promise = new std::promise<ScalarOutput>();
 
 		auto job = [=]() {
@@ -99,7 +99,7 @@ struct Host {
 			promise->set_value(scalar);
 			delete promise;
 		};
-		context.get_stream().push_job(job);
+		stream.push_job(job);
 		return promise->get_future();
 	}
 

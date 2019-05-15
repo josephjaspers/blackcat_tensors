@@ -13,7 +13,7 @@
 #include "Common.h"
 
 namespace BC {
-namespace context {
+namespace stream {
 struct Host;
 }
 }
@@ -26,7 +26,7 @@ struct Host;
             return std:: function (BC_CPP17_EXECUTION, parameters...);\
         }\
 		template<class... args>\
-		static auto function (BC::context::Host& stream, args... parameters){\
+		static auto function (BC::stream::Host& stream, args... parameters){\
 			stream.push_job([=](){ std:: function (BC_CPP17_EXECUTION, parameters...); });\
 		}
 #else
@@ -37,7 +37,7 @@ struct Host;
             return std:: function (parameters...);\
         }\
 		template<class... args>\
-		static void function (BC::context::Host stream, args... parameters){\
+		static void function (BC::stream::Host stream, args... parameters){\
 			stream.push_job([=](){ std:: function (parameters...); });\
 		}
 #endif

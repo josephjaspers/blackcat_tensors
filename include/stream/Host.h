@@ -13,7 +13,7 @@
 #include "HostStream.h"
 
 namespace BC {
-namespace context {
+namespace stream {
 
 
 class Host {
@@ -52,30 +52,30 @@ public:
 
 
 
-	 Host& get_stream() {
+	 Host& get() {
 		 return *this;
 	 }
-	 const Host& get_stream() const {
+	 const Host& get() const {
 		 return *this;
 	 }
 
-	bool is_default_stream() {
+	bool is_default() {
 		return m_contents == get_default_contents();
 	}
 
-	void create_stream() {
+	void create() {
 		m_contents = std::shared_ptr<Contents>(new Contents());
 	}
 
-	void destroy_stream() {
+	void destroy() {
 		m_contents = get_default_contents();
 	}
 
-	void sync_stream() {
+	void sync() {
 		//** Pushing a job while syncing is undefined behavior.
-		if (!is_default_stream()) {
+		if (!is_default()) {
 			if (!m_contents.get()->m_stream.empty()) {
-				stream_record_event();
+				record_event();
 				this->m_contents.get()->m_event.get()->get_waiter().operator ()();
 			}
 		}
@@ -85,8 +85,8 @@ public:
 		this->m_contents = stream_.m_contents;
 	}
 
-    void stream_record_event() {
-    	if (!is_default_stream()) {
+    void record_event() {
+    	if (!is_default()) {
         	std::mutex locker;
         	locker.lock();
         	m_contents.get()->m_event = std::unique_ptr<HostEvent>(new HostEvent());
@@ -94,8 +94,8 @@ public:
     		locker.unlock();
     	}
     }
-    void stream_wait_event(Host& stream) {
-    	if (!stream.is_default_stream()) {
+    void wait_event(Host& stream) {
+    	if (!stream.is_default()) {
 			std::mutex locker;
 			locker.lock();
 			BC_ASSERT(stream.m_contents.get()->m_event.get(), "Attempting to wait on an event that was never recorded");
@@ -104,14 +104,14 @@ public:
     	}
 	}
 
-    void stream_wait_stream(Host& stream) {
-    	stream.stream_record_event();
-    	this->stream_wait_event(stream);
+    void wait_stream(Host& stream) {
+    	stream.record_event();
+    	this->wait_event(stream);
     }
 
 	template<class Functor>
 	void push_job(Functor functor) {
-		if (this->is_default_stream()) {
+		if (this->is_default()) {
 			host_sync();
 			functor();
 		} else {
@@ -119,7 +119,7 @@ public:
 		}
 	}
 	template<class Functor>
-	void stream_enqueue_callback(Functor functor) {
+	void enqueue_callback(Functor functor) {
 		push_job(functor);
 	}
 

@@ -1,5 +1,5 @@
 /*
- * Context.h
+ * Stream.h
  *
  *  Created on: Jan 24, 2019
  *      Author: joseph
@@ -11,12 +11,12 @@
 #include "Host.h"
 #include "Device.h"
 
-BC_DEFAULT_MODULE_BODY(context)
+BC_DEFAULT_MODULE_BODY(stream)
 
 namespace BC {
 
 template<class system_tag>  //push into BC namespace
-using Context = context::template implementation<system_tag>;
+using Stream = stream::template implementation<system_tag>;
 
 }
 
