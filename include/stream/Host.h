@@ -45,10 +45,8 @@ public:
     auto get_allocator_rebound() {
     	return typename allocator_t::template rebind<RebindType>::other(m_contents->m_workspace);
     }
-    auto set_blas_pointer_mode_host() {
-    }
-    auto set_blas_pointer_mode_device() {
-	}
+    auto set_blas_pointer_mode_host() {}
+    auto set_blas_pointer_mode_device() {}
 
 
 

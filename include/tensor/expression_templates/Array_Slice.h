@@ -38,9 +38,6 @@ public:
 	const allocator_t& get_allocator() const { return m_allocator; }
 		  allocator_t& get_allocator() 	   { return m_allocator; }
 
-	const auto& internal_base() const { return *this; }
-		  auto& internal_base() 	  { return *this; }
-
 	const stream_t& get_stream() const  { return m_stream; }
 		  stream_t& get_stream()  		{ return m_stream; }
 };

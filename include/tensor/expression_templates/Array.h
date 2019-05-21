@@ -231,10 +231,6 @@ public:
        this->array = nullptr;
 	}
 
-	self& internal_base() {
-		return *this;}
-	const self& internal_base() const {
-		return *this;}
 };
 
 template<class ValueType, int dims, class Stream>

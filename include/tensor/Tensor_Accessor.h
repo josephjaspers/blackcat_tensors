@@ -22,8 +22,8 @@ class Tensor_Accessor {
     const auto& as_derived() const { return static_cast<const Tensor_Base<ExpressionTemplate>&>(*this); }
           auto& as_derived()       { return static_cast<      Tensor_Base<ExpressionTemplate>&>(*this); }
 
-    const auto& internal() const { return as_derived().internal_base(); }
-          auto& internal()       { return as_derived().internal_base(); }
+//    const auto& as_derived() const { return as_derived().internal_base(); }
+//          auto& as_derived()       { return as_derived().internal_base(); }
 
 public:
 
@@ -37,34 +37,34 @@ public:
     const auto operator [] (range r) const { return slice(r.from, r.to); }
           auto operator [] (range r)       { return slice(r.from, r.to); }
 
-    const auto scalar(BC::size_t i) const { return make_tensor(exprs::make_scalar(internal(), i)); }
-          auto scalar(BC::size_t i)       { return make_tensor(exprs::make_scalar(internal(), i)); }
+    const auto scalar(BC::size_t i) const { return make_tensor(exprs::make_scalar(as_derived(), i)); }
+          auto scalar(BC::size_t i)       { return make_tensor(exprs::make_scalar(as_derived(), i)); }
 
 	const auto slice(BC::size_t i) const {
-		return make_tensor(exprs::make_slice(internal(), i));
+		return make_tensor(exprs::make_slice(as_derived(), i));
 	}
 
 	auto slice(BC::size_t i) {
-		return make_tensor(exprs::make_slice(internal(), i));
+		return make_tensor(exprs::make_slice(as_derived(), i));
 	}
 
 	const auto slice(BC::size_t from, BC::size_t to) const {
-		return make_tensor(exprs::make_ranged_slice(internal(), from, to));
+		return make_tensor(exprs::make_ranged_slice(as_derived(), from, to));
 	}
 
 	auto slice(BC::size_t from, BC::size_t to) {
-		return make_tensor(exprs::make_ranged_slice(internal(), from, to));
+		return make_tensor(exprs::make_ranged_slice(as_derived(), from, to));
 	}
 
 // TODO FIX
     const auto diagnol(BC::size_t index = 0) const {
         static_assert(ExpressionTemplate::DIMS  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
-        return make_tensor(exprs::make_diagnol(internal(),index));
+        return make_tensor(exprs::make_diagnol(as_derived(),index));
     }
 
     auto diagnol(BC::size_t index = 0) {
         static_assert(ExpressionTemplate::DIMS  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
-        return make_tensor(exprs::make_diagnol(internal(),index));
+        return make_tensor(exprs::make_diagnol(as_derived(),index));
     }
 
     const auto col(BC::size_t i) const {
@@ -79,12 +79,12 @@ public:
 
     const auto row(BC::size_t i) const {
         static_assert(ExpressionTemplate::DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
-        return make_tensor(exprs::make_row(internal(), i));
+        return make_tensor(exprs::make_row(as_derived(), i));
     }
 
     auto row(BC::size_t i) {
         static_assert(ExpressionTemplate::DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
-        return make_tensor(exprs::make_row(internal(), i));
+        return make_tensor(exprs::make_row(as_derived(), i));
     }
 
     const auto operator() (BC::size_t i) const { return scalar(i); }
@@ -98,13 +98,13 @@ public:
 template<class T>
 const auto reshape(const Tensor_Base<T>& tensor) {
     return [&](auto... integers) {
-        return make_tensor(exprs::make_view(tensor.internal_base(), BC::make_array(integers...)));
+        return make_tensor(exprs::make_view(tensor, BC::make_array(integers...)));
     };
 }
 template<class T>
 auto reshape(Tensor_Base<T>& tensor) {
     return [&](auto... integers) {
-        return make_tensor(exprs::make_view(tensor.internal_base(), BC::make_array(integers...)));
+        return make_tensor(exprs::make_view(tensor, BC::make_array(integers...)));
     };
 }
 
@@ -114,7 +114,7 @@ const auto chunk(const Tensor_Base<T>& tensor, integers... ints) {
 
     return [&, index_point](auto... shape_indicies) {
         return make_tensor(exprs::make_chunk(
-                tensor.internal_base(),
+                tensor,
                 index_point,
                 BC::make_array(shape_indicies...)));
     };
@@ -125,7 +125,7 @@ auto chunk(Tensor_Base<T>& tensor, integers... ints) {
 	auto index_point =  BC::make_array(ints...);
     return [&, index_point](auto... shape_indicies) {
         return make_tensor(exprs::make_chunk(
-                tensor.internal_base(),
+                tensor,
                 index_point,
                 BC::make_array(shape_indicies...)));
     };

@@ -66,8 +66,6 @@ struct Array_Const_View
 	const stream_type& get_stream()   const { return stream; }
 	stream_type& get_stream()   { return stream; }
 
-	const auto& internal_base() const { return *this; }
-		  auto& internal_base()       { return *this; }
 };
 }
 }

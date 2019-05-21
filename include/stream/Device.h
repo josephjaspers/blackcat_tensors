@@ -17,6 +17,7 @@
 #include <cublas.h>
 
 #include <memory>
+#include <future>
 
 namespace BC {
 namespace stream {
@@ -142,11 +143,12 @@ public:
     		BC_CUDA_ASSERT(cudaStreamSynchronize(device_contents.get()->m_stream_handle));
     }
 
-    template<class function>
+    template<class function, class=std::enable_if_t<std::is_void<decltype(std::declval<function>()())>::value>>
     void enqueue_callback(function func) {
 
     	if (is_default()){
     		func();
+    		return;
     	}
 
     	BC_CUDA_ASSERT(cudaEventRecord(
@@ -159,6 +161,30 @@ public:
     				func();
     			}
     	);
+    }
+    template<class function, class=std::enable_if_t<!std::is_void<decltype(std::declval<function>()())>::value>, int ADL=0>
+    auto enqueue_callback(function func) {
+    	std::promise<decltype(func())> promise;
+
+    	if (is_default()){
+    		promise.set_value(func());
+    		return promise.get_future();
+    	}
+
+
+    	auto future = promise.get_future();
+    	BC_CUDA_ASSERT(cudaEventRecord(
+    			device_contents.get()->m_event_handle,
+    			device_contents.get()->m_stream_handle));
+
+    	device_contents.get()->m_host_stream.push(
+    			BC::meta::bind(
+    			[this, func](std::promise<decltype(func())> promise) {
+    				cudaEventSynchronize(this->device_contents.get()->m_event_handle);
+    	    		promise.set_value(func());
+    	}, std::move(promise))
+    	);
+    	return future;
     }
 
     bool operator == (const Device& dev) {

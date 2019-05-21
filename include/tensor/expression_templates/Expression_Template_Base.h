@@ -28,11 +28,6 @@ public:
     BCINLINE const auto& internal() const { return as_derived(); }
     BCINLINE       auto& internal()       { return as_derived(); }
 
-    //default method - returns the mixin of Tensor_Base (may be different than internal())
-    //should be shadowed by classes that support non-trivial copy/move construction
-    BCINLINE const auto& internal_base() const { return as_derived(); }
-    BCINLINE       auto& internal_base()       { return as_derived(); }
-
     operator       derived&()       { return as_derived(); }
     operator const derived&() const { return as_derived(); }
 
