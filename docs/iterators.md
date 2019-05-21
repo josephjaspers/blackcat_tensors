@@ -38,8 +38,8 @@ int main() {
   BC::Cube<float> cube(3,3,3); 
 
   for (auto matrix : cube.nd_iter()) {       
-    for (auto row : cube.nd_iter()) {        
-      for (float& scalar : row) {
+    for (auto vec : cube.nd_iter()) {        
+      for (float& scalar : vec) {
          //do work 
       }
     }
@@ -68,7 +68,7 @@ BC::Matrix<float> mat;
   mat.nd_rend();
 ```
 #### Utility Iterators
-The Blackcat_Tensors defines convienant iterator proxies which support start and end ranges.
+Convienant iterator proxies which support start and end ranges.
 
 ```cpp
 BC::Matrix<float> mat; 
@@ -77,12 +77,12 @@ BC::Matrix<float> mat;
     //do work
   }
   
-  for (float& scalar : mat.nd_iter(start, finish)) {
+  for (auto vec : mat.nd_iter(start, finish)) {
     //do work
   }
   
   //reverse iterators are also supported.
-  for (auto vec : mat.reverse_iter(finish, start)) {
+  for (auto& float : mat.reverse_iter(finish, start)) {
     //do work
   }
   
