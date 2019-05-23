@@ -18,5 +18,6 @@
 /Debug/
 /Debug/.*
 /Release/
-/BlackCat_Tensors/autograd/
-/BlackCat_Tensors/BlackCat_Autograd.h/
+/include/autograd/
+/include/autograd/*
+/include/BlackCat_Autograd.h/
