@@ -20,21 +20,21 @@ static constexpr bool requires_greedy_eval() {
 }
 
 //------------------------------------------------Purely lazy evaluation----------------------------------//
-template< class expression, class Stream>
-static std::enable_if_t<!requires_greedy_eval<expression>()>
-evaluate(const expression& expr, Stream stream_) {
-	nd_evaluate(expr, stream_);
+template<class Expression, class Stream>
+static std::enable_if_t<!requires_greedy_eval<Expression>()>
+evaluate(Expression expression, Stream stream) {
+	nd_evaluate(expression, stream);
 }
 //------------------------------------------------Purely lazy alias evaluation----------------------------------//
-template< class expression, class Stream>
-static std::enable_if_t<!requires_greedy_eval<expression>()>
-evaluate_aliased(const expression& expr, Stream stream_) {
-	nd_evaluate(expr, stream_);
+template< class Expression, class Stream>
+static std::enable_if_t<!requires_greedy_eval<Expression>()>
+evaluate_aliased(Expression expression, Stream stream_) {
+	nd_evaluate(expression, stream_);
 }
 //------------------------------------------------Greedy evaluation (BLAS function call detected)----------------------------------//
-template< class expression, class Stream>
-static std::enable_if_t<requires_greedy_eval<expression>()>
-evaluate(const expression& expr, Stream stream_) {
+template< class Expression, class Stream>
+static std::enable_if_t<requires_greedy_eval<Expression>()>
+evaluate(Expression expr, Stream stream_) {
 	auto greedy_evaluated_expr = BC::exprs::tree::evaluator_paths::evaluate(expr, stream_);
 
 	if (expression_traits<decltype(greedy_evaluated_expr)>::is_expr) {
@@ -43,9 +43,9 @@ evaluate(const expression& expr, Stream stream_) {
 	BC::exprs::tree::evaluator_paths::deallocate_temporaries(greedy_evaluated_expr, stream_);
 }
 //------------------------------------------------Greedy evaluation (BLAS function call detected), skip injection optimization--------------------//
-template< class expression, class Stream>
-static std::enable_if_t<requires_greedy_eval<expression>()>
-evaluate_aliased(const expression& expr, Stream stream_) {
+template<class Expression, class Stream>
+static std::enable_if_t<requires_greedy_eval<Expression>()>
+evaluate_aliased(Expression expr, Stream stream_) {
 	auto greedy_evaluated_expr = BC::exprs::tree::evaluator_paths::evaluate_aliased(expr, stream_);        //evaluate the internal tensor_type
 
 	if (expression_traits<decltype(greedy_evaluated_expr)>::is_expr) {
@@ -66,10 +66,10 @@ void greedy_evaluate(Array array, Expression expr, Stream stream) {
 //-------------------------------- Cache Evaluator Endpoints (used in blas functions) ---------------------------------- //
 
 template<class Expression, class Stream, class=std::enable_if_t<expression_traits<Expression>::is_array>> //The branch is an array, no evaluation required
-static auto greedy_evaluate(const Expression& expression, Stream stream) { return expression; }
+static auto greedy_evaluate(Expression expression, Stream stream) { return expression; }
 
 template<class Expression, class Stream, class=std::enable_if_t<expression_traits<Expression>::is_expr>, int=0> //Create and return an array_core created from the expression
-static auto greedy_evaluate(const Expression& expression, Stream stream) {
+static auto greedy_evaluate(Expression expression, Stream stream) {
 	using value_type = typename Expression::value_type;
 	auto shape = BC::make_shape(expression.inner_shape());
 	auto temporary = make_temporary_tensor_array<value_type>(shape, stream);

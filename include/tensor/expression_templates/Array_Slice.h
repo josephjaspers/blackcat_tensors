@@ -45,11 +45,11 @@ public:
 
 template<class Parent>
 auto make_row(Parent& parent, BC::size_t index) {
-	using value_type = BC::meta::propagate_const_t<Parent, typename Parent::value_type>;
+	using value_type = typename Parent::value_type;
 	using slice_type = Array_Slice<
 			1,
 			value_type,
-			BC::meta::propagate_const_t<Parent, typename Parent::allocator_t>,
+			typename Parent::allocator_t,
 			BC_View,
 			BC_Noncontinuous>;
 
@@ -67,7 +67,7 @@ auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
     using slice_type =
     		Array_Slice<1,
     					typename Parent::value_type,
-    					BC::meta::propagate_const_t<Parent, typename Parent::allocator_t>,
+    					typename Parent::allocator_t,
     					BC_View, BC_Noncontinuous>;
 
 	return slice_type(parent.get_stream(), parent.get_allocator(),
@@ -79,10 +79,10 @@ auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
 template<class Parent, class=std::enable_if_t<!expression_traits<Parent>::is_continuous>>
 static auto make_slice(Parent& parent, BC::size_t index) {
 	static constexpr int Dimension = Parent::DIMS-1;
-	using value_type = BC::meta::propagate_const_t<Parent, typename Parent::value_type>;
+	using value_type = typename Parent::value_type;
 	using slice_type = Array_Slice<Dimension,
 			value_type,
-			BC::meta::propagate_const_t<Parent, typename Parent::allocator_t>,
+			typename Parent::allocator_t,
 			BC_View,
 			BC_Noncontinuous>;
 
@@ -93,11 +93,11 @@ static auto make_slice(Parent& parent, BC::size_t index) {
 template<class Parent, class=std::enable_if_t<expression_traits<Parent>::is_continuous>, int differentiator=0>
 static auto make_slice(Parent& parent, BC::size_t index) {
 	static constexpr int Dimension = Parent::DIMS-1;
-	using value_type = BC::meta::propagate_const_t<Parent, typename Parent::value_type>;
+	using value_type = typename Parent::value_type;
 	using slice_type = Array_Slice<
 			Dimension,
 			value_type,
-			BC::meta::propagate_const_t<Parent, typename Parent::allocator_t>,
+			 typename Parent::allocator_t,
 			BC_View>;
 
 	return slice_type(parent.get_stream(), parent.get_allocator(),
@@ -107,7 +107,7 @@ static auto make_slice(Parent& parent, BC::size_t index) {
 template<class Parent>
 static auto make_ranged_slice(Parent& parent, BC::size_t from, BC::size_t to) {
 	static constexpr int Dimension = Parent::DIMS;
-	using value_type = BC::meta::propagate_const_t<Parent, typename Parent::value_type>;
+	using value_type =typename Parent::value_type;
 	using slice_type = Array_Slice<
 									Dimension,
 									value_type,
@@ -126,7 +126,7 @@ static auto make_ranged_slice(Parent& parent, BC::size_t from, BC::size_t to) {
 
 template<class Parent, int ndims>
 static auto make_view(Parent& parent, BC::array<ndims, BC::size_t> shape) {
-	using value_type = BC::meta::propagate_const_t<Parent, typename Parent::value_type>;
+	using value_type = typename Parent::value_type;
 	using slice_type = Array_Slice<
 			ndims,
 			value_type,
@@ -137,7 +137,7 @@ static auto make_view(Parent& parent, BC::array<ndims, BC::size_t> shape) {
 
 template<class Parent>
 	static auto make_scalar(Parent& parent, BC::size_t index) {
-		using value_type = BC::meta::propagate_const_t<Parent, typename Parent::value_type>;
+		using value_type = typename Parent::value_type;
 		using system_tag = typename Parent::system_tag;
 		using slice_type =
 				Array_Slice<
@@ -152,11 +152,11 @@ template<class Parent, int ndims>
 auto make_chunk(Parent& parent, BC::array<Parent::DIMS, int> index_points, BC::array<ndims, int> shape) {
 	static_assert(ndims > 1, "TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, USE SCALAR OR RANGED_SLICE OTHERWISE");
 
-	using value_type = BC::meta::propagate_const_t<Parent, typename Parent::value_type>;
+	using value_type =  typename Parent::value_type;
 	using slice_type = Array_Slice<
 			ndims,
 			value_type,
-			BC::meta::propagate_const_t<Parent, typename Parent::allocator_t>,
+			typename Parent::allocator_t,
 			BC_Noncontinuous,
 			BC_View>;
 

@@ -89,26 +89,6 @@ template<typename T> __global__ static void eval5d(T t) {
         }
     }
 }
-
-template<class T> __device__
-T& get(T& t) {
-	return t;
-}
-template<class T> __device__
-const T& get(const T& t) {
-	return t;
-}
-template<class T> __device__
-T& get(T* t) {
-	return *t;
-}
-
-template<class T, class U, class V> __global__
-static void scalar_mul(T t, U u, V v) {
-	get(t) = get(u) * get(v);
-}
-
-
 }
 }
 

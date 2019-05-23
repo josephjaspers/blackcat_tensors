@@ -36,6 +36,10 @@ private:
           derived& as_derived()       { return static_cast<      derived&>(*this); }
 
     template<class derived_t>
+    void evaluate(Tensor_Operations<derived_t>&& tensor) {
+        exprs::evaluate(tensor.as_derived().internal(), this->as_derived().get_stream());
+    }
+    template<class derived_t>
     void evaluate(const Tensor_Operations<derived_t>& tensor) {
         exprs::evaluate(tensor.as_derived().internal(), this->as_derived().get_stream());
     }
@@ -78,7 +82,7 @@ public:
 	template<class p_value_type, class=std::enable_if_t<std::is_convertible<p_value_type, value_type>::value>>       \
 	derived& operator  op (const p_value_type& param) {                                                              \
 		BC_ASSERT_ASSIGNABLE("derived& operator " #op " (const Tensor_Operations<pDeriv>& param)");                  \
-		evaluate(bi_expr<oper:: op_functor >(exprs::make_scalar_constant<system_tag>((value_type)param)));  \
+		evaluate(bi_expr_scalar<oper:: op_functor >(exprs::make_scalar_constant<system_tag>((value_type)param)));  \
 		return as_derived();                                                                                         \
 	}
 
@@ -108,7 +112,7 @@ public:
 #define BC_SCALAR_COEFFICIENTWISE_DEF(op, op_functor)                                                                   \
         template<class p_value_type, typename = std::enable_if_t<std::is_convertible<p_value_type, value_type>::value>>                                    \
         auto op (const p_value_type& param) const {                                                                     \
-            return bi_expr<oper:: op_functor >(exprs::make_scalar_constant<system_tag>((value_type)param));    \
+            return bi_expr_scalar<oper:: op_functor >(exprs::make_scalar_constant<system_tag>((value_type)param));    \
         }
 
 #define BC_COEFFICIENTWISE_DEF(op, op_functor)\
@@ -217,26 +221,34 @@ public:
         return make_tensor(exprs::make_un_expr<functor>(as_derived().internal(), f));
     }
     template<class functor>
-    const auto un_expr() const {
+    auto un_expr() const {
         return make_tensor(exprs::make_un_expr<functor>(as_derived().internal()));
     }
     template<class functor, class right_value>
-    const auto bi_expr(functor f, const Tensor_Operations<right_value>& rv) const {
+    auto bi_expr(functor f, const Tensor_Operations<right_value>& rv) const {
         return make_tensor(exprs::make_bin_expr<functor>(as_derived().internal(), rv.as_derived().internal()));
     }
     template<class functor, class right_value>
-    const auto bi_expr(const Tensor_Operations<right_value>& rv) const {
+    auto bi_expr(const Tensor_Operations<right_value>& rv) const {
+        return make_tensor(exprs::make_bin_expr<functor>(as_derived().internal(), rv.as_derived().internal()));
+    }
+    template<class functor, class right_value>
+    auto bi_expr(functor f, const Tensor_Operations<right_value>& rv) {
+        return make_tensor(exprs::make_bin_expr<functor>(as_derived().internal(), rv.as_derived().internal()));
+    }
+    template<class functor, class right_value>
+    auto bi_expr(const Tensor_Operations<right_value>& rv) {
         return make_tensor(exprs::make_bin_expr<functor>(as_derived().internal(), rv.as_derived().internal()));
     }
 
 private:
 
     template<class functor, class right_value>
-    const auto bi_expr(functor f, const right_value& rv) const {
+    auto bi_expr_scalar(functor f, const right_value& rv) const {
         return make_tensor(exprs::make_bin_expr<functor>(as_derived().internal(), rv, f));
     }
     template<class functor, class right_value>
-    const auto bi_expr(const right_value& rv) const {
+    auto bi_expr_scalar(const right_value& rv) const {
         return make_tensor(exprs::make_bin_expr<functor>(as_derived().internal(), rv));
     }
 

@@ -10,7 +10,6 @@
 #define BLACKCAT_INTERNAL_FORWARD_DECLS_H_
 
 #include <type_traits>
-#include "operations/Binary.h"
 
 namespace BC {
 namespace exprs {

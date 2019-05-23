@@ -41,7 +41,7 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
 	}
 
 	template<class L, class R> BCINLINE
-	auto oper(const L& l, const R& r) {
+	auto oper(L&& l, R&& r) {
 		return static_cast< Operation&>(*this)(l,r);
 	}
 
@@ -55,6 +55,17 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
     auto  operator ()(integers... ints) const {
     	return oper(left(ints...), right(ints...));
     }
+
+    BCINLINE
+    auto  operator [](int index) {
+    	return oper(left[index], right[index]);
+    }
+
+    template<class... integers> BCINLINE
+    auto  operator ()(integers... ints) {
+    	return oper(left(ints...), right(ints...));
+    }
+
 private:
     BCINLINE const auto& shape() const { return dominant_type<Lv, Rv>::shape(left, right); }
 public:
