@@ -151,7 +151,7 @@ public:
 	  stream_t(array_.get_stream()),
 	  parent(array_) {
 		array_.array = nullptr;
-		//This causes segmentation fault with NVCC currently
+		//This causes segmentation fault with NVCC currently (compiler segfault, not runtime)
 //		array_.as_shape() = BC::Shape<Dimension>(); //resets the shape
 	}
 

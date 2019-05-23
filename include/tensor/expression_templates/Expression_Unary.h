@@ -34,13 +34,31 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Value, operati
     Unary_Expression(Value v, const args&... args_)
     : operation(args_...) , array(v) {}
 
-    BCINLINE
-    auto operator [](int index) const {
-        return static_cast<const operation&>(*this)(array[index]);
+	template<class ValueType> BCINLINE
+	const auto oper(const ValueType& value) const {
+		return static_cast<const operation&>(*this)(value);
+	}
+
+	template<class ValueType> BCINLINE
+	auto oper(ValueType&& value) {
+		return static_cast<operation&>(*this)(value);
+	}
+
+
+    BCINLINE auto operator [](int index) const {
+        return oper(array[index]);
     }
     template<class... integers> BCINLINE
     auto operator ()(integers... index) const {
-        return static_cast<const operation&>(*this)(array(index...));
+        return oper(array(index...));
+    }
+
+    BCINLINE auto operator [](int index) {
+        return oper(array[index]);
+    }
+    template<class... integers> BCINLINE
+    auto operator ()(integers... index) {
+        return oper(array(index...));
     }
 
     BCINLINE const auto inner_shape() const { return array.inner_shape(); }

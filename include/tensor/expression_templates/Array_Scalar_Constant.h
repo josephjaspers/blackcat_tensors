@@ -15,8 +15,6 @@
 namespace BC {
 namespace exprs {
 
-
-//identical to Array_Scalar, though the scalar is allocated on the stack opposed to heap
 template<class Scalar, class SystemTag>
 struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, SystemTag>, 0>, BC::exprs::BC_Stack_Allocated {
 

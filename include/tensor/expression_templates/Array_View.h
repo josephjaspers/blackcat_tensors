@@ -64,7 +64,7 @@ struct Array_Const_View
 		return alloc;
 	}
 	const stream_type& get_stream()   const { return stream; }
-	stream_type& get_stream()   { return stream; }
+		  stream_type& get_stream()   		{ return stream; }
 
 };
 }

@@ -45,10 +45,8 @@ public:
 
 template<class Parent>
 auto make_row(Parent& parent, BC::size_t index) {
-	using value_type = typename Parent::value_type;
-	using slice_type = Array_Slice<
-			1,
-			value_type,
+	using slice_type = Array_Slice<1,
+			typename Parent::value_type,
 			typename Parent::allocator_t,
 			BC_View,
 			BC_Noncontinuous>;
@@ -64,13 +62,13 @@ auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
     BC::size_t length = BC::meta::min(parent.rows(), parent.cols() - diagnol_index);
     BC::size_t ptr_index = diagnol_index > 0 ? parent.leading_dimension(0) * diagnol_index : std::abs(diagnol_index);
 
-    using slice_type =
-    		Array_Slice<1,
+    using slice_type = Array_Slice<1,
     					typename Parent::value_type,
     					typename Parent::allocator_t,
     					BC_View, BC_Noncontinuous>;
 
-	return slice_type(parent.get_stream(), parent.get_allocator(),
+	return slice_type(parent.get_stream(),
+						parent.get_allocator(),
 						Shape<1>(length, stride),
 						parent.memptr() + ptr_index);
 }
@@ -78,91 +76,87 @@ auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
 
 template<class Parent, class=std::enable_if_t<!expression_traits<Parent>::is_continuous>>
 static auto make_slice(Parent& parent, BC::size_t index) {
-	static constexpr int Dimension = Parent::DIMS-1;
-	using value_type = typename Parent::value_type;
-	using slice_type = Array_Slice<Dimension,
-			value_type,
-			typename Parent::allocator_t,
-			BC_View,
-			BC_Noncontinuous>;
+	using slice_type = Array_Slice<Parent::DIMS-1,
+						typename Parent::value_type,
+						typename Parent::allocator_t,
+						BC_View,
+						BC_Noncontinuous>;
 
-	return slice_type(parent.get_stream(), parent.get_allocator(),
+	return slice_type(parent.get_stream(),
+						parent.get_allocator(),
 						parent.get_shape(),
 						parent.memptr() + parent.slice_ptr_index(index));
 }
 template<class Parent, class=std::enable_if_t<expression_traits<Parent>::is_continuous>, int differentiator=0>
 static auto make_slice(Parent& parent, BC::size_t index) {
-	static constexpr int Dimension = Parent::DIMS-1;
-	using value_type = typename Parent::value_type;
-	using slice_type = Array_Slice<
-			Dimension,
-			value_type,
-			 typename Parent::allocator_t,
-			BC_View>;
 
-	return slice_type(parent.get_stream(), parent.get_allocator(),
+	using slice_type = Array_Slice<Parent::DIMS-1,
+						typename Parent::value_type,
+						typename Parent::allocator_t,
+						BC_View>;
+
+	return slice_type(parent.get_stream(),
+						parent.get_allocator(),
 						parent.get_shape(),
 						parent.memptr() + parent.slice_ptr_index(index));
 }
 template<class Parent>
 static auto make_ranged_slice(Parent& parent, BC::size_t from, BC::size_t to) {
-	static constexpr int Dimension = Parent::DIMS;
-	using value_type =typename Parent::value_type;
-	using slice_type = Array_Slice<
-									Dimension,
-									value_type,
-									typename Parent::allocator_t>;
-
 	BC::size_t range = to - from;
 	BC::size_t index = parent.slice_ptr_index(from);
-	BC::array<Dimension, BC::size_t> inner_shape = parent.inner_shape();
-	inner_shape[Dimension-1] = range;
 
-	BC::exprs::Shape<Dimension> new_shape(inner_shape);
-	return slice_type(parent.get_stream(), parent.get_allocator(),
-						new_shape,
+	BC::array<Parent::DIMS, BC::size_t> inner_shape = parent.inner_shape();
+	inner_shape[Parent::DIMS-1] = range;
+
+	using slice_type = Array_Slice<Parent::DIMS,
+						typename Parent::value_type,
+						typename Parent::allocator_t>;
+
+	return slice_type(parent.get_stream(),
+						parent.get_allocator(),
+						BC::Shape<Parent::DIMS>(inner_shape),
 						parent.memptr() + index);
 }
 
-template<class Parent, int ndims>
-static auto make_view(Parent& parent, BC::array<ndims, BC::size_t> shape) {
-	using value_type = typename Parent::value_type;
-	using slice_type = Array_Slice<
-			ndims,
-			value_type,
-			typename Parent::allocator_t>;
+template<class Parent, int Dimension>
+static auto make_view(Parent& parent, BC::array<Dimension, BC::size_t> shape) {
+	using slice_type = Array_Slice<Dimension,
+						typename Parent::value_type,
+						typename Parent::allocator_t>;
 
-	return slice_type(parent.get_stream(), parent.get_allocator(), BC::Shape<ndims>(shape), parent.memptr());
+	return slice_type(parent.get_stream(),
+						parent.get_allocator(),
+						BC::Shape<Dimension>(shape),
+						parent.memptr());
 }
 
 template<class Parent>
-	static auto make_scalar(Parent& parent, BC::size_t index) {
-		using value_type = typename Parent::value_type;
-		using system_tag = typename Parent::system_tag;
-		using slice_type =
-				Array_Slice<
-							0,
-							value_type,
-							typename Parent::allocator_t>;
+static auto make_scalar(Parent& parent, BC::size_t index) {
+	using slice_type = Array_Slice<0,
+						typename Parent::value_type,
+						typename Parent::allocator_t>;
 
-		return slice_type(parent.get_stream(), parent.get_allocator(), BC::Shape<0>(), parent.memptr() + index);
-	}
+	return slice_type(parent.get_stream(),
+						parent.get_allocator(),
+						BC::Shape<0>(),
+						parent.memptr() + index);
+}
 
-template<class Parent, int ndims>
-auto make_chunk(Parent& parent, BC::array<Parent::DIMS, int> index_points, BC::array<ndims, int> shape) {
-	static_assert(ndims > 1, "TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, USE SCALAR OR RANGED_SLICE OTHERWISE");
+template<class Parent, int Dimension>
+auto make_chunk(Parent& parent, BC::array<Parent::DIMS, BC::size_t> index_points, BC::array<Dimension, int> shape) {
+	static_assert(Dimension > 1, "TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, USE SCALAR OR RANGED_SLICE OTHERWISE");
 
-	using value_type =  typename Parent::value_type;
 	using slice_type = Array_Slice<
-			ndims,
-			value_type,
+			Dimension,
+			typename Parent::value_type,
 			typename Parent::allocator_t,
 			BC_Noncontinuous,
 			BC_View>;
 
-	BC::size_t index = parent.dims_to_index(index_points);
-	SubShape<ndims> chunk_shape = SubShape<ndims>(shape, parent.get_shape());
-	return slice_type(parent.get_stream(), parent.get_allocator(), chunk_shape, parent.memptr() + index);
+	return slice_type(parent.get_stream(),
+						parent.get_allocator(),
+						SubShape<Dimension>(shape, parent.get_shape()),
+						parent.memptr() + parent.dims_to_index(index_points));
 }
 
 
