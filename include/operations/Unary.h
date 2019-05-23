@@ -19,9 +19,15 @@ namespace oper {
         template<class lv> BCINLINE lv operator ()(lv val) const {
             return -val;
         }
+        template<class lv> BCINLINE static lv apply(lv val) {
+            return -val;
+        }
     };
     struct logical {
         template<class lv> BCINLINE lv operator ()(lv val) const {
+            return val == 0 ? 0 : 1;
+        }
+        template<class lv> BCINLINE static lv apply(lv val) {
             return val == 0 ? 0 : 1;
         }
     };

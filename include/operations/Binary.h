@@ -128,5 +128,6 @@ namespace oper {
 }
 }
 
+#undef BC_BIN_OP
 #endif /* EXPRESSION_BINARY_FUNCTORS_H_ */
 
