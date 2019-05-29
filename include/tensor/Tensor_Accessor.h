@@ -58,32 +58,32 @@ public:
 
 // TODO FIX
     const auto diagnol(BC::size_t index = 0) const {
-        static_assert(ExpressionTemplate::DIMS  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
+        static_assert(ExpressionTemplate::tensor_dimension  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
         return make_tensor(exprs::make_diagnol(as_derived(),index));
     }
 
     auto diagnol(BC::size_t index = 0) {
-        static_assert(ExpressionTemplate::DIMS  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
+        static_assert(ExpressionTemplate::tensor_dimension  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
         return make_tensor(exprs::make_diagnol(as_derived(),index));
     }
 
     const auto col(BC::size_t i) const {
-        static_assert(ExpressionTemplate::DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+        static_assert(ExpressionTemplate::tensor_dimension == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
         return slice(i);
     }
 
     auto col(BC::size_t i) {
-        static_assert(ExpressionTemplate::DIMS == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+        static_assert(ExpressionTemplate::tensor_dimension == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
         return slice(i);
     }
 
     const auto row(BC::size_t i) const {
-        static_assert(ExpressionTemplate::DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+        static_assert(ExpressionTemplate::tensor_dimension == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
         return make_tensor(exprs::make_row(as_derived(), i));
     }
 
     auto row(BC::size_t i) {
-        static_assert(ExpressionTemplate::DIMS == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+        static_assert(ExpressionTemplate::tensor_dimension == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
         return make_tensor(exprs::make_row(as_derived(), i));
     }
 

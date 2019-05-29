@@ -25,8 +25,8 @@ struct Unary_Expression<Value, oper::transpose<System_Tag>>
     using value_type  = typename Value::value_type;
     using system_tag = System_Tag;
 
-    static constexpr int DIMS = Value::DIMS;
-    static constexpr int ITERATOR = DIMS > 1? DIMS :0;
+    static constexpr int tensor_dimension = Value::tensor_dimension;
+    static constexpr int tensor_iterator_dimension = tensor_dimension > 1? tensor_dimension :0;
 
     Value array;
 
@@ -34,12 +34,12 @@ struct Unary_Expression<Value, oper::transpose<System_Tag>>
     Unary_Expression(Value p, const oper::transpose<System_Tag>&) : array(p) {}
 
     BCINLINE const auto inner_shape() const {
-        return make_lambda_array<DIMS>([=](int i) {
-            if (DIMS >= 2)
+        return make_lambda_array<tensor_dimension>([=](int i) {
+            if (tensor_dimension >= 2)
                 return i == 0 ? array.cols() : i == 1 ? array.rows() : array.dimension(i);
-            else if (DIMS == 2)
+            else if (tensor_dimension == 2)
                 return i == 0 ? array.cols() : i == 1 ? array.rows() : 1;
-            else if (DIMS == 1)
+            else if (tensor_dimension == 1)
                 return i == 0 ? array.rows() : 1;
             else
                 return 1;
@@ -48,7 +48,7 @@ struct Unary_Expression<Value, oper::transpose<System_Tag>>
 
     BCINLINE
     const auto block_shape() const {
-        return make_lambda_array<DIMS>([=](int i) {
+        return make_lambda_array<tensor_dimension>([=](int i) {
             return i == 0 ? array.cols() : 1 == 1 ? array.rows() : array.block_dimension(i);
         });
     }

@@ -23,8 +23,8 @@
 //
 //    //2d tensor for 2d conv
 //    template<class img_out, class img_in>
-//    static std::enable_if_t<img_in::DIMS == 2> img2col(img_out out, img_in in, BC::size_t  padding = 0,  BC::size_t  stride = 1) {
-//        static_assert(img_out::DIMS == 4 && img_in::DIMS == 2, "img2col 2d requires a 4d and 2d tensors");
+//    static std::enable_if_t<img_in::tensor_dimension == 2> img2col(img_out out, img_in in, BC::size_t  padding = 0,  BC::size_t  stride = 1) {
+//        static_assert(img_out::tensor_dimension == 4 && img_in::tensor_dimension == 2, "img2col 2d requires a 4d and 2d tensors");
 //
 //        if (padding == 0)
 //            for (int cp = 0; cp < out.dimension(3); ++cp)         //number of column positions
@@ -51,8 +51,8 @@
 //
 //    //3d tensor for 2d conv
 //    template<class img_out, class img_in>
-//    static std::enable_if_t<img_in::DIMS == 3> img2col(img_out out, img_in in, BC::size_t  padding = 0,  BC::size_t  stride = 1) {
-//        static_assert(img_out::DIMS == 5 && img_in::DIMS == 2, "img2col 2d requires a 4d and 2d tensors");
+//    static std::enable_if_t<img_in::tensor_dimension == 3> img2col(img_out out, img_in in, BC::size_t  padding = 0,  BC::size_t  stride = 1) {
+//        static_assert(img_out::tensor_dimension == 5 && img_in::tensor_dimension == 2, "img2col 2d requires a 4d and 2d tensors");
 //
 //        if (padding == 0)
 //            for (int cp = 0; cp < out.dimension(4); ++cp)         //number of column positions

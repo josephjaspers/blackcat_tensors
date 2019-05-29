@@ -56,7 +56,7 @@ template<class value_type, class allocator_t = alloc_t<value_type>> using Matrix
 template<class value_type, class allocator_t = alloc_t<value_type>> using Cube_View   = Tensor_View<3, value_type, allocator_t>;
 
 namespace expr {
-template<int x, class iterator_t, typename = std::enable_if_t<iterator_t::DIMS == x>>
+template<int x, class iterator_t, typename = std::enable_if_t<iterator_t::tensor_dimension == x>>
 using tensor = Tensor_Base<iterator_t>;
 
 template<class iterator_t> using scal = tensor<0, iterator_t>;

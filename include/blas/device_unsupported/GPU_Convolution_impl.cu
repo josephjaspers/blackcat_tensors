@@ -20,7 +20,7 @@ namespace gpu_impl {
 //2 dimensional image2col accepts a matrix (in) as the image and a 4d matrix out reshaped for the output matrix(rows, cols, row_positions, col_positions)
 template<class img_out, class img_in>
 void img2col_2d(img_out out, img_in in) {
-    static_assert(img_out::DIMS == 4 && img_in::DIMS == 2, "img2col 2d requires a 4d and 2d tensors");
+    static_assert(img_out::tensor_dimension == 4 && img_in::tensor_dimension == 2, "img2col 2d requires a 4d and 2d tensors");
     //number of column positions
     BC::size_t  cp = blockIdx.z * blockDim.z + threadIdx.z;
     for (; cp < out.dimension(3); cp += blockDim.z * gridDim.z) {
@@ -44,7 +44,7 @@ void img2col_2d(img_out out, img_in in) {
 }
 template<class img_out, class img_in>
 void img2col_3d(img_out out, img_in in) {
-    static_assert(img_out::DIMS == 5 && img_in::DIMS == 3, "img2col 2d requires a 4d and 2d tensors");
+    static_assert(img_out::tensor_dimension == 5 && img_in::tensor_dimension == 3, "img2col 2d requires a 4d and 2d tensors");
     //number of depth positions
     BC::size_t  dp = blockIdx.z * blockDim.z + threadIdx.z;
     for (; dp < out.dimension(3); dp += blockDim.z * gridDim.z) {

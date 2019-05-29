@@ -24,7 +24,7 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
 
 	static_assert(std::is_same<typename lv::value_type, typename rv::value_type>::value,
 			"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
-    static_assert(lv::DIMS == 1 && (rv::DIMS == 1 || rv::DIMS ==0),
+    static_assert(lv::tensor_dimension == 1 && (rv::tensor_dimension == 1 || rv::tensor_dimension ==0),
     		"DOT DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
 
     using value_type = typename lv::value_type;
@@ -35,8 +35,8 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
     static constexpr bool lv_scalar = blas_expression_traits<lv>::is_scalar_multiplied;
     static constexpr bool rv_scalar = blas_expression_traits<rv>::is_scalar_multiplied;
 
-    static constexpr int DIMS  = 0;
-    static constexpr int ITERATOR = 0;
+    static constexpr int tensor_dimension  = 0;
+    static constexpr int tensor_iterator_dimension = 0;
 
     lv left;
     rv right;

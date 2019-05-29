@@ -32,8 +32,8 @@ struct Array_Const_View
     static constexpr bool copy_assignable    = false;
     static constexpr bool move_assignable    = true;
 
-    static constexpr int DIMS = Dimension;
-    static constexpr int ITERATOR = DIMS;
+    static constexpr int tensor_dimension = Dimension;
+    static constexpr int tensor_iterator_dimension = tensor_dimension;
 
 	stream_type stream;
 	Allocator alloc;
@@ -52,7 +52,7 @@ struct Array_Const_View
 	template<
 		class tensor_t,
 		typename = std::enable_if_t<
-			tensor_t::DIMS == Dimension &&
+			tensor_t::tensor_dimension == Dimension &&
 			expression_traits<tensor_t>::is_array>
 	>
 	Array_Const_View(const tensor_t& tensor)

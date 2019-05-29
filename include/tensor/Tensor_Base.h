@@ -46,7 +46,7 @@ public:
     using ExpressionTemplate::ExpressionTemplate;
     using ExpressionTemplate::internal;
 
-    using ExpressionTemplate::DIMS; //required
+    using ExpressionTemplate::tensor_dimension; //required
     using value_type  = typename ExpressionTemplate::value_type;
 	using system_tag  = typename ExpressionTemplate::system_tag;
 
@@ -92,8 +92,8 @@ public:
          return *this;
     }
 
-    Tensor_Base(BC::meta::only_if<DIMS==0, value_type> scalar) {
-        static_assert(DIMS == 0, "SCALAR_INITIALIZATION ONLY AVAILABLE TO SCALARS");
+    Tensor_Base(BC::meta::only_if<tensor_dimension==0, value_type> scalar) {
+        static_assert(tensor_dimension == 0, "SCALAR_INITIALIZATION ONLY AVAILABLE TO SCALARS");
         this->fill(scalar);
     }
 

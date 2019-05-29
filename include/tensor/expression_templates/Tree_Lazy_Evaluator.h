@@ -11,7 +11,7 @@ template<class Expression, class Stream>
 static void nd_evaluate(const Expression expr, Stream stream) {
 	using system_tag = typename Stream::system_tag;
 	using evaluator_impl  = typename BC::evaluator::template implementation<system_tag>;
-	evaluator_impl::template nd_evaluator<Expression::ITERATOR>(expr, stream);
+	evaluator_impl::template nd_evaluator<Expression::tensor_iterator_dimension>(expr, stream);
 }
 
 template<class T>
@@ -58,9 +58,10 @@ evaluate_aliased(Expression expr, Stream stream_) {
 
 //-------------------------------- Evaluator Endpoints ---------------------------------- //
 template<class Array, class Expression, class Stream>
-void greedy_evaluate(Array array, Expression expr, Stream stream) {
+auto greedy_evaluate(Array array, Expression expr, Stream stream) {
     static_assert(expression_traits<Array>::is_array, "MAY ONLY EVALUATE TO ARRAYS");
     evaluate(make_bin_expr<oper::assign>(array, expr), stream);
+    return array;
 }
 
 //-------------------------------- Cache Evaluator Endpoints (used in blas functions) ---------------------------------- //
@@ -73,8 +74,7 @@ static auto greedy_evaluate(Expression expression, Stream stream) {
 	using value_type = typename Expression::value_type;
 	auto shape = BC::make_shape(expression.inner_shape());
 	auto temporary = make_temporary_tensor_array<value_type>(shape, stream);
-
-	return evaluate_to(temporary, expression, stream);
+	return greedy_evaluate(temporary, expression, stream);
 }
 
 }

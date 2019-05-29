@@ -76,7 +76,7 @@ auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
 
 template<class Parent, class=std::enable_if_t<!expression_traits<Parent>::is_continuous>>
 static auto make_slice(Parent& parent, BC::size_t index) {
-	using slice_type = Array_Slice<Parent::DIMS-1,
+	using slice_type = Array_Slice<Parent::tensor_dimension-1,
 						typename Parent::value_type,
 						typename Parent::allocator_t,
 						BC_View,
@@ -90,7 +90,7 @@ static auto make_slice(Parent& parent, BC::size_t index) {
 template<class Parent, class=std::enable_if_t<expression_traits<Parent>::is_continuous>, int differentiator=0>
 static auto make_slice(Parent& parent, BC::size_t index) {
 
-	using slice_type = Array_Slice<Parent::DIMS-1,
+	using slice_type = Array_Slice<Parent::tensor_dimension-1,
 						typename Parent::value_type,
 						typename Parent::allocator_t,
 						BC_View>;
@@ -105,16 +105,16 @@ static auto make_ranged_slice(Parent& parent, BC::size_t from, BC::size_t to) {
 	BC::size_t range = to - from;
 	BC::size_t index = parent.slice_ptr_index(from);
 
-	BC::array<Parent::DIMS, BC::size_t> inner_shape = parent.inner_shape();
-	inner_shape[Parent::DIMS-1] = range;
+	BC::array<Parent::tensor_dimension, BC::size_t> inner_shape = parent.inner_shape();
+	inner_shape[Parent::tensor_dimension-1] = range;
 
-	using slice_type = Array_Slice<Parent::DIMS,
+	using slice_type = Array_Slice<Parent::tensor_dimension,
 						typename Parent::value_type,
 						typename Parent::allocator_t>;
 
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
-						BC::Shape<Parent::DIMS>(inner_shape),
+						BC::Shape<Parent::tensor_dimension>(inner_shape),
 						parent.memptr() + index);
 }
 
@@ -143,7 +143,7 @@ static auto make_scalar(Parent& parent, BC::size_t index) {
 }
 
 template<class Parent, int Dimension>
-auto make_chunk(Parent& parent, BC::array<Parent::DIMS, BC::size_t> index_points, BC::array<Dimension, int> shape) {
+auto make_chunk(Parent& parent, BC::array<Parent::tensor_dimension, BC::size_t> index_points, BC::array<Dimension, int> shape) {
 	static_assert(Dimension > 1, "TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, USE SCALAR OR RANGED_SLICE OTHERWISE");
 
 	using slice_type = Array_Slice<

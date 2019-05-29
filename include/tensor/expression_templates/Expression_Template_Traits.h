@@ -40,8 +40,8 @@ struct remove_scalar_mul {
 
 template<class lv, class rv>
 struct remove_scalar_mul<Binary_Expression<lv, rv, oper::scalar_mul>> {
-	using type = std::conditional_t<lv::DIMS == 0, rv, lv>;
-	using scalar_type = std::conditional_t<lv::DIMS == 0, lv ,rv>;
+	using type = std::conditional_t<lv::tensor_dimension == 0, rv, lv>;
+	using scalar_type = std::conditional_t<lv::tensor_dimension == 0, lv ,rv>;
 
 	static type rm(Binary_Expression<lv, rv, oper::scalar_mul> expression) {
 		struct lv_ {
@@ -54,7 +54,7 @@ struct remove_scalar_mul<Binary_Expression<lv, rv, oper::scalar_mul>> {
 				return arg.left;
 			}
 		};
-		return std::conditional_t<lv::DIMS == 0, lv_, rv_>::remove(expression);
+		return std::conditional_t<lv::tensor_dimension == 0, lv_, rv_>::remove(expression);
 	}
 
 	static scalar_type get_scalar(Binary_Expression<lv, rv, oper::scalar_mul> expression) {
@@ -68,7 +68,7 @@ struct remove_scalar_mul<Binary_Expression<lv, rv, oper::scalar_mul>> {
 				return arg.right;
 			}
 		};
-		return std::conditional_t<lv::DIMS == 0, lv_, rv_>::get(expression);
+		return std::conditional_t<lv::tensor_dimension == 0, lv_, rv_>::get(expression);
 	}
 
 };

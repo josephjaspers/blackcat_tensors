@@ -8,10 +8,18 @@
 #ifndef BLACKCAT_COMMON_H_
 #define BLACKCAT_COMMON_H_
 
+#include <type_traits>
+
 namespace BC {
 
-class host_tag;
-class device_tag;
+class system_tag_base {};
+class host_tag : system_tag_base {} host;
+class device_tag : system_tag_base {} device;
+
+template<class T>
+struct is_system_tag {
+	static constexpr bool value = std::is_base_of<system_tag_base, T>::value;
+};
 
 }
 

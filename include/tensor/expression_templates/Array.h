@@ -50,8 +50,8 @@ struct ArrayExpression
     static constexpr bool copy_assignable    = true;
     static constexpr bool move_assignable    = !expression_traits<self_type>::is_view;
 
-    static constexpr int DIMS = Dimension;
-    static constexpr int ITERATOR = expression_traits<self_type>::is_continuous ? 1 : DIMS;
+    static constexpr int tensor_dimension = Dimension;
+    static constexpr int tensor_iterator_dimension = expression_traits<self_type>::is_continuous ? 1 : tensor_dimension;
 
     pointer_type array = nullptr;
 
@@ -67,7 +67,7 @@ struct ArrayExpression
     BCINLINE const shape_type& get_shape() const { return static_cast<const shape_type&>(*this); }
 
     BCINLINE const auto& operator [](int index) const {
-    	if (!expression_traits<self_type>::is_continuous && DIMS==1) {
+    	if (!expression_traits<self_type>::is_continuous && tensor_dimension==1) {
     		return array[this->leading_dimension(0) * index];
     	} else {
     		return array[index];
@@ -75,7 +75,7 @@ struct ArrayExpression
     }
 
     BCINLINE auto& operator [](int index) {
-    	if (!expression_traits<self_type>::is_continuous && DIMS==1) {
+    	if (!expression_traits<self_type>::is_continuous && tensor_dimension==1) {
     		return array[this->leading_dimension(0) * index];
     	} else {
     		return array[index];
@@ -93,9 +93,9 @@ struct ArrayExpression
     }
 
     BCINLINE auto slice_ptr_index(int i) const {
-        if (DIMS == 0)
+        if (tensor_dimension == 0)
             return 0;
-        else if (DIMS == 1)
+        else if (tensor_dimension == 1)
             return i;
         else
             return this->leading_dimension(Dimension - 2) * i;
@@ -261,7 +261,7 @@ void destroy_temporary_tensor_array(ArrayExpression<Dimension, ValueType, System
 
 template<class Shape, class Allocator>
 auto make_tensor_array(Shape shape, Allocator alloc) {
-	return Array<Shape::DIMS, typename Allocator::value_type, Allocator>(shape, alloc);
+	return Array<Shape::tensor_dimension, typename Allocator::value_type, Allocator>(shape, alloc);
 }
 
 

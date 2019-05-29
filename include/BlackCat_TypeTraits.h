@@ -15,6 +15,25 @@
 
 namespace BC {
 namespace meta {
+namespace numerics {
+
+
+template<class ValueType, int Value, int DecimalValue=0> struct Number {
+	using type = ValueType;
+	using value_type = ValueType;
+	static constexpr ValueType value = Value + (1/DecimalValue);
+
+	BCINLINE constexpr operator value_type() { return value; }
+};
+
+template<int Value, int DecimalValue>
+struct Double  : Number<double, Value, DecimalValue> {};
+
+template<int Value>
+struct Integer  : Number<int, Value, 0> {};
+
+}
+
 
 	template<class T>
 	static constexpr bool true_v = true;
@@ -292,17 +311,17 @@ namespace meta {
     //---------------------
 
 	template<class T> BCINLINE
-	T& bc_const_cast(const T& param) {
+	T& auto_remove_const(const T& param) {
 		return const_cast<T&>(param);
 	}
 
 	template<class T> BCINLINE
-	T&& bc_const_cast(const T&& param) {
+	T&& auto_remove_const(const T&& param) {
 		return const_cast<T&&>(param);
 	}
 
 	template<class T> BCINLINE
-	T* bc_const_cast(const T* param) {
+	T* auto_remove_const(const T* param) {
 		return const_cast<T*>(param);
 	}
 

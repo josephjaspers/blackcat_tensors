@@ -18,7 +18,7 @@ namespace exprs {
 template<class derived>
 class Expression_Template_Base : BC_Type {
 
-    static constexpr int  DIMS = derived::DIMS;
+    static constexpr int  tensor_dimension = derived::tensor_dimension;
 
     BCINLINE const derived& as_derived() const { return static_cast<const derived&>(*this); }
     BCINLINE       derived& as_derived()       { return static_cast<      derived&>(*this); }
@@ -45,8 +45,8 @@ public:
 		static_assert(std::is_same<bool, std::decay_t<decltype(derived::move_constructible)>>::value, "Internal Types must define 'static constexpr bool move_constructible'");
 		static_assert(std::is_same<bool, std::decay_t<decltype(derived::copy_assignable)>>::value, "Internal Types must define 'static constexpr bool copy_assignable'");
 		static_assert(std::is_same<bool, std::decay_t<decltype(derived::move_assignable)>>::value, "Internal Types must define 'static constexpr bool move_assignable'");
-		static_assert(std::is_same<int, std::decay_t<decltype(derived::DIMS)>>::value, "Internal Types must define 'static constexpr int DIMS'");
-		static_assert(std::is_same<int, std::decay_t<decltype(derived::ITERATOR)>>::value, "Internal Types must define 'static constexpr int ITERATOR'");
+		static_assert(std::is_same<int, std::decay_t<decltype(derived::tensor_dimension)>>::value, "Internal Types must define 'static constexpr int tensor_dimension'");
+		static_assert(std::is_same<int, std::decay_t<decltype(derived::tensor_iterator_dimension)>>::value, "Internal Types must define 'static constexpr int tensor_iterator_dimension'");
     }
 
     void deallocate() const {}

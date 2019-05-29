@@ -25,8 +25,8 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
     using value_type  = std::remove_reference_t<std::decay_t<return_type>>;
     using system_tag  = typename Lv::system_tag;
 
-    static constexpr int DIMS = Lv::DIMS > Rv::DIMS ?  Lv::DIMS : Rv::DIMS;
-    static constexpr int ITERATOR = Lv::DIMS != Rv::DIMS ? DIMS : BC::meta::max(Lv::ITERATOR, Rv::ITERATOR);
+    static constexpr int tensor_dimension = Lv::tensor_dimension > Rv::tensor_dimension ?  Lv::tensor_dimension : Rv::tensor_dimension;
+    static constexpr int tensor_iterator_dimension = Lv::tensor_dimension != Rv::tensor_dimension ? tensor_dimension : BC::meta::max(Lv::tensor_iterator_dimension, Rv::tensor_iterator_dimension);
 
     Lv left;
     Rv right;

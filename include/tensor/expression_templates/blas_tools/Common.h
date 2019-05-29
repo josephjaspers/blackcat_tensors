@@ -79,6 +79,19 @@ struct Common_Tools {
 				)));
 	}
 
+	template<class Lv, class Rv, class Alpha, class Beta>
+	 struct contents {
+        static constexpr bool lv_is_transposed = blas_expression_traits<Lv>::is_transposed;
+        static constexpr bool rv_is_transposed = blas_expression_traits<Rv>::is_transposed;
+        static constexpr bool lv_is_scalar_multiplied = blas_expression_traits<Lv>::is_scalar_multiplied;
+        static constexpr bool rv_is_scalar_multiplied = blas_expression_traits<Rv>::is_scalar_multiplied;
+
+		Lv left;
+		Rv right;
+		Alpha alpha;
+		Beta beta;
+	};
+
 	template<int alpha_mod, int beta_mod, class Stream, class Lv, class Rv>
 	static auto parse_expression(Stream stream, Lv left, Rv right) {
 	    static constexpr bool lv_scalar = blas_expression_traits<Lv>::is_scalar_multiplied;
@@ -99,14 +112,7 @@ struct Common_Tools {
 	    using alpha_t = std::remove_reference_t<decltype(alpha_)>;
 	    using beta_t = std::remove_reference_t<decltype(beta_)>;
 
-		struct contents {
-			left_t left;
-			right_t right;
-			alpha_t alpha;
-			beta_t beta;
-		};
-
-	    return contents { left_, right_, alpha_, beta_ };
+	    return contents<left_t, right_t, alpha_t, beta_t> { left_, right_, alpha_, beta_ };
 	}
 	template<class Stream, class Contents>
 	static void post_parse_expression_evaluation(Stream stream, Contents contents) {

@@ -34,10 +34,10 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
     static constexpr bool lv_scalar = blas_expression_traits<lv>::is_scalar_multiplied;
     static constexpr bool rv_scalar = blas_expression_traits<rv>::is_scalar_multiplied;
 
-    static constexpr int DIMS = 2;
-    static constexpr int ITERATOR = 1;
+    static constexpr int tensor_dimension = 2;
+    static constexpr int tensor_iterator_dimension = 1;
 
-    static_assert(lv::DIMS == 1 && rv::DIMS == 1 && transB,
+    static_assert(lv::tensor_dimension == 1 && rv::tensor_dimension == 1 && transB,
     		"GER DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
 
 
@@ -54,8 +54,8 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 
     BCINLINE BC::size_t  outer_dimension() const { return rows(); }
 
-    BCINLINE const auto inner_shape() const { return make_lambda_array<DIMS>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.rows() : 1; });}
-    BCINLINE const auto block_shape() const { return make_lambda_array<DIMS>([&](int i) { return i == 0 ? left.rows() : i == 1 ? size() : 1; });}
+    BCINLINE const auto inner_shape() const { return make_lambda_array<tensor_dimension>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.rows() : 1; });}
+    BCINLINE const auto block_shape() const { return make_lambda_array<tensor_dimension>([&](int i) { return i == 0 ? left.rows() : i == 1 ? size() : 1; });}
     BCINLINE BC::size_t  M() const { return left.rows();  }
     BCINLINE BC::size_t  N() const { return right.cols(); }
 

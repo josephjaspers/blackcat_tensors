@@ -38,7 +38,7 @@ struct Host {
         auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
         auto TRANS_B =  transB ? CblasTrans : CblasNoTrans;
 
-        stream.get_stream().push_job([=]() {
+        stream.push_job([=]() {
                 cblas_sgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 		});
     }
@@ -134,7 +134,7 @@ struct Host {
         auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
         auto TRANS_B =  transB ? CblasTrans : CblasNoTrans;
 
-        stream.get_stream().push_job([=]() {
+        stream.push_job([=]() {
                 cblas_sgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, *alpha, A, lda, B, ldb, *beta, C, ldc);
 		});
     }

@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef STL_ITERATOR_COMMON_H_
-#define STL_ITERATOR_COMMON_H_
+#ifndef STL_tensor_iterator_dimension_COMMON_H_
+#define STL_tensor_iterator_dimension_COMMON_H_
 
 namespace BC {
 namespace iterators {
@@ -23,4 +23,4 @@ enum direction {
 
 
 
-#endif /* STL_ITERATOR_COMMON_H_ */
+#endif /* STL_tensor_iterator_dimension_COMMON_H_ */

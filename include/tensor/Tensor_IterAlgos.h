@@ -5,8 +5,8 @@
  *      Author: joseph
  */
 
-#ifndef BLACKCAT_TENSOR_ITERATOR_H_
-#define BLACKCAT_TENSOR_ITERATOR_H_
+#ifndef BLACKCAT_TENSOR_tensor_iterator_dimension_H_
+#define BLACKCAT_TENSOR_tensor_iterator_dimension_H_
 
 namespace BC {
 
@@ -54,7 +54,7 @@ public:
 	}
 
    void randomize(value_type lb=0, value_type ub=1)  {
-	   static_assert(internal_t::ITERATOR == 0 || internal_t::ITERATOR == 1,
+	   static_assert(internal_t::tensor_iterator_dimension == 0 || internal_t::tensor_iterator_dimension == 1,
 			   	   	   "randomize not available to non-continuous tensors");
 
 	   using impl = random::implementation<system_tag>;
@@ -141,7 +141,7 @@ public:
 	}
         //----------------------iterator wrappers---------------------------//
 
-#define BC_TENSOR_ITERATOR_DEF(iterator_name, begin_func, end_func)\
+#define BC_TENSOR_tensor_iterator_dimension_DEF(iterator_name, begin_func, end_func)\
     template<class der_t>                                        \
     struct iterator_name {                                       \
                                                                  \
@@ -184,12 +184,12 @@ public:
        return iterator_name<der_t>(p_derived, params...);                 \
  }                                                                        \
 
-BC_TENSOR_ITERATOR_DEF(ND_ForwardIterator, nd_begin, nd_end)
-BC_TENSOR_ITERATOR_DEF(ND_ReverseIterator, nd_rbegin, nd_rend)
-BC_TENSOR_ITERATOR_DEF(CW_ForwardIterator, begin, end)
-BC_TENSOR_ITERATOR_DEF(CW_ReverseIterator, rbegin, rend)
+BC_TENSOR_tensor_iterator_dimension_DEF(ND_ForwardIterator, nd_begin, nd_end)
+BC_TENSOR_tensor_iterator_dimension_DEF(ND_ReverseIterator, nd_rbegin, nd_rend)
+BC_TENSOR_tensor_iterator_dimension_DEF(CW_ForwardIterator, begin, end)
+BC_TENSOR_tensor_iterator_dimension_DEF(CW_ReverseIterator, rbegin, rend)
 
-#undef BC_TENSOR_ITERATOR_DEF
+#undef BC_TENSOR_tensor_iterator_dimension_DEF
 
 	template<class... params> auto iter(params ... ps) {
 		return make_CW_ForwardIterator(as_derived(), ps...);

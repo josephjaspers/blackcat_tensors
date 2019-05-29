@@ -22,8 +22,8 @@ struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, SystemTag>
     using system_tag = SystemTag;
     using allocation_tag = BC::host_tag;
 
-    static constexpr int ITERATOR = 0;
-    static constexpr int DIMS     = 0;
+    static constexpr int tensor_iterator_dimension = 0;
+    static constexpr int tensor_dimension     = 0;
 
     static constexpr bool copy_constructible = true;
     static constexpr bool move_constructible = true;
@@ -63,8 +63,8 @@ struct Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>
     using system_tag = BC::host_tag;
     using allocation_tag = BC::host_tag;
 
-    static constexpr int ITERATOR = 0;
-    static constexpr int DIMS     = 0;
+    static constexpr int tensor_iterator_dimension = 0;
+    static constexpr int tensor_dimension     = 0;
 
     static constexpr bool copy_constructible = false;
     static constexpr bool move_constructible = false;
@@ -93,8 +93,8 @@ struct Constexpr_Scalar_Constant<Value, Scalar, BC::device_tag>
     using system_tag = BC::host_tag;
     using allocation_tag = BC::host_tag;
 
-    static constexpr int ITERATOR = 0;
-    static constexpr int DIMS     = 0;
+    static constexpr int tensor_iterator_dimension = 0;
+    static constexpr int tensor_dimension     = 0;
 
     static constexpr bool copy_constructible = true;
     static constexpr bool move_constructible = true;

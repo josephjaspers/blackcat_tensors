@@ -25,8 +25,8 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Value, operati
 
     using system_tag  = typename Value::system_tag;
 
-    static constexpr int DIMS  = Value::DIMS;
-    static constexpr int ITERATOR = Value::ITERATOR;
+    static constexpr int tensor_dimension  = Value::tensor_dimension;
+    static constexpr int tensor_iterator_dimension = Value::tensor_iterator_dimension;
 
     Value array;
 

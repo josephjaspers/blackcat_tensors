@@ -261,7 +261,7 @@ auto make_shape(integers... ints) {
 
 template<class InnerShape, typename=std::enable_if_t<!meta::seq_of<BC::size_t, InnerShape>>>
 auto make_shape(InnerShape is) {
-	return Shape<InnerShape::DIMS>(is);
+	return Shape<InnerShape::tensor_dimension>(is);
 }
 
 }

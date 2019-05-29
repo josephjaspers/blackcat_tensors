@@ -24,7 +24,7 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
 
 	static_assert(std::is_same<typename lv::value_type, typename rv::value_type>::value,
     		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
-    static_assert(lv::DIMS == 2 && rv::DIMS == 1,
+    static_assert(lv::tensor_dimension == 2 && rv::tensor_dimension == 1,
     		"GEMV DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
 
     using value_type    = typename lv::value_type;
@@ -37,8 +37,8 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
     static constexpr bool lv_scalar = blas_expression_traits<lv>::is_scalar_multiplied;
     static constexpr bool rv_scalar = blas_expression_traits<rv>::is_scalar_multiplied;
 
-    static constexpr int DIMS = 1;
-    static constexpr int ITERATOR = 1;
+    static constexpr int tensor_dimension = 1;
+    static constexpr int tensor_iterator_dimension = 1;
 
 
     lv left;
@@ -56,8 +56,8 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
     BCINLINE BC::size_t M() const { return left.rows(); }
     BCINLINE BC::size_t N() const { return left.cols(); }
 
-    BCINLINE const auto inner_shape() const { return make_lambda_array<DIMS>([&](int i) { return i == 0 ? left.rows() : 1; });}
-    BCINLINE const auto block_shape() const { return make_lambda_array<DIMS>([&](int i) { return i == 0 ? rows() : 1; });}
+    BCINLINE const auto inner_shape() const { return make_lambda_array<tensor_dimension>([&](int i) { return i == 0 ? left.rows() : 1; });}
+    BCINLINE const auto block_shape() const { return make_lambda_array<tensor_dimension>([&](int i) { return i == 0 ? rows() : 1; });}
 
     template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class allocator>
     void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, allocator& alloc) const {

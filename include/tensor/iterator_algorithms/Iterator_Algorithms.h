@@ -5,10 +5,10 @@
  *      Author: joseph
  */
 
-#ifndef BC_CORE_ITERATOR_ALGORITHMS_H_
-#define BC_CORE_ITERATOR_ALGORITHMS_H_
+#ifndef BC_CORE_tensor_iterator_dimension_ALGORITHMS_H_
+#define BC_CORE_tensor_iterator_dimension_ALGORITHMS_H_
 
 #include "iterators/Iterators.h"
 #include "algorithms/Algorithms.h"
 
-#endif /* ITERATOR_ALGORITHMS_H_ */
+#endif /* tensor_iterator_dimension_ALGORITHMS_H_ */

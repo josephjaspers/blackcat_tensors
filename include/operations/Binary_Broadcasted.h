@@ -125,7 +125,6 @@ struct broadcasted_div_assign<BC::device_tag> : assignment_operation {
 		static_assert(
 				std::is_same<void, Lv>::value,
 				"BLACKCAT_TENSORS: broadcasted-reduction div-assign is currently not available on the GPU");
-//    	atomicDiv(&meta::bc_const_cast(l), r); //no atomicDiv
     	return lv;
 	)
 };
@@ -139,9 +138,6 @@ struct broadcasted_mul_assign<BC::device_tag> : assignment_operation {
 		static_assert(
 				std::is_same<void, Lv>::value,
 				"BLACKCAT_TENSORS: broadcasted-reduction mul-assign is currently not available on the GPU");
-//				std::is_integral<rv>::value && std::is_integral<lv>::value,
-//					"atomic_div assign is only available to integer types on the GPU");
-//    	atomicMul(&meta::bc_const_cast(l), r);
     	return lv;
 	)
 };

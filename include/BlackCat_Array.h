@@ -22,7 +22,7 @@ namespace BC {
 //-------------------------------Lightweight array -------------------------------//
     template<int size_, class T>
     struct array {
-    	static constexpr int DIMS = size_;
+    	static constexpr int tensor_dimension = size_;
 
         T value[size_] = { 0 } ;
 
@@ -45,7 +45,7 @@ namespace BC {
 //-------------------------------Lightweight lambda-wrapper to enable usage of the bracket-operator-------------------------------//
     template<int dimension, class scalar, class ref>
     struct lambda_array{
-    	static constexpr int DIMS = dimension;
+    	static constexpr int tensor_dimension = dimension;
         ref value;
         BCINLINE lambda_array(ref a) : value(a) {}
 

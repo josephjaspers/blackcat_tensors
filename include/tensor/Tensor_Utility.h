@@ -42,7 +42,7 @@ struct Tensor_Utility {
     friend class Tensor_Utility;
 
 private:
-    static constexpr int DIMS = ExpressionTemplate::DIMS;
+    static constexpr int tensor_dimension = ExpressionTemplate::tensor_dimension;
 
     derived& as_derived() {
         return static_cast<derived&>(*this);
@@ -85,7 +85,7 @@ private:
     }
 
     template<class ADL=void>
-    std::enable_if_t<std::is_void<ADL>::value && (DIMS == 0), std::stringstream&>
+    std::enable_if_t<std::is_void<ADL>::value && (tensor_dimension == 0), std::stringstream&>
     print_impl(std::stringstream& ss, int prec, bool sparse, bool pretty) const {
     	return ss << only_if("]", pretty)
     				<< format_value(utility_l::extract(as_derived().memptr(), 0), prec)
@@ -93,7 +93,7 @@ private:
     }
 
     template<class ADL=void, class v1=void>
-    std::enable_if_t<std::is_void<ADL>::value && (DIMS == 1), std::stringstream&>
+    std::enable_if_t<std::is_void<ADL>::value && (tensor_dimension == 1), std::stringstream&>
     print_impl(std::stringstream& ss, int prec, bool sparse, bool pretty) const {
     	bool first = true;
 
@@ -111,10 +111,10 @@ private:
     }
 
     template<class ADL=void, class v1=void, class v2=void>
-    std::enable_if_t<std::is_void<ADL>::value && (DIMS == 2), std::stringstream&>
+    std::enable_if_t<std::is_void<ADL>::value && (tensor_dimension == 2), std::stringstream&>
     print_impl(std::stringstream& ss, int prec, bool sparse, bool pretty) const {
     	std::string dim_header;
-    	dim_header.append(DIMS, '-');
+    	dim_header.append(tensor_dimension, '-');
 
     	ss <<  only_if(dim_header, pretty) << '\n';
     	auto trans = this->as_derived().transpose();
@@ -135,10 +135,10 @@ private:
     }
 
     template<class ADL=void, class v1=void, class v2=void, class v3=void>
-    std::enable_if_t<std::is_void<ADL>::value && (DIMS > 2), std::stringstream&>
+    std::enable_if_t<std::is_void<ADL>::value && (tensor_dimension > 2), std::stringstream&>
     print_impl(std::stringstream& ss, int prec, bool sparse, bool pretty) const {
     	std::string dim_header;
-    	dim_header.append(DIMS, '-');
+    	dim_header.append(tensor_dimension, '-');
 
     	ss <<  only_if(dim_header, pretty) << '\n';
     	for (const auto slice : this->as_derived().nd_iter()) {
@@ -187,7 +187,7 @@ public:
     void read_as_one_hot(std::ifstream& is) {
         BC_ASSERT_ARRAY_ONLY("void read_as_one_hot(std::ifstream& is)");
 
-        if (derived::DIMS != 1)
+        if (derived::tensor_dimension != 1)
             throw std::invalid_argument("one_hot only supported by vectors");
 
         as_derived().zero();
@@ -199,7 +199,7 @@ public:
 
     }
 
-    void read(std::ifstream& is) {
+    void read_csv_row(std::ifstream& is) {
         BC_ASSERT_ARRAY_ONLY("void read(std::ifstream& is)");
 
         if (!is.good()) {
@@ -224,7 +224,9 @@ public:
             if (ss.peek() == ',')
                 ss.ignore();
         }
-            utility_l::HostToDevice(as_derived().internal().memptr(), &file_data[0], (unsigned)as_derived().size() > file_data.size() ? file_data.size() : as_derived().size());
+
+        int copy_size = (unsigned)as_derived().size() > file_data.size() ? file_data.size() : as_derived().size();
+        utility_l::HostToDevice(as_derived().internal().memptr(), file_data.data(), copy_size);
 
     }
 
@@ -256,9 +258,9 @@ public:
 
         if (read_dimensions) {
             std::vector<int> dims((int) file_data[0]);
-            if (file_data[0] != derived::DIMS) {
+            if (file_data[0] != derived::tensor_dimension) {
                 std::cout << " attempting to read data from file of tensor of dimensions = " << file_data[0]
-                        << " however the reading to tensor is of dimension = " << derived::DIMS;
+                        << " however the reading to tensor is of dimension = " << derived::tensor_dimension;
                 throw std::invalid_argument("Invalid Tensor File");
             }
             for (int i = 0; i < dims.size(); ++i) {
@@ -266,8 +268,8 @@ public:
             }
             if (overrideDimensions) {
 
-                exprs::Shape<derived::DIMS> shape;
-                for (int i = 0; i < derived::DIMS; ++i) {
+                exprs::Shape<derived::tensor_dimension> shape;
+                for (int i = 0; i < derived::tensor_dimension; ++i) {
                     shape.is()[i] = (int) file_data[i + 1];
                 }
 
@@ -283,7 +285,7 @@ public:
 
     void read_tensor_data_as_one_hot(std::ifstream& is,  BC::size_t   sz) {
         BC_ASSERT_ARRAY_ONLY("void read_tensor_data_as_one_hot(std::ifstream& is,  BC::size_t   sz)");
-        if (derived::DIMS != 1)
+        if (derived::tensor_dimension != 1)
             throw std::invalid_argument("one_hot only supported by vectors");
 
         //rescale
@@ -300,10 +302,10 @@ public:
     }
 
     void print_dimensions() const {
-    	if (DIMS == 0) {
+    	if (tensor_dimension == 0) {
     		std::cout << "[1]" << std::endl;
     	} else {
-			for (int i = 0; i < DIMS; ++i) {
+			for (int i = 0; i < tensor_dimension; ++i) {
 				std::cout << "[" << as_derived().dimension(i) << "]";
 			}
 			std::cout << std::endl;
@@ -311,14 +313,14 @@ public:
     }
 
     void print_leading_dimensions() const {
-        for (int i = 0; i < DIMS; ++i) {
+        for (int i = 0; i < tensor_dimension; ++i) {
             std::cout << "[" << as_derived().leading_dimension(i) << "]";
         }
         std::cout << std::endl;
     }
 
     void print_block_dimensions() const {
-        for (int i = 0; i < DIMS; ++i) {
+        for (int i = 0; i < tensor_dimension; ++i) {
             std::cout << "[" << as_derived().block_dimension(i) << "]";
         }
         std::cout << std::endl;

@@ -33,8 +33,8 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
     static constexpr bool transA = blas_expression_traits<lv>::is_transposed;
     static constexpr bool transB = blas_expression_traits<rv>::is_transposed;
 
-    static constexpr int DIMS 	   = rv::DIMS;
-    static constexpr int ITERATOR  = 1;
+    static constexpr int tensor_dimension 	   = rv::tensor_dimension;
+    static constexpr int tensor_iterator_dimension  = 1;
 
     lv left;
     rv right;
@@ -43,13 +43,13 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
      : left(left), right(right) {}
 
     BCINLINE const auto inner_shape() const {
-    	return make_lambda_array<DIMS>([&](int i) {
+    	return make_lambda_array<tensor_dimension>([&](int i) {
     		return i == 0 ? left.rows() : i == 1 ? right.cols() : 1;
     	});
     }
 
     BCINLINE const auto block_shape() const {
-    	return make_lambda_array<DIMS>([&](int i) {
+    	return make_lambda_array<tensor_dimension>([&](int i) {
     		return i == 0 ? left.rows() : i == 1 ? size() : 1;
     	});
     }

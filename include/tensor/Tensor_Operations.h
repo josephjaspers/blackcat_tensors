@@ -48,7 +48,7 @@ public:
     template<class pDeriv> BCHOT
     derived& operator = (const Tensor_Operations<pDeriv>& param) {
         BC_ASSERT_ASSIGNABLE("derived& operator = (const Tensor_Operations<pDeriv>& param)");
-        static_assert(derived::DIMS >= pDeriv::DIMS,
+        static_assert(derived::tensor_dimension >= pDeriv::tensor_dimension,
         		"BlackCat_Tensors: Operator= is not a valid operation for (reduction) broadcasting");
         assert_valid(param);
 		evaluate(bi_expr< BC::oper::assign >(param));
@@ -70,7 +70,7 @@ public:
     derived& operator op (const Tensor_Operations<pDeriv>& param) {                             	\
         BC_ASSERT_ASSIGNABLE("derived& operator " #op "(const Tensor_Operations<pDeriv>& param)");  \
         assert_valid(param);                                                                    	\
-		using operation = std::conditional_t<(derived::DIMS >= pDeriv::DIMS), 						\
+		using operation = std::conditional_t<(derived::tensor_dimension >= pDeriv::tensor_dimension), 						\
     				oper::op_functor, 																\
     				oper::broadcasted_##op_functor<system_tag>										\
     	>;																							\
@@ -155,11 +155,11 @@ public:
         static constexpr bool lv_trans = exprs::blas_expression_traits<expression_t>::is_transposed;
         static constexpr bool rv_trans = exprs::blas_expression_traits<rv_expression_t>::is_transposed;
 
-        static constexpr bool scalmul = derived::DIMS == 0 || param_deriv::DIMS == 0;
-        static constexpr bool gemm    = derived::DIMS == 2 && param_deriv::DIMS == 2;
-        static constexpr bool gemv    = derived::DIMS == 2 && param_deriv::DIMS == 1;
-        static constexpr bool ger     = derived::DIMS == 1 && param_deriv::DIMS == 1 && !lv_trans && rv_trans;
-        static constexpr bool dot     = derived::DIMS == 1 && param_deriv::DIMS == 1 && !lv_trans && !rv_trans;
+        static constexpr bool scalmul = derived::tensor_dimension == 0 || param_deriv::tensor_dimension == 0;
+        static constexpr bool gemm    = derived::tensor_dimension == 2 && param_deriv::tensor_dimension == 2;
+        static constexpr bool gemv    = derived::tensor_dimension == 2 && param_deriv::tensor_dimension == 1;
+        static constexpr bool ger     = derived::tensor_dimension == 1 && param_deriv::tensor_dimension == 1 && !lv_trans && rv_trans;
+        static constexpr bool dot     = derived::tensor_dimension == 1 && param_deriv::tensor_dimension == 1 && !lv_trans && !rv_trans;
 
         using matmul_t =
                      std::conditional_t<scalmul, oper::scalar_mul,
@@ -254,10 +254,10 @@ private:
 
     //----------------------------------------------validity checks--------------------------------------------------//
     template<class deriv>  bool non_scalar_op(const Tensor_Operations<deriv>& tensor) const {
-        return derived::DIMS != 0 && deriv::DIMS != 0;
+        return derived::tensor_dimension != 0 && deriv::tensor_dimension != 0;
     }
     template<class deriv>  bool same_rank(const Tensor_Operations<deriv>& tensor) const {
-        return derived::DIMS == deriv::DIMS;
+        return derived::tensor_dimension == deriv::tensor_dimension;
     }
     template<class deriv>  bool same_size(const Tensor_Operations<deriv>& tensor) const {
         return this->as_derived().size() == tensor.as_derived().size();
@@ -270,7 +270,7 @@ private:
 
     //ensures that the smaller tensor is a same-dimensioned "slice" of the other
     template<class deriv>  bool valid_slice(const Tensor_Operations<deriv>& tensor) const {
-        constexpr BC::size_t  DIM_MIN = meta::min(derived::DIMS, deriv::DIMS);
+        constexpr BC::size_t  DIM_MIN = meta::min(derived::tensor_dimension, deriv::tensor_dimension);
         for (int i = 0; i < DIM_MIN; ++i)
             if (tensor.as_derived().dimension(i) != as_derived().dimension(i))
                 return false;
@@ -279,9 +279,9 @@ private:
 
     template<class deriv>
     bool error_message(const Tensor_Operations<deriv>& tensor) const {
-        std::cout << "this->DIMS = " << derived::DIMS << " this->size() = " <<  as_derived().size() <<  " this_dims ";
+        std::cout << "this->tensor_dimension = " << derived::tensor_dimension << " this->size() = " <<  as_derived().size() <<  " this_dims ";
         as_derived().print_dimensions();
-        std::cout <<  "param->DIMS = " << deriv::DIMS << " param.size() = " << tensor.as_derived().size() <<  " param_dims ";
+        std::cout <<  "param->tensor_dimension = " << deriv::tensor_dimension << " param.size() = " << tensor.as_derived().size() <<  " param_dims ";
         tensor.as_derived().print_dimensions();
         std::cout << std::endl;
         throw std::invalid_argument("Tensor by Tensor operation - size mismatch - ");
