@@ -29,33 +29,24 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
     using blas_impl  = BC::blas::implementation<system_tag>;
     using blas_util	 = BC::exprs::blas_tools::implementation<system_tag>;
 
-    static constexpr bool transA = blas_expression_traits<lv>::is_transposed;
-    static constexpr bool transB = blas_expression_traits<rv>::is_transposed;
-    static constexpr bool lv_scalar = blas_expression_traits<lv>::is_scalar_multiplied;
-    static constexpr bool rv_scalar = blas_expression_traits<rv>::is_scalar_multiplied;
-
     static constexpr int tensor_dimension = 2;
     static constexpr int tensor_iterator_dimension = 1;
 
-    static_assert(lv::tensor_dimension == 1 && rv::tensor_dimension == 1 && transB,
-    		"GER DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
-
+    static_assert(lv::tensor_dimension == 1 &&
+    				rv::tensor_dimension == 1 &&
+    				blas_expression_traits<rv>::is_transposed,
+    				"GER DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
 
     lv left;
     rv right;
 
-
-     Binary_Expression(lv left, rv right) : left(left), right(right) {}
+    Binary_Expression(lv left, rv right) : left(left), right(right) {}
     BCINLINE BC::size_t  size() const { return left.size() * right.size(); }
     BCINLINE BC::size_t  rows() const { return left.rows(); }
     BCINLINE BC::size_t  cols() const { return right.cols(); }
     BCINLINE BC::size_t  dimension(int i) const { return i == 0 ? rows() : i == 1 ? cols() : 1; }
-    BCINLINE BC::size_t  block_dimension(int i) const { return this->block_shape()(i); }
+    BCINLINE BC::size_t  block_dimension(int i) const {  return i == 0 ? left.rows() : i == 1 ? size() : 1; }
 
-    BCINLINE BC::size_t  outer_dimension() const { return rows(); }
-
-    BCINLINE const auto inner_shape() const { return make_lambda_array<tensor_dimension>([&](int i) { return i == 0 ? left.rows() : i == 1 ? right.rows() : 1; });}
-    BCINLINE const auto block_shape() const { return make_lambda_array<tensor_dimension>([&](int i) { return i == 0 ? left.rows() : i == 1 ? size() : 1; });}
     BCINLINE BC::size_t  M() const { return left.rows();  }
     BCINLINE BC::size_t  N() const { return right.cols(); }
 
@@ -71,19 +62,21 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 			evaluate(expr, stream);
 		}
 
-		if (lv_scalar || rv_scalar) {
+		if (blas_expression_traits<lv>::is_scalar_multiplied ||
+				blas_expression_traits<rv>::is_scalar_multiplied) {
+
 	        auto contents = blas_util::template parse_expression<alpha_mod, beta_mod>(stream, left, right);
 	        auto A = contents.left;
 	        auto B = contents.right;
 	        auto alpha = contents.alpha;
-			blas_impl::ger(stream, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
+			blas_impl::ger(stream, left.rows(), right.cols(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
 	        blas_util::post_parse_expression_evaluation(stream, contents);
 		} else {
 			auto alpha = make_constexpr_scalar<BC::host_tag, (alpha_mod == 0 ? 1 : alpha_mod), value_type>();
 			auto A = greedy_evaluate(blas_expression_traits<lv>::remove_blas_modifiers(left), stream);
 			auto B = greedy_evaluate(blas_expression_traits<rv>::remove_blas_modifiers(right), stream);
 			stream.set_blas_pointer_mode_host();
-			blas_impl::ger(stream, M(), N(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
+			blas_impl::ger(stream, left.rows(), right.cols(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
 		}
 	}
 };

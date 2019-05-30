@@ -32,11 +32,6 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
     using blas_impl     = BC::blas::implementation<system_tag>;
     using blas_util	    = BC::exprs::blas_tools::implementation<system_tag>;
 
-    static constexpr bool transA = blas_expression_traits<lv>::is_transposed;
-    static constexpr bool transB = blas_expression_traits<rv>::is_transposed;
-    static constexpr bool lv_scalar = blas_expression_traits<lv>::is_scalar_multiplied;
-    static constexpr bool rv_scalar = blas_expression_traits<rv>::is_scalar_multiplied;
-
     static constexpr int tensor_dimension = 1;
     static constexpr int tensor_iterator_dimension = 1;
 
@@ -71,6 +66,7 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
         auto X = contents.right;
         auto alpha = contents.alpha;
         auto beta  = contents.beta;
+        bool transA = contents.lv_is_transposed;
 
 		blas_impl::gemv(alloc, transA,  M(), N(),
 				alpha, A, A.leading_dimension(0),

@@ -24,14 +24,14 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
 
 	static_assert(std::is_same<typename lv::value_type, typename rv::value_type>::value,
     		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
+	static_assert(lv::tensor_dimension==2 && rv::tensor_dimension==2,
+    		"GEMM Expression initialized with non matrix tensor");
+
 
     using value_type	= typename lv::value_type;
     using system_tag	= System_Tag;
     using blas_impl		= BC::blas::implementation<system_tag>;
     using blas_util	    = BC::exprs::blas_tools::implementation<system_tag>;
-
-    static constexpr bool transA = blas_expression_traits<lv>::is_transposed;
-    static constexpr bool transB = blas_expression_traits<rv>::is_transposed;
 
     static constexpr int tensor_dimension 	   = rv::tensor_dimension;
     static constexpr int tensor_iterator_dimension  = 1;
@@ -42,23 +42,15 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
     BCHOT Binary_Expression(lv left, rv right)
      : left(left), right(right) {}
 
-    BCINLINE const auto inner_shape() const {
-    	return make_lambda_array<tensor_dimension>([&](int i) {
-    		return i == 0 ? left.rows() : i == 1 ? right.cols() : 1;
-    	});
-    }
-
-    BCINLINE const auto block_shape() const {
-    	return make_lambda_array<tensor_dimension>([&](int i) {
-    		return i == 0 ? left.rows() : i == 1 ? size() : 1;
-    	});
-    }
-
     BCINLINE BC::size_t  size() const { return left.rows() * right.cols(); }
     BCINLINE BC::size_t  rows() const { return left.rows();  }
     BCINLINE BC::size_t  cols() const { return right.cols(); }
-    BCINLINE BC::size_t  dimension(int i) const { return inner_shape()[i]; }
-    BCINLINE BC::size_t  block_dimension(int i) const { return block_shape()[i]; }
+    BCINLINE BC::size_t  dimension(int i) const {
+		return i == 0 ? left.rows() : i == 1 ? right.cols() : 1;
+    }
+    BCINLINE BC::size_t  block_dimension(int i) const {
+			return i == 0 ? left.rows() : i == 1 ? size() : 1;
+    }
 
     template<class core, int alpha_mod, int beta_mod, class Stream>
     void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, Stream& alloc) const {
@@ -71,6 +63,8 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
         auto B = contents.right;
         auto alpha = contents.alpha;
         auto beta  = contents.beta;
+        auto transA = contents.lv_is_transposed;
+        auto transB = contents.rv_is_transposed;
 
 		//call matrix_mul
         blas_impl::gemm(alloc, transA, transB,  left.rows(), right.cols(), left.cols(),

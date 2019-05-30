@@ -62,6 +62,21 @@ struct Expression_Base
             static constexpr bool move_constructible = false;
             static constexpr bool copy_assignable    = false;
             static constexpr bool move_assignable    = false;
+
+            BCINLINE const auto inner_shape() const {
+            	return make_lambda_array<derived::tensor_dimension>([&](int i) {
+            		return static_cast<const derived&>(*this).dimension(i);
+            	});
+            }
+
+            BCINLINE const auto block_shape() const {
+            	return make_lambda_array<derived::tensor_dimension>([&](int i) {
+            		return static_cast<const derived&>(*this).block_dimension(i);
+            	});
+            }
+
+
+
         };
 
 template<class Derived, int Dimension>

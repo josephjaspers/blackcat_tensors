@@ -41,6 +41,9 @@ struct Binary_Expression<lv, rv, oper::dot<System_Tag>>
     lv left;
     rv right;
 
+    using Shape<0>::inner_shape;
+    using Shape<0>::block_shape;
+
     Binary_Expression(lv left, rv right) : left(left), right(right) {}
 
     template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class allocator>

@@ -25,45 +25,34 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
     using value_type  = std::remove_reference_t<std::decay_t<return_type>>;
     using system_tag  = typename Lv::system_tag;
 
-    static constexpr int tensor_dimension = Lv::tensor_dimension > Rv::tensor_dimension ?  Lv::tensor_dimension : Rv::tensor_dimension;
+    static constexpr int tensor_dimension = BC::meta::max(Lv::tensor_dimension, Rv::tensor_dimension);
     static constexpr int tensor_iterator_dimension = Lv::tensor_dimension != Rv::tensor_dimension ? tensor_dimension : BC::meta::max(Lv::tensor_iterator_dimension, Rv::tensor_iterator_dimension);
 
     Lv left;
     Rv right;
 
     template<class... args> BCHOT
-    Binary_Expression(Lv l, Rv r, const args&... args_) :  Operation(args_...), left(l), right(r) {}
+    Binary_Expression(Lv l, Rv r, const args&... args_):
+    Operation(args_...), left(l), right(r) {}
 
 
-	template<class L, class R> BCINLINE
-	const auto oper(const L& l, const R& r) const {
-		return static_cast<const Operation&>(*this)(l,r);
-	}
-
-	template<class L, class R> BCINLINE
-	auto oper(L&& l, R&& r) {
-		return static_cast< Operation&>(*this)(l,r);
-	}
-
-
-    BCINLINE
-    auto  operator [](int index) const {
-    	return oper(left[index], right[index]);
+	BCINLINE auto  operator [](int index) const {
+    	return Operation::operator()(left[index], right[index]);
     }
 
-    template<class... integers> BCINLINE
-    auto  operator ()(integers... ints) const {
-    	return oper(left(ints...), right(ints...));
+    template<class... integers>
+    BCINLINE auto  operator ()(integers... ints) const {
+    	return Operation::operator()(left(ints...), right(ints...));
     }
 
     BCINLINE
     auto  operator [](int index) {
-    	return oper(left[index], right[index]);
+    	return Operation::operator()(left[index], right[index]);
     }
 
-    template<class... integers> BCINLINE
-    auto  operator ()(integers... ints) {
-    	return oper(left(ints...), right(ints...));
+    template<class... integers>
+    BCINLINE auto  operator ()(integers... ints) {
+     	return Operation::operator()(left(ints...), right(ints...));
     }
 
 private:
@@ -79,20 +68,12 @@ public:
 };
 
 template<class Op, class Lv, class Rv, class... Args> BCHOT
-auto make_bin_expr(Lv left, Rv right, const Args&... args) {
+auto make_bin_expr(Lv left, Rv right, Args&&... args) {
 	return Binary_Expression<
 			std::decay_t<decltype(left.internal())>,
 			std::decay_t<decltype(right.internal())>,
 			Op>(left.internal(), right.internal(), args...);
 }
-template<class Lv, class Rv, class Op> BCHOT
-auto make_bin_expr(Lv left, Rv right, Op oper) {
-	return Binary_Expression<
-			std::decay_t<decltype(left.internal())>,
-			std::decay_t<decltype(right.internal())>,
-			Op>(left.internal(), right.internal(), oper);
-}
-
 
 }
 }
