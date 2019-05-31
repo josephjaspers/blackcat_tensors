@@ -17,17 +17,16 @@ BC::for_each(dev_mat.begin(), dev_mat.end(), your_function); //will call std::fo
 Using BC::algortihms is preferable to directly using to std or thrust's implementation as it enables user's to write allocation-generic code. Here we created a method that applies the logistic function to each element of a matrix. 
 
 ```cpp
+struct logistic_functor {
+	__host__ __device__
+	void operator() (value_type& scalar) {
+		scalar =  1 / (1 + exp(-scalar));
+	}		
+
+} logistic; 
+
 template<class alloc>
 void logistic_function(BC::Matrix<float, alloc>& mat) {
-
-	struct logistic_functor {
-		__host__ __device__
-		void operator() (value_type& scalar) {
-			scalar =  1 / (1 + exp(-scalar));
-		}		
-
-	} logistc; 
-
 	BC::for_each(mat.begin(), mat.end(), logistic); 
 }
 ```
