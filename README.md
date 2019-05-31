@@ -3,11 +3,13 @@ Author: Joseph Jaspers
 
 BlackCat_Tensors (BCT) is a highly efficient Matrix library designed for NeuralNetwork construction. BCT is designed to support GPU computing (CUDA) and CPU multi-threading (OpenMP).BCT focuses on delivering a high-level framework with low-level performance.
 
-#### Intallation/Setup:
+#### Setup:
 BCT is a header only library that supports compilation with the NVCC and G++ BCT does not support any default BLAS routines, and must be linked with an apropriate BLAS library. Setting up simply requires adding the BlackCat_Tensors your path and including "BlackCat_Tensors.h"
 
 `git clone` the `stable` branch if you would like to use the "cleanest" branch.  
 `git clone` the `master` branch if you would like to use the most update-to-date branch.
+
+Currently tested with GCC 7.4 and Cuda 10.
 
 #### FAQ Fast Explanation:
 
