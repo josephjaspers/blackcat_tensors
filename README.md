@@ -48,8 +48,8 @@ BlackCat Tensors attempts to align itself with the design of the C++ standard li
 
 
 #### Dependencies 
-        Cuda 10
-        GCC 7.4 (and up)
+	Cuda 10
+	GCC 7.4 (and up)
 
 	cublas
 	curand
