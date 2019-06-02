@@ -25,8 +25,6 @@ struct OutputLayer : Layer_Base {
 
     using mat_view = BC::Matrix_View<ValueType, BC::Allocator<SystemTag, ValueType>>;
 
-
-
     mat_view x;
 
 public:
@@ -50,6 +48,15 @@ public:
     void read(std::ifstream& os) {}
 
 };
+
+template<class ValueType, class SystemTag>
+OutputLayer<SystemTag, ValueType> outputlayer(SystemTag system_tag, int inputs) {
+	return OutputLayer<SystemTag, ValueType>(inputs);
+}
+template<class SystemTag>
+auto outputlayer(SystemTag system_tag, int inputs) {
+	return OutputLayer<SystemTag, typename SystemTag::default_floating_point_type>(inputs);
+}
 
 }
 }

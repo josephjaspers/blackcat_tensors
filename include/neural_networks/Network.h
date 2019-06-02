@@ -28,9 +28,14 @@ struct NeuralNetwork {
     void cache_gradients() { network.cache_gradients(); }
     void set_max_bptt_length(int len)   { network.set_max_bptt_length(len); }
     void set_batch_size(int size)       { network.set_batch_size(size);   }
-//    void initialize_variables()         { network.initialize_variables(); }
 
 };
+
+template<class... Layers>
+auto neuralnetwork(Layers&&... layers) {
+	return NeuralNetwork<Layers...>(layers...);
+}
+
 }
 }
 

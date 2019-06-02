@@ -44,8 +44,12 @@ struct LayerChain<index, derived, front, lst...>
 
     front layer;
 
-    template<class param, class... integers>
-    LayerChain(param i, param o, integers... dims) :  parent(o, dims...), layer(i,o) {}
+    template<class... integers>
+    LayerChain(size_t i, size_t o, integers... dims) :  parent(o, dims...), layer(i,o) {}
+
+    template<class... integers>
+    LayerChain(front f, integers... dims) :  parent(dims...), layer(f) {}
+
 
     const auto& head() const { return prev().head(); }
           auto& head()          { return prev().head(); }
@@ -78,8 +82,8 @@ struct Chain : public LayerChain<0, Chain<lst...>, lst...>{
 
     BC::size_t  batch_size = 1;
 
-    template<class... integers>
-    Chain(int x, integers... dims) : parent(x, dims...) {} //first layer is always input layer (so we double x)
+    template<class... Args>
+    Chain(Args&&... args) : parent(args...) {} //first layer is always input layer (so we double x)
 
     template<class T> const auto& back_propagation(const T& tensor_expected) { return this->tail().bp(tensor_expected); }
     template<class T> const auto& forward_propagation(const T& tensor_expected) { return this->head().fp(tensor_expected); }

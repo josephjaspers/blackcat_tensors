@@ -328,11 +328,10 @@ private:
             if (same_rank(tensor)) {                //else check is same dimension (element-wise function) (
                 if (!same_size(tensor))             //if is same dimension, ensure same size
                     error_message(tensor);          //else error
-                } else if (!valid_slice(tensor)) {  //if not same dimension check if valid slice operation
-                    error_message(tensor);          //else error
-                }
+            } else if (!valid_slice(tensor)) {  //if not same dimension check if valid slice operation
+            	error_message(tensor);          //else error
+            }
         }
-
 #endif
     }
 

@@ -44,19 +44,19 @@ public:
             w(outputs, inputs),
             b(outputs)
     {
-        w.randomize(-1, 1);
-        b.randomize(-1, 1);
+        w.randomize(-2, 2);
+        b.randomize(-2, 2);
     }
     template<class Matrix>
     const auto& forward_propagation(const Matrix& x_) {
     	x = mat_view(x_);
-        y = BC::logistic(w * x + b);
+        y = w * x + b;
         return y;
     }
     template<class Matrix>
     auto back_propagation(const Matrix& dy_) {
     	dy = dy_;
-        return w.t() * dy % BC::cached_dx_logistic(x);
+        return w.t() * dy;
     }
     void update_weights() {
     	w -= dy * lr * x.t();
@@ -68,6 +68,16 @@ public:
         dy = mat(this->numb_outputs(), x);
     }
 };
+
+template<class ValueType, class SystemTag>
+FeedForward<SystemTag, ValueType> feedforward(SystemTag system_tag, int inputs, int outputs) {
+	return FeedForward<SystemTag, ValueType>(inputs, outputs);
+}
+template<class SystemTag>
+auto feedforward(SystemTag system_tag, int inputs, int outputs) {
+	return FeedForward<SystemTag, typename SystemTag::default_floating_point_type>(inputs, outputs);
+}
+
 }
 }
 

@@ -13,18 +13,18 @@
 namespace BC {
 
 //defines a function with a user defined implementation (not part of std::cmath.h)
-#define BLACKCAT_BC_FUNCTOR_DEF(funcName, func_math) 	 \
+#define BLACKCAT_BC_FUNCTOR_DEF(funcName, ...) 	 \
 namespace module {										 \
 														 \
 	struct funcName {									 \
 														 \
 	  template<class value_type> BCINLINE    	     \
 	  value_type operator () (value_type x) const { 	 \
-		return func_math; 								 \
+		return __VA_ARGS__; 								 \
 	  } 											     \
 	  template<class value_type> BCINLINE    	     \
 	  static value_type impl(value_type x) { 		     \
-		return func_math; 								 \
+		return __VA_ARGS__; 								 \
 	  }													 \
 	};													 \
 }													 	 \
@@ -96,13 +96,16 @@ BLACKCAT_MATH_DEF(isnan)
 
 BLACKCAT_BC_FUNCTOR_DEF(logistic, 1 / (1 + std::exp(-x)));
 BLACKCAT_BC_FUNCTOR_DEF(dx_logistic, logistic::impl(x) * (1 - logistic::impl(x)));
-BLACKCAT_BC_FUNCTOR_DEF(cached_dx_logistic, x * (1 - x));
+BLACKCAT_BC_FUNCTOR_DEF(cached_dx_logistic, (1 - x)*x);
 BLACKCAT_BC_FUNCTOR_DEF(dx_tanh, 1 - std::pow(std::tanh(x), 2));
 BLACKCAT_BC_FUNCTOR_DEF(cached_dx_tanh, 1 - std::pow(x, 2));
 BLACKCAT_BC_FUNCTOR_DEF(relu,std::max(0, x));
 BLACKCAT_BC_FUNCTOR_DEF(dx_relu, x > 0 ? 1 : 0);
 BLACKCAT_BC_FUNCTOR_DEF(cached_dx_relu, x > 0 ? 1 : 0); //same as dx_relu
 BLACKCAT_BC_FUNCTOR_DEF(logical, x > 0 ? 1 : 0);
+BLACKCAT_BC_FUNCTOR_DEF(sign, x > 0 ? 1 : x < 0 ? -1 : 0);
+
+BLACKCAT_BC_FUNCTOR_DEF(pow2, std::pow(x, 2));
 
 #undef BLACKCAT_BC_FUNCTOR_DEF
 #undef BLACKCAT_MATH_DEF

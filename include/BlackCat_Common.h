@@ -13,8 +13,15 @@
 namespace BC {
 
 class system_tag_base {};
-class host_tag : system_tag_base {} host;
-class device_tag : system_tag_base {} device;
+struct host_tag : system_tag_base {
+	using default_floating_point_type = double;
+	using default_integer_type = int;
+} host;
+
+struct device_tag : system_tag_base {
+	using default_floating_point_type = float;
+	using default_integer_type = int;
+} device;
 
 template<class T>
 struct is_system_tag {

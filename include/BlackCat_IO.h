@@ -30,6 +30,7 @@ inline dtype from_string(const std::string& str) {\
 from_string_def(double, std::stod(str))
 from_string_def(float, std::stof(str))
 from_string_def(int, std::stoi(str))
+from_string_def(std::string, str)
 
 
 
@@ -47,49 +48,26 @@ auto range(T begin, T end=T()) {
 
 struct csv_descriptor {
 
-	std::string filename;
-	char mode_ = 'r';
-	bool header_ = true;
-	bool index_ = false;
-	char delim_ = ',';
-	bool transpose_ = false;
-	std::vector<int> skip_rows_;
-	std::vector<int> skip_cols_;
+#define FORWARDED_PARAM(dtype, name, default_value,  return_dtype)	\
+dtype name##_ = default_value;											\
+csv_descriptor& name(dtype name) {	\
+	name##_ = name; 				\
+	return *this; 					\
+}									\
+return_dtype name() const {			\
+	return name##_; 				\
+}									\
 
-	csv_descriptor(std::string filename_, char mode  = 'r'):
-		filename(filename_),
-		mode_(mode) {}
+	csv_descriptor(std::string fname) : filename_(fname) {}
 
-	csv_descriptor& header(bool header) {
-		header_ = header;
-		return *this;
-	}
-	csv_descriptor& index(bool index) {
-		index_ = index;
-		return *this;
-	}
-	csv_descriptor& delim(char delim) {
-		delim_ = delim;
-		return *this;
-	}
-	csv_descriptor& mode(bool mode) {
-		assert(mode == 'r' || mode == 'w');
-		mode_ = mode;
-		return *this;
-	}
-	csv_descriptor& transpose(bool transpose) {
-		transpose_ = transpose;
-		return *this;
-	}
+	FORWARDED_PARAM(std::string, filename, "", const std::string&)
+	FORWARDED_PARAM(bool, header, true, bool)
+	FORWARDED_PARAM(char, mode, 'r', char)
+	FORWARDED_PARAM(char, delim, ',', char)
+	FORWARDED_PARAM(bool, transpose, true, bool)
+	FORWARDED_PARAM(std::vector<int>, skip_rows, {}, const std::vector<int>&)
+	FORWARDED_PARAM(std::vector<int>, skip_cols, {}, const std::vector<int>&)
 
-	csv_descriptor& skip_rows(std::vector<int> srows) {
-		skip_rows_ = srows;
-		return *this;
-	}
-	csv_descriptor& skip_cols(std::vector<int> scols) {
-		skip_cols_ = scols;
-		return *this;
-	}
 	template<class... Integers>
 	csv_descriptor& skip_rows(int x, Integers... args_) {
 		skip_rows_ = std::vector<int> {x, args_...};
@@ -102,37 +80,13 @@ struct csv_descriptor {
 		return *this;
 	}
 
-	const std::vector<int>& skip_rows() const {
-		return skip_rows_;
-	}
-	const std::vector<int>& skip_cols() const {
-		return skip_cols_;
-	}
-
-	bool transpose() const {
-		return transpose_;
-	}
-	bool header() const {
-		return header_;
-	}
-	bool index() const {
-		return index_;
-	}
-	char delim() const {
-		return delim_;
-	}
-	bool mode() const {
-		return mode_;
-	}
-
-
 };
 
 
 template<class ValueType, class Allocator=BC::Allocator<BC::host_tag, ValueType>>
 static BC::Matrix<ValueType, Allocator> read_uniform(csv_descriptor csv, Allocator alloc=Allocator()) {
 
-	  std::ifstream ifs(csv.filename);
+	  std::ifstream ifs(csv.filename());
 	  std::stringstream str_buf;
 	  std::vector<ValueType> cell_buf;
 
