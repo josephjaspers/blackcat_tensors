@@ -52,7 +52,7 @@ auto make_row(Parent& parent, BC::size_t index) {
 			BC_Noncontinuous>;
 
 	return slice_type(parent.get_stream(), parent.get_allocator(),
-						Shape<1>(parent.cols(), parent.leading_dimension(0) + 1),
+						Shape<1>(parent.cols(), parent.leading_dimension(0)),
 						parent.memptr() + index);
 }
 

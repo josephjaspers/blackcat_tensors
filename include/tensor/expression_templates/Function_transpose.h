@@ -79,7 +79,10 @@ struct Unary_Expression<Value, oper::transpose<System_Tag>>
     auto operator ()(BC::size_t m, BC::size_t n, ints... integers) const -> decltype(array(n,m)) {
         return array(n,m, integers...);
     }
-
+    template<class... ints> BCINLINE
+    auto operator ()(BC::size_t m, BC::size_t n, ints... integers) -> decltype(array(n,m)) {
+        return array(n,m, integers...);
+    }
 };
 
 template<class expr_t>

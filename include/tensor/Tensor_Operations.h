@@ -214,6 +214,39 @@ public:
 		return bi_expr<oper::sub>(param.array);
 	}
 
+
+    template<class right_value>
+    void copy(const Tensor_Operations<right_value>& rv) {
+        static_assert(exprs::expression_traits<Expression>::is_copy_assignable, "copy_most be array");
+        static_assert(exprs::expression_traits<right_value>::is_copy_assignable, "copy_most be array");
+        static_assert(Expression::tensor_iterator_dimension <= 1, "copy only accepts continuous");
+        static_assert(right_value::tensor_iterator_dimension <= 1, "copy only accepts continuous");
+        assert(same_size(rv));
+
+#ifdef __CUDACC__
+        using copy_impl = BC::utility::implementation<system_tag>;
+
+        if (std::is_same<system_tag, typename right_value::system_tag>::value) {
+        	//Ensures it only compiles when true
+        	BC::meta::constexpr_if<std::is_same<system_tag, typename right_value::system_tag>::value>(
+        			BC::meta::bind([](auto& self, const auto& rv){
+        				self = rv;
+        	}, *this, rv));
+        } else if (std::is_same<system_tag, device_tag>::value) {
+        	copy_impl::HostToDevice(as_derived().memptr(),
+        			rv.as_derived().memptr(),
+        			as_derived().size());
+        } else {
+        	copy_impl::DeviceToHost(as_derived().memptr(),
+        			rv.as_derived().memptr(),
+        			as_derived().size());
+        }
+#else
+        *this = rv;
+#endif
+    }
+
+
     //-----------------------------------expression_factory--------------------------------------------------//
 
     template<class functor>
