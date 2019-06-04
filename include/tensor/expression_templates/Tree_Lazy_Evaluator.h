@@ -60,7 +60,7 @@ evaluate_aliased(Expression expr, Stream stream_) {
 template<class Array, class Expression, class Stream>
 auto greedy_evaluate(Array array, Expression expr, Stream stream) {
     static_assert(expression_traits<Array>::is_array, "MAY ONLY EVALUATE TO ARRAYS");
-    evaluate(make_bin_expr<oper::assign>(array, expr), stream);
+    evaluate(make_bin_expr<oper::Assign>(array, expr), stream);
     return array;
 }
 

@@ -51,7 +51,7 @@ public:
         static_assert(derived::tensor_dimension >= pDeriv::tensor_dimension,
         		"BlackCat_Tensors: Operator= is not a valid operation for (reduction) broadcasting");
         assert_valid(param);
-		evaluate(bi_expr< BC::oper::assign >(param));
+		evaluate(bi_expr< BC::oper::Assign >(param));
         return as_derived();
     }
 
@@ -59,7 +59,7 @@ public:
     derived& operator = (const BC::meta::only_if<exprs::expression_traits<Expression>::is_copy_assignable, derived>& param) {
         BC_ASSERT_ASSIGNABLE("derived& operator = (const derived& param)");
         assert_valid(param);
-        evaluate(bi_expr< oper:: assign >(param));
+        evaluate(bi_expr< oper::Assign >(param));
         return as_derived();
     }
 
@@ -71,8 +71,8 @@ public:
         BC_ASSERT_ASSIGNABLE("derived& operator " #op "(const Tensor_Operations<pDeriv>& param)");  \
         assert_valid(param);                                                                    	\
 		using operation = std::conditional_t<(derived::tensor_dimension >= pDeriv::tensor_dimension), 						\
-    				oper::op_functor, 																\
-    				oper::broadcasted_##op_functor<system_tag>										\
+    				oper::op_functor##_Assign, 														\
+    				oper::Atomic_##op_functor														\
     	>;																							\
 		evaluate(bi_expr< operation >(param));                                						\
         return as_derived();                                                                    	\
@@ -90,11 +90,11 @@ public:
     		BC_OPER_SCALAR_ASSIGNMENT_DEF(op, op_functor)\
     		BC_OPER_BASIC_ASSIGNMENT_DEF(op, op_functor)
 
-    BC_OPER_SCALAR_ASSIGNMENT_DEF(=, assign)
-    BC_OPER_ASSIGNMENT_DEF(+=, add_assign)
-    BC_OPER_ASSIGNMENT_DEF(-=, sub_assign)
-    BC_OPER_ASSIGNMENT_DEF(%=, mul_assign)
-    BC_OPER_ASSIGNMENT_DEF(/=, div_assign)
+    BC_OPER_SCALAR_ASSIGNMENT_DEF(=, Assign)
+    BC_OPER_ASSIGNMENT_DEF(+=, Add)
+    BC_OPER_ASSIGNMENT_DEF(-=, Sub)
+    BC_OPER_ASSIGNMENT_DEF(%=, Mul)
+    BC_OPER_ASSIGNMENT_DEF(/=, Div)
 
 #undef BC_OPER_ASSIGNMENT_DEF
 #undef BC_OPER_SCALAR_ASSIGNMENT_DEF
@@ -123,22 +123,22 @@ public:
 	BC_BASIC_COEFFICIENTWISE_DEF(operator op, op_functor)\
     BC_SCALAR_COEFFICIENTWISE_DEF(operator op, op_functor)
 
-    BC_OPER_COEFFICIENTWISE_DEF(+, add)
-    BC_OPER_COEFFICIENTWISE_DEF(-, sub)
-    BC_OPER_COEFFICIENTWISE_DEF(%, mul)
-    BC_OPER_COEFFICIENTWISE_DEF(/, div)
-    BC_OPER_COEFFICIENTWISE_DEF( == , equal )
-    BC_OPER_COEFFICIENTWISE_DEF( >  , greater)
-    BC_OPER_COEFFICIENTWISE_DEF( <  , lesser)
-    BC_OPER_COEFFICIENTWISE_DEF( >= , greater_equal)
-    BC_OPER_COEFFICIENTWISE_DEF( <= , lesser_equal )
-    BC_OPER_COEFFICIENTWISE_DEF( && , AND )
-    BC_OPER_COEFFICIENTWISE_DEF( || , OR )
+    BC_OPER_COEFFICIENTWISE_DEF(+, Add)
+    BC_OPER_COEFFICIENTWISE_DEF(-, Sub)
+    BC_OPER_COEFFICIENTWISE_DEF(%, Mul)
+    BC_OPER_COEFFICIENTWISE_DEF(/, Div)
+    BC_OPER_COEFFICIENTWISE_DEF( == , Equal )
+    BC_OPER_COEFFICIENTWISE_DEF( >  , Greater)
+    BC_OPER_COEFFICIENTWISE_DEF( <  , Lesser)
+    BC_OPER_COEFFICIENTWISE_DEF( >= , Greater_Equal)
+    BC_OPER_COEFFICIENTWISE_DEF( <= , Lesser_Equal )
+    BC_OPER_COEFFICIENTWISE_DEF( && , And )
+    BC_OPER_COEFFICIENTWISE_DEF( || , Or )
 
-    BC_COEFFICIENTWISE_DEF(approx_equal, approx_equal)
-    BC_COEFFICIENTWISE_DEF(max_value, max)
-    BC_COEFFICIENTWISE_DEF(min_value, min)
-    BC_SCALAR_COEFFICIENTWISE_DEF(operator *, scalar_mul)
+    BC_COEFFICIENTWISE_DEF(approx_equal, Approx_Equal)
+    BC_COEFFICIENTWISE_DEF(max_value, Max)
+    BC_COEFFICIENTWISE_DEF(min_value, Min)
+    BC_SCALAR_COEFFICIENTWISE_DEF(operator *, Scalar_Mul)
 
 #undef BC_BASIC_COEFFICIENTWISE_DEF
 #undef BC_SCALAR_COEFFICIENTWISE_DEF
@@ -162,7 +162,7 @@ public:
         static constexpr bool dot     = derived::tensor_dimension == 1 && param_deriv::tensor_dimension == 1 && !lv_trans && !rv_trans;
 
         using matmul_t =
-                     std::conditional_t<scalmul, oper::scalar_mul,
+                     std::conditional_t<scalmul, oper::Scalar_Mul,
                      std::conditional_t<gemm,    oper::gemm<system_tag>,
                      std::conditional_t<gemv,    oper::gemv<system_tag>,
                      std::conditional_t<ger,     oper::ger<system_tag>,
@@ -352,21 +352,21 @@ public:
         template<class derived_t>
         auto& operator = (const Tensor_Operations<derived_t>& param) {
             tensor.assert_valid(param);
-            evaluate(tensor.bi_expr(oper::assign(), param));
+            evaluate(tensor.bi_expr(oper::Assign(), param));
             return tensor;
         }
 
         template<class derived_t>
         auto& operator += (const Tensor_Operations<derived_t>& param) {
             tensor.assert_valid(param);
-            evaluate(tensor.bi_expr(oper::add_assign(), param));
+            evaluate(tensor.bi_expr(oper::Add_Assign(), param));
             return tensor;
         }
 
         template<class derived_t>
         auto& operator -= (const Tensor_Operations<derived_t>& param) {
             tensor.assert_valid(param);
-            evaluate(tensor.bi_expr(oper::sub_assign(), param));
+            evaluate(tensor.bi_expr(oper::Sub_Assign(), param));
             return tensor;
         }
     };
@@ -396,15 +396,15 @@ public:
             return make_tensor(scalar_obj).bi_expr(oper:: op_functor (), tensor);                                \
         }
 
-    BC_OPER_LV_SCALAR_DEF(+, add)
-    BC_OPER_LV_SCALAR_DEF(-, sub)
-    BC_OPER_LV_SCALAR_DEF(*, scalar_mul)
-    BC_OPER_LV_SCALAR_DEF(/, div)
-    BC_OPER_LV_SCALAR_DEF(>, greater)
-    BC_OPER_LV_SCALAR_DEF(<, lesser)
-    BC_OPER_LV_SCALAR_DEF(>=, greater_equal)
-    BC_OPER_LV_SCALAR_DEF(<=, lesser_equal)
-    BC_OPER_LV_SCALAR_DEF(==, equal)
+    BC_OPER_LV_SCALAR_DEF(+, Add)
+    BC_OPER_LV_SCALAR_DEF(-, Sub)
+    BC_OPER_LV_SCALAR_DEF(*, Scalar_Mul)
+    BC_OPER_LV_SCALAR_DEF(/, Div)
+    BC_OPER_LV_SCALAR_DEF(>, Greater)
+    BC_OPER_LV_SCALAR_DEF(<, Lesser)
+    BC_OPER_LV_SCALAR_DEF(>=, Greater_Equal)
+    BC_OPER_LV_SCALAR_DEF(<=, Lesser_Equal)
+    BC_OPER_LV_SCALAR_DEF(==, Equal)
 
 #undef BC_OPER_LV_SCALAR_DEF
 #undef BC_ASSERT_ASSIGNABLE

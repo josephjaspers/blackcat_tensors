@@ -73,44 +73,44 @@ static auto evaluate_temporaries(expression_t expression, Allocator& alloc) {
 namespace evaluator_paths {
 
 template<class lv, class rv, class Allocator, class=std::enable_if_t<!optimizer<rv>::entirely_blas_expr>>
-static  auto evaluate(Binary_Expression<lv, rv, oper::add_assign> expression, Allocator& alloc) {
+static  auto evaluate(Binary_Expression<lv, rv, oper::Add_Assign> expression, Allocator& alloc) {
 	auto right = optimizer<rv>::linear_evaluation(expression.right, injector<lv, 1, 1>(expression.left), alloc);
-	return make_bin_expr<oper::add_assign>(expression.left, detail::evaluate_temporaries(right, alloc));
+	return make_bin_expr<oper::Add_Assign>(expression.left, detail::evaluate_temporaries(right, alloc));
 }
 
 template<class lv, class rv, class Allocator, class=std::enable_if_t<!optimizer<rv>::entirely_blas_expr>>
-static auto evaluate(Binary_Expression<lv, rv, oper::sub_assign> expression, Allocator& alloc) {
+static auto evaluate(Binary_Expression<lv, rv, oper::Sub_Assign> expression, Allocator& alloc) {
 	auto right = optimizer<rv>::linear_evaluation(expression.right, injector<lv, -1, 1>(expression.left), alloc);
-	return make_bin_expr<oper::sub_assign>(expression.left, detail::evaluate_temporaries(right, alloc));
+	return make_bin_expr<oper::Sub_Assign>(expression.left, detail::evaluate_temporaries(right, alloc));
 }
 
 template<class lv, class rv, class Allocator, class=std::enable_if_t<optimizer<rv>::entirely_blas_expr>, int V2=0>
-static  auto evaluate(Binary_Expression<lv, rv, oper::add_assign> expression, Allocator& alloc) {
+static  auto evaluate(Binary_Expression<lv, rv, oper::Add_Assign> expression, Allocator& alloc) {
 	optimizer<rv>::linear_evaluation(expression.right, injector<lv, 1, 1>(expression.left), alloc);
 	return expression.left;
 }
 
 template<class lv, class rv, class Allocator, class=std::enable_if_t<optimizer<rv>::entirely_blas_expr>, int V2=0>
-static auto evaluate(Binary_Expression<lv, rv, oper::sub_assign> expression, Allocator& alloc) {
+static auto evaluate(Binary_Expression<lv, rv, oper::Sub_Assign> expression, Allocator& alloc) {
 	optimizer<rv>::linear_evaluation(expression.right, injector<lv, -1, 1>(expression.left), alloc);
 	return expression.left;
 }
 
 template<class lv, class rv, class Allocator, class=std::enable_if_t<!optimizer<rv>::partial_blas_expr && !optimizer<rv>::entirely_blas_expr>>
-static auto evaluate(Binary_Expression<lv, rv, oper::assign> expression, Allocator& alloc) {
+static auto evaluate(Binary_Expression<lv, rv, oper::Assign> expression, Allocator& alloc) {
 	auto right = optimizer<rv>::injection(expression.right, injector<lv, 1, 0>(expression.left), alloc);
-	return make_bin_expr<oper::assign>(expression.left, detail::evaluate_temporaries(right, alloc));
+	return make_bin_expr<oper::Assign>(expression.left, detail::evaluate_temporaries(right, alloc));
 }
 template<class lv, class rv, class Allocator, class=std::enable_if_t<optimizer<rv>::entirely_blas_expr>, int=0>
-static auto evaluate(Binary_Expression<lv, rv, oper::assign> expression, Allocator& alloc) {
+static auto evaluate(Binary_Expression<lv, rv, oper::Assign> expression, Allocator& alloc) {
 	optimizer<rv>::linear_evaluation(expression.right, injector<lv, 1, 0>(expression.left), alloc);
 	return expression.left;
 }
 
 template<class lv, class rv, class Allocator, class=std::enable_if_t<optimizer<rv>::partial_blas_expr  && !optimizer<rv>::entirely_blas_expr>, int=0,int=0>
-static auto evaluate(Binary_Expression<lv, rv, oper::assign> expression, Allocator& alloc) {
+static auto evaluate(Binary_Expression<lv, rv, oper::Assign> expression, Allocator& alloc) {
 	auto right = optimizer<rv>::linear_evaluation(expression.right, injector<lv, 1, 0>(expression.left), alloc);
-	return make_bin_expr<oper::add_assign>(expression.left, detail::evaluate_temporaries(right, alloc));
+	return make_bin_expr<oper::Add_Assign>(expression.left, detail::evaluate_temporaries(right, alloc));
 }
 
 

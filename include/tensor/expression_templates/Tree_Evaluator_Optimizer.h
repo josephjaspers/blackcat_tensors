@@ -136,7 +136,7 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
         				},
 				BC::meta::constexpr_else_if<optimizer<lv>::entirely_blas_expr>(
         				[&]() {
-        					return BC::meta::constexpr_ternary<std::is_same<op, oper::sub>::value>(
+        					return BC::meta::constexpr_ternary<std::is_same<op, oper::Sub>::value>(
         							[&]() {
 										/*auto left = */ optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
 										auto right = optimizer<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);

@@ -58,7 +58,7 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
         //if we need to negate or zero the output
 		//If beta_mod != 1 consider using gemm (to enable zeroing/modifying the output)
 		if (beta_mod != 1) {
-			auto expr = make_bin_expr<oper::assign>(injection, make_scalar_constant<value_type>(beta_mod));
+			auto expr = make_bin_expr<oper::Assign>(injection, make_scalar_constant<value_type>(beta_mod));
 			evaluate(expr, stream);
 		}
 

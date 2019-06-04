@@ -39,32 +39,32 @@ struct remove_scalar_mul {
 };
 
 template<class lv, class rv>
-struct remove_scalar_mul<Binary_Expression<lv, rv, oper::scalar_mul>> {
+struct remove_scalar_mul<Binary_Expression<lv, rv, oper::Scalar_Mul>> {
 	using type = std::conditional_t<lv::tensor_dimension == 0, rv, lv>;
 	using scalar_type = std::conditional_t<lv::tensor_dimension == 0, lv ,rv>;
 
-	static type rm(Binary_Expression<lv, rv, oper::scalar_mul> expression) {
+	static type rm(Binary_Expression<lv, rv, oper::Scalar_Mul> expression) {
 		struct lv_ {
-			static auto remove(Binary_Expression<lv, rv, oper::scalar_mul> arg) {
+			static auto remove(Binary_Expression<lv, rv, oper::Scalar_Mul> arg) {
 				return arg.right;
 			}
 		};
 		struct rv_ {
-			static auto remove(Binary_Expression<lv, rv, oper::scalar_mul> arg) {
+			static auto remove(Binary_Expression<lv, rv, oper::Scalar_Mul> arg) {
 				return arg.left;
 			}
 		};
 		return std::conditional_t<lv::tensor_dimension == 0, lv_, rv_>::remove(expression);
 	}
 
-	static scalar_type get_scalar(Binary_Expression<lv, rv, oper::scalar_mul> expression) {
+	static scalar_type get_scalar(Binary_Expression<lv, rv, oper::Scalar_Mul> expression) {
 		struct lv_ {
-			static auto get(Binary_Expression<lv, rv, oper::scalar_mul> arg) {
+			static auto get(Binary_Expression<lv, rv, oper::Scalar_Mul> arg) {
 				return arg.left;
 			}
 		};
 		struct rv_ {
-			static auto get(Binary_Expression<lv, rv, oper::scalar_mul> arg) {
+			static auto get(Binary_Expression<lv, rv, oper::Scalar_Mul> arg) {
 				return arg.right;
 			}
 		};
