@@ -26,17 +26,7 @@ namespace oper {
 		-> decltype(apply(lv, rv)) {													\
 			return apply(lv, rv);														\
 		}																				\
-																						\
-		template<class Lv, class Rv>													\
-		BCINLINE 																		\
-		static auto forward_propagate (Lv&& lv, Rv&& rv) 								\
-		-> decltype(apply(operation_traits<Lv>::select_on_forward_propagate(lv), 		\
-							operation_traits<Rv>::select_on_forward_propagate(rv))) 	\
-		{																				\
-			return apply(operation_traits<Lv>::select_on_forward_propagate(lv), 		\
-							operation_traits<Rv>::select_on_forward_propagate(rv));		\
-		}																				\
-
+																			\
 
 #define BC_FORWARD_DEF(...)															\
 	template<class Lv, class Rv>													\
@@ -56,46 +46,49 @@ namespace oper {
 	BC_FORWARD_TO_APPLY
 
 
-#define BC_BACKWARD_DEF(...)														\
-	template<class Delta, class Lv_x, class Rv_x, class Lv, class Rv>				\
-	BCINLINE 																		\
-	static void backward_propagate(Delta&& dy, 										\
-									Lv_x&& lv_x, 									\
-									Rv_x&& rv_x, 									\
-									Lv&& lv_, 										\
-									Rv&& rv_) 										\
-	{																				\
-			auto&& lv = operation_traits<Lv>::select_on_backward_propagate(lv_);	\
-			auto&& rv = operation_traits<Rv>::select_on_backward_propagate(rv_);	\
-			__VA_ARGS__;															\
-	}																				\
+#define BC_BACKWARD_LV_DEF(...)						\
+	template<class Delta, class Lv, class Rv>				\
+	BCINLINE static auto lv_dx(Lv&& lv, Rv&& rv, Delta&& dy) 	\
+	{												\
+		return __VA_ARGS__;								\
+	}												\
 
-
+#define BC_BACKWARD_RV_DEF(...)						\
+	template<class Delta, class Lv, class Rv>				\
+	BCINLINE static auto rv_dx(Lv&& lv, Rv&& rv, Delta&& dy) 	\
+	{												\
+		return __VA_ARGS__;								\
+	}												\
 
     struct Scalar_Mul {
     	BC_FORWARD_DEF(lv * rv)
-    	BC_BACKWARD_DEF(lv.backward(dy * rv_x), rv.backward(lv_x * dy));
+    	BC_BACKWARD_LV_DEF(rv)
+    	BC_BACKWARD_RV_DEF(lv)
     } scalar_mul;
 
 
     struct Add : linear_operation, alpha_modifier<1> {
     	BC_FORWARD_DEF(lv + rv)
-    	BC_BACKWARD_DEF(lv.backward(dy), rv.backward(dy));
-
+    	BC_BACKWARD_LV_DEF(1)
+    	BC_BACKWARD_RV_DEF(1)
     } add;
 
     struct Mul {
     	BC_FORWARD_DEF(lv * rv)
-    	BC_BACKWARD_DEF(lv.backward(dy * rv_x), rv.backward(lv_x * dy))
+    	BC_BACKWARD_LV_DEF(rv)
+    	BC_BACKWARD_RV_DEF(lv)
     } mul;
 
     struct Sub : linear_operation, alpha_modifier<-1> {
     	BC_FORWARD_DEF(lv - rv)
-    	BC_BACKWARD_DEF(lv.backward(dy), rv.backward(-dy))
+    	BC_BACKWARD_LV_DEF(1)
+    	BC_BACKWARD_RV_DEF(-1)
     } sub;
 
     struct Div {
     	BC_FORWARD_DEF(lv / rv)
+    	BC_BACKWARD_LV_DEF(1/rv)
+    	BC_BACKWARD_RV_DEF(lv)
     } div;
 
     struct Assign : assignment_operation, beta_modifier<0>, alpha_modifier<1> {

@@ -185,7 +185,7 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
     template<class core, int a, int b, class Stream>
     static auto injection(Binary_Expression<lv, rv, op> branch, injector<core, a, b> tensor, Stream alloc) {
 
-    	auto basic_eval = [&](auto adl=0) {
+    	auto basic_eval = [&]() {
         	static constexpr bool left_evaluated = optimizer<lv>::partial_blas_expr || b != 0;
         	auto left = optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
             auto right = optimizer<rv>::linear_evaluation(branch.right, update_injection<op, left_evaluated>(tensor), alloc);
