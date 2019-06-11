@@ -67,7 +67,9 @@ namespace oper {
     } scalar_mul;
 
 
-    struct Add : linear_operation, alpha_modifier<1> {
+    struct Add : linear_operation {
+    	using alpha_modifier = BC::meta::Integer<1>;
+
     	BC_FORWARD_DEF(lv + rv)
     	BC_BACKWARD_LV_DEF(1)
     	BC_BACKWARD_RV_DEF(1)
@@ -79,7 +81,8 @@ namespace oper {
     	BC_BACKWARD_RV_DEF(lv)
     } mul;
 
-    struct Sub : linear_operation, alpha_modifier<-1> {
+    struct Sub : linear_operation {
+    	using alpha_modifier = BC::meta::Integer<-1>;
     	BC_FORWARD_DEF(lv - rv)
     	BC_BACKWARD_LV_DEF(1)
     	BC_BACKWARD_RV_DEF(-1)
@@ -91,23 +94,33 @@ namespace oper {
     	BC_BACKWARD_RV_DEF(lv)
     } div;
 
-    struct Assign : assignment_operation, beta_modifier<0>, alpha_modifier<1> {
+    struct Assign : assignment_operation {
+    	using alpha_modifier = BC::meta::Integer<1>;
+    	using beta_modifier = BC::meta::Integer<0>;
     	BC_FORWARD_DEF(lv = rv)
     } assign;
 
-    struct Add_Assign : linear_assignment_operation, beta_modifier<1>, alpha_modifier<1> {
+    struct Add_Assign : linear_assignment_operation {
+    	using alpha_modifier = BC::meta::Integer<1>;
+    	using beta_modifier = BC::meta::Integer<1>;
     	BC_FORWARD_DEF(lv += rv)
     } add_assign;
 
     struct Mul_Assign : assignment_operation {
+    	using alpha_modifier = BC::meta::Integer<1>;
+    	using beta_modifier = BC::meta::Integer<1>;
     	BC_FORWARD_DEF(lv *= rv)
     } mul_assign;
 
-    struct Sub_Assign : linear_assignment_operation, beta_modifier<1>, alpha_modifier<-1> {
+    struct Sub_Assign : linear_assignment_operation {
+    	using alpha_modifier = BC::meta::Integer<-1>;
+    	using beta_modifier = BC::meta::Integer<1>;
     	BC_FORWARD_DEF(lv -= rv)
     } sub_assign;
 
     struct Div_Assign : assignment_operation {
+    	using alpha_modifier = BC::meta::Integer<1>;
+    	using beta_modifier = BC::meta::Integer<1>;
     	BC_FORWARD_DEF(lv /= rv)
     } div_assign;
 
@@ -169,7 +182,7 @@ namespace oper {
 
 
 struct Host_Atomic_Add:
-	linear_assignment_operation, beta_modifier<1>, alpha_modifier<1> {
+	Add_Assign {
 	BC_ADVANCED_FORWARD_DEF(
 			BC_omp_atomic__
 			lv += rv;
@@ -179,7 +192,7 @@ struct Host_Atomic_Add:
 
 
 struct Host_Atomic_Mul:
-		assignment_operation {
+		Mul_Assign {
 		BC_ADVANCED_FORWARD_DEF(
 				BC_omp_atomic__
 				lv *= rv;
@@ -188,7 +201,7 @@ struct Host_Atomic_Mul:
 } host_atomic_mul;
 
 struct Host_Atomic_Sub:
-	linear_assignment_operation, beta_modifier<1>, alpha_modifier<-1> {
+	Sub_Assign {
 		BC_ADVANCED_FORWARD_DEF(
 				BC_omp_atomic__
 				lv -= rv;
@@ -197,7 +210,7 @@ struct Host_Atomic_Sub:
 } host_atomic_sub;
 
 
-struct Host_Atomic_Div: assignment_operation {
+struct Host_Atomic_Div: Div_Assign {
 	BC_ADVANCED_FORWARD_DEF(
 			BC_omp_atomic__
 			lv /= rv;
@@ -213,8 +226,7 @@ static constexpr bool is_host = std::is_same<T, host_tag>::value;
 
 
 #ifdef __CUDACC__
-struct Device_Atomic_Add:
-	linear_assignment_operation, beta_modifier<1>, alpha_modifier<1> {
+struct Device_Atomic_Add: Add_Assign {
 	BC_ADVANCED_FORWARD_DEF(
 			atomicAdd(&lv, rv);
 			return lv;
@@ -222,8 +234,7 @@ struct Device_Atomic_Add:
 } device_atomic_add;
 
 
-struct Device_Atomic_Mul:
-		assignment_operation {
+struct Device_Atomic_Mul: Mul_Assign {
 		BC_ADVANCED_FORWARD_DEF(
 				static_assert(
 					std::is_same<void, Lv>::value,
@@ -231,8 +242,7 @@ struct Device_Atomic_Mul:
 	)
 } device_atomic_mul;
 
-struct Device_Atomic_Sub:
-	linear_assignment_operation, beta_modifier<1>, alpha_modifier<-1> {
+struct Device_Atomic_Sub: Sub_Assign{
 		BC_ADVANCED_FORWARD_DEF(
 				atomicAdd(&lv, -rv);
 				return lv;
@@ -240,7 +250,7 @@ struct Device_Atomic_Sub:
 } device_atomic_sub;
 
 
-struct Device_Atomic_Div: assignment_operation {
+struct Device_Atomic_Div: Div_Assign {
 	BC_ADVANCED_FORWARD_DEF(
 			static_assert(
 				std::is_same<void, Lv>::value,

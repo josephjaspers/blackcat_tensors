@@ -16,6 +16,8 @@
 namespace BC {
 namespace meta {
 
+	template<int x> struct Integer { static constexpr int value = x; };
+
 	template<class T> static constexpr bool true_v = true;
 	template<class T> static constexpr bool false_v= false;
 
@@ -39,8 +41,8 @@ namespace meta {
 		using type = func<TestType>;
 	};
 
-//	template<template<class> class func, class TestType, class DefaultType>
-//	using conditional_detected_t = typename conditional_detected<func, TestType, DefaultType>::type;
+	template<template<class> class func, class TestType, class DefaultType>
+	using conditional_detected_t = typename conditional_detected<func, TestType, DefaultType>::type;
 
 
     BCINLINE static constexpr BC::size_t  max(int x) { return x; }

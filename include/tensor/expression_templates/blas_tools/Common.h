@@ -12,7 +12,9 @@
 
 namespace BC {
 namespace exprs {
-template<class,class,class> struct Binary_Expression;
+
+template<class,class,class>
+struct Binary_Expression;
 
 namespace blas_tools {
 

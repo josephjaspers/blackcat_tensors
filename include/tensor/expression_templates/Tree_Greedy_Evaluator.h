@@ -24,7 +24,7 @@
  *  Example: (assume matrices)
  *  	y += a * b + c * d
  *
- *  	Naively, this expression may generate 2 temporaries, one for each matrix multplication.
+ *  	Naively, this expression may generate 2 temporaries, one for each matrix multiplication.
  *  	However, a more efficient way to evaluate this equation would be to make 2 gemm calls,
  *  	gemm(y,a,b) and gemm(y, c, d).
  *
@@ -32,7 +32,7 @@
  *  	y = abs(a * b + c * d).
  *
  *  	Here we can apply... (the second gemm call updateing alpha to 1)
- *  	gemm(y,a,b), gemm(y,c,d) followed by evaluationg y := abs(y).
+ *  	gemm(y,a,b), gemm(y,c,d) followed by evaluating y := abs(y).
  *
  */
 
@@ -71,6 +71,11 @@ static auto evaluate_temporaries(expression_t expression, Allocator& alloc) {
 } //ns detail
 
 namespace evaluator_paths {
+/*
+ * These overloads determine the initial alpha and beta modifiers.
+ * (The integer template values of the 'injector' class)
+ */
+
 
 template<class lv, class rv, class Allocator, class=std::enable_if_t<!optimizer<rv>::entirely_blas_expr>>
 static  auto evaluate(Binary_Expression<lv, rv, oper::Add_Assign> expression, Allocator& alloc) {

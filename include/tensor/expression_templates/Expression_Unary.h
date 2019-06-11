@@ -60,57 +60,6 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Value, operati
 
 };
 
-
-template<class Operation>
-struct index_aware_function : Operation {
-	using Operation::Operation;
-};
-
-template<class Value, class Operation>
-struct Unary_Expression<Value, index_aware_function<Operation>>
-: public Expression_Base<Unary_Expression<Value, index_aware_function<Operation>>>,
-  public index_aware_function<Operation> {
-
-	using operation   = index_aware_function<Operation>;
-    using value_type  = typename Value::value_type;
-    using system_tag  = typename Value::system_tag;
-
-    static constexpr int tensor_dimension  = Value::tensor_dimension;
-    static constexpr int tensor_iterator_dimension = Value::tensor_iterator_dimension;
-
-    Value array;
-
-    template<class... args> BCINLINE
-    Unary_Expression(Value v, args&&... args_):
-    	array(v), operation(args_...) {}
-
-    BCINLINE auto operator [](int index) const {
-        return operation::operator()(array, index);
-    }
-    template<class... integers> BCINLINE
-    auto operator ()(integers... index) const {
-        return operation::operator()(array, index...);
-    }
-
-    BCINLINE auto operator [](int index) {
-        return operation::operator()(array, index);
-    }
-    template<class... integers> BCINLINE
-    auto operator ()(integers... index) {
-        return operation::operator()(array, index...);
-    }
-
-    BCINLINE const auto inner_shape() const { return array.inner_shape(); }
-    BCINLINE const auto block_shape() const { return array.block_shape(); }
-    BCINLINE BC::size_t size() const { return array.size(); }
-    BCINLINE BC::size_t rows() const { return array.rows(); }
-    BCINLINE BC::size_t cols() const { return array.cols(); }
-    BCINLINE BC::size_t dimension(int i) const { return array.dimension(i); }
-    BCINLINE BC::size_t block_dimension(int i) const { return array.block_dimension(i); }
-
-};
-
-
 template<class op, class expr> BCHOT
 auto make_un_expr(expr e, op oper =op()) {
 	return Unary_Expression<std::decay_t<decltype(e.internal())>, op>(e.internal(), oper);

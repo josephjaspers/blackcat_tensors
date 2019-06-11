@@ -36,14 +36,14 @@ class Stream<host_tag> {
 public:
 
 	using system_tag = host_tag;
-	using allocator_t = BC::allocator::fancy::Workspace<host_tag>;
+	using allocator_type = BC::allocator::fancy::Workspace<host_tag>;
 
     BC::allocator::fancy::Workspace<host_tag>& get_allocator() {
     	return m_contents.get()->m_workspace;
     }
     template<class RebindType>
     auto get_allocator_rebound() {
-    	return typename allocator_t::template rebind<RebindType>::other(m_contents->m_workspace);
+    	return typename allocator_type::template rebind<RebindType>::other(m_contents->m_workspace);
     }
     void set_blas_pointer_mode_host() {}
     void set_blas_pointer_mode_device() {}

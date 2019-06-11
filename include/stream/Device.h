@@ -65,7 +65,7 @@ class Stream<device_tag> {
 public:
 
 	using system_tag = device_tag;
-	using allocator_t = BC::allocator::fancy::Workspace<device_tag>;
+	using allocator_type = BC::allocator::fancy::Workspace<device_tag>;
 
 	BC::allocator::fancy::Workspace<device_tag>& get_allocator() {
     	return device_contents.get()->m_workspace;
@@ -73,7 +73,7 @@ public:
 
     template<class RebindType>
     auto get_allocator_rebound() {
-    	return typename allocator_t::template rebind<RebindType>::other(get_allocator());
+    	return typename allocator_type::template rebind<RebindType>::other(get_allocator());
     }
 
     auto set_blas_pointer_mode_host() {

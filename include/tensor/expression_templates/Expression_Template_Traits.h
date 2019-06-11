@@ -13,14 +13,16 @@
 
 namespace BC {
 namespace exprs {
+
 template<class,class,class> struct Binary_Expression;
 template<class,class>		struct Unary_Expression;
 
-
 namespace detail {
+
 template<class T> using query_value_type = typename T::value_type;
 template<class T> using query_allocation_type = typename T::allocation_tag;
 template<class T> using query_system_tag = typename T::system_tag;
+
 template<class T> using query_copy_assignable =
 				std::conditional_t<T::copy_assignable, std::true_type, std::false_type>;
 template<class T> using query_copy_constructible =
@@ -35,7 +37,6 @@ template<class T>
 struct remove_scalar_mul {
 	using type = T;
 	using scalar_type = typename BC::meta::conditional_detected<query_value_type, T, T>::type *;
-
 
 	static T rm(T expression) {
 		return expression;
@@ -53,31 +54,16 @@ struct remove_scalar_mul<Binary_Expression<lv, rv, oper::Scalar_Mul>> {
 	using scalar_type = std::conditional_t<lv::tensor_dimension == 0, lv ,rv>;
 
 	static type rm(Binary_Expression<lv, rv, oper::Scalar_Mul> expression) {
-		struct lv_ {
-			static auto remove(Binary_Expression<lv, rv, oper::Scalar_Mul> arg) {
-				return arg.right;
-			}
-		};
-		struct rv_ {
-			static auto remove(Binary_Expression<lv, rv, oper::Scalar_Mul> arg) {
-				return arg.left;
-			}
-		};
-		return std::conditional_t<lv::tensor_dimension == 0, lv_, rv_>::remove(expression);
+		return BC::meta::constexpr_ternary<lv::tensor_dimension==0>(
+				[&]() { return expression.right; },
+				[&]() { return expression.left;  }
+		);
 	}
-
 	static scalar_type get_scalar(Binary_Expression<lv, rv, oper::Scalar_Mul> expression) {
-		struct lv_ {
-			static auto get(Binary_Expression<lv, rv, oper::Scalar_Mul> arg) {
-				return arg.left;
-			}
-		};
-		struct rv_ {
-			static auto get(Binary_Expression<lv, rv, oper::Scalar_Mul> arg) {
-				return arg.right;
-			}
-		};
-		return std::conditional_t<lv::tensor_dimension == 0, lv_, rv_>::get(expression);
+		return BC::meta::constexpr_ternary<lv::tensor_dimension==0>(
+				[&]() { return expression.left; },
+				[&]() { return expression.right;  }
+		);
 	}
 
 };
@@ -123,19 +109,19 @@ struct expression_traits {
 
 // Causes 'catastrophic error' with NVCC. Compiles with GCC TODO change once NVCC fixes
 //	static constexpr bool is_move_constructible =
-//					BC::meta::conditional_detected<
+//					BC::meta::conditional_detected_t<
 //						detail::query_move_constructible, T, std::false_type>::type::value;
 //
 //	static constexpr bool is_copy_constructible =
-//					BC::meta::conditional_detected<
+//					BC::meta::conditional_detected_t<
 //						detail::query_copy_constructible, T, std::false_type>::type::value;
 //
 //	static constexpr bool is_move_assignable 	=
-//					BC::meta::conditional_detected<
+//					BC::meta::conditional_detected_t<
 //						detail::query_move_assignable, T, std::false_type>::type::value;
 //
 //	static constexpr bool is_copy_assignable 	=
-//					BC::meta::conditional_detected<
+//					BC::meta::conditional_detected_t<
 //						detail::query_copy_assignable, T, std::false_type>::type::value;
 
 	static constexpr bool is_move_constructible = T::move_constructible;
@@ -165,7 +151,6 @@ struct blas_expression_traits : expression_traits<T> {
 	 using remove_blas_features_type	= typename detail::remove_transpose<remove_scalar_mul_type>::type;
 	 using scalar_multiplier_type		= typename detail::remove_scalar_mul<T>::scalar_type;
 	 using value_type					= typename T::value_type;
-
 
 	 static constexpr bool is_scalar_multiplied = !std::is_same<remove_scalar_mul_type, T>::value;
 	 static constexpr bool is_transposed 		= !std::is_same<remove_transpose_type,  T>::value;
