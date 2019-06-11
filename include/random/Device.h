@@ -18,7 +18,8 @@
 namespace BC {
 namespace random {
 
-struct Device {
+template<>
+struct Random<device_tag> {
 
 	static curandState_t* bc_curand_state() {
 		struct bc_curandState_t {

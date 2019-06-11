@@ -5,6 +5,7 @@
 namespace BC {
 namespace nn {
 
+
 template<class SystemTag, class ValueType, class Functor>
 class Function : public Layer_Base {
 

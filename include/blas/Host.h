@@ -20,8 +20,8 @@ namespace blas {
  *
  *  (this is to enable BC_Tensors's to not have to specialize the template system)
  */
-
-struct Host {
+template<>
+struct BLAS<host_tag> {
 
     /*
      * a = M x K

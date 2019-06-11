@@ -41,7 +41,7 @@ struct ArrayExpression
 
     using value_type = ValueType;
     using system_tag = SystemTag;
-    using pointer_type = std::conditional_t<BC::meta::seq_contains<BC_Immutable, Tags...>,  BC::meta::apply_const_t<value_type>*, value_type*>;
+    using pointer_type = value_type*;
     using shape_type = std::conditional_t<BC::meta::seq_contains<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>;
     using self_type  = ArrayExpression<Dimension, ValueType, SystemTag, Tags...>;
 

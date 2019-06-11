@@ -20,7 +20,6 @@
 #include "utility/Utility.h"
 #include "random/Random.h"
 
-
 #include "tensor/Tensor_Common.h"
 #include "tensor/Tensor_Base.h"
 #include "tensor/Tensor_Aliases.h"

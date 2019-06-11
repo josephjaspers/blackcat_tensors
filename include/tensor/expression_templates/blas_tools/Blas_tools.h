@@ -9,9 +9,11 @@
 #define BC_EXPRESSION_BLAS_TOOLS_H_
 
 #include "../Expression_Template_Traits.h"
+
+BC_DEFAULT_MODULE_BODY(exprs { namespace blas_tools, BLAS_Tools) }
+
 #include "Host.h"
 #include "Device.h"
 
-BC_DEFAULT_MODULE_BODY(exprs { namespace blas_tools) }
 
 #endif /* BLAS_TOOLS_H_ */

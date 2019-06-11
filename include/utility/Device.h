@@ -15,7 +15,8 @@
 namespace BC {
 namespace utility {
 
-struct Device {
+template<>
+struct Utility<device_tag> {
 
 	template<class T>
 	static void HostToDevice(T* t, const T* u, BC::size_t  size = 1) {

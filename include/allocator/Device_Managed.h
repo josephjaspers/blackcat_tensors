@@ -16,6 +16,8 @@ namespace allocator {
 template<class T>
 struct Device_Managed : Device<T> {
 
+	static constexpr bool managed_memory = true;
+
 	template<class altT>
 	struct rebind { using other = Device_Managed<altT>; };
 

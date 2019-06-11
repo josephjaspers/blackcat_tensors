@@ -168,71 +168,119 @@ namespace oper {
 #endif
 
 
-struct Atomic_Add:
+struct Host_Atomic_Add:
 	linear_assignment_operation, beta_modifier<1>, alpha_modifier<1> {
 	BC_ADVANCED_FORWARD_DEF(
-		IF_HOST_MODE(
 			BC_omp_atomic__
 			lv += rv;
 			return lv;
-		)
-		IF_DEVICE_MODE(
-			atomicAdd(&lv, rv);
-			return lv;
-		)
 	)
-} atomic_add;
+} host_atomic_add;
 
 
-struct Atomic_Mul:
+struct Host_Atomic_Mul:
 		assignment_operation {
 		BC_ADVANCED_FORWARD_DEF(
-			IF_HOST_MODE(
 				BC_omp_atomic__
 				lv *= rv;
 				return lv;
-			)
-			IF_DEVICE_MODE(
-				static_assert(
-					std::is_same<void, Lv>::value,
-					"BLACKCAT_TENSORS: Atomic-reduction mul-assign is currently not available on the GPU");
-
-			)
 	)
-} atomic_mul;
+} host_atomic_mul;
 
-struct Atomic_Sub:
+struct Host_Atomic_Sub:
 	linear_assignment_operation, beta_modifier<1>, alpha_modifier<-1> {
 		BC_ADVANCED_FORWARD_DEF(
-			IF_HOST_MODE(
 				BC_omp_atomic__
 				lv -= rv;
 				return lv;
-			)
-			IF_DEVICE_MODE(
-				atomicAdd(&lv, -rv);
-				return lv;
-			)
 		)
-} atomic_sub;
+} host_atomic_sub;
 
 
-struct Atomic_Div: assignment_operation {
+struct Host_Atomic_Div: assignment_operation {
 	BC_ADVANCED_FORWARD_DEF(
-		IF_HOST_MODE(
 			BC_omp_atomic__
 			lv /= rv;
 			return lv;
-		)
+	)
+} host_atomic_div;
 
-		IF_DEVICE_MODE(
+//----------------------------------------
+namespace detail {
+template<class T>
+static constexpr bool is_host = std::is_same<T, host_tag>::value;
+}
+
+
+#ifdef __CUDACC__
+struct Device_Atomic_Add:
+	linear_assignment_operation, beta_modifier<1>, alpha_modifier<1> {
+	BC_ADVANCED_FORWARD_DEF(
+			atomicAdd(&lv, rv);
+			return lv;
+	)
+} device_atomic_add;
+
+
+struct Device_Atomic_Mul:
+		assignment_operation {
+		BC_ADVANCED_FORWARD_DEF(
+				static_assert(
+					std::is_same<void, Lv>::value,
+					"BLACKCAT_TENSORS: Atomic-reduction mul-assign is currently not available on the GPU");
+	)
+} device_atomic_mul;
+
+struct Device_Atomic_Sub:
+	linear_assignment_operation, beta_modifier<1>, alpha_modifier<-1> {
+		BC_ADVANCED_FORWARD_DEF(
+				atomicAdd(&lv, -rv);
+				return lv;
+		)
+} device_atomic_sub;
+
+
+struct Device_Atomic_Div: assignment_operation {
+	BC_ADVANCED_FORWARD_DEF(
 			static_assert(
 				std::is_same<void, Lv>::value,
 				"BLACKCAT_TENSORS: Atomic-reduction div-assign is currently not available on the GPU");
-
-		)
 	)
-} atomic_div;
+} device_atomic_div;
+
+
+
+
+template<class SystemTag>
+using Atomic_Add = std::conditional_t<detail::is_host<SystemTag>,
+		Host_Atomic_Add, Device_Atomic_Add>;
+template<class SystemTag>
+using Atomic_Sub = std::conditional_t<detail::is_host<SystemTag>,
+		Host_Atomic_Add, Device_Atomic_Sub>;
+template<class SystemTag>
+using Atomic_Div = std::conditional_t<detail::is_host<SystemTag>,
+		Host_Atomic_Add, Device_Atomic_Div>;
+template<class SystemTag>
+using Atomic_Mul = std::conditional_t<detail::is_host<SystemTag>,
+		Host_Atomic_Add, Device_Atomic_Mul>;
+
+#else //if __CUDACC__ is not defined
+
+template<class SystemTag>
+using Atomic_Add = std::enable_if_t<detail::is_host<SystemTag>,
+		Host_Atomic_Add>;
+template<class SystemTag>
+using Atomic_Sub = std::enable_if_t<detail::is_host<SystemTag>,
+		Host_Atomic_Add>;
+template<class SystemTag>
+using Atomic_Div = std::enable_if_t<detail::is_host<SystemTag>,
+		Host_Atomic_Add>;
+template<class SystemTag>
+using Atomic_Mul = std::enable_if_t<detail::is_host<SystemTag>,
+		Host_Atomic_Add>;
+
+
+#endif
 
 }
 }

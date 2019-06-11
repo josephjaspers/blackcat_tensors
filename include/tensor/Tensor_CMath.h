@@ -14,49 +14,32 @@ namespace BC {
 template<class> class Tensor_Base;
 
 //defines a function with a user defined implementation (not part of std::cmath.h)
-#define BLACKCAT_BC_FUNCTOR_DEF(funcName, instance_name, ...) 	 \
-														 	 	 \
+#define BLACKCAT_FUNCTOR_DEF(funcName, instance_name, math_function, ...) 	\
+														 	 	\
 struct funcName {									 			\
 	template<class value_type> BCINLINE    	     				\
-	value_type operator () (const value_type& x) const { 	 			\
-		return __VA_ARGS__; 									 \
+	value_type operator () (const value_type& x) const { 	 	\
+		return math_function; 									\
 	} 											     			\
 	template<class value_type> BCINLINE    	     				\
-	static auto apply(const value_type& x) { 		    	 			\
-		return __VA_ARGS__; 								 	\
+	static auto apply(const value_type& x) { 		    	 	\
+		return math_function; 								 	\
 	}															\
 	template<class internal_t>									\
 	auto operator() (const Tensor_Base<internal_t>& tensor) {   \
 		  return tensor.un_expr(funcName());               		\
-	}\
-	template<class value_type> static auto dx(const value_type&); 								\
-	template<class value_type> static auto cached_dx(const value_type&); 					\
-	template<class internal_t> static auto dx(const Tensor_Base<internal_t>&); 								\
-	template<class internal_t> static auto cached_dx(const Tensor_Base<internal_t>&); 					\
-			\
+	}															\
+																\
+	__VA_ARGS__													\
 } instance_name;												\
 																\
 
+#define DERIVATIVE_DEF(...) BLACKCAT_FUNCTOR_DEF(Derivative, dx, __VA_ARGS__)
 
+#define DERIVATIVE_CACHED_DEF(...) BLACKCAT_FUNCTOR_DEF(Cached_Derivative, cached_dx, __VA_ARGS__)
 
-#define DERIVATIVE_DX_DEF(funcName, instance_name, ...)\
-		BLACKCAT_BC_FUNCTOR_DEF(funcName##_dx, instance_name##_dx,  __VA_ARGS__)\
-		template<class value_type> auto funcName::dx (const value_type& x) { return __VA_ARGS__; }\
-		template<class internal_t> auto funcName::dx (const Tensor_Base<internal_t>& x) { return x.un_expr(instance_name##_dx); }\
-
-
-#define DERIVATIVE_CACHED_DX_DEF(funcName, instance_name, ...)\
-		BLACKCAT_BC_FUNCTOR_DEF(funcName##_cached_dx, instance_name##_cached_dx,  __VA_ARGS__)\
-		template<class value_type> auto funcName::cached_dx (const value_type& x) { return __VA_ARGS__; }\
-		template<class internal_t> auto funcName::cached_dx (const Tensor_Base<internal_t>& x) { return x.un_expr(instance_name##_cached_dx); }\
-
-
-#define DERIVATIVE_DEF(funcName, instance_name, ...)\
-		DERIVATIVE_DX_DEF(funcName,instance_name, __VA_ARGS__)\
-		DERIVATIVE_CACHED_DX_DEF(funcName,instance_name, __VA_ARGS__)
-
-#define BLACKCAT_MATH_DEF(funcName, instanceName) \
-		BLACKCAT_BC_FUNCTOR_DEF(funcName, instanceName, std::instanceName(x))
+#define BLACKCAT_MATH_DEF(funcName, instanceName, ...) \
+		BLACKCAT_FUNCTOR_DEF(funcName, instanceName, std::instanceName(x), __VA_ARGS__)
 
 BLACKCAT_MATH_DEF( Abs , abs )
 BLACKCAT_MATH_DEF( Acos , acos )
@@ -69,7 +52,7 @@ BLACKCAT_MATH_DEF( Atanh , atanh )
 BLACKCAT_MATH_DEF( Cbrt , cbrt )
 BLACKCAT_MATH_DEF( Ceil , ceil )
 BLACKCAT_MATH_DEF( Copysign , copysign )
-BLACKCAT_MATH_DEF( Cos , cos )
+BLACKCAT_MATH_DEF( Cos , cos, DERIVATIVE_DEF(-std::sin(x)))
 BLACKCAT_MATH_DEF( Cosh , cosh )
 BLACKCAT_MATH_DEF( Exp , exp )
 BLACKCAT_MATH_DEF( Exp2 , exp2 )
@@ -133,52 +116,31 @@ BLACKCAT_MATH_DEF( Rint , rint )
 BLACKCAT_MATH_DEF( Round , round )
 BLACKCAT_MATH_DEF( Scalbln , scalbln )
 BLACKCAT_MATH_DEF( Scalbn , scalbn )
-BLACKCAT_MATH_DEF( Sin , sin )
+BLACKCAT_MATH_DEF( Sin , sin, DERIVATIVE_DEF(cos(x)));
 BLACKCAT_MATH_DEF( Sinh , sinh )
 BLACKCAT_MATH_DEF( Sqrt , sqrt )
 BLACKCAT_MATH_DEF( Tan , tan )
-BLACKCAT_BC_FUNCTOR_DEF( Sec , sec, 1/std::cos(x) )
-BLACKCAT_MATH_DEF( Tanh , tanh )
+BLACKCAT_FUNCTOR_DEF( Sec , sec, 1/std::cos(x) )
+BLACKCAT_MATH_DEF( Tanh , tanh, DERIVATIVE_DEF(1 - std::pow(std::tanh(x), 2))
+								DERIVATIVE_CACHED_DEF(1 - std::pow(x,2)))
 BLACKCAT_MATH_DEF( Trunc , trunc )
 BLACKCAT_MATH_DEF( Isinf , isinf )
 BLACKCAT_MATH_DEF( Isnan , isnan )
 
-BLACKCAT_BC_FUNCTOR_DEF(Pow2, pow2, std::pow(x, 2));
+BLACKCAT_FUNCTOR_DEF(Pow2, pow2, (std::pow(x, 2)), DERIVATIVE_DEF(2));
+BLACKCAT_FUNCTOR_DEF(Pow3, pow3, (std::pow(x, 3)), DERIVATIVE_DEF(3));
 
-DERIVATIVE_DEF(Pow2, pow2, 2)
+BLACKCAT_FUNCTOR_DEF(Logistic, logistic, (1 / (1 + std::exp(-x))),
+		DERIVATIVE_DEF(1) //Logistic::apply(x) * (1 - Logistic::apply(x)))
+		DERIVATIVE_CACHED_DEF(x * (1 - x)));
 
-DERIVATIVE_DEF(Abs, abs, Copysign::apply(x))
-
-DERIVATIVE_DEF(Sin, sin, Cos::apply(x))
-DERIVATIVE_DEF(Cos, cos, -Sin::apply(x))
-DERIVATIVE_DEF(Tan, tan, Pow::apply(Sec::apply(x), 2))
-DERIVATIVE_DEF(Acos , acos, -1/Sqrt::apply(1-Pow2::apply(x)))
-DERIVATIVE_DEF(Asin , asin, 1/Sqrt::apply(1-Pow2::apply(x)))
-DERIVATIVE_DEF(Atan , atan, 1/(1+Pow2::apply(x)) )
-
-
-BLACKCAT_BC_FUNCTOR_DEF(Logistic, logistic, 1 / (1 + std::exp(-x)));
-
-DERIVATIVE_DX_DEF(Logistic, logistic, Logistic::apply(x) * (1 - Logistic::apply(x)));
-DERIVATIVE_CACHED_DX_DEF(Logistic, logistic, x * (1 - x));
-
-BLACKCAT_BC_FUNCTOR_DEF(Dx_Logistic, dx_logistic, Logistic::apply(x) * (1 - Logistic::apply(x)));
-BLACKCAT_BC_FUNCTOR_DEF(Cached_Dx_Logistic, cached_dx_logistic, (1 - x)*x);
-
-DERIVATIVE_DX_DEF(Tanh, tanh, 1 - Pow2::apply(Tanh::apply(x)));
-//BLACKCAT_BC_FUNCTOR_DEF(Cached_Dx_Tanh, cached_dx_tanh, 1 - std::pow(x, 2));
-
-BLACKCAT_BC_FUNCTOR_DEF(Relu, relu,max(0, x));
-DERIVATIVE_DEF(Relu, relu,  x > 0 ? 1 : 0)
-
-BLACKCAT_BC_FUNCTOR_DEF(Dx_Relu, dx_relu, x > 0 ? 1 : 0);
-BLACKCAT_BC_FUNCTOR_DEF(Cached_Dx_Relu, cached_dx_relu, x > 0 ? 1 : 0); //same as dx_relu
-BLACKCAT_BC_FUNCTOR_DEF(Logical, logical, x != 0 ? 1 : 0);
+BLACKCAT_FUNCTOR_DEF(Relu, relu,max(0, x), DERIVATIVE_DEF(x > 0 ? 1 : 0));
+BLACKCAT_FUNCTOR_DEF(Logical, logical, x != 0 ? 1 : 0);
 
 
 
 
-#undef BLACKCAT_BC_FUNCTOR_DEF
+#undef BLACKCAT_FUNCTOR_DEF
 #undef BLACKCAT_MATH_DEF
 
 //--------------------------------------------not actually cmath--------------------------------------//

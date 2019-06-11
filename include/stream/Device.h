@@ -22,7 +22,8 @@
 namespace BC {
 namespace stream {
 
-class Device {
+template<>
+class Stream<device_tag> {
 
 	struct Device_Stream_Contents {
 
@@ -96,7 +97,7 @@ public:
     }
 
 
-    void set_stream(Device dev) {
+    void set_stream(Stream dev) {
     	device_contents = dev.device_contents;
     }
 
@@ -106,13 +107,13 @@ public:
     			device_contents.get()->m_stream_handle));
     }
 
-    void wait_event(Device& stream) {
+    void wait_event(Stream& stream) {
     	BC_CUDA_ASSERT(cudaStreamWaitEvent(
     			device_contents.get()->m_stream_handle,
     			stream.device_contents.get()->m_event_handle, 0));
     }
 
-    void wait_stream(Device& stream) {
+    void wait_stream(Stream& stream) {
     	stream.record_event();
     	BC_CUDA_ASSERT(cudaStreamWaitEvent(
     			device_contents.get()->m_stream_handle,
@@ -187,22 +188,22 @@ public:
     	return future;
     }
 
-    bool operator == (const Device& dev) {
+    bool operator == (const Stream& dev) {
     	return device_contents == dev.device_contents;
     }
 
-    bool operator != (const Device& dev) {
+    bool operator != (const Stream& dev) {
 		return device_contents != dev.device_contents;
 	}
 
-    Device() = default;
-    Device(const Device& dev) = default;
-    Device(Device&&) = default;
-    Device & operator = (const Device& device) {
+    Stream() = default;
+    Stream(const Stream& dev) = default;
+    Stream(Stream&&) = default;
+    Stream<device_tag>& operator = (const Stream& device) {
     	this->device_contents = device.device_contents;
     	return *this;
     }
-    Device & operator = (Device&& device) {
+    Stream<device_tag>& operator = (Stream&& device) {
     	this->device_contents = std::move(device.device_contents);
     	return *this;
     }

@@ -78,6 +78,12 @@ auto feedforward(SystemTag system_tag, int inputs, int outputs) {
 	return FeedForward<SystemTag, typename SystemTag::default_floating_point_type>(inputs, outputs);
 }
 
+auto feedforward(int inputs, int outputs) {
+	return FeedForward<BLACKCAT_DEFAULT_SYSTEM_T,
+			typename BLACKCAT_DEFAULT_SYSTEM_T::default_floating_point_type>(inputs, outputs);
+}
+
+
 }
 }
 

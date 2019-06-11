@@ -18,7 +18,7 @@ struct Polymorphic_Allocator {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	using default_allocator_t = BC::allocator::implementation<system_tag, value_type>;
+	using default_allocator_t = BC::Allocator<system_tag, value_type>;
 
 private:
 

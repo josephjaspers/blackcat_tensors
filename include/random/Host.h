@@ -13,7 +13,8 @@
 namespace BC {
 namespace random {
 
-struct Host {
+template<>
+struct Random<host_tag> {
 	 template<typename T, typename value_type>
 	    static void randomize_kernel(T& tensor, value_type lower_bound, value_type upper_bound) {
 	 BC_omp_for__

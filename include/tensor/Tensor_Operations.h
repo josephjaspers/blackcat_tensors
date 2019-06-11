@@ -72,7 +72,7 @@ public:
         assert_valid(param);                                                                    	\
 		using operation = std::conditional_t<(derived::tensor_dimension >= pDeriv::tensor_dimension), 						\
     				oper::op_functor##_Assign, 														\
-    				oper::Atomic_##op_functor														\
+    				oper::Atomic_##op_functor<system_tag>														\
     	>;																							\
 		evaluate(bi_expr< operation >(param));                                						\
         return as_derived();                                                                    	\

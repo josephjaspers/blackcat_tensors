@@ -5,10 +5,12 @@
  *      Author: joseph
  */
 
-#ifndef CONVOLUTION_H_
-#define CONVOLUTION_H_
+#ifndef BLACKCAT_NEURALNETWORK_CONVOLUTION_H_
+#define BLACKCAT_NEURALNETWORK_CONVOLUTION_H_
 
+namespace BC {
 
+}
 
 
 

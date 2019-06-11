@@ -11,7 +11,8 @@
 namespace BC {
 namespace utility {
 
-struct Host {
+template<>
+struct Utility<host_tag> {
 
 	template<class T, class U, class V>
 	static void copy(T* to, U* from, V size) {

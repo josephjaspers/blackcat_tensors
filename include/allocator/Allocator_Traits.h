@@ -16,24 +16,28 @@ class host_tag;
 class device_tag;
 
 namespace allocator {
-namespace traits {
+namespace detail {
 
-template<class alloc, class enabler=void>
-struct system_tag_of : std::false_type {
-	using type = host_tag;
-};
+	template<class T>
+	using query_system_tag = typename T::system_tag;
 
-template<class alloc>
-struct system_tag_of<alloc, std::enable_if_t<!std::is_void<typename alloc::system_tag>::value>>
-: std::true_type {
-	using type = typename alloc::system_tag;
-};
+	template<class T>
+	using query_managed_memory = std::conditional_t<T::managed_memory,
+				std::true_type, std::false_type>;;
+
 
 }
 
+
 template<class Allocator>
 struct allocator_traits : std::allocator_traits<Allocator> {
-	using system_tag = typename traits::system_tag_of<Allocator>::type;
+	using system_tag =
+			typename BC::meta::conditional_detected<
+			detail::query_system_tag, Allocator, host_tag>::type;
+
+	static constexpr bool is_managed_memory =
+			BC::meta::conditional_detected<
+			detail::query_managed_memory, Allocator, std::false_type>::type::value;
 };
 
 }

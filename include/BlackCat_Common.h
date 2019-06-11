@@ -144,9 +144,7 @@ BC::meta::constexpr_if<conditional>([&]()
 // --------------------------------- module body macro --------------------------------- //
 
 
-#ifdef __CUDACC__	//------------------------------------------|
-
-#define BC_DEFAULT_MODULE_BODY(namespace_name)					\
+#define BC_DEFAULT_MODULE_BODY(namespace_name, class_name)		\
 																\
 namespace BC { 													\
 																\
@@ -155,36 +153,14 @@ class device_tag;												\
 																\
 namespace namespace_name {									   	\
 																\
-	template<class system_tag>									\
-	using implementation =										\
-			std::conditional_t<									\
-				std::is_same<host_tag, system_tag>::value,		\
-					Host,										\
-					Device>;									\
+	template<class SystemTag>									\
+	class class_name;											\
+																\
+	template<class SystemTag>									\
+	using implementation = class_name<SystemTag>;				\
 																\
 	}															\
 }
-
-#else
-
-#define BC_DEFAULT_MODULE_BODY(namespace_name)					 \
-																 \
-namespace BC { 													 \
-																 \
-class host_tag;													 \
-class device_tag;												 \
-																 \
-namespace namespace_name {										 \
-																 \
-	template<													 \
-		class system_tag,										 \
-		class=std::enable_if<std::is_same<system_tag, host_tag>::value> \
-	>															 \
-	using implementation = Host;								 \
-																 \
-	}															 \
-}
-#endif
 
 // --------------------------------- openmp macros --------------------------------- //
 

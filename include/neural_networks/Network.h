@@ -9,7 +9,6 @@
 #define NEURALNETWORK_H_
 
 #include <forward_list>
-
 #include "LayerChain.h"
 
 namespace BC {

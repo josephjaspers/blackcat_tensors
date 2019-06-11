@@ -13,7 +13,8 @@
 namespace BC {
 namespace blas {
 
-struct Device {
+template<>
+struct BLAS<device_tag> {
 
 	template<class Stream>
     static void gemm(Stream stream, bool transA, bool transB, BC::size_t  m, BC::size_t  n, BC::size_t  k,

@@ -15,28 +15,9 @@
 
 namespace BC {
 namespace meta {
-namespace numerics {
 
-
-template<class ValueType, int Value, int DecimalValue=0> struct Number {
-	using type = ValueType;
-	using value_type = ValueType;
-	static constexpr ValueType value = Value + (1/DecimalValue);
-
-	BCINLINE constexpr operator value_type() { return value; }
-};
-
-template<int Value, int DecimalValue>
-struct Double  : Number<double, Value, DecimalValue> {};
-
-template<int Value>
-struct Integer  : Number<int, Value, 0> {};
-
-}
-
-
-	template<class T>
-	static constexpr bool true_v = true;
+	template<class T> static constexpr bool true_v = true;
+	template<class T> static constexpr bool false_v= false;
 
 	template<class... Ts> using void_t = void;
 
@@ -45,14 +26,6 @@ struct Integer  : Number<int, Value, 0> {};
 
 	template<template<class> class func, class T>
 	struct is_detected<func, T, std::enable_if_t<true_v<func<T>>>> : std::true_type { };
-
-	template<class T, class U>
-	using propagate_const_t = std::conditional_t<std::is_const<T>::value,
-													std::conditional_t<std::is_const<U>::value, U, const U>,
-													U>;
-
-	template<class T>
-	using apply_const_t = std::conditional_t<std::is_const<T>::value, T, const T>;
 
 	template<template<class> class func, class T>
 	static constexpr bool is_detected_v = is_detected<func, T>::value;
@@ -65,8 +38,10 @@ struct Integer  : Number<int, Value, 0> {};
 	struct conditional_detected<func, TestType, DefaultType, std::enable_if_t<is_detected<func,TestType>::value>> {
 		using type = func<TestType>;
 	};
-	template<template<class> class func, class TestType, class DefaultType>
-	using conditional_detected_t = typename conditional_detected<func, TestType, DefaultType>::type;
+
+//	template<template<class> class func, class TestType, class DefaultType>
+//	using conditional_detected_t = typename conditional_detected<func, TestType, DefaultType>::type;
+
 
     BCINLINE static constexpr BC::size_t  max(int x) { return x; }
     BCINLINE static constexpr BC::size_t  min(int x) { return x; }
@@ -324,6 +299,10 @@ struct Integer  : Number<int, Value, 0> {};
 	T* auto_remove_const(const T* param) {
 		return const_cast<T*>(param);
 	}
+
+
+	template<class T>
+	using apply_const_t = std::conditional_t<std::is_const<T>::value, T, const T>;
 
 
 }

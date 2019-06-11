@@ -57,6 +57,11 @@ template<class SystemTag>
 auto outputlayer(SystemTag system_tag, int inputs) {
 	return OutputLayer<SystemTag, typename SystemTag::default_floating_point_type>(inputs);
 }
+auto outputlayer(int inputs) {
+	return OutputLayer<BLACKCAT_DEFAULT_SYSTEM_T,
+			typename BLACKCAT_DEFAULT_SYSTEM_T::default_floating_point_type>(inputs);
+}
+
 
 }
 }

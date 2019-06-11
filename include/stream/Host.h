@@ -15,8 +15,8 @@
 namespace BC {
 namespace stream {
 
-
-class Host {
+template<>
+class Stream<host_tag> {
 
 	struct Contents {
 		std::unique_ptr<HostEvent> m_event;
@@ -45,15 +45,13 @@ public:
     auto get_allocator_rebound() {
     	return typename allocator_t::template rebind<RebindType>::other(m_contents->m_workspace);
     }
-    auto set_blas_pointer_mode_host() {}
-    auto set_blas_pointer_mode_device() {}
+    void set_blas_pointer_mode_host() {}
+    void set_blas_pointer_mode_device() {}
 
-
-
-	 Host& get() {
+	 Stream& get() {
 		 return *this;
 	 }
-	 const Host& get() const {
+	 const Stream& get() const {
 		 return *this;
 	 }
 
@@ -79,7 +77,7 @@ public:
 		}
 	}
 
-	void set_stream(Host stream_) {
+	void set_stream(Stream stream_) {
 		this->m_contents = stream_.m_contents;
 	}
 
@@ -92,7 +90,7 @@ public:
     		locker.unlock();
     	}
     }
-    void wait_event(Host& stream) {
+    void wait_event(Stream& stream) {
     	if (!stream.is_default()) {
 			std::mutex locker;
 			locker.lock();
@@ -102,7 +100,7 @@ public:
     	}
 	}
 
-    void wait_stream(Host& stream) {
+    void wait_stream(Stream& stream) {
     	stream.record_event();
     	this->wait_event(stream);
     }
@@ -121,10 +119,10 @@ public:
 		push_job(functor);
 	}
 
-    bool operator == (const Host& dev) {
+    bool operator == (const Stream& dev) {
     	return m_contents == dev.m_contents;
     }
-    bool operator != (const Host& dev) {
+    bool operator != (const Stream& dev) {
     	return m_contents != dev.m_contents;
     }
 };

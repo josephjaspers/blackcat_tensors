@@ -15,7 +15,8 @@ namespace BC {
 namespace exprs {
 namespace blas_tools {
 
-struct Device : Common_Tools<Device> {
+template<>
+struct BLAS_Tools<device_tag> : Common_Tools<BLAS_Tools<device_tag>> {
 
 	template<class Stream, class Scalar, class... Scalars>
 	static void scalar_multiply(Stream stream, Scalar output, Scalars... vals) {

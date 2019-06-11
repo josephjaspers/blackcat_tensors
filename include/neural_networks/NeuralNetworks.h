@@ -9,10 +9,12 @@
 #ifndef BCNN_GLOBAL_UNIFIER_H_
 #define BCNN_GLOBAL_UNIFIER_H_
 
+#include "common.h"
 #include "Layers/FeedForward.h"
 #include "Layers/OutputLayer.h"
-#include "Layers/Logistic.h"
+//#include "Layers/Logistic.h"
 #include "Layers/UnaryFunction.h"
+#include "Layers/Nonlinear.h"
 #include "Network.h"
 
 #endif /* BCNN_GLOBAL_UNIFIER_H_ */

@@ -14,7 +14,7 @@
 
 namespace BC {
 namespace stream {
-struct Host;
+struct Stream<host_tag>;
 }
 }
 
@@ -37,7 +37,7 @@ struct Host;
             return std:: function (parameters...);\
         }\
 		template<class... args>\
-		static void function (BC::stream::Host stream, args... parameters){\
+		static void function (stream::Stream<host_tag> stream, args... parameters){\
 			stream.push_job([=](){ std:: function (parameters...); });\
 		}
 #endif
@@ -52,7 +52,9 @@ static auto function (args... parameters){ \
 
 namespace BC {
 namespace algorithms {
-struct Host {
+
+template<>
+struct Algorithm<host_tag> {
 
     //non-modifying sequences
 

@@ -33,7 +33,7 @@ int test_blas(int sz=128) {
 
 	using allocator_t = allocator<value_type>;
 	using system_tag = typename BC::allocator_traits<allocator_t>::system_tag;
-	using compare_allocator = BC::allocator::implementation<system_tag, value_type>;
+	using compare_allocator = BC::Allocator<system_tag, value_type>;
 	using blas = BC::blas::implementation<system_tag>;
 
 	using mat = BC::Matrix<value_type, allocator_t>;

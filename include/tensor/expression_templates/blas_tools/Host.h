@@ -10,11 +10,13 @@
 
 #include "Host_Impl.h"
 #include "Common.h"
+
 namespace BC {
 namespace exprs {
 namespace blas_tools {
 
-struct Host : Common_Tools<Host> {
+template<>
+struct BLAS_Tools<host_tag> : Common_Tools<BLAS_Tools<host_tag>> {
 
 	template<class Stream, class OutputScalar, class... Scalars>
 	static void scalar_multiply(Stream, OutputScalar& eval, Scalars... scalars) {

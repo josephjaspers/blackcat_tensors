@@ -20,7 +20,8 @@
 namespace BC {
 namespace evaluator {
 
-struct Device {
+template<>
+struct Evaluator<device_tag> {
 
 	 template<int Dimensions>
 	 struct nd_evaluator_func {

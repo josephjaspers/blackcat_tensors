@@ -53,7 +53,8 @@ struct evaluator_impl<0> {
 };
 
 
-struct Host {
+template<>
+struct Evaluator<host_tag> {
 
 	template<int Dimension, class Expression, class Stream>
 	static void nd_evaluator(Expression expression, Stream stream) {

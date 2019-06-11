@@ -8,10 +8,12 @@
 #ifndef BC_AGORITHMS_ALGORITHMS_H_
 #define BC_AGORITHMS_ALGORITHMS_H_
 
+
+BC_DEFAULT_MODULE_BODY(algorithms, Algorithm)
+
 #include "Device.h"
 #include "Host.h"
 
-BC_DEFAULT_MODULE_BODY(algorithms)
 
 namespace BC {
 
@@ -21,9 +23,7 @@ namespace BC {
     static auto function (iter_begin_ begin_, iter_end_ end_, args... params) {\
         using tensor_t = typename iter_end_::tensor_t;\
         using system_tag  = typename tensor_t::system_tag;\
-        using implementation = typename BC::algorithms::template implementation<system_tag>;\
-\
-        return implementation:: function (begin_, end_, params...);\
+        return algorithms::Algorithm<system_tag>:: function (begin_, end_, params...);\
     }\
 
 namespace alg {

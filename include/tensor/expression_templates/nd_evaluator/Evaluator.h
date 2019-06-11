@@ -8,10 +8,10 @@
 #ifndef EVALUATOR_H_
 #define EVALUATOR_H_
 
+BC_DEFAULT_MODULE_BODY(evaluator, Evaluator)
+
 #include "Device.cu"
 #include "Host.h"
-
-BC_DEFAULT_MODULE_BODY(evaluator)
 
 
 #endif /* EVALUATOR_H_ */

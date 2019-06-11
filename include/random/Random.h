@@ -9,9 +9,9 @@
 #ifndef BC_RANDOM_RANDOM_H_
 #define BC_RANDOM_RANDOM_H_
 
+BC_DEFAULT_MODULE_BODY(random, Random)
+
 #include "Host.h"
 #include "Device.h"
-
-BC_DEFAULT_MODULE_BODY(random)
 
 #endif /* RANDOM_H_ */

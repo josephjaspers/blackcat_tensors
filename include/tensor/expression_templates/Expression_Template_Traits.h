@@ -21,6 +21,15 @@ namespace detail {
 template<class T> using query_value_type = typename T::value_type;
 template<class T> using query_allocation_type = typename T::allocation_tag;
 template<class T> using query_system_tag = typename T::system_tag;
+template<class T> using query_copy_assignable =
+				std::conditional_t<T::copy_assignable, std::true_type, std::false_type>;
+template<class T> using query_copy_constructible =
+				std::conditional_t<T::copy_constructible, std::true_type, std::false_type>;
+template<class T> using query_move_assignable =
+				std::conditional_t<T::move_assignable, std::true_type, std::false_type>;
+template<class T> using query_move_constructible =
+				std::conditional_t<T::move_constructible, std::true_type, std::false_type>;
+
 
 template<class T>
 struct remove_scalar_mul {
@@ -112,11 +121,29 @@ struct expression_traits {
 	 using allocation_tag = typename BC::meta::conditional_detected<detail::query_allocation_type, T, system_tag>::type;
 	 using value_type	  = typename BC::meta::conditional_detected<detail::query_value_type, T, void>::type;
 
+// Causes 'catastrophic error' with NVCC. Compiles with GCC TODO change once NVCC fixes
+//	static constexpr bool is_move_constructible =
+//					BC::meta::conditional_detected<
+//						detail::query_move_constructible, T, std::false_type>::type::value;
+//
+//	static constexpr bool is_copy_constructible =
+//					BC::meta::conditional_detected<
+//						detail::query_copy_constructible, T, std::false_type>::type::value;
+//
+//	static constexpr bool is_move_assignable 	=
+//					BC::meta::conditional_detected<
+//						detail::query_move_assignable, T, std::false_type>::type::value;
+//
+//	static constexpr bool is_copy_assignable 	=
+//					BC::meta::conditional_detected<
+//						detail::query_copy_assignable, T, std::false_type>::type::value;
 
 	static constexpr bool is_move_constructible = T::move_constructible;
 	static constexpr bool is_copy_constructible = T::copy_constructible;
 	static constexpr bool is_move_assignable 	= T::move_assignable;
 	static constexpr bool is_copy_assignable 	= T::copy_assignable;
+
+
 
 	 static constexpr bool is_bc_type  	 = std::is_base_of<BC_Type, T>::value;
 	 static constexpr bool is_array  	 = std::is_base_of<BC_Array, T>::value;

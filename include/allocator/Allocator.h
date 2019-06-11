@@ -18,19 +18,14 @@ namespace allocator {
 
 class Byte {};
 
-#ifdef __CUDACC__
-template<class SystemTag, class ValueType>
-using implementation = std::conditional_t<std::is_same<host_tag, SystemTag>::value, Host<ValueType>, Device<ValueType>>;
-#else
-template<class SystemTag, class ValueType>
-using implementation = std::conditional_t<std::is_same<host_tag, SystemTag>::value, Host<ValueType>, void>;
-#endif
-
 }
 
-//Push allocator_traits into the BC namespace
 template<class Allocator_Type>
 using allocator_traits = allocator::allocator_traits<Allocator_Type>;
+
+template<class value_type>
+using Basic_Allocator = allocator::Host<value_type>;
+
 
 #ifdef __CUDACC__
 template<class value_type>
@@ -38,20 +33,26 @@ using Cuda_Allocator = allocator::Device<value_type>;
 
 template<class value_type>
 using Cuda_Managed = allocator::Device_Managed<value_type>;
-#endif
-
-template<class value_type>
-using Basic_Allocator = allocator::Host<value_type>;
 
 template<class system_tag, class value_type>
-using Allocator = BC::allocator::implementation<system_tag, value_type>;
+using Allocator = std::conditional_t<std::is_same<system_tag, host_tag>::value,
+										Basic_Allocator<value_type>, Cuda_Allocator<value_type>>;
 
-} //ns BC
+#else
+template<class system_tag, class value_type>
+using Allocator = Basic_Allocator<
+		std::enable_if_t<
+			std::is_same<system_tag, host_tag>::value,
+			value_type>>;
+
+#endif
+
+
+
+} //end of namespace BC
 
 // --- Include "fancy allocators" below here --- //
-// Fancy allocators are included below as they more depend upon the
-//	 default allocator and/or BC::Allocator_Traits
-
+//	 Fancy Allocators depend on allocators_traits/basic_allocator
 #include "fancy/Polymorphic_Allocator.h"
 #include "fancy/Workspace.h"
 
