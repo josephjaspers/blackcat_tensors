@@ -14,21 +14,18 @@ namespace BC {
 namespace exprs {
 namespace tree {
 
-
-template<class tensor_core, int alpha_modifier_ = 1, int beta_modifier_= 0>
+template<class Tensor, int alpha_modifier_ = 1, int beta_modifier_= 0>
 struct injector {
 
-	static constexpr BC::size_t  ALPHA = alpha_modifier_;
-	static constexpr BC::size_t  BETA = beta_modifier_;
-    injector(tensor_core& array_) : array(array_) {}
+	static constexpr size_t ALPHA = alpha_modifier_;
+	static constexpr size_t BETA = beta_modifier_;
 
-    tensor_core array;
+	injector(Tensor& array_) : array(array_) {}
 
-    operator const tensor_core& () const { return array; }
-    operator       tensor_core& ()       { return array; }
+    Tensor array;
 
-    const tensor_core& data() const { return array; }
-          tensor_core& data()       { return array; }
+    const Tensor& data() const { return array; }
+          Tensor& data()       { return array; }
 };
 
 //entirely_blas_expr -- detects if the tree is entirely +/- operations with blas functions, --> y = a * b + c * d - e * f  --> true, y = a + b * c --> false

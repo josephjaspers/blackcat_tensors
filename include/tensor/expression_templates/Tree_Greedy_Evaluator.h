@@ -40,107 +40,83 @@
 namespace BC {
 namespace exprs {
 namespace tree {
-namespace detail {
-
-template<class expression_t, class voider=void>
-struct temporary_evaluator;
-
-template<class expression_t>
-struct temporary_evaluator<expression_t, std::enable_if_t<!optimizer<expression_t>::requires_greedy_eval>> {
-	template<class Allocator>
-	static auto evaluate_temporaries(expression_t expression, Allocator& alloc) {
-		return expression;
-	}
-};
-
-template<class expression_t>
-struct temporary_evaluator<expression_t, std::enable_if_t<optimizer<expression_t>::requires_greedy_eval>> {
-	template<class Allocator>
-	static auto evaluate_temporaries(expression_t expression, Allocator& alloc) {
-		auto expr = optimizer<expression_t>::template temporary_injection(expression, alloc);
-		return temporary_evaluator<std::decay_t<decltype(expr)>>::evaluate_temporaries(expr, alloc);
-	}
-};
-
-template<class expression_t, class Allocator>
-static auto evaluate_temporaries(expression_t expression, Allocator& alloc) {
-	return temporary_evaluator<expression_t>::evaluate_temporaries(expression, alloc);
-}
-
-
-} //ns detail
-
 namespace evaluator_paths {
 /*
  * These overloads determine the initial alpha and beta modifiers.
  * (The integer template values of the 'injector' class)
  */
 
-
-template<class lv, class rv, class Allocator, class=std::enable_if_t<!optimizer<rv>::entirely_blas_expr>>
-static  auto evaluate(Binary_Expression<lv, rv, oper::Add_Assign> expression, Allocator& alloc) {
-	auto right = optimizer<rv>::linear_evaluation(expression.right, injector<lv, 1, 1>(expression.left), alloc);
-	return make_bin_expr<oper::Add_Assign>(expression.left, detail::evaluate_temporaries(right, alloc));
+template<class expression_t, class SystemTag>
+static auto evaluate_temporaries(expression_t expression, BC::Stream<SystemTag>& stream) {
+	return BC::meta::constexpr_if<optimizer<expression_t>::requires_greedy_eval>([&]() {
+		return optimizer<expression_t>::template temporary_injection(expression, stream);
+	}, [&]() {
+		return expression;
+	});
 }
-
-template<class lv, class rv, class Allocator, class=std::enable_if_t<!optimizer<rv>::entirely_blas_expr>>
-static auto evaluate(Binary_Expression<lv, rv, oper::Sub_Assign> expression, Allocator& alloc) {
-	auto right = optimizer<rv>::linear_evaluation(expression.right, injector<lv, -1, 1>(expression.left), alloc);
-	return make_bin_expr<oper::Sub_Assign>(expression.left, detail::evaluate_temporaries(right, alloc));
-}
-
-template<class lv, class rv, class Allocator, class=std::enable_if_t<optimizer<rv>::entirely_blas_expr>, int V2=0>
-static  auto evaluate(Binary_Expression<lv, rv, oper::Add_Assign> expression, Allocator& alloc) {
-	optimizer<rv>::linear_evaluation(expression.right, injector<lv, 1, 1>(expression.left), alloc);
-	return expression.left;
-}
-
-template<class lv, class rv, class Allocator, class=std::enable_if_t<optimizer<rv>::entirely_blas_expr>, int V2=0>
-static auto evaluate(Binary_Expression<lv, rv, oper::Sub_Assign> expression, Allocator& alloc) {
-	optimizer<rv>::linear_evaluation(expression.right, injector<lv, -1, 1>(expression.left), alloc);
-	return expression.left;
-}
-
-template<class lv, class rv, class Allocator, class=std::enable_if_t<!optimizer<rv>::partial_blas_expr && !optimizer<rv>::entirely_blas_expr>>
-static auto evaluate(Binary_Expression<lv, rv, oper::Assign> expression, Allocator& alloc) {
-	auto right = optimizer<rv>::injection(expression.right, injector<lv, 1, 0>(expression.left), alloc);
-	return make_bin_expr<oper::Assign>(expression.left, detail::evaluate_temporaries(right, alloc));
-}
-template<class lv, class rv, class Allocator, class=std::enable_if_t<optimizer<rv>::entirely_blas_expr>, int=0>
-static auto evaluate(Binary_Expression<lv, rv, oper::Assign> expression, Allocator& alloc) {
-	optimizer<rv>::linear_evaluation(expression.right, injector<lv, 1, 0>(expression.left), alloc);
-	return expression.left;
-}
-
-template<class lv, class rv, class Allocator, class=std::enable_if_t<optimizer<rv>::partial_blas_expr  && !optimizer<rv>::entirely_blas_expr>, int=0,int=0>
-static auto evaluate(Binary_Expression<lv, rv, oper::Assign> expression, Allocator& alloc) {
-	auto right = optimizer<rv>::linear_evaluation(expression.right, injector<lv, 1, 0>(expression.left), alloc);
-	return make_bin_expr<oper::Add_Assign>(expression.left, detail::evaluate_temporaries(right, alloc));
-}
-
 
 template<
 	class lv,
 	class rv,
-	class Allocator,
-	class assignment_oper,
-	class=std::enable_if_t<BC::oper::operation_traits<assignment_oper>::is_assignment_operation>
->
-static auto evaluate(Binary_Expression<lv, rv, assignment_oper> expression, Allocator& alloc) {
-	auto right_eval =  optimizer<rv>::temporary_injection(expression.right,  alloc);
-	return make_bin_expr<assignment_oper>(expression.left, right_eval);
+	class SystemTag,
+	class Op,
+	class=std::enable_if_t<BC::oper::operation_traits<Op>::is_linear_assignment_operation>> // += or -=
+static  auto evaluate(Binary_Expression<lv, rv, Op> expression, BC::Stream<SystemTag> stream) {
+	static constexpr bool entirely_blas_expression = optimizer<rv>::entirely_blas_expr; // all operations are +/- blas calls
+	static constexpr int alpha_mod = BC::oper::operation_traits<Op>::alpha_modifier;
+	static constexpr int beta_mod = BC::oper::operation_traits<Op>::beta_modifier;
 
+	return BC::meta::constexpr_ternary<entirely_blas_expression>([&]() {
+		optimizer<rv>::linear_evaluation(expression.right, injector<lv, alpha_mod, beta_mod>(expression.left), stream);
+		return expression.left;
+	}, [&]() {
+		auto right = optimizer<rv>::linear_evaluation(expression.right, injector<lv, alpha_mod, beta_mod>(expression.left), stream);
+		return make_bin_expr<Op>(expression.left, evaluate_temporaries(right, stream));
+	});
 }
 
-template<class lv, class rv, class op, class Allocator>
-static auto evaluate_aliased(Binary_Expression<lv, rv, op> expression, Allocator& alloc) {
-	auto right = optimizer<rv>::temporary_injection(expression.right, alloc);
+template<
+	class lv,
+	class rv,
+	class SystemTag>
+static  auto evaluate(Binary_Expression<lv, rv, oper::Assign> expression, BC::Stream<SystemTag> stream) {
+	static constexpr int alpha_mod = BC::oper::operation_traits<oper::Assign>::alpha_modifier; //1
+	static constexpr int beta_mod = BC::oper::operation_traits<oper::Assign>::beta_modifier;   //0
+	auto right = optimizer<rv>::injection(expression.right, injector<lv, alpha_mod, beta_mod>(expression.left), stream);
+
+	return BC::meta::constexpr_if<optimizer<rv>::partial_blas_expr && !optimizer<rv>::entirely_blas_expr>([&]() {
+		return make_bin_expr<oper::Add_Assign>(expression.left, evaluate_temporaries(right, stream));
+
+	}, BC::meta::constexpr_else_if<optimizer<rv>::entirely_blas_expr>([&]() {
+		return expression.left;
+
+	}, [&]() { //else !optimizer<rv>::partial_blas_expr && !optimizer<rv>::entirely_blas_expr
+		return make_bin_expr<oper::Assign>(expression.left, evaluate_temporaries(right, stream));
+	}));
+}
+
+template<
+	class lv,
+	class rv,
+	class SystemTag,
+	class assignment_oper,
+	class=std::enable_if_t<!BC::oper::operation_traits<assignment_oper>::is_linear_assignment_operation>,
+	int ADL=0
+>
+static auto evaluate(Binary_Expression<lv, rv, assignment_oper> expression, BC::Stream<SystemTag> stream) {
+	auto right_eval =  optimizer<rv>::temporary_injection(expression.right,  stream);
+	return make_bin_expr<assignment_oper>(expression.left, right_eval);
+}
+
+template<class lv, class rv, class op, class SystemTag>
+static auto evaluate_aliased(Binary_Expression<lv, rv, op> expression, BC::Stream<SystemTag> stream) {
+	auto right = evaluate_temporaries(expression.right, stream);
 	return make_bin_expr<op>(expression.left, right);
 }
 
-template<class expression, class Allocator>
-static void deallocate_temporaries(expression expr, Allocator& alloc) {
-	optimizer<expression>::deallocate_temporaries(expr, alloc);
+template<class expression, class SystemTag>
+static void deallocate_temporaries(expression expr, BC::Stream<SystemTag>& stream) {
+	optimizer<expression>::deallocate_temporaries(expr, stream);
 }
 
 } //ns evaluator_paths
