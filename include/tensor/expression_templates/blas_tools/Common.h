@@ -53,7 +53,7 @@ struct Common_Tools {
 								[&](){
 									return make_scalar_constant<BC::host_tag, Scalar_t>(alpha_mod * lv[0] * rv[0]);
 								},[&](){
-									auto tmp_scalar =  make_temporary_scalar<Scalar_t>(stream);
+									auto tmp_scalar =  make_temporary_kernel_scalar<Scalar_t>(stream);
 									derived::scalar_multiply(stream, tmp_scalar, alpha_mod, lv, rv);
 									return tmp_scalar;
 								});
@@ -64,7 +64,7 @@ struct Common_Tools {
 									[&](){
 										return make_scalar_constant<BC::host_tag, Scalar_t>(alpha_mod * lv[0]);
 									},[&](){
-										auto tmp_scalar =  make_temporary_scalar<Scalar_t>(stream);
+										auto tmp_scalar =  make_temporary_kernel_scalar<Scalar_t>(stream);
 										derived::scalar_multiply(stream, tmp_scalar, alpha_mod, lv);
 										return tmp_scalar;
 									});
@@ -73,7 +73,7 @@ struct Common_Tools {
 									[&](){
 										return make_scalar_constant<BC::host_tag, Scalar_t>(alpha_mod * rv[0]);
 									},[&](){
-										auto tmp_scalar =  make_temporary_scalar<Scalar_t>(stream);
+										auto tmp_scalar =  make_temporary_kernel_scalar<Scalar_t>(stream);
 										derived::scalar_multiply(stream, tmp_scalar, alpha_mod, rv);
 										return tmp_scalar;
 									});

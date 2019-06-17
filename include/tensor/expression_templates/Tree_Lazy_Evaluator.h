@@ -73,7 +73,7 @@ template<class Expression, class Stream, class=std::enable_if_t<expression_trait
 static auto greedy_evaluate(Expression expression, Stream stream) {
 	using value_type = typename Expression::value_type;
 	auto shape = BC::make_shape(expression.inner_shape());
-	auto temporary = make_temporary_tensor_array<value_type>(shape, stream);
+	auto temporary = make_temporary_kernel_array<value_type>(shape, stream);
 	return greedy_evaluate(temporary, expression, stream);
 }
 

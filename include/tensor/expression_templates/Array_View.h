@@ -19,13 +19,13 @@ namespace exprs {
 
 template<int Dimension, class Scalar, class Allocator>
 struct Array_Const_View
-		: ArrayExpression<Dimension,
+		: KernelArray<Dimension,
 						  Scalar,
 						  typename BC::allocator_traits<Allocator>::system_tag, BC_Noncontinuous> {
 
 	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
 	using stream_type = BC::Stream<system_tag>;
-	using parent =  ArrayExpression<Dimension, Scalar, system_tag, BC_Noncontinuous>;
+	using parent =  KernelArray<Dimension, Scalar, system_tag, BC_Noncontinuous>;
 
     static constexpr bool copy_constructible = true;
     static constexpr bool move_constructible = true;

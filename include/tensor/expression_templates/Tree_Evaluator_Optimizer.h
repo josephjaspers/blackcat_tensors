@@ -70,7 +70,7 @@ struct optimizer<Array, std::enable_if_t<expression_traits<Array>::is_temporary>
 
 	template<class Stream>
     static void deallocate_temporaries(Array tmp, Stream alloc) {
-        destroy_temporary_tensor_array(tmp, alloc);
+        destroy_temporary_kernel_array(tmp, alloc);
     }
 };
 
@@ -102,7 +102,7 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
     template<class Stream>
     static auto temporary_injection(Binary_Expression<lv, rv, op> branch, Stream alloc) {
     	using value_type = typename Binary_Expression<lv, rv, op>::value_type;
-    	auto temporary = make_temporary_tensor_array<value_type>(make_shape(branch.inner_shape()), alloc);
+    	auto temporary = make_temporary_kernel_array<value_type>(make_shape(branch.inner_shape()), alloc);
         branch.eval(make_injection<1, 0>(temporary), alloc);
         return temporary;
     }

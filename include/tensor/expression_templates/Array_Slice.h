@@ -15,11 +15,11 @@ namespace BC {
 namespace exprs {
 
 template<int Dimensions, class ValueType, class Allocator, class... Tags>
-struct Array_Slice : ArrayExpression<Dimensions, ValueType, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
+struct Array_Slice : KernelArray<Dimensions, ValueType, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
 
 	using allocator_t 	 = Allocator;
 	using stream_t 	 = BC::Stream<typename BC::allocator_traits<Allocator>::system_tag>;
-	using parent = ArrayExpression<Dimensions, ValueType, typename BC::allocator_traits<Allocator>::system_tag, Tags...>;
+	using parent = KernelArray<Dimensions, ValueType, typename BC::allocator_traits<Allocator>::system_tag, Tags...>;
 
 public:
 
