@@ -17,10 +17,10 @@
 namespace BC {
 namespace exprs {
 
-template<class Value, class operation>
-struct Unary_Expression : public Expression_Base<Unary_Expression<Value, operation>>, public operation {
+template<class Value, class Operation>
+struct Unary_Expression : public Expression_Base<Unary_Expression<Value, Operation>>, public Operation {
 
-    using return_type  = decltype(std::declval<operation>()(std::declval<typename Value::value_type>()));
+    using return_type  = decltype(std::declval<Operation>()(std::declval<typename Value::value_type>()));
     using value_type  = std::remove_reference_t<std::decay_t<return_type>>;
 
     using system_tag  = typename Value::system_tag;
@@ -30,24 +30,28 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Value, operati
 
     Value array;
 
+    Operation get_operation() const {
+    	return static_cast<const Operation&>(*this);
+    }
+
     template<class... args> BCINLINE
     Unary_Expression(Value v, const args&... args_)
-    : operation(args_...) , array(v) {}
+    : Operation(args_...) , array(v) {}
 
     BCINLINE auto operator [](int index) const {
-        return operation::operator()(array[index]);
+        return Operation::operator()(array[index]);
     }
     template<class... integers> BCINLINE
     auto operator ()(integers... index) const {
-        return operation::operator()(array(index...));
+        return Operation::operator()(array(index...));
     }
 
     BCINLINE auto operator [](int index) {
-        return operation::operator()(array[index]);
+        return Operation::operator()(array[index]);
     }
     template<class... integers> BCINLINE
     auto operator ()(integers... index) {
-        return operation::operator()(array(index...));
+        return Operation::operator()(array(index...));
     }
 
     BCINLINE const auto inner_shape() const { return array.inner_shape(); }

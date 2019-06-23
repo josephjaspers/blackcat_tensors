@@ -10,7 +10,7 @@
 #define BC_EXPRESSION_TEMPLATES_FUNCTION_GER_H_
 
 #include "Expression_Template_Base.h"
-#include "Tree_Lazy_Evaluator.h"
+#include "Tree_Evaluator.h"
 #include "Array_Scalar_Constant.h"
 #include "blas_tools/Blas_tools.h"
 
@@ -52,7 +52,7 @@ struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
 
 
 	template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class Stream>
-	void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, Stream& stream) const {
+	void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream& stream) const {
 		auto& injection = injection_values.data();
 
         //if we need to negate or zero the output

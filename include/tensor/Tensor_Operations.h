@@ -9,6 +9,8 @@
 #ifndef BLACKCAT_TENSOR_OPERATIONS_H_
 #define BLACKCAT_TENSOR_OPERATIONS_H_
 
+#include "expression_templates/Tree_Evaluator.h"
+
 namespace BC {
 
 template<class>

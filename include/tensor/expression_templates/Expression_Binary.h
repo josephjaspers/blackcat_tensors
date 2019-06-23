@@ -31,6 +31,10 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
     Lv left;
     Rv right;
 
+    Operation get_operation() const {
+    	return static_cast<const Operation&>(*this);
+    }
+
     template<class... args> BCHOT
     Binary_Expression(Lv l, Rv r, const args&... args_):
     Operation(args_...), left(l), right(r) {}

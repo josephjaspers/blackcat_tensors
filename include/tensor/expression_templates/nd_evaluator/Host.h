@@ -65,45 +65,6 @@ struct Evaluator<host_tag> {
 	}
 
 
-	//!!!!ScalarOutput should be a TensorBase type
-	template<int Dimension, class ScalarOutput, class Expression, class Stream>
-	static std::future<ScalarOutput> reduce_sum(ScalarOutput scalar, Expression expression, Stream stream) {
-		std::promise<ScalarOutput>* promise = new std::promise<ScalarOutput>();
-
-		auto job = [=]() {
-			scalar.internal()[0] = evaluator_impl<Dimension>::sum(expression);
-			promise->set_value(scalar);
-			delete promise;
-		};
-
-		stream.push_job(job);
-		return promise->get_future();
-	}
-	template<int Dimension, class ScalarOutput, class Expression, class Stream>
-	static std::future<ScalarOutput> reduce_prod(ScalarOutput scalar, Expression expression, Stream stream) {
-		std::promise<ScalarOutput>* promise = new std::promise<ScalarOutput>();
-
-		auto job = [=]() {
-			scalar.internal()[0] = evaluator_impl<Dimension>::sum(expression);
-			promise->set_value(scalar);
-			delete promise;
-		};
-		stream.push_job(job);
-		return promise->get_future();
-	}
-	template<int Dimension, class ScalarOutput, class Expression, class Stream>
-	static std::future<ScalarOutput> reduce_mean(ScalarOutput scalar, Expression expression, Stream stream) {
-		std::promise<ScalarOutput>* promise = new std::promise<ScalarOutput>();
-
-		auto job = [=]() {
-			scalar.internal()[0] = evaluator_impl<Dimension>::sum(expression) / expression.size();
-			promise->set_value(scalar);
-			delete promise;
-		};
-		stream.push_job(job);
-		return promise->get_future();
-	}
-
 };
 }
 }

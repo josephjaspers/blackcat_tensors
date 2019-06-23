@@ -23,6 +23,6 @@
 #include "Function_gemv.h"
 #include "Function_gemm.h"
 
-#include "Tree_Lazy_Evaluator.h"
+#include "Tree_Evaluator.h"
 
 #endif /* EXPRESSION_TEMPLATES_H_ */

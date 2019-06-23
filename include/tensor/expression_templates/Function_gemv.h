@@ -10,7 +10,7 @@
 #define BC_EXPRESSION_TEMPLATES_FUNCTION_GEMV_H_
 
 #include "Expression_Template_Base.h"
-#include "Tree_Lazy_Evaluator.h"
+#include "Tree_Evaluator.h"
 #include "blas_tools/Blas_tools.h"
 
 
@@ -55,7 +55,7 @@ struct Binary_Expression<lv, rv, oper::gemv<System_Tag>>
     BCINLINE const auto block_shape() const { return make_lambda_array<tensor_dimension>([&](int i) { return i == 0 ? rows() : 1; });}
 
     template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class allocator>
-    void eval(tree::injector<core, alpha_mod, beta_mod> injection_values, allocator& alloc) const {
+    void eval(injector<core, alpha_mod, beta_mod> injection_values, allocator& alloc) const {
 
 		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
 		auto& injection = injection_values.data();

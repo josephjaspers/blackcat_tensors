@@ -55,6 +55,16 @@ public:
 		m_memptr = nullptr;
 	}
 
+	size_t available_bytes() const {
+		 return m_memptr_sz - m_curr_index;
+	}
+	size_t allocated_bytes() const {
+		 return m_curr_index;
+	}
+	size_t reserved_bytes() const {
+		 return m_memptr_sz;
+	}
+
 	template<class Allocator>
 	void set_allocator(Allocator alloc) {
 		BC_ASSERT(m_curr_index==0,
@@ -126,8 +136,18 @@ public:
 	Workspace(const Workspace&)=default;
 	Workspace(Workspace&&)=default;
 
-	void reserve(std::size_t sz)  { ws_ptr.get()->reserve(sz); }
-	void free() { ws_ptr.get()->free(); }
+	void reserve(std::size_t sz)  { ws_ptr->reserve(sz); }
+	void free() { ws_ptr->free(); }
+
+	size_t available_bytes() const {
+		 return ws_ptr->available_bytes();
+	}
+	size_t allocated_bytes() const {
+		 return ws_ptr->allocated_bytes();
+	}
+	size_t reserved_bytes() const {
+		 return ws_ptr->reserved_bytes();
+	}
 
 	template<class Allocator>
 	void set_allocator(Allocator alloc) {

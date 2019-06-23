@@ -12,7 +12,6 @@
 
 namespace BC {
 namespace exprs {
-namespace tree {
 
 template<class Tensor, int alpha_modifier_ = 1, int beta_modifier_= 0>
 struct injector {
@@ -42,7 +41,6 @@ auto make_injection(core c) {
 }
 
 
-}
 }
 }
 
