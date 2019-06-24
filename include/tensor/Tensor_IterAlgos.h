@@ -59,9 +59,9 @@ public:
 	   static_assert(internal_t::tensor_iterator_dimension == 0 || internal_t::tensor_iterator_dimension == 1,
 			   	   	   "randomize not available to non-continuous tensors");
 
-	   using impl = random::implementation<system_tag>;
+	   using Random = BC::random::Random<system_tag>;
 	   //Note!! functions and BLAS calls use get_stream, iteralgos use get_stream
-	   impl::randomize(this->as_derived().get_stream(), this->as_derived().internal(), lb, ub);
+	   Random::randomize(this->as_derived().get_stream(), this->as_derived().internal(), lb, ub);
    }
 
 	//------------------------multidimension_iterator------------------------//

@@ -27,19 +27,21 @@ struct Random<device_tag> {
 
 			bc_curandState_t() {
 				BC_CUDA_ASSERT((cudaMalloc((void**) &state, sizeof(curandState_t))));
+				device_impl::bc_curand_init<<<1,1>>>(state);
+				cudaDeviceSynchronize();
 			}
 			~bc_curandState_t() {
 		    	BC_CUDA_ASSERT((cudaFree((void*)state)));
 			}
 		};
-		bc_curandState_t bc_state;
+		thread_local bc_curandState_t bc_state;
 		return bc_state.state;
 	}
 
     template<class Stream, typename T>
     static void randomize(Stream stream, T t, float lower_bound, float upper_bound) {
     	device_impl::randomize<<<blocks(t.size()),threads(), 0, stream>>>(
-    			bc_curand_state(), t, lower_bound, upper_bound, std::rand());
+    			bc_curand_state(), t, lower_bound, upper_bound);
     }
 };
 

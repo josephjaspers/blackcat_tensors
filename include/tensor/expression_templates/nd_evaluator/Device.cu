@@ -75,11 +75,11 @@ struct Evaluator<device_tag> {
 	};
 
 	template<int dimensions, class Expression>
-	static void nd_evaluator(Expression expression) {
+	static void nd_evaluate(Expression expression) {
 		nd_evaluator_func<dimensions>::eval(expression);
 	}
 	template<int dimensions, class Expression, class Stream>
-	static void nd_evaluator(Expression expression, Stream stream) {
+	static void nd_evaluate(Expression expression, Stream stream) {
 		nd_evaluator_func<dimensions>::eval(expression, stream);
 	}
 

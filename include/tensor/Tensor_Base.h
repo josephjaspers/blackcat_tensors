@@ -101,18 +101,6 @@ public:
         this->deallocate();
     }
 
-
-//
-//    //template<int=0> is to ensure ADL occur
-//    template<int=0>
-//    auto get_stream() {
-//    	return this->get_stream().get_stream();
-//    }
-//    template<int=0>
-//    auto get_stream() const {
-//        return this->get_stream().get_stream();
-//    }
-
 private:
 
     parent& as_parent() {

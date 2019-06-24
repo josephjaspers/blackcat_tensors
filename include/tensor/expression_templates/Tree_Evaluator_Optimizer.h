@@ -298,13 +298,13 @@ struct optimizer<Unary_Expression<array_t, op>>
     template<class core, int a, int b, class Stream>
     static auto injection(Unary_Expression<array_t, op> branch, injector<core, a, b> tensor, Stream alloc) {
         auto array =  optimizer<array_t>::injection(branch.array, tensor, alloc);
-        return Unary_Expression<decltype(array), op>(array, branch.get_operation());
+        return make_un_expr(array, branch.get_operation());
     }
 
     template<class Stream>
     static auto temporary_injection(Unary_Expression<array_t, op> branch, Stream& alloc) {
     	auto expr = optimizer<array_t>::template temporary_injection<Stream>(branch.array, alloc);
-    	return Unary_Expression<std::decay_t<decltype(expr)>, op>(expr, branch.get_operation());
+    	return make_un_expr(expr, branch.get_operation());
 
     }
     template<class Stream>

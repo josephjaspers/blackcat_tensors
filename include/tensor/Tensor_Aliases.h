@@ -55,15 +55,14 @@ template<class value_type, class allocator_t = alloc_t<value_type>> using Vector
 template<class value_type, class allocator_t = alloc_t<value_type>> using Matrix_View = Tensor_View<2, value_type, allocator_t>;
 template<class value_type, class allocator_t = alloc_t<value_type>> using Cube_View   = Tensor_View<3, value_type, allocator_t>;
 
-namespace expr {
 template<int x, class iterator_t, typename = std::enable_if_t<iterator_t::tensor_dimension == x>>
 using tensor = Tensor_Base<iterator_t>;
 
-template<class iterator_t> using scal = tensor<0, iterator_t>;
-template<class iterator_t> using vec  = tensor<1, iterator_t>;
-template<class iterator_t> using mat  = tensor<2, iterator_t>;
-template<class iterator_t> using cube = tensor<3, iterator_t>;
-}
+template<class iterator_t> using ScalarXpr = tensor<0, iterator_t>;
+template<class iterator_t> using VectorXpr = tensor<1, iterator_t>;
+template<class iterator_t> using MatrixXpr = tensor<2, iterator_t>;
+template<class iterator_t> using CubeXpr = tensor<3, iterator_t>;
+
 }
 
 #endif /* TENSOR_ALIASES_H_ */

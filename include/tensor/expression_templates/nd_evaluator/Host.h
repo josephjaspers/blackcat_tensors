@@ -57,7 +57,7 @@ template<>
 struct Evaluator<host_tag> {
 
 	template<int Dimension, class Expression, class Stream>
-	static void nd_evaluator(Expression expression, Stream stream) {
+	static void nd_evaluate(Expression expression, Stream stream) {
 		auto job = [=]() {
 			evaluator_impl<Dimension>::impl(expression);
 		};

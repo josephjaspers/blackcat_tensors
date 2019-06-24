@@ -104,12 +104,18 @@ struct Common_Tools {
 
 	template<int alpha_mod, int beta_mod, class Stream, class Lv, class Rv>
 	static auto parse_expression(Stream stream, Lv left, Rv right) {
+		/*
+		 *	Strips transposition and scalar-multiplied from and left and right,
+		 *	returns a 'contents' object. --
+		 *
+		 *	If left/right is/are transposed, calling 'dimensions(0), rows(), cols()'
+		 *	will return the non-transposed dimensions/rows/cols. Ergo- you should use the original parameters
+		 *	to access the shape of the returned value.
+		 */
+
 	    static constexpr bool lv_scalar = blas_expression_traits<Lv>::is_scalar_multiplied;
 	    static constexpr bool rv_scalar = blas_expression_traits<Rv>::is_scalar_multiplied;
 	    using value_type = typename Lv::value_type;
-
-		auto left_ = greedy_evaluate(blas_expression_traits<Lv>::remove_blas_modifiers(left), stream);
-	    auto right_ = greedy_evaluate(blas_expression_traits<Rv>::remove_blas_modifiers(right), stream);
 
 	    auto alpha_lv = blas_expression_traits<Lv>::get_scalar(left);
 		auto alpha_rv = blas_expression_traits<Rv>::get_scalar(right);
@@ -117,10 +123,13 @@ struct Common_Tools {
 		auto alpha_ = calculate_alpha<value_type, alpha_mod, lv_scalar, rv_scalar>(stream, alpha_lv, alpha_rv);
 	    auto beta_  = make_constexpr_scalar<typename expression_traits<decltype(alpha_)>::allocation_tag, beta_mod, value_type>();//blas_impl::template scalar_constant<value_type, beta_mod>();
 
-	    using left_t = std::remove_reference_t<decltype(left_)>;
-	    using right_t = std::remove_reference_t<decltype(right_)>;
-	    using alpha_t = std::remove_reference_t<decltype(alpha_)>;
-	    using beta_t = std::remove_reference_t<decltype(beta_)>;
+		auto left_ = greedy_evaluate(blas_expression_traits<Lv>::remove_blas_modifiers(left), stream);
+	    auto right_ = greedy_evaluate(blas_expression_traits<Rv>::remove_blas_modifiers(right), stream);
+
+	    using left_t = std::decay_t<decltype(left_)>;
+	    using right_t = std::decay_t<decltype(right_)>;
+	    using alpha_t = std::decay_t<decltype(alpha_)>;
+	    using beta_t = std::decay_t<decltype(beta_)>;
 
 	    return contents<
 	    		left_t,

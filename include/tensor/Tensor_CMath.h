@@ -116,7 +116,7 @@ BLACKCAT_MATH_DEF( Rint , rint )
 BLACKCAT_MATH_DEF( Round , round )
 BLACKCAT_MATH_DEF( Scalbln , scalbln )
 BLACKCAT_MATH_DEF( Scalbn , scalbn )
-BLACKCAT_MATH_DEF( Sin , sin, DERIVATIVE_DEF(cos(x)));
+BLACKCAT_MATH_DEF( Sin , sin, DERIVATIVE_DEF(std::cos(x)));
 BLACKCAT_MATH_DEF( Sinh , sinh )
 BLACKCAT_MATH_DEF( Sqrt , sqrt )
 BLACKCAT_MATH_DEF( Tan , tan )
@@ -131,7 +131,7 @@ BLACKCAT_FUNCTOR_DEF(Pow2, pow2, (std::pow(x, 2)), DERIVATIVE_DEF(2));
 BLACKCAT_FUNCTOR_DEF(Pow3, pow3, (std::pow(x, 3)), DERIVATIVE_DEF(3));
 
 BLACKCAT_FUNCTOR_DEF(Logistic, logistic, (1 / (1 + std::exp(-x))),
-		DERIVATIVE_DEF(1) //Logistic::apply(x) * (1 - Logistic::apply(x)))
+		DERIVATIVE_DEF(Logistic::apply(x) * (1 - Logistic::apply(x)))
 		DERIVATIVE_CACHED_DEF(x * (1 - x)));
 
 BLACKCAT_FUNCTOR_DEF(Relu, relu,max(0, x), DERIVATIVE_DEF(x > 0 ? 1 : 0));

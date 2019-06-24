@@ -12,7 +12,6 @@
 #include "common.h"
 #include "Layers/FeedForward.h"
 #include "Layers/OutputLayer.h"
-//#include "Layers/Logistic.h"
 #include "Layers/UnaryFunction.h"
 #include "Layers/Nonlinear.h"
 #include "Network.h"

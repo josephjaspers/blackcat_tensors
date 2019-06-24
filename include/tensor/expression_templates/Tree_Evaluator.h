@@ -42,36 +42,21 @@ namespace BC {
 namespace exprs {
 namespace detail {
 
-template<class Expression, class Stream>
-static void nd_evaluate(const Expression expr, Stream stream) {
-	using system_tag = typename Stream::system_tag;
-	using evaluator_impl  = typename BC::evaluator::template implementation<system_tag>;
+template<class Expression, class SystemTag>
+static void nd_evaluate(const Expression expr, BC::Stream<SystemTag> stream) {
+	using nd_evaluator  = typename BC::evaluator::Evaluator<SystemTag>;
 
 	BC::meta::constexpr_if<expression_traits<Expression>::is_expr> ([&]() {
-		evaluator_impl::template nd_evaluator<Expression::tensor_iterator_dimension>(expr, stream);
+		nd_evaluator::template nd_evaluate<Expression::tensor_iterator_dimension>(expr, stream);
 	});
-}
-
-template<class expression_t, class SystemTag>
-static auto evaluate_temporaries(expression_t expression, BC::Stream<SystemTag> stream) {
-	return BC::meta::constexpr_if<optimizer<expression_t>::requires_greedy_eval>([&]() {
-		return optimizer<expression_t>::template temporary_injection(expression, stream);
-	}, [&]() {
-		return expression;
-	});
-}
-
-template<class expression, class SystemTag>
-static void deallocate_temporaries(expression expr, BC::Stream<SystemTag> stream) {
-	optimizer<expression>::deallocate_temporaries(expr, stream);
 }
 
 template<class AssignmentOp, class Left, class Right, class SystemTag>
 void greedy_eval(Left left, Right right, BC::Stream<SystemTag> stream) {
-	auto temporaries_evaluated_expression = detail::evaluate_temporaries(right, stream);
-	auto assignment_expression =make_bin_expr<AssignmentOp>(left, temporaries_evaluated_expression);
+	auto temporaries_evaluated_expression = optimizer<Right>::template temporary_injection(right, stream);
+	auto assignment_expression = make_bin_expr<AssignmentOp>(left, temporaries_evaluated_expression);
 	detail::nd_evaluate(assignment_expression, stream);
-	deallocate_temporaries(temporaries_evaluated_expression, stream);
+	optimizer<decltype(temporaries_evaluated_expression)>::deallocate_temporaries(temporaries_evaluated_expression, stream);
 }
 
 }
@@ -80,11 +65,10 @@ template<
 	class lv,
 	class rv,
 	class SystemTag,
-	class Op,
-	class=std::enable_if_t<BC::oper::operation_traits<Op>::is_linear_assignment_operation> // += or -=
->
+	class Op>
 static
-std::enable_if_t<optimizer<Binary_Expression<lv, rv, Op>>::requires_greedy_eval>
+std::enable_if_t<optimizer<Binary_Expression<lv, rv, Op>>::requires_greedy_eval &&
+					BC::oper::operation_traits<Op>::is_linear_assignment_operation>
 evaluate(Binary_Expression<lv, rv, Op> expression, BC::Stream<SystemTag> stream) {
 	static constexpr bool entirely_blas_expression = optimizer<rv>::entirely_blas_expr; // all operations are +/- blas calls
 	static constexpr int alpha_mod = BC::oper::operation_traits<Op>::alpha_modifier;
@@ -93,7 +77,7 @@ evaluate(Binary_Expression<lv, rv, Op> expression, BC::Stream<SystemTag> stream)
 	auto output = injector<lv, alpha_mod, beta_mod>(expression.left);
 	auto right = optimizer<rv>::linear_evaluation(expression.right, output, stream);
 
-	if (!entirely_blas_expression)
+	if /*constexpr*/ (!entirely_blas_expression)
 		detail::greedy_eval<Op>(expression.left, right, stream);
 }
 
@@ -124,11 +108,10 @@ template<
 	class lv,
 	class rv,
 	class SystemTag,
-	class Op,
-	class=std::enable_if_t<!BC::oper::operation_traits<Op>::is_linear_assignment_operation>,
-	int ADL=0
+	class Op
 >
-static std::enable_if_t<optimizer<Binary_Expression<lv, rv, Op>>::requires_greedy_eval>
+static std::enable_if_t<optimizer<Binary_Expression<lv, rv, Op>>::requires_greedy_eval &&
+							!BC::oper::operation_traits<Op>::is_linear_assignment_operation>
 evaluate(Binary_Expression<lv, rv, Op> expression, BC::Stream<SystemTag> stream) {
 	auto right = optimizer<rv>::temporary_injection(expression.right,  stream);
 	detail::greedy_eval<Op>(expression.left, right, stream);
@@ -141,8 +124,7 @@ template<
 	class SystemTag>
 static std::enable_if_t<optimizer<Binary_Expression<lv, rv, Op>>::requires_greedy_eval>
 evaluate_aliased(Binary_Expression<lv, rv, Op> expression, BC::Stream<SystemTag> stream) {
-	auto right =  detail::evaluate_temporaries(expression.right, stream);
-	detail::greedy_eval<Op>(expression.left, right, stream);
+	detail::greedy_eval<Op>(expression.left, expression.right, stream);
 }
 //--------------------- lazy only ----------------------- //
 
@@ -169,13 +151,30 @@ auto greedy_evaluate(Array array, Expression expr, Stream stream) {
     return array;
 }
 
-template<class Expression, class Stream, class=std::enable_if_t<expression_traits<Expression>::is_array>> //The branch is an array, no evaluation required
-static auto greedy_evaluate(Expression expression, Stream stream) { return expression; }
-
-template<class Expression,
+//The branch is an array, no evaluation required
+template<
+	class Expression,
 	class Stream,
-	class=std::enable_if_t<expression_traits<Expression>::is_expr>, int=0> //Create and return an array_core created from the expression
+	class=std::enable_if_t<expression_traits<Expression>::is_array>
+>
 static auto greedy_evaluate(Expression expression, Stream stream) {
+	return expression;
+}
+
+
+template<
+	class Expression,
+	class Stream,
+	class=std::enable_if_t<expression_traits<Expression>::is_expr>,
+	int=0
+>
+static auto greedy_evaluate(Expression expression, Stream stream) {
+	/*
+	 * Returns a kernel_array containing the tag BC_Temporary,
+	 * the caller of the function is responsible for its deallocation.
+	 *
+	 * Users may query this tag via 'BC::expression_traits<Expression>::is_temporary'
+	 */
 	using value_type = typename Expression::value_type;
 	auto shape = BC::make_shape(expression.inner_shape());
 	auto temporary = make_temporary_kernel_array<value_type>(shape, stream);
