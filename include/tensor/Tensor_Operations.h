@@ -219,8 +219,8 @@ public:
 
     template<class right_value>
     void copy(const Tensor_Operations<right_value>& rv) {
-        static_assert(exprs::expression_traits<Expression>::is_copy_assignable, "copy_most be array");
-        static_assert(exprs::expression_traits<right_value>::is_copy_assignable, "copy_most be array");
+        static_assert(exprs::expression_traits<Expression>::is_copy_assignable, "copy lv must be array");
+        static_assert(exprs::expression_traits<right_value>::is_copy_assignable, "copy rv most be array");
         static_assert(Expression::tensor_iterator_dimension <= 1, "copy only accepts continuous");
         static_assert(right_value::tensor_iterator_dimension <= 1, "copy only accepts continuous");
         assert(same_size(rv));

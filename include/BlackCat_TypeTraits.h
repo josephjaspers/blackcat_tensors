@@ -16,12 +16,17 @@
 namespace BC {
 namespace meta {
 
-	template<int x> struct Integer { static constexpr int value = x; };
+	template<int x>
+	struct Integer { static constexpr int value = x; };
 
-	template<class T> static constexpr bool true_v = true;
-	template<class T> static constexpr bool false_v= false;
+	template<class T, class... Ts>
+	using front_t = T;
 
-	template<class... Ts> using void_t = void;
+	template<class...> static constexpr bool true_v  = true;
+	template<class...> static constexpr bool false_v = false;
+	template<class...> using void_t = void;
+
+	//----------------------------------
 
 	template<template<class> class func, class T, class voider=void>
 	struct is_detected : std::false_type { };
@@ -31,6 +36,8 @@ namespace meta {
 
 	template<template<class> class func, class T>
 	static constexpr bool is_detected_v = is_detected<func, T>::value;
+
+	//----------------------------------
 
 	template<template<class> class func, class TestType, class DefaultType, class enabler=void>
 	struct conditional_detected {
@@ -44,6 +51,30 @@ namespace meta {
 	template<template<class> class func, class TestType, class DefaultType>
 	using conditional_detected_t = typename conditional_detected<func, TestType, DefaultType>::type;
 
+	//----------------------------------
+
+	template<class Function, class voider=void>
+	struct is_compileable : std::false_type {};
+
+	template<class Function>
+	struct is_compileable<Function,
+			std::enable_if_t<
+					BC::meta::true_v<
+						decltype(std::declval<Function>()())>
+				>
+			> : std::true_type {};
+
+	template<class Function>
+	static constexpr bool compileable(Function&&) {
+		return is_compileable<Function>::value;
+	}
+	template<class Function>
+	static constexpr bool compileable() {
+		return is_compileable<Function>::value;
+	}
+
+	//----------------------------------
+
 
     BCINLINE static constexpr BC::size_t  max(int x) { return x; }
     BCINLINE static constexpr BC::size_t  min(int x) { return x; }
@@ -53,6 +84,8 @@ namespace meta {
 
     template<class... integers>
     BCINLINE static constexpr BC::size_t  min(int x, integers... ints) { return x < min (ints...) ? x : min(ints...); }
+
+	//----------------------------------
 
     template<class T, class... Ts>
     struct seq_contains_impl {
@@ -301,7 +334,6 @@ namespace meta {
 	T* auto_remove_const(const T* param) {
 		return const_cast<T*>(param);
 	}
-
 
 	template<class T>
 	using apply_const_t = std::conditional_t<std::is_const<T>::value, T, const T>;

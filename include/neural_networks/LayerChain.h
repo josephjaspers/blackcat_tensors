@@ -91,6 +91,17 @@ struct Chain : public LayerChain<0, Chain<lst...>, lst...>{
     void read(std::ifstream& is)         { this->for_each([&](auto& layer) { layer.read(is);     });}
     void write(std::ifstream& os)         { this->for_each([&](auto& layer) { layer.write(os);     });}
     void set_batch_size(int x)             { this->for_each([&](auto& layer) { layer.set_batch_size(x);    });}
+
+    template<class SystemTag>
+    void initialize_variables(BC::Stream<SystemTag> stream)             { this->for_each([&](auto& layer) { layer.initialize_variables(stream);    });}
+
+    template<class SystemTag>
+    size_t get_workspace_size(BC::Stream<SystemTag> stream){
+    	size_t size;
+    	this->for_each([&](auto& layer) { size += layer.get_workspace_size(stream);    });
+    }
+
+
     void update_weights()                 { this->for_each([ ](auto& layer) { layer.update_weights();        });}
     void cache_gradients()                { this->for_each([ ](auto& layer) { layer.cache_gradients();    });}
     void set_max_bptt_length(int len)   { this->for_each_internal([&](auto& layer)  { layer.set_max_bptt_length(len);}); }

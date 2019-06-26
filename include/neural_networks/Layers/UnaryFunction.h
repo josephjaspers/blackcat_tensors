@@ -4,7 +4,24 @@
 
 namespace BC {
 namespace nn {
+namespace detail {
 
+template<class T>
+using query_cached_dx =	decltype(std::declval<T>().cached_dx);
+
+template<class T, class voider=void>
+struct detect_cached_dx : std::false_type {};
+
+template<class T>
+struct detect_cached_dx<T,
+		std::enable_if_t<
+				BC::meta::true_v<
+					decltype(std::declval<T>().cached_dx)>
+			>
+		> : std::true_type {};
+
+
+}
 
 template<class SystemTag, class ValueType, class Functor>
 class Function : public Layer_Base {
@@ -38,7 +55,15 @@ public:
     }
     template<class Matrix>
     auto back_propagation(const Matrix& dy) {
-    	return function.dx(x) % dy;
+    	return BC::meta::constexpr_ternary<detail::detect_cached_dx<Functor>::value>(
+    		BC::meta::bind([](auto function, auto& y, auto& dy){
+        		return function.cached_dx(y) % dy;
+    		}, function, y, dy),
+
+    		BC::meta::bind([](auto function, auto& x, auto& dy){
+   	        	return function.dx(x) % dy;
+        	}, function, x, dy)
+    	);
     }
     void update_weights() {}
 
