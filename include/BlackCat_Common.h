@@ -12,6 +12,10 @@
 
 namespace BC {
 
+#ifndef BC_DEFAULT_SYSTEM_TAG
+#define BC_DEFAULT_SYSTEM_TAG host_tag
+#endif
+
 class system_tag_base {};
 struct host_tag : system_tag_base {
 	using default_floating_point_type = double;
@@ -27,6 +31,8 @@ template<class T>
 struct is_system_tag {
 	static constexpr bool value = std::is_base_of<system_tag_base, T>::value;
 };
+
+using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 
 }
 

@@ -8,8 +8,6 @@
 #ifndef BLACKCAT_TENSOR_tensor_iterator_dimension_H_
 #define BLACKCAT_TENSOR_tensor_iterator_dimension_H_
 
-#include "Tensor_CMath.h"
-
 namespace BC {
 
 template<class internal>

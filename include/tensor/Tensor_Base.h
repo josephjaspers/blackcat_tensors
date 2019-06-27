@@ -9,11 +9,11 @@
 #ifndef BLACKCAT_TENSOR_BASE_H_
 #define BLACKCAT_TENSOR_BASE_H_
 
+#include "Tensor_Common.h"
 #include "Tensor_Operations.h"
 #include "Tensor_Accessor.h"
 #include "Tensor_IterAlgos.h"
 #include "Tensor_Utility.h"
-#include "Tensor_CMath.h"
 
 namespace BC {
 
@@ -73,7 +73,9 @@ public:
     Tensor_Base(const parent&  param) : parent(param) {}
     Tensor_Base(parent&& param) : parent(param) {}
 
-    template<class U> Tensor_Base(const Tensor_Base<U>&  tensor) : parent(tensor.as_parent()) {}
+    template<class U>
+    Tensor_Base(const Tensor_Base<U>&  tensor)
+    : parent(tensor.as_parent()) {}
 
 
     Tensor_Base(copy_parameter tensor)

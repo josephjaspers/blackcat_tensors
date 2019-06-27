@@ -12,10 +12,18 @@
 
 namespace BC {
 namespace oper {
-namespace detail {
+namespace {
+
+using BC::meta::conditional_detected_t;
+using BC::meta::is_detected_v;
+using BC::meta::Integer;
+using std::is_base_of;
 
 template<class T> using query_alpha_modifier = typename T::alpha_modifier;
 template<class T> using query_beta_modifier = typename T::beta_modifier;
+
+template<class T> using query_dx = decltype(std::declval<T>().dx);
+template<class T> using query_cached_dx = decltype(std::declval<T>().cached_dx);
 
 }
 
@@ -23,14 +31,17 @@ template<class T> using query_beta_modifier = typename T::beta_modifier;
 template<class T>
 struct operation_traits {
 	static constexpr int alpha_modifier =
-			BC::meta::conditional_detected_t<detail::query_alpha_modifier, T, BC::meta::Integer<1>>::value;
+			conditional_detected_t<query_alpha_modifier, T, Integer<1>>::value;
 	static constexpr int beta_modifier =
-				BC::meta::conditional_detected_t<detail::query_beta_modifier, T, BC::meta::Integer<1>>::value;
+				conditional_detected_t<query_beta_modifier, T, Integer<1>>::value;
 
-	static constexpr bool is_linear_operation = std::is_base_of<linear_operation,T>::value;
-	static constexpr bool is_linear_assignment_operation = std::is_base_of<linear_assignment_operation, T>::value;
-	static constexpr bool is_assignment_operation        = std::is_base_of<assignment_operation, T>::value;
-	static constexpr bool is_blas_function               = std::is_base_of<BLAS_Function, T>::value;
+	static constexpr bool has_dx = is_detected_v<query_dx, T>;
+	static constexpr bool has_cached_dx = is_detected_v<query_cached_dx, T>;
+
+	static constexpr bool is_linear_operation            = is_base_of<linear_operation,T>::value;
+	static constexpr bool is_linear_assignment_operation = is_base_of<linear_assignment_operation, T>::value;
+	static constexpr bool is_assignment_operation        = is_base_of<assignment_operation, T>::value;
+	static constexpr bool is_blas_function               = is_base_of<BLAS_Function, T>::value;
 	static constexpr bool is_nonlinear_operation 		 = !is_blas_function && !is_linear_operation;
 };
 

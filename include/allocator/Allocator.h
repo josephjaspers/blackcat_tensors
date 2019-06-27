@@ -5,8 +5,8 @@
  *      Author: joseph
  */
 
-#ifndef BC_ALLOCATOR_ALLOCATOR_H_
-#define BC_ALLOCATOR_ALLOCATOR_H_
+#ifndef BLACKCAT_ALLOCATOR_ALLOCATOR_H_
+#define BLACKCAT_ALLOCATOR_ALLOCATOR_H_
 
 #include "Host.h"
 #include "Device.h"

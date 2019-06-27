@@ -12,6 +12,7 @@
 #include "Binary.h"
 #include "Unary.h"
 #include "BLAS.h"
+#include "CMath.h"
 #include "Operation_Traits.h"
 
 #endif /* OPERATIONS_H_ */

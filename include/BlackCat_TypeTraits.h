@@ -15,7 +15,17 @@
 
 namespace BC {
 namespace meta {
-
+namespace {
+	using std::enable_if_t;
+	using std::true_type;
+	using std::false_type;
+	using std::is_same;
+	using std::declval;
+	using std::is_const;
+	using std::conditional_t;
+	using std::tuple;
+	using std::forward;
+}
 	template<int x>
 	struct Integer { static constexpr int value = x; };
 
@@ -29,10 +39,10 @@ namespace meta {
 	//----------------------------------
 
 	template<template<class> class func, class T, class voider=void>
-	struct is_detected : std::false_type { };
+	struct is_detected : false_type { };
 
 	template<template<class> class func, class T>
-	struct is_detected<func, T, std::enable_if_t<true_v<func<T>>>> : std::true_type { };
+	struct is_detected<func, T, enable_if_t<true_v<func<T>>>> : true_type { };
 
 	template<template<class> class func, class T>
 	static constexpr bool is_detected_v = is_detected<func, T>::value;
@@ -44,7 +54,7 @@ namespace meta {
 		using type = DefaultType;
 	};
 	template<template<class> class func, class TestType, class DefaultType>
-	struct conditional_detected<func, TestType, DefaultType, std::enable_if_t<is_detected<func,TestType>::value>> {
+	struct conditional_detected<func, TestType, DefaultType, enable_if_t<is_detected_v<func,TestType>>> {
 		using type = func<TestType>;
 	};
 
@@ -54,15 +64,15 @@ namespace meta {
 	//----------------------------------
 
 	template<class Function, class voider=void>
-	struct is_compileable : std::false_type {};
+	struct is_compileable : false_type {};
 
 	template<class Function>
 	struct is_compileable<Function,
-			std::enable_if_t<
-					BC::meta::true_v<
-						decltype(std::declval<Function>()())>
+			enable_if_t<
+					true_v<
+						decltype(declval<Function>()())>
 				>
-			> : std::true_type {};
+			> : true_type {};
 
 	template<class Function>
 	static constexpr bool compileable(Function&&) {
@@ -93,27 +103,27 @@ namespace meta {
     };
     template<class T, class U, class... Ts>
 	struct seq_contains_impl<T,U,Ts...> {
-		static constexpr bool value= std::is_same<T,U>::value || seq_contains_impl<T,Ts...>::value;
+		static constexpr bool value= is_same<T,U>::value || seq_contains_impl<T,Ts...>::value;
 	};
 
     template<class T, class... Ts>
-    struct seq_of_impl : std::false_type{};
+    struct seq_of_impl : false_type{};
 
     template<class T, class U>
     struct seq_of_impl<T,U> {
-        static constexpr bool value = std::is_same<T,U>::value;
+        static constexpr bool value = is_same<T,U>::value;
     };
     template<class T, class U, class... Ts>
     struct seq_of_impl<T,U,Ts...> {
-        static constexpr bool value = std::is_same<T,U>::value || seq_of_impl<T,Ts...>::value;
+        static constexpr bool value = is_same<T,U>::value || seq_of_impl<T,Ts...>::value;
     };
 
     template<template<class> class function, class... Ts>
-    struct seq_is : std::true_type {};
+    struct seq_is : true_type {};
 
     template<template<class> class function, class T, class... Ts>
 	struct seq_is<function, T, Ts...> :
-        std::conditional_t<function<T>::value && seq_is<function, Ts...>::value, std::true_type, std::false_type> {};
+        conditional_t<function<T>::value && seq_is<function, Ts...>::value, true_type, false_type> {};
 
     template<class T, class U, class... Ts>
     static constexpr bool seq_of = seq_of_impl<T,U,Ts...>::value;
@@ -271,45 +281,45 @@ namespace meta {
     }
 
     template<class> struct DISABLE;
-    template<bool x,class T> using only_if = std::conditional_t<x, T, DISABLE<T>>;
+    template<bool x,class T> using only_if = conditional_t<x, T, DISABLE<T>>;
 
     template<class Function, class... args>
-    struct Bind : std::tuple<args...> {
+    struct Bind : tuple<args...> {
     	Function f;
 
     	Bind(Function f, args... args_)
-    	: std::tuple<args...>(args_...), f(f) {}
+    	: tuple<args...>(args_...), f(f) {}
 
     	template<int ADL=0>
     	auto operator () () {
-    		return call(std::conditional_t<sizeof...(args) == 0, std::true_type, std::false_type>());
+    		return call(conditional_t<sizeof...(args) == 0, true_type, false_type>());
     	}
     	template<int ADL=0>
     	auto operator () () const {
-    		return call(std::conditional_t<sizeof...(args) == 0, std::true_type, std::false_type>());
+    		return call(conditional_t<sizeof...(args) == 0, true_type, false_type>());
     	}
     private:
     	template<class... args_>
-    	auto call(std::true_type, args_... params) {
+    	auto call(true_type, args_... params) {
     		return f(params...);
     	}
     	template<class... args_>
-    	auto call(std::false_type, args_... params) {
+    	auto call(false_type, args_... params) {
     		return call(
-    				std::conditional_t<sizeof...(args_) + 1 == sizeof...(args), std::true_type, std::false_type>(),
-    				std::forward<args_>(params)...,
-    				std::get<sizeof...(args_)>(static_cast<std::tuple<args...>&>(*this)));
+    				conditional_t<sizeof...(args_) + 1 == sizeof...(args), true_type, false_type>(),
+    				forward<args_>(params)...,
+    				get<sizeof...(args_)>(static_cast<tuple<args...>&>(*this)));
     	}
     	template<class... args_>
-    	auto call(std::true_type, args_... params) const {
-    		return f(std::forward<args_>(params)...);
+    	auto call(true_type, args_... params) const {
+    		return f(forward<args_>(params)...);
     	}
     	template<class... args_>
-    	auto call(std::false_type, args_... params) const {
+    	auto call(false_type, args_... params) const {
     		return call(
-    				std::conditional_t<sizeof...(args_) + 1 == sizeof...(args), std::true_type, std::false_type>(),
-    				std::forward<args_>(params)...,
-    				std::get<sizeof...(args_)>(static_cast<std::tuple<args...>&>(*this)));
+    				conditional_t<sizeof...(args_) + 1 == sizeof...(args), true_type, false_type>(),
+    				forward<args_>(params)...,
+    				get<sizeof...(args_)>(static_cast<tuple<args...>&>(*this)));
     	}
 
     };
@@ -336,7 +346,7 @@ namespace meta {
 	}
 
 	template<class T>
-	using apply_const_t = std::conditional_t<std::is_const<T>::value, T, const T>;
+	using apply_const_t = conditional_t<is_const<T>::value, T, const T>;
 
 
 }
