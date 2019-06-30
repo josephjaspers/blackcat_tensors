@@ -15,7 +15,6 @@
 namespace BC {
 namespace exprs {
 
-
 template<class Lv, class Rv, class Operation>
 struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Operation>>, public Operation {
 
@@ -57,6 +56,18 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
     template<class... integers>
     BCINLINE auto  operator ()(integers... ints) {
      	return Operation::operator()(left(ints...), right(ints...));
+    }
+
+    auto dx() const {
+		auto lv_dx = expression_traits<Lv>::select_on_dx(left);
+		auto rv_dx = expression_traits<Rv>::select_on_dx(right);
+		auto op_dx = oper::operation_traits<Operation>::select_on_dx(get_operation());
+		using lv_dx_t = std::decay_t<decltype(lv_dx)>;
+		using rv_dx_t = std::decay_t<decltype(rv_dx)>;
+		using op_dx_t = std::decay_t<decltype(op_dx)>;
+		static_assert(!std::is_same<BC::oper::Mul, Operation>::value, "Derivative of multiplication is not supported yet,"
+																		"product rule is difficult to implement");
+		return Binary_Expression<lv_dx_t, rv_dx_t, op_dx_t>(lv_dx, rv_dx, op_dx);
     }
 
 private:

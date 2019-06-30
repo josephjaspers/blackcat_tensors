@@ -13,8 +13,9 @@
 namespace BC {
 namespace oper {
 
-struct assignment_operation {};
-struct linear_operation {};
+struct basic_operation {};
+struct assignment_operation : basic_operation{};
+struct linear_operation : basic_operation {};
 struct linear_assignment_operation : linear_operation, assignment_operation {};
 struct BLAS_Function {};
 

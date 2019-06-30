@@ -63,6 +63,7 @@ struct Array_Const_View
 	const Allocator get_allocator() const {
 		return alloc;
 	}
+
 	const stream_type& get_stream()   const { return stream; }
 		  stream_type& get_stream()   		{ return stream; }
 

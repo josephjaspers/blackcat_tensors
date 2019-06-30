@@ -216,7 +216,6 @@ public:
 		return bi_expr<oper::sub>(param.array);
 	}
 
-
     template<class right_value>
     void copy(const Tensor_Operations<right_value>& rv) {
         static_assert(exprs::expression_traits<Expression>::is_copy_assignable, "copy lv must be array");
@@ -410,6 +409,12 @@ public:
 
 #undef BC_OPER_LV_SCALAR_DEF
 #undef BC_ASSERT_ASSIGNABLE
+
+    template<class Expression>
+	auto dx(Tensor_Base<Expression>&& tensor) {
+		return make_tensor(exprs::expression_traits<Expression>::select_on_dx(tensor.internal()));
+	}
+
 
 }
 

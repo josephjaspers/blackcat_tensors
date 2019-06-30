@@ -32,6 +32,21 @@ namespace {
 	template<class T, class... Ts>
 	using front_t = T;
 
+	template<class... Ts>
+	using void_t = void;
+
+
+	template<class T, class U>
+	struct Pair {
+		T left;
+		U right;
+	};
+
+	template<class T, class U>
+	Pair<T, U> make_pair(T&& t, U&& u) {
+		return {t, u};
+	}
+
 	template<class...> static constexpr bool true_v  = true;
 	template<class...> static constexpr bool false_v = false;
 	template<class...> using void_t = void;

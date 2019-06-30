@@ -19,9 +19,12 @@ template<class,class>		struct Unary_Expression;
 
 namespace detail {
 
+
+template<class T> using query_system_tag = typename T::system_tag;
 template<class T> using query_value_type = typename T::value_type;
 template<class T> using query_allocation_type = typename T::allocation_tag;
-template<class T> using query_system_tag = typename T::system_tag;
+
+template<class T> using has_dx = decltype(std::declval<T>().dx());
 
 template<class T> using query_copy_assignable =
 				std::conditional_t<T::copy_assignable, std::true_type, std::false_type>;
@@ -107,6 +110,18 @@ struct expression_traits {
 	 using allocation_tag = typename BC::meta::conditional_detected<detail::query_allocation_type, T, system_tag>::type;
 	 using value_type	  = typename BC::meta::conditional_detected<detail::query_value_type, T, void>::type;
 
+
+	 static constexpr bool derivative_is_defined =  BC::meta::is_detected_v<detail::has_dx, T>;
+	 static auto select_on_dx(T expression) {
+		 return BC::meta::constexpr_ternary<
+		 	 BC::meta::is_detected_v<detail::has_dx, T>>(
+		 		BC::meta::bind([&](auto expression) {
+			 	 	 return expression.dx();
+		 	 	 }, expression),
+		 		[&]() { return expression; }
+		 	 );
+	 }
+
 // Causes 'catastrophic error' with NVCC. Compiles with GCC TODO change once NVCC fixes
 //	static constexpr bool is_move_constructible =
 //					BC::meta::conditional_detected_t<
@@ -129,17 +144,15 @@ struct expression_traits {
 	static constexpr bool is_move_assignable 	= T::move_assignable;
 	static constexpr bool is_copy_assignable 	= T::copy_assignable;
 
+	static constexpr bool is_bc_type  	 = std::is_base_of<BC_Type, T>::value;
+	static constexpr bool is_array  	 = std::is_base_of<BC_Array, T>::value;
+	static constexpr bool is_view 		 = std::is_base_of<BC_View, T>::value;
+	static constexpr bool is_continuous = !std::is_base_of<BC_Noncontinuous, T>::value;
 
-
-	 static constexpr bool is_bc_type  	 = std::is_base_of<BC_Type, T>::value;
-	 static constexpr bool is_array  	 = std::is_base_of<BC_Array, T>::value;
-	 static constexpr bool is_view 		 = std::is_base_of<BC_View, T>::value;
-	 static constexpr bool is_continuous = !std::is_base_of<BC_Noncontinuous, T>::value;
-
-	 static constexpr bool is_expr  		   = std::is_base_of<BC_Expr, T>::value;
-	 static constexpr bool is_temporary 	   = std::is_base_of<BC_Temporary, T>::value;
-	 static constexpr bool is_stack_allocated  = std::is_base_of<BC_Stack_Allocated, T>::value;
-	 static constexpr bool is_immutable  	   = std::is_base_of<BC_Immutable, T>::value;
+	static constexpr bool is_expr  		   = std::is_base_of<BC_Expr, T>::value;
+	static constexpr bool is_temporary 	   = std::is_base_of<BC_Temporary, T>::value;
+	static constexpr bool is_stack_allocated  = std::is_base_of<BC_Stack_Allocated, T>::value;
+	static constexpr bool is_immutable  	   = std::is_base_of<BC_Immutable, T>::value;
 
 };
 

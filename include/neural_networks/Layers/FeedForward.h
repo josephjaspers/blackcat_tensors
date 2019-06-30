@@ -28,7 +28,7 @@ public:
 
 private:
 
-    ValueType lr = 0.03;
+    ValueType lr = 0.3;
 
     mat dy;          //error
     mat y;           //outputs

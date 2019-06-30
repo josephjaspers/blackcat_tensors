@@ -86,7 +86,10 @@ struct Array_Base : Expression_Template_Base<Derived>, BC_Array {
 	BCHOT operator       auto*()       { return static_cast<      Derived&>(*this).memptr(); }
 
     BCINLINE Array_Base() {
-		static_assert(!std::is_same<void, decltype(std::declval<Derived>().memptr())>::value, "Array types must define memptr");
+		static_assert(!std::is_same<
+					typename Derived::value_type,
+					std::remove_pointer<decltype(std::declval<Derived>().memptr())>
+				>::value, "Array types must define memptr");
     }
 
 

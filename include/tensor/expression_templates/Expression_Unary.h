@@ -34,6 +34,13 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Value, Operati
     	return static_cast<const Operation&>(*this);
     }
 
+    auto dx() const {
+    	auto array_dx = exprs::expression_traits<Value>::select_on_dx(array);
+    	auto dx_op    = oper::operation_traits<Operation>::select_on_dx(get_operation());
+    	return Unary_Expression<decltype(array_dx),
+    							decltype(dx_op)>(array_dx, dx_op);
+    }
+
     template<class... args> BCINLINE
     Unary_Expression(Value v, const args&... args_)
     : Operation(args_...) , array(v) {}

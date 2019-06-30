@@ -16,7 +16,10 @@ namespace BC {
 namespace exprs {
 
 template<class Scalar, class SystemTag>
-struct Scalar_Constant : Shape<0>, Array_Base<Scalar_Constant<Scalar, SystemTag>, 0>, BC::exprs::BC_Stack_Allocated {
+struct Scalar_Constant:
+		Shape<0>,
+		Array_Base<Scalar_Constant<Scalar, SystemTag>, 0>,
+		BC::exprs::BC_Stack_Allocated {
 
     using value_type = Scalar;
     using system_tag = SystemTag;

@@ -45,25 +45,8 @@ namespace oper {
 	}																				\
 	BC_FORWARD_TO_APPLY
 
-
-#define BC_BACKWARD_LV_DEF(...)						\
-	template<class Delta, class Lv, class Rv>				\
-	BCINLINE static auto lv_dx(Lv&& lv, Rv&& rv, Delta&& dy) 	\
-	{												\
-		return __VA_ARGS__;								\
-	}												\
-
-#define BC_BACKWARD_RV_DEF(...)						\
-	template<class Delta, class Lv, class Rv>				\
-	BCINLINE static auto rv_dx(Lv&& lv, Rv&& rv, Delta&& dy) 	\
-	{												\
-		return __VA_ARGS__;								\
-	}												\
-
     struct Scalar_Mul {
     	BC_FORWARD_DEF(lv * rv)
-    	BC_BACKWARD_LV_DEF(rv)
-    	BC_BACKWARD_RV_DEF(lv)
     } scalar_mul;
 
 
@@ -71,27 +54,33 @@ namespace oper {
     	using alpha_modifier = BC::meta::Integer<1>;
 
     	BC_FORWARD_DEF(lv + rv)
-    	BC_BACKWARD_LV_DEF(1)
-    	BC_BACKWARD_RV_DEF(1)
     } add;
 
     struct Mul {
     	BC_FORWARD_DEF(lv * rv)
-    	BC_BACKWARD_LV_DEF(rv)
-    	BC_BACKWARD_RV_DEF(lv)
+
+    	struct Derivative {
+    		template<class Lv, class Lv_dx, class Rv, class Rv_dx>
+    			BCINLINE static auto apply (BC::meta::Pair<Lv, Lv_dx>&& lv, BC::meta::Pair<Rv, Rv_dx>&& rv)
+    			-> decltype(lv.left * rv.right + lv.right * rv.left) {														\
+    			return lv.left * rv.right + lv.right * rv.left;
+    			}
+    			template<class Lv, class Rv>
+    			BCINLINE auto operator () (Lv&& lv, Rv&& rv) const
+    				-> decltype(apply(lv, rv)) {
+    					return apply(lv, rv);
+    				}
+    	} static dx;
+
     } mul;
 
     struct Sub : linear_operation {
     	using alpha_modifier = BC::meta::Integer<-1>;
     	BC_FORWARD_DEF(lv - rv)
-    	BC_BACKWARD_LV_DEF(1)
-    	BC_BACKWARD_RV_DEF(-1)
     } sub;
 
     struct Div {
     	BC_FORWARD_DEF(lv / rv)
-    	BC_BACKWARD_LV_DEF(1/rv)
-    	BC_BACKWARD_RV_DEF(lv)
     } div;
 
     struct Assign : assignment_operation {
@@ -171,6 +160,10 @@ namespace oper {
     	BC_FORWARD_DEF(lv ^ rv)
     } xor_;
 
+
+    struct Make_Pair {
+    	BC_FORWARD_DEF(BC::meta::make_pair(lv, rv))
+    } make_pair;
 
 #ifdef __CUDACC__
 #define IF_DEVICE_MODE(...) __VA_ARGS__

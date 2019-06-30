@@ -99,6 +99,7 @@ struct Chain : public LayerChain<0, Chain<lst...>, lst...>{
     size_t get_workspace_size(BC::Stream<SystemTag> stream){
     	size_t size;
     	this->for_each([&](auto& layer) { size += layer.get_workspace_size(stream);    });
+    	return size;
     }
 
 
