@@ -44,7 +44,7 @@ static void randomize(curandState_t* state, T t, float lower_bound, float upper_
 
     __syncthreads();
     if (i == 0)
-    	skipahead(i, state);
+    	skipahead(t.size(), state);
 }
 }
 }

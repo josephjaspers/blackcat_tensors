@@ -1,15 +1,11 @@
-/*
- * BlackCat_Operations.h
+/*  Project: BlackCat_Tensors
+ *  Author: JosephJaspers
+ *  Copyright 2018
  *
- *  Created on: May 22, 2019
- *      Author: joseph
- */
-
-#ifndef BLACKCAT_OPERATIONS_H_
-#define BLACKCAT_OPERATIONS_H_
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include "BlackCat_Common.h"
 #include "BlackCat_TypeTraits.h"
 #include "operations/Operations.h"
-
-#endif /* BLACKCAT_OPERATIONS_H_ */

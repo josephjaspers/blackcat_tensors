@@ -31,12 +31,12 @@ namespace detail {
 template<class Allocator>
 struct allocator_traits : std::allocator_traits<Allocator> {
 	using system_tag =
-			typename BC::meta::conditional_detected<
-			detail::query_system_tag, Allocator, host_tag>::type;
+			BC::meta::conditional_detected_t<
+			detail::query_system_tag, Allocator, host_tag>;
 
 	static constexpr bool is_managed_memory =
-			BC::meta::conditional_detected<
-			detail::query_managed_memory, Allocator, std::false_type>::type::value;
+			BC::meta::conditional_detected_t<
+			detail::query_managed_memory, Allocator, std::false_type>::value;
 };
 
 }
