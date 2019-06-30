@@ -25,7 +25,6 @@ namespace detail {
 	using query_managed_memory = std::conditional_t<T::managed_memory,
 				std::true_type, std::false_type>;;
 
-
 }
 
 

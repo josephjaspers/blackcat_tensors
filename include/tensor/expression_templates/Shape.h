@@ -26,9 +26,9 @@ struct Shape {
 
     BCINLINE Shape() {}
 
-    template<class... integers, class = std::enable_if_t<BC::meta::seq_of<BC::size_t, integers...>>>
+    template<class... integers, class = std::enable_if_t<BC::meta::sequence_of_v<BC::size_t, integers...>>>
     Shape(integers... ints) {
-        static_assert(meta::seq_of<int, integers...>, "INTEGER LIST OF SHAPE");
+        static_assert(meta::sequence_of_v<int, integers...>, "INTEGER LIST OF SHAPE");
         static_assert(sizeof...(integers) == dims, "integer initialization must have the same number of dimensions");
         init(BC::make_array(ints...));
     }
@@ -64,7 +64,7 @@ struct Shape {
     BCINLINE BC::size_t  leading_dimension(int i) const { return i < dims ? m_block_shape[i] : 0; }
     BCINLINE BC::size_t  block_dimension(int i) const  { return leading_dimension(i); }
 
-    template<class... integers, typename=std::enable_if_t<BC::meta::seq_of<BC::size_t, integers...>>>
+    template<class... integers, typename=std::enable_if_t<BC::meta::sequence_of_v<BC::size_t, integers...>>>
     BCINLINE BC::size_t dims_to_index(integers... ints) const {
         return dims_to_index(BC::make_array(ints...));
     }
@@ -219,7 +219,7 @@ struct SubShape : Shape<ndims, SubShape<ndims>> {
 	}
 
 
-    template<class... integers, typename=std::enable_if_t<BC::meta::seq_of<BC::size_t, integers...>>>
+    template<class... integers, typename=std::enable_if_t<BC::meta::sequence_of_v<BC::size_t, integers...>>>
     BCINLINE BC::size_t dims_to_index(integers... ints) const {
         return dims_to_index(BC::make_array(ints...));
     }
@@ -254,12 +254,12 @@ struct SubShape<1> : Shape<1, SubShape<1>> {
 template<int x>
 using Shape = exprs::Shape<x>;
 
-template<class... integers, typename=std::enable_if_t<meta::seq_of<BC::size_t, integers...>>>
+template<class... integers, typename=std::enable_if_t<meta::sequence_of_v<BC::size_t, integers...>>>
 auto make_shape(integers... ints) {
 	return Shape<sizeof...(integers)>(ints...);
 }
 
-template<class InnerShape, typename=std::enable_if_t<!meta::seq_of<BC::size_t, InnerShape>>>
+template<class InnerShape, typename=std::enable_if_t<!meta::sequence_of_v<BC::size_t, InnerShape>>>
 auto make_shape(InnerShape is) {
 	return Shape<InnerShape::tensor_dimension>(is);
 }

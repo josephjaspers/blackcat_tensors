@@ -13,6 +13,7 @@
 namespace BC {
 namespace allocator {
 namespace fancy {
+
 template<class ValueType, class SystemTag>
 struct Polymorphic_Allocator {
 

@@ -36,13 +36,13 @@ namespace exprs {
 template<int Dimension, class ValueType, class SystemTag, class... Tags>
 struct KernelArray
 		: Array_Base<KernelArray<Dimension, ValueType, SystemTag, Tags...>, Dimension>,
-		  std::conditional_t<BC::meta::seq_contains<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>,
+		  std::conditional_t<BC::meta::sequence_contains_v<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>,
 		  public Tags... {
 
     using value_type = ValueType;
     using system_tag = SystemTag;
     using pointer_type = value_type*;
-    using shape_type = std::conditional_t<BC::meta::seq_contains<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>;
+    using shape_type = std::conditional_t<BC::meta::sequence_contains_v<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>;
     using self_type  = KernelArray<Dimension, ValueType, SystemTag, Tags...>;
 
     static constexpr bool copy_constructible = !expression_traits<self_type>::is_view;
@@ -175,7 +175,7 @@ public:
 	//Constructor for integer sequence, IE Matrix(m, n)
 	template<class... args,
 	typename=std::enable_if_t<
-		meta::seq_of<BC::size_t, args...> &&
+		meta::sequence_of_v<BC::size_t, args...> &&
 		sizeof...(args) == Dimension>>
 	Array(const args&... params) {
 		this->as_shape() = Shape<Dimension>(params...);
@@ -245,7 +245,7 @@ auto make_temporary_kernel_scalar(Stream stream) {
 	return Array(BC::Shape<0>(), stream.template get_allocator_rebound<ValueType>().allocate(1));
 }
 
-template<int Dimension, class ValueType, class SystemTag, class... Tags, class=std::enable_if_t<BC::meta::seq_contains<BC_Temporary, Tags...>>>
+template<int Dimension, class ValueType, class SystemTag, class... Tags, class=std::enable_if_t<BC::meta::sequence_contains_v<BC_Temporary, Tags...>>>
 void destroy_temporary_kernel_array(KernelArray<Dimension, ValueType, SystemTag, Tags...> temporary, BC::Stream<SystemTag> stream) {
 	stream.template get_allocator_rebound<ValueType>().deallocate(temporary.array, temporary.size());
 }
