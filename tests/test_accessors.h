@@ -41,7 +41,7 @@ int test_accessors(int sz=128) {
 
 		validation = a[0].approx_equal(a0) && a[1].approx_equal(a1);
 
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 
 	BC_TEST_DEF(
@@ -49,7 +49,7 @@ int test_accessors(int sz=128) {
 		vec b3(a3.size());
 		b3 = a.diagnol();
 
-		return BC::all(a3.approx_equal(a.diagnol())) && BC::all(a.diagnol().approx_equal(b3)) && a3.size() == sz;
+		return BC::tensors::all(a3.approx_equal(a.diagnol())) && BC::tensors::all(a.diagnol().approx_equal(b3)) && a3.size() == sz;
 	)
 
 	//test ranged slice
@@ -65,7 +65,7 @@ int test_accessors(int sz=128) {
 		bool ensure_correct_rows = a.rows() == sz;
 
 		validation = slice_range[0].approx_equal(a0) && slice_range[1].approx_equal(a1) && slice_range[2].approx_equal(a2);
-		return BC::all(validation) && ensure_correct_size && ensure_correct_cols && ensure_correct_rows;
+		return BC::tensors::all(validation) && ensure_correct_size && ensure_correct_cols && ensure_correct_rows;
 	)
 
 	//test ranged slice
@@ -81,7 +81,7 @@ int test_accessors(int sz=128) {
 		bool ensure_correct_rows = a.rows() == sz;
 
 		validation = slice_range[0].approx_equal(a0) && slice_range[1].approx_equal(a1) && slice_range[2].approx_equal(a2);
-		return BC::all(validation) && ensure_correct_size && ensure_correct_cols && ensure_correct_rows;
+		return BC::tensors::all(validation) && ensure_correct_size && ensure_correct_cols && ensure_correct_rows;
 	)
 	//test chunk
 	BC_TEST_DEF(
@@ -104,7 +104,7 @@ int test_accessors(int sz=128) {
 				block_of_a[1].approx_equal(a2.slice(1, 5)) &&
 				block_of_a[2].approx_equal(a3.slice(1, 5));
 
-		return BC::all(validation) && ensure_correct_size && ensure_correct_cols && ensure_correct_rows;
+		return BC::tensors::all(validation) && ensure_correct_size && ensure_correct_cols && ensure_correct_rows;
 	)
 
 
@@ -131,7 +131,7 @@ int test_accessors(int sz=128) {
 				block_of_a[1].approx_equal(a2.slice(1, 5)) &&
 				block_of_a[2].approx_equal(a3.slice(1, 5));
 
-		return BC::all(validation) && ensure_correct_size && ensure_correct_cols && ensure_correct_rows;
+		return BC::tensors::all(validation) && ensure_correct_size && ensure_correct_cols && ensure_correct_rows;
 	)
 
 

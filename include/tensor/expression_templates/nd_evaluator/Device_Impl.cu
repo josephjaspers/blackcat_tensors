@@ -16,6 +16,9 @@
 #include <curand_kernel.h>
 
 namespace BC {
+namespace tensors {
+namespace exprs {
+namespace evaluator {
 namespace gpu_impl {
 
 template<class T> __global__
@@ -88,6 +91,10 @@ template<typename T> __global__ static void eval5d(T t) {
             }
         }
     }
+}
+
+}
+}
 }
 }
 }

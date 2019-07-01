@@ -12,7 +12,8 @@
 #include "Common.h"
 
 namespace BC {
-namespace exprs {
+namespace tensors {
+namespace exprs { 
 namespace blas_tools {
 
 template<>
@@ -20,11 +21,11 @@ struct BLAS_Tools<host_tag> : Common_Tools<BLAS_Tools<host_tag>> {
 
 	template<class Stream, class OutputScalar, class... Scalars>
 	static void scalar_multiply(Stream, OutputScalar& eval, Scalars... scalars) {
-		eval[0] = BC::exprs::blas_tools::host_impl::calculate_alpha(scalars...);
+		eval[0] = BC::tensors::exprs::blas_tools::host_impl::calculate_alpha(scalars...);
 	}
 	template<class Stream, class OutputScalar, class... Scalars>
 	static void scalar_multiply(Stream, OutputScalar* eval, Scalars... scalars) {
-		eval[0] = BC::exprs::blas_tools::host_impl::calculate_alpha(scalars...);
+		eval[0] = BC::tensors::exprs::blas_tools::host_impl::calculate_alpha(scalars...);
 	}
 
 	template<class value_type, int value>
@@ -38,7 +39,7 @@ struct BLAS_Tools<host_tag> : Common_Tools<BLAS_Tools<host_tag>> {
 }
 }
 }
-
+}
 
 
 #endif /* HOST_H_ */

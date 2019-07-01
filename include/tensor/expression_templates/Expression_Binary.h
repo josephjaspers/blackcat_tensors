@@ -13,6 +13,7 @@
 #include "Shape.h"
 
 namespace BC {
+namespace tensors {
 namespace exprs {
 
 template<class Lv, class Rv, class Operation>
@@ -90,8 +91,10 @@ auto make_bin_expr(Lv left, Rv right, Args&&... args) {
 			Op>(left.internal(), right.internal(), args...);
 }
 
-}
-}
+
+} //ns BC
+} //ns exprs
+} //ns tensors
 
 
 #endif /* EXPRESSION_BINARY_POINTWISE_SAME_H_ */

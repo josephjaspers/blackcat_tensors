@@ -10,7 +10,7 @@
 
 #include "../Expression_Template_Traits.h"
 
-BC_DEFAULT_MODULE_BODY(exprs { namespace blas_tools, BLAS_Tools) }
+BC_DEFAULT_MODULE_BODY(tensors { namespace exprs { namespace blas_tools, BLAS_Tools) }}
 
 #include "Host.h"
 #include "Device.h"

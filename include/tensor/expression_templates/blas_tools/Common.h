@@ -11,7 +11,8 @@
 #include "../Array_Scalar_Constant.h"
 
 namespace BC {
-namespace exprs {
+namespace tensors {
+namespace exprs { 
 
 template<class,class,class>
 struct Binary_Expression;
@@ -24,8 +25,8 @@ struct Common_Tools {
 	template<class Scalar_t, int alpha_mod, bool lv_scalar, bool rv_scalar, class Stream,  class lv_scalar_t, class rv_scalar_t>
 	static auto calculate_alpha(Stream stream, lv_scalar_t lv, rv_scalar_t rv) {
 
-		static constexpr bool lv_host_mode = (BC::exprs::expression_traits<lv_scalar_t>::is_stack_allocated);
-		static constexpr bool rv_host_mode = (BC::exprs::expression_traits<rv_scalar_t>::is_stack_allocated);
+		static constexpr bool lv_host_mode = (BC::tensors::exprs::expression_traits<lv_scalar_t>::is_stack_allocated);
+		static constexpr bool rv_host_mode = (BC::tensors::exprs::expression_traits<rv_scalar_t>::is_stack_allocated);
 		static_assert(lv_host_mode == rv_host_mode || lv_scalar != rv_scalar,
 				"Host and Device Scalars may not be mixed Blas calculations");
 		static constexpr bool host_mode    = lv_host_mode || rv_host_mode;
@@ -145,7 +146,7 @@ struct Common_Tools {
 	template<class Stream, class Contents>
 	static void post_parse_expression_evaluation(Stream stream, Contents contents) {
 		using value_type = typename decltype(contents.alpha)::value_type;
-        BC::meta::constexpr_if<(BC::exprs::expression_traits<decltype(contents.alpha)>::is_temporary)>(
+        BC::meta::constexpr_if<(BC::tensors::exprs::expression_traits<decltype(contents.alpha)>::is_temporary)>(
             BC::meta::bind([&](auto alpha) {
         		stream.template get_allocator_rebound<value_type>().deallocate(alpha, 1);
         	}, 	contents.alpha));
@@ -154,12 +155,9 @@ struct Common_Tools {
 };
 
 
-
-
 }
-
-
-
-}}
+}
+}
+}
 
 #endif

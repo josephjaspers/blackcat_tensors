@@ -14,6 +14,7 @@
 
 
 namespace BC {
+namespace tensors {
 namespace exprs {
 
 /*
@@ -257,8 +258,10 @@ auto make_tensor_array(Shape shape, Allocator alloc) {
 }
 
 
-}
-}
+} //ns BC
+} //ns exprs
+} //ns tensors
+
 
 
 #endif /* SHAPE_H_ */

@@ -39,12 +39,13 @@
 
 
 namespace BC {
-namespace exprs {
+namespace tensors {
+namespace exprs { 
 namespace detail {
 
 template<class Expression, class SystemTag>
 static void nd_evaluate(const Expression expr, BC::Stream<SystemTag> stream) {
-	using nd_evaluator  = typename BC::evaluator::Evaluator<SystemTag>;
+	using nd_evaluator  = typename BC::tensors::exprs::evaluator::Evaluator<SystemTag>;
 
 	BC::meta::constexpr_if<expression_traits<Expression>::is_expr> ([&]() {
 		nd_evaluator::template nd_evaluate<Expression::tensor_iterator_dimension>(expr, stream);
@@ -182,8 +183,8 @@ static auto greedy_evaluate(Expression expression, Stream stream) {
 }
 
 } //ns exprs
+} //ns tensors
 } //ns BC
-
 
 
 #endif /* PARSE_TREE_COMPLEX_EVALUATOR_H_ */

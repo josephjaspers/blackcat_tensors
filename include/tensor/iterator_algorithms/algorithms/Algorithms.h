@@ -9,14 +9,14 @@
 #define BC_AGORITHMS_ALGORITHMS_H_
 
 
-BC_DEFAULT_MODULE_BODY(algorithms, Algorithm)
+BC_DEFAULT_MODULE_BODY(tensors { namespace algorithms, Algorithm) }
 
 #include "Device.h"
 #include "Host.h"
 
 
 namespace BC {
-
+namespace tensors {
 #define BC_TENSOR_ALGORITHM_DEF(function)\
 \
     template<class iter_begin_, class iter_end_, class... args>\
@@ -112,7 +112,7 @@ BC_TENSOR_ALGORITHM_DEF(bsearch)
 
 #undef BC_TENSOR_ALGORITHM_DEF
 }//end of namespace alg
-
-using namespace alg;
+} //end of tensors
+using namespace BC::tensors::alg;
 }
 #endif /* ALGORITHMS_H_ */

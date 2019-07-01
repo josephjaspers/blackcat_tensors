@@ -16,6 +16,8 @@ namespace tests {
 template<class value_type, template<class> class allocator>
 int test_constructors(int sz=128) {
 
+	using BC::tensors::all;
+
 	using alloc_t = allocator<value_type>;
 	using scal = BC::Scalar<value_type, alloc_t>;
 	using vec = BC::Vector<value_type, alloc_t>;
@@ -64,7 +66,7 @@ int test_constructors(int sz=128) {
 		mat a(5,5); a.rand(0, 10);
 		mat b(a);
 
-		return BC::all(b.approx_equal(a)) && b.rows() == 5 && b.cols() == 5 && a.memptr() != b.memptr();
+		return BC::tensors::all(b.approx_equal(a)) && b.rows() == 5 && b.cols() == 5 && a.memptr() != b.memptr();
 	)
 	//-----------------------------------Move Constructor-----------------------------//
 	BC_TEST_DEF(
@@ -85,7 +87,7 @@ int test_constructors(int sz=128) {
 		mat b(5,5);
 
 		b = a;
-		return BC::all(b.approx_equal(a));
+		return BC::tensors::all(b.approx_equal(a));
 	)
 //	//-----------------------------------Move Oper-----------------------------//
 	BC_TEST_DEF(
@@ -96,7 +98,7 @@ int test_constructors(int sz=128) {
 		auto* original_ptr = a.memptr();
 		b = std::move(a);
 
-		return BC::all(b.approx_equal(c)) && a.memptr() != b.memptr() && b.memptr() == original_ptr;
+		return BC::tensors::all(b.approx_equal(c)) && a.memptr() != b.memptr() && b.memptr() == original_ptr;
 	)
 
 	BC_TEST_BODY_TAIL

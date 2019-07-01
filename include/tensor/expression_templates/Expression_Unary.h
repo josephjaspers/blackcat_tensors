@@ -15,7 +15,8 @@
 
 
 namespace BC {
-namespace exprs {
+namespace tensors {
+namespace exprs { 
 
 template<class Value, class Operation>
 struct Unary_Expression : public Expression_Base<Unary_Expression<Value, Operation>>, public Operation {
@@ -78,8 +79,9 @@ auto make_un_expr(expr e, op oper =op()) {
 
 
 
-}
-}
+} //ns BC
+} //ns exprs
+} //ns tensors
 
 
 #endif /* EXPRESSION_UNARY_POINTWISE_CU_ */

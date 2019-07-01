@@ -12,6 +12,7 @@
 #include "Shape.h"
 
 namespace BC {
+namespace tensors {
 namespace exprs {
 
 template<int Dimensions, class ValueType, class Allocator, class... Tags>
@@ -42,15 +43,19 @@ public:
 		  stream_t& get_stream()  		{ return m_stream; }
 };
 
+namespace {
+
+template<int dimension, class Parent, class... Tags>
+using slice_type_from_parent = Array_Slice<dimension,
+		typename Parent::value_type,
+		typename Parent::allocator_t,
+		BC_View, Tags...>;
+
+}
 
 template<class Parent>
 auto make_row(Parent& parent, BC::size_t index) {
-	using slice_type = Array_Slice<1,
-			typename Parent::value_type,
-			typename Parent::allocator_t,
-			BC_View,
-			BC_Noncontinuous>;
-
+	using slice_type = slice_type_from_parent<1, Parent, BC_Noncontinuous>;
 	return slice_type(parent.get_stream(), parent.get_allocator(),
 						Shape<1>(parent.cols(), parent.leading_dimension(0)),
 						parent.memptr() + index);
@@ -62,11 +67,7 @@ auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
     BC::size_t length = BC::meta::min(parent.rows(), parent.cols() - diagnol_index);
     BC::size_t ptr_index = diagnol_index > 0 ? parent.leading_dimension(0) * diagnol_index : std::abs(diagnol_index);
 
-    using slice_type = Array_Slice<1,
-    					typename Parent::value_type,
-    					typename Parent::allocator_t,
-    					BC_View, BC_Noncontinuous>;
-
+    using slice_type = slice_type_from_parent<1, Parent, BC_Noncontinuous>;
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
 						Shape<1>(length, stride),
@@ -76,12 +77,7 @@ auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
 
 template<class Parent, class=std::enable_if_t<!expression_traits<Parent>::is_continuous>>
 static auto make_slice(Parent& parent, BC::size_t index) {
-	using slice_type = Array_Slice<Parent::tensor_dimension-1,
-						typename Parent::value_type,
-						typename Parent::allocator_t,
-						BC_View,
-						BC_Noncontinuous>;
-
+	using slice_type = slice_type_from_parent<Parent::tensor_dimension-1, Parent, BC_Noncontinuous>;
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
 						parent.get_shape(),
@@ -90,11 +86,7 @@ static auto make_slice(Parent& parent, BC::size_t index) {
 template<class Parent, class=std::enable_if_t<expression_traits<Parent>::is_continuous>, int differentiator=0>
 static auto make_slice(Parent& parent, BC::size_t index) {
 
-	using slice_type = Array_Slice<Parent::tensor_dimension-1,
-						typename Parent::value_type,
-						typename Parent::allocator_t,
-						BC_View>;
-
+	using slice_type = slice_type_from_parent<Parent::tensor_dimension-1, Parent>;
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
 						parent.get_shape(),
@@ -108,10 +100,7 @@ static auto make_ranged_slice(Parent& parent, BC::size_t from, BC::size_t to) {
 	BC::array<Parent::tensor_dimension, BC::size_t> inner_shape = parent.inner_shape();
 	inner_shape[Parent::tensor_dimension-1] = range;
 
-	using slice_type = Array_Slice<Parent::tensor_dimension,
-						typename Parent::value_type,
-						typename Parent::allocator_t>;
-
+	using slice_type = slice_type_from_parent<Parent::tensor_dimension, Parent>;
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
 						BC::Shape<Parent::tensor_dimension>(inner_shape),
@@ -120,10 +109,7 @@ static auto make_ranged_slice(Parent& parent, BC::size_t from, BC::size_t to) {
 
 template<class Parent, int Dimension>
 static auto make_view(Parent& parent, BC::array<Dimension, BC::size_t> shape) {
-	using slice_type = Array_Slice<Dimension,
-						typename Parent::value_type,
-						typename Parent::allocator_t>;
-
+	using slice_type = slice_type_from_parent<Dimension, Parent>;
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
 						BC::Shape<Dimension>(shape),
@@ -132,10 +118,7 @@ static auto make_view(Parent& parent, BC::array<Dimension, BC::size_t> shape) {
 
 template<class Parent>
 static auto make_scalar(Parent& parent, BC::size_t index) {
-	using slice_type = Array_Slice<0,
-						typename Parent::value_type,
-						typename Parent::allocator_t>;
-
+	using slice_type = slice_type_from_parent<0, Parent>;
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
 						BC::Shape<0>(),
@@ -146,13 +129,7 @@ template<class Parent, int Dimension>
 auto make_chunk(Parent& parent, BC::array<Parent::tensor_dimension, BC::size_t> index_points, BC::array<Dimension, int> shape) {
 	static_assert(Dimension > 1, "TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, USE SCALAR OR RANGED_SLICE OTHERWISE");
 
-	using slice_type = Array_Slice<
-			Dimension,
-			typename Parent::value_type,
-			typename Parent::allocator_t,
-			BC_Noncontinuous,
-			BC_View>;
-
+	using slice_type = slice_type_from_parent<Dimension, Parent, BC_Noncontinuous>;
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
 						SubShape<Dimension>(shape, parent.get_shape()),
@@ -160,8 +137,10 @@ auto make_chunk(Parent& parent, BC::array<Parent::tensor_dimension, BC::size_t> 
 }
 
 
-}
-}
+} //ns BC
+} //ns exprs
+} //ns tensors
+
 
 
 #endif /* Array_Slice_H_ */

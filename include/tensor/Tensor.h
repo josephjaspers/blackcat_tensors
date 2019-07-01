@@ -14,12 +14,16 @@
 #include "Tensor_Base.h"
 #include "../BlackCat_Allocator.h"
 namespace BC {
+namespace tensors {
+namespace common_using {
+
 namespace {
 template<class T>
 using default_allocator = BC::Allocator<default_system_tag_t, T>;
 }
+
 template<int dimension, class ValueType, class Allocator=default_allocator<ValueType>>
-using Tensor = Tensor_Base<exprs::Array<dimension, ValueType, Allocator>>;
+using Tensor = BC::tensors::Tensor_Base<exprs::Array<dimension, ValueType, Allocator>>;
 
 template<class ValueType, class Allocator = default_allocator<ValueType>> using Scalar = Tensor<0, ValueType, Allocator>;
 template<class ValueType, class Allocator = default_allocator<ValueType>> using Vector = Tensor<1, ValueType, Allocator>;
@@ -27,7 +31,7 @@ template<class ValueType, class Allocator = default_allocator<ValueType>> using 
 template<class ValueType, class Allocator = default_allocator<ValueType>> using Cube = Tensor<3, ValueType, Allocator>;
 
 template<int dimension, class ValueType, class Allocator=default_allocator<ValueType>>
-using Tensor_View = Tensor_Base<BC::exprs::Array_Const_View<dimension, ValueType, Allocator>>;
+using Tensor_View = Tensor_Base<BC::tensors::exprs::Array_Const_View<dimension, ValueType, Allocator>>;
 
 template<class ValueType, class Allocator = default_allocator<ValueType>> using Scalar_View = Tensor_View<0, ValueType, Allocator>;
 template<class ValueType, class Allocator = default_allocator<ValueType>> using Vector_View = Tensor_View<1, ValueType, Allocator>;
@@ -42,6 +46,11 @@ template<class Expression> using VectorXpr = TensorXpr<1, Expression>;
 template<class Expression> using MatrixXpr = TensorXpr<2, Expression>;
 template<class Expression> using CubeXpr = TensorXpr<3, Expression>;
 
-}
+} //end of ns common_using
+} //end of ns tensors
+
+using namespace BC::tensors::common_using;
+
+} //end of ns BC
 
 #endif /* TENSOR_ALIASES_H_ */

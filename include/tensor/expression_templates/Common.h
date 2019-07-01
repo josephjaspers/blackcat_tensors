@@ -13,6 +13,7 @@
 #include "Expression_Template_Traits.h"
 
 namespace BC {
+namespace tensors {
 namespace exprs {
 
 
@@ -46,8 +47,9 @@ struct inferior_type<lv, rv, std::enable_if_t<(lv::tensor_dimension > rv::tensor
 };
 
 
-}
-}
+} //ns BC
+} //ns exprs
+} //ns tensors
 
 
 #endif /* BLACKCAT_COMPILERDEFINITIONS_H_ */

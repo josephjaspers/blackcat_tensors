@@ -13,6 +13,7 @@
 #include "Shape.h"
 
 namespace BC {
+namespace tensors {
 namespace exprs {
 
 template<class derived>
@@ -95,8 +96,10 @@ struct Array_Base : Expression_Template_Base<Derived>, BC_Array {
 
 };
 
-}
-}
+} //ns BC
+} //ns exprs
+} //ns tensors
+
 
 
 #endif /* BC_INTERNAL_BASE_H_ */

@@ -12,7 +12,8 @@
 #include <type_traits>
 
 namespace BC {
-namespace exprs {
+namespace tensors {
+namespace exprs { 
 
 template<class,class,class> struct Binary_Expression;
 template<class,class>		struct Unary_Expression;
@@ -181,7 +182,8 @@ struct blas_expression_traits : expression_traits<T> {
 	}
 };
 
-}
-}
+} //ns BC
+} //ns exprs
+} //ns tensors
 
 #endif /* BLACKCAT_INTERNAL_FORWARD_DECLS_H_ */

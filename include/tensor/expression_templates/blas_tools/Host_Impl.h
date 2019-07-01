@@ -9,7 +9,8 @@
 #define BC_CORE_BLAS_TOOLS_HOST_IMPL_H_
 
 namespace BC {
-namespace exprs {
+namespace tensors {
+namespace exprs { 
 namespace blas_tools {
 namespace host_impl {
 
@@ -56,7 +57,7 @@ static auto calculate_alpha(Scalar head, Scalars... tails) {
 }
 }
 }
-
+}
 
 
 #endif /* HOST_IMPL_H_ */

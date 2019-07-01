@@ -61,6 +61,7 @@ static auto function (iter_begin begin, iter_end end){\
 
 
 namespace BC {
+namespace tensors {
 namespace algorithms {
 
 template<>
@@ -154,6 +155,7 @@ struct Algorithm<device_tag> {
 
 
 };
+}
 }
 }
 

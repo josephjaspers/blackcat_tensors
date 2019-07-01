@@ -51,6 +51,7 @@ static auto function (args... parameters){ \
 
 
 namespace BC {
+namespace tensors {
 namespace algorithms {
 
 template<>
@@ -149,7 +150,7 @@ struct Algorithm<host_tag> {
 };
 }
 }
-
+}
 
 #undef BC_CPU_ALGORITHM_FORWARDER_DEF
 #undef BC_ALGORITHM_HOST_NDEF_FORWARDER_DEF

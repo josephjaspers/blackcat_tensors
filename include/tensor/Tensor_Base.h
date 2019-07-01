@@ -16,30 +16,36 @@
 #include "Tensor_Utility.h"
 
 namespace BC {
+namespace tensors {
+
+namespace {
+using namespace BC::meta;
+}
+
 
 template<class ExpressionTemplate>
 class Tensor_Base :
         public ExpressionTemplate,
-        public module::Tensor_Operations<ExpressionTemplate>,
-        public module::Tensor_Utility<ExpressionTemplate>,
-        public module::Tensor_Accessor<ExpressionTemplate>,
-        public module::Tensor_IterAlgos<ExpressionTemplate> {
+        public Tensor_Operations<ExpressionTemplate>,
+        public Tensor_Utility<ExpressionTemplate>,
+        public Tensor_Accessor<ExpressionTemplate>,
+        public Tensor_IterAlgos<ExpressionTemplate> {
 
     template<class> friend class Tensor_Base;
-    friend class module::Tensor_Operations<ExpressionTemplate>;
-    friend class module::Tensor_Utility<ExpressionTemplate>;
-    friend class module::Tensor_Accessor<ExpressionTemplate>;
+    friend class Tensor_Operations<ExpressionTemplate>;
+    friend class Tensor_Utility<ExpressionTemplate>;
+    friend class Tensor_Accessor<ExpressionTemplate>;
 
     using parent        = ExpressionTemplate;
     using self          = Tensor_Base<ExpressionTemplate>;
-    using operations    = module::Tensor_Operations<ExpressionTemplate>;
-    using utility       = module::Tensor_Utility<ExpressionTemplate>;
-    using accessor      = module::Tensor_Accessor<ExpressionTemplate>;
+    using operations    = Tensor_Operations<ExpressionTemplate>;
+    using utility       = Tensor_Utility<ExpressionTemplate>;
+    using accessor      = Tensor_Accessor<ExpressionTemplate>;
 
-    using move_parameter        = BC::meta::only_if<exprs::expression_traits<ExpressionTemplate>::is_move_constructible, self&&>;
-    using copy_parameter        = BC::meta::only_if<exprs::expression_traits<ExpressionTemplate>::is_copy_constructible, const self&>;
-    using move_assign_parameter = BC::meta::only_if<exprs::expression_traits<ExpressionTemplate>::is_move_assignable,       self&&>;
-    using copy_assign_parameter = BC::meta::only_if<exprs::expression_traits<ExpressionTemplate>::is_copy_assignable, const self&>;
+    using move_parameter        = only_if<exprs::expression_traits<ExpressionTemplate>::is_move_constructible, self&&>;
+    using copy_parameter        = only_if<exprs::expression_traits<ExpressionTemplate>::is_copy_constructible, const self&>;
+    using move_assign_parameter = only_if<exprs::expression_traits<ExpressionTemplate>::is_move_assignable,       self&&>;
+    using copy_assign_parameter = only_if<exprs::expression_traits<ExpressionTemplate>::is_copy_assignable, const self&>;
 
 public:
 
@@ -47,6 +53,7 @@ public:
     using ExpressionTemplate::internal;
 
     using ExpressionTemplate::tensor_dimension; //required
+    using allocator_type = conditional_detected_t<query_allocator_type, ExpressionTemplate, void>;
     using value_type  = typename ExpressionTemplate::value_type;
 	using system_tag  = typename ExpressionTemplate::system_tag;
 
@@ -94,7 +101,7 @@ public:
          return *this;
     }
 
-    Tensor_Base(BC::meta::only_if<tensor_dimension==0, value_type> scalar) {
+    Tensor_Base(only_if<tensor_dimension==0, value_type> scalar) {
         static_assert(tensor_dimension == 0, "SCALAR_INITIALIZATION ONLY AVAILABLE TO SCALARS");
         this->fill(scalar);
     }
@@ -113,6 +120,7 @@ private:
     }
 };
 
+}
 }
 
 #endif /* TENSOR_BASE_H_ */

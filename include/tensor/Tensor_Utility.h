@@ -16,11 +16,10 @@
 #include <sstream>
 
 namespace BC {
+namespace tensors {
 
 template<class>
 class Tensor_Base;
-
-namespace module {
 
 /*
  * Defines standard utility methods related to I/O

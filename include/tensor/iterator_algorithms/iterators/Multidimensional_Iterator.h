@@ -12,6 +12,7 @@
 #include "Common.h"
 
 namespace BC {
+namespace tensors {
 namespace iterators {
 
 template<direction direction, class tensor_t>
@@ -131,6 +132,6 @@ reverse_iterator_end(derived_t& derived) {
 
 }
 }
-
+}
 
 #endif /* tensor_iterator_dimension_H_ */

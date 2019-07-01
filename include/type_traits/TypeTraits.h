@@ -21,19 +21,31 @@ using namespace BC::meta::common_traits;
 	template<bool x,class T> using only_if = conditional_t<x, T, DISABLE<T>>;
 
 	template<int x> struct Integer { static constexpr int value = x; };
+	template<class T> struct Type { using type = T; };
 	template<class T, class... Ts> using front_t = T;
 
 	template<class...> using void_t = void;
 	template<class...> static constexpr bool true_v  = true;
 	template<class...> static constexpr bool false_v = false;
 
+	template<bool cond> using truth_type = conditional_t<cond, true_type, false_type>;
+	template<bool cond> using not_truth_type = conditional_t<cond, false_type, true_type>;
+
+	template<class> struct not_type;
+	template<> struct not_type<false_type>: true_type {};
+	template<> struct not_type<true_type>: false_type {};
+
+	//---------------------------------
+	template<class T> using query_allocator_type = typename T::allocator_type;
+	template<class T> using query_value_type  	 = typename T::value_type;
+
 	//----------------------------------
 
 	template<template<class> class func, class T, class voider=void>
-	struct is_detected : false_type { };
+	struct is_detected : false_type {};
 
 	template<template<class> class func, class T>
-	struct is_detected<func, T, enable_if_t<true_v<func<T>>>> : true_type { };
+	struct is_detected<func, T, enable_if_t<true_v<func<T>>>> : true_type {};
 
 	template<template<class> class func, class T>
 	static constexpr bool is_detected_v = is_detected<func, T>::value;
@@ -111,7 +123,7 @@ using namespace BC::meta::common_traits;
     static constexpr bool any_v = any<Function, Ts...>::value;
 
     template<template<class> class Function, class... Ts>
-    struct none : conditional_t<any<Function, Ts...>::value, false_type, true_type> {};
+    struct none: conditional_t<any<Function, Ts...>::value, false_type, true_type> {};
 
     template<template<class> class Function, class... Ts>
     static constexpr bool none_v = none<Function, Ts...>::value;

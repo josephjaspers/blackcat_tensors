@@ -12,7 +12,9 @@
 #include <functional>
 
 namespace BC {
+namespace tensors {
 template<class> class Tensor_Base;
+}
 
 //defines a function with a user defined implementation (not part of std::cmath.h)
 #define BLACKCAT_FUNCTOR_DEF(funcName, instance_name, math_function, ...) 	\
@@ -27,7 +29,7 @@ struct funcName {									 			\
 		return math_function; 								 	\
 	}															\
 	template<class internal_t>									\
-	auto operator() (const Tensor_Base<internal_t>& tensor) {   \
+	auto operator() (const BC::tensors::Tensor_Base<internal_t>& tensor) {   \
 		  return tensor.un_expr(funcName());               		\
 	}															\
 																\
@@ -99,7 +101,7 @@ struct Pow {
 		return std::pow(x, exp);
 	}
 	template<class internal_t, class Exp>
-	auto operator() (const Tensor_Base<internal_t>& tensor, Exp exp) {
+	auto operator() (const BC::tensors::Tensor_Base<internal_t>& tensor, Exp exp) {
 		struct FunctorPow {
 			typename internal_t::value_type exp;
 			 auto operator() (const typename internal_t::value_type value) const {
@@ -162,7 +164,7 @@ struct norm {
 };
 
 template<class internal_t, class min_, class max_>
-static auto normalize(const Tensor_Base<internal_t>& tensor, min_ min, max_ max) {
+static auto normalize(const BC::tensors::Tensor_Base<internal_t>& tensor, min_ min, max_ max) {
     using value_type = typename internal_t::value_type;
     return tensor.un_expr(norm<value_type>(value_type(min), value_type(max)));
 }

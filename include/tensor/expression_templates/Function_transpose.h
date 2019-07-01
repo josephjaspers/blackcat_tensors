@@ -15,7 +15,8 @@
 
 
 namespace BC {
-namespace exprs {
+namespace tensors {
+namespace exprs { 
 
 
 template<class Value, class System_Tag>
@@ -97,9 +98,8 @@ auto make_transpose(Unary_Expression<Array, oper::transpose<SystemTag>> expressi
 	return expression.array;
 }
 
-
-}
-}
-
+} //ns BC
+} //ns exprs
+} //ns tensors
 
 #endif /* EXPRESSION_UNARY_MATRIXTRANSPOSITION_H_ */

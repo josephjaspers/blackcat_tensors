@@ -17,7 +17,10 @@
 #include "Device_Impl.cu"
 #include <iostream>
 
+
 namespace BC {
+namespace tensors {
+namespace exprs {
 namespace evaluator {
 
 template<>
@@ -85,6 +88,8 @@ struct Evaluator<device_tag> {
 
 };
 
+}
+}
 }
 }
 

@@ -15,6 +15,7 @@
 
 
 namespace BC {
+namespace tensors {
 namespace exprs {
 
 template<int Dimension, class Scalar, class Allocator>
@@ -68,7 +69,11 @@ struct Array_Const_View
 		  stream_type& get_stream()   		{ return stream; }
 
 };
-}
-}
+
+
+} //ns BC
+} //ns exprs
+} //ns tensors
+
 
 #endif /* ARRAY_VIEW_H_ */

@@ -12,7 +12,8 @@
 #include "Common.h"
 
 namespace BC {
-namespace exprs {
+namespace tensors {
+namespace exprs { 
 namespace blas_tools {
 
 template<>
@@ -46,7 +47,7 @@ struct BLAS_Tools<device_tag> : Common_Tools<BLAS_Tools<device_tag>> {
 }
 }
 }
-
+}
 
 
 #endif /* DEVICE_H_ */

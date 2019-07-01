@@ -1,5 +1,6 @@
 namespace BC {
-namespace exprs {
+namespace tensors {
+namespace exprs { 
 namespace blas_tools {
 namespace device_impl {
 
@@ -49,6 +50,7 @@ static void calculate_alpha(ScalarOut output, Scalars... vals) {
 	output[0] = calculate_alpha_impl(vals...);
 }
 
+}
 }
 }
 }

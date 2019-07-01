@@ -10,6 +10,7 @@
 #define STL_tensor_iterator_dimension_COMMON_H_
 
 namespace BC {
+namespace tensors {
 namespace iterators {
 
 enum direction {
@@ -18,6 +19,7 @@ enum direction {
 };
 
 
+}
 }
 }
 

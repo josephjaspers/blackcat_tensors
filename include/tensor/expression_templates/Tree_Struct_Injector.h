@@ -11,6 +11,7 @@
 
 
 namespace BC {
+namespace tensors {
 namespace exprs {
 
 template<class Tensor, int alpha_modifier_ = 1, int beta_modifier_= 0>
@@ -41,8 +42,9 @@ auto make_injection(core c) {
 }
 
 
-}
-}
+} //ns exprs
+} //ns tensors
+} //ns BC
 
 
 #endif /* INJECTION_INFO_H_ */

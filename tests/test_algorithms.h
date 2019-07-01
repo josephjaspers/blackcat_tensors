@@ -27,13 +27,13 @@ int test_algorithms(int sz=128) {
 		mat a(sz, sz);
 		a.fill(2);
 
-		return BC::all(a == 2);
+		return BC::tensors::all(a == 2);
 	)
 	BC_TEST_DEF(
 		mat a(sz, sz);
 		BC::fill(a.begin(), a.end(), 3);
 
-		return BC::all(a == 3);
+		return BC::tensors::all(a == 3);
 	)
 
 	BC_TEST_DEF(
@@ -49,7 +49,7 @@ int test_algorithms(int sz=128) {
 		a.sync();
 		b.sync();
 
-		return BC::all(a == 5) && BC::all(b == 7);
+		return BC::tensors::all(a == 5) && BC::tensors::all(b == 7);
 	)
 
 
@@ -68,7 +68,7 @@ int test_algorithms(int sz=128) {
 		b.sync();
 
 
-		return BC::all(a == 5) && BC::all(b == 7);
+		return BC::tensors::all(a == 5) && BC::tensors::all(b == 7);
 	)
 
 	BC_TEST_BODY_TAIL

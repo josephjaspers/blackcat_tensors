@@ -10,6 +10,7 @@
 #define BLACKCAT_TENSOR_ACCESSOR_H_
 
 namespace BC {
+namespace tensors {
 
 template<class>
 class Tensor_Base;
@@ -17,7 +18,7 @@ class Tensor_Base;
 
 template<class T>
 const auto reshape(const Tensor_Base<T>& tensor) {
-	static_assert(BC::exprs::expression_traits<T>::is_array &&
+	static_assert(BC::tensors::exprs::expression_traits<T>::is_array &&
 					T::tensor_iterator_dimension <= 1,
 					"Reshape is only available to continuous tensors");
     return [&](auto... integers) {
@@ -26,7 +27,7 @@ const auto reshape(const Tensor_Base<T>& tensor) {
 }
 template<class T>
 auto reshape(Tensor_Base<T>& tensor) {
-	static_assert(BC::exprs::expression_traits<T>::is_array &&
+	static_assert(BC::tensors::exprs::expression_traits<T>::is_array &&
 					T::tensor_iterator_dimension <= 1,
 					"Reshape is only available to continuous tensors");
     return [&](auto... integers) {
@@ -57,7 +58,6 @@ auto chunk(Tensor_Base<T>& tensor, integers... ints) {
     };
 }
 
-namespace module {
 
 template<class ExpressionTemplate>
 class Tensor_Accessor {

@@ -14,9 +14,10 @@
 namespace BC {
 namespace allocator {
 namespace fancy {
+namespace detail {
 
 template<class SystemTag>
-class Workspace_Core {
+class Workspace_Base {
 
 	using system_tag = SystemTag;
 
@@ -33,7 +34,7 @@ class Workspace_Core {
 	Polymorphic_Allocator<Byte, SystemTag> m_allocator = get_default_allocator();
 
 public:
-	Workspace_Core(std::size_t sz=0) : m_memptr_sz(sz){
+	Workspace_Base(std::size_t sz=0) : m_memptr_sz(sz){
 		if (sz)
 			m_memptr = m_allocator.allocate(sz);
 	}
@@ -99,12 +100,13 @@ public:
 		deallocate(reinterpret_cast<Byte*>(memptr), sz * sizeof(T));
 	}
 
-	~Workspace_Core(){
+	~Workspace_Base(){
 		BC_ASSERT(m_curr_index==0,
 				"Workspace Destructor called while memory is still allocated, Memory Leak Detected");
 		m_allocator.deallocate(m_memptr, m_memptr_sz);
 	}
 };
+} //end of ns detail
 
 template<class SystemTag, class ValueType=BC::allocator::Byte>
 class Workspace {
@@ -112,9 +114,8 @@ class Workspace {
 	template<class, class>
 	friend class Workspace;
 
-	using ws_core_t = Workspace_Core<SystemTag>;
-
-	std::shared_ptr<ws_core_t> ws_ptr;
+	using ws_base_t = detail::Workspace_Base<SystemTag>;
+	std::shared_ptr<ws_base_t> ws_ptr;
 
 public:
 
@@ -128,7 +129,7 @@ public:
 	};
 
 	Workspace(int sz=0)
-	: ws_ptr(new ws_core_t(sz)) {}
+	: ws_ptr(new ws_base_t(sz)) {}
 
 	template<class T>
 	Workspace(const Workspace<SystemTag, T>& ws) : ws_ptr(ws.ws_ptr) {}

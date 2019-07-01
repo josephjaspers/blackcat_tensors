@@ -12,7 +12,7 @@
 namespace BC {
 namespace nn {
 
-static const BC::exprs::Shape<0> NULL_TENSOR = BC::exprs::Shape<0>();
+static const BC::tensors::exprs::Shape<0> NULL_TENSOR = BC::tensors::exprs::Shape<0>();
 
 //template<class derived>
 class Layer_Base {

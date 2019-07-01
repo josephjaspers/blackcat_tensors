@@ -12,11 +12,11 @@
 #include "expression_templates/Tree_Evaluator.h"
 
 namespace BC {
+namespace tensors {
 
 template<class>
 class Tensor_Base;
 
-namespace module {
 
 template<class Expression>
 struct Tensor_Operations {
@@ -216,6 +216,8 @@ public:
 		return bi_expr<oper::sub>(param.array);
 	}
 
+	// --------------- host_to_device/device_to_host copy function --------------- //
+
     template<class right_value>
     void copy(const Tensor_Operations<right_value>& rv) {
         static_assert(exprs::expression_traits<Expression>::is_copy_assignable, "copy lv must be array");
@@ -380,7 +382,6 @@ public:
 
 
 };
-}
 
 //----------------------------------------------scalar element-wise operations--------------------------------------------------//
 #define BC_OPER_LV_SCALAR_DEF(op, op_functor)               \
@@ -389,9 +390,9 @@ public:
 			class expression_t, 							\
         	class = std::enable_if_t<						\
         					std::is_convertible<p_value_type, typename expression_t::value_type>::value && 							 \
-        					!BC::exprs::expression_traits<p_value_type>::is_bc_type>							 \
+        					!BC::tensors::exprs::expression_traits<p_value_type>::is_bc_type>							 \
 		>        					 																			 \
-         auto operator op (const p_value_type& param, const module::Tensor_Operations<expression_t>& tensor) {   \
+         auto operator op (const p_value_type& param, const Tensor_Base<expression_t>& tensor) {   \
             using value_type = typename expression_t::value_type;                                                \
             auto scalar_obj = exprs::make_scalar_constant<typename expression_t::system_tag>((value_type)param); \
             return make_tensor(scalar_obj).bi_expr(oper:: op_functor (), tensor);                                \
@@ -415,7 +416,7 @@ public:
 		return make_tensor(exprs::expression_traits<Expression>::select_on_dx(tensor.internal()));
 	}
 
-
+}
 }
 
 #endif /* TENSOR_CORE_H_ */

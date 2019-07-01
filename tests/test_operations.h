@@ -33,42 +33,42 @@ int test_operations(int sz=128) {
 	BC_TEST_DEF(
 		mat c(a);
 		validation = (c + b).approx_equal(a += b);
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 	BC_TEST_DEF(
 		mat c(a);
 		validation = (c - b).approx_equal(a -= b);
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 	BC_TEST_DEF(
 		mat c(a);
 		validation = (c / b).approx_equal(a /= b);
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 	BC_TEST_DEF(
 		mat c(a);
 		validation = (c % b).approx_equal(a %= b);
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 	BC_TEST_DEF(
 		mat c(a);
 		validation = (c + 1) >= a;
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 	BC_TEST_DEF(
 		mat c(a);
 		validation = (c - 1) <= a;
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 	BC_TEST_DEF(
 		mat c(a);
 		validation = c == a;
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 	BC_TEST_DEF(
 		mat c(a);
 		validation = c*-1 == -a;
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 
 	BC_TEST_BODY_TAIL
@@ -106,7 +106,7 @@ int test_matrix_muls(int sz=128) {
 		d = a * b;
 
 		validation =  c.approx_equal(d);
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 
 	BC_TEST_DEF(
@@ -114,7 +114,7 @@ int test_matrix_muls(int sz=128) {
 		c = atrans.t() * b;
 		d = a * b;
 		validation =  c.approx_equal(d);
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 
 	//rv trans
@@ -123,7 +123,7 @@ int test_matrix_muls(int sz=128) {
 		c=(b * a);
 		d=(b * atrans.t());
 		validation = c.approx_equal(d);
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 
 	BC_TEST_DEF(
@@ -131,7 +131,7 @@ int test_matrix_muls(int sz=128) {
 		d = 2 * a * b;
 
 		validation = c.approx_equal(d);
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 
 
@@ -140,7 +140,7 @@ int test_matrix_muls(int sz=128) {
 		d = 2 * a.t() * b;
 
 		validation = c.approx_equal(d);
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 	BC_TEST_DEF(
 		mat atrans(a.t());
@@ -148,7 +148,7 @@ int test_matrix_muls(int sz=128) {
 		d = 2 * a.t() * b;
 
 		validation = c.approx_equal(d);
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 	BC_TEST_DEF(
 		mat atrans(a.t());
@@ -156,7 +156,7 @@ int test_matrix_muls(int sz=128) {
 		d = 2 * atrans * b;
 
 		validation = c.approx_equal(d);
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 	BC_TEST_DEF(
 		mat atrans(a.t());
@@ -164,7 +164,7 @@ int test_matrix_muls(int sz=128) {
 		d = 3 + 2 * atrans * b + 5;
 
 		validation = c.approx_equal(d);
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 
 	BC_TEST_DEF(
@@ -182,7 +182,7 @@ int test_matrix_muls(int sz=128) {
 		f += f;
 
 		validation = (c.approx_equal(d) && c.approx_equal(e) && c.approx_equal(f));
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 	BC_TEST_DEF(
 		mat atrans(a.t());
@@ -206,7 +206,7 @@ int test_matrix_muls(int sz=128) {
 
 
 		validation = c.approx_equal(d) && e.approx_equal(f) && g.approx_equal(h);
-		return BC::all(validation);
+		return BC::tensors::all(validation);
 	)
 	BC_TEST_BODY_TAIL
 }

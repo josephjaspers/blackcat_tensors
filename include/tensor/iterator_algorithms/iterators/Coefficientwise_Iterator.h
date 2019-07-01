@@ -12,6 +12,7 @@
 #include "Common.h"
 
 namespace BC {
+namespace tensors {
 namespace iterators {
 
 template<direction direction, class tensor_t_, class enabler=void>
@@ -124,6 +125,6 @@ auto reverse_cwise_iterator_end(tensor_t& tensor) {
 
 }
 }
-
+}
 
 #endif /* ELEMENTWISE_Coefficientwise_Iterator_H_ */

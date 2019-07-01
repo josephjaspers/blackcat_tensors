@@ -9,11 +9,10 @@
 #define BLACKCAT_TENSOR_tensor_iterator_dimension_H_
 
 namespace BC {
+namespace tensors {
 
 template<class internal>
 class Tensor_Base;
-
-namespace module {
 
 template<class internal_t>
 class Tensor_IterAlgos {
@@ -46,7 +45,7 @@ public:
     }
 
     void sort() {
-    	BC::alg::sort(this->as_derived().get_stream(), this->begin(), this->end());
+    	BC::tensors::alg::sort(this->as_derived().get_stream(), this->begin(), this->end());
     }
 
     void rand(value_type lb=0, value_type ub=1) {
@@ -217,9 +216,6 @@ BC_TENSOR_tensor_iterator_dimension_DEF(CW_ReverseIterator, rbegin, rend)
 	}
 };
 
-}//end of namespace module
-
-
 #ifdef BC_CPP17 //------------------------------------------------------------------------------------------
 
 template<class internal_t>
@@ -253,7 +249,7 @@ template<class internal_t>
 static auto max(const Tensor_Base<internal_t>& tensor) {
 	static_assert(exprs::expression_traits<internal_t>::is_array,
 			"'max' is only available to Array types, max on 'Expressions' is prohibited");
-	auto max_index = BC::alg::max_element(tensor.get_stream(), tensor.cbegin(), tensor.cend());
+	auto max_index = BC::tensors::alg::max_element(tensor.get_stream(), tensor.cbegin(), tensor.cend());
 	return tensor(max_index);
 }
 
@@ -261,12 +257,12 @@ template<class internal_t>
 static auto min(const Tensor_Base<internal_t>& tensor) {
 	static_assert(exprs::expression_traits<internal_t>::is_array,
 			"'min' is only available to Array types, min on 'Expressions' is prohibited");
-	auto min_index = BC::alg::min_element(tensor.get_stream(), tensor.cbegin(), tensor.cend());
+	auto min_index = BC::tensors::alg::min_element(tensor.get_stream(), tensor.cbegin(), tensor.cend());
 	return tensor(min_index);
 }
 
 #endif //ifdef BC_CPP17 //------------------------------------------------------------------------------------------
-
+} //end of ns tensors
 } //end of ns BC
 
 #endif /* TENSOR_STL_INTERFACE_H_ */

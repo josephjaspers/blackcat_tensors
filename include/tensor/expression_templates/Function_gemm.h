@@ -14,7 +14,8 @@
 #include "blas_tools/Blas_tools.h"
 
 namespace BC {
-namespace exprs {
+namespace tensors {
+namespace exprs { 
 
 
 template<class lv, class rv, class System_Tag>
@@ -31,7 +32,7 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
     using value_type	= typename lv::value_type;
     using system_tag	= System_Tag;
     using blas_impl		= BC::blas::implementation<system_tag>;
-    using blas_util	    = BC::exprs::blas_tools::implementation<system_tag>;
+    using blas_util	    = BC::tensors::exprs::blas_tools::implementation<system_tag>;
 
     static constexpr int tensor_dimension 	   = rv::tensor_dimension;
     static constexpr int tensor_iterator_dimension  = 1;
@@ -79,8 +80,9 @@ struct Binary_Expression<lv, rv, oper::gemm<System_Tag>>
 };
 
 
-}
-}
+} //ns BC
+} //ns exprs
+} //ns tensors
 
 
 #endif /* EXPRESSION_BINARY_DOTPRODUCT_CU_ */

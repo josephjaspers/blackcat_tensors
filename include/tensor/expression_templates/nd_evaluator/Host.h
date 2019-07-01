@@ -12,6 +12,8 @@
 #include <future>
 
 namespace BC {
+namespace tensors {
+namespace exprs {
 namespace evaluator {
 
 template<int Dimension>
@@ -66,6 +68,9 @@ struct Evaluator<host_tag> {
 
 
 };
+
+}
+}
 }
 }
 #endif

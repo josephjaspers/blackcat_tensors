@@ -18,9 +18,6 @@ namespace tests {
 template<class allocator>
 struct log_allocator : allocator {
 
-	using propagate_on_temporary_construction = std::true_type;
-//	using propagate_on_container_swap = std::true_type;
-
 	std::shared_ptr<BC::size_t> total_allocated = std::shared_ptr<BC::size_t>(new BC::size_t());
 	std::shared_ptr<BC::size_t> total_deallocated = std::shared_ptr<BC::size_t>(new BC::size_t());
 
@@ -52,13 +49,15 @@ struct log_allocator : allocator {
 template<class value_type, template<class> class allocator>
 int test_allocators(int sz=128) {
 
+	using BC::tensors::all;
+
 	BC_TEST_BODY_HEAD
 
 
 	using mat = BC::Matrix<value_type, log_allocator<allocator<value_type>>>;
 	using vec = BC::Vector<value_type, log_allocator<allocator<value_type>>>;
 
-	using system_tag = typename BC::allocator_traits<allocator<value_type>>::system_tag;
+	using system_tag = typename allocator_traits<allocator<value_type>>::system_tag;
 
 	//A stream by default references the default stream and the default global memory_pool
 	//(Use 'create_stream' to initialize a new stream and a new memory_pool

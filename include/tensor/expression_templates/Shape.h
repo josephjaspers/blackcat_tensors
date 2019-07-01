@@ -12,7 +12,8 @@
 #include "Common.h"
 
 namespace BC {
-namespace exprs {
+namespace tensors {
+namespace exprs { 
 
 
 template<int dims, class derived=void>
@@ -249,10 +250,14 @@ struct SubShape<1> : Shape<1, SubShape<1>> {
 	using parent::parent;
 };
 
-}
+} //ns exprs
+} //ns tensors
+
 //push shape into BC namespace
 template<int x>
-using Shape = exprs::Shape<x>;
+using Shape = tensors::exprs::Shape<x>;
+
+
 
 template<class... integers, typename=std::enable_if_t<meta::sequence_of_v<BC::size_t, integers...>>>
 auto make_shape(integers... ints) {
@@ -264,8 +269,7 @@ auto make_shape(InnerShape is) {
 	return Shape<InnerShape::tensor_dimension>(is);
 }
 
-}
-
+} //ns BC
 
 
 #endif /* SHAPE_H_ */

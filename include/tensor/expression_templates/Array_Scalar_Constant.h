@@ -13,13 +13,14 @@
 #include "Shape.h"
 
 namespace BC {
+namespace tensors {
 namespace exprs {
 
 template<class Scalar, class SystemTag>
 struct Scalar_Constant:
 		Shape<0>,
 		Array_Base<Scalar_Constant<Scalar, SystemTag>, 0>,
-		BC::exprs::BC_Stack_Allocated {
+		BC::tensors::exprs::BC_Stack_Allocated {
 
     using value_type = Scalar;
     using system_tag = SystemTag;
@@ -136,8 +137,11 @@ auto make_constexpr_scalar() {
 	return Constexpr_Scalar_Constant<Value, Scalar, SystemTag>();
 }
 
-}
-}
+
+} //ns BC
+} //ns exprs
+} //ns tensors
+
 
 
 

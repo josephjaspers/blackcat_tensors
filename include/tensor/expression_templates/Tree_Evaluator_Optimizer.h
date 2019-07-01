@@ -17,7 +17,8 @@
 #include "Expression_Unary.h"
 
 namespace BC {
-namespace exprs {
+namespace tensors {
+namespace exprs { 
 
 template<class T, class voider=void>
 struct optimizer;
@@ -313,8 +314,9 @@ struct optimizer<Unary_Expression<array_t, op>>
     }
 };
 
-}
-}
+} //ns exprs
+} //ns tensors
+} //ns BC
 
 
 

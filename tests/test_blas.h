@@ -29,10 +29,12 @@ namespace tests {
 template<class value_type, template<class> class allocator>
 int test_blas(int sz=128) {
 
+	using BC::tensors::all;
+
 	BC_TEST_BODY_HEAD
 
 	using allocator_t = allocator<value_type>;
-	using system_tag = typename BC::allocator_traits<allocator_t>::system_tag;
+	using system_tag = typename allocator_traits<allocator_t>::system_tag;
 	using compare_allocator = BC::Allocator<system_tag, value_type>;
 	using blas = BC::blas::implementation<system_tag>;
 
@@ -77,7 +79,7 @@ int test_blas(int sz=128) {
 				h_b.data(), sz,
 				zero, h_y.data(), sz);
 
-			return BC::all(h_y.approx_equal(y));
+			return BC::tensors::all(h_y.approx_equal(y));
 	)
 	BC_TEST_DEF(
 		y[0].zero();
@@ -91,7 +93,7 @@ int test_blas(int sz=128) {
 				h_b.data(), 1,
 				zero, h_y.data(), 1);
 
-			return BC::all(h_y[0].approx_equal(y[0]));
+			return BC::tensors::all(h_y[0].approx_equal(y[0]));
 	)
 	BC_TEST_DEF(
 		y.zero();
@@ -104,14 +106,14 @@ int test_blas(int sz=128) {
 				h_b[0], 1,
 				h_y.data(), sz);
 
-			return BC::all(h_y.approx_equal(y));
+			return BC::tensors::all(h_y.approx_equal(y));
 	)
 
 	BC_TEST_DEF(
 			//test dot
 		y[0][0] = a[0] * b[0];
 
-		return BC::all(y[0][0].approx_equal(BC::sum(a[0] % b[0])));
+		return BC::tensors::all(y[0][0].approx_equal(sum(a[0] % b[0])));
 	)
 
 	//scalar left test -------------------
@@ -124,7 +126,7 @@ int test_blas(int sz=128) {
 				h_b.data(), sz,
 				zero, h_y.data(), sz);
 
-			return BC::all(h_y.approx_equal(y));
+			return BC::tensors::all(h_y.approx_equal(y));
 	)
 	BC_TEST_DEF(
 		y[0].zero();
@@ -138,7 +140,7 @@ int test_blas(int sz=128) {
 				h_b.data(), 1,
 				zero, h_y.data(), 1);
 
-			return BC::all(h_y[0].approx_equal(y[0]));
+			return BC::tensors::all(h_y[0].approx_equal(y[0]));
 	)
 	BC_TEST_DEF(
 		y.zero();
@@ -151,14 +153,14 @@ int test_blas(int sz=128) {
 				h_b[0], 1,
 				h_y.data(), sz);
 
-			return BC::all(h_y.approx_equal(y));
+			return BC::tensors::all(h_y.approx_equal(y));
 	)
 
 	BC_TEST_DEF(
 			//test dot
 		y[0][0] = a[0] * b[0];
 
-		return BC::all(y[0][0].approx_equal(BC::sum(a[0] % b[0])));
+		return BC::tensors::all(y[0][0].approx_equal(sum(a[0] % b[0])));
 	)
 
 
@@ -173,7 +175,7 @@ int test_blas(int sz=128) {
 					h_b.data(), sz,
 					zero, h_y.data(), sz);
 
-				return BC::all(h_y.approx_equal(y));
+				return BC::tensors::all(h_y.approx_equal(y));
 		)
 		BC_TEST_DEF(
 			y[0].zero();
@@ -187,7 +189,7 @@ int test_blas(int sz=128) {
 					h_b.data(), 1,
 					zero, h_y.data(), 1);
 
-				return BC::all(h_y[0].approx_equal(y[0]));
+				return BC::tensors::all(h_y[0].approx_equal(y[0]));
 		)
 		BC_TEST_DEF(
 			y.zero();
@@ -200,14 +202,14 @@ int test_blas(int sz=128) {
 					h_b[0], 1,
 					h_y.data(), sz);
 
-				return BC::all(h_y.approx_equal(y));
+				return BC::tensors::all(h_y.approx_equal(y));
 		)
 
 		BC_TEST_DEF(
 				//test dot
 			y[0][0] = a[0] * b[0];
 
-			return BC::all(y[0][0].approx_equal(BC::sum(a[0] % b[0])));
+			return BC::tensors::all(y[0][0].approx_equal(sum(a[0] % b[0])));
 		)
 
 
@@ -225,7 +227,7 @@ int test_blas(int sz=128) {
 				h_b.data(), sz,
 				zero, h_y.data(), sz);
 
-		return BC::all(h_y.approx_equal(y));
+		return BC::tensors::all(h_y.approx_equal(y));
 	)
 
 	BC_TEST_DEF(
@@ -239,13 +241,13 @@ int test_blas(int sz=128) {
 				h_b.data(), sz,
 				one, h_y.data(), sz);
 
-		return BC::all(h_y.approx_equal(y));
+		return BC::tensors::all(h_y.approx_equal(y));
 	)
 	BC_TEST_DEF(
 		y = 1;
 		h_y = 1;
 		y -= a * b - a * b;
-		return BC::all(h_y.approx_equal(y));
+		return BC::tensors::all(h_y.approx_equal(y));
 	)
 
 	BC_TEST_DEF(
@@ -259,14 +261,14 @@ int test_blas(int sz=128) {
 				h_b.data(), sz,
 				one, h_y.data(), sz);
 
-			return BC::all(h_y.approx_equal(y));
+			return BC::tensors::all(h_y.approx_equal(y));
 	)
 
 	BC_TEST_DEF(
 		y = 1;
 		h_y = 2;
 		y -= a * b - a * b - 1;
-		return BC::all(h_y.approx_equal(y));
+		return BC::tensors::all(h_y.approx_equal(y));
 	)
 
 	BC_TEST_DEF(
@@ -274,7 +276,7 @@ int test_blas(int sz=128) {
 		h_y = 2;
 		y += (a * b) / (a * b);
 
-		return BC::all(y.approx_equal(h_y));
+		return BC::tensors::all(y.approx_equal(h_y));
 	)
 
 	BC_TEST_DEF(
@@ -282,7 +284,7 @@ int test_blas(int sz=128) {
 		h_y = 0;
 		y -= (a * b) / (a * b);
 
-		return BC::all(y.approx_equal(h_y));
+		return BC::tensors::all(y.approx_equal(h_y));
 	)
 
 
@@ -300,7 +302,7 @@ int test_blas(int sz=128) {
 				h_b.data(), sz,
 				zero, h_y.data(), sz);
 
-			return BC::all(h_y.approx_equal(y));
+			return BC::tensors::all(h_y.approx_equal(y));
 	)
 	BC_TEST_DEF(
 		y[0].zero();
@@ -314,7 +316,7 @@ int test_blas(int sz=128) {
 				h_b.data(), 1,
 				zero, h_y.data(), 1);
 
-			return BC::all(h_y[0].approx_equal(y[0]));
+			return BC::tensors::all(h_y[0].approx_equal(y[0]));
 	)
 	BC_TEST_DEF(
 		y.zero();
@@ -327,14 +329,14 @@ int test_blas(int sz=128) {
 				h_b[0], 1,
 				h_y.data(), sz);
 
-			return BC::all(h_y.approx_equal(y));
+			return BC::tensors::all(h_y.approx_equal(y));
 	)
 
 	BC_TEST_DEF(
 			//test dot
 		y[0][0] = a[0] * b[0];
 
-		return BC::all(y[0][0].approx_equal(BC::sum(a[0] % b[0])));
+		return BC::tensors::all(y[0][0].approx_equal(sum(a[0] % b[0])));
 	)
 
 
@@ -349,7 +351,7 @@ int test_blas(int sz=128) {
 					h_b.data(), sz,
 					zero, h_y.data(), sz);
 
-				return BC::all(h_y.approx_equal(y));
+				return BC::tensors::all(h_y.approx_equal(y));
 		)
 		BC_TEST_DEF(
 			y[0].zero();
@@ -363,7 +365,7 @@ int test_blas(int sz=128) {
 					h_b.data(), 1,
 					zero, h_y.data(), 1);
 
-				return BC::all(h_y[0].approx_equal(y[0]));
+				return BC::tensors::all(h_y[0].approx_equal(y[0]));
 		)
 		BC_TEST_DEF(
 			y.zero();
@@ -376,7 +378,7 @@ int test_blas(int sz=128) {
 					h_b[0], 1,
 					h_y.data(), sz);
 
-				return BC::all(h_y.approx_equal(y));
+				return BC::tensors::all(h_y.approx_equal(y));
 		)
 
 	BC_TEST_BODY_TAIL

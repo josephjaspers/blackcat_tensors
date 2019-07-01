@@ -21,10 +21,8 @@ using std::is_base_of;
 
 template<class T> using query_alpha_modifier = typename T::alpha_modifier;
 template<class T> using query_beta_modifier = typename T::beta_modifier;
-
 template<class T> using query_dx = decltype(std::declval<T>().dx);
 template<class T> using query_cached_dx = decltype(std::declval<T>().cached_dx);
-
 template<class T> using query_dx = decltype(std::declval<T>().dx);
 
 }
