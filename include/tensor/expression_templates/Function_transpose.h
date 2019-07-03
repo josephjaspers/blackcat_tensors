@@ -20,8 +20,8 @@ namespace exprs {
 
 
 template<class Value, class System_Tag>
-struct Unary_Expression<Value, oper::transpose<System_Tag>>
-    : Expression_Base<Unary_Expression<Value, oper::transpose<System_Tag>>> {
+struct Unary_Expression<oper::transpose<System_Tag>, Value>
+    : Expression_Base<Unary_Expression<oper::transpose<System_Tag>, Value>> {
 
     using value_type  = typename Value::value_type;
     using system_tag = System_Tag;
@@ -90,11 +90,11 @@ template<class expr_t>
 auto make_transpose(expr_t expr) {
 	using internal_t = std::decay_t<decltype(expr.internal())>;
 	using system_tag = typename internal_t::system_tag;
-	return Unary_Expression<internal_t, oper::transpose<system_tag>>(expr.internal());
+	return Unary_Expression<oper::transpose<system_tag>, internal_t>(expr.internal());
 }
 
 template<class Array, class SystemTag>
-auto make_transpose(Unary_Expression<Array, oper::transpose<SystemTag>> expression) {
+auto make_transpose(Unary_Expression<oper::transpose<SystemTag>, Array> expression) {
 	return expression.array;
 }
 

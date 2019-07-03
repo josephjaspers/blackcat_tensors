@@ -18,8 +18,8 @@ namespace BC {
 namespace tensors {
 namespace exprs { 
 
-template<class Value, class Operation>
-struct Unary_Expression : public Expression_Base<Unary_Expression<Value, Operation>>, public Operation {
+template<class Operation, class Value>
+struct Unary_Expression : public Expression_Base<Unary_Expression<Operation, Value>>, public Operation {
 
     using return_type  = decltype(std::declval<Operation>()(std::declval<typename Value::value_type>()));
     using value_type  = std::remove_reference_t<std::decay_t<return_type>>;
@@ -107,7 +107,7 @@ struct dx_forwarder { };
 
 
 template<class Value>
-struct Unary_Expression<Value, dx_forwarder>: public Expression_Base<Unary_Expression<Value, dx_forwarder>> {
+struct Unary_Expression<dx_forwarder, Value>: public Expression_Base<Unary_Expression<dx_forwarder, Value>> {
 
     using system_tag  = typename Value::system_tag;
 
@@ -151,7 +151,10 @@ struct Unary_Expression<Value, dx_forwarder>: public Expression_Base<Unary_Expre
 
 template<class op, class expr> BCHOT
 auto make_un_expr(expr e, op oper =op()) {
-	return Unary_Expression<std::decay_t<decltype(e.internal())>, op>(e.internal(), oper);
+	static_assert(std::is_trivially_copyable<expr>::value,
+			"Unary_Expressions - Arg must be trivially copyable");
+
+	return Unary_Expression<op, expr>(e, oper);
 }
 
 

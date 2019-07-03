@@ -53,17 +53,17 @@ struct remove_scalar_mul {
 };
 
 template<class lv, class rv>
-struct remove_scalar_mul<Binary_Expression<lv, rv, oper::Scalar_Mul>> {
+struct remove_scalar_mul<Binary_Expression<oper::Scalar_Mul, lv, rv>> {
 	using type = std::conditional_t<lv::tensor_dimension == 0, rv, lv>;
 	using scalar_type = std::conditional_t<lv::tensor_dimension == 0, lv ,rv>;
 
-	static type rm(Binary_Expression<lv, rv, oper::Scalar_Mul> expression) {
+	static type rm(Binary_Expression<oper::Scalar_Mul, lv, rv> expression) {
 		return BC::meta::constexpr_ternary<lv::tensor_dimension==0>(
 				[&]() { return expression.right; },
 				[&]() { return expression.left;  }
 		);
 	}
-	static scalar_type get_scalar(Binary_Expression<lv, rv, oper::Scalar_Mul> expression) {
+	static scalar_type get_scalar(Binary_Expression<oper::Scalar_Mul, lv, rv> expression) {
 		return BC::meta::constexpr_ternary<lv::tensor_dimension==0>(
 				[&]() { return expression.left; },
 				[&]() { return expression.right;  }
@@ -80,10 +80,10 @@ struct remove_transpose {
 	}
 };
 template<class Array, class SystemTag>
-struct remove_transpose<Unary_Expression<Array, oper::transpose<SystemTag>>> {
+struct remove_transpose<Unary_Expression<oper::transpose<SystemTag>, Array>> {
 	using type = Array;
 
-	static type rm(Unary_Expression<Array, oper::transpose<SystemTag>> expression) {
+	static type rm(Unary_Expression<oper::transpose<SystemTag>, Array> expression) {
 		return expression.array;
 	}
 };

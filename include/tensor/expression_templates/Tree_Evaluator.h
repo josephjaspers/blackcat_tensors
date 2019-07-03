@@ -68,9 +68,9 @@ template<
 	class SystemTag,
 	class Op>
 static
-std::enable_if_t<optimizer<Binary_Expression<lv, rv, Op>>::requires_greedy_eval &&
+std::enable_if_t<optimizer<Binary_Expression<Op, lv, rv>>::requires_greedy_eval &&
 					BC::oper::operation_traits<Op>::is_linear_assignment_operation>
-evaluate(Binary_Expression<lv, rv, Op> expression, BC::Stream<SystemTag> stream) {
+evaluate(Binary_Expression<Op, lv, rv> expression, BC::Stream<SystemTag> stream) {
 	static constexpr bool entirely_blas_expression = optimizer<rv>::entirely_blas_expr; // all operations are +/- blas calls
 	static constexpr int alpha_mod = BC::oper::operation_traits<Op>::alpha_modifier;
 	static constexpr int beta_mod = BC::oper::operation_traits<Op>::beta_modifier;
@@ -88,8 +88,8 @@ template<
 	class SystemTag
 	>
 static
-std::enable_if_t<optimizer<Binary_Expression<lv, rv, oper::Assign>>::requires_greedy_eval>
-evaluate(Binary_Expression<lv, rv, oper::Assign> expression, BC::Stream<SystemTag> stream) {
+std::enable_if_t<optimizer<Binary_Expression<oper::Assign, lv, rv>>::requires_greedy_eval>
+evaluate(Binary_Expression<oper::Assign, lv, rv> expression, BC::Stream<SystemTag> stream) {
 	static constexpr int alpha_mod = BC::oper::operation_traits<oper::Assign>::alpha_modifier; //1
 	static constexpr int beta_mod = BC::oper::operation_traits<oper::Assign>::beta_modifier;   //0
 
@@ -111,9 +111,9 @@ template<
 	class SystemTag,
 	class Op
 >
-static std::enable_if_t<optimizer<Binary_Expression<lv, rv, Op>>::requires_greedy_eval &&
+static std::enable_if_t<optimizer<Binary_Expression<Op, lv, rv>>::requires_greedy_eval &&
 							!BC::oper::operation_traits<Op>::is_linear_assignment_operation>
-evaluate(Binary_Expression<lv, rv, Op> expression, BC::Stream<SystemTag> stream) {
+evaluate(Binary_Expression<Op, lv, rv> expression, BC::Stream<SystemTag> stream) {
 	auto right = optimizer<rv>::temporary_injection(expression.right,  stream);
 	detail::greedy_eval<Op>(expression.left, right, stream);
 }
@@ -123,8 +123,8 @@ template<
 	class rv,
 	class Op,
 	class SystemTag>
-static std::enable_if_t<optimizer<Binary_Expression<lv, rv, Op>>::requires_greedy_eval>
-evaluate_aliased(Binary_Expression<lv, rv, Op> expression, BC::Stream<SystemTag> stream) {
+static std::enable_if_t<optimizer<Binary_Expression<Op, lv, rv>>::requires_greedy_eval>
+evaluate_aliased(Binary_Expression<Op, lv, rv> expression, BC::Stream<SystemTag> stream) {
 	detail::greedy_eval<Op>(expression.left, expression.right, stream);
 }
 //--------------------- lazy only ----------------------- //

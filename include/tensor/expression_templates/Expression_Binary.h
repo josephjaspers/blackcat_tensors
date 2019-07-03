@@ -16,8 +16,8 @@ namespace BC {
 namespace tensors {
 namespace exprs {
 
-template<class Lv, class Rv, class Operation>
-struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Operation>>, public Operation {
+template<class Operation, class Lv, class Rv>
+struct Binary_Expression : public Expression_Base<Binary_Expression<Operation, Lv, Rv>>, public Operation {
 
 	using lv_value_t = typename Lv::value_type;
 	using rv_value_t = typename Rv::value_type;
@@ -68,7 +68,7 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Lv, Rv, Oper
 		using op_dx_t = std::decay_t<decltype(op_dx)>;
 		static_assert(!std::is_same<BC::oper::Mul, Operation>::value, "Derivative of multiplication is not supported yet,"
 																		"product rule is difficult to implement");
-		return Binary_Expression<lv_dx_t, rv_dx_t, op_dx_t>(lv_dx, rv_dx, op_dx);
+		return Binary_Expression<op_dx_t, lv_dx_t, rv_dx_t>(lv_dx, rv_dx, op_dx);
     }
 
 private:
@@ -85,10 +85,13 @@ public:
 
 template<class Op, class Lv, class Rv, class... Args> BCHOT
 auto make_bin_expr(Lv left, Rv right, Args&&... args) {
-	return Binary_Expression<
-			std::decay_t<decltype(left.internal())>,
-			std::decay_t<decltype(right.internal())>,
-			Op>(left.internal(), right.internal(), args...);
+	static_assert(std::is_trivially_copyable<Lv>::value,
+				"Binary_Expression's - Left Arg must be trivially copyable");
+	static_assert(std::is_trivially_copyable<Rv>::value,
+					"Binary_Expression's - Right Arg must be trivially copyable");
+
+
+	return Binary_Expression<Op,Lv, Rv>(left, right, args...);
 }
 
 

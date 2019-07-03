@@ -19,8 +19,8 @@ namespace tensors {
 namespace exprs { 
 
 template<class lv, class rv, class System_Tag>
-struct Binary_Expression<lv, rv, oper::ger<System_Tag>>
-    : Expression_Base<Binary_Expression<lv, rv,  oper::ger<System_Tag>>>, oper::ger<System_Tag> {
+struct Binary_Expression<oper::ger<System_Tag>, lv, rv>
+    : Expression_Base<Binary_Expression<oper::ger<System_Tag>, lv, rv>>, oper::ger<System_Tag> {
 
 	static_assert(std::is_same<typename lv::value_type, typename rv::value_type>::value,
     		"GER ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
