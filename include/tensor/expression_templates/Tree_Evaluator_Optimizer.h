@@ -15,7 +15,6 @@
 #include "Array.h"
 #include "Expression_Binary.h"
 #include "Expression_Unary.h"
-
 namespace BC {
 namespace tensors {
 namespace exprs { 
@@ -159,7 +158,7 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
 				            auto right = optimizer<rv>::injection(branch.right, tensor, alloc);
 				            return make_bin_expr<op>(branch.left, right);
 						},
-				BC::meta::else_(
+				BC::meta::constexpr_else(
 						[&]() {
 				        	static constexpr bool left_evaluated = optimizer<lv>::partial_blas_expr || b != 0;
 				        	auto left = optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
@@ -210,7 +209,7 @@ struct optimizer<Binary_Expression<lv, rv, op>, std::enable_if_t<oper::operation
 				            auto right = optimizer<rv>::injection(branch.right, tensor, alloc);
 				            return make_bin_expr<op>(branch.left, right);
 						},
-				BC::meta::else_(
+				BC::meta::constexpr_else(
 						basic_eval
 				)))));
     }

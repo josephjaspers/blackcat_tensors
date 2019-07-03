@@ -31,16 +31,46 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Value, Operati
 
     Value array;
 
-    Operation get_operation() const {
+    BCINLINE
+    const Operation& get_operation() const {
     	return static_cast<const Operation&>(*this);
     }
 
-    auto dx() const {
-    	auto array_dx = exprs::expression_traits<Value>::select_on_dx(array);
-    	auto dx_op    = oper::operation_traits<Operation>::select_on_dx(get_operation());
-    	return Unary_Expression<decltype(array_dx),
-    							decltype(dx_op)>(array_dx, dx_op);
+
+
+	struct dx_defined {
+		template<class T> BCINLINE
+		static auto impl(const T& array, const Operation& op, BC::size_t index) {
+			// ’(f(g(x))) == f’(g(x))g’(x)
+			auto gx_and_dxgx = array.dx(index);	// [g(x), g’(x)]
+			auto gx = gx_and_dxgx.first; // g(x)
+			auto dx_gx =  gx_and_dxgx.second; // g’(x)
+
+			auto f_gx = op(gx);
+			auto dx_f_gx = op.dx(gx) * dx_gx;
+
+			return BC::meta::make_pair(f_gx, dx_f_gx);
+		}
+	};
+
+	struct dx_not_defined {
+		template<class T> BCINLINE
+		static auto impl(const T& array, const Operation& op, BC::size_t index) {
+	    	auto value = array[index];
+	    	auto gx = op(value);
+	    	auto dx_gx = op.dx(value);
+	    	return BC::meta::make_pair(gx, dx_gx);
+		}
+	};
+
+
+    BCINLINE auto dx(BC::size_t index) const {
+		using foo = std::conditional_t<expression_traits<Value>::derivative_is_defined, dx_defined, dx_not_defined>;
+		return foo::impl(array, get_operation(), index);
+
     }
+
+
 
     template<class... args> BCINLINE
     Unary_Expression(Value v, const args&... args_)
@@ -60,6 +90,53 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Value, Operati
     template<class... integers> BCINLINE
     auto operator ()(integers... index) {
         return Operation::operator()(array(index...));
+    }
+
+    BCINLINE const auto inner_shape() const { return array.inner_shape(); }
+    BCINLINE const auto block_shape() const { return array.block_shape(); }
+    BCINLINE BC::size_t size() const { return array.size(); }
+    BCINLINE BC::size_t rows() const { return array.rows(); }
+    BCINLINE BC::size_t cols() const { return array.cols(); }
+    BCINLINE BC::size_t dimension(int i) const { return array.dimension(i); }
+    BCINLINE BC::size_t block_dimension(int i) const { return array.block_dimension(i); }
+
+};
+
+
+struct dx_forwarder { };
+
+
+template<class Value>
+struct Unary_Expression<Value, dx_forwarder>: public Expression_Base<Unary_Expression<Value, dx_forwarder>> {
+
+    using system_tag  = typename Value::system_tag;
+
+    static constexpr int tensor_dimension  = Value::tensor_dimension;
+    static constexpr int tensor_iterator_dimension = Value::tensor_iterator_dimension;
+
+    Value array;
+
+    using value_type  = typename Value::value_type;
+
+
+    template<class... args> BCINLINE
+    Unary_Expression(Value v, const args&... args_)
+    :array(v) {}
+
+    BCINLINE auto operator [](int index) const {
+        return array.dx(index).second;
+    }
+    template<class... integers> BCINLINE
+    auto operator ()(integers... index) const {
+        return array.dx(index...).second;
+    }
+
+    BCINLINE auto operator [](int index) {
+        return array.dx(index).second;
+    }
+    template<class... integers> BCINLINE
+    auto operator ()(integers... index) {
+        return array.dx(index...).second;
     }
 
     BCINLINE const auto inner_shape() const { return array.inner_shape(); }

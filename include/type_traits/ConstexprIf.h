@@ -140,7 +140,7 @@ auto constexpr_else_if(f1 f1_, f2 f2_) {
 
 
 template<class f1>
-struct Else_ {
+struct Constexpr_Else {
 	f1 f1_;
 
 	template<int adl=0>
@@ -154,8 +154,8 @@ struct Else_ {
 };
 
 template<class f1>
-Else_<f1> else_(f1 f1_) {
-	return Else_<f1>{f1_};
+Constexpr_Else<f1> constexpr_else(f1 f1_) {
+	return Constexpr_Else<f1>{f1_};
 }
 
 

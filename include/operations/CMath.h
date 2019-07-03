@@ -8,18 +8,20 @@
 #ifndef BLACKCAT_TENSOR_CMATH_H_
 #define BLACKCAT_TENSOR_CMATH_H_
 
-#include <cmath>
 #include <functional>
+#include <cmath>
 
 namespace BC {
 namespace tensors {
 template<class> class Tensor_Base;
 }
 
+namespace oper {
+namespace cmath_functions {
 //defines a function with a user defined implementation (not part of std::cmath.h)
 #define BLACKCAT_FUNCTOR_DEF(funcName, instance_name, math_function, ...) 	\
 														 	 	\
-struct funcName {									 			\
+struct funcName {				 					 			\
 	template<class value_type> BCINLINE    	     				\
 	value_type operator () (const value_type& x) const { 	 	\
 		return math_function; 									\
@@ -34,7 +36,7 @@ struct funcName {									 			\
 	}															\
 																\
 	__VA_ARGS__													\
-} static instance_name; 										\
+} instance_name; 										\
 																\
 																\
 template<class T> auto surpress_unused_variable_warning_workaround(funcName)\
@@ -169,9 +171,12 @@ static auto normalize(const BC::tensors::Tensor_Base<internal_t>& tensor, min_ m
     return tensor.un_expr(norm<value_type>(value_type(min), value_type(max)));
 }
 
+} //end of ns cmath_functions
+} //end of ns oper
 
-}
+	using namespace BC::oper::cmath_functions;
 
+} //end of ns BC
 
 
 

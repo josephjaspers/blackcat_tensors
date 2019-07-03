@@ -25,7 +25,7 @@ template<class T> using query_system_tag = typename T::system_tag;
 template<class T> using query_value_type = typename T::value_type;
 template<class T> using query_allocation_type = typename T::allocation_tag;
 
-template<class T> using has_dx = decltype(std::declval<T>().dx());
+template<class T> using query_dx = decltype(std::declval<T>().get_operation().dx);
 
 template<class T> using query_copy_assignable =
 				std::conditional_t<T::copy_assignable, std::true_type, std::false_type>;
@@ -112,10 +112,9 @@ struct expression_traits {
 	 using value_type	  = typename BC::meta::conditional_detected<detail::query_value_type, T, void>::type;
 
 
-	 static constexpr bool derivative_is_defined =  BC::meta::is_detected_v<detail::has_dx, T>;
+	 static constexpr bool derivative_is_defined =  BC::meta::is_detected_v<detail::query_dx, T>;
 	 static auto select_on_dx(T expression) {
-		 return BC::meta::constexpr_ternary<
-		 	 BC::meta::is_detected_v<detail::has_dx, T>>(
+		 return BC::meta::constexpr_ternary<BC::meta::is_detected_v<detail::query_dx, T>>(
 		 		BC::meta::bind([&](auto expression) {
 			 	 	 return expression.dx();
 		 	 	 }, expression),

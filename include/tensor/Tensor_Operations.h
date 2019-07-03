@@ -413,7 +413,7 @@ public:
 
     template<class Expression>
 	auto dx(Tensor_Base<Expression>&& tensor) {
-		return make_tensor(exprs::expression_traits<Expression>::select_on_dx(tensor.internal()));
+		return make_tensor(tensor.template un_expr<exprs::dx_forwarder>());
 	}
 
 }

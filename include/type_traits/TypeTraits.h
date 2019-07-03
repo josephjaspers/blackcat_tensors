@@ -157,11 +157,11 @@ using namespace BC::meta::common_traits;
     //Only required for NVCC (can't pass std::pair to cuda kernels)
 	template<class T, class U>
 	struct Pair {
-		T left;
-		U right;
+		T first;
+		U second;
 	};
-	template<class T, class U>
-	Pair<T, U> make_pair(T&& t, U&& u) { return {t, u}; }
+	template<class T, class U> BCINLINE
+	Pair<T, U> make_pair(T t, U u) { return Pair<T, U>{t, u}; }
 
     //---------------------
 

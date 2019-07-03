@@ -19,8 +19,9 @@ template<int Dimensions, class ValueType, class Allocator, class... Tags>
 struct Array_Slice : KernelArray<Dimensions, ValueType, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
 
 	using allocator_t 	 = Allocator;
-	using stream_t 	 = BC::Stream<typename BC::allocator_traits<Allocator>::system_tag>;
-	using parent = KernelArray<Dimensions, ValueType, typename BC::allocator_traits<Allocator>::system_tag, Tags...>;
+	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
+	using stream_t 	 = BC::Stream<system_tag>;
+	using parent = KernelArray<Dimensions, ValueType, system_tag, Tags...>;
 
 public:
 
