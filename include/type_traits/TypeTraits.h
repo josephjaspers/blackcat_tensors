@@ -183,6 +183,14 @@ using namespace BC::meta::common_traits;
 	template<class T> //for removing GCC warning "const modifier doesn't do anything"
 	using apply_const_t = conditional_t<is_const<T>::value, T, const T>;
 
+
+	template<class T> BCINLINE
+	apply_const_t<T>& auto_apply_const(T& param) { return param; }
+	template<class T> BCINLINE
+	apply_const_t<T>&& auto_apply_const(T&& param) { return param; }
+	template<class T> BCINLINE
+	apply_const_t<T>* auto_apply_const(T* param) { return param; }
+
 }
 }
 

@@ -24,6 +24,7 @@ template<class T> using query_beta_modifier = typename T::beta_modifier;
 template<class T> using query_dx = decltype(std::declval<T>().dx);
 template<class T> using query_cached_dx = decltype(std::declval<T>().cached_dx);
 template<class T> using query_dx = decltype(std::declval<T>().dx);
+template<class T> using query_index_aware_function = typename T::index_aware_function;
 
 }
 
@@ -44,10 +45,11 @@ struct operation_traits {
 	static constexpr int alpha_modifier =
 			conditional_detected_t<query_alpha_modifier, T, Integer<1>>::value;
 	static constexpr int beta_modifier =
-				conditional_detected_t<query_beta_modifier, T, Integer<1>>::value;
+			conditional_detected_t<query_beta_modifier, T, Integer<1>>::value;
+	static constexpr bool is_index_aware_function =
+			conditional_detected_t<query_index_aware_function, T, std::false_type>::value;
 
 	static constexpr bool has_dx = is_detected_v<query_dx, T>;
-	static constexpr bool has_cached_dx = is_detected_v<query_cached_dx, T>;
 
 	static constexpr bool is_linear_operation            = is_base_of<linear_operation,T>::value;
 	static constexpr bool is_linear_assignment_operation = is_base_of<linear_assignment_operation, T>::value;

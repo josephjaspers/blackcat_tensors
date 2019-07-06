@@ -87,6 +87,20 @@ struct remove_transpose<Unary_Expression<oper::transpose<SystemTag>, Array>> {
 		return expression.array;
 	}
 };
+
+struct select_on_dx_when_defined {
+	template<class T> BCINLINE
+	static auto impl(const T& array, BC::size_t index) {
+		return array.dx(index);
+	}
+};
+struct select_on_dx_when_not_defined {
+	template<class T> BCINLINE
+	static auto impl(const T& array, BC::size_t index) {
+    	return BC::meta::make_pair(array[index], 1);
+	}
+};
+
 }
 
 class BC_Type  {}; //a type inherited by expressions and tensor_cores, it is used a flag and lacks a "genuine" implementation
@@ -111,15 +125,19 @@ struct expression_traits {
 	 using allocation_tag = typename BC::meta::conditional_detected<detail::query_allocation_type, T, system_tag>::type;
 	 using value_type	  = typename BC::meta::conditional_detected<detail::query_value_type, T, void>::type;
 
-
 	 static constexpr bool derivative_is_defined =  BC::meta::is_detected_v<detail::query_dx, T>;
-	 static auto select_on_dx(T expression) {
-		 return BC::meta::constexpr_ternary<BC::meta::is_detected_v<detail::query_dx, T>>(
-		 		BC::meta::bind([&](auto expression) {
-			 	 	 return expression.dx();
-		 	 	 }, expression),
-		 		[&]() { return expression; }
-		 	 );
+
+	 BCINLINE static auto select_on_dx(const T& expression, size_t index) {
+		 using selector = std::conditional_t<derivative_is_defined,
+				 detail::select_on_dx_when_defined,
+				 detail::select_on_dx_when_not_defined>;
+		 return selector::impl(expression, index);
+	 }
+	 BCINLINE static auto select_on_dx(T& expression, size_t index) {
+		 using selector = std::conditional_t<derivative_is_defined,
+				 detail::select_on_dx_when_defined,
+				 detail::select_on_dx_when_not_defined>;
+		 return selector::impl(expression, index);
 	 }
 
 // Causes 'catastrophic error' with NVCC. Compiles with GCC TODO change once NVCC fixes

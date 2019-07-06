@@ -19,8 +19,8 @@ namespace exprs {
 template<class Scalar, class SystemTag>
 struct Scalar_Constant:
 		Shape<0>,
-		Array_Base<Scalar_Constant<Scalar, SystemTag>, 0>,
-		BC::tensors::exprs::BC_Stack_Allocated {
+		Kernel_Array_Base<Scalar_Constant<Scalar, SystemTag>>,
+		BC_Stack_Allocated {
 
     using value_type = Scalar;
     using system_tag = SystemTag;
@@ -61,7 +61,7 @@ struct Constexpr_Scalar_Constant;
 template<int Value, class Scalar>
 struct Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>
 : Shape<0>,
-  Array_Base<Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>, 0>{
+  Kernel_Array_Base<Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>>{
 
     using value_type = Scalar;
     using system_tag = BC::host_tag;
@@ -91,7 +91,7 @@ struct Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>
 template<int Value, class Scalar>
 struct Constexpr_Scalar_Constant<Value, Scalar, BC::device_tag>
 : Shape<0>,
-  Array_Base<Constexpr_Scalar_Constant<Value, Scalar, BC::device_tag>, 0>{
+  Kernel_Array_Base<Constexpr_Scalar_Constant<Value, Scalar, BC::device_tag>>{
 
     using value_type = Scalar;
     using system_tag = BC::host_tag;

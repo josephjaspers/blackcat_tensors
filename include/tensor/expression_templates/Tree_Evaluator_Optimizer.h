@@ -9,12 +9,11 @@
 #ifndef PTE_ARRAY_H_
 #define PTE_ARRAY_H_
 
-#include "Common.h"
 #include "Tree_Struct_Injector.h"
-
 #include "Array.h"
 #include "Expression_Binary.h"
 #include "Expression_Unary.h"
+
 namespace BC {
 namespace tensors {
 namespace exprs { 

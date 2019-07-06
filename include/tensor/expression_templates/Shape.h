@@ -9,8 +9,6 @@
 #ifndef INTERNAL_SHAPE_H_
 #define INTERNAL_SHAPE_H_
 
-#include "Common.h"
-
 namespace BC {
 namespace tensors {
 namespace exprs { 

@@ -18,14 +18,14 @@ namespace tensors {
 namespace exprs {
 
 /*
- * 	Array is a class that inherits from KernelArray and the Allocator type.
- *  The Array class is used to initialize and destruct the KernelArray object.
+ * 	Array is a class that inherits from Kernel_Array and the Allocator type.
+ *  The Array class is used to initialize and destruct the Kernel_Array object.
  *
- *  Array and KernelArray are two tightly coupled classes as expression-templates must be trivially copyable (to pass them to CUDA functions).
+ *  Array and Kernel_Array are two tightly coupled classes as expression-templates must be trivially copyable (to pass them to CUDA functions).
  *  Separating these two enables the usage of non-trivially copyable allocators as well as the ability to define
  *  non-default move and copy assignments/constructors.
  *
- *  The KernelArray class should never be instantiated normally. It should only be accessed by instantiating
+ *  The Kernel_Array class should never be instantiated normally. It should only be accessed by instantiating
  *  an instance of the Array class, and calling 'my_array_object.internal()' to query it.
  *
  *  Additionally this design pattern (replicated in Array_View) enables expression-templates to
@@ -35,8 +35,8 @@ namespace exprs {
 
 
 template<int Dimension, class ValueType, class SystemTag, class... Tags>
-struct KernelArray
-		: Array_Base<KernelArray<Dimension, ValueType, SystemTag, Tags...>, Dimension>,
+struct Kernel_Array
+		: Kernel_Array_Base<Kernel_Array<Dimension, ValueType, SystemTag, Tags...>>,
 		  std::conditional_t<BC::meta::sequence_contains_v<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>,
 		  public Tags... {
 
@@ -44,7 +44,7 @@ struct KernelArray
     using system_tag = SystemTag;
     using pointer_type = value_type*;
     using shape_type = std::conditional_t<BC::meta::sequence_contains_v<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>;
-    using self_type  = KernelArray<Dimension, ValueType, SystemTag, Tags...>;
+    using self_type  = Kernel_Array<Dimension, ValueType, SystemTag, Tags...>;
 
     static constexpr bool copy_constructible = !expression_traits<self_type>::is_view;
     static constexpr bool move_constructible = !expression_traits<self_type>::is_view;
@@ -56,10 +56,10 @@ struct KernelArray
 
     pointer_type array = nullptr;
 
-    KernelArray()=default;
-    KernelArray(const KernelArray&)=default;
-    KernelArray(KernelArray&&)=default;
-    KernelArray(shape_type shape, pointer_type ptr)
+    Kernel_Array()=default;
+    Kernel_Array(const Kernel_Array&)=default;
+    Kernel_Array(Kernel_Array&&)=default;
+    Kernel_Array(shape_type shape, pointer_type ptr)
     	: shape_type(shape), array(ptr) {};
 
     BCINLINE BC::meta::apply_const_t<pointer_type> memptr() const { return array; }
@@ -111,10 +111,10 @@ template<int Dimension, class Scalar, class Allocator, class... Tags>
 class Array :
 			private Allocator,
 			public Stream<typename BC::allocator_traits<Allocator>::system_tag>,
-			public KernelArray<Dimension, Scalar, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
+			public Kernel_Array<Dimension, Scalar, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
 
 	using self = Array<Dimension, Scalar, Allocator, Tags...>;
-	using parent = KernelArray<Dimension, Scalar,  typename BC::allocator_traits<Allocator>::system_tag, Tags...>;
+	using parent = Kernel_Array<Dimension, Scalar,  typename BC::allocator_traits<Allocator>::system_tag, Tags...>;
 
 public:
 
@@ -236,18 +236,18 @@ template<class ValueType, int dims, class Stream>
 auto make_temporary_kernel_array(Shape<dims> shape, Stream stream) {
 	static_assert(dims >= 1, "make_temporary_tensor_array: assumes dimension is 1 or greater");
 	using system_tag = typename Stream::system_tag;
-	using Array = KernelArray<dims, ValueType, system_tag, BC_Temporary>;
+	using Array = Kernel_Array<dims, ValueType, system_tag, BC_Temporary>;
 	return Array(shape, stream.template get_allocator_rebound<ValueType>().allocate(shape.size()));
 }
 template<class ValueType, class Stream>
 auto make_temporary_kernel_scalar(Stream stream) {
 	using system_tag = typename Stream::system_tag;
-	using Array = KernelArray<0, ValueType, system_tag, BC_Temporary>;
+	using Array = Kernel_Array<0, ValueType, system_tag, BC_Temporary>;
 	return Array(BC::Shape<0>(), stream.template get_allocator_rebound<ValueType>().allocate(1));
 }
 
 template<int Dimension, class ValueType, class SystemTag, class... Tags, class=std::enable_if_t<BC::meta::sequence_contains_v<BC_Temporary, Tags...>>>
-void destroy_temporary_kernel_array(KernelArray<Dimension, ValueType, SystemTag, Tags...> temporary, BC::Stream<SystemTag> stream) {
+void destroy_temporary_kernel_array(Kernel_Array<Dimension, ValueType, SystemTag, Tags...> temporary, BC::Stream<SystemTag> stream) {
 	stream.template get_allocator_rebound<ValueType>().deallocate(temporary.array, temporary.size());
 }
 

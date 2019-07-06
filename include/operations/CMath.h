@@ -158,8 +158,7 @@ struct norm {
     scalar min;
     scalar max;
 
-    norm(scalar min_, scalar max_) : min(min_), max(max_) {}
-
+    BCINLINE norm(scalar min_, scalar max_) : min(min_), max(max_) {}
     BCINLINE auto operator () (scalar v) const {
         return (v - min) / (max - min);
     }

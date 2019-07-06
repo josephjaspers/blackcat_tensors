@@ -18,26 +18,87 @@ namespace BC {
 namespace tensors {
 namespace exprs { 
 
-template<class Operation, class Value>
-struct Unary_Expression : public Expression_Base<Unary_Expression<Operation, Value>>, public Operation {
+template<class Operation, class ArrayType>
+struct Unary_Expression : public Expression_Base<Unary_Expression<Operation, ArrayType>>, public Operation {
 
-    using return_type  = decltype(std::declval<Operation>()(std::declval<typename Value::value_type>()));
-    using value_type  = std::remove_reference_t<std::decay_t<return_type>>;
+	//TODO fix value_type deduction
+//    using return_type = decltype(std::declval<Operation>()(std::declval<typename ArrayType::value_type>()));
+    using value_type  = typename ArrayType::value_type;//std::remove_reference_t<std::decay_t<return_type>>;
 
-    using system_tag  = typename Value::system_tag;
+    using system_tag  = typename ArrayType::system_tag;
 
-    static constexpr int tensor_dimension  = Value::tensor_dimension;
-    static constexpr int tensor_iterator_dimension = Value::tensor_iterator_dimension;
+    static constexpr int tensor_dimension  = ArrayType::tensor_dimension;
+    static constexpr int tensor_iterator_dimension = ArrayType::tensor_iterator_dimension;
 
-    Value array;
+    ArrayType array;
 
     BCINLINE
     const Operation& get_operation() const {
     	return static_cast<const Operation&>(*this);
     }
 
+    template<class... args> BCINLINE
+    Unary_Expression(ArrayType v, const args&... args_)
+    : Operation(args_...) , array(v) {}
 
 
+    // --------------- Not index Aware function (Basic)---------------- //
+    template<class... integers, class Op=Operation>
+    BCINLINE std::enable_if_t<!BC::oper::operation_traits<Op>::is_index_aware_function,
+    value_type> operator ()(integers... index) const {
+        return Operation::operator()(array(index...));
+    }
+    template<class Op=Operation> BCINLINE
+	std::enable_if_t<!BC::oper::operation_traits<Op>::is_index_aware_function,
+	value_type> operator [](int index) const {
+		return Operation::operator()(array[index]);
+	}
+
+    // --------------- Index Aware function (Advanced)---------------- //
+    template<class... integers, class Op=Operation> BCINLINE
+    std::enable_if_t<BC::oper::operation_traits<Op>::is_index_aware_function,
+    value_type> operator ()(integers... index) const {
+        return Operation::operator()(array, index...);
+    }
+
+    template<class Op=Operation> BCINLINE
+    std::enable_if_t<BC::oper::operation_traits<Op>::is_index_aware_function,
+    value_type> operator [](int index) const {
+        return Operation::operator()(array, index);
+    }
+    //-------- forward to const versions
+
+    template<class... integers> BCINLINE
+    value_type operator ()(integers... index) {
+    	using namespace BC::meta;
+        return auto_remove_const(auto_apply_const(*this)(index...));
+    }
+
+    BCINLINE value_type operator [](int index) {
+    	using namespace BC::meta;
+        return auto_remove_const(auto_apply_const(*this)[index]);
+    }
+
+    // derivative function --------------------------------
+
+    BCINLINE auto dx(BC::size_t index) const {
+		using foo = std::conditional_t<
+				expression_traits<ArrayType>::derivative_is_defined,
+				dx_defined,
+				dx_not_defined>;
+
+		return foo::impl(array, get_operation(), index);
+    }
+
+    BCINLINE const auto inner_shape() const { return array.inner_shape(); }
+    BCINLINE const auto block_shape() const { return array.block_shape(); }
+    BCINLINE BC::size_t size() const { return array.size(); }
+    BCINLINE BC::size_t rows() const { return array.rows(); }
+    BCINLINE BC::size_t cols() const { return array.cols(); }
+    BCINLINE BC::size_t dimension(int i) const { return array.dimension(i); }
+    BCINLINE BC::size_t block_dimension(int i) const { return array.block_dimension(i); }
+
+private:
 	struct dx_defined {
 		template<class T> BCINLINE
 		static auto impl(const T& array, const Operation& op, BC::size_t index) {
@@ -62,91 +123,30 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Operation, Val
 	    	return BC::meta::make_pair(gx, dx_gx);
 		}
 	};
-
-
-    BCINLINE auto dx(BC::size_t index) const {
-		using foo = std::conditional_t<expression_traits<Value>::derivative_is_defined, dx_defined, dx_not_defined>;
-		return foo::impl(array, get_operation(), index);
-
-    }
-
-
-
-    template<class... args> BCINLINE
-    Unary_Expression(Value v, const args&... args_)
-    : Operation(args_...) , array(v) {}
-
-    BCINLINE auto operator [](int index) const {
-        return Operation::operator()(array[index]);
-    }
-    template<class... integers> BCINLINE
-    auto operator ()(integers... index) const {
-        return Operation::operator()(array(index...));
-    }
-
-    BCINLINE auto operator [](int index) {
-        return Operation::operator()(array[index]);
-    }
-    template<class... integers> BCINLINE
-    auto operator ()(integers... index) {
-        return Operation::operator()(array(index...));
-    }
-
-    BCINLINE const auto inner_shape() const { return array.inner_shape(); }
-    BCINLINE const auto block_shape() const { return array.block_shape(); }
-    BCINLINE BC::size_t size() const { return array.size(); }
-    BCINLINE BC::size_t rows() const { return array.rows(); }
-    BCINLINE BC::size_t cols() const { return array.cols(); }
-    BCINLINE BC::size_t dimension(int i) const { return array.dimension(i); }
-    BCINLINE BC::size_t block_dimension(int i) const { return array.block_dimension(i); }
-
 };
 
 
-struct dx_forwarder { };
+struct dx_forwarder {
 
+	using index_aware_function = std::true_type;
 
-template<class Value>
-struct Unary_Expression<dx_forwarder, Value>: public Expression_Base<Unary_Expression<dx_forwarder, Value>> {
+	template<class Expression> BCINLINE
+	auto operator () (const Expression& expression, size_t index) const {
+		return expression.dx(index).second;
+	}
+	template<class Expression> BCINLINE
+	auto operator () (const Expression& expression, size_t index) {
+		return expression.dx(index).second;
+	}
 
-    using system_tag  = typename Value::system_tag;
-
-    static constexpr int tensor_dimension  = Value::tensor_dimension;
-    static constexpr int tensor_iterator_dimension = Value::tensor_iterator_dimension;
-
-    Value array;
-
-    using value_type  = typename Value::value_type;
-
-
-    template<class... args> BCINLINE
-    Unary_Expression(Value v, const args&... args_)
-    :array(v) {}
-
-    BCINLINE auto operator [](int index) const {
-        return array.dx(index).second;
-    }
-    template<class... integers> BCINLINE
-    auto operator ()(integers... index) const {
-        return array.dx(index...).second;
-    }
-
-    BCINLINE auto operator [](int index) {
-        return array.dx(index).second;
-    }
-    template<class... integers> BCINLINE
-    auto operator ()(integers... index) {
-        return array.dx(index...).second;
-    }
-
-    BCINLINE const auto inner_shape() const { return array.inner_shape(); }
-    BCINLINE const auto block_shape() const { return array.block_shape(); }
-    BCINLINE BC::size_t size() const { return array.size(); }
-    BCINLINE BC::size_t rows() const { return array.rows(); }
-    BCINLINE BC::size_t cols() const { return array.cols(); }
-    BCINLINE BC::size_t dimension(int i) const { return array.dimension(i); }
-    BCINLINE BC::size_t block_dimension(int i) const { return array.block_dimension(i); }
-
+	template<class Expression, class... size_ts> BCINLINE
+	auto operator () (const Expression& expression, size_ts... indicies) const {
+		return expression.dx(indicies...).second;
+	}
+	template<class Expression, class... size_ts> BCINLINE
+	auto operator () (const Expression& expression, size_ts... indicies) {
+		return expression.dx(indicies...).second;
+	}
 };
 
 template<class op, class expr> BCHOT

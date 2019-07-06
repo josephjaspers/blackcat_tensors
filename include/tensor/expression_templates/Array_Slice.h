@@ -16,12 +16,12 @@ namespace tensors {
 namespace exprs {
 
 template<int Dimensions, class ValueType, class Allocator, class... Tags>
-struct Array_Slice : KernelArray<Dimensions, ValueType, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
+struct Array_Slice : Kernel_Array<Dimensions, ValueType, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
 
 	using allocator_t 	 = Allocator;
 	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
 	using stream_t 	 = BC::Stream<system_tag>;
-	using parent = KernelArray<Dimensions, ValueType, system_tag, Tags...>;
+	using parent = Kernel_Array<Dimensions, ValueType, system_tag, Tags...>;
 
 public:
 

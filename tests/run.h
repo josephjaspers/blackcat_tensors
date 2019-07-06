@@ -9,6 +9,7 @@
 #include "test_streams.h"
 #include "test_algorithms.h"
 #include "test_blas.h"
+#include "test_derivatives.h"
 
 namespace BC {
 namespace tests {
@@ -26,6 +27,7 @@ int test_all(int sz) {
 	errors += test_streams<scalar_type, allocator>(sz);
 	errors += test_algorithms<scalar_type, allocator>(sz);
 	errors += test_blas<scalar_type, allocator>(sz);
+	errors += test_derivatives<scalar_type, allocator>(sz);
 
 	return errors;
 }

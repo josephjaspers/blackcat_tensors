@@ -9,8 +9,8 @@
 #ifndef BC_INTERNAL_BASE_H_
 #define BC_INTERNAL_BASE_H_
 
-#include "Common.h"
 #include "Shape.h"
+#include "Expression_Template_Traits.h"
 
 namespace BC {
 namespace tensors {
@@ -75,20 +75,15 @@ struct Expression_Base
             		return static_cast<const derived&>(*this).block_dimension(i);
             	});
             }
-
-
-
-
-
         };
 
-template<class Derived, int Dimension>
-struct Array_Base : Expression_Template_Base<Derived>, BC_Array {
+template<class Derived>
+struct Kernel_Array_Base : Expression_Template_Base<Derived>, BC_Array {
 
 	BCHOT operator const auto*() const { return static_cast<const Derived&>(*this).memptr(); }
 	BCHOT operator       auto*()       { return static_cast<      Derived&>(*this).memptr(); }
 
-    BCINLINE Array_Base() {
+    BCINLINE Kernel_Array_Base() {
 		static_assert(!std::is_same<
 					typename Derived::value_type,
 					std::remove_pointer<decltype(std::declval<Derived>().memptr())>

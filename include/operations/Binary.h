@@ -26,7 +26,7 @@ namespace oper {
 		-> decltype(apply(lv, rv)) {													\
 			return apply(lv, rv);														\
 		}																				\
-																			\
+																						\
 
 #define BC_FORWARD_DEF(...)															\
 	template<class Lv, class Rv>													\
@@ -45,6 +45,16 @@ namespace oper {
 	}																				\
 	BC_FORWARD_TO_APPLY
 
+
+#define BC_BACKWARD_DEF(...)														\
+	template<class Lv, class Rv>													\
+	BCINLINE 																		\
+	static auto dx (Lv lv, Rv rv) 												\
+	-> decltype(__VA_ARGS__) {														\
+		return __VA_ARGS__;															\
+	}																				\
+
+
     struct Scalar_Mul {
     	BC_FORWARD_DEF(lv * rv)
     } scalar_mul;
@@ -52,35 +62,32 @@ namespace oper {
 
     struct Add : linear_operation {
     	using alpha_modifier = BC::meta::Integer<1>;
-
     	BC_FORWARD_DEF(lv + rv)
+    	BC_BACKWARD_DEF(lv.second + rv.second)
     } add;
 
     struct Mul {
     	BC_FORWARD_DEF(lv * rv)
-
-    	struct Derivative {
-    		template<class Lv, class Lv_dx, class Rv, class Rv_dx>
-    			BCINLINE static auto apply (BC::meta::Pair<Lv, Lv_dx>&& lv, BC::meta::Pair<Rv, Rv_dx>&& rv)
-    			-> decltype(lv.left * rv.right + lv.right * rv.left) {														\
-    			return lv.left * rv.right + lv.right * rv.left;
-    			}
-    			template<class Lv, class Rv>
-    			BCINLINE auto operator () (Lv&& lv, Rv&& rv) const
-    				-> decltype(apply(lv, rv)) {
-    					return apply(lv, rv);
-    				}
-    	} static dx;
+    	BC_BACKWARD_DEF(lv.second*rv.first + rv.second*lv.first)
 
     } mul;
 
     struct Sub : linear_operation {
     	using alpha_modifier = BC::meta::Integer<-1>;
     	BC_FORWARD_DEF(lv - rv)
+    	BC_BACKWARD_DEF(lv.second - rv.second)
+
     } sub;
 
     struct Div {
     	BC_FORWARD_DEF(lv / rv)
+    	//d(f(x)/g(x)) == [g(x) * f`(x) - f(x)*g`(x)] / g(x)^2
+    	//lv.first == f(x)
+    	//lv.second == f`(x)
+    	//rv.first == g(x)
+    	//rv.second == g`(x)
+    	BC_BACKWARD_DEF((rv.first * lv.second - lv.first * rv.second) / (rv.first*rv.first))
+
     } div;
 
     struct Assign : assignment_operation {

@@ -128,7 +128,7 @@ struct Algorithm<device_tag> {
     BC_GPU_ALGORITHM_FORWARDER_DEF(min_element)
     BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(minmax)
     BC_GPU_ALGORITHM_FORWARDER_DEF(minmax_element)
-    BC_GPU_ALGORITHM_FORWARDER_DEF(equal)
+//    BC_GPU_ALGORITHM_FORWARDER_DEF(equal)
     BC_GPU_ALGORITHM_THRUST_NDEF_FORWARDER_DEF(lexicographical_compare)
 
     //numeric--------------------------

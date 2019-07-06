@@ -59,20 +59,28 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Operation, L
      	return Operation::operator()(left(ints...), right(ints...));
     }
 
-    auto dx() const {
-		auto lv_dx = expression_traits<Lv>::select_on_dx(left);
-		auto rv_dx = expression_traits<Rv>::select_on_dx(right);
-		auto op_dx = oper::operation_traits<Operation>::select_on_dx(get_operation());
-		using lv_dx_t = std::decay_t<decltype(lv_dx)>;
-		using rv_dx_t = std::decay_t<decltype(rv_dx)>;
-		using op_dx_t = std::decay_t<decltype(op_dx)>;
-		static_assert(!std::is_same<BC::oper::Mul, Operation>::value, "Derivative of multiplication is not supported yet,"
-																		"product rule is difficult to implement");
-		return Binary_Expression<op_dx_t, lv_dx_t, rv_dx_t>(lv_dx, rv_dx, op_dx);
+    BCINLINE auto dx(size_t index) const {
+    	auto lv_dx = expression_traits<Lv>::select_on_dx(left, index);
+    	auto rv_dx = expression_traits<Rv>::select_on_dx(right, index);
+    	auto cache_out = Operation::operator()(lv_dx.first, rv_dx.first);
+    	auto deriv_out = Operation::dx(lv_dx, rv_dx);
+    	return BC::meta::make_pair(cache_out, deriv_out);
     }
 
 private:
-    BCINLINE const auto& shape() const { return dominant_type<Lv, Rv>::shape(left, right); }
+    BCINLINE const auto& shape() const {
+    	struct Lv_shape {
+    		static BCINLINE
+    		const Lv& get_shape(const Lv& left, const Rv& right) { return left; }
+    	};
+    	struct Rv_shape {
+    		static BCINLINE
+    		const Rv& get_shape(const Lv& left, const Rv& right) { return right; }
+    	};
+    	using impl = std::conditional_t<(Lv::tensor_dimension > Rv::tensor_dimension), Lv_shape, Rv_shape>;
+    	return impl::get_shape(left, right);
+    }
+
 public:
     BCINLINE BC::size_t size() const { return shape().size(); }
     BCINLINE BC::size_t rows() const { return shape().rows(); }
