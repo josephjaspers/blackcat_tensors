@@ -14,7 +14,7 @@
 
 namespace BC {
 
-namespace stream {
+namespace streams {
 
 	//forward declare stream for common_traits
 	template<class SystemTag>

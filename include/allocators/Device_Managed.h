@@ -11,7 +11,7 @@
 #include "Device.h"
 
 namespace BC {
-namespace allocator {
+namespace allocators {
 
 template<class T>
 struct Device_Managed : Device<T> {

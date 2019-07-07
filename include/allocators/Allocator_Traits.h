@@ -15,7 +15,7 @@ namespace BC {
 class host_tag;
 class device_tag;
 
-namespace allocator {
+namespace allocators {
 namespace detail {
 
 	template<class T>

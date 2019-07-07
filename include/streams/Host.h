@@ -13,7 +13,7 @@
 #include "HostStream.h"
 
 namespace BC {
-namespace stream {
+namespace streams {
 
 template<>
 class Stream<host_tag> {
@@ -21,7 +21,7 @@ class Stream<host_tag> {
 	struct Contents {
 		std::unique_ptr<HostEvent> m_event;
 		HostStream m_stream;
-		BC::allocator::fancy::Workspace<host_tag> m_workspace;
+		BC::allocators::fancy::Workspace<host_tag> m_workspace;
 	};
 
 	static BC::memory::atomic_shared_ptr<Contents> get_default_contents() {
@@ -36,9 +36,9 @@ class Stream<host_tag> {
 public:
 
 	using system_tag = host_tag;
-	using allocator_type = BC::allocator::fancy::Workspace<host_tag>;
+	using allocator_type = BC::allocators::fancy::Workspace<host_tag>;
 
-    BC::allocator::fancy::Workspace<host_tag>& get_allocator() {
+    BC::allocators::fancy::Workspace<host_tag>& get_allocator() {
     	return m_contents->m_workspace;
     }
     template<class RebindType>

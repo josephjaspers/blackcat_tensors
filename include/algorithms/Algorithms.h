@@ -27,7 +27,7 @@ namespace tensors {
 #define BC_ALGORITHM_DEF(function)\
 BC_IF_CUDA(\
 template<class Begin, class End, class... Args>\
-static auto function (BC::stream::Stream<BC::device_tag> stream, Begin begin, End end, Args... args) {\
+static auto function (BC::streams::Stream<BC::device_tag> stream, Begin begin, End end, Args... args) {\
 	return thrust::function(thrust::cuda::par.on(stream), begin, end, args...);\
 }\
 template<class Begin, class End, class... Args>\
@@ -35,22 +35,22 @@ static auto function (cudaStream_t stream, Begin begin, End end, Args... args) {
 	return thrust::function(thrust::cuda::par.on(stream), begin, end, args...);\
 })\
 template<class Begin, class End, class... Args>\
-static auto function (BC::stream::Stream<BC::host_tag> stream, Begin begin, End end, Args... args) {   \
+static auto function (BC::streams::Stream<BC::host_tag> stream, Begin begin, End end, Args... args) {   \
 	return stream.enqueue([&](){std::function(begin, end, args...); });\
 }\
 template<class Container, class... Args>\
 static auto function (const Container& container, Args&&... args) {\
-	return function(BC::stream::select_on_get_stream(container), container.begin(), container.end(), args...);\
+	return function(BC::streams::select_on_get_stream(container), container.begin(), container.end(), args...);\
 }\
 template<class Container, class... Args>\
 static auto function (Container& container, Args&&... args) {\
-	return function(BC::stream::select_on_get_stream(container), container.begin(), container.end(), args...);\
+	return function(BC::streams::select_on_get_stream(container), container.begin(), container.end(), args...);\
 }\
 
 #define BC_REDUCE_ALGORITHM_DEF(function)\
 BC_IF_CUDA(\
 template<class Begin, class End, class... Args>\
-static auto function (const BC::stream::Stream<BC::device_tag>& stream, Begin begin, End end, Args... args) {\
+static auto function (const BC::streams::Stream<BC::device_tag>& stream, Begin begin, End end, Args... args) {\
 	return thrust::function(thrust::cuda::par.on(stream), begin, end, args...);\
 }\
 template<class Begin, class End, class... Args>\
@@ -58,7 +58,7 @@ static auto function (cudaStream_t stream, Begin begin, End end, Args... args) {
 	return thrust::function(thrust::cuda::par.on(stream), begin, end, args...);\
 })\
 template<class Begin, class End, class... Args>\
-static auto function (BC::stream::Stream<BC::host_tag> stream, Begin begin, End end, Args... args) {   \
+static auto function (BC::streams::Stream<BC::host_tag> stream, Begin begin, End end, Args... args) {   \
 	double value = 1.0;\
 	stream.enqueue([&](){ value = std::function(begin, end, args...); });\
 	stream.sync();\
@@ -66,11 +66,11 @@ static auto function (BC::stream::Stream<BC::host_tag> stream, Begin begin, End 
 }\
 template<class Container, class... Args>\
 static auto function (const Container& container, Args&&... args) {\
-	return function(BC::stream::select_on_get_stream(container), container.begin(), container.end(), args...);\
+	return function(BC::streams::select_on_get_stream(container), container.begin(), container.end(), args...);\
 }\
 template<class Container, class... Args>\
 static auto function (Container& container, Args&&... args) {\
-	return function(BC::stream::select_on_get_stream(container), container.begin(), container.end(), args...);\
+	return function(BC::streams::select_on_get_stream(container), container.begin(), container.end(), args...);\
 }\
 
 namespace alg {
@@ -148,7 +148,7 @@ BC_ALGORITHM_DEF(equal)
 //BC_IF_CUDA(\
 
 template<class Begin, class End, class... Args>\
-static auto accumulate (const BC::stream::Stream<BC::device_tag>& stream, Begin begin, End end, Args... args) {\
+static auto accumulate (const BC::streams::Stream<BC::device_tag>& stream, Begin begin, End end, Args... args) {\
 	return thrust::reduce(
 			thrust::cuda::par.on(stream), begin, end, args...);\
 }\
@@ -160,7 +160,7 @@ static auto accumulate (cudaStream_t stream, Begin begin, End end, Args... args)
 //)\
 
 template<class Begin, class End, class... Args>\
-static auto accumulate (BC::stream::Stream<BC::host_tag> stream, Begin begin, End end, Args... args) {   \
+static auto accumulate (BC::streams::Stream<BC::host_tag> stream, Begin begin, End end, Args... args) {   \
 	double value = 1.0;
 	stream.enqueue([&](){ value = std::accumulate(begin, end, args...); });\
 	stream.sync();
@@ -168,11 +168,11 @@ static auto accumulate (BC::stream::Stream<BC::host_tag> stream, Begin begin, En
 }\
 template<class Container, class... Args>\
 static auto accumulate (const Container& container, Args&&... args) {\
-	return accumulate(BC::stream::select_on_get_stream(container), container.begin(), container.end(), args...);\
+	return accumulate(BC::streams::select_on_get_stream(container), container.begin(), container.end(), args...);\
 }\
 template<class Container, class... Args>\
 static auto accumulate (Container& container, Args&&... args) {\
-	return accumulate(BC::stream::select_on_get_stream(container), container.begin(), container.end(), args...);\
+	return accumulate(BC::streams::select_on_get_stream(container), container.begin(), container.end(), args...);\
 }\
 
 

@@ -7,5 +7,5 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include "BlackCat_Common.h"
-#include "stream/Stream.h"
+#include "streams/Streams.h"
 #include "blas/BLAS.h"

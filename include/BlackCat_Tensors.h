@@ -18,7 +18,7 @@
 #include "utility/Utility.h"
 #include "random/Random.h"
 
-#include "tensor/Tensor.h"
+#include "tensors/Tensors.h"
 
 namespace BC {
 	using namespace BC::tensors; //import all

@@ -41,7 +41,7 @@ y.get_stream() == y[0].get_stream(); //True
 
 ```cpp
 
-using Stream = BC::stream::implementation<system_tag>; 
+using Stream = BC::streams::implementation<system_tag>; 
 Stream stream;
 
 stream.create_stream();			//calls cudaCreateStream

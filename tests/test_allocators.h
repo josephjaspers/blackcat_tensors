@@ -15,15 +15,15 @@ namespace BC {
 namespace tests {
 
 
-template<class allocator>
-struct log_allocator : allocator {
+template<class Allocator>
+struct log_allocator : Allocator {
 
 	std::shared_ptr<BC::size_t> total_allocated = std::shared_ptr<BC::size_t>(new BC::size_t());
 	std::shared_ptr<BC::size_t> total_deallocated = std::shared_ptr<BC::size_t>(new BC::size_t());
 
 	template<class T>
 	struct rebind {
-		using other = log_allocator<typename allocator::template rebind<T>::other>;
+		using other = log_allocator<typename Allocator::template rebind<T>::other>;
 	};
 
 
@@ -36,12 +36,12 @@ struct log_allocator : allocator {
 	}
 
 	auto allocate(BC::size_t sz) {
-		(*total_allocated.get()) += sz * sizeof(typename allocator::value_type);
-		return allocator::allocate(sz);
+		(*total_allocated.get()) += sz * sizeof(typename Allocator::value_type);
+		return Allocator::allocate(sz);
 	}
-	auto deallocate(typename allocator::value_type*& memptr, BC::size_t sz) {
-		(*total_deallocated.get()) += sz* sizeof(typename allocator::value_type);
-		return allocator::deallocate(memptr, sz);
+	auto deallocate(typename Allocator::value_type*& memptr, BC::size_t sz) {
+		(*total_deallocated) += sz* sizeof(typename Allocator::value_type);
+		return Allocator::deallocate(memptr, sz);
 
 	}
 };

@@ -16,7 +16,7 @@ namespace BC {
 
 class device_tag;
 
-namespace allocator {
+namespace allocators {
 
 template<class T>
 struct Device {

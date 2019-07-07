@@ -22,7 +22,7 @@ int test_algorithms(int sz=128) {
 	using mat = BC::Matrix<value_type, alloc_t>;
 
 	using system_tag = typename BC::allocator_traits<alloc_t>::system_tag;
-	BC::stream::Stream<system_tag> stream;
+	BC::streams::Stream<system_tag> stream;
 
 	BC_TEST_DEF(
 		mat a(sz, sz);

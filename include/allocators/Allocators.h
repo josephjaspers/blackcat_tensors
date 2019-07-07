@@ -14,25 +14,25 @@
 #include "Allocator_Traits.h"
 
 namespace BC {
-namespace allocator {
+namespace allocators {
 
 class Byte {};
 
 }
 
 template<class Allocator_Type>
-using allocator_traits = allocator::allocator_traits<Allocator_Type>;
+using allocator_traits = allocators::allocator_traits<Allocator_Type>;
 
 template<class value_type>
-using Basic_Allocator = allocator::Host<value_type>;
+using Basic_Allocator = allocators::Host<value_type>;
 
 
 #ifdef __CUDACC__
 template<class value_type>
-using Cuda_Allocator = allocator::Device<value_type>;
+using Cuda_Allocator = allocators::Device<value_type>;
 
 template<class value_type>
-using Cuda_Managed = allocator::Device_Managed<value_type>;
+using Cuda_Managed = allocators::Device_Managed<value_type>;
 
 template<class system_tag, class value_type>
 using Allocator = std::conditional_t<std::is_same<system_tag, host_tag>::value,

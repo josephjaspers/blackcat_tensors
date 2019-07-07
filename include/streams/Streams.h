@@ -16,9 +16,9 @@ BC_DEFAULT_MODULE_BODY(stream, Stream)
 namespace BC {
 
 template<class system_tag>  //push into BC namespace
-using Stream = stream::Stream<system_tag>;
+using Stream = streams::Stream<system_tag>;
 
-namespace stream {
+namespace streams {
 
 template<class T>
 static auto select_on_get_stream(const T& type) {
@@ -35,7 +35,7 @@ static auto select_on_get_stream(const T& type) {
 			}, type),
 			meta::constexpr_else(
 					[]() {
-						return BC::stream::Stream<system_tag>();
+						return BC::streams::Stream<system_tag>();
 					}
 			));
 }

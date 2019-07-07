@@ -13,7 +13,7 @@ namespace BC {
 
 class host_tag;
 
-namespace allocator {
+namespace allocators {
 
 
 template<class T>

@@ -12,7 +12,7 @@
 #include <vector>
 
 namespace BC {
-namespace allocator {
+namespace allocators {
 namespace fancy {
 namespace detail {
 
@@ -26,8 +26,8 @@ class Workspace_Base {
 
 	Byte* m_memptr=nullptr;
 
-	static Polymorphic_Allocator<BC::allocator::Byte, SystemTag>& get_default_allocator() {
-		static Polymorphic_Allocator<BC::allocator::Byte, SystemTag> default_allocator;
+	static Polymorphic_Allocator<BC::allocators::Byte, SystemTag>& get_default_allocator() {
+		static Polymorphic_Allocator<BC::allocators::Byte, SystemTag> default_allocator;
 		return default_allocator;
 	}
 
@@ -108,7 +108,7 @@ public:
 };
 } //end of ns detail
 
-template<class SystemTag, class ValueType=BC::allocator::Byte>
+template<class SystemTag, class ValueType=BC::allocators::Byte>
 class Workspace {
 
 	template<class, class>
