@@ -145,35 +145,34 @@ BC_ALGORITHM_DEF(equal)
 //--------------------------- numeric (mostly undefined) ---------------------------//
 //BC_DEF_IF_CPP17(BC_ALGORITHM_DEF(iota))
 
-//BC_IF_CUDA(\
+BC_IF_CUDA(
+	template<class Begin, class End, class... Args>
+	static auto accumulate (const BC::streams::Stream<BC::device_tag>& stream, Begin begin, End end, Args... args) {
+		return thrust::reduce(thrust::cuda::par.on(stream), begin, end, args...);
+	}
+	template<class Begin, class End, class... Args>
+	static auto accumulate (cudaStream_t stream, Begin begin, End end, Args... args) {
+		return thrust::reduce(thrust::cuda::par.on(stream), begin, end, args...);
+	}
+)
 
-template<class Begin, class End, class... Args>\
-static auto accumulate (const BC::streams::Stream<BC::device_tag>& stream, Begin begin, End end, Args... args) {\
-	return thrust::reduce(
-			thrust::cuda::par.on(stream), begin, end, args...);\
-}\
-template<class Begin, class End, class... Args>\
-static auto accumulate (cudaStream_t stream, Begin begin, End end, Args... args) {\
-	return thrust::reduce(thrust::cuda::par.on(stream), begin, end, args...);\
-}
-
-//)\
-
-template<class Begin, class End, class... Args>\
-static auto accumulate (BC::streams::Stream<BC::host_tag> stream, Begin begin, End end, Args... args) {   \
+template<class Begin, class End, class... Args>
+static auto accumulate (BC::streams::Stream<BC::host_tag> stream, Begin begin, End end, Args... args) {
 	double value = 1.0;
-	stream.enqueue([&](){ value = std::accumulate(begin, end, args...); });\
+	stream.enqueue([&](){ value = std::accumulate(begin, end, args...); });
 	stream.sync();
 	return value;
-}\
-template<class Container, class... Args>\
-static auto accumulate (const Container& container, Args&&... args) {\
-	return accumulate(BC::streams::select_on_get_stream(container), container.begin(), container.end(), args...);\
-}\
-template<class Container, class... Args>\
-static auto accumulate (Container& container, Args&&... args) {\
-	return accumulate(BC::streams::select_on_get_stream(container), container.begin(), container.end(), args...);\
-}\
+}
+
+template<class Container, class... Args>
+static auto accumulate (const Container& container, Args&&... args) {
+	return accumulate(BC::streams::select_on_get_stream(container), container.begin(), container.end(), args...);
+}
+
+template<class Container, class... Args>
+static auto accumulate (Container& container, Args&&... args) {
+	return accumulate(BC::streams::select_on_get_stream(container), container.begin(), container.end(), args...);
+}
 
 
 //BC_DEF_IF_CPP17(BC_ALGORITHM_DEF(inner_product))
