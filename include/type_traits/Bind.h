@@ -13,7 +13,7 @@
 namespace BC {
 namespace meta {
 
-using namespace BC::meta::common_traits;
+using namespace BC::meta::common;
 
 /*
  * Similar to std::bind but the evaluation of the function

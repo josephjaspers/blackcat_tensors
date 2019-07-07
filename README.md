@@ -1,7 +1,7 @@
 # Documentation 
 Author: Joseph Jaspers
 
-BlackCat_Tensors (BCT) is a highly efficient Matrix library designed for NeuralNetwork construction. BCT is designed to support GPU computing (CUDA) and CPU multi-threading (OpenMP).BCT focuses on delivering a high-level framework with low-level performance.
+BlackCat_Tensors (BCT) is a highly efficient Matrix library designed for NeuralNetwork construction. BCT is designed to support GPU computing (CUDA) and CPU multi-threading (OpenMP). BCT focuses on delivering a high-level framework with low-level performance.
 
 #### Setup:
 BCT is a header only library that supports compilation with the NVCC and G++ BCT does not support any default BLAS routines, and must be linked with an apropriate BLAS library. Setting up simply requires adding the BlackCat_Tensors your path and including "BlackCat_Tensors.h"
@@ -48,13 +48,11 @@ BlackCat Tensors attempts to align itself with the design of the C++ standard li
 
 
 #### Dependencies 
-	Cuda 10
+	Cuda 10 (Only required for GPU-usage)
 	GCC 7.4 (and up)
 
-	cublas
-	curand
-	gomp
-	cblas
+	gomp  (Only required for CPU multithreading)
+	cblas (Only required for BLAS functions)
 
 	The cuda libraries are only required if the user wants to utilize GPU operations.
 	gomp (or another openmp library) is only required for multithreading certain operations, though it is not required. 

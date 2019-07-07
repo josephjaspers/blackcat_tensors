@@ -13,9 +13,17 @@
 #include "Bind.h"
 
 namespace BC {
+
+namespace stream {
+
+	//forward declare stream for common_traits
+	template<class SystemTag>
+	class Stream;
+}
+
 namespace meta {
 
-using namespace BC::meta::common_traits;
+using namespace BC::meta::common;
 
 	namespace { template<class> struct DISABLE; }
 	template<bool x,class T> using only_if = conditional_t<x, T, DISABLE<T>>;
@@ -34,10 +42,6 @@ using namespace BC::meta::common_traits;
 	template<class> struct not_type;
 	template<> struct not_type<false_type>: true_type {};
 	template<> struct not_type<true_type>: false_type {};
-
-	//---------------------------------
-	template<class T> using query_allocator_type = typename T::allocator_type;
-	template<class T> using query_value_type  	 = typename T::value_type;
 
 	//----------------------------------
 
@@ -191,7 +195,34 @@ using namespace BC::meta::common_traits;
 	template<class T> BCINLINE
 	apply_const_t<T>* auto_apply_const(T* param) { return param; }
 
+
+	template<class T> using query_value_type = typename T::value_type;
+	template<class T> using query_allocator_type = typename T::allocator_type;
+	template<class T> using query_system_tag = typename T::system_tag;
+	template<class T> using query_get_stream = decltype(std::declval<T>().get_stream);
+
+	class None;
+
+	template<class T>
+	struct common_traits {
+
+		static constexpr bool defines_value_type = is_detected_v<query_value_type, T>;
+		static constexpr bool defines_allocator_type = is_detected_v<query_allocator_type, T>;
+		static constexpr bool defines_system_tag = is_detected_v<query_system_tag, T>;
+		static constexpr bool defines_get_stream = is_detected_v<query_get_stream, T>;
+
+		using value_type =
+				meta::conditional_detected_t<query_value_type, T, None>;
+		using allocator_type =
+				meta::conditional_detected_t<query_allocator_type, T, None>;
+		using system_tag =
+				meta::conditional_detected_t<query_system_tag, T, host_tag>;
+	};
+
 }
+
+using meta::common_traits; //import common_traits into BC namespace
+
 }
 
 

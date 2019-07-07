@@ -12,7 +12,7 @@
 #include <type_traits>
 
 #include "expression_templates/Expression_Templates.h" //depends on Stream.h
-#include "iterator_algorithms/Iterator_Algorithms.h"   //depends on Stream.h
+#include "iterators/Iterators.h"///depends on Stream.h
 
 namespace BC {
 namespace tensors {

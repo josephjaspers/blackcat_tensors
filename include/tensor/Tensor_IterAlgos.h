@@ -31,7 +31,7 @@ public:
 
 	//------------------------ iterator-algorthims---------------------------//
 
-    void fill(value_type value) { BC::fill(as_derived().get_stream(), as_derived().begin(), as_derived().end(), value);}
+    void fill(value_type value) { BC::fill(as_derived(), value);}
     void zero()                 { fill(0); }
     void ones()                 { fill(1); }
 
@@ -225,13 +225,15 @@ using BC_sum_t = std::conditional_t<std::is_same<typename internal_t::value_type
 template<class internal_t>
 auto sum(const Tensor_Base<internal_t>& tensor) {
 	using sum_value_type = BC_sum_t<internal_t>;
-	return BC::accumulate(tensor.cbegin(), tensor.cend(), sum_value_type(0));
+	return BC::accumulate(BC::stream::select_on_get_stream(tensor),
+			tensor.cbegin(), tensor.cend(), sum_value_type(0));
 }
 
 template<class internal_t>
 auto prod(const Tensor_Base<internal_t>& tensor) {
 	using value_type = typename internal_t::value_type;
-	return BC::accumulate(tensor.cbegin(), tensor.cend(), value_type(1), BC::oper::mul);
+	return BC::accumulate(BC::stream::select_on_get_stream(tensor),
+			tensor.cbegin(), tensor.cend(), value_type(1), BC::oper::mul);
 }
 
 template<class internal_t>
@@ -247,17 +249,13 @@ static bool any(const Tensor_Base<internal_t>& tensor) {
 
 template<class internal_t>
 static auto max(const Tensor_Base<internal_t>& tensor) {
-	static_assert(exprs::expression_traits<internal_t>::is_array,
-			"'max' is only available to Array types, max on 'Expressions' is prohibited");
-	auto max_index = BC::tensors::alg::max_element(tensor.get_stream(), tensor.cbegin(), tensor.cend());
+	auto max_index = BC::tensors::alg::max_element(BC::stream::select_on_get_stream(tensor), tensor.cbegin(), tensor.cend());
 	return tensor(max_index);
 }
 
 template<class internal_t>
 static auto min(const Tensor_Base<internal_t>& tensor) {
-	static_assert(exprs::expression_traits<internal_t>::is_array,
-			"'min' is only available to Array types, min on 'Expressions' is prohibited");
-	auto min_index = BC::tensors::alg::min_element(tensor.get_stream(), tensor.cbegin(), tensor.cend());
+	auto min_index = BC::tensors::alg::min_element(BC::stream::select_on_get_stream(tensor), tensor.cbegin(), tensor.cend());
 	return tensor(min_index);
 }
 

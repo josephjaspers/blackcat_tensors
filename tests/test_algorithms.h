@@ -19,9 +19,10 @@ int test_algorithms(int sz=128) {
 	BC_TEST_BODY_HEAD
 
 	using alloc_t = allocator<value_type>;
-//	using vec = BC::Vector<value_type, alloc_t>;
 	using mat = BC::Matrix<value_type, alloc_t>;
-//	using scalar = BC::Scalar<value_type, alloc_t>;
+
+	using system_tag = typename BC::allocator_traits<alloc_t>::system_tag;
+	BC::stream::Stream<system_tag> stream;
 
 	BC_TEST_DEF(
 		mat a(sz, sz);
@@ -31,7 +32,7 @@ int test_algorithms(int sz=128) {
 	)
 	BC_TEST_DEF(
 		mat a(sz, sz);
-		BC::fill(a.begin(), a.end(), 3);
+		BC::fill(a, 3);
 
 		return BC::tensors::all(a == 3);
 	)

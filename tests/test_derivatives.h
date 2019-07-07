@@ -19,8 +19,6 @@ int test_derivatives(int sz=128) {
 	BC_TEST_BODY_HEAD
 
 	using mat = BC::Matrix<value_type, allocator<value_type>>;
-	using vec = BC::Vector<value_type, allocator<value_type>>;
-	using bmat = BC::Matrix<bool, allocator<bool>>;
 
 	using namespace BC::oper;
 	using BC::tanh;

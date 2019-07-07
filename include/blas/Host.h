@@ -38,7 +38,7 @@ struct BLAS<host_tag> {
         auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
         auto TRANS_B =  transB ? CblasTrans : CblasNoTrans;
 
-        stream.push_job([=]() {
+        stream.enqueue([=]() {
                 cblas_sgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 		});
     }
@@ -52,7 +52,7 @@ struct BLAS<host_tag> {
         auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
         auto TRANS_B =  transB ? CblasTrans : CblasNoTrans;
 
-        stream.push_job([=]() {
+        stream.enqueue([=]() {
         	cblas_dgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
     	});
 
@@ -67,7 +67,7 @@ struct BLAS<host_tag> {
 
         auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
 
-        stream.push_job([=]() {
+        stream.enqueue([=]() {
         	cblas_dgemv(CblasColMajor, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY);
     	});
 	}
@@ -80,7 +80,7 @@ struct BLAS<host_tag> {
 
         auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
 
-        stream.push_job([=]() {
+        stream.enqueue([=]() {
         	cblas_sgemv(CblasColMajor, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY);
     	});
 	}
@@ -92,7 +92,7 @@ struct BLAS<host_tag> {
                                  const double* Y, BC::size_t  incY,
                                   double* A, BC::size_t  lda) {
 
-        stream.push_job([=]() {
+        stream.enqueue([=]() {
         	cblas_dger(CblasColMajor, m, n, alpha, X, incX, Y, incY, A, lda);
         });
 	}
@@ -104,21 +104,21 @@ struct BLAS<host_tag> {
                                  const float* Y, BC::size_t  incY,
                                   float* A, BC::size_t  lda) {
 
-        stream.push_job([=]() {
+        stream.enqueue([=]() {
         	cblas_sger(CblasColMajor, m, n, alpha, X, incX, Y, incY, A, lda);
         });
 	}
 
 	template<class Stream>
     static void dot(Stream stream, int n, double* A, const double* x, BC::size_t  incX, const double* y, BC::size_t  incY) {
-        stream.push_job([=]() {
+        stream.enqueue([=]() {
         	*A = cblas_ddot(n, x, incX, y, incY);
         });
     }
 
 	template<class Stream>
     static void dot(Stream stream, int n, float* A, const float* x, BC::size_t  incX, const float* y, BC::size_t  incY) {
-        stream.push_job([=]() {
+        stream.enqueue([=]() {
         	*A = cblas_sdot(n, x, incX, y, incY);
         });
 	}
@@ -134,7 +134,7 @@ struct BLAS<host_tag> {
         auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
         auto TRANS_B =  transB ? CblasTrans : CblasNoTrans;
 
-        stream.push_job([=]() {
+        stream.enqueue([=]() {
                 cblas_sgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, *alpha, A, lda, B, ldb, *beta, C, ldc);
 		});
     }
@@ -148,7 +148,7 @@ struct BLAS<host_tag> {
         auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
         auto TRANS_B =  transB ? CblasTrans : CblasNoTrans;
 
-        stream.push_job([=]() {
+        stream.enqueue([=]() {
         	cblas_dgemm(CblasColMajor, TRANS_A, TRANS_B, m, n, k, *alpha, A, lda, B, ldb, *beta, C, ldc);
     	});
 
@@ -163,7 +163,7 @@ struct BLAS<host_tag> {
 
         auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
 
-        stream.push_job([=]() {
+        stream.enqueue([=]() {
         	cblas_dgemv(CblasColMajor, TRANS_A, m, n, *alpha, A, lda, X, incX, *beta, Y, incY);
     	});
 	}
@@ -176,7 +176,7 @@ struct BLAS<host_tag> {
 
         auto TRANS_A =  transA ? CblasTrans : CblasNoTrans;
 
-        stream.push_job([=]() {
+        stream.enqueue([=]() {
         	cblas_sgemv(CblasColMajor, TRANS_A, m, n, *alpha, A, lda, X, incX, *beta, Y, incY);
     	});
 	}
@@ -188,7 +188,7 @@ struct BLAS<host_tag> {
                                  const double* Y, BC::size_t  incY,
                                   double* A, BC::size_t  lda) {
 
-        stream.push_job([=]() {
+        stream.enqueue([=]() {
         	cblas_dger(CblasColMajor, m, n, *alpha, X, incX, Y, incY, A, lda);
         });
 	}
@@ -200,7 +200,7 @@ struct BLAS<host_tag> {
                                  const float* Y, BC::size_t  incY,
                                   float* A, BC::size_t  lda) {
 
-        stream.push_job([=]() {
+        stream.enqueue([=]() {
         	cblas_sger(CblasColMajor, m, n, *alpha, X, incX, Y, incY, A, lda);
         });
 	}

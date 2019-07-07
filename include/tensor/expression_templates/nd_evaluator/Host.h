@@ -63,7 +63,7 @@ struct Evaluator<host_tag> {
 		auto job = [=]() {
 			evaluator_impl<Dimension>::impl(expression);
 		};
-		stream.push_job(job);
+		stream.enqueue(job);
 	}
 
 

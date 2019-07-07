@@ -13,6 +13,7 @@
 #include "BlackCat_Blas.h"
 #include "BlackCat_Array.h"
 #include "BlackCat_Operations.h"
+#include "BlackCat_Algorithms.h"
 
 #include "utility/Utility.h"
 #include "random/Random.h"

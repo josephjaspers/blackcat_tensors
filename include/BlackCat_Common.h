@@ -57,6 +57,13 @@ using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 //#define BC_INLINE_OVERRIDE <compiler_attribute>       //overloads the default inline attribute
 //#define BC_SIZE_T_OVERRIDE  <integer_type>			//overloads the default size_t (default is signed int)
 
+// ------------- define if cuda is defined ----------------- //
+#ifdef __CUDACC__
+#define BC_IF_CUDA(...) __VA_ARGS__
+#else
+#define BC_IF_CUDA(...)
+#endif
+
 // --------------------------------- inline macros -----------------------------------------//
 
 #ifdef __CUDACC__

@@ -26,7 +26,7 @@ struct Random<host_tag> {
 
 	 template<class Stream, typename T, typename value_type>
 	    static void randomize(Stream stream, T& tensor, value_type lower_bound, value_type upper_bound) {
-		 stream.push_job([&](){
+		 stream.enqueue([&](){
 			 randomize_kernel(tensor, lower_bound, upper_bound);
 		 });
 	    }

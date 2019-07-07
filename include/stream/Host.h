@@ -24,14 +24,14 @@ class Stream<host_tag> {
 		BC::allocator::fancy::Workspace<host_tag> m_workspace;
 	};
 
-	static std::shared_ptr<Contents> get_default_contents() {
-		static std::shared_ptr<Contents> default_contents =
-					std::shared_ptr<Contents>(new Contents());
+	static BC::memory::atomic_shared_ptr<Contents> get_default_contents() {
+		static BC::memory::atomic_shared_ptr<Contents> default_contents =
+				BC::memory::atomic_shared_ptr<Contents>(new Contents());
 
 		return default_contents;
 	}
 
-	std::shared_ptr<Contents> m_contents = get_default_contents();
+	BC::memory::atomic_shared_ptr<Contents> m_contents = get_default_contents();
 
 public:
 
@@ -39,7 +39,7 @@ public:
 	using allocator_type = BC::allocator::fancy::Workspace<host_tag>;
 
     BC::allocator::fancy::Workspace<host_tag>& get_allocator() {
-    	return m_contents.get()->m_workspace;
+    	return m_contents->m_workspace;
     }
     template<class RebindType>
     auto get_allocator_rebound() {
@@ -60,7 +60,7 @@ public:
 	}
 
 	void create() {
-		m_contents = std::shared_ptr<Contents>(new Contents());
+		m_contents = BC::memory::atomic_shared_ptr<Contents>(new Contents());
 	}
 
 	void destroy() {
@@ -70,9 +70,9 @@ public:
 	void sync() {
 		//** Pushing a job while syncing is undefined behavior.
 		if (!is_default()) {
-			if (!m_contents.get()->m_stream.empty()) {
+			if (!m_contents->m_stream.empty()) {
 				record_event();
-				this->m_contents.get()->m_event.get()->get_waiter().operator ()();
+				this->m_contents->m_event->get_waiter().operator ()();
 			}
 		}
 	}
@@ -83,20 +83,14 @@ public:
 
     void record_event() {
     	if (!is_default()) {
-        	std::mutex locker;
-        	locker.lock();
-        	m_contents.get()->m_event = std::unique_ptr<HostEvent>(new HostEvent());
-    		this->push_job(m_contents.get()->m_event.get()->get_recorder());
-    		locker.unlock();
+        	m_contents->m_event = std::unique_ptr<HostEvent>(new HostEvent());
+    		this->enqueue(m_contents->m_event->get_recorder());
     	}
     }
     void wait_event(Stream& stream) {
     	if (!stream.is_default()) {
-			std::mutex locker;
-			locker.lock();
-			BC_ASSERT(stream.m_contents.get()->m_event.get(), "Attempting to wait on an event that was never recorded");
-			this->push_job(stream.m_contents.get()->m_event.get()->get_waiter());
-			locker.unlock();
+			BC_ASSERT(stream.m_contents->m_event.get(), "Attempting to wait on an event that was never recorded");
+			this->enqueue(stream.m_contents->m_event->get_waiter());
     	}
 	}
 
@@ -106,17 +100,17 @@ public:
     }
 
 	template<class Functor>
-	void push_job(Functor functor) {
+	void enqueue(Functor functor) {
 		if (this->is_default()) {
 			host_sync();
 			functor();
 		} else {
-			m_contents.get()->m_stream.push(functor);
+			m_contents->m_stream.push(functor);
 		}
 	}
 	template<class Functor>
 	void enqueue_callback(Functor functor) {
-		push_job(functor);
+		enqueue(functor);
 	}
 
     bool operator == (const Stream& dev) {

@@ -13,7 +13,7 @@
 
 namespace BC {
 namespace meta {
-namespace common_traits {
+namespace common {
 
 	using std::enable_if_t;
 	using std::true_type;
