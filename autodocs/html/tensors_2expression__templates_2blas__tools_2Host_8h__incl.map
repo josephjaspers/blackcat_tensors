@@ -1,8 +1,0 @@
-<map id="include/tensors/expression_templates/blas_tools/Host.h" name="include/tensors/expression_templates/blas_tools/Host.h">
-<area shape="rect" id="node2" href="$Host__Impl_8h.html" title="Host_Impl.h" alt="" coords="5,95,99,121"/>
-<area shape="rect" id="node3" href="$tensors_2expression__templates_2blas__tools_2Common_8h.html" title="Common.h" alt="" coords="123,95,210,121"/>
-<area shape="rect" id="node4" href="$Array__Scalar__Constant_8h.html" title="../Array_Scalar_Constant.h" alt="" coords="77,169,257,196"/>
-<area shape="rect" id="node5" href="$Expression__Template__Base_8h.html" title="Expression_Template\l_Base.h" alt="" coords="149,244,297,285"/>
-<area shape="rect" id="node6" href="$Shape_8h.html" title="Shape.h" alt="" coords="75,341,146,367"/>
-<area shape="rect" id="node7" href="$Expression__Template__Traits_8h.html" title="Expression_Template\l_Traits.h" alt="" coords="170,333,318,375"/>
-</map>

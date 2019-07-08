@@ -1,8 +1,0 @@
-<map id="include/allocators/Allocators.h" name="include/allocators/Allocators.h">
-<area shape="rect" id="node2" href="$allocators_2Host_8h.html" title="Host.h" alt="" coords="5,95,67,121"/>
-<area shape="rect" id="node3" href="$allocators_2Device_8h.html" title="Device.h" alt="" coords="91,95,165,121"/>
-<area shape="rect" id="node4" href="$Device__Managed_8h.html" title="Device_Managed.h" alt="" coords="190,95,325,121"/>
-<area shape="rect" id="node5" href="$Allocator__Traits_8h.html" title="Allocator_Traits.h" alt="" coords="218,169,342,196"/>
-<area shape="rect" id="node7" href="$Polymorphic__Allocator_8h.html" title="fancy/Polymorphic_Allocator.h" alt="" coords="366,169,565,196"/>
-<area shape="rect" id="node8" href="$Workspace_8h.html" title="fancy/Workspace.h" alt="" coords="451,95,586,121"/>
-</map>

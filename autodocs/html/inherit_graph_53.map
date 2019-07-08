@@ -1,6 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classBC_1_1nn_1_1Layer__Base.html" title="BC::nn::Layer_Base" alt="" coords="5,78,145,105"/>
-<area shape="rect" id="node2" href="$classBC_1_1nn_1_1FeedForward.html" title="BC::nn::FeedForward\l\&lt; SystemTag, ValueType \&gt;" alt="" coords="193,5,376,47"/>
-<area shape="rect" id="node3" href="$classBC_1_1nn_1_1Function.html" title="BC::nn::Function\&lt; System\lTag, ValueType, Functor \&gt;" alt="" coords="195,71,374,112"/>
-<area shape="rect" id="node4" href="$structBC_1_1nn_1_1OutputLayer.html" title="BC::nn::OutputLayer\l\&lt; SystemTag, ValueType \&gt;" alt="" coords="193,136,376,177"/>
-</map>

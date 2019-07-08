@@ -1,9 +1,0 @@
-<map id="include/tensors/expression_templates/Tree_Evaluator_Optimizer.h" name="include/tensors/expression_templates/Tree_Evaluator_Optimizer.h">
-<area shape="rect" id="node2" href="$Tree__Struct__Injector_8h.html" title="Tree_Struct_Injector.h" alt="" coords="5,109,156,136"/>
-<area shape="rect" id="node3" href="$Array_8h.html" title="Array.h" alt="" coords="511,109,575,136"/>
-<area shape="rect" id="node8" href="$Expression__Binary_8h.html" title="Expression_Binary.h" alt="" coords="180,109,323,136"/>
-<area shape="rect" id="node9" href="$Expression__Unary_8h.html" title="Expression_Unary.h" alt="" coords="347,109,487,136"/>
-<area shape="rect" id="node4" href="$Expression__Template__Base_8h.html" title="Expression_Template\l_Base.h" alt="" coords="343,184,491,225"/>
-<area shape="rect" id="node5" href="$Shape_8h.html" title="Shape.h" alt="" coords="257,281,328,307"/>
-<area shape="rect" id="node6" href="$Expression__Template__Traits_8h.html" title="Expression_Template\l_Traits.h" alt="" coords="352,273,500,315"/>
-</map>

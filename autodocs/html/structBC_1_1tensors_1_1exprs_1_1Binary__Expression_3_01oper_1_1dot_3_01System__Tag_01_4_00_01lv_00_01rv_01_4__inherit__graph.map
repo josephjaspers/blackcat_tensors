@@ -1,9 +1,0 @@
-<map id="BC::tensors::exprs::Binary_Expression&lt; oper::dot&lt; System_Tag &gt;, lv, rv &gt;" name="BC::tensors::exprs::Binary_Expression&lt; oper::dot&lt; System_Tag &gt;, lv, rv &gt;">
-<area shape="rect" id="node2" href="$structBC_1_1tensors_1_1exprs_1_1Expression__Base.html" title="BC::tensors::exprs\l::Expression_Base\&lt; Binary\l_Expression\&lt; oper::dot\&lt;\l System_Tag \&gt;, lv, rv \&gt; \&gt;" alt="" coords="413,57,595,127"/>
-<area shape="rect" id="node3" href="$classBC_1_1tensors_1_1exprs_1_1Expression__Template__Base.html" title="BC::tensors::exprs\l::Expression_Template\l_Base\&lt; Binary_Expression\l\&lt; oper::dot\&lt; System_Tag\l \&gt;, lv, rv \&gt; \&gt;" alt="" coords="185,5,365,91"/>
-<area shape="rect" id="node4" href="$classBC_1_1tensors_1_1exprs_1_1BC__Type.html" title="BC::tensors::exprs\l::BC_Type" alt="" coords="5,27,137,69"/>
-<area shape="rect" id="node5" href="$classBC_1_1tensors_1_1exprs_1_1BC__Expr.html" title="BC::tensors::exprs\l::BC_Expr" alt="" coords="209,115,341,157"/>
-<area shape="rect" id="node6" href="$structBC_1_1tensors_1_1exprs_1_1Shape_3_010_01_4.html" title="BC::tensors::exprs\l::Shape\&lt; 0 \&gt;" alt="" coords="438,151,570,193"/>
-<area shape="rect" id="node7" href="$structBC_1_1oper_1_1dot.html" title="BC::oper::dot\&lt; System\l_Tag \&gt;" alt="" coords="425,217,583,258"/>
-<area shape="rect" id="node8" href="$structBC_1_1oper_1_1BLAS__Function.html" title="BC::oper::BLAS_Function" alt="" coords="189,224,362,251"/>
-</map>

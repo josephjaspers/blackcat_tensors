@@ -1,7 +1,0 @@
-<map id="BC::oper::Sub_Assign" name="BC::oper::Sub_Assign">
-<area shape="rect" id="node6" href="$structBC_1_1oper_1_1Host__Atomic__Sub.html" title="BC::oper::Host_Atomic_Sub" alt="" coords="90,333,278,360"/>
-<area shape="rect" id="node2" href="$structBC_1_1oper_1_1linear__assignment__operation.html" title="BC::oper::linear_assignment\l_operation" alt="" coords="91,169,277,211"/>
-<area shape="rect" id="node3" href="$structBC_1_1oper_1_1linear__operation.html" title="BC::oper::linear_operation" alt="" coords="5,87,179,114"/>
-<area shape="rect" id="node4" href="$structBC_1_1oper_1_1basic__operation.html" title="BC::oper::basic_operation" alt="" coords="97,5,271,32"/>
-<area shape="rect" id="node5" href="$structBC_1_1oper_1_1assignment__operation.html" title="BC::oper::assignment\l_operation" alt="" coords="203,80,352,121"/>
-</map>

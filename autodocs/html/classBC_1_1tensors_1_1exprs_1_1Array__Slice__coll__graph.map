@@ -1,9 +1,0 @@
-<map id="BC::tensors::exprs::Array_Slice&lt; Dimensions, ValueType, Allocator, Tags &gt;" name="BC::tensors::exprs::Array_Slice&lt; Dimensions, ValueType, Allocator, Tags &gt;">
-<area shape="rect" id="node2" href="$structBC_1_1tensors_1_1exprs_1_1Kernel__Array.html" title="BC::tensors::exprs\l::Kernel_Array\&lt; Dimensions,\l ValueType, BC::allocator\l_traits\&lt; Allocator \&gt;::system\l_tag, Tags... \&gt;" alt="" coords="753,201,944,287"/>
-<area shape="rect" id="node3" href="$structBC_1_1tensors_1_1exprs_1_1Kernel__Array__Base.html" title="BC::tensors::exprs\l::Kernel_Array_Base\l\&lt; Kernel_Array\&lt; Dimension,\l ValueType, BC::allocator\l_traits\&lt; Allocator \&gt;::system\l_tag, Tags... \&gt; \&gt;" alt="" coords="500,70,687,170"/>
-<area shape="rect" id="node4" href="$classBC_1_1tensors_1_1exprs_1_1Expression__Template__Base.html" title="BC::tensors::exprs\l::Expression_Template\l_Base\&lt; Kernel_Array\&lt; Dimension,\l ValueType, BC::allocator_traits\l\&lt; Allocator \&gt;::system_tag, Tags... \&gt; \&gt;" alt="" coords="187,5,433,91"/>
-<area shape="rect" id="node5" href="$classBC_1_1tensors_1_1exprs_1_1BC__Type.html" title="BC::tensors::exprs\l::BC_Type" alt="" coords="5,27,137,69"/>
-<area shape="rect" id="node6" href="$classBC_1_1tensors_1_1exprs_1_1BC__Array.html" title="BC::tensors::exprs\l::BC_Array" alt="" coords="244,115,376,157"/>
-<area shape="rect" id="node9" href="$structBC_1_1allocators_1_1Host.html" title="BC::allocators::Host\&lt; T \&gt;" alt="" coords="762,311,935,337"/>
-<area shape="rect" id="node10" href="$classBC_1_1streams_1_1Stream.html" title="BC::streams::Stream\l\&lt; system_tag \&gt;" alt="" coords="775,362,922,403"/>
-</map>

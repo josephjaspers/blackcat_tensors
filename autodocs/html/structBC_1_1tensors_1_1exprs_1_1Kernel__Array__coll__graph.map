@@ -1,6 +1,0 @@
-<map id="BC::tensors::exprs::Kernel_Array&lt; Dimension, ValueType, SystemTag, Tags &gt;" name="BC::tensors::exprs::Kernel_Array&lt; Dimension, ValueType, SystemTag, Tags &gt;">
-<area shape="rect" id="node2" href="$structBC_1_1tensors_1_1exprs_1_1Kernel__Array__Base.html" title="BC::tensors::exprs\l::Kernel_Array_Base\l\&lt; Kernel_Array\&lt; Dimension,\l ValueType, SystemTag, Tags... \&gt; \&gt;" alt="" coords="469,45,705,116"/>
-<area shape="rect" id="node3" href="$classBC_1_1tensors_1_1exprs_1_1Expression__Template__Base.html" title="BC::tensors::exprs\l::Expression_Template\l_Base\&lt; Kernel_Array\&lt; Dimension,\l ValueType, SystemTag, Tags... \&gt; \&gt;" alt="" coords="185,5,421,76"/>
-<area shape="rect" id="node4" href="$classBC_1_1tensors_1_1exprs_1_1BC__Type.html" title="BC::tensors::exprs\l::BC_Type" alt="" coords="5,20,137,61"/>
-<area shape="rect" id="node5" href="$classBC_1_1tensors_1_1exprs_1_1BC__Array.html" title="BC::tensors::exprs\l::BC_Array" alt="" coords="237,100,369,141"/>
-</map>

@@ -1,6 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node2" href="$structBC_1_1meta_1_1all.html" title="BC::meta::all\&lt; Function,\l Ts \&gt;" alt="" coords="140,5,305,47"/>
-<area shape="rect" id="node3" href="$structBC_1_1meta_1_1is__compileable_3_01Function_00_01enable__if__t_3_01true__v_3_01decltype_07d8adad13b4eb1e0e26c7d725c9c1dd19e.html" title="BC::meta::is_compileable\l\&lt; Function, enable_if_t\l\&lt; true_v\&lt; decltype(declval\l\&lt; Function \&gt;()())\&gt; \&gt;" alt="" coords="135,71,311,141"/>
-<area shape="rect" id="node4" href="$structBC_1_1meta_1_1is__detected_3_01func_00_01T_00_01enable__if__t_3_01true__v_3_01func_3_01T_01_4_01_4_01_4_01_4.html" title="BC::meta::is_detected\l\&lt; func, T, enable_if\l_t\&lt; true_v\&lt; func\&lt; T \&gt; \&gt; \&gt; \&gt;" alt="" coords="129,166,316,222"/>
-<area shape="rect" id="node5" href="$structBC_1_1meta_1_1not__type_3_01false__type_01_4.html" title="BC::meta::not_type\l\&lt; false_type \&gt;" alt="" coords="155,245,291,287"/>
-</map>

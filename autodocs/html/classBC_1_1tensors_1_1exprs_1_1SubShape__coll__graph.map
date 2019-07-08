@@ -1,5 +1,0 @@
-<map id="BC::tensors::exprs::SubShape&lt; ndims &gt;" name="BC::tensors::exprs::SubShape&lt; ndims &gt;">
-<area shape="rect" id="node2" href="$classBC_1_1tensors_1_1exprs_1_1Shape.html" title="BC::tensors::exprs\l::Shape\&lt; ndims, SubShape\l\&lt; ndims \&gt; \&gt;" alt="" coords="299,7,481,63"/>
-<area shape="rect" id="node3" href="$structBC_1_1array.html" title="BC::array\&lt; dims, int \&gt;" alt="" coords="5,21,157,48"/>
-<area shape="rect" id="node4" href="$structBC_1_1array.html" title="BC::array\&lt; ndims, BC\l::size_t \&gt;" alt="" coords="314,86,466,127"/>
-</map>
