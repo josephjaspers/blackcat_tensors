@@ -60,10 +60,10 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Operation, L
      	return Operation::operator()(left(ints...), right(ints...));
     }
 
-
-    BCINLINE auto dx(size_t index) const {
-    	auto lv_dx = expression_traits<Lv>::select_on_dx(left, index);
-    	auto rv_dx = expression_traits<Rv>::select_on_dx(right, index);
+    template<class... Indicies>
+    BCINLINE auto dx(Indicies... indicies) const {
+    	auto lv_dx = expression_traits<Lv>::select_on_dx(left, indicies...);
+    	auto rv_dx = expression_traits<Rv>::select_on_dx(right, indicies...);
     	auto cache_out = Operation::operator()(lv_dx.first, rv_dx.first);
     	auto deriv_out = Operation::dx(lv_dx, rv_dx);
     	return BC::meta::make_pair(cache_out, deriv_out);

@@ -92,11 +92,19 @@ struct select_on_dx_when_defined {
 	static auto impl(const T& array, BC::size_t index) {
 		return array.dx(index);
 	}
+	template<class T, class... Indicies> BCINLINE
+	static auto impl(const T& array, Indicies... indicies) {
+		return array.dx(index, indicies...);
+	}
 };
 struct select_on_dx_when_not_defined {
 	template<class T> BCINLINE
 	static auto impl(const T& array, BC::size_t index) {
     	return BC::meta::make_pair(array[index], 1);
+	}
+	template<class T, class... Indicies> BCINLINE
+	static auto impl(const T& array, Indicies... indicies) {
+    	return BC::meta::make_pair(array(indicies...), 1);
 	}
 };
 
@@ -127,17 +135,20 @@ struct expression_traits {
 	 static constexpr bool derivative_is_defined =
 			 BC::meta::conditional_detected_t<detail::query_dx_is_defined, T, std::false_type>::value;
 
-	 BCINLINE static auto select_on_dx(const T& expression, size_t index) {
+	 template<class... Indicies>
+	 BCINLINE static auto select_on_dx(const T& expression, Indicies... indicies) {
 		 using selector = std::conditional_t<derivative_is_defined,
 				 detail::select_on_dx_when_defined,
 				 detail::select_on_dx_when_not_defined>;
-		 return selector::impl(expression, index);
+		 return selector::impl(expression, indicies...);
 	 }
-	 BCINLINE static auto select_on_dx(T& expression, size_t index) {
+
+	 template<class... Indicies>
+	 BCINLINE static auto select_on_dx(T& expression, Indicies... indicies) {
 		 using selector = std::conditional_t<derivative_is_defined,
 				 detail::select_on_dx_when_defined,
 				 detail::select_on_dx_when_not_defined>;
-		 return selector::impl(expression, index);
+		 return selector::impl(expression, indicies...);
 	 }
 
 // Causes 'catastrophic error' with NVCC. Compiles with GCC TODO change once NVCC fixes

@@ -80,8 +80,9 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Operation, Arr
     }
 
 
-    BCINLINE auto dx(BC::size_t index) const {
-		auto gx_and_dxgx = expression_traits<ArrayType>::select_on_dx(array, index);	// [g(x), g’(x)]
+    template<class... Indicies>
+    BCINLINE auto dx(Indicies... indicies) const {
+		auto gx_and_dxgx = expression_traits<ArrayType>::select_on_dx(array, indicies...);	// [g(x), g’(x)]
 		auto f_gx = Operation::operator()(gx_and_dxgx.first);
 		auto dx_f_gx = Operation::dx(gx_and_dxgx.first) * gx_and_dxgx.second;
 		return BC::meta::make_pair(f_gx, dx_f_gx);
