@@ -1,0 +1,158 @@
+\hypertarget{namespaceBC_1_1nn}{}\section{BC\+:\+:nn Namespace Reference}
+\label{namespaceBC_1_1nn}\index{B\+C\+::nn@{B\+C\+::nn}}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespaceBC_1_1nn_1_1detail}{detail}
+\end{DoxyCompactItemize}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structBC_1_1nn_1_1Chain}{Chain}
+\item 
+class \hyperlink{classBC_1_1nn_1_1FeedForward}{Feed\+Forward}
+\item 
+class \hyperlink{classBC_1_1nn_1_1Function}{Function}
+\item 
+class \hyperlink{classBC_1_1nn_1_1Layer__Base}{Layer\+\_\+\+Base}
+\item 
+struct \hyperlink{structBC_1_1nn_1_1LayerChain}{Layer\+Chain}
+\item 
+struct \hyperlink{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01front_00_01lst_8_8_8_01_4}{Layer\+Chain$<$ index, derived, front, lst... $>$}
+\item 
+struct \hyperlink{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4}{Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}
+\item 
+class \hyperlink{classBC_1_1nn_1_1Linear}{Linear}
+\item 
+class \hyperlink{classBC_1_1nn_1_1Logistic}{Logistic}
+\item 
+struct \hyperlink{structBC_1_1nn_1_1Network}{Network}
+\item 
+struct \hyperlink{structBC_1_1nn_1_1Network_3_01Index_00_01DerivedNetwork_00_01Layer_01_4}{Network$<$ Index, Derived\+Network, Layer $>$}
+\item 
+struct \hyperlink{structBC_1_1nn_1_1Network_3_01Index_00_01DerivedNetwork_00_01LayerType_00_01lst_8_8_8_01_4}{Network$<$ Index, Derived\+Network, Layer\+Type, lst... $>$}
+\item 
+struct \hyperlink{structBC_1_1nn_1_1NeuralNetwork}{Neural\+Network}
+\item 
+struct \hyperlink{structBC_1_1nn_1_1OutputLayer}{Output\+Layer}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class Value\+Type , class System\+Tag $>$ }\\auto \hyperlink{namespaceBC_1_1nn_a38965a760aed98536d8a3930eeadee48}{linear} (System\+Tag system, std\+::size\+\_\+t inputs, std\+::size\+\_\+t outputs)
+\item 
+{\footnotesize template$<$class System\+Tag $>$ }\\auto \hyperlink{namespaceBC_1_1nn_a4f8ca60b8d5eb4f4bc1046a059f3ea0c}{linear} (System\+Tag system, std\+::size\+\_\+t inputs, std\+::size\+\_\+t outputs)
+\item 
+{\footnotesize template$<$class Value\+Type , class System\+Tag $>$ }\\\hyperlink{classBC_1_1nn_1_1FeedForward}{Feed\+Forward}$<$ System\+Tag, Value\+Type $>$ \hyperlink{namespaceBC_1_1nn_a51fc70cd8778330bc4914e542c48b155}{feedforward} (System\+Tag system\+\_\+tag, int inputs, int outputs)
+\item 
+{\footnotesize template$<$class System\+Tag $>$ }\\auto \hyperlink{namespaceBC_1_1nn_a948b06010c609f3f11ace46c5651193f}{feedforward} (System\+Tag system\+\_\+tag, int inputs, int outputs)
+\item 
+auto \hyperlink{namespaceBC_1_1nn_a1dde2f1cb0e9e565993fded0847fb556}{feedforward} (int inputs, int outputs)
+\item 
+{\footnotesize template$<$class Value\+Type , class System\+Tag $>$ }\\\hyperlink{structBC_1_1nn_1_1OutputLayer}{Output\+Layer}$<$ System\+Tag, Value\+Type $>$ \hyperlink{namespaceBC_1_1nn_a39c999166064e9ab5d1a89d2c717dc6e}{outputlayer} (System\+Tag system\+\_\+tag, int inputs)
+\item 
+{\footnotesize template$<$class System\+Tag $>$ }\\auto \hyperlink{namespaceBC_1_1nn_a2f30c07bc3c1f4cdee774731040c1daa}{outputlayer} (System\+Tag system\+\_\+tag, int inputs)
+\item 
+auto \hyperlink{namespaceBC_1_1nn_a05306f12db2fce53d32b8b3b5b1357ce}{outputlayer} (int inputs)
+\item 
+{\footnotesize template$<$class Value\+Type , class System\+Tag , class Functor $>$ }\\\hyperlink{classBC_1_1nn_1_1Function}{Function}$<$ System\+Tag, Value\+Type, Functor $>$ \hyperlink{namespaceBC_1_1nn_a5429ceaa392776ade7234175af39050d}{function} (System\+Tag system\+\_\+tag, int inputs, Functor function=Functor())
+\item 
+{\footnotesize template$<$class System\+Tag , class Functor $>$ }\\auto \hyperlink{namespaceBC_1_1nn_ae7b4e75fd015a6306e885f835740fe11}{function} (System\+Tag system\+\_\+tag, int inputs, Functor function=Functor())
+\item 
+{\footnotesize template$<$class... Layers$>$ }\\auto \hyperlink{namespaceBC_1_1nn_a630cb1dda6910f5f434864209d6c9548}{neuralnetwork} (Layers \&\&...layers)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{B\+C\+::nn@{B\+C\+::nn}!feedforward@{feedforward}}
+\index{feedforward@{feedforward}!B\+C\+::nn@{B\+C\+::nn}}
+\subsubsection[{\texorpdfstring{feedforward(\+System\+Tag system\+\_\+tag, int inputs, int outputs)}{feedforward(SystemTag system_tag, int inputs, int outputs)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type , class System\+Tag $>$ {\bf Feed\+Forward}$<$System\+Tag, Value\+Type$>$ B\+C\+::nn\+::feedforward (
+\begin{DoxyParamCaption}
+\item[{System\+Tag}]{system\+\_\+tag, }
+\item[{int}]{inputs, }
+\item[{int}]{outputs}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1nn_a51fc70cd8778330bc4914e542c48b155}{}\label{namespaceBC_1_1nn_a51fc70cd8778330bc4914e542c48b155}
+\index{B\+C\+::nn@{B\+C\+::nn}!feedforward@{feedforward}}
+\index{feedforward@{feedforward}!B\+C\+::nn@{B\+C\+::nn}}
+\subsubsection[{\texorpdfstring{feedforward(\+System\+Tag system\+\_\+tag, int inputs, int outputs)}{feedforward(SystemTag system_tag, int inputs, int outputs)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag $>$ auto B\+C\+::nn\+::feedforward (
+\begin{DoxyParamCaption}
+\item[{System\+Tag}]{system\+\_\+tag, }
+\item[{int}]{inputs, }
+\item[{int}]{outputs}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1nn_a948b06010c609f3f11ace46c5651193f}{}\label{namespaceBC_1_1nn_a948b06010c609f3f11ace46c5651193f}
+\index{B\+C\+::nn@{B\+C\+::nn}!feedforward@{feedforward}}
+\index{feedforward@{feedforward}!B\+C\+::nn@{B\+C\+::nn}}
+\subsubsection[{\texorpdfstring{feedforward(int inputs, int outputs)}{feedforward(int inputs, int outputs)}}]{\setlength{\rightskip}{0pt plus 5cm}auto B\+C\+::nn\+::feedforward (
+\begin{DoxyParamCaption}
+\item[{int}]{inputs, }
+\item[{int}]{outputs}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1nn_a1dde2f1cb0e9e565993fded0847fb556}{}\label{namespaceBC_1_1nn_a1dde2f1cb0e9e565993fded0847fb556}
+\index{B\+C\+::nn@{B\+C\+::nn}!function@{function}}
+\index{function@{function}!B\+C\+::nn@{B\+C\+::nn}}
+\subsubsection[{\texorpdfstring{function(\+System\+Tag system\+\_\+tag, int inputs, Functor function=\+Functor())}{function(SystemTag system_tag, int inputs, Functor function=Functor())}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type , class System\+Tag , class Functor $>$ {\bf Function}$<$System\+Tag, Value\+Type, Functor$>$ B\+C\+::nn\+::function (
+\begin{DoxyParamCaption}
+\item[{System\+Tag}]{system\+\_\+tag, }
+\item[{int}]{inputs, }
+\item[{Functor}]{function = {\ttfamily Functor()}}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1nn_a5429ceaa392776ade7234175af39050d}{}\label{namespaceBC_1_1nn_a5429ceaa392776ade7234175af39050d}
+\index{B\+C\+::nn@{B\+C\+::nn}!function@{function}}
+\index{function@{function}!B\+C\+::nn@{B\+C\+::nn}}
+\subsubsection[{\texorpdfstring{function(\+System\+Tag system\+\_\+tag, int inputs, Functor function=\+Functor())}{function(SystemTag system_tag, int inputs, Functor function=Functor())}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag , class Functor $>$ auto B\+C\+::nn\+::function (
+\begin{DoxyParamCaption}
+\item[{System\+Tag}]{system\+\_\+tag, }
+\item[{int}]{inputs, }
+\item[{Functor}]{function = {\ttfamily Functor()}}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1nn_ae7b4e75fd015a6306e885f835740fe11}{}\label{namespaceBC_1_1nn_ae7b4e75fd015a6306e885f835740fe11}
+\index{B\+C\+::nn@{B\+C\+::nn}!linear@{linear}}
+\index{linear@{linear}!B\+C\+::nn@{B\+C\+::nn}}
+\subsubsection[{\texorpdfstring{linear(\+System\+Tag system, std\+::size\+\_\+t inputs, std\+::size\+\_\+t outputs)}{linear(SystemTag system, std::size_t inputs, std::size_t outputs)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type , class System\+Tag $>$ auto B\+C\+::nn\+::linear (
+\begin{DoxyParamCaption}
+\item[{System\+Tag}]{system, }
+\item[{std\+::size\+\_\+t}]{inputs, }
+\item[{std\+::size\+\_\+t}]{outputs}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1nn_a38965a760aed98536d8a3930eeadee48}{}\label{namespaceBC_1_1nn_a38965a760aed98536d8a3930eeadee48}
+\index{B\+C\+::nn@{B\+C\+::nn}!linear@{linear}}
+\index{linear@{linear}!B\+C\+::nn@{B\+C\+::nn}}
+\subsubsection[{\texorpdfstring{linear(\+System\+Tag system, std\+::size\+\_\+t inputs, std\+::size\+\_\+t outputs)}{linear(SystemTag system, std::size_t inputs, std::size_t outputs)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag $>$ auto B\+C\+::nn\+::linear (
+\begin{DoxyParamCaption}
+\item[{System\+Tag}]{system, }
+\item[{std\+::size\+\_\+t}]{inputs, }
+\item[{std\+::size\+\_\+t}]{outputs}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1nn_a4f8ca60b8d5eb4f4bc1046a059f3ea0c}{}\label{namespaceBC_1_1nn_a4f8ca60b8d5eb4f4bc1046a059f3ea0c}
+\index{B\+C\+::nn@{B\+C\+::nn}!neuralnetwork@{neuralnetwork}}
+\index{neuralnetwork@{neuralnetwork}!B\+C\+::nn@{B\+C\+::nn}}
+\subsubsection[{\texorpdfstring{neuralnetwork(\+Layers \&\&...\+layers)}{neuralnetwork(Layers &&...layers)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... Layers$>$ auto B\+C\+::nn\+::neuralnetwork (
+\begin{DoxyParamCaption}
+\item[{Layers \&\&...}]{layers}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1nn_a630cb1dda6910f5f434864209d6c9548}{}\label{namespaceBC_1_1nn_a630cb1dda6910f5f434864209d6c9548}
+\index{B\+C\+::nn@{B\+C\+::nn}!outputlayer@{outputlayer}}
+\index{outputlayer@{outputlayer}!B\+C\+::nn@{B\+C\+::nn}}
+\subsubsection[{\texorpdfstring{outputlayer(\+System\+Tag system\+\_\+tag, int inputs)}{outputlayer(SystemTag system_tag, int inputs)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type , class System\+Tag $>$ {\bf Output\+Layer}$<$System\+Tag, Value\+Type$>$ B\+C\+::nn\+::outputlayer (
+\begin{DoxyParamCaption}
+\item[{System\+Tag}]{system\+\_\+tag, }
+\item[{int}]{inputs}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1nn_a39c999166064e9ab5d1a89d2c717dc6e}{}\label{namespaceBC_1_1nn_a39c999166064e9ab5d1a89d2c717dc6e}
+\index{B\+C\+::nn@{B\+C\+::nn}!outputlayer@{outputlayer}}
+\index{outputlayer@{outputlayer}!B\+C\+::nn@{B\+C\+::nn}}
+\subsubsection[{\texorpdfstring{outputlayer(\+System\+Tag system\+\_\+tag, int inputs)}{outputlayer(SystemTag system_tag, int inputs)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag $>$ auto B\+C\+::nn\+::outputlayer (
+\begin{DoxyParamCaption}
+\item[{System\+Tag}]{system\+\_\+tag, }
+\item[{int}]{inputs}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1nn_a2f30c07bc3c1f4cdee774731040c1daa}{}\label{namespaceBC_1_1nn_a2f30c07bc3c1f4cdee774731040c1daa}
+\index{B\+C\+::nn@{B\+C\+::nn}!outputlayer@{outputlayer}}
+\index{outputlayer@{outputlayer}!B\+C\+::nn@{B\+C\+::nn}}
+\subsubsection[{\texorpdfstring{outputlayer(int inputs)}{outputlayer(int inputs)}}]{\setlength{\rightskip}{0pt plus 5cm}auto B\+C\+::nn\+::outputlayer (
+\begin{DoxyParamCaption}
+\item[{int}]{inputs}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1nn_a05306f12db2fce53d32b8b3b5b1357ce}{}\label{namespaceBC_1_1nn_a05306f12db2fce53d32b8b3b5b1357ce}

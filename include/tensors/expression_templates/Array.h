@@ -110,11 +110,11 @@ template<int ,class,class, class...> class Array_Slice;
 template<int Dimension, class Scalar, class Allocator, class... Tags>
 class Array :
 			private Allocator,
-			public Stream<typename BC::allocator_traits<Allocator>::system_tag>,
 			public Kernel_Array<Dimension, Scalar, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
 
 	using self = Array<Dimension, Scalar, Allocator, Tags...>;
 	using parent = Kernel_Array<Dimension, Scalar,  typename BC::allocator_traits<Allocator>::system_tag, Tags...>;
+	using stream_type = Stream<typename BC::allocator_traits<Allocator>::system_tag>;
 
 public:
 
@@ -125,32 +125,35 @@ public:
 
 private:
 
+	stream_type m_stream;
+
+
 	const Shape<Dimension>& as_shape() const { return static_cast<const Shape<Dimension>&>(*this); }
 	Shape<Dimension>& as_shape() { return static_cast<Shape<Dimension>&>(*this); }
 
 
 public:
-	const stream_t& get_stream()   const { return static_cast<const stream_t&>(*this); }
-	stream_t& get_stream()   { return static_cast<stream_t&>(*this); }
+	const stream_t& get_stream()   const { return m_stream; }
+	stream_t& get_stream()   { return m_stream; }
 
 	Allocator get_allocator() const { return static_cast<const Allocator&>(*this); }
 
 	Array() {
 		if (Dimension == 0) {
-			this->array = this->allocate(1);
+			this->array = get_allocator().allocate(1);
 		}
 	}
 
 	Array(const Array& array_)
 	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(array_)),
-	  stream_t(array_.get_stream()),
+	  m_stream(array_.get_stream()),
 	  parent(array_) {
-        this->array = this->allocate(this->size());
+        this->array = get_allocator().allocate(this->size());
         greedy_evaluate(this->internal(), array_.internal(), get_stream());
 	}
 	Array(Array&& array_) //TODO handle propagate_on_container_move_assignment
 	: Allocator(array_.get_allocator()),
-	  stream_t(array_.get_stream()),
+	  m_stream(array_.get_stream()),
 	  parent(array_) {
 		array_.array = nullptr;
 		//This causes segmentation fault with NVCC currently (compiler segfault, not runtime)
@@ -163,14 +166,14 @@ public:
     													Dimension != 0>>
     Array(U param) {
     	this->as_shape() = Shape<Dimension>(param);
-    	this->array = this->allocate(this->size());
+    	this->array = get_allocator().allocate(this->size());
     }
 
 	//Construct via shape-like object and Allocator
     template<class U,typename = std::enable_if_t<!expression_traits<U>::is_array && !expression_traits<U>::is_expr>>
     Array(U param, const Allocator& alloc_) : Allocator(alloc_) {
     	this->as_shape() = Shape<Dimension>(param);
-    	this->array = this->allocate(this->size());
+    	this->array = get_allocator().allocate(this->size());
     }
 
 	//Constructor for integer sequence, IE Matrix(m, n)
@@ -180,14 +183,14 @@ public:
 		sizeof...(args) == Dimension>>
 	Array(const args&... params) {
 		this->as_shape() = Shape<Dimension>(params...);
-		this->array      = this->allocate(this->size());
+		this->array      = get_allocator().allocate(this->size());
 	}
 
 	//Shape-like object with maybe allocator
     template<class Expr,typename = std::enable_if_t<expression_traits<Expr>::is_array || expression_traits<Expr>::is_expr>>
 	Array(const Expr& expr_t, const Allocator& alloc=Allocator()) : Allocator(alloc) {
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
-		this->array = this->allocate(this->size());
+		this->array = get_allocator().allocate(this->size());
 		greedy_evaluate(this->internal(), expr_t.internal(), get_stream());
 	}
 
@@ -200,10 +203,10 @@ public:
 	Array(const Array_Slice<Dimension, value_type, allocator_t, SliceTags...>& expr_t)
 	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(
 			expr_t.get_allocator())),
-	  stream_t(expr_t.get_stream())
+	  m_stream(expr_t.get_stream())
 	{
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
-		this->array = this->allocate(this->size());
+		this->array = get_allocator().allocate(this->size());
 		greedy_evaluate(this->internal(), expr_t.internal(), this->get_stream());
 	}
 

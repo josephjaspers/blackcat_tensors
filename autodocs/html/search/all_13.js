@@ -1,0 +1,15 @@
+var searchData=
+[
+  ['un_5fexpr',['un_expr',['../structBC_1_1tensors_1_1Tensor__Operations.html#a0513f47543ce68bdc514c9c6f28ec2ed',1,'BC::tensors::Tensor_Operations::un_expr(functor f) const '],['../structBC_1_1tensors_1_1Tensor__Operations.html#a28995965a91a6cdfde1ff40d744766c3',1,'BC::tensors::Tensor_Operations::un_expr() const ']]],
+  ['unary_2eh',['Unary.h',['../Unary_8h.html',1,'']]],
+  ['unary_5fexpression',['Unary_Expression',['../structBC_1_1tensors_1_1exprs_1_1Unary__Expression.html#add026b1406d5832e258030d77b9bc286',1,'BC::tensors::exprs::Unary_Expression::Unary_Expression()'],['../structBC_1_1tensors_1_1exprs_1_1Unary__Expression_3_01oper_1_1transpose_3_01System__Tag_01_4_00_01Value_01_4.html#a214753a971578689240d9ce6fce7bf31',1,'BC::tensors::exprs::Unary_Expression&lt; oper::transpose&lt; System_Tag &gt;, Value &gt;::Unary_Expression(Value p)'],['../structBC_1_1tensors_1_1exprs_1_1Unary__Expression_3_01oper_1_1transpose_3_01System__Tag_01_4_00_01Value_01_4.html#a9e2a4f3563f67abcdcbc90426c8cba58',1,'BC::tensors::exprs::Unary_Expression&lt; oper::transpose&lt; System_Tag &gt;, Value &gt;::Unary_Expression(Value p, const oper::transpose&lt; System_Tag &gt; &amp;)']]],
+  ['unary_5fexpression',['Unary_Expression',['../structBC_1_1tensors_1_1exprs_1_1Unary__Expression.html',1,'BC::tensors::exprs']]],
+  ['unary_5fexpression_3c_20oper_3a_3atranspose_3c_20system_5ftag_20_3e_2c_20value_20_3e',['Unary_Expression&lt; oper::transpose&lt; System_Tag &gt;, Value &gt;',['../structBC_1_1tensors_1_1exprs_1_1Unary__Expression_3_01oper_1_1transpose_3_01System__Tag_01_4_00_01Value_01_4.html',1,'BC::tensors::exprs']]],
+  ['unaryexpression',['UnaryExpression',['../structBC_1_1NN_1_1UnaryExpression.html',1,'BC::NN']]],
+  ['unaryfunction_2eh',['UnaryFunction.h',['../UnaryFunction_8h.html',1,'']]],
+  ['update_5finjection',['update_injection',['../namespaceBC_1_1tensors_1_1exprs.html#a08cc2bd4a63bb7ce352661cec2b0c896',1,'BC::tensors::exprs']]],
+  ['update_5fweights',['update_weights',['../structBC_1_1NN_1_1Chain.html#a5849a2e8cd2907345bb9ae03a51b74b5',1,'BC::NN::Chain::update_weights()'],['../structBC_1_1nn_1_1Chain.html#a93f5c719cf2c966c22519ef608019406',1,'BC::nn::Chain::update_weights()'],['../classBC_1_1nn_1_1FeedForward.html#a4d21f002b18731b7e3f26c63a82d5ae4',1,'BC::nn::FeedForward::update_weights()'],['../structBC_1_1nn_1_1OutputLayer.html#a5c2ca5ead550670cb40db93124c993f3',1,'BC::nn::OutputLayer::update_weights()'],['../classBC_1_1nn_1_1Function.html#aa7e88e30051b96615985e52952481db4',1,'BC::nn::Function::update_weights()'],['../structBC_1_1nn_1_1NeuralNetwork.html#aa2145618d2030424f8dbc131e07fe9e0',1,'BC::nn::NeuralNetwork::update_weights()']]],
+  ['utility_2eh',['Utility.h',['../Utility_8h.html',1,'']]],
+  ['utility_3c_20host_5ftag_20_3e',['Utility&lt; host_tag &gt;',['../structBC_1_1utility_1_1Utility_3_01host__tag_01_4.html',1,'BC::utility']]],
+  ['utility_5fl',['utility_l',['../structBC_1_1tensors_1_1Tensor__Utility.html#ae309609d855fa2c7253d2c845473a3c0',1,'BC::tensors::Tensor_Utility']]]
+];

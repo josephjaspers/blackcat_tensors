@@ -1,0 +1,146 @@
+\hypertarget{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4}{}\section{BC\+:\+:nn\+:\+:Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$ Struct Template Reference}
+\label{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4}\index{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}}
+
+
+{\ttfamily \#include $<$Layer\+Chain.\+h$>$}
+
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \hyperlink{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a49c206bb8331c9fa003194ad9c33a30f}{self} = \hyperlink{structBC_1_1nn_1_1LayerChain}{Layer\+Chain}$<$ index, derived, output\+\_\+layer\+\_\+t $>$
+\item 
+using \hyperlink{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a0c63b4c0ab7b39412bff5581bc33db5d}{type} = output\+\_\+layer\+\_\+t
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class... Args$>$ }\\\hyperlink{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a1f3e4deee5015ce211cbabf6686df39e}{Layer\+Chain} (Args...\+args\+\_\+)
+\item 
+const auto \& \hyperlink{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a45703a53d4faef145b9415aafa4de6bc}{head} () const 
+\item 
+auto \& \hyperlink{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_af03d490a35a8108cbbdf0774a44970d7}{head} ()
+\item 
+const auto \& \hyperlink{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_ad07637db6468c9ee0507dff83b965768}{tail} () const 
+\item 
+auto \& \hyperlink{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a8e90e96647686b319532ece4349c1ade}{tail} ()
+\item 
+const auto \& \hyperlink{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_aee5f69966885acb2b2fc5336fa6df86c}{prev} () const 
+\item 
+auto \& \hyperlink{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a97cd3ba51b8fceb2547dedfaa9406a65}{prev} ()
+\item 
+{\footnotesize template$<$class T $>$ }\\const auto \& \hyperlink{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a2c4b3c307a4db694f01b4dd9effee817}{fp} (const T \&tensor)
+\item 
+{\footnotesize template$<$class T $>$ }\\const auto \& \hyperlink{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a39c4ee1723c1a2c5dc191ad497a3b4d0}{bp} (const T \&tensor)
+\item 
+{\footnotesize template$<$class function $>$ }\\void \hyperlink{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a219a237d17314f8ab04215a0fe9da8a8}{for\+\_\+each} (\hyperlink{namespaceBC_1_1nn_a5429ceaa392776ade7234175af39050d}{function} f)
+\item 
+{\footnotesize template$<$class function $>$ }\\void \hyperlink{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a53d8aa7b2a37ee1930c2fb2405bd42f6}{for\+\_\+each\+\_\+internal} (\hyperlink{namespaceBC_1_1nn_a5429ceaa392776ade7234175af39050d}{function} f)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+output\+\_\+layer\+\_\+t \hyperlink{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a090c4320f0cd55d0c75f41c948497bde}{layer}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\index{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}!self@{self}}
+\index{self@{self}!B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}}
+\subsubsection[{\texorpdfstring{self}{self}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int index, class derived , class output\+\_\+layer\+\_\+t $>$ using {\bf B\+C\+::nn\+::\+Layer\+Chain}$<$ index, derived, output\+\_\+layer\+\_\+t $>$\+::{\bf self} =  {\bf Layer\+Chain}$<$index, derived, output\+\_\+layer\+\_\+t$>$}\hypertarget{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a49c206bb8331c9fa003194ad9c33a30f}{}\label{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a49c206bb8331c9fa003194ad9c33a30f}
+\index{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}!type@{type}}
+\index{type@{type}!B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}}
+\subsubsection[{\texorpdfstring{type}{type}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int index, class derived , class output\+\_\+layer\+\_\+t $>$ using {\bf B\+C\+::nn\+::\+Layer\+Chain}$<$ index, derived, output\+\_\+layer\+\_\+t $>$\+::{\bf type} =  output\+\_\+layer\+\_\+t}\hypertarget{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a0c63b4c0ab7b39412bff5581bc33db5d}{}\label{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a0c63b4c0ab7b39412bff5581bc33db5d}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}!Layer\+Chain@{Layer\+Chain}}
+\index{Layer\+Chain@{Layer\+Chain}!B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}}
+\subsubsection[{\texorpdfstring{Layer\+Chain(\+Args...\+args\+\_\+)}{LayerChain(Args...args_)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int index, class derived , class output\+\_\+layer\+\_\+t $>$ template$<$class... Args$>$ {\bf B\+C\+::nn\+::\+Layer\+Chain}$<$ index, derived, output\+\_\+layer\+\_\+t $>$\+::{\bf Layer\+Chain} (
+\begin{DoxyParamCaption}
+\item[{Args...}]{args\+\_\+}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a1f3e4deee5015ce211cbabf6686df39e}{}\label{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a1f3e4deee5015ce211cbabf6686df39e}
+
+
+\subsection{Member Function Documentation}
+\index{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}!bp@{bp}}
+\index{bp@{bp}!B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}}
+\subsubsection[{\texorpdfstring{bp(const T \&tensor)}{bp(const T &tensor)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int index, class derived , class output\+\_\+layer\+\_\+t $>$ template$<$class T $>$ const auto\& {\bf B\+C\+::nn\+::\+Layer\+Chain}$<$ index, derived, output\+\_\+layer\+\_\+t $>$\+::bp (
+\begin{DoxyParamCaption}
+\item[{const T \&}]{tensor}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a39c4ee1723c1a2c5dc191ad497a3b4d0}{}\label{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a39c4ee1723c1a2c5dc191ad497a3b4d0}
+\index{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}!for\+\_\+each@{for\+\_\+each}}
+\index{for\+\_\+each@{for\+\_\+each}!B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}}
+\subsubsection[{\texorpdfstring{for\+\_\+each(function f)}{for_each(function f)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int index, class derived , class output\+\_\+layer\+\_\+t $>$ template$<$class function $>$ void {\bf B\+C\+::nn\+::\+Layer\+Chain}$<$ index, derived, output\+\_\+layer\+\_\+t $>$\+::for\+\_\+each (
+\begin{DoxyParamCaption}
+\item[{{\bf function}}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a219a237d17314f8ab04215a0fe9da8a8}{}\label{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a219a237d17314f8ab04215a0fe9da8a8}
+\index{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}!for\+\_\+each\+\_\+internal@{for\+\_\+each\+\_\+internal}}
+\index{for\+\_\+each\+\_\+internal@{for\+\_\+each\+\_\+internal}!B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}}
+\subsubsection[{\texorpdfstring{for\+\_\+each\+\_\+internal(function f)}{for_each_internal(function f)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int index, class derived , class output\+\_\+layer\+\_\+t $>$ template$<$class function $>$ void {\bf B\+C\+::nn\+::\+Layer\+Chain}$<$ index, derived, output\+\_\+layer\+\_\+t $>$\+::for\+\_\+each\+\_\+internal (
+\begin{DoxyParamCaption}
+\item[{{\bf function}}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a53d8aa7b2a37ee1930c2fb2405bd42f6}{}\label{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a53d8aa7b2a37ee1930c2fb2405bd42f6}
+\index{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}!fp@{fp}}
+\index{fp@{fp}!B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}}
+\subsubsection[{\texorpdfstring{fp(const T \&tensor)}{fp(const T &tensor)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int index, class derived , class output\+\_\+layer\+\_\+t $>$ template$<$class T $>$ const auto\& {\bf B\+C\+::nn\+::\+Layer\+Chain}$<$ index, derived, output\+\_\+layer\+\_\+t $>$\+::fp (
+\begin{DoxyParamCaption}
+\item[{const T \&}]{tensor}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a2c4b3c307a4db694f01b4dd9effee817}{}\label{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a2c4b3c307a4db694f01b4dd9effee817}
+\index{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}!head@{head}}
+\index{head@{head}!B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}}
+\subsubsection[{\texorpdfstring{head() const }{head() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int index, class derived , class output\+\_\+layer\+\_\+t $>$ const auto\& {\bf B\+C\+::nn\+::\+Layer\+Chain}$<$ index, derived, output\+\_\+layer\+\_\+t $>$\+::head (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a45703a53d4faef145b9415aafa4de6bc}{}\label{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a45703a53d4faef145b9415aafa4de6bc}
+\index{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}!head@{head}}
+\index{head@{head}!B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}}
+\subsubsection[{\texorpdfstring{head()}{head()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int index, class derived , class output\+\_\+layer\+\_\+t $>$ auto\& {\bf B\+C\+::nn\+::\+Layer\+Chain}$<$ index, derived, output\+\_\+layer\+\_\+t $>$\+::head (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_af03d490a35a8108cbbdf0774a44970d7}{}\label{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_af03d490a35a8108cbbdf0774a44970d7}
+\index{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}!prev@{prev}}
+\index{prev@{prev}!B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}}
+\subsubsection[{\texorpdfstring{prev() const }{prev() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int index, class derived , class output\+\_\+layer\+\_\+t $>$ const auto\& {\bf B\+C\+::nn\+::\+Layer\+Chain}$<$ index, derived, output\+\_\+layer\+\_\+t $>$\+::prev (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_aee5f69966885acb2b2fc5336fa6df86c}{}\label{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_aee5f69966885acb2b2fc5336fa6df86c}
+\index{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}!prev@{prev}}
+\index{prev@{prev}!B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}}
+\subsubsection[{\texorpdfstring{prev()}{prev()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int index, class derived , class output\+\_\+layer\+\_\+t $>$ auto\& {\bf B\+C\+::nn\+::\+Layer\+Chain}$<$ index, derived, output\+\_\+layer\+\_\+t $>$\+::prev (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a97cd3ba51b8fceb2547dedfaa9406a65}{}\label{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a97cd3ba51b8fceb2547dedfaa9406a65}
+\index{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}!tail@{tail}}
+\index{tail@{tail}!B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}}
+\subsubsection[{\texorpdfstring{tail() const }{tail() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int index, class derived , class output\+\_\+layer\+\_\+t $>$ const auto\& {\bf B\+C\+::nn\+::\+Layer\+Chain}$<$ index, derived, output\+\_\+layer\+\_\+t $>$\+::tail (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_ad07637db6468c9ee0507dff83b965768}{}\label{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_ad07637db6468c9ee0507dff83b965768}
+\index{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}!tail@{tail}}
+\index{tail@{tail}!B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}}
+\subsubsection[{\texorpdfstring{tail()}{tail()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int index, class derived , class output\+\_\+layer\+\_\+t $>$ auto\& {\bf B\+C\+::nn\+::\+Layer\+Chain}$<$ index, derived, output\+\_\+layer\+\_\+t $>$\+::tail (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a8e90e96647686b319532ece4349c1ade}{}\label{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a8e90e96647686b319532ece4349c1ade}
+
+
+\subsection{Member Data Documentation}
+\index{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}!layer@{layer}}
+\index{layer@{layer}!B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$@{B\+C\+::nn\+::\+Layer\+Chain$<$ index, derived, output\+\_\+layer\+\_\+t $>$}}
+\subsubsection[{\texorpdfstring{layer}{layer}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int index, class derived , class output\+\_\+layer\+\_\+t $>$ output\+\_\+layer\+\_\+t {\bf B\+C\+::nn\+::\+Layer\+Chain}$<$ index, derived, output\+\_\+layer\+\_\+t $>$\+::layer}\hypertarget{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a090c4320f0cd55d0c75f41c948497bde}{}\label{structBC_1_1nn_1_1LayerChain_3_01index_00_01derived_00_01output__layer__t_01_4_a090c4320f0cd55d0c75f41c948497bde}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/neural\+\_\+networks/\hyperlink{LayerChain_8h}{Layer\+Chain.\+h}\end{DoxyCompactItemize}

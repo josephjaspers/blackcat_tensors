@@ -41,14 +41,14 @@ int test_algorithms(int sz=128) {
 		mat a(sz, sz);
 		mat b(sz, sz);
 
-		a.create();
-		b.create();
+		a.get_stream().create();
+		b.get_stream().create();
 
 		BC::fill(a.get_stream(), a.begin(), a.end(), 5);
 		BC::fill(b.get_stream(), b.begin(), b.end(), 7);
 
-		a.sync();
-		b.sync();
+		a.get_stream().sync();
+		b.get_stream().sync();
 
 		return BC::tensors::all(a == 5) && BC::tensors::all(b == 7);
 	)
@@ -60,13 +60,13 @@ int test_algorithms(int sz=128) {
 		mat a(sz, sz);
 		mat b(sz, sz);
 
-		a.create();
+		a.get_stream().create();
 
 		BC::fill(a.get_stream(), a.begin(), a.end(), 5);
 		BC::fill(b.get_stream(), b.begin(), b.end(), 7);
 
-		a.sync();
-		b.sync();
+		a.get_stream().sync();
+		b.get_stream().sync();
 
 
 		return BC::tensors::all(a == 5) && BC::tensors::all(b == 7);

@@ -1,0 +1,7 @@
+<map id="include/neural_networks/Layers/Layer_Base.h" name="include/neural_networks/Layers/Layer_Base.h">
+<area shape="rect" id="node2" href="$FeedForward_8h.html" title="include/neural_networks\l/Layers/FeedForward.h" alt="" coords="41,95,203,136"/>
+<area shape="rect" id="node5" href="$OutputLayer_8h.html" title="include/neural_networks\l/Layers/OutputLayer.h" alt="" coords="227,95,390,136"/>
+<area shape="rect" id="node3" href="$neural__networks_2NeuralNetworks_8h.html" title="include/neural_networks\l/NeuralNetworks.h" alt="" coords="41,184,203,225"/>
+<area shape="rect" id="node4" href="$BlackCat__NeuralNetworks_8h.html" title="include/BlackCat_NeuralNetworks.h" alt="" coords="5,273,239,300"/>
+<area shape="rect" id="node6" href="$network_8h.html" title="include/autograd/network.h" alt="" coords="227,191,406,218"/>
+</map>

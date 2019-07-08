@@ -1,0 +1,67 @@
+\hypertarget{structBC_1_1CPU__Convolution}{}\section{BC\+:\+:C\+P\+U\+\_\+\+Convolution$<$ core\+\_\+lib $>$ Struct Template Reference}
+\label{structBC_1_1CPU__Convolution}\index{B\+C\+::\+C\+P\+U\+\_\+\+Convolution$<$ core\+\_\+lib $>$@{B\+C\+::\+C\+P\+U\+\_\+\+Convolution$<$ core\+\_\+lib $>$}}
+
+
+{\ttfamily \#include $<$C\+P\+U\+\_\+\+Convolution.\+h$>$}
+
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class img\+\_\+out , class img\+\_\+in $>$ }\\static std\+::enable\+\_\+if\+\_\+t$<$ img\+\_\+in\+::tensor\+\_\+dimension==2 $>$ \hyperlink{structBC_1_1CPU__Convolution_a46822fa47314dcc4ecb7cc91d70d4825}{img2col} (img\+\_\+out out, img\+\_\+in in, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} padding=0, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} stride=1)
+\item 
+{\footnotesize template$<$class img\+\_\+out , class img\+\_\+in $>$ }\\static std\+::enable\+\_\+if\+\_\+t$<$ img\+\_\+in\+::tensor\+\_\+dimension==3 $>$ \hyperlink{structBC_1_1CPU__Convolution_a196b73002daac739c6ecb0bbd0475609}{img2col} (img\+\_\+out out, img\+\_\+in in, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} padding=0, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} stride=1)
+\item 
+{\footnotesize template$<$class value\+\_\+type $>$ }\\static void \hyperlink{structBC_1_1CPU__Convolution_a5a26b368ec0395d887ce95a3ccbbe3d5}{conv2} (C\+P\+U\+\_\+\+Array$<$ 2, value\+\_\+type $>$ out, C\+P\+U\+\_\+\+Array$<$ 2, value\+\_\+type $>$ in, C\+P\+U\+\_\+\+Array$<$ 2, value\+\_\+type $>$ filter, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} padding=0, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} stride=1)
+\item 
+{\footnotesize template$<$class value\+\_\+type $>$ }\\static void \hyperlink{structBC_1_1CPU__Convolution_a98cde461401a1f60176b7ab8802f0071}{conv2} (C\+P\+U\+\_\+\+Array$<$ 2, value\+\_\+type $>$ out, C\+P\+U\+\_\+\+Array$<$ 3, value\+\_\+type $>$ in, C\+P\+U\+\_\+\+Array$<$ 3, value\+\_\+type $>$ filter, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} padding=0, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} stride=1)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\index{B\+C\+::\+C\+P\+U\+\_\+\+Convolution@{B\+C\+::\+C\+P\+U\+\_\+\+Convolution}!conv2@{conv2}}
+\index{conv2@{conv2}!B\+C\+::\+C\+P\+U\+\_\+\+Convolution@{B\+C\+::\+C\+P\+U\+\_\+\+Convolution}}
+\subsubsection[{\texorpdfstring{conv2(\+C\+P\+U\+\_\+\+Array$<$ 2, value\+\_\+type $>$ out, C\+P\+U\+\_\+\+Array$<$ 2, value\+\_\+type $>$ in, C\+P\+U\+\_\+\+Array$<$ 2, value\+\_\+type $>$ filter, B\+C\+::size\+\_\+t padding=0, B\+C\+::size\+\_\+t stride=1)}{conv2(CPU_Array< 2, value_type > out, CPU_Array< 2, value_type > in, CPU_Array< 2, value_type > filter, BC::size_t padding=0, BC::size_t stride=1)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class core\+\_\+lib $>$ template$<$class value\+\_\+type $>$ static void {\bf B\+C\+::\+C\+P\+U\+\_\+\+Convolution}$<$ core\+\_\+lib $>$\+::conv2 (
+\begin{DoxyParamCaption}
+\item[{C\+P\+U\+\_\+\+Array$<$ 2, value\+\_\+type $>$}]{out, }
+\item[{C\+P\+U\+\_\+\+Array$<$ 2, value\+\_\+type $>$}]{in, }
+\item[{C\+P\+U\+\_\+\+Array$<$ 2, value\+\_\+type $>$}]{filter, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{padding = {\ttfamily 0}, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{stride = {\ttfamily 1}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\hypertarget{structBC_1_1CPU__Convolution_a5a26b368ec0395d887ce95a3ccbbe3d5}{}\label{structBC_1_1CPU__Convolution_a5a26b368ec0395d887ce95a3ccbbe3d5}
+\index{B\+C\+::\+C\+P\+U\+\_\+\+Convolution@{B\+C\+::\+C\+P\+U\+\_\+\+Convolution}!conv2@{conv2}}
+\index{conv2@{conv2}!B\+C\+::\+C\+P\+U\+\_\+\+Convolution@{B\+C\+::\+C\+P\+U\+\_\+\+Convolution}}
+\subsubsection[{\texorpdfstring{conv2(\+C\+P\+U\+\_\+\+Array$<$ 2, value\+\_\+type $>$ out, C\+P\+U\+\_\+\+Array$<$ 3, value\+\_\+type $>$ in, C\+P\+U\+\_\+\+Array$<$ 3, value\+\_\+type $>$ filter, B\+C\+::size\+\_\+t padding=0, B\+C\+::size\+\_\+t stride=1)}{conv2(CPU_Array< 2, value_type > out, CPU_Array< 3, value_type > in, CPU_Array< 3, value_type > filter, BC::size_t padding=0, BC::size_t stride=1)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class core\+\_\+lib $>$ template$<$class value\+\_\+type $>$ static void {\bf B\+C\+::\+C\+P\+U\+\_\+\+Convolution}$<$ core\+\_\+lib $>$\+::conv2 (
+\begin{DoxyParamCaption}
+\item[{C\+P\+U\+\_\+\+Array$<$ 2, value\+\_\+type $>$}]{out, }
+\item[{C\+P\+U\+\_\+\+Array$<$ 3, value\+\_\+type $>$}]{in, }
+\item[{C\+P\+U\+\_\+\+Array$<$ 3, value\+\_\+type $>$}]{filter, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{padding = {\ttfamily 0}, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{stride = {\ttfamily 1}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\hypertarget{structBC_1_1CPU__Convolution_a98cde461401a1f60176b7ab8802f0071}{}\label{structBC_1_1CPU__Convolution_a98cde461401a1f60176b7ab8802f0071}
+\index{B\+C\+::\+C\+P\+U\+\_\+\+Convolution@{B\+C\+::\+C\+P\+U\+\_\+\+Convolution}!img2col@{img2col}}
+\index{img2col@{img2col}!B\+C\+::\+C\+P\+U\+\_\+\+Convolution@{B\+C\+::\+C\+P\+U\+\_\+\+Convolution}}
+\subsubsection[{\texorpdfstring{img2col(img\+\_\+out out, img\+\_\+in in, B\+C\+::size\+\_\+t padding=0, B\+C\+::size\+\_\+t stride=1)}{img2col(img_out out, img_in in, BC::size_t padding=0, BC::size_t stride=1)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class core\+\_\+lib $>$ template$<$class img\+\_\+out , class img\+\_\+in $>$ static std\+::enable\+\_\+if\+\_\+t$<$img\+\_\+in\+::tensor\+\_\+dimension == 2$>$ {\bf B\+C\+::\+C\+P\+U\+\_\+\+Convolution}$<$ core\+\_\+lib $>$\+::img2col (
+\begin{DoxyParamCaption}
+\item[{img\+\_\+out}]{out, }
+\item[{img\+\_\+in}]{in, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{padding = {\ttfamily 0}, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{stride = {\ttfamily 1}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\hypertarget{structBC_1_1CPU__Convolution_a46822fa47314dcc4ecb7cc91d70d4825}{}\label{structBC_1_1CPU__Convolution_a46822fa47314dcc4ecb7cc91d70d4825}
+\index{B\+C\+::\+C\+P\+U\+\_\+\+Convolution@{B\+C\+::\+C\+P\+U\+\_\+\+Convolution}!img2col@{img2col}}
+\index{img2col@{img2col}!B\+C\+::\+C\+P\+U\+\_\+\+Convolution@{B\+C\+::\+C\+P\+U\+\_\+\+Convolution}}
+\subsubsection[{\texorpdfstring{img2col(img\+\_\+out out, img\+\_\+in in, B\+C\+::size\+\_\+t padding=0, B\+C\+::size\+\_\+t stride=1)}{img2col(img_out out, img_in in, BC::size_t padding=0, BC::size_t stride=1)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class core\+\_\+lib $>$ template$<$class img\+\_\+out , class img\+\_\+in $>$ static std\+::enable\+\_\+if\+\_\+t$<$img\+\_\+in\+::tensor\+\_\+dimension == 3$>$ {\bf B\+C\+::\+C\+P\+U\+\_\+\+Convolution}$<$ core\+\_\+lib $>$\+::img2col (
+\begin{DoxyParamCaption}
+\item[{img\+\_\+out}]{out, }
+\item[{img\+\_\+in}]{in, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{padding = {\ttfamily 0}, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{stride = {\ttfamily 1}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\hypertarget{structBC_1_1CPU__Convolution_a196b73002daac739c6ecb0bbd0475609}{}\label{structBC_1_1CPU__Convolution_a196b73002daac739c6ecb0bbd0475609}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/blas/host\+\_\+unsupported/\hyperlink{CPU__Convolution_8h}{C\+P\+U\+\_\+\+Convolution.\+h}\end{DoxyCompactItemize}

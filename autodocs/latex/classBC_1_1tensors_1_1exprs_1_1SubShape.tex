@@ -1,0 +1,147 @@
+\hypertarget{classBC_1_1tensors_1_1exprs_1_1SubShape}{}\section{BC\+:\+:tensors\+:\+:exprs\+:\+:Sub\+Shape$<$ ndims $>$ Struct Template Reference}
+\label{classBC_1_1tensors_1_1exprs_1_1SubShape}\index{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape$<$ ndims $>$@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape$<$ ndims $>$}}
+
+
+{\ttfamily \#include $<$Expression\+\_\+\+Template\+\_\+\+Traits.\+h$>$}
+
+
+
+Inheritance diagram for BC\+:\+:tensors\+:\+:exprs\+:\+:Sub\+Shape$<$ ndims $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=217pt]{classBC_1_1tensors_1_1exprs_1_1SubShape__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for BC\+:\+:tensors\+:\+:exprs\+:\+:Sub\+Shape$<$ ndims $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classBC_1_1tensors_1_1exprs_1_1SubShape__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \hyperlink{classBC_1_1tensors_1_1exprs_1_1SubShape_ad46bda04032a2a649162c80ee78f2a46}{parent} = \hyperlink{classBC_1_1tensors_1_1exprs_1_1Shape}{Shape}$<$ ndims, \hyperlink{classBC_1_1tensors_1_1exprs_1_1SubShape}{Sub\+Shape}$<$ ndims $>$$>$
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classBC_1_1tensors_1_1exprs_1_1SubShape_ac4256af3a6cd413e82a83ef2398bd1bf}{Sub\+Shape} ()=default
+\item 
+{\footnotesize template$<$class der $>$ }\\\hyperlink{classBC_1_1tensors_1_1exprs_1_1SubShape_a82531b1c499ad61c64f925381296d58b}{Sub\+Shape} (const \hyperlink{structBC_1_1array}{B\+C\+::array}$<$ ndims, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} $>$ \&new\+\_\+shape, const \hyperlink{classBC_1_1tensors_1_1exprs_1_1Shape}{Shape}$<$ ndims, der $>$ \&parent\+\_\+shape)
+\item 
+\hyperlink{classBC_1_1tensors_1_1exprs_1_1SubShape_affa10ca6f7cb0d3809b0d836014419f1}{Sub\+Shape} (const \hyperlink{structBC_1_1array}{B\+C\+::array}$<$ ndims, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} $>$ \&new\+\_\+shape, const \hyperlink{classBC_1_1tensors_1_1exprs_1_1SubShape}{Sub\+Shape}$<$ ndims $>$ \&parent\+\_\+shape)
+\item 
+{\footnotesize template$<$int Dims, class  = std\+::enable\+\_\+if\+\_\+t$<$(\+Dims$>$=ndims$>$ }\\\hyperlink{classBC_1_1tensors_1_1exprs_1_1SubShape_add45ce5c506191481ac39e608070a99e}{Sub\+Shape} (\hyperlink{classBC_1_1tensors_1_1exprs_1_1SubShape}{Sub\+Shape}$<$ Dims $>$ parent\+\_\+shape)
+\item 
+{\footnotesize template$<$int Dims, class  = std\+::enable\+\_\+if\+\_\+t$<$(\+Dims$>$=ndims$>$ }\\\hyperlink{classBC_1_1tensors_1_1exprs_1_1SubShape_aac6b073a1e419f363c506b88e1a60fc2}{Sub\+Shape} (\hyperlink{classBC_1_1tensors_1_1exprs_1_1Shape}{Shape}$<$ Dims $>$ parent\+\_\+shape)
+\item 
+{\footnotesize template$<$class... integers, typename  = std\+::enable\+\_\+if\+\_\+t$<$\+B\+C\+::meta\+::sequence\+\_\+of\+\_\+v$<$\+B\+C\+::size\+\_\+t, integers...$>$$>$$>$ }\\\hyperlink{BlackCat__Common_8h_a6699e8b0449da5c0fafb878e59c1d4b1}{B\+C\+I\+N\+L\+I\+NE} \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} \hyperlink{classBC_1_1tensors_1_1exprs_1_1SubShape_af72cbd001ead576166ed85b2d1670966}{dims\+\_\+to\+\_\+index} (integers...\+ints) const 
+\item 
+{\footnotesize template$<$int D$>$ }\\\hyperlink{BlackCat__Common_8h_a6699e8b0449da5c0fafb878e59c1d4b1}{B\+C\+I\+N\+L\+I\+NE} \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} \hyperlink{classBC_1_1tensors_1_1exprs_1_1SubShape_a97651ccb78b528caa11314e23480345c}{dims\+\_\+to\+\_\+index} (const \hyperlink{structBC_1_1array}{B\+C\+::array}$<$ D, int $>$ \&var) const 
+\item 
+\hyperlink{BlackCat__Common_8h_a6699e8b0449da5c0fafb878e59c1d4b1}{B\+C\+I\+N\+L\+I\+NE} const auto \& \hyperlink{classBC_1_1tensors_1_1exprs_1_1SubShape_afabf43689f0bdfb8873b0f9a10b08eb4}{outer\+\_\+shape} () const 
+\item 
+\hyperlink{BlackCat__Common_8h_a6699e8b0449da5c0fafb878e59c1d4b1}{B\+C\+I\+N\+L\+I\+NE} \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} \hyperlink{classBC_1_1tensors_1_1exprs_1_1SubShape_aa8b80b8dcce133cf11ac69bb631edbc4}{leading\+\_\+dimension} (int i) const 
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structBC_1_1array}{B\+C\+::array}$<$ ndims, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} $>$ \hyperlink{classBC_1_1tensors_1_1exprs_1_1SubShape_aecebfe667cd43408f9c94b633b2f3a9d}{m\+\_\+outer\+\_\+shape}
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Member Typedef Documentation}
+\index{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}!parent@{parent}}
+\index{parent@{parent}!B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}}
+\subsubsection[{\texorpdfstring{parent}{parent}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int ndims$>$ using {\bf B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}$<$ ndims $>$\+::{\bf parent} =  {\bf Shape}$<$ndims, {\bf Sub\+Shape}$<$ndims$>$$>$}\hypertarget{classBC_1_1tensors_1_1exprs_1_1SubShape_ad46bda04032a2a649162c80ee78f2a46}{}\label{classBC_1_1tensors_1_1exprs_1_1SubShape_ad46bda04032a2a649162c80ee78f2a46}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}!Sub\+Shape@{Sub\+Shape}}
+\index{Sub\+Shape@{Sub\+Shape}!B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}}
+\subsubsection[{\texorpdfstring{Sub\+Shape()=default}{SubShape()=default}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int ndims$>$ {\bf B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}$<$ ndims $>$\+::{\bf Sub\+Shape} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [default]}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1SubShape_ac4256af3a6cd413e82a83ef2398bd1bf}{}\label{classBC_1_1tensors_1_1exprs_1_1SubShape_ac4256af3a6cd413e82a83ef2398bd1bf}
+\index{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}!Sub\+Shape@{Sub\+Shape}}
+\index{Sub\+Shape@{Sub\+Shape}!B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}}
+\subsubsection[{\texorpdfstring{Sub\+Shape(const B\+C\+::array$<$ ndims, B\+C\+::size\+\_\+t $>$ \&new\+\_\+shape, const Shape$<$ ndims, der $>$ \&parent\+\_\+shape)}{SubShape(const BC::array< ndims, BC::size_t > &new_shape, const Shape< ndims, der > &parent_shape)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int ndims$>$ template$<$class der $>$ {\bf B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}$<$ ndims $>$\+::{\bf Sub\+Shape} (
+\begin{DoxyParamCaption}
+\item[{const {\bf B\+C\+::array}$<$ ndims, {\bf B\+C\+::size\+\_\+t} $>$ \&}]{new\+\_\+shape, }
+\item[{const {\bf Shape}$<$ ndims, der $>$ \&}]{parent\+\_\+shape}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1SubShape_a82531b1c499ad61c64f925381296d58b}{}\label{classBC_1_1tensors_1_1exprs_1_1SubShape_a82531b1c499ad61c64f925381296d58b}
+\index{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}!Sub\+Shape@{Sub\+Shape}}
+\index{Sub\+Shape@{Sub\+Shape}!B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}}
+\subsubsection[{\texorpdfstring{Sub\+Shape(const B\+C\+::array$<$ ndims, B\+C\+::size\+\_\+t $>$ \&new\+\_\+shape, const Sub\+Shape$<$ ndims $>$ \&parent\+\_\+shape)}{SubShape(const BC::array< ndims, BC::size_t > &new_shape, const SubShape< ndims > &parent_shape)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int ndims$>$ {\bf B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}$<$ ndims $>$\+::{\bf Sub\+Shape} (
+\begin{DoxyParamCaption}
+\item[{const {\bf B\+C\+::array}$<$ ndims, {\bf B\+C\+::size\+\_\+t} $>$ \&}]{new\+\_\+shape, }
+\item[{const {\bf Sub\+Shape}$<$ ndims $>$ \&}]{parent\+\_\+shape}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1SubShape_affa10ca6f7cb0d3809b0d836014419f1}{}\label{classBC_1_1tensors_1_1exprs_1_1SubShape_affa10ca6f7cb0d3809b0d836014419f1}
+\index{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}!Sub\+Shape@{Sub\+Shape}}
+\index{Sub\+Shape@{Sub\+Shape}!B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}}
+\subsubsection[{\texorpdfstring{Sub\+Shape(\+Sub\+Shape$<$ Dims $>$ parent\+\_\+shape)}{SubShape(SubShape< Dims > parent_shape)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int ndims$>$ template$<$int Dims, class  = std\+::enable\+\_\+if\+\_\+t$<$(\+Dims$>$=ndims$>$ {\bf B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}$<$ ndims $>$\+::{\bf Sub\+Shape} (
+\begin{DoxyParamCaption}
+\item[{{\bf Sub\+Shape}$<$ Dims $>$}]{parent\+\_\+shape}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1SubShape_add45ce5c506191481ac39e608070a99e}{}\label{classBC_1_1tensors_1_1exprs_1_1SubShape_add45ce5c506191481ac39e608070a99e}
+\index{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}!Sub\+Shape@{Sub\+Shape}}
+\index{Sub\+Shape@{Sub\+Shape}!B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}}
+\subsubsection[{\texorpdfstring{Sub\+Shape(\+Shape$<$ Dims $>$ parent\+\_\+shape)}{SubShape(Shape< Dims > parent_shape)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int ndims$>$ template$<$int Dims, class  = std\+::enable\+\_\+if\+\_\+t$<$(\+Dims$>$=ndims$>$ {\bf B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}$<$ ndims $>$\+::{\bf Sub\+Shape} (
+\begin{DoxyParamCaption}
+\item[{{\bf Shape}$<$ Dims $>$}]{parent\+\_\+shape}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1SubShape_aac6b073a1e419f363c506b88e1a60fc2}{}\label{classBC_1_1tensors_1_1exprs_1_1SubShape_aac6b073a1e419f363c506b88e1a60fc2}
+
+
+\subsection{Member Function Documentation}
+\index{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}!dims\+\_\+to\+\_\+index@{dims\+\_\+to\+\_\+index}}
+\index{dims\+\_\+to\+\_\+index@{dims\+\_\+to\+\_\+index}!B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}}
+\subsubsection[{\texorpdfstring{dims\+\_\+to\+\_\+index(integers...\+ints) const }{dims_to_index(integers...ints) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int ndims$>$ template$<$class... integers, typename  = std\+::enable\+\_\+if\+\_\+t$<$\+B\+C\+::meta\+::sequence\+\_\+of\+\_\+v$<$\+B\+C\+::size\+\_\+t, integers...$>$$>$$>$ {\bf B\+C\+I\+N\+L\+I\+NE} {\bf B\+C\+::size\+\_\+t} {\bf B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}$<$ ndims $>$\+::dims\+\_\+to\+\_\+index (
+\begin{DoxyParamCaption}
+\item[{integers...}]{ints}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1SubShape_af72cbd001ead576166ed85b2d1670966}{}\label{classBC_1_1tensors_1_1exprs_1_1SubShape_af72cbd001ead576166ed85b2d1670966}
+\index{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}!dims\+\_\+to\+\_\+index@{dims\+\_\+to\+\_\+index}}
+\index{dims\+\_\+to\+\_\+index@{dims\+\_\+to\+\_\+index}!B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}}
+\subsubsection[{\texorpdfstring{dims\+\_\+to\+\_\+index(const B\+C\+::array$<$ D, int $>$ \&var) const }{dims_to_index(const BC::array< D, int > &var) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int ndims$>$ template$<$int D$>$ {\bf B\+C\+I\+N\+L\+I\+NE} {\bf B\+C\+::size\+\_\+t} {\bf B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}$<$ ndims $>$\+::dims\+\_\+to\+\_\+index (
+\begin{DoxyParamCaption}
+\item[{const {\bf B\+C\+::array}$<$ D, int $>$ \&}]{var}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1SubShape_a97651ccb78b528caa11314e23480345c}{}\label{classBC_1_1tensors_1_1exprs_1_1SubShape_a97651ccb78b528caa11314e23480345c}
+\index{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}!leading\+\_\+dimension@{leading\+\_\+dimension}}
+\index{leading\+\_\+dimension@{leading\+\_\+dimension}!B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}}
+\subsubsection[{\texorpdfstring{leading\+\_\+dimension(int i) const }{leading_dimension(int i) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int ndims$>$ {\bf B\+C\+I\+N\+L\+I\+NE} {\bf B\+C\+::size\+\_\+t} {\bf B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}$<$ ndims $>$\+::leading\+\_\+dimension (
+\begin{DoxyParamCaption}
+\item[{int}]{i}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1SubShape_aa8b80b8dcce133cf11ac69bb631edbc4}{}\label{classBC_1_1tensors_1_1exprs_1_1SubShape_aa8b80b8dcce133cf11ac69bb631edbc4}
+\index{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}!outer\+\_\+shape@{outer\+\_\+shape}}
+\index{outer\+\_\+shape@{outer\+\_\+shape}!B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}}
+\subsubsection[{\texorpdfstring{outer\+\_\+shape() const }{outer_shape() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int ndims$>$ {\bf B\+C\+I\+N\+L\+I\+NE} const auto\& {\bf B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}$<$ ndims $>$\+::outer\+\_\+shape (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1SubShape_afabf43689f0bdfb8873b0f9a10b08eb4}{}\label{classBC_1_1tensors_1_1exprs_1_1SubShape_afabf43689f0bdfb8873b0f9a10b08eb4}
+
+
+\subsection{Member Data Documentation}
+\index{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}!m\+\_\+outer\+\_\+shape@{m\+\_\+outer\+\_\+shape}}
+\index{m\+\_\+outer\+\_\+shape@{m\+\_\+outer\+\_\+shape}!B\+C\+::tensors\+::exprs\+::\+Sub\+Shape@{B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}}
+\subsubsection[{\texorpdfstring{m\+\_\+outer\+\_\+shape}{m_outer_shape}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int ndims$>$ {\bf B\+C\+::array}$<$ndims, {\bf B\+C\+::size\+\_\+t}$>$ {\bf B\+C\+::tensors\+::exprs\+::\+Sub\+Shape}$<$ ndims $>$\+::m\+\_\+outer\+\_\+shape}\hypertarget{classBC_1_1tensors_1_1exprs_1_1SubShape_aecebfe667cd43408f9c94b633b2f3a9d}{}\label{classBC_1_1tensors_1_1exprs_1_1SubShape_aecebfe667cd43408f9c94b633b2f3a9d}
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/tensors/expression\+\_\+templates/\hyperlink{Expression__Template__Traits_8h}{Expression\+\_\+\+Template\+\_\+\+Traits.\+h}\item 
+include/tensors/expression\+\_\+templates/\hyperlink{Shape_8h}{Shape.\+h}\end{DoxyCompactItemize}

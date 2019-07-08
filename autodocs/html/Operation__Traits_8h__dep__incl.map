@@ -1,0 +1,20 @@
+<map id="include/operations/Operation_Traits.h" name="include/operations/Operation_Traits.h">
+<area shape="rect" id="node2" href="$Binary_8h.html" title="include/operations\l/Binary.h" alt="" coords="231,95,358,136"/>
+<area shape="rect" id="node3" href="$Operations_8h.html" title="include/operations\l/Operations.h" alt="" coords="333,184,459,225"/>
+<area shape="rect" id="node19" href="$operations_2BLAS_8h.html" title="include/operations\l/BLAS.h" alt="" coords="434,95,561,136"/>
+<area shape="rect" id="node4" href="$BlackCat__Operations_8h.html" title="include/BlackCat_Operations.h" alt="" coords="295,273,497,300"/>
+<area shape="rect" id="node5" href="$BlackCat__Tensors_8h.html" title="include/BlackCat_Tensors.h" alt="" coords="303,348,489,375"/>
+<area shape="rect" id="node6" href="$elementwise_8h.html" title="benchmarks/elementwise.h" alt="" coords="5,423,187,449"/>
+<area shape="rect" id="node7" href="$BlackCat__IO_8h.html" title="include/BlackCat_IO.h" alt="" coords="211,423,365,449"/>
+<area shape="rect" id="node8" href="$BlackCat__NeuralNetworks_8h.html" title="include/BlackCat_NeuralNetworks.h" alt="" coords="389,423,622,449"/>
+<area shape="rect" id="node9" href="$test__common_8h.html" title="tests/test_common.h" alt="" coords="646,423,791,449"/>
+<area shape="rect" id="node10" href="$test__accessors_8h.html" title="tests/test_accessors.h" alt="" coords="45,497,200,524"/>
+<area shape="rect" id="node11" href="$run_8h.html" title="tests/run.h" alt="" coords="677,572,761,599"/>
+<area shape="rect" id="node12" href="$test__allocators_8h.html" title="tests/test_allocators.h" alt="" coords="275,497,426,524"/>
+<area shape="rect" id="node13" href="$test__constructors_8h.html" title="tests/test_constructors.h" alt="" coords="450,497,617,524"/>
+<area shape="rect" id="node14" href="$test__operations_8h.html" title="tests/test_operations.h" alt="" coords="641,497,796,524"/>
+<area shape="rect" id="node15" href="$test__streams_8h.html" title="tests/test_streams.h" alt="" coords="821,497,963,524"/>
+<area shape="rect" id="node16" href="$test__algorithms_8h.html" title="tests/test_algorithms.h" alt="" coords="988,497,1143,524"/>
+<area shape="rect" id="node17" href="$test__blas_8h.html" title="tests/test_blas.h" alt="" coords="1166,497,1285,524"/>
+<area shape="rect" id="node18" href="$test__derivatives_8h.html" title="tests/test_derivatives.h" alt="" coords="1309,497,1467,524"/>
+</map>

@@ -1,0 +1,149 @@
+\hypertarget{classBC_1_1tensors_1_1exprs_1_1Array__Slice}{}\section{BC\+:\+:tensors\+:\+:exprs\+:\+:Array\+\_\+\+Slice$<$ Dimensions, Value\+Type, Allocator, Tags $>$ Struct Template Reference}
+\label{classBC_1_1tensors_1_1exprs_1_1Array__Slice}\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice$<$ Dimensions, Value\+Type, Allocator, Tags $>$@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice$<$ Dimensions, Value\+Type, Allocator, Tags $>$}}
+
+
+{\ttfamily \#include $<$Array.\+h$>$}
+
+
+
+Inheritance diagram for BC\+:\+:tensors\+:\+:exprs\+:\+:Array\+\_\+\+Slice$<$ Dimensions, Value\+Type, Allocator, Tags $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classBC_1_1tensors_1_1exprs_1_1Array__Slice__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for BC\+:\+:tensors\+:\+:exprs\+:\+:Array\+\_\+\+Slice$<$ Dimensions, Value\+Type, Allocator, Tags $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classBC_1_1tensors_1_1exprs_1_1Array__Slice__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_aa0bee33cbbb4ea522d89aefa986b6584}{allocator\+\_\+t} = \hyperlink{namespaceBC_a934f94b17b06290e6b241e5f59930c5f}{Allocator}
+\item 
+using \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_ae9aed80988883e25cc77cdd0e658a36e}{system\+\_\+tag} = typename \hyperlink{namespaceBC_a702bcffa3526460ac93fb2a315f2f7c7}{B\+C\+::allocator\+\_\+traits}$<$ \hyperlink{namespaceBC_a934f94b17b06290e6b241e5f59930c5f}{Allocator} $>$\+::\hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_ae9aed80988883e25cc77cdd0e658a36e}{system\+\_\+tag}
+\item 
+using \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a5395d730cd39e49ff6695a3294b4be5f}{stream\+\_\+t} = \hyperlink{namespaceBC_abc64a63cd29a22d102a68f478dfd588d}{B\+C\+::\+Stream}$<$ \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_ae9aed80988883e25cc77cdd0e658a36e}{system\+\_\+tag} $>$
+\item 
+using \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_acabef76354e22bb269d63cec2cd501df}{parent} = \hyperlink{structBC_1_1tensors_1_1exprs_1_1Kernel__Array}{Kernel\+\_\+\+Array}$<$ Dimensions, Value\+Type, \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_ae9aed80988883e25cc77cdd0e658a36e}{system\+\_\+tag}, Tags... $>$
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class... Args$>$ }\\\hyperlink{BlackCat__Common_8h_ac085f07cc309e3aac24aa3fc0a40f6d2}{B\+C\+H\+OT} \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a258f8311b24278d8b2789755a2b5c59b}{Array\+\_\+\+Slice} (\hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a5395d730cd39e49ff6695a3294b4be5f}{stream\+\_\+t} stream\+\_\+, \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_aa0bee33cbbb4ea522d89aefa986b6584}{allocator\+\_\+t} allocator\+\_\+, Args...\+args\+\_\+)
+\item 
+\hyperlink{BlackCat__Common_8h_ac085f07cc309e3aac24aa3fc0a40f6d2}{B\+C\+H\+OT} \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a48f3e7cca6b46d825488d7c29e101942}{Array\+\_\+\+Slice} (const \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice}{Array\+\_\+\+Slice} \&)=default
+\item 
+\hyperlink{BlackCat__Common_8h_ac085f07cc309e3aac24aa3fc0a40f6d2}{B\+C\+H\+OT} \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a2fbf29b59907dca910979de4921790ef}{Array\+\_\+\+Slice} (\hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice}{Array\+\_\+\+Slice} \&\&)=default
+\item 
+const \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_aa0bee33cbbb4ea522d89aefa986b6584}{allocator\+\_\+t} \& \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_ad35ebf0a4f818fc38b1976e4b917f63e}{get\+\_\+allocator} () const 
+\item 
+\hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_aa0bee33cbbb4ea522d89aefa986b6584}{allocator\+\_\+t} \& \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a3700a7d19ba9e80da45d40037a14b133}{get\+\_\+allocator} ()
+\item 
+const \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a5395d730cd39e49ff6695a3294b4be5f}{stream\+\_\+t} \& \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_ae293508a48d82c01bc43c10e6102aa20}{get\+\_\+stream} () const 
+\item 
+\hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a5395d730cd39e49ff6695a3294b4be5f}{stream\+\_\+t} \& \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a6fb03e660a3b4f3941d6419d71895ce4}{get\+\_\+stream} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a5395d730cd39e49ff6695a3294b4be5f}{stream\+\_\+t} \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a88f9bafcc2e18f45ae9217d1f37215df}{m\+\_\+stream}
+\item 
+\hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_aa0bee33cbbb4ea522d89aefa986b6584}{allocator\+\_\+t} \hyperlink{classBC_1_1tensors_1_1exprs_1_1Array__Slice_aa7dc5cd48d47896f87e7df27671d74b7}{m\+\_\+allocator}
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Member Typedef Documentation}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}!allocator\+\_\+t@{allocator\+\_\+t}}
+\index{allocator\+\_\+t@{allocator\+\_\+t}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}}
+\subsubsection[{\texorpdfstring{allocator\+\_\+t}{allocator_t}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimensions, class Value\+Type, class Allocator, class... Tags$>$ using {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}$<$ Dimensions, Value\+Type, {\bf Allocator}, Tags $>$\+::{\bf allocator\+\_\+t} =  {\bf Allocator}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1Array__Slice_aa0bee33cbbb4ea522d89aefa986b6584}{}\label{classBC_1_1tensors_1_1exprs_1_1Array__Slice_aa0bee33cbbb4ea522d89aefa986b6584}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}!parent@{parent}}
+\index{parent@{parent}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}}
+\subsubsection[{\texorpdfstring{parent}{parent}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimensions, class Value\+Type, class Allocator, class... Tags$>$ using {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}$<$ Dimensions, Value\+Type, {\bf Allocator}, Tags $>$\+::{\bf parent} =  {\bf Kernel\+\_\+\+Array}$<$Dimensions, Value\+Type, {\bf system\+\_\+tag}, Tags...$>$}\hypertarget{classBC_1_1tensors_1_1exprs_1_1Array__Slice_acabef76354e22bb269d63cec2cd501df}{}\label{classBC_1_1tensors_1_1exprs_1_1Array__Slice_acabef76354e22bb269d63cec2cd501df}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}!stream\+\_\+t@{stream\+\_\+t}}
+\index{stream\+\_\+t@{stream\+\_\+t}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}}
+\subsubsection[{\texorpdfstring{stream\+\_\+t}{stream_t}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimensions, class Value\+Type, class Allocator, class... Tags$>$ using {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}$<$ Dimensions, Value\+Type, {\bf Allocator}, Tags $>$\+::{\bf stream\+\_\+t} =  {\bf B\+C\+::\+Stream}$<${\bf system\+\_\+tag}$>$}\hypertarget{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a5395d730cd39e49ff6695a3294b4be5f}{}\label{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a5395d730cd39e49ff6695a3294b4be5f}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}!system\+\_\+tag@{system\+\_\+tag}}
+\index{system\+\_\+tag@{system\+\_\+tag}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}}
+\subsubsection[{\texorpdfstring{system\+\_\+tag}{system_tag}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimensions, class Value\+Type, class Allocator, class... Tags$>$ using {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}$<$ Dimensions, Value\+Type, {\bf Allocator}, Tags $>$\+::{\bf system\+\_\+tag} =  typename {\bf B\+C\+::allocator\+\_\+traits}$<${\bf Allocator}$>$\+::{\bf system\+\_\+tag}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1Array__Slice_ae9aed80988883e25cc77cdd0e658a36e}{}\label{classBC_1_1tensors_1_1exprs_1_1Array__Slice_ae9aed80988883e25cc77cdd0e658a36e}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}!Array\+\_\+\+Slice@{Array\+\_\+\+Slice}}
+\index{Array\+\_\+\+Slice@{Array\+\_\+\+Slice}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}}
+\subsubsection[{\texorpdfstring{Array\+\_\+\+Slice(stream\+\_\+t stream\+\_\+, allocator\+\_\+t allocator\+\_\+, Args...\+args\+\_\+)}{Array_Slice(stream_t stream_, allocator_t allocator_, Args...args_)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimensions, class Value\+Type, class Allocator, class... Tags$>$ template$<$class... Args$>$ {\bf B\+C\+H\+OT} {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}$<$ Dimensions, Value\+Type, {\bf Allocator}, Tags $>$\+::{\bf Array\+\_\+\+Slice} (
+\begin{DoxyParamCaption}
+\item[{{\bf stream\+\_\+t}}]{stream\+\_\+, }
+\item[{{\bf allocator\+\_\+t}}]{allocator\+\_\+, }
+\item[{Args...}]{args\+\_\+}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a258f8311b24278d8b2789755a2b5c59b}{}\label{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a258f8311b24278d8b2789755a2b5c59b}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}!Array\+\_\+\+Slice@{Array\+\_\+\+Slice}}
+\index{Array\+\_\+\+Slice@{Array\+\_\+\+Slice}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}}
+\subsubsection[{\texorpdfstring{Array\+\_\+\+Slice(const Array\+\_\+\+Slice \&)=default}{Array_Slice(const Array_Slice &)=default}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimensions, class Value\+Type, class Allocator, class... Tags$>$ {\bf B\+C\+H\+OT} {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}$<$ Dimensions, Value\+Type, {\bf Allocator}, Tags $>$\+::{\bf Array\+\_\+\+Slice} (
+\begin{DoxyParamCaption}
+\item[{const {\bf Array\+\_\+\+Slice}$<$ Dimensions, Value\+Type, {\bf Allocator}, Tags $>$ \&}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [default]}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a48f3e7cca6b46d825488d7c29e101942}{}\label{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a48f3e7cca6b46d825488d7c29e101942}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}!Array\+\_\+\+Slice@{Array\+\_\+\+Slice}}
+\index{Array\+\_\+\+Slice@{Array\+\_\+\+Slice}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}}
+\subsubsection[{\texorpdfstring{Array\+\_\+\+Slice(\+Array\+\_\+\+Slice \&\&)=default}{Array_Slice(Array_Slice &&)=default}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimensions, class Value\+Type, class Allocator, class... Tags$>$ {\bf B\+C\+H\+OT} {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}$<$ Dimensions, Value\+Type, {\bf Allocator}, Tags $>$\+::{\bf Array\+\_\+\+Slice} (
+\begin{DoxyParamCaption}
+\item[{{\bf Array\+\_\+\+Slice}$<$ Dimensions, Value\+Type, {\bf Allocator}, Tags $>$ \&\&}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [default]}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a2fbf29b59907dca910979de4921790ef}{}\label{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a2fbf29b59907dca910979de4921790ef}
+
+
+\subsection{Member Function Documentation}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}!get\+\_\+allocator@{get\+\_\+allocator}}
+\index{get\+\_\+allocator@{get\+\_\+allocator}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}}
+\subsubsection[{\texorpdfstring{get\+\_\+allocator() const }{get_allocator() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimensions, class Value\+Type, class Allocator, class... Tags$>$ const {\bf allocator\+\_\+t}\& {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}$<$ Dimensions, Value\+Type, {\bf Allocator}, Tags $>$\+::get\+\_\+allocator (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1Array__Slice_ad35ebf0a4f818fc38b1976e4b917f63e}{}\label{classBC_1_1tensors_1_1exprs_1_1Array__Slice_ad35ebf0a4f818fc38b1976e4b917f63e}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}!get\+\_\+allocator@{get\+\_\+allocator}}
+\index{get\+\_\+allocator@{get\+\_\+allocator}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}}
+\subsubsection[{\texorpdfstring{get\+\_\+allocator()}{get_allocator()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimensions, class Value\+Type, class Allocator, class... Tags$>$ {\bf allocator\+\_\+t}\& {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}$<$ Dimensions, Value\+Type, {\bf Allocator}, Tags $>$\+::get\+\_\+allocator (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a3700a7d19ba9e80da45d40037a14b133}{}\label{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a3700a7d19ba9e80da45d40037a14b133}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}!get\+\_\+stream@{get\+\_\+stream}}
+\index{get\+\_\+stream@{get\+\_\+stream}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}}
+\subsubsection[{\texorpdfstring{get\+\_\+stream() const }{get_stream() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimensions, class Value\+Type, class Allocator, class... Tags$>$ const {\bf stream\+\_\+t}\& {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}$<$ Dimensions, Value\+Type, {\bf Allocator}, Tags $>$\+::get\+\_\+stream (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1Array__Slice_ae293508a48d82c01bc43c10e6102aa20}{}\label{classBC_1_1tensors_1_1exprs_1_1Array__Slice_ae293508a48d82c01bc43c10e6102aa20}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}!get\+\_\+stream@{get\+\_\+stream}}
+\index{get\+\_\+stream@{get\+\_\+stream}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}}
+\subsubsection[{\texorpdfstring{get\+\_\+stream()}{get_stream()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimensions, class Value\+Type, class Allocator, class... Tags$>$ {\bf stream\+\_\+t}\& {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}$<$ Dimensions, Value\+Type, {\bf Allocator}, Tags $>$\+::get\+\_\+stream (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a6fb03e660a3b4f3941d6419d71895ce4}{}\label{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a6fb03e660a3b4f3941d6419d71895ce4}
+
+
+\subsection{Member Data Documentation}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}!m\+\_\+allocator@{m\+\_\+allocator}}
+\index{m\+\_\+allocator@{m\+\_\+allocator}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}}
+\subsubsection[{\texorpdfstring{m\+\_\+allocator}{m_allocator}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimensions, class Value\+Type, class Allocator, class... Tags$>$ {\bf allocator\+\_\+t} {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}$<$ Dimensions, Value\+Type, {\bf Allocator}, Tags $>$\+::m\+\_\+allocator}\hypertarget{classBC_1_1tensors_1_1exprs_1_1Array__Slice_aa7dc5cd48d47896f87e7df27671d74b7}{}\label{classBC_1_1tensors_1_1exprs_1_1Array__Slice_aa7dc5cd48d47896f87e7df27671d74b7}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}!m\+\_\+stream@{m\+\_\+stream}}
+\index{m\+\_\+stream@{m\+\_\+stream}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}}
+\subsubsection[{\texorpdfstring{m\+\_\+stream}{m_stream}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimensions, class Value\+Type, class Allocator, class... Tags$>$ {\bf stream\+\_\+t} {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Slice}$<$ Dimensions, Value\+Type, {\bf Allocator}, Tags $>$\+::m\+\_\+stream}\hypertarget{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a88f9bafcc2e18f45ae9217d1f37215df}{}\label{classBC_1_1tensors_1_1exprs_1_1Array__Slice_a88f9bafcc2e18f45ae9217d1f37215df}
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/tensors/expression\+\_\+templates/\hyperlink{Array_8h}{Array.\+h}\item 
+include/tensors/expression\+\_\+templates/\hyperlink{Array__Slice_8h}{Array\+\_\+\+Slice.\+h}\end{DoxyCompactItemize}

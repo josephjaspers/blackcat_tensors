@@ -1,0 +1,91 @@
+\hypertarget{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator}{}\section{BC\+:\+:tensors\+:\+:iterators\+:\+:Multidimensional\+\_\+\+Iterator$<$ direction, tensor\+\_\+t $>$ Struct Template Reference}
+\label{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator}\index{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator$<$ direction, tensor\+\_\+t $>$@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator$<$ direction, tensor\+\_\+t $>$}}
+
+
+{\ttfamily \#include $<$Multidimensional\+\_\+\+Iterator.\+h$>$}
+
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \hyperlink{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_a6370d6c3ef166ac92fd31f4718f17536}{self} = \hyperlink{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator}{Multidimensional\+\_\+\+Iterator}$<$ \hyperlink{namespaceBC_1_1tensors_1_1iterators_adbaa579cf4202e9bf262b436879f0f91}{direction}, tensor\+\_\+t $>$
+\item 
+using \hyperlink{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_a4b21637f176748500fff232ca13fe2bb}{Iterator} = \hyperlink{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator}{Multidimensional\+\_\+\+Iterator}$<$ \hyperlink{namespaceBC_1_1tensors_1_1iterators_adbaa579cf4202e9bf262b436879f0f91}{direction}, tensor\+\_\+t $>$
+\item 
+using \hyperlink{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_af1894bf9eea6a7a889a347392c2c2fd1}{iterator\+\_\+category} = std\+::random\+\_\+access\+\_\+iterator\+\_\+tag
+\item 
+using \hyperlink{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_ab876f005ae32c434ca78921214a3ecec}{value\+\_\+type} = decltype(std\+::declval$<$ tensor\+\_\+t \& $>$().slice(0))
+\item 
+using \hyperlink{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_ad5a1d1036eaf2d644e1e3e62ed30ceae}{difference\+\_\+type} = int
+\item 
+using \hyperlink{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_a7273dce25bbc3709f40b187bafd73832}{reference} = \hyperlink{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_ab876f005ae32c434ca78921214a3ecec}{value\+\_\+type}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{BlackCat__Common_8h_a6699e8b0449da5c0fafb878e59c1d4b1}{B\+C\+I\+N\+L\+I\+NE} \hyperlink{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_ac6974f656a9df51a8b20e96c82b76987}{Multidimensional\+\_\+\+Iterator} (tensor\+\_\+t \&tensor\+\_\+, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} index\+\_\+=0)
+\item 
+\hyperlink{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_a5ab094be1ba44cbbb1fa136a55e1e4d3}{B\+C\+\_\+\+N\+D\+\_\+\+Iter\+\_\+\+Compare} ($<$, $>$) B\+C\+\_\+\+N\+D\+\_\+\+Iter\+\_\+\+Compare($>$
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+tensor\+\_\+t \& \hyperlink{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_a278ffdb16ff61939d9f995c6664b7dbc}{tensor}
+\item 
+\hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} \hyperlink{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_af979c046e9e21c8b1624405069490962}{index}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\index{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}!difference\+\_\+type@{difference\+\_\+type}}
+\index{difference\+\_\+type@{difference\+\_\+type}!B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}}
+\subsubsection[{\texorpdfstring{difference\+\_\+type}{difference_type}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$direction direction, class tensor\+\_\+t$>$ using {\bf B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}$<$ {\bf direction}, tensor\+\_\+t $>$\+::{\bf difference\+\_\+type} =  int}\hypertarget{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_ad5a1d1036eaf2d644e1e3e62ed30ceae}{}\label{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_ad5a1d1036eaf2d644e1e3e62ed30ceae}
+\index{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}!Iterator@{Iterator}}
+\index{Iterator@{Iterator}!B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}}
+\subsubsection[{\texorpdfstring{Iterator}{Iterator}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$direction direction, class tensor\+\_\+t$>$ using {\bf B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}$<$ {\bf direction}, tensor\+\_\+t $>$\+::{\bf Iterator} =  {\bf Multidimensional\+\_\+\+Iterator}$<${\bf direction}, tensor\+\_\+t$>$}\hypertarget{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_a4b21637f176748500fff232ca13fe2bb}{}\label{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_a4b21637f176748500fff232ca13fe2bb}
+\index{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}!iterator\+\_\+category@{iterator\+\_\+category}}
+\index{iterator\+\_\+category@{iterator\+\_\+category}!B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}}
+\subsubsection[{\texorpdfstring{iterator\+\_\+category}{iterator_category}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$direction direction, class tensor\+\_\+t$>$ using {\bf B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}$<$ {\bf direction}, tensor\+\_\+t $>$\+::{\bf iterator\+\_\+category} =  std\+::random\+\_\+access\+\_\+iterator\+\_\+tag}\hypertarget{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_af1894bf9eea6a7a889a347392c2c2fd1}{}\label{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_af1894bf9eea6a7a889a347392c2c2fd1}
+\index{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}!reference@{reference}}
+\index{reference@{reference}!B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}}
+\subsubsection[{\texorpdfstring{reference}{reference}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$direction direction, class tensor\+\_\+t$>$ using {\bf B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}$<$ {\bf direction}, tensor\+\_\+t $>$\+::{\bf reference} =  {\bf value\+\_\+type}}\hypertarget{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_a7273dce25bbc3709f40b187bafd73832}{}\label{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_a7273dce25bbc3709f40b187bafd73832}
+\index{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}!self@{self}}
+\index{self@{self}!B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}}
+\subsubsection[{\texorpdfstring{self}{self}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$direction direction, class tensor\+\_\+t$>$ using {\bf B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}$<$ {\bf direction}, tensor\+\_\+t $>$\+::{\bf self} =  {\bf Multidimensional\+\_\+\+Iterator}$<${\bf direction}, tensor\+\_\+t$>$}\hypertarget{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_a6370d6c3ef166ac92fd31f4718f17536}{}\label{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_a6370d6c3ef166ac92fd31f4718f17536}
+\index{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}!value\+\_\+type@{value\+\_\+type}}
+\index{value\+\_\+type@{value\+\_\+type}!B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}}
+\subsubsection[{\texorpdfstring{value\+\_\+type}{value_type}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$direction direction, class tensor\+\_\+t$>$ using {\bf B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}$<$ {\bf direction}, tensor\+\_\+t $>$\+::{\bf value\+\_\+type} =  decltype(std\+::declval$<$tensor\+\_\+t\&$>$().slice(0))}\hypertarget{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_ab876f005ae32c434ca78921214a3ecec}{}\label{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_ab876f005ae32c434ca78921214a3ecec}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}!Multidimensional\+\_\+\+Iterator@{Multidimensional\+\_\+\+Iterator}}
+\index{Multidimensional\+\_\+\+Iterator@{Multidimensional\+\_\+\+Iterator}!B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}}
+\subsubsection[{\texorpdfstring{Multidimensional\+\_\+\+Iterator(tensor\+\_\+t \&tensor\+\_\+, B\+C\+::size\+\_\+t index\+\_\+=0)}{Multidimensional_Iterator(tensor_t &tensor_, BC::size_t index_=0)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$direction direction, class tensor\+\_\+t$>$ {\bf B\+C\+I\+N\+L\+I\+NE} {\bf B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}$<$ {\bf direction}, tensor\+\_\+t $>$\+::{\bf Multidimensional\+\_\+\+Iterator} (
+\begin{DoxyParamCaption}
+\item[{tensor\+\_\+t \&}]{tensor\+\_\+, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{index\+\_\+ = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_ac6974f656a9df51a8b20e96c82b76987}{}\label{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_ac6974f656a9df51a8b20e96c82b76987}
+
+
+\subsection{Member Function Documentation}
+\index{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}!B\+C\+\_\+\+N\+D\+\_\+\+Iter\+\_\+\+Compare@{B\+C\+\_\+\+N\+D\+\_\+\+Iter\+\_\+\+Compare}}
+\index{B\+C\+\_\+\+N\+D\+\_\+\+Iter\+\_\+\+Compare@{B\+C\+\_\+\+N\+D\+\_\+\+Iter\+\_\+\+Compare}!B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}}
+\subsubsection[{\texorpdfstring{B\+C\+\_\+\+N\+D\+\_\+\+Iter\+\_\+\+Compare($<$, $>$) B\+C\+\_\+\+N\+D\+\_\+\+Iter\+\_\+\+Compare($>$}{BC_ND_Iter_Compare(<, >) BC_ND_Iter_Compare(>}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$direction direction, class tensor\+\_\+t$>$ {\bf B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}$<$ {\bf direction}, tensor\+\_\+t $>$\+::B\+C\+\_\+\+N\+D\+\_\+\+Iter\+\_\+\+Compare (
+\begin{DoxyParamCaption}
+\item[{$<$, $>$}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_a5ab094be1ba44cbbb1fa136a55e1e4d3}{}\label{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_a5ab094be1ba44cbbb1fa136a55e1e4d3}
+
+
+\subsection{Member Data Documentation}
+\index{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}!index@{index}}
+\index{index@{index}!B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}}
+\subsubsection[{\texorpdfstring{index}{index}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$direction direction, class tensor\+\_\+t$>$ {\bf B\+C\+::size\+\_\+t} {\bf B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}$<$ {\bf direction}, tensor\+\_\+t $>$\+::index}\hypertarget{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_af979c046e9e21c8b1624405069490962}{}\label{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_af979c046e9e21c8b1624405069490962}
+\index{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}!tensor@{tensor}}
+\index{tensor@{tensor}!B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator@{B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}}
+\subsubsection[{\texorpdfstring{tensor}{tensor}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$direction direction, class tensor\+\_\+t$>$ tensor\+\_\+t\& {\bf B\+C\+::tensors\+::iterators\+::\+Multidimensional\+\_\+\+Iterator}$<$ {\bf direction}, tensor\+\_\+t $>$\+::tensor}\hypertarget{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_a278ffdb16ff61939d9f995c6664b7dbc}{}\label{structBC_1_1tensors_1_1iterators_1_1Multidimensional__Iterator_a278ffdb16ff61939d9f995c6664b7dbc}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/tensors/iterators/\hyperlink{Multidimensional__Iterator_8h}{Multidimensional\+\_\+\+Iterator.\+h}\end{DoxyCompactItemize}

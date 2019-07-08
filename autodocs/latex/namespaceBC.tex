@@ -1,0 +1,246 @@
+\hypertarget{namespaceBC}{}\section{BC Namespace Reference}
+\label{namespaceBC}\index{BC@{BC}}
+
+
+depends on Stream.\+h  
+
+
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespaceBC_1_1allocators}{allocators}
+\item 
+ \hyperlink{namespaceBC_1_1benchmarks}{benchmarks}
+\item 
+ \hyperlink{namespaceBC_1_1blas}{blas}
+\item 
+ \hyperlink{namespaceBC_1_1exprs}{exprs}
+\item 
+ \hyperlink{namespaceBC_1_1i2c}{i2c}
+\item 
+ \hyperlink{namespaceBC_1_1memory}{memory}
+\item 
+ \hyperlink{namespaceBC_1_1meta}{meta}
+\item 
+ \hyperlink{namespaceBC_1_1nn}{nn}
+\item 
+ \hyperlink{namespaceBC_1_1NN}{NN}
+\item 
+ \hyperlink{namespaceBC_1_1oper}{oper}
+\item 
+ \hyperlink{namespaceBC_1_1random}{random}
+\item 
+ \hyperlink{namespaceBC_1_1streams}{streams}
+\item 
+ \hyperlink{namespaceBC_1_1tensors}{tensors}
+\item 
+ \hyperlink{namespaceBC_1_1tests}{tests}
+\item 
+ \hyperlink{namespaceBC_1_1utility}{utility}
+\end{DoxyCompactItemize}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structBC_1_1array}{array}
+\item 
+struct \hyperlink{structBC_1_1array_3_010_00_01T_01_4}{array$<$ 0, T $>$}
+\item 
+struct \hyperlink{structBC_1_1CPU__Convolution}{C\+P\+U\+\_\+\+Convolution}
+\item 
+struct \hyperlink{structBC_1_1csv__descriptor}{csv\+\_\+descriptor}
+\item 
+struct \hyperlink{structBC_1_1device__tag}{device\+\_\+tag}
+\item 
+struct \hyperlink{structBC_1_1GPU__Convolution}{G\+P\+U\+\_\+\+Convolution}
+\item 
+struct \hyperlink{structBC_1_1host__tag}{host\+\_\+tag}
+\item 
+struct \hyperlink{structBC_1_1is__system__tag}{is\+\_\+system\+\_\+tag}
+\item 
+struct \hyperlink{structBC_1_1lambda__array}{lambda\+\_\+array}
+\item 
+class \hyperlink{classBC_1_1system__tag__base}{system\+\_\+tag\+\_\+base}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class Allocator\+\_\+\+Type $>$ }\\using \hyperlink{namespaceBC_a702bcffa3526460ac93fb2a315f2f7c7}{allocator\+\_\+traits} = \hyperlink{structBC_1_1allocators_1_1allocator__traits}{allocators\+::allocator\+\_\+traits}$<$ Allocator\+\_\+\+Type $>$
+\item 
+{\footnotesize template$<$class value\+\_\+type $>$ }\\using \hyperlink{namespaceBC_a887e2503ef30c92b917feb4a80f92a69}{Basic\+\_\+\+Allocator} = \hyperlink{structBC_1_1allocators_1_1Host}{allocators\+::\+Host}$<$ value\+\_\+type $>$
+\item 
+{\footnotesize template$<$class system\+\_\+tag , class value\+\_\+type $>$ }\\using \hyperlink{namespaceBC_a934f94b17b06290e6b241e5f59930c5f}{Allocator} = \hyperlink{namespaceBC_a887e2503ef30c92b917feb4a80f92a69}{Basic\+\_\+\+Allocator}$<$ std\+::enable\+\_\+if\+\_\+t$<$ std\+::is\+\_\+same$<$ system\+\_\+tag, \hyperlink{structBC_1_1host__tag}{host\+\_\+tag} $>$\+::value, value\+\_\+type $>$$>$
+\item 
+using \hyperlink{namespaceBC_abe6173b72b8ddcda096eac20d5110e72}{default\+\_\+system\+\_\+tag\+\_\+t} = \hyperlink{BlackCat__Common_8h_afe0743760bd7b796144b764d8c5ab66c}{B\+C\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+Y\+S\+T\+E\+M\+\_\+\+T\+AG}
+\item 
+using \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{size\+\_\+t} = int
+\item 
+{\footnotesize template$<$class system\+\_\+tag $>$ }\\using \hyperlink{namespaceBC_abc64a63cd29a22d102a68f478dfd588d}{Stream} = \hyperlink{classBC_1_1streams_1_1Stream}{streams\+::\+Stream}$<$ system\+\_\+tag $>$
+\item 
+{\footnotesize template$<$int x$>$ }\\using \hyperlink{namespaceBC_adac665f44bd5de19df55f8681248310b}{Shape} = \hyperlink{classBC_1_1tensors_1_1exprs_1_1Shape}{tensors\+::exprs\+::\+Shape}$<$ x $>$
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class T , class... vals$>$ }\\\hyperlink{BlackCat__Common_8h_a6699e8b0449da5c0fafb878e59c1d4b1}{B\+C\+I\+N\+L\+I\+NE} auto \hyperlink{namespaceBC_adb3312598e1b299e1dc72abc5d628e03}{make\+\_\+array} (T front, vals...\+values)
+\item 
+{\footnotesize template$<$int dimension, class func $>$ }\\\hyperlink{BlackCat__Common_8h_adf0d8d6bff3d32b4fa9fa91abebf4002}{B\+C\+H\+O\+S\+T\+D\+EV} auto \hyperlink{namespaceBC_a02f9533e8aa1aae5b946f6d969602039}{make\+\_\+lambda\+\_\+array} (func internal)
+\item 
+{\footnotesize template$<$class str\+\_\+type $>$ }\\void \hyperlink{namespaceBC_ae3e6d09c6f741d9a5c528ec74a76f1cb}{bc\+\_\+assert} (bool condition, str\+\_\+type msg, const char $\ast$file, const char $\ast$function, int line)
+\item 
+void \hyperlink{namespaceBC_a307ff8eb16e8fbe7a7492b8f4932acb0}{host\+\_\+sync} ()
+\item 
+void \hyperlink{namespaceBC_ae715d475db5272e26d72d016af287291}{device\+\_\+sync} ()
+\item 
+void \hyperlink{namespaceBC_a470040eaa8faabaf80974d0189c564f9}{synchronize} ()
+\item 
+\hyperlink{namespaceBC_a34dbc60dbc0f055dbc06971b6bc4fad8}{from\+\_\+string\+\_\+def} (double, std\+::stod(str)) from\+\_\+string\+\_\+def(float
+\item 
+{\footnotesize template$<$class T $>$ }\\std\+::stoi(str)) \hyperlink{namespaceBC_a34dbc60dbc0f055dbc06971b6bc4fad8}{from\+\_\+string\+\_\+def}(std auto \hyperlink{namespaceBC_a0fc024c5ff6c04c0c0f356356a065eb8}{range} (T begin, T end=T())
+\item 
+void \hyperlink{namespaceBC_a8f3806b0eabfafa9edce8d0ab8f08014}{conv1} (int m, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} n, float $\ast$alpha, float $\ast$A, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} inc\+\_\+a, float $\ast$X, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} inc\+\_\+x, float $\ast$beta, float $\ast$Y, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} inc\+\_\+y, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} padding=0, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} stride=1)
+\item 
+{\footnotesize template$<$class... integers, typename  = std\+::enable\+\_\+if\+\_\+t$<$meta\+::sequence\+\_\+of\+\_\+v$<$\+B\+C\+::size\+\_\+t, integers...$>$$>$$>$ }\\auto \hyperlink{namespaceBC_a4ca5e2fe2bd2f884441847cdfd953de8}{make\+\_\+shape} (integers...\+ints)
+\item 
+{\footnotesize template$<$class Inner\+Shape , typename  = std\+::enable\+\_\+if\+\_\+t$<$!meta\+::sequence\+\_\+of\+\_\+v$<$\+B\+C\+::size\+\_\+t, Inner\+Shape$>$$>$$>$ }\\auto \hyperlink{namespaceBC_a267b352d08fd2323ae638bf7d7bf0d23}{make\+\_\+shape} (Inner\+Shape is)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structBC_1_1host__tag}{B\+C\+::host\+\_\+tag} \hyperlink{namespaceBC_a6a08f6f3615e3b1abd0460c74c899536}{host}
+\item 
+\hyperlink{structBC_1_1device__tag}{B\+C\+::device\+\_\+tag} \hyperlink{namespaceBC_a7e470be15628f2bc146897a23005c9b9}{device}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+depends on Stream.\+h 
+
+\subsection{Typedef Documentation}
+\index{BC@{BC}!Allocator@{Allocator}}
+\index{Allocator@{Allocator}!BC@{BC}}
+\subsubsection[{\texorpdfstring{Allocator}{Allocator}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class system\+\_\+tag , class value\+\_\+type $>$ using {\bf B\+C\+::\+Allocator} = typedef {\bf Basic\+\_\+\+Allocator}$<$ std\+::enable\+\_\+if\+\_\+t$<$ std\+::is\+\_\+same$<$system\+\_\+tag, {\bf host\+\_\+tag}$>$\+::value, value\+\_\+type$>$$>$}\hypertarget{namespaceBC_a934f94b17b06290e6b241e5f59930c5f}{}\label{namespaceBC_a934f94b17b06290e6b241e5f59930c5f}
+\index{BC@{BC}!allocator\+\_\+traits@{allocator\+\_\+traits}}
+\index{allocator\+\_\+traits@{allocator\+\_\+traits}!BC@{BC}}
+\subsubsection[{\texorpdfstring{allocator\+\_\+traits}{allocator_traits}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Allocator\+\_\+\+Type $>$ using {\bf B\+C\+::allocator\+\_\+traits} = typedef {\bf allocators\+::allocator\+\_\+traits}$<$Allocator\+\_\+\+Type$>$}\hypertarget{namespaceBC_a702bcffa3526460ac93fb2a315f2f7c7}{}\label{namespaceBC_a702bcffa3526460ac93fb2a315f2f7c7}
+\index{BC@{BC}!Basic\+\_\+\+Allocator@{Basic\+\_\+\+Allocator}}
+\index{Basic\+\_\+\+Allocator@{Basic\+\_\+\+Allocator}!BC@{BC}}
+\subsubsection[{\texorpdfstring{Basic\+\_\+\+Allocator}{Basic_Allocator}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class value\+\_\+type $>$ using {\bf B\+C\+::\+Basic\+\_\+\+Allocator} = typedef {\bf allocators\+::\+Host}$<$value\+\_\+type$>$}\hypertarget{namespaceBC_a887e2503ef30c92b917feb4a80f92a69}{}\label{namespaceBC_a887e2503ef30c92b917feb4a80f92a69}
+\index{BC@{BC}!default\+\_\+system\+\_\+tag\+\_\+t@{default\+\_\+system\+\_\+tag\+\_\+t}}
+\index{default\+\_\+system\+\_\+tag\+\_\+t@{default\+\_\+system\+\_\+tag\+\_\+t}!BC@{BC}}
+\subsubsection[{\texorpdfstring{default\+\_\+system\+\_\+tag\+\_\+t}{default_system_tag_t}}]{\setlength{\rightskip}{0pt plus 5cm}using {\bf B\+C\+::default\+\_\+system\+\_\+tag\+\_\+t} = typedef {\bf B\+C\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+S\+Y\+S\+T\+E\+M\+\_\+\+T\+AG}}\hypertarget{namespaceBC_abe6173b72b8ddcda096eac20d5110e72}{}\label{namespaceBC_abe6173b72b8ddcda096eac20d5110e72}
+\index{BC@{BC}!Shape@{Shape}}
+\index{Shape@{Shape}!BC@{BC}}
+\subsubsection[{\texorpdfstring{Shape}{Shape}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int x$>$ using {\bf B\+C\+::\+Shape} = typedef {\bf tensors\+::exprs\+::\+Shape}$<$x$>$}\hypertarget{namespaceBC_adac665f44bd5de19df55f8681248310b}{}\label{namespaceBC_adac665f44bd5de19df55f8681248310b}
+\index{BC@{BC}!size\+\_\+t@{size\+\_\+t}}
+\index{size\+\_\+t@{size\+\_\+t}!BC@{BC}}
+\subsubsection[{\texorpdfstring{size\+\_\+t}{size_t}}]{\setlength{\rightskip}{0pt plus 5cm}using {\bf B\+C\+::size\+\_\+t} = typedef int}\hypertarget{namespaceBC_a6007cbc4eeec401a037b558910a56173}{}\label{namespaceBC_a6007cbc4eeec401a037b558910a56173}
+\index{BC@{BC}!Stream@{Stream}}
+\index{Stream@{Stream}!BC@{BC}}
+\subsubsection[{\texorpdfstring{Stream}{Stream}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class system\+\_\+tag $>$ using {\bf B\+C\+::\+Stream} = typedef {\bf streams\+::\+Stream}$<$system\+\_\+tag$>$}\hypertarget{namespaceBC_abc64a63cd29a22d102a68f478dfd588d}{}\label{namespaceBC_abc64a63cd29a22d102a68f478dfd588d}
+
+
+\subsection{Function Documentation}
+\index{BC@{BC}!bc\+\_\+assert@{bc\+\_\+assert}}
+\index{bc\+\_\+assert@{bc\+\_\+assert}!BC@{BC}}
+\subsubsection[{\texorpdfstring{bc\+\_\+assert(bool condition, str\+\_\+type msg, const char $\ast$file, const char $\ast$function, int line)}{bc_assert(bool condition, str_type msg, const char *file, const char *function, int line)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class str\+\_\+type $>$ void B\+C\+::bc\+\_\+assert (
+\begin{DoxyParamCaption}
+\item[{bool}]{condition, }
+\item[{str\+\_\+type}]{msg, }
+\item[{const char $\ast$}]{file, }
+\item[{const char $\ast$}]{function, }
+\item[{int}]{line}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{namespaceBC_ae3e6d09c6f741d9a5c528ec74a76f1cb}{}\label{namespaceBC_ae3e6d09c6f741d9a5c528ec74a76f1cb}
+\index{BC@{BC}!conv1@{conv1}}
+\index{conv1@{conv1}!BC@{BC}}
+\subsubsection[{\texorpdfstring{conv1(int m, B\+C\+::size\+\_\+t n, float $\ast$alpha, float $\ast$\+A, B\+C\+::size\+\_\+t inc\+\_\+a, float $\ast$\+X, B\+C\+::size\+\_\+t inc\+\_\+x, float $\ast$beta, float $\ast$\+Y, B\+C\+::size\+\_\+t inc\+\_\+y, B\+C\+::size\+\_\+t padding=0, B\+C\+::size\+\_\+t stride=1)}{conv1(int m, BC::size_t n, float *alpha, float *A, BC::size_t inc_a, float *X, BC::size_t inc_x, float *beta, float *Y, BC::size_t inc_y, BC::size_t padding=0, BC::size_t stride=1)}}]{\setlength{\rightskip}{0pt plus 5cm}void B\+C\+::conv1 (
+\begin{DoxyParamCaption}
+\item[{int}]{m, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{n, }
+\item[{float $\ast$}]{alpha, }
+\item[{float $\ast$}]{A, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{inc\+\_\+a, }
+\item[{float $\ast$}]{X, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{inc\+\_\+x, }
+\item[{float $\ast$}]{beta, }
+\item[{float $\ast$}]{Y, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{inc\+\_\+y, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{padding = {\ttfamily 0}, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{stride = {\ttfamily 1}}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_a8f3806b0eabfafa9edce8d0ab8f08014}{}\label{namespaceBC_a8f3806b0eabfafa9edce8d0ab8f08014}
+\index{BC@{BC}!device\+\_\+sync@{device\+\_\+sync}}
+\index{device\+\_\+sync@{device\+\_\+sync}!BC@{BC}}
+\subsubsection[{\texorpdfstring{device\+\_\+sync()}{device_sync()}}]{\setlength{\rightskip}{0pt plus 5cm}void B\+C\+::device\+\_\+sync (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{namespaceBC_ae715d475db5272e26d72d016af287291}{}\label{namespaceBC_ae715d475db5272e26d72d016af287291}
+\index{BC@{BC}!from\+\_\+string\+\_\+def@{from\+\_\+string\+\_\+def}}
+\index{from\+\_\+string\+\_\+def@{from\+\_\+string\+\_\+def}!BC@{BC}}
+\subsubsection[{\texorpdfstring{from\+\_\+string\+\_\+def(double, std\+::stod(str)) from\+\_\+string\+\_\+def(float}{from_string_def(double, std::stod(str)) from_string_def(float}}]{\setlength{\rightskip}{0pt plus 5cm}B\+C\+::from\+\_\+string\+\_\+def (
+\begin{DoxyParamCaption}
+\item[{double}]{, }
+\item[{std\+::stod(str)}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_a34dbc60dbc0f055dbc06971b6bc4fad8}{}\label{namespaceBC_a34dbc60dbc0f055dbc06971b6bc4fad8}
+\index{BC@{BC}!host\+\_\+sync@{host\+\_\+sync}}
+\index{host\+\_\+sync@{host\+\_\+sync}!BC@{BC}}
+\subsubsection[{\texorpdfstring{host\+\_\+sync()}{host_sync()}}]{\setlength{\rightskip}{0pt plus 5cm}void B\+C\+::host\+\_\+sync (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{namespaceBC_a307ff8eb16e8fbe7a7492b8f4932acb0}{}\label{namespaceBC_a307ff8eb16e8fbe7a7492b8f4932acb0}
+\index{BC@{BC}!make\+\_\+array@{make\+\_\+array}}
+\index{make\+\_\+array@{make\+\_\+array}!BC@{BC}}
+\subsubsection[{\texorpdfstring{make\+\_\+array(\+T front, vals...\+values)}{make_array(T front, vals...values)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T , class... vals$>$ {\bf B\+C\+I\+N\+L\+I\+NE} auto B\+C\+::make\+\_\+array (
+\begin{DoxyParamCaption}
+\item[{T}]{front, }
+\item[{vals...}]{values}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_adb3312598e1b299e1dc72abc5d628e03}{}\label{namespaceBC_adb3312598e1b299e1dc72abc5d628e03}
+\index{BC@{BC}!make\+\_\+lambda\+\_\+array@{make\+\_\+lambda\+\_\+array}}
+\index{make\+\_\+lambda\+\_\+array@{make\+\_\+lambda\+\_\+array}!BC@{BC}}
+\subsubsection[{\texorpdfstring{make\+\_\+lambda\+\_\+array(func internal)}{make_lambda_array(func internal)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int dimension, class func $>$ {\bf B\+C\+H\+O\+S\+T\+D\+EV} auto B\+C\+::make\+\_\+lambda\+\_\+array (
+\begin{DoxyParamCaption}
+\item[{func}]{internal}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_a02f9533e8aa1aae5b946f6d969602039}{}\label{namespaceBC_a02f9533e8aa1aae5b946f6d969602039}
+\index{BC@{BC}!make\+\_\+shape@{make\+\_\+shape}}
+\index{make\+\_\+shape@{make\+\_\+shape}!BC@{BC}}
+\subsubsection[{\texorpdfstring{make\+\_\+shape(integers...\+ints)}{make_shape(integers...ints)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... integers, typename  = std\+::enable\+\_\+if\+\_\+t$<$meta\+::sequence\+\_\+of\+\_\+v$<$\+B\+C\+::size\+\_\+t, integers...$>$$>$$>$ auto B\+C\+::make\+\_\+shape (
+\begin{DoxyParamCaption}
+\item[{integers...}]{ints}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_a4ca5e2fe2bd2f884441847cdfd953de8}{}\label{namespaceBC_a4ca5e2fe2bd2f884441847cdfd953de8}
+\index{BC@{BC}!make\+\_\+shape@{make\+\_\+shape}}
+\index{make\+\_\+shape@{make\+\_\+shape}!BC@{BC}}
+\subsubsection[{\texorpdfstring{make\+\_\+shape(\+Inner\+Shape is)}{make_shape(InnerShape is)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Inner\+Shape , typename  = std\+::enable\+\_\+if\+\_\+t$<$!meta\+::sequence\+\_\+of\+\_\+v$<$\+B\+C\+::size\+\_\+t, Inner\+Shape$>$$>$$>$ auto B\+C\+::make\+\_\+shape (
+\begin{DoxyParamCaption}
+\item[{Inner\+Shape}]{is}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_a267b352d08fd2323ae638bf7d7bf0d23}{}\label{namespaceBC_a267b352d08fd2323ae638bf7d7bf0d23}
+\index{BC@{BC}!range@{range}}
+\index{range@{range}!BC@{BC}}
+\subsubsection[{\texorpdfstring{range(\+T begin, T end=\+T())}{range(T begin, T end=T())}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ std\+::stoi (str)) {\bf from\+\_\+string\+\_\+def}(std auto B\+C\+::range (
+\begin{DoxyParamCaption}
+\item[{T}]{begin, }
+\item[{T}]{end = {\ttfamily T()}}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_a0fc024c5ff6c04c0c0f356356a065eb8}{}\label{namespaceBC_a0fc024c5ff6c04c0c0f356356a065eb8}
+\index{BC@{BC}!synchronize@{synchronize}}
+\index{synchronize@{synchronize}!BC@{BC}}
+\subsubsection[{\texorpdfstring{synchronize()}{synchronize()}}]{\setlength{\rightskip}{0pt plus 5cm}void B\+C\+::synchronize (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{namespaceBC_a470040eaa8faabaf80974d0189c564f9}{}\label{namespaceBC_a470040eaa8faabaf80974d0189c564f9}
+
+
+\subsection{Variable Documentation}
+\index{BC@{BC}!device@{device}}
+\index{device@{device}!BC@{BC}}
+\subsubsection[{\texorpdfstring{device}{device}}]{\setlength{\rightskip}{0pt plus 5cm} {\bf B\+C\+::device\+\_\+tag}  B\+C\+::device}\hypertarget{namespaceBC_a7e470be15628f2bc146897a23005c9b9}{}\label{namespaceBC_a7e470be15628f2bc146897a23005c9b9}
+\index{BC@{BC}!host@{host}}
+\index{host@{host}!BC@{BC}}
+\subsubsection[{\texorpdfstring{host}{host}}]{\setlength{\rightskip}{0pt plus 5cm} {\bf B\+C\+::host\+\_\+tag}  B\+C\+::host}\hypertarget{namespaceBC_a6a08f6f3615e3b1abd0460c74c899536}{}\label{namespaceBC_a6a08f6f3615e3b1abd0460c74c899536}

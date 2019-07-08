@@ -1,0 +1,55 @@
+\hypertarget{ConstexprIf_8h}{}\section{include/type\+\_\+traits/\+Constexpr\+If.h File Reference}
+\label{ConstexprIf_8h}\index{include/type\+\_\+traits/\+Constexpr\+If.\+h@{include/type\+\_\+traits/\+Constexpr\+If.\+h}}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{ConstexprIf_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structBC_1_1meta_1_1constexpr__ternary__impl}{B\+C\+::meta\+::constexpr\+\_\+ternary\+\_\+impl$<$ bool $>$}
+\item 
+struct \hyperlink{structBC_1_1meta_1_1constexpr__ternary__impl_3_01false_01_4}{B\+C\+::meta\+::constexpr\+\_\+ternary\+\_\+impl$<$ false $>$}
+\item 
+struct \hyperlink{structBC_1_1meta_1_1constexpr__if__impl}{B\+C\+::meta\+::constexpr\+\_\+if\+\_\+impl$<$ bool $>$}
+\item 
+struct \hyperlink{structBC_1_1meta_1_1constexpr__if__impl_3_01false_01_4}{B\+C\+::meta\+::constexpr\+\_\+if\+\_\+impl$<$ false $>$}
+\item 
+struct \hyperlink{structBC_1_1meta_1_1Constexpr__Else__If}{B\+C\+::meta\+::\+Constexpr\+\_\+\+Else\+\_\+\+If$<$ bool,... $>$}
+\item 
+struct \hyperlink{structBC_1_1meta_1_1Constexpr__Else__If_3_01true_00_01f1_00_01f2_01_4}{B\+C\+::meta\+::\+Constexpr\+\_\+\+Else\+\_\+\+If$<$ true, f1, f2 $>$}
+\item 
+struct \hyperlink{structBC_1_1meta_1_1Constexpr__Else__If_3_01false_00_01f1_00_01f2_01_4}{B\+C\+::meta\+::\+Constexpr\+\_\+\+Else\+\_\+\+If$<$ false, f1, f2 $>$}
+\item 
+struct \hyperlink{structBC_1_1meta_1_1Constexpr__Else__If_3_01true_00_01f1_01_4}{B\+C\+::meta\+::\+Constexpr\+\_\+\+Else\+\_\+\+If$<$ true, f1 $>$}
+\item 
+struct \hyperlink{structBC_1_1meta_1_1Constexpr__Else__If_3_01false_00_01f1_01_4}{B\+C\+::meta\+::\+Constexpr\+\_\+\+Else\+\_\+\+If$<$ false, f1 $>$}
+\item 
+struct \hyperlink{structBC_1_1meta_1_1Constexpr__Else}{B\+C\+::meta\+::\+Constexpr\+\_\+\+Else$<$ f1 $>$}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespaceBC}{BC}
+\begin{DoxyCompactList}\small\item\em depends on Stream.\+h \end{DoxyCompactList}\item 
+ \hyperlink{namespaceBC_1_1meta}{B\+C\+::meta}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$bool cond, class f1 , class f2 $>$ }\\auto \hyperlink{namespaceBC_1_1meta_a209dc926cef76a430de0fb1c52f2d28d}{B\+C\+::meta\+::constexpr\+\_\+ternary} (f1 true\+\_\+path, f2 false\+\_\+path)
+\item 
+{\footnotesize template$<$bool b, class f $>$ }\\auto \hyperlink{namespaceBC_1_1meta_a2fd3d5755398360b88ef69b886f7d144}{B\+C\+::meta\+::constexpr\+\_\+if} (f path)
+\item 
+{\footnotesize template$<$bool cond, class f1 , class f2 $>$ }\\auto \hyperlink{namespaceBC_1_1meta_a39d2f5624161f998372cd9e98031f8fb}{B\+C\+::meta\+::constexpr\+\_\+if} (f1 true\+\_\+path, f2 false\+\_\+path)
+\item 
+{\footnotesize template$<$bool cond, class f1 $>$ }\\auto \hyperlink{namespaceBC_1_1meta_ad8bd175962b1c0e27c6d679dec431e2f}{B\+C\+::meta\+::constexpr\+\_\+else\+\_\+if} (f1 f1\+\_\+)
+\item 
+{\footnotesize template$<$bool cond, class f1 , class f2 $>$ }\\auto \hyperlink{namespaceBC_1_1meta_acb13b45e0c687e983ea553be368a614b}{B\+C\+::meta\+::constexpr\+\_\+else\+\_\+if} (f1 f1\+\_\+, f2 f2\+\_\+)
+\item 
+{\footnotesize template$<$class f1 $>$ }\\Constexpr\+\_\+\+Else$<$ f1 $>$ \hyperlink{namespaceBC_1_1meta_aed37053e9740d1bef8fb5b02027ff56b}{B\+C\+::meta\+::constexpr\+\_\+else} (f1 f1\+\_\+)
+\end{DoxyCompactItemize}

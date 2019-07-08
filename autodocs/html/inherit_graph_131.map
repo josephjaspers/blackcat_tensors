@@ -1,0 +1,4 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$structBC_1_1tensors_1_1exprs_1_1optimizer__default.html" title="BC::tensors::exprs\l::optimizer_default\&lt; T \&gt;" alt="" coords="5,27,167,69"/>
+<area shape="rect" id="node2" href="$structBC_1_1tensors_1_1exprs_1_1optimizer_3_01T_00_01std_1_1enable__if__t_3_01expression__traitsf1cfe5fcb8a0bc73842726d99ded0fc2.html" title="BC::tensors::exprs\l::optimizer\&lt; T, std\l::enable_if_t\&lt; expression\l_traits\&lt; T \&gt;::is_array &amp;&amp;!expression\l_traits\&lt; T \&gt;::is_temporary \&gt; \&gt;" alt="" coords="215,5,448,91"/>
+</map>

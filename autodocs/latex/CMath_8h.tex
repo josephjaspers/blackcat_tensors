@@ -1,0 +1,137 @@
+\hypertarget{CMath_8h}{}\section{include/operations/\+C\+Math.h File Reference}
+\label{CMath_8h}\index{include/operations/\+C\+Math.\+h@{include/operations/\+C\+Math.\+h}}
+{\ttfamily \#include $<$functional$>$}\\*
+{\ttfamily \#include $<$cmath$>$}\\*
+Include dependency graph for C\+Math.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=202pt]{CMath_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{CMath_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classBC_1_1tensors_1_1Tensor__Base}{B\+C\+::tensors\+::\+Tensor\+\_\+\+Base$<$ Expression\+Template $>$}
+\item 
+struct \hyperlink{structBC_1_1oper_1_1cmath__functions_1_1norm}{B\+C\+::oper\+::cmath\+\_\+functions\+::norm$<$ scalar $>$}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespaceBC}{BC}
+\begin{DoxyCompactList}\small\item\em depends on Stream.\+h \end{DoxyCompactList}\item 
+ \hyperlink{namespaceBC_1_1tensors}{B\+C\+::tensors}
+\item 
+ \hyperlink{namespaceBC_1_1oper}{B\+C\+::oper}
+\item 
+ \hyperlink{namespaceBC_1_1oper_1_1cmath__functions}{B\+C\+::oper\+::cmath\+\_\+functions}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{CMath_8h_afb1fc5a5401820630933062abbc19b95}{B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF}(func\+Name,  instance\+\_\+name,  math\+\_\+function, ...)
+\item 
+\#define \hyperlink{CMath_8h_a768f649788d69a59c66ebcdbfb8561e4}{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+D\+EF}(...)~\hyperlink{CMath_8h_afb1fc5a5401820630933062abbc19b95}{B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF}(Derivative, dx, \+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+)
+\item 
+\#define \hyperlink{CMath_8h_a1775859539e05441b6c8b1489c328ed7}{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+C\+A\+C\+H\+E\+D\+\_\+\+D\+EF}(...)~\hyperlink{CMath_8h_afb1fc5a5401820630933062abbc19b95}{B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF}(Cached\+\_\+\+Derivative, cached\+\_\+dx, \+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+)
+\item 
+\#define \hyperlink{CMath_8h_a1a5d952980afb19126398d4435b57dee}{B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+M\+A\+T\+H\+\_\+\+D\+EF}(func\+Name,  instance\+Name, ...)~\hyperlink{CMath_8h_afb1fc5a5401820630933062abbc19b95}{B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF}(func\+Name, instance\+Name, std\+::instance\+Name(x), \+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{namespaceBC_1_1oper_1_1cmath__functions_a78d10c1677862f9bbbda57d357fb9756}{B\+C\+::oper\+::cmath\+\_\+functions\+::\+B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+M\+A\+T\+H\+\_\+\+D\+EF} (Cos, cos, \hyperlink{CMath_8h_a768f649788d69a59c66ebcdbfb8561e4}{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+D\+EF}(-\/std\+::sin(x))) struct Pow
+\item 
+\hyperlink{namespaceBC_1_1oper_1_1cmath__functions_a3aa486fe539332036c03aac29b6ea91b}{B\+C\+::oper\+::cmath\+\_\+functions\+::\+B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+M\+A\+T\+H\+\_\+\+D\+EF} (Sin, sin, \hyperlink{CMath_8h_a768f649788d69a59c66ebcdbfb8561e4}{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+D\+EF}(std\+::cos(x)))
+\item 
+\hyperlink{namespaceBC_1_1oper_1_1cmath__functions_a52e3ff57f2c6006b617c5338f6698918}{B\+C\+::oper\+::cmath\+\_\+functions\+::\+B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+M\+A\+T\+H\+\_\+\+D\+EF} (Tanh, tanh, \hyperlink{CMath_8h_a768f649788d69a59c66ebcdbfb8561e4}{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+D\+EF}(1-\/std\+::pow(std\+::tanh(x), 2)) \hyperlink{CMath_8h_a1775859539e05441b6c8b1489c328ed7}{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+C\+A\+C\+H\+E\+D\+\_\+\+D\+EF}(1-\/std\+::pow(x, 2))) \hyperlink{CMath_8h_afb1fc5a5401820630933062abbc19b95}{B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF}(Pow2
+\item 
+\hyperlink{namespaceBC_1_1oper_1_1cmath__functions_a078f98e4afdccf3b6305572a2b8007d5}{B\+C\+::oper\+::cmath\+\_\+functions\+::\+D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+D\+EF} (2))
+\item 
+\hyperlink{namespaceBC_1_1oper_1_1cmath__functions_a6577c214d4b5166b2ac292e87a6577f3}{B\+C\+::oper\+::cmath\+\_\+functions\+::\+B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF} (Pow3, pow3,(std\+::pow(x, 3)), \hyperlink{CMath_8h_a768f649788d69a59c66ebcdbfb8561e4}{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+D\+EF}(3))
+\item 
+\hyperlink{namespaceBC_1_1oper_1_1cmath__functions_a0a3baca1513600b3224b532b21fccec5}{B\+C\+::oper\+::cmath\+\_\+functions\+::\+B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF} (Logistic, logistic,(1/(1+std\+::exp(-\/x))), \hyperlink{CMath_8h_a768f649788d69a59c66ebcdbfb8561e4}{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+D\+EF}(Logistic\+::apply(x)$\ast$(1-\/Logistic\+::apply(x))) \hyperlink{CMath_8h_a1775859539e05441b6c8b1489c328ed7}{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+C\+A\+C\+H\+E\+D\+\_\+\+D\+EF}(x $\ast$(1-\/x)))
+\item 
+\hyperlink{namespaceBC_1_1oper_1_1cmath__functions_a5e7c2f4ab315a052e9c3661917376660}{B\+C\+::oper\+::cmath\+\_\+functions\+::\+B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF} (Relu, relu, B\+C\+::meta\+::max(0, x), \hyperlink{CMath_8h_a768f649788d69a59c66ebcdbfb8561e4}{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+D\+EF}(x $>$ 0?1\+:0))
+\item 
+\hyperlink{namespaceBC_1_1oper_1_1cmath__functions_ade0134a7d086a3c7ef0eced5e77b4f1b}{B\+C\+::oper\+::cmath\+\_\+functions\+::\+B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF} (Logical, logical, x!=0?1\+:0)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{namespaceBC_1_1oper_1_1cmath__functions_a3091c4f6c79051707f3859c95f4fb133}{B\+C\+::oper\+::cmath\+\_\+functions\+::pow}
+\item 
+\hyperlink{namespaceBC_1_1oper_1_1cmath__functions_a97859214dcde1d6e85e3ea4f497780b0}{B\+C\+::oper\+::cmath\+\_\+functions\+::pow2}
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{C\+Math.\+h@{C\+Math.\+h}!B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF@{B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF}}
+\index{B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF@{B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF}!C\+Math.\+h@{C\+Math.\+h}}
+\subsubsection[{\texorpdfstring{B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF}{BLACKCAT_FUNCTOR_DEF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF(
+\begin{DoxyParamCaption}
+\item[{}]{func\+Name, }
+\item[{}]{instance\+\_\+name, }
+\item[{}]{math\+\_\+function, }
+\item[{}]{...}
+\end{DoxyParamCaption}
+)}\hypertarget{CMath_8h_afb1fc5a5401820630933062abbc19b95}{}\label{CMath_8h_afb1fc5a5401820630933062abbc19b95}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\(\backslash\)
+struct funcName \{                                               \(\backslash\)
+    template<class value\_type> BCINLINE                         \(\backslash\)
+    value\_type operator () (\textcolor{keyword}{const} value\_type& x)\textcolor{keyword}{ const }\{        \(\backslash\)
+        return math\_function;                                   \(\backslash\)
+    \}                                                           \(\backslash\)
+    template<class value\_type> BCINLINE                         \(\backslash\)
+    static \textcolor{keyword}{auto} apply(\textcolor{keyword}{const} value\_type& x) \{                    \(\backslash\)
+        return math\_function;                                   \(\backslash\)
+    \}                                                           \(\backslash\)
+    template<class internal\_t>                                  \(\backslash\)
+    auto operator() (\textcolor{keyword}{const} \hyperlink{classBC_1_1tensors_1_1Tensor__Base}{BC::tensors::Tensor\_Base<internal\_t>}& tensor
+      ) \{   \(\backslash\)
+          return tensor.\hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a0513f47543ce68bdc514c9c6f28ec2ed}{un\_expr}(funcName());                     \(\backslash\)
+    \}                                                           \(\backslash\)
+                                                                \(\backslash\)
+    \_\_VA\_ARGS\_\_                                                 \(\backslash\)
+\} instance\_name;                                        \(\backslash\)
+                                                                \(\backslash\)
+                                                                \(\backslash\)
+template<class T> \textcolor{keyword}{auto} surpress\_unused\_variable\_warning\_workaround(funcName)\(\backslash\)
+\{\textcolor{keywordflow}{return} instance\_name;\}    \(\backslash\)
+                                                                \(\backslash\)
+\end{DoxyCode}
+\index{C\+Math.\+h@{C\+Math.\+h}!B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+M\+A\+T\+H\+\_\+\+D\+EF@{B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+M\+A\+T\+H\+\_\+\+D\+EF}}
+\index{B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+M\+A\+T\+H\+\_\+\+D\+EF@{B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+M\+A\+T\+H\+\_\+\+D\+EF}!C\+Math.\+h@{C\+Math.\+h}}
+\subsubsection[{\texorpdfstring{B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+M\+A\+T\+H\+\_\+\+D\+EF}{BLACKCAT_MATH_DEF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+M\+A\+T\+H\+\_\+\+D\+EF(
+\begin{DoxyParamCaption}
+\item[{}]{func\+Name, }
+\item[{}]{instance\+Name, }
+\item[{}]{...}
+\end{DoxyParamCaption}
+)~{\bf B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF}(func\+Name, instance\+Name, std\+::instance\+Name(x), \+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+)}\hypertarget{CMath_8h_a1a5d952980afb19126398d4435b57dee}{}\label{CMath_8h_a1a5d952980afb19126398d4435b57dee}
+\index{C\+Math.\+h@{C\+Math.\+h}!D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+C\+A\+C\+H\+E\+D\+\_\+\+D\+EF@{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+C\+A\+C\+H\+E\+D\+\_\+\+D\+EF}}
+\index{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+C\+A\+C\+H\+E\+D\+\_\+\+D\+EF@{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+C\+A\+C\+H\+E\+D\+\_\+\+D\+EF}!C\+Math.\+h@{C\+Math.\+h}}
+\subsubsection[{\texorpdfstring{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+C\+A\+C\+H\+E\+D\+\_\+\+D\+EF}{DERIVATIVE_CACHED_DEF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+C\+A\+C\+H\+E\+D\+\_\+\+D\+EF(
+\begin{DoxyParamCaption}
+\item[{}]{...}
+\end{DoxyParamCaption}
+)~{\bf B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF}(Cached\+\_\+\+Derivative, cached\+\_\+dx, \+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+)}\hypertarget{CMath_8h_a1775859539e05441b6c8b1489c328ed7}{}\label{CMath_8h_a1775859539e05441b6c8b1489c328ed7}
+\index{C\+Math.\+h@{C\+Math.\+h}!D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+D\+EF@{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+D\+EF}}
+\index{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+D\+EF@{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+D\+EF}!C\+Math.\+h@{C\+Math.\+h}}
+\subsubsection[{\texorpdfstring{D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+D\+EF}{DERIVATIVE_DEF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+E\+R\+I\+V\+A\+T\+I\+V\+E\+\_\+\+D\+EF(
+\begin{DoxyParamCaption}
+\item[{}]{...}
+\end{DoxyParamCaption}
+)~{\bf B\+L\+A\+C\+K\+C\+A\+T\+\_\+\+F\+U\+N\+C\+T\+O\+R\+\_\+\+D\+EF}(Derivative, dx, \+\_\+\+\_\+\+V\+A\+\_\+\+A\+R\+G\+S\+\_\+\+\_\+)}\hypertarget{CMath_8h_a768f649788d69a59c66ebcdbfb8561e4}{}\label{CMath_8h_a768f649788d69a59c66ebcdbfb8561e4}

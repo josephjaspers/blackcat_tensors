@@ -1,0 +1,63 @@
+Black\+Cat Tensor\textquotesingle{}s common-\/types (Vector, Matrix, Cube) are created using two template arguments. The first argument, is the scalar-\/type while the second is the allocator. This was designed to mimic {\ttfamily stl} library.
+
+\paragraph*{Overview}
+
+{\itshape Basic\+\_\+\+Allocator}\+: \begin{DoxyVerb}The standard allocator and default argument.
+The Basic Allocator is comparable to the std::allocator.
+It has no special properties.
+\end{DoxyVerb}
+
+
+{\itshape Cuda}\+: \begin{DoxyVerb}The generic allocator for CUDA. 
+Allocates memory on the device. 
+Memory allocated with Cuda cannot be accessed from the host.
+\end{DoxyVerb}
+
+
+{\itshape Cuda\+\_\+\+Managed}\+: \begin{DoxyVerb}Cuda_Managed allocates memory via CudaMallocManaged. 
+The memory is accessible from both host and device. 
+Cuda_Managed is recommended if you are not familiar with Cuda programming.
+\end{DoxyVerb}
+
+
+\paragraph*{Additional Tags of Black\+Cat Allocators}
+
+\begin{DoxyVerb}BlackCat Allocators utilize 2 additional tags to achieve various modifiability. 
+
+
+`system_tag`
+
+The system_tag, may be either BC::host_tag or BC::device_tag.
+`system_tag` informs if the memory is allocated on the GPU or CPU. 
+This enables compile time checking to make sure expressions are computed in the apropriate manner as well
+as enabling querying for apropriate default behavior across the CPU and GPU. 
+
+If system_tag is not supplied, it is defaulted to 'host_tag'.
+
+
+`propagate_on_temporary_construction` 
+
+The 'propagate_on_temporary_construction' enables the user to specify the behavior of memory allocation
+when temporaries are needed. 
+
+if 'propagate_on_temporary_construction' is set to 'std::false_type', the default allocator is used.
+if 'propagate_on_temporary_construction' is set to 'std::true_type', the same allocator is used,
+    the allocator will use "select_on_container_copy_construction" to generate the new allocator. 
+
+if 'propagate_on_temporary_construction' is not defined it is defaulted to be 'std::false_type' 
+\end{DoxyVerb}
+
+
+\paragraph*{Choosing an allocator (example)\+:}
+
+
+\begin{DoxyCode}
+\hyperlink{classBC_1_1tensors_1_1Tensor__Base}{BC::Matrix<float>} mat;                     \textcolor{comment}{//defaults to Basic\_Allocator<float>}
+\hyperlink{classBC_1_1tensors_1_1Tensor__Base}{BC::Matrix<float, BC::Basic\_Allocator<float>}> mat; \textcolor{comment}{//identical
+       to above   }
+\hyperlink{classBC_1_1tensors_1_1Tensor__Base}{BC::Matrix<float, BC::Cuda<float>}> mat;            \textcolor{comment}{//allocates memory on
+       the GPU }
+\hyperlink{classBC_1_1tensors_1_1Tensor__Base}{BC::Matrix<float, BC::Cuda\_Managed<float>}> mat;    \textcolor{comment}{//allocates
+       memory on the GPU but data transfer is managed automatically. }
+\end{DoxyCode}
+ 

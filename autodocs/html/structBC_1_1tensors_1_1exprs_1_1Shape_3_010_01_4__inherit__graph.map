@@ -1,0 +1,5 @@
+<map id="BC::tensors::exprs::Shape&lt; 0 &gt;" name="BC::tensors::exprs::Shape&lt; 0 &gt;">
+<area shape="rect" id="node2" href="$structBC_1_1tensors_1_1exprs_1_1Binary__Expression_3_01oper_1_1dot_3_01System__Tag_01_4_00_01lv_00_01rv_01_4.html" title="BC::tensors::exprs\l::Binary_Expression\l\&lt; oper::dot\&lt; System_Tag\l \&gt;, lv, rv \&gt;" alt="" coords="205,5,375,76"/>
+<area shape="rect" id="node3" href="$structBC_1_1tensors_1_1exprs_1_1Constexpr__Scalar__Constant_3_01Value_00_01Scalar_00_01BC_1_1host__tag_01_4.html" title="BC::tensors::exprs\l::Constexpr_Scalar_Constant\l\&lt; Value, Scalar, BC::host_tag \&gt;" alt="" coords="185,101,395,157"/>
+<area shape="rect" id="node4" href="$structBC_1_1tensors_1_1exprs_1_1Scalar__Constant.html" title="BC::tensors::exprs\l::Scalar_Constant\&lt; Scalar,\l SystemTag \&gt;" alt="" coords="200,181,380,237"/>
+</map>

@@ -1,0 +1,193 @@
+\hypertarget{structBC_1_1nn_1_1Chain}{}\section{BC\+:\+:nn\+:\+:Chain$<$ lst $>$ Struct Template Reference}
+\label{structBC_1_1nn_1_1Chain}\index{B\+C\+::nn\+::\+Chain$<$ lst $>$@{B\+C\+::nn\+::\+Chain$<$ lst $>$}}
+
+
+{\ttfamily \#include $<$Layer\+Chain.\+h$>$}
+
+
+
+Inheritance diagram for BC\+:\+:nn\+:\+:Chain$<$ lst $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=187pt]{structBC_1_1nn_1_1Chain__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for BC\+:\+:nn\+:\+:Chain$<$ lst $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=187pt]{structBC_1_1nn_1_1Chain__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \hyperlink{structBC_1_1nn_1_1Chain_a921489965d26e0a38dc0e44d9224ff11}{self} = \hyperlink{structBC_1_1nn_1_1Chain}{Chain}$<$ lst... $>$
+\item 
+using \hyperlink{structBC_1_1nn_1_1Chain_a61348985f8615b90024f8206bb37c9b5}{parent} = \hyperlink{structBC_1_1nn_1_1LayerChain}{Layer\+Chain}$<$ 0, \hyperlink{structBC_1_1nn_1_1Chain_a921489965d26e0a38dc0e44d9224ff11}{self}, lst... $>$
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class... Args$>$ }\\\hyperlink{structBC_1_1nn_1_1Chain_adae78d2d981f8e8568101576987a9b47}{Chain} (Args \&\&...args)
+\item 
+{\footnotesize template$<$class T $>$ }\\const auto \& \hyperlink{structBC_1_1nn_1_1Chain_accefa2d4b8ce0dbeab98934fc4cb0147}{back\+\_\+propagation} (const T \&tensor\+\_\+expected)
+\item 
+{\footnotesize template$<$class T $>$ }\\const auto \& \hyperlink{structBC_1_1nn_1_1Chain_ad897096a95ccd0a3974114ac1794d16e}{forward\+\_\+propagation} (const T \&tensor\+\_\+expected)
+\item 
+void \hyperlink{structBC_1_1nn_1_1Chain_a0326ba60c43fc89e723533c851181822}{read} (std\+::ifstream \&is)
+\item 
+void \hyperlink{structBC_1_1nn_1_1Chain_a4655d321daaa900048d0237618f2ff35}{write} (std\+::ifstream \&os)
+\item 
+void \hyperlink{structBC_1_1nn_1_1Chain_a9cd23d83054be857c93f30bdc8869d86}{set\+\_\+batch\+\_\+size} (int x)
+\item 
+{\footnotesize template$<$class System\+Tag $>$ }\\void \hyperlink{structBC_1_1nn_1_1Chain_a4149a6682cc60a9d819fcc5c8b5eff84}{initialize\+\_\+variables} (\hyperlink{namespaceBC_abc64a63cd29a22d102a68f478dfd588d}{B\+C\+::\+Stream}$<$ System\+Tag $>$ stream)
+\item 
+{\footnotesize template$<$class System\+Tag $>$ }\\\hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{size\+\_\+t} \hyperlink{structBC_1_1nn_1_1Chain_ae01691a2d7cb81a44916c73c76039ff2}{get\+\_\+workspace\+\_\+size} (\hyperlink{namespaceBC_abc64a63cd29a22d102a68f478dfd588d}{B\+C\+::\+Stream}$<$ System\+Tag $>$ stream)
+\item 
+void \hyperlink{structBC_1_1nn_1_1Chain_a93f5c719cf2c966c22519ef608019406}{update\+\_\+weights} ()
+\item 
+void \hyperlink{structBC_1_1nn_1_1Chain_a606eeb347bc8454a1c33aebd973c00b8}{cache\+\_\+gradients} ()
+\item 
+void \hyperlink{structBC_1_1nn_1_1Chain_a9e66e038dcdb69078901c2b1e6b5e26c}{set\+\_\+max\+\_\+bptt\+\_\+length} (int len)
+\item 
+{\footnotesize template$<$class function $>$ }\\void \hyperlink{structBC_1_1nn_1_1Chain_a7573d5305e385f2513d26650fb324c55}{for\+\_\+each\+\_\+internal} (\hyperlink{namespaceBC_1_1nn_a5429ceaa392776ade7234175af39050d}{function} f)
+\item 
+{\footnotesize template$<$class T $>$ }\\const auto \& \hyperlink{structBC_1_1nn_1_1Chain_a10264f8ac106cdc4fb3a393e3c84cad7}{bp} (const T \&dx)
+\item 
+auto \& \hyperlink{structBC_1_1nn_1_1Chain_a1aaa64c33e9902b0db045bdc20f8d488}{head} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} \hyperlink{structBC_1_1nn_1_1Chain_ab36fdf102bb73c6c0f22aa8ede632fd9}{batch\+\_\+size} = 1
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!parent@{parent}}
+\index{parent@{parent}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{parent}{parent}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ using {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::{\bf parent} =  {\bf Layer\+Chain}$<$0, {\bf self}, lst...$>$}\hypertarget{structBC_1_1nn_1_1Chain_a61348985f8615b90024f8206bb37c9b5}{}\label{structBC_1_1nn_1_1Chain_a61348985f8615b90024f8206bb37c9b5}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!self@{self}}
+\index{self@{self}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{self}{self}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ using {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::{\bf self} =  {\bf Chain}$<$lst...$>$}\hypertarget{structBC_1_1nn_1_1Chain_a921489965d26e0a38dc0e44d9224ff11}{}\label{structBC_1_1nn_1_1Chain_a921489965d26e0a38dc0e44d9224ff11}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!Chain@{Chain}}
+\index{Chain@{Chain}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{Chain(\+Args \&\&...\+args)}{Chain(Args &&...args)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ template$<$class... Args$>$ {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::{\bf Chain} (
+\begin{DoxyParamCaption}
+\item[{Args \&\&...}]{args}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1Chain_adae78d2d981f8e8568101576987a9b47}{}\label{structBC_1_1nn_1_1Chain_adae78d2d981f8e8568101576987a9b47}
+
+
+\subsection{Member Function Documentation}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!back\+\_\+propagation@{back\+\_\+propagation}}
+\index{back\+\_\+propagation@{back\+\_\+propagation}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{back\+\_\+propagation(const T \&tensor\+\_\+expected)}{back_propagation(const T &tensor_expected)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ template$<$class T $>$ const auto\& {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::back\+\_\+propagation (
+\begin{DoxyParamCaption}
+\item[{const T \&}]{tensor\+\_\+expected}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1Chain_accefa2d4b8ce0dbeab98934fc4cb0147}{}\label{structBC_1_1nn_1_1Chain_accefa2d4b8ce0dbeab98934fc4cb0147}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!bp@{bp}}
+\index{bp@{bp}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{bp(const T \&dx)}{bp(const T &dx)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ template$<$class T $>$ const auto\& {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::bp (
+\begin{DoxyParamCaption}
+\item[{const T \&}]{dx}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1Chain_a10264f8ac106cdc4fb3a393e3c84cad7}{}\label{structBC_1_1nn_1_1Chain_a10264f8ac106cdc4fb3a393e3c84cad7}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!cache\+\_\+gradients@{cache\+\_\+gradients}}
+\index{cache\+\_\+gradients@{cache\+\_\+gradients}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{cache\+\_\+gradients()}{cache_gradients()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ void {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::cache\+\_\+gradients (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1Chain_a606eeb347bc8454a1c33aebd973c00b8}{}\label{structBC_1_1nn_1_1Chain_a606eeb347bc8454a1c33aebd973c00b8}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!for\+\_\+each\+\_\+internal@{for\+\_\+each\+\_\+internal}}
+\index{for\+\_\+each\+\_\+internal@{for\+\_\+each\+\_\+internal}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{for\+\_\+each\+\_\+internal(function f)}{for_each_internal(function f)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ template$<$class function $>$ void {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::for\+\_\+each\+\_\+internal (
+\begin{DoxyParamCaption}
+\item[{{\bf function}}]{f}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1Chain_a7573d5305e385f2513d26650fb324c55}{}\label{structBC_1_1nn_1_1Chain_a7573d5305e385f2513d26650fb324c55}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!forward\+\_\+propagation@{forward\+\_\+propagation}}
+\index{forward\+\_\+propagation@{forward\+\_\+propagation}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{forward\+\_\+propagation(const T \&tensor\+\_\+expected)}{forward_propagation(const T &tensor_expected)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ template$<$class T $>$ const auto\& {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::forward\+\_\+propagation (
+\begin{DoxyParamCaption}
+\item[{const T \&}]{tensor\+\_\+expected}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1Chain_ad897096a95ccd0a3974114ac1794d16e}{}\label{structBC_1_1nn_1_1Chain_ad897096a95ccd0a3974114ac1794d16e}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!get\+\_\+workspace\+\_\+size@{get\+\_\+workspace\+\_\+size}}
+\index{get\+\_\+workspace\+\_\+size@{get\+\_\+workspace\+\_\+size}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{get\+\_\+workspace\+\_\+size(\+B\+C\+::\+Stream$<$ System\+Tag $>$ stream)}{get_workspace_size(BC::Stream< SystemTag > stream)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ template$<$class System\+Tag $>$ {\bf size\+\_\+t} {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::get\+\_\+workspace\+\_\+size (
+\begin{DoxyParamCaption}
+\item[{{\bf B\+C\+::\+Stream}$<$ System\+Tag $>$}]{stream}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1Chain_ae01691a2d7cb81a44916c73c76039ff2}{}\label{structBC_1_1nn_1_1Chain_ae01691a2d7cb81a44916c73c76039ff2}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!head@{head}}
+\index{head@{head}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{head()}{head()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ auto\& {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::head (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1Chain_a1aaa64c33e9902b0db045bdc20f8d488}{}\label{structBC_1_1nn_1_1Chain_a1aaa64c33e9902b0db045bdc20f8d488}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!initialize\+\_\+variables@{initialize\+\_\+variables}}
+\index{initialize\+\_\+variables@{initialize\+\_\+variables}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{initialize\+\_\+variables(\+B\+C\+::\+Stream$<$ System\+Tag $>$ stream)}{initialize_variables(BC::Stream< SystemTag > stream)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ template$<$class System\+Tag $>$ void {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::initialize\+\_\+variables (
+\begin{DoxyParamCaption}
+\item[{{\bf B\+C\+::\+Stream}$<$ System\+Tag $>$}]{stream}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1Chain_a4149a6682cc60a9d819fcc5c8b5eff84}{}\label{structBC_1_1nn_1_1Chain_a4149a6682cc60a9d819fcc5c8b5eff84}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!read@{read}}
+\index{read@{read}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{read(std\+::ifstream \&is)}{read(std::ifstream &is)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ void {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::read (
+\begin{DoxyParamCaption}
+\item[{std\+::ifstream \&}]{is}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1Chain_a0326ba60c43fc89e723533c851181822}{}\label{structBC_1_1nn_1_1Chain_a0326ba60c43fc89e723533c851181822}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!set\+\_\+batch\+\_\+size@{set\+\_\+batch\+\_\+size}}
+\index{set\+\_\+batch\+\_\+size@{set\+\_\+batch\+\_\+size}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{set\+\_\+batch\+\_\+size(int x)}{set_batch_size(int x)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ void {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::set\+\_\+batch\+\_\+size (
+\begin{DoxyParamCaption}
+\item[{int}]{x}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1Chain_a9cd23d83054be857c93f30bdc8869d86}{}\label{structBC_1_1nn_1_1Chain_a9cd23d83054be857c93f30bdc8869d86}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!set\+\_\+max\+\_\+bptt\+\_\+length@{set\+\_\+max\+\_\+bptt\+\_\+length}}
+\index{set\+\_\+max\+\_\+bptt\+\_\+length@{set\+\_\+max\+\_\+bptt\+\_\+length}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{set\+\_\+max\+\_\+bptt\+\_\+length(int len)}{set_max_bptt_length(int len)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ void {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::set\+\_\+max\+\_\+bptt\+\_\+length (
+\begin{DoxyParamCaption}
+\item[{int}]{len}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1Chain_a9e66e038dcdb69078901c2b1e6b5e26c}{}\label{structBC_1_1nn_1_1Chain_a9e66e038dcdb69078901c2b1e6b5e26c}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!update\+\_\+weights@{update\+\_\+weights}}
+\index{update\+\_\+weights@{update\+\_\+weights}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{update\+\_\+weights()}{update_weights()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ void {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::update\+\_\+weights (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1Chain_a93f5c719cf2c966c22519ef608019406}{}\label{structBC_1_1nn_1_1Chain_a93f5c719cf2c966c22519ef608019406}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!write@{write}}
+\index{write@{write}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{write(std\+::ifstream \&os)}{write(std::ifstream &os)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ void {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::write (
+\begin{DoxyParamCaption}
+\item[{std\+::ifstream \&}]{os}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1nn_1_1Chain_a4655d321daaa900048d0237618f2ff35}{}\label{structBC_1_1nn_1_1Chain_a4655d321daaa900048d0237618f2ff35}
+
+
+\subsection{Member Data Documentation}
+\index{B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}!batch\+\_\+size@{batch\+\_\+size}}
+\index{batch\+\_\+size@{batch\+\_\+size}!B\+C\+::nn\+::\+Chain@{B\+C\+::nn\+::\+Chain}}
+\subsubsection[{\texorpdfstring{batch\+\_\+size}{batch_size}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class... lst$>$ {\bf B\+C\+::size\+\_\+t} {\bf B\+C\+::nn\+::\+Chain}$<$ lst $>$\+::batch\+\_\+size = 1}\hypertarget{structBC_1_1nn_1_1Chain_ab36fdf102bb73c6c0f22aa8ede632fd9}{}\label{structBC_1_1nn_1_1Chain_ab36fdf102bb73c6c0f22aa8ede632fd9}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/neural\+\_\+networks/\hyperlink{LayerChain_8h}{Layer\+Chain.\+h}\end{DoxyCompactItemize}

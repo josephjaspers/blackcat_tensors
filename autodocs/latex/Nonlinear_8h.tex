@@ -1,0 +1,58 @@
+\hypertarget{Nonlinear_8h}{}\section{include/neural\+\_\+networks/\+Layers/\+Nonlinear.h File Reference}
+\label{Nonlinear_8h}\index{include/neural\+\_\+networks/\+Layers/\+Nonlinear.\+h@{include/neural\+\_\+networks/\+Layers/\+Nonlinear.\+h}}
+{\ttfamily \#include \char`\"{}Unary\+Function.\+h\char`\"{}}\\*
+Include dependency graph for Nonlinear.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=202pt]{Nonlinear_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=255pt]{Nonlinear_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespaceBC}{BC}
+\begin{DoxyCompactList}\small\item\em depends on Stream.\+h \end{DoxyCompactList}\item 
+ \hyperlink{namespaceBC_1_1nn}{B\+C\+::nn}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{Nonlinear_8h_a5de801e6f28182c0d926fbfe7decf1ae}{B\+C\+\_\+\+N\+O\+N\+L\+I\+N\+E\+A\+R\+\_\+\+D\+EF}(Type\+Name,  func\+Name)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{Nonlinear.\+h@{Nonlinear.\+h}!B\+C\+\_\+\+N\+O\+N\+L\+I\+N\+E\+A\+R\+\_\+\+D\+EF@{B\+C\+\_\+\+N\+O\+N\+L\+I\+N\+E\+A\+R\+\_\+\+D\+EF}}
+\index{B\+C\+\_\+\+N\+O\+N\+L\+I\+N\+E\+A\+R\+\_\+\+D\+EF@{B\+C\+\_\+\+N\+O\+N\+L\+I\+N\+E\+A\+R\+\_\+\+D\+EF}!Nonlinear.\+h@{Nonlinear.\+h}}
+\subsubsection[{\texorpdfstring{B\+C\+\_\+\+N\+O\+N\+L\+I\+N\+E\+A\+R\+\_\+\+D\+EF}{BC_NONLINEAR_DEF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+C\+\_\+\+N\+O\+N\+L\+I\+N\+E\+A\+R\+\_\+\+D\+EF(
+\begin{DoxyParamCaption}
+\item[{}]{Type\+Name, }
+\item[{}]{func\+Name}
+\end{DoxyParamCaption}
+)}\hypertarget{Nonlinear_8h_a5de801e6f28182c0d926fbfe7decf1ae}{}\label{Nonlinear_8h_a5de801e6f28182c0d926fbfe7decf1ae}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\textcolor{keyword}{auto} funcName(\hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{BC::size\_t} inputs) \{\(\backslash\)
+    return Function<\hyperlink{include_2neural__networks_2common_8h_a682f2ba95795c8042e0c1572ab752560}{BLACKCAT\_DEFAULT\_SYSTEM\_T},\(\backslash\)
+                    typename BLACKCAT\_DEFAULT\_SYSTEM\_T::default\_floating\_point\_type,\(\backslash\)
+                    BC::TypeName>(inputs); \(\backslash\)
+\}\(\backslash\)
+template<class ValueType, class SystemTag>\(\backslash\)
+auto funcName(SystemTag system, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{BC::size\_t} inputs) \{\(\backslash\)
+    return Function<SystemTag, ValueType, BC::TypeName>(inputs); \(\backslash\)
+\}\(\backslash\)
+template<class SystemTag>\(\backslash\)
+auto funcName(SystemTag system, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{BC::size\_t} inputs) \{\(\backslash\)
+    return Function<SystemTag, typename SystemTag::default\_floating\_point\_type, BC::TypeName>(inputs); \(\backslash\)
+\}
+\end{DoxyCode}

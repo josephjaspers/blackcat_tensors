@@ -1,0 +1,177 @@
+\hypertarget{structBC_1_1allocators_1_1Host}{}\section{BC\+:\+:allocators\+:\+:Host$<$ T $>$ Struct Template Reference}
+\label{structBC_1_1allocators_1_1Host}\index{B\+C\+::allocators\+::\+Host$<$ T $>$@{B\+C\+::allocators\+::\+Host$<$ T $>$}}
+
+
+{\ttfamily \#include $<$Host.\+h$>$}
+
+
+
+Inheritance diagram for BC\+:\+:allocators\+:\+:Host$<$ T $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structBC_1_1allocators_1_1Host__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structBC_1_1allocators_1_1Host_1_1rebind}{rebind}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \hyperlink{structBC_1_1allocators_1_1Host_a970d265edb8b984dd4c27535ab262cb0}{system\+\_\+tag} = \hyperlink{structBC_1_1host__tag}{host\+\_\+tag}
+\item 
+using \hyperlink{structBC_1_1allocators_1_1Host_a0663f90f62e2b8c223a4402bef3d87e5}{value\+\_\+type} = T
+\item 
+using \hyperlink{structBC_1_1allocators_1_1Host_a02ff007cb4b935aea02771535ef19205}{pointer} = T $\ast$
+\item 
+using \hyperlink{structBC_1_1allocators_1_1Host_afee64cff8e4726203834cb86a94a5761}{const\+\_\+pointer} = T $\ast$
+\item 
+using \hyperlink{structBC_1_1allocators_1_1Host_ae589e96e6629045f1413c43f08aea894}{size\+\_\+type} = int
+\item 
+using \hyperlink{structBC_1_1allocators_1_1Host_abb579317e977037f39958b3fa43b92c7}{propagate\+\_\+on\+\_\+container\+\_\+copy\+\_\+assignment} = std\+::false\+\_\+type
+\item 
+using \hyperlink{structBC_1_1allocators_1_1Host_a965a8964fd4ec1851d3bec468a51d07d}{propagate\+\_\+on\+\_\+container\+\_\+move\+\_\+assignment} = std\+::false\+\_\+type
+\item 
+using \hyperlink{structBC_1_1allocators_1_1Host_a8ff9ef7cce3b0ffc4051c930c358512b}{propagate\+\_\+on\+\_\+container\+\_\+swap} = std\+::false\+\_\+type
+\item 
+using \hyperlink{structBC_1_1allocators_1_1Host_a71dcf87309308a9e792e381c233b3b1a}{is\+\_\+always\+\_\+equal} = std\+::true\+\_\+type
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class U $>$ }\\\hyperlink{structBC_1_1allocators_1_1Host_a037aaf2e55afe33aca7cd18baf5dbead}{Host} (const \hyperlink{structBC_1_1allocators_1_1Host}{Host}$<$ U $>$ \&)
+\item 
+\hyperlink{structBC_1_1allocators_1_1Host_ab4788e4e41d64a605e8cce57b02f6864}{Host} ()=default
+\item 
+\hyperlink{structBC_1_1allocators_1_1Host_a67f8ac90a95dc64e203da5360359f91f}{Host} (const \hyperlink{structBC_1_1allocators_1_1Host}{Host} \&)=default
+\item 
+\hyperlink{structBC_1_1allocators_1_1Host_a3866b82b461d0672eaf3b0a4bf357363}{Host} (\hyperlink{structBC_1_1allocators_1_1Host}{Host} \&\&)=default
+\item 
+\hyperlink{structBC_1_1allocators_1_1Host}{Host} \& \hyperlink{structBC_1_1allocators_1_1Host_a9d5fdb05dd11397ba72886f9792749b1}{operator=} (const \hyperlink{structBC_1_1allocators_1_1Host}{Host} \&)=default
+\item 
+\hyperlink{structBC_1_1allocators_1_1Host}{Host} \& \hyperlink{structBC_1_1allocators_1_1Host_abdaf8b95eddbc30f4da271d34aabc22d}{operator=} (\hyperlink{structBC_1_1allocators_1_1Host}{Host} \&\&)=default
+\item 
+T $\ast$ \hyperlink{structBC_1_1allocators_1_1Host_abd5afca4a1205509c7af2530f6a380a5}{allocate} (int size)
+\item 
+void \hyperlink{structBC_1_1allocators_1_1Host_a35c45682d1d5a718de9711184357b10c}{deallocate} (T $\ast$t, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} size)
+\item 
+constexpr bool \hyperlink{structBC_1_1allocators_1_1Host_aec0455855e645036d2e4ddce17cdddf1}{operator==} (const \hyperlink{structBC_1_1allocators_1_1Host}{Host} \&)
+\item 
+constexpr bool \hyperlink{structBC_1_1allocators_1_1Host_a816b53acd1139a98d994c2a38e551bdc}{operator!=} (const \hyperlink{structBC_1_1allocators_1_1Host}{Host} \&)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!const\+\_\+pointer@{const\+\_\+pointer}}
+\index{const\+\_\+pointer@{const\+\_\+pointer}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{const\+\_\+pointer}{const_pointer}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ using {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::{\bf const\+\_\+pointer} =  T$\ast$}\hypertarget{structBC_1_1allocators_1_1Host_afee64cff8e4726203834cb86a94a5761}{}\label{structBC_1_1allocators_1_1Host_afee64cff8e4726203834cb86a94a5761}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!is\+\_\+always\+\_\+equal@{is\+\_\+always\+\_\+equal}}
+\index{is\+\_\+always\+\_\+equal@{is\+\_\+always\+\_\+equal}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{is\+\_\+always\+\_\+equal}{is_always_equal}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ using {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::{\bf is\+\_\+always\+\_\+equal} =  std\+::true\+\_\+type}\hypertarget{structBC_1_1allocators_1_1Host_a71dcf87309308a9e792e381c233b3b1a}{}\label{structBC_1_1allocators_1_1Host_a71dcf87309308a9e792e381c233b3b1a}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!pointer@{pointer}}
+\index{pointer@{pointer}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{pointer}{pointer}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ using {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::{\bf pointer} =  T$\ast$}\hypertarget{structBC_1_1allocators_1_1Host_a02ff007cb4b935aea02771535ef19205}{}\label{structBC_1_1allocators_1_1Host_a02ff007cb4b935aea02771535ef19205}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!propagate\+\_\+on\+\_\+container\+\_\+copy\+\_\+assignment@{propagate\+\_\+on\+\_\+container\+\_\+copy\+\_\+assignment}}
+\index{propagate\+\_\+on\+\_\+container\+\_\+copy\+\_\+assignment@{propagate\+\_\+on\+\_\+container\+\_\+copy\+\_\+assignment}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{propagate\+\_\+on\+\_\+container\+\_\+copy\+\_\+assignment}{propagate_on_container_copy_assignment}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ using {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::{\bf propagate\+\_\+on\+\_\+container\+\_\+copy\+\_\+assignment} =  std\+::false\+\_\+type}\hypertarget{structBC_1_1allocators_1_1Host_abb579317e977037f39958b3fa43b92c7}{}\label{structBC_1_1allocators_1_1Host_abb579317e977037f39958b3fa43b92c7}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!propagate\+\_\+on\+\_\+container\+\_\+move\+\_\+assignment@{propagate\+\_\+on\+\_\+container\+\_\+move\+\_\+assignment}}
+\index{propagate\+\_\+on\+\_\+container\+\_\+move\+\_\+assignment@{propagate\+\_\+on\+\_\+container\+\_\+move\+\_\+assignment}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{propagate\+\_\+on\+\_\+container\+\_\+move\+\_\+assignment}{propagate_on_container_move_assignment}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ using {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::{\bf propagate\+\_\+on\+\_\+container\+\_\+move\+\_\+assignment} =  std\+::false\+\_\+type}\hypertarget{structBC_1_1allocators_1_1Host_a965a8964fd4ec1851d3bec468a51d07d}{}\label{structBC_1_1allocators_1_1Host_a965a8964fd4ec1851d3bec468a51d07d}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!propagate\+\_\+on\+\_\+container\+\_\+swap@{propagate\+\_\+on\+\_\+container\+\_\+swap}}
+\index{propagate\+\_\+on\+\_\+container\+\_\+swap@{propagate\+\_\+on\+\_\+container\+\_\+swap}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{propagate\+\_\+on\+\_\+container\+\_\+swap}{propagate_on_container_swap}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ using {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::{\bf propagate\+\_\+on\+\_\+container\+\_\+swap} =  std\+::false\+\_\+type}\hypertarget{structBC_1_1allocators_1_1Host_a8ff9ef7cce3b0ffc4051c930c358512b}{}\label{structBC_1_1allocators_1_1Host_a8ff9ef7cce3b0ffc4051c930c358512b}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!size\+\_\+type@{size\+\_\+type}}
+\index{size\+\_\+type@{size\+\_\+type}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{size\+\_\+type}{size_type}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ using {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::{\bf size\+\_\+type} =  int}\hypertarget{structBC_1_1allocators_1_1Host_ae589e96e6629045f1413c43f08aea894}{}\label{structBC_1_1allocators_1_1Host_ae589e96e6629045f1413c43f08aea894}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!system\+\_\+tag@{system\+\_\+tag}}
+\index{system\+\_\+tag@{system\+\_\+tag}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{system\+\_\+tag}{system_tag}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ using {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::{\bf system\+\_\+tag} =  {\bf host\+\_\+tag}}\hypertarget{structBC_1_1allocators_1_1Host_a970d265edb8b984dd4c27535ab262cb0}{}\label{structBC_1_1allocators_1_1Host_a970d265edb8b984dd4c27535ab262cb0}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!value\+\_\+type@{value\+\_\+type}}
+\index{value\+\_\+type@{value\+\_\+type}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{value\+\_\+type}{value_type}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ using {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::{\bf value\+\_\+type} =  T}\hypertarget{structBC_1_1allocators_1_1Host_a0663f90f62e2b8c223a4402bef3d87e5}{}\label{structBC_1_1allocators_1_1Host_a0663f90f62e2b8c223a4402bef3d87e5}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!Host@{Host}}
+\index{Host@{Host}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{Host(const Host$<$ U $>$ \&)}{Host(const Host< U > &)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ template$<$class U $>$ {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::{\bf Host} (
+\begin{DoxyParamCaption}
+\item[{const {\bf Host}$<$ U $>$ \&}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1allocators_1_1Host_a037aaf2e55afe33aca7cd18baf5dbead}{}\label{structBC_1_1allocators_1_1Host_a037aaf2e55afe33aca7cd18baf5dbead}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!Host@{Host}}
+\index{Host@{Host}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{Host()=default}{Host()=default}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::{\bf Host} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [default]}}\hypertarget{structBC_1_1allocators_1_1Host_ab4788e4e41d64a605e8cce57b02f6864}{}\label{structBC_1_1allocators_1_1Host_ab4788e4e41d64a605e8cce57b02f6864}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!Host@{Host}}
+\index{Host@{Host}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{Host(const Host \&)=default}{Host(const Host &)=default}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::{\bf Host} (
+\begin{DoxyParamCaption}
+\item[{const {\bf Host}$<$ T $>$ \&}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [default]}}\hypertarget{structBC_1_1allocators_1_1Host_a67f8ac90a95dc64e203da5360359f91f}{}\label{structBC_1_1allocators_1_1Host_a67f8ac90a95dc64e203da5360359f91f}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!Host@{Host}}
+\index{Host@{Host}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{Host(\+Host \&\&)=default}{Host(Host &&)=default}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::{\bf Host} (
+\begin{DoxyParamCaption}
+\item[{{\bf Host}$<$ T $>$ \&\&}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [default]}}\hypertarget{structBC_1_1allocators_1_1Host_a3866b82b461d0672eaf3b0a4bf357363}{}\label{structBC_1_1allocators_1_1Host_a3866b82b461d0672eaf3b0a4bf357363}
+
+
+\subsection{Member Function Documentation}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!allocate@{allocate}}
+\index{allocate@{allocate}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{allocate(int size)}{allocate(int size)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T$\ast$ {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::allocate (
+\begin{DoxyParamCaption}
+\item[{int}]{size}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1allocators_1_1Host_abd5afca4a1205509c7af2530f6a380a5}{}\label{structBC_1_1allocators_1_1Host_abd5afca4a1205509c7af2530f6a380a5}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!deallocate@{deallocate}}
+\index{deallocate@{deallocate}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{deallocate(\+T $\ast$t, B\+C\+::size\+\_\+t size)}{deallocate(T *t, BC::size_t size)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::deallocate (
+\begin{DoxyParamCaption}
+\item[{T $\ast$}]{t, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{size}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1allocators_1_1Host_a35c45682d1d5a718de9711184357b10c}{}\label{structBC_1_1allocators_1_1Host_a35c45682d1d5a718de9711184357b10c}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{operator"!=(const Host \&)}{operator!=(const Host &)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ constexpr bool {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::operator!= (
+\begin{DoxyParamCaption}
+\item[{const {\bf Host}$<$ T $>$ \&}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1allocators_1_1Host_a816b53acd1139a98d994c2a38e551bdc}{}\label{structBC_1_1allocators_1_1Host_a816b53acd1139a98d994c2a38e551bdc}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!operator=@{operator=}}
+\index{operator=@{operator=}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{operator=(const Host \&)=default}{operator=(const Host &)=default}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ {\bf Host}\& {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::operator= (
+\begin{DoxyParamCaption}
+\item[{const {\bf Host}$<$ T $>$ \&}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [default]}}\hypertarget{structBC_1_1allocators_1_1Host_a9d5fdb05dd11397ba72886f9792749b1}{}\label{structBC_1_1allocators_1_1Host_a9d5fdb05dd11397ba72886f9792749b1}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!operator=@{operator=}}
+\index{operator=@{operator=}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{operator=(\+Host \&\&)=default}{operator=(Host &&)=default}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ {\bf Host}\& {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::operator= (
+\begin{DoxyParamCaption}
+\item[{{\bf Host}$<$ T $>$ \&\&}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [default]}}\hypertarget{structBC_1_1allocators_1_1Host_abdaf8b95eddbc30f4da271d34aabc22d}{}\label{structBC_1_1allocators_1_1Host_abdaf8b95eddbc30f4da271d34aabc22d}
+\index{B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}!operator==@{operator==}}
+\index{operator==@{operator==}!B\+C\+::allocators\+::\+Host@{B\+C\+::allocators\+::\+Host}}
+\subsubsection[{\texorpdfstring{operator==(const Host \&)}{operator==(const Host &)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ constexpr bool {\bf B\+C\+::allocators\+::\+Host}$<$ T $>$\+::operator== (
+\begin{DoxyParamCaption}
+\item[{const {\bf Host}$<$ T $>$ \&}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1allocators_1_1Host_aec0455855e645036d2e4ddce17cdddf1}{}\label{structBC_1_1allocators_1_1Host_aec0455855e645036d2e4ddce17cdddf1}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/allocators/\hyperlink{allocators_2Host_8h}{Host.\+h}\end{DoxyCompactItemize}

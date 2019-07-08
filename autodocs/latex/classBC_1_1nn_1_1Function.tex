@@ -1,0 +1,128 @@
+\hypertarget{classBC_1_1nn_1_1Function}{}\section{BC\+:\+:nn\+:\+:Function$<$ System\+Tag, Value\+Type, Functor $>$ Class Template Reference}
+\label{classBC_1_1nn_1_1Function}\index{B\+C\+::nn\+::\+Function$<$ System\+Tag, Value\+Type, Functor $>$@{B\+C\+::nn\+::\+Function$<$ System\+Tag, Value\+Type, Functor $>$}}
+
+
+{\ttfamily \#include $<$Unary\+Function.\+h$>$}
+
+
+
+Inheritance diagram for BC\+:\+:nn\+:\+:Function$<$ System\+Tag, Value\+Type, Functor $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{classBC_1_1nn_1_1Function__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for BC\+:\+:nn\+:\+:Function$<$ System\+Tag, Value\+Type, Functor $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{classBC_1_1nn_1_1Function__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \hyperlink{classBC_1_1nn_1_1Function_a53b53a2a2a9f335e5ac57d8d38ef9331}{system\+\_\+tag} = System\+Tag
+\item 
+using \hyperlink{classBC_1_1nn_1_1Function_a38613d0bc4a6ea946592925c1ce15148}{value\+\_\+type} = Value\+Type
+\item 
+using \hyperlink{classBC_1_1nn_1_1Function_a3b600b13f8145a475fceeead09ccf827}{mat} = \hyperlink{namespaceBC_1_1tensors_1_1common__using_a6fc3153d379a42b1a97df46ed5b71a29}{B\+C\+::\+Matrix}$<$ Value\+Type, \hyperlink{namespaceBC_a934f94b17b06290e6b241e5f59930c5f}{B\+C\+::\+Allocator}$<$ System\+Tag, Value\+Type $>$$>$
+\item 
+using \hyperlink{classBC_1_1nn_1_1Function_a6518bb1857280656abf74d7d4e9cc164}{vec} = \hyperlink{namespaceBC_1_1tensors_1_1common__using_ab2d6784064c0dda8aef3c2a9177ffa77}{B\+C\+::\+Vector}$<$ Value\+Type, \hyperlink{namespaceBC_a934f94b17b06290e6b241e5f59930c5f}{B\+C\+::\+Allocator}$<$ System\+Tag, Value\+Type $>$$>$
+\item 
+using \hyperlink{classBC_1_1nn_1_1Function_ac1e30031ee79cf0839d104cf85db3419}{mat\+\_\+view} = \hyperlink{namespaceBC_1_1tensors_1_1common__using_a2ef3cf5721d0ae966c30051cbe6f24b6}{B\+C\+::\+Matrix\+\_\+\+View}$<$ Value\+Type, \hyperlink{namespaceBC_a934f94b17b06290e6b241e5f59930c5f}{B\+C\+::\+Allocator}$<$ System\+Tag, Value\+Type $>$$>$
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classBC_1_1nn_1_1Function_a05bee8e8cb52f9f9b6a6641ac08317f0}{Function} (int inputs, Functor function\+\_\+=Functor())
+\item 
+{\footnotesize template$<$class Matrix $>$ }\\const auto \& \hyperlink{classBC_1_1nn_1_1Function_a587b7190d19bbd367b746db5411db321}{forward\+\_\+propagation} (const \hyperlink{namespaceBC_1_1tensors_1_1common__using_a6fc3153d379a42b1a97df46ed5b71a29}{Matrix} \&x\+\_\+)
+\item 
+{\footnotesize template$<$class Matrix $>$ }\\auto \hyperlink{classBC_1_1nn_1_1Function_a257f24c8f52fc4082070355655638a3a}{back\+\_\+propagation} (const \hyperlink{namespaceBC_1_1tensors_1_1common__using_a6fc3153d379a42b1a97df46ed5b71a29}{Matrix} \&dy)
+\item 
+void \hyperlink{classBC_1_1nn_1_1Function_aa7e88e30051b96615985e52952481db4}{update\+\_\+weights} ()
+\item 
+void \hyperlink{classBC_1_1nn_1_1Function_a906c38a34166f0d91ad9eaa5cad09384}{set\+\_\+batch\+\_\+size} (int x)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Functor \hyperlink{classBC_1_1nn_1_1Function_ac503d1f164e9377e7446cc7aa2113963}{function}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\index{B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}!mat@{mat}}
+\index{mat@{mat}!B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}}
+\subsubsection[{\texorpdfstring{mat}{mat}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type, class Functor$>$ using {\bf B\+C\+::nn\+::\+Function}$<$ System\+Tag, Value\+Type, Functor $>$\+::{\bf mat} =  {\bf B\+C\+::\+Matrix}$<$Value\+Type, {\bf B\+C\+::\+Allocator}$<$System\+Tag, Value\+Type$>$$>$}\hypertarget{classBC_1_1nn_1_1Function_a3b600b13f8145a475fceeead09ccf827}{}\label{classBC_1_1nn_1_1Function_a3b600b13f8145a475fceeead09ccf827}
+\index{B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}!mat\+\_\+view@{mat\+\_\+view}}
+\index{mat\+\_\+view@{mat\+\_\+view}!B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}}
+\subsubsection[{\texorpdfstring{mat\+\_\+view}{mat_view}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type, class Functor$>$ using {\bf B\+C\+::nn\+::\+Function}$<$ System\+Tag, Value\+Type, Functor $>$\+::{\bf mat\+\_\+view} =  {\bf B\+C\+::\+Matrix\+\_\+\+View}$<$Value\+Type, {\bf B\+C\+::\+Allocator}$<$System\+Tag, Value\+Type$>$$>$}\hypertarget{classBC_1_1nn_1_1Function_ac1e30031ee79cf0839d104cf85db3419}{}\label{classBC_1_1nn_1_1Function_ac1e30031ee79cf0839d104cf85db3419}
+\index{B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}!system\+\_\+tag@{system\+\_\+tag}}
+\index{system\+\_\+tag@{system\+\_\+tag}!B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}}
+\subsubsection[{\texorpdfstring{system\+\_\+tag}{system_tag}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type, class Functor$>$ using {\bf B\+C\+::nn\+::\+Function}$<$ System\+Tag, Value\+Type, Functor $>$\+::{\bf system\+\_\+tag} =  System\+Tag}\hypertarget{classBC_1_1nn_1_1Function_a53b53a2a2a9f335e5ac57d8d38ef9331}{}\label{classBC_1_1nn_1_1Function_a53b53a2a2a9f335e5ac57d8d38ef9331}
+\index{B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}!value\+\_\+type@{value\+\_\+type}}
+\index{value\+\_\+type@{value\+\_\+type}!B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}}
+\subsubsection[{\texorpdfstring{value\+\_\+type}{value_type}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type, class Functor$>$ using {\bf B\+C\+::nn\+::\+Function}$<$ System\+Tag, Value\+Type, Functor $>$\+::{\bf value\+\_\+type} =  Value\+Type}\hypertarget{classBC_1_1nn_1_1Function_a38613d0bc4a6ea946592925c1ce15148}{}\label{classBC_1_1nn_1_1Function_a38613d0bc4a6ea946592925c1ce15148}
+\index{B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}!vec@{vec}}
+\index{vec@{vec}!B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}}
+\subsubsection[{\texorpdfstring{vec}{vec}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type, class Functor$>$ using {\bf B\+C\+::nn\+::\+Function}$<$ System\+Tag, Value\+Type, Functor $>$\+::{\bf vec} =  {\bf B\+C\+::\+Vector}$<$Value\+Type, {\bf B\+C\+::\+Allocator}$<$System\+Tag, Value\+Type$>$$>$}\hypertarget{classBC_1_1nn_1_1Function_a6518bb1857280656abf74d7d4e9cc164}{}\label{classBC_1_1nn_1_1Function_a6518bb1857280656abf74d7d4e9cc164}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}!Function@{Function}}
+\index{Function@{Function}!B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}}
+\subsubsection[{\texorpdfstring{Function(int inputs, Functor function\+\_\+=\+Functor())}{Function(int inputs, Functor function_=Functor())}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type, class Functor$>$ {\bf B\+C\+::nn\+::\+Function}$<$ System\+Tag, Value\+Type, Functor $>$\+::{\bf Function} (
+\begin{DoxyParamCaption}
+\item[{int}]{inputs, }
+\item[{Functor}]{function\+\_\+ = {\ttfamily Functor()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1nn_1_1Function_a05bee8e8cb52f9f9b6a6641ac08317f0}{}\label{classBC_1_1nn_1_1Function_a05bee8e8cb52f9f9b6a6641ac08317f0}
+
+
+\subsection{Member Function Documentation}
+\index{B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}!back\+\_\+propagation@{back\+\_\+propagation}}
+\index{back\+\_\+propagation@{back\+\_\+propagation}!B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}}
+\subsubsection[{\texorpdfstring{back\+\_\+propagation(const Matrix \&dy)}{back_propagation(const Matrix &dy)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type, class Functor$>$ template$<$class Matrix $>$ auto {\bf B\+C\+::nn\+::\+Function}$<$ System\+Tag, Value\+Type, Functor $>$\+::back\+\_\+propagation (
+\begin{DoxyParamCaption}
+\item[{const {\bf Matrix} \&}]{dy}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1nn_1_1Function_a257f24c8f52fc4082070355655638a3a}{}\label{classBC_1_1nn_1_1Function_a257f24c8f52fc4082070355655638a3a}
+\index{B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}!forward\+\_\+propagation@{forward\+\_\+propagation}}
+\index{forward\+\_\+propagation@{forward\+\_\+propagation}!B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}}
+\subsubsection[{\texorpdfstring{forward\+\_\+propagation(const Matrix \&x\+\_\+)}{forward_propagation(const Matrix &x_)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type, class Functor$>$ template$<$class Matrix $>$ const auto\& {\bf B\+C\+::nn\+::\+Function}$<$ System\+Tag, Value\+Type, Functor $>$\+::forward\+\_\+propagation (
+\begin{DoxyParamCaption}
+\item[{const {\bf Matrix} \&}]{x\+\_\+}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1nn_1_1Function_a587b7190d19bbd367b746db5411db321}{}\label{classBC_1_1nn_1_1Function_a587b7190d19bbd367b746db5411db321}
+\index{B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}!set\+\_\+batch\+\_\+size@{set\+\_\+batch\+\_\+size}}
+\index{set\+\_\+batch\+\_\+size@{set\+\_\+batch\+\_\+size}!B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}}
+\subsubsection[{\texorpdfstring{set\+\_\+batch\+\_\+size(int x)}{set_batch_size(int x)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type, class Functor$>$ void {\bf B\+C\+::nn\+::\+Function}$<$ System\+Tag, Value\+Type, Functor $>$\+::set\+\_\+batch\+\_\+size (
+\begin{DoxyParamCaption}
+\item[{int}]{x}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1nn_1_1Function_a906c38a34166f0d91ad9eaa5cad09384}{}\label{classBC_1_1nn_1_1Function_a906c38a34166f0d91ad9eaa5cad09384}
+\index{B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}!update\+\_\+weights@{update\+\_\+weights}}
+\index{update\+\_\+weights@{update\+\_\+weights}!B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}}
+\subsubsection[{\texorpdfstring{update\+\_\+weights()}{update_weights()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type, class Functor$>$ void {\bf B\+C\+::nn\+::\+Function}$<$ System\+Tag, Value\+Type, Functor $>$\+::update\+\_\+weights (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1nn_1_1Function_aa7e88e30051b96615985e52952481db4}{}\label{classBC_1_1nn_1_1Function_aa7e88e30051b96615985e52952481db4}
+
+
+\subsection{Member Data Documentation}
+\index{B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}!function@{function}}
+\index{function@{function}!B\+C\+::nn\+::\+Function@{B\+C\+::nn\+::\+Function}}
+\subsubsection[{\texorpdfstring{function}{function}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type, class Functor$>$ Functor {\bf B\+C\+::nn\+::\+Function}$<$ System\+Tag, Value\+Type, Functor $>$\+::function}\hypertarget{classBC_1_1nn_1_1Function_ac503d1f164e9377e7446cc7aa2113963}{}\label{classBC_1_1nn_1_1Function_ac503d1f164e9377e7446cc7aa2113963}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/neural\+\_\+networks/\+Layers/\hyperlink{UnaryFunction_8h}{Unary\+Function.\+h}\end{DoxyCompactItemize}

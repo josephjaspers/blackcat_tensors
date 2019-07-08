@@ -1,0 +1,69 @@
+\hypertarget{namespaceBC_1_1benchmarks}{}\section{BC\+:\+:benchmarks Namespace Reference}
+\label{namespaceBC_1_1benchmarks}\index{B\+C\+::benchmarks@{B\+C\+::benchmarks}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{namespaceBC_1_1benchmarks_add46a338875be9f4be596618df15d68e}{run} (std\+::vector$<$ int $>$ sizes=\{100, 500, 1000, 2500, 5000, 75000, 10000, 20000, 40000\}, int reps=1000)
+\item 
+{\footnotesize template$<$class scalar\+\_\+t , class allocator  = B\+C\+::\+Basic\+\_\+\+Allocator$<$scalar\+\_\+t$>$$>$ }\\auto \hyperlink{namespaceBC_1_1benchmarks_a1d1d494d954f7846e7863d659693fde8}{bc\+\_\+cwise} (int size, int reps)
+\item 
+{\footnotesize template$<$class scalar\+\_\+t , class allocator  = B\+C\+::\+Basic\+\_\+\+Allocator$<$scalar\+\_\+t$>$$>$ }\\auto \hyperlink{namespaceBC_1_1benchmarks_a044db82dfdc102f3994595be8a9ae13a}{c\+\_\+cwise} (int size, int reps)
+\item 
+auto \hyperlink{namespaceBC_1_1benchmarks_ad95941f83bba8f45ab77fa5e32c2c09f}{cwise\+\_\+benchmark} (int sz, int reps=10, bool stdout=false)
+\item 
+{\footnotesize template$<$class function $>$ }\\float \hyperlink{namespaceBC_1_1benchmarks_a73c054a10290b4186e0ab7f5b89e64e2}{timeit} (function \&func, int iters=10)
+\item 
+{\footnotesize template$<$class function $>$ }\\float \hyperlink{namespaceBC_1_1benchmarks_a8c9df466e8f843f4356251b00d073bc9}{timeit} (const function \&func, int iters=10)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{B\+C\+::benchmarks@{B\+C\+::benchmarks}!bc\+\_\+cwise@{bc\+\_\+cwise}}
+\index{bc\+\_\+cwise@{bc\+\_\+cwise}!B\+C\+::benchmarks@{B\+C\+::benchmarks}}
+\subsubsection[{\texorpdfstring{bc\+\_\+cwise(int size, int reps)}{bc_cwise(int size, int reps)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class scalar\+\_\+t , class allocator  = B\+C\+::\+Basic\+\_\+\+Allocator$<$scalar\+\_\+t$>$$>$ auto B\+C\+::benchmarks\+::bc\+\_\+cwise (
+\begin{DoxyParamCaption}
+\item[{int}]{size, }
+\item[{int}]{reps}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1benchmarks_a1d1d494d954f7846e7863d659693fde8}{}\label{namespaceBC_1_1benchmarks_a1d1d494d954f7846e7863d659693fde8}
+\index{B\+C\+::benchmarks@{B\+C\+::benchmarks}!c\+\_\+cwise@{c\+\_\+cwise}}
+\index{c\+\_\+cwise@{c\+\_\+cwise}!B\+C\+::benchmarks@{B\+C\+::benchmarks}}
+\subsubsection[{\texorpdfstring{c\+\_\+cwise(int size, int reps)}{c_cwise(int size, int reps)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class scalar\+\_\+t , class allocator  = B\+C\+::\+Basic\+\_\+\+Allocator$<$scalar\+\_\+t$>$$>$ auto B\+C\+::benchmarks\+::c\+\_\+cwise (
+\begin{DoxyParamCaption}
+\item[{int}]{size, }
+\item[{int}]{reps}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1benchmarks_a044db82dfdc102f3994595be8a9ae13a}{}\label{namespaceBC_1_1benchmarks_a044db82dfdc102f3994595be8a9ae13a}
+\index{B\+C\+::benchmarks@{B\+C\+::benchmarks}!cwise\+\_\+benchmark@{cwise\+\_\+benchmark}}
+\index{cwise\+\_\+benchmark@{cwise\+\_\+benchmark}!B\+C\+::benchmarks@{B\+C\+::benchmarks}}
+\subsubsection[{\texorpdfstring{cwise\+\_\+benchmark(int sz, int reps=10, bool stdout=false)}{cwise_benchmark(int sz, int reps=10, bool stdout=false)}}]{\setlength{\rightskip}{0pt plus 5cm}auto B\+C\+::benchmarks\+::cwise\+\_\+benchmark (
+\begin{DoxyParamCaption}
+\item[{int}]{sz, }
+\item[{int}]{reps = {\ttfamily 10}, }
+\item[{bool}]{stdout = {\ttfamily false}}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1benchmarks_ad95941f83bba8f45ab77fa5e32c2c09f}{}\label{namespaceBC_1_1benchmarks_ad95941f83bba8f45ab77fa5e32c2c09f}
+\index{B\+C\+::benchmarks@{B\+C\+::benchmarks}!run@{run}}
+\index{run@{run}!B\+C\+::benchmarks@{B\+C\+::benchmarks}}
+\subsubsection[{\texorpdfstring{run(std\+::vector$<$ int $>$ sizes=\lcurly{}100, 500, 1000, 2500, 5000, 75000, 10000, 20000, 40000\rcurly{}, int reps=1000)}{run(std::vector< int > sizes=\{100, 500, 1000, 2500, 5000, 75000, 10000, 20000, 40000\}, int reps=1000)}}]{\setlength{\rightskip}{0pt plus 5cm}void B\+C\+::benchmarks\+::run (
+\begin{DoxyParamCaption}
+\item[{std\+::vector$<$ int $>$}]{sizes = {\ttfamily \{100,~500,~1000,~2500,~5000,~75000,~10000,~20000,~40000~\}}, }
+\item[{int}]{reps = {\ttfamily 1000}}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1benchmarks_add46a338875be9f4be596618df15d68e}{}\label{namespaceBC_1_1benchmarks_add46a338875be9f4be596618df15d68e}
+\index{B\+C\+::benchmarks@{B\+C\+::benchmarks}!timeit@{timeit}}
+\index{timeit@{timeit}!B\+C\+::benchmarks@{B\+C\+::benchmarks}}
+\subsubsection[{\texorpdfstring{timeit(function \&func, int iters=10)}{timeit(function &func, int iters=10)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class function $>$ float B\+C\+::benchmarks\+::timeit (
+\begin{DoxyParamCaption}
+\item[{function \&}]{func, }
+\item[{int}]{iters = {\ttfamily 10}}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1benchmarks_a73c054a10290b4186e0ab7f5b89e64e2}{}\label{namespaceBC_1_1benchmarks_a73c054a10290b4186e0ab7f5b89e64e2}
+\index{B\+C\+::benchmarks@{B\+C\+::benchmarks}!timeit@{timeit}}
+\index{timeit@{timeit}!B\+C\+::benchmarks@{B\+C\+::benchmarks}}
+\subsubsection[{\texorpdfstring{timeit(const function \&func, int iters=10)}{timeit(const function &func, int iters=10)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class function $>$ float B\+C\+::benchmarks\+::timeit (
+\begin{DoxyParamCaption}
+\item[{const function \&}]{func, }
+\item[{int}]{iters = {\ttfamily 10}}
+\end{DoxyParamCaption}
+)}\hypertarget{namespaceBC_1_1benchmarks_a8c9df466e8f843f4356251b00d073bc9}{}\label{namespaceBC_1_1benchmarks_a8c9df466e8f843f4356251b00d073bc9}

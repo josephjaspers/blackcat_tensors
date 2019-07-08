@@ -1,0 +1,182 @@
+\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View}{}\section{BC\+:\+:tensors\+:\+:exprs\+:\+:Array\+\_\+\+Const\+\_\+\+View$<$ Dimension, Scalar, Allocator $>$ Struct Template Reference}
+\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View}\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View$<$ Dimension, Scalar, Allocator $>$@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View$<$ Dimension, Scalar, Allocator $>$}}
+
+
+{\ttfamily \#include $<$Array\+\_\+\+View.\+h$>$}
+
+
+
+Inheritance diagram for BC\+:\+:tensors\+:\+:exprs\+:\+:Array\+\_\+\+Const\+\_\+\+View$<$ Dimension, Scalar, Allocator $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structBC_1_1tensors_1_1exprs_1_1Array__Const__View__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for BC\+:\+:tensors\+:\+:exprs\+:\+:Array\+\_\+\+Const\+\_\+\+View$<$ Dimension, Scalar, Allocator $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structBC_1_1tensors_1_1exprs_1_1Array__Const__View__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_aafde0c1500b6b71d2d964f04b55266a1}{system\+\_\+tag} = typename \hyperlink{namespaceBC_a702bcffa3526460ac93fb2a315f2f7c7}{B\+C\+::allocator\+\_\+traits}$<$ \hyperlink{namespaceBC_a934f94b17b06290e6b241e5f59930c5f}{Allocator} $>$\+::\hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_aafde0c1500b6b71d2d964f04b55266a1}{system\+\_\+tag}
+\item 
+using \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a8bb694230cd6fd0ff0f5b5cbe667614a}{stream\+\_\+type} = \hyperlink{namespaceBC_abc64a63cd29a22d102a68f478dfd588d}{B\+C\+::\+Stream}$<$ \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_aafde0c1500b6b71d2d964f04b55266a1}{system\+\_\+tag} $>$
+\item 
+using \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_ab5bec1e932c07d5980709326ea33c680}{parent} = \hyperlink{structBC_1_1tensors_1_1exprs_1_1Kernel__Array}{Kernel\+\_\+\+Array}$<$ Dimension, \hyperlink{namespaceBC_1_1tensors_1_1common__using_a22de9a173f6aa6b07a3b4f543c9ad5c1}{Scalar}, \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_aafde0c1500b6b71d2d964f04b55266a1}{system\+\_\+tag}, \hyperlink{classBC_1_1tensors_1_1exprs_1_1BC__Noncontinuous}{B\+C\+\_\+\+Noncontinuous} $>$
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a2365ad25296b4fe97148ab12c0beb195}{Array\+\_\+\+Const\+\_\+\+View} ()=default
+\item 
+\hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_acac30a700235f57f5c343da97481f513}{Array\+\_\+\+Const\+\_\+\+View} (const \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View}{Array\+\_\+\+Const\+\_\+\+View} \&)=default
+\item 
+\hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a7d7dd9f251f1b53129d0249e6079c19b}{Array\+\_\+\+Const\+\_\+\+View} (\hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View}{Array\+\_\+\+Const\+\_\+\+View} \&\&)=default
+\item 
+void \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a12c8aa2fea3be876491353bb7999c173}{internal\+\_\+move} (\hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View}{Array\+\_\+\+Const\+\_\+\+View} \&\&swap)
+\item 
+{\footnotesize template$<$class tensor\+\_\+t , typename  = std\+::enable\+\_\+if\+\_\+t$<$			tensor\+\_\+t\+::tensor\+\_\+dimension == Dimension \&\&			expression\+\_\+traits$<$tensor\+\_\+t$>$\+::is\+\_\+array$>$$>$ }\\\hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a9e28e5b41e137b03e6a16d56484f7b70}{Array\+\_\+\+Const\+\_\+\+View} (const tensor\+\_\+t \&tensor)
+\item 
+const \hyperlink{namespaceBC_a934f94b17b06290e6b241e5f59930c5f}{Allocator} \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a0d8614794e0a4210bf8e654ffbc95271}{get\+\_\+allocator} () const 
+\item 
+const \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a8bb694230cd6fd0ff0f5b5cbe667614a}{stream\+\_\+type} \& \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a46e06b79c9abfeb2ca089867846bc642}{get\+\_\+stream} () const 
+\item 
+\hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a8bb694230cd6fd0ff0f5b5cbe667614a}{stream\+\_\+type} \& \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_ad2f920d2f6e782a3f5bc481872906e88}{get\+\_\+stream} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a8bb694230cd6fd0ff0f5b5cbe667614a}{stream\+\_\+type} \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a563db6a19ab0dd981c3d2ecf976913ea}{stream}
+\item 
+\hyperlink{namespaceBC_a934f94b17b06290e6b241e5f59930c5f}{Allocator} \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a41840bc29472fdfe86ddbf6792a23e98}{alloc}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a5f5088e4a51d9fc5e0f9a8890719d789}{copy\+\_\+constructible} = true
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_aad24a886f0d1cf6460591aef05e441b1}{move\+\_\+constructible} = true
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a157f189e9ed3cbe65a71ae2a7a0b1550}{copy\+\_\+assignable} = false
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a956fa29e4f433d9547c29cfbce39cf64}{move\+\_\+assignable} = true
+\item 
+static constexpr int \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a93f55387af07781120c38abbb7a89bfd}{tensor\+\_\+dimension} = Dimension
+\item 
+static constexpr int \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_ac2bcaa8bbfbdfb0ae6d232f1b3fdb340}{tensor\+\_\+iterator\+\_\+dimension} = \hyperlink{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a93f55387af07781120c38abbb7a89bfd}{tensor\+\_\+dimension}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!parent@{parent}}
+\index{parent@{parent}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{parent}{parent}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ using {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::{\bf parent} =  {\bf Kernel\+\_\+\+Array}$<$Dimension, {\bf Scalar}, {\bf system\+\_\+tag}, {\bf B\+C\+\_\+\+Noncontinuous}$>$}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_ab5bec1e932c07d5980709326ea33c680}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_ab5bec1e932c07d5980709326ea33c680}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!stream\+\_\+type@{stream\+\_\+type}}
+\index{stream\+\_\+type@{stream\+\_\+type}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{stream\+\_\+type}{stream_type}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ using {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::{\bf stream\+\_\+type} =  {\bf B\+C\+::\+Stream}$<${\bf system\+\_\+tag}$>$}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a8bb694230cd6fd0ff0f5b5cbe667614a}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a8bb694230cd6fd0ff0f5b5cbe667614a}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!system\+\_\+tag@{system\+\_\+tag}}
+\index{system\+\_\+tag@{system\+\_\+tag}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{system\+\_\+tag}{system_tag}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ using {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::{\bf system\+\_\+tag} =  typename {\bf B\+C\+::allocator\+\_\+traits}$<${\bf Allocator}$>$\+::{\bf system\+\_\+tag}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_aafde0c1500b6b71d2d964f04b55266a1}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_aafde0c1500b6b71d2d964f04b55266a1}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!Array\+\_\+\+Const\+\_\+\+View@{Array\+\_\+\+Const\+\_\+\+View}}
+\index{Array\+\_\+\+Const\+\_\+\+View@{Array\+\_\+\+Const\+\_\+\+View}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{Array\+\_\+\+Const\+\_\+\+View()=default}{Array_Const_View()=default}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::{\bf Array\+\_\+\+Const\+\_\+\+View} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [default]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a2365ad25296b4fe97148ab12c0beb195}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a2365ad25296b4fe97148ab12c0beb195}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!Array\+\_\+\+Const\+\_\+\+View@{Array\+\_\+\+Const\+\_\+\+View}}
+\index{Array\+\_\+\+Const\+\_\+\+View@{Array\+\_\+\+Const\+\_\+\+View}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{Array\+\_\+\+Const\+\_\+\+View(const Array\+\_\+\+Const\+\_\+\+View \&)=default}{Array_Const_View(const Array_Const_View &)=default}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::{\bf Array\+\_\+\+Const\+\_\+\+View} (
+\begin{DoxyParamCaption}
+\item[{const {\bf Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$ \&}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [default]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_acac30a700235f57f5c343da97481f513}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_acac30a700235f57f5c343da97481f513}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!Array\+\_\+\+Const\+\_\+\+View@{Array\+\_\+\+Const\+\_\+\+View}}
+\index{Array\+\_\+\+Const\+\_\+\+View@{Array\+\_\+\+Const\+\_\+\+View}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{Array\+\_\+\+Const\+\_\+\+View(\+Array\+\_\+\+Const\+\_\+\+View \&\&)=default}{Array_Const_View(Array_Const_View &&)=default}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::{\bf Array\+\_\+\+Const\+\_\+\+View} (
+\begin{DoxyParamCaption}
+\item[{{\bf Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$ \&\&}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [default]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a7d7dd9f251f1b53129d0249e6079c19b}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a7d7dd9f251f1b53129d0249e6079c19b}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!Array\+\_\+\+Const\+\_\+\+View@{Array\+\_\+\+Const\+\_\+\+View}}
+\index{Array\+\_\+\+Const\+\_\+\+View@{Array\+\_\+\+Const\+\_\+\+View}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{Array\+\_\+\+Const\+\_\+\+View(const tensor\+\_\+t \&tensor)}{Array_Const_View(const tensor_t &tensor)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ template$<$class tensor\+\_\+t , typename  = std\+::enable\+\_\+if\+\_\+t$<$			tensor\+\_\+t\+::tensor\+\_\+dimension == Dimension \&\&			expression\+\_\+traits$<$tensor\+\_\+t$>$\+::is\+\_\+array$>$$>$ {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::{\bf Array\+\_\+\+Const\+\_\+\+View} (
+\begin{DoxyParamCaption}
+\item[{const tensor\+\_\+t \&}]{tensor}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a9e28e5b41e137b03e6a16d56484f7b70}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a9e28e5b41e137b03e6a16d56484f7b70}
+
+
+\subsection{Member Function Documentation}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!get\+\_\+allocator@{get\+\_\+allocator}}
+\index{get\+\_\+allocator@{get\+\_\+allocator}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{get\+\_\+allocator() const }{get_allocator() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ const {\bf Allocator} {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::get\+\_\+allocator (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a0d8614794e0a4210bf8e654ffbc95271}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a0d8614794e0a4210bf8e654ffbc95271}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!get\+\_\+stream@{get\+\_\+stream}}
+\index{get\+\_\+stream@{get\+\_\+stream}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{get\+\_\+stream() const }{get_stream() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ const {\bf stream\+\_\+type}\& {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::get\+\_\+stream (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a46e06b79c9abfeb2ca089867846bc642}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a46e06b79c9abfeb2ca089867846bc642}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!get\+\_\+stream@{get\+\_\+stream}}
+\index{get\+\_\+stream@{get\+\_\+stream}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{get\+\_\+stream()}{get_stream()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ {\bf stream\+\_\+type}\& {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::get\+\_\+stream (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_ad2f920d2f6e782a3f5bc481872906e88}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_ad2f920d2f6e782a3f5bc481872906e88}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!internal\+\_\+move@{internal\+\_\+move}}
+\index{internal\+\_\+move@{internal\+\_\+move}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{internal\+\_\+move(\+Array\+\_\+\+Const\+\_\+\+View \&\&swap)}{internal_move(Array_Const_View &&swap)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ void {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::internal\+\_\+move (
+\begin{DoxyParamCaption}
+\item[{{\bf Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$ \&\&}]{swap}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a12c8aa2fea3be876491353bb7999c173}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a12c8aa2fea3be876491353bb7999c173}
+
+
+\subsection{Member Data Documentation}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!alloc@{alloc}}
+\index{alloc@{alloc}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{alloc}{alloc}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ {\bf Allocator} {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::alloc}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a41840bc29472fdfe86ddbf6792a23e98}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a41840bc29472fdfe86ddbf6792a23e98}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!copy\+\_\+assignable@{copy\+\_\+assignable}}
+\index{copy\+\_\+assignable@{copy\+\_\+assignable}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{copy\+\_\+assignable}{copy_assignable}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::copy\+\_\+assignable = false\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a157f189e9ed3cbe65a71ae2a7a0b1550}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a157f189e9ed3cbe65a71ae2a7a0b1550}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!copy\+\_\+constructible@{copy\+\_\+constructible}}
+\index{copy\+\_\+constructible@{copy\+\_\+constructible}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{copy\+\_\+constructible}{copy_constructible}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::copy\+\_\+constructible = true\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a5f5088e4a51d9fc5e0f9a8890719d789}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a5f5088e4a51d9fc5e0f9a8890719d789}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!move\+\_\+assignable@{move\+\_\+assignable}}
+\index{move\+\_\+assignable@{move\+\_\+assignable}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{move\+\_\+assignable}{move_assignable}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::move\+\_\+assignable = true\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a956fa29e4f433d9547c29cfbce39cf64}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a956fa29e4f433d9547c29cfbce39cf64}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!move\+\_\+constructible@{move\+\_\+constructible}}
+\index{move\+\_\+constructible@{move\+\_\+constructible}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{move\+\_\+constructible}{move_constructible}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::move\+\_\+constructible = true\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_aad24a886f0d1cf6460591aef05e441b1}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_aad24a886f0d1cf6460591aef05e441b1}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!stream@{stream}}
+\index{stream@{stream}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{stream}{stream}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ {\bf stream\+\_\+type} {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::stream}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a563db6a19ab0dd981c3d2ecf976913ea}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a563db6a19ab0dd981c3d2ecf976913ea}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!tensor\+\_\+dimension@{tensor\+\_\+dimension}}
+\index{tensor\+\_\+dimension@{tensor\+\_\+dimension}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{tensor\+\_\+dimension}{tensor_dimension}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ constexpr int {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::tensor\+\_\+dimension = Dimension\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a93f55387af07781120c38abbb7a89bfd}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_a93f55387af07781120c38abbb7a89bfd}
+\index{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}!tensor\+\_\+iterator\+\_\+dimension@{tensor\+\_\+iterator\+\_\+dimension}}
+\index{tensor\+\_\+iterator\+\_\+dimension@{tensor\+\_\+iterator\+\_\+dimension}!B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View@{B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}}
+\subsubsection[{\texorpdfstring{tensor\+\_\+iterator\+\_\+dimension}{tensor_iterator_dimension}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$int Dimension, class Scalar , class Allocator $>$ constexpr int {\bf B\+C\+::tensors\+::exprs\+::\+Array\+\_\+\+Const\+\_\+\+View}$<$ Dimension, {\bf Scalar}, {\bf Allocator} $>$\+::tensor\+\_\+iterator\+\_\+dimension = {\bf tensor\+\_\+dimension}\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_ac2bcaa8bbfbdfb0ae6d232f1b3fdb340}{}\label{structBC_1_1tensors_1_1exprs_1_1Array__Const__View_ac2bcaa8bbfbdfb0ae6d232f1b3fdb340}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/tensors/expression\+\_\+templates/\hyperlink{Array__View_8h}{Array\+\_\+\+View.\+h}\end{DoxyCompactItemize}

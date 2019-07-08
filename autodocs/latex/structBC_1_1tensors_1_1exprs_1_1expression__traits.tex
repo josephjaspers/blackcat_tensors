@@ -1,0 +1,139 @@
+\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits}{}\section{BC\+:\+:tensors\+:\+:exprs\+:\+:expression\+\_\+traits$<$ T $>$ Struct Template Reference}
+\label{structBC_1_1tensors_1_1exprs_1_1expression__traits}\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits$<$ T $>$@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits$<$ T $>$}}
+
+
+{\ttfamily \#include $<$Expression\+\_\+\+Template\+\_\+\+Traits.\+h$>$}
+
+
+
+Inheritance diagram for BC\+:\+:tensors\+:\+:exprs\+:\+:expression\+\_\+traits$<$ T $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=224pt]{structBC_1_1tensors_1_1exprs_1_1expression__traits__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_a15729391a3675a8a223645a666e69178}{system\+\_\+tag} = typename \hyperlink{structBC_1_1meta_1_1conditional__detected}{B\+C\+::meta\+::conditional\+\_\+detected}$<$ \hyperlink{namespaceBC_1_1tensors_1_1exprs_1_1detail_a78ddbc90d8902249df20ae15022d9274}{detail\+::query\+\_\+system\+\_\+tag}, T, \hyperlink{structBC_1_1host__tag}{host\+\_\+tag} $>$\+::type
+\item 
+using \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_afabecef46ed2bcd596923189b244b384}{allocation\+\_\+tag} = typename \hyperlink{structBC_1_1meta_1_1conditional__detected}{B\+C\+::meta\+::conditional\+\_\+detected}$<$ \hyperlink{namespaceBC_1_1tensors_1_1exprs_1_1detail_af7ba0020a7b4a640c05dbf54f8085f29}{detail\+::query\+\_\+allocation\+\_\+type}, T, \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_a15729391a3675a8a223645a666e69178}{system\+\_\+tag} $>$\+::type
+\item 
+using \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_ac886019065ee32295c353fc7cbb0e41a}{value\+\_\+type} = typename \hyperlink{structBC_1_1meta_1_1conditional__detected}{B\+C\+::meta\+::conditional\+\_\+detected}$<$ \hyperlink{namespaceBC_1_1tensors_1_1exprs_1_1detail_aa067d25adc2a68a08de1456648d9bf2c}{detail\+::query\+\_\+value\+\_\+type}, T, void $>$\+::type
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{BlackCat__Common_8h_a6699e8b0449da5c0fafb878e59c1d4b1}{B\+C\+I\+N\+L\+I\+NE} auto \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_af0cf58250172b30fa59905f5142b1ba6}{select\+\_\+on\+\_\+dx} (const T \&expression, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{size\+\_\+t} index)
+\item 
+static \hyperlink{BlackCat__Common_8h_a6699e8b0449da5c0fafb878e59c1d4b1}{B\+C\+I\+N\+L\+I\+NE} auto \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_a6a2bbc4d8b4b5a3f85686ec9b4aadde2}{select\+\_\+on\+\_\+dx} (T \&expression, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{size\+\_\+t} index)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_acbcd4e07a009c38b446e8c4d96d15b4e}{derivative\+\_\+is\+\_\+defined} = B\+C\+::meta\+::is\+\_\+detected\+\_\+v$<$\hyperlink{namespaceBC_1_1tensors_1_1exprs_1_1detail_afce786a08d3636682dba772cadb7d251}{detail\+::query\+\_\+dx}, T$>$
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_aa9f262de79c02b4ee44c7cde0dbaa80f}{is\+\_\+move\+\_\+constructible} = T\+::move\+\_\+constructible
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_a6ce7acf8f9730b988b165e980a04f414}{is\+\_\+copy\+\_\+constructible} = T\+::copy\+\_\+constructible
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_afc39357c204a3ab34923e6d7ee713698}{is\+\_\+move\+\_\+assignable} = T\+::move\+\_\+assignable
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_a8e3c18748968740ef7a8526950d692c9}{is\+\_\+copy\+\_\+assignable} = T\+::copy\+\_\+assignable
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_a73033f70dcd6430ed05bb8fe843ed220}{is\+\_\+bc\+\_\+type} = std\+::is\+\_\+base\+\_\+of$<$\hyperlink{classBC_1_1tensors_1_1exprs_1_1BC__Type}{B\+C\+\_\+\+Type}, T$>$\+::value
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_a8774f4aef36f7f53555b92560ad5b0d6}{is\+\_\+array} = std\+::is\+\_\+base\+\_\+of$<$\hyperlink{classBC_1_1tensors_1_1exprs_1_1BC__Array}{B\+C\+\_\+\+Array}, T$>$\+::value
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_ac41debc0a82fa70128a31a3192610e5a}{is\+\_\+view} = std\+::is\+\_\+base\+\_\+of$<$\hyperlink{classBC_1_1tensors_1_1exprs_1_1BC__View}{B\+C\+\_\+\+View}, T$>$\+::value
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_a25f42c4b0aacb8dbb3f7768f4190abdf}{is\+\_\+continuous} = !std\+::is\+\_\+base\+\_\+of$<$\hyperlink{classBC_1_1tensors_1_1exprs_1_1BC__Noncontinuous}{B\+C\+\_\+\+Noncontinuous}, T$>$\+::value
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_a11b9ac090e8715f9376590a03c8f6afd}{is\+\_\+expr} = std\+::is\+\_\+base\+\_\+of$<$\hyperlink{classBC_1_1tensors_1_1exprs_1_1BC__Expr}{B\+C\+\_\+\+Expr}, T$>$\+::value
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_a931646f14b49daddf77d9f6603b9936a}{is\+\_\+temporary} = std\+::is\+\_\+base\+\_\+of$<$\hyperlink{classBC_1_1tensors_1_1exprs_1_1BC__Temporary}{B\+C\+\_\+\+Temporary}, T$>$\+::value
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_a43c094c4c1101ff8959bb21c74b0cd3f}{is\+\_\+stack\+\_\+allocated} = std\+::is\+\_\+base\+\_\+of$<$\hyperlink{classBC_1_1tensors_1_1exprs_1_1BC__Stack__Allocated}{B\+C\+\_\+\+Stack\+\_\+\+Allocated}, T$>$\+::value
+\item 
+static constexpr bool \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits_a555e0eff871b0495d9405a436d9a1f4d}{is\+\_\+immutable} = std\+::is\+\_\+base\+\_\+of$<$\hyperlink{classBC_1_1tensors_1_1exprs_1_1BC__Immutable}{B\+C\+\_\+\+Immutable}, T$>$\+::value
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!allocation\+\_\+tag@{allocation\+\_\+tag}}
+\index{allocation\+\_\+tag@{allocation\+\_\+tag}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{allocation\+\_\+tag}{allocation_tag}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ using {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::{\bf allocation\+\_\+tag} =  typename {\bf B\+C\+::meta\+::conditional\+\_\+detected}$<${\bf detail\+::query\+\_\+allocation\+\_\+type}, T, {\bf system\+\_\+tag}$>$\+::type}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_afabecef46ed2bcd596923189b244b384}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_afabecef46ed2bcd596923189b244b384}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!system\+\_\+tag@{system\+\_\+tag}}
+\index{system\+\_\+tag@{system\+\_\+tag}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{system\+\_\+tag}{system_tag}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ using {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::{\bf system\+\_\+tag} =  typename {\bf B\+C\+::meta\+::conditional\+\_\+detected}$<${\bf detail\+::query\+\_\+system\+\_\+tag}, T, {\bf host\+\_\+tag}$>$\+::type}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_a15729391a3675a8a223645a666e69178}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_a15729391a3675a8a223645a666e69178}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!value\+\_\+type@{value\+\_\+type}}
+\index{value\+\_\+type@{value\+\_\+type}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{value\+\_\+type}{value_type}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ using {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::{\bf value\+\_\+type} =  typename {\bf B\+C\+::meta\+::conditional\+\_\+detected}$<${\bf detail\+::query\+\_\+value\+\_\+type}, T, void$>$\+::type}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_ac886019065ee32295c353fc7cbb0e41a}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_ac886019065ee32295c353fc7cbb0e41a}
+
+
+\subsection{Member Function Documentation}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!select\+\_\+on\+\_\+dx@{select\+\_\+on\+\_\+dx}}
+\index{select\+\_\+on\+\_\+dx@{select\+\_\+on\+\_\+dx}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{select\+\_\+on\+\_\+dx(const T \&expression, size\+\_\+t index)}{select_on_dx(const T &expression, size_t index)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ static {\bf B\+C\+I\+N\+L\+I\+NE} auto {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::select\+\_\+on\+\_\+dx (
+\begin{DoxyParamCaption}
+\item[{const T \&}]{expression, }
+\item[{{\bf size\+\_\+t}}]{index}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_af0cf58250172b30fa59905f5142b1ba6}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_af0cf58250172b30fa59905f5142b1ba6}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!select\+\_\+on\+\_\+dx@{select\+\_\+on\+\_\+dx}}
+\index{select\+\_\+on\+\_\+dx@{select\+\_\+on\+\_\+dx}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{select\+\_\+on\+\_\+dx(\+T \&expression, size\+\_\+t index)}{select_on_dx(T &expression, size_t index)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ static {\bf B\+C\+I\+N\+L\+I\+NE} auto {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::select\+\_\+on\+\_\+dx (
+\begin{DoxyParamCaption}
+\item[{T \&}]{expression, }
+\item[{{\bf size\+\_\+t}}]{index}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_a6a2bbc4d8b4b5a3f85686ec9b4aadde2}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_a6a2bbc4d8b4b5a3f85686ec9b4aadde2}
+
+
+\subsection{Member Data Documentation}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!derivative\+\_\+is\+\_\+defined@{derivative\+\_\+is\+\_\+defined}}
+\index{derivative\+\_\+is\+\_\+defined@{derivative\+\_\+is\+\_\+defined}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{derivative\+\_\+is\+\_\+defined}{derivative_is_defined}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::derivative\+\_\+is\+\_\+defined = B\+C\+::meta\+::is\+\_\+detected\+\_\+v$<${\bf detail\+::query\+\_\+dx}, T$>$\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_acbcd4e07a009c38b446e8c4d96d15b4e}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_acbcd4e07a009c38b446e8c4d96d15b4e}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!is\+\_\+array@{is\+\_\+array}}
+\index{is\+\_\+array@{is\+\_\+array}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{is\+\_\+array}{is_array}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::is\+\_\+array = std\+::is\+\_\+base\+\_\+of$<${\bf B\+C\+\_\+\+Array}, T$>$\+::value\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_a8774f4aef36f7f53555b92560ad5b0d6}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_a8774f4aef36f7f53555b92560ad5b0d6}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!is\+\_\+bc\+\_\+type@{is\+\_\+bc\+\_\+type}}
+\index{is\+\_\+bc\+\_\+type@{is\+\_\+bc\+\_\+type}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{is\+\_\+bc\+\_\+type}{is_bc_type}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::is\+\_\+bc\+\_\+type = std\+::is\+\_\+base\+\_\+of$<${\bf B\+C\+\_\+\+Type}, T$>$\+::value\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_a73033f70dcd6430ed05bb8fe843ed220}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_a73033f70dcd6430ed05bb8fe843ed220}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!is\+\_\+continuous@{is\+\_\+continuous}}
+\index{is\+\_\+continuous@{is\+\_\+continuous}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{is\+\_\+continuous}{is_continuous}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::is\+\_\+continuous = !std\+::is\+\_\+base\+\_\+of$<${\bf B\+C\+\_\+\+Noncontinuous}, T$>$\+::value\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_a25f42c4b0aacb8dbb3f7768f4190abdf}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_a25f42c4b0aacb8dbb3f7768f4190abdf}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!is\+\_\+copy\+\_\+assignable@{is\+\_\+copy\+\_\+assignable}}
+\index{is\+\_\+copy\+\_\+assignable@{is\+\_\+copy\+\_\+assignable}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{is\+\_\+copy\+\_\+assignable}{is_copy_assignable}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::is\+\_\+copy\+\_\+assignable = T\+::copy\+\_\+assignable\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_a8e3c18748968740ef7a8526950d692c9}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_a8e3c18748968740ef7a8526950d692c9}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!is\+\_\+copy\+\_\+constructible@{is\+\_\+copy\+\_\+constructible}}
+\index{is\+\_\+copy\+\_\+constructible@{is\+\_\+copy\+\_\+constructible}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{is\+\_\+copy\+\_\+constructible}{is_copy_constructible}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::is\+\_\+copy\+\_\+constructible = T\+::copy\+\_\+constructible\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_a6ce7acf8f9730b988b165e980a04f414}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_a6ce7acf8f9730b988b165e980a04f414}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!is\+\_\+expr@{is\+\_\+expr}}
+\index{is\+\_\+expr@{is\+\_\+expr}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{is\+\_\+expr}{is_expr}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::is\+\_\+expr = std\+::is\+\_\+base\+\_\+of$<${\bf B\+C\+\_\+\+Expr}, T$>$\+::value\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_a11b9ac090e8715f9376590a03c8f6afd}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_a11b9ac090e8715f9376590a03c8f6afd}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!is\+\_\+immutable@{is\+\_\+immutable}}
+\index{is\+\_\+immutable@{is\+\_\+immutable}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{is\+\_\+immutable}{is_immutable}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::is\+\_\+immutable = std\+::is\+\_\+base\+\_\+of$<${\bf B\+C\+\_\+\+Immutable}, T$>$\+::value\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_a555e0eff871b0495d9405a436d9a1f4d}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_a555e0eff871b0495d9405a436d9a1f4d}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!is\+\_\+move\+\_\+assignable@{is\+\_\+move\+\_\+assignable}}
+\index{is\+\_\+move\+\_\+assignable@{is\+\_\+move\+\_\+assignable}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{is\+\_\+move\+\_\+assignable}{is_move_assignable}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::is\+\_\+move\+\_\+assignable = T\+::move\+\_\+assignable\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_afc39357c204a3ab34923e6d7ee713698}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_afc39357c204a3ab34923e6d7ee713698}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!is\+\_\+move\+\_\+constructible@{is\+\_\+move\+\_\+constructible}}
+\index{is\+\_\+move\+\_\+constructible@{is\+\_\+move\+\_\+constructible}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{is\+\_\+move\+\_\+constructible}{is_move_constructible}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::is\+\_\+move\+\_\+constructible = T\+::move\+\_\+constructible\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_aa9f262de79c02b4ee44c7cde0dbaa80f}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_aa9f262de79c02b4ee44c7cde0dbaa80f}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!is\+\_\+stack\+\_\+allocated@{is\+\_\+stack\+\_\+allocated}}
+\index{is\+\_\+stack\+\_\+allocated@{is\+\_\+stack\+\_\+allocated}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{is\+\_\+stack\+\_\+allocated}{is_stack_allocated}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::is\+\_\+stack\+\_\+allocated = std\+::is\+\_\+base\+\_\+of$<${\bf B\+C\+\_\+\+Stack\+\_\+\+Allocated}, T$>$\+::value\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_a43c094c4c1101ff8959bb21c74b0cd3f}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_a43c094c4c1101ff8959bb21c74b0cd3f}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!is\+\_\+temporary@{is\+\_\+temporary}}
+\index{is\+\_\+temporary@{is\+\_\+temporary}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{is\+\_\+temporary}{is_temporary}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::is\+\_\+temporary = std\+::is\+\_\+base\+\_\+of$<${\bf B\+C\+\_\+\+Temporary}, T$>$\+::value\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_a931646f14b49daddf77d9f6603b9936a}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_a931646f14b49daddf77d9f6603b9936a}
+\index{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}!is\+\_\+view@{is\+\_\+view}}
+\index{is\+\_\+view@{is\+\_\+view}!B\+C\+::tensors\+::exprs\+::expression\+\_\+traits@{B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}}
+\subsubsection[{\texorpdfstring{is\+\_\+view}{is_view}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ constexpr bool {\bf B\+C\+::tensors\+::exprs\+::expression\+\_\+traits}$<$ T $>$\+::is\+\_\+view = std\+::is\+\_\+base\+\_\+of$<${\bf B\+C\+\_\+\+View}, T$>$\+::value\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{structBC_1_1tensors_1_1exprs_1_1expression__traits_ac41debc0a82fa70128a31a3192610e5a}{}\label{structBC_1_1tensors_1_1exprs_1_1expression__traits_ac41debc0a82fa70128a31a3192610e5a}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/tensors/expression\+\_\+templates/\hyperlink{Expression__Template__Traits_8h}{Expression\+\_\+\+Template\+\_\+\+Traits.\+h}\end{DoxyCompactItemize}

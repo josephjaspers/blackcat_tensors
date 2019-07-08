@@ -1,0 +1,117 @@
+\hypertarget{classBC_1_1nn_1_1FeedForward}{}\section{BC\+:\+:nn\+:\+:Feed\+Forward$<$ System\+Tag, Value\+Type $>$ Class Template Reference}
+\label{classBC_1_1nn_1_1FeedForward}\index{B\+C\+::nn\+::\+Feed\+Forward$<$ System\+Tag, Value\+Type $>$@{B\+C\+::nn\+::\+Feed\+Forward$<$ System\+Tag, Value\+Type $>$}}
+
+
+{\ttfamily \#include $<$Feed\+Forward.\+h$>$}
+
+
+
+Inheritance diagram for BC\+:\+:nn\+:\+:Feed\+Forward$<$ System\+Tag, Value\+Type $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=217pt]{classBC_1_1nn_1_1FeedForward__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for BC\+:\+:nn\+:\+:Feed\+Forward$<$ System\+Tag, Value\+Type $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=217pt]{classBC_1_1nn_1_1FeedForward__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \hyperlink{classBC_1_1nn_1_1FeedForward_a91e5b58a7c6d5cb02460cc0b27ea0f51}{system\+\_\+tag} = System\+Tag
+\item 
+using \hyperlink{classBC_1_1nn_1_1FeedForward_ac38f49be968436c2db3a6f96517c36d7}{value\+\_\+type} = Value\+Type
+\item 
+using \hyperlink{classBC_1_1nn_1_1FeedForward_aa9d6dd34a3d6e7c67bfc9d234e068d2d}{mat} = \hyperlink{namespaceBC_1_1tensors_1_1common__using_a6fc3153d379a42b1a97df46ed5b71a29}{B\+C\+::\+Matrix}$<$ Value\+Type, \hyperlink{namespaceBC_a934f94b17b06290e6b241e5f59930c5f}{B\+C\+::\+Allocator}$<$ System\+Tag, Value\+Type $>$$>$
+\item 
+using \hyperlink{classBC_1_1nn_1_1FeedForward_ade4e53b38558345c7bb0844fe6bf5e9b}{vec} = \hyperlink{namespaceBC_1_1tensors_1_1common__using_ab2d6784064c0dda8aef3c2a9177ffa77}{B\+C\+::\+Vector}$<$ Value\+Type, \hyperlink{namespaceBC_a934f94b17b06290e6b241e5f59930c5f}{B\+C\+::\+Allocator}$<$ System\+Tag, Value\+Type $>$$>$
+\item 
+using \hyperlink{classBC_1_1nn_1_1FeedForward_aeb218c59bd13c7f136ad98f9fef7782e}{mat\+\_\+view} = \hyperlink{namespaceBC_1_1tensors_1_1common__using_a2ef3cf5721d0ae966c30051cbe6f24b6}{B\+C\+::\+Matrix\+\_\+\+View}$<$ Value\+Type, \hyperlink{namespaceBC_a934f94b17b06290e6b241e5f59930c5f}{B\+C\+::\+Allocator}$<$ System\+Tag, Value\+Type $>$$>$
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classBC_1_1nn_1_1FeedForward_aa3bba5d4f40eca8aba17adcc6c6dcb99}{Feed\+Forward} (int inputs, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} outputs)
+\item 
+{\footnotesize template$<$class Matrix $>$ }\\const auto \& \hyperlink{classBC_1_1nn_1_1FeedForward_ada6fe0456206043fe14f73314fe71793}{forward\+\_\+propagation} (const \hyperlink{namespaceBC_1_1tensors_1_1common__using_a6fc3153d379a42b1a97df46ed5b71a29}{Matrix} \&x\+\_\+)
+\item 
+{\footnotesize template$<$class Matrix $>$ }\\auto \hyperlink{classBC_1_1nn_1_1FeedForward_a994bc64fefccdbc0b9e7d49aec15e039}{back\+\_\+propagation} (const \hyperlink{namespaceBC_1_1tensors_1_1common__using_a6fc3153d379a42b1a97df46ed5b71a29}{Matrix} \&dy\+\_\+)
+\item 
+void \hyperlink{classBC_1_1nn_1_1FeedForward_a4d21f002b18731b7e3f26c63a82d5ae4}{update\+\_\+weights} ()
+\item 
+void \hyperlink{classBC_1_1nn_1_1FeedForward_a41251313514994440f61cf861b891a05}{set\+\_\+batch\+\_\+size} (int x)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\index{B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}!mat@{mat}}
+\index{mat@{mat}!B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}}
+\subsubsection[{\texorpdfstring{mat}{mat}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type$>$ using {\bf B\+C\+::nn\+::\+Feed\+Forward}$<$ System\+Tag, Value\+Type $>$\+::{\bf mat} =  {\bf B\+C\+::\+Matrix}$<$Value\+Type, {\bf B\+C\+::\+Allocator}$<$System\+Tag, Value\+Type$>$$>$}\hypertarget{classBC_1_1nn_1_1FeedForward_aa9d6dd34a3d6e7c67bfc9d234e068d2d}{}\label{classBC_1_1nn_1_1FeedForward_aa9d6dd34a3d6e7c67bfc9d234e068d2d}
+\index{B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}!mat\+\_\+view@{mat\+\_\+view}}
+\index{mat\+\_\+view@{mat\+\_\+view}!B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}}
+\subsubsection[{\texorpdfstring{mat\+\_\+view}{mat_view}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type$>$ using {\bf B\+C\+::nn\+::\+Feed\+Forward}$<$ System\+Tag, Value\+Type $>$\+::{\bf mat\+\_\+view} =  {\bf B\+C\+::\+Matrix\+\_\+\+View}$<$Value\+Type, {\bf B\+C\+::\+Allocator}$<$System\+Tag, Value\+Type$>$$>$}\hypertarget{classBC_1_1nn_1_1FeedForward_aeb218c59bd13c7f136ad98f9fef7782e}{}\label{classBC_1_1nn_1_1FeedForward_aeb218c59bd13c7f136ad98f9fef7782e}
+\index{B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}!system\+\_\+tag@{system\+\_\+tag}}
+\index{system\+\_\+tag@{system\+\_\+tag}!B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}}
+\subsubsection[{\texorpdfstring{system\+\_\+tag}{system_tag}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type$>$ using {\bf B\+C\+::nn\+::\+Feed\+Forward}$<$ System\+Tag, Value\+Type $>$\+::{\bf system\+\_\+tag} =  System\+Tag}\hypertarget{classBC_1_1nn_1_1FeedForward_a91e5b58a7c6d5cb02460cc0b27ea0f51}{}\label{classBC_1_1nn_1_1FeedForward_a91e5b58a7c6d5cb02460cc0b27ea0f51}
+\index{B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}!value\+\_\+type@{value\+\_\+type}}
+\index{value\+\_\+type@{value\+\_\+type}!B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}}
+\subsubsection[{\texorpdfstring{value\+\_\+type}{value_type}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type$>$ using {\bf B\+C\+::nn\+::\+Feed\+Forward}$<$ System\+Tag, Value\+Type $>$\+::{\bf value\+\_\+type} =  Value\+Type}\hypertarget{classBC_1_1nn_1_1FeedForward_ac38f49be968436c2db3a6f96517c36d7}{}\label{classBC_1_1nn_1_1FeedForward_ac38f49be968436c2db3a6f96517c36d7}
+\index{B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}!vec@{vec}}
+\index{vec@{vec}!B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}}
+\subsubsection[{\texorpdfstring{vec}{vec}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type$>$ using {\bf B\+C\+::nn\+::\+Feed\+Forward}$<$ System\+Tag, Value\+Type $>$\+::{\bf vec} =  {\bf B\+C\+::\+Vector}$<$Value\+Type, {\bf B\+C\+::\+Allocator}$<$System\+Tag, Value\+Type$>$$>$}\hypertarget{classBC_1_1nn_1_1FeedForward_ade4e53b38558345c7bb0844fe6bf5e9b}{}\label{classBC_1_1nn_1_1FeedForward_ade4e53b38558345c7bb0844fe6bf5e9b}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}!Feed\+Forward@{Feed\+Forward}}
+\index{Feed\+Forward@{Feed\+Forward}!B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}}
+\subsubsection[{\texorpdfstring{Feed\+Forward(int inputs, B\+C\+::size\+\_\+t outputs)}{FeedForward(int inputs, BC::size_t outputs)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type$>$ {\bf B\+C\+::nn\+::\+Feed\+Forward}$<$ System\+Tag, Value\+Type $>$\+::{\bf Feed\+Forward} (
+\begin{DoxyParamCaption}
+\item[{int}]{inputs, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{outputs}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1nn_1_1FeedForward_aa3bba5d4f40eca8aba17adcc6c6dcb99}{}\label{classBC_1_1nn_1_1FeedForward_aa3bba5d4f40eca8aba17adcc6c6dcb99}
+
+
+\subsection{Member Function Documentation}
+\index{B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}!back\+\_\+propagation@{back\+\_\+propagation}}
+\index{back\+\_\+propagation@{back\+\_\+propagation}!B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}}
+\subsubsection[{\texorpdfstring{back\+\_\+propagation(const Matrix \&dy\+\_\+)}{back_propagation(const Matrix &dy_)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type$>$ template$<$class Matrix $>$ auto {\bf B\+C\+::nn\+::\+Feed\+Forward}$<$ System\+Tag, Value\+Type $>$\+::back\+\_\+propagation (
+\begin{DoxyParamCaption}
+\item[{const {\bf Matrix} \&}]{dy\+\_\+}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1nn_1_1FeedForward_a994bc64fefccdbc0b9e7d49aec15e039}{}\label{classBC_1_1nn_1_1FeedForward_a994bc64fefccdbc0b9e7d49aec15e039}
+\index{B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}!forward\+\_\+propagation@{forward\+\_\+propagation}}
+\index{forward\+\_\+propagation@{forward\+\_\+propagation}!B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}}
+\subsubsection[{\texorpdfstring{forward\+\_\+propagation(const Matrix \&x\+\_\+)}{forward_propagation(const Matrix &x_)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type$>$ template$<$class Matrix $>$ const auto\& {\bf B\+C\+::nn\+::\+Feed\+Forward}$<$ System\+Tag, Value\+Type $>$\+::forward\+\_\+propagation (
+\begin{DoxyParamCaption}
+\item[{const {\bf Matrix} \&}]{x\+\_\+}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1nn_1_1FeedForward_ada6fe0456206043fe14f73314fe71793}{}\label{classBC_1_1nn_1_1FeedForward_ada6fe0456206043fe14f73314fe71793}
+\index{B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}!set\+\_\+batch\+\_\+size@{set\+\_\+batch\+\_\+size}}
+\index{set\+\_\+batch\+\_\+size@{set\+\_\+batch\+\_\+size}!B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}}
+\subsubsection[{\texorpdfstring{set\+\_\+batch\+\_\+size(int x)}{set_batch_size(int x)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type$>$ void {\bf B\+C\+::nn\+::\+Feed\+Forward}$<$ System\+Tag, Value\+Type $>$\+::set\+\_\+batch\+\_\+size (
+\begin{DoxyParamCaption}
+\item[{int}]{x}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1nn_1_1FeedForward_a41251313514994440f61cf861b891a05}{}\label{classBC_1_1nn_1_1FeedForward_a41251313514994440f61cf861b891a05}
+\index{B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}!update\+\_\+weights@{update\+\_\+weights}}
+\index{update\+\_\+weights@{update\+\_\+weights}!B\+C\+::nn\+::\+Feed\+Forward@{B\+C\+::nn\+::\+Feed\+Forward}}
+\subsubsection[{\texorpdfstring{update\+\_\+weights()}{update_weights()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class System\+Tag, class Value\+Type$>$ void {\bf B\+C\+::nn\+::\+Feed\+Forward}$<$ System\+Tag, Value\+Type $>$\+::update\+\_\+weights (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1nn_1_1FeedForward_a4d21f002b18731b7e3f26c63a82d5ae4}{}\label{classBC_1_1nn_1_1FeedForward_a4d21f002b18731b7e3f26c63a82d5ae4}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/neural\+\_\+networks/\+Layers/\hyperlink{FeedForward_8h}{Feed\+Forward.\+h}\end{DoxyCompactItemize}

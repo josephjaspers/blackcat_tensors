@@ -1,0 +1,119 @@
+\hypertarget{Algorithms_8h}{}\section{include/algorithms/\+Algorithms.h File Reference}
+\label{Algorithms_8h}\index{include/algorithms/\+Algorithms.\+h@{include/algorithms/\+Algorithms.\+h}}
+{\ttfamily \#include \char`\"{}Common.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$numeric$>$}\\*
+{\ttfamily \#include $<$algorithm$>$}\\*
+Include dependency graph for Algorithms.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=289pt]{Algorithms_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{Algorithms_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{Algorithms_8h_a8dc73f0bc29b43358f3af1bfcaa0c926}{B\+C\+\_\+\+A\+L\+G\+O\+R\+I\+T\+H\+M\+\_\+\+D\+EF}(function)
+\item 
+\#define \hyperlink{Algorithms_8h_a1ed557e86415a8142e35577f1c3e666b}{B\+C\+\_\+\+R\+E\+D\+U\+C\+E\+\_\+\+A\+L\+G\+O\+R\+I\+T\+H\+M\+\_\+\+D\+EF}(function)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{Algorithms_8h_ab640fabee4117871578d5266643a330f}{B\+C\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+B\+O\+DY} (tensors\{namespace algorithms, Algorithm)\}namespace BC
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\index{Algorithms.\+h@{Algorithms.\+h}!B\+C\+\_\+\+A\+L\+G\+O\+R\+I\+T\+H\+M\+\_\+\+D\+EF@{B\+C\+\_\+\+A\+L\+G\+O\+R\+I\+T\+H\+M\+\_\+\+D\+EF}}
+\index{B\+C\+\_\+\+A\+L\+G\+O\+R\+I\+T\+H\+M\+\_\+\+D\+EF@{B\+C\+\_\+\+A\+L\+G\+O\+R\+I\+T\+H\+M\+\_\+\+D\+EF}!Algorithms.\+h@{Algorithms.\+h}}
+\subsubsection[{\texorpdfstring{B\+C\+\_\+\+A\+L\+G\+O\+R\+I\+T\+H\+M\+\_\+\+D\+EF}{BC_ALGORITHM_DEF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+C\+\_\+\+A\+L\+G\+O\+R\+I\+T\+H\+M\+\_\+\+D\+EF(
+\begin{DoxyParamCaption}
+\item[{}]{function}
+\end{DoxyParamCaption}
+)}\hypertarget{Algorithms_8h_a8dc73f0bc29b43358f3af1bfcaa0c926}{}\label{Algorithms_8h_a8dc73f0bc29b43358f3af1bfcaa0c926}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\hyperlink{BlackCat__Common_8h_a86f4e2210c4647476c960638e87e390a}{BC\_IF\_CUDA}(\(\backslash\)
+template<class Begin, class End, class... Args>\(\backslash\)
+\textcolor{keyword}{static} \textcolor{keyword}{auto} \textcolor{keyword}{function} (\hyperlink{classBC_1_1streams_1_1Stream}{BC::streams::Stream<BC::device\_tag>} stream, Begin 
+      begin, End end, Args... args) \{\(\backslash\)
+    return thrust::function(thrust::cuda::par.on(stream), begin, end, args...);\(\backslash\)
+\}\(\backslash\)
+template<class Begin, class End, class... Args>\(\backslash\)
+\textcolor{keyword}{static} \textcolor{keyword}{auto} \hyperlink{namespaceBC_1_1nn_a5429ceaa392776ade7234175af39050d}{function} (cudaStream\_t stream, Begin begin, End end, Args... args) \{\(\backslash\)
+    return thrust::function(thrust::cuda::par.on(stream), begin, end, args...);\(\backslash\)
+\})\(\backslash\)
+template<\textcolor{keyword}{class }Begin, class End, class... Args>\(\backslash\)
+static auto \hyperlink{namespaceBC_1_1nn_a5429ceaa392776ade7234175af39050d}{function} (\hyperlink{namespaceBC}{BC}::\hyperlink{namespaceBC_abc64a63cd29a22d102a68f478dfd588d}{streams::Stream}<BC::host\_tag> stream, Begin begin, End 
+      end, Args... args) \{   \(\backslash\)
+    return stream.enqueue([&]()\{\hyperlink{namespaceBC_1_1nn_a5429ceaa392776ade7234175af39050d}{std::function}(begin, end, args...); \});\(\backslash\)
+\}\(\backslash\)
+template<\textcolor{keyword}{class }Container, class... Args>\(\backslash\)
+static auto \hyperlink{namespaceBC_1_1nn_a5429ceaa392776ade7234175af39050d}{function} (const Container& container, Args&&... args) \{\(\backslash\)
+    return \textcolor{keyword}{function}(BC::streams::select\_on\_get\_stream(container), container.begin(), container.end(), args.
+      ..);\(\backslash\)
+\}\(\backslash\)
+template<\textcolor{keyword}{class }Container, class... Args>\(\backslash\)
+static auto \hyperlink{namespaceBC_1_1nn_a5429ceaa392776ade7234175af39050d}{function} (Container& container, Args&&... args) \{\(\backslash\)
+    return \textcolor{keyword}{function}(BC::streams::select\_on\_get\_stream(container), container.begin(), container.end(), args.
+      ..);\(\backslash\)
+\}\(\backslash\)
+\end{DoxyCode}
+\index{Algorithms.\+h@{Algorithms.\+h}!B\+C\+\_\+\+R\+E\+D\+U\+C\+E\+\_\+\+A\+L\+G\+O\+R\+I\+T\+H\+M\+\_\+\+D\+EF@{B\+C\+\_\+\+R\+E\+D\+U\+C\+E\+\_\+\+A\+L\+G\+O\+R\+I\+T\+H\+M\+\_\+\+D\+EF}}
+\index{B\+C\+\_\+\+R\+E\+D\+U\+C\+E\+\_\+\+A\+L\+G\+O\+R\+I\+T\+H\+M\+\_\+\+D\+EF@{B\+C\+\_\+\+R\+E\+D\+U\+C\+E\+\_\+\+A\+L\+G\+O\+R\+I\+T\+H\+M\+\_\+\+D\+EF}!Algorithms.\+h@{Algorithms.\+h}}
+\subsubsection[{\texorpdfstring{B\+C\+\_\+\+R\+E\+D\+U\+C\+E\+\_\+\+A\+L\+G\+O\+R\+I\+T\+H\+M\+\_\+\+D\+EF}{BC_REDUCE_ALGORITHM_DEF}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+C\+\_\+\+R\+E\+D\+U\+C\+E\+\_\+\+A\+L\+G\+O\+R\+I\+T\+H\+M\+\_\+\+D\+EF(
+\begin{DoxyParamCaption}
+\item[{}]{function}
+\end{DoxyParamCaption}
+)}\hypertarget{Algorithms_8h_a1ed557e86415a8142e35577f1c3e666b}{}\label{Algorithms_8h_a1ed557e86415a8142e35577f1c3e666b}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+\hyperlink{BlackCat__Common_8h_a86f4e2210c4647476c960638e87e390a}{BC\_IF\_CUDA}(\(\backslash\)
+template<class Begin, class End, class... Args>\(\backslash\)
+\textcolor{keyword}{static} \textcolor{keyword}{auto} \textcolor{keyword}{function} (\textcolor{keyword}{const} \hyperlink{classBC_1_1streams_1_1Stream}{BC::streams::Stream<BC::device\_tag>}& stream,
+       Begin begin, End end, Args... args) \{\(\backslash\)
+    return thrust::function(thrust::cuda::par.on(stream), begin, end, args...);\(\backslash\)
+\}\(\backslash\)
+template<class Begin, class End, class... Args>\(\backslash\)
+\textcolor{keyword}{static} \textcolor{keyword}{auto} \hyperlink{namespaceBC_1_1nn_a5429ceaa392776ade7234175af39050d}{function} (cudaStream\_t stream, Begin begin, End end, Args... args) \{\(\backslash\)
+    return thrust::function(thrust::cuda::par.on(stream), begin, end, args...);\(\backslash\)
+\})\(\backslash\)
+template<\textcolor{keyword}{class }Begin, class End, class... Args>\(\backslash\)
+static auto \hyperlink{namespaceBC_1_1nn_a5429ceaa392776ade7234175af39050d}{function} (\hyperlink{namespaceBC}{BC}::\hyperlink{namespaceBC_abc64a63cd29a22d102a68f478dfd588d}{streams::Stream}<BC::host\_tag> stream, Begin begin, End 
+      end, Args... args) \{   \(\backslash\)
+    double value = 1.0;\(\backslash\)
+    stream.enqueue([&]()\{ value = \hyperlink{namespaceBC_1_1nn_a5429ceaa392776ade7234175af39050d}{std::function}(begin, end, args...); \});\(\backslash\)
+    stream.sync();\(\backslash\)
+    return value;\(\backslash\)
+\}\(\backslash\)
+template<\textcolor{keyword}{class }Container, class... Args>\(\backslash\)
+static auto \hyperlink{namespaceBC_1_1nn_a5429ceaa392776ade7234175af39050d}{function} (const Container& container, Args&&... args) \{\(\backslash\)
+    return \textcolor{keyword}{function}(BC::streams::select\_on\_get\_stream(container), container.begin(), container.end(), args.
+      ..);\(\backslash\)
+\}\(\backslash\)
+template<\textcolor{keyword}{class }Container, class... Args>\(\backslash\)
+static auto \hyperlink{namespaceBC_1_1nn_a5429ceaa392776ade7234175af39050d}{function} (Container& container, Args&&... args) \{\(\backslash\)
+    return \textcolor{keyword}{function}(BC::streams::select\_on\_get\_stream(container), container.begin(), container.end(), args.
+      ..);\(\backslash\)
+\}\(\backslash\)
+\end{DoxyCode}
+
+
+\subsection{Function Documentation}
+\index{Algorithms.\+h@{Algorithms.\+h}!B\+C\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+B\+O\+DY@{B\+C\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+B\+O\+DY}}
+\index{B\+C\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+B\+O\+DY@{B\+C\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+B\+O\+DY}!Algorithms.\+h@{Algorithms.\+h}}
+\subsubsection[{\texorpdfstring{B\+C\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+B\+O\+D\+Y(tensors\lcurly{}namespace algorithms, Algorithm)\rcurly{}namespace BC}{BC_DEFAULT_MODULE_BODY(tensors\{namespace algorithms, Algorithm)\}namespace BC}}]{\setlength{\rightskip}{0pt plus 5cm}B\+C\+\_\+\+D\+E\+F\+A\+U\+L\+T\+\_\+\+M\+O\+D\+U\+L\+E\+\_\+\+B\+O\+DY (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{Algorithms_8h_ab640fabee4117871578d5266643a330f}{}\label{Algorithms_8h_ab640fabee4117871578d5266643a330f}

@@ -1,0 +1,153 @@
+\hypertarget{classBC_1_1memory_1_1atomic__shared__ptr}{}\section{BC\+:\+:memory\+:\+:atomic\+\_\+shared\+\_\+ptr$<$ Value\+Type $>$ Class Template Reference}
+\label{classBC_1_1memory_1_1atomic__shared__ptr}\index{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr$<$ Value\+Type $>$@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr$<$ Value\+Type $>$}}
+
+
+{\ttfamily \#include $<$Black\+Cat\+\_\+\+Memory.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structBC_1_1memory_1_1atomic__shared__ptr_1_1wrapper}{wrapper}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class... Args$>$ }\\\hyperlink{classBC_1_1memory_1_1atomic__shared__ptr_a5e60d8cd3873420741fe6b2c12cacb86}{atomic\+\_\+shared\+\_\+ptr} (Args \&\&...args)
+\item 
+\hyperlink{classBC_1_1memory_1_1atomic__shared__ptr_a3a720872a09351834feda9126f25eecb}{atomic\+\_\+shared\+\_\+ptr} (\hyperlink{classBC_1_1memory_1_1atomic__shared__ptr}{atomic\+\_\+shared\+\_\+ptr} \&\&ptr)
+\item 
+\hyperlink{classBC_1_1memory_1_1atomic__shared__ptr_a46f2567c2a73e455595835d7633cfe3a}{atomic\+\_\+shared\+\_\+ptr} (const \hyperlink{classBC_1_1memory_1_1atomic__shared__ptr}{atomic\+\_\+shared\+\_\+ptr} \&ptr)
+\item 
+\hyperlink{classBC_1_1memory_1_1atomic__shared__ptr_aec6b34765f04d120c96236c21a15c981}{atomic\+\_\+shared\+\_\+ptr} ()=default
+\item 
+{\footnotesize template$<$class... Args$>$ }\\\hyperlink{classBC_1_1memory_1_1atomic__shared__ptr_a3728bb6491f877538ac4868ec43f5360}{atomic\+\_\+shared\+\_\+ptr} (const Args \&...args)
+\item 
+{\footnotesize template$<$class Y , class Deleter  = detail\+::\+Default\+\_\+\+Deleter, class Allocator  = std\+::allocator$<$\+Value\+Type$>$$>$ }\\void \hyperlink{classBC_1_1memory_1_1atomic__shared__ptr_a59b1b6c8781a2b70008e1ae4c8325d17}{reset} (Y $\ast$ptr, Deleter del=\hyperlink{namespaceBC_1_1memory_1_1detail_a42827b91c57157365e4c7249397f12b6}{detail\+::default\+\_\+deleter}, \hyperlink{namespaceBC_a934f94b17b06290e6b241e5f59930c5f}{Allocator} alloc=\hyperlink{namespaceBC_a934f94b17b06290e6b241e5f59930c5f}{Allocator}())
+\item 
+void \hyperlink{classBC_1_1memory_1_1atomic__shared__ptr_ad7a862c5433c6c3c5af8b55762d4fe0f}{swap} (std\+::shared\+\_\+ptr$<$ Value\+Type $>$ \&sh\+\_\+ptr)
+\item 
+\hyperlink{structBC_1_1memory_1_1atomic__shared__ptr_1_1wrapper}{wrapper} \hyperlink{classBC_1_1memory_1_1atomic__shared__ptr_afc9fbab0c0f7744b1364c03675b6fa13}{get} ()
+\item 
+const \hyperlink{structBC_1_1memory_1_1atomic__shared__ptr_1_1wrapper}{wrapper} \hyperlink{classBC_1_1memory_1_1atomic__shared__ptr_ac25a830aee63f9273529cb0a67350166}{get} () const 
+\item 
+auto \hyperlink{classBC_1_1memory_1_1atomic__shared__ptr_a3024f0c9f0ba45f096b1d7e5c603c7b0}{operator-\/$>$} ()
+\item 
+auto \hyperlink{classBC_1_1memory_1_1atomic__shared__ptr_ae2c5708e2519ead2cf30bc05a7c4b6f8}{operator-\/$>$} () const 
+\item 
+bool \hyperlink{classBC_1_1memory_1_1atomic__shared__ptr_a1793a0e3d10f3fb6d3487f58d390fc5e}{operator==} (const \hyperlink{classBC_1_1memory_1_1atomic__shared__ptr}{atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$ \&ptr)
+\item 
+bool \hyperlink{classBC_1_1memory_1_1atomic__shared__ptr_a0a25f4cf07d78c96f934741018cc5f3b}{operator!=} (const \hyperlink{classBC_1_1memory_1_1atomic__shared__ptr}{atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$ \&ptr)
+\item 
+\hyperlink{classBC_1_1memory_1_1atomic__shared__ptr}{atomic\+\_\+shared\+\_\+ptr} \& \hyperlink{classBC_1_1memory_1_1atomic__shared__ptr_a76412c3271513ef2fd1eef5199a78b0d}{operator=} (const \hyperlink{classBC_1_1memory_1_1atomic__shared__ptr}{atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$ \&ptr)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}!atomic\+\_\+shared\+\_\+ptr@{atomic\+\_\+shared\+\_\+ptr}}
+\index{atomic\+\_\+shared\+\_\+ptr@{atomic\+\_\+shared\+\_\+ptr}!B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}}
+\subsubsection[{\texorpdfstring{atomic\+\_\+shared\+\_\+ptr(\+Args \&\&...\+args)}{atomic_shared_ptr(Args &&...args)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type$>$ template$<$class... Args$>$ {\bf B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$\+::{\bf atomic\+\_\+shared\+\_\+ptr} (
+\begin{DoxyParamCaption}
+\item[{Args \&\&...}]{args}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}\hypertarget{classBC_1_1memory_1_1atomic__shared__ptr_a5e60d8cd3873420741fe6b2c12cacb86}{}\label{classBC_1_1memory_1_1atomic__shared__ptr_a5e60d8cd3873420741fe6b2c12cacb86}
+\index{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}!atomic\+\_\+shared\+\_\+ptr@{atomic\+\_\+shared\+\_\+ptr}}
+\index{atomic\+\_\+shared\+\_\+ptr@{atomic\+\_\+shared\+\_\+ptr}!B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}}
+\subsubsection[{\texorpdfstring{atomic\+\_\+shared\+\_\+ptr(atomic\+\_\+shared\+\_\+ptr \&\&ptr)}{atomic_shared_ptr(atomic_shared_ptr &&ptr)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type$>$ {\bf B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$\+::{\bf atomic\+\_\+shared\+\_\+ptr} (
+\begin{DoxyParamCaption}
+\item[{{\bf atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$ \&\&}]{ptr}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1memory_1_1atomic__shared__ptr_a3a720872a09351834feda9126f25eecb}{}\label{classBC_1_1memory_1_1atomic__shared__ptr_a3a720872a09351834feda9126f25eecb}
+\index{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}!atomic\+\_\+shared\+\_\+ptr@{atomic\+\_\+shared\+\_\+ptr}}
+\index{atomic\+\_\+shared\+\_\+ptr@{atomic\+\_\+shared\+\_\+ptr}!B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}}
+\subsubsection[{\texorpdfstring{atomic\+\_\+shared\+\_\+ptr(const atomic\+\_\+shared\+\_\+ptr \&ptr)}{atomic_shared_ptr(const atomic_shared_ptr &ptr)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type$>$ {\bf B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$\+::{\bf atomic\+\_\+shared\+\_\+ptr} (
+\begin{DoxyParamCaption}
+\item[{const {\bf atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$ \&}]{ptr}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1memory_1_1atomic__shared__ptr_a46f2567c2a73e455595835d7633cfe3a}{}\label{classBC_1_1memory_1_1atomic__shared__ptr_a46f2567c2a73e455595835d7633cfe3a}
+\index{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}!atomic\+\_\+shared\+\_\+ptr@{atomic\+\_\+shared\+\_\+ptr}}
+\index{atomic\+\_\+shared\+\_\+ptr@{atomic\+\_\+shared\+\_\+ptr}!B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}}
+\subsubsection[{\texorpdfstring{atomic\+\_\+shared\+\_\+ptr()=default}{atomic_shared_ptr()=default}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type$>$ {\bf B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$\+::{\bf atomic\+\_\+shared\+\_\+ptr} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [default]}}\hypertarget{classBC_1_1memory_1_1atomic__shared__ptr_aec6b34765f04d120c96236c21a15c981}{}\label{classBC_1_1memory_1_1atomic__shared__ptr_aec6b34765f04d120c96236c21a15c981}
+\index{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}!atomic\+\_\+shared\+\_\+ptr@{atomic\+\_\+shared\+\_\+ptr}}
+\index{atomic\+\_\+shared\+\_\+ptr@{atomic\+\_\+shared\+\_\+ptr}!B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}}
+\subsubsection[{\texorpdfstring{atomic\+\_\+shared\+\_\+ptr(const Args \&...\+args)}{atomic_shared_ptr(const Args &...args)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type$>$ template$<$class... Args$>$ {\bf B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$\+::{\bf atomic\+\_\+shared\+\_\+ptr} (
+\begin{DoxyParamCaption}
+\item[{const Args \&...}]{args}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1memory_1_1atomic__shared__ptr_a3728bb6491f877538ac4868ec43f5360}{}\label{classBC_1_1memory_1_1atomic__shared__ptr_a3728bb6491f877538ac4868ec43f5360}
+
+
+\subsection{Member Function Documentation}
+\index{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}!get@{get}}
+\index{get@{get}!B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}}
+\subsubsection[{\texorpdfstring{get()}{get()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type$>$ {\bf wrapper} {\bf B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$\+::get (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1memory_1_1atomic__shared__ptr_afc9fbab0c0f7744b1364c03675b6fa13}{}\label{classBC_1_1memory_1_1atomic__shared__ptr_afc9fbab0c0f7744b1364c03675b6fa13}
+\index{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}!get@{get}}
+\index{get@{get}!B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}}
+\subsubsection[{\texorpdfstring{get() const }{get() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type$>$ const {\bf wrapper} {\bf B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$\+::get (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1memory_1_1atomic__shared__ptr_ac25a830aee63f9273529cb0a67350166}{}\label{classBC_1_1memory_1_1atomic__shared__ptr_ac25a830aee63f9273529cb0a67350166}
+\index{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}}
+\subsubsection[{\texorpdfstring{operator"!=(const atomic\+\_\+shared\+\_\+ptr$<$ Value\+Type $>$ \&ptr)}{operator!=(const atomic_shared_ptr< ValueType > &ptr)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type$>$ bool {\bf B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$\+::operator!= (
+\begin{DoxyParamCaption}
+\item[{const {\bf atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$ \&}]{ptr}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1memory_1_1atomic__shared__ptr_a0a25f4cf07d78c96f934741018cc5f3b}{}\label{classBC_1_1memory_1_1atomic__shared__ptr_a0a25f4cf07d78c96f934741018cc5f3b}
+\index{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}!operator-\/$>$@{operator-\/$>$}}
+\index{operator-\/$>$@{operator-\/$>$}!B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}}
+\subsubsection[{\texorpdfstring{operator-\/$>$()}{operator->()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type$>$ auto {\bf B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$\+::operator-\/$>$ (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1memory_1_1atomic__shared__ptr_a3024f0c9f0ba45f096b1d7e5c603c7b0}{}\label{classBC_1_1memory_1_1atomic__shared__ptr_a3024f0c9f0ba45f096b1d7e5c603c7b0}
+\index{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}!operator-\/$>$@{operator-\/$>$}}
+\index{operator-\/$>$@{operator-\/$>$}!B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}}
+\subsubsection[{\texorpdfstring{operator-\/$>$() const }{operator->() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type$>$ auto {\bf B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$\+::operator-\/$>$ (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1memory_1_1atomic__shared__ptr_ae2c5708e2519ead2cf30bc05a7c4b6f8}{}\label{classBC_1_1memory_1_1atomic__shared__ptr_ae2c5708e2519ead2cf30bc05a7c4b6f8}
+\index{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}!operator=@{operator=}}
+\index{operator=@{operator=}!B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}}
+\subsubsection[{\texorpdfstring{operator=(const atomic\+\_\+shared\+\_\+ptr$<$ Value\+Type $>$ \&ptr)}{operator=(const atomic_shared_ptr< ValueType > &ptr)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type$>$ {\bf atomic\+\_\+shared\+\_\+ptr}\& {\bf B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$\+::operator= (
+\begin{DoxyParamCaption}
+\item[{const {\bf atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$ \&}]{ptr}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1memory_1_1atomic__shared__ptr_a76412c3271513ef2fd1eef5199a78b0d}{}\label{classBC_1_1memory_1_1atomic__shared__ptr_a76412c3271513ef2fd1eef5199a78b0d}
+\index{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}!operator==@{operator==}}
+\index{operator==@{operator==}!B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}}
+\subsubsection[{\texorpdfstring{operator==(const atomic\+\_\+shared\+\_\+ptr$<$ Value\+Type $>$ \&ptr)}{operator==(const atomic_shared_ptr< ValueType > &ptr)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type$>$ bool {\bf B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$\+::operator== (
+\begin{DoxyParamCaption}
+\item[{const {\bf atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$ \&}]{ptr}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1memory_1_1atomic__shared__ptr_a1793a0e3d10f3fb6d3487f58d390fc5e}{}\label{classBC_1_1memory_1_1atomic__shared__ptr_a1793a0e3d10f3fb6d3487f58d390fc5e}
+\index{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}!reset@{reset}}
+\index{reset@{reset}!B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}}
+\subsubsection[{\texorpdfstring{reset(\+Y $\ast$ptr, Deleter del=detail\+::default\+\_\+deleter, Allocator alloc=\+Allocator())}{reset(Y *ptr, Deleter del=detail::default_deleter, Allocator alloc=Allocator())}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type$>$ template$<$class Y , class Deleter  = detail\+::\+Default\+\_\+\+Deleter, class Allocator  = std\+::allocator$<$\+Value\+Type$>$$>$ void {\bf B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$\+::reset (
+\begin{DoxyParamCaption}
+\item[{Y $\ast$}]{ptr, }
+\item[{Deleter}]{del = {\ttfamily {\bf detail\+::default\+\_\+deleter}}, }
+\item[{{\bf Allocator}}]{alloc = {\ttfamily {\bf Allocator}()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1memory_1_1atomic__shared__ptr_a59b1b6c8781a2b70008e1ae4c8325d17}{}\label{classBC_1_1memory_1_1atomic__shared__ptr_a59b1b6c8781a2b70008e1ae4c8325d17}
+\index{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}!swap@{swap}}
+\index{swap@{swap}!B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr@{B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}}
+\subsubsection[{\texorpdfstring{swap(std\+::shared\+\_\+ptr$<$ Value\+Type $>$ \&sh\+\_\+ptr)}{swap(std::shared_ptr< ValueType > &sh_ptr)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Value\+Type$>$ void {\bf B\+C\+::memory\+::atomic\+\_\+shared\+\_\+ptr}$<$ Value\+Type $>$\+::swap (
+\begin{DoxyParamCaption}
+\item[{std\+::shared\+\_\+ptr$<$ Value\+Type $>$ \&}]{sh\+\_\+ptr}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBC_1_1memory_1_1atomic__shared__ptr_ad7a862c5433c6c3c5af8b55762d4fe0f}{}\label{classBC_1_1memory_1_1atomic__shared__ptr_ad7a862c5433c6c3c5af8b55762d4fe0f}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{BlackCat__Memory_8h}{Black\+Cat\+\_\+\+Memory.\+h}\end{DoxyCompactItemize}

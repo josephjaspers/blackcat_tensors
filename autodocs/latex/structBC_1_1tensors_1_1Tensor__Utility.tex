@@ -1,0 +1,190 @@
+\hypertarget{structBC_1_1tensors_1_1Tensor__Utility}{}\section{BC\+:\+:tensors\+:\+:Tensor\+\_\+\+Utility$<$ Expression\+Template $>$ Struct Template Reference}
+\label{structBC_1_1tensors_1_1Tensor__Utility}\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility$<$ Expression\+Template $>$@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility$<$ Expression\+Template $>$}}
+
+
+{\ttfamily \#include $<$Tensor\+\_\+\+Utility.\+h$>$}
+
+
+
+Inheritance diagram for BC\+:\+:tensors\+:\+:Tensor\+\_\+\+Utility$<$ Expression\+Template $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structBC_1_1tensors_1_1Tensor__Utility__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_a6a3f28ec43165a64baf4e328029cf7a0}{system\+\_\+tag} = typename Expression\+Template\+::system\+\_\+tag
+\item 
+using \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_a239565220d275ad807c9969dde8c775b}{derived} = \hyperlink{classBC_1_1tensors_1_1Tensor__Base}{Tensor\+\_\+\+Base}$<$ Expression\+Template $>$
+\item 
+using \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_a77d35af590f103f5d512ade9bf2be6c9}{scalar} = typename Expression\+Template\+::value\+\_\+type
+\item 
+using \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_ae309609d855fa2c7253d2c845473a3c0}{utility\+\_\+l} = utility\+::implementation$<$ \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_a6a3f28ec43165a64baf4e328029cf7a0}{system\+\_\+tag} $>$
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_a3202a6c237d7657367d8c4750bf9fc37}{to\+\_\+string} (int precision=5, bool sparse=false, bool pretty=false) const 
+\item 
+std\+::string \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_a01052a3274a80a252743aa6bfe74dcbe}{to\+\_\+pretty\+\_\+string} (int precision=5, bool sparse=false) const 
+\item 
+void \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_a6c5af9542ac1800075d811450c3c6e8b}{print} (int precision=8, bool sparse=false, bool pretty=false) const 
+\item 
+void \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_a68f9cdcb723efb6288e3cea1501f9021}{print\+Sparse} (int precision=8, bool pretty=true) const 
+\item 
+void \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_a4ce9623fc490c0c996bb377cf79ed033}{write} (std\+::ofstream \&os) const 
+\item 
+void \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_a14e7f9e594c1c54f5b11b6b5c598947c}{write\+\_\+tensor\+\_\+data} (std\+::ofstream \&os) const 
+\item 
+void \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_a28ca9005e5a5817579f027aaf4e1d180}{read\+\_\+as\+\_\+one\+\_\+hot} (std\+::ifstream \&is)
+\item 
+void \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_a7a5b71809ca307bb1ec15fefcb3c40b3}{read\+\_\+csv\+\_\+row} (std\+::ifstream \&is)
+\item 
+void \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_af969b8b30323ba40d4ee8595866a9c13}{read\+\_\+tensor\+\_\+data} (std\+::ifstream \&is, bool read\+\_\+dimensions=true, bool override\+Dimensions=true)
+\item 
+void \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_a4bdfca850f646b3ca5f5acb9951cfd54}{read\+\_\+tensor\+\_\+data\+\_\+as\+\_\+one\+\_\+hot} (std\+::ifstream \&is, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} sz)
+\item 
+void \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_a4a90e2584e698bccf99047ad7b28eb50}{print\+\_\+dimensions} () const 
+\item 
+void \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_adc6c8e93d9c896bce34a40910162c19a}{print\+\_\+leading\+\_\+dimensions} () const 
+\item 
+void \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_a9fedd9cc3f5dff6916b33abee051dfa9}{print\+\_\+block\+\_\+dimensions} () const 
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class $>$ }\\class \hyperlink{structBC_1_1tensors_1_1Tensor__Utility_a2c5e6098681f791432fcc61818c11375}{Tensor\+\_\+\+Utility}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!derived@{derived}}
+\index{derived@{derived}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{derived}{derived}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ using {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::{\bf derived} =  {\bf Tensor\+\_\+\+Base}$<$Expression\+Template$>$}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_a239565220d275ad807c9969dde8c775b}{}\label{structBC_1_1tensors_1_1Tensor__Utility_a239565220d275ad807c9969dde8c775b}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!scalar@{scalar}}
+\index{scalar@{scalar}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{scalar}{scalar}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ using {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::{\bf scalar} =  typename Expression\+Template\+::value\+\_\+type}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_a77d35af590f103f5d512ade9bf2be6c9}{}\label{structBC_1_1tensors_1_1Tensor__Utility_a77d35af590f103f5d512ade9bf2be6c9}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!system\+\_\+tag@{system\+\_\+tag}}
+\index{system\+\_\+tag@{system\+\_\+tag}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{system\+\_\+tag}{system_tag}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ using {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::{\bf system\+\_\+tag} =  typename Expression\+Template\+::system\+\_\+tag}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_a6a3f28ec43165a64baf4e328029cf7a0}{}\label{structBC_1_1tensors_1_1Tensor__Utility_a6a3f28ec43165a64baf4e328029cf7a0}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!utility\+\_\+l@{utility\+\_\+l}}
+\index{utility\+\_\+l@{utility\+\_\+l}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{utility\+\_\+l}{utility_l}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ using {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::{\bf utility\+\_\+l} =  utility\+::implementation$<${\bf system\+\_\+tag}$>$}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_ae309609d855fa2c7253d2c845473a3c0}{}\label{structBC_1_1tensors_1_1Tensor__Utility_ae309609d855fa2c7253d2c845473a3c0}
+
+
+\subsection{Member Function Documentation}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!print@{print}}
+\index{print@{print}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{print(int precision=8, bool sparse=false, bool pretty=false) const }{print(int precision=8, bool sparse=false, bool pretty=false) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ void {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::print (
+\begin{DoxyParamCaption}
+\item[{int}]{precision = {\ttfamily 8}, }
+\item[{bool}]{sparse = {\ttfamily false}, }
+\item[{bool}]{pretty = {\ttfamily false}}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_a6c5af9542ac1800075d811450c3c6e8b}{}\label{structBC_1_1tensors_1_1Tensor__Utility_a6c5af9542ac1800075d811450c3c6e8b}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!print\+\_\+block\+\_\+dimensions@{print\+\_\+block\+\_\+dimensions}}
+\index{print\+\_\+block\+\_\+dimensions@{print\+\_\+block\+\_\+dimensions}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{print\+\_\+block\+\_\+dimensions() const }{print_block_dimensions() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ void {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::print\+\_\+block\+\_\+dimensions (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_a9fedd9cc3f5dff6916b33abee051dfa9}{}\label{structBC_1_1tensors_1_1Tensor__Utility_a9fedd9cc3f5dff6916b33abee051dfa9}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!print\+\_\+dimensions@{print\+\_\+dimensions}}
+\index{print\+\_\+dimensions@{print\+\_\+dimensions}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{print\+\_\+dimensions() const }{print_dimensions() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ void {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::print\+\_\+dimensions (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_a4a90e2584e698bccf99047ad7b28eb50}{}\label{structBC_1_1tensors_1_1Tensor__Utility_a4a90e2584e698bccf99047ad7b28eb50}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!print\+\_\+leading\+\_\+dimensions@{print\+\_\+leading\+\_\+dimensions}}
+\index{print\+\_\+leading\+\_\+dimensions@{print\+\_\+leading\+\_\+dimensions}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{print\+\_\+leading\+\_\+dimensions() const }{print_leading_dimensions() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ void {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::print\+\_\+leading\+\_\+dimensions (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_adc6c8e93d9c896bce34a40910162c19a}{}\label{structBC_1_1tensors_1_1Tensor__Utility_adc6c8e93d9c896bce34a40910162c19a}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!print\+Sparse@{print\+Sparse}}
+\index{print\+Sparse@{print\+Sparse}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{print\+Sparse(int precision=8, bool pretty=true) const }{printSparse(int precision=8, bool pretty=true) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ void {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::print\+Sparse (
+\begin{DoxyParamCaption}
+\item[{int}]{precision = {\ttfamily 8}, }
+\item[{bool}]{pretty = {\ttfamily true}}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_a68f9cdcb723efb6288e3cea1501f9021}{}\label{structBC_1_1tensors_1_1Tensor__Utility_a68f9cdcb723efb6288e3cea1501f9021}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!read\+\_\+as\+\_\+one\+\_\+hot@{read\+\_\+as\+\_\+one\+\_\+hot}}
+\index{read\+\_\+as\+\_\+one\+\_\+hot@{read\+\_\+as\+\_\+one\+\_\+hot}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{read\+\_\+as\+\_\+one\+\_\+hot(std\+::ifstream \&is)}{read_as_one_hot(std::ifstream &is)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ void {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::read\+\_\+as\+\_\+one\+\_\+hot (
+\begin{DoxyParamCaption}
+\item[{std\+::ifstream \&}]{is}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_a28ca9005e5a5817579f027aaf4e1d180}{}\label{structBC_1_1tensors_1_1Tensor__Utility_a28ca9005e5a5817579f027aaf4e1d180}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!read\+\_\+csv\+\_\+row@{read\+\_\+csv\+\_\+row}}
+\index{read\+\_\+csv\+\_\+row@{read\+\_\+csv\+\_\+row}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{read\+\_\+csv\+\_\+row(std\+::ifstream \&is)}{read_csv_row(std::ifstream &is)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ void {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::read\+\_\+csv\+\_\+row (
+\begin{DoxyParamCaption}
+\item[{std\+::ifstream \&}]{is}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_a7a5b71809ca307bb1ec15fefcb3c40b3}{}\label{structBC_1_1tensors_1_1Tensor__Utility_a7a5b71809ca307bb1ec15fefcb3c40b3}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!read\+\_\+tensor\+\_\+data@{read\+\_\+tensor\+\_\+data}}
+\index{read\+\_\+tensor\+\_\+data@{read\+\_\+tensor\+\_\+data}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{read\+\_\+tensor\+\_\+data(std\+::ifstream \&is, bool read\+\_\+dimensions=true, bool override\+Dimensions=true)}{read_tensor_data(std::ifstream &is, bool read_dimensions=true, bool overrideDimensions=true)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ void {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::read\+\_\+tensor\+\_\+data (
+\begin{DoxyParamCaption}
+\item[{std\+::ifstream \&}]{is, }
+\item[{bool}]{read\+\_\+dimensions = {\ttfamily true}, }
+\item[{bool}]{override\+Dimensions = {\ttfamily true}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_af969b8b30323ba40d4ee8595866a9c13}{}\label{structBC_1_1tensors_1_1Tensor__Utility_af969b8b30323ba40d4ee8595866a9c13}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!read\+\_\+tensor\+\_\+data\+\_\+as\+\_\+one\+\_\+hot@{read\+\_\+tensor\+\_\+data\+\_\+as\+\_\+one\+\_\+hot}}
+\index{read\+\_\+tensor\+\_\+data\+\_\+as\+\_\+one\+\_\+hot@{read\+\_\+tensor\+\_\+data\+\_\+as\+\_\+one\+\_\+hot}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{read\+\_\+tensor\+\_\+data\+\_\+as\+\_\+one\+\_\+hot(std\+::ifstream \&is, B\+C\+::size\+\_\+t sz)}{read_tensor_data_as_one_hot(std::ifstream &is, BC::size_t sz)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ void {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::read\+\_\+tensor\+\_\+data\+\_\+as\+\_\+one\+\_\+hot (
+\begin{DoxyParamCaption}
+\item[{std\+::ifstream \&}]{is, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{sz}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_a4bdfca850f646b3ca5f5acb9951cfd54}{}\label{structBC_1_1tensors_1_1Tensor__Utility_a4bdfca850f646b3ca5f5acb9951cfd54}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!to\+\_\+pretty\+\_\+string@{to\+\_\+pretty\+\_\+string}}
+\index{to\+\_\+pretty\+\_\+string@{to\+\_\+pretty\+\_\+string}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{to\+\_\+pretty\+\_\+string(int precision=5, bool sparse=false) const }{to_pretty_string(int precision=5, bool sparse=false) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ std\+::string {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::to\+\_\+pretty\+\_\+string (
+\begin{DoxyParamCaption}
+\item[{int}]{precision = {\ttfamily 5}, }
+\item[{bool}]{sparse = {\ttfamily false}}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_a01052a3274a80a252743aa6bfe74dcbe}{}\label{structBC_1_1tensors_1_1Tensor__Utility_a01052a3274a80a252743aa6bfe74dcbe}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!to\+\_\+string@{to\+\_\+string}}
+\index{to\+\_\+string@{to\+\_\+string}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{to\+\_\+string(int precision=5, bool sparse=false, bool pretty=false) const }{to_string(int precision=5, bool sparse=false, bool pretty=false) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ std\+::string {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::to\+\_\+string (
+\begin{DoxyParamCaption}
+\item[{int}]{precision = {\ttfamily 5}, }
+\item[{bool}]{sparse = {\ttfamily false}, }
+\item[{bool}]{pretty = {\ttfamily false}}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_a3202a6c237d7657367d8c4750bf9fc37}{}\label{structBC_1_1tensors_1_1Tensor__Utility_a3202a6c237d7657367d8c4750bf9fc37}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!write@{write}}
+\index{write@{write}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{write(std\+::ofstream \&os) const }{write(std::ofstream &os) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ void {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::write (
+\begin{DoxyParamCaption}
+\item[{std\+::ofstream \&}]{os}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_a4ce9623fc490c0c996bb377cf79ed033}{}\label{structBC_1_1tensors_1_1Tensor__Utility_a4ce9623fc490c0c996bb377cf79ed033}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!write\+\_\+tensor\+\_\+data@{write\+\_\+tensor\+\_\+data}}
+\index{write\+\_\+tensor\+\_\+data@{write\+\_\+tensor\+\_\+data}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{write\+\_\+tensor\+\_\+data(std\+::ofstream \&os) const }{write_tensor_data(std::ofstream &os) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ void {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}$<$ Expression\+Template $>$\+::write\+\_\+tensor\+\_\+data (
+\begin{DoxyParamCaption}
+\item[{std\+::ofstream \&}]{os}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_a14e7f9e594c1c54f5b11b6b5c598947c}{}\label{structBC_1_1tensors_1_1Tensor__Utility_a14e7f9e594c1c54f5b11b6b5c598947c}
+
+
+\subsection{Friends And Related Function Documentation}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}!Tensor\+\_\+\+Utility@{Tensor\+\_\+\+Utility}}
+\index{Tensor\+\_\+\+Utility@{Tensor\+\_\+\+Utility}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Utility}}
+\subsubsection[{\texorpdfstring{Tensor\+\_\+\+Utility}{Tensor_Utility}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression\+Template $>$ template$<$class $>$ friend class {\bf Tensor\+\_\+\+Utility}\hspace{0.3cm}{\ttfamily [friend]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Utility_a2c5e6098681f791432fcc61818c11375}{}\label{structBC_1_1tensors_1_1Tensor__Utility_a2c5e6098681f791432fcc61818c11375}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/tensors/\hyperlink{Tensor__Utility_8h}{Tensor\+\_\+\+Utility.\+h}\end{DoxyCompactItemize}

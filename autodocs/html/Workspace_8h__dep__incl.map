@@ -1,0 +1,22 @@
+<map id="include/allocators/fancy/Workspace.h" name="include/allocators/fancy/Workspace.h">
+<area shape="rect" id="node2" href="$Allocators_8h.html" title="include/allocators\l/Allocators.h" alt="" coords="409,95,532,136"/>
+<area shape="rect" id="node3" href="$BlackCat__Allocator_8h.html" title="include/BlackCat_Allocator.h" alt="" coords="375,184,566,211"/>
+<area shape="rect" id="node4" href="$BlackCat__Tensors_8h.html" title="include/BlackCat_Tensors.h" alt="" coords="303,483,489,509"/>
+<area shape="rect" id="node18" href="$BlackCat__Memory_8h.html" title="include/BlackCat_Memory.h" alt="" coords="312,259,499,285"/>
+<area shape="rect" id="node19" href="$BlackCat__Stream_8h.html" title="include/BlackCat_Stream.h" alt="" coords="313,333,495,360"/>
+<area shape="rect" id="node21" href="$Tensors_8h.html" title="include/tensors/Tensors.h" alt="" coords="519,333,691,360"/>
+<area shape="rect" id="node5" href="$elementwise_8h.html" title="benchmarks/elementwise.h" alt="" coords="5,557,187,584"/>
+<area shape="rect" id="node6" href="$BlackCat__IO_8h.html" title="include/BlackCat_IO.h" alt="" coords="211,557,365,584"/>
+<area shape="rect" id="node7" href="$BlackCat__NeuralNetworks_8h.html" title="include/BlackCat_NeuralNetworks.h" alt="" coords="389,557,622,584"/>
+<area shape="rect" id="node8" href="$test__common_8h.html" title="tests/test_common.h" alt="" coords="646,557,791,584"/>
+<area shape="rect" id="node9" href="$test__accessors_8h.html" title="tests/test_accessors.h" alt="" coords="45,632,200,659"/>
+<area shape="rect" id="node10" href="$run_8h.html" title="tests/run.h" alt="" coords="677,707,761,733"/>
+<area shape="rect" id="node11" href="$test__allocators_8h.html" title="tests/test_allocators.h" alt="" coords="275,632,426,659"/>
+<area shape="rect" id="node12" href="$test__constructors_8h.html" title="tests/test_constructors.h" alt="" coords="450,632,617,659"/>
+<area shape="rect" id="node13" href="$test__operations_8h.html" title="tests/test_operations.h" alt="" coords="641,632,796,659"/>
+<area shape="rect" id="node14" href="$test__streams_8h.html" title="tests/test_streams.h" alt="" coords="821,632,963,659"/>
+<area shape="rect" id="node15" href="$test__algorithms_8h.html" title="tests/test_algorithms.h" alt="" coords="988,632,1143,659"/>
+<area shape="rect" id="node16" href="$test__blas_8h.html" title="tests/test_blas.h" alt="" coords="1166,632,1285,659"/>
+<area shape="rect" id="node17" href="$test__derivatives_8h.html" title="tests/test_derivatives.h" alt="" coords="1309,632,1467,659"/>
+<area shape="rect" id="node20" href="$BlackCat__Algorithms_8h.html" title="include/BlackCat_Algorithms.h" alt="" coords="365,408,566,435"/>
+</map>

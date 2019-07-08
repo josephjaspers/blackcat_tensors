@@ -1,0 +1,247 @@
+\hypertarget{structBC_1_1tensors_1_1Tensor__Operations}{}\section{BC\+:\+:tensors\+:\+:Tensor\+\_\+\+Operations$<$ Expression $>$ Struct Template Reference}
+\label{structBC_1_1tensors_1_1Tensor__Operations}\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations$<$ Expression $>$@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations$<$ Expression $>$}}
+
+
+{\ttfamily \#include $<$Tensor\+\_\+\+Operations.\+h$>$}
+
+
+
+Inheritance diagram for BC\+:\+:tensors\+:\+:Tensor\+\_\+\+Operations$<$ Expression $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{structBC_1_1tensors_1_1Tensor__Operations__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_1_1Alias}{Alias}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a830b9a11262226b18af9caef7b9da13b}{derived} = \hyperlink{classBC_1_1tensors_1_1Tensor__Base}{Tensor\+\_\+\+Base}$<$ Expression $>$
+\item 
+using \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a963cb506586200de946d7f3c9a02c56d}{expression\+\_\+t} = Expression
+\item 
+using \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a05713745a836002a261c16e032629aa8}{value\+\_\+type} = typename expression\+\_\+t\+::value\+\_\+type
+\item 
+using \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_aeb2358dba2e022c48d925342d4bc34a2}{system\+\_\+tag} = typename expression\+\_\+t\+::system\+\_\+tag
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class p\+Deriv $>$ }\\\hyperlink{BlackCat__Common_8h_ac085f07cc309e3aac24aa3fc0a40f6d2}{B\+C\+H\+OT} \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a830b9a11262226b18af9caef7b9da13b}{derived} \& \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a846f62c3e0a0e813c344a3a62f2e4e86}{operator=} (const \hyperlink{structBC_1_1tensors_1_1Tensor__Operations}{Tensor\+\_\+\+Operations}$<$ p\+Deriv $>$ \&param)
+\item 
+\hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a830b9a11262226b18af9caef7b9da13b}{derived} \& \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a6d29ad7700f905abb54691a9f1e1735f}{operator=} (const \hyperlink{namespaceBC_1_1meta_afed7f4daa1d160f98e989138722fd031}{B\+C\+::meta\+::only\+\_\+if}$<$ \hyperlink{structBC_1_1tensors_1_1exprs_1_1expression__traits}{exprs\+::expression\+\_\+traits}$<$ Expression $>$\+::is\+\_\+copy\+\_\+assignable, \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a830b9a11262226b18af9caef7b9da13b}{derived} $>$ \&param)
+\item 
+{\footnotesize template$<$class param\+\_\+deriv $>$ }\\auto \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a35e6557f78bb866b756bf52709b190df}{operator$\ast$} (const \hyperlink{structBC_1_1tensors_1_1Tensor__Operations}{Tensor\+\_\+\+Operations}$<$ param\+\_\+deriv $>$ \&param) const 
+\item 
+const auto \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a5f339c4fec8d159973d05d12cd29a135}{transpose} () const 
+\item 
+auto \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_ac408bdabd760f9464ed66d9efcf43be0}{transpose} ()
+\item 
+const auto \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a6d5a8ff7ab127322609943af5a2d1064}{t} () const 
+\item 
+auto \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_aace003bdad68df77f429a239d3b2784d}{t} ()
+\item 
+auto \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a3bacb2241b1bab40d9212734eb0e41fc}{operator-\/} () const 
+\item 
+{\footnotesize template$<$class expression\+\_\+t $>$ }\\\hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a830b9a11262226b18af9caef7b9da13b}{derived} \& \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_ac9e54c8dcf66d4ad2341bdea938bae60}{operator+=} (const \hyperlink{classBC_1_1tensors_1_1Tensor__Base}{negated\+\_\+t}$<$ \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a963cb506586200de946d7f3c9a02c56d}{expression\+\_\+t} $>$ \&param)
+\item 
+{\footnotesize template$<$class expression\+\_\+t $>$ }\\\hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a830b9a11262226b18af9caef7b9da13b}{derived} \& \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a3ea33bbe36095e3106f09ed105e709c8}{operator-\/=} (const \hyperlink{classBC_1_1tensors_1_1Tensor__Base}{negated\+\_\+t}$<$ \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a963cb506586200de946d7f3c9a02c56d}{expression\+\_\+t} $>$ \&param)
+\item 
+{\footnotesize template$<$class expression\+\_\+t $>$ }\\auto \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a5542fc23f64610d56de924df4aa82410}{operator+} (const \hyperlink{classBC_1_1tensors_1_1Tensor__Base}{negated\+\_\+t}$<$ \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a963cb506586200de946d7f3c9a02c56d}{expression\+\_\+t} $>$ \&param) const 
+\item 
+{\footnotesize template$<$class right\+\_\+value $>$ }\\void \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a09ee84a69572ab98aab3d4b758c000f2}{copy} (const \hyperlink{structBC_1_1tensors_1_1Tensor__Operations}{Tensor\+\_\+\+Operations}$<$ right\+\_\+value $>$ \&rv)
+\item 
+{\footnotesize template$<$class functor $>$ }\\auto \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a0513f47543ce68bdc514c9c6f28ec2ed}{un\+\_\+expr} (functor f) const 
+\item 
+{\footnotesize template$<$class functor $>$ }\\auto \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a28995965a91a6cdfde1ff40d744766c3}{un\+\_\+expr} () const 
+\item 
+{\footnotesize template$<$class functor , class right\+\_\+value $>$ }\\auto \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a6c5d65a88c7c501c19262e6ab9582474}{bi\+\_\+expr} (functor f, const \hyperlink{structBC_1_1tensors_1_1Tensor__Operations}{Tensor\+\_\+\+Operations}$<$ right\+\_\+value $>$ \&rv) const 
+\item 
+{\footnotesize template$<$class functor , class right\+\_\+value $>$ }\\auto \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a239e16a212581c41686f16b99347e308}{bi\+\_\+expr} (const \hyperlink{structBC_1_1tensors_1_1Tensor__Operations}{Tensor\+\_\+\+Operations}$<$ right\+\_\+value $>$ \&rv) const 
+\item 
+{\footnotesize template$<$class functor , class right\+\_\+value $>$ }\\auto \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_ac8700a097a7eaff4e771cf097e304232}{bi\+\_\+expr} (functor f, const \hyperlink{structBC_1_1tensors_1_1Tensor__Operations}{Tensor\+\_\+\+Operations}$<$ right\+\_\+value $>$ \&rv)
+\item 
+{\footnotesize template$<$class functor , class right\+\_\+value $>$ }\\auto \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_aefd950bc45730a02e20208db86c095d7}{bi\+\_\+expr} (const \hyperlink{structBC_1_1tensors_1_1Tensor__Operations}{Tensor\+\_\+\+Operations}$<$ right\+\_\+value $>$ \&rv)
+\item 
+\hyperlink{structBC_1_1tensors_1_1Tensor__Operations_1_1Alias}{Alias} \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_aba3d9dfbfa147dead2e62b279265cb43}{alias} ()
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class $>$ }\\class \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a4ad1710d63bfbaf82aa34422959ab998}{Tensor\+\_\+\+Operations}
+\item 
+class \hyperlink{structBC_1_1tensors_1_1Tensor__Operations_a79bc94ce849ece1b793fc22408e50fb8}{Alias}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!derived@{derived}}
+\index{derived@{derived}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{derived}{derived}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ using {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::{\bf derived} =  {\bf Tensor\+\_\+\+Base}$<$Expression$>$}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a830b9a11262226b18af9caef7b9da13b}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a830b9a11262226b18af9caef7b9da13b}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!expression\+\_\+t@{expression\+\_\+t}}
+\index{expression\+\_\+t@{expression\+\_\+t}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{expression\+\_\+t}{expression_t}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ using {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::{\bf expression\+\_\+t} =  Expression}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a963cb506586200de946d7f3c9a02c56d}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a963cb506586200de946d7f3c9a02c56d}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!system\+\_\+tag@{system\+\_\+tag}}
+\index{system\+\_\+tag@{system\+\_\+tag}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{system\+\_\+tag}{system_tag}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ using {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::{\bf system\+\_\+tag} =  typename expression\+\_\+t\+::system\+\_\+tag}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_aeb2358dba2e022c48d925342d4bc34a2}{}\label{structBC_1_1tensors_1_1Tensor__Operations_aeb2358dba2e022c48d925342d4bc34a2}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!value\+\_\+type@{value\+\_\+type}}
+\index{value\+\_\+type@{value\+\_\+type}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{value\+\_\+type}{value_type}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ using {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::{\bf value\+\_\+type} =  typename expression\+\_\+t\+::value\+\_\+type}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a05713745a836002a261c16e032629aa8}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a05713745a836002a261c16e032629aa8}
+
+
+\subsection{Member Function Documentation}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!alias@{alias}}
+\index{alias@{alias}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{alias()}{alias()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ {\bf Alias} {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::alias (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_aba3d9dfbfa147dead2e62b279265cb43}{}\label{structBC_1_1tensors_1_1Tensor__Operations_aba3d9dfbfa147dead2e62b279265cb43}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!bi\+\_\+expr@{bi\+\_\+expr}}
+\index{bi\+\_\+expr@{bi\+\_\+expr}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{bi\+\_\+expr(functor f, const Tensor\+\_\+\+Operations$<$ right\+\_\+value $>$ \&rv) const }{bi_expr(functor f, const Tensor_Operations< right_value > &rv) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ template$<$class functor , class right\+\_\+value $>$ auto {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::bi\+\_\+expr (
+\begin{DoxyParamCaption}
+\item[{functor}]{f, }
+\item[{const {\bf Tensor\+\_\+\+Operations}$<$ right\+\_\+value $>$ \&}]{rv}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a6c5d65a88c7c501c19262e6ab9582474}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a6c5d65a88c7c501c19262e6ab9582474}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!bi\+\_\+expr@{bi\+\_\+expr}}
+\index{bi\+\_\+expr@{bi\+\_\+expr}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{bi\+\_\+expr(const Tensor\+\_\+\+Operations$<$ right\+\_\+value $>$ \&rv) const }{bi_expr(const Tensor_Operations< right_value > &rv) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ template$<$class functor , class right\+\_\+value $>$ auto {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::bi\+\_\+expr (
+\begin{DoxyParamCaption}
+\item[{const {\bf Tensor\+\_\+\+Operations}$<$ right\+\_\+value $>$ \&}]{rv}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a239e16a212581c41686f16b99347e308}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a239e16a212581c41686f16b99347e308}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!bi\+\_\+expr@{bi\+\_\+expr}}
+\index{bi\+\_\+expr@{bi\+\_\+expr}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{bi\+\_\+expr(functor f, const Tensor\+\_\+\+Operations$<$ right\+\_\+value $>$ \&rv)}{bi_expr(functor f, const Tensor_Operations< right_value > &rv)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ template$<$class functor , class right\+\_\+value $>$ auto {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::bi\+\_\+expr (
+\begin{DoxyParamCaption}
+\item[{functor}]{f, }
+\item[{const {\bf Tensor\+\_\+\+Operations}$<$ right\+\_\+value $>$ \&}]{rv}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_ac8700a097a7eaff4e771cf097e304232}{}\label{structBC_1_1tensors_1_1Tensor__Operations_ac8700a097a7eaff4e771cf097e304232}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!bi\+\_\+expr@{bi\+\_\+expr}}
+\index{bi\+\_\+expr@{bi\+\_\+expr}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{bi\+\_\+expr(const Tensor\+\_\+\+Operations$<$ right\+\_\+value $>$ \&rv)}{bi_expr(const Tensor_Operations< right_value > &rv)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ template$<$class functor , class right\+\_\+value $>$ auto {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::bi\+\_\+expr (
+\begin{DoxyParamCaption}
+\item[{const {\bf Tensor\+\_\+\+Operations}$<$ right\+\_\+value $>$ \&}]{rv}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_aefd950bc45730a02e20208db86c095d7}{}\label{structBC_1_1tensors_1_1Tensor__Operations_aefd950bc45730a02e20208db86c095d7}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!copy@{copy}}
+\index{copy@{copy}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{copy(const Tensor\+\_\+\+Operations$<$ right\+\_\+value $>$ \&rv)}{copy(const Tensor_Operations< right_value > &rv)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ template$<$class right\+\_\+value $>$ void {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::copy (
+\begin{DoxyParamCaption}
+\item[{const {\bf Tensor\+\_\+\+Operations}$<$ right\+\_\+value $>$ \&}]{rv}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a09ee84a69572ab98aab3d4b758c000f2}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a09ee84a69572ab98aab3d4b758c000f2}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{operator$\ast$(const Tensor\+\_\+\+Operations$<$ param\+\_\+deriv $>$ \&param) const }{operator*(const Tensor_Operations< param_deriv > &param) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ template$<$class param\+\_\+deriv $>$ auto {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::operator$\ast$ (
+\begin{DoxyParamCaption}
+\item[{const {\bf Tensor\+\_\+\+Operations}$<$ param\+\_\+deriv $>$ \&}]{param}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a35e6557f78bb866b756bf52709b190df}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a35e6557f78bb866b756bf52709b190df}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!operator+@{operator+}}
+\index{operator+@{operator+}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{operator+(const negated\+\_\+t$<$ expression\+\_\+t $>$ \&param) const }{operator+(const negated_t< expression_t > &param) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ template$<$class expression\+\_\+t $>$ auto {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::operator+ (
+\begin{DoxyParamCaption}
+\item[{const {\bf negated\+\_\+t}$<$ {\bf expression\+\_\+t} $>$ \&}]{param}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a5542fc23f64610d56de924df4aa82410}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a5542fc23f64610d56de924df4aa82410}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{operator+=(const negated\+\_\+t$<$ expression\+\_\+t $>$ \&param)}{operator+=(const negated_t< expression_t > &param)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ template$<$class expression\+\_\+t $>$ {\bf derived}\& {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::operator+= (
+\begin{DoxyParamCaption}
+\item[{const {\bf negated\+\_\+t}$<$ {\bf expression\+\_\+t} $>$ \&}]{param}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_ac9e54c8dcf66d4ad2341bdea938bae60}{}\label{structBC_1_1tensors_1_1Tensor__Operations_ac9e54c8dcf66d4ad2341bdea938bae60}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{operator-\/() const }{operator-() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ auto {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::operator-\/ (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a3bacb2241b1bab40d9212734eb0e41fc}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a3bacb2241b1bab40d9212734eb0e41fc}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!operator-\/=@{operator-\/=}}
+\index{operator-\/=@{operator-\/=}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{operator-\/=(const negated\+\_\+t$<$ expression\+\_\+t $>$ \&param)}{operator-=(const negated_t< expression_t > &param)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ template$<$class expression\+\_\+t $>$ {\bf derived}\& {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::operator-\/= (
+\begin{DoxyParamCaption}
+\item[{const {\bf negated\+\_\+t}$<$ {\bf expression\+\_\+t} $>$ \&}]{param}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a3ea33bbe36095e3106f09ed105e709c8}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a3ea33bbe36095e3106f09ed105e709c8}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!operator=@{operator=}}
+\index{operator=@{operator=}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{operator=(const Tensor\+\_\+\+Operations$<$ p\+Deriv $>$ \&param)}{operator=(const Tensor_Operations< pDeriv > &param)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ template$<$class p\+Deriv $>$ {\bf B\+C\+H\+OT} {\bf derived}\& {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::operator= (
+\begin{DoxyParamCaption}
+\item[{const {\bf Tensor\+\_\+\+Operations}$<$ p\+Deriv $>$ \&}]{param}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a846f62c3e0a0e813c344a3a62f2e4e86}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a846f62c3e0a0e813c344a3a62f2e4e86}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!operator=@{operator=}}
+\index{operator=@{operator=}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{operator=(const B\+C\+::meta\+::only\+\_\+if$<$ exprs\+::expression\+\_\+traits$<$ Expression $>$\+::is\+\_\+copy\+\_\+assignable, derived $>$ \&param)}{operator=(const BC::meta::only_if< exprs::expression_traits< Expression >::is_copy_assignable, derived > &param)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ {\bf derived}\& {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::operator= (
+\begin{DoxyParamCaption}
+\item[{const {\bf B\+C\+::meta\+::only\+\_\+if}$<$ {\bf exprs\+::expression\+\_\+traits}$<$ Expression $>$\+::is\+\_\+copy\+\_\+assignable, {\bf derived} $>$ \&}]{param}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a6d29ad7700f905abb54691a9f1e1735f}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a6d29ad7700f905abb54691a9f1e1735f}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!t@{t}}
+\index{t@{t}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{t() const }{t() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ const auto {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::t (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a6d5a8ff7ab127322609943af5a2d1064}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a6d5a8ff7ab127322609943af5a2d1064}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!t@{t}}
+\index{t@{t}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{t()}{t()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ auto {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::t (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_aace003bdad68df77f429a239d3b2784d}{}\label{structBC_1_1tensors_1_1Tensor__Operations_aace003bdad68df77f429a239d3b2784d}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!transpose@{transpose}}
+\index{transpose@{transpose}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{transpose() const }{transpose() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ const auto {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::transpose (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a5f339c4fec8d159973d05d12cd29a135}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a5f339c4fec8d159973d05d12cd29a135}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!transpose@{transpose}}
+\index{transpose@{transpose}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{transpose()}{transpose()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ auto {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::transpose (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_ac408bdabd760f9464ed66d9efcf43be0}{}\label{structBC_1_1tensors_1_1Tensor__Operations_ac408bdabd760f9464ed66d9efcf43be0}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!un\+\_\+expr@{un\+\_\+expr}}
+\index{un\+\_\+expr@{un\+\_\+expr}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{un\+\_\+expr(functor f) const }{un_expr(functor f) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ template$<$class functor $>$ auto {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::un\+\_\+expr (
+\begin{DoxyParamCaption}
+\item[{functor}]{f}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a0513f47543ce68bdc514c9c6f28ec2ed}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a0513f47543ce68bdc514c9c6f28ec2ed}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!un\+\_\+expr@{un\+\_\+expr}}
+\index{un\+\_\+expr@{un\+\_\+expr}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{un\+\_\+expr() const }{un_expr() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ template$<$class functor $>$ auto {\bf B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}$<$ Expression $>$\+::un\+\_\+expr (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a28995965a91a6cdfde1ff40d744766c3}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a28995965a91a6cdfde1ff40d744766c3}
+
+
+\subsection{Friends And Related Function Documentation}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!Alias@{Alias}}
+\index{Alias@{Alias}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{Alias}{Alias}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ friend class {\bf Alias}\hspace{0.3cm}{\ttfamily [friend]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a79bc94ce849ece1b793fc22408e50fb8}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a79bc94ce849ece1b793fc22408e50fb8}
+\index{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}!Tensor\+\_\+\+Operations@{Tensor\+\_\+\+Operations}}
+\index{Tensor\+\_\+\+Operations@{Tensor\+\_\+\+Operations}!B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations@{B\+C\+::tensors\+::\+Tensor\+\_\+\+Operations}}
+\subsubsection[{\texorpdfstring{Tensor\+\_\+\+Operations}{Tensor_Operations}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Expression$>$ template$<$class $>$ friend class {\bf Tensor\+\_\+\+Operations}\hspace{0.3cm}{\ttfamily [friend]}}\hypertarget{structBC_1_1tensors_1_1Tensor__Operations_a4ad1710d63bfbaf82aa34422959ab998}{}\label{structBC_1_1tensors_1_1Tensor__Operations_a4ad1710d63bfbaf82aa34422959ab998}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/tensors/\hyperlink{Tensor__Operations_8h}{Tensor\+\_\+\+Operations.\+h}\end{DoxyCompactItemize}

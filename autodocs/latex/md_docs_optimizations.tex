@@ -1,0 +1,42 @@
+Black\+Cat\+\_\+\+Tensor\textquotesingle{}s utilize\textquotesingle{}s two optimizations to improve its performance; expression-\/templates, and compile-\/time expression reordering.
+
+\paragraph*{Expression-\/\+Templates}
+
+The standard expression-\/template system allows converting multiple element-\/wise operations into single for loops. For example an operation such as\+: y = a + b -\/ c / d;
+
+Will automatically produce assembly code that is identical to
+
+
+\begin{DoxyCode}
+\textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < y.size(); ++i)
+    y[i] = a[i] + b[i] - c[i] / d[i];
+\end{DoxyCode}
+
+
+This in short allows users to use code that appears to be identical to mathematical expressions with performance equivalent to hand written code.
+
+If you are interested in how expression templates are implemented, (Todd Veldhuizen is the original creator of expression-\/templates) \href{https://www.cct.lsu.edu/~hkaiser/spring_2012/files/ExpressionTemplates-ToddVeldhuizen.pdf}{\tt https\+://www.\+cct.\+lsu.\+edu/$\sim$hkaiser/spring\+\_\+2012/files/\+Expression\+Templates-\/\+Todd\+Veldhuizen.\+pdf}
+
+\paragraph*{Compile-\/\+Time Expression Reordering}
+
+Black\+Cat\+\_\+\+Tensor\textquotesingle{}s now supports an injection system for gemm (and other B\+L\+AS routines) to reduce the generation of temporaries. Operations utilizing matrix multiplication in which possible \char`\"{}injections\char`\"{} are available will not use a temporary to store the result of a matrix-\/mul operation.
+
+This system detects complicated matrix-\/mul problems such as forward-\/propagation in Neural\+Networks.
+
+
+\begin{DoxyCode}
+y = sigmoid(w * x + b);     \textcolor{comment}{//forward propagation}
+\end{DoxyCode}
+
+
+The \char`\"{}optimized\char`\"{} hard-\/coded form would be
+
+1) evalute the product of {\ttfamily w} and {\ttfamily x} to {\ttfamily y}. {\ttfamily y = w $\ast$ x} (which is evaluated via a single B\+L\+AS call gemm(y, w, x))
+
+2) evaluate the element-\/wise operation of {\ttfamily y = sigmoid (y + b)} (which is evaluated with a single for loop through the expression-\/template system)
+
+Black\+Cat\+\_\+\+Tensors at compile detects that the reordering above is possible and executes the expression as such.
+
+$\ast$$\ast$$\ast$\+Caveat$\ast$$\ast$$\ast$
+
+B\+CT cannot detect if an alias is used. so problems such as\+: y = y $\ast$ x will cause the B\+L\+A\+S\+\_\+gemm call to start writing to Y as it is still calculating the product. When reusing tensors you may use aliases to skip this optimization. Example\+: y.\+alias() = y $\ast$ x 

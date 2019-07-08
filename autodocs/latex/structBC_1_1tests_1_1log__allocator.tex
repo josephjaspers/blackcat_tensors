@@ -1,0 +1,99 @@
+\hypertarget{structBC_1_1tests_1_1log__allocator}{}\section{BC\+:\+:tests\+:\+:log\+\_\+allocator$<$ Allocator $>$ Struct Template Reference}
+\label{structBC_1_1tests_1_1log__allocator}\index{B\+C\+::tests\+::log\+\_\+allocator$<$ Allocator $>$@{B\+C\+::tests\+::log\+\_\+allocator$<$ Allocator $>$}}
+
+
+{\ttfamily \#include $<$test\+\_\+allocators.\+h$>$}
+
+
+
+Inheritance diagram for BC\+:\+:tests\+:\+:log\+\_\+allocator$<$ Allocator $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{structBC_1_1tests_1_1log__allocator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for BC\+:\+:tests\+:\+:log\+\_\+allocator$<$ Allocator $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{structBC_1_1tests_1_1log__allocator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structBC_1_1tests_1_1log__allocator_1_1rebind}{rebind}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structBC_1_1tests_1_1log__allocator_a696c2f544e5b6b4296a82ce6d2e02f47}{log\+\_\+allocator} ()=default
+\item 
+{\footnotesize template$<$class T $>$ }\\\hyperlink{structBC_1_1tests_1_1log__allocator_a8ece15db677dfb81ca0c29be51392db0}{log\+\_\+allocator} (const \hyperlink{structBC_1_1tests_1_1log__allocator}{log\+\_\+allocator}$<$ T $>$ \&la)
+\item 
+auto \hyperlink{structBC_1_1tests_1_1log__allocator_ac1f6d426cba5e161cd3901fe98b7ddea}{allocate} (\hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} sz)
+\item 
+auto \hyperlink{structBC_1_1tests_1_1log__allocator_a409cb739866e398d3bbecc629cced894}{deallocate} (typename \hyperlink{structBC_1_1allocators_1_1Host_a0663f90f62e2b8c223a4402bef3d87e5}{Allocator\+::value\+\_\+type} $\ast$\&memptr, \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} sz)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} $>$ \hyperlink{structBC_1_1tests_1_1log__allocator_a683a18471dcf4a5d253862c24d4a05a8}{total\+\_\+allocated} = std\+::shared\+\_\+ptr$<$\hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t}$>$(new \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t}())
+\item 
+std\+::shared\+\_\+ptr$<$ \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t} $>$ \hyperlink{structBC_1_1tests_1_1log__allocator_ac67d73b48ae664682454e6ecc0b0e7fc}{total\+\_\+deallocated} = std\+::shared\+\_\+ptr$<$\hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t}$>$(new \hyperlink{namespaceBC_a6007cbc4eeec401a037b558910a56173}{B\+C\+::size\+\_\+t}())
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{B\+C\+::tests\+::log\+\_\+allocator@{B\+C\+::tests\+::log\+\_\+allocator}!log\+\_\+allocator@{log\+\_\+allocator}}
+\index{log\+\_\+allocator@{log\+\_\+allocator}!B\+C\+::tests\+::log\+\_\+allocator@{B\+C\+::tests\+::log\+\_\+allocator}}
+\subsubsection[{\texorpdfstring{log\+\_\+allocator()=default}{log_allocator()=default}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Allocator$>$ {\bf B\+C\+::tests\+::log\+\_\+allocator}$<$ {\bf Allocator} $>$\+::{\bf log\+\_\+allocator} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [default]}}\hypertarget{structBC_1_1tests_1_1log__allocator_a696c2f544e5b6b4296a82ce6d2e02f47}{}\label{structBC_1_1tests_1_1log__allocator_a696c2f544e5b6b4296a82ce6d2e02f47}
+\index{B\+C\+::tests\+::log\+\_\+allocator@{B\+C\+::tests\+::log\+\_\+allocator}!log\+\_\+allocator@{log\+\_\+allocator}}
+\index{log\+\_\+allocator@{log\+\_\+allocator}!B\+C\+::tests\+::log\+\_\+allocator@{B\+C\+::tests\+::log\+\_\+allocator}}
+\subsubsection[{\texorpdfstring{log\+\_\+allocator(const log\+\_\+allocator$<$ T $>$ \&la)}{log_allocator(const log_allocator< T > &la)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Allocator$>$ template$<$class T $>$ {\bf B\+C\+::tests\+::log\+\_\+allocator}$<$ {\bf Allocator} $>$\+::{\bf log\+\_\+allocator} (
+\begin{DoxyParamCaption}
+\item[{const {\bf log\+\_\+allocator}$<$ T $>$ \&}]{la}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tests_1_1log__allocator_a8ece15db677dfb81ca0c29be51392db0}{}\label{structBC_1_1tests_1_1log__allocator_a8ece15db677dfb81ca0c29be51392db0}
+
+
+\subsection{Member Function Documentation}
+\index{B\+C\+::tests\+::log\+\_\+allocator@{B\+C\+::tests\+::log\+\_\+allocator}!allocate@{allocate}}
+\index{allocate@{allocate}!B\+C\+::tests\+::log\+\_\+allocator@{B\+C\+::tests\+::log\+\_\+allocator}}
+\subsubsection[{\texorpdfstring{allocate(\+B\+C\+::size\+\_\+t sz)}{allocate(BC::size_t sz)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Allocator$>$ auto {\bf B\+C\+::tests\+::log\+\_\+allocator}$<$ {\bf Allocator} $>$\+::allocate (
+\begin{DoxyParamCaption}
+\item[{{\bf B\+C\+::size\+\_\+t}}]{sz}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tests_1_1log__allocator_ac1f6d426cba5e161cd3901fe98b7ddea}{}\label{structBC_1_1tests_1_1log__allocator_ac1f6d426cba5e161cd3901fe98b7ddea}
+\index{B\+C\+::tests\+::log\+\_\+allocator@{B\+C\+::tests\+::log\+\_\+allocator}!deallocate@{deallocate}}
+\index{deallocate@{deallocate}!B\+C\+::tests\+::log\+\_\+allocator@{B\+C\+::tests\+::log\+\_\+allocator}}
+\subsubsection[{\texorpdfstring{deallocate(typename Allocator\+::value\+\_\+type $\ast$\&memptr, B\+C\+::size\+\_\+t sz)}{deallocate(typename Allocator::value_type *&memptr, BC::size_t sz)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Allocator$>$ auto {\bf B\+C\+::tests\+::log\+\_\+allocator}$<$ {\bf Allocator} $>$\+::deallocate (
+\begin{DoxyParamCaption}
+\item[{typename {\bf Allocator\+::value\+\_\+type} $\ast$\&}]{memptr, }
+\item[{{\bf B\+C\+::size\+\_\+t}}]{sz}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structBC_1_1tests_1_1log__allocator_a409cb739866e398d3bbecc629cced894}{}\label{structBC_1_1tests_1_1log__allocator_a409cb739866e398d3bbecc629cced894}
+
+
+\subsection{Member Data Documentation}
+\index{B\+C\+::tests\+::log\+\_\+allocator@{B\+C\+::tests\+::log\+\_\+allocator}!total\+\_\+allocated@{total\+\_\+allocated}}
+\index{total\+\_\+allocated@{total\+\_\+allocated}!B\+C\+::tests\+::log\+\_\+allocator@{B\+C\+::tests\+::log\+\_\+allocator}}
+\subsubsection[{\texorpdfstring{total\+\_\+allocated}{total_allocated}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Allocator$>$ std\+::shared\+\_\+ptr$<${\bf B\+C\+::size\+\_\+t}$>$ {\bf B\+C\+::tests\+::log\+\_\+allocator}$<$ {\bf Allocator} $>$\+::total\+\_\+allocated = std\+::shared\+\_\+ptr$<${\bf B\+C\+::size\+\_\+t}$>$(new {\bf B\+C\+::size\+\_\+t}())}\hypertarget{structBC_1_1tests_1_1log__allocator_a683a18471dcf4a5d253862c24d4a05a8}{}\label{structBC_1_1tests_1_1log__allocator_a683a18471dcf4a5d253862c24d4a05a8}
+\index{B\+C\+::tests\+::log\+\_\+allocator@{B\+C\+::tests\+::log\+\_\+allocator}!total\+\_\+deallocated@{total\+\_\+deallocated}}
+\index{total\+\_\+deallocated@{total\+\_\+deallocated}!B\+C\+::tests\+::log\+\_\+allocator@{B\+C\+::tests\+::log\+\_\+allocator}}
+\subsubsection[{\texorpdfstring{total\+\_\+deallocated}{total_deallocated}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Allocator$>$ std\+::shared\+\_\+ptr$<${\bf B\+C\+::size\+\_\+t}$>$ {\bf B\+C\+::tests\+::log\+\_\+allocator}$<$ {\bf Allocator} $>$\+::total\+\_\+deallocated = std\+::shared\+\_\+ptr$<${\bf B\+C\+::size\+\_\+t}$>$(new {\bf B\+C\+::size\+\_\+t}())}\hypertarget{structBC_1_1tests_1_1log__allocator_ac67d73b48ae664682454e6ecc0b0e7fc}{}\label{structBC_1_1tests_1_1log__allocator_ac67d73b48ae664682454e6ecc0b0e7fc}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tests/\hyperlink{test__allocators_8h}{test\+\_\+allocators.\+h}\end{DoxyCompactItemize}
