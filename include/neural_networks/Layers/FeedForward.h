@@ -58,6 +58,15 @@ public:
     	dy = dy_;
         return w.t() * dy;
     }
+    /*
+     * y =  w * x;
+     *
+     * derivative of w == dy * x.t
+     * derivative of x == w.t * dy
+     *
+     *
+     */
+
     void update_weights() {
     	w -= dy * lr * x.t();
         b -= dy * lr;

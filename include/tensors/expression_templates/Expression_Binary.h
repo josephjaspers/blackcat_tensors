@@ -24,6 +24,7 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Operation, L
     using return_type = decltype(std::declval<Operation>()(std::declval<lv_value_t&>(), std::declval<rv_value_t&>()));
     using value_type  = std::remove_reference_t<std::decay_t<return_type>>;
     using system_tag  = typename Lv::system_tag;
+    using dx_is_defined = std::true_type;
 
     static constexpr int tensor_dimension = BC::meta::max(Lv::tensor_dimension, Rv::tensor_dimension);
     static constexpr int tensor_iterator_dimension = Lv::tensor_dimension != Rv::tensor_dimension ? tensor_dimension : BC::meta::max(Lv::tensor_iterator_dimension, Rv::tensor_iterator_dimension);
@@ -58,6 +59,7 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Operation, L
     BCINLINE auto  operator ()(integers... ints) {
      	return Operation::operator()(left(ints...), right(ints...));
     }
+
 
     BCINLINE auto dx(size_t index) const {
     	auto lv_dx = expression_traits<Lv>::select_on_dx(left, index);

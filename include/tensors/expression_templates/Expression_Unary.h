@@ -24,7 +24,7 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Operation, Arr
 	//TODO fix value_type deduction
 //    using return_type = decltype(std::declval<Operation>()(std::declval<typename ArrayType::value_type>()));
     using value_type  = typename ArrayType::value_type;//std::remove_reference_t<std::decay_t<return_type>>;
-
+    using dx_is_defined = std::true_type;
     using system_tag  = typename ArrayType::system_tag;
 
     static constexpr int tensor_dimension  = ArrayType::tensor_dimension;
@@ -79,15 +79,12 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Operation, Arr
         return auto_remove_const(auto_apply_const(*this)[index]);
     }
 
-    // derivative function --------------------------------
 
     BCINLINE auto dx(BC::size_t index) const {
-		using foo = std::conditional_t<
-				expression_traits<ArrayType>::derivative_is_defined,
-				dx_defined,
-				dx_not_defined>;
-
-		return foo::impl(array, get_operation(), index);
+		auto gx_and_dxgx = expression_traits<ArrayType>::select_on_dx(array, index);	// [g(x), g’(x)]
+		auto f_gx = Operation::operator()(gx_and_dxgx.first);
+		auto dx_f_gx = Operation::dx(gx_and_dxgx.first) * gx_and_dxgx.second;
+		return BC::meta::make_pair(f_gx, dx_f_gx);
     }
 
     BCINLINE const auto inner_shape() const { return array.inner_shape(); }
@@ -97,34 +94,7 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Operation, Arr
     BCINLINE BC::size_t cols() const { return array.cols(); }
     BCINLINE BC::size_t dimension(int i) const { return array.dimension(i); }
     BCINLINE BC::size_t block_dimension(int i) const { return array.block_dimension(i); }
-
-private:
-	struct dx_defined {
-		template<class T> BCINLINE
-		static auto impl(const T& array, const Operation& op, BC::size_t index) {
-			// ’(f(g(x))) == f’(g(x))g’(x)
-			auto gx_and_dxgx = array.dx(index);	// [g(x), g’(x)]
-			auto gx = gx_and_dxgx.first; // g(x)
-			auto dx_gx =  gx_and_dxgx.second; // g’(x)
-
-			auto f_gx = op(gx);
-			auto dx_f_gx = op.dx(gx) * dx_gx;
-
-			return BC::meta::make_pair(f_gx, dx_f_gx);
-		}
-	};
-
-	struct dx_not_defined {
-		template<class T> BCINLINE
-		static auto impl(const T& array, const Operation& op, BC::size_t index) {
-	    	auto value = array[index];
-	    	auto gx = op(value);
-	    	auto dx_gx = op.dx(value);
-	    	return BC::meta::make_pair(gx, dx_gx);
-		}
-	};
 };
-
 
 struct dx_forwarder {
 

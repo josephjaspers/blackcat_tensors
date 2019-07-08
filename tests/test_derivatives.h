@@ -67,6 +67,12 @@ int test_derivatives(int sz=128) {
 			return BC::all(out.approx_equal(-0.471300));
 	)
 
+	BC_TEST_DEF(
+			mat out(sz,sz);
+			out = dx(sin(cos(x) + cos(x)));
+			return BC::all(out.approx_equal(0.175782));
+	)
+
 	BC_TEST_BODY_TAIL
 }
 }

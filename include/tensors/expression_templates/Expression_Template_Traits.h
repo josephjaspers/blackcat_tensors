@@ -24,8 +24,7 @@ namespace detail {
 template<class T> using query_system_tag = typename T::system_tag;
 template<class T> using query_value_type = typename T::value_type;
 template<class T> using query_allocation_type = typename T::allocation_tag;
-
-template<class T> using query_dx = decltype(std::declval<T>().get_operation().dx);
+template<class T> using query_dx_is_defined = typename T::dx_is_defined;
 
 template<class T> using query_copy_assignable =
 				std::conditional_t<T::copy_assignable, std::true_type, std::false_type>;
@@ -125,7 +124,8 @@ struct expression_traits {
 	 using allocation_tag = typename BC::meta::conditional_detected<detail::query_allocation_type, T, system_tag>::type;
 	 using value_type	  = typename BC::meta::conditional_detected<detail::query_value_type, T, void>::type;
 
-	 static constexpr bool derivative_is_defined =  BC::meta::is_detected_v<detail::query_dx, T>;
+	 static constexpr bool derivative_is_defined =
+			 BC::meta::conditional_detected_t<detail::query_dx_is_defined, T, std::false_type>::value;
 
 	 BCINLINE static auto select_on_dx(const T& expression, size_t index) {
 		 using selector = std::conditional_t<derivative_is_defined,
