@@ -247,14 +247,6 @@ using  size_t   = BC_SIZE_T_OVERRIDE;
 #endif
 
 }
-/*
- * Include Order:
- * 	1) Dependencies of Core
- * 	2) Core
- * 	3) Things dependent upon core
- *
- */
-
 
 
 #endif /* BLACKCAT_COMMON_H_ */

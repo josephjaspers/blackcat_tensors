@@ -11,8 +11,8 @@
 
 #include <type_traits>
 
-#include "expression_templates/Expression_Templates.h" //depends on Stream.h
-#include "iterators/Iterators.h"///depends on Stream.h
+#include "expression_templates/Expression_Templates.h"
+#include "iterators/Iterators.h"
 
 namespace BC {
 namespace tensors {

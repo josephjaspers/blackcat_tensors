@@ -191,4 +191,5 @@ BC_DEF_IF_CPP17(BC_ALGORITHM_DEF(adjacent_difference))
 
 } //ns algorithms
 } //bs BC
+
 #endif /* ALGORITHMS_H_ */

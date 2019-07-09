@@ -88,7 +88,7 @@ public:
     : parent(std::move(tensor.as_parent())) {}
 
     Tensor_Base& operator =(only_if<move_assignable, Tensor_Base<ExpressionTemplate>&&> tensor) {
-        this->internal_move(std::move(tensor.as_parent()));
+        this->as_parent() = std::move(tensor.as_parent());
         return *this;
     }
 

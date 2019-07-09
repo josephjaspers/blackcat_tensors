@@ -43,11 +43,12 @@ struct Array_Const_View
 	Array_Const_View(const Array_Const_View&) = default;
 	Array_Const_View(Array_Const_View&&) = default;
 
-	void internal_move(Array_Const_View&& swap) {
+	Array_Const_View& operator = (Array_Const_View&& swap) {
 		this->stream = swap.stream;
 		this->alloc   = swap.get_allocator();
 		this->array   = swap.array;
 		static_cast<SubShape<Dimension>&>(*this) = SubShape<Dimension>(swap);
+		return *this;
 	}
 
 	template<

@@ -211,7 +211,7 @@ public:
 	}
 
 public:
-    void internal_move(Array&& array) {
+    Array& operator = (Array&& array) {
     		if (BC::allocator_traits<Allocator>::is_always_equal::value ||
     			array.get_allocator() == this->get_allocator()) {
 			std::swap(this->array, array.array);
@@ -226,6 +226,7 @@ public:
 			this->array = get_allocator().allocate(this->size());
 			greedy_evaluate(this->internal(), array.internal(), this->get_stream());
     	}
+    		return *this;
     }
 
     void deallocate() {
