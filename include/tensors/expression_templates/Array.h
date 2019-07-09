@@ -183,37 +183,35 @@ public:
     	parent(typename parent::shape_type(param), get_allocator_ref()) {}
 
 	//Constructor for integer sequence, IE Matrix(m, n)
-	template<class... args,
-	typename=std::enable_if_t<
-		traits::sequence_of_v<BC::size_t, args...> &&
-		sizeof...(args) == Dimension>>
-	Array(const args&... params) {
-		this->as_shape() = Shape<Dimension>(params...);
-		this->memptr_ref()      = get_allocator().allocate(this->size());
-	}
+	template<
+		class... ShapeDims,
+		class=std::enable_if_t<
+			traits::sequence_of_v<BC::size_t, ShapeDims...> &&
+			sizeof...(ShapeDims) == Dimension>
+	>
+	Array(const ShapeDims&... shape_dims):
+		parent(typename parent::shape_type(shape_dims...), get_allocator_ref()) {}
 
 	//Shape-like object with maybe allocator
-    template<class Expr,typename = std::enable_if_t<expression_traits<Expr>::is_array || expression_traits<Expr>::is_expr>>
-	Array(const Expr& expr_t, const Allocator& alloc=Allocator()) : Allocator(alloc) {
-		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
-		this->memptr_ref() = get_allocator().allocate(this->size());
-		greedy_evaluate(this->internal(), expr_t.internal(), get_stream());
+    template<
+    	class Expression,
+    	class=std::enable_if_t<expression_traits<Expression>::is_array || expression_traits<Expression>::is_expr>>
+	Array(const Expression& expression, Allocator allocator=Allocator()):
+		Allocator(allocator),
+		parent(typename parent::shape_type(expression.inner_shape()), get_allocator_ref()) {
+		greedy_evaluate(this->internal(), expression.internal(), get_stream());
 	}
-
 
 
 	//If Copy-constructing from a slice, attempt to query the allocator
     //Restrict to same value_type (obviously), same dimensions (for fast-copy)
     //And restrict to continuous (as we should attempt to support Sparse matrices in the future)
     template<class... SliceTags>
-	Array(const Array_Slice<Dimension, value_type, allocator_t, SliceTags...>& expr_t)
-	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(
-			expr_t.get_allocator())),
-	  m_stream(expr_t.get_stream())
-	{
-		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
-		this->memptr_ref() = get_allocator().allocate(this->size());
-		greedy_evaluate(this->internal(), expr_t.internal(), this->get_stream());
+	Array(const Array_Slice<Dimension, value_type, allocator_t, SliceTags...>& expression):
+		Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(expression.get_allocator())),
+		parent(typename parent::shape_type(expression.inner_shape()), get_allocator_ref()),
+		m_stream(expression.get_stream()) {
+		greedy_evaluate(this->internal(), expression.internal(), this->get_stream());
 	}
 
 public:
@@ -256,8 +254,14 @@ auto make_temporary_kernel_scalar(Stream stream) {
 	return Array(BC::Shape<0>(), stream.template get_allocator_rebound<ValueType>().allocate(1));
 }
 
-template<int Dimension, class ValueType, class SystemTag, class... Tags, class=std::enable_if_t<BC::traits::sequence_contains_v<BC_Temporary, Tags...>>>
-void destroy_temporary_kernel_array(Kernel_Array<Dimension, ValueType, SystemTag, Tags...> temporary, BC::Stream<SystemTag> stream) {
+template<
+	int Dimension,
+	class ValueType,
+	class SystemTag,
+	class... Tags,
+	class=std::enable_if_t<BC::traits::sequence_contains_v<BC_Temporary, Tags...>>>
+void destroy_temporary_kernel_array(
+		Kernel_Array<Dimension, ValueType, SystemTag, Tags...> temporary, BC::Stream<SystemTag> stream) {
 	stream.template get_allocator_rebound<ValueType>().deallocate(temporary.memptr(), temporary.size());
 }
 
