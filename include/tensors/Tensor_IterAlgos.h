@@ -31,7 +31,7 @@ public:
 
 	//------------------------ iterator-algorthims---------------------------//
 
-    void fill(value_type value) { BC::fill(as_derived(), value);}
+    void fill(value_type value) { BC::algorithms::fill(as_derived(), value);}
     void zero()                 { fill(0); }
     void ones()                 { fill(1); }
 
@@ -45,7 +45,7 @@ public:
     }
 
     void sort() {
-    	BC::tensors::alg::sort(this->as_derived().get_stream(), this->begin(), this->end());
+    	BC::algorithms::sort(this->as_derived().get_stream(), this->begin(), this->end());
     }
 
     void rand(value_type lb=0, value_type ub=1) {
@@ -225,14 +225,14 @@ using BC_sum_t = std::conditional_t<std::is_same<typename internal_t::value_type
 template<class internal_t>
 auto sum(const Tensor_Base<internal_t>& tensor) {
 	using sum_value_type = BC_sum_t<internal_t>;
-	return BC::accumulate(BC::streams::select_on_get_stream(tensor),
+	return BC::algorithms::accumulate(BC::streams::select_on_get_stream(tensor),
 			tensor.cbegin(), tensor.cend(), sum_value_type(0));
 }
 
 template<class internal_t>
 auto prod(const Tensor_Base<internal_t>& tensor) {
 	using value_type = typename internal_t::value_type;
-	return BC::accumulate(BC::streams::select_on_get_stream(tensor),
+	return BC::algorithms::accumulate(BC::streams::select_on_get_stream(tensor),
 			tensor.cbegin(), tensor.cend(), value_type(1), BC::oper::mul);
 }
 
@@ -249,13 +249,13 @@ static bool any(const Tensor_Base<internal_t>& tensor) {
 
 template<class internal_t>
 static auto max(const Tensor_Base<internal_t>& tensor) {
-	auto max_index = BC::tensors::alg::max_element(BC::streams::select_on_get_stream(tensor), tensor.cbegin(), tensor.cend());
+	auto max_index = BC::algorithms::max_element(BC::streams::select_on_get_stream(tensor), tensor.cbegin(), tensor.cend());
 	return tensor(max_index);
 }
 
 template<class internal_t>
 static auto min(const Tensor_Base<internal_t>& tensor) {
-	auto min_index = BC::tensors::alg::min_element(BC::streams::select_on_get_stream(tensor), tensor.cbegin(), tensor.cend());
+	auto min_index = BC::algorithms::min_element(BC::streams::select_on_get_stream(tensor), tensor.cbegin(), tensor.cend());
 	return tensor(min_index);
 }
 

@@ -94,7 +94,7 @@ struct select_on_dx_when_defined {
 	}
 	template<class T, class... Indicies> BCINLINE
 	static auto impl(const T& array, Indicies... indicies) {
-		return array.dx(index, indicies...);
+		return array.dx(indicies...);
 	}
 };
 struct select_on_dx_when_not_defined {

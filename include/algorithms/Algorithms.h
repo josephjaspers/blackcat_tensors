@@ -18,10 +18,10 @@
 #include <thrust/copy.h>
 #endif
 
-BC_DEFAULT_MODULE_BODY(tensors { namespace algorithms, Algorithm) }
+BC_DEFAULT_MODULE_BODY(algorithms, Algorithm)
 
 namespace BC {
-namespace tensors {
+namespace algorithms {
 
 
 #define BC_ALGORITHM_DEF(function)\
@@ -73,7 +73,6 @@ static auto function (Container& container, Args&&... args) {\
 	return function(BC::streams::select_on_get_stream(container), container.begin(), container.end(), args...);\
 }\
 
-namespace alg {
 //---------------------------non-modifying sequences---------------------------//
 //BC_ALGORITHM_DEF(all_of)
 //BC_ALGORITHM_DEF(any_of)
@@ -147,7 +146,7 @@ BC_ALGORITHM_DEF(equal)
 
 BC_IF_CUDA(
 	template<class Begin, class End, class... Args>
-	static auto accumulate (const BC::streams::Stream<BC::device_tag>& stream, Begin begin, End end, Args... args) {
+	static auto accumulate (BC::streams::Stream<BC::device_tag> stream, Begin begin, End end, Args... args) {
 		return thrust::reduce(thrust::cuda::par.on(stream), begin, end, args...);
 	}
 	template<class Begin, class End, class... Args>
@@ -190,8 +189,6 @@ BC_DEF_IF_CPP17(BC_ALGORITHM_DEF(adjacent_difference))
 #undef BC_ALGORITHM_DEF
 #undef BC_REDUCE_ALGORITHM_DEF
 
-}//end of namespace alg
-} //end of tensors
-using namespace BC::tensors::alg;
-}
+} //ns algorithms
+} //bs BC
 #endif /* ALGORITHMS_H_ */

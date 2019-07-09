@@ -86,9 +86,10 @@ private:
     template<class ADL=void>
     std::enable_if_t<std::is_void<ADL>::value && (tensor_dimension == 0), std::stringstream&>
     print_impl(std::stringstream& ss, int prec, bool sparse, bool pretty) const {
-    	return ss << only_if("]", pretty)
+    	ss << only_if("]", pretty)
     				<< format_value(utility_l::extract(as_derived().memptr(), 0), prec)
     				<< only_if("]", pretty) << '\n';
+    	return ss;
     }
 
     template<class ADL=void, class v1=void>
