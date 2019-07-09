@@ -54,17 +54,26 @@ struct Kernel_Array
     static constexpr int tensor_dimension = Dimension;
     static constexpr int tensor_iterator_dimension = expression_traits<self_type>::is_continuous ? 1 : tensor_dimension;
 
+private:
     pointer_type array = nullptr;
 
+protected:
+
+    BCINLINE pointer_type& memptr_ref() { return array; }
+    BCINLINE shape_type& get_shape_ref() { return static_cast<shape_type&>(*this); }
+
+public:
     Kernel_Array()=default;
     Kernel_Array(const Kernel_Array&)=default;
     Kernel_Array(Kernel_Array&&)=default;
     Kernel_Array(shape_type shape, pointer_type ptr)
     	: shape_type(shape), array(ptr) {};
 
-    BCINLINE BC::traits::apply_const_t<pointer_type> memptr() const { return array; }
-    BCINLINE       pointer_type memptr()       { return array; }
+    template<class AllocatorType>
+    Kernel_Array(shape_type shape, AllocatorType& allocator)
+    	: shape_type(shape), array(allocator.allocate(this->size())) {};
 
+    BCINLINE pointer_type memptr() const { return array; }
     BCINLINE const shape_type& get_shape() const { return static_cast<const shape_type&>(*this); }
 
     BCINLINE const auto& operator [](int index) const {
@@ -130,6 +139,7 @@ private:
 
 	const Shape<Dimension>& as_shape() const { return static_cast<const Shape<Dimension>&>(*this); }
 	Shape<Dimension>& as_shape() { return static_cast<Shape<Dimension>&>(*this); }
+	Allocator& get_allocator_ref() { return static_cast<Allocator&>(*this); }
 
 
 public:
@@ -140,41 +150,37 @@ public:
 
 	Array() {
 		if (Dimension == 0) {
-			this->array = get_allocator().allocate(1);
+			this->memptr_ref() = get_allocator().allocate(1);
 		}
 	}
 
-	Array(const Array& array_)
-	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(array_)),
-	  m_stream(array_.get_stream()),
-	  parent(array_) {
-        this->array = get_allocator().allocate(this->size());
-        greedy_evaluate(this->internal(), array_.internal(), get_stream());
+	Array(const Array& array)
+	: Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(array)),
+	  parent(array.get_shape(), get_allocator_ref()),
+	  m_stream(array.get_stream()) {
+		greedy_evaluate(this->internal(), array.internal(), get_stream());
 	}
-	Array(Array&& array_) //TODO handle propagate_on_container_move_assignment
-	: Allocator(array_.get_allocator()),
-	  m_stream(array_.get_stream()),
-	  parent(array_) {
-		array_.array = nullptr;
+
+	Array(Array&& array) //TODO handle propagate_on_container_move_assignment
+	: Allocator(array.get_allocator()),
+	  parent(array),
+	  m_stream(array.get_stream()) {
+		array.memptr_ref() = nullptr;
 		//This causes segmentation fault with NVCC currently (compiler segfault, not runtime)
 //		array_.as_shape() = BC::Shape<Dimension>(); //resets the shape
 	}
 
-	//Construct via shape-like object
-    template<class U,typename = std::enable_if_t<!expression_traits<U>::is_array &&
-    												!expression_traits<U>::is_expr &&
-    													Dimension != 0>>
-    Array(U param) {
-    	this->as_shape() = Shape<Dimension>(param);
-    	this->array = get_allocator().allocate(this->size());
-    }
-
 	//Construct via shape-like object and Allocator
-    template<class U,typename = std::enable_if_t<!expression_traits<U>::is_array && !expression_traits<U>::is_expr>>
-    Array(U param, const Allocator& alloc_) : Allocator(alloc_) {
-    	this->as_shape() = Shape<Dimension>(param);
-    	this->array = get_allocator().allocate(this->size());
-    }
+    template<
+    	class ShapeLike,
+    	class=std::enable_if_t<
+    		!expression_traits<ShapeLike>::is_array &&
+    		!expression_traits<ShapeLike>::is_expr &&
+    		Dimension != 0>
+    >
+    Array(ShapeLike param, Allocator allocator=Allocator()):
+    	Allocator(allocator),
+    	parent(typename parent::shape_type(param), get_allocator_ref()) {}
 
 	//Constructor for integer sequence, IE Matrix(m, n)
 	template<class... args,
@@ -183,14 +189,14 @@ public:
 		sizeof...(args) == Dimension>>
 	Array(const args&... params) {
 		this->as_shape() = Shape<Dimension>(params...);
-		this->array      = get_allocator().allocate(this->size());
+		this->memptr_ref()      = get_allocator().allocate(this->size());
 	}
 
 	//Shape-like object with maybe allocator
     template<class Expr,typename = std::enable_if_t<expression_traits<Expr>::is_array || expression_traits<Expr>::is_expr>>
 	Array(const Expr& expr_t, const Allocator& alloc=Allocator()) : Allocator(alloc) {
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
-		this->array = get_allocator().allocate(this->size());
+		this->memptr_ref() = get_allocator().allocate(this->size());
 		greedy_evaluate(this->internal(), expr_t.internal(), get_stream());
 	}
 
@@ -206,7 +212,7 @@ public:
 	  m_stream(expr_t.get_stream())
 	{
 		this->as_shape() = Shape<Dimension>(expr_t.inner_shape());
-		this->array = get_allocator().allocate(this->size());
+		this->memptr_ref() = get_allocator().allocate(this->size());
 		greedy_evaluate(this->internal(), expr_t.internal(), this->get_stream());
 	}
 
@@ -214,24 +220,24 @@ public:
     Array& operator = (Array&& array) {
     		if (BC::allocator_traits<Allocator>::is_always_equal::value ||
     			array.get_allocator() == this->get_allocator()) {
-			std::swap(this->array, array.array);
+			std::swap(this->memptr_ref(), array.memptr_ref());
 			this->as_shape() = array.as_shape();
 
 	    	if (BC::allocator_traits<Allocator>::propagate_on_container_move_assignment::value) {
 				static_cast<Allocator&>(*this) = static_cast<Allocator&&>(array);
 			}
     	} else {
-    		get_allocator().deallocate(this->array, this->size());
+    		get_allocator().deallocate(this->memptr_ref(), this->size());
 			this->as_shape() = array.as_shape();
-			this->array = get_allocator().allocate(this->size());
+			this->memptr_ref() = get_allocator().allocate(this->size());
 			greedy_evaluate(this->internal(), array.internal(), this->get_stream());
     	}
     		return *this;
     }
 
     void deallocate() {
-       Allocator::deallocate(this->array, this->size());
-       this->array = nullptr;
+       Allocator::deallocate(this->memptr_ref(), this->size());
+       this->memptr_ref() = nullptr;
 	}
 
 };
@@ -252,7 +258,7 @@ auto make_temporary_kernel_scalar(Stream stream) {
 
 template<int Dimension, class ValueType, class SystemTag, class... Tags, class=std::enable_if_t<BC::traits::sequence_contains_v<BC_Temporary, Tags...>>>
 void destroy_temporary_kernel_array(Kernel_Array<Dimension, ValueType, SystemTag, Tags...> temporary, BC::Stream<SystemTag> stream) {
-	stream.template get_allocator_rebound<ValueType>().deallocate(temporary.array, temporary.size());
+	stream.template get_allocator_rebound<ValueType>().deallocate(temporary.memptr(), temporary.size());
 }
 
 

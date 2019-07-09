@@ -15,6 +15,8 @@
 namespace BC {
 namespace streams {
 
+template<class> class Stream;
+
 template<>
 class Stream<host_tag> {
 

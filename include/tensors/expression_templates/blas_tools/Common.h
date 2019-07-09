@@ -22,8 +22,8 @@ namespace blas_tools {
 template<class derived>
 struct Common_Tools {
 
-	template<class Scalar_t, int alpha_mod, bool lv_scalar, bool rv_scalar, class Stream,  class lv_scalar_t, class rv_scalar_t>
-	static auto calculate_alpha(Stream stream, lv_scalar_t lv, rv_scalar_t rv) {
+	template<class ValueType, int alpha_mod, bool lv_scalar, bool rv_scalar, class SystemTag,  class lv_scalar_t, class rv_scalar_t>
+	static auto calculate_alpha(BC::Stream<SystemTag> stream, lv_scalar_t lv, rv_scalar_t rv) {
 
 		static constexpr bool lv_host_mode = (BC::tensors::exprs::expression_traits<lv_scalar_t>::is_stack_allocated);
 		static constexpr bool rv_host_mode = (BC::tensors::exprs::expression_traits<rv_scalar_t>::is_stack_allocated);
@@ -39,7 +39,7 @@ struct Common_Tools {
 
 		return BC::traits::constexpr_if<!lv_scalar && !rv_scalar>(
 					[&](){
-						return make_constexpr_scalar<BC::host_tag, alpha_mod, Scalar_t>();
+						return make_constexpr_scalar<BC::host_tag, alpha_mod, ValueType>();
 					},
 				BC::traits::constexpr_else_if<(lv_scalar != rv_scalar) && (alpha_mod == 1)>(
 					[&](){
@@ -52,9 +52,9 @@ struct Common_Tools {
 					[&]() {
 						return BC::traits::constexpr_ternary<host_mode>(
 								[&](){
-									return make_scalar_constant<BC::host_tag, Scalar_t>(alpha_mod * lv[0] * rv[0]);
+									return make_scalar_constant<BC::host_tag, ValueType>(alpha_mod * lv[0] * rv[0]);
 								},[&](){
-									auto tmp_scalar =  make_temporary_kernel_scalar<Scalar_t>(stream);
+									auto tmp_scalar =  make_temporary_kernel_scalar<ValueType>(stream);
 									derived::scalar_multiply(stream, tmp_scalar, alpha_mod, lv, rv);
 									return tmp_scalar;
 								});
@@ -63,18 +63,18 @@ struct Common_Tools {
 						[&]() {
 							return BC::traits::constexpr_if<host_mode>(
 									[&](){
-										return make_scalar_constant<BC::host_tag, Scalar_t>(alpha_mod * lv[0]);
+										return make_scalar_constant<BC::host_tag, ValueType>(alpha_mod * lv[0]);
 									},[&](){
-										auto tmp_scalar =  make_temporary_kernel_scalar<Scalar_t>(stream);
+										auto tmp_scalar =  make_temporary_kernel_scalar<ValueType>(stream);
 										derived::scalar_multiply(stream, tmp_scalar, alpha_mod, lv);
 										return tmp_scalar;
 									});
 						}, [&]() { //else if rv_scalar
 							return BC::traits::constexpr_if<host_mode>(
 									[&](){
-										return make_scalar_constant<BC::host_tag, Scalar_t>(alpha_mod * rv[0]);
+										return make_scalar_constant<BC::host_tag, ValueType>(alpha_mod * rv[0]);
 									},[&](){
-										auto tmp_scalar =  make_temporary_kernel_scalar<Scalar_t>(stream);
+										auto tmp_scalar =  make_temporary_kernel_scalar<ValueType>(stream);
 										derived::scalar_multiply(stream, tmp_scalar, alpha_mod, rv);
 										return tmp_scalar;
 									});
@@ -103,8 +103,8 @@ struct Common_Tools {
 		Beta beta;
 	};
 
-	template<int alpha_mod, int beta_mod, class Stream, class Lv, class Rv>
-	static auto parse_expression(Stream stream, Lv left, Rv right) {
+	template<int alpha_mod, int beta_mod, class SystemTag, class Lv, class Rv>
+	static auto parse_expression(BC::Stream<SystemTag> stream, Lv left, Rv right) {
 		/*
 		 *	Strips transposition and scalar-multiplied from and left and right,
 		 *	returns a 'contents' object. --

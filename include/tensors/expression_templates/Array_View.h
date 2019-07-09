@@ -43,11 +43,11 @@ struct Array_Const_View
 	Array_Const_View(const Array_Const_View&) = default;
 	Array_Const_View(Array_Const_View&&) = default;
 
-	Array_Const_View& operator = (Array_Const_View&& swap) {
-		this->stream = swap.stream;
-		this->alloc   = swap.get_allocator();
-		this->array   = swap.array;
-		static_cast<SubShape<Dimension>&>(*this) = SubShape<Dimension>(swap);
+	Array_Const_View& operator = (Array_Const_View&& acv) {
+		this->stream  = acv.stream;
+		this->alloc   = acv.get_allocator();
+		this->memptr_ref()    = acv.memptr();
+		this->get_shape_ref() = acv.get_shape();
 		return *this;
 	}
 
@@ -62,7 +62,7 @@ struct Array_Const_View
 	  stream(tensor.get_stream()),
 	  alloc(tensor.get_allocator()) {}
 
-	const Allocator get_allocator() const {
+	Allocator get_allocator() const {
 		return alloc;
 	}
 

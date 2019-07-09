@@ -61,27 +61,27 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>
 				[&](int i) {return i == 0 ? rows() : 1;});
 	}
 
-    template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class allocator>
-    void eval(injector<core, alpha_mod, beta_mod> injection_values, allocator& alloc) const {
+    template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod>
+    void eval(injector<core, alpha_mod, beta_mod> injection_values, BC::Stream<system_tag> stream) const {
 
 		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
 		auto& injection = injection_values.data();
 
 		//evaluate the left and right branches (computes only if necessary)
-        auto contents = blas_util::template parse_expression<alpha_mod, beta_mod>(alloc, left, right);
+        auto contents = blas_util::template parse_expression<alpha_mod, beta_mod>(stream, left, right);
         auto A = contents.left;
         auto X = contents.right;
         auto alpha = contents.alpha;
         auto beta  = contents.beta;
         bool transA = contents.lv_is_transposed;
 
-		blas_impl::gemv(alloc, transA,  M(), N(),
+		blas_impl::gemv(stream, transA,  M(), N(),
 				alpha, A, A.leading_dimension(0),
 				X, X.leading_dimension(0)/*inc_X*/,
 				beta,
 				injection/*Y*/, injection.leading_dimension(0)/*incy*/);
 
-        blas_util::post_parse_expression_evaluation(alloc, contents);
+        blas_util::post_parse_expression_evaluation(stream, contents);
 
     }
 };

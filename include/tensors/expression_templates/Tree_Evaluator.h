@@ -130,23 +130,23 @@ evaluate_aliased(Binary_Expression<Op, lv, rv> expression, BC::Stream<SystemTag>
 //--------------------- lazy only ----------------------- //
 
 //------------------------------------------------Greedy evaluation (BLAS function call detected), skip injection optimization--------------------//
-template<class Expression, class Stream>
+template<class Expression, class SystemTag>
 static std::enable_if_t<!optimizer<Expression>::requires_greedy_eval>
-evaluate(Expression expression, Stream stream) {
+evaluate(Expression expression, BC::Stream<SystemTag> stream) {
 	detail::nd_evaluate(expression, stream);
 }
 //------------------------------------------------Purely lazy alias evaluation----------------------------------//
-template< class Expression, class Stream>
+template< class Expression, class SystemTag>
 static std::enable_if_t<!optimizer<Expression>::requires_greedy_eval>
-evaluate_aliased(Expression expression, Stream stream_) {
-	detail::nd_evaluate(expression, stream_);
+evaluate_aliased(Expression expression, BC::Stream<SystemTag> stream) {
+	detail::nd_evaluate(expression, stream);
 }
 
 
 // ----------------- greedy evaluation --------------------- //
 
-template<class Array, class Expression, class Stream>
-auto greedy_evaluate(Array array, Expression expr, Stream stream) {
+template<class Array, class Expression, class SystemTag>
+auto greedy_evaluate(Array array, Expression expr, BC::Stream<SystemTag> stream) {
     static_assert(expression_traits<Array>::is_array, "MAY ONLY EVALUATE TO ARRAYS");
     evaluate(make_bin_expr<oper::Assign>(array, expr), stream);
     return array;
@@ -155,21 +155,21 @@ auto greedy_evaluate(Array array, Expression expr, Stream stream) {
 //The branch is an array, no evaluation required
 template<
 	class Expression,
-	class Stream,
+	class SystemTag,
 	class=std::enable_if_t<expression_traits<Expression>::is_array>
 >
-static auto greedy_evaluate(Expression expression, Stream stream) {
+static auto greedy_evaluate(Expression expression, BC::Stream<SystemTag> stream) {
 	return expression;
 }
 
 
 template<
 	class Expression,
-	class Stream,
+	class SystemTag,
 	class=std::enable_if_t<expression_traits<Expression>::is_expr>,
 	int=0
 >
-static auto greedy_evaluate(Expression expression, Stream stream) {
+static auto greedy_evaluate(Expression expression, BC::Stream<SystemTag> stream) {
 	/*
 	 * Returns a kernel_array containing the tag BC_Temporary,
 	 * the caller of the function is responsible for its deallocation.

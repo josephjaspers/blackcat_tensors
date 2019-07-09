@@ -18,10 +18,10 @@ namespace tensors {
 namespace exprs { 
 
 
-template<class lv, class rv, class System_Tag>
-struct Binary_Expression<oper::gemm<System_Tag>, lv, rv>
-: Expression_Base<Binary_Expression<oper::gemm<System_Tag>, lv, rv>>,
-  oper::gemm<System_Tag> {
+template<class lv, class rv, class SystemTag>
+struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>
+: Expression_Base<Binary_Expression<oper::gemm<SystemTag>, lv, rv>>,
+  oper::gemm<SystemTag> {
 
 	static_assert(std::is_same<typename lv::value_type, typename rv::value_type>::value,
     		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
@@ -30,7 +30,7 @@ struct Binary_Expression<oper::gemm<System_Tag>, lv, rv>
 
 
     using value_type	= typename lv::value_type;
-    using system_tag	= System_Tag;
+    using system_tag	= SystemTag;
     using blas_impl		= BC::blas::implementation<system_tag>;
     using blas_util	    = BC::tensors::exprs::blas_tools::implementation<system_tag>;
 
@@ -53,13 +53,13 @@ struct Binary_Expression<oper::gemm<System_Tag>, lv, rv>
 			return i == 0 ? left.rows() : i == 1 ? size() : 1;
     }
 
-    template<class core, int alpha_mod, int beta_mod, class Stream>
-    void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream& alloc) const {
+    template<class core, int alpha_mod, int beta_mod>
+    void eval(injector<core, alpha_mod, beta_mod> injection_values, BC::Stream<system_tag> stream) const {
 
         //get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
         auto& injection = injection_values.data();
 
-        auto contents = blas_util::template parse_expression<alpha_mod, beta_mod>(alloc, left, right);
+        auto contents = blas_util::template parse_expression<alpha_mod, beta_mod>(stream, left, right);
         auto A = contents.left;
         auto B = contents.right;
         auto alpha = contents.alpha;
@@ -68,12 +68,12 @@ struct Binary_Expression<oper::gemm<System_Tag>, lv, rv>
         auto transB = contents.rv_is_transposed;
 
 		//call matrix_mul
-        blas_impl::gemm(alloc, transA, transB,  left.rows(), right.cols(), left.cols(),
+        blas_impl::gemm(stream, transA, transB,  left.rows(), right.cols(), left.cols(),
 					alpha, A, A.leading_dimension(0),
 					B, B.leading_dimension(0),
 					beta, injection, injection.leading_dimension(0));
 
-        blas_util::post_parse_expression_evaluation(alloc, contents);
+        blas_util::post_parse_expression_evaluation(stream, contents);
 
 
     }

@@ -8,15 +8,14 @@
 #ifndef BC_CONTEXT_CONTEXT_H_
 #define BC_CONTEXT_CONTEXT_H_
 
-BC_DEFAULT_MODULE_BODY(stream, Stream)
+BC_DEFAULT_MODULE_BODY(streams, Stream)
 
 #include "Host.h"
 #include "Device.h"
 
 namespace BC {
 
-template<class system_tag>  //push into BC namespace
-using Stream = streams::Stream<system_tag>;
+using BC::streams::Stream;
 
 namespace streams {
 

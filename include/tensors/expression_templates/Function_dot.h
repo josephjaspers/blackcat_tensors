@@ -47,8 +47,8 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>
 
     Binary_Expression(lv left, rv right) : left(left), right(right) {}
 
-    template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class allocator>
-    void eval(injector<core, alpha_mod, beta_mod> injection_values, allocator& alloc) const {
+    template<class core, int alpha_mod, int beta_mod>
+    void eval(injector<core, alpha_mod, beta_mod> injection_values, BC::Stream<system_tag> stream) const {
 
 		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
 		auto& injection = injection_values.data();
@@ -56,19 +56,19 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>
 		//evaluate the left and right branches (computes only if necessary)
 		//Note: dot does not accept a scalar Alpha, therefor we don't extract the array from left/right
 		//The CacheEvaluator will generate a temporary if need be
-		auto X = greedy_evaluate(left, alloc);
-		auto Y = greedy_evaluate(right, alloc);
+		auto X = greedy_evaluate(left, stream);
+		auto Y = greedy_evaluate(right, stream);
 
 		//call outer product
-		blas_impl::dot(alloc, X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
+		blas_impl::dot(stream, X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
 
 		static constexpr int beta_value = beta_mod == 0 ? 1 : beta_mod;
 		if (lv_scalar || rv_scalar) {
 			auto alpha_lv = blas_expression_traits<lv>::get_scalar(left);
 			auto alpha_rv = blas_expression_traits<rv>::get_scalar(right);
-			blas_util::scalar_multiply(alloc, injection.memptr(), beta_value, alpha_lv, alpha_rv);
+			blas_util::scalar_multiply(stream, injection.memptr(), beta_value, alpha_lv, alpha_rv);
 		} else if (beta_value != 1) {
-			blas_util::scalar_multiply(alloc, injection.memptr(), injection.memptr(), beta_value);
+			blas_util::scalar_multiply(stream, injection.memptr(), injection.memptr(), beta_value);
 		}
     }
 };

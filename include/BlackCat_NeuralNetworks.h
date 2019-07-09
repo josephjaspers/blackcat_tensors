@@ -8,5 +8,6 @@
 
 #include "BlackCat_TypeTraits.h"
 #include "BlackCat_Common.h"
+#include "BlackCat_Stream.h"
 #include "BlackCat_Tensors.h"
 #include "neural_networks/NeuralNetworks.h"
