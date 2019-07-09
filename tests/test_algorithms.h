@@ -32,7 +32,7 @@ int test_algorithms(int sz=128) {
 	)
 	BC_TEST_DEF(
 		mat a(sz, sz);
-		BC::fill(a, 3);
+		BC::algorithms::fill(a, 3);
 
 		return BC::tensors::all(a == 3);
 	)
@@ -44,8 +44,8 @@ int test_algorithms(int sz=128) {
 		a.get_stream().create();
 		b.get_stream().create();
 
-		BC::fill(a.get_stream(), a.begin(), a.end(), 5);
-		BC::fill(b.get_stream(), b.begin(), b.end(), 7);
+		BC::algorithms::fill(a.get_stream(), a.begin(), a.end(), 5);
+		BC::algorithms::fill(b.get_stream(), b.begin(), b.end(), 7);
 
 		a.get_stream().sync();
 		b.get_stream().sync();
@@ -62,8 +62,8 @@ int test_algorithms(int sz=128) {
 
 		a.get_stream().create();
 
-		BC::fill(a.get_stream(), a.begin(), a.end(), 5);
-		BC::fill(b.get_stream(), b.begin(), b.end(), 7);
+		BC::algorithms::fill(a.get_stream(), a.begin(), a.end(), 5);
+		BC::algorithms::fill(b.get_stream(), b.begin(), b.end(), 7);
 
 		a.get_stream().sync();
 		b.get_stream().sync();

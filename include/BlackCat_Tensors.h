@@ -11,11 +11,10 @@
 #include "BlackCat_Allocator.h"
 #include "BlackCat_Stream.h"
 #include "BlackCat_Blas.h"
-#include "BlackCat_Array.h"
+#include "BlackCat_Utility.h"
 #include "BlackCat_Operations.h"
 #include "BlackCat_Algorithms.h"
 
-#include "utility/Utility.h"
 #include "random/Random.h"
 
 #include "tensors/Tensors.h"

@@ -14,9 +14,9 @@ namespace BC {
 namespace oper {
 namespace {
 
-using BC::meta::conditional_detected_t;
-using BC::meta::is_detected_v;
-using BC::meta::Integer;
+using BC::traits::conditional_detected_t;
+using BC::traits::is_detected_v;
+using BC::traits::Integer;
 using std::is_base_of;
 
 template<class T> using query_alpha_modifier = typename T::alpha_modifier;
@@ -32,10 +32,10 @@ template<class T> using query_index_aware_function = typename T::index_aware_fun
 template<class T>
 struct operation_traits {
 
-	 static constexpr bool dx_is_defined =  BC::meta::is_detected_v<query_dx, T>;
+	 static constexpr bool dx_is_defined =  BC::traits::is_detected_v<query_dx, T>;
 	 static auto select_on_dx(T&& expression) {
-		 return BC::meta::constexpr_ternary<dx_is_defined>(
-		 		BC::meta::bind([&](auto&& expression) {
+		 return BC::traits::constexpr_ternary<dx_is_defined>(
+		 		BC::traits::bind([&](auto&& expression) {
 			 	 	 return expression.dx;
 		 	 	 }, expression),
 		 		[&]() { return expression; }

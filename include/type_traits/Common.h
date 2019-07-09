@@ -12,7 +12,7 @@
 #include <tuple>
 
 namespace BC {
-namespace meta {
+namespace traits {
 namespace common {
 
 	using std::enable_if_t;

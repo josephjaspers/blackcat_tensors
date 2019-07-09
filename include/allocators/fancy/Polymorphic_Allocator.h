@@ -14,6 +14,8 @@ namespace BC {
 namespace allocators {
 namespace fancy {
 
+/// Similar to the C++17 std::pmr::polymorphic_allocator,
+/// this allocator allows modifying its underlying allocator at runtime.
 template<class ValueType, class SystemTag>
 struct Polymorphic_Allocator {
 
@@ -102,19 +104,11 @@ public:
 
 	template<class Allocator>
 	void set_allocator(const Allocator& alloc) {
+		///Change the underlying allocator
 		using allocator_t = typename Allocator::template rebind<BC::allocators::Byte>::other;
 		m_allocator = std::unique_ptr<Virtual_Allocator>(
 				new Derived_Allocator<allocator_t>(alloc));
 	}
-
-	auto& get_allocator() {
-		return m_allocator.get().retrieve_allocator();
-	}
-
-	auto& get_allocator() const {
-		return m_allocator.get().retrieve_allocator();
-	}
-
 };
 
 }

@@ -26,8 +26,8 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Operation, L
     using system_tag  = typename Lv::system_tag;
     using dx_is_defined = std::true_type;
 
-    static constexpr int tensor_dimension = BC::meta::max(Lv::tensor_dimension, Rv::tensor_dimension);
-    static constexpr int tensor_iterator_dimension = Lv::tensor_dimension != Rv::tensor_dimension ? tensor_dimension : BC::meta::max(Lv::tensor_iterator_dimension, Rv::tensor_iterator_dimension);
+    static constexpr int tensor_dimension = BC::traits::max(Lv::tensor_dimension, Rv::tensor_dimension);
+    static constexpr int tensor_iterator_dimension = Lv::tensor_dimension != Rv::tensor_dimension ? tensor_dimension : BC::traits::max(Lv::tensor_iterator_dimension, Rv::tensor_iterator_dimension);
 
     Lv left;
     Rv right;
@@ -66,7 +66,7 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Operation, L
     	auto rv_dx = expression_traits<Rv>::select_on_dx(right, indicies...);
     	auto cache_out = Operation::operator()(lv_dx.first, rv_dx.first);
     	auto deriv_out = Operation::dx(lv_dx, rv_dx);
-    	return BC::meta::make_pair(cache_out, deriv_out);
+    	return BC::traits::make_pair(cache_out, deriv_out);
     }
 
 private:

@@ -19,7 +19,7 @@
 #include <assert.h>
 
 namespace BC {
-
+namespace io {
 template<class T>
 static T from_string(const std::string& str);
 
@@ -184,7 +184,7 @@ static BC::Matrix<ValueType, Allocator> read_uniform(csv_descriptor csv, Allocat
 
 
 
-
+}
 }
 
 

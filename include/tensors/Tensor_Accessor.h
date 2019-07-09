@@ -15,49 +15,45 @@ namespace tensors {
 template<class>
 class Tensor_Base;
 
-
 template<class T>
 const auto reshape(const Tensor_Base<T>& tensor) {
 	static_assert(BC::tensors::exprs::expression_traits<T>::is_array &&
 					T::tensor_iterator_dimension <= 1,
 					"Reshape is only available to continuous tensors");
-    return [&](auto... integers) {
-        return make_tensor(exprs::make_view(tensor, BC::make_array(integers...)));
+    return [&](auto... indicies) {
+        return make_tensor(exprs::make_view(tensor, utility::make_array(indicies...)));
     };
 }
+
+template<class T, class... Indicies, class=std::enable_if_t<traits::sequence_of_v<BC::size_t, Indicies...>>>
+const auto chunk(const Tensor_Base<T>& tensor, Indicies... ints) {
+    return [&, ints...](auto... shape_dimensions) {
+        return make_tensor(exprs::make_chunk(
+                tensor,
+                BC::utility::make_array(ints...),
+                BC::utility::make_array(shape_dimensions...)));
+    };
+}
+
 template<class T>
 auto reshape(Tensor_Base<T>& tensor) {
 	static_assert(BC::tensors::exprs::expression_traits<T>::is_array &&
 					T::tensor_iterator_dimension <= 1,
 					"Reshape is only available to continuous tensors");
-    return [&](auto... integers) {
-        return make_tensor(exprs::make_view(tensor, BC::make_array(integers...)));
+    return [&](auto... indicies) {
+        return make_tensor(exprs::make_view(tensor, utility::make_array(indicies...)));
     };
 }
 
-template<class T, class... integers, class enabler = std::enable_if_t<meta::sequence_of_v<BC::size_t, integers...>>>
-const auto chunk(const Tensor_Base<T>& tensor, integers... ints) {
-	auto index_point =  BC::make_array(ints...);
-
-    return [&, index_point](auto... shape_indicies) {
+template<class T, class... Indicies, class=std::enable_if_t<traits::sequence_of_v<BC::size_t, Indicies...>>>
+auto chunk(Tensor_Base<T>& tensor, Indicies... ints) {
+    return [&, ints...](auto... shape_dimensions) {
         return make_tensor(exprs::make_chunk(
                 tensor,
-                index_point,
-                BC::make_array(shape_indicies...)));
+                BC::utility::make_array(ints...),
+                BC::utility::make_array(shape_dimensions...)));
     };
 }
-
-template<class T, class... integers, class enabler = std::enable_if_t<meta::sequence_of_v<BC::size_t, integers...>>>
-auto chunk(Tensor_Base<T>& tensor, integers... ints) {
-	auto index_point =  BC::make_array(ints...);
-    return [&, index_point](auto... shape_indicies) {
-        return make_tensor(exprs::make_chunk(
-                tensor,
-                index_point,
-                BC::make_array(shape_indicies...)));
-    };
-}
-
 
 template<class ExpressionTemplate>
 class Tensor_Accessor {
@@ -82,7 +78,7 @@ public:
 		return chunk(this->as_derived(), begin, 0)(end-begin, this->as_derived().cols());
 	}
 	auto row_range(int begin, int end) {
-		return BC::meta::auto_remove_const(
+		return BC::traits::auto_remove_const(
 				const_cast<const Tensor_Accessor<ExpressionTemplate>&>(*this).row_range(begin, end));
 	}
 

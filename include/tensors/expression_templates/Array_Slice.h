@@ -16,7 +16,8 @@ namespace tensors {
 namespace exprs {
 
 template<int Dimensions, class ValueType, class Allocator, class... Tags>
-struct Array_Slice : Kernel_Array<Dimensions, ValueType, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
+struct Array_Slice:
+		Kernel_Array<Dimensions, ValueType, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
 
 	using allocator_t 	 = Allocator;
 	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
@@ -65,7 +66,7 @@ auto make_row(Parent& parent, BC::size_t index) {
 template<class Parent>
 auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
     BC::size_t stride = parent.leading_dimension(0) + 1;
-    BC::size_t length = BC::meta::min(parent.rows(), parent.cols() - diagnol_index);
+    BC::size_t length = BC::traits::min(parent.rows(), parent.cols() - diagnol_index);
     BC::size_t ptr_index = diagnol_index > 0 ? parent.leading_dimension(0) * diagnol_index : std::abs(diagnol_index);
 
     using slice_type = slice_type_from_parent<1, Parent, BC_Noncontinuous>;
@@ -98,7 +99,7 @@ static auto make_ranged_slice(Parent& parent, BC::size_t from, BC::size_t to) {
 	BC::size_t range = to - from;
 	BC::size_t index = parent.slice_ptr_index(from);
 
-	BC::array<Parent::tensor_dimension, BC::size_t> inner_shape = parent.inner_shape();
+	BC::utility::array<Parent::tensor_dimension, BC::size_t> inner_shape = parent.inner_shape();
 	inner_shape[Parent::tensor_dimension-1] = range;
 
 	using slice_type = slice_type_from_parent<Parent::tensor_dimension, Parent>;
@@ -109,7 +110,7 @@ static auto make_ranged_slice(Parent& parent, BC::size_t from, BC::size_t to) {
 }
 
 template<class Parent, int Dimension>
-static auto make_view(Parent& parent, BC::array<Dimension, BC::size_t> shape) {
+static auto make_view(Parent& parent, BC::utility::array<Dimension, BC::size_t> shape) {
 	using slice_type = slice_type_from_parent<Dimension, Parent>;
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
@@ -127,7 +128,9 @@ static auto make_scalar(Parent& parent, BC::size_t index) {
 }
 
 template<class Parent, int Dimension>
-auto make_chunk(Parent& parent, BC::array<Parent::tensor_dimension, BC::size_t> index_points, BC::array<Dimension, int> shape) {
+auto make_chunk(Parent& parent,
+			BC::utility::array<Parent::tensor_dimension, BC::size_t> index_points,
+			BC::utility::array<Dimension, int> shape) {
 	static_assert(Dimension > 1, "TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, USE SCALAR OR RANGED_SLICE OTHERWISE");
 
 	using slice_type = slice_type_from_parent<Dimension, Parent, BC_Noncontinuous>;

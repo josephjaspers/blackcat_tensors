@@ -10,6 +10,7 @@
 #define BC_CORE_STRUCTURES_H_
 
 #include "BlackCat_Common.h"
+#include "utility/Utility.h"
 
 /*
  * Defines stack array and lambda array
@@ -18,7 +19,7 @@
  */
 
 namespace BC {
-
+namespace utility {
 //-------------------------------Lightweight array -------------------------------//
     template<int size_, class T>
     struct array {
@@ -59,6 +60,6 @@ namespace BC {
     	return lambda_array<dimension, decltype(internal(0)), func>(internal);
     }
 }
-
+}
 
 #endif /* INTERNAL_SHAPES_H_ */

@@ -15,9 +15,13 @@ class host_tag;
 
 namespace allocators {
 
+template<class SystemTag, class ValueType>
+class Allocator;
 
+
+/// Comparable to 'std::allocator.'
 template<class T>
-struct Host {
+struct Allocator<host_tag, T> {
 
     using system_tag = host_tag;	//BC tag
 
@@ -31,16 +35,16 @@ struct Host {
     using is_always_equal = std::true_type;
 
 	template<class altT>
-	struct rebind { using other = Host<altT>; };
+	struct rebind { using other = Allocator<host_tag, altT>; };
 
 	template<class U>
-	Host(const Host<U>&) {}
-	Host() = default;
-	Host(const Host&) = default;
-	Host(Host&&) = default;
+	Allocator(const Allocator<host_tag, U>&) {}
+	Allocator() = default;
+	Allocator(const Allocator&) = default;
+	Allocator(Allocator&&) = default;
 
-	Host& operator = (const Host&) = default;
-	Host& operator = (Host&&) = default;
+	Allocator& operator = (const Allocator&) = default;
+	Allocator& operator = (Allocator&&) = default;
 
     T* allocate(int size) {
         return new T[size];
@@ -50,8 +54,8 @@ struct Host {
         delete[] t;
     }
 
-    constexpr bool operator == (const Host&) { return true; }
-    constexpr bool operator != (const Host&) { return false; }
+    template<class U> constexpr bool operator == (const Allocator<host_tag, U>&) { return true; }
+    template<class U> constexpr bool operator != (const Allocator<host_tag, U>&) { return false; }
 };
 
 }

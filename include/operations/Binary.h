@@ -61,7 +61,7 @@ namespace oper {
 
 
     struct Add : linear_operation {
-    	using alpha_modifier = BC::meta::Integer<1>;
+    	using alpha_modifier = BC::traits::Integer<1>;
     	BC_FORWARD_DEF(lv + rv)
     	BC_BACKWARD_DEF(lv.second + rv.second)
     } add;
@@ -73,7 +73,7 @@ namespace oper {
     } mul;
 
     struct Sub : linear_operation {
-    	using alpha_modifier = BC::meta::Integer<-1>;
+    	using alpha_modifier = BC::traits::Integer<-1>;
     	BC_FORWARD_DEF(lv - rv)
     	BC_BACKWARD_DEF(lv.second - rv.second)
 
@@ -91,32 +91,32 @@ namespace oper {
     } div;
 
     struct Assign : assignment_operation {
-    	using alpha_modifier = BC::meta::Integer<1>;
-    	using beta_modifier = BC::meta::Integer<0>;
+    	using alpha_modifier = BC::traits::Integer<1>;
+    	using beta_modifier = BC::traits::Integer<0>;
     	BC_FORWARD_DEF(lv = rv)
     } assign;
 
     struct Add_Assign : linear_assignment_operation {
-    	using alpha_modifier = BC::meta::Integer<1>;
-    	using beta_modifier = BC::meta::Integer<1>;
+    	using alpha_modifier = BC::traits::Integer<1>;
+    	using beta_modifier = BC::traits::Integer<1>;
     	BC_FORWARD_DEF(lv += rv)
     } add_assign;
 
     struct Mul_Assign : assignment_operation {
-    	using alpha_modifier = BC::meta::Integer<1>;
-    	using beta_modifier = BC::meta::Integer<1>;
+    	using alpha_modifier = BC::traits::Integer<1>;
+    	using beta_modifier = BC::traits::Integer<1>;
     	BC_FORWARD_DEF(lv *= rv)
     } mul_assign;
 
     struct Sub_Assign : linear_assignment_operation {
-    	using alpha_modifier = BC::meta::Integer<-1>;
-    	using beta_modifier = BC::meta::Integer<1>;
+    	using alpha_modifier = BC::traits::Integer<-1>;
+    	using beta_modifier = BC::traits::Integer<1>;
     	BC_FORWARD_DEF(lv -= rv)
     } sub_assign;
 
     struct Div_Assign : assignment_operation {
-    	using alpha_modifier = BC::meta::Integer<1>;
-    	using beta_modifier = BC::meta::Integer<1>;
+    	using alpha_modifier = BC::traits::Integer<1>;
+    	using beta_modifier = BC::traits::Integer<1>;
     	BC_FORWARD_DEF(lv /= rv)
     } div_assign;
 
@@ -169,7 +169,7 @@ namespace oper {
 
 
     struct Make_Pair {
-    	BC_FORWARD_DEF(BC::meta::make_pair(lv, rv))
+    	BC_FORWARD_DEF(BC::traits::make_pair(lv, rv))
     } make_pair;
 
 #ifdef __CUDACC__

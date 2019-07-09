@@ -58,7 +58,7 @@ public:
     }
 
     //specialization for explicit copy operator
-    derived& operator = (const BC::meta::only_if<exprs::expression_traits<Expression>::is_copy_assignable, derived>& param) {
+    derived& operator = (const BC::traits::only_if<exprs::expression_traits<Expression>::is_copy_assignable, derived>& param) {
         BC_ASSERT_ASSIGNABLE("derived& operator = (const derived& param)");
         assert_valid(param);
         evaluate(bi_expr< oper::Assign >(param));
@@ -231,8 +231,8 @@ public:
 
         if (std::is_same<system_tag, typename right_value::system_tag>::value) {
         	//Ensures it only compiles when true
-        	BC::meta::constexpr_if<std::is_same<system_tag, typename right_value::system_tag>::value>(
-        			BC::meta::bind([](auto& self, const auto& rv){
+        	BC::traits::constexpr_if<std::is_same<system_tag, typename right_value::system_tag>::value>(
+        			BC::traits::bind([](auto& self, const auto& rv){
         				self = rv;
         	}, *this, rv));
         } else if (std::is_same<system_tag, device_tag>::value) {
@@ -306,7 +306,7 @@ private:
 
     //ensures that the smaller tensor is a same-dimensioned "slice" of the other
     template<class deriv>  bool valid_slice(const Tensor_Operations<deriv>& tensor) const {
-        constexpr BC::size_t  DIM_MIN = meta::min(derived::tensor_dimension, deriv::tensor_dimension);
+        constexpr BC::size_t  DIM_MIN = traits::min(derived::tensor_dimension, deriv::tensor_dimension);
         for (int i = 0; i < DIM_MIN; ++i)
             if (tensor.as_derived().dimension(i) != as_derived().dimension(i))
                 return false;

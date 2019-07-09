@@ -124,15 +124,15 @@ struct optimizer<Binary_Expression<op, lv, rv>, std::enable_if_t<oper::operation
     template<class core, int a, int b, class Stream>
     static auto linear_evaluation(Binary_Expression<op, lv, rv>& branch, injector<core, a, b> tensor, Stream alloc) {
         return
-        		BC::meta::constexpr_if<entirely_blas_expr>(
+        		BC::traits::constexpr_if<entirely_blas_expr>(
         				[&](){
 							optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
 							optimizer<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
 							return tensor.data();
         				},
-				BC::meta::constexpr_else_if<optimizer<lv>::entirely_blas_expr>(
+				BC::traits::constexpr_else_if<optimizer<lv>::entirely_blas_expr>(
         				[&]() {
-        					return BC::meta::constexpr_ternary<std::is_same<op, oper::Sub>::value>(
+        					return BC::traits::constexpr_ternary<std::is_same<op, oper::Sub>::value>(
         							[&]() {
 										/*auto left = */ optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
 										auto right = optimizer<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
@@ -146,18 +146,18 @@ struct optimizer<Binary_Expression<op, lv, rv>, std::enable_if_t<oper::operation
         							}
         					);
         				},
-				BC::meta::constexpr_else_if<optimizer<rv>::entirely_blas_expr>(
+				BC::traits::constexpr_else_if<optimizer<rv>::entirely_blas_expr>(
         				[&]() {
 								auto left  = optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
 							  /*auto right = */ optimizer<rv>::linear_evaluation(branch.right, update_injection<op, b != 0>(tensor), alloc);
 								return left;
 						},
-				BC::meta::constexpr_else_if<optimizer<rv>::nested_blas_expr>(
+				BC::traits::constexpr_else_if<optimizer<rv>::nested_blas_expr>(
         				[&]() {
 				            auto right = optimizer<rv>::injection(branch.right, tensor, alloc);
 				            return make_bin_expr<op>(branch.left, right);
 						},
-				BC::meta::constexpr_else(
+				BC::traits::constexpr_else(
 						[&]() {
 				        	static constexpr bool left_evaluated = optimizer<lv>::partial_blas_expr || b != 0;
 				        	auto left = optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
@@ -190,25 +190,25 @@ struct optimizer<Binary_Expression<op, lv, rv>, std::enable_if_t<oper::operation
 
 
         return
-        		BC::meta::constexpr_if<entirely_blas_expr>(
+        		BC::traits::constexpr_if<entirely_blas_expr>(
         				[&](){
 							optimizer<lv>::linear_evaluation(branch.left, tensor, alloc);
 							optimizer<rv>::linear_evaluation(branch.right, update_injection<op, true>(tensor), alloc);
 							return tensor.data();
         				},
-				BC::meta::constexpr_else_if<optimizer<rv>::partial_blas_expr && optimizer<lv>::partial_blas_expr>(
+				BC::traits::constexpr_else_if<optimizer<rv>::partial_blas_expr && optimizer<lv>::partial_blas_expr>(
         					basic_eval,
-				BC::meta::constexpr_else_if<optimizer<lv>::nested_blas_expr>(
+				BC::traits::constexpr_else_if<optimizer<lv>::nested_blas_expr>(
         				[&]() {
 							auto left = optimizer<lv>::injection(branch.left, tensor, alloc);
 							return make_bin_expr<op>(left, branch.right);
 						},
-				BC::meta::constexpr_else_if<optimizer<rv>::nested_blas_expr>(
+				BC::traits::constexpr_else_if<optimizer<rv>::nested_blas_expr>(
         				[&]() {
 				            auto right = optimizer<rv>::injection(branch.right, tensor, alloc);
 				            return make_bin_expr<op>(branch.left, right);
 						},
-				BC::meta::constexpr_else(
+				BC::traits::constexpr_else(
 						basic_eval
 				)))));
     }
@@ -249,7 +249,7 @@ struct optimizer<Binary_Expression<op, lv, rv>, std::enable_if_t<oper::operation
 
     template<class core, int a, int b, class Stream>
     static auto injection(Binary_Expression<op, lv, rv> branch, injector<core, a, b> tensor, Stream alloc) {
-    	return BC::meta::constexpr_ternary<optimizer<lv>::partial_blas_expr || optimizer<lv>::nested_blas_expr>(
+    	return BC::traits::constexpr_ternary<optimizer<lv>::partial_blas_expr || optimizer<lv>::nested_blas_expr>(
 					[&]() {
 						auto left = optimizer<lv>::injection(branch.left, tensor, alloc);
 						auto right = branch.right;

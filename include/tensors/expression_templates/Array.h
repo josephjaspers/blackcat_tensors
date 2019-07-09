@@ -37,13 +37,13 @@ namespace exprs {
 template<int Dimension, class ValueType, class SystemTag, class... Tags>
 struct Kernel_Array
 		: Kernel_Array_Base<Kernel_Array<Dimension, ValueType, SystemTag, Tags...>>,
-		  std::conditional_t<BC::meta::sequence_contains_v<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>,
+		  std::conditional_t<BC::traits::sequence_contains_v<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>,
 		  public Tags... {
 
     using value_type = ValueType;
     using system_tag = SystemTag;
     using pointer_type = value_type*;
-    using shape_type = std::conditional_t<BC::meta::sequence_contains_v<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>;
+    using shape_type = std::conditional_t<BC::traits::sequence_contains_v<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>;
     using self_type  = Kernel_Array<Dimension, ValueType, SystemTag, Tags...>;
 
     static constexpr bool copy_constructible = !expression_traits<self_type>::is_view;
@@ -62,7 +62,7 @@ struct Kernel_Array
     Kernel_Array(shape_type shape, pointer_type ptr)
     	: shape_type(shape), array(ptr) {};
 
-    BCINLINE BC::meta::apply_const_t<pointer_type> memptr() const { return array; }
+    BCINLINE BC::traits::apply_const_t<pointer_type> memptr() const { return array; }
     BCINLINE       pointer_type memptr()       { return array; }
 
     BCINLINE const shape_type& get_shape() const { return static_cast<const shape_type&>(*this); }
@@ -179,7 +179,7 @@ public:
 	//Constructor for integer sequence, IE Matrix(m, n)
 	template<class... args,
 	typename=std::enable_if_t<
-		meta::sequence_of_v<BC::size_t, args...> &&
+		traits::sequence_of_v<BC::size_t, args...> &&
 		sizeof...(args) == Dimension>>
 	Array(const args&... params) {
 		this->as_shape() = Shape<Dimension>(params...);
@@ -249,7 +249,7 @@ auto make_temporary_kernel_scalar(Stream stream) {
 	return Array(BC::Shape<0>(), stream.template get_allocator_rebound<ValueType>().allocate(1));
 }
 
-template<int Dimension, class ValueType, class SystemTag, class... Tags, class=std::enable_if_t<BC::meta::sequence_contains_v<BC_Temporary, Tags...>>>
+template<int Dimension, class ValueType, class SystemTag, class... Tags, class=std::enable_if_t<BC::traits::sequence_contains_v<BC_Temporary, Tags...>>>
 void destroy_temporary_kernel_array(Kernel_Array<Dimension, ValueType, SystemTag, Tags...> temporary, BC::Stream<SystemTag> stream) {
 	stream.template get_allocator_rebound<ValueType>().deallocate(temporary.array, temporary.size());
 }

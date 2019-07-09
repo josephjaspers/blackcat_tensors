@@ -19,7 +19,7 @@ namespace BC {
 namespace tensors {
 
 namespace {
-using namespace BC::meta;
+using namespace BC::traits;
 }
 
 
@@ -31,21 +31,12 @@ class Tensor_Base :
         public Tensor_Accessor<ExpressionTemplate>,
         public Tensor_IterAlgos<ExpressionTemplate> {
 
-    template<class> friend class Tensor_Base;
-    friend class Tensor_Operations<ExpressionTemplate>;
-    friend class Tensor_Utility<ExpressionTemplate>;
-    friend class Tensor_Accessor<ExpressionTemplate>;
+    template<class>
+    friend class Tensor_Base;
 
     using parent        = ExpressionTemplate;
-    using self          = Tensor_Base<ExpressionTemplate>;
     using operations    = Tensor_Operations<ExpressionTemplate>;
-    using utility       = Tensor_Utility<ExpressionTemplate>;
     using accessor      = Tensor_Accessor<ExpressionTemplate>;
-
-    using move_parameter        = only_if<exprs::expression_traits<ExpressionTemplate>::is_move_constructible, self&&>;
-    using copy_parameter        = only_if<exprs::expression_traits<ExpressionTemplate>::is_copy_constructible, const self&>;
-    using move_assign_parameter = only_if<exprs::expression_traits<ExpressionTemplate>::is_move_assignable,       self&&>;
-    using copy_assign_parameter = only_if<exprs::expression_traits<ExpressionTemplate>::is_copy_assignable, const self&>;
 
 public:
 
@@ -56,6 +47,11 @@ public:
     using allocator_type = conditional_detected_t<query_allocator_type, ExpressionTemplate, void>;
     using value_type  = typename ExpressionTemplate::value_type;
 	using system_tag  = typename ExpressionTemplate::system_tag;
+
+    static constexpr bool move_constructible = exprs::expression_traits<ExpressionTemplate>::is_move_constructible;
+    static constexpr bool copy_constructible = exprs::expression_traits<ExpressionTemplate>::is_move_constructible;
+    static constexpr bool move_assignable = exprs::expression_traits<ExpressionTemplate>::is_move_assignable;
+    static constexpr bool copy_assignable = exprs::expression_traits<ExpressionTemplate>::is_copy_assignable;
 
     using operations::operator=;
 	using operations::operator+;
@@ -85,18 +81,18 @@ public:
     : parent(tensor.as_parent()) {}
 
 
-    Tensor_Base(copy_parameter tensor)
+    Tensor_Base(only_if<copy_constructible, const Tensor_Base<ExpressionTemplate>&> tensor)
     : parent(tensor.as_parent()) {}
 
-    Tensor_Base(move_parameter tensor)
+    Tensor_Base(only_if<move_constructible, Tensor_Base<ExpressionTemplate>&&> tensor)
     : parent(std::move(tensor.as_parent())) {}
 
-    Tensor_Base& operator =(move_assign_parameter tensor) {
+    Tensor_Base& operator =(only_if<move_assignable, Tensor_Base<ExpressionTemplate>&&> tensor) {
         this->internal_move(std::move(tensor.as_parent()));
         return *this;
     }
 
-    Tensor_Base& operator =(copy_assign_parameter tensor) {
+    Tensor_Base& operator =(only_if<copy_assignable, const Tensor_Base<ExpressionTemplate>&> tensor) {
          operations::operator=(tensor);
          return *this;
     }

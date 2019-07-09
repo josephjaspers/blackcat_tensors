@@ -20,16 +20,16 @@ struct Shape {
 	static_assert(dims >= 0, "BC: SHAPE OBJECT MUST HAVE AT LEAST 0 OR MORE DIMENSIONS");
 	using self = std::conditional_t<std::is_void<derived>::value, Shape<dims, derived>, derived>;
 
-    BC::array<dims, int> m_inner_shape = {0};
-    BC::array<dims, int> m_block_shape = {0};
+    BC::utility::array<dims, int> m_inner_shape = {0};
+    BC::utility::array<dims, int> m_block_shape = {0};
 
     BCINLINE Shape() {}
 
-    template<class... integers, class = std::enable_if_t<BC::meta::sequence_of_v<BC::size_t, integers...>>>
+    template<class... integers, class = std::enable_if_t<BC::traits::sequence_of_v<BC::size_t, integers...>>>
     Shape(integers... ints) {
-        static_assert(meta::sequence_of_v<int, integers...>, "INTEGER LIST OF SHAPE");
+        static_assert(traits::sequence_of_v<int, integers...>, "INTEGER LIST OF SHAPE");
         static_assert(sizeof...(integers) == dims, "integer initialization must have the same number of dimensions");
-        init(BC::make_array(ints...));
+        init(BC::utility::make_array(ints...));
     }
 
     template<int x> BCINLINE
@@ -42,12 +42,12 @@ struct Shape {
     }
 
     template<int dim, class int_t, class=std::enable_if_t<(dim>=dims)>>
-    BCINLINE Shape (BC::array<dim, int_t> param) {
+    BCINLINE Shape (BC::utility::array<dim, int_t> param) {
         static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
         init(param);
     }
     template<int dim, class f, class int_t>
-    BCINLINE Shape (lambda_array<dim, int_t, f> param) {
+    BCINLINE Shape (utility::lambda_array<dim, int_t, f> param) {
         static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
         init(param);
     }
@@ -63,13 +63,13 @@ struct Shape {
     BCINLINE BC::size_t  leading_dimension(int i) const { return i < dims ? m_block_shape[i] : 0; }
     BCINLINE BC::size_t  block_dimension(int i) const  { return leading_dimension(i); }
 
-    template<class... integers, typename=std::enable_if_t<BC::meta::sequence_of_v<BC::size_t, integers...>>>
+    template<class... integers, typename=std::enable_if_t<BC::traits::sequence_of_v<BC::size_t, integers...>>>
     BCINLINE BC::size_t dims_to_index(integers... ints) const {
-        return dims_to_index(BC::make_array(ints...));
+        return dims_to_index(BC::utility::make_array(ints...));
     }
 
     template<int D> BCINLINE
-    BC::size_t dims_to_index(const BC::array<D, int>& var) const {
+    BC::size_t dims_to_index(const BC::utility::array<D, int>& var) const {
         BC::size_t  index = var[0];
         for(int i = 1; i < dims; ++i) {
             index += leading_dimension(i - 1) * var[i];
@@ -105,9 +105,9 @@ struct Shape<0> {
     Shape(const Shape<x>&) {} //empty
 
     BCINLINE Shape<0>() {}
-    BCINLINE const auto inner_shape() const { return make_lambda_array<0>([&](auto x) { return 1; });}
-    BCINLINE const auto outer_shape() const { return make_lambda_array<0>([&](auto x) { return 0; });}
-    BCINLINE const auto block_shape() const { return make_lambda_array<0>([&](auto x) { return 1; });}
+    BCINLINE const auto inner_shape() const { return utility::make_lambda_array<0>([&](auto x) { return 1; });}
+    BCINLINE const auto outer_shape() const { return utility::make_lambda_array<0>([&](auto x) { return 0; });}
+    BCINLINE const auto block_shape() const { return utility::make_lambda_array<0>([&](auto x) { return 1; });}
     BCINLINE BC::size_t  size() const { return 1; }
     BCINLINE BC::size_t  rows() const { return 1; }
     BCINLINE BC::size_t  cols() const { return 1; }
@@ -127,14 +127,14 @@ struct Shape<0> {
 template<>
 struct Shape<1> {
 
-    BC::array<1, int> m_inner_shape = {0};
-    BC::array<1, int> m_block_shape = {1};
+    BC::utility::array<1, int> m_inner_shape = {0};
+    BC::utility::array<1, int> m_block_shape = {1};
 
     BCINLINE Shape() {};
-    BCINLINE Shape (BC::array<1, int> param) : m_inner_shape {param}, m_block_shape { 1 }  {}
+    BCINLINE Shape (BC::utility::array<1, int> param) : m_inner_shape {param}, m_block_shape { 1 }  {}
 
     template<int dim, class f, class int_t> BCINLINE
-    Shape (lambda_array<dim, int_t, f> param) {
+    Shape (utility::lambda_array<dim, int_t, f> param) {
         static_assert(dim >= 1, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
         m_inner_shape[0] = param[0];
         m_block_shape[0] = 1;
@@ -181,19 +181,19 @@ template<int ndims>
 struct SubShape : Shape<ndims, SubShape<ndims>> {
 
 	using parent = Shape<ndims, SubShape<ndims>>;
-	BC::array<ndims, BC::size_t> m_outer_shape;
+	BC::utility::array<ndims, BC::size_t> m_outer_shape;
 
 	SubShape() = default;
 
 
 	template<class der>
-	SubShape(const BC::array<ndims, BC::size_t>& new_shape, const Shape<ndims, der>& parent_shape)
+	SubShape(const BC::utility::array<ndims, BC::size_t>& new_shape, const Shape<ndims, der>& parent_shape)
 	: parent(new_shape) {
 		for (int i = 0; i < ndims; ++i ) {
 			m_outer_shape[i] = parent_shape.leading_dimension(i);
 		}
 	}
-	SubShape(const BC::array<ndims, BC::size_t>& new_shape, const SubShape<ndims>& parent_shape)
+	SubShape(const BC::utility::array<ndims, BC::size_t>& new_shape, const SubShape<ndims>& parent_shape)
 	: parent(new_shape) {
 		for (int i = 0; i < ndims; ++i ) {
 			m_outer_shape[i] = parent_shape.m_outer_shape[i];
@@ -218,13 +218,13 @@ struct SubShape : Shape<ndims, SubShape<ndims>> {
 	}
 
 
-    template<class... integers, typename=std::enable_if_t<BC::meta::sequence_of_v<BC::size_t, integers...>>>
+    template<class... integers, typename=std::enable_if_t<BC::traits::sequence_of_v<BC::size_t, integers...>>>
     BCINLINE BC::size_t dims_to_index(integers... ints) const {
-        return dims_to_index(BC::make_array(ints...));
+        return dims_to_index(BC::utility::make_array(ints...));
     }
 
     template<int D> BCINLINE
-    BC::size_t dims_to_index(const BC::array<D, int>& var) const {
+    BC::size_t dims_to_index(const BC::utility::array<D, int>& var) const {
         BC::size_t  index = var[0];
         for(int i = 1; i < ndims; ++i) {
             index += leading_dimension(i - 1) * var[i];
@@ -257,12 +257,12 @@ using Shape = tensors::exprs::Shape<x>;
 
 
 
-template<class... integers, typename=std::enable_if_t<meta::sequence_of_v<BC::size_t, integers...>>>
+template<class... integers, typename=std::enable_if_t<traits::sequence_of_v<BC::size_t, integers...>>>
 auto make_shape(integers... ints) {
 	return Shape<sizeof...(integers)>(ints...);
 }
 
-template<class InnerShape, typename=std::enable_if_t<!meta::sequence_of_v<BC::size_t, InnerShape>>>
+template<class InnerShape, typename=std::enable_if_t<!traits::sequence_of_v<BC::size_t, InnerShape>>>
 auto make_shape(InnerShape is) {
 	return Shape<InnerShape::tensor_dimension>(is);
 }

@@ -70,12 +70,12 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Operation, Arr
 
     template<class... integers> BCINLINE
     value_type operator ()(integers... index) {
-    	using namespace BC::meta;
+    	using namespace BC::traits;
         return auto_remove_const(auto_apply_const(*this)(index...));
     }
 
     BCINLINE value_type operator [](int index) {
-    	using namespace BC::meta;
+    	using namespace BC::traits;
         return auto_remove_const(auto_apply_const(*this)[index]);
     }
 
@@ -85,7 +85,7 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Operation, Arr
 		auto gx_and_dxgx = expression_traits<ArrayType>::select_on_dx(array, indicies...);	// [g(x), g’(x)]
 		auto f_gx = Operation::operator()(gx_and_dxgx.first);
 		auto dx_f_gx = Operation::dx(gx_and_dxgx.first) * gx_and_dxgx.second;
-		return BC::meta::make_pair(f_gx, dx_f_gx);
+		return BC::traits::make_pair(f_gx, dx_f_gx);
     }
 
     BCINLINE const auto inner_shape() const { return array.inner_shape(); }

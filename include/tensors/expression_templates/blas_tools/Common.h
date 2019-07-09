@@ -37,20 +37,20 @@ struct Common_Tools {
 			stream.set_blas_pointer_mode_device();
 		}
 
-		return BC::meta::constexpr_if<!lv_scalar && !rv_scalar>(
+		return BC::traits::constexpr_if<!lv_scalar && !rv_scalar>(
 					[&](){
 						return make_constexpr_scalar<BC::host_tag, alpha_mod, Scalar_t>();
 					},
-				BC::meta::constexpr_else_if<(lv_scalar != rv_scalar) && (alpha_mod == 1)>(
+				BC::traits::constexpr_else_if<(lv_scalar != rv_scalar) && (alpha_mod == 1)>(
 					[&](){
-						return BC::meta::constexpr_ternary<lv_scalar>(
+						return BC::traits::constexpr_ternary<lv_scalar>(
 								[&]() { return lv; },
 								[&]() { return rv; }
 						);
 					},
-				BC::meta::constexpr_else_if<lv_scalar && rv_scalar>(
+				BC::traits::constexpr_else_if<lv_scalar && rv_scalar>(
 					[&]() {
-						return BC::meta::constexpr_ternary<host_mode>(
+						return BC::traits::constexpr_ternary<host_mode>(
 								[&](){
 									return make_scalar_constant<BC::host_tag, Scalar_t>(alpha_mod * lv[0] * rv[0]);
 								},[&](){
@@ -59,9 +59,9 @@ struct Common_Tools {
 									return tmp_scalar;
 								});
 					},
-				BC::meta::constexpr_else_if<lv_scalar>(
+				BC::traits::constexpr_else_if<lv_scalar>(
 						[&]() {
-							return BC::meta::constexpr_if<host_mode>(
+							return BC::traits::constexpr_if<host_mode>(
 									[&](){
 										return make_scalar_constant<BC::host_tag, Scalar_t>(alpha_mod * lv[0]);
 									},[&](){
@@ -70,7 +70,7 @@ struct Common_Tools {
 										return tmp_scalar;
 									});
 						}, [&]() { //else if rv_scalar
-							return BC::meta::constexpr_if<host_mode>(
+							return BC::traits::constexpr_if<host_mode>(
 									[&](){
 										return make_scalar_constant<BC::host_tag, Scalar_t>(alpha_mod * rv[0]);
 									},[&](){
@@ -146,8 +146,8 @@ struct Common_Tools {
 	template<class Stream, class Contents>
 	static void post_parse_expression_evaluation(Stream stream, Contents contents) {
 		using value_type = typename decltype(contents.alpha)::value_type;
-        BC::meta::constexpr_if<(BC::tensors::exprs::expression_traits<decltype(contents.alpha)>::is_temporary)>(
-            BC::meta::bind([&](auto alpha) {
+        BC::traits::constexpr_if<(BC::tensors::exprs::expression_traits<decltype(contents.alpha)>::is_temporary)>(
+            BC::traits::bind([&](auto alpha) {
         		stream.template get_allocator_rebound<value_type>().deallocate(alpha, 1);
         	}, 	contents.alpha));
 

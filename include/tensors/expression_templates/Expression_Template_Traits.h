@@ -39,7 +39,7 @@ template<class T> using query_move_constructible =
 template<class T>
 struct remove_scalar_mul {
 	using type = T;
-	using scalar_type = typename BC::meta::conditional_detected<query_value_type, T, T>::type *;
+	using scalar_type = typename BC::traits::conditional_detected<query_value_type, T, T>::type *;
 
 	static T rm(T expression) {
 		return expression;
@@ -57,13 +57,13 @@ struct remove_scalar_mul<Binary_Expression<oper::Scalar_Mul, lv, rv>> {
 	using scalar_type = std::conditional_t<lv::tensor_dimension == 0, lv ,rv>;
 
 	static type rm(Binary_Expression<oper::Scalar_Mul, lv, rv> expression) {
-		return BC::meta::constexpr_ternary<lv::tensor_dimension==0>(
+		return BC::traits::constexpr_ternary<lv::tensor_dimension==0>(
 				[&]() { return expression.right; },
 				[&]() { return expression.left;  }
 		);
 	}
 	static scalar_type get_scalar(Binary_Expression<oper::Scalar_Mul, lv, rv> expression) {
-		return BC::meta::constexpr_ternary<lv::tensor_dimension==0>(
+		return BC::traits::constexpr_ternary<lv::tensor_dimension==0>(
 				[&]() { return expression.left; },
 				[&]() { return expression.right;  }
 		);
@@ -100,11 +100,11 @@ struct select_on_dx_when_defined {
 struct select_on_dx_when_not_defined {
 	template<class T> BCINLINE
 	static auto impl(const T& array, BC::size_t index) {
-    	return BC::meta::make_pair(array[index], 1);
+    	return BC::traits::make_pair(array[index], 1);
 	}
 	template<class T, class... Indicies> BCINLINE
 	static auto impl(const T& array, Indicies... indicies) {
-    	return BC::meta::make_pair(array(indicies...), 1);
+    	return BC::traits::make_pair(array(indicies...), 1);
 	}
 };
 
@@ -128,12 +128,12 @@ template<int,class> class Shape;
 template<class T>
 struct expression_traits {
 
-	 using system_tag	  = typename BC::meta::conditional_detected<detail::query_system_tag, T, host_tag>::type;
-	 using allocation_tag = typename BC::meta::conditional_detected<detail::query_allocation_type, T, system_tag>::type;
-	 using value_type	  = typename BC::meta::conditional_detected<detail::query_value_type, T, void>::type;
+	 using system_tag	  = typename BC::traits::conditional_detected<detail::query_system_tag, T, host_tag>::type;
+	 using allocation_tag = typename BC::traits::conditional_detected<detail::query_allocation_type, T, system_tag>::type;
+	 using value_type	  = typename BC::traits::conditional_detected<detail::query_value_type, T, void>::type;
 
 	 static constexpr bool derivative_is_defined =
-			 BC::meta::conditional_detected_t<detail::query_dx_is_defined, T, std::false_type>::value;
+			 BC::traits::conditional_detected_t<detail::query_dx_is_defined, T, std::false_type>::value;
 
 	 template<class... Indicies>
 	 BCINLINE static auto select_on_dx(const T& expression, Indicies... indicies) {
@@ -153,19 +153,19 @@ struct expression_traits {
 
 // Causes 'catastrophic error' with NVCC. Compiles with GCC TODO change once NVCC fixes
 //	static constexpr bool is_move_constructible =
-//					BC::meta::conditional_detected_t<
+//					BC::traits::conditional_detected_t<
 //						detail::query_move_constructible, T, std::false_type>::type::value;
 //
 //	static constexpr bool is_copy_constructible =
-//					BC::meta::conditional_detected_t<
+//					BC::traits::conditional_detected_t<
 //						detail::query_copy_constructible, T, std::false_type>::type::value;
 //
 //	static constexpr bool is_move_assignable 	=
-//					BC::meta::conditional_detected_t<
+//					BC::traits::conditional_detected_t<
 //						detail::query_move_assignable, T, std::false_type>::type::value;
 //
 //	static constexpr bool is_copy_assignable 	=
-//					BC::meta::conditional_detected_t<
+//					BC::traits::conditional_detected_t<
 //						detail::query_copy_assignable, T, std::false_type>::type::value;
 
 	static constexpr bool is_move_constructible = T::move_constructible;

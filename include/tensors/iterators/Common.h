@@ -30,7 +30,7 @@ template<class T>
 struct iterator_traits : std::iterator_traits<T> {
 
 	using system_tag =
-			BC::meta::conditional_detected_t<
+			BC::traits::conditional_detected_t<
 			detail::query_system_tag, T, host_tag>;
 };
 

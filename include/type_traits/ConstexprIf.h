@@ -9,7 +9,7 @@
 #define BLACKCAT_CONSTEXPRIF_H_
 
 namespace BC {
-namespace meta {
+namespace traits {
 
 
 //-------------------------- constexpr ternary -----------------------//

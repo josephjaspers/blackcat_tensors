@@ -18,18 +18,21 @@ namespace allocators {
 
 class Byte {};
 
+template<class SystemTag, class ValueType>
+class Allocator;
+
 }
 
 template<class Allocator_Type>
 using allocator_traits = allocators::allocator_traits<Allocator_Type>;
 
 template<class value_type>
-using Basic_Allocator = allocators::Host<value_type>;
+using Basic_Allocator = allocators::Allocator<host_tag, value_type>;
 
 
 #ifdef __CUDACC__
 template<class value_type>
-using Cuda_Allocator = allocators::Device<value_type>;
+using Cuda_Allocator = allocators::Allocator<device_tag, value_type>;
 
 template<class value_type>
 using Cuda_Managed = allocators::Device_Managed<value_type>;

@@ -13,8 +13,9 @@
 namespace BC {
 namespace allocators {
 
+/// A basic allocator, memory is allocated via 'cudaMallocManaged'
 template<class T>
-struct Device_Managed : Device<T> {
+struct Device_Managed : Allocator<device_tag, T> {
 
 	static constexpr bool managed_memory = true;
 
@@ -27,6 +28,9 @@ struct Device_Managed : Device<T> {
 
 	Device_Managed& operator = (const Device_Managed&) = default;
 	Device_Managed& operator = (Device_Managed&&) = default;
+
+	template<class U>
+	constexpr bool operator == (const Device_Managed<U>&) { return true; }
 
 	template<class U>
 	Device_Managed(const Device_Managed<U>&) {}

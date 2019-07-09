@@ -47,7 +47,7 @@ template<class Expression, class SystemTag>
 static void nd_evaluate(const Expression expr, BC::Stream<SystemTag> stream) {
 	using nd_evaluator  = typename BC::tensors::exprs::evaluator::Evaluator<SystemTag>;
 
-	BC::meta::constexpr_if<expression_traits<Expression>::is_expr> ([&]() {
+	BC::traits::constexpr_if<expression_traits<Expression>::is_expr> ([&]() {
 		nd_evaluator::template nd_evaluate<Expression::tensor_iterator_dimension>(expr, stream);
 	});
 }
@@ -98,9 +98,9 @@ evaluate(Binary_Expression<oper::Assign, lv, rv> expression, BC::Stream<SystemTa
 
 	auto right = optimizer<rv>::injection(expression.right, injector<lv, alpha_mod, beta_mod>(expression.left), stream);
 
-	return BC::meta::constexpr_if<partial_blas_expr>([&]() {
+	return BC::traits::constexpr_if<partial_blas_expr>([&]() {
 		detail::greedy_eval<oper::Add_Assign>(expression.left, right, stream);
-	}, BC::meta::constexpr_else_if<!entirely_blas_expr>([&]() {
+	}, BC::traits::constexpr_else_if<!entirely_blas_expr>([&]() {
 		detail::greedy_eval<oper::Assign>(expression.left, right, stream);
 	}));
 }

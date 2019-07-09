@@ -21,9 +21,9 @@ namespace streams {
 	class Stream;
 }
 
-namespace meta {
+namespace traits {
 
-using namespace BC::meta::common;
+using namespace BC::traits::common;
 
 	namespace { template<class> struct DISABLE; }
 	template<bool x,class T> using only_if = conditional_t<x, T, DISABLE<T>>;
@@ -212,16 +212,16 @@ using namespace BC::meta::common;
 		static constexpr bool defines_get_stream = is_detected_v<query_get_stream, T>;
 
 		using value_type =
-				meta::conditional_detected_t<query_value_type, T, None>;
+				traits::conditional_detected_t<query_value_type, T, None>;
 		using allocator_type =
-				meta::conditional_detected_t<query_allocator_type, T, None>;
+				traits::conditional_detected_t<query_allocator_type, T, None>;
 		using system_tag =
-				meta::conditional_detected_t<query_system_tag, T, host_tag>;
+				traits::conditional_detected_t<query_system_tag, T, host_tag>;
 	};
 
 }
 
-using meta::common_traits; //import common_traits into BC namespace
+using traits::common_traits; //import common_traits into BC namespace
 
 }
 

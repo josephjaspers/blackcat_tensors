@@ -11,16 +11,16 @@
 #include "Common.h"
 
 namespace BC {
-namespace meta {
+namespace traits {
 
-using namespace BC::meta::common;
+using namespace BC::traits::common;
 
 /*
  * Similar to std::bind but the evaluation of the function
  * in respect to its bound arguments are deduced if and only if the function is called.
  * IE
  *
- * 	auto func = BC::meta::bind([](int x) {}, std::vector<double>());
+ * 	auto func = BC::traits::bind([](int x) {}, std::vector<double>());
  *
  * 	will compile, even though a std::vector is not a valid argument
  * 	for the given lambda.

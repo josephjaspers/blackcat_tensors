@@ -15,7 +15,7 @@ struct detect_cached_dx : std::false_type {};
 template<class T>
 struct detect_cached_dx<T,
 		std::enable_if_t<
-				BC::meta::true_v<
+				BC::traits::true_v<
 					decltype(std::declval<T>().cached_dx)>
 			>
 		> : std::true_type {};
@@ -55,12 +55,12 @@ public:
     }
     template<class Matrix>
     auto back_propagation(const Matrix& dy) {
-    	return BC::meta::constexpr_ternary<detail::detect_cached_dx<Functor>::value>(
-    		BC::meta::bind([](auto function, auto& y, auto& dy){
+    	return BC::traits::constexpr_ternary<detail::detect_cached_dx<Functor>::value>(
+    		BC::traits::bind([](auto function, auto& y, auto& dy){
         		return function.cached_dx(y) % dy;
     		}, function, y, dy),
 
-    		BC::meta::bind([](auto function, auto& x, auto& dy){
+    		BC::traits::bind([](auto function, auto& x, auto& dy){
    	        	return function.dx(x) % dy;
         	}, function, x, dy)
     	);

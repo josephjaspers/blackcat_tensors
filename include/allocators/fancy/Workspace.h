@@ -108,6 +108,10 @@ public:
 };
 } //end of ns detail
 
+
+/// An unsynced memory pool implemented as a stack.
+/// Deallocation must happen in reverse order of deallocation.
+/// This class is used with BC::Tensor_Base expressions to enable very fast allocations of temporaries.
 template<class SystemTag, class ValueType=BC::allocators::Byte>
 class Workspace {
 
@@ -137,7 +141,10 @@ public:
 	Workspace(const Workspace&)=default;
 	Workspace(Workspace&&)=default;
 
+	///Reserve an amount of memory in bytes.
 	void reserve(std::size_t sz)  { ws_ptr->reserve(sz); }
+
+	/// Delete all reserved memory, if memory is currently allocated an error is thrown.
 	void free() { ws_ptr->free(); }
 
 	size_t available_bytes() const {

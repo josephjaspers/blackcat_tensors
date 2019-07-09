@@ -179,7 +179,7 @@ public:
     			device_contents.get()->m_stream_handle));
 
     	device_contents.get()->m_host_stream.push(
-    			BC::meta::bind(
+    			BC::traits::bind(
     			[this, func](std::promise<decltype(func())> promise) {
     				cudaEventSynchronize(this->device_contents.get()->m_event_handle);
     	    		promise.set_value(func());

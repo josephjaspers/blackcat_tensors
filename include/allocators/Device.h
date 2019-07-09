@@ -18,8 +18,14 @@ class device_tag;
 
 namespace allocators {
 
+template<class SystemTag, class ValueType>
+class Allocator;
+
+
+/// The 'std::allocator' of GPU-allocators.
+/// Memory is allocated via 'cudaMalloc'
 template<class T>
-struct Device {
+struct Allocator<device_tag, T> {
 
     using system_tag = device_tag;		//BC tag
 
@@ -33,17 +39,17 @@ struct Device {
     using is_always_equal = std::true_type;
 
 	template<class altT>
-	struct rebind { using other = Device<altT>; };
+	struct rebind { using other = Allocator<device_tag, altT>; };
 
 	template<class U>
-	Device(const Device<U>&) {}
+	Allocator(const Allocator<device_tag, U>&) {}
 
-	Device() = default;
-	Device(const Device&)=default;
-	Device(Device&&) = default;
+	Allocator() = default;
+	Allocator(const Allocator&)=default;
+	Allocator(Allocator&&) = default;
 
-	Device& operator = (const Device&) = default;
-	Device& operator = (Device&&) = default;
+	Allocator& operator = (const Allocator&) = default;
+	Allocator& operator = (Allocator&&) = default;
 
     T* allocate(std::size_t sz) const {
     	T* data_ptr;
@@ -55,10 +61,8 @@ struct Device {
     	BC_CUDA_ASSERT((cudaFree((void*)data_ptr)));
     }
 
-    constexpr bool operator == (const Device&) { return true; }
-    constexpr bool operator != (const Device&) { return false; }
-
-
+    template<class U> constexpr bool operator == (const Allocator<device_tag, U>&) { return true; }
+    template<class U> constexpr bool operator != (const Allocator<device_tag, U>&) { return false; }
 };
 
 }

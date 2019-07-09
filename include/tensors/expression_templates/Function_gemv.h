@@ -52,8 +52,14 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>
     BCINLINE BC::size_t M() const { return left.rows(); }
     BCINLINE BC::size_t N() const { return left.cols(); }
 
-    BCINLINE const auto inner_shape() const { return make_lambda_array<tensor_dimension>([&](int i) { return i == 0 ? left.rows() : 1; });}
-    BCINLINE const auto block_shape() const { return make_lambda_array<tensor_dimension>([&](int i) { return i == 0 ? rows() : 1; });}
+	BCINLINE const auto inner_shape() const {
+		return utility::make_lambda_array<tensor_dimension>(
+				[&](int i) {return i == 0 ? left.rows() : 1;});
+	}
+	BCINLINE const auto block_shape() const {
+		return utility::make_lambda_array<tensor_dimension>(
+				[&](int i) {return i == 0 ? rows() : 1;});
+	}
 
     template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod, class allocator>
     void eval(injector<core, alpha_mod, beta_mod> injection_values, allocator& alloc) const {
