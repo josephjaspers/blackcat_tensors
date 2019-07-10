@@ -53,6 +53,6 @@ stream.set_stream(another_bc_stream_object);
 | void | wait_event | BC::Stream | Causes the current stream to wait on the last recorded event of the parameter-stream | 
 | void | wait_stream | BC::Stream | Shorthand for recording an event on the parameter-stream and synchronizing on that stream |
 | void | enqueue_callback | Functor |Enques a host-call back function into the stream, a device stream will not wait for the completion of the host event to continue running | 
-| Workspace<ValueType> | get_allocator_rebound<value_type>() | Returns a BC::fancy::Workspace allocator contained inside the stream. | 
+| Workspace<ValueType> | get_allocator_rebound<value_type> | Returns a BC::fancy::Workspace allocator contained inside the stream. | 
  
 
