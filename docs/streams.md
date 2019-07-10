@@ -40,7 +40,7 @@ stream.set_stream(another_bc_stream_object);
 ```
 
 
-####Methods 
+#### Methods 
 
 | return type | method name | parameters | documentation |
 | --- | --- | --- | --- |
