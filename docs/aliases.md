@@ -6,32 +6,32 @@ Two template arguments are commonly supplied, value_type, (scalar type) and allo
 
 #### The Core Tensor Types: 
 ```cpp  
-    Tensor<int x, value_type, allocator_t> 
-    Scalar<value_type, allocator_t>
-    Vector<value_type, allocator_t>
-    Matrix<value_type, allocator_t>
-    Cube<value_type, allocator_t>
+    Tensor<int x, ValueType, Allocator> 
+    Scalar<ValueType, Allocator>
+    Vector<ValueType, Allocator>
+    Matrix<ValueType, Allocator>
+    Cube<ValueType, Allocator>
 ```
 
 #### View Types:
 - Accepts a Tensor to construct. Shares the internal pointer and is not mutable. 
 - Construction is a no-copy operation, though the data is not modifiable. 
 ```cpp
-    Tensor_View<int x, value_type, allocator_t>
-    Scalar_View<value_type, allocator_t>
-    Vector_View<value_type, allocator_t>
-    Matrix_View<value_type, allocator_t>
-    Cube_View<value_type, allocator_t>
+    Tensor_View<int Dimensions, ValueType, Allocator>
+    Scalar_View<ValueType, Allocator>
+    Vector_View<ValueType, Allocator>
+    Matrix_View<ValueType, Allocator>
+    Cube_View<ValueType, Allocator>
 
 ```
 
 #### Expression Types:
-- Any tensor that is expression (non-memory owning) or Tensor (memory owning) of the apropriate dimensionality.
+- A TensorXpr reference should be used in any function that will accept a Tensor or TensorExpression.
 - Cannot be constructed directly, used only for method parameters. 
 ```cpp
-    expr::Tensor<int> 
-    expr::Scalar
-    expr::Vector
-    expr::Matrix
-    expr::Cube
+    TensorXpr<int, T>
+    ScalarXpr<T>
+    VectorXpr<T>
+    MatrixXpr<T>
+    CubeXpr<T>
   ```

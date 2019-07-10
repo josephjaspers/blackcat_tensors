@@ -11,7 +11,7 @@ BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two temp
 	The Basic Allocator is comparable to the std::allocator.
 	It has no special properties.
 
-*Cuda*:
+*Cuda_Allocator*:
 
 	The generic allocator for CUDA. 
 	Allocates memory on the device. 
@@ -26,12 +26,14 @@ BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two temp
 	
 #### Additional Tags of BlackCat Allocators
 
-	BlackCat Allocators utilize 2 additional tags to achieve various modifiability. 
+	BlackCat Allocators utilizes the 'system_tag' to differentiate between host and device allocators.
 	
-
 	`system_tag`
 
 	The system_tag, may be either BC::host_tag or BC::device_tag.
+	```cpp
+		using system_tag = BC::device_tag; //Will inform BC_Tensors your allocators is a 'Cuda Allocator'
+	```
 	`system_tag` informs if the memory is allocated on the GPU or CPU. 
 	This enables compile time checking to make sure expressions are computed in the apropriate manner as well
 	as enabling querying for apropriate default behavior across the CPU and GPU. 
@@ -39,23 +41,30 @@ BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two temp
 	If system_tag is not supplied, it is defaulted to 'host_tag'.
 
 
-	`propagate_on_temporary_construction` 
-
-	The 'propagate_on_temporary_construction' enables the user to specify the behavior of memory allocation
-	when temporaries are needed. 
-	
-	if 'propagate_on_temporary_construction' is set to 'std::false_type', the default allocator is used.
-	if 'propagate_on_temporary_construction' is set to 'std::true_type', the same allocator is used,
-		the allocator will use "select_on_container_copy_construction" to generate the new allocator. 
-	
-	if 'propagate_on_temporary_construction' is not defined it is defaulted to be 'std::false_type' 
-
-
 #### Choosing an allocator (example):
 
 ```cpp
 BC::Matrix<float> mat; 			    	   //defaults to Basic_Allocator<float>
 BC::Matrix<float, BC::Basic_Allocator<float>> mat; //identical to above   
-BC::Matrix<float, BC::Cuda<float>> mat;	    	   //allocates memory on the GPU 
+BC::Matrix<float, BC::Cuda_Allocator<float>> mat;  //allocates memory on the GPU 
 BC::Matrix<float, BC::Cuda_Managed<float>> mat;    //allocates memory on the GPU but data transfer is managed automatically. 
+```
+
+#### Fancy Allocators:
+
+	BlackCat_Tensors supports some more advanced allocators found in the namespace BC::allocators::fancy.
+	
+```cpp
+	template<class ValueType, class SystemTag>
+	struct Polymorphic_Allocator;
+	
+	//The Polymorphic allocator function similarly to the C++17 std::pmr::polymorphic_allocator. 
+	//It accepts another allocator during its construction and uses Virtual-Calls to enable changing the underlying allocator at run time. 
+
+	template<class ValueType, class SystemTag>
+	struct Workspace;
+
+	// and 
+
+
 ```

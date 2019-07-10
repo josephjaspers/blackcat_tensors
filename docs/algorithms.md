@@ -5,29 +5,42 @@ These methods are called through the `BC` namespace.
 
 BlackCat_Tensor's does not implement any of these algorithms itself, instead forwarding to either the std implementation or thrust's implementation depending on how memory is allocated.
 
+The first argument must always be a stream argument, the possible arguments are: BC::Stream<host_tag>, BC::Stream<device_tag>, cudaStream_t.
+
 
 ```cpp
-BC::Matrix<float, BC::Cuda> dev_mat(3,3);
-BC::for_each(dev_mat.begin(), dev_mat.end(), your_function);  //will call thrust::for_each
+BC::Matrix<float, BC::Cuda_Allocator<float>> dev_mat(3,3);
+BC::algorithms::for_each(dev_mat.get_stream(), dev_mat.begin(), dev_mat.end(), your_function);  //will call thrust::for_each
 
-BC::Matrix<float, BC::Basic_Allocator> host_mat(3,3);
-BC::for_each(dev_mat.begin(), dev_mat.end(), your_function); //will call std::for_each
+BC::Matrix<float, BC::Basic_Allocator<float>> host_mat(3,3);
+BC::algorithms::for_each(dev_mat.get_stream(), dev_mat.begin(), dev_mat.end(), your_function); //will call std::for_each
 ```
 
-Using BC::algortihms is preferable to directly using to std or thrust's implementation as it enables user's to write allocation-generic code. Here we created a method that applies the logistic function to each element of a matrix. 
+Convenience definitions are given for each of the supported algorithms.
+
+IE 
+```cpp
+BC::Matrix<float> dev_mat(3,3);
+BC::algorithms::for_each(dev_mat, your_function);  //will call thrust::for_each
+
+```
+
+
+
+Using BC::algortihms is preferable to directly using to std or thrust's implementation as it enables user's to write allocation-generic code. Here we created a method that applies the sigmoid function to each element of a matrix. 
 
 ```cpp
-struct logistic_functor {
-	__host__ __device__
-	void operator() (value_type& scalar) {
+struct Sigmoid {
+	template<class ValueType> __host__ __device__
+	void operator() (ValueType& scalar) {
 		scalar =  1 / (1 + exp(-scalar));
 	}		
 
-} logistic; 
+}; 
 
-template<class alloc>
-void logistic_function(BC::Matrix<float, alloc>& mat) {
-	BC::for_each(mat.begin(), mat.end(), logistic); 
+template<class ValueType, class Allocator>
+void logistic_function(BC::Matrix<ValueType, Allocator>& matrix) {
+	BC::for_each(matrix, Sigmoid()); 
 }
 ```
 
@@ -35,13 +48,14 @@ This function can accept Tensors allocated on either the GPU or CPU. If we used 
 
 
 #####  The supported algorithms:
-
-    for_each
+    
+    accumulate
     count
     count_if
     find
     find_if
     find_if_not
+    for_each
     copy
     copy_if
     copy_n
@@ -58,9 +72,12 @@ This function can accept Tensors allocated on either the GPU or CPU. If we used 
     swap_ranges
     reverse
     reverse_copy
+    sort
     stable_sort
     max_element
     min_element
+    max
+    min
     minmax_element
     equal
 

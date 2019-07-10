@@ -9,12 +9,15 @@ BCT is a header only library that supports compilation with the NVCC and G++ BCT
 `git clone` the `stable` branch if you would like to use the "cleanest" branch.  
 `git clone` the `master` branch if you would like to use the most update-to-date branch.
 
-Currently tested with GCC 7.4 and Cuda 10.
+Tested Compilers: 
+NVCC- 10, 10.1
+
+GCC- 7.4, 8.0
 
 #### FAQ Fast Explanation:
 
 CPU multithreading? Simply link OpenMP  
-GPU multithreading? Simply link CUDA 9
+GPU multithreading? Simply link CUDA
 
 How to choose allocation?
 
