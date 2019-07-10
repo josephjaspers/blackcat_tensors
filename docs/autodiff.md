@@ -36,7 +36,7 @@ int main() {
 	y = cos(cos(x)) * -sin(x);
 	y.print();
 
-	// dx(tanh) == 1 - BC::pow(BC::tanh(x), 2)
+	// dx(tanh(x)) == 1 - BC::pow(BC::tanh(x), 2)
 	y = dx(tanh(x));
 	y.print();
 
