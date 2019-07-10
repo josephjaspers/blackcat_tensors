@@ -37,7 +37,7 @@ BC::algorithms::for_each(BC::streams::select_on_get_stream(dev_mat), dev_mat.beg
 `select_on_get_stream` will first query for a 'get_stream' method, and return that if the method exists. If it does not, it
 than will query for a `using system_tag = [BC::device_tag, BC::host_tag];` which, if it exists, will use the default host or device stream. If a `system_tag` is not found, it will default to the host (cpu) implementation. 
 
-Using BC::algortihms is preferable to directly using to std or thrust's implementation as it enables user's to write allocation-generic code. Here we created a method that applies the sigmoid function to each element of a matrix. 
+Using BC::algortihms is preferable to directly using `std` or `thrust`'s implementation as it enables user's to write allocation-generic code. Here we created a method that applies the sigmoid function to each element of a matrix. 
 
 ```cpp
 struct Sigmoid {
@@ -50,7 +50,7 @@ struct Sigmoid {
 
 template<class ValueType, class Allocator>
 void logistic_function(BC::Matrix<ValueType, Allocator>& matrix) {
-	BC::for_each(matrix, Sigmoid()); 
+	BC::algorithms::for_each(matrix, Sigmoid()); 
 }
 ```
 
