@@ -41,9 +41,10 @@ stream.set_stream(another_bc_stream_object);
 
 
 ####Methods 
+
 | return type | method name | parameters | documentation |
 | --- | --- | --- | --- |
-| bool | is_default | --- || returns if the stream is the default stream |
+| bool | is_default | --- | returns if the stream is the default stream |
 | void | create | --- | creates a stream inplace, the stream will refer to a new non-default stream |
 | void | destroy | --- | destroys the stream, the stream used will be the default stream |
 | void | sync | --- | synchronizes the host stream with the current stream | 
