@@ -1,8 +1,6 @@
 # Aliases 
 
-BlackCat_Tensor's defines a numerous amount of user-types.
-
-Two template arguments are commonly supplied, value_type, (scalar type) and allocator_t (how to allocate the memory). 
+BlackCat_Tensor's defines a numerous amount of user-types. 
 
 #### The Core Tensor Types: 
 ```cpp  
