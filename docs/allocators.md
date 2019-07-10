@@ -64,7 +64,7 @@ BC::Matrix<float, BC::Cuda_Managed<float>> mat;    //allocates memory on the GPU
 	template<class ValueType, class SystemTag>
 	struct Workspace;
 
-	// and 
-
+	//The Workspace allocator works as un unsynchronized-memory stack. 
+	//Ists memory 
 
 ```
