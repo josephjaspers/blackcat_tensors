@@ -41,10 +41,12 @@ private:
     void evaluate(Tensor_Operations<derived_t>&& tensor) {
         exprs::evaluate(tensor.as_derived().internal(), this->as_derived().get_stream());
     }
+
     template<class derived_t>
     void evaluate(const Tensor_Operations<derived_t>& tensor) {
         exprs::evaluate(tensor.as_derived().internal(), this->as_derived().get_stream());
     }
+
 public:
     //--------------------------------------assignment operators-----------------------------------------------//
     template<class pDeriv> BCHOT
@@ -412,10 +414,14 @@ public:
 #undef BC_ASSERT_ASSIGNABLE
 
     template<class Expression>
-	auto dx(Tensor_Base<Expression>&& tensor) {
+	auto derivative(Tensor_Base<Expression>&& tensor) {
 		return make_tensor(tensor.template un_expr<exprs::dx_forwarder>());
 	}
 
+    template<class Expression>
+	auto dx(Tensor_Base<Expression>&& tensor) {
+		return make_tensor(tensor.template un_expr<exprs::dx_forwarder>());
+	}
 }
 }
 

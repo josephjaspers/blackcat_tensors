@@ -114,7 +114,9 @@ public:
 };
 
 
-template<int ,class,class, class...> class Array_Slice;
+template<int, class, class, class...>
+class Array_Slice;
+
 
 template<int Dimension, class Scalar, class Allocator, class... Tags>
 class Array :

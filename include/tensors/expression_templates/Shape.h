@@ -105,6 +105,10 @@ struct Shape<0> {
     Shape(const Shape<x>&) {} //empty
 
     BCINLINE Shape<0>() {}
+
+    template<class... Args>
+    BCINLINE Shape<0>(const Args&...) {}
+
     BCINLINE const auto inner_shape() const { return utility::make_lambda_array<0>([&](auto x) { return 1; });}
     BCINLINE const auto outer_shape() const { return utility::make_lambda_array<0>([&](auto x) { return 0; });}
     BCINLINE const auto block_shape() const { return utility::make_lambda_array<0>([&](auto x) { return 1; });}

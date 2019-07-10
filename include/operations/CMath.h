@@ -50,21 +50,37 @@ template<class T> auto surpress_unused_variable_warning_workaround(funcName)\
 #define BLACKCAT_MATH_DEF(funcName, instanceName, ...) \
 		BLACKCAT_FUNCTOR_DEF(funcName, instanceName, std::instanceName(x), __VA_ARGS__)
 
-BLACKCAT_MATH_DEF( Abs , abs )
-BLACKCAT_MATH_DEF( Acos , acos )
-BLACKCAT_MATH_DEF( Acosh , acosh )
-BLACKCAT_MATH_DEF( Asin , asin )
-BLACKCAT_MATH_DEF( Asinh , asinh )
-BLACKCAT_MATH_DEF( Atan , atan )
+//COMMON
+BLACKCAT_MATH_DEF( Exp , exp , DERIVATIVE_DEF(std::exp(x)))
+BLACKCAT_MATH_DEF( Exp2 , exp2 )
+BLACKCAT_MATH_DEF( Sqrt , sqrt, DERIVATIVE_DEF((std::pow(x, -1/2)/2)))
+
+//Trig
+BLACKCAT_MATH_DEF( Sin , sin, DERIVATIVE_DEF(std::cos(x)));
+BLACKCAT_MATH_DEF( Cos , cos, DERIVATIVE_DEF(-std::sin(x)))
+BLACKCAT_MATH_DEF( Tan , tan, DERIVATIVE_DEF(std::pow(1/std::cos(x), 2)))
+BLACKCAT_FUNCTOR_DEF( Sec, sec, 1/std::cos(x) )
+
+//Hyperbolic
+BLACKCAT_MATH_DEF( Sinh , sinh, DERIVATIVE_DEF(std::cosh(x)))
+BLACKCAT_MATH_DEF( Cosh , cosh, DERIVATIVE_DEF(std::sinh(x)))
+BLACKCAT_MATH_DEF( Tanh , tanh, DERIVATIVE_DEF(1 - std::pow(std::tanh(x), 2))
+										DERIVATIVE_CACHED_DEF(1 - std::pow(x,2)))
+//Arc
+BLACKCAT_MATH_DEF( Asin , asin, DERIVATIVE_DEF(1/std::sqrt(1-std::pow(x,2))))
+BLACKCAT_MATH_DEF( Acos , acos, DERIVATIVE_DEF(-1/std::sqrt(1-std::pow(x,2))))
+BLACKCAT_MATH_DEF( Atan , atan, DERIVATIVE_DEF(1/(1+std::pow(x,2))))
 BLACKCAT_MATH_DEF( Atan2 , atan2 )
+
+//Arc Hyperbolic
+BLACKCAT_MATH_DEF( Asinh , asinh )
+BLACKCAT_MATH_DEF( Acosh , acosh )
 BLACKCAT_MATH_DEF( Atanh , atanh )
+
+BLACKCAT_MATH_DEF( Abs , abs )
 BLACKCAT_MATH_DEF( Cbrt , cbrt )
 BLACKCAT_MATH_DEF( Ceil , ceil )
 BLACKCAT_MATH_DEF( Copysign , copysign )
-BLACKCAT_MATH_DEF( Cos , cos, DERIVATIVE_DEF(-std::sin(x)))
-BLACKCAT_MATH_DEF( Cosh , cosh )
-BLACKCAT_MATH_DEF( Exp , exp )
-BLACKCAT_MATH_DEF( Exp2 , exp2 )
 BLACKCAT_MATH_DEF( Expm1 , expm1 )
 BLACKCAT_MATH_DEF( Fabs , fabs )
 BLACKCAT_MATH_DEF( Fdim , fdim )
@@ -79,7 +95,7 @@ BLACKCAT_MATH_DEF( Ilogb , ilogb )
 BLACKCAT_MATH_DEF( Ldexp , ldexp )
 BLACKCAT_MATH_DEF( Llrint , llrint )
 BLACKCAT_MATH_DEF( Llround , llround )
-BLACKCAT_MATH_DEF( Log , log )
+BLACKCAT_MATH_DEF( Log , log, DERIVATIVE_DEF(1/x))
 BLACKCAT_MATH_DEF( Log10 , log10 )
 BLACKCAT_MATH_DEF( Log1P , log1p )
 BLACKCAT_MATH_DEF( Log2 , log2 )
@@ -125,13 +141,6 @@ BLACKCAT_MATH_DEF( Rint , rint )
 BLACKCAT_MATH_DEF( Round , round )
 BLACKCAT_MATH_DEF( Scalbln , scalbln )
 BLACKCAT_MATH_DEF( Scalbn , scalbn )
-BLACKCAT_MATH_DEF( Sin , sin, DERIVATIVE_DEF(std::cos(x)));
-BLACKCAT_MATH_DEF( Sinh , sinh )
-BLACKCAT_MATH_DEF( Sqrt , sqrt )
-BLACKCAT_MATH_DEF( Tan , tan )
-BLACKCAT_FUNCTOR_DEF( Sec , sec, 1/std::cos(x) )
-BLACKCAT_MATH_DEF( Tanh , tanh, DERIVATIVE_DEF(1 - std::pow(std::tanh(x), 2))
-								DERIVATIVE_CACHED_DEF(1 - std::pow(x,2)))
 BLACKCAT_MATH_DEF( Trunc , trunc )
 BLACKCAT_MATH_DEF( Isinf , isinf )
 BLACKCAT_MATH_DEF( Isnan , isnan )
