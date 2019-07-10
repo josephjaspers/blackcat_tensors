@@ -3,9 +3,10 @@
 BlackCat_Tensors supports auto-differentiation for all basic operations (+, -, /, *)
 as well as the common trig functions:
 
-sin, cos, tan, 
-asin, acos, atan, 
-sinh, cosh, tanh.
+sin, cos, tan,  
+asin, acos, atan,   
+sinh, cosh, tanh,  
+pow, exp, sqrt  
 
 The dx function is found in the BC::tensors namespace and is supported by all Tensors (Vector/Matrices/Cube/etc).
 
