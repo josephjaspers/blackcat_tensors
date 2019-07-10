@@ -1,11 +1,11 @@
 # Algorithms
 
 BlackCat_Tensor's offer a wide range of the standard library's algorithms. 
-These methods are called through the `BC` namespace.
+These methods exist in the `BC::algorithms` namespace.
 
 BlackCat_Tensor's does not implement any of these algorithms itself, instead forwarding to either the std implementation or thrust's implementation depending on how memory is allocated.
 
-The first argument must always be a stream argument, the possible arguments are: BC::Stream<host_tag>, BC::Stream<device_tag>, cudaStream_t.
+The first argument must always be a stream argument, the possible 'stream' arguments are: BC::Stream<host_tag>, BC::Stream<device_tag>, or cudaStream_t.
 
 
 ```cpp
@@ -25,7 +25,17 @@ BC::algorithms::for_each(dev_mat, your_function);  //will call thrust::for_each
 
 ```
 
+The convienance definitions will query for a `get_stream` method and will than forward to the correct algorithm.
 
+```cpp
+// This 
+BC::algorithms::for_each(dev_mat, your_function);
+
+// is equivalent to
+BC::algorithms::for_each(BC::streams::select_on_get_stream(dev_mat), dev_mat.begin(), dev_mat.end(), your_function);
+```
+`select_on_get_stream` will first query for a 'get_stream' method, and return that if the method exists. If it does not, it
+than will query for a `using system_tag = [BC::device_tag, BC::host_tag];` which, if it exists, will use the default host or device stream. If a `system_tag` is not found, it will default to the host (cpu) implementation. 
 
 Using BC::algortihms is preferable to directly using to std or thrust's implementation as it enables user's to write allocation-generic code. Here we created a method that applies the sigmoid function to each element of a matrix. 
 
