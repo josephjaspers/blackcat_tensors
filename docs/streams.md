@@ -1,4 +1,4 @@
-# Streams and Streams 
+# Streams
 
 BlackCat_Tensors's support using Cuda streams. 
 A stream stores the required meta-data of handling computations of a Tensor.
