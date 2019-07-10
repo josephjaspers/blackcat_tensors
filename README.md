@@ -45,7 +45,7 @@ BlackCat Tensors attempts to align itself with the design of the C++ standard li
 | 4 | [Iterators](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/iterators.md) | Overview of iterators in BCT and their functionality |
 | 5 | [Algorithms](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/algorithms.md) | Brief overview of how algorithms are implemented, and a list of supported algorithms |
 | 6 | [CMath Functions](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/cmath_functions.md) | A list of supported CMath functions |
-| 7 | [Streams and Workspaces](link) | Streams refer to streaming features offered by the cuda Library. |
+| 7 | [Streams](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/streams.md) | Streams refer to streaming features offered by the cuda Library. |
 | 8 | [Benchmarks](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/benchmarks.md) | Performance Testing |
 | 9 | [PTX Code Generation](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/PTX_Generation.md) | A comparison of PTX code generated from handwritten kernels compared to BlackCat_Tensors (Hint: None) |
 
