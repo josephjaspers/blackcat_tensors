@@ -13,10 +13,9 @@ BCT is a header only library that supports compilation with the NVCC and G++ BCT
 `git clone` the `stable` branch if you would like to use the "cleanest" branch.  
 `git clone` the `master` branch if you would like to use the most update-to-date branch.
 
-Tested Compilers: 
-NVCC- 10, 10.1
-
-GCC- 7.4, 8.0
+#### Tested Compilers:  
+NVCC: 10, 10.1  
+GCC: 7.4, 8.0 
 
 #### FAQ Fast Explanation:
 
