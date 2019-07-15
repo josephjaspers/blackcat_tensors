@@ -32,7 +32,7 @@ int percept_MNIST(System system_tag=System()) {
     			logistic(system_tag, 256),
     			feedforward(system_tag, 256, 10),
     			logistic(system_tag, 10),
-    			outputlayer(system_tag, 10)
+    			softmax(system_tag, 10)
     );
 
     network.set_batch_size(batch_size);

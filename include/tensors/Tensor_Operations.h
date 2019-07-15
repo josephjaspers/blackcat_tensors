@@ -52,8 +52,8 @@ public:
     template<class pDeriv> BCHOT
     derived& operator = (const Tensor_Operations<pDeriv>& param) {
         BC_ASSERT_ASSIGNABLE("derived& operator = (const Tensor_Operations<pDeriv>& param)");
-        static_assert(derived::tensor_dimension >= pDeriv::tensor_dimension,
-        		"BlackCat_Tensors: Operator= is not a valid operation for (reduction) broadcasting");
+//        static_assert(derived::tensor_dimension >= pDeriv::tensor_dimension,
+//        		"BlackCat_Tensors: Operator= is not a valid operation for (reduction) broadcasting");
         assert_valid(param);
 		evaluate(bi_expr< BC::oper::Assign >(param));
         return as_derived();

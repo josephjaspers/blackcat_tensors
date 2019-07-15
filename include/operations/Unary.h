@@ -23,6 +23,35 @@ namespace oper {
             return -val;
         }
     };
+
+    template<class SystemTag, class ValueType>
+    struct Sum;
+
+    template<class ValueType>
+    struct Sum<host_tag, ValueType> {
+    	mutable ValueType total = 0;
+    	mutable int index = 0;
+    	template<class T>
+    	auto operator ()(T&& value) const {
+    		total += value;
+    		std::cout << "current total" << total << " index " << index++ << std::endl;
+    		return total;
+    	}
+    };
+
+#ifdef __CUDACC__
+    template<class ValueType> __device__
+    struct Sum<device_tag, ValueType> {
+    	mutable ValueType total = 0;
+
+    	template<class T>
+    	auto operator ()(T&& value) const {
+			atomicAdd(&total, value);
+			__syncthreads();
+    		return total;
+    	}
+    };
+#endif
 }
 }
 
