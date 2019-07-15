@@ -16,24 +16,26 @@ namespace BC {
 namespace tensors {
 namespace exprs {
 
+template<class Derived>
+struct Scalar_Constant_Base : Shape<0>, Kernel_Array_Base<Derived> {
+
+    static constexpr int tensor_iterator_dimension = 0;
+    static constexpr int tensor_dimension     = 0;
+
+    static constexpr bool copy_constructible = false;
+    static constexpr bool move_constructible = false;
+    static constexpr bool copy_assignable    = false;
+    static constexpr bool move_assignable    = false;
+};
+
 template<class Scalar, class SystemTag>
 struct Scalar_Constant:
-		Shape<0>,
-		Kernel_Array_Base<Scalar_Constant<Scalar, SystemTag>>,
+		Scalar_Constant_Base<Scalar_Constant<Scalar, SystemTag>>,
 		BC_Stack_Allocated {
 
     using value_type = Scalar;
     using system_tag = SystemTag;
     using allocation_tag = BC::host_tag;
-
-    static constexpr int tensor_iterator_dimension = 0;
-    static constexpr int tensor_dimension     = 0;
-
-    static constexpr bool copy_constructible = true;
-    static constexpr bool move_constructible = true;
-    static constexpr bool copy_assignable    = true;
-    static constexpr bool move_assignable    = true;
-
 
     value_type scalar;
 
@@ -59,21 +61,12 @@ template<int Value, class Scalar, class SystemTag>
 struct Constexpr_Scalar_Constant;
 
 template<int Value, class Scalar>
-struct Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>
-: Shape<0>,
-  Kernel_Array_Base<Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>>{
+struct Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>:
+	Scalar_Constant_Base<Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>> {
 
-    using value_type = Scalar;
+	using value_type = Scalar;
     using system_tag = BC::host_tag;
     using allocation_tag = BC::host_tag;
-
-    static constexpr int tensor_iterator_dimension = 0;
-    static constexpr int tensor_dimension     = 0;
-
-    static constexpr bool copy_constructible = false;
-    static constexpr bool move_constructible = false;
-    static constexpr bool copy_assignable    = false;
-    static constexpr bool move_assignable    = false;
 
     Scalar value = Scalar(Value);
 
@@ -89,21 +82,12 @@ struct Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>
 
 #ifdef __CUDACC__
 template<int Value, class Scalar>
-struct Constexpr_Scalar_Constant<Value, Scalar, BC::device_tag>
-: Shape<0>,
-  Kernel_Array_Base<Constexpr_Scalar_Constant<Value, Scalar, BC::device_tag>>{
+struct Constexpr_Scalar_Constant<Value, Scalar, BC::device_tag>:
+	Scalar_Constant_Base<Constexpr_Scalar_Constant<Value, Scalar, BC::device_tag>> {
 
     using value_type = Scalar;
     using system_tag = BC::host_tag;
     using allocation_tag = BC::host_tag;
-
-    static constexpr int tensor_iterator_dimension = 0;
-    static constexpr int tensor_dimension     = 0;
-
-    static constexpr bool copy_constructible = true;
-    static constexpr bool move_constructible = true;
-    static constexpr bool copy_assignable    = true;
-    static constexpr bool move_assignable    = true;
 
     const Scalar* value = cuda_constexpr_scalar_ptr();
 
