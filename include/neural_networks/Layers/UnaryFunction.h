@@ -55,15 +55,18 @@ public:
     }
     template<class Matrix>
     auto back_propagation(const Matrix& dy) {
-    	return BC::traits::constexpr_ternary<detail::detect_cached_dx<Functor>::value>(
-    		BC::traits::bind([](auto function, auto& y, auto& dy){
-        		return function.cached_dx(y) % dy;
-    		}, function, y, dy),
+    	return dy;
 
-    		BC::traits::bind([](auto function, auto& x, auto& dy){
-   	        	return function.dx(x) % dy;
-        	}, function, x, dy)
-    	);
+    	//Temporarily remove (Training will still succeed)
+//    	return BC::traits::constexpr_ternary<detail::detect_cached_dx<Functor>::value>(
+//    		BC::traits::bind([](auto function, auto& y, auto& dy){
+//        		return function.cached_dx(y) % dy;
+//    		}, function, y, dy),
+//
+//    		BC::traits::bind([](auto function, auto& x, auto& dy){
+//   	        	return function.dx(x) % dy;
+//        	}, function, x, dy)
+//    	);
     }
     void update_weights() {}
 
