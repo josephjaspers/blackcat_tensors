@@ -19,7 +19,7 @@ namespace evaluator {
 template<int Dimension>
 struct evaluator_impl {
     template<class Expression, class... indexes>
-    static void i(Expression& expression, indexes... indicies) {
+    static void impl(Expression& expression, indexes... indicies) {
         BC_omp_for__
         for (int i = 0; i < expression.dimension(Dimension-1); ++i) {
         	evaluator_impl<Dimension-1>::impl(expression, i, indicies...);
