@@ -15,27 +15,26 @@ namespace BC {
 namespace tensors {
 namespace iterators {
 
-template<direction direction, class tensor_t_, class enabler=void>
+template<direction direction, class Tensor, class enabler=void>
 struct Coefficientwise_Iterator {
 
-    using Iterator = Coefficientwise_Iterator<direction, tensor_t_>;
-    using tensor_t = tensor_t_;
+    using Iterator = Coefficientwise_Iterator<direction, Tensor>;
 
     static constexpr bool ref_value_type
-    	= std::is_reference<decltype(std::declval<tensor_t>().internal()[0])>::value;
+    	= std::is_reference<decltype(std::declval<Tensor>().internal()[0])>::value;
 
     using iterator_category = std::random_access_iterator_tag;
-    using value_type = typename tensor_t::value_type;
+    using value_type = typename Tensor::value_type;
     using difference_type = int;
-    using reference = decltype(std::declval<tensor_t>()[0]);
+    using reference = decltype(std::declval<Tensor>()[0]);
     using pointer   = std::conditional_t<std::is_same<reference, value_type>::value,
-    										decltype(std::declval<tensor_t>().internal()), value_type*>;
+    										decltype(std::declval<Tensor>().internal()), value_type*>;
 
 
-    tensor_t tensor;
+    Tensor tensor;
     BC::size_t  index;
 
-    BCINLINE Coefficientwise_Iterator(tensor_t tensor_, BC::size_t  index_=0) :
+    BCINLINE Coefficientwise_Iterator(Tensor tensor_, BC::size_t  index_=0) :
 	tensor(tensor_), index(index_) {}
 
     BCINLINE Coefficientwise_Iterator& operator =(const Coefficientwise_Iterator& iter) {
@@ -105,21 +104,21 @@ struct Coefficientwise_Iterator {
     BCINLINE auto operator [] (int i)       -> decltype(this->tensor[i]) { return this->tensor[i]; }
 };
 
-template<class tensor_t>
-auto forward_cwise_iterator_begin(tensor_t& tensor) {
-    return Coefficientwise_Iterator<direction::forward, tensor_t>(tensor, 0);
+template<class Tensor>
+auto forward_cwise_iterator_begin(Tensor& tensor) {
+    return Coefficientwise_Iterator<direction::forward, Tensor>(tensor, 0);
 }
-template<class tensor_t>
-auto forward_cwise_iterator_end(tensor_t& tensor) {
-    return Coefficientwise_Iterator<direction::forward, tensor_t>(tensor, tensor.size());
+template<class Tensor>
+auto forward_cwise_iterator_end(Tensor& tensor) {
+    return Coefficientwise_Iterator<direction::forward, Tensor>(tensor, tensor.size());
 }
-template<class tensor_t>
-auto reverse_cwise_iterator_begin(tensor_t& tensor) {
-    return Coefficientwise_Iterator<direction::reverse, tensor_t>(tensor, tensor.size()-1);
+template<class Tensor>
+auto reverse_cwise_iterator_begin(Tensor& tensor) {
+    return Coefficientwise_Iterator<direction::reverse, Tensor>(tensor, tensor.size()-1);
 }
-template<class tensor_t>
-auto reverse_cwise_iterator_end(tensor_t& tensor) {
-    return Coefficientwise_Iterator<direction::reverse, tensor_t>(tensor, -1);
+template<class Tensor>
+auto reverse_cwise_iterator_end(Tensor& tensor) {
+    return Coefficientwise_Iterator<direction::reverse, Tensor>(tensor, -1);
 }
 
 

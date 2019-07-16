@@ -15,20 +15,20 @@ namespace BC {
 namespace tensors {
 namespace iterators {
 
-template<direction direction, class tensor_t>
+template<direction direction, class Tensor>
 struct Multidimensional_Iterator {
 
-    using self =Multidimensional_Iterator<direction, tensor_t>;
-    using Iterator = Multidimensional_Iterator<direction, tensor_t>;
+    using self =Multidimensional_Iterator<direction, Tensor>;
+    using Iterator = Multidimensional_Iterator<direction, Tensor>;
     using iterator_category = std::random_access_iterator_tag;
-    using value_type = decltype(std::declval<tensor_t&>().slice(0));
+    using value_type = decltype(std::declval<Tensor>().slice(0));
     using difference_type = int;
     using reference = value_type;
 
-    tensor_t& tensor;
+    Tensor& tensor;
     BC::size_t  index;
 
-    BCINLINE Multidimensional_Iterator(tensor_t& tensor_, BC::size_t  index_=0) :
+    BCINLINE Multidimensional_Iterator(Tensor& tensor_, BC::size_t  index_=0) :
 			tensor(tensor_), index(index_) {}
 
 #define BC_ND_Iter_Compare(sign, rev)                          \

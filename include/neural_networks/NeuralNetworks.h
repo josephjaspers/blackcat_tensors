@@ -14,7 +14,7 @@
 #include "Layers/OutputLayer.h"
 #include "Layers/UnaryFunction.h"
 #include "Layers/Nonlinear.h"
-#include "Layers/Softmax.h"
+//#include "Layers/Softmax.h"
 #include "Network.h"
 
 #endif /* BCNN_GLOBAL_UNIFIER_H_ */

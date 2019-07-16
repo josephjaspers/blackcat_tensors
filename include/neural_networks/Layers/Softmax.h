@@ -35,12 +35,27 @@ public:
     SoftMax(int inputs):
         Layer_Base(inputs, inputs) {}
 
-    template<class Matrix>
-    const auto& forward_propagation(const Matrix& x_) {
+    template<class Expression>
+    const auto& forward_propagation(const BC::MatrixXpr<Expression>& x_) {
     	x = mat_view(x_);
-    	//Todo change to functor
-        return y = BC::exp(x) / BC::sum(BC::exp(x));
+        for (auto xyiters = std::make_pair(x.nd_begin(), y.nd_begin());
+        		xyiters.first != x.nd_end() && xyiters.second != y.nd_end();
+        		xyiters.first++, xyiters.second++) {
+        	auto ycol = *xyiters.second;
+        	auto xcol = *xyiters.first;
+
+        	ycol = BC::exp(xcol) / BC::sum(BC::exp(xcol));
+        }
+        return y;
     }
+
+//    template<class Expression>
+//    const auto& forward_propagation(const BC::VectorXpr<Expression>& x_) {
+//    	x = mat_view(x_);
+//    	//Todo change to functor
+//        return y = BC::exp(x) / BC::sum(BC::exp(x));
+//    }
+
     template<class Matrix>
     auto back_propagation(const Matrix& dy) {
     	return dy;
