@@ -5,14 +5,14 @@
  *      Author: joseph
  */
 
-#ifndef MNIST_TEST_CPP_
-#define MNIST_TEST_CPP_
+#ifndef MNIST_TEST_CU_
+#define MNIST_TEST_CU_
 
 #include "BlackCat_Tensors.h" //Add BlackCat_Tensors/include/ to path
 #include "MNIST_Test.h"	      //Add BlackCat_Tensors/examples/ to path
 
 int main() {
-	BC::nn::percept_MNIST(BC::host_tag());
+	BC::nn::percept_MNIST(BC::device_tag());
 }
 
-#endif /* MNIST_TEST_CPP_ */
+#endif /* MNIST_TEST_CU_ */

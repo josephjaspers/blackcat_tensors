@@ -138,7 +138,7 @@ BC_REDUCE_ALGORITHM_DEF(min_element)
 //BC_ALGORITHM_DEF(minmax)
 BC_REDUCE_ALGORITHM_DEF(minmax_element)
 //BC_DEF_IF_CPP17(BC_ALGORITHM_DEF(clamp))
-BC_ALGORITHM_DEF(equal)
+//BC_ALGORITHM_DEF(equal)
 //BC_ALGORITHM_DEF(lexicographical_compare)
 
 //--------------------------- numeric (mostly undefined) ---------------------------//

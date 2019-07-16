@@ -14,20 +14,20 @@ namespace tensors {
 template<class internal>
 class Tensor_Base;
 
-template<class internal_t>
+template<class Expression>
 class Tensor_IterAlgos {
 
-	Tensor_Base<internal_t>& as_derived() {
-		return static_cast<Tensor_Base<internal_t>&>(*this);
+	Tensor_Base<Expression>& as_derived() {
+		return static_cast<Tensor_Base<Expression>&>(*this);
 	}
-	const Tensor_Base<internal_t>& as_derived() const {
-		return static_cast<const Tensor_Base<internal_t>&>(*this);
+	const Tensor_Base<Expression>& as_derived() const {
+		return static_cast<const Tensor_Base<Expression>&>(*this);
 	}
 
 public:
 
-	using system_tag = typename internal_t::system_tag;
-	using value_type = typename internal_t::value_type;
+	using system_tag = typename Expression::system_tag;
+	using value_type = typename Expression::value_type;
 
 	//------------------------ iterator-algorthims---------------------------//
 
@@ -53,7 +53,7 @@ public:
 	}
 
    void randomize(value_type lb=0, value_type ub=1)  {
-	   static_assert(internal_t::tensor_iterator_dimension == 0 || internal_t::tensor_iterator_dimension == 1,
+	   static_assert(Expression::tensor_iterator_dimension == 0 || Expression::tensor_iterator_dimension == 1,
 			   	   	   "randomize not available to non-continuous tensors");
 
 	   using Random = BC::random::Random<system_tag>;
@@ -217,44 +217,45 @@ BC_TENSOR_tensor_iterator_dimension_DEF(CW_ReverseIterator, rbegin, rend)
 };
 
 #ifdef BC_CPP17 //------------------------------------------------------------------------------------------
+namespace {
+template<class Expression>
+using BC_sum_t = std::conditional_t<std::is_same<typename Expression::value_type, bool>::value,
+		BC::size_t, typename Expression::value_type>;
+}
 
-template<class internal_t>
-using BC_sum_t = std::conditional_t<std::is_same<typename internal_t::value_type, bool>::value,
-		BC::size_t, typename internal_t::value_type>;
-
-template<class internal_t>
-auto sum(const Tensor_Base<internal_t>& tensor) {
-	using sum_value_type = BC_sum_t<internal_t>;
+template<class Expression>
+auto sum(const Tensor_Base<Expression>& tensor) {
+	using sum_value_type = BC_sum_t<Expression>;
 	return BC::algorithms::accumulate(BC::streams::select_on_get_stream(tensor),
 			tensor.cbegin(), tensor.cend(), sum_value_type(0));
 }
 
-template<class internal_t>
-auto prod(const Tensor_Base<internal_t>& tensor) {
-	using value_type = typename internal_t::value_type;
+template<class Expression>
+auto prod(const Tensor_Base<Expression>& tensor) {
+	using value_type = typename Expression::value_type;
 	return BC::algorithms::accumulate(BC::streams::select_on_get_stream(tensor),
 			tensor.cbegin(), tensor.cend(), value_type(1), BC::oper::mul);
 }
 
-template<class internal_t>
-static bool all(const Tensor_Base<internal_t>& tensor) {
+template<class Expression>
+static bool all(const Tensor_Base<Expression>& tensor) {
 	return tensor.size() == sum(logical(tensor));
 }
 
-template<class internal_t>
-static bool any(const Tensor_Base<internal_t>& tensor) {
+template<class Expression>
+static bool any(const Tensor_Base<Expression>& tensor) {
 	return sum(logical(tensor)) != 0;
 }
 
 
-template<class internal_t>
-static auto max(const Tensor_Base<internal_t>& tensor) {
+template<class Expression>
+static auto max(const Tensor_Base<Expression>& tensor) {
 	auto max_index = BC::algorithms::max_element(BC::streams::select_on_get_stream(tensor), tensor.cbegin(), tensor.cend());
 	return tensor(max_index);
 }
 
-template<class internal_t>
-static auto min(const Tensor_Base<internal_t>& tensor) {
+template<class Expression>
+static auto min(const Tensor_Base<Expression>& tensor) {
 	auto min_index = BC::algorithms::min_element(BC::streams::select_on_get_stream(tensor), tensor.cbegin(), tensor.cend());
 	return tensor(min_index);
 }

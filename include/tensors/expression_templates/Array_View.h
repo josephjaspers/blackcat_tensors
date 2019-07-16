@@ -27,6 +27,7 @@ struct Array_Const_View
 	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
 	using stream_type = BC::Stream<system_tag>;
 	using parent =  Kernel_Array<Dimension, Scalar, system_tag, BC_Noncontinuous>;
+	using allocator_t = Allocator;
 
     static constexpr bool copy_constructible = true;
     static constexpr bool move_constructible = true;

@@ -18,15 +18,16 @@ namespace BC {
 #endif
 
 class system_tag_base {};
+
 struct host_tag : system_tag_base {
 	using default_floating_point_type = double;
 	using default_integer_type = int;
-} host;
+};
 
 struct device_tag : system_tag_base {
 	using default_floating_point_type = float;
 	using default_integer_type = int;
-} device;
+};
 
 template<class T>
 struct is_system_tag {

@@ -37,28 +37,34 @@ public:
 
     template<class Expression>
     const auto& forward_propagation(const BC::MatrixXpr<Expression>& x_) {
-    	x = mat_view(x_);
-        for (auto xyiters = std::make_pair(x.nd_begin(), y.nd_begin());
-        		xyiters.first != x.nd_end() && xyiters.second != y.nd_end();
-        		xyiters.first++, xyiters.second++) {
-        	auto ycol = *xyiters.second;
-        	auto xcol = *xyiters.first;
+    	using BC::exp;
+    	using BC::sum;
 
-        	ycol = BC::exp(xcol) / BC::sum(BC::exp(xcol));
-        }
+    	x = mat_view(x_);
+
+//    	std::cout << " x is \n" <<  x[0].to_string() << std::endl;
+//    	vec exp_ = BC::exp(x[0]);
+//    	std::cout << " exp(x) is \n" << std::endl;
+//    	exp_.print();
+//    	std::cout << " sum(exp(x)) is \n" <<  BC::sum(exp_) << std::endl;
+
+
+    	for (int i = 0; i < x.cols(); ++i) {
+    		y[i] = exp(x[i]) / sum(exp(x[i]));
+    	}
+
+
+//    	std::cout << "waitign on int " << std::endl;
+//    	int x;
+//    	std::cin >> x;
         return y;
     }
 
-//    template<class Expression>
-//    const auto& forward_propagation(const BC::VectorXpr<Expression>& x_) {
-//    	x = mat_view(x_);
-//    	//Todo change to functor
-//        return y = BC::exp(x) / BC::sum(BC::exp(x));
-//    }
 
     template<class Matrix>
     auto back_propagation(const Matrix& dy) {
     	return dy;
+//    	return (y % (1-y)) % dy;
     }
     void update_weights() {}
 
@@ -75,6 +81,7 @@ template<class SystemTag>
 auto softmax(SystemTag system_tag, int inputs) {
 	return SoftMax<SystemTag, typename SystemTag::default_floating_point_type>(inputs);
 }
+
 
 }
 }

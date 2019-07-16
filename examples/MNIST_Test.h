@@ -51,13 +51,13 @@ int percept_MNIST(System system_tag=System()) {
 	const BC::size_t  NUMB_BATCHES = TRAINING_EXAMPLES / BATCH_SIZE;
 	const BC::size_t  PICTURE_SZ = 784;
 	const BC::size_t  NUMB_DIGITS = 10;
-	const BC::size_t  EPOCHS = 10;
+	const BC::size_t  EPOCHS = 3;
 
     auto network = neuralnetwork(
     			feedforward(system_tag, 784, 256),
     			logistic(system_tag, 256),
     			feedforward(system_tag, 256, 10),
-    			logistic(system_tag, 10),
+    			softmax(system_tag, 10),
     			outputlayer(system_tag, 10)
     );
 

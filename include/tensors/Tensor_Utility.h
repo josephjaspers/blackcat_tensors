@@ -51,7 +51,7 @@ private:
     }
 public:
     std::string to_string(int precision=5, bool sparse=false, bool pretty=false) const{
-    	const_cast<derived&>(this->as_derived()).get_stream().sync();
+    	BC::streams::select_on_get_stream(this->as_derived()).sync();
     	std::stringstream ss;
     	std::string data =  this->print_impl<void>(ss, precision, sparse, pretty).str();
     	return data;
