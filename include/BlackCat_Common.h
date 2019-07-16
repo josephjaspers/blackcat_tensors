@@ -45,12 +45,10 @@ using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 
 //#define BC_NO_OPENMP                    //Disables automatic multi-threading of element-wise operations (if openmp is linked)
 #define BC_CPP17                          //Enables C++17 features -- Note: constexpr if is not supported by NVCC
-//#define BC_DISABLE_TEMPORARIES		  //Disables the creation of temporaries in expressions
 //#define BC_EXECUTION_POLICIES           //Enables execution policies
 //#define NDEBUG 		                  //Disables runtime checks
 //BC_CPP17_EXECUTION std::execution::par  //defines default execution as parallel
 //BC_CPP17_EXECUTION std::execution::seq  //defines default execution as sequential
-//#define BC_TREE_OPTIMIZER_DEBUG	      //enables print statements for the tree evaluator. (For developers)
 //#define BC_CPP20						  //enables C++20 features -- None: this is reserved for future, NVCC does not support cpp20 features
 
 // --------------------------------- override macro-option s --------------------------------- //
@@ -72,13 +70,14 @@ using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 	#define BCHOSTDEV
 #endif
 
-#ifdef BC_INLINE_OVERRIDER
-#define BCINLINE BCHOSTDEV  BC_INLINE_OVERRIDER
+#ifdef BC_INLINE_OVERRIDE
+	#define BCINLINE BCHOSTDEV BC_INLINE_OVERRIDE
+	#define BCHOT BC_INLINE_OVERRIDE
 #else
-#define BCINLINE BCHOSTDEV  inline __attribute__((always_inline)) __attribute__((hot))  //host_device inline
+	#define BCINLINE BCHOSTDEV  inline __attribute__((always_inline)) __attribute__((hot))  //host_device inline
+	#define BCHOT   		   inline __attribute__((always_inline)) __attribute__((hot))  //device-only inline
 #endif
 
-#define BCHOT   		   inline __attribute__((always_inline)) __attribute__((hot))  //device-only inline
 
 // --------------------------------- unique address -----------------------------------------//
 
