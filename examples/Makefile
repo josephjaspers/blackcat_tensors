@@ -9,7 +9,7 @@ ATLASLIBS = -lcblas -latlas -lf77blas
 CULIBS = -lcublas
 
 INCLUDE = ../include/ 
-LIBBLAS = /usr/libs/  # PATH TO YOUR BLAS 
+LIBINCLUDE = /usr/libs/  # PATH TO YOUR BLAS 
 LIBATLASINCLUDE = /home/joseph/Library_Sources/ATLAS/Build/lib  # PATH TO YOUR ATLAS-BLAS LIBRARY
 
 all:
