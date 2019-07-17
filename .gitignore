@@ -21,5 +21,7 @@
 /include/autograd/
 /include/autograd/*
 /include/neural_networks/Layers/LSTM.h
+/include/neural_networks/Layers/Recurrent.h
+/include/neural_networks/Layers/RecurrentFeedForward.h
 /include/BlackCat_Autograd.h/
 /autodocs/
