@@ -4,14 +4,19 @@ CUFLAGS = -O3 -o mnist_test_exec_cu  -gencode arch=compute_52,code=sm_52
 CXXFILES = MNIST_Test.cpp
 CUFILES  = MNIST_Test.cu
 
-LIBS = -lcblas -latlas -lf77blas
+LIBS = -lcblas
+ATLASLIBS = -lcblas -latlas -lf77blas
 CULIBS = -lcublas
 
-INCLUDE = ../include/
-LIBINCLUDE = /home/joseph/Library_Sources/ATLAS/Build/lib
+INCLUDE = ../include/ 
+LIBBLAS = /usr/libs/  # PATH TO YOUR BLAS 
+LIBATLASINCLUDE = /home/joseph/Library_Sources/ATLAS/Build/lib  # PATH TO YOUR ATLAS-BLAS LIBRARY
 
 all:
 	$(CXX) $(CXXFILES) $(LIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)
+
+atlas:
+	$(CXX) $(CXXFILES) $(LIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBATLASINCLUDE)
 
 cuda:
 	nvcc $(CUFILES) $(CULIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)

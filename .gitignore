@@ -20,5 +20,6 @@
 /Release/
 /include/autograd/
 /include/autograd/*
+/include/neural_networks/Layers/LSTM.h
 /include/BlackCat_Autograd.h/
 /autodocs/
