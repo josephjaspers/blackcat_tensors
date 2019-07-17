@@ -1,11 +1,8 @@
 #include "BlackCat_NeuralNetworks.h"
 
-#include <unistd.h>
 #include <chrono>
 #include <fstream>
 #include <iostream>
-#include <string>
-#include <omp.h>
 
 namespace BC {
 namespace nn {

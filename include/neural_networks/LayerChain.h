@@ -5,119 +5,119 @@
 namespace BC {
 namespace nn {
 
-template<int index, class derived, class...>
+template<int index, class Derived, class...>
 struct LayerChain;
 
 //TAIL
-template<int index, class derived, class output_layer_t>
-struct LayerChain<index, derived, output_layer_t> {
+template<int index, class Derived, class OutputLayer>
+struct LayerChain<index, Derived, OutputLayer> {
 
-    using self = LayerChain<index, derived, output_layer_t>;
-    using type = output_layer_t;
+    using type = OutputLayer;
 
-    output_layer_t layer;
+    OutputLayer layer;
 
     template<class... Args>
     LayerChain(Args... args_) : layer(args_...) {}
     const auto& head() const { return prev().head(); }
           auto& head()       { return prev().head(); }
     const auto& tail() const { return *this; }
-          auto& tail()          { return *this; }
-    const auto& prev() const { return static_cast<const derived&>(*this); }
-          auto& prev()       { return static_cast<      derived&>(*this); }
+          auto& tail()       { return *this; }
+    const auto& prev() const { return static_cast<const Derived&>(*this); }
+          auto& prev()       { return static_cast<      Derived&>(*this); }
 
     template<class T> const auto& fp(const T& tensor) { return layer.forward_propagation(tensor); }
-    template<class T> const auto& bp(const T& tensor) { return this->prev().bp(layer.back_propagation(tensor)); }
+    template<class T> const auto bp(const T& tensor)  { return this->prev().bp(layer.back_propagation(tensor)); }
     template<class function> void for_each(function f) { f(layer); }
-    template<class function> void for_each_internal(function f) {}
-
 };
 
 //BODY
-template<int index, class derived,class front, class... lst>
-struct LayerChain<index, derived, front, lst...>
-: LayerChain<index + 1, LayerChain<index, derived, front, lst...>, lst...> {
+template<int index, class Derived,class CurrentLayer, class... Layers>
+struct LayerChain<index, Derived, CurrentLayer, Layers...>
+: LayerChain<index + 1, LayerChain<index, Derived, CurrentLayer, Layers...>, Layers...> {
 
-    using self         = LayerChain<index, derived, front, lst...>;
-    using parent     = LayerChain<index + 1, self, lst...>;
-    using type         = front;
+    using self   = LayerChain<index, Derived, CurrentLayer, Layers...>;
+    using parent = LayerChain<index + 1, self, Layers...>;
+    using type   = CurrentLayer;
 
-    front layer;
+    CurrentLayer layer;
 
-    template<class... integers>
-    LayerChain(size_t i, size_t o, integers... dims) :  parent(o, dims...), layer(i,o) {}
-
-    template<class... integers>
-    LayerChain(front f, integers... dims) :  parent(dims...), layer(f) {}
-
+    LayerChain(CurrentLayer f, Layers... layers):
+    	parent(layers...),
+    	layer(f) {}
 
     const auto& head() const { return prev().head(); }
-          auto& head()          { return prev().head(); }
+          auto& head()       { return prev().head(); }
     const auto& tail() const { return next().tail(); }
-          auto& tail()          { return next().tail(); }
+          auto& tail()       { return next().tail(); }
     const auto& next() const { return static_cast<const parent&>(*this); }
-          auto& next()         { return static_cast<        parent&>(*this); }
-    const auto& prev() const { return static_cast<const derived&>(*this); }
-          auto& prev()         { return static_cast<        derived&>(*this); }
+          auto& next()       { return static_cast<        parent&>(*this); }
+    const auto& prev() const { return static_cast<const Derived&>(*this); }
+          auto& prev()       { return static_cast<        Derived&>(*this); }
 
     template<class T> const auto& fp(const T& tensor) { return this->next().fp(layer.forward_propagation(tensor)); }
-    template<class T> const auto& bp(const T& tensor) { return this->prev().bp(layer.back_propagation(tensor)); }
+    template<class T> const auto bp(const T& tensor) { return this->prev().bp(layer.back_propagation(tensor)); }
 
     template<class function> void for_each(function f) {
         f(layer);
         next().for_each(f);
     }
-    template<class function> void for_each_internal(function f) {
-        f(layer);
-        next().for_each_internal(f);
-    }
 };
 
 //HEAD
-template<class... lst>
-struct Chain : public LayerChain<0, Chain<lst...>, lst...>{
+template<class Derived,class CurrentLayer, class... Layers>
+struct LayerChain<0, Derived, CurrentLayer, Layers...>
+: LayerChain<1, LayerChain<0, Derived, CurrentLayer, Layers...>, Layers...> {
 
-    using self = Chain<lst...>;
-    using parent = LayerChain<0, self, lst...>;
+	static_assert(std::is_void<Derived>::value, "First Derived class must be void of LayerChain");
+    using self   = LayerChain<0, Derived, CurrentLayer, Layers...>;
+    using parent = LayerChain<1, self, Layers...>;
+    using type   = CurrentLayer;
 
-    BC::size_t  batch_size = 1;
+    CurrentLayer layer;
 
-    template<class... Args>
-    Chain(Args&&... args) : parent(args...) {} //first layer is always input layer (so we double x)
+    LayerChain(CurrentLayer f, Layers... layers):
+    	parent(layers...),
+    	layer(f) {}
 
-    template<class T> const auto& back_propagation(const T& tensor_expected) { return this->tail().bp(tensor_expected); }
+    const auto& head() const { return *this; }
+          auto& head()       { return *this; }
+    const auto& tail() const { return next().tail(); }
+          auto& tail()       { return next().tail(); }
+    const auto& next() const { return static_cast<const parent&>(*this); }
+          auto& next()       { return static_cast<      parent&>(*this); }
+    const auto& prev() const { return *this; }
+          auto& prev()       { return *this; }
+
+    template<class T> const auto& fp(const T& tensor) { return this->next().fp(layer.forward_propagation(tensor)); }
+    template<class T> const auto bp(const T& tensor) { return layer.back_propagation(tensor); }
+
+    template<class function> void for_each(function f) {
+        f(layer);
+        next().for_each(f);
+    }
+
+};
+
+//HEAD
+template<class... Layers>
+struct Chain:
+		public LayerChain<0, void, Layers...>{
+
+    using self = Chain<Layers...>;
+    using parent = LayerChain<0, void, Layers...>;
+
+    Chain(Layers... layers):
+    	parent(layers...) {}
+
+    template<class T> const auto back_propagation(const T& tensor_expected) { return this->tail().bp(tensor_expected); }
     template<class T> const auto& forward_propagation(const T& tensor_expected) { return this->head().fp(tensor_expected); }
 
     void read(std::ifstream& is)         { this->for_each([&](auto& layer) { layer.read(is);     });}
     void write(std::ifstream& os)         { this->for_each([&](auto& layer) { layer.write(os);     });}
     void set_batch_size(int x)             { this->for_each([&](auto& layer) { layer.set_batch_size(x);    });}
 
-    template<class SystemTag>
-    void initialize_variables(BC::Stream<SystemTag> stream)             { this->for_each([&](auto& layer) { layer.initialize_variables(stream);    });}
-
-    template<class SystemTag>
-    size_t get_workspace_size(BC::Stream<SystemTag> stream){
-    	size_t size;
-    	this->for_each([&](auto& layer) { size += layer.get_workspace_size(stream);    });
-    	return size;
-    }
-
-
     void update_weights()                 { this->for_each([ ](auto& layer) { layer.update_weights();        });}
-    void cache_gradients()                { this->for_each([ ](auto& layer) { layer.cache_gradients();    });}
-    void set_max_bptt_length(int len)   { this->for_each_internal([&](auto& layer)  { layer.set_max_bptt_length(len);}); }
-//    void clear_stored_gradients()        { this->for_each([ ](auto& layer) { layer.clear_stored_gradients(); }); }
-
-    template<class function>
-    void for_each_internal(function f) {
-        //same as for each but excludes input and output layers
-        this->next().for_each_internal(f);
-    }
-
-public:
-    template<class T>
-    const auto& bp(const T& dx) { return dx; }
-    auto& head() { return this->data(); }
+    void set_max_bptt_length(int len)   { this->for_each([&](auto& layer)  { layer.set_max_bptt_length(len);}); }
 };
 }
 }

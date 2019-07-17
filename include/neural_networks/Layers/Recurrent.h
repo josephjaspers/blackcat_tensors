@@ -5,8 +5,8 @@
  *      Author: joseph
  */
 
-#ifndef FEEDFORWARD_CU_
-#define FEEDFORWARD_CU_
+#ifndef BLACKCAT_NEURALNETWORKS_RECURRENT_H_
+#define BLACKCAT_NEURALNETWORKS_RECURRENT_H_
 
 #include "Layer_Base.h"
 
@@ -14,7 +14,7 @@ namespace BC {
 namespace nn {
 
 template<class SystemTag, class ValueType>
-class FeedForward : public Layer_Base {
+class Recurrent : public Layer_Base {
 
 public:
 
@@ -22,31 +22,32 @@ public:
 	using value_type = ValueType;
 
 	using mat = BC::Matrix<ValueType, BC::Allocator<SystemTag, ValueType>>;
-	using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
+    using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
+
     using mat_view = BC::Matrix_View<ValueType, BC::Allocator<SystemTag, ValueType>>;
 
 private:
 
     ValueType lr = 0.003;
 
-    mat dy;          //error
-    mat y;           //outputs
-    mat_view x;             //inputs
+    mat dy;     //error
+    mat y;      //outputs
+    mat_view x; //inputs
 
-    mat w;                  //weights
-    vec b;                  //biases
+    mat w; //weights
+    mat r;
+    vec b; //biases
 
 public:
 
-    FeedForward(int inputs, BC::size_t  outputs) :
+    Recurrent(int inputs, BC::size_t  outputs) :
         Layer_Base(inputs, outputs),
-		w(outputs, inputs),
-		b(outputs)
+            w(outputs, inputs),
+            b(outputs)
     {
         w.randomize(-2, 2);
         b.randomize(-2, 2);
     }
-
     template<class Matrix>
     const auto& forward_propagation(const Matrix& x_) {
     	x = mat_view(x_);

@@ -15,6 +15,7 @@
 #include "Layers/UnaryFunction.h"
 #include "Layers/Nonlinear.h"
 #include "Layers/Softmax.h"
+#include "Layers/LSTM.h"
 #include "Network.h"
 
 #endif /* BCNN_GLOBAL_UNIFIER_H_ */
