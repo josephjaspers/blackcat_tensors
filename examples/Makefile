@@ -16,11 +16,11 @@ all:
 	$(CXX) $(CXXFILES) $(LIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)
 
 atlas:
-	$(CXX) $(CXXFILES) $(LIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBATLASINCLUDE)
+	$(CXX) $(CXXFILES) $(ATLASLIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBATLASINCLUDE)
 
 cuda:
 	nvcc $(CUFILES) $(CULIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)
 	
 	
 clean:
-	rm -f prog *.o; rm mnist_test; rm mnist_test_cu;
+	rm -f prog *.o; rm mnist_test_exec; rm mnist_test_exec_cu;
