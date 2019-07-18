@@ -17,18 +17,16 @@ namespace BC {
 namespace allocators {
 
 class Byte {};
-
 template<class SystemTag, class ValueType>
 class Allocator;
 
 }
 
-template<class Allocator_Type>
-using allocator_traits = allocators::allocator_traits<Allocator_Type>;
+using allocators::allocator_traits;
+using allocators::Allocator;
 
 template<class value_type>
 using Basic_Allocator = allocators::Allocator<host_tag, value_type>;
-
 
 #ifdef __CUDACC__
 template<class value_type>
@@ -36,20 +34,7 @@ using Cuda_Allocator = allocators::Allocator<device_tag, value_type>;
 
 template<class value_type>
 using Cuda_Managed = allocators::Device_Managed<value_type>;
-
-template<class system_tag, class value_type>
-using Allocator = std::conditional_t<std::is_same<system_tag, host_tag>::value,
-										Basic_Allocator<value_type>, Cuda_Allocator<value_type>>;
-
-#else
-template<class system_tag, class value_type>
-using Allocator = Basic_Allocator<
-		std::enable_if_t<
-			std::is_same<system_tag, host_tag>::value,
-			value_type>>;
-
 #endif
-
 
 
 } //end of namespace BC

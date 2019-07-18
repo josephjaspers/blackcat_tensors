@@ -16,6 +16,7 @@
 #include <thrust/generate.h>
 #include <thrust/sort.h>
 #include <thrust/copy.h>
+#include <thrust/reduce.h>
 #endif
 
 BC_DEFAULT_MODULE_BODY(algorithms, Algorithm)

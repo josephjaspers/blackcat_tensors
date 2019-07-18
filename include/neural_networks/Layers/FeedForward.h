@@ -47,14 +47,16 @@ public:
         b.randomize(-2, 2);
     }
 
-    template<class Matrix>
-    const auto& forward_propagation(const Matrix& x_) {
+    template<class Expression>
+    const auto& forward_propagation(const BC::MatrixXpr<Expression>& x_) {
     	x = mat_view(x_);
         y = w * x + b;
         return y;
     }
-    template<class Matrix>
-    auto back_propagation(const Matrix& dy_) {
+
+
+    template<class Expression>
+    auto back_propagation(const BC::MatrixXpr<Expression>& dy_) {
     	dy = dy_;
         return w.t() * dy;
     }
@@ -68,8 +70,9 @@ public:
      */
 
     void update_weights() {
-    	w -= dy * lr * x.t();
-        b -= dy * lr;
+    	auto rate = lr / this->batch_size();
+    	w -= dy * rate * x.t();
+        b -= dy * rate;
     }
 
     void set_batch_size(int x) {

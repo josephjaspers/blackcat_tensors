@@ -24,4 +24,5 @@
 /include/neural_networks/Layers/Recurrent.h
 /include/neural_networks/Layers/RecurrentFeedForward.h
 /include/BlackCat_Autograd.h/
+/examples/mnist_test_recurrent/*
 /autodocs/

@@ -18,7 +18,6 @@ namespace allocators {
 template<class SystemTag, class ValueType>
 class Allocator;
 
-
 /// Comparable to 'std::allocator.'
 template<class T>
 struct Allocator<host_tag, T> {
