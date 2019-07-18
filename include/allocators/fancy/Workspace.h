@@ -26,12 +26,12 @@ class Workspace_Base {
 
 	Byte* m_memptr=nullptr;
 
-	static Polymorphic_Allocator<BC::allocators::Byte, SystemTag>& get_default_allocator() {
-		static Polymorphic_Allocator<BC::allocators::Byte, SystemTag> default_allocator;
+	static Polymorphic_Allocator<SystemTag, BC::allocators::Byte>& get_default_allocator() {
+		static Polymorphic_Allocator<SystemTag, BC::allocators::Byte> default_allocator;
 		return default_allocator;
 	}
 
-	Polymorphic_Allocator<Byte, SystemTag> m_allocator = get_default_allocator();
+	Polymorphic_Allocator<SystemTag, Byte> m_allocator = get_default_allocator();
 
 public:
 	Workspace_Base(std::size_t sz=0) : m_memptr_sz(sz){

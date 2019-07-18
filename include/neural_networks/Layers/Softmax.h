@@ -57,7 +57,7 @@ public:
     void update_weights() {}
 
     void set_batch_size(int x) {
-        y = mat(this->numb_outputs(), x);
+        y = mat(this->output_size(), x);
     }
 };
 

@@ -76,8 +76,8 @@ public:
     }
 
     void set_batch_size(int x) {
-        y = mat(this->numb_outputs(), x);
-        dy = mat(this->numb_outputs(), x);
+        y = mat(this->output_size(), x);
+        dy = mat(this->output_size(), x);
     }
 };
 

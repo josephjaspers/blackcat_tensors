@@ -37,6 +37,8 @@ public:
     using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
 
     using mat_view = BC::Matrix_View<ValueType, BC::Allocator<SystemTag, ValueType>>;
+//	using allocator_type = BC::allocators::fancy::Polymorphic_Allocator<SystemTag, ValueType>;
+//	using mat_view = BC::Matrix_View<ValueType, allocator_type>;
 
 private:
     mat y;
@@ -68,7 +70,7 @@ public:
     void update_weights() {}
 
     void set_batch_size(int x) {
-        y = mat(this->numb_outputs(), x);
+        y = mat(this->output_size(), x);
     }
 };
 
