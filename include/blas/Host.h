@@ -8,8 +8,14 @@
 #ifndef BC_BLAS_HOST_H_
 #define BC_BLAS_HOST_H_
 
+#if __has_include(<cblas.h>)
 #include <cblas.h>
-//#include <mkl_cblas.h> //TODO create/ifdef wrapper for MKL
+#elif __has_include(<mkl.h>)
+#define BC_MKL 1
+#else
+#error "BLACKCAT_TENSORS REQUIRES A VALID <cblas.h> OR <mkl.h> IN ITS PATH"
+#endif
+
 
 namespace BC {
 namespace blas {
