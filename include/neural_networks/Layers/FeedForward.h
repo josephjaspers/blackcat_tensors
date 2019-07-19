@@ -29,12 +29,9 @@ private:
 
     ValueType lr = 0.003;
 
-    mat dy;          //error
-    mat y;           //outputs
-    mat_view x;             //inputs
-
-    mat w;                  //weights
-    vec b;                  //biases
+    mat dy; //error
+    mat w;  //weights
+    vec b;  //biases
 
 public:
 
@@ -47,36 +44,27 @@ public:
         b.randomize(-2, 2);
     }
 
-    template<class Expression>
-    const auto& forward_propagation(const BC::MatrixXpr<Expression>& x_) {
-    	x = mat_view(x_);
-        y = w * x + b;
-        return y;
+    template<class Matrix>
+    auto forward_propagation(const Matrix& x) {
+    	return w * x + b;
     }
 
-
-    template<class Expression>
-    auto back_propagation(const BC::MatrixXpr<Expression>& dy_) {
-    	dy = dy_;
-        return w.t() * dy;
-    }
     /*
      * y =  w * x;
-     *
      * derivative of w == dy * x.t
      * derivative of x == w.t * dy
-     *
-     *
      */
-
-    void update_weights() {
+    template<class Matrix>
+    auto back_propagation(const mat& x, const Matrix& dy_) {
+    	dy = dy_;
     	auto rate = lr / this->batch_size();
     	w -= dy * rate * x.t();
         b -= dy * rate;
+        return w.t() * dy;
     }
 
+    void update_weights() {}
     void set_batch_size(int x) {
-        y = mat(this->output_size(), x);
         dy = mat(this->output_size(), x);
     }
 };

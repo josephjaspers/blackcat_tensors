@@ -2,8 +2,11 @@
 #ifndef BLACKCAT_TUPLE
 #define BLACKCAT_TUPLE
 
+#include "LayerCache.h"
+
 namespace BC {
 namespace nn {
+
 
 template<int index, class Derived, class...>
 struct LayerChain {};
@@ -16,6 +19,11 @@ struct LayerChain<index, Derived, CurrentLayer, Layers...>
     using parent = LayerChain<index + 1, self, Layers...>;
     using type   = CurrentLayer;
 
+    using value_type = typename CurrentLayer::value_type;
+    using system_tag = typename CurrentLayer::system_tag;
+    static constexpr int tensor_dimension = 1;//CurrentLayer::tensor_dimension;
+
+    LayerCache<tensor_dimension, value_type, system_tag> m_cacher;
     CurrentLayer layer;
 
     LayerChain(CurrentLayer f, Layers... layers):
@@ -50,13 +58,13 @@ private:
 		return this->next().fp(layer.forward_propagation(tensor));
 	}
 	template<class T> const auto bp_impl(const T& tensor, std::true_type) {
-		return this->prev().bp(layer.back_propagation(tensor));
+		return this->prev().bp(layer.back_propagation(m_cacher.m_batched_cache.back(), tensor));
 	}
 	template<class T> const auto& fp_impl(const T& tensor, std::false_type) {
 		return layer.forward_propagation(tensor);
 	}
 	template<class T> const auto bp_impl(const T& tensor, std::false_type) {
-		return layer.back_propagation(tensor);
+		return layer.back_propagation(m_cacher.m_batched_cache.back(), tensor);
 	}
 
 
@@ -73,7 +81,8 @@ public:
           auto& prev()       { return prev_impl(BC::traits::truth_type<index != 0>()); }
 
 	template<class T> const auto& fp(const T& tensor) {
-		return fp_impl(tensor, BC::traits::truth_type<sizeof...(Layers)!=0>());
+		m_cacher.m_batched_cache.push_back(tensor);
+		return fp_impl(m_cacher.m_batched_cache.back(), BC::traits::truth_type<sizeof...(Layers)!=0>());
 	}
 	template<class T> const auto bp(const T& tensor) {
 		return bp_impl(tensor, BC::traits::truth_type<index!=0>());

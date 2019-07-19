@@ -35,8 +35,8 @@ public:
     SoftMax(int inputs):
         Layer_Base(inputs, inputs) {}
 
-    template<class Expression>
-    const auto& forward_propagation(const BC::MatrixXpr<Expression>& x_) {
+    template<class Matrix>
+    const auto& forward_propagation(const Matrix& x_) {
     	using BC::exp;
     	using BC::sum;
 
@@ -49,11 +49,11 @@ public:
         return y;
     }
 
-
     template<class Matrix>
-    auto back_propagation(const Matrix& dy) {
-    	return dy;
-    }
+	auto back_propagation(const mat& x, const Matrix& dy) {
+		return dy;
+	}
+
     void update_weights() {}
 
     void set_batch_size(int x) {

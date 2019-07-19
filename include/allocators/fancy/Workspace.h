@@ -43,7 +43,9 @@ public:
 				"Workspace reserve called while memory is still allocated");
 
 		if (m_memptr_sz < sz) {
-			m_allocator.deallocate(m_memptr, m_memptr_sz);
+			if (m_memptr_sz > 0) {
+				m_allocator.deallocate(m_memptr, m_memptr_sz);
+			}
 			m_memptr = m_allocator.allocate(sz);
 			m_memptr_sz = sz;
 		}
@@ -74,7 +76,17 @@ public:
 	}
 
 	Byte* allocate(std::size_t sz) {
-		BC_ASSERT(m_curr_index + sz <= m_memptr_sz,
+		if (m_memptr_sz == 0) {
+			this->reserve(sz);
+		}
+
+		if (m_curr_index + sz > m_memptr_sz) {
+			std::cout << "BC_Memory Allocation failure: \n" <<
+					"\tcurrent_stack_index == " << m_curr_index << " out of " << m_memptr_sz
+					<<"\n\t attempting to allocate " << sz << " bytes, error: " << (m_curr_index + sz <= m_memptr_sz) << std::endl;
+		}
+
+		BC_ASSERT(!(m_curr_index + sz > m_memptr_sz),
 				"BC_Memory Allocation failure, attempting to allocate memory larger that workspace size");
 
 		Byte* mem = m_memptr + m_curr_index;

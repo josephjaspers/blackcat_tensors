@@ -4,29 +4,9 @@
 
 namespace BC {
 namespace nn {
-namespace detail {
-
-template<class T>
-using query_cached_dx =	decltype(std::declval<T>().cached_dx);
-
-template<class T, class voider=void>
-struct detect_cached_dx : std::false_type {};
-
-template<class T>
-struct detect_cached_dx<T,
-		std::enable_if_t<
-				BC::traits::true_v<
-					decltype(std::declval<T>().cached_dx)>
-			>
-		> : std::true_type {};
-
-
-}
 
 template<class SystemTag, class ValueType, class Functor>
-class Function : public Layer_Base {
-
-public:
+struct Function : public Layer_Base {
 
 	Functor function;
 
@@ -34,15 +14,6 @@ public:
 	using value_type = ValueType;
 
 	using mat = BC::Matrix<ValueType, BC::Allocator<SystemTag, ValueType>>;
-    using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
-
-    using mat_view = BC::Matrix_View<ValueType, BC::Allocator<SystemTag, ValueType>>;
-//	using allocator_type = BC::allocators::fancy::Polymorphic_Allocator<SystemTag, ValueType>;
-//	using mat_view = BC::Matrix_View<ValueType, allocator_type>;
-
-private:
-    mat y;
-    mat_view x;
 
 public:
 
@@ -51,27 +22,16 @@ public:
         function(function_) {}
 
     template<class Matrix>
-    const auto& forward_propagation(const Matrix& x_) {
-    	x = mat_view(x_);
-        return y = function(x);
+    auto forward_propagation(const Matrix& x) {
+        return function(x);
     }
     template<class Matrix>
-    auto back_propagation(const Matrix& dy) {
-    	return BC::traits::constexpr_ternary<detail::detect_cached_dx<Functor>::value>(
-    		BC::traits::bind([](auto function, auto& y, auto& dy){
-        		return function.cached_dx(y) % dy;
-    		}, function, y, dy),
-
-    		BC::traits::bind([](auto function, auto& x, auto& dy){
-   	        	return function.dx(x) % dy;
-        	}, function, x, dy)
-    	);
+    auto back_propagation(const mat& x, const Matrix& dy) {
+		return function.dx(x) % dy;
     }
+
     void update_weights() {}
-
-    void set_batch_size(int x) {
-        y = mat(this->output_size(), x);
-    }
+    void set_batch_size(int x) {}
 };
 
 template<class ValueType, class SystemTag, class Functor>
