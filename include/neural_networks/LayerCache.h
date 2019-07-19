@@ -40,24 +40,48 @@ struct LayerCache {
 //	LayerCache(allocator_type allocator=allocator_type()):
 //		m_allocator(allocator) {}
 
-//	template<class Expression>
-//	void cache(const Tensor_Base<Expression>& expression) {
-//		static_assert(
-//				Expression::tensor_dimension == Dimension ||
-//				Expression::tensor_dimension == Dimension + 1,
-//				"Valid cache arguments must have the same Dimension or the Batched Dimension (Dimension+1)"
-//			);
-//
-//		BC::traits::constexpr_ternary<(Expression::tensor_dimension == Dimension)>(
-//			BC::traits::bind([&](auto& m_cache_, auto& expression_){
-//				m_cache_.push_back(cache_value_type(expression_));//, m_allocator));
-//			}, m_cache, expression),
-//
-//			BC::traits::bind([&](auto& m_batched_cache_, auto& expression_){
-//				m_batched_cache_.push_back(batched_cache_value_type(expression_));//, m_allocator));
-//			}, m_batched_cache, expression));
-//
-//	}
+
+private:
+
+	template<class Expression>
+	void cache_impl(const Tensor_Base<Expression>& expression, BC::traits::Integer<Dimension>) {
+		m_cache.push_back(expression);
+	}
+	template<class Expression>
+	void cache_impl(const Tensor_Base<Expression>& expression, BC::traits::Integer<Dimension+1>) {
+		m_batched_cache.push_back(expression);
+	}
+
+
+
+public:
+
+	template<class Expression>
+	void cache(const Tensor_Base<Expression>& expression) {
+		static_assert(
+				Expression::tensor_dimension == Dimension ||
+				Expression::tensor_dimension == Dimension + 1,
+				"Valid cache arguments must have the same Dimension or the Batched Dimension (Dimension+1)"
+			);
+		cache_impl(expression, BC::traits::Integer<Expression::tensor_dimension>());
+	}
+
+	const auto& get_last(BC::traits::Integer<Dimension>) const {
+		return m_cache.back();
+	}
+
+	const auto& get_last(BC::traits::Integer<Dimension+1>) const {
+		return m_batched_cache.back();
+	}
+
+	auto& get_last(BC::traits::Integer<Dimension>) {
+		return m_cache.back();
+	}
+
+	auto& get_last(BC::traits::Integer<Dimension+1>) {
+		return m_batched_cache.back();
+	}
+
 
 	void clear() {
 		clear_batched_cache();

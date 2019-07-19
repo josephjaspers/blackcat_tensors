@@ -58,7 +58,9 @@ private:
 		return this->next().fp(layer.forward_propagation(tensor));
 	}
 	template<class T> const auto bp_impl(const T& tensor, std::true_type) {
-		return this->prev().bp(layer.back_propagation(m_cacher.m_batched_cache.back(), tensor));
+		return this->prev().bp(
+				layer.back_propagation(
+						m_cacher.get_last(BC::traits::Integer<T::tensor_dimension>()), tensor));
 	}
 	template<class T> const auto& fp_impl(const T& tensor, std::false_type) {
 		return layer.forward_propagation(tensor);
@@ -81,7 +83,7 @@ public:
           auto& prev()       { return prev_impl(BC::traits::truth_type<index != 0>()); }
 
 	template<class T> const auto& fp(const T& tensor) {
-		m_cacher.m_batched_cache.push_back(tensor);
+		m_cacher.cache(tensor);
 		return fp_impl(m_cacher.m_batched_cache.back(), BC::traits::truth_type<sizeof...(Layers)!=0>());
 	}
 	template<class T> const auto bp(const T& tensor) {
