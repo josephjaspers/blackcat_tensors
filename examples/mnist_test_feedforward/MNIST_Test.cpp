@@ -11,7 +11,7 @@
 #include "MNIST_Test.h"	      //Add BlackCat_Tensors/examples/ to path
 
 int main() {
-	BC::nn::percept_MNIST(BC::host_tag());
+	percept_MNIST(BC::host_tag());
 }
 
 #endif /* MNIST_TEST_CPP_ */
