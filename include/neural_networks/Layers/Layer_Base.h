@@ -8,7 +8,8 @@
 #ifndef LAYER_H_
 #define LAYER_H_
 
-//#include "Layer_Utility_Functions.h"
+#include "Layer_Traits.h"
+
 namespace BC {
 namespace nn {
 
@@ -19,6 +20,7 @@ class Layer_Base {
     BC::size_t batch_sz;
 
 public:
+
     Layer_Base(int inputs, BC::size_t outputs):
     	m_input_sz(inputs),
         m_output_sz(outputs),

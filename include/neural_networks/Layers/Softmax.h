@@ -41,7 +41,7 @@ public:
     	using BC::sum;
 
     	//TODO -- convert this into an operation, need 'broadcasted' sum
-    	x = mat_view(x_);
+    	mat x(x_);
     	for (int i = 0; i < x.cols(); ++i) {
     		y[i] = exp(x[i]) / sum(exp(x[i]));
     	}

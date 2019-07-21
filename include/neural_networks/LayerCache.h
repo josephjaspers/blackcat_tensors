@@ -44,12 +44,15 @@ struct LayerCache {
 private:
 
 	template<class Expression>
-	void cache_impl(const Tensor_Base<Expression>& expression, BC::traits::Integer<Dimension>) {
+	cache_value_type& cache_impl(const Tensor_Base<Expression>& expression, BC::traits::Integer<Dimension>) {
 		m_cache.push_back(expression);
+		return m_cache.back();
 	}
 	template<class Expression>
-	void cache_impl(const Tensor_Base<Expression>& expression, BC::traits::Integer<Dimension+1>) {
+	batched_cache_value_type& cache_impl(const Tensor_Base<Expression>& expression, BC::traits::Integer<Dimension+1>) {
 		m_batched_cache.push_back(expression);
+		return m_batched_cache.back();
+
 	}
 
 
@@ -57,13 +60,13 @@ private:
 public:
 
 	template<class Expression>
-	void cache(const Tensor_Base<Expression>& expression) {
+	auto& cache(const Tensor_Base<Expression>& expression) {
 		static_assert(
 				Expression::tensor_dimension == Dimension ||
 				Expression::tensor_dimension == Dimension + 1,
 				"Valid cache arguments must have the same Dimension or the Batched Dimension (Dimension+1)"
 			);
-		cache_impl(expression, BC::traits::Integer<Expression::tensor_dimension>());
+		return cache_impl(expression, BC::traits::Integer<Expression::tensor_dimension>());
 	}
 
 	const auto& get_last(BC::traits::Integer<Dimension>) const {
@@ -100,16 +103,16 @@ public:
  *
  * TODO add the Tag option to disable this feature
  */
-template<
-	int Dimension,
-	class ValueType,
-	class SystemTag//,
-//	class Allocator=BC::allocators::fancy::Polymorphic_Allocator<SystemTag, ValueType>>
-	>
-using InputLayerCache = LayerCache<Dimension, ValueType, SystemTag,
-//		Allocator,
-		BC::Tensor_View>;
-
+//template<
+//	int Dimension,
+//	class ValueType,
+//	class SystemTag//,
+////	class Allocator=BC::allocators::fancy::Polymorphic_Allocator<SystemTag, ValueType>>
+//	>
+//using InputLayerCache = LayerCache<Dimension, ValueType, SystemTag,
+////		Allocator,
+//		BC::Tensor_View>;
+//
 
 }
 }
