@@ -54,8 +54,19 @@ private:
     template<class Function> void for_each_impl(Function f, std::true_type)  { f(layer); this->next().for_each(f); }
     template<class Function> void for_each_impl(Function f, std::false_type) { f(layer); }
 
+    template<class T> const auto& call_forward(const T& tensor, std::true_type requires_outputs) {
+    	static constexpr bool is_batched = T::tensor_dimension != tensor_dimension;
+    	auto cache_tensor_dimension = BC::traits::Integer<is_batched + parent::tensor_dimension>();
+		return layer.forward_propagation(tensor, this->next().m_cacher.get_last(cache_tensor_dimension));
+    }
+    template<class T> auto call_forward(const T& tensor, std::false_type requires_outputs)
+    -> decltype(layer.forward_propagation(tensor)) {
+		return layer.forward_propagation(tensor);
+    }
+
+
 	template<class T> const auto& fp_impl(const T& tensor, std::true_type) {
-		return this->next().fp(layer.forward_propagation(tensor));
+		return this->next().fp(call_forward(tensor, typename layer_traits<CurrentLayer>::forward_requires_outputs()));
 	}
 	template<class T> const auto bp_impl(const T& tensor, std::true_type) {
 		return this->prev().bp(
@@ -63,7 +74,7 @@ private:
 						m_cacher.get_last(BC::traits::Integer<T::tensor_dimension>()), tensor));
 	}
 	template<class T> const auto& fp_impl(const T& tensor, std::false_type) {
-		return layer.forward_propagation(tensor);
+		return call_forward(tensor, typename layer_traits<CurrentLayer>::forward_requires_outputs());
 	}
 	template<class T> const auto bp_impl(const T& tensor, std::false_type) {
 		return layer.back_propagation(m_cacher.m_batched_cache.back(), tensor);
@@ -95,32 +106,6 @@ public:
     }
 };
 
-//HEAD
-template<class... Layers>
-struct Chain:
-		public LayerChain<0, void, Layers...>{
-
-    using self = Chain<Layers...>;
-    using parent = LayerChain<0, void, Layers...>;
-
-    Chain(Layers... layers):
-    	parent(layers...) {}
-
-	template<class T> const auto back_propagation(const T& tensor_expected) {
-		return this->tail().bp(tensor_expected);
-	}
-
-	template<class T> const auto& forward_propagation(
-			const T& tensor_expected) {
-		return this->head().fp(tensor_expected);
-	}
-
-    void set_batch_size(int x)    { this->for_each([&](auto& layer) { layer.set_batch_size(x);    });}
-    void update_weights()             { this->for_each([ ](auto& layer) { layer.update_weights();        });}
-//    void read(std::ifstream& is)  { this->for_each([&](auto& layer) { layer.read(is);     });}
-//    void write(std::ifstream& os) { this->for_each([&](auto& layer) { layer.write(os);     });}
-//    void set_max_bptt_length(int len) { this->for_each([&](auto& layer)  { layer.set_max_bptt_length(len);}); }
-};
 }
 }
 #endif
