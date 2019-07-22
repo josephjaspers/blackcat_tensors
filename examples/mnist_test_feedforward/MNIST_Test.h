@@ -13,6 +13,14 @@ auto load_mnist(System system, int batch_size=default_batch_size, int samples=32
 	using value_type = typename System::default_floating_point_type;
 	using allocator_type = BC::Allocator<System, value_type>;
 	using cube = BC::Cube<value_type, allocator_type>;
+}
+
+template<class System>
+auto load_mnist(System system, int batch_size=default_batch_size, int samples=32*1024) {
+
+	using value_type = typename System::default_floating_point_type;
+	using allocator_type = BC::Allocator<System, value_type>;
+	using cube = BC::Cube<value_type, allocator_type>;
 
 	std::ifstream read_data("..///mnist_train.csv");
 	if (!read_data.is_open()){

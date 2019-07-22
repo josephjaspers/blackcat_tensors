@@ -42,8 +42,9 @@ public:
 
     using ExpressionTemplate::ExpressionTemplate;
     using ExpressionTemplate::internal;
+    static constexpr int tensor_dimension = ExpressionTemplate::tensor_dimension;
+    static constexpr int tensor_iterator_dimension = ExpressionTemplate::tensor_iterator_dimension;
 
-    using ExpressionTemplate::tensor_dimension; //required
     using allocator_type = conditional_detected_t<query_allocator_type, ExpressionTemplate, void>;
     using value_type  = typename ExpressionTemplate::value_type;
 	using system_tag  = typename ExpressionTemplate::system_tag;
@@ -73,11 +74,11 @@ public:
     using accessor::operator();
 
     Tensor_Base() = default;
-    Tensor_Base(const parent&  param) : parent(param) {}
-    Tensor_Base(parent&& param) : parent(param) {}
+    Tensor_Base(const parent&  param): parent(param) {}
+    Tensor_Base(parent&& param): parent(param) {}
 
     template<class U>
-    Tensor_Base(const Tensor_Base<U>&  tensor)
+    Tensor_Base(const Tensor_Base<U>& tensor)
     : parent(tensor.as_parent()) {}
 
 

@@ -16,7 +16,7 @@ namespace fancy {
 
 /// Similar to the C++17 std::pmr::polymorphic_allocator,
 /// this allocator allows modifying its underlying allocator at runtime.
-template<class ValueType, class SystemTag>
+template<class SystemTag, class ValueType>
 struct Polymorphic_Allocator {
 
 	using system_tag = SystemTag;
@@ -71,6 +71,7 @@ private:
 		Derived_Allocator(Allocator&& alloc)
 		: m_allocator(alloc) {}
 
+
 		virtual value_type* allocate(std::size_t sz) override final {
 			return retrieve_allocator(m_allocator).allocate(sz);
 		}
@@ -94,6 +95,16 @@ public:
 
 	Polymorphic_Allocator(const Polymorphic_Allocator& pa)
 	: m_allocator(pa.m_allocator.get()->clone()) {}
+
+	Polymorphic_Allocator& operator = (const Polymorphic_Allocator& alloc) {
+		this->set_allocator(alloc.m_allocator->clone());
+		return *this;
+	}
+
+	Polymorphic_Allocator& operator = (Polymorphic_Allocator&& alloc) {
+		this->m_allocator = std::move(alloc.m_allocator);
+		return *this;
+	}
 
 	value_type* allocate(std::size_t sz) {
 		return m_allocator.get()->allocate(sz);

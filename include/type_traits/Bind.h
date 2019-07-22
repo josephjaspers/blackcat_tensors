@@ -45,7 +45,7 @@ struct get_impl<0> {
 }
 
 template<int index, class... Ts>
-auto get(Ts... params) {
+auto get(Ts&&... params) {
 	return get_impl<index>::impl(params...);
 }
 
@@ -90,10 +90,9 @@ private:
 
 };
 template<class Function, class... Args>
-Bind<Function, Args...> bind(Function f, Args... args) {
-	return {f, args...};
+Bind<Function, Args...> bind(Function&& f, Args&&... args) {
+	return {std::forward<Function>(f), std::forward<Args>(args)...};
 }
-
 
 }
 }

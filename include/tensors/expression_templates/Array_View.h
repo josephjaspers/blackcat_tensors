@@ -63,6 +63,17 @@ struct Array_Const_View
 	  stream(tensor.get_stream()),
 	  alloc(tensor.get_allocator()) {}
 
+	template<
+		class tensor_t,
+		typename = std::enable_if_t<
+			tensor_t::tensor_dimension == Dimension &&
+			expression_traits<tensor_t>::is_array>
+	>
+	Array_Const_View(const tensor_t& tensor, allocator_t allocator)
+	: parent(typename parent::shape_type(tensor.get_shape()), tensor.memptr()),
+	  stream(tensor.get_stream()),
+	  alloc(allocator) {}
+
 	Allocator get_allocator() const {
 		return alloc;
 	}

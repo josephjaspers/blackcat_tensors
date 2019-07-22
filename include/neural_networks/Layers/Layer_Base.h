@@ -8,33 +8,33 @@
 #ifndef LAYER_H_
 #define LAYER_H_
 
-//#include "Layer_Utility_Functions.h"
+#include "Layer_Traits.h"
+
 namespace BC {
 namespace nn {
 
-static const BC::tensors::exprs::Shape<0> NULL_TENSOR = BC::tensors::exprs::Shape<0>();
-
-//template<class derived>
 class Layer_Base {
 
-    static constexpr bool is_recurrent = false;
+    const BC::size_t m_input_sz;
+    const BC::size_t m_output_sz;
+    BC::size_t batch_sz;
 
-    const BC::size_t  INPUTS;
-    const BC::size_t  OUTPUTS;
-    BC::size_t  BATCH_SIZE;
 public:
-    Layer_Base(int inputs, BC::size_t  outputs)
-        : INPUTS(inputs),
-          OUTPUTS(outputs),
-          BATCH_SIZE(1)
-    {}
 
-    BC::size_t  numb_inputs() const { return INPUTS; }
-    BC::size_t  numb_outputs() const { return OUTPUTS; }
-    BC::size_t  batch_size()   const { return BATCH_SIZE; }
+    Layer_Base(int inputs, BC::size_t outputs):
+    	m_input_sz(inputs),
+        m_output_sz(outputs),
+        batch_sz(1) {}
+
+    BC::size_t  input_size() const { return m_input_sz; }
+	BC::size_t  output_size() const { return m_output_sz; }
+    BC::size_t  batch_size()   const { return batch_sz; }
+
+	BC::size_t  batched_input_size() const { return m_input_sz * batch_sz; }
+	BC::size_t  batched_output_size() const { return m_output_sz * batch_sz; }
 
     void set_batch_size(int bs) {
-        BATCH_SIZE = bs;
+        batch_sz = bs;
     }
 };
 

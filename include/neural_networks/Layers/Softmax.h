@@ -35,13 +35,13 @@ public:
     SoftMax(int inputs):
         Layer_Base(inputs, inputs) {}
 
-    template<class Expression>
-    const auto& forward_propagation(const BC::MatrixXpr<Expression>& x_) {
+    template<class Matrix>
+    const auto& forward_propagation(const Matrix& x_) {
     	using BC::exp;
     	using BC::sum;
 
     	//TODO -- convert this into an operation, need 'broadcasted' sum
-    	x = mat_view(x_);
+    	mat x(x_);
     	for (int i = 0; i < x.cols(); ++i) {
     		y[i] = exp(x[i]) / sum(exp(x[i]));
     	}
@@ -49,15 +49,15 @@ public:
         return y;
     }
 
-
     template<class Matrix>
-    auto back_propagation(const Matrix& dy) {
-    	return dy;
-    }
+	auto back_propagation(const mat& x, const Matrix& dy) {
+		return dy;
+	}
+
     void update_weights() {}
 
     void set_batch_size(int x) {
-        y = mat(this->numb_outputs(), x);
+        y = mat(this->output_size(), x);
     }
 };
 

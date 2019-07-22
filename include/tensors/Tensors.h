@@ -38,13 +38,15 @@ template<class ValueType, class Allocator = default_allocator<ValueType>> using 
 template<class ValueType, class Allocator = default_allocator<ValueType>> using Matrix_View = Tensor_View<2, ValueType, Allocator>;
 template<class ValueType, class Allocator = default_allocator<ValueType>> using Cube_View   = Tensor_View<3, ValueType, Allocator>;
 
-template<int X, class Expression, class=std::enable_if_t<Expression::tensor_dimension == X>>
-using TensorXpr = Tensor_Base<Expression>;
 
-template<class Expression> using ScalarXpr = TensorXpr<0, Expression>;
-template<class Expression> using VectorXpr = TensorXpr<1, Expression>;
-template<class Expression> using MatrixXpr = TensorXpr<2, Expression>;
-template<class Expression> using CubeXpr = TensorXpr<3, Expression>;
+//TODO RE-ADD SOMETHING WITH SIMILAR FEATURES, THIS IS TOO FRAGILE
+//template<int X, class Expression, class=std::enable_if_t<Expression::tensor_dimension == X>>
+//using TensorXpr = Tensor_Base<Expression>;
+
+//template<class Expression> using ScalarXpr = TensorXpr<0, Expression>;
+//template<class Expression> using VectorXpr = TensorXpr<1, Expression>;
+//template<class Expression> using MatrixXpr = TensorXpr<2, Expression>;
+//template<class Expression> using CubeXpr = TensorXpr<3, Expression>;
 
 } //end of ns common_using
 } //end of ns tensors
