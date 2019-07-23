@@ -54,6 +54,9 @@ private:
     template<class Function> void for_each_impl(Function f, std::true_type)  { f(layer); this->next().for_each(f); }
     template<class Function> void for_each_impl(Function f, std::false_type) { f(layer); }
 
+    template<class Function> void for_each_node_impl(Function f, std::true_type)  { f(*this); this->next().for_each_node(f); }
+    template<class Function> void for_each_node_impl(Function f, std::false_type) { f(*this); }
+
     template<class T> const auto& call_forward(const T& tensor, std::true_type requires_outputs) {
     	static constexpr bool is_batched = T::tensor_dimension != tensor_dimension;
     	auto cache_tensor_dimension = BC::traits::Integer<is_batched + parent::tensor_dimension>();
@@ -103,6 +106,9 @@ public:
 
     template<class function> void for_each(function f) {
     	for_each_impl(f, BC::traits::truth_type<sizeof...(Layers) != 0>());
+    }
+    template<class function> void for_each_node(function f) {
+    	for_each_node_impl(f, BC::traits::truth_type<sizeof...(Layers) != 0>());
     }
 };
 
