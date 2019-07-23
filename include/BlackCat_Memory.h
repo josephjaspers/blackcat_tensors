@@ -43,13 +43,17 @@ public:
 	atomic_shared_ptr(atomic_shared_ptr&& ptr) {
 		*this = ptr;
 	}
+	
 	atomic_shared_ptr(const atomic_shared_ptr& ptr) {
 		*this = ptr;
 	}
+	
 	atomic_shared_ptr() = default;
+	
 	template<class... Args>
 	atomic_shared_ptr(const Args&... args) : m_ptr(args...) {};
-
+	
+private:
 	struct wrapper {
 		std::mutex& locker;
 		std::shared_ptr<ValueType> m_ptr;
@@ -69,11 +73,6 @@ public:
 	void reset(Y* ptr, Deleter del=detail::default_deleter, Allocator alloc=Allocator()) {
 		locker.lock();
 		m_ptr.reset(ptr, del, alloc);
-		locker.unlock();
-	}
-	void swap(std::shared_ptr<ValueType>& sh_ptr) {
-		locker.lock();
-
 		locker.unlock();
 	}
 
