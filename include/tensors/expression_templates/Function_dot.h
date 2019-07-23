@@ -60,7 +60,8 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>
 		auto Y = greedy_evaluate(right, stream);
 
 		//call outer product
-		blas_impl::dot(stream, X.rows(), injection, X, X.leading_dimension(0), Y, Y.leading_dimension(0));
+		blas_impl::dot(stream, X.rows(), injection.memptr(), X.memptr(), X.leading_dimension(0),
+				Y.memptr(), Y.leading_dimension(0));
 
 		static constexpr int beta_value = beta_mod == 0 ? 1 : beta_mod;
 		if (lv_scalar || rv_scalar) {

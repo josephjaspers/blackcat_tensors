@@ -70,14 +70,20 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>
 	        auto A = contents.left;
 	        auto B = contents.right;
 	        auto alpha = contents.alpha;
-			blas_impl::ger(stream, left.rows(), right.cols(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
+			blas_impl::ger(stream, left.rows(), right.cols(),
+					alpha.memptr(), A.memptr(), A.leading_dimension(0),
+					B.memptr(), B.leading_dimension(0),
+					injection.memptr(), injection.leading_dimension(0));
 	        blas_util::post_parse_expression_evaluation(stream, contents);
 		} else {
 			auto alpha = make_constexpr_scalar<BC::host_tag, (alpha_mod == 0 ? 1 : alpha_mod), value_type>();
 			auto A = greedy_evaluate(blas_expression_traits<lv>::remove_blas_modifiers(left), stream);
 			auto B = greedy_evaluate(blas_expression_traits<rv>::remove_blas_modifiers(right), stream);
 			stream.set_blas_pointer_mode_host();
-			blas_impl::ger(stream, left.rows(), right.cols(), alpha, A, A.leading_dimension(0), B, B.leading_dimension(0), injection, injection.leading_dimension(0));
+			blas_impl::ger(stream, left.rows(), right.cols(),
+					alpha.memptr(), A.memptr(), A.leading_dimension(0),
+					B.memptr(), B.leading_dimension(0),
+					injection.memptr(), injection.leading_dimension(0));
 		}
 	}
 };

@@ -75,9 +75,9 @@ int test_blas(int sz=128) {
 
 		stream.set_blas_pointer_mode_device();
 		blas::gemm(stream, false, false,  sz, sz, sz,
-				one, h_a.data(), sz,
+				one.data(), h_a.data(), sz,
 				h_b.data(), sz,
-				zero, h_y.data(), sz);
+				zero.data(), h_y.data(), sz);
 
 			return BC::tensors::all(h_y.approx_equal(y));
 	)
@@ -88,10 +88,10 @@ int test_blas(int sz=128) {
 		y[0] = a * b[0];
 
 		stream.set_blas_pointer_mode_device();
-		blas::gemv(stream, false,  sz, sz,
-				one, h_a.data(), sz,
+		blas::gemv(stream, false, sz, sz,
+				one.data(), h_a.data(), sz,
 				h_b.data(), 1,
-				zero, h_y.data(), 1);
+				zero.data(), h_y.data(), 1);
 
 			return BC::tensors::all(h_y[0].approx_equal(y[0]));
 	)
@@ -102,8 +102,8 @@ int test_blas(int sz=128) {
 
 		stream.set_blas_pointer_mode_device();
 		blas::ger(stream,  sz, sz,
-				one, h_a[0], 1,
-				h_b[0], 1,
+				one.data(), h_a[0].data(), 1,
+				h_b[0].data(), 1,
 				h_y.data(), sz);
 
 			return BC::tensors::all(h_y.approx_equal(y));
@@ -122,9 +122,9 @@ int test_blas(int sz=128) {
 
 		stream.set_blas_pointer_mode_device();
 		blas::gemm(stream, false, false,  sz, sz, sz,
-				two, h_a.data(), sz,
+				two.data(), h_a.data(), sz,
 				h_b.data(), sz,
-				zero, h_y.data(), sz);
+				zero.data(), h_y.data(), sz);
 
 			return BC::tensors::all(h_y.approx_equal(y));
 	)
@@ -136,9 +136,9 @@ int test_blas(int sz=128) {
 
 		stream.set_blas_pointer_mode_device();
 		blas::gemv(stream, false,  sz, sz,
-				two, h_a.data(), sz,
+				two.data(), h_a.data(), sz,
 				h_b.data(), 1,
-				zero, h_y.data(), 1);
+				zero.data(), h_y.data(), 1);
 
 			return BC::tensors::all(h_y[0].approx_equal(y[0]));
 	)
@@ -149,8 +149,8 @@ int test_blas(int sz=128) {
 
 		stream.set_blas_pointer_mode_device();
 		blas::ger(stream,  sz, sz,
-				two, h_a[0], 1,
-				h_b[0], 1,
+				two.data(), h_a[0].data(), 1,
+				h_b[0].data(), 1,
 				h_y.data(), sz);
 
 			return BC::tensors::all(h_y.approx_equal(y));
@@ -171,9 +171,9 @@ int test_blas(int sz=128) {
 
 			stream.set_blas_pointer_mode_device();
 			blas::gemm(stream, false, false,  sz, sz, sz,
-					two, h_a.data(), sz,
+					two.data(), h_a.data(), sz,
 					h_b.data(), sz,
-					zero, h_y.data(), sz);
+					zero.data(), h_y.data(), sz);
 
 				return BC::tensors::all(h_y.approx_equal(y));
 		)
@@ -185,9 +185,9 @@ int test_blas(int sz=128) {
 
 			stream.set_blas_pointer_mode_device();
 			blas::gemv(stream, false,  sz, sz,
-					two, h_a.data(), sz,
+					two.data(), h_a.data(), sz,
 					h_b.data(), 1,
-					zero, h_y.data(), 1);
+					zero.data(), h_y.data(), 1);
 
 				return BC::tensors::all(h_y[0].approx_equal(y[0]));
 		)
@@ -198,8 +198,8 @@ int test_blas(int sz=128) {
 
 			stream.set_blas_pointer_mode_device();
 			blas::ger(stream,  sz, sz,
-					two, h_a[0], 1,
-					h_b[0], 1,
+					two.data(), h_a[0].data(), 1,
+					h_b[0].data(), 1,
 					h_y.data(), sz);
 
 				return BC::tensors::all(h_y.approx_equal(y));
@@ -223,9 +223,9 @@ int test_blas(int sz=128) {
 
 		stream.set_blas_pointer_mode_device();
 		blas::gemm(stream, false, false,  sz, sz, sz,
-				two, h_a.data(), sz,
+				two.data(), h_a.data(), sz,
 				h_b.data(), sz,
-				zero, h_y.data(), sz);
+				zero.data(), h_y.data(), sz);
 
 		return BC::tensors::all(h_y.approx_equal(y));
 	)
@@ -237,9 +237,9 @@ int test_blas(int sz=128) {
 
 		stream.set_blas_pointer_mode_device();
 		blas::gemm(stream, false, false,  sz, sz, sz,
-				two, h_a.data(), sz,
+				two.data(), h_a.data(), sz,
 				h_b.data(), sz,
-				one, h_y.data(), sz);
+				one.data(), h_y.data(), sz);
 
 		return BC::tensors::all(h_y.approx_equal(y));
 	)
@@ -257,9 +257,9 @@ int test_blas(int sz=128) {
 
 		stream.set_blas_pointer_mode_device();
 		blas::gemm(stream, false, false,  sz, sz, sz,
-				two, h_a.data(), sz,
+				two.data(), h_a.data(), sz,
 				h_b.data(), sz,
-				one, h_y.data(), sz);
+				one.data(), h_y.data(), sz);
 
 			return BC::tensors::all(h_y.approx_equal(y));
 	)
@@ -298,9 +298,9 @@ int test_blas(int sz=128) {
 
 		stream.set_blas_pointer_mode_device();
 		blas::gemm(stream, false, false,  sz, sz, sz,
-				two, h_a.data(), sz,
+				two.data(), h_a.data(), sz,
 				h_b.data(), sz,
-				zero, h_y.data(), sz);
+				zero.data(), h_y.data(), sz);
 
 			return BC::tensors::all(h_y.approx_equal(y));
 	)
@@ -312,9 +312,9 @@ int test_blas(int sz=128) {
 
 		stream.set_blas_pointer_mode_device();
 		blas::gemv(stream, false,  sz, sz,
-				two, h_a.data(), sz,
+				two.data(), h_a.data(), sz,
 				h_b.data(), 1,
-				zero, h_y.data(), 1);
+				zero.data(), h_y.data(), 1);
 
 			return BC::tensors::all(h_y[0].approx_equal(y[0]));
 	)
@@ -325,8 +325,8 @@ int test_blas(int sz=128) {
 
 		stream.set_blas_pointer_mode_device();
 		blas::ger(stream,  sz, sz,
-				two, h_a[0], 1,
-				h_b[0], 1,
+				two.data(), h_a[0].data(), 1,
+				h_b[0].data(), 1,
 				h_y.data(), sz);
 
 			return BC::tensors::all(h_y.approx_equal(y));
@@ -347,9 +347,9 @@ int test_blas(int sz=128) {
 
 			stream.set_blas_pointer_mode_device();
 			blas::gemm(stream, false, false,  sz, sz, sz,
-					two, h_a.data(), sz,
+					two.data(), h_a.data(), sz,
 					h_b.data(), sz,
-					zero, h_y.data(), sz);
+					zero.data(), h_y.data(), sz);
 
 				return BC::tensors::all(h_y.approx_equal(y));
 		)
@@ -361,9 +361,9 @@ int test_blas(int sz=128) {
 
 			stream.set_blas_pointer_mode_device();
 			blas::gemv(stream, false,  sz, sz,
-					two, h_a.data(), sz,
+					two.data(), h_a.data(), sz,
 					h_b.data(), 1,
-					zero, h_y.data(), 1);
+					zero.data(), h_y.data(), 1);
 
 				return BC::tensors::all(h_y[0].approx_equal(y[0]));
 		)
@@ -374,8 +374,8 @@ int test_blas(int sz=128) {
 
 			stream.set_blas_pointer_mode_device();
 			blas::ger(stream,  sz, sz,
-					two, h_a[0], 1,
-					h_b[0], 1,
+					two.data(), h_a[0].data(), 1,
+					h_b[0].data(), 1,
 					h_y.data(), sz);
 
 				return BC::tensors::all(h_y.approx_equal(y));
