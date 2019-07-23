@@ -19,18 +19,21 @@ template<int index, class Derived, class...>
 struct LayerChain {};
 
 template<int index, class Derived,class CurrentLayer, class... Layers>
-struct LayerChain<index, Derived, CurrentLayer, Layers...>
-: LayerChain<index + 1, LayerChain<index, Derived, CurrentLayer, Layers...>, Layers...> {
+struct LayerChain<index, Derived, CurrentLayer, Layers...>:
+LayerChain<index + 1, LayerChain<index, Derived, CurrentLayer, Layers...>, Layers...>, //parent class
+ std::conditional_t<index == 0,
+ 	 Input_Layer_Manager<LayerChain<index, Derived, CurrentLayer, Layers...>, CurrentLayer>, //if first layer
+ 	 Layer_Manager<LayerChain<index, Derived, CurrentLayer, Layers...>, CurrentLayer>> {     //if not first layer
 
     using self   = LayerChain<index, Derived, CurrentLayer, Layers...>;
     using parent = LayerChain<index + 1, self, Layers...>;
+    using layer  = std::conditional_t<index == 0,
+    	 	 Input_Layer_Manager<self, CurrentLayer>, //if first layer
+    	 	 Layer_Manager<self, CurrentLayer>>;
     using type   = CurrentLayer;
 
     using value_type = typename CurrentLayer::value_type;
     using system_tag = typename CurrentLayer::system_tag;
-    using LayerType = std::conditional_t<index == 0, Input_Layer_Manager<CurrentLayer>, Layer_Manager<CurrentLayer>>;
-
-    LayerType layer;
 
     LayerChain(CurrentLayer f, Layers... layers):
     	parent(layers...),
@@ -86,23 +89,27 @@ private:
     template<int ADL=0> const auto& prev_impl(std::false_type) const { return *this; }
     template<int ADL=0>       auto& prev_impl(std::false_type)       { return *this; }
 
-    template<class Function> void for_each_impl(Function f, std::true_type)  { f(layer); this->next().for_each(f); }
-    template<class Function> void for_each_impl(Function f, std::false_type) { f(layer); }
+    template<class Function> void for_each_impl(Function f, std::true_type)  {
+    	f(static_cast<layer&>(*this)); this->next().for_each(f);
+    }
+    template<class Function> void for_each_impl(Function f, std::false_type) {
+    	f(static_cast<layer&>(*this));
+    }
 
     template<class Function> void for_each_node_impl(Function f, std::true_type)  { f(*this); this->next().for_each_node(f); }
     template<class Function> void for_each_node_impl(Function f, std::false_type) { f(*this); }
 
 	template<class T> const auto fp_impl(const T& tensor, std::true_type) {
-		return this->next().fp(layer.forward_propagation(tensor));
+		return this->next().fp(layer::forward_propagation(tensor));
 	}
 	template<class T> const auto bp_impl(const T& tensor, std::true_type) {
-		return this->prev().bp(layer.back_propagation(tensor));
+		return this->prev().bp(layer::back_propagation(tensor));
 	}
 	template<class T> const auto fp_impl(const T& tensor, std::false_type) {
-		return layer.forward_propagation(tensor);
+		return layer::forward_propagation(tensor);
 	}
 	template<class T> const auto bp_impl(const T& tensor, std::false_type) {
-		return layer.back_propagation(tensor);
+		return layer::back_propagation(tensor);
 	}
 };
 

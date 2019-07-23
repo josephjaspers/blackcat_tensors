@@ -23,6 +23,7 @@ struct Recurrent_Layer_Manager;
 
 //Non-recurrent layer_manager
 template<
+	class Derived, //The LayerChain base
 	class Layer,
 	class Allocator=BC::Allocator<typename layer_traits<Layer>::system_tag, typename layer_traits<Layer>::value_type>>
 struct Layer_Manager: Layer {
@@ -85,6 +86,7 @@ private:
 
 //Same as forward_layer manager but uses 'Tensor_Views' to avoid doing copy operations on input data
 template<
+	class Derived, //The LayerChain base
 	class Layer,
 	class Allocator=BC::Allocator<typename layer_traits<Layer>::system_tag, typename layer_traits<Layer>::value_type>>
 struct Input_Layer_Manager: Layer {
