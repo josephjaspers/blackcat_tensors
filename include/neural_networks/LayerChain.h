@@ -23,7 +23,11 @@ struct LayerChain<index, Derived, CurrentLayer, Layers...>
     using system_tag = typename CurrentLayer::system_tag;
     static constexpr int tensor_dimension = 1;//CurrentLayer::tensor_dimension;
 
-    LayerCache<tensor_dimension, value_type, system_tag> m_cacher;
+    using layer_cache_t = std::conditional_t<index == 0,
+    		InputLayerCache<tensor_dimension, value_type, system_tag>,
+    		Forward_LayerCache<tensor_dimension, value_type, system_tag>>;
+
+    layer_cache_t m_cacher;
     CurrentLayer layer;
 
     LayerChain(CurrentLayer f, Layers... layers):
@@ -80,7 +84,7 @@ private:
 		return call_forward(tensor, typename layer_traits<CurrentLayer>::forward_requires_outputs());
 	}
 	template<class T> const auto bp_impl(const T& tensor, std::false_type) {
-		return layer.back_propagation(m_cacher.m_batched_cache.back(), tensor);
+		return layer.back_propagation(m_cacher.get_last(BC::traits::Integer<T::tensor_dimension>()), tensor);
 	}
 
 
@@ -98,7 +102,7 @@ public:
 
 	template<class T> const auto& fp(const T& tensor) {
 		m_cacher.cache(tensor);
-		return fp_impl(m_cacher.m_batched_cache.back(), BC::traits::truth_type<sizeof...(Layers)!=0>());
+		return fp_impl(m_cacher.get_last(BC::traits::Integer<T::tensor_dimension>()), BC::traits::truth_type<sizeof...(Layers)!=0>());
 	}
 	template<class T> const auto bp(const T& tensor) {
 		return bp_impl(tensor, BC::traits::truth_type<index!=0>());
