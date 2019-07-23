@@ -5,10 +5,11 @@
 
 namespace {
 static constexpr int default_batch_size = 32;
+static constexpr int numb_samples_in_dataset = 8192;
 }
 
 template<class System>
-auto load_mnist(System system, int batch_size=default_batch_size, int samples=32*1024) {
+auto load_mnist(System system, int batch_size=default_batch_size, int samples=numb_samples_in_dataset) {
 
 	using value_type = typename System::default_floating_point_type;
 	using allocator_type = BC::Allocator<System, value_type>;
