@@ -151,27 +151,31 @@ struct expression_traits {
 		 return selector::impl(expression, indicies...);
 	 }
 
-// Causes 'catastrophic error' with NVCC. Compiles with GCC TODO change once NVCC fixes
-//	static constexpr bool is_move_constructible =
-//					BC::traits::conditional_detected_t<
-//						detail::query_move_constructible, T, std::false_type>::type::value;
-//
-//	static constexpr bool is_copy_constructible =
-//					BC::traits::conditional_detected_t<
-//						detail::query_copy_constructible, T, std::false_type>::type::value;
-//
-//	static constexpr bool is_move_assignable 	=
-//					BC::traits::conditional_detected_t<
-//						detail::query_move_assignable, T, std::false_type>::type::value;
-//
-//	static constexpr bool is_copy_assignable 	=
-//					BC::traits::conditional_detected_t<
-//						detail::query_copy_assignable, T, std::false_type>::type::value;
 
+#ifndef __CUDACC__
+// Causes 'catastrophic error' with NVCC. Compiles with GCC TODO change once NVCC fixes
+	static constexpr bool is_move_constructible =
+					BC::traits::conditional_detected_t<
+						detail::query_move_constructible, T, std::false_type>::type::value;
+
+	static constexpr bool is_copy_constructible =
+					BC::traits::conditional_detected_t<
+						detail::query_copy_constructible, T, std::false_type>::type::value;
+
+	static constexpr bool is_move_assignable 	=
+					BC::traits::conditional_detected_t<
+						detail::query_move_assignable, T, std::false_type>::type::value;
+
+	static constexpr bool is_copy_assignable 	=
+					BC::traits::conditional_detected_t<
+						detail::query_copy_assignable, T, std::false_type>::type::value;
+
+#else 
 	static constexpr bool is_move_constructible = T::move_constructible;
 	static constexpr bool is_copy_constructible = T::copy_constructible;
 	static constexpr bool is_move_assignable 	= T::move_assignable;
 	static constexpr bool is_copy_assignable 	= T::copy_assignable;
+#endif 
 
 	static constexpr bool is_bc_type  	 = std::is_base_of<BC_Type, T>::value;
 	static constexpr bool is_array  	 = std::is_base_of<BC_Array, T>::value;

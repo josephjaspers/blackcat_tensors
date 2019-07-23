@@ -19,9 +19,12 @@
 /Debug/.*
 /Release/
 /include/autograd/
+BlackCat_Tensors.sln
+*.vcxproj*
+/x64/*
+/.vs/*
 /include/autograd/*
 /include/neural_networks/Layers/LSTM.h
-/include/neural_networks/Layers/Recurrent.h
 /include/neural_networks/Layers/RecurrentFeedForward.h
 /include/BlackCat_Autograd.h/
 /examples/mnist_test_recurrent/*

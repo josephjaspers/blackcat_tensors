@@ -75,10 +75,19 @@ using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 	#define BCINLINE BCHOSTDEV BC_INLINE_OVERRIDE
 	#define BCHOT BC_INLINE_OVERRIDE
 #else
+	#if defined(__GNUG__) || defined(__GNUC__)
 	#define BCINLINE BCHOSTDEV  inline __attribute__((always_inline)) __attribute__((hot))  //host_device inline
 	#define BCHOT   		   inline __attribute__((always_inline)) __attribute__((hot))  //device-only inline
-#endif
 
+	#elif defined(_MSC_VER)
+		#define BCINLINE BCHOSTDEV __forceinline
+		#define BCHOT    __forceinline
+
+	#else
+		#define BCINLINE BCHOSTDEV inline
+		#define BCHOT  inline
+	#endif
+#endif 
 
 // --------------------------------- unique address -----------------------------------------//
 
@@ -91,6 +100,10 @@ using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 
 // --------------------------------- asserts -----------------------------------------//
 
+// Visual Studio
+#ifdef _MSC_VER 
+#define __PRETTY_FUNCTION__ __FUNCTION__
+#endif
 
 #include <iostream>
 

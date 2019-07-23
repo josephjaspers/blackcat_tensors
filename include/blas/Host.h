@@ -11,9 +11,11 @@
 #if __has_include(<cblas.h>)
 #include <cblas.h>
 #elif __has_include(<mkl.h>)
-#define BC_MKL 1
+#include <mkl.h>
 #else
+#ifndef _MSC_VER
 #warning "BLACKCAT_TENSORS REQUIRES A VALID <cblas.h> OR <mkl.h> IN ITS PATH"
+#endif
 #endif
 
 

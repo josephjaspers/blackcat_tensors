@@ -18,10 +18,6 @@
 namespace BC {
 namespace tensors {
 
-namespace {
-using namespace BC::traits;
-}
-
 
 template<class ExpressionTemplate>
 class Tensor_Base :
@@ -45,7 +41,7 @@ public:
     static constexpr int tensor_dimension = ExpressionTemplate::tensor_dimension;
     static constexpr int tensor_iterator_dimension = ExpressionTemplate::tensor_iterator_dimension;
 
-    using allocator_type = conditional_detected_t<query_allocator_type, ExpressionTemplate, void>;
+    using allocator_type = BC::traits::conditional_detected_t<BC::traits::query_allocator_type, ExpressionTemplate, void>;
     using value_type  = typename ExpressionTemplate::value_type;
 	using system_tag  = typename ExpressionTemplate::system_tag;
 
@@ -82,23 +78,23 @@ public:
     : parent(tensor.as_parent()) {}
 
 
-    Tensor_Base(only_if<copy_constructible, const Tensor_Base<ExpressionTemplate>&> tensor)
+    Tensor_Base(BC::traits::only_if<copy_constructible, const Tensor_Base<ExpressionTemplate>&> tensor)
     : parent(tensor.as_parent()) {}
 
-    Tensor_Base(only_if<move_constructible, Tensor_Base<ExpressionTemplate>&&> tensor)
+    Tensor_Base(BC::traits::only_if<move_constructible, Tensor_Base<ExpressionTemplate>&&> tensor)
     : parent(std::move(tensor.as_parent())) {}
 
-    Tensor_Base& operator =(only_if<move_assignable, Tensor_Base<ExpressionTemplate>&&> tensor) {
+    Tensor_Base& operator =(BC::traits::only_if<move_assignable, Tensor_Base<ExpressionTemplate>&&> tensor) {
         this->as_parent() = std::move(tensor.as_parent());
         return *this;
     }
 
-    Tensor_Base& operator =(only_if<copy_assignable, const Tensor_Base<ExpressionTemplate>&> tensor) {
+    Tensor_Base& operator =(BC::traits::only_if<copy_assignable, const Tensor_Base<ExpressionTemplate>&> tensor) {
          operations::operator=(tensor);
          return *this;
     }
 
-    Tensor_Base(only_if<tensor_dimension==0, value_type> scalar) {
+    Tensor_Base(BC::traits::only_if<tensor_dimension==0, value_type> scalar) {
         static_assert(tensor_dimension == 0, "SCALAR_INITIALIZATION ONLY AVAILABLE TO SCALARS");
         this->fill(scalar);
     }

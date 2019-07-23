@@ -122,9 +122,6 @@ struct dx_forwarder {
 
 template<class op, class expr> BCHOT
 auto make_un_expr(expr e, op oper =op()) {
-	static_assert(std::is_trivially_copyable<expr>::value,
-			"Unary_Expressions - Arg must be trivially copyable");
-
 	return Unary_Expression<op, expr>(e, oper);
 }
 

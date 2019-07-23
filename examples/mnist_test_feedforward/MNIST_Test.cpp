@@ -12,6 +12,9 @@
 
 int main() {
 	percept_MNIST(BC::host_tag());
+
+	int wait;
+	std::cin >> wait; 
 }
 
 #endif /* MNIST_TEST_CPP_ */

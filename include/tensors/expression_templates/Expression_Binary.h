@@ -95,12 +95,6 @@ public:
 
 template<class Op, class Lv, class Rv, class... Args> BCHOT
 auto make_bin_expr(Lv left, Rv right, Args&&... args) {
-	static_assert(std::is_trivially_copyable<Lv>::value,
-				"Binary_Expression's - Left Arg must be trivially copyable");
-	static_assert(std::is_trivially_copyable<Rv>::value,
-					"Binary_Expression's - Right Arg must be trivially copyable");
-
-
 	return Binary_Expression<Op,Lv, Rv>(left, right, args...);
 }
 

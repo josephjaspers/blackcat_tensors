@@ -46,13 +46,16 @@ struct Kernel_Array
     using shape_type = std::conditional_t<BC::traits::sequence_contains_v<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>;
     using self_type  = Kernel_Array<Dimension, ValueType, SystemTag, Tags...>;
 
-    static constexpr bool copy_constructible = !expression_traits<self_type>::is_view;
-    static constexpr bool move_constructible = !expression_traits<self_type>::is_view;
+	static constexpr bool self_is_view = BC::traits::sequence_contains_v<BC_View, Tags...>;
+	static constexpr bool is_continuous = ! BC::traits::sequence_contains_v<BC_Noncontinuous, Tags...>;
+
+	static constexpr bool copy_constructible = !self_is_view;
+	static constexpr bool move_constructible = !self_is_view;
     static constexpr bool copy_assignable    = true;
-    static constexpr bool move_assignable    = !expression_traits<self_type>::is_view;
+	static constexpr bool move_assignable    = !self_is_view;
 
     static constexpr int tensor_dimension = Dimension;
-    static constexpr int tensor_iterator_dimension = expression_traits<self_type>::is_continuous ? 1 : tensor_dimension;
+    static constexpr int tensor_iterator_dimension = is_continuous ? 1 : tensor_dimension;
 
 private:
     pointer_type array = nullptr;

@@ -14,7 +14,7 @@ auto load_mnist(System system, int batch_size=default_batch_size, int samples=32
 	using allocator_type = BC::Allocator<System, value_type>;
 	using cube = BC::Cube<value_type, allocator_type>;
 
-	std::ifstream read_data("..///mnist_train.csv");
+	std::ifstream read_data("C:///Users///Rungle///blackcat_tensors///BlackCat_Tensors///examples///mnist_train.csv");
 	if (!read_data.is_open()){
 		std::cout << " error opening file. '..///mnist_train.csv'"
 				"Program expected to be run from examples directory." << std::endl;
