@@ -5,11 +5,10 @@
  *      Author: joseph
  */
 
-#ifndef NEURALNETWORK_H_
-#define NEURALNETWORK_H_
+#ifndef BLACKCAT_NEURALNETWORK_NEURALNETWORK_H_
+#define BLACKCAT_NEURALNETWORK_NEURALNETWORK_H_
 
-#include <forward_list>
-#include "LayerChain.h"
+#include "Layer_Chain.h"
 
 namespace BC {
 namespace nn {
@@ -39,6 +38,7 @@ struct NeuralNetwork {
 //    void read(std::ifstream& is)  { m_layer_chain.for_each([&](auto& layer) { layer.read(is);     });}
 //    void write(std::ifstream& os) { m_layer_chain.for_each([&](auto& layer) { layer.write(os);     });}
 //    void set_max_bptt_length(int len) { m_layer_chain.for_each([&](auto& layer)  { layer.set_max_bptt_length(len);}); }
+
 };
 template<class... Layers>
 auto neuralnetwork(Layers&&... layers) {
