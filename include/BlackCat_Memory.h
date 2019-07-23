@@ -52,8 +52,7 @@ public:
 	
 	template<class... Args>
 	atomic_shared_ptr(const Args&... args) : m_ptr(args...) {};
-	
-private:
+
 	struct wrapper {
 		std::mutex& locker;
 		std::shared_ptr<ValueType> m_ptr;
@@ -103,7 +102,6 @@ private:
 	}
 };
 
-using namespace memory;
 }
 }
 #endif /* BLACKCAT_MEMORY_H_ */

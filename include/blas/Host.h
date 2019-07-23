@@ -13,7 +13,7 @@
 #elif __has_include(<mkl.h>)
 #define BC_MKL 1
 #else
-#error "BLACKCAT_TENSORS REQUIRES A VALID <cblas.h> OR <mkl.h> IN ITS PATH"
+#warning "BLACKCAT_TENSORS REQUIRES A VALID <cblas.h> OR <mkl.h> IN ITS PATH"
 #endif
 
 
