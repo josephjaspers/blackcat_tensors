@@ -31,9 +31,9 @@ public:
     	return x;
     }
 
-    template <class Matrix>
-    auto back_propagation(const mat& x, const Matrix& exp) {
-        return x - exp;
+    template <class X, class Y>
+    auto back_propagation(const X& x, const Y& y) {
+        return x - y;
     }
 
     void update_weights() {}

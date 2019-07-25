@@ -22,6 +22,7 @@ template<class T> using query_backwards_requires_outputs = typename T::backwards
 template<class T> using query_input_tensor_dimension  = typename T::input_tensor_dimension;
 template<class T> using query_output_tensor_dimension = typename T::output_tensor_dimension;
 
+template<class T> using query_greedy_evaluate_delta = typename T::greedy_evaluate_delta;
 
 //If true we cache the delta- into a matrix/vector. This is not stored in recurrent layers.
 //It is used for things like feedforward backprop which require using the 'deltaY' error multiple times
@@ -64,6 +65,10 @@ struct layer_traits {
 			= conditional_detected_t<query_backwards_requires_outputs, T, std::false_type>;
 	using backwards_delta_should_be_cached
 			= conditional_detected_t<query_backwards_requires_outputs, T, std::false_type>;
+
+	using greedy_evaluate_delta
+			= conditional_detected_t<query_greedy_evaluate_delta, T, std::false_type>;
+
 };
 
  } //namespace impl

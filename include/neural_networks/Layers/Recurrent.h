@@ -42,7 +42,7 @@ private:
 
 public:
 
-    Recurrent(int inputs, BC::size_t  outputs) :
+    Recurrent(int inputs, BC::size_t outputs):
         Layer_Base(inputs, outputs),
 		w(outputs, inputs),
 		r(outputs, outputs),
@@ -62,26 +62,58 @@ public:
     }
 
     template<class X, class Y>
-    const auto& forward_propagation(const X& x, const Y& y) {
+    auto forward_propagation(const X& x, const Y& y) {
+    	std::cout << " recurrent fp " << std::endl;
     	return w * x + r * y;
     }
+    template<class X>
+    auto forward_propagation(const X& x) {
+    	std::cout << " single recurrent fp " << std::endl;
+    	return w * x;
+    }
+    template<class Allocator, class DeltaY>
+    auto back_propagation(const BC::Matrix<value_type, Allocator>& x, const DeltaY& dy) {
+    	std::cout << " single recurrent BP MATRIX" << std::endl;
+    	x.print_dimensions();
+    	dc = dy;
+    	std::cout << " 1 " << std::endl;
+
+    	w_gradients -= dc * x.t();
+    	std::cout << " 2 " << std::endl;
+
+    	b_gradients -= dc;
+    	std::cout << " 3 " << std::endl;
+
+    	(w.t() * dy).print_dimensions();
+    	return w.t() * dy;
+    }
+    template<class Allocator, class DeltaY>
+    auto back_propagation(const BC::Vector<value_type, Allocator>& x, const DeltaY& dy) {
+    	std::cout << " single recurrent BP VECTOR" << std::endl;
+    	std::cout << " set dc[0] = dy" << std::endl;
+
+    	dc[0] = dy;
+
+    	std::cout << " 1 " << std::endl;
+
+    	w_gradients -= dc[0] * x.t();
+    	b_gradients -= dc[0];
+
+    	std::cout << " 2 "  << std::endl;
+
+    	return w.t() * dy;
+    }
+
     template<class X, class Y, class DeltaY>
     auto back_propagation(const X& x, const Y& y, const DeltaY& dy) {
-    	dc = dy;
+    	std::cout << " recurrent BP " << std::endl;
+
+    	dc += dy;
     	w_gradients -= dc * x.t();
     	r_gradients -= dc * y.t();
     	b_gradients -= dc;
 
     	return w.t() * dy;
-    }
-    template<class X, class Y, class DeltaY>
-    auto back_propagation_through_time(const X& x, const Y& y, const DeltaY& dy) {
-    	dc += dy + r.t() * dc;
-    	w_gradients -= dc * x.t();
-    	r_gradients -= dc * y.t();
-    	b_gradients -= dc;
-
-    	return w.t() * dc;
     }
 
     void update_weights() {

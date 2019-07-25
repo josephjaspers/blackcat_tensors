@@ -76,10 +76,6 @@ public:
 	}
 
 	Byte* allocate(std::size_t sz) {
-		if (m_memptr_sz == 0) {
-			this->reserve(sz);
-		}
-
 		if (m_curr_index + sz > m_memptr_sz) {
 			std::cout << "BC_Memory Allocation failure: \n" <<
 					"\tcurrent_stack_index == " << m_curr_index << " out of " << m_memptr_sz

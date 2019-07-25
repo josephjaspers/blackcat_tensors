@@ -25,9 +25,9 @@ public:
     auto forward_propagation(const Matrix& x) {
         return function(x);
     }
-    template<class Matrix>
-    auto back_propagation(const mat& x, const Matrix& dy) {
-		return function.dx(x) % dy;
+    template<class X, class Delta>
+    auto back_propagation(const X& x, const Delta& dy) {
+    	return function.dx(x) % dy;
     }
 
     void update_weights() {}

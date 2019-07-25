@@ -25,11 +25,12 @@ public:
 	using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
     using mat_view = BC::Matrix_View<ValueType, BC::Allocator<SystemTag, ValueType>>;
 
+    using greedy_evaluate_delta = std::true_type;
+
 private:
 
     ValueType lr = 0.003;
 
-    mat dy; //error
     mat w;  //weights
     vec b;  //biases
 
@@ -54,19 +55,16 @@ public:
      * derivative of w == dy * x.t
      * derivative of x == w.t * dy
      */
-    template<class Matrix>
-    auto back_propagation(const mat& x, const Matrix& dy_) {
-    	dy = dy_;
+    template<class X, class Delta>
+    auto back_propagation(const X& x, const Delta& dy) {
     	auto rate = lr / this->batch_size();
-    	w -= dy * rate * x.t();
-        b -= dy * rate;
-        return w.t() * dy;
+    	w -= rate * dy  * x.t();
+    	b -= rate * dy;
+    	return w.t() * dy;
     }
 
     void update_weights() {}
-    void set_batch_size(int x) {
-        dy = mat(this->output_size(), x);
-    }
+    void set_batch_size(int x) {}
 };
 
 template<class ValueType, class SystemTag>

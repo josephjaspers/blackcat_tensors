@@ -25,8 +25,8 @@ namespace traits {
 
 using namespace BC::traits::common;
 
-	namespace { template<class> struct DISABLE; }
-	template<bool x,class T> using only_if = conditional_t<x, T, DISABLE<T>>;
+	namespace detail { template<class> struct DISABLE; }
+	template<bool x,class T> using only_if = conditional_t<x, T, detail::DISABLE<T>>;
 
 	template<int x> struct Integer { static constexpr int value = x; };
 	template<class T> struct Type { using type = T; };
@@ -37,11 +37,7 @@ using namespace BC::traits::common;
 	template<class...> static constexpr bool false_v = false;
 
 	template<bool cond> using truth_type = conditional_t<cond, true_type, false_type>;
-	template<bool cond> using not_truth_type = conditional_t<cond, false_type, true_type>;
-
-	template<class> struct not_type;
-	template<> struct not_type<false_type>: true_type {};
-	template<> struct not_type<true_type>: false_type {};
+	template<bool cond> using not_type = conditional_t<cond, false_type, true_type>;
 
 	//----------------------------------
 
