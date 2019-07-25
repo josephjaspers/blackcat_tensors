@@ -8,15 +8,14 @@ LIBS = -lcblas
 ATLASLIBS = -lcblas -latlas -lf77blas
 CULIBS = -lcublas
 
-INCLUDE = ../include/ 
-LIBINCLUDE = /usr/libs/  # PATH TO YOUR BLAS 
-LIBATLASINCLUDE = /home/joseph/Library_Sources/ATLAS/Build/lib  # PATH TO YOUR ATLAS-BLAS LIBRARY
+INCLUDE = ../include/  -I /usr/include/
+LIBINCLUDE = /usr/lib/  # PATH TO YOUR BLAS 
 
-all:
+default:
 	$(CXX) $(CXXFILES) $(LIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)
 
 atlas:
-	$(CXX) $(CXXFILES) $(ATLASLIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBATLASINCLUDE)
+	$(CXX) $(CXXFILES) $(ATLASLIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)
 
 cuda:
 	nvcc $(CUFILES) $(CULIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)
