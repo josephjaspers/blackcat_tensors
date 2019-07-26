@@ -19,28 +19,18 @@ struct OutputLayer : Layer_Base {
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 
-	using mat = BC::Matrix<ValueType, BC::Allocator<SystemTag, ValueType>>;
-    using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
+    OutputLayer(int inputs):
+    	Layer_Base(inputs, inputs) {}
 
-public:
-
-    OutputLayer(int inputs) : Layer_Base(inputs, inputs) {}
-
-    template <class Matrix>
-    const auto& forward_propagation(const Matrix& x) {
+    template <class Tensor>
+    const auto& forward_propagation(const Tensor& x) {
     	return x;
     }
 
-    template <class X, class Y>
-    auto back_propagation(const X& x, const Y& y) {
+    template <class TensorX, class TensorY>
+    auto back_propagation(const TensorX& x, const TensorY& y) {
         return x - y;
     }
-
-    void update_weights() {}
-    void clear_stored_gradients() {}
-    void write(std::ofstream& is) {}
-    void read(std::ifstream& os) {}
-
 };
 
 template<class ValueType, class SystemTag>

@@ -23,6 +23,9 @@
 #include "Function_gemv.h"
 #include "Function_gemm.h"
 
+#include "Function_BatchedReduce.h"
+#include "Function_AutoBroadcast.h"
+
 #include "Tree_Evaluator.h"
 
 #endif /* EXPRESSION_TEMPLATES_H_ */

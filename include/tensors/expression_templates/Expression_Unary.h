@@ -27,8 +27,11 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Operation, Arr
     using dx_is_defined = std::true_type;
     using system_tag  = typename ArrayType::system_tag;
 
+    static constexpr bool is_index_aware_function = BC::oper::operation_traits<Operation>::is_index_aware_function;
     static constexpr int tensor_dimension  = ArrayType::tensor_dimension;
-    static constexpr int tensor_iterator_dimension = ArrayType::tensor_iterator_dimension;
+    static constexpr int tensor_iterator_dimension =
+    		!is_index_aware_function ? ArrayType::tensor_iterator_dimension :
+    				BC::traits::max(tensor_dimension, ArrayType::tensor_iterator_dimension);
 
     ArrayType array;
 

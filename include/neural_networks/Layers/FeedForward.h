@@ -14,18 +14,14 @@ namespace BC {
 namespace nn {
 
 template<class SystemTag, class ValueType>
-class FeedForward : public Layer_Base {
-
-public:
+struct FeedForward : public Layer_Base {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
+    using greedy_evaluate_delta = std::true_type;
 
 	using mat = BC::Matrix<ValueType, BC::Allocator<SystemTag, ValueType>>;
 	using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
-    using mat_view = BC::Matrix_View<ValueType, BC::Allocator<SystemTag, ValueType>>;
-
-    using greedy_evaluate_delta = std::true_type;
 
 private:
 
@@ -50,21 +46,12 @@ public:
     	return w * x + b;
     }
 
-    /*
-     * y =  w * x;
-     * derivative of w == dy * x.t
-     * derivative of x == w.t * dy
-     */
     template<class X, class Delta>
     auto back_propagation(const X& x, const Delta& dy) {
-    	auto rate = lr / this->batch_size();
-    	w -= rate * dy  * x.t();
-    	b -= rate * dy;
+    	w -= lr * dy  * x.t();
+    	b -= lr * dy;
     	return w.t() * dy;
     }
-
-    void update_weights() {}
-    void set_batch_size(int x) {}
 };
 
 template<class ValueType, class SystemTag>

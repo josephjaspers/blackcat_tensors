@@ -327,9 +327,14 @@ private:
 
     template<class deriv>
     void assert_valid(const Tensor_Operations<deriv>& tensor) const {
-#ifdef NDEBUG
+//#ifdef NDEBUG
     	assert_same_system(tensor);                 //static_assert same allocation (gpu/cpu)
-        if (non_scalar_op(tensor)) {                //check if a tensor by scalar operation
+
+    	if (BC::tensors::exprs::expression_traits<deriv>::is_auto_broadcasted) {
+    		return; //If it will be a broadcast expression do not validate dimensions
+    	}
+
+    	if (non_scalar_op(tensor)) {                //check if a tensor by scalar operation
             if (same_rank(tensor)) {                //else check is same dimension (element-wise function) (
                 if (!same_size(tensor))             //if is same dimension, ensure same size
                     error_message(tensor);          //else error
@@ -337,7 +342,7 @@ private:
             	error_message(tensor);          //else error
             }
         }
-#endif
+//#endif
     }
 
 
@@ -413,15 +418,35 @@ public:
 #undef BC_OPER_LV_SCALAR_DEF
 #undef BC_ASSERT_ASSIGNABLE
 
+    //alias of dx
     template<class Expression>
 	auto derivative(Tensor_Base<Expression>&& tensor) {
-		return make_tensor(tensor.template un_expr<exprs::dx_forwarder>());
+		return tensor.template un_expr<exprs::dx_forwarder>();
+	}
+
+    //alias of derivative
+    template<class Expression>
+	auto dx(Tensor_Base<Expression>&& tensor) {
+		return tensor.template un_expr<exprs::dx_forwarder>();
 	}
 
     template<class Expression>
-	auto dx(Tensor_Base<Expression>&& tensor) {
-		return make_tensor(tensor.template un_expr<exprs::dx_forwarder>());
+	auto batched_sum(const Tensor_Base<Expression>& tensor) {
+		return tensor.template un_expr<exprs::BatchedReduce<typename Expression::system_tag>>();
 	}
+
+    //For enabling broadcasting of same-dimension tensors
+    template<class Expression>
+	auto broadcast(const Tensor_Base<Expression>& tensor) {
+		return tensor.template un_expr<exprs::Auto_Broadcast>();
+	}
+    template<class Expression>
+	auto broadcast(Tensor_Base<Expression>&& tensor) {
+		return tensor.template un_expr<exprs::Auto_Broadcast>();
+	}
+
+
+
 }
 }
 

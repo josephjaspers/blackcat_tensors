@@ -36,6 +36,8 @@ public:
     void set_batch_size(int bs) {
         batch_sz = bs;
     }
+
+    void update_weights() {}
 };
 
 }

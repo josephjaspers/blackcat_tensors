@@ -21,7 +21,9 @@ namespace nn {
 template<
 	class Derived, //The LayerChain base
 	class Layer,
-	class Allocator=BC::Allocator<typename layer_traits<Layer>::system_tag, typename layer_traits<Layer>::value_type>>
+	class Allocator=BC::Allocator<
+		typename layer_traits<Layer>::system_tag,
+		typename layer_traits<Layer>::value_type>>
 struct Layer_Manager: Layer {
 
 	template<class... Args>

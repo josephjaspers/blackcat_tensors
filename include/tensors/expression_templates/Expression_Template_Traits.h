@@ -35,6 +35,8 @@ template<class T> using query_move_assignable =
 template<class T> using query_move_constructible =
 				std::conditional_t<T::move_constructible, std::true_type, std::false_type>;
 
+template<class T> using query_auto_broadcast = typename T::auto_broadcast;
+
 
 template<class T>
 struct remove_scalar_mul {
@@ -136,15 +138,7 @@ struct expression_traits {
 			 BC::traits::conditional_detected_t<detail::query_dx_is_defined, T, std::false_type>::value;
 
 	 template<class... Indicies>
-	 BCINLINE static auto select_on_dx(const T& expression, Indicies... indicies) {
-		 using selector = std::conditional_t<derivative_is_defined,
-				 detail::select_on_dx_when_defined,
-				 detail::select_on_dx_when_not_defined>;
-		 return selector::impl(expression, indicies...);
-	 }
-
-	 template<class... Indicies>
-	 BCINLINE static auto select_on_dx(T& expression, Indicies... indicies) {
+	 BCINLINE static auto select_on_dx(T&& expression, Indicies... indicies) {
 		 using selector = std::conditional_t<derivative_is_defined,
 				 detail::select_on_dx_when_defined,
 				 detail::select_on_dx_when_not_defined>;
@@ -156,19 +150,19 @@ struct expression_traits {
 // Causes 'catastrophic error' with NVCC. Compiles with GCC TODO change once NVCC fixes
 	static constexpr bool is_move_constructible =
 					BC::traits::conditional_detected_t<
-						detail::query_move_constructible, T, std::false_type>::type::value;
+						detail::query_move_constructible, T, std::false_type>::value;
 
 	static constexpr bool is_copy_constructible =
 					BC::traits::conditional_detected_t<
-						detail::query_copy_constructible, T, std::false_type>::type::value;
+						detail::query_copy_constructible, T, std::false_type>::value;
 
 	static constexpr bool is_move_assignable 	=
 					BC::traits::conditional_detected_t<
-						detail::query_move_assignable, T, std::false_type>::type::value;
+						detail::query_move_assignable, T, std::false_type>::value;
 
 	static constexpr bool is_copy_assignable 	=
 					BC::traits::conditional_detected_t<
-						detail::query_copy_assignable, T, std::false_type>::type::value;
+						detail::query_copy_assignable, T, std::false_type>::value;
 
 #else 
 	static constexpr bool is_move_constructible = T::move_constructible;
@@ -186,6 +180,10 @@ struct expression_traits {
 	static constexpr bool is_temporary 	   = std::is_base_of<BC_Temporary, T>::value;
 	static constexpr bool is_stack_allocated  = std::is_base_of<BC_Stack_Allocated, T>::value;
 	static constexpr bool is_immutable  	   = std::is_base_of<BC_Immutable, T>::value;
+
+	static constexpr bool is_auto_broadcasted =
+					BC::traits::conditional_detected_t<
+						detail::query_auto_broadcast, T, std::false_type>::value;
 
 };
 

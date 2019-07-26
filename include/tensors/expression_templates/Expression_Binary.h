@@ -79,7 +79,20 @@ private:
     		static BCINLINE
     		const Rv& get_shape(const Lv& left, const Rv& right) { return right; }
     	};
-    	using impl = std::conditional_t<(Lv::tensor_dimension > Rv::tensor_dimension), Lv_shape, Rv_shape>;
+    	constexpr bool lv_is_auto_broadcast = expression_traits<Lv>::is_auto_broadcasted;
+    	constexpr bool rv_is_auto_broadcast = expression_traits<Rv>::is_auto_broadcasted;
+
+    	constexpr bool rv_is_greater_dim = Rv::tensor_dimension > Lv::tensor_dimension;
+    	constexpr bool lv_is_greater_dim = Lv::tensor_dimension > Rv::tensor_dimension;
+
+    	using impl =
+    		std::conditional_t<lv_is_greater_dim, Lv_shape,
+    			std::conditional_t<rv_is_greater_dim, Rv_shape,
+    				std::conditional_t<lv_is_auto_broadcast, Rv_shape,
+    					std::conditional_t<rv_is_auto_broadcast, Lv_shape, Lv_shape>>>>;
+    	static_assert(!(lv_is_auto_broadcast && rv_is_auto_broadcast),
+    			"Lv and Rv are autobroadcasted functions, error cannot deduce shape of this expression,"
+    			"in a binary_expression only one branch maybe auto-broadcasted");
     	return impl::get_shape(left, right);
     }
 
