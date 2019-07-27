@@ -26,36 +26,31 @@ namespace evaluator {
 template<>
 struct Evaluator<device_tag> {
 
-	 template<int Dimensions>
-	 struct nd_evaluator_func {
+	template<int Dimensions, class Expression, class Stream>
+	static void nd_evaluate(Expression expression, Stream stream) {
 
 		struct n1 {
-			template<class Expression>
-			static void eval(Expression expression, cudaStream_t stream=cudaStream_t()) {
+			static void eval(Expression expression, cudaStream_t stream) {
 				gpu_impl::eval<<<blocks(expression.size()), threads(), 0, stream>>>(expression);
 			}
 		};
 		struct n2 {
-			template<class Expression>
-			static void eval(Expression expression, cudaStream_t stream=cudaStream_t()) {
+			static void eval(Expression expression, cudaStream_t stream) {
 				gpu_impl::eval2d<<<blocks(expression.size()), threads(), 0, stream>>>(expression);
 			}
 		};
 		struct n3 {
-			template<class Expression>
-			static void eval(Expression expression, cudaStream_t stream=cudaStream_t()) {
+			static void eval(Expression expression, cudaStream_t stream) {
 				gpu_impl::eval3d<<<blocks(expression.size()), threads(), 0, stream>>>(expression);
 			}
 		};
 		struct n4 {
-			template<class Expression>
-			static void eval(Expression expression, cudaStream_t stream=cudaStream_t()) {
+			static void eval(Expression expression, cudaStream_t stream) {
 				gpu_impl::eval4d<<<blocks(expression.size()), threads(), 0, stream>>>(expression);
 			}
 		};
 		struct n5 {
-			template<class Expression>
-			static void eval(Expression expression, cudaStream_t stream=cudaStream_t()) {
+			static void eval(Expression expression, cudaStream_t stream) {
 				gpu_impl::eval5d<<<blocks(expression.size()), threads(), 0, stream>>>(expression);
 			}
 		};
@@ -65,25 +60,9 @@ struct Evaluator<device_tag> {
 							std::conditional_t<(Dimensions == 3), n3,
 								std::conditional_t<(Dimensions == 4), n4, n5>>>>;
 
-		template<class Expression>
-		static void eval(Expression expression) {
-			run::eval(expression);
-		}
-
-		template<class Expression, class Stream>
-		static void eval(Expression expression, Stream stream) {
-				run::eval(expression, stream);
-
-		}
-	};
-
-	template<int dimensions, class Expression>
-	static void nd_evaluate(Expression expression) {
-		nd_evaluator_func<dimensions>::eval(expression);
-	}
-	template<int dimensions, class Expression, class Stream>
-	static void nd_evaluate(Expression expression, Stream stream) {
-		nd_evaluator_func<dimensions>::eval(expression, stream);
+		stream.enqueue([=]() {
+			run::eval(expression, stream);
+		});
 	}
 
 };

@@ -61,8 +61,8 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>
 				[&](int i) {return i == 0 ? rows() : 1;});
 	}
 
-    template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod>
-    void eval(injector<core, alpha_mod, beta_mod> injection_values, BC::Stream<system_tag> stream) const {
+    template<class core, int alpha_mod, int beta_mod, class Stream>
+    void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
 
 		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
 		auto& injection = injection_values.data();

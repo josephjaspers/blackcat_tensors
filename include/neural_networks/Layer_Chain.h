@@ -129,16 +129,16 @@ private:
     	f(*this);
     }
 
-	template<class T> const auto fp_impl(const T& tensor, std::true_type) {
+	template<class T> const auto fp_impl(const T& tensor, std::true_type has_next) {
 		return this->next().fp(layer_type::forward_propagation(tensor));
+	}
+
+	template<class T> const auto fp_impl(const T& tensor, std::false_type has_next) {
+		return layer_type::forward_propagation(tensor);
 	}
 
 	template<class T> const auto bp_impl(const T& tensor, std::true_type) {
 		return this->prev().bp(layer_type::back_propagation(tensor));
-	}
-
-	template<class T> const auto fp_impl(const T& tensor, std::false_type) {
-		return layer_type::forward_propagation(tensor);
 	}
 
 	template<class T> const auto bp_impl(const T& tensor, std::false_type) {

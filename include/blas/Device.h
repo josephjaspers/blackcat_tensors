@@ -25,8 +25,10 @@ struct BLAS<device_tag> {
         auto TRANS_A = transA ? CUBLAS_OP_T : CUBLAS_OP_N;
         auto TRANS_B = transB ? CUBLAS_OP_T : CUBLAS_OP_N;
 
-		cublasHandle_t& handle = stream.get_cublas_handle();
-		BC_CUDA_ASSERT((cublasSgemm(handle, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc)));
+        stream.enqueue([=]() {
+			cublasHandle_t handle = stream.get_cublas_handle();
+			BC_CUDA_ASSERT((cublasSgemm(handle, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc)));
+        });
     }
 
 	//y := alpha*A*x + beta*y,   or   y := alpha*A**T*x + beta*y,
@@ -36,11 +38,12 @@ struct BLAS<device_tag> {
 								const float* X, BC::size_t incX,
 			const float* beta,        float* Y, BC::size_t incY) {
 
-
 		auto TRANS_A =  transA ? CUBLAS_OP_T : CUBLAS_OP_N;
 
-		cublasHandle_t& handle = stream.get_cublas_handle();
-		BC_CUDA_ASSERT((cublasSgemv(handle, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY)));
+        stream.enqueue([=]() {
+			cublasHandle_t handle = stream.get_cublas_handle();
+			BC_CUDA_ASSERT((cublasSgemv(handle, TRANS_A, m, n, alpha, A, lda, X, incX, beta, Y, incY)));
+        });
 	}
 
 	template<class Stream>
@@ -50,14 +53,18 @@ struct BLAS<device_tag> {
 			const float* Y, BC::size_t incY,
 				  float* A, BC::size_t lda) {
 
-		cublasHandle_t& handle = stream.get_cublas_handle();
-		BC_CUDA_ASSERT((cublasSger(handle, m, n, alpha, X, incX, Y, incY, A, lda)));
+        stream.enqueue([=]() {
+			cublasHandle_t handle = stream.get_cublas_handle();
+			BC_CUDA_ASSERT((cublasSger(handle, m, n, alpha, X, incX, Y, incY, A, lda)));
+        });
 	}
 
 	template<class Stream>
 	static void dot(Stream stream, int n, float* A, const float* x, BC::size_t incX, const float* y, BC::size_t incY) {
-		cublasHandle_t& handle = stream.get_cublas_handle();
-		BC_CUDA_ASSERT((cublasSdot(handle, n, x, incX, y, incY, A)));
+        stream.enqueue([=]() {
+			cublasHandle_t handle = stream.get_cublas_handle();
+			BC_CUDA_ASSERT((cublasSdot(handle, n, x, incX, y, incY, A)));
+        });
 	}
 };
 

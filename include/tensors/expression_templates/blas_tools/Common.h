@@ -22,8 +22,8 @@ namespace blas_tools {
 template<class derived>
 struct Common_Tools {
 
-	template<class ValueType, int alpha_mod, bool lv_scalar, bool rv_scalar, class SystemTag,  class lv_scalar_t, class rv_scalar_t>
-	static auto calculate_alpha(BC::Stream<SystemTag> stream, lv_scalar_t lv, rv_scalar_t rv) {
+	template<class ValueType, int alpha_mod, bool lv_scalar, bool rv_scalar, class Stream, class lv_scalar_t, class rv_scalar_t>
+	static auto calculate_alpha(Stream stream, lv_scalar_t lv, rv_scalar_t rv) {
 
 		static constexpr bool lv_host_mode = (BC::tensors::exprs::expression_traits<lv_scalar_t>::is_stack_allocated);
 		static constexpr bool rv_host_mode = (BC::tensors::exprs::expression_traits<rv_scalar_t>::is_stack_allocated);
@@ -103,8 +103,8 @@ struct Common_Tools {
 		Beta beta;
 	};
 
-	template<int alpha_mod, int beta_mod, class SystemTag, class Lv, class Rv>
-	static auto parse_expression(BC::Stream<SystemTag> stream, Lv left, Rv right) {
+	template<int alpha_mod, int beta_mod, class Stream, class Lv, class Rv>
+	static auto parse_expression(Stream stream, Lv left, Rv right) {
 		/*
 		 *	Strips transposition and scalar-multiplied from and left and right,
 		 *	returns a 'contents' object. --

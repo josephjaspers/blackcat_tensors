@@ -52,8 +52,8 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>
     BCINLINE BC::size_t  N() const { return right.cols(); }
 
 
-	template<class core, BC::size_t  alpha_mod, BC::size_t  beta_mod>
-	void eval(injector<core, alpha_mod, beta_mod> injection_values, BC::Stream<system_tag> stream) const {
+	template<class core, int alpha_mod, int beta_mod, class Stream>
+	void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
 		auto& injection = injection_values.data();
 
         //if we need to negate or zero the output

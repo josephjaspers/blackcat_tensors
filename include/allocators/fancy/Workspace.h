@@ -39,6 +39,16 @@ public:
 			m_memptr = m_allocator.allocate(sz);
 	}
 	void reserve(std::size_t sz)  {
+		if (sz == 0) {
+			return;
+		}
+
+		if (!(m_curr_index==0)){
+			std::cout << "BC_Memory Allocation failure: \n" <<
+					"\tcurrent_stack_index == " << m_curr_index << " out of " << m_memptr_sz << \
+					"attempting to reserve " << sz  << " bytes " << std::endl;
+		}
+
 		BC_ASSERT(m_curr_index==0,
 				"Workspace reserve called while memory is still allocated");
 
@@ -150,7 +160,7 @@ public:
 	Workspace(Workspace&&)=default;
 
 	///Reserve an amount of memory in bytes.
-	void reserve(std::size_t sz)  { ws_ptr->reserve(sz); }
+	void reserve(std::size_t sz)  { ws_ptr->reserve(sz * sizeof(value_type)); }
 
 	/// Delete all reserved memory, if memory is currently allocated an error is thrown.
 	void free() { ws_ptr->free(); }

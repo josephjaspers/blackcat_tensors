@@ -146,6 +146,12 @@ public:
     		BC_CUDA_ASSERT(cudaStreamSynchronize(device_contents.get()->m_stream_handle));
     }
 
+    //Enqueue is to ensure-same interface as the HostStream, as well as the LoggingStream (To be implemented)
+    template<class Function>
+    void enqueue(Function f) {
+    	f();
+    }
+
     template<class function, class=std::enable_if_t<std::is_void<decltype(std::declval<function>()())>::value>>
     void enqueue_callback(function func) {
 

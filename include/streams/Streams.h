@@ -12,6 +12,7 @@ BC_DEFAULT_MODULE_BODY(streams, Stream)
 
 #include "Host.h"
 #include "Device.h"
+#include "Logging_Stream.h"
 
 namespace BC {
 

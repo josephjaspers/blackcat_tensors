@@ -47,8 +47,8 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>
 
     Binary_Expression(lv left, rv right) : left(left), right(right) {}
 
-    template<class core, int alpha_mod, int beta_mod>
-    void eval(injector<core, alpha_mod, beta_mod> injection_values, BC::Stream<system_tag> stream) const {
+    template<class core, int alpha_mod, int beta_mod, class Stream>
+    void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
 
 		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
 		auto& injection = injection_values.data();

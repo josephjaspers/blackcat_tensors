@@ -262,11 +262,11 @@ auto make_temporary_kernel_scalar(Stream stream) {
 template<
 	int Dimension,
 	class ValueType,
-	class SystemTag,
+	class Stream,
 	class... Tags,
 	class=std::enable_if_t<BC::traits::sequence_contains_v<BC_Temporary, Tags...>>>
 void destroy_temporary_kernel_array(
-		Kernel_Array<Dimension, ValueType, SystemTag, Tags...> temporary, BC::Stream<SystemTag> stream) {
+		Kernel_Array<Dimension, ValueType, typename Stream::system_tag, Tags...> temporary, Stream stream) {
 	stream.template get_allocator_rebound<ValueType>().deallocate(temporary.memptr(), temporary.size());
 }
 

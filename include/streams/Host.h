@@ -50,13 +50,6 @@ public:
     void set_blas_pointer_mode_host() {}
     void set_blas_pointer_mode_device() {}
 
-	 Stream& get() {
-		 return *this;
-	 }
-	 const Stream& get() const {
-		 return *this;
-	 }
-
 	bool is_default() {
 		return m_contents == get_default_contents();
 	}
