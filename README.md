@@ -16,7 +16,7 @@ BCT is a header only library that supports compilation with the NVCC and G++ BCT
 #### Tested Compilers:  
 NVCC: 10, 10.1  
 GCC: 7.4, 8.0   
-MSVC: VS2019 (_MSC_VER=1921) //CPU-only 
+MSVC: VS2019 (_MSC_VER=1921) //CPU-only  
 Cling: 0.6 //CPU-only
 
 #### FAQ Fast Explanation:
