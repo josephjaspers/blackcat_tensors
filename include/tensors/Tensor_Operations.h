@@ -86,7 +86,7 @@ public:
 	template<class p_value_type, class=std::enable_if_t<std::is_convertible<p_value_type, value_type>::value>>       \
 	derived& operator  op (const p_value_type& param) {                                                              \
 		BC_ASSERT_ASSIGNABLE("derived& operator " #op " (const Tensor_Operations<pDeriv>& param)");                  \
-		evaluate(bi_expr_scalar<oper:: op_functor >(exprs::make_scalar_constant<system_tag>((value_type)param)));  \
+		evaluate(bi_expr_scalar<oper:: op_functor##_Assign >(exprs::make_scalar_constant<system_tag>((value_type)param)));  \
 		return as_derived();                                                                                         \
 	}
 
@@ -94,7 +94,14 @@ public:
     		BC_OPER_SCALAR_ASSIGNMENT_DEF(op, op_functor)\
     		BC_OPER_BASIC_ASSIGNMENT_DEF(op, op_functor)
 
-    BC_OPER_SCALAR_ASSIGNMENT_DEF(=, Assign)
+
+template<class p_value_type, class=std::enable_if_t<std::is_convertible<p_value_type, value_type>::value>>
+derived& operator = (const p_value_type& param) {
+	BC_ASSERT_ASSIGNABLE("derived& operator =(const Tensor_Operations<pDeriv>& param)");
+	evaluate(bi_expr_scalar<oper::Assign>(exprs::make_scalar_constant<system_tag>((value_type)param)));
+	return as_derived();
+}
+
     BC_OPER_ASSIGNMENT_DEF(+=, Add)
     BC_OPER_ASSIGNMENT_DEF(-=, Sub)
     BC_OPER_ASSIGNMENT_DEF(%=, Mul)

@@ -41,12 +41,10 @@ struct Scalar_Constant:
 
     BCINLINE Scalar_Constant(value_type scalar_) : scalar(scalar_) {}
 
-    template<class... integers> BCINLINE auto operator()  (const integers&...) const { return scalar; }
-    template<class... integers> BCINLINE auto operator()  (const integers&...) 		 { return scalar; }
+    template<class... integers>
+    BCINLINE auto operator()  (const integers&...) const { return scalar; }
 
-    BCINLINE auto operator [] (int i ) const { return scalar; }
-    BCINLINE auto operator [] (int i )  	 { return scalar; }
-
+    BCINLINE auto operator [] (int) const { return scalar; }
     BCINLINE const value_type* memptr() const { return &scalar; }
 };
 

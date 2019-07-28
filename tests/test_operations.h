@@ -71,6 +71,32 @@ int test_operations(int sz=128) {
 		return BC::tensors::all(validation);
 	)
 
+	BC_TEST_DEF(
+		mat c(a);
+		c += 2;
+		validation = c == a + 2;
+		return BC::tensors::all(validation);
+	)
+	BC_TEST_DEF(
+		mat c(a);
+		c -= 2;
+		validation = c == a - 2;
+		return BC::tensors::all(validation);
+	)
+	BC_TEST_DEF(
+		mat c(a);
+		c /= 2;
+		validation = c == a / 2;
+		return BC::tensors::all(validation);
+	)
+	BC_TEST_DEF(
+		mat c(a);
+		c %= 2; //%= element-wise multiplication
+		validation = c == a * 2; //scalar multiplication
+		return BC::tensors::all(validation);
+	)
+
+
 	BC_TEST_BODY_TAIL
 }
 

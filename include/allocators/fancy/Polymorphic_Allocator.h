@@ -47,7 +47,7 @@ private:
 		public:
 
 
-		Virtual_Allocator* clone() const {
+		Virtual_Allocator* clone() const override {
 			return new Derived_Allocator(m_allocator);
 		}
 
