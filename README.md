@@ -10,13 +10,11 @@ For a better source-tree/full method listing:
 #### Setup:
 BCT is a header only library that supports compilation with the NVCC and G++ BCT does not support any default BLAS routines, and must be linked with an apropriate BLAS library. Setting up simply requires adding the BlackCat_Tensors your path and including "BlackCat_Tensors.h"
 
-`git clone` the `stable` branch if you would like to use the "cleanest" branch.  
-`git clone` the `master` branch if you would like to use the most update-to-date branch.
-
 #### Tested Compilers:  
 NVCC: 10, 10.1  
 GCC: 7.4, 8.0   
 MSVC: VS2019 (_MSC_VER=1921) //CPU-only  
+Cling: 0.6 //CPU-only
 
 #### FAQ Fast Explanation:
 
