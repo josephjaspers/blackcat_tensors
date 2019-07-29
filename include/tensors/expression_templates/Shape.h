@@ -25,7 +25,8 @@ struct Shape {
 
     BCINLINE Shape() {}
 
-    template<class... integers, class = std::enable_if_t<BC::traits::sequence_of_v<BC::size_t, integers...>>>
+    template<class... integers,
+    class=std::enable_if_t<BC::traits::sequence_of_v<BC::size_t, integers...> && (sizeof...(integers) == dims)>>
     Shape(integers... ints) {
         static_assert(traits::sequence_of_v<int, integers...>, "INTEGER LIST OF SHAPE");
         static_assert(sizeof...(integers) == dims, "integer initialization must have the same number of dimensions");

@@ -8,8 +8,20 @@
 #ifndef BC_BLAS_HOST_H_
 #define BC_BLAS_HOST_H_
 
+#ifdef BC_BLAS_USE_C_LINKAGE
+#define BC_EXTERN_C_BEGIN extern "C" {
+#define BC_EXTERN_C_END }
+#else
+#define BC_EXTERN_C_BEGIN
+#define BC_EXTERN_C_END	
+#endif 
+
 #if __has_include(<cblas.h>)
+
+BC_EXTERN_C_BEGIN
 #include <cblas.h>
+BC_EXTERN_C_END
+
 #elif __has_include(<mkl.h>)
 #include <mkl.h>
 #else
@@ -18,6 +30,8 @@
 #endif
 #endif
 
+#undef BC_EXTERN_C_BEGIN
+#undef BC_EXTERN_C_END 
 
 namespace BC {
 namespace blas {

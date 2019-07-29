@@ -45,7 +45,7 @@ public:
     }
 
     void sort() {
-    	BC::algorithms::sort(this->as_derived().get_stream(), this->begin(), this->end());
+    	BC::algorithms::sort(this->as_derived().get_stream(), this->cw_begin(), this->cw_end());
     }
 
     void rand(value_type lb=0, value_type ub=1) {
@@ -63,79 +63,79 @@ public:
 
 	//------------------------multidimension_iterator------------------------//
 
-	auto nd_begin() {
+	auto begin() {
 		return iterators::forward_iterator_begin(as_derived());
 	}
-	auto nd_end() {
+	auto end() {
 		return iterators::forward_iterator_end(as_derived());
 	}
-	const auto nd_cbegin() const {
+	const auto cbegin() const {
 		return iterators::forward_iterator_begin(as_derived());
 	}
-	const auto nd_cend() const {
+	const auto cend() const {
 		return iterators::forward_iterator_end(as_derived());
 	}
-	auto nd_rbegin() {
+	auto rbegin() {
 		return iterators::reverse_iterator_begin(as_derived());
 	}
-	auto nd_rend() {
+	auto rend() {
 		return iterators::reverse_iterator_end(as_derived());
 	}
-	const auto nd_crbegin() const {
+	const auto crbegin() const {
 		return iterators::reverse_iterator_begin(as_derived());
 	}
-	const auto nd_crend() const {
+	const auto crend() const {
 		return iterators::reverse_iterator_end(as_derived());
 	}
 	//----------const versions----------//
-	auto nd_begin() const {
+	auto begin() const {
 		return iterators::forward_iterator_begin(as_derived());
 	}
-	auto nd_end() const {
+	auto end() const {
 		return iterators::forward_iterator_end(as_derived());
 	}
-	auto nd_rbegin() const {
+	auto rbegin() const {
 		return iterators::reverse_iterator_begin(as_derived());
 	}
-	auto nd_rend() const {
+	auto rend() const {
 		return iterators::reverse_iterator_end(as_derived());
 	}
 	//------------------------elementwise_iterator------------------------//
-	auto begin() {
+	auto cw_begin() {
 		return iterators::forward_cwise_iterator_begin(as_derived().internal());
 	}
-	auto end() {
+	auto cw_end() {
 		return iterators::forward_cwise_iterator_end(as_derived().internal());
 	}
-	const auto cbegin() const {
+	const auto cw_cbegin() const {
 		return iterators::forward_cwise_iterator_begin(as_derived().internal());
 	}
-	const auto cend() const {
+	const auto cw_cend() const {
 		return iterators::forward_cwise_iterator_end(as_derived().internal());
 	}
-	auto rbegin() {
+	auto cw_rbegin() {
 		return iterators::reverse_cwise_iterator_begin(as_derived().internal());
 	}
-	auto rend() {
+	auto cw_rend() {
 		return iterators::reverse_cwise_iterator_end(as_derived().internal());
 	}
-	const auto crbegin() const {
+	const auto cw_crbegin() const {
 		return iterators::reverse_cwise_iterator_begin(as_derived().internal());
 	}
-	const auto crend() const {
+	const auto cw_crend() const {
 		return iterators::reverse_cwise_iterator_end(as_derived().internal());
 	}
 	//const versions
-	auto begin() const {
+	auto cw_begin() const {
 		return iterators::forward_cwise_iterator_begin(as_derived().internal());
 	}
-	auto end() const {
+	auto cw_end() const {
 		return iterators::forward_cwise_iterator_end(as_derived().internal());
 	}
-	auto rbegin() const {
+	auto cw_rbegin() const {
 		return iterators::reverse_cwise_iterator_begin(as_derived().internal());
 	}
-	auto rend() const {
+	auto cw_rend() const {
 		return iterators::reverse_cwise_iterator_end(as_derived().internal());
 	}
         //----------------------iterator wrappers---------------------------//
@@ -190,28 +190,28 @@ BC_TENSOR_tensor_iterator_dimension_DEF(CW_ReverseIterator, rbegin, rend)
 
 #undef BC_TENSOR_tensor_iterator_dimension_DEF
 
-	template<class... params> auto iter(params ... ps) {
+	template<class... params> auto cw_iter(params ... ps) {
 		return make_CW_ForwardIterator(as_derived(), ps...);
+	}
+	template<class... params> auto cw_reverse_iter(params ... ps) {
+		return make_CW_ReverseIterator(as_derived(), ps...);
+	}
+	template<class... params> auto cw_iter(params ... ps) const {
+		return make_CW_ForwardIterator(as_derived(), ps...);
+	}
+	template<class... params> auto cw_reverse_iter(params ... ps) const {
+		return make_CW_ReverseIterator(as_derived(), ps...);
+	}
+	template<class... params> auto iter(params ... ps) {
+		return make_ND_ForwardIterator(as_derived(), ps...);
 	}
 	template<class... params> auto reverse_iter(params ... ps) {
-		return make_CW_ReverseIterator(as_derived(), ps...);
-	}
-	template<class... params> auto iter(params ... ps) const {
-		return make_CW_ForwardIterator(as_derived(), ps...);
-	}
-	template<class... params> auto reverse_iter(params ... ps) const {
-		return make_CW_ReverseIterator(as_derived(), ps...);
-	}
-	template<class... params> auto nd_iter(params ... ps) {
-		return make_ND_ForwardIterator(as_derived(), ps...);
-	}
-	template<class... params> auto nd_reverse_iter(params ... ps) {
 		return make_ND_ReverseIterator(as_derived(), ps...);
 	}
-	template<class... params> auto nd_iter(params ... ps) const {
+	template<class... params> auto iter(params ... ps) const {
 		return make_ND_ForwardIterator(as_derived(), ps...);
 	}
-	template<class... params> auto nd_reverse_iter(params ... ps) const {
+	template<class... params> auto reverse_iter(params ... ps) const {
 		return make_ND_ReverseIterator(as_derived(), ps...);
 	}
 };
@@ -227,14 +227,14 @@ template<class Expression>
 auto sum(const Tensor_Base<Expression>& tensor) {
 	using sum_value_type = BC_sum_t<Expression>;
 	return BC::algorithms::accumulate(BC::streams::select_on_get_stream(tensor),
-			tensor.cbegin(), tensor.cend(), sum_value_type(0));
+			tensor.cw_cbegin(), tensor.cw_cend(), sum_value_type(0));
 }
 
 template<class Expression>
 auto prod(const Tensor_Base<Expression>& tensor) {
 	using value_type = typename Expression::value_type;
 	return BC::algorithms::accumulate(BC::streams::select_on_get_stream(tensor),
-			tensor.cbegin(), tensor.cend(), value_type(1), BC::oper::mul);
+			tensor.cw_cbegin(), tensor.cw_cend(), value_type(1), BC::oper::mul);
 }
 
 template<class Expression>

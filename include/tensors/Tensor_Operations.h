@@ -200,7 +200,7 @@ public:
 
 private:
      template<class expression_t>
-     using negated_t = Tensor_Base<exprs::Unary_Expression<expression_t, oper::negation>>;
+     using negated_t = Tensor_Base<exprs::Unary_Expression<oper::negation, expression_t>>;
 public:
 
     template<class expression_t>
