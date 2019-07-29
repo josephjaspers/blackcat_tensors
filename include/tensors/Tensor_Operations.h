@@ -233,10 +233,14 @@ public:
         static_assert(exprs::expression_traits<right_value>::is_copy_assignable, "copy rv most be array");
         static_assert(Expression::tensor_iterator_dimension <= 1, "copy only accepts continuous");
         static_assert(right_value::tensor_iterator_dimension <= 1, "copy only accepts continuous");
-        assert(same_size(rv));
+
+        if (!same_size(rv)) {
+        	std::cout << "Attempting to copy two different size tensors (ERROR)"  << std::endl;
+        	throw 1;
+        }
 
 #ifdef __CUDACC__
-        using copy_impl = BC::utility::implementation<system_tag>;
+        using copy_impl = BC::utility::implementation<device_tag>;
 
         if (std::is_same<system_tag, typename right_value::system_tag>::value) {
         	//Ensures it only compiles when true

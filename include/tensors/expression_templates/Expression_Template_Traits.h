@@ -148,6 +148,8 @@ struct expression_traits {
 		 return selector::impl(expression, indicies...);
 	 }
 
+//Succeeds in CUDA version 10 and up, sometimes causes failure with 9.2 and 9.1
+#if ! defined(__CUDACC__) ||  __CUDACC_VER_MAJOR__ >= 10
 	static constexpr bool is_move_constructible =
 					BC::traits::conditional_detected_t<
 						detail::query_move_constructible, T, std::false_type>::value;
@@ -163,6 +165,12 @@ struct expression_traits {
 	static constexpr bool is_copy_assignable 	=
 					BC::traits::conditional_detected_t<
 						detail::query_copy_assignable, T, std::false_type>::value;
+#else
+		static constexpr bool is_move_constructible = T::move_constructible;
+		static constexpr bool is_copy_constructible = T::copy_consructible;
+		static constexpr bool is_move_assignable 	= T::move_assignable;
+		static constexpr bool is_copy_assignable 	= T::copy_assignable;
+#endif
 
 	static constexpr bool is_auto_broadcasted =
 					BC::traits::conditional_detected_t<

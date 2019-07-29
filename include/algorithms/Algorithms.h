@@ -41,11 +41,11 @@ static auto function (BC::streams::Stream<BC::host_tag> stream, Begin begin, End
 }\
 template<class Container, class... Args>\
 static auto function (const Container& container, Args&&... args) {\
-	return function(BC::streams::select_on_get_stream(container), container.begin(), container.end(), args...);\
+	return function(BC::streams::select_on_get_stream(container), container.cw_begin(), container.cw_end(), args...);\
 }\
 template<class Container, class... Args>\
 static auto function (Container& container, Args&&... args) {\
-	return function(BC::streams::select_on_get_stream(container), container.begin(), container.end(), args...);\
+	return function(BC::streams::select_on_get_stream(container), container.cw_begin(), container.cw_end(), args...);\
 }\
 
 #define BC_REDUCE_ALGORITHM_DEF(function)\

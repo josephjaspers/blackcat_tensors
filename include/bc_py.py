@@ -17,3 +17,13 @@ for type in named_types:
 
     setattr(type, '__repr__', __repr__)
 
+
+
+a = matrix(3,3)
+a.randomize(0, 1);
+a.print()
+
+print('a + a / a')
+a = a + a / a
+print(a) 
+

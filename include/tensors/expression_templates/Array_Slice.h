@@ -48,7 +48,7 @@ public:
 namespace {
 
 template<int dimension, class Parent, class... Tags>
-using slice_type_from_parent = Array_Slice<dimension,
+using slice_type_from_parent = Array_Slice<BC::traits::max(dimension,0),
 		typename Parent::value_type,
 		typename Parent::allocator_t,
 		BC_View, Tags...>;
@@ -80,19 +80,23 @@ auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
 template<class Parent, class=std::enable_if_t<!expression_traits<Parent>::is_continuous>>
 static auto make_slice(Parent& parent, BC::size_t index) {
 	using slice_type = slice_type_from_parent<Parent::tensor_dimension-1, Parent, BC_Noncontinuous>;
-	return slice_type(parent.get_stream(),
-						parent.get_allocator(),
-						parent.get_shape(),
-						parent.memptr() + parent.slice_ptr_index(index));
+	using scalar_type = slice_type_from_parent<0, Parent>;
+	return std::conditional_t<Parent::tensor_dimension == 1, scalar_type, slice_type>(
+			parent.get_stream(),
+			parent.get_allocator(),
+			parent.get_shape(),
+			parent.memptr() + parent.slice_ptr_index(index));
 }
 template<class Parent, class=std::enable_if_t<expression_traits<Parent>::is_continuous>, int differentiator=0>
 static auto make_slice(Parent& parent, BC::size_t index) {
 
 	using slice_type = slice_type_from_parent<Parent::tensor_dimension-1, Parent>;
-	return slice_type(parent.get_stream(),
-						parent.get_allocator(),
-						parent.get_shape(),
-						parent.memptr() + parent.slice_ptr_index(index));
+	using scalar_type = slice_type_from_parent<0, Parent>;
+	return std::conditional_t<Parent::tensor_dimension == 1, scalar_type, slice_type>(
+			parent.get_stream(),
+			parent.get_allocator(),
+			parent.get_shape(),
+			parent.memptr() + parent.slice_ptr_index(index));
 }
 template<class Parent>
 static auto make_ranged_slice(Parent& parent, BC::size_t from, BC::size_t to) {

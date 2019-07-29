@@ -8,7 +8,7 @@
 #ifndef MNIST_TEST_CU_
 #define MNIST_TEST_CU_
 
-#include "MNIST_Test.h"	      //Add BlackCat_Tensors/examples/ to path
+#include "mnist_test.h"	      //Add BlackCat_Tensors/examples/ to path
 
 int main() {
 	percept_MNIST(BC::device_tag());

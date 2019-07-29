@@ -44,8 +44,8 @@ int test_algorithms(int sz=128) {
 		a.get_stream().create();
 		b.get_stream().create();
 
-		BC::algorithms::fill(a.get_stream(), a.begin(), a.end(), 5);
-		BC::algorithms::fill(b.get_stream(), b.begin(), b.end(), 7);
+		BC::algorithms::fill(a.get_stream(), a.cw_begin(), a.cw_end(), 5);
+		BC::algorithms::fill(b.get_stream(), b.cw_begin(), b.cw_end(), 7);
 
 		a.get_stream().sync();
 		b.get_stream().sync();
@@ -62,8 +62,8 @@ int test_algorithms(int sz=128) {
 
 		a.get_stream().create();
 
-		BC::algorithms::fill(a.get_stream(), a.begin(), a.end(), 5);
-		BC::algorithms::fill(b.get_stream(), b.begin(), b.end(), 7);
+		BC::algorithms::fill(a.get_stream(), a.cw_begin(), a.cw_end(), 5);
+		BC::algorithms::fill(b.get_stream(), b.cw_begin(), b.cw_end(), 7);
 
 		a.get_stream().sync();
 		b.get_stream().sync();

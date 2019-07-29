@@ -62,7 +62,6 @@ public:
    }
 
 	//------------------------multidimension_iterator------------------------//
-
 	auto begin() {
 		return iterators::forward_iterator_begin(as_derived());
 	}
@@ -100,6 +99,46 @@ public:
 	auto rend() const {
 		return iterators::reverse_iterator_end(as_derived());
 	}
+
+
+	auto nd_begin() {
+		return iterators::forward_iterator_begin(as_derived());
+	}
+	auto nd_end() {
+		return iterators::forward_iterator_end(as_derived());
+	}
+	const auto nd_cbegin() const {
+		return iterators::forward_iterator_begin(as_derived());
+	}
+	const auto nd_cend() const {
+		return iterators::forward_iterator_end(as_derived());
+	}
+	auto nd_rbegin() {
+		return iterators::reverse_iterator_begin(as_derived());
+	}
+	auto nd_rend() {
+		return iterators::reverse_iterator_end(as_derived());
+	}
+	const auto nd_crbegin() const {
+		return iterators::reverse_iterator_begin(as_derived());
+	}
+	const auto nd_crend() const {
+		return iterators::reverse_iterator_end(as_derived());
+	}
+	//----------const versions----------//
+	auto nd_begin() const {
+		return iterators::forward_iterator_begin(as_derived());
+	}
+	auto nd_end() const {
+		return iterators::forward_iterator_end(as_derived());
+	}
+	auto nd_rbegin() const {
+		return iterators::reverse_iterator_begin(as_derived());
+	}
+	auto nd_rend() const {
+		return iterators::reverse_iterator_end(as_derived());
+	}
+
 	//------------------------elementwise_iterator------------------------//
 	auto cw_begin() {
 		return iterators::forward_cwise_iterator_begin(as_derived().internal());
@@ -202,17 +241,31 @@ BC_TENSOR_tensor_iterator_dimension_DEF(CW_ReverseIterator, rbegin, rend)
 	template<class... params> auto cw_reverse_iter(params ... ps) const {
 		return make_CW_ReverseIterator(as_derived(), ps...);
 	}
-	template<class... params> auto iter(params ... ps) {
+
+	template<class... params> auto nd_iter(params ... ps) {
 		return make_ND_ForwardIterator(as_derived(), ps...);
+	}
+	template<class... params> auto nd_reverse_iter(params ... ps) {
+		return make_ND_ReverseIterator(as_derived(), ps...);
+	}
+	template<class... params> auto nd_iter(params ... ps) const {
+		return make_ND_ForwardIterator(as_derived(), ps...);
+	}
+	template<class... params> auto nd_reverse_iter(params ... ps) const {
+		return make_ND_ReverseIterator(as_derived(), ps...);
+	}
+
+	template<class... params> auto iter(params ... ps) {
+		return nd_iter();
 	}
 	template<class... params> auto reverse_iter(params ... ps) {
-		return make_ND_ReverseIterator(as_derived(), ps...);
+		return nd_reverse_iter();
 	}
 	template<class... params> auto iter(params ... ps) const {
-		return make_ND_ForwardIterator(as_derived(), ps...);
+		return nd_iter();
 	}
 	template<class... params> auto reverse_iter(params ... ps) const {
-		return make_ND_ReverseIterator(as_derived(), ps...);
+		return nd_reverse_iter();
 	}
 };
 

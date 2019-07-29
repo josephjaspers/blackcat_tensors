@@ -95,7 +95,7 @@ int percept_MNIST(System system_tag=System(), int epochs=10, int batch_size=defa
 	mat hyps = mat(network.forward_propagation(inputs[0]));
 
 	for (int i = 0; i < test_images; ++i) {
-		img[i].printSparse(3);
+		img[i].print_sparse(3);
 		hyps[i].print();
 		std::cout << "------------------------------------" <<std::endl;
 	}

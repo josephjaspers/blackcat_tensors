@@ -86,49 +86,24 @@ struct Multidimensional_Iterator {
 };
 
 
-template<class derived_t, typename=std::enable_if_t<derived_t::tensor_dimension != 1>>
+template<class derived_t>//, typename=std::enable_if_t<derived_t::tensor_dimension != 1>>
 auto forward_iterator_begin(derived_t& derived) {
      return Multidimensional_Iterator<direction::forward, derived_t>(derived, 0);
 }
-template<class derived_t, typename=std::enable_if_t<derived_t::tensor_dimension != 1>>
+template<class derived_t>//, typename=std::enable_if_t<derived_t::tensor_dimension != 1>>
 auto forward_iterator_end(derived_t& derived) {
      return Multidimensional_Iterator<direction::forward, derived_t>(derived, derived.outer_dimension());
 }
 
-template<class derived_t, typename=std::enable_if_t<derived_t::tensor_dimension != 1>>
+template<class derived_t>//, typename=std::enable_if_t<derived_t::tensor_dimension != 1>>
 auto reverse_iterator_begin(derived_t& derived) {
      return Multidimensional_Iterator<direction::reverse, derived_t>(derived, derived.outer_dimension()-1);
 }
 
-template<class derived_t, typename=std::enable_if_t<derived_t::tensor_dimension != 1>>
+template<class derived_t>//, typename=std::enable_if_t<derived_t::tensor_dimension != 1>>
 auto reverse_iterator_end(derived_t& derived) {
      return Multidimensional_Iterator<direction::reverse, derived_t>(derived, -1);
 }
-
-template<class derived_t>
-std::enable_if_t<derived_t::tensor_dimension == 1, decltype(forward_cwise_iterator_begin(std::declval<derived_t&>().internal()))>
-forward_iterator_begin(derived_t& derived) {
-    return forward_cwise_iterator_begin(derived.internal());
-}
-
-template<class derived_t, class = std::enable_if_t<derived_t::tensor_dimension == 1>>
-std::enable_if_t<derived_t::tensor_dimension == 1, decltype(forward_cwise_iterator_end(std::declval<derived_t&>().internal()))>
-forward_iterator_end(derived_t& derived) {
-    return forward_cwise_iterator_end(derived.internal());
-}
-
-template<class derived_t, class = std::enable_if_t<derived_t::tensor_dimension == 1>>
-std::enable_if_t<derived_t::tensor_dimension == 1, decltype(reverse_cwise_iterator_begin(std::declval<derived_t&>().internal()))>
-reverse_iterator_begin(derived_t& derived) {
-    return reverse_cwise_iterator_begin(derived.internal());
-}
-
-template<class derived_t, class = std::enable_if_t<derived_t::tensor_dimension == 1>>
-std::enable_if_t<derived_t::tensor_dimension == 1, decltype(reverse_cwise_iterator_begin(std::declval<derived_t&>().internal()))>
-reverse_iterator_end(derived_t& derived) {
-    return reverse_cwise_iterator_begin(derived.internal());
-}
-
 
 }
 }
