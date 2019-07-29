@@ -29,3 +29,9 @@ BlackCat_Tensors.sln
 /include/BlackCat_Autograd.h/
 /examples/mnist_test_recurrent/*
 /autodocs/
+/include/bc_py.py
+/examples/mnist_test/mnist_test_exec_cu
+/examples/mnist_test/mnist_test_exec
+/tests/blackcat_tensors_test
+/tests/blackcat_tensors_test_cu
+/__pycache__/
