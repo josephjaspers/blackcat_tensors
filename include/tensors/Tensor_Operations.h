@@ -66,7 +66,23 @@ public:
         evaluate(bi_expr< oper::Assign >(param));
         return as_derived();
     }
+    template<class pDeriv> BCHOT
+    derived& assign(const Tensor_Operations<pDeriv>& param) {
+        BC_ASSERT_ASSIGNABLE("derived& operator = (const Tensor_Operations<pDeriv>& param)");
+//        static_assert(derived::tensor_dimension >= pDeriv::tensor_dimension,
+//        		"BlackCat_Tensors: Operator= is not a valid operation for (reduction) broadcasting");
+        assert_valid(param);
+		evaluate(bi_expr< BC::oper::Assign >(param));
+        return as_derived();
+    }
 
+    //specialization for explicit copy operator
+    derived& assign(const BC::traits::only_if<exprs::expression_traits<Expression>::is_copy_assignable, derived>& param) {
+        BC_ASSERT_ASSIGNABLE("derived& operator = (const derived& param)");
+        assert_valid(param);
+        evaluate(bi_expr< oper::Assign >(param));
+        return as_derived();
+    }
 
 #define BC_OPER_BASIC_ASSIGNMENT_DEF(op, op_functor)                                            	\
                                                                                                 	\
@@ -90,6 +106,13 @@ public:
 		return as_derived();                                                                                         \
 	}
 
+#define BC_NAMED_ASSIGNMENT_OPER(op, op_functor)\
+		template<class Arg>\
+    	derived& op_functor##_assign (const Arg& arg) {\
+    		return *this op arg;\
+    	}
+
+
 #define BC_OPER_ASSIGNMENT_DEF(op, op_functor)\
     		BC_OPER_SCALAR_ASSIGNMENT_DEF(op, op_functor)\
     		BC_OPER_BASIC_ASSIGNMENT_DEF(op, op_functor)
@@ -102,6 +125,12 @@ derived& operator = (const p_value_type& param) {
 	return as_derived();
 }
 
+template<class p_value_type, class=std::enable_if_t<std::is_convertible<p_value_type, value_type>::value>>
+derived& assign(const p_value_type& param) {
+	BC_ASSERT_ASSIGNABLE("derived& operator =(const Tensor_Operations<pDeriv>& param)");
+	evaluate(bi_expr_scalar<oper::Assign>(exprs::make_scalar_constant<system_tag>((value_type)param)));
+	return as_derived();
+}
     BC_OPER_ASSIGNMENT_DEF(+=, Add)
     BC_OPER_ASSIGNMENT_DEF(-=, Sub)
     BC_OPER_ASSIGNMENT_DEF(%=, Mul)

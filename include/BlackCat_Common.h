@@ -51,7 +51,7 @@ using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 //BC_CPP17_EXECUTION std::execution::par  //defines default execution as parallel
 //BC_CPP17_EXECUTION std::execution::seq  //defines default execution as sequential
 //#define BC_CPP20						  //enables C++20 features -- None: this is reserved for future, NVCC does not support cpp20 features
-
+//#define BC_CLING_JIT 			  		  //Defines certain code based upon if we are using a cling
 // --------------------------------- override macro-option s --------------------------------- //
 //#define BC_INLINE_OVERRIDE <compiler_attribute>       //overloads the default inline attribute
 //#define BC_SIZE_T_OVERRIDE  <integer_type>			//overloads the default size_t (default is signed int)
@@ -75,7 +75,7 @@ using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 	#define BCINLINE BCHOSTDEV BC_INLINE_OVERRIDE
 	#define BCHOT BC_INLINE_OVERRIDE
 #else
-	#if defined(__GNUG__) || defined(__GNUC__)
+	#if defined(__GNUG__) || defined(__GNUC__) || defined(__clang__) || defined(__cling__) 
 	#define BCINLINE BCHOSTDEV  inline __attribute__((always_inline)) __attribute__((hot))  //host_device inline
 	#define BCHOT   		   inline __attribute__((always_inline)) __attribute__((hot))  //device-only inline
 

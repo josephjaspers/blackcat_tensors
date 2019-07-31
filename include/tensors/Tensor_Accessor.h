@@ -55,7 +55,7 @@ auto chunk(Tensor_Base<T>& tensor, Indicies... ints) {
     };
 }
 
-template<class ExpressionTemplate>
+template<class ExpressionTemplate, class voider=void>
 class Tensor_Accessor {
 
     const auto& as_derived() const { return static_cast<const Tensor_Base<ExpressionTemplate>&>(*this); }
@@ -136,6 +136,29 @@ public:
           auto operator() (BC::size_t i)       { return scalar(i); }
 
 };
+
+//Disable accessors for expression types
+//This specialization is just for the cppyy interpretor,
+//Tensor_Base has... using accessor[] ||
+#ifdef BC_CLING_JIT
+template<class ExpressionTemplate>
+class Tensor_Accessor<ExpressionTemplate, std::enable_if_t<exprs::expression_traits<ExpressionTemplate>::is_expr>> {
+
+	const auto& as_derived() const { return static_cast<const Tensor_Base<ExpressionTemplate>&>(*this); }
+		  auto& as_derived()       { return static_cast<      Tensor_Base<ExpressionTemplate>&>(*this); }
+
+
+public:
+	const int operator [] (int i) const {
+		throw 1;
+	}
+
+	template<class... args>
+	const void operator () (args... i) const {
+		throw 1;
+	}
+};
+#endif
 
 }//end of module name space
 }//end of BC name space

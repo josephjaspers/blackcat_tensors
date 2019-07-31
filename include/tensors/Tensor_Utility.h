@@ -51,37 +51,48 @@ private:
     const derived& as_derived() const {
         return static_cast<const derived&>(*this);
     }
+
+
+    //If host_tensor
+    template<template<int> class Integer>
+    std::string to_string(Integer<0>, int precision=5, bool sparse=false) const {
+		return BC::tensors::io::to_string(as_derived(), precision, sparse, BC::traits::Integer<tensor_dimension>());
+    }
+    //If device_tensor
+    template<template<int> class Integer>
+    std::string to_string(Integer<1>, int precision=5, bool sparse=false) const {
+    	using host_tensor = Tensor_Base<exprs::Array<
+    							tensor_dimension,
+    							typename ExpressionTemplate::value_type,
+    							BC::Allocator<host_tag, value_type>>>;
+
+    				host_tensor host_(as_derived().inner_shape());
+    				host_.copy(as_derived());
+    				return BC::tensors::io::to_string(host_, precision, sparse, BC::traits::Integer<tensor_dimension>());
+    }
+
+    //If expression_type
+    template<template<int> class Integer>
+    std::string to_string(Integer<2>, int precision=5, bool sparse=false) const {
+		using tensor = Tensor_Base<exprs::Array<
+					tensor_dimension,
+					typename ExpressionTemplate::value_type,
+					BC::Allocator<system_tag, value_type>>>;
+
+		return tensor(this->as_derived()).to_string();
+    }
+
 public:
 
     std::string to_string(int precision=5, bool sparse=false) const {
+    	using specialization =
+    			std::conditional_t<
+    				BC::tensors::exprs::expression_traits<ExpressionTemplate>::is_expr, BC::traits::Integer<2>,
+    			std::conditional_t<
+    				std::is_same<host_tag, system_tag>::value, BC::traits::Integer<0>, BC::traits::Integer<1>>>;
 
-    	//host tensor, simple to string
-		if (std::is_same<host_tag, system_tag>::value &&
-				BC::tensors::exprs::expression_traits<ExpressionTemplate>::is_array) {
-			return BC::tensors::io::to_string(as_derived(), precision, sparse, BC::traits::Integer<tensor_dimension>());
-		}
-
-		//if is a cuda_allocated tensor, copy it to a host_tensor
-		else if (BC::tensors::exprs::expression_traits<ExpressionTemplate>::is_array) {
-			using host_tensor = Tensor_Base<exprs::Array<
-						tensor_dimension,
-						typename ExpressionTemplate::value_type,
-						BC::Allocator<host_tag, value_type>>>;
-
-			host_tensor host_(as_derived().inner_shape());
-			host_.copy(as_derived());
-			return BC::tensors::io::to_string(host_, precision, sparse, BC::traits::Integer<tensor_dimension>());
-
-			//if is an expression, evaluate to tensor, than call to_string
-		} else {
-			using tensor = Tensor_Base<exprs::Array<
-						tensor_dimension,
-						typename ExpressionTemplate::value_type,
-						BC::Allocator<system_tag, value_type>>>;
-
-			return tensor(this->as_derived()).to_string();
-		}
-    }
+    		return this->to_string(specialization(), precision, sparse);
+    	}
 
     void print(int precision=8, bool sparse=false) const {
     	std::cout << this->to_string(precision, sparse);
