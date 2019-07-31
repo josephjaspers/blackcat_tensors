@@ -35,3 +35,5 @@ BlackCat_Tensors.sln
 /tests/blackcat_tensors_test
 /tests/blackcat_tensors_test_cu
 /__pycache__/
+
+.*/

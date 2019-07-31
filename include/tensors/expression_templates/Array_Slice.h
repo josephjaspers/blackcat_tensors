@@ -19,12 +19,11 @@ template<int Dimensions, class ValueType, class Allocator, class... Tags>
 struct Array_Slice:
 		Kernel_Array<Dimensions, ValueType, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
 
+	using value_type = ValueType;
 	using allocator_t 	 = Allocator;
 	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
 	using stream_t 	 = BC::Stream<system_tag>;
 	using parent = Kernel_Array<Dimensions, ValueType, system_tag, Tags...>;
-
-public:
 
 	stream_t m_stream;
 	allocator_t m_allocator;
@@ -34,6 +33,10 @@ public:
 	: parent(args_...),
 	  m_stream(stream_),
 	  m_allocator(allocator_) {}
+
+	template<class... Args>
+	BCHOT Array_Slice(value_type* ptr, Args... shape_arguments):
+		parent(typename parent::shape_type(shape_arguments...), ptr) {}
 
 	BCHOT Array_Slice(const Array_Slice&) = default;
 	BCHOT Array_Slice(Array_Slice&&) = default;
