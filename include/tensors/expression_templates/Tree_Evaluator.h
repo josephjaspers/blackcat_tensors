@@ -97,12 +97,7 @@ evaluate(Binary_Expression<oper::Assign, lv, rv> expression, Stream stream) {
 	static constexpr bool partial_blas_expr = optimizer<rv>::partial_blas_expr && !entirely_blas_expr;
 
 	auto right = optimizer<rv>::injection(expression.right, injector<lv, alpha_mod, beta_mod>(expression.left), stream);
-
-	return BC::traits::constexpr_if<partial_blas_expr>([&]() {
-		detail::greedy_optimization<oper::Add_Assign>(expression.left, right, stream);
-	}, BC::traits::constexpr_else_if<!entirely_blas_expr>([&]() {
-		detail::greedy_optimization<oper::Assign>(expression.left, right, stream);
-	}));
+	return detail::greedy_optimization<oper::Assign>(expression.left, right, stream);
 }
 
 template<

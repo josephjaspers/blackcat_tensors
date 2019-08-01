@@ -30,7 +30,7 @@ public:
 
 private:
 
-    ValueType lr = 0.003;
+    ValueType lr = 0.0003;
 
     mat dc;          //cellstate error
 
@@ -51,8 +51,9 @@ public:
 		b(outputs),
 		b_gradients(outputs)
     {
-    	r.randomize(-2, 1); //slightly bias recurrent weights to contribute less
-        w.randomize(-2, 2);
+    	r.randomize(-2, 2); //slightly bias recurrent weights to contribute less
+        r = 0;
+    	w.randomize(-2, 2);
         b.randomize(-2, 2);
 
         w_gradients.zero();
@@ -62,44 +63,42 @@ public:
 
     template<class X, class Y>
     auto forward_propagation(const X& x, const Y& y) {
-    	return w * x + r * y;
+    	return w * x  + r * y;
     }
     template<class X>
     auto forward_propagation(const X& x) {
-    	return w * x;
+    	return w * x ;
     }
-    template<class Allocator, class DeltaY>
-    auto back_propagation(const BC::Matrix<value_type, Allocator>& x, const DeltaY& dy) {
+    template<class X, class DeltaY>
+    auto back_propagation(const X& x, const DeltaY& dy) {
     	dc = dy;
     	w_gradients -= dc * x.t();
     	b_gradients -= dc;
     	return w.t() * dy;
     }
-    template<class Allocator, class DeltaY>
-    auto back_propagation(const BC::Vector<value_type, Allocator>& x, const DeltaY& dy) {
-    	dc[0] = dy;
-
-    	w_gradients -= dc[0] * x.t();
-    	b_gradients -= dc[0];
-    	return w.t() * dy;
-    }
+//    template<class Allocator, class DeltaY>
+//    auto back_propagation(const BC::Vector<value_type, Allocator>& x, const DeltaY& dy) {
+////    	dc[0] = dy;
+////
+////    	w_gradients -= dc[0] * x.t();
+////    	b_gradients -= dc[0];
+////    	return w.t() * dy;
+//    }
 
     template<class X, class Y, class DeltaY>
     auto back_propagation(const X& x, const Y& y, const DeltaY& dy) {
-    	dc += dy;
-    	w_gradients -= dc * x.t();
-    	r_gradients -= dc * y.t();
-    	b_gradients -= dc;
-
-    	return w.t() * dy;
+    	dc = dy;
+    	//       	dc.alias() += dy + r.t() * dc;
+       	r_gradients -= dc * y.t();
+        w_gradients -= dc * x.t();
+        b_gradients -= dc;
+        return w.t() * dy;
     }
 
     void update_weights() {
     	w += w_gradients * lr; w_gradients.zero();
     	r += r_gradients * lr; r_gradients.zero();
     	b += b_gradients * lr; b_gradients.zero();
-
-
     	dc.zero();
     }
 

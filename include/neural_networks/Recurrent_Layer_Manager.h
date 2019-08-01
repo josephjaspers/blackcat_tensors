@@ -108,13 +108,24 @@ private:
 	template<class T, class TruthType>
 	auto back_propagation_maybe_supply_previous_outputs(
 			const T& dy, std::true_type requires_outputs, TruthType is_batched) {
+		if (this->as_derived().next().layer().get_cache(is_batched).empty()) {
+			return Layer::back_propagation(this->get_cache(is_batched).back(), dy);
+		} else {
 		return Layer::back_propagation(this->get_cache(is_batched).back(),
 				this->as_derived().next().layer().get_cache(is_batched).back(), dy);
+		}
 	}
 	template<class T, class TruthType>
 	auto back_propagation_maybe_supply_previous_outputs(
 			const T& dy, std::false_type requires_outputs, TruthType is_batched) {
 		return Layer::back_propagation(this->get_cache(is_batched).back(), dy);
+	}
+
+public:
+	void update_weights() {
+		Layer::update_weights();
+		this->inputs.clear();
+		this->batched_inputs.clear();
 	}
 
 };
