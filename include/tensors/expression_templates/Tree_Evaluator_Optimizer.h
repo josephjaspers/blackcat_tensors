@@ -283,7 +283,7 @@ struct optimizer<Binary_Expression<op, lv, rv>, std::enable_if_t<oper::operation
 //--------------Unary Expression---------------------------------------------------------------------//
 
 template<class Op, class Array>
-struct optimizer<Unary_Expression<Op, Array>>
+struct optimizer<Unary_Expression<Op, Array>, std::enable_if_t<!expression_traits<Array>::is_auto_broadcasted>>
 {
     static constexpr bool entirely_blas_expr 	= false;
     static constexpr bool partial_blas_expr 	= false;

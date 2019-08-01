@@ -56,6 +56,8 @@ void greedy_optimization(Left left, Right right, Stream stream) {
 	auto temporaries_evaluated_expression = optimizer<Right>::template temporary_injection(right, stream);
 	auto assignment_expression = make_bin_expr<AssignmentOp>(left, temporaries_evaluated_expression);
 	detail::nd_evaluate(assignment_expression, stream);
+
+	std::cout << " calling deallocate_temporaries " << std::endl;
 	optimizer<decltype(temporaries_evaluated_expression)>::deallocate_temporaries(temporaries_evaluated_expression, stream);
 }
 
@@ -77,6 +79,9 @@ evaluate(Binary_Expression<Op, lv, rv> expression, Stream stream) {
 
 	if /*constexpr*/ (!entirely_blas_expression)
 		detail::greedy_optimization<Op>(expression.left, right, stream);
+	else {
+		optimizer<decltype(right)>::deallocate_temporaries(right);
+	}
 }
 
 template<

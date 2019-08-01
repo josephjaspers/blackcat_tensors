@@ -97,6 +97,11 @@ struct Common_Tools {
         static constexpr bool lv_is_scalar_multiplied = LvScalar;
         static constexpr bool rv_is_scalar_multiplied = RvScalar;
 
+        using left_value_type = Lv;
+        using right_value_type = Rv;
+        using alpha_type = Alpha;
+        using beta_type = Beta;
+
 		Lv left;
 		Rv right;
 		Alpha alpha;
@@ -150,6 +155,9 @@ struct Common_Tools {
             BC::traits::bind([&](auto alpha) {
         		stream.template get_allocator_rebound<value_type>().deallocate(alpha, 1);
         	}, 	contents.alpha));
+
+        optimizer<typename Contents::left_value_type>::deallocate_temporaries(contents.left, stream);
+        optimizer<typename Contents::right_value_type>::deallocate_temporaries(contents.right, stream);
 
 	}
 };
