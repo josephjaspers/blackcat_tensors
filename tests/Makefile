@@ -1,4 +1,4 @@
-CXXFLAGS = -O3 -o blackcat_tensors_test
+CXXFLAGS = -O3 -o blackcat_tensors_test  -fopenmp
 CUFLAGS = -O3 -o blackcat_tensors_test_cu
 
 CXXFILES = run.cpp
@@ -7,7 +7,7 @@ CUFILES  = run.cu
 LIBS = -lcblas
 
 ATLAS_BLAS_LINKAGE = -D BC_BLAS_USE_C_LINKAGE=1
-ATLASLIBS =  -lf77blas -lcblas -latlas
+ATLASLIBS =  -lf77blas -lcblas -latlas -lgomp
 CULIBS = -lcublas
 
 INCLUDE = ../include/  -I /usr/include/

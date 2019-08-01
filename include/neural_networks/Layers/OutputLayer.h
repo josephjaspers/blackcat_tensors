@@ -33,6 +33,7 @@ struct OutputLayer : Layer_Base {
     }
 };
 
+#ifndef BC_CLING_JIT
 template<class ValueType, class SystemTag>
 OutputLayer<SystemTag, ValueType> outputlayer(SystemTag system_tag, int inputs) {
 	return OutputLayer<SystemTag, ValueType>(inputs);
@@ -41,6 +42,8 @@ template<class SystemTag>
 auto outputlayer(SystemTag system_tag, int inputs) {
 	return OutputLayer<SystemTag, typename SystemTag::default_floating_point_type>(inputs);
 }
+#endif
+
 auto outputlayer(int inputs) {
 	return OutputLayer<BLACKCAT_DEFAULT_SYSTEM_T,
 			typename BLACKCAT_DEFAULT_SYSTEM_T::default_floating_point_type>(inputs);

@@ -72,6 +72,7 @@ public:
     }
 };
 
+
 template<class ValueType, class SystemTag>
 SoftMax<SystemTag, ValueType> softmax(SystemTag system_tag, int inputs) {
 	return SoftMax<SystemTag, ValueType>(inputs);
@@ -81,6 +82,10 @@ auto softmax(SystemTag system_tag, int inputs) {
 	return SoftMax<SystemTag, typename SystemTag::default_floating_point_type>(inputs);
 }
 
+auto softmax(int inputs) {
+	return SoftMax<BLACKCAT_DEFAULT_SYSTEM_T,
+			typename BLACKCAT_DEFAULT_SYSTEM_T::default_floating_point_type>(inputs);
+}
 
 }
 }

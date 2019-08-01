@@ -25,6 +25,15 @@ const auto reshape(const Tensor_Base<T>& tensor) {
     };
 }
 
+template<class T, class... Shape>
+auto reshape(Tensor_Base<T>& tensor, Shape... indicies) {
+//	static_assert(BC::tensors::exprs::expression_traits<T>::is_array &&
+//					T::tensor_iterator_dimension <= 1,
+//					"Reshape is only available to continuous tensors");
+	return make_tensor(exprs::make_view(tensor, utility::make_array(indicies...)));
+}
+
+
 template<class T, class... Indicies, class=std::enable_if_t<traits::sequence_of_v<BC::size_t, Indicies...>>>
 const auto chunk(const Tensor_Base<T>& tensor, Indicies... ints) {
     return [&, ints...](auto... shape_dimensions) {
@@ -142,7 +151,9 @@ public:
 //Tensor_Base has... using accessor[] ||
 #ifdef BC_CLING_JIT
 template<class ExpressionTemplate>
-class Tensor_Accessor<ExpressionTemplate, std::enable_if_t<exprs::expression_traits<ExpressionTemplate>::is_expr>> {
+class Tensor_Accessor<ExpressionTemplate,
+std::enable_if_t<exprs::expression_traits<ExpressionTemplate>::is_expr ||
+	ExpressionTemplate::tensor_dimension == 0>>	 {
 
 	const auto& as_derived() const { return static_cast<const Tensor_Base<ExpressionTemplate>&>(*this); }
 		  auto& as_derived()       { return static_cast<      Tensor_Base<ExpressionTemplate>&>(*this); }

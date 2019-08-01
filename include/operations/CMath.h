@@ -182,7 +182,7 @@ static auto normalize(const BC::tensors::Tensor_Base<internal_t>& tensor, min_ m
 } //end of ns cmath_functions
 } //end of ns oper
 
-	using namespace BC::oper::cmath_functions;
+using namespace BC::oper::cmath_functions;
 
 } //end of ns BC
 

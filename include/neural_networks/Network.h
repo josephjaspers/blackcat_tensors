@@ -40,8 +40,9 @@ struct NeuralNetwork {
 //    void set_max_bptt_length(int len) { m_layer_chain.for_each([&](auto& layer)  { layer.set_max_bptt_length(len);}); }
 
 };
+
 template<class... Layers>
-auto neuralnetwork(Layers&&... layers) {
+auto neuralnetwork(Layers... layers) {
 	return NeuralNetwork<Layers...>(layers...);
 }
 

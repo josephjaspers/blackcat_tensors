@@ -54,10 +54,13 @@ public:
     }
 };
 
+#ifndef BC_CLING_JIT
 template<class ValueType, class SystemTag>
 FeedForward<SystemTag, ValueType> feedforward(SystemTag system_tag, int inputs, int outputs) {
 	return FeedForward<SystemTag, ValueType>(inputs, outputs);
 }
+#endif
+
 template<class SystemTag>
 auto feedforward(SystemTag system_tag, int inputs, int outputs) {
 	return FeedForward<SystemTag, typename SystemTag::default_floating_point_type>(inputs, outputs);

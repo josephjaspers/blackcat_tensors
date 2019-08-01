@@ -82,7 +82,7 @@ auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
 
 template<class Parent, class=std::enable_if_t<!expression_traits<Parent>::is_continuous>>
 static auto make_slice(Parent& parent, BC::size_t index) {
-	using slice_type = slice_type_from_parent<Parent::tensor_dimension-1, Parent, BC_Noncontinuous>;
+	using slice_type = slice_type_from_parent<BC::traits::max(0,Parent::tensor_dimension-1), Parent, BC_Noncontinuous>;
 	using scalar_type = slice_type_from_parent<0, Parent>;
 	return std::conditional_t<Parent::tensor_dimension == 1, scalar_type, slice_type>(
 			parent.get_stream(),
@@ -93,7 +93,7 @@ static auto make_slice(Parent& parent, BC::size_t index) {
 template<class Parent, class=std::enable_if_t<expression_traits<Parent>::is_continuous>, int differentiator=0>
 static auto make_slice(Parent& parent, BC::size_t index) {
 
-	using slice_type = slice_type_from_parent<Parent::tensor_dimension-1, Parent>;
+	using slice_type = slice_type_from_parent<BC::traits::max(0,Parent::tensor_dimension-1), Parent>;
 	using scalar_type = slice_type_from_parent<0, Parent>;
 	return std::conditional_t<Parent::tensor_dimension == 1, scalar_type, slice_type>(
 			parent.get_stream(),
