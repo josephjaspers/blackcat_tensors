@@ -9,16 +9,16 @@ static constexpr int numb_samples_in_dataset = 2048;
 }
 
 template<class System>
-auto load_mnist(System system, int batch_size=default_batch_size, int samples=numb_samples_in_dataset) {
+auto load_mnist(System system, const char* mnist_dataset,
+		int batch_size=default_batch_size, int samples=numb_samples_in_dataset) {
 
 	using value_type = typename System::default_floating_point_type;
 	using allocator_type = BC::Allocator<System, value_type>;
 	using cube = BC::Cube<value_type, allocator_type>;
 
-	std::ifstream read_data("..///mnist_train.csv");
+	std::ifstream read_data(mnist_dataset);
 	if (!read_data.is_open()){
-		std::cout << " error opening file. '..///mnist_train.csv'"
-				"Program expected to be run from examples directory." << std::endl;
+		std::cout << " error opening file. " << mnist_dataset << std::endl;
 		throw std::invalid_argument("Failure opening mnist_train.csv");
 	}
 	//move the file_ptr of the csv past the headers
@@ -47,7 +47,8 @@ auto load_mnist(System system, int batch_size=default_batch_size, int samples=nu
 }
 
 template<class System=BC::host_tag>
-int percept_MNIST(System system_tag=System(), int epochs=10, int batch_size=default_batch_size, int samples=32*1024) {
+int percept_MNIST(System system_tag, const char* mnist_dataset,
+		int epochs=10, int batch_size=default_batch_size, int samples=32*1024) {
 
 	using namespace BC::nn;
 
@@ -67,7 +68,7 @@ int percept_MNIST(System system_tag=System(), int epochs=10, int batch_size=defa
     );
     network.set_batch_size(batch_size);
 
-    std::pair<cube, cube> data = load_mnist(system_tag, batch_size, samples);
+    std::pair<cube, cube> data = load_mnist(system_tag, mnist_dataset, batch_size, samples);
     cube& inputs = data.first;
     cube& outputs = data.second;
 	std::cout << " training..." << std::endl;
