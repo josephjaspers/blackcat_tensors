@@ -26,14 +26,14 @@ class Stream<host_tag> {
 		BC::allocators::fancy::Workspace<host_tag> m_workspace;
 	};
 
-	static BC::memory::atomic_shared_ptr<Contents> get_default_contents() {
-		static BC::memory::atomic_shared_ptr<Contents> default_contents =
-				BC::memory::atomic_shared_ptr<Contents>(new Contents());
+	static std::shared_ptr<Contents> get_default_contents() {
+		static std::shared_ptr<Contents> default_contents =
+				std::shared_ptr<Contents>(new Contents());
 
 		return default_contents;
 	}
 
-	BC::memory::atomic_shared_ptr<Contents> m_contents = get_default_contents();
+	std::shared_ptr<Contents> m_contents = get_default_contents();
 
 public:
 
@@ -55,7 +55,7 @@ public:
 	}
 
 	void create() {
-		m_contents = BC::memory::atomic_shared_ptr<Contents>(new Contents());
+		m_contents = std::shared_ptr<Contents>(new Contents());
 	}
 
 	void destroy() {

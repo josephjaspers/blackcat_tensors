@@ -9,7 +9,12 @@
 #define TEST_BLAS_VALIDITY_H_
 
 #include "test_common.h"
+
+#if __has_include(<cblas.h>)
 #include "cblas.h"
+#elif __has_include(<mkl.h>)
+#include <mkl.h>
+#endif
 
 namespace BC {
 namespace tests {
@@ -387,4 +392,4 @@ int test_blas(int sz=128) {
 }
 
 
-#endif /* TEST_BLAS_VALIDITY_H_ */
+#endif /* TEST_BLAS_VALIDITY_H_ */ 
