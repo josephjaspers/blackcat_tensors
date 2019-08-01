@@ -36,11 +36,7 @@ struct NeuralNetwork {
     layer_chain m_layer_chain;
 
     NeuralNetwork(Layers... layers):
-    	m_layer_chain(layers...) {
-
-    	std::cout << " is recurrent !! " <<  recurrent_neural_network << std::endl;
-
-    }
+    	m_layer_chain(layers...) {}
 
 	template<class T> auto back_propagation(const T& tensor_expected) {
 		return m_layer_chain.tail().bp(tensor_expected);
