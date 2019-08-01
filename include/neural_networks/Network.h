@@ -8,19 +8,32 @@
 #ifndef BLACKCAT_NEURALNETWORK_NEURALNETWORK_H_
 #define BLACKCAT_NEURALNETWORK_NEURALNETWORK_H_
 
+#include "Layers/Layer_Traits.h"
 #include "Layer_Chain.h"
 
 namespace BC {
 namespace nn {
+namespace detail {
+
+template<class T>
+using is_recurrent_layer = BC::traits::conditional_detected_t<
+			detail::query_forward_requires_outputs, T, std::false_type>;
+
+
+}
+
 
 //HEAD
 template<class... Layers>
 struct NeuralNetwork {
 
-    using self = NeuralNetwork<Layers...>;
-    using parent = LayerChain<0, void, Layers...>;
+	static constexpr bool recurrent_neural_network =
+			BC::traits::any<detail::is_recurrent_layer, Layers...>::value;
 
-    LayerChain<0, void, Layers...> m_layer_chain;
+    using self = NeuralNetwork<Layers...>;
+    using layer_chain = LayerChain<recurrent_neural_network, 0, void, Layers...>;
+
+    layer_chain m_layer_chain;
 
     NeuralNetwork(Layers... layers):
     	m_layer_chain(layers...) {}

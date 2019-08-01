@@ -10,7 +10,7 @@
 
 namespace BC {
 namespace nn {
-namespace incomplete {
+//namespace incomplete {
 
 
 //TODO
@@ -24,6 +24,8 @@ struct Recurrent_Layer_Manager: Layer {
 	Recurrent_Layer_Manager(Args... args):
 		Layer(args...),
 		inputs(Layer::input_size()) {} 	//TODO must change once we support more dimension for Neural Nets
+
+//	using Allocator = BC::Allocator<typename layer_traits<Layer>::system_tag, typename layer_traits<Layer>::value_type>;
 
 	using input_tensor_dimension = typename layer_traits<Layer>::input_tensor_dimension;
 	using output_tensor_dimension = typename layer_traits<Layer>::output_tensor_dimension;
@@ -117,7 +119,7 @@ private:
 
 };
 
-}
+//}
 }
 }
 

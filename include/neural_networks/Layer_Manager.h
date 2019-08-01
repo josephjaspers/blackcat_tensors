@@ -8,6 +8,8 @@
 #ifndef LAYER_MANAGER_H_
 #define LAYER_MANAGER_H_
 
+#include "Recurrent_Layer_Manager.h"
+
 namespace BC {
 namespace nn {
 

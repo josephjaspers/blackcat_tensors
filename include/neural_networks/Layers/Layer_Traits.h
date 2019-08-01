@@ -10,9 +10,7 @@
 
 namespace BC {
 namespace nn {
-namespace impl {
-
-using namespace BC::traits;
+namespace detail {
 
 template<class T> using query_forward_requires_inputs  = typename T::forward_requires_inputs;
 template<class T> using query_forward_requires_outputs = typename T::forward_requires_outputs;
@@ -29,6 +27,8 @@ template<class T> using query_greedy_evaluate_delta = typename T::greedy_evaluat
 //This tag is used to prevent recalculating the same error values multiple times (and saving on reallocations)
 template<class T> using query_backwards_delta_should_be_cached = typename T::query_backwards_delta_should_be_cached;
 
+}
+
 template<class T>
 struct layer_traits {
 	/**
@@ -43,37 +43,34 @@ struct layer_traits {
 	 *  If backwards_requires_outputs==std::true_type, outputs will be supplied in backward prop
 	 *
 	 */
+
 	using system_tag = typename T::system_tag;
 	using value_type
-			= conditional_detected_t<BC::traits::query_value_type, T,
+			= BC::traits::conditional_detected_t<BC::traits::query_value_type, T,
 				typename system_tag::default_floating_point_type>;
 	using input_tensor_dimension
-			= conditional_detected_t<query_input_tensor_dimension, T, BC::traits::Integer<1>>;
+			= BC::traits::conditional_detected_t<detail::query_input_tensor_dimension, T, BC::traits::Integer<1>>;
 	using output_tensor_dimension
-			= conditional_detected_t<query_output_tensor_dimension, T, BC::traits::Integer<1>>;
+			= BC::traits::conditional_detected_t<detail::query_output_tensor_dimension, T, BC::traits::Integer<1>>;
 
 
 	using forward_requires_inputs
-			= conditional_detected_t<query_forward_requires_inputs, T, std::true_type>;
+			= BC::traits::conditional_detected_t<detail::query_forward_requires_inputs, T, std::true_type>;
 	using forward_requires_outputs
-			= conditional_detected_t<query_forward_requires_outputs, T, std::false_type>;
+			= BC::traits::conditional_detected_t<detail::query_forward_requires_outputs, T, std::false_type>;
 
 
 	using backwards_requires_inputs
-			= conditional_detected_t<query_backwards_requires_inputs, T, std::true_type>;
+			= BC::traits::conditional_detected_t<detail::query_backwards_requires_inputs, T, std::true_type>;
 	using backwards_requires_outputs
-			= conditional_detected_t<query_backwards_requires_outputs, T, std::false_type>;
+			= BC::traits::conditional_detected_t<detail::query_backwards_requires_outputs, T, std::false_type>;
 	using backwards_delta_should_be_cached
-			= conditional_detected_t<query_backwards_requires_outputs, T, std::false_type>;
+			= BC::traits::conditional_detected_t<detail::query_backwards_requires_outputs, T, std::false_type>;
 
 	using greedy_evaluate_delta
-			= conditional_detected_t<query_greedy_evaluate_delta, T, std::false_type>;
+			= BC::traits::conditional_detected_t<detail::query_greedy_evaluate_delta, T, std::false_type>;
 
 };
-
- } //namespace impl
-
-using impl::layer_traits;
 
 }  // namespace nn
 }  // namespace BC

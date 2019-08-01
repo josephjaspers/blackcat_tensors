@@ -11,11 +11,15 @@ namespace detail {
 	template<class T>
 	using query_layer_type = typename T::layer_type;
 
-	template<int Index, class Derived, class Layer>
-	using LayerManager = std::conditional_t<Index == 0,
-		 	 Input_Layer_Manager<Derived, Layer>, //if first layer
-//		 	 Recurrent_Layer_Manager<Derived, Layer>>;
-		 	 Layer_Manager<Derived, Layer>>;
+	template<bool Recurrent, int Index, class Derived, class Layer>
+	using LayerManager =
+			std::conditional_t<Recurrent,
+				std::conditional_t<Index == 0,
+					Input_Layer_Manager<Derived, Layer>, //if first layer
+					Recurrent_Layer_Manager<Derived, Layer>>,
+				std::conditional_t<Index == 0,
+					Input_Layer_Manager<Derived, Layer>, //if first layer
+					Layer_Manager<Derived, Layer>>>;
 
 }
 
@@ -27,18 +31,18 @@ namespace detail {
  * (Forward iteration for forward propagation, reverse for back-prop)
  */
 
-template<int Index, class Derived, class...>
+template<bool Recurrent, int Index, class Derived, class...>
 struct LayerChain {};
 
-template<int Index, class Derived,class CurrentLayer, class... Layers>
-struct LayerChain<Index, Derived, CurrentLayer, Layers...>:
-	LayerChain<Index + 1, LayerChain<Index, Derived, CurrentLayer, Layers...>, Layers...>, //parent_type class
-	detail::LayerManager<Index, LayerChain<Index, Derived, CurrentLayer, Layers...>, CurrentLayer> {     //if not first layer
+template<bool Recurrent, int Index, class Derived,class CurrentLayer, class... Layers>
+struct LayerChain<Recurrent, Index, Derived, CurrentLayer, Layers...>:
+	LayerChain<Recurrent,Index + 1, LayerChain<Recurrent,Index, Derived, CurrentLayer, Layers...>, Layers...>, //parent_type class
+	detail::LayerManager<Recurrent, Index, LayerChain<Recurrent,Index, Derived, CurrentLayer, Layers...>, CurrentLayer> {     //if not first layer
 
 
-    using self_type   = LayerChain<Index, Derived, CurrentLayer, Layers...>;
-    using parent_type = LayerChain<Index + 1, self_type, Layers...>;
-    using layer_type  = detail::LayerManager<Index, self_type, CurrentLayer>;
+    using self_type   = LayerChain<Recurrent, Index, Derived, CurrentLayer, Layers...>;
+    using parent_type = LayerChain<Recurrent, Index + 1, self_type, Layers...>;
+    using layer_type  = detail::LayerManager<Recurrent, Index, self_type, CurrentLayer>;
 
     using next_layer_type = BC::traits::conditional_detected<
     		detail::query_layer_type, parent_type, void>;

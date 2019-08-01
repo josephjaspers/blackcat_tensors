@@ -45,11 +45,10 @@ public:
     Recurrent(int inputs, BC::size_t outputs):
         Layer_Base(inputs, outputs),
 		w(outputs, inputs),
-		r(outputs, outputs),
-		b(outputs),
-
 		w_gradients(outputs, inputs),
+		r(outputs, outputs),
 		r_gradients(outputs, outputs),
+		b(outputs),
 		b_gradients(outputs)
     {
     	r.randomize(-2, 1); //slightly bias recurrent weights to contribute less
