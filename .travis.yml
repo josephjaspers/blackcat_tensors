@@ -1,0 +1,20 @@
+matrix:
+  include:
+    # works on Precise and Trusty
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-8.3
+            - gcc-7.4
+      env:
+         - MATRIX_EVAL="CC=gcc-7.4 && CXX=g++-8.3"
+
+before_install:
+    - eval "${MATRIX_EVAL}"
+    
+before_script: cd tests
+
+script: make default
