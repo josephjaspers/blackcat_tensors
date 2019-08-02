@@ -66,6 +66,9 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
     			softmax(system_tag, 10),
     			outputlayer(system_tag, 10)
     );
+    //layer1  = y = logistic(w * x + b)
+    //layer2  = y2  = softmax(w * y1 + b)
+    //
     network.set_batch_size(batch_size);
 
     std::pair<cube, cube> data = load_mnist(system_tag, mnist_dataset, batch_size, samples);
