@@ -3,6 +3,7 @@ matrix:
   include:
     # works on Precise and Trusty
     - os: linux
+      dist: bionic
       addons:
         apt:
           sources:
