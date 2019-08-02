@@ -1,3 +1,4 @@
+languages: cpp
 matrix:
   include:
     # works on Precise and Trusty
@@ -7,14 +8,15 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-8.3
-            - gcc-7.4
+            - g++-7
+            - gcc-7
+            - libblas-dev
       env:
-         - MATRIX_EVAL="CC=gcc-7.4 && CXX=g++-8.3"
+         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-8"
 
 before_install:
     - eval "${MATRIX_EVAL}"
     
 before_script: cd tests
 
-script: make default
+script: make default;  ./blackcat_tests;
