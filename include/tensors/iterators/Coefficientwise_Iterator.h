@@ -15,10 +15,10 @@ namespace BC {
 namespace tensors {
 namespace iterators {
 
-template<direction direction, class Tensor, class enabler=void>
+template<direction Direction, class Tensor, class enabler=void>
 struct Coefficientwise_Iterator {
 
-    using Iterator = Coefficientwise_Iterator<direction, Tensor>;
+    using Iterator = Coefficientwise_Iterator<Direction, Tensor>;
 
     static constexpr bool ref_value_type
     	= std::is_reference<decltype(std::declval<Tensor>().internal()[0])>::value;
@@ -45,14 +45,14 @@ struct Coefficientwise_Iterator {
 #define BC_Iter_Compare(sign, rev)                          \
 	BCINLINE				            \
     bool operator sign (const Iterator& iter) {             \
-        if (direction == direction::forward)                \
+        if (Direction == direction::forward)                \
             return index sign iter.index;                   \
         else                                                \
             return index rev iter.index;                    \
     }                                                       \
     BCINLINE 					    \
     bool operator sign (int p_index) {                      \
-        if (direction == direction::forward)                \
+        if (Direction == direction::forward)                \
             return index sign p_index;                      \
         else                                                \
             return index rev  p_index;                      \
@@ -76,25 +76,25 @@ struct Coefficientwise_Iterator {
 
     BCINLINE Iterator& operator =  (int index_) { this->index = index_;  return *this; }
 
-    BCINLINE Iterator& operator ++ ()    { index += direction; return *this; }
-    BCINLINE Iterator& operator -- ()    { index -= direction; return *this; }
+    BCINLINE Iterator& operator ++ ()    { index += Direction; return *this; }
+    BCINLINE Iterator& operator -- ()    { index -= Direction; return *this; }
 
     BCINLINE Iterator  operator ++ (int) { return Iterator(tensor, index++); }
     BCINLINE Iterator  operator -- (int) { return Iterator(tensor, index--); }
 
 
-    BCINLINE Iterator& operator += (int dist)       { index += dist*direction; return *this; }
-    BCINLINE Iterator& operator -= (int dist)       { index -= dist*direction; return *this; }
+    BCINLINE Iterator& operator += (int dist)       { index += dist*Direction; return *this; }
+    BCINLINE Iterator& operator -= (int dist)       { index -= dist*Direction; return *this; }
 
-    BCINLINE Iterator  operator +  (int dist) const { return Iterator(tensor, index + dist*direction); }
-    BCINLINE Iterator  operator -  (int dist) const { return Iterator(tensor, index - dist*direction); }
+    BCINLINE Iterator  operator +  (int dist) const { return Iterator(tensor, index + dist*Direction); }
+    BCINLINE Iterator  operator -  (int dist) const { return Iterator(tensor, index - dist*Direction); }
 
 
-    BCINLINE Iterator& operator += (const Iterator& dist)       { index += dist.index * direction; return *this; }
-    BCINLINE Iterator& operator -= (const Iterator& dist)       { index -= dist.index * direction; return *this; }
+    BCINLINE Iterator& operator += (const Iterator& dist)       { index += dist.index * Direction; return *this; }
+    BCINLINE Iterator& operator -= (const Iterator& dist)       { index -= dist.index * Direction; return *this; }
     
-    BCINLINE Iterator  operator +  (const Iterator& dist) const { return Iterator(tensor, index + dist.index*direction); }
-    BCINLINE Iterator  operator -  (const Iterator& dist) const { return Iterator(tensor, index - dist.index*direction); }
+    BCINLINE Iterator  operator +  (const Iterator& dist) const { return Iterator(tensor, index + dist.index*Direction); }
+    BCINLINE Iterator  operator -  (const Iterator& dist) const { return Iterator(tensor, index - dist.index*Direction); }
 
 
     BCINLINE auto operator*() const -> decltype(this->tensor[this->index]) { return this->tensor[this->index]; }

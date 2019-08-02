@@ -1,5 +1,6 @@
-CXXFLAGS = -O3 -o blackcat_tensors_test  -fopenmp
-CUFLAGS = -O3 -o blackcat_tensors_test_cu
+CXXVERSION = -std=c++14
+CXXFLAGS = -O3 -o mnist_test_exec
+CUFLAGS = -O3 -o mnist_test_exec_cu
 
 CXXFILES = run.cpp
 CUFILES  = run.cu
@@ -7,24 +8,24 @@ CUFILES  = run.cu
 LIBS = -lcblas
 
 ATLAS_BLAS_LINKAGE = -D BC_BLAS_USE_C_LINKAGE=1
-ATLASLIBS =  -lf77blas -lcblas -latlas -lgomp
+ATLASLIBS =  -lf77blas -lcblas -latlas
 CULIBS = -lcublas
 
 INCLUDE = ../include/  -I /usr/include/
 LIBINCLUDE = /usr/lib/
 
 default:
-	$(CXX) $(CXXFILES) $(LIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)
+	$(CXX) $(CXXVERSION) $(CXXFILES) $(LIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)
 
 atlas:
-	 $(CXX) $(ATLAS_BLAS_LINKAGE) $(CXXFILES)  $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE) $(ATLASLIBS)
+	 $(CXX) $(CXXVERSION) $(ATLAS_BLAS_LINKAGE) $(CXXFILES)  $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE) $(ATLASLIBS)
 
 cuda:
-	nvcc $(CUFILES) $(CULIBS) $(LIBS) $(CUFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)
+	nvcc $(CUFILES) $(CXXVERSION) $(CULIBS) $(LIBS) $(CUFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)
 
 cuda_atlas:
-	nvcc $(CUFILES) $(ATLAS_BLAS_LINKAGE) $(CULIBS) $(CUFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE) $(ATLASLIBS)
-
+	nvcc $(CUFILES) $(CXXVERSION) $(ATLAS_BLAS_LINKAGE) $(CULIBS) $(CUFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE) $(ATLASLIBS)
 	
 clean:
-	rm -i prog *.o; rm blackcat_tensors_test; rm blackcat_tensors_test_cu;
+	rm -i mnist_test_exec; rm -i mnist_test_exec_cu;
+
