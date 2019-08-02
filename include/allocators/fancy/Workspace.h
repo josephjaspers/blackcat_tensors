@@ -39,7 +39,7 @@ public:
 			m_memptr = m_allocator.allocate(sz);
 	}
 	void reserve(std::size_t sz)  {
-		if (sz == 0) {
+		if (sz == 0 || (m_memptr_sz - m_curr_index) > sz) {
 			return;
 		}
 

@@ -32,6 +32,12 @@ struct Recurrent_Layer_Manager: Layer {
 
 	using value_type = typename layer_traits<Layer>::value_type;
 
+	using Output_Tensor_Type = BC::Tensor<output_tensor_dimension::value, value_type, Allocator>;
+	using Batched_Output_Tensor_Type = BC::Tensor<output_tensor_dimension::value+1, value_type, Allocator>;
+
+	Output_Tensor_Type delta_cache;
+	Batched_Output_Tensor_Type batched_delta_cache;
+
 	using Input_Tensor_Type = BC::Tensor<input_tensor_dimension::value, value_type, Allocator>;
 	using Batched_Input_Tensor_Type = BC::Tensor<input_tensor_dimension::value+1, value_type, Allocator>;
 
@@ -52,6 +58,19 @@ struct Recurrent_Layer_Manager: Layer {
 		return batched_inputs;
 	}
 
+	auto& get_delta_cache(std::false_type is_batched=std::false_type()) {
+		return delta_cache;
+	}
+	auto& get_delta_cache(std::true_type is_batched) {
+		return batched_delta_cache;
+	}
+	auto& get_delta_cache(std::false_type is_batched=std::false_type()) const {
+		return delta_cache;
+	}
+	auto& get_delta_cache(std::true_type is_batched) const {
+		return batched_delta_cache;
+	}
+
 	void set_batch_size(BC::size_t batch_sz) {
 		Layer::set_batch_size(batch_sz);
 	}
@@ -62,7 +81,23 @@ struct Recurrent_Layer_Manager: Layer {
 		return forward_propagation_cache(expression, BC::traits::truth_type<is_batched>());
 	}
 	template<class T>
-	auto back_propagation(const T& dy) {
+	const auto& bp_cache_delta(const T& dy, std::true_type is_batched) {
+		auto& cache = get_delta_cache(is_batched);
+		if (cache.size()) {
+			return cache = dy;
+		} else {
+			return cache = decltype(cache)(dy); //calls move (resizes
+		}
+	}
+	template<class T>
+	const auto& bp_cache_delta(const T& dy, std::false_type is_batched) {
+		return dy;
+	}
+
+
+	template<class T>
+	auto back_propagation(const T& dy_) {
+		auto& dy = bp_cache_delta(dy_, typename layer_traits<Layer>::backwards_delta_should_be_cached());
 		constexpr bool is_batched = T::tensor_dimension == output_tensor_dimension::value + 1;
 		return back_propagation_maybe_supply_previous_outputs(
 				dy,
