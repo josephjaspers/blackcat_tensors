@@ -73,6 +73,10 @@ struct Recurrent_Layer_Manager: Layer {
 
 	void set_batch_size(BC::size_t batch_sz) {
 		Layer::set_batch_size(batch_sz);
+
+		if (layer_traits<Layer>::greedy_evaluate_delta::value) {
+			batched_delta_cache = Batched_Output_Tensor_Type(Layer::output_size(), batch_sz);
+		}
 	}
 
 	template<class T>
@@ -83,11 +87,7 @@ struct Recurrent_Layer_Manager: Layer {
 	template<class T>
 	const auto& bp_cache_delta(const T& dy, std::true_type is_batched) {
 		auto& cache = get_delta_cache(is_batched);
-		if (cache.size()) {
-			return cache = dy;
-		} else {
-			return cache = decltype(cache)(dy); //calls move (resizes
-		}
+		return cache = dy;
 	}
 	template<class T>
 	const auto& bp_cache_delta(const T& dy, std::false_type is_batched) {
@@ -97,7 +97,7 @@ struct Recurrent_Layer_Manager: Layer {
 
 	template<class T>
 	auto back_propagation(const T& dy_) {
-		auto& dy = bp_cache_delta(dy_, typename layer_traits<Layer>::backwards_delta_should_be_cached());
+		auto& dy = bp_cache_delta(dy_, typename layer_traits<Layer>::greedy_evaluate_delta());
 		constexpr bool is_batched = T::tensor_dimension == output_tensor_dimension::value + 1;
 		return back_propagation_maybe_supply_previous_outputs(
 				dy,
