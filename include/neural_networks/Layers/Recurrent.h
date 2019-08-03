@@ -28,7 +28,7 @@ struct Recurrent : public Layer_Base {
 
 private:
 
-    ValueType lr = 0.03;
+    ValueType lr = 0.0003;
 
     mat w;  //weights
     mat r;

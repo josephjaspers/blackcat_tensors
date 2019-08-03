@@ -14,9 +14,11 @@ namespace detail {
 	template<bool Recurrent, int Index, class Derived, class Layer>
 	using LayerManager =
 			std::conditional_t<Recurrent,
-				std::conditional_t<Index == 0,
-					Input_Layer_Manager<Derived, Layer>, //if first layer
-					Recurrent_Layer_Manager<Derived, Layer>>,
+
+//TODO Add recurrent input layer_manager
+//				std::conditional_t<Index == 0,
+//					Input_Layer_Manager<Derived, Layer>, //if first layer
+					Recurrent_Layer_Manager<Derived, Layer>, //>,
 				std::conditional_t<Index == 0,
 					Input_Layer_Manager<Derived, Layer>, //if first layer
 					Layer_Manager<Derived, Layer>>>;

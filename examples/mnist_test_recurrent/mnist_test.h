@@ -87,6 +87,8 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 
 				//Truncate BP to only the last output
 				network.back_propagation(outputs[j]);
+				network.back_propagation(outputs[j]);
+
 				network.update_weights();
 		}
 	}
