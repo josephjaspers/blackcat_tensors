@@ -27,7 +27,6 @@ BlackCat_Tensors.sln
 /include/neural_networks/Layers/LSTM.h
 /include/neural_networks/Layers/RecurrentFeedForward.h
 /include/BlackCat_Autograd.h/
-/examples/mnist_test_recurrent/*
 /autodocs/
 /include/bc_py.py
 /examples/mnist_test/mnist_test_exec_cu

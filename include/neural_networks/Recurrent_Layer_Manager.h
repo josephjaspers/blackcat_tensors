@@ -20,56 +20,47 @@ template<
 	class Allocator=BC::Allocator<typename layer_traits<Layer>::system_tag, typename layer_traits<Layer>::value_type>>
 struct Recurrent_Layer_Manager: Layer {
 
-	template<class... Args>
-	Recurrent_Layer_Manager(Args... args):
-		Layer(args...),
-		inputs(Layer::input_size()) {} 	//TODO must change once we support more dimension for Neural Nets
-
-//	using Allocator = BC::Allocator<typename layer_traits<Layer>::system_tag, typename layer_traits<Layer>::value_type>;
+	using value_type = typename layer_traits<Layer>::value_type;
+	using allocator_type = Allocator;
 
 	using input_tensor_dimension = typename layer_traits<Layer>::input_tensor_dimension;
 	using output_tensor_dimension = typename layer_traits<Layer>::output_tensor_dimension;
 
-	using value_type = typename layer_traits<Layer>::value_type;
+	using Input_Tensor_Type = BC::Tensor<input_tensor_dimension::value, value_type, Allocator>;
+	using Batched_Input_Tensor_Type = BC::Tensor<input_tensor_dimension::value+1, value_type, Allocator>;
 
 	using Output_Tensor_Type = BC::Tensor<output_tensor_dimension::value, value_type, Allocator>;
 	using Batched_Output_Tensor_Type = BC::Tensor<output_tensor_dimension::value+1, value_type, Allocator>;
 
+private:
+
+	unsigned time_minus_index = 0;
+
 	Output_Tensor_Type delta_cache;
 	Batched_Output_Tensor_Type batched_delta_cache;
 
-	using Input_Tensor_Type = BC::Tensor<input_tensor_dimension::value, value_type, Allocator>;
-	using Batched_Input_Tensor_Type = BC::Tensor<input_tensor_dimension::value+1, value_type, Allocator>;
+	std::vector<Input_Tensor_Type> inputs;
+	std::vector<Batched_Input_Tensor_Type> batched_inputs;
 
-	std::vector<Input_Tensor_Type> inputs = std::vector<Input_Tensor_Type>(0);
-	std::vector<Batched_Input_Tensor_Type> batched_inputs = std::vector<Batched_Input_Tensor_Type>(0);
+public:
 
+	template<class... Args>
+	Recurrent_Layer_Manager(Args... args):
+		Layer(args...),
+		inputs(0),
+		batched_inputs(0) {}
 
-	auto& get_cache(std::false_type is_batched=std::false_type()) {
-		return inputs;
-	}
-	auto& get_cache(std::true_type is_batched) {
-		return batched_inputs;
-	}
-	auto& get_cache(std::false_type is_batched=std::false_type()) const {
-		return inputs;
-	}
-	auto& get_cache(std::true_type is_batched) const {
-		return batched_inputs;
-	}
+	int batched_cache_index(int tminus_idx=0) const { return batched_inputs.size() - 1 - tminus_idx; }
+	int cache_index(int tminus_idx=0) const { return inputs.size() - 1 - tminus_idx; }
 
-	auto& get_delta_cache(std::false_type is_batched=std::false_type()) {
-		return delta_cache;
-	}
-	auto& get_delta_cache(std::true_type is_batched) {
-		return batched_delta_cache;
-	}
-	auto& get_delta_cache(std::false_type is_batched=std::false_type()) const {
-		return delta_cache;
-	}
-	auto& get_delta_cache(std::true_type is_batched) const {
-		return batched_delta_cache;
-	}
+	auto& get_cache(std::false_type is_batched) const { return inputs; }
+	auto& get_cache(std::true_type  is_batched) const { return batched_inputs; }
+	auto& get_cache(std::false_type is_batched) { return inputs; }
+	auto& get_cache(std::true_type  is_batched) { return batched_inputs; }
+	auto& get_cache(std::false_type is_batched, int tminus_idx) const { return inputs[cache_index(tminus_idx)]; }
+	auto& get_cache(std::true_type  is_batched, int tminus_idx) const { return batched_inputs[batched_cache_index(tminus_idx)]; }
+	auto& get_cache(std::false_type is_batched, int tminus_idx) { return inputs[cache_index(tminus_idx)]; }
+	auto& get_cache(std::true_type  is_batched, int tminus_idx) { return batched_inputs[batched_cache_index(tminus_idx)]; }
 
 	void set_batch_size(BC::size_t batch_sz) {
 		Layer::set_batch_size(batch_sz);
@@ -81,9 +72,24 @@ struct Recurrent_Layer_Manager: Layer {
 
 	template<class T>
 	auto forward_propagation(const T& expression) {
+		time_minus_index = 0;
 		constexpr bool is_batched = T::tensor_dimension == input_tensor_dimension::value + 1;
 		return forward_propagation_cache(expression, BC::traits::truth_type<is_batched>());
 	}
+
+	template<class T>
+	auto back_propagation(const T& dy_) {
+		auto& dy = bp_cache_delta(dy_, typename layer_traits<Layer>::greedy_evaluate_delta());
+		constexpr bool is_batched = T::tensor_dimension == output_tensor_dimension::value + 1;
+		return back_propagation_maybe_supply_previous_outputs(
+				dy,
+				typename layer_traits<Layer>::backwards_requires_outputs(),
+				BC::traits::truth_type<is_batched>());
+		time_minus_index++;
+	}
+
+private:
+
 	template<class T>
 	const auto& bp_cache_delta(const T& dy, std::true_type is_batched) {
 		auto& cache = get_delta_cache(is_batched);
@@ -94,18 +100,11 @@ struct Recurrent_Layer_Manager: Layer {
 		return dy;
 	}
 
+	auto& get_delta_cache(std::false_type is_batched) const { return delta_cache; }
+	auto& get_delta_cache(std::true_type  is_batched) const { return batched_delta_cache; }
 
-	template<class T>
-	auto back_propagation(const T& dy_) {
-		auto& dy = bp_cache_delta(dy_, typename layer_traits<Layer>::greedy_evaluate_delta());
-		constexpr bool is_batched = T::tensor_dimension == output_tensor_dimension::value + 1;
-		return back_propagation_maybe_supply_previous_outputs(
-				dy,
-				typename layer_traits<Layer>::backwards_requires_outputs(),
-				BC::traits::truth_type<is_batched>());
-	}
-
-private:
+	auto& get_delta_cache(std::false_type is_batched) { return delta_cache; }
+	auto& get_delta_cache(std::true_type  is_batched) { return batched_delta_cache; }
 
 	/** Casts this to the derived LayerChain class
 	 *  (so we can access the previous/next LayerManager's cache) */
@@ -120,22 +119,23 @@ private:
 		using tensor_t = std::conditional_t<TruthType::value, Batched_Input_Tensor_Type, Input_Tensor_Type>;
 
 		if (outputs_container.empty()) {
-			return tensor_t(Layer::forward_propagation(get_cache(is_batched).back()));
+			return tensor_t(Layer::forward_propagation(get_cache(is_batched, time_minus_index)));
 		} else {
-			return tensor_t(Layer::forward_propagation(get_cache(is_batched).back(), outputs_container.back()));
+			auto& last_output = as_derived().next().layer().get_cache(is_batched, time_minus_index);
+			return tensor_t(Layer::forward_propagation(get_cache(is_batched, time_minus_index), last_output));
 		}
 	}
 
 	template<class T, class TruthType>
 	auto forward_propagation_maybe_supply_previous_outputs(
 			const T& expression, std::false_type requires_outputs, TruthType is_batched) {
-		return Layer::forward_propagation(get_cache(is_batched).back());
+		return Layer::forward_propagation(get_cache(is_batched, time_minus_index));
 	}
 
 	template<class T, class TruthType>
 	auto forward_propagation_cache(const T& expression, TruthType is_batched) {
 		this->get_cache(is_batched).push_back(expression);
-		return forward_propagation_maybe_supply_previous_outputs(this->get_cache(is_batched).back(),
+		return forward_propagation_maybe_supply_previous_outputs(this->get_cache(is_batched, time_minus_index),
 				typename layer_traits<Layer>::forward_requires_outputs(), is_batched);
 	}
 
@@ -144,25 +144,34 @@ private:
 	auto back_propagation_maybe_supply_previous_outputs(
 			const T& dy, std::true_type requires_outputs, TruthType is_batched) {
 		if (this->as_derived().next().layer().get_cache(is_batched).empty()) {
-			return Layer::back_propagation(this->get_cache(is_batched).back(), dy);
+			return Layer::back_propagation(this->get_cache(is_batched, time_minus_index), dy);
 		} else {
-		return Layer::back_propagation(this->get_cache(is_batched).back(),
-				this->as_derived().next().layer().get_cache(is_batched).back(), dy);
+		return Layer::back_propagation(this->get_cache(is_batched, time_minus_index),
+				this->as_derived().next().layer().get_cache(is_batched, time_minus_index), dy);
 		}
 	}
 	template<class T, class TruthType>
 	auto back_propagation_maybe_supply_previous_outputs(
 			const T& dy, std::false_type requires_outputs, TruthType is_batched) {
-		return Layer::back_propagation(this->get_cache(is_batched).back(), dy);
+		return Layer::back_propagation(this->get_cache(is_batched, time_minus_index), dy);
 	}
 
 public:
 	void update_weights() {
 		Layer::update_weights();
-		this->inputs.clear();
-		this->batched_inputs.clear();
-	}
 
+		//Clear all but the last input, this ensures we maintain the internal state inbetween layers
+		if (!inputs.empty()) {
+			auto last = std::move(inputs.back());
+			inputs.clear();
+			inputs.push_back(std::move(last));
+		}
+		if (!batched_inputs.empty()) {
+			auto last = std::move(batched_inputs.back());
+			batched_inputs.clear();
+			batched_inputs.push_back(std::move(last));
+		}
+	}
 };
 
 //}
