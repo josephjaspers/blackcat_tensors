@@ -18,6 +18,87 @@ namespace nn {
  * They will cache the inputs and outputs (NOT COMPLETED YET) during forward_prop and backward prop.
  *
  */
+//
+//template<class Cache, class BatchedCache>
+//struct cache {
+//
+//	Cache m_cache;
+//	BatchedCache m_batched_cache;
+//
+//	auto& get(std::false_type is_batched) const {
+//		return m_cache;
+//	}
+//	auto& get(std::true_type is_batched) const {
+//		return m_batched_cache;
+//	}
+//	auto& get(std::false_type is_batched) {
+//		return m_cache;
+//	}
+//	auto& get(std::true_type is_batched) {
+//		return m_batched_cache;
+//	}
+//
+//	template<class T>
+//	auto& cache(const T& expression, std::false_type is_batched) {
+//		return m_cache = expression;
+//	}
+//
+//	template<class T>
+//	auto& cache(const T& expression, std::true_type is_batched) {
+//		return m_batched_cache = expression;
+//	}
+//
+//	template<class T>
+//	auto& cache(const T& expression, std::false_type is_batched) {
+//		return m_cache = expression;
+//	}
+//
+//	template<class T>
+//	auto& cache(const T& expression, std::true_type is_batched) {
+//		return m_batched_cache = expression;
+//	}
+//};
+template<class Cache, class BatchedCache>
+struct recurrent_cache {
+
+	std::vector<Cache> m_cache;
+	std::vector<BatchedCache> m_batched_cache;
+
+	auto& get(std::false_type is_batched, int tminus_idx=0) const {
+		return m_cache[m_cache.size() - 1 - tminus_idx];
+	}
+	auto& get(std::true_type is_batched, int tminus_idx=0) const {
+		return m_batched_cache[m_batched_cache.size() - 1 - tminus_idx];
+	}
+	auto& get(std::false_type is_batched, int tminus_idx=0) {
+		return m_cache[m_cache.size() - 1 - tminus_idx];
+	}
+	auto& get(std::true_type is_batched, int tminus_idx=0) {
+		return m_batched_cache[m_batched_cache.size() - 1 - tminus_idx];
+	}
+
+	template<class T>
+	auto& cache(const T& expression, std::false_type is_batched) const {
+		return m_cache = expression;
+	}
+
+	template<class T>
+	auto& cache(const T& expression, std::true_type is_batched) const {
+		return m_batched_cache = expression;
+	}
+
+	template<class T>
+	auto& cache(const T& expression, std::false_type is_batched) {
+		return m_cache = expression;
+	}
+
+	template<class T>
+	auto& cache(const T& expression, std::true_type is_batched) {
+		return m_batched_cache = expression;
+	}
+};
+
+
 
 //Non-recurrent layer_manager
 template<
@@ -72,8 +153,15 @@ struct Layer_Manager: Layer {
 		return batched_inputs;
 	}
 
+
+
 	template<class T>
-	auto forward_propagation(const T& expression) {
+	auto forward_propagation(const T& expression)
+		-> decltype(Layer::forward_propagation(
+				this->get_cache(BC::traits::truth_type<(
+						T::tensor_dimension == input_tensor_dimension::value + 1)>()) = expression))
+
+		{
 		using is_batched = BC::traits::truth_type<(T::tensor_dimension == input_tensor_dimension::value + 1)>;
 		return Layer::forward_propagation(this->get_cache(is_batched()) = expression);
 	}
