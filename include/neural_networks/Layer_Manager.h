@@ -1,5 +1,5 @@
 /*
- * Layer_Manager.h
+ 	 * Layer_Manager.h
  *
  *  Created on: Jul 23, 2019
  *      Author: joseph
@@ -18,89 +18,7 @@ namespace nn {
  * They will cache the inputs and outputs (NOT COMPLETED YET) during forward_prop and backward prop.
  *
  */
-//
-//template<class Cache, class BatchedCache>
-//struct cache {
-//
-//	Cache m_cache;
-//	BatchedCache m_batched_cache;
-//
-//	auto& get(std::false_type is_batched) const {
-//		return m_cache;
-//	}
-//	auto& get(std::true_type is_batched) const {
-//		return m_batched_cache;
-//	}
-//	auto& get(std::false_type is_batched) {
-//		return m_cache;
-//	}
-//	auto& get(std::true_type is_batched) {
-//		return m_batched_cache;
-//	}
-//
-//	template<class T>
-//	auto& cache(const T& expression, std::false_type is_batched) {
-//		return m_cache = expression;
-//	}
-//
-//	template<class T>
-//	auto& cache(const T& expression, std::true_type is_batched) {
-//		return m_batched_cache = expression;
-//	}
-//
-//	template<class T>
-//	auto& cache(const T& expression, std::false_type is_batched) {
-//		return m_cache = expression;
-//	}
-//
-//	template<class T>
-//	auto& cache(const T& expression, std::true_type is_batched) {
-//		return m_batched_cache = expression;
-//	}
-//};
-template<class Cache, class BatchedCache>
-struct recurrent_cache {
 
-	std::vector<Cache> m_cache;
-	std::vector<BatchedCache> m_batched_cache;
-
-	auto& get(std::false_type is_batched, int tminus_idx=0) const {
-		return m_cache[m_cache.size() - 1 - tminus_idx];
-	}
-	auto& get(std::true_type is_batched, int tminus_idx=0) const {
-		return m_batched_cache[m_batched_cache.size() - 1 - tminus_idx];
-	}
-	auto& get(std::false_type is_batched, int tminus_idx=0) {
-		return m_cache[m_cache.size() - 1 - tminus_idx];
-	}
-	auto& get(std::true_type is_batched, int tminus_idx=0) {
-		return m_batched_cache[m_batched_cache.size() - 1 - tminus_idx];
-	}
-
-	template<class T>
-	auto& cache(const T& expression, std::false_type is_batched) const {
-		return m_cache = expression;
-	}
-
-	template<class T>
-	auto& cache(const T& expression, std::true_type is_batched) const {
-		return m_batched_cache = expression;
-	}
-
-	template<class T>
-	auto& cache(const T& expression, std::false_type is_batched) {
-		return m_cache = expression;
-	}
-
-	template<class T>
-	auto& cache(const T& expression, std::true_type is_batched) {
-		return m_batched_cache = expression;
-	}
-};
-
-
-
-//Non-recurrent layer_manager
 template<
 	class Derived, //The LayerChain base
 	class Layer,
