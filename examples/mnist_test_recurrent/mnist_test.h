@@ -48,7 +48,7 @@ auto load_mnist(System system, const char* mnist_dataset,
 
 template<class System=BC::host_tag>
 int percept_MNIST(System system_tag, const char* mnist_dataset,
-		int epochs=10, int batch_size=default_batch_size, int samples=32*1024) {
+		int epochs=1, int batch_size=default_batch_size, int samples=32*1024) {
 
 	using namespace BC::nn;
 
@@ -60,11 +60,11 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 
 
     auto network = neuralnetwork(
-    			recurrent(system_tag, 784/2, 128),
+    			feedforward(system_tag, 784/2, 128),
     			tanh(system_tag, 128),
-    			recurrent(system_tag, 128, 64),
-    			tanh(system_tag, 64),
-    			recurrent(system_tag, 64, 10),
+    			recurrent(system_tag, 128, 10),
+//    			logistic(system_tag, 10),
+//    			recurrent(system_tag, 64, 10),
     			softmax(system_tag, 10),
     			outputlayer(system_tag, 10)
     );

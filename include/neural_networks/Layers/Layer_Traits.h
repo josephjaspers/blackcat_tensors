@@ -14,8 +14,8 @@ namespace detail {
 
 template<class T> using query_forward_requires_inputs  = typename T::forward_requires_inputs;
 template<class T> using query_forward_requires_outputs = typename T::forward_requires_outputs;
-template<class T> using query_backwards_requires_inputs  = typename T::backwards_requires_inputs;
-template<class T> using query_backwards_requires_outputs = typename T::backwards_requires_outputs;
+template<class T> using query_backward_requires_inputs  = typename T::backward_requires_inputs;
+template<class T> using query_backward_requires_outputs = typename T::backward_requires_outputs;
 
 template<class T> using query_input_tensor_dimension  = typename T::input_tensor_dimension;
 template<class T> using query_output_tensor_dimension = typename T::output_tensor_dimension;
@@ -60,12 +60,12 @@ struct layer_traits {
 			= BC::traits::conditional_detected_t<detail::query_forward_requires_outputs, T, std::false_type>;
 
 
-	using backwards_requires_inputs
-			= BC::traits::conditional_detected_t<detail::query_backwards_requires_inputs, T, std::true_type>;
-	using backwards_requires_outputs
-			= BC::traits::conditional_detected_t<detail::query_backwards_requires_outputs, T, std::false_type>;
-	using backwards_delta_should_be_cached
-			= BC::traits::conditional_detected_t<detail::query_backwards_requires_outputs, T, std::false_type>;
+	using backward_requires_inputs
+			= BC::traits::conditional_detected_t<detail::query_backward_requires_inputs, T, std::true_type>;
+	using backward_requires_outputs
+			= BC::traits::conditional_detected_t<detail::query_backward_requires_outputs, T, std::false_type>;
+	using backward_delta_should_be_cached
+			= BC::traits::conditional_detected_t<detail::query_backward_requires_outputs, T, std::false_type>;
 
 	using greedy_evaluate_delta
 			= BC::traits::conditional_detected_t<detail::query_greedy_evaluate_delta, T, std::false_type>;

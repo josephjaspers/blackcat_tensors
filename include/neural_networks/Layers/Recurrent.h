@@ -13,7 +13,7 @@
 namespace BC {
 namespace nn {
 
-template<class SystemTag, class ValueType>
+template<class SystemTag, class ValueType, class RecurrentNonLinearity=BC::Tanh>
 struct Recurrent : public Layer_Base {
 
 	using system_tag = SystemTag;
@@ -26,16 +26,13 @@ struct Recurrent : public Layer_Base {
 	using mat = BC::Matrix<ValueType, BC::Allocator<SystemTag, ValueType>>;
 	using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
 
-private:
-
+	RecurrentNonLinearity g;
     ValueType lr = 0.03;
 
     mat dc; //delta cell_state
     mat w, w_gradients;  //weights
     mat r, r_gradients;
     vec b, b_gradients;  //biases
-
-public:
 
     Recurrent(int inputs, int outputs) :
         Layer_Base(inputs, outputs),
@@ -48,39 +45,35 @@ public:
 	{
         w.randomize(-2, 2);
         b.randomize(-2, 2);
+        r.randomize(-2, 2);
     }
 
-    template<class Matrix>
-    auto forward_propagation(const Matrix& x) {
+    template<class X>
+    auto forward_propagation(const X& x) {
     	return w * x + b;
-    }
-
-    template<class X, class Delta>
-    auto back_propagation(const X& x, const Delta& dy) {
-    	dc = dy;
-    	w_gradients -= lr * dc  * x.t();
-    	b_gradients -= lr * dc;
-    	return w.t() * dc;
     }
 
     template<class X, class Y>
     auto forward_propagation(const X& x, const Y& y) {
-    	return w * x + r * y + b;
+    	return w * x + r * g(y) + b;
     }
 
     template<class X, class Y, class Delta>
     auto back_propagation(const X& x, const Y& y, const Delta& dy) {
-    	dc = dy + r.t() * dc;
-    	w_gradients -= lr * dc  * x.t();
-    	b_gradients -= lr * dc;
-    	r_gradients -= lr * dc * y.t();
-    	return w.t() * dc;
+    	r_gradients -= dc * g.dx(y).t();
+
+    	dc.alias() = dy + r.t() * dc;
+    	w_gradients -= dy  * x.t();
+    	b_gradients -= dy;
+    	return w.t() * dy;
     }
 
     void update_weights() {
-    	w += w_gradients / this->batch_size();
-    	b += b_gradients / this->batch_size();
-    	r += r_gradients / this->batch_size();
+    	auto lr = this->lr / this->batch_size();
+
+    	w += w_gradients * lr;
+    	b += b_gradients * lr;
+    	r += r_gradients * lr;
 
     	w_gradients.zero();
     	b_gradients.zero();

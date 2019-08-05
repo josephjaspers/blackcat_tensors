@@ -10,7 +10,6 @@
 
 namespace BC {
 namespace nn {
-//namespace incomplete {
 
 
 //TODO
@@ -83,7 +82,7 @@ public:
 		constexpr bool is_batched = T::tensor_dimension == output_tensor_dimension::value + 1;
 		return back_propagation_maybe_supply_previous_outputs(
 				dy,
-				typename layer_traits<Layer>::backwards_requires_outputs(),
+				typename layer_traits<Layer>::backward_requires_outputs(),
 				BC::traits::truth_type<is_batched>());
 		time_minus_index++;
 	}
@@ -143,16 +142,15 @@ private:
 	template<class T, class TruthType>
 	auto back_propagation_maybe_supply_previous_outputs(
 			const T& dy, std::true_type requires_outputs, TruthType is_batched) {
-		if (this->as_derived().next().layer().get_cache(is_batched).empty()) {
-			return Layer::back_propagation(this->get_cache(is_batched, time_minus_index), dy);
-		} else {
+
 		return Layer::back_propagation(this->get_cache(is_batched, time_minus_index),
 				this->as_derived().next().layer().get_cache(is_batched, time_minus_index), dy);
-		}
 	}
+
 	template<class T, class TruthType>
 	auto back_propagation_maybe_supply_previous_outputs(
 			const T& dy, std::false_type requires_outputs, TruthType is_batched) {
+
 		return Layer::back_propagation(this->get_cache(is_batched, time_minus_index), dy);
 	}
 
@@ -174,7 +172,6 @@ public:
 	}
 };
 
-//}
 }
 }
 

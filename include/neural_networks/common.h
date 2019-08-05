@@ -17,8 +17,6 @@ namespace nn {
 #define BLACKCAT_DEFAULT_SYSTEM_T BC::BLACKCAT_DEFAULT_SYSTEM##_tag
 #endif
 
-
-
 }
 }
 

@@ -50,6 +50,9 @@ template<class T> auto surpress_unused_variable_warning_workaround(funcName)\
 #define BLACKCAT_MATH_DEF(funcName, instanceName, ...) \
 		BLACKCAT_FUNCTOR_DEF(funcName, instanceName, std::instanceName(x), __VA_ARGS__)
 
+//UTILITY 'just returns x'
+BLACKCAT_FUNCTOR_DEF( Pass , pass, x, DERIVATIVE_DEF(1))
+
 //COMMON
 BLACKCAT_MATH_DEF( Exp , exp , DERIVATIVE_DEF(std::exp(x)))
 BLACKCAT_MATH_DEF( Exp2 , exp2 )

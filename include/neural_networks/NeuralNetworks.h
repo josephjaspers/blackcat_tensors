@@ -16,6 +16,8 @@
 #include "Layers/Nonlinear.h"
 #include "Layers/Softmax.h"
 //#include "Layers/LSTM.h"		//TODO
+//#include "Layers/GRU.h"		//TODO
+
 #include "Layers/Recurrent.h" //TODO
 #include "Network.h"
 
