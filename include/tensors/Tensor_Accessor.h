@@ -15,53 +15,41 @@ namespace tensors {
 template<class>
 class Tensor_Base;
 
-template<class T>
-const auto reshape(const Tensor_Base<T>& tensor) {
+//aliases
+template<class... Ts>
+auto index(Ts... ts) {
+	return BC::utility::make_array_t<BC::size_t>(ts...);
+}
+template<class... Ts>
+auto shape(Ts... ts) {
+	return BC::utility::make_array_t<BC::size_t>(ts...);
+}
+
+
+template<class T, class Shape>
+auto reshape(Tensor_Base<T>& tensor, Shape shape) {
 	static_assert(BC::tensors::exprs::expression_traits<T>::is_array &&
 					T::tensor_iterator_dimension <= 1,
 					"Reshape is only available to continuous tensors");
-    return [&](auto... indicies) {
-        return make_tensor(exprs::make_view(tensor, utility::make_array(indicies...)));
-    };
+	return make_tensor(exprs::make_view(tensor, shape));
 }
 
-template<class T, class... Shape>
-auto reshape(Tensor_Base<T>& tensor, Shape... indicies) {
-//	static_assert(BC::tensors::exprs::expression_traits<T>::is_array &&
-//					T::tensor_iterator_dimension <= 1,
-//					"Reshape is only available to continuous tensors");
-	return make_tensor(exprs::make_view(tensor, utility::make_array(indicies...)));
+template<class T, class Index, class Shape>
+auto chunk(Tensor_Base<T>& tensor, Index index, Shape shape) {
+	return make_tensor(exprs::make_chunk(tensor, index, shape));
 }
 
-
-template<class T, class... Indicies, class=std::enable_if_t<traits::sequence_of_v<BC::size_t, Indicies...>>>
-const auto chunk(const Tensor_Base<T>& tensor, Indicies... ints) {
-    return [&, ints...](auto... shape_dimensions) {
-        return make_tensor(exprs::make_chunk(
-                tensor,
-                BC::utility::make_array(ints...),
-                BC::utility::make_array(shape_dimensions...)));
-    };
-}
-
-template<class T>
-auto reshape(Tensor_Base<T>& tensor) {
+template<class T, class Shape>
+const auto reshape(const Tensor_Base<T>& tensor, Shape shape) {
 	static_assert(BC::tensors::exprs::expression_traits<T>::is_array &&
-					T::tensor_iterator_dimension <= 1,
-					"Reshape is only available to continuous tensors");
-    return [&](auto... indicies) {
-        return make_tensor(exprs::make_view(tensor, utility::make_array(indicies...)));
-    };
+		T::tensor_iterator_dimension <= 1,
+		"Reshape is only available to continuous tensors");
+	return make_tensor(exprs::make_view(tensor, shape));
 }
 
-template<class T, class... Indicies, class=std::enable_if_t<traits::sequence_of_v<BC::size_t, Indicies...>>>
-auto chunk(Tensor_Base<T>& tensor, Indicies... ints) {
-    return [&, ints...](auto... shape_dimensions) {
-        return make_tensor(exprs::make_chunk(
-                tensor,
-                BC::utility::make_array(ints...),
-                BC::utility::make_array(shape_dimensions...)));
-    };
+template<class T, class Index, class Shape>
+const auto chunk(const Tensor_Base<T>& tensor, Index index, Shape shape) {
+	return make_tensor(exprs::make_chunk(tensor, index, shape));
 }
 
 template<class ExpressionTemplate, class voider=void>

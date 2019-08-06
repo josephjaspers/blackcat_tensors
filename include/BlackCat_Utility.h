@@ -42,6 +42,12 @@ namespace utility {
     	return array<sizeof...(values) + 1, T> {front, values...};
     }
 
+	//make array but specify the type 
+	template<class T, class... vals> BCINLINE
+		auto make_array_t(vals... values) {
+		return array<sizeof...(values), T> {values...};
+	}
+
 
 //-------------------------------Lightweight lambda-wrapper to enable usage of the bracket-operator-------------------------------//
     template<int dimension, class scalar, class ref>

@@ -93,7 +93,7 @@ int test_accessors(int sz=128) {
 		vec a2(a[2]);
 		vec a3(a[3]);
 
-		auto block_of_a = chunk(a,1,1)(4,3); //a 3x3 matrix starting at point 1,1
+		auto block_of_a = chunk(a, BC::index(1,1), BC::shape(4,3)); //a 3x3 matrix starting at point 1,1
 
 		bool ensure_correct_size = block_of_a.size() == 4 * 3;
 		bool ensure_correct_rows = block_of_a.rows() == 4;
@@ -119,8 +119,8 @@ int test_accessors(int sz=128) {
 		vec a3(a[3]);
 
 
-		auto primary_block_of_a = chunk(a, 0, 0)(5,5);
-		auto block_of_a = chunk(primary_block_of_a ,1,1)(4,3); //a 3x3 matrix starting at point 1,1
+		auto primary_block_of_a = chunk(a, BC::index(0, 0), BC::shape(5,5));
+		auto block_of_a = chunk(primary_block_of_a, BC::index(1,1), BC::shape(4,3)); //a 3x3 matrix starting at point 1,1
 
 		bool ensure_correct_size = block_of_a.size() == 4 * 3;
 		bool ensure_correct_rows = block_of_a.rows() == 4;
