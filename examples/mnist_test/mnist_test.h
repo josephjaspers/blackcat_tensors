@@ -86,7 +86,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 
 	std::cout << " testing... " << std::endl;
 	int test_images = 10;
-	cube img = cube(reshape(inputs[0])(28,28, batch_size));
+	cube img = cube(reshape(inputs[0], BC::shape(28,28, batch_size)));
 	mat hyps = mat(network.forward_propagation(inputs[0]));
 
 	for (int i = 0; i < test_images; ++i) {
