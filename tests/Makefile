@@ -1,6 +1,6 @@
 CXXVERSION = -std=c++14
-CXXFLAGS = -O3 -o mnist_test_exec
-CUFLAGS = -O3 -o mnist_test_exec_cu
+CXXFLAGS = -O3 -o blackcat_tests
+CUFLAGS = -O3 -o blackcat_tests_cu
 
 CXXFILES = run.cpp
 CUFILES  = run.cu
