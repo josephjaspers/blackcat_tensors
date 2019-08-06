@@ -21,4 +21,4 @@ before_install:
     
 before_script: cd tests
 
-script: make default;  ./blackcat_tests;
+script: make travis;  ./blackcat_tests;
