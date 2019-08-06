@@ -25,12 +25,15 @@ BlackCat_Tensors.sln
 /.vs/*
 /include/autograd/*
 /include/neural_networks/Layers/LSTM.h
+/include/neural_networks/Layers/GRU.h
 /include/neural_networks/Layers/RecurrentFeedForward.h
 /include/BlackCat_Autograd.h/
 /autodocs/
 /include/bc_py.py
 /examples/mnist_test/mnist_test_exec_cu
 /examples/mnist_test/mnist_test_exec
+/examples/mnist_test_recurrent/mnist_test_exec_cu
+/examples/mnist_test_recurrent/mnist_test_exec
 /tests/blackcat_tensors_test
 /tests/blackcat_tensors_test_cu
 /__pycache__/

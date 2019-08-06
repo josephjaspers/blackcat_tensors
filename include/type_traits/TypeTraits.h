@@ -89,16 +89,19 @@ using namespace BC::traits::common;
 	//----------------------------------
 
 
-    BCINLINE static constexpr BC::size_t  max(int x) { return x; }
-    BCINLINE static constexpr BC::size_t  min(int x) { return x; }
+	template<class T>
+    BCINLINE static constexpr BC::size_t  max(const T& x) { return x; }
+
+	template<class T>
+    BCINLINE static constexpr BC::size_t  min(const T& x) { return x; }
 
     template<class T, class... Ts> BCINLINE
-    static constexpr size_t max(T&& x, Ts&&... xs) {
+    static constexpr size_t max(const T& x, const Ts&... xs) {
     	return x > max(xs...) ? x : max(xs...);
     }
 
     template<class T, class... Ts> BCINLINE
-    static constexpr size_t min(T&& x, Ts&&... xs) {
+    static constexpr size_t min(const T& x, const Ts&... xs) {
     	return x < min(xs...) ? x : min(xs...);
     }
 
