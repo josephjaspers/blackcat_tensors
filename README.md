@@ -1,3 +1,6 @@
+# Build State 
+[![Build Status](https://travis-ci.org/josephjaspers/BlackCat_Tensors.svg?branch=master)](https://travis-ci.org/josephjaspers/BlackCat_Tensors)
+
 # Documentation 
 Author: Joseph Jaspers
 
