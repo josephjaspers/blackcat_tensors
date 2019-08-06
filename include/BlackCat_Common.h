@@ -19,12 +19,14 @@ namespace BC {
 
 class system_tag_base {};
 
-struct host_tag : system_tag_base {
+class host_tag : system_tag_base {
+public:
 	using default_floating_point_type = double;
 	using default_integer_type = int;
 };
 
-struct device_tag : system_tag_base {
+class device_tag : system_tag_base {
+public:
 	using default_floating_point_type = float;
 	using default_integer_type = int;
 };

@@ -84,7 +84,7 @@ public:
 	Tensor_Base(BC::traits::only_if<move_constructible, self_type&&> tensor):
 		parent(std::move(tensor.as_parent())) {}
 
-	Tensor_Base& operator =(BC::traits::only_if<move_assignable, self_type&&> tensor) {
+	Tensor_Base& operator =(BC::traits::only_if<move_assignable, self_type&&> tensor) noexcept {
 		this->as_parent() = std::move(tensor.as_parent());
 		return *this;
 	}

@@ -40,7 +40,7 @@ struct Tensor_Utility {
     using utility_l = BC::utility::implementation<system_tag>;
 
     template<class>
-    friend class Tensor_Utility;
+    friend struct Tensor_Utility;
 
 private:
     static constexpr int tensor_dimension = ExpressionTemplate::tensor_dimension;
