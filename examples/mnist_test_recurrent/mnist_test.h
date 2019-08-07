@@ -60,10 +60,9 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	using mat  = BC::Matrix<value_type, allocator_type>;
 	using clock = std::chrono::duration<double>;
 
-
 #ifdef BC_MNIST_TEST_LSTM
-	epochs = 10000; //Requires more iterations to train
-	samples=128; //reduce the number of samples (this takes much longer to train)
+	epochs = 1000; //Requires more iterations to train
+	samples = 128; //reduce the number of samples (this takes much longer to train)
 
     auto network = neuralnetwork(
 				feedforward(system_tag, 784/4, 64),
