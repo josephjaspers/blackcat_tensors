@@ -54,7 +54,7 @@ public:
     	using BC::sum;
 
     	//TODO -- convert this into an operation, need 'broadcasted' sum
-    		y[0] = exp(x) / sum(exp(x));
+		y[0] = exp(x) / sum(exp(x));
 
         return y[0];
     }

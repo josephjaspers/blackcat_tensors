@@ -61,6 +61,17 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	using clock = std::chrono::duration<double>;
 
 
+#ifdef BC_MNIST_TEST_LSTM
+	epochs = 10000; //Requires more iterations to train
+	samples=128; //reduce the number of samples (this takes much longer to train)
+
+    auto network = neuralnetwork(
+				feedforward(system_tag, 784/4, 64),
+				tanh(system_tag, 64),
+    			lstm(system_tag, 64, 10),
+    			softmax(system_tag, 10),
+    			outputlayer(system_tag, 10));
+#else
     auto network = neuralnetwork(
     			feedforward(system_tag, 784/4, 128),
     			tanh(system_tag, 128),
@@ -70,6 +81,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
     			softmax(system_tag, 10),
     			outputlayer(system_tag, 10)
     );
+#endif
     network.set_batch_size(batch_size);
 
     std::pair<cube, cube> data = load_mnist(system_tag, mnist_dataset, batch_size, samples);
@@ -103,7 +115,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	std::cout << " training time: " <<  total.count() << std::endl;
 
 	std::cout << " testing... " << std::endl;
-	BC::size_t test_images = 20;
+	BC::size_t test_images = 10;
 	cube img = cube(reshape(inputs[0], BC::shape(28,28, batch_size)));
 	network.forward_propagation(chunk(inputs[0], BC::index(0,        0), BC::shape(784/4, batch_size)));
 	network.forward_propagation(chunk(inputs[0], BC::index(784* 1/4, 0), BC::shape(784/4, batch_size)));
