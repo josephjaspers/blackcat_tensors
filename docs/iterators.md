@@ -12,12 +12,12 @@ int main() {
 
     BC::Matrix<float> matrix(5, 5); 
     
-    for (float& val : matrix) {
+    for (auto col : matrix) {
       //do work 
     }
     
     //identical
-    for (float& val : matrix.iter()) {
+    for (float& val : matrix.cw_iter()) {
       //do work 
     }
 }
@@ -73,7 +73,7 @@ Convienant iterator proxies which support start and end ranges.
 ```cpp
 BC::Matrix<float> mat; 
 
-  for (float& scalar : mat.iter(start, finish)) {
+  for (float& scalar : mat.cw_iter(start, finish)) {
     //do work
   }
   
