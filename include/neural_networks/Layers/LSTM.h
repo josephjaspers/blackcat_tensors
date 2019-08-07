@@ -35,7 +35,7 @@ struct LSTM : public Layer_Base {
 
 private:
 
-    ValueType lr = 0.0001;
+    ValueType lr = 0.03;
 
 	CellStateNonLinearity  c_g;
     ForgetGateNonlinearity f_g;

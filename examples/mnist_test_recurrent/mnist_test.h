@@ -60,6 +60,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	using mat  = BC::Matrix<value_type, allocator_type>;
 	using clock = std::chrono::duration<double>;
 
+#define BC_MNIST_TEST_LSTM
 #ifdef BC_MNIST_TEST_LSTM
 	epochs = 1000; //Requires more iterations to train
 	samples = 128; //reduce the number of samples (this takes much longer to train)
@@ -103,6 +104,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 
 				//Truncate BP to only the last output
 //				network.back_propagation(outputs[j]);
+				network.back_propagation(outputs[j]);
 				network.back_propagation(outputs[j]);
 
 				network.update_weights();
