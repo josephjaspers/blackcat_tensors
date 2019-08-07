@@ -1,14 +1,14 @@
 # Allocators 
 
-BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two template arguments. The first argument, is the scalar-type while the second is the allocator. This was designed to mimic `stl` library.
+BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two template arguments. The first argument, is the scalar-type while the second is the allocator. This was designed to mimic the `stl` library.
 
 	
 #### Overview
 
 *Basic_Allocator*:
 
-	The standard allocator and default argument.
-	The Basic Allocator is comparable to the std::allocator.
+	The default allocator. 
+	The Basic_Allocator is comparable to the std::allocator.
 	It has no special properties.
 
 *Cuda_Allocator*:
@@ -31,12 +31,12 @@ BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two temp
 	`system_tag`
 
 	The system_tag, may be either BC::host_tag or BC::device_tag.
-	```cpp
-		using system_tag = BC::device_tag; //Will inform BC_Tensors your allocators is a 'Cuda Allocator'
-	```
+	
+```cppp
+using system_tag = BC::device_tag; //Will inform BC_Tensors your allocator allocates memory on the GPU.
+```	
 	`system_tag` informs if the memory is allocated on the GPU or CPU. 
-	This enables compile time checking to make sure expressions are computed in the apropriate manner as well
-	as enabling querying for apropriate default behavior across the CPU and GPU. 
+	Tensors constructed with 'device' allocators will have their computations run on the GPU.
 
 	If system_tag is not supplied, it is defaulted to 'host_tag'.
 
@@ -53,6 +53,8 @@ BC::Matrix<float, BC::Cuda_Managed<float>> mat;    //allocates memory on the GPU
 #### Fancy Allocators:
 
 	BlackCat_Tensors supports some more advanced allocators found in the namespace BC::allocators::fancy.
+	Allocators in the 'fancy' namespace have more advanced properties than the aforementioned allocators. 
+	They're generally used internally for performance-critical components of the BCT.
 	
 ```cpp
 	template<class ValueType, class SystemTag>
@@ -65,6 +67,5 @@ BC::Matrix<float, BC::Cuda_Managed<float>> mat;    //allocates memory on the GPU
 	struct Workspace;
 
 	//The Workspace allocator works as un unsynchronized-memory stack. 
-	//Ists memory 
-
+	//It;s deallocations must be in reverse order of it's allocations.
 ```
