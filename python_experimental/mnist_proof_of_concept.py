@@ -3,12 +3,13 @@ from blackcat_tensors import bc #bc is the c++ namespace
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv('../examples/mnist_train.csv')
+df = pd.read_csv('../examples/mnist_test/mnist_train.csv')
 
 outputs = blackcat_tensors.Matrix(10, len(df))
 inputs  = blackcat_tensors.Matrix(784, len(df))
 single_Value_outputs = df.label.values 
 
+outputs.zero()
 #'intializing one hot vector of outputs'
 for i in range(0, len(df.label)):
 	outputs[i][int(df.label.values[i])].fill(1)
@@ -31,13 +32,14 @@ network = bc.nn.neuralnetwork(
 )
 
 samples = outputs.cols()
-batch_size = 32
-epochs = 10 
+batch_size = 8
+epochs = 1 
 batches = int(samples/batch_size)
 network.set_batch_size(batch_size) 
 
-outs = bc.tensors.reshape(outputs, 10, batch_size, batches)
-ins  = bc.tensors.reshape(inputs, 784, batch_size, batches)
+outs = bc.tensors.reshape(outputs, bc.tensors.shape(10, batch_size, batches))
+ins  = bc.tensors.reshape(inputs, bc.tensors.shape(784, batch_size, batches))
+
 
 print('training...')
 for i in range(epochs):
@@ -49,6 +51,7 @@ for i in range(epochs):
 
 
 prediction = network.forward_propagation(ins[0])
+prediction.print()
 for i in range(batch_size):	
 	print('----------------------')
 	print('EXPECTED ', outs[0][i])
