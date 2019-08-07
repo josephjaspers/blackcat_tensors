@@ -80,11 +80,11 @@ public:
 	auto back_propagation(const T& dy_) {
 		auto& dy = bp_cache_delta(dy_, typename layer_traits<Layer>::greedy_evaluate_delta());
 		constexpr bool is_batched = T::tensor_dimension == output_tensor_dimension::value + 1;
+		time_minus_index++;
 		return back_propagation_maybe_supply_previous_outputs(
 				dy,
 				typename layer_traits<Layer>::backward_requires_outputs(),
 				BC::traits::truth_type<is_batched>());
-		time_minus_index++;
 	}
 
 private:

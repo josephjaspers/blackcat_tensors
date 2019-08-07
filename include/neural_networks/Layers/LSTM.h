@@ -35,7 +35,7 @@ struct LSTM : public Layer_Base {
 
 private:
 
-    ValueType lr = 0.001;
+    ValueType lr = 0.0001;
 
 	CellStateNonLinearity  c_g;
     ForgetGateNonlinearity f_g;
@@ -223,6 +223,7 @@ public:
     template<class X, class Delta>
     auto back_propagation(const X& x, const Delta& delta_outputs) {
     	throw 1;
+    	//required -- TODO fix
     	return wz.t() * dz +
         			wi.t() * dz +
         			wf.t() * df +
