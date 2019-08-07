@@ -142,14 +142,16 @@ private:
 	auto back_propagation_maybe_supply_previous_outputs(
 			const T& dy, std::true_type requires_outputs, TruthType is_batched) {
 
-		return Layer::back_propagation(this->get_cache(is_batched, time_minus_index),
-				this->as_derived().next().layer().get_cache(is_batched, time_minus_index++), dy); //note: post inc (not pre)
+		time_minus_index++;
+		return Layer::back_propagation(this->get_cache(is_batched, time_minus_index-1),
+				this->as_derived().next().layer().get_cache(is_batched, time_minus_index-1), dy); //note: post inc (not pre)
 	}
 
 	template<class T, class TruthType>
 	auto back_propagation_maybe_supply_previous_outputs(
 			const T& dy, std::false_type requires_outputs, TruthType is_batched) {
-		return Layer::back_propagation(this->get_cache(is_batched, time_minus_index++), dy); //note: post inc (not pre)
+		time_minus_index++;
+		return Layer::back_propagation(this->get_cache(is_batched, time_minus_index-1), dy); //note: post inc (not pre)
 	}
 
 public:
