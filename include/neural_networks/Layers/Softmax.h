@@ -2,7 +2,7 @@
  * SoftMax.h
  *
  *  Created on: Jul 15, 2019
- *      Author: joseph
+ *	  Author: joseph
  */
 
 #ifndef BLACKCAT_NEURALNETWORK_SOFTMAX_H_
@@ -22,54 +22,54 @@ public:
 	using value_type = ValueType;
 
 	using mat = BC::Matrix<ValueType, BC::Allocator<SystemTag, ValueType>>;
-    using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
+	using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
 
-    using mat_view = BC::Matrix_View<ValueType, BC::Allocator<SystemTag, ValueType>>;
+	using mat_view = BC::Matrix_View<ValueType, BC::Allocator<SystemTag, ValueType>>;
 
 private:
-    mat y;
-    mat_view x;
+	mat y;
+	mat_view x;
 
 public:
 
-    SoftMax(int inputs):
-        Layer_Base(inputs, inputs) {}
+	SoftMax(int inputs):
+		Layer_Base(inputs, inputs) {}
 
-    template<class Allocator>
-    const auto& forward_propagation(const BC::Matrix<value_type, Allocator>& x_) {
-    	using BC::exp;
-    	using BC::sum;
+	template<class Allocator>
+	const auto& forward_propagation(const BC::Matrix<value_type, Allocator>& x_) {
+		using BC::exp;
+		using BC::sum;
 
-    	//TODO -- convert this into an operation, need 'broadcasted' sum
-    	mat x = mat(x_);
-    	for (int i = 0; i < x.cols(); ++i) {
-    		y[i] = exp(x[i]) / sum(exp(x[i]));
-    	}
+		//TODO -- convert this into an operation, need 'broadcasted' sum
+		mat x = mat(x_);
+		for (int i = 0; i < x.cols(); ++i) {
+			y[i] = exp(x[i]) / sum(exp(x[i]));
+		}
 
-        return y;
-    }
-    template<class Allocator>
-    auto forward_propagation(const BC::Vector<value_type, Allocator>& x) {
-    	using BC::exp;
-    	using BC::sum;
+		return y;
+	}
+	template<class Allocator>
+	auto forward_propagation(const BC::Vector<value_type, Allocator>& x) {
+		using BC::exp;
+		using BC::sum;
 
-    	//TODO -- convert this into an operation, need 'broadcasted' sum
+		//TODO -- convert this into an operation, need 'broadcasted' sum
 		y[0] = exp(x) / sum(exp(x));
 
-        return y[0];
-    }
+		return y[0];
+	}
 
 
-    template<class Matrix>
+	template<class Matrix>
 	auto back_propagation(const mat& x, const Matrix& dy) {
 		return dy;
 	}
 
-    void update_weights() {}
+	void update_weights() {}
 
-    void set_batch_size(int x) {
-        y = mat(this->output_size(), x);
-    }
+	void set_batch_size(int x) {
+		y = mat(this->output_size(), x);
+	}
 };
 
 

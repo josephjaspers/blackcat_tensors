@@ -2,7 +2,7 @@
  * FeedForward.cu
  *
  *  Created on: Jan 28, 2018
- *      Author: joseph
+ *	  Author: joseph
  */
 
 #ifndef FEEDFORWARD_CU_
@@ -18,40 +18,40 @@ struct FeedForward : public Layer_Base {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-    using greedy_evaluate_delta = std::true_type;
+	using greedy_evaluate_delta = std::true_type;
 
 	using mat = BC::Matrix<ValueType, BC::Allocator<SystemTag, ValueType>>;
 	using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
 
 private:
 
-    ValueType lr = 0.003;
+	ValueType lr = 0.003;
 
-    mat w;  //weights
-    vec b;  //biases
+	mat w;  //weights
+	vec b;  //biases
 
 public:
 
-    FeedForward(int inputs, BC::size_t  outputs) :
-        Layer_Base(inputs, outputs),
+	FeedForward(int inputs, BC::size_t  outputs) :
+		Layer_Base(inputs, outputs),
 		w(outputs, inputs),
 		b(outputs)
-    {
-        w.randomize(-2, 2);
-        b.randomize(-2, 2);
-    }
+	{
+		w.randomize(-2, 2);
+		b.randomize(-2, 2);
+	}
 
-    template<class Matrix>
-    auto forward_propagation(const Matrix& x) {
-    	return w * x + b;
-    }
+	template<class Matrix>
+	auto forward_propagation(const Matrix& x) {
+		return w * x + b;
+	}
 
-    template<class X, class Delta>
-    auto back_propagation(const X& x, const Delta& dy) {
-    	w -= lr * dy  * x.t();
-    	b -= lr * dy;
-    	return w.t() * dy;
-    }
+	template<class X, class Delta>
+	auto back_propagation(const X& x, const Delta& dy) {
+		w -= lr * dy  * x.t();
+		b -= lr * dy;
+		return w.t() * dy;
+	}
 };
 
 #ifndef BC_CLING_JIT

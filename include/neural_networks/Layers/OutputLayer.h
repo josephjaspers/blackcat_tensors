@@ -2,7 +2,7 @@
  * FeedForward.cu
  *
  *  Created on: Jan 28, 2018
- *      Author: joseph
+ *	  Author: joseph
  */
 
 #ifndef OUTPUTas_CU
@@ -19,18 +19,18 @@ struct OutputLayer : Layer_Base {
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 
-    OutputLayer(int inputs):
-    	Layer_Base(inputs, inputs) {}
+	OutputLayer(int inputs):
+		Layer_Base(inputs, inputs) {}
 
-    template <class Tensor>
-    const auto& forward_propagation(const Tensor& x) {
-    	return x;
-    }
+	template <class Tensor>
+	const auto& forward_propagation(const Tensor& x) {
+		return x;
+	}
 
-    template <class TensorX, class TensorY>
-    auto back_propagation(const TensorX& x, const TensorY& y) {
-        return x - y;
-    }
+	template <class TensorX, class TensorY>
+	auto back_propagation(const TensorX& x, const TensorY& y) {
+		return x - y;
+	}
 };
 
 #ifndef BC_CLING_JIT

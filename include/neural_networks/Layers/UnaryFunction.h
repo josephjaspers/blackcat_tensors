@@ -13,19 +13,19 @@ struct Function: Layer_Base {
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 
-    Function(int inputs, Functor function_=Functor()):
-        Layer_Base(inputs, inputs),
-        function(function_) {}
+	Function(int inputs, Functor function_=Functor()):
+		Layer_Base(inputs, inputs),
+		function(function_) {}
 
-    template<class Matrix>
-    auto forward_propagation(const Matrix& x) {
-        return function(x);
-    }
+	template<class Matrix>
+	auto forward_propagation(const Matrix& x) {
+		return function(x);
+	}
 
-    template<class X, class Delta>
-    auto back_propagation(const X& x, const Delta& dy) {
-    	return function.dx(x) % dy;
-    }
+	template<class X, class Delta>
+	auto back_propagation(const X& x, const Delta& dy) {
+		return function.dx(x) % dy;
+	}
 };
 
 
