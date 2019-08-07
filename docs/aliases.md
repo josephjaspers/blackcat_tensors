@@ -22,14 +22,3 @@ BlackCat_Tensor's defines a numerous amount of user-types.
     Cube_View<ValueType, Allocator>
 
 ```
-
-#### Expression Types:
-- A TensorXpr reference should be used in any function that will accept a Tensor or TensorExpression.
-- Cannot be constructed directly, used only for method parameters. 
-```cpp
-    TensorXpr<int, T>
-    ScalarXpr<T>
-    VectorXpr<T>
-    MatrixXpr<T>
-    CubeXpr<T>
-  ```
