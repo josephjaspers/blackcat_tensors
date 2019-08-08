@@ -13,9 +13,14 @@
 namespace BC {
 namespace allocators {
 namespace fancy {
-
-/// Similar to the C++17 std::pmr::polymorphic_allocator,
-/// this allocator allows modifying its underlying allocator at runtime.
+/**
+ * Similar to the C++17 std::pmr::polymorphic_allocator.
+ *
+ * The polymorphic_allocator accepts an Allocator object on construction
+ * and uses polymorphism to create an internal 'allocator.' All calls of allocate/deallocate
+ * are forwarded to the stated allocator. The polymorphic_allocator there-for, cannot be rebound.
+ *
+ */
 template<class SystemTag, class ValueType>
 struct Polymorphic_Allocator {
 
@@ -87,14 +92,14 @@ public:
 
 
 	template<class Allocator>
-	Polymorphic_Allocator(const Allocator& alloc)
-	: m_allocator(std::unique_ptr<Virtual_Allocator>(new Derived_Allocator<Allocator>(alloc))) {}
+	Polymorphic_Allocator(const Allocator& alloc):
+		m_allocator(std::unique_ptr<Virtual_Allocator>(new Derived_Allocator<Allocator>(alloc))) {}
 
-	Polymorphic_Allocator()
-	: m_allocator(std::unique_ptr<Virtual_Allocator>(new Derived_Allocator<default_allocator_t>())) {}
+	Polymorphic_Allocator():
+		m_allocator(std::unique_ptr<Virtual_Allocator>(new Derived_Allocator<default_allocator_t>())) {}
 
-	Polymorphic_Allocator(const Polymorphic_Allocator& pa)
-	: m_allocator(pa.m_allocator.get()->clone()) {}
+	Polymorphic_Allocator(const Polymorphic_Allocator& pa):
+		m_allocator(pa.m_allocator.get()->clone()) {}
 
 	Polymorphic_Allocator& operator = (const Polymorphic_Allocator& alloc) {
 		this->set_allocator(alloc.m_allocator->clone());

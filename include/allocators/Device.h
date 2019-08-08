@@ -22,12 +22,11 @@ template<class SystemTag, class ValueType>
 class Allocator;
 
 
-/// The 'std::allocator' of GPU-allocators.
-/// Memory is allocated via 'cudaMalloc'
+/// The 'std::allocator' of GPU-allocators. Memory is allocated via 'cudaMalloc'
 template<class T>
 struct Allocator<device_tag, T> {
 
-    using system_tag = device_tag;		//BC tag
+    using system_tag = device_tag;
 
     using value_type = T;
     using pointer = T*;

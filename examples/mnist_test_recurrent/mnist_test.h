@@ -60,28 +60,14 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	using mat  = BC::Matrix<value_type, allocator_type>;
 	using clock = std::chrono::duration<double>;
 
-#define BC_MNIST_TEST_LSTM
-#ifdef BC_MNIST_TEST_LSTM
-	epochs = 1000; //Requires more iterations to train
-	samples = 128; //reduce the number of samples (this takes much longer to train)
-
     auto network = neuralnetwork(
 				feedforward(system_tag, 784/4, 64),
 				tanh(system_tag, 64),
-    			lstm(system_tag, 64, 10),
+    			lstm(system_tag, 64, 32),
+    			feedforward(system_tag, 32, 10),
     			softmax(system_tag, 10),
     			outputlayer(system_tag, 10));
-#else
-    auto network = neuralnetwork(
-    			feedforward(system_tag, 784/4, 128),
-    			tanh(system_tag, 128),
-    			recurrent(system_tag, 128, 64),
-    			tanh(system_tag, 64),
-    			recurrent(system_tag, 64, 10),
-    			softmax(system_tag, 10),
-    			outputlayer(system_tag, 10)
-    );
-#endif
+
     network.set_batch_size(batch_size);
 
     std::pair<cube, cube> data = load_mnist(system_tag, mnist_dataset, batch_size, samples);
