@@ -57,7 +57,6 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	using value_type = typename System::default_floating_point_type;
 	using allocator_type = BC::Allocator<System, value_type>;
 	using cube = BC::Cube<value_type, allocator_type>;
-	using vec  = BC::Matrix<value_type, allocator_type>;
 	using mat  = BC::Matrix<value_type, allocator_type>;
 	using clock = std::chrono::duration<double>;
 
@@ -104,16 +103,14 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	std::cout << " testing... " << std::endl;
 	BC::size_t test_images = 10;
 	cube img = cube(reshape(inputs[0], BC::shape(28,28, batch_size)));
+	network.forward_propagation(chunk(inputs[0], BC::index(0,        0), BC::shape(784/4, batch_size)));
+	network.forward_propagation(chunk(inputs[0], BC::index(784* 1/4, 0), BC::shape(784/4, batch_size)));
+	network.forward_propagation(chunk(inputs[0], BC::index(784* 2/4, 0), BC::shape(784/4, batch_size)));
+	mat hyps =network.forward_propagation(chunk(inputs[0], BC::index(784* 3/4, 0), BC::shape(784/4, batch_size)));
 
 	for (int i = 0; i < test_images; ++i) {
-		network.forward_propagation(inputs[0][i][{0, 784*(1/4)}]);
-		network.forward_propagation(inputs[0][i][{784*(1/4), 784*(2/4)}]);
-		network.forward_propagation(inputs[0][i][{784*(2/4), 784*(3/4)}]);
-		vec hyps = network.forward_propagation(inputs[0][i][{784*(3/4), 784*(4/4)}]);
-
 		img[i].t().print_sparse(3);
-		hyps.print();
-
+		hyps[i].print();
 		std::cout << "------------------------------------" <<std::endl;
 	}
 	std::cout << " success " << std::endl;
