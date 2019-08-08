@@ -21,4 +21,4 @@ before_install:
     
 before_script: cd tests
 
-script: make travis;  ./blackcat_tests;
+script: cd tests; make travis; ./blackcat_tests;  cd ../examples/mnist_test/; make travis; ./mnist_test_exec mnist_train.csv;
