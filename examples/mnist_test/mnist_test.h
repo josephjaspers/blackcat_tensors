@@ -24,7 +24,7 @@ auto load_mnist(System system, const char* mnist_dataset, int batch_size, int sa
 	int training_sets = samples / batch_size;
 
 	cube inputs(img_sz, batch_size, training_sets);
-	cube outputs(10, batch_size, training_sets); //10 -- 1 hot vector of outputs (10 for 1 hot digitgs)
+	cube outputs(10, batch_size, training_sets); //10 -- 1 hot vector of outputs (10 for 1 hot digits)
 
 	//tensor's memory is uninitialized
 	inputs.zero();
@@ -32,7 +32,7 @@ auto load_mnist(System system, const char* mnist_dataset, int batch_size, int sa
 
 	for (int i = 0; i < training_sets && read_data.good(); ++i) {
 		for (int j = 0; j < batch_size && read_data.good(); ++j) {
-			outputs[i][j].read_as_one_hot(read_data); //read a single value (comma delimeted) set that index to 1
+			outputs[i][j].read_as_one_hot(read_data); //read a single int-value (comma delimited) set that index to 1
 			inputs[i][j].read_csv_row(read_data);	  //read an entire row of a csv
 		 }
 	}
@@ -53,12 +53,12 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	using mat  = BC::Matrix<value_type, allocator_type>;
 	using clock = std::chrono::duration<double>;
 
-    auto network = neuralnetwork(
-    		feedforward(system_tag, 784, 256),
-			logistic(system_tag, 256),
-			feedforward(system_tag, 256, 10),
-			softmax(system_tag, 10),
-			outputlayer(system_tag, 10)
+	auto network = neuralnetwork(
+		feedforward(system_tag, 784, 256),
+		logistic(system_tag, 256),
+		feedforward(system_tag, 256, 10),
+		softmax(system_tag, 10),
+		outputlayer(system_tag, 10)
     );
 
     network.set_batch_size(batch_size);
@@ -71,27 +71,25 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	auto start = std::chrono::system_clock::now();
 
 	for (int i = 0; i < epochs; ++i){
-		std::cout << " current epoch: " << i++ << std::endl;
+		std::cout << " current epoch: " << i << std::endl;
 		for (int j = 0; j < samples/batch_size; ++j) {
-				network.forward_propagation(inputs[j]);
-				network.back_propagation(outputs[j]);
-				network.update_weights();
+			network.forward_propagation(inputs[j]);
+			network.back_propagation(outputs[j]);
+			network.update_weights();
 		}
 	}
 
 	auto end = std::chrono::system_clock::now();
-	clock total = clock(end - start);
-	std::cout << " training time: " <<  total.count() << std::endl;
-
+	std::cout << " training time: " <<  clock(end - start).count() << std::endl;
 
 	std::cout << " testing... " << std::endl;
 	int test_images = 10;
-	cube images = cube(reshape(inputs[0], BC::shape(28,28, batch_size)));
-//	mat hyps = mat(network.forward_propagation(inputs[0]));
+	auto images = reshape(inputs[0], BC::shape(28,28, batch_size));
 
 	for (int i = 0; i < test_images; ++i) {
-		mat(images[i].t()).print_sparse(3);	//print transpose to orient the images correctly
-		mat hyp = network.forward_propagation(inputs[0][i]);
+		//print transpose to orient the images correctly
+		images[i].t().print_sparse(3);
+		network.forward_propagation(inputs[0][i]).print();
 		std::cout << "------------------------------------" <<std::endl;
 	}
 	std::cout << " success " << std::endl;

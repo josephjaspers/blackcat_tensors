@@ -47,8 +47,8 @@ struct Shape {
         static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
         init(param);
     }
-    template<int dim, class f, class int_t>
-    BCINLINE Shape (utility::lambda_array<dim, int_t, f> param) {
+    template<int dim, class Function, class IntType, class=std::enable_if_t<(dim >= dims)>>
+    BCINLINE Shape (utility::lambda_array<dim, IntType, Function> param) {
         static_assert(dim >= dims, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
         init(param);
     }

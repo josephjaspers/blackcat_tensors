@@ -79,7 +79,7 @@ private:
 					typename ExpressionTemplate::value_type,
 					BC::Allocator<system_tag, value_type>>>;
 
-		return tensor(this->as_derived()).to_string();
+		return tensor(this->as_derived()).to_string(precision, sparse);
     }
 
 public:
@@ -99,7 +99,6 @@ public:
     }
 
     void print_sparse(int precision=8) const {
-    	const_cast<derived&>(this->as_derived()).get_stream().sync();
     	std::cout << this->to_string(precision, true);
     }
 
