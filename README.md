@@ -1,7 +1,8 @@
 # Documentation 
 Author: Joseph Jaspers
 
- [![Build Status](https://travis-ci.org/josephjaspers/BlackCat_Tensors.svg?branch=master)](https://travis-ci.org/josephjaspers/BlackCat_Tensors)
+[![Build Status](https://travis-ci.org/josephjaspers/BlackCat_Tensors.svg?branch=master)](https://travis-ci.org/josephjaspers/BlackCat_Tensors)
+
 
 BlackCat_Tensors (BCT) is a highly efficient Matrix library designed for NeuralNetwork construction. BCT is designed to support GPU computing (CUDA) and CPU multi-threading (OpenMP). BCT focuses on delivering a high-level framework with low-level performance.
 
@@ -64,6 +65,11 @@ BlackCat Tensors attempts to align itself with the design of the C++ standard li
 
 	The cuda libraries are only required if the user wants to utilize GPU operations.
 	gomp (or another openmp library) is only required for multithreading certain operations, though it is not required. 
+
+#### Tests/Examples 
+[tests and examples output (Travis build)](https://travis-ci.org/josephjaspers/BlackCat_Tensors) 
+
+
 
 #### License
 ```
