@@ -63,10 +63,10 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
     auto network = neuralnetwork(
 				feedforward(system_tag, 784/4, 64),
 				tanh(system_tag, 64),
-    			lstm(system_tag, 64, 32),
-    			feedforward(system_tag, 32, 10),
-    			softmax(system_tag, 10),
-    			outputlayer(system_tag, 10));
+				lstm(system_tag, 64, 32),
+				feedforward(system_tag, 32, 10),
+				softmax(system_tag, 10),
+				outputlayer(system_tag, 10));
 
     network.set_batch_size(batch_size);
 
