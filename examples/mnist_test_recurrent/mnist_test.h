@@ -60,19 +60,20 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	using mat  = BC::Matrix<value_type, allocator_type>;
 	using clock = std::chrono::duration<double>;
 
-    auto network = neuralnetwork(
-				feedforward(system_tag, 784/4, 64),
-				tanh(system_tag, 64),
-				lstm(system_tag, 64, 32),
-				feedforward(system_tag, 32, 10),
-				softmax(system_tag, 10),
-				outputlayer(system_tag, 10));
+	auto network = neuralnetwork(
+		feedforward(system_tag, 784/4, 64),
+		tanh(system_tag, 64),
+		lstm(system_tag, 64, 32),
+		feedforward(system_tag, 32, 10),
+		softmax(system_tag, 10),
+		outputlayer(system_tag, 10)
+	);
 
-    network.set_batch_size(batch_size);
+	network.set_batch_size(batch_size);
 
-    std::pair<cube, cube> data = load_mnist(system_tag, mnist_dataset, batch_size, samples);
-    cube& inputs = data.first;
-    cube& outputs = data.second;
+	std::pair<cube, cube> data = load_mnist(system_tag, mnist_dataset, batch_size, samples);
+	cube& inputs = data.first;
+	cube& outputs = data.second;
 
 	std::cout << " training..." << std::endl;
 	auto start = std::chrono::system_clock::now();
@@ -81,19 +82,17 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 		std::cout << " current epoch: " << i << std::endl;
 		for (int j = 0; j < samples/batch_size; j++) {
 
-				//Feed the top half of the image followed by the bottom half
-				network.forward_propagation(chunk(inputs[j], BC::index(0,        0), BC::shape(784/4, batch_size)));
-				network.forward_propagation(chunk(inputs[j], BC::index(784* 1/4, 0), BC::shape(784/4, batch_size)));
-				network.forward_propagation(chunk(inputs[j], BC::index(784* 2/4, 0), BC::shape(784/4, batch_size)));
-				network.forward_propagation(chunk(inputs[j], BC::index(784* 3/4, 0), BC::shape(784/4, batch_size)));
+			//Feed 1/4th of the image at a time
+			network.forward_propagation(chunk(inputs[j], BC::index(0,        0), BC::shape(784/4, batch_size)));
+			network.forward_propagation(chunk(inputs[j], BC::index(784* 1/4, 0), BC::shape(784/4, batch_size)));
+			network.forward_propagation(chunk(inputs[j], BC::index(784* 2/4, 0), BC::shape(784/4, batch_size)));
+			network.forward_propagation(chunk(inputs[j], BC::index(784* 3/4, 0), BC::shape(784/4, batch_size)));
 
+			//Apply backprop on the last two images (images 3/4 and 4/4)
+			network.back_propagation(outputs[j]);
+			network.back_propagation(outputs[j]);
 
-				//Truncate BP to only the last output
-//				network.back_propagation(outputs[j]);
-				network.back_propagation(outputs[j]);
-				network.back_propagation(outputs[j]);
-
-				network.update_weights();
+			network.update_weights();
 		}
 	}
 
