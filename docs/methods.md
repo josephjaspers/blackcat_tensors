@@ -64,24 +64,24 @@ Note: Many of the return types have been abreviated. The underlying implementati
 | expression_t | bi_expr | functor, tensor or scalar | Returns a user-defined binary_expression object that will be laziliy evaluated. |
 
 #### Static Functions 
-| static | return type | method name | parameters | documentation | alias-methods |
-| --- | --- | --- | --- | ---  | --- |
-| --- | value_type | min | ---  | --- | --- |
-| --- | value_type | max | ---  | --- | --- |
-| --- | void | rand | --- | --- | randomize |
-| --- | functor | for_each | functor | Convenient-definition of for_each. Identical to BC::for_each(tensor.begin(), tensor.end(), functor) | --- |
-| --- | void | sort | --- | Implemenation is dependent upon gpu vs cpu allocation and std and thrust's implementation. | --- |
+ | return type | method name | parameters | documentation |
+| --- | --- | --- | ---  | 
+| value_type | min | Tensor  | --- | --- |
+| value_type | max | Tensor  | --- | --- |
+| void | rand | Tensor | --- |
+| --- | for_each | functor | Convenient-definition of for_each. Identical to BC::for_each(tensor.begin(), tensor.end(), functor) |
+| void | sort | Tensor | Implemenation is dependent upon gpu vs cpu allocation and std and thrust's implementation. |
 
 
 
 #### Utility
-| static | return type | method name | parameters | documentation | alias-methods |
-| --- | --- | --- | --- | --- | --- |
-| --- | void | print | ---  | Formatted print to console. | --- |
-| --- | void | print_sparse | --- | Formatted print to console, ignoring 0's. | --- |
-| --- | void | print_dimensions | --- | Output dimensions of a tensor. | --- |
-| --- | void | print_leading_dimensions | --- | Output outer dimensions of a tensor (strides). | --- |
-| --- | void | print_block_dimensions | --- | Output the block_dimensions of a tensor (IE a 3x4 matrix will output. `[3][12]`) | --- |
+| return type | method name | parameters | documentation |
+| --- | --- | --- | --- |
+| void | print | ---  | Formatted print to console. | 
+| void | print_sparse | --- | Formatted print to console, ignoring 0's. | 
+| void | print_dimensions | --- | Output dimensions of a tensor. | 
+| void | print_leading_dimensions | --- | Output outer dimensions of a tensor (strides). | 
+ | void | print_block_dimensions | --- | Output the block_dimensions of a tensor (IE a 3x4 matrix will output. `[3][12]`) |
 
 #### CMath
 The following Cmath functions are supported through the `BC` namespace. These expressions will automatically be scalarized. (lazy evaluated)
