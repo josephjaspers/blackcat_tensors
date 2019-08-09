@@ -15,8 +15,8 @@ Note: Many of the return types have been abreviated. The underlying implementati
 | transpose_view | transpose | ---  | returns a transpose view of a Matrix or Vector. Cannot transpose in place. Matrix = Matrix.transpose() is undefined. |
 | vector | row | BC::size_t  | returns a row of a matrix. |
 | view | transpose | BC::size_t   | returns a row of a matrix. |
-| reshape | reshape | tensor, and ints...  | returns a reshaped view of the tensor parameter. Does not modify the original tensor |
-| slice | chunk | index, shape | returns a reshaped view of the tensor parameter. Does not modify the original tensor |
+| reshape | (static) reshape | tensor, and ints...  | returns a reshaped view of the tensor parameter. Does not modify the original tensor |
+| slice | (static) chunk | index, shape | returns a reshaped view of the tensor parameter. Does not modify the original tensor |
 
 #### Iterator Methods
 | return type | method name | parameter | documentation |
