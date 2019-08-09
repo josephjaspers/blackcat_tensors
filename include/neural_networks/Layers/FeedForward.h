@@ -28,13 +28,14 @@ struct FeedForward : public Layer_Base {
 
 private:
 
-	ValueType lr = 0.3;
+	ValueType lr = Layer_Base::default_learning_rate;
 
 	mat w;  //weights
 	vec b;  //biases
 
 	mat w_gradients;
 	vec b_gradients;
+
 public:
 
 	FeedForward(int inputs, BC::size_t  outputs) :

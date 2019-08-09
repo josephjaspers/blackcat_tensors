@@ -21,6 +21,8 @@ class Layer_Base {
 
 public:
 
+	static constexpr bool default_learning_rate = .01;
+
 	Layer_Base(int inputs, BC::size_t outputs):
 		m_input_sz(inputs),
 		m_output_sz(outputs),

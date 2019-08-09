@@ -35,7 +35,7 @@ struct LSTM : public Layer_Base {
 
 private:
 
-	ValueType lr = 0.03;
+	ValueType lr = Layer_Base::default_learning_rate;
 
 	CellStateNonLinearity  c_g;
 	ForgetGateNonlinearity f_g;
@@ -109,6 +109,8 @@ public:
 		rz.randomize(-.1, .1);
 		ri.randomize(-.1, .1);
 		ro.randomize(0, .5);
+
+		zero_gradients();
 	}
 
 	template<class X>
@@ -248,27 +250,22 @@ public:
 		bi += bi_gradients * lr;
 		bo += bo_gradients * lr;
 
-		wz_gradients.zero();
-		wf_gradients.zero();
-		wi_gradients.zero();
-		wo_gradients.zero();
+		zero_gradients();
+		clear_bp_storage();
+	}
 
-		rz_gradients.zero();
-		rf_gradients.zero();
-		ri_gradients.zero();
-		ro_gradients.zero();
+	void set_batch_size(int bs) {
+		dc = mat(this->output_size(), bs);
+		df = mat(this->output_size(), bs);
+		dz = mat(this->output_size(), bs);
+		di = mat(this->output_size(), bs);
+		do_ = mat(this->output_size(), bs);
+		c = mat(this->output_size(), bs);
 
-		bz_gradients.zero();
-		bf_gradients.zero();
-		bi_gradients.zero();
-		bo_gradients.zero();
+		zero_deltas();
+	}
 
-		dc.zero();
-		df.zero();
-		di.zero();
-		dz.zero();
-		do_.zero();
-
+	void clear_bp_storage() {
 		//remove all but the last element
 		auto clear = [](std::vector<mat>& v) {
 			v.erase(v.begin(), v.end()-1);
@@ -279,15 +276,32 @@ public:
 		clear(zs);
 		clear(is);
 		clear(os);
+
 	}
 
-	void set_batch_size(int bs) {
-		dc = mat(this->output_size(), bs);
-		df = mat(this->output_size(), bs);
-		dz = mat(this->output_size(), bs);
-		di = mat(this->output_size(), bs);
-		do_ = mat(this->output_size(), bs);
-		c = mat(this->output_size(), bs);
+	void zero_deltas() {
+		dc.zero();
+		df.zero();
+		di.zero();
+		dz.zero();
+		do_.zero();
+	}
+
+	void zero_gradients() {
+		wf_gradients.zero();
+		wz_gradients.zero();
+		wi_gradients.zero();
+		wo_gradients.zero();
+
+		rf_gradients.zero();
+		rz_gradients.zero();
+		ri_gradients.zero();
+		ro_gradients.zero();
+
+		bf_gradients.zero();
+		bz_gradients.zero();
+		bi_gradients.zero();
+		bo_gradients.zero();
 	}
 };
 

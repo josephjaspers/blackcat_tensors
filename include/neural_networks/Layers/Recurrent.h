@@ -27,7 +27,7 @@ struct Recurrent : public Layer_Base {
 	using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
 
 	RecurrentNonLinearity g;
-	ValueType lr = 0.03;
+	ValueType lr = Layer_Base::default_learning_rate;
 
 	mat dc; //delta cell_state
 	mat w, w_gradients;  //weights
@@ -46,6 +46,7 @@ struct Recurrent : public Layer_Base {
 		w.randomize(-2, 2);
 		b.randomize(-2, 2);
 		r.randomize(-2, 2);
+		zero_gradients();
 	}
 
 	template<class X>
@@ -75,15 +76,23 @@ struct Recurrent : public Layer_Base {
 		b += b_gradients * lr;
 		r += r_gradients * lr;
 
-		w_gradients.zero();
-		b_gradients.zero();
-		r_gradients.zero();
-		dc.zero();
+		zero_deltas();
+		zero_gradients();
 	}
 
 	void set_batch_size(BC::size_t bs) {
 		Layer_Base::set_batch_size(bs);
 		dc = mat(this->output_size(), bs);
+		zero_deltas();
+	}
+
+	void zero_deltas() {
+		dc.zero();
+	}
+	void zero_gradients() {
+		w_gradients.zero();
+		b_gradients.zero();
+		r_gradients.zero();
 	}
 };
 
