@@ -13,32 +13,41 @@
 namespace BC {
 namespace nn {
 
-template<class SystemTag, class ValueType>
+template<
+	class SystemTag,
+	class ValueType>
 struct FeedForward : public Layer_Base {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	using greedy_evaluate_delta = std::true_type;
 
 	using mat = BC::Matrix<ValueType, BC::Allocator<SystemTag, ValueType>>;
 	using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
 
+	using greedy_evaluate_delta = std::true_type;
+
 private:
 
-	ValueType lr = 0.003;
+	ValueType lr = 0.3;
 
 	mat w;  //weights
 	vec b;  //biases
 
+	mat w_gradients;
+	vec b_gradients;
 public:
 
 	FeedForward(int inputs, BC::size_t  outputs) :
 		Layer_Base(inputs, outputs),
 		w(outputs, inputs),
-		b(outputs)
+		b(outputs),
+		w_gradients(outputs, inputs),
+		b_gradients(outputs)
 	{
 		w.randomize(-2, 2);
 		b.randomize(-2, 2);
+		w_gradients.zero();
+		b_gradients.zero();
 	}
 
 	template<class Matrix>
@@ -48,9 +57,17 @@ public:
 
 	template<class X, class Delta>
 	auto back_propagation(const X& x, const Delta& dy) {
-		w -= lr * dy  * x.t();
-		b -= lr * dy;
+		w_gradients -= dy  * x.t();
+		b_gradients -= dy;
 		return w.t() * dy;
+	}
+
+	void update_weights() {
+		ValueType lr = this->lr / this->batch_size();
+		w += w_gradients * lr;
+		b += b_gradients * lr;
+		w_gradients.zero();
+		b_gradients.zero();
 	}
 };
 
