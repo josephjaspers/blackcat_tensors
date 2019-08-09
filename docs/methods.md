@@ -6,82 +6,82 @@
 Note: Many of the return types have been abreviated. The underlying implementation of these is not relevant to the user. 
 
 #### Data Access 
-| static | return type | method name | parameters | const/non-const | documentation | alias-methods |
-| --- | --- | --- | --- | --- | --- | --- |
-| --- | slice | operator[] | BC::size_t  | both | Returns a slice of the tensor. IE Cube returns a matrix slice, Matrix returns a column, etc | slice |
-| --- | scalar_obj | operator() | BC::size_t  | both | Returns a scalar object. Access to this data is safe. | scalar | 
-| --- | vector | diag | int=0 | both | Returns the diagnol of a matrix. A positive integer will have the diagnol start from the top left corner. A negative integer will have the diagnol end n from the bottom right |
-| --- | slice | col | BC::size_t  | both | Returns a column of a matrix. |
-| --- | transpose_view | transpose | --- | both | returns a transpose view of a Matrix or Vector. Cannot transpose in place. Matrix = Matrix.transpose() is undefined. | t |
-| --- | vector | row | BC::size_t  | both | returns a row of a matrix. |
-| --- | view | transpose | BC::size_t  | both | returns a row of a matrix. |
-| X | reshape | reshape | tensor, and ints... | both | returns a reshaped view of the tensor parameter. Does not modify the original tensor |
-| X | chunk | chunk | tensor, and ints... | both | returns a reshaped view of the tensor parameter. Does not modify the original tensor |
+| return type | method name | parameters | documentation |
+|--- | --- | --- | --- |
+| slice | operator[] | BC::size_t   | Returns a slice of the tensor |
+| scalar_obj | operator() | BC::size_t   | Returns a scalar object. Access to this data is safe. |
+| vector | diag | int=0  | Returns the diagnol of a matrix. A positive integer will have the diagnol start from the top left corner. A negative integer will have the diagnol end n from the bottom right |
+| slice | col | BC::size_t   | Returns a column of a matrix. |
+| transpose_view | transpose | ---  | returns a transpose view of a Matrix or Vector. Cannot transpose in place. Matrix = Matrix.transpose() is undefined. |
+| vector | row | BC::size_t  | returns a row of a matrix. |
+| view | transpose | BC::size_t   | returns a row of a matrix. |
+| reshape | reshape | tensor, and ints...  | returns a reshaped view of the tensor parameter. Does not modify the original tensor |
+| slice | chunk | index, shape | returns a reshaped view of the tensor parameter. Does not modify the original tensor |
 
 #### Iterator Methods
-| static | return type | method name | parameters | const/non-const | documentation | alias-methods |
-| --- | --- | --- | --- | --- | --- | --- |
-| --- | cw_iterator | begin | --- | both | Returns the begining of a coefficientwise iterator. | --- |
-| --- | cw_iterator | end | --- | both | Returns the end of a coefficientwise iterator. | --- |
-| --- | cw_iterator | cbegin | --- | const | Explcit const version of begin. | --- |
-| --- | cw_iterator | cend | --- | const | Explcit const version of end. | --- |
-| --- | cw_iterator | rbegin | --- | both | Returns the begining of a coefficientwise reverse iterator. | --- |
-| --- | cw_iterator | rend | --- | both | Returns the begining of a coefficientwise reverse iterator. | --- |
-| --- | cw_iterator | crbegin | --- | const | Explicit const version of rbegin. | --- |
-| --- | cw_iterator | crend | --- | const | Explicit const version of rend. | --- |
-| --- | nd_iterator | nd_begin | --- | both | Returns the begining of a multidimensional iterator (iterates along outer stride). | --- |
-| --- | nd_iterator | nd_end | --- | both | Returns the end of a multidimensional iterator. | --- |
-| --- | nd_iterator | nd_cbegin | --- | const | Explicit const version of nd_begin. | --- |
-| --- | nd_iterator | nd_cend | --- | const | Explicit const version of nd_end. | --- |
-| --- | nd_iterator | nd_rbegin | --- | both | Returns the begining of a multidimensional reverse iterator. (Iterates along outer stride). | --- |
-| --- | nd_iterator | nd_rend | --- | both | Returns the end of a multidimensional reverse iterator. | --- |
-| --- | nd_iterator | nd_crbegin | --- | const | Explicit const version of nd_rbegin. | --- |
-| --- | nd_iterator | nd_crend | --- | const | Explicit const version of nd_rend. | --- |
-| --- | cw_iterator | iter | int=0, int=size | both | Returns an iterator proxy, used for range-convienance. | --- |
-| --- | cw_iterator | nd_iter | int=0, int=size | both | Returns an iterator proxy, used for range-convienance. | --- |
-| --- | cw_iterator | reverse_iter | int=0, int=size | both | Returns an iterator proxy, used for range-convienance. | --- |
-| --- | cw_iterator | nd_reverse_iter | int=0, int=size | both | Returns an iterator proxy, used for range-convienance. | --- |
+| return type | method name | parameter | documentation |
+| --- | --- | --- | --- |
+| nd_iterator | begin | ---  | Returns the begining of a n-dimension iterator. |
+| nd_iterator | end | ---  | Returns the end of a n-dimension iterator. |
+| nd_iterator | cbegin | ---  | Explcit const version of begin. | 
+| nd_iterator | cend | ---  | Explcit const version of end. |
+| nd_iterator | rbegin | ---  | Returns the begining of a coefficientwise reverse iterator. | 
+| nd_iterator | rend | ---  | Returns the begining of a coefficientwise reverse iterator. | 
+| nd_iterator | crbegin | ---  | Explicit const version of rbegin. |
+| nd_iterator | crend | ---  | Explicit const version of rend. |
+| nd_iterator | nd_begin | ---  | Returns the begining of a multidimensional iterator (iterates along outer stride). |
+| nd_iterator | nd_end | ---  | Returns the end of a multidimensional iterator. |
+| nd_iterator | nd_cbegin | ---  | Explicit const version of nd_begin. |
+| nd_iterator | nd_cend | ---  | Explicit const version of nd_end. |
+| nd_iterator | nd_rbegin | ---  | Returns the begining of a multidimensional reverse iterator. (Iterates along outer stride). |
+| nd_iterator | nd_rend | ---  | Returns the end of a multidimensional reverse iterator. |
+| nd_iterator | nd_crbegin | ---  | Explicit const version of nd_rbegin. |
+| nd_iterator | nd_crend | ---  | Explicit const version of nd_rend. |
+| cw_iterator | cw_iter | int=0, int=size  | Returns an iterator proxy, used for range-convienance. |
+| nd_iterator | nd_iter | int=0, int=size  | Returns an iterator proxy, used for range-convienance. |
+| nd_iterator | nd_reverse_iter | int=0, int=size  | Returns an iterator proxy, used for range-convienance. |
+| cw_iterator | cw_reverse_iter | int=0, int=size  | Returns an iterator proxy, used for range-convienance. |
 
 #### Operations
-| static | return type | method name | parameters | const/non-const | documentation | alias-methods |
-| --- | --- | --- | --- | --- | --- | --- |
-| --- | tensor& | += | tensor or scalar | non-const | --- | --- |
-| --- | tensor& | -= | tensor or scalar | non-const | --- | --- |
-| --- | tensor& | %= | tensor or scalar | non-const | Element-wise multiplication (to differentiate from matrix multiplication) | --- |
-| --- | tensor& | /= | tensor or scalar | non-const | --- | --- |
-| --- | expression_t | + | tensor or scalar | both | --- | --- |
-| --- | expression_t | - | tensor or scalar | both | --- | --- |
-| --- | expression_t | % | tensor or scalar | both | Element-wise multiplication (to differentiate from matrix multiplication) | --- |
-| --- | expression_t | / | tensor or scalar | both | --- | --- |
-| --- | expression_t | == | tensor or scalar | both | --- | --- |
-| --- | expression_t | > | tensor or scalar | both | --- | --- |
-| --- | expression_t | < | tensor or scalar | both | --- | --- |
-| --- | expression_t | >= | tensor or scalar | both | --- | --- |
-| --- | expression_t | <= | tensor or scalar | both | --- | --- |
-| --- | expression_t | * | tensor or scalar | both | Executes one of the following BLAS calls gemm, gemv, ger, dot, or scalarmul depending upon the dimensionality of the parameters. This is detected at compile-time, and does not incur any branching | --- |
-| --- | expression_t | - | --- | both | Negation of a tensor. | --- |
-| --- | expression_t | un_expr | functor | Returns a user-defined unary_expression object that will be laziliy evaluated. | --- |
-| --- | expression_t | bi_expr | functor, tensor or scalar | Returns a user-defined binary_expression object that will be laziliy evaluated. | --- |
+| return type | method name | parameters | documentation |
+| --- | --- | --- | --- | 
+| tensor& | += | tensor or scalar | --- |
+| tensor& | -= | tensor or scalar | --- |
+| tensor& | %= | tensor or scalar | Element-wise multiplication (to differentiate from matrix multiplication) | --- |
+| tensor& | /= | tensor or scalar | --- | --- |
+| expression_t | + | tensor or scalar | --- | --- |
+| expression_t | - | tensor or scalar | --- | --- |
+| expression_t | % | tensor or scalar | Element-wise multiplication (to differentiate from matrix multiplication) | --- |
+| expression_t | / | tensor or scalar | --- | --- |
+| expression_t | == | tensor or scalar | --- | --- |
+| expression_t | > | tensor or scalar | --- | --- |
+| expression_t | < | tensor or scalar | --- | --- |
+| expression_t | >= | tensor or scalar | --- | --- |
+| expression_t | <= | tensor or scalar | --- | --- |
+| expression_t | * | tensor or scalar | Executes one of the following BLAS calls gemm, gemv, ger, dot, or scalarmul depending upon the dimensionality of the parameters. This is detected at compile-time, and does not incur any branching | --- |
+| expression_t | - | --- | Negation of a tensor. |
+| expression_t | un_expr | functor | Returns a user-defined unary_expression object that will be laziliy evaluated. |
+| expression_t | bi_expr | functor, tensor or scalar | Returns a user-defined binary_expression object that will be laziliy evaluated. |
 
-#### Functions 
-| static | return type | method name | parameters | const/non-const | documentation | alias-methods |
-| --- | --- | --- | --- | --- | --- | --- |
-| --- | value_type | min | --- | both | --- | --- |
-| --- | value_type | max | --- | both | --- | --- |
-| --- | void | rand | --- | --- | non-const | randomize |
-| --- | functor | for_each | functor | both | Convenient-definition of for_each. Identical to BC::for_each(tensor.begin(), tensor.end(), functor) | --- |
-| --- | void | sort | --- | non-const | Implemenation is dependent upon gpu vs cpu allocation and std and thrust's implementation. | --- |
+#### Static Functions 
+| static | return type | method name | parameters | documentation | alias-methods |
+| --- | --- | --- | --- | ---  | --- |
+| --- | value_type | min | ---  | --- | --- |
+| --- | value_type | max | ---  | --- | --- |
+| --- | void | rand | --- | --- | randomize |
+| --- | functor | for_each | functor | Convenient-definition of for_each. Identical to BC::for_each(tensor.begin(), tensor.end(), functor) | --- |
+| --- | void | sort | --- | Implemenation is dependent upon gpu vs cpu allocation and std and thrust's implementation. | --- |
 
 
 
 #### Utility
-| static | return type | method name | parameters | const/non-const | documentation | alias-methods |
-| --- | --- | --- | --- | --- | --- | --- |
-| --- | void | print | --- | both | Formatted print to console. | --- |
-| --- | void | print_sparse | --- | both | Formatted print to console, ignoring 0's. | --- |
-| --- | void | print_dimensions | --- | both | Output dimensions of a tensor. | --- |
-| --- | void | print_leading_dimensions | --- | both | Output outer dimensions of a tensor (strides). | --- |
-| --- | void | print_block_dimensions | --- | both | Output the block_dimensions of a tensor (IE a 3x4 matrix will output. `[3][12]`) | --- |
+| static | return type | method name | parameters | documentation | alias-methods |
+| --- | --- | --- | --- | --- | --- |
+| --- | void | print | ---  | Formatted print to console. | --- |
+| --- | void | print_sparse | --- | Formatted print to console, ignoring 0's. | --- |
+| --- | void | print_dimensions | --- | Output dimensions of a tensor. | --- |
+| --- | void | print_leading_dimensions | --- | Output outer dimensions of a tensor (strides). | --- |
+| --- | void | print_block_dimensions | --- | Output the block_dimensions of a tensor (IE a 3x4 matrix will output. `[3][12]`) | --- |
 
 #### CMath
 The following Cmath functions are supported through the `BC` namespace. These expressions will automatically be scalarized. (lazy evaluated)
