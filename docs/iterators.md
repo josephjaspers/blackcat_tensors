@@ -56,7 +56,7 @@ int main() {
 }
 ```
 
-**Note** Calling `nd_iter()` (regular `begin`/`end`) on a Vector returns Scalar 'view' objects, while calling 'cw_iter' returns references to the underlying data type. The `cw_iter` is used for calling `std` style algorithms while the `nd_iter` is used for most general use cases.
+**Note** Calling `nd_iter()` (regular `begin`/`end`) on a Vector returns Scalar 'view' objects, while calling `cw_iter` returns references to the underlying data type. The `cw_iter` is used for calling `std` style algorithms while the `nd_iter` is used for most general use cases.
 
 ----------------------------------------------------------------------------------------------
 ##### Std-Style Iterators
@@ -89,14 +89,16 @@ BC::Matrix<float> mat;
   for (auto vec : mat.nd_iter(start, finish)) {
     //do work
   }
-  
+
+  for (auto vec : mat.reverse_nd_iter(finish, start)) {
+    //do work
+  }
+
   //reverse iterators are also supported.
-  for (auto& float : mat.reverse_iter(finish, start)) {
+  for (auto& float : mat.reverse_cw_iter(finish, start)) {
     //do work
   }
   
-    for (auto vec : mat.reverse_nd_iter(finish, start)) {
-    //do work
-  }
+
 
 ```
