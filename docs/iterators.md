@@ -56,7 +56,7 @@ int main() {
 }
 ```
 
-**Note** Calling `nd_iter()` on a Vector forwards to `iter()`. 
+**Note** Calling `nd_iter()` (regular `begin`/`end`) on a Vector returns Scalar 'view' objects, while calling 'cw_iter' returns references to the underlying data type. The `cw_iter` is used for calling `std` style algorithms while the `nd_iter` is used for most general use cases.
 
 ----------------------------------------------------------------------------------------------
 ##### Std-Style Iterators
