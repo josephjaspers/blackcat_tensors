@@ -222,16 +222,6 @@ public:
 				wo.t() * do_;
 	}
 
-	template<class X, class Delta>
-	auto back_propagation(const X& x, const Delta& delta_outputs) {
-		throw 1;
-		//required -- TODO fix
-		return wz.t() * dz +
-					wi.t() * dz +
-					wf.t() * df +
-					wo.t() * do_;
-	}
-
 	void update_weights() {
 		ValueType lr = this->lr / this->batch_size();
 
