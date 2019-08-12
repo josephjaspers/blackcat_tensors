@@ -49,7 +49,7 @@ struct NeuralNetwork {
 	template<int X> auto& get_layer() const { return m_layer_chain.get(BC::traits::Integer<X>()); }
 	template<int X> auto& get_layer() { return m_layer_chain.get(BC::traits::Integer<X>()); }
 
-	void set_learning_rate(double lr) { m_layer_chain.for_each([](auto& layer) { layer.set_learning_rate(lr); }); }
+	void set_learning_rate(double lr) { m_layer_chain.for_each([&](auto& layer) { layer.set_learning_rate(lr); }); }
     void set_batch_size(int x) { m_layer_chain.for_each([&](auto& layer) { layer.set_batch_size(x);    });}
     void update_weights()      { m_layer_chain.for_each([ ](auto& layer) { layer.update_weights();        });}
 //    void read(std::ifstream& is)  { m_layer_chain.for_each([&](auto& layer) { layer.read(is);     });}
