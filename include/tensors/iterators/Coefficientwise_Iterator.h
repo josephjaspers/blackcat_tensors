@@ -20,15 +20,11 @@ struct Coefficientwise_Iterator {
 
     using Iterator = Coefficientwise_Iterator<Direction, Tensor>;
 
-    static constexpr bool ref_value_type
-    	= std::is_reference<decltype(std::declval<Tensor>().internal()[0])>::value;
-
     using iterator_category = std::random_access_iterator_tag;
     using value_type = typename Tensor::value_type;
     using difference_type = int;
-    using reference = decltype(std::declval<Tensor>()[0]);
-    using pointer   = std::conditional_t<std::is_same<reference, value_type>::value,
-    										decltype(std::declval<Tensor>().internal()), value_type*>;
+    using reference = value_type&;
+    using pointer   = value_type*;
 
 
     Tensor tensor;

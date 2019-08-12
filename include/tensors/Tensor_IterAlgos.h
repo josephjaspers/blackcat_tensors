@@ -224,8 +224,8 @@ public:
 
 BC_TENSOR_tensor_iterator_dimension_DEF(ND_ForwardIterator, nd_begin, nd_end)
 BC_TENSOR_tensor_iterator_dimension_DEF(ND_ReverseIterator, nd_rbegin, nd_rend)
-BC_TENSOR_tensor_iterator_dimension_DEF(CW_ForwardIterator, begin, end)
-BC_TENSOR_tensor_iterator_dimension_DEF(CW_ReverseIterator, rbegin, rend)
+BC_TENSOR_tensor_iterator_dimension_DEF(CW_ForwardIterator, cw_begin, cw_end)
+BC_TENSOR_tensor_iterator_dimension_DEF(CW_ReverseIterator, cw_rbegin, cw_rend)
 
 #undef BC_TENSOR_tensor_iterator_dimension_DEF
 

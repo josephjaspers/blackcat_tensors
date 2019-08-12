@@ -15,52 +15,112 @@ namespace BC {
 namespace tensors {
 namespace io {
 
+struct features {
+
+	features(std::size_t precision_,
+			bool pretty_=true,
+			bool sparse_=true):
+		precision(precision_),
+		pretty(pretty_),
+		sparse(sparse_) {}
+
+
+	std::size_t precision = 5;
+	bool pretty = false;
+	bool sparse = false;
+};
+
 //TODO
 template<class ValueType>
-static std::string format_value(const ValueType& s, BC::size_t precision, bool sparse=false) {
-	std::string fstr  = !sparse || std::abs(s) > .1 ? std::to_string(s) : "";
-	if (fstr.length() < (unsigned)precision)
-		return fstr.append(precision - fstr.length(), ' ');
+static std::string format_value(const ValueType& s,  features f) {
+	std::string fstr  = !f.sparse || std::abs(s) > .1 ? std::to_string(s) : "";
+	if (fstr.length() < (unsigned)f.precision)
+		return fstr.append(f.precision - fstr.length(), ' ');
 	else
-		return fstr.substr(0, precision);
+		return fstr.substr(0, f.precision);
 }
 
 
 template<class Tensor>
-std::string to_string(const Tensor& tensor, int precision, bool sparse, BC::traits::Integer<2>) {
+std::string to_string(const Tensor& tensor, features f, BC::traits::Integer<2>) {
 	std::string s = "";
-	for (BC::size_t m = 0; m < tensor.rows(); ++m) {
+	if (f.pretty)
 		s += "[";
-		for (BC::size_t n = 0; n < tensor.cols(); ++n) {
-			s += format_value(tensor[n][m].memptr()[0], precision, sparse) + ", ";
-		}
-		s += "]\n";
-	}
-	return s;
-}
 
-
-template<class Tensor>
-std::string to_string(const Tensor& tensor, int precision, int sparse, BC::traits::Integer<1>) {
-	std::string s = "[";
 	for (BC::size_t m = 0; m < tensor.rows(); ++m) {
-		s += format_value(tensor[m].memptr()[0], precision, sparse) +", ";
+
+		if (f.pretty)
+			s += "[";
+
+		for (BC::size_t n = 0; n < tensor.cols(); ++n) {
+			s += format_value(tensor[n][m].memptr()[0], f);
+
+			if (n != tensor.cols() - 1)
+				s+=", ";
+		}
+
+		if (f.pretty)
+			s += "]";
+		if (m != tensor.rows()-1)
+		s += '\n';
 	}
-	s += "]\n";
+
+	if (f.pretty)
+		s += "]";
+	return s;
+}
+
+
+template<class Tensor>
+std::string to_string(const Tensor& tensor, features f, BC::traits::Integer<1>) {
+	std::string s;
+
+	if (f.pretty)
+		s += "[";
+
+	for (BC::size_t m = 0; m < tensor.rows(); ++m) {
+		s += format_value(tensor[m].memptr()[0], f);
+
+		if(m!=tensor.rows()-1)
+			s+=", ";
+	}
+
+	if (f.pretty)
+		s += ']';
 	return s;
 }
 
 template<class Tensor>
-std::string to_string(const Tensor& tensor, int precision, int sparse, BC::traits::Integer<0>) {
-	return "[" + format_value(tensor.memptr()[0], precision, sparse) + "]\n";
+std::string to_string(const Tensor& tensor,  features f, BC::traits::Integer<0>) {
+	std::string s;
+
+	if (f.pretty)
+		s += '[';
+
+	s += format_value(tensor.memptr()[0], f);
+
+	if (f.pretty)
+		s += "]";
+
+	return s;
 }
 
 template<class Tensor, int X>
-std::string to_string(const Tensor& tensor, int precision, int sparse, BC::traits::Integer<X>) {
-	std::string s = "";
-	for (auto block : tensor) {
-		s +=  "[" + to_string(block, precision, sparse, BC::traits::Integer<X-1>()) + "]\n";
+std::string to_string(const Tensor& tensor, features f, BC::traits::Integer<X>) {
+	std::string s;
+
+	if (f.pretty)
+		s += '[';
+
+	for (auto it = tensor.nd_begin(); it!= tensor.nd_end(); ++it) {
+		s += to_string(*it, f, BC::traits::Integer<X-1>());
+
+		if (it != tensor.nd_end() - 1)
+			s += '\n';
 	}
+
+	if (f.pretty)
+		s += ']';
 	return s;
 }
 

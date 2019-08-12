@@ -35,10 +35,8 @@ public:
 	BC::size_t  batched_input_size() const { return m_input_sz * batch_sz; }
 	BC::size_t  batched_output_size() const { return m_output_sz * batch_sz; }
 
-	void set_batch_size(int bs) {
-		batch_sz = bs;
-	}
-
+	void set_batch_size(int bs) { batch_sz = bs;}
+	void set_learning_rate() {}
 	void update_weights() {}
 };
 

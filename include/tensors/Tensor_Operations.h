@@ -287,7 +287,7 @@ public:
         			as_derived().size());
         }
 #else
-        *this = rv;
+        this->as_derived() = rv.as_derived();
 #endif
     }
 

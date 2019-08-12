@@ -55,12 +55,12 @@ private:
 
     //If host_tensor
     template<template<int> class Integer>
-    std::string to_string(Integer<0>, int precision=5, bool sparse=false) const {
-		return BC::tensors::io::to_string(as_derived(), precision, sparse, BC::traits::Integer<tensor_dimension>());
+    std::string to_string(Integer<0>, BC::tensors::io::features fs) const {
+		return BC::tensors::io::to_string(as_derived(), fs, BC::traits::Integer<tensor_dimension>());
     }
     //If device_tensor
     template<template<int> class Integer>
-    std::string to_string(Integer<1>, int precision=5, bool sparse=false) const {
+    std::string to_string(Integer<1>, BC::tensors::io::features fs) const {
     	using host_tensor = Tensor_Base<exprs::Array<
     							tensor_dimension,
     							typename ExpressionTemplate::value_type,
@@ -68,38 +68,46 @@ private:
 
     				host_tensor host_(as_derived().inner_shape());
     				host_.copy(as_derived());
-    				return BC::tensors::io::to_string(host_, precision, sparse, BC::traits::Integer<tensor_dimension>());
+    				return BC::tensors::io::to_string(host_, fs, BC::traits::Integer<tensor_dimension>());
     }
 
     //If expression_type
     template<template<int> class Integer>
-    std::string to_string(Integer<2>, int precision=5, bool sparse=false) const {
+    std::string to_string(Integer<2>, BC::tensors::io::features fs) const {
 		using tensor = Tensor_Base<exprs::Array<
 					tensor_dimension,
 					typename ExpressionTemplate::value_type,
 					BC::Allocator<system_tag, value_type>>>;
 
-		return tensor(this->as_derived()).to_string(precision, sparse);
+		return tensor(this->as_derived()).to_string(fs.precision, fs.pretty, fs.sparse);
     }
 
 public:
 
-    std::string to_string(int precision=5, bool sparse=false) const {
+    std::string to_string(int precision=8, bool pretty=true, bool sparse=false) const {
     	using specialization =
     			std::conditional_t<
     				BC::tensors::exprs::expression_traits<ExpressionTemplate>::is_expr, BC::traits::Integer<2>,
     			std::conditional_t<
     				std::is_same<host_tag, system_tag>::value, BC::traits::Integer<0>, BC::traits::Integer<1>>>;
 
-    		return this->to_string(specialization(), precision, sparse);
+    		return this->to_string(specialization(), BC::tensors::io::features(precision, pretty, sparse));
     	}
 
-    void print(int precision=8, bool sparse=false) const {
-    	std::cout << this->to_string(precision, sparse);
+    std::string to_raw_string(int precision=8) {
+    	return this->to_string(precision, false, false);
     }
 
-    void print_sparse(int precision=8) const {
-    	std::cout << this->to_string(precision, true);
+    void print(int precision=8, bool pretty=true, bool sparse=false) const {
+    	std::cout << this->to_string(precision, pretty, sparse) << std::endl;
+    }
+
+    void print_sparse(int precision=8, bool pretty=true) const {
+    	std::cout << this->to_string(precision, pretty, true) << std::endl;
+    }
+
+    void raw_print(int precision=0, bool sparse=false) const {
+    	std::cout << this->to_string(precision, false, sparse) << std::endl;
     }
 
     void read_as_one_hot(std::ifstream& is) {
@@ -114,7 +122,6 @@ public:
         std::getline(is, tmp, ',');
 
         as_derived()(std::stoi(tmp)) = 1;
-
     }
 
     void read_csv_row(std::ifstream& is) {
@@ -149,14 +156,10 @@ public:
     }
 
     void print_dimensions() const {
-    	if (tensor_dimension == 0) {
-    		std::cout << "[1]" << std::endl;
-    	} else {
-			for (int i = 0; i < tensor_dimension; ++i) {
-				std::cout << "[" << as_derived().dimension(i) << "]";
-			}
-			std::cout << std::endl;
-    	}
+		for (int i = 0; i < tensor_dimension; ++i) {
+			std::cout << "[" << as_derived().dimension(i) << "]";
+		}
+		std::cout << std::endl;
     }
 
     void print_leading_dimensions() const {

@@ -65,7 +65,7 @@ return_dtype name() const {			\
 	FORWARDED_PARAM(bool, header, true, bool)
 	FORWARDED_PARAM(char, mode, 'r', char)
 	FORWARDED_PARAM(char, delim, ',', char)
-	FORWARDED_PARAM(bool, transpose, true, bool)
+	FORWARDED_PARAM(bool, transpose, false, bool)
 	FORWARDED_PARAM(std::vector<int>, skip_rows, {}, const std::vector<int>&)
 	FORWARDED_PARAM(std::vector<int>, skip_cols, {}, const std::vector<int>&)
 
@@ -166,8 +166,7 @@ static BC::Matrix<ValueType, Allocator> read_uniform(csv_descriptor csv, Allocat
 	  BC::Matrix<ValueType> data(
 			  n_cols, n_rows);
 
-	  std::copy(cell_buf.begin(), cell_buf.end(), data.begin());
-
+	  std::copy(cell_buf.begin(), cell_buf.end(), data.cw_begin());
 	  if (csv.transpose()) {
 		  BC::Matrix<ValueType, Allocator> data_t(BC::make_shape(n_cols, n_rows), alloc);
 		  data_t.copy(data);
@@ -175,6 +174,7 @@ static BC::Matrix<ValueType, Allocator> read_uniform(csv_descriptor csv, Allocat
 	  } else {
 		  BC::Matrix<ValueType> data_transposed(n_rows, n_cols);
 		  data_transposed = data.transpose();
+		  data_transposed.print();
 
 		  BC::Matrix<ValueType, Allocator> data_correct_system(BC::make_shape(n_rows, n_cols), alloc);
 		  data_correct_system.copy(data_transposed);
