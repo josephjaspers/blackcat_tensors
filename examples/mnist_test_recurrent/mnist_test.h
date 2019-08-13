@@ -102,6 +102,10 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	clock total = clock(end - start);
 	std::cout << " training time: " <<  total.count() << std::endl;
 
+	network.save("test_save");
+	network.load("test_save");
+	
+
 	std::cout << " testing... " << std::endl;
 	BC::size_t test_images = 10;
 	cube img = cube(reshape(inputs[0], BC::shape(28,28, batch_size)));

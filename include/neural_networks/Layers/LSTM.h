@@ -291,14 +291,14 @@ public:
 
 	void save(int index, std::string directory_name) {
 		std::string subdir = "l" + std::to_string(index) + "_" + this->classname();
-		std::string fullpath = directory_name + "/" + subdir;
+		std::string fullpath = directory_name + bc_directory_separator() + subdir;
 		std::string mkdir = "mkdir " + fullpath;
 
 		int error = system(mkdir.c_str());
 
 #define BC_LSTM_SAVE(weight, type)\
 		{\
-			std::ofstream os(fullpath + "/"#weight"."#type);\
+			std::ofstream os(fullpath + bc_directory_separator() + #weight"."#type);\
 			os<< weight.to_raw_string();\
 		}
 #define BC_LSTM_SAVE_W(weight) BC_LSTM_SAVE(weight, mat)
@@ -329,16 +329,16 @@ public:
 
 	void load(int index, std::string directory_name) {
 		std::string subdir = "l" + std::to_string(index) + "_" + this->classname();
-		std::string fullpath = directory_name + "/" + subdir;
+		std::string fullpath = directory_name + bc_directory_separator() + subdir;
 
 #define BC_LSTM_LOAD_W(weight)\
 		weight = BC::io::read_uniform<value_type>(\
-		BC::io::csv_descriptor(fullpath + "/"#weight".mat").header(false), allocator_type());\
+		BC::io::csv_descriptor(fullpath + bc_directory_separator() + #weight".mat").header(false), allocator_type());\
 
 #define BC_LSTM_LOAD_B(bias)\
 		bias = vec(this->output_size());\
 		bias = BC::io::read_uniform<value_type>(\
-				BC::io::csv_descriptor(fullpath + "/"#bias".vec").header(false), allocator_type()).row(0);\
+				BC::io::csv_descriptor(fullpath + bc_directory_separator() + #bias".vec").header(false), allocator_type()).row(0);\
 
 		BC_LSTM_LOAD_W(c)
 

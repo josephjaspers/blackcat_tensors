@@ -80,7 +80,7 @@ struct NeuralNetwork {
     	}
 
 		//Create a yaml file with network description/architecture
-		std::string architecture_yaml = directory_name + "/architecture.yaml";
+		std::string architecture_yaml = directory_name + bc_directory_separator() + "architecture.yaml";
 		std::ofstream os(architecture_yaml);
 		os << get_string_architecture();
 

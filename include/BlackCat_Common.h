@@ -277,6 +277,17 @@ inline const char* bc_get_classname_of(const T& arg) {
 }
 #endif
 
+//------ seperator ---------- //
+
+inline char bc_directory_separator()
+{
+#if defined _WIN32 || defined __CYGWIN__
+	return '\\';
+#else
+	return '/';
+#endif
+}
+
 
 }
 
