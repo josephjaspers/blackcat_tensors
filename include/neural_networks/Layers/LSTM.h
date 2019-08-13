@@ -110,6 +110,11 @@ public:
 		ri.randomize(-.1, .1);
 		ro.randomize(0, .5);
 
+		bf.randomize(-1, 1);
+		bz.randomize(-.1, .1);
+		bi.randomize(-.1, .1);
+		bo.randomize(0, .5);
+
 		zero_gradients();
 	}
 
