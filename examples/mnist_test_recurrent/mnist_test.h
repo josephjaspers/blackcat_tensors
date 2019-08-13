@@ -66,7 +66,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 		softmax(system_tag, 10),
 		outputlayer(system_tag, 10)
 	);
-
+	network.set_learning_rate(0.001);
 	network.set_batch_size(batch_size);
 
 	std::pair<cube, cube> data = load_mnist(system_tag, mnist_dataset, batch_size, samples);
