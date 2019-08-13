@@ -13,8 +13,7 @@ Note: Many of the return types have been abreviated. The underlying implementati
 | vector | diag | int=0  | Returns the diagnol of a matrix. A positive integer will have the diagnol start from the top left corner. A negative integer will have the diagnol end n from the bottom right |
 | slice | col | BC::size_t   | Returns a column of a matrix. |
 | transpose_view | transpose | ---  | returns a transpose view of a Matrix or Vector. Cannot transpose in place. Matrix = Matrix.transpose() is undefined. |
-| vector | row | BC::size_t  | returns a row of a matrix. |
-| view | transpose | BC::size_t   | returns a row of a matrix. |
+| vector_view | row | BC::size_t  | returns a row of a matrix. |
 | reshape | (static) reshape | tensor, and ints...  | returns a reshaped view of the tensor parameter. Does not modify the original tensor |
 | slice | (static) chunk | index, shape | returns a reshaped view of the tensor parameter. Does not modify the original tensor |
 
