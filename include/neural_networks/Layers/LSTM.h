@@ -14,6 +14,8 @@
 namespace BC {
 namespace nn {
 
+using BC::algorithms::reference_list;
+
 template<class SystemTag,
 		class ValueType,
 		class ForgetGateNonlinearity=BC::Logistic,
@@ -25,13 +27,15 @@ struct LSTM : public Layer_Base {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
+	using allocator_type = BC::Allocator<SystemTag, ValueType>;
+
+	using mat = BC::Matrix<value_type, allocator_type>;
+	using vec = BC::Vector<value_type, allocator_type>;
 
 	using greedy_evaluate_delta = std::true_type;
 	using forward_requires_outputs = std::true_type;
 	using backward_requires_outputs = std::true_type;
 
-	using mat = BC::Matrix<ValueType, BC::Allocator<SystemTag, ValueType>>;
-	using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
 
 private:
 
@@ -69,7 +73,7 @@ private:
 public:
 
 	LSTM(int inputs, BC::size_t  outputs):
-		Layer_Base(inputs, outputs),
+		Layer_Base(__func__, inputs, outputs),
 		wf(outputs, inputs),
 		wz(outputs, inputs),
 		wi(outputs, inputs),
@@ -117,6 +121,8 @@ public:
 
 		zero_gradients();
 	}
+
+
 
 	template<class X>
 	auto forward_propagation(const X& x) {
@@ -250,54 +256,114 @@ public:
 	}
 
 	void set_batch_size(int bs) {
-		dc = mat(this->output_size(), bs);
-		df = mat(this->output_size(), bs);
-		dz = mat(this->output_size(), bs);
-		di = mat(this->output_size(), bs);
-		do_ = mat(this->output_size(), bs);
-		c = mat(this->output_size(), bs);
+		for (auto& delta: reference_list(dc, df, dz, di, do_, c)) {
+			delta = mat(this->output_size(), bs);
+		}
 
 		zero_deltas();
 	}
 
 	void clear_bp_storage() {
 		//remove all but the last element
-		auto clear = [](std::vector<mat>& v) {
-			v.erase(v.begin(), v.end()-1);
-		};
-
-		clear(cs);
-		clear(fs);
-		clear(zs);
-		clear(is);
-		clear(os);
-
+		for (auto& bp_storage : reference_list(cs, fs, zs, is, os)) {
+			bp_storage.erase(bp_storage.begin(), bp_storage.end()-1);
+		}
 	}
 
 	void zero_deltas() {
-		dc.zero();
-		df.zero();
-		di.zero();
-		dz.zero();
-		do_.zero();
+		for (auto& delta : reference_list(dc, df, di, dz, do_)) {
+			delta.zero();
+		}
 	}
 
 	void zero_gradients() {
-		wf_gradients.zero();
-		wz_gradients.zero();
-		wi_gradients.zero();
-		wo_gradients.zero();
+		for (auto& grad : reference_list(
+				wf_gradients, wz_gradients, wi_gradients, wo_gradients,
+				rf_gradients, rz_gradients, ri_gradients, ro_gradients)) {
+			grad.zero();
+		}
 
-		rf_gradients.zero();
-		rz_gradients.zero();
-		ri_gradients.zero();
-		ro_gradients.zero();
-
-		bf_gradients.zero();
-		bz_gradients.zero();
-		bi_gradients.zero();
-		bo_gradients.zero();
+		for (auto& grad : reference_list(
+				bf_gradients, bz_gradients, bi_gradients, bo_gradients)) {
+			grad.zero();
+		}
 	}
+
+	void save(int index, std::string directory_name) {
+		std::string subdir = "l" + std::to_string(index) + "_" + this->classname();
+		std::string fullpath = directory_name + "/" + subdir;
+		std::string mkdir = "mkdir " + fullpath;
+
+		int error = system(mkdir.c_str());
+
+#define BC_LSTM_SAVE(weight, type)\
+		{\
+			std::ofstream os(fullpath + "/"#weight"."#type);\
+			os<< weight.to_raw_string();\
+		}
+#define BC_LSTM_SAVE_W(weight) BC_LSTM_SAVE(weight, mat)
+#define BC_LSTM_SAVE_B(weight) BC_LSTM_SAVE(weight, vec)
+
+		BC_LSTM_SAVE_W(c)
+
+		BC_LSTM_SAVE_W(wf)
+		BC_LSTM_SAVE_W(wz)
+		BC_LSTM_SAVE_W(wi)
+		BC_LSTM_SAVE_W(wo)
+
+		BC_LSTM_SAVE_W(rf)
+		BC_LSTM_SAVE_W(rz)
+		BC_LSTM_SAVE_W(ri)
+		BC_LSTM_SAVE_W(ro)
+
+		BC_LSTM_SAVE_B(bf)
+		BC_LSTM_SAVE_B(bz)
+		BC_LSTM_SAVE_B(bi)
+		BC_LSTM_SAVE_B(bo)
+
+#undef BC_LSTM_SAVE
+#undef BC_LSTM_SAVE_W
+#undef BC_LSTM_SAVE_B
+
+	}
+
+	void load(int index, std::string directory_name) {
+		std::string subdir = "l" + std::to_string(index) + "_" + this->classname();
+		std::string fullpath = directory_name + "/" + subdir;
+
+#define BC_LSTM_LOAD_W(weight)\
+		weight = BC::io::read_uniform<value_type>(\
+		BC::io::csv_descriptor(fullpath + "/"#weight".mat").header(false), allocator_type());\
+
+#define BC_LSTM_LOAD_B(bias)\
+		bias = vec(this->output_size());\
+		bias = BC::io::read_uniform<value_type>(\
+				BC::io::csv_descriptor(fullpath + "/"#bias".vec").header(false), allocator_type()).row(0);\
+
+		BC_LSTM_LOAD_W(c)
+
+		BC_LSTM_LOAD_W(wf)
+		BC_LSTM_LOAD_W(wz)
+		BC_LSTM_LOAD_W(wi)
+		BC_LSTM_LOAD_W(wo)
+
+		BC_LSTM_LOAD_W(rf)
+		BC_LSTM_LOAD_W(rz)
+		BC_LSTM_LOAD_W(ri)
+		BC_LSTM_LOAD_W(ro)
+
+		//Required --
+		Layer_Base::resize(wf.cols(), wf.rows());
+
+		BC_LSTM_LOAD_B(bf)
+		BC_LSTM_LOAD_B(bz)
+		BC_LSTM_LOAD_B(bi)
+		BC_LSTM_LOAD_B(bo)
+
+#undef BC_LSTM_LOAD_W
+#undef BC_LSTM_LOAD_B
+	}
+
 };
 
 #ifndef BC_CLING_JIT

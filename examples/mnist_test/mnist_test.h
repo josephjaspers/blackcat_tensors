@@ -43,7 +43,7 @@ auto load_mnist(System system, const char* mnist_dataset, int batch_size, int sa
 
 template<class System=BC::host_tag>
 int percept_MNIST(System system_tag, const char* mnist_dataset,
-		int epochs=10, int batch_size=32, int samples=32*1024) {
+		int epochs=2, int batch_size=32, int samples=32*1024) {
 
 	using namespace BC::nn;
 
@@ -62,6 +62,9 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
     );
 
     network.set_batch_size(batch_size);
+
+	std::cout << "Neural Network architecture: \n" <<
+			network.get_string_architecture() << std::endl;
 
     std::pair<cube, cube> data = load_mnist(system_tag, mnist_dataset, batch_size, samples);
     cube& inputs = data.first;

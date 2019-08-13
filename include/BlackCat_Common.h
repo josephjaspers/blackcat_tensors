@@ -261,6 +261,23 @@ using  size_t   = BC_SIZE_T_OVERRIDE;
     }
 #endif
 
+
+// ------------ classname ------------- //
+#if defined(__GNUG__) || defined(__GNUC__)
+#include <cxxabi.h>
+template<class T>
+inline const char* bc_get_classname_of(const T& arg) {
+	int status;
+	return abi::__cxa_demangle(typeid(arg).name(),0,0,&status);
+}
+#else
+template<class T>
+inline const char* bc_get_classname_of(const T& arg) {
+	return typeid(arg).name();
+}
+#endif
+
+
 }
 
 

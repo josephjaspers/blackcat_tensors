@@ -163,6 +163,10 @@ static BC::Matrix<ValueType, Allocator> read_uniform(csv_descriptor csv, Allocat
 		  str_buf.clear();
 	  }
 
+	  if (n_rows == 1) {
+		  ++n_cols;
+	  }
+
 	  BC::Matrix<ValueType> data(
 			  n_cols, n_rows);
 
@@ -174,7 +178,6 @@ static BC::Matrix<ValueType, Allocator> read_uniform(csv_descriptor csv, Allocat
 	  } else {
 		  BC::Matrix<ValueType> data_transposed(n_rows, n_cols);
 		  data_transposed = data.transpose();
-		  data_transposed.print();
 
 		  BC::Matrix<ValueType, Allocator> data_correct_system(BC::make_shape(n_rows, n_cols), alloc);
 		  data_correct_system.copy(data_transposed);

@@ -22,7 +22,7 @@ struct Coefficientwise_Iterator {
 
     using iterator_category = std::random_access_iterator_tag;
     using value_type = typename Tensor::value_type;
-    using difference_type = int;
+    using difference_type = BC::size_t;
     using reference = value_type&;
     using pointer   = value_type*;
 

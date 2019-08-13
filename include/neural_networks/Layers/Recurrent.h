@@ -18,13 +18,14 @@ struct Recurrent : public Layer_Base {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
+	using allocator_type = BC::Allocator<SystemTag, ValueType>;
+
+	using mat = BC::Matrix<value_type, allocator_type>;
+	using vec = BC::Vector<value_type, allocator_type>;
 
 	using forward_requires_outputs = std::true_type;
 	using backward_requires_outputs = std::true_type;
 	using greedy_evaluate_delta = std::true_type;
-
-	using mat = BC::Matrix<ValueType, BC::Allocator<SystemTag, ValueType>>;
-	using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
 
 	RecurrentNonLinearity g;
 	ValueType lr = Layer_Base::default_learning_rate;
@@ -35,7 +36,7 @@ struct Recurrent : public Layer_Base {
 	vec b, b_gradients;  //biases
 
 	Recurrent(int inputs, int outputs) :
-		Layer_Base(inputs, outputs),
+		Layer_Base(__func__, inputs, outputs),
 		w(outputs, inputs),
 		w_gradients(outputs, inputs),
 		r(outputs, outputs),
@@ -93,6 +94,40 @@ struct Recurrent : public Layer_Base {
 		w_gradients.zero();
 		b_gradients.zero();
 		r_gradients.zero();
+	}
+
+
+	void save(int index, std::string directory_name) {
+		std::string subdir = "l" + std::to_string(index) + "_" + this->classname();
+		std::string fullpath = directory_name + "/" + subdir;
+		std::string mkdir = "mkdir " + fullpath;
+		int error = system(mkdir.c_str());
+
+		std::ofstream m_is(fullpath + "/w.mat");
+		m_is << w.to_raw_string();
+
+		std::ofstream r_is(fullpath + "/r.mat");
+		r_is << r.to_raw_string();
+
+		std::ofstream b_is(fullpath + "/b.vec");
+		b_is << b.to_raw_string();
+	}
+
+	void load(int index, std::string directory_name) {
+		std::string subdir = "l" + std::to_string(index) + "_" + this->classname();
+		std::string fullpath = directory_name + "/" + subdir;
+
+		w = BC::io::read_uniform<value_type>(
+				BC::io::csv_descriptor(fullpath + "/w.mat").header(false), allocator_type());
+
+		r = BC::io::read_uniform<value_type>(
+				BC::io::csv_descriptor(fullpath + "/r.mat").header(false), allocator_type());
+
+		Layer_Base::resize(w.cols(), w.rows());
+		b = vec(this->output_size());
+		b = BC::io::read_uniform<value_type>(
+				BC::io::csv_descriptor(fullpath + "/b.vec").header(false), allocator_type()).row(0);
+
 	}
 };
 

@@ -20,7 +20,7 @@ struct OutputLayer : Layer_Base {
 	using value_type = ValueType;
 
 	OutputLayer(int inputs):
-		Layer_Base(inputs, inputs) {}
+		Layer_Base(__func__, inputs, inputs) {}
 
 	template <class Tensor>
 	const auto& forward_propagation(const Tensor& x) {

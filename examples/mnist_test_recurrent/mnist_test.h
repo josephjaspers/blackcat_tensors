@@ -66,6 +66,10 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 		softmax(system_tag, 10),
 		outputlayer(system_tag, 10)
 	);
+
+	std::cout << "Neural Network architecture: \n" <<
+			network.get_string_architecture() << std::endl;
+
 	network.set_learning_rate(0.001);
 	network.set_batch_size(batch_size);
 

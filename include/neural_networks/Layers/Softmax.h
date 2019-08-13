@@ -28,20 +28,18 @@ public:
 
 private:
 	mat y;
-	mat_view x;
 
 public:
 
 	SoftMax(int inputs):
-		Layer_Base(inputs, inputs) {}
+		Layer_Base(__func__, inputs, inputs) {}
 
 	template<class Allocator>
-	const auto& forward_propagation(const BC::Matrix<value_type, Allocator>& x_) {
+	const auto& forward_propagation(const BC::Matrix<value_type, Allocator>& x) {
 		using BC::exp;
 		using BC::sum;
 
 		//TODO -- convert this into an operation, need 'broadcasted' sum
-		mat x = mat(x_);
 		for (int i = 0; i < x.cols(); ++i) {
 			y[i] = exp(x[i]) / sum(exp(x[i]));
 		}
@@ -52,11 +50,8 @@ public:
 	auto forward_propagation(const BC::Vector<value_type, Allocator>& x) {
 		using BC::exp;
 		using BC::sum;
-
 		//TODO -- convert this into an operation, need 'broadcasted' sum
-		y[0] = exp(x) / sum(exp(x));
-
-		return y[0];
+		return  exp(x) / sum(exp(x));
 	}
 
 
@@ -67,8 +62,9 @@ public:
 
 	void update_weights() {}
 
-	void set_batch_size(int x) {
-		y = mat(this->output_size(), x);
+	void set_batch_size(int bs) {
+		Layer_Base::set_batch_size(bs);
+		y = mat(this->output_size(), bs);
 	}
 };
 

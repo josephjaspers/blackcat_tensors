@@ -2,6 +2,8 @@
 #ifndef BLACKCAT_NEURALNETWORK_UNARYFUNCTION_H_
 #define BLACKCAT_NEURALNETWORK_UNARYFUNCTION_H_
 
+#include <string>
+
 namespace BC {
 namespace nn {
 
@@ -14,7 +16,7 @@ struct Function: Layer_Base {
 	using value_type = ValueType;
 
 	Function(int inputs, Functor function_=Functor()):
-		Layer_Base(inputs, inputs),
+		Layer_Base(bc_get_classname_of(function), inputs, inputs),
 		function(function_) {}
 
 	template<class Matrix>

@@ -100,6 +100,14 @@ struct LayerChain<Recurrent, Index, Derived, CurrentLayer, Layers...>:
 		for_each_node_impl(f, is_not_output_layer());
 	}
 
+	template<class function> void for_each(function f) const {
+		for_each_impl(f, is_not_output_layer());
+	}
+
+	template<class function> void for_each_node(function f) const {
+		for_each_node_impl(f, is_not_output_layer());
+	}
+
 
 	//------------------------ implementation --------------------------- //
 private:
@@ -124,7 +132,23 @@ private:
 	template<int ADL=0> const auto& prev_impl(std::false_type) const { return *this; }
 	template<int ADL=0>	   auto& prev_impl(std::false_type)	   { return *this; }
 
-	template<class Function> void for_each_impl(Function f, std::true_type)  {
+	template<class Function> void for_each_impl(Function f, std::true_type) const {
+		f(static_cast<const layer_type&>(*this)); this->next().for_each(f);
+	}
+
+	template<class Function> void for_each_impl(Function f, std::false_type) const {
+		f(static_cast<const layer_type&>(*this));
+	}
+
+	template<class Function> void for_each_node_impl(Function f, std::true_type) const {
+		f(*this); this->next().for_each_node(f);
+	}
+
+	template<class Function> void for_each_node_impl(Function f, std::false_type) const {
+		f(*this);
+	}
+
+	template<class Function> void for_each_impl(Function f, std::true_type) {
 		f(static_cast<layer_type&>(*this)); this->next().for_each(f);
 	}
 
@@ -139,6 +163,7 @@ private:
 	template<class Function> void for_each_node_impl(Function f, std::false_type) {
 		f(*this);
 	}
+
 
 	template<class T> const auto fp_impl(const T& tensor, std::true_type has_next) {
 		return this->next().fp(layer_type::forward_propagation(tensor));
