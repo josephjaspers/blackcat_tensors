@@ -4,11 +4,42 @@ Author: Joseph Jaspers
 [![Build Status](https://travis-ci.org/josephjaspers/BlackCat_Tensors.svg?branch=master)](https://travis-ci.org/josephjaspers/BlackCat_Tensors)
 
 
-BlackCat_Tensors (BCT) is a highly efficient Matrix library designed for NeuralNetwork construction. BCT is designed to support GPU computing (CUDA) and CPU multi-threading (OpenMP). BCT focuses on delivering a high-level framework with low-level performance.
+BlackCat_Tensors (BCT) is a highly efficient NeuralNetwork and Tensor library. BCT is designed to support GPU computing (CUDA) and CPU multi-threading (OpenMP). BCT focuses on delivering a high-level framework with low-level performance.
 
 #### Doxygen Documentation 
 For a better source-tree/full method listing:
 	[Source Tree Documentation](https://josephjaspers.github.io/BlackCat_Tensors_Doxygen/html/annotated.html)
+
+#### Neural Networks Overview
+BlackCat_Tensors supports various Neural Network primitives including:
+
+LSTM,
+RNN,
+FeedForward (Dense),
+Tanh, Logistic, Relu, Softmax
+(Convolution in progress).
+
+Brief example:
+```cpp
+
+int main() {
+
+using namespace BC::nn;
+auto system_tag = BC::host_tag();   //for CPU/OpenMP
+auto system_tag = BC::device_tag(); //for CUDA 
+
+auto network = neuralnetwork(
+	feedforward(system_tag, 784, 256),
+	logistic(system_tag, 256),
+	feedforward(system_tag, 256, 10),
+	softmax(system_tag, 10),
+	outputlayer(system_tag, 10)
+);
+
+}
+```
+(MNIST example)[https://github.com/josephjaspers/BlackCat_Tensors/blob/master/examples/mnist_test/mnist_test.h]
+(MNIST example output)[https://travis-ci.org/josephjaspers/BlackCat_Tensors] (bottom of the build_log)
 
 #### Setup:
 BCT is a header only library that supports compilation with the NVCC and G++ BCT does not support any default BLAS routines, and must be linked with an apropriate BLAS library. Setting up simply requires adding the BlackCat_Tensors your path and including "BlackCat_Tensors.h"
@@ -44,7 +75,7 @@ BlackCat Tensors attempts to align itself with the design of the C++ standard li
 
 |Index| Concept | Brief |
 | --- | --- | --- 
-| 1 | [Methods](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/methods.md)| Method list | 
+| 1 | [Tensor Methods](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/methods.md)| Brief documentation of the common tensor methods | 
 | 2 | [Core Types](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/aliases.md) | List of primary Tensor-Types |
 | 3 | [Allocators](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/allocators.md) | Overview of allocators in BCT and their functionality |
 | 4 | [Iterators](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/iterators.md) | Overview of iterators in BCT and their functionality |
