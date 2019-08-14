@@ -13,11 +13,10 @@ For a better source-tree/full method listing:
 #### Neural Networks Overview
 BlackCat_Tensors supports various Neural Network primitives including:
 
-LSTM,
-RNN,
-FeedForward (Dense),
-Tanh, Logistic, Relu, Softmax
-(Convolution in progress).
+LSTM,  
+RNN,  
+FeedForward (Dense),  
+Tanh, Logistic, Relu, Softmax  
 
 Brief example:
 ```cpp
