@@ -94,7 +94,7 @@ public:
     		return this->to_string(specialization(), BC::tensors::io::features(precision, pretty, sparse));
     	}
 
-    std::string to_raw_string(int precision=8) {
+    std::string to_raw_string(int precision=8) const {
     	return this->to_string(precision, false, false);
     }
 

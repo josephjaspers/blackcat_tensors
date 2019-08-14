@@ -96,38 +96,16 @@ struct Recurrent : public Layer_Base {
 		r_gradients.zero();
 	}
 
-
-	void save(int index, std::string directory_name) {
-		std::string subdir = "l" + std::to_string(index) + "_" + this->classname();
-		std::string fullpath = directory_name + "/" + subdir;
-		std::string mkdir = "mkdir " + fullpath;
-		int error = system(mkdir.c_str());
-
-		std::ofstream m_is(fullpath + "/w.mat");
-		m_is << w.to_raw_string();
-
-		std::ofstream r_is(fullpath + "/r.mat");
-		r_is << r.to_raw_string();
-
-		std::ofstream b_is(fullpath + "/b.vec");
-		b_is << b.to_raw_string();
+	void save(Layer_Loader& loader) {
+		loader.save_variable(w, "w");
+		loader.save_variable(r, "r");
+		loader.save_variable(b, "b");
 	}
 
-	void load(int index, std::string directory_name) {
-		std::string subdir = "l" + std::to_string(index) + "_" + this->classname();
-		std::string fullpath = directory_name + bc_directory_separator() + subdir;
-
-		w = BC::io::read_uniform<value_type>(
-				BC::io::csv_descriptor(fullpath + bc_directory_separator() + "w.mat").header(false), allocator_type());
-
-		r = BC::io::read_uniform<value_type>(
-				BC::io::csv_descriptor(fullpath + bc_directory_separator() + "r.mat").header(false), allocator_type());
-
-		Layer_Base::resize(w.cols(), w.rows());
-		b = vec(this->output_size());
-		b = BC::io::read_uniform<value_type>(
-				BC::io::csv_descriptor(fullpath + bc_directory_separator() + "b.vec").header(false), allocator_type()).row(0);
-
+	void load(Layer_Loader& loader) {
+		loader.load_variable(w, "w");
+		loader.load_variable(r, "r");
+		loader.load_variable(b, "b");
 	}
 };
 

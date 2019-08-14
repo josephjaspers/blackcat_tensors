@@ -8,6 +8,7 @@
 #ifndef LAYER_H_
 #define LAYER_H_
 
+#include "../Layer_Loader.h"
 #include "Layer_Traits.h"
 #include <string>
 
@@ -22,6 +23,7 @@ namespace nn {
 class Layer_Base {
 
 	const std::string m_classname;
+	std::string m_directory_save_path;
 	std::string m_additional_architecture_features;
 
 	BC::size_t m_input_sz;
@@ -39,9 +41,9 @@ public:
 	static constexpr bool default_learning_rate = .01;
 
 	/**
-	 * m_classname should be initialized by supplying __func__ to the first argument
+	 * m_classname should be initialized by supplying `__func__` to the first argument
 	 * of the Layer_Base. `parse_classname()` will normalize the string
-	 * as __func__ is compiler dependent.
+	 * as `__func__` is compiler dependent.
 	 */
 	Layer_Base(std::string classname_, BC::size_t inputs, BC::size_t outputs):
 		m_classname(parse_classname(classname_)),
@@ -90,8 +92,9 @@ public:
 	void set_learning_rate(int) {}
 	void update_weights() {}
 
-	void save(int index, std::string directory_name) {};
-	void load(int index, std::string directory_name) {};
+	void save(Layer_Loader&) {};
+	void load(Layer_Loader&) {};
+
 
 };
 

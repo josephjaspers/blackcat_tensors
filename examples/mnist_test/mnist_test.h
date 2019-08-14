@@ -82,6 +82,9 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 		}
 	}
 
+	//	network.save("mnist_test_feedforward"); //Uncomment to add saving/loading
+	//	network.load("mnist_test_feedforward");
+
 	auto end = std::chrono::system_clock::now();
 	std::cout << " training time: " <<  clock(end - start).count() << std::endl;
 

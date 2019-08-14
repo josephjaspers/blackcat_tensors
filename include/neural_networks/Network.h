@@ -9,8 +9,9 @@
 #define BLACKCAT_NEURALNETWORK_NEURALNETWORK_H_
 
 #include "Layers/Layer_Traits.h"
-#include "Layer_Chain.h"
 
+#include "Layer_Chain.h"
+#include "Layer_Loader.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -21,12 +22,8 @@ namespace detail {
 template<class T>
 using is_recurrent_layer = BC::traits::conditional_detected_t<
 			detail::query_forward_requires_outputs, T, std::false_type>;
-
-
 }
 
-
-//HEAD
 template<class... Layers>
 struct NeuralNetwork {
 
@@ -84,18 +81,25 @@ struct NeuralNetwork {
 		std::ofstream os(architecture_yaml);
 		os << get_string_architecture();
 
-		//Iterate through each layer and call save
+		Layer_Loader loader(directory_name);
+
     	int index = 0;
     	m_layer_chain.for_each([&](auto& layer){
-    		layer.save(index, directory_name);
+    		loader.set_current_layer_index(index);
+    		loader.set_current_layer_name(layer.classname());
+    		loader.make_current_directory();
+    		layer.save(loader);
     		index++;
     	});
     }
 
     void load(std::string directory_name) {
+		Layer_Loader loader(directory_name);
     	int index = 0;
     	m_layer_chain.for_each([&](auto& layer){
-    		layer.load(index, directory_name);
+    		loader.set_current_layer_index(index);
+    		loader.set_current_layer_name(layer.classname());
+    		layer.load(loader);
     		index++;
     	});
     }

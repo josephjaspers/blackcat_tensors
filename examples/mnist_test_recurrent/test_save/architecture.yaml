@@ -1,0 +1,12 @@
+LSTM:
+	inputs: 196
+	outputs: 32
+FeedForward:
+	inputs: 32
+	outputs: 10
+SoftMax:
+	inputs: 10
+	outputs: 10
+OutputLayer:
+	inputs: 10
+	outputs: 10

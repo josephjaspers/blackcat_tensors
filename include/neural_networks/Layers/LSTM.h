@@ -289,81 +289,45 @@ public:
 		}
 	}
 
-	void save(int index, std::string directory_name) {
-		std::string subdir = "l" + std::to_string(index) + "_" + this->classname();
-		std::string fullpath = directory_name + bc_directory_separator() + subdir;
-		std::string mkdir = "mkdir " + fullpath;
+	void save(Layer_Loader& loader) {
+		loader.save_variable(wf, "wf");
+		loader.save_variable(rf, "rf");
+		loader.save_variable(bf, "bf");
 
-		int error = system(mkdir.c_str());
+		loader.save_variable(wz, "wz");
+		loader.save_variable(rz, "rz");
+		loader.save_variable(bz, "bz");
 
-#define BC_LSTM_SAVE(weight, type)\
-		{\
-			std::ofstream os(fullpath + bc_directory_separator() + #weight"."#type);\
-			os<< weight.to_raw_string();\
-		}
-#define BC_LSTM_SAVE_W(weight) BC_LSTM_SAVE(weight, mat)
-#define BC_LSTM_SAVE_B(weight) BC_LSTM_SAVE(weight, vec)
+		loader.save_variable(wi, "wi");
+		loader.save_variable(ri, "ri");
+		loader.save_variable(bi, "bi");
 
-		BC_LSTM_SAVE_W(c)
+		loader.save_variable(wo, "wo");
+		loader.save_variable(ro, "ro");
+		loader.save_variable(bo, "bo");
 
-		BC_LSTM_SAVE_W(wf)
-		BC_LSTM_SAVE_W(wz)
-		BC_LSTM_SAVE_W(wi)
-		BC_LSTM_SAVE_W(wo)
-
-		BC_LSTM_SAVE_W(rf)
-		BC_LSTM_SAVE_W(rz)
-		BC_LSTM_SAVE_W(ri)
-		BC_LSTM_SAVE_W(ro)
-
-		BC_LSTM_SAVE_B(bf)
-		BC_LSTM_SAVE_B(bz)
-		BC_LSTM_SAVE_B(bi)
-		BC_LSTM_SAVE_B(bo)
-
-#undef BC_LSTM_SAVE
-#undef BC_LSTM_SAVE_W
-#undef BC_LSTM_SAVE_B
-
+		loader.save_variable(c, "c");
 	}
 
-	void load(int index, std::string directory_name) {
-		std::string subdir = "l" + std::to_string(index) + "_" + this->classname();
-		std::string fullpath = directory_name + bc_directory_separator() + subdir;
+	void load(Layer_Loader& loader) {
+		loader.load_variable(wf, "wf");
+		loader.load_variable(rf, "rf");
+		loader.load_variable(bf, "bf");
 
-#define BC_LSTM_LOAD_W(weight)\
-		weight = BC::io::read_uniform<value_type>(\
-		BC::io::csv_descriptor(fullpath + bc_directory_separator() + #weight".mat").header(false), allocator_type());\
+		loader.load_variable(wz, "wz");
+		loader.load_variable(rz, "rz");
+		loader.load_variable(bz, "bz");
 
-#define BC_LSTM_LOAD_B(bias)\
-		bias = vec(this->output_size());\
-		bias = BC::io::read_uniform<value_type>(\
-				BC::io::csv_descriptor(fullpath + bc_directory_separator() + #bias".vec").header(false), allocator_type()).row(0);\
+		loader.load_variable(wi, "wi");
+		loader.load_variable(ri, "ri");
+		loader.load_variable(bi, "bi");
 
-		BC_LSTM_LOAD_W(c)
+		loader.load_variable(wo, "wo");
+		loader.load_variable(ro, "ro");
+		loader.load_variable(bo, "bo");
 
-		BC_LSTM_LOAD_W(wf)
-		BC_LSTM_LOAD_W(wz)
-		BC_LSTM_LOAD_W(wi)
-		BC_LSTM_LOAD_W(wo)
-
-		BC_LSTM_LOAD_W(rf)
-		BC_LSTM_LOAD_W(rz)
-		BC_LSTM_LOAD_W(ri)
-		BC_LSTM_LOAD_W(ro)
-
-		//Required --
-		Layer_Base::resize(wf.cols(), wf.rows());
-
-		BC_LSTM_LOAD_B(bf)
-		BC_LSTM_LOAD_B(bz)
-		BC_LSTM_LOAD_B(bi)
-		BC_LSTM_LOAD_B(bo)
-
-#undef BC_LSTM_LOAD_W
-#undef BC_LSTM_LOAD_B
+		loader.load_variable(c, "c");
 	}
-
 };
 
 #ifndef BC_CLING_JIT
