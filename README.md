@@ -21,6 +21,8 @@ Tanh, Logistic, Relu, Softmax
 Brief example:
 ```cpp
 
+#include "BlackCat_NeuralNetworks.h"
+
 int main() {
 
 using namespace BC::nn;
