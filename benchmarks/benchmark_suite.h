@@ -17,9 +17,17 @@ namespace benchmarks {
 
 //Requires Cuda to run
 
-void run(std::vector<int> sizes = {100, 500, 1000, 2500, 5000, 75000, 10000, 20000, 40000 }, int reps=1000) {
+void run(std::vector<int> sizes = {10, 50, 100, 500, 1000, 2500, 5000, 75000, 10000, 20000, 40000 }, int reps=100000) {
+#ifndef __CUDACC__
+	std::cout << "| Size | C-impl | BC_host | Host-performance |\n";
+	std::cout << "| ---  | --- | --- | --- | \n";
 
+	for (int sz : sizes) {
+		auto times = cwise_benchmark(sz, reps, false);
 
+		std::cout << "|" << sz <<
+				"|" << std::get<0>(times) << "|" << std::get<1>(times) << "|" << std::get<0>(times)/std::get<1>(times) << std::endl;	}
+#else
 	std::cout << "| Size | C-impl | BC_host | Host-performance | Cuda-impl | BC_device | Device-Performance | \n";
 	std::cout << "| ---  | --- | --- | --- | --- | --- | --- | \n";
 
@@ -30,6 +38,7 @@ void run(std::vector<int> sizes = {100, 500, 1000, 2500, 5000, 75000, 10000, 200
 				"|" << std::get<0>(times) << "|" << std::get<1>(times) << "|" << std::get<0>(times)/std::get<1>(times) << \
 				"|" << std::get<2>(times) << "|" << std::get<3>(times) << "|" << std::get<2>(times)/std::get<3>(times) <<  "|" <<std::endl;
 	}
+#endif
 }
 
 

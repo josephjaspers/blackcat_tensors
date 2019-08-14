@@ -21,13 +21,18 @@ namespace exprs {
 
 template<class Value, class System_Tag>
 struct Unary_Expression<oper::transpose<System_Tag>, Value>
-    : Expression_Base<Unary_Expression<oper::transpose<System_Tag>, Value>> {
+    : Expression_Base<Unary_Expression<oper::transpose<System_Tag>, Value>>, oper::transpose<System_Tag> {
 
     using value_type  = typename Value::value_type;
     using system_tag = System_Tag;
 
     static constexpr int tensor_dimension = Value::tensor_dimension;
     static constexpr int tensor_iterator_dimension = tensor_dimension > 1? tensor_dimension :0;
+
+    BCINLINE
+    const oper::transpose<System_Tag>& get_operation() const {
+    	return static_cast<const oper::transpose<System_Tag>&>(*this);
+    }
 
     Value array;
 

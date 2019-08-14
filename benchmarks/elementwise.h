@@ -11,9 +11,11 @@
 #include <chrono>
 #include "../../BlackCat_Tensors/include/BlackCat_Tensors.h"
 
-auto benchmark_forloop(int size, BC::size_t  iters, bool stdout=false) {
+template<class Allocator>
+auto benchmark_forloop(int size, BC::size_t  iters, Allocator alloc, bool stdout=false) {
 
     using clock = std::chrono::duration<double>;
+    using vec = BC::Vector<typename Allocator::value_type, Allocator>;
 
     clock bc_time;
     clock cptr_time;
@@ -68,7 +70,8 @@ auto benchmark_forloop(int size, BC::size_t  iters, bool stdout=false) {
 }
 
 
-void benchmark_forloop_suite() {
+template<class allocator=BC::Allocator<BC::host_tag, double>>
+void benchmark_forloop_suite(bool stdout=false, allocator alloc=allocator()) {
 	int size = 1000000;
 	int reps = 100;
 	float multiplier = 1.5;
@@ -82,7 +85,7 @@ void benchmark_forloop_suite() {
 
 	std::cout << markdown_header << std::endl;
 	for (int i = 0; i < 10; ++i) {
-		auto times = benchmark_forloop(size, reps);
+		auto times = benchmark_forloop(size, reps, alloc, stdout);
 		auto bc = times.first;
 		auto baseline = times.second;
 

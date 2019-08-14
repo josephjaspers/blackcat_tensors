@@ -185,34 +185,42 @@ static auto greedy_evaluate(Expression expression, Stream stream) {
 //----------------------------------- endpoints ---------------------------------------//
 template<class Expression, class Stream>
 static auto greedy_evaluate(Expression expression, Stream stream) {
-	//Initialize a logging_stream (does not call any jobs-enqueued or allocate memory, simply logs memory requirements)
-	BC::streams::Logging_Stream<typename Stream::system_tag> logging_stream;
-	detail::greedy_evaluate(expression, logging_stream);	//record allocations/deallocations
-	stream.get_allocator().reserve(logging_stream.get_max_allocated());	//Reserve the maximum amount of memory
+	if (optimizer<Expression>::requires_greedy_eval) {
+		//Initialize a logging_stream (does not call any jobs-enqueued or allocate memory, simply logs memory requirements)
+		BC::streams::Logging_Stream<typename Stream::system_tag> logging_stream;
+		detail::greedy_evaluate(expression, logging_stream);	//record allocations/deallocations
+		stream.get_allocator().reserve(logging_stream.get_max_allocated());	//Reserve the maximum amount of memory
+	}
 	return detail::greedy_evaluate(expression, stream);	//Do the actual calculation
 }
 
 template<class ArrayType, class Expression, class Stream>
 static auto greedy_evaluate(ArrayType array, Expression expression, Stream stream) {
-	BC::streams::Logging_Stream<typename Stream::system_tag> logging_stream;
-	detail::greedy_evaluate(array, expression, logging_stream);
-	stream.get_allocator().reserve(logging_stream.get_max_allocated());
+	if (optimizer<Expression>::requires_greedy_eval) {
+		BC::streams::Logging_Stream<typename Stream::system_tag> logging_stream;
+		detail::greedy_evaluate(array, expression, logging_stream);
+		stream.get_allocator().reserve(logging_stream.get_max_allocated());
+	}
 	return detail::greedy_evaluate(array, expression, stream);
 }
 
 template<class Expression, class Stream>
 static auto evaluate(Expression expression, Stream stream) {
-	BC::streams::Logging_Stream<typename Stream::system_tag> logging_stream;
-	detail::evaluate(expression, logging_stream);
-	stream.get_allocator().reserve(logging_stream.get_max_allocated());
+	if (optimizer<Expression>::requires_greedy_eval) {
+		BC::streams::Logging_Stream<typename Stream::system_tag> logging_stream;
+		detail::evaluate(expression, logging_stream);
+		stream.get_allocator().reserve(logging_stream.get_max_allocated());
+	}
 	return detail::evaluate(expression, stream);
 }
 
 template<class Expression, class Stream>
 static auto evaluate_aliased(Expression expression, Stream stream) {
-	BC::streams::Logging_Stream<typename Stream::system_tag> logging_stream;
-	detail::evaluate_aliased(expression, logging_stream);
-	stream.get_allocator().reserve(logging_stream.get_max_allocated());
+	if (optimizer<Expression>::requires_greedy_eval) {
+		BC::streams::Logging_Stream<typename Stream::system_tag> logging_stream;
+		detail::evaluate_aliased(expression, logging_stream);
+		stream.get_allocator().reserve(logging_stream.get_max_allocated());
+	}
 	return detail::evaluate_aliased(expression, stream);
 }
 
