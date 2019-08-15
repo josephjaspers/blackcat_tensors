@@ -32,9 +32,6 @@ struct NeuralNetwork {
 
 	using self = NeuralNetwork<Layers...>;
 	using layer_chain = LayerChain<recurrent_neural_network, 0, void, Layers...>;
-//	using value_type = typename BC::traits::front_t<Layers...>::value_type;
-//	using system_tag = typename BC::traits::front_t<Layers...>::system_tag;
-
 
 	layer_chain m_layer_chain;
 
@@ -42,10 +39,13 @@ struct NeuralNetwork {
 		m_layer_chain(layers...) {}
 
 	template<class T> auto back_propagation(const T& tensor_expected) {
-		return m_layer_chain.tail().bp(tensor_expected);
+		auto dx =  m_layer_chain.tail().bp(tensor_expected);
+		m_layer_chain.for_each([&](auto& layer) { layer.inc_bp_index(); });
+		return dx;
 	}
 
 	template<class T> auto forward_propagation(const T& tensor_expected) {
+		m_layer_chain.for_each([&](auto& layer) { layer.zero_bp_index(); });
 		return m_layer_chain.head().fp(tensor_expected);
 	}
 

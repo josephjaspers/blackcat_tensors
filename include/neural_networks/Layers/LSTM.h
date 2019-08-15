@@ -8,9 +8,6 @@
 #ifndef BLACKCAT_TENSORS_NEURALNETWORKS_LSTM_H_
 #define BLACKCAT_TENSORS_NEURALNETWORKS_LSTM_H_
 
-#include "OutputLayer.h"
-#include "Recurrent.h"
-
 namespace BC {
 namespace nn {
 

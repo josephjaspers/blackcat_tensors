@@ -154,6 +154,28 @@ using namespace BC::traits::common;
     template<class... Ts>
     static constexpr bool sequence_contains_v = sequence_contains<Ts...>::value;
 
+    // -------- new addition, other code will use static_cast
+
+    template<template<class...> class Type, class Derived, class... Ts>
+    auto& derived_cast(const Type<Derived, Ts...>& t) {
+    	return static_cast<const Derived&>(t);
+    }
+
+    template<template<class...> class Type, class Derived, class... Ts>
+    auto& derived_cast(Type<Derived, Ts...>& t) {
+    	return static_cast<Derived&>(t);
+    }
+
+    template<class Derived, class Type>
+    const auto& derived_cast(const Type& t) {
+    	return static_cast<const Derived&>(t);
+    }
+
+    template<class Derived, class Type>
+    auto& derived_cast(Type& t) {
+    	return static_cast<Derived&>(t);
+    }
+
 
     //---------------------
 

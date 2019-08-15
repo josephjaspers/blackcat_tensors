@@ -54,7 +54,7 @@ struct layer_traits {
 			= BC::traits::conditional_detected_t<BC::traits::query_value_type, T,
 				typename system_tag::default_floating_point_type>;
 
-	using requests_extra_cache = BC::traits::truth_type<BC::traits::is_detected_v<detail::query_extra_cache_args, T>>;
+	using requires_extra_cache = BC::traits::truth_type<BC::traits::is_detected_v<detail::query_extra_cache_args, T>>;
 
 	using input_tensor_dimension
 			= BC::traits::conditional_detected_t<detail::query_input_tensor_dimension, T, BC::traits::Integer<1>>;

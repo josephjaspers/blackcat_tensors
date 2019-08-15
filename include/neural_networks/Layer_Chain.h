@@ -12,10 +12,7 @@ namespace detail {
 	using query_layer_type = typename T::layer_type;
 
 	template<bool Recurrent, int Index, class Derived, class Layer>
-	using LayerManager =
-			std::conditional_t<Recurrent,
-			Recurrent_Layer_Manager<Derived, Layer>,
-			Layer_Manager<Derived, Layer>>;
+	using LayerManager = Layer_Manager<Derived,Layer, BC::traits::truth_type<Recurrent>>;
 }
 
 /**
