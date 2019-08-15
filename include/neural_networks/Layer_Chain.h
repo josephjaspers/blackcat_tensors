@@ -14,25 +14,17 @@ namespace detail {
 	template<bool Recurrent, int Index, class Derived, class Layer>
 	using LayerManager =
 			std::conditional_t<Recurrent,
-
-//TODO Add recurrent input layer_manager
-//				std::conditional_t<Index == 0,
-//					Input_Layer_Manager<Derived, Layer>, //if first layer
-					Recurrent_Layer_Manager<Derived, Layer>, //>,
-				std::conditional_t<Index == 0,
-					Input_Layer_Manager<Derived, Layer>, //if first layer
-					Layer_Manager<Derived, Layer>>>;
-
+			Recurrent_Layer_Manager<Derived, Layer>,
+			Layer_Manager<Derived, Layer>>;
 }
 
-/*
+/**
  * The LayerChain implements a 'bi-directional-tuple'.
  * This bi-directional tuple stores the Layers inside of it.
  *
  * It supports reverse and forward iteration which allows it to be good container for neural networks.
  * (Forward iteration for forward propagation, reverse for back-prop)
  */
-
 template<bool Recurrent, int Index, class Derived, class...>
 struct LayerChain {};
 

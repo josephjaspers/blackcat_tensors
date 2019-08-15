@@ -50,7 +50,7 @@ auto load_mnist(System system, const char* mnist_dataset, int batch_size, int sa
 
 template<class System=BC::host_tag>
 int percept_MNIST(System system_tag, const char* mnist_dataset,
-		int epochs=10, int batch_size=32, int samples=32*1024) {
+		int epochs=200, int batch_size=32, int samples=32*1024) {
 
 	using namespace BC::nn;
 
@@ -80,6 +80,29 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	std::cout << " training..." << std::endl;
 	auto start = std::chrono::system_clock::now();
 
+
+	auto visual_test = [&]() {
+		auto end = std::chrono::system_clock::now();
+		clock total = clock(end - start);
+		std::cout << " training time: " <<  total.count() << std::endl;
+
+		std::cout << " testing... " << std::endl;
+		BC::size_t test_images = 10;
+		cube img = cube(reshape(inputs[0], BC::shape(28,28, batch_size)));
+		network.forward_propagation(chunk(inputs[0], BC::index(0,        0), BC::shape(784/4, batch_size)));
+		network.forward_propagation(chunk(inputs[0], BC::index(784* 1/4, 0), BC::shape(784/4, batch_size)));
+		network.forward_propagation(chunk(inputs[0], BC::index(784* 2/4, 0), BC::shape(784/4, batch_size)));
+		mat hyps =network.forward_propagation(chunk(inputs[0], BC::index(784* 3/4, 0), BC::shape(784/4, batch_size)));
+
+		for (int i = 0; i < test_images; ++i) {
+			img[i].t().print_sparse(3);
+			hyps[i].print();
+			std::cout << "------------------------------------" <<std::endl;
+		}
+		std::cout << " success " << std::endl;
+		return 0;
+	};
+
 	for (int i = 0; i < epochs; ++i){
 		std::cout << " current epoch: " << i << std::endl;
 		for (int j = 0; j < samples/batch_size; j++) {
@@ -96,28 +119,14 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 
 			network.update_weights();
 		}
+
+		if (epoch % 10 == 0) {
+			visual_test();
+		}
 	}
 
 //	network.save("recurrent_test"); //Uncomment to add saving/loading
 //	network.load("recurrent_test");
 
-	auto end = std::chrono::system_clock::now();
-	clock total = clock(end - start);
-	std::cout << " training time: " <<  total.count() << std::endl;
-	
-	std::cout << " testing... " << std::endl;
-	BC::size_t test_images = 10;
-	cube img = cube(reshape(inputs[0], BC::shape(28,28, batch_size)));
-	network.forward_propagation(chunk(inputs[0], BC::index(0,        0), BC::shape(784/4, batch_size)));
-	network.forward_propagation(chunk(inputs[0], BC::index(784* 1/4, 0), BC::shape(784/4, batch_size)));
-	network.forward_propagation(chunk(inputs[0], BC::index(784* 2/4, 0), BC::shape(784/4, batch_size)));
-	mat hyps =network.forward_propagation(chunk(inputs[0], BC::index(784* 3/4, 0), BC::shape(784/4, batch_size)));
 
-	for (int i = 0; i < test_images; ++i) {
-		img[i].t().print_sparse(3);
-		hyps[i].print();
-		std::cout << "------------------------------------" <<std::endl;
-	}
-	std::cout << " success " << std::endl;
-	return 0;
 }

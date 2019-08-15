@@ -10,6 +10,7 @@
 #define BCNN_GLOBAL_UNIFIER_H_
 
 #include "common.h"
+#include "Layers/GreedyFeedForward.h"
 #include "Layers/FeedForward.h"
 #include "Layers/OutputLayer.h"
 #include "Layers/UnaryFunction.h"

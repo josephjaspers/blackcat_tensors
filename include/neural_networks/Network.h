@@ -2,7 +2,7 @@
  * NeuralNetwork.h
  *
  *  Created on: Mar 5, 2018
- *      Author: joseph
+ *	  Author: joseph
  */
 
 #ifndef BLACKCAT_NEURALNETWORK_NEURALNETWORK_H_
@@ -30,13 +30,16 @@ struct NeuralNetwork {
 	static constexpr bool recurrent_neural_network =
 			BC::traits::any<detail::is_recurrent_layer, Layers...>::value;
 
-    using self = NeuralNetwork<Layers...>;
-    using layer_chain = LayerChain<recurrent_neural_network, 0, void, Layers...>;
+	using self = NeuralNetwork<Layers...>;
+	using layer_chain = LayerChain<recurrent_neural_network, 0, void, Layers...>;
+//	using value_type = typename BC::traits::front_t<Layers...>::value_type;
+//	using system_tag = typename BC::traits::front_t<Layers...>::system_tag;
 
-    layer_chain m_layer_chain;
 
-    NeuralNetwork(Layers... layers):
-    	m_layer_chain(layers...) {}
+	layer_chain m_layer_chain;
+
+	NeuralNetwork(Layers... layers):
+		m_layer_chain(layers...) {}
 
 	template<class T> auto back_propagation(const T& tensor_expected) {
 		return m_layer_chain.tail().bp(tensor_expected);
@@ -50,31 +53,35 @@ struct NeuralNetwork {
 	template<int X> auto& get_layer() { return m_layer_chain.get(BC::traits::Integer<X>()); }
 
 	void set_learning_rate(double lr) { m_layer_chain.for_each([&](auto& layer) { layer.set_learning_rate(lr); }); }
-    void set_batch_size(int x) { m_layer_chain.for_each([&](auto& layer) { layer.set_batch_size(x);    });}
-    void update_weights()      { m_layer_chain.for_each([ ](auto& layer) { layer.update_weights();        });}
+	void set_batch_size(int x) { m_layer_chain.for_each([&](auto& layer) { layer.set_batch_size(x);	});}
+	void update_weights()	  { m_layer_chain.for_each([ ](auto& layer) { layer.update_weights(); });}
 
+	BC::size_t input_size() const { return m_layer_chain.head().layer().input_size(); }
+	BC::size_t output_size() const { return m_layer_chain.tail().layer().output_size(); }
+	BC::size_t batch_size() const { return m_layer_chain.head().layer().batch_size(); }
 
-    /**
-     * Returns a yaml representation of the neural network
-     */
-    std::string get_string_architecture() const {
-    	std::string architecture = "";
-    	m_layer_chain.for_each([&](auto& layer) {
-    		architecture += layer.get_string_architecture() + "\n";
-    	});
-    	return architecture;
-    }
+	/**
+	 * Returns a yaml representation of the neural network
+	 */
+	std::string get_string_architecture() const {
+		std::string architecture = "";
+		m_layer_chain.for_each([&](auto& layer) {
+			architecture += layer.get_string_architecture() + "\n";
+		});
+		return architecture;
+	}
 
-    /**
-     * Creates the directory `directory_name` using mkdir.
-     * Than outputs an architecture.yaml file with a description of the neural network.
-     * Than iterates through each layer and calls 'save(int layer_index, std::string directory_name)'
-     */
-    void save(std::string directory_name) {
-    	//Attempt to create a directory to save our model in
-    	if ((directory_name != "") && (directory_name != ".")) {
-    		int error = system(std::string("mkdir " + directory_name).c_str());
-    	}
+	/**
+	 * Creates the directory `directory_name` using mkdir.
+	 * Than outputs an architecture.yaml file with a description of the neural network.
+	 * Than iterates through each layer and calls 'save(int layer_index, std::string directory_name)'
+	 */
+
+	void save(std::string directory_name) {
+		//Attempt to create a directory to save our model in
+		if ((directory_name != "") && (directory_name != ".")) {
+			int error = system(std::string("mkdir " + directory_name).c_str());
+		}
 
 		//Create a yaml file with network description/architecture
 		std::string architecture_yaml = directory_name + bc_directory_separator() + "architecture.yaml";
@@ -83,26 +90,26 @@ struct NeuralNetwork {
 
 		Layer_Loader loader(directory_name);
 
-    	int index = 0;
-    	m_layer_chain.for_each([&](auto& layer){
-    		loader.set_current_layer_index(index);
-    		loader.set_current_layer_name(layer.classname());
-    		loader.make_current_directory();
-    		layer.save(loader);
-    		index++;
-    	});
-    }
+		int index = 0;
+		m_layer_chain.for_each([&](auto& layer){
+			loader.set_current_layer_index(index);
+			loader.set_current_layer_name(layer.classname());
+			loader.make_current_directory();
+			layer.save(loader);
+			index++;
+		});
+	}
 
-    void load(std::string directory_name) {
+	void load(std::string directory_name) {
 		Layer_Loader loader(directory_name);
-    	int index = 0;
-    	m_layer_chain.for_each([&](auto& layer){
-    		loader.set_current_layer_index(index);
-    		loader.set_current_layer_name(layer.classname());
-    		layer.load(loader);
-    		index++;
-    	});
-    }
+		int index = 0;
+		m_layer_chain.for_each([&](auto& layer){
+			loader.set_current_layer_index(index);
+			loader.set_current_layer_name(layer.classname());
+			layer.load(loader);
+			index++;
+		});
+	}
 };
 
 template<class... Layers>
