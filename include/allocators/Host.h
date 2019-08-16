@@ -53,8 +53,8 @@ struct Allocator<host_tag, T> {
         delete[] t;
     }
 
-    template<class U> constexpr bool operator == (const Allocator<host_tag, U>&) { return true; }
-    template<class U> constexpr bool operator != (const Allocator<host_tag, U>&) { return false; }
+    template<class U> constexpr bool operator == (const Allocator<host_tag, U>&) const { return true; }
+    template<class U> constexpr bool operator != (const Allocator<host_tag, U>&) const { return false; }
 };
 
 }

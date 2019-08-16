@@ -45,7 +45,10 @@ struct Forward_Tensor_Cache {
 
 	template<class T>
 	auto& store(const T& expression, std::true_type is_batched) {
-		return this->batched_tensor = expression;
+		std::cout << " storing " << std::endl;
+		this->batched_tensor = expression;
+		std::cout << " Asdfsdf " << std::endl;
+		return this->batched_tensor;
 	}
 
 	template<class T>
@@ -207,7 +210,10 @@ struct Layer_Manager: Layer {
 	template<class T>
 	auto back_propagation(const T& dy) {
 		using is_batched = BC::traits::truth_type<(T::tensor_dimension == output_tensor_dimension::value + 1)>;
-		return  backward_supply_outputs(typename layer_traits<Layer>::backward_requires_outputs(), m_input_cache.load(is_batched()), dy);
+		return  backward_supply_outputs(
+				typename layer_traits<Layer>::backward_requires_outputs(),
+				m_input_cache.load(is_batched()),
+				maybe_cache_delta(dy));
 	}
 
 	void update_weights() {

@@ -60,8 +60,8 @@ struct Allocator<device_tag, T> {
     	BC_CUDA_ASSERT((cudaFree((void*)data_ptr)));
     }
 
-    template<class U> constexpr bool operator == (const Allocator<device_tag, U>&) { return true; }
-    template<class U> constexpr bool operator != (const Allocator<device_tag, U>&) { return false; }
+    template<class U> constexpr bool operator == (const Allocator<device_tag, U>&) const { return true; }
+    template<class U> constexpr bool operator != (const Allocator<device_tag, U>&) const { return false; }
 };
 
 }
