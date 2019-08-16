@@ -45,9 +45,7 @@ struct Forward_Tensor_Cache {
 
 	template<class T>
 	auto& store(const T& expression, std::true_type is_batched) {
-		std::cout << " storing " << std::endl;
 		this->batched_tensor = expression;
-		std::cout << " Asdfsdf " << std::endl;
 		return this->batched_tensor;
 	}
 
