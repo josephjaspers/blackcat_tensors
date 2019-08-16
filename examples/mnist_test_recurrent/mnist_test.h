@@ -1,5 +1,5 @@
-#include "../../include/BlackCat_Tensors.h" //Add BlackCat_Tensors/include/ to path
-#include "../../include/BlackCat_NeuralNetworks.h" //Add BlackCat_Tensors/include/ to path
+#include "../../include/BlackCat_Tensors.h"
+#include "../../include/BlackCat_NeuralNetworks.h"
 
 #include <chrono>
 
@@ -10,7 +10,6 @@
  * upon the previous blocks of the image
  *
  */
-
 template<class System>
 auto load_mnist(System system, const char* mnist_dataset, int batch_size, int samples) {
 

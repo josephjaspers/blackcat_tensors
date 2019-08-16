@@ -1,5 +1,5 @@
-#include "../../include/BlackCat_Tensors.h" //Add BlackCat_Tensors/include/ to path
-#include "../../include/BlackCat_NeuralNetworks.h" //Add BlackCat_Tensors/include/ to path
+#include "../../include/BlackCat_Tensors.h"
+#include "../../include/BlackCat_NeuralNetworks.h"
 
 #include <chrono>
 
