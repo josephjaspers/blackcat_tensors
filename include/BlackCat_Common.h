@@ -289,6 +289,17 @@ inline char bc_directory_separator()
 }
 
 
+template<class T>
+void print(const T& arg) {
+	std::cout << arg << std::endl;
+}
+template<class T, class... Ts>
+void print(const T& arg, const Ts&... args) {
+	std::cout << arg << ", ";
+	print(args...);
+}
+
+
 }
 
 

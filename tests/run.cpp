@@ -1,5 +1,5 @@
 #include "run.h"
 
 int main() {
-	BC::tests::run();
+	BC::tests::run(16);
 }

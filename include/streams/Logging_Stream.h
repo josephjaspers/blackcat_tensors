@@ -101,6 +101,7 @@ struct Logging_Stream: Logging_Stream_Base<SystemTag> {
 		}
 
 		void deallocate(T* t, BC::size_t size) {
+			BC_ASSERT(info->current_allocated >= size * sizeof(value_type), "BC_DEALLOCATION ERROR, DOUBLE DUPLICATION")
 			info->current_allocated -= size * sizeof(value_type);
 		}
 	};

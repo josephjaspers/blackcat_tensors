@@ -103,6 +103,7 @@ int test_operations(int sz=128) {
 template<class value_type, template<class> class allocator=BC::Basic_Allocator>
 int test_matrix_muls(int sz=128) {
 
+	sz =16;
 	BC_TEST_BODY_HEAD
 
 	using alloc_t = allocator<value_type>;
@@ -124,6 +125,8 @@ int test_matrix_muls(int sz=128) {
 	a.randomize(0, 12);
 	b.randomize(0, 12);
 
+
+	validation.get_stream().get_allocator().force_deallocate();
 
 	//lv trans
 	BC_TEST_DEF(
@@ -162,6 +165,9 @@ int test_matrix_muls(int sz=128) {
 
 
 	BC_TEST_DEF(
+		c.zero();
+		d.zero();
+
 		c = a.t() * b * 2;
 		d = 2 * a.t() * b;
 
@@ -170,6 +176,7 @@ int test_matrix_muls(int sz=128) {
 	)
 	BC_TEST_DEF(
 		mat atrans(a.t());
+
 		c = atrans * b * 2;
 		d = 2 * a.t() * b;
 
@@ -234,6 +241,37 @@ int test_matrix_muls(int sz=128) {
 		validation = c.approx_equal(d) && e.approx_equal(f) && g.approx_equal(h);
 		return BC::tensors::all(validation);
 	)
+	validation.get_stream().get_allocator().force_deallocate();
+
+
+	BC_TEST_DEF(
+		mat y(4,4);
+		mat dy(4,4);
+		mat w(4,4);
+		mat x(4,4);
+
+
+		mat z(4,4);
+
+		z += w.t() * BC::logistic.dx(w.t() * (y-dy));
+
+		return z.get_stream().get_allocator().allocated_bytes() == 0;
+	)
+
+	BC_TEST_DEF(
+		mat y(4,4);
+		mat dy(4,4);
+		mat w(4,4);
+		mat x(4,4);
+
+
+		mat z(4,4);
+
+		z -= w.t() * BC::logistic.dx(w.t() * (y-dy));
+
+		return z.get_stream().get_allocator().allocated_bytes() == 0;
+	)
+
 	BC_TEST_BODY_TAIL
 }
 

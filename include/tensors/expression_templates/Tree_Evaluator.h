@@ -51,11 +51,13 @@ static void nd_evaluate(const Expression expression, Stream stream) {
 	});
 }
 
-template<class AssignmentOp, class Left, class Right, class Stream>
-void greedy_optimization(Left left, Right right, Stream stream) {
+template<class AssignmentOp, class Left, class Right, class Stream, class TruthType>
+void greedy_optimization(Left left, Right right, Stream stream, TruthType is_subexpression) {
 	auto temporaries_evaluated_expression = optimizer<Right>::template temporary_injection(right, stream);
 	auto assignment_expression = make_bin_expr<AssignmentOp>(left, temporaries_evaluated_expression);
 	detail::nd_evaluate(assignment_expression, stream);
+
+	if (!TruthType::value)
 	optimizer<decltype(temporaries_evaluated_expression)>::deallocate_temporaries(temporaries_evaluated_expression, stream);
 }
 
@@ -63,11 +65,12 @@ template<
 	class lv,
 	class rv,
 	class Stream,
-	class Op>
+	class Op,
+	class TruthType=std::false_type>
 static
 std::enable_if_t<optimizer<Binary_Expression<Op, lv, rv>>::requires_greedy_eval &&
 					BC::oper::operation_traits<Op>::is_linear_assignment_operation>
-evaluate(Binary_Expression<Op, lv, rv> expression, Stream stream) {
+evaluate(Binary_Expression<Op, lv, rv> expression, Stream stream, TruthType is_subexpression=TruthType()) {
 	static constexpr bool entirely_blas_expression = optimizer<rv>::entirely_blas_expr; // all operations are +/- blas calls
 	static constexpr int alpha_mod = BC::oper::operation_traits<Op>::alpha_modifier;
 	static constexpr int beta_mod = BC::oper::operation_traits<Op>::beta_modifier;
@@ -76,8 +79,8 @@ evaluate(Binary_Expression<Op, lv, rv> expression, Stream stream) {
 	auto right = optimizer<rv>::linear_evaluation(expression.right, output, stream);
 
 	if /*constexpr*/ (!entirely_blas_expression)
-		detail::greedy_optimization<Op>(expression.left, right, stream);
-	else {
+		detail::greedy_optimization<Op>(expression.left, right, stream, is_subexpression);
+	else if (!TruthType::value) {
 		optimizer<decltype(right)>::deallocate_temporaries(right, stream);
 	}
 }
@@ -85,11 +88,12 @@ evaluate(Binary_Expression<Op, lv, rv> expression, Stream stream) {
 template<
 	class lv,
 	class rv,
-	class Stream
+	class Stream,
+	class TruthType=std::false_type
 	>
 static
 std::enable_if_t<optimizer<Binary_Expression<oper::Assign, lv, rv>>::requires_greedy_eval>
-evaluate(Binary_Expression<oper::Assign, lv, rv> expression, Stream stream) {
+evaluate(Binary_Expression<oper::Assign, lv, rv> expression, Stream stream, TruthType is_subexpression=TruthType()) {
 	static constexpr int alpha_mod = BC::oper::operation_traits<oper::Assign>::alpha_modifier; //1
 	static constexpr int beta_mod = BC::oper::operation_traits<oper::Assign>::beta_modifier;   //0
 
@@ -98,8 +102,8 @@ evaluate(Binary_Expression<oper::Assign, lv, rv> expression, Stream stream) {
 
 	auto right = optimizer<rv>::injection(expression.right, injector<lv, alpha_mod, beta_mod>(expression.left), stream);
 
-	BC::traits::constexpr_if<partial_blas_expr || !entirely_blas_expr>([&]() {
-		detail::greedy_optimization<oper::Assign>(expression.left, right, stream);
+	BC::traits::constexpr_if<!entirely_blas_expr>([&]() {
+		detail::greedy_optimization<oper::Assign>(expression.left, right, stream, is_subexpression);
 	});
 }
 
@@ -107,13 +111,14 @@ template<
 	class lv,
 	class rv,
 	class Stream,
-	class Op
+	class Op,
+	class TruthType
 >
 static std::enable_if_t<optimizer<Binary_Expression<Op, lv, rv>>::requires_greedy_eval &&
 							!BC::oper::operation_traits<Op>::is_linear_assignment_operation>
-evaluate(Binary_Expression<Op, lv, rv> expression, Stream stream) {
-	auto right = optimizer<rv>::temporary_injection(expression.right,  stream);
-	detail::greedy_optimization<Op>(expression.left, right, stream);
+evaluate(Binary_Expression<Op, lv, rv> expression, Stream stream,  TruthType is_subexpression=TruthType()) {
+	auto right = optimizer<rv>::temporary_injection(expression.right, stream);
+	detail::greedy_optimization<Op>(expression.left, right, stream, is_subexpression);
 }
 
 template<
@@ -128,9 +133,9 @@ evaluate_aliased(Binary_Expression<Op, lv, rv> expression, Stream stream) {
 //--------------------- lazy only ----------------------- //
 
 //------------------------------------------------Greedy evaluation (BLAS function call detected), skip injection optimization--------------------//
-template<class Expression, class Stream>
+template<class Expression, class Stream, class TruthType=std::false_type>
 static std::enable_if_t<!optimizer<Expression>::requires_greedy_eval>
-evaluate(Expression expression, Stream stream) {
+evaluate(Expression expression, Stream stream, TruthType=TruthType()) {
 	detail::nd_evaluate(expression, stream);
 }
 //------------------------------------------------Purely lazy alias evaluation----------------------------------//
@@ -146,7 +151,7 @@ evaluate_aliased(Expression expression, Stream stream) {
 template<class Array, class Expression, class Stream>
 auto greedy_evaluate(Array array, Expression expr, Stream stream) {
     static_assert(expression_traits<Array>::is_array, "MAY ONLY EVALUATE TO ARRAYS");
-    detail::evaluate(make_bin_expr<oper::Assign>(array, expr), stream);
+    detail::evaluate(make_bin_expr<oper::Assign>(array, expr), stream, std::true_type());
     return array;
 }
 
@@ -179,6 +184,8 @@ static auto greedy_evaluate(Expression expression, Stream stream) {
 	auto temporary = make_temporary_kernel_array<value_type>(shape, stream);
 	return detail::greedy_evaluate(temporary, expression, stream);
 }
+
+
 } //ns detail
 
 
@@ -223,6 +230,28 @@ static auto evaluate_aliased(Expression expression, Stream stream) {
 	}
 	return detail::evaluate_aliased(expression, stream);
 }
+
+template<class Expression, class SystemTag>
+static auto greedy_evaluate(Expression expression, BC::streams::Logging_Stream<SystemTag> logging_stream) {
+	return detail::greedy_evaluate(expression, logging_stream);	//record allocations/deallocations
+}
+
+template<class ArrayType, class Expression, class SystemTag>
+static auto greedy_evaluate(ArrayType array, Expression expression, BC::streams::Logging_Stream<SystemTag> logging_stream) {
+	return detail::greedy_evaluate(array, expression, logging_stream);
+}
+
+template<class Expression, class SystemTag>
+static auto evaluate(Expression expression, BC::streams::Logging_Stream<SystemTag> logging_stream) {
+	return detail::evaluate(expression, logging_stream);
+}
+
+template<class Expression, class SystemTag>
+static auto evaluate_aliased(Expression expression, BC::streams::Logging_Stream<SystemTag> logging_stream) {
+	return detail::evaluate_aliased(expression, logging_stream);
+}
+
+
 
 
 } //ns exprs

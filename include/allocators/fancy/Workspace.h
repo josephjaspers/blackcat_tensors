@@ -101,11 +101,20 @@ public:
 	}
 
 	void deallocate(Byte* memptr, std::size_t sz) {
+		BC_ASSERT(m_curr_index!=0,
+				"BC_Memory Deallocation failure, attempting to deallocate already deallocated memory.");
+
 		BC_ASSERT(memptr == (m_memptr + m_curr_index - sz),
 				"BC_Memory Deallocation failure, attempting to deallocate memory out of order,"
 				"\nWorkspace memory functions as a stack, deallocations must be in reverse order of allocations.");
 
+
 		m_curr_index -= sz;
+	}
+
+
+	void force_deallocate() {
+		m_curr_index = 0;
 	}
 
 	template<class T>
@@ -164,6 +173,10 @@ public:
 
 	/// Delete all reserved memory, if memory is currently allocated an error is thrown.
 	void free() { ws_ptr->free(); }
+
+	void force_deallocate() {
+		ws_ptr->force_deallocate();
+	}
 
 	size_t available_bytes() const {
 		 return ws_ptr->available_bytes();

@@ -85,6 +85,29 @@ struct remove_transpose<Unary_Expression<oper::transpose<SystemTag>, Array>> {
 	}
 };
 
+template<class Array, class SystemTag, class Rv>
+struct remove_transpose<
+	Binary_Expression<oper::Scalar_Mul, Unary_Expression<oper::transpose<SystemTag>, Array>, Rv>> {
+	using type = Array;
+
+	static type rm(Binary_Expression<oper::Scalar_Mul, Unary_Expression<oper::transpose<SystemTag>, Array>, Rv> expression) {
+		return expression.left.array;
+	}
+};
+
+template<class Array, class SystemTag, class Lv>
+struct remove_transpose<
+	Binary_Expression<oper::Scalar_Mul, Lv, Unary_Expression<oper::transpose<SystemTag>, Array>>> {
+	using type = Array;
+
+	static type rm(Binary_Expression<oper::Scalar_Mul, Lv, Unary_Expression<oper::transpose<SystemTag>, Array>> expression) {
+		return expression.right.array;
+	}
+};
+
+
+
+
 struct select_on_dx_when_defined {
 	template<class T> BCINLINE
 	static auto impl(const T& array, BC::size_t index) {

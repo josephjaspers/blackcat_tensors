@@ -24,6 +24,7 @@ int test_all(int sz) {
 	errors += test_allocators<scalar_type, allocator>(sz);
 	errors += test_constructors<scalar_type, allocator>(sz);
 	errors += test_operations<scalar_type, allocator>(sz);
+	errors += test_matrix_muls<scalar_type, allocator>(sz);
 	errors += test_streams<scalar_type, allocator>(sz);
 	errors += test_algorithms<scalar_type, allocator>(sz);
 	errors += test_blas<scalar_type, allocator>(sz);
