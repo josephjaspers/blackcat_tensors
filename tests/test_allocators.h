@@ -26,7 +26,6 @@ struct log_allocator : Allocator {
 		using other = log_allocator<typename Allocator::template rebind<T>::other>;
 	};
 
-
 	log_allocator() = default;
 
 	template<class T>
@@ -39,6 +38,7 @@ struct log_allocator : Allocator {
 		(*total_allocated.get()) += sz * sizeof(typename Allocator::value_type);
 		return Allocator::allocate(sz);
 	}
+
 	auto deallocate(typename Allocator::value_type*& memptr, BC::size_t sz) {
 		(*total_deallocated) += sz* sizeof(typename Allocator::value_type);
 		return Allocator::deallocate(memptr, sz);
@@ -53,10 +53,8 @@ int test_allocators(int sz=128) {
 
 	BC_TEST_BODY_HEAD
 
-
 	using mat = BC::Matrix<value_type, log_allocator<allocator<value_type>>>;
 	using vec = BC::Vector<value_type, log_allocator<allocator<value_type>>>;
-
 	using system_tag = typename allocator_traits<allocator<value_type>>::system_tag;
 
 	//A stream by default references the default stream and the default global memory_pool
@@ -81,9 +79,6 @@ int test_allocators(int sz=128) {
 		return *(b.get_allocator().total_allocated.get()) == 50 * sizeof(value_type);
 	)
 
-
-	//Allocators can be passed from slices
-
 //TODO fix this test for MSV- causes compiler error
 #ifdef _MSV_VER
 	BC_TEST_DEF(
@@ -94,33 +89,12 @@ int test_allocators(int sz=128) {
 	)
 #endif
 
-// Test no longer relevant
-//	//Allocators can be passed from slices
-//	BC_TEST_DEF(
-//		mat a(5,5);  //mem sz = 25
-//		a.get_stream().get_allocator().reserve(25 * sizeof(value_type));
-//
-//		a %= a * a;	 //25 memory should be allocated for the a*a temporary
-//					 //25 should be deallocated after using the a*a temporary
-//
-//		return *(a.get_allocator().total_allocated.get()) == 25  * sizeof(value_type) &&
-//				*(a.get_allocator().total_deallocated.get()) == 25  * sizeof(value_type);
-//	)
-
 	BC_TEST_DEF(
 		mat a(5,5);  //mem sz = 25
 		a.get_stream().get_allocator().reserve(30 * sizeof(value_type));
 		a = BC::logistic(a * a + a); // should not allocate any memory
 		return *(a.get_allocator().total_allocated.get()) == 25 * sizeof(value_type);
 	)
-
-
-// This test is no longer relevant
-//	BC_TEST_DEF(
-//		mat a(5,5);  //mem sz = 25
-//		a.alias() = BC::logistic(a * a + a); //alias should disable expression re-ordering
-//		return *(a.get_allocator().total_allocated.get()) == 50  * sizeof(value_type);
-//	)
 
 	BC_TEST_BODY_TAIL
 };

@@ -35,36 +35,43 @@ int test_operations(int sz=128) {
 		validation = (c + b).approx_equal(a += b);
 		return BC::tensors::all(validation);
 	)
+
 	BC_TEST_DEF(
 		mat c(a);
 		validation = (c - b).approx_equal(a -= b);
 		return BC::tensors::all(validation);
 	)
+
 	BC_TEST_DEF(
 		mat c(a);
 		validation = (c / b).approx_equal(a /= b);
 		return BC::tensors::all(validation);
 	)
+
 	BC_TEST_DEF(
 		mat c(a);
 		validation = (c % b).approx_equal(a %= b);
 		return BC::tensors::all(validation);
 	)
+
 	BC_TEST_DEF(
 		mat c(a);
 		validation = (c + 1) >= a;
 		return BC::tensors::all(validation);
 	)
+
 	BC_TEST_DEF(
 		mat c(a);
 		validation = (c - 1) <= a;
 		return BC::tensors::all(validation);
 	)
+
 	BC_TEST_DEF(
 		mat c(a);
 		validation = c == a;
 		return BC::tensors::all(validation);
 	)
+
 	BC_TEST_DEF(
 		mat c(a);
 		validation = c*-1 == -a;
@@ -77,25 +84,27 @@ int test_operations(int sz=128) {
 		validation = c == a + 2;
 		return BC::tensors::all(validation);
 	)
+
 	BC_TEST_DEF(
 		mat c(a);
 		c -= 2;
 		validation = c == a - 2;
 		return BC::tensors::all(validation);
 	)
+
 	BC_TEST_DEF(
 		mat c(a);
 		c /= 2;
 		validation = c == a / 2;
 		return BC::tensors::all(validation);
 	)
+
 	BC_TEST_DEF(
 		mat c(a);
 		c %= 2; //%= element-wise multiplication
 		validation = c == a * 2; //scalar multiplication
 		return BC::tensors::all(validation);
 	)
-
 
 	BC_TEST_BODY_TAIL
 }
@@ -174,6 +183,7 @@ int test_matrix_muls(int sz=128) {
 		validation = c.approx_equal(d);
 		return BC::tensors::all(validation);
 	)
+
 	BC_TEST_DEF(
 		mat atrans(a.t());
 
@@ -183,6 +193,7 @@ int test_matrix_muls(int sz=128) {
 		validation = c.approx_equal(d);
 		return BC::tensors::all(validation);
 	)
+
 	BC_TEST_DEF(
 		mat atrans(a.t());
 		c = atrans * b * 2;
@@ -249,8 +260,6 @@ int test_matrix_muls(int sz=128) {
 		mat dy(4,4);
 		mat w(4,4);
 		mat x(4,4);
-
-
 		mat z(4,4);
 
 		z += w.t() * BC::logistic.dx(w.t() * (y-dy));
@@ -263,8 +272,6 @@ int test_matrix_muls(int sz=128) {
 		mat dy(4,4);
 		mat w(4,4);
 		mat x(4,4);
-
-
 		mat z(4,4);
 
 		z -= w.t() * BC::logistic.dx(w.t() * (y-dy));

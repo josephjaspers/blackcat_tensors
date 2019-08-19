@@ -18,10 +18,10 @@ int test_algorithms(int sz=128) {
 
 	BC_TEST_BODY_HEAD
 
-	using alloc_t = allocator<value_type>;
-	using mat = BC::Matrix<value_type, alloc_t>;
+	using allocator_type = allocator<value_type>;
+	using system_tag = typename BC::allocator_traits<allocator_type>::system_tag;
+	using mat = BC::Matrix<value_type, allocator_type>;
 
-	using system_tag = typename BC::allocator_traits<alloc_t>::system_tag;
 	BC::streams::Stream<system_tag> stream;
 
 	BC_TEST_DEF(

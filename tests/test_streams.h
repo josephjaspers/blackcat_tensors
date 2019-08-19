@@ -102,11 +102,7 @@ int test_streams(int sz=128) {
 				col_0.get_stream() == scal_0.get_stream();
 	)
 
-
-
-
 	BC_TEST_BODY_TAIL
-
 }
 
 }

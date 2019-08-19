@@ -33,7 +33,7 @@ network = bc.nn.neuralnetwork(
 
 samples = outputs.cols()
 batch_size = 8
-epochs = 1 
+epochs = 10 
 batches = int(samples/batch_size)
 network.set_batch_size(batch_size) 
 

@@ -22,17 +22,13 @@ int test_accessors(int sz=128) {
 	using vec = BC::Vector<value_type, allocator<value_type>>;
 	using bmat = BC::Matrix<bool, allocator<bool>>;
 
-
 	mat a(sz,sz);
 	bmat validation(sz,sz);
-
 
 	value_type val= 0;
 	for (auto col : a.nd_iter()) {
 		col = val++;
 	}
-
-
 
 	//test slice
 	BC_TEST_DEF(
@@ -133,7 +129,6 @@ int test_accessors(int sz=128) {
 
 		return BC::tensors::all(validation) && ensure_correct_size && ensure_correct_cols && ensure_correct_rows;
 	)
-
 
 	BC_TEST_BODY_TAIL
 }
