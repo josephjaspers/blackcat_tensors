@@ -98,7 +98,6 @@ evaluate(Binary_Expression<oper::Assign, lv, rv> expression, Stream stream, Trut
 	static constexpr int beta_mod = BC::oper::operation_traits<oper::Assign>::beta_modifier;   //0
 
 	static constexpr bool entirely_blas_expr = optimizer<rv>::entirely_blas_expr;
-	static constexpr bool partial_blas_expr = optimizer<rv>::partial_blas_expr && !entirely_blas_expr;
 
 	auto right = optimizer<rv>::injection(expression.right, injector<lv, alpha_mod, beta_mod>(expression.left), stream);
 
@@ -128,7 +127,7 @@ template<
 	class Stream>
 static std::enable_if_t<optimizer<Binary_Expression<Op, lv, rv>>::requires_greedy_eval>
 evaluate_aliased(Binary_Expression<Op, lv, rv> expression, Stream stream) {
-	detail::greedy_optimization<Op>(expression.left, expression.right, stream);
+	detail::greedy_optimization<Op>(expression.left, expression.right, stream, std::false_type());
 }
 //--------------------- lazy only ----------------------- //
 
