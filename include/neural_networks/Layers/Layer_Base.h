@@ -38,7 +38,7 @@ class Layer_Base {
 
 public:
 
-	static constexpr bool default_learning_rate = .01;
+	static constexpr double default_learning_rate = .01;
 
 	/**
 	 * m_classname should be initialized by supplying `__func__` to the first argument
