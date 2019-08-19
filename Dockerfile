@@ -5,4 +5,3 @@ RUN apt-get update && \
   apt-get install g++-8 && \
   apt-get install libblas-dev
 CMD [cd examples && make atlas && ./blackcat_tests]
-
