@@ -1,5 +1,5 @@
 FROM ubuntu 
-ENV DEVIAN_FRONTEND
+ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
   apt-get install gcc-7 && \
   apt-get install g++-8 && \
