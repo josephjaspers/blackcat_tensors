@@ -6,11 +6,11 @@ Author: Joseph Jaspers
 
 BlackCat_Tensors (BCT) is a highly efficient NeuralNetwork and Tensor library. BCT is designed to support GPU computing (CUDA) and CPU multi-threading (OpenMP). BCT focuses on delivering a high-level framework with low-level performance.
 
-#### Doxygen Documentation 
+#### Doxygen Documentation:
 For a better source-tree/full method listing:
 	[Source Tree Documentation](https://josephjaspers.github.io/BlackCat_Tensors_Doxygen/html/annotated.html)
 
-#### Neural Networks Overview
+#### Neural Networks Brief:
 BlackCat_Tensors supports various Neural Network primitives including:
 
 LSTM,  
