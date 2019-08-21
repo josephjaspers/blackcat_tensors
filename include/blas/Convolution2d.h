@@ -36,6 +36,67 @@ void conv2d(OutputPtr output, size_t output_ld,
 	}
 }
 
+
+/**
+ * 2d Convolution of a 3d tensor with multiple 3d kernels.
+ * Assume packed format.
+ *
+ */
+template<class OutputPtr, class ImgPtr, class KrnlPtr>
+void conv2d_3dtensor_multichannel(
+			OutputPtr output,
+			ImgPtr img,  size_t rows, size_t cols, size_t depth,
+			KrnlPtr krnl, size_t k_rows, size_t k_cols, size_t k_depth, size_t nkrnls,
+			size_t stride=1, size_t padding=0) {
+
+	auto krnl_index = [&](auto krnl_index, auto depth, auto col, auto row) {
+		return krnl_index * (k_rows * k_cols * k_depth)
+				+ depth * (k_rows * k_cols)
+				+ col * (k_rows)
+				+ row;
+	};
+
+	auto img_index = [&](auto depth, auto col, auto row) {
+		return depth * (rows * cols)
+				+ col * (rows)
+				+ row;
+	};
+
+	auto out_index = [&](auto krnl_idx, auto col, auto row) {
+		size_t output_columns = (cols + padding - k_cols + 1) / stride;
+		size_t output_rows    = (rows + padding - k_rows + 1) / stride;
+
+		return krnl_idx * (output_columns * output_rows)
+				+ col * (output_rows)
+				+ row;
+	};
+
+
+	for (int c = -padding; c < cols + padding - k_cols + 1; c += stride) {
+		for (int r = -padding; r < rows + padding - k_rows + 1; r += stride) {
+			for (int k = 0; k < nkrnls; ++k) {
+				float sum = 0;
+				for (int kc = 0; kc < k_cols; ++kc) {
+					for (int kr = 0; kr < k_rows; ++kr) {
+						for (int d = 0; d < depth; ++d) {
+							if (c+kc >= 0 && c+kc < cols &&
+								r+kr >= 0 && r+kr < rows) {
+								auto x = img[img_index(d, c+kc, r+kr)];
+								auto w = krnl[krnl_index(k, d, kc, kr)];
+								sum += w * x;
+							}
+						}
+					}
+				}
+				output[out_index(k, c, r)] = sum;
+			}
+		}
+	}
+
+
+}
+
+
 }
 }
 
