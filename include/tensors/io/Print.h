@@ -36,8 +36,14 @@ static std::string format_value(const ValueType& s,  features f) {
 	std::string fstr  = !f.sparse || std::abs(s) > .1 ? std::to_string(s) : "";
 	if (fstr.length() < (unsigned)f.precision)
 		return fstr.append(f.precision - fstr.length(), ' ');
-	else
-		return fstr;
+	else {
+		std::string substr = fstr.substr(0, f.precision);
+		if (std::find(substr.begin(), substr.end(), '.') != substr.end()) {
+			return fstr.substr(0, f.precision);
+		} else {
+			return fstr;
+		}
+	}
 }
 
 
