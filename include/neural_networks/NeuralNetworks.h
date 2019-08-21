@@ -16,10 +16,10 @@
 #include "Layers/UnaryFunction.h"
 #include "Layers/Nonlinear.h"
 #include "Layers/Softmax.h"
-#include "Layers/LSTM.h"		//TODO
+#include "Layers/LSTM.h"
+#include "Layers/Logging_Output_Layer.h"
 //#include "Layers/GRU.h"		//TODO
-
-#include "Layers/Recurrent.h" //TODO
+#include "Layers/Recurrent.h"
 #include "Network.h"
 
 #endif /* BCNN_GLOBAL_UNIFIER_H_ */

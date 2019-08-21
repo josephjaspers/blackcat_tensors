@@ -12,6 +12,6 @@ BC_DEFAULT_MODULE_BODY(blas, BLAS)
 
 #include "Device.h"
 #include "Host.h"
-
+#include "Convolution2d.h"
 
 #endif /* BLAS_H_ */

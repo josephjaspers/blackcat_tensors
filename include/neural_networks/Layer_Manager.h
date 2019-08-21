@@ -202,7 +202,6 @@ struct Layer_Manager: Layer {
 
 	template<class T>
 	auto forward_propagation(const T& expression) {
-		using is_batched = BC::traits::truth_type<(T::tensor_dimension == input_tensor_dimension::value + 1)>;
 		return forward_supply_outputs(typename layer_traits<Layer>::forward_requires_outputs(), this->m_input_cache.store(expression));
 	}
 	template<class T>
