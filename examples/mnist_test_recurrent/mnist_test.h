@@ -87,7 +87,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 		for (int j = 0; j < samples/batch_size; j++) {
 
 			//Feed 1/4th of the image at a time
-			network.forward_propagation(chunk(inputs[j], BC::index(0,        0), BC::shape(784/4, batch_size)));
+			network.forward_propagation(chunk(inputs[j], BC::index(0,		0), BC::shape(784/4, batch_size)));
 			network.forward_propagation(chunk(inputs[j], BC::index(784* 1/4, 0), BC::shape(784/4, batch_size)));
 			network.forward_propagation(chunk(inputs[j], BC::index(784* 2/4, 0), BC::shape(784/4, batch_size)));
 			network.forward_propagation(chunk(inputs[j], BC::index(784* 3/4, 0), BC::shape(784/4, batch_size)));
@@ -107,7 +107,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	std::cout << " testing... " << std::endl;
 	BC::size_t test_images = 10;
 	cube img = cube(reshape(inputs[0], BC::shape(28,28, batch_size)));
-	network.forward_propagation(chunk(inputs[0], BC::index(0,        0), BC::shape(784/4, batch_size)));
+	network.forward_propagation(chunk(inputs[0], BC::index(0,		0), BC::shape(784/4, batch_size)));
 	network.forward_propagation(chunk(inputs[0], BC::index(784* 1/4, 0), BC::shape(784/4, batch_size)));
 	network.forward_propagation(chunk(inputs[0], BC::index(784* 2/4, 0), BC::shape(784/4, batch_size)));
 	mat hyps =network.forward_propagation(chunk(inputs[0], BC::index(784* 3/4, 0), BC::shape(784/4, batch_size)));

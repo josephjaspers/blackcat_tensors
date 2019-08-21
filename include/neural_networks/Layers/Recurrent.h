@@ -107,6 +107,13 @@ struct Recurrent : public Layer_Base {
 		loader.load_variable(r, "r");
 		loader.load_variable(b, "b");
 	}
+
+	auto& get_weight() const { return w; }
+	auto& get_weight() { return w; }
+	auto& get_recurrent_weight() const { return r; }
+	auto& get_recurrent_weight() { return r; }
+	auto& get_bias() const { return b; }
+	auto& get_bias() { return b; }
 };
 
 #ifndef BC_CLING_JIT

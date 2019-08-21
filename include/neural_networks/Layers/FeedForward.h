@@ -81,6 +81,12 @@ public:
 		loader.load_variable(w, "w");
 		loader.load_variable(b, "b");
 	}
+
+	auto& get_weight() const { return w; }
+	auto& get_weight() { return w; }
+	auto& get_bias() const { return b; }
+	auto& get_bias() { return b; }
+	auto get_learning_rate() const { return lr; }
 };
 
 #ifndef BC_CLING_JIT

@@ -8,7 +8,7 @@
 #ifndef BLACKCAT_NEURALNETWORKS_LAYER_GREEDYFEEDFORWARD_H_
 #define BLACKCAT_NEURALNETWORKS_LAYER_GREEDYFEEDFORWARD_H_
 
-#include "Layer_Base.h"
+#include "FeedForward.h"
 
 namespace BC {
 namespace nn {
@@ -20,56 +20,21 @@ namespace nn {
 template<
 	class SystemTag,
 	class ValueType>
-struct GreedyFeedForward : public Layer_Base {
+struct GreedyFeedForward: FeedForward<SystemTag, ValueType> {
 
-	using system_tag = SystemTag;
-	using value_type = ValueType;
-	using allocator_type = BC::Allocator<SystemTag, ValueType>;
-
-	using mat = BC::Matrix<value_type, allocator_type>;
-	using vec = BC::Vector<value_type, allocator_type>;
-
-	using greedy_evaluate_delta = std::true_type;
-
-private:
-
-	ValueType lr = Layer_Base::default_learning_rate;
-
-	mat w;  //weights
-	vec b;  //biases
-
-public:
-
-	GreedyFeedForward(BC::size_t inputs, BC::size_t outputs) :
-		Layer_Base(__func__, inputs, outputs),
-		w(outputs, inputs),
-		b(outputs) {
-		w.randomize(-2, 2);
-		b.randomize(-2, 2);
-	}
-
-	template<class Matrix>
-	auto forward_propagation(const Matrix& x) {
-		return w * x + b;
-	}
+	GreedyFeedForward(BC::size_t inputs, BC::size_t outputs):
+		FeedForward<SystemTag, ValueType>(inputs, outputs) {}
 
 	template<class X, class Delta>
 	auto back_propagation(const X& x, const Delta& dy) {
-		ValueType lr = this->lr / this->batch_size();
+		auto& w = this->get_weight();
+		auto& b = this->get_bias();
+		auto lr = this->get_learning_rate();
 
+		lr /= this->batch_size();
 		w -= lr * dy * x.t();
 		b -= lr * dy;
 		return w.t() * dy;
-	}
-
-	void save(Layer_Loader& loader) {
-		loader.save_variable(w, "w");
-		loader.save_variable(b, "b");
-	}
-
-	void load(Layer_Loader& loader) {
-		loader.load_variable(w, "w");
-		loader.load_variable(b, "b");
 	}
 };
 

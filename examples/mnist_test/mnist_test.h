@@ -55,21 +55,21 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 
 	auto network = neuralnetwork(
 		feedforward(system_tag, 784, 256),
-		tanh(system_tag, 256),
+		logistic(system_tag, 256),
 		feedforward(system_tag, 256, 10),
 		softmax(system_tag, 10),
-		logging_output_layer(system_tag, 10, BC::nn::RMSE).skip_every(100)
-    );
+		logging_output_layer(system_tag, 10, BC::nn::RMSE)
+	);
 
-    network.set_batch_size(batch_size);
-    network.set_learning_rate(.3);
+	network.set_batch_size(batch_size);
+	network.set_learning_rate(.3);
 
 	std::cout << "Neural Network architecture: \n" <<
 			network.get_string_architecture() << std::endl;
 
-    std::pair<cube, cube> data = load_mnist(system_tag, mnist_dataset, batch_size, samples);
-    cube& inputs = data.first;
-    cube& outputs = data.second;
+	std::pair<cube, cube> data = load_mnist(system_tag, mnist_dataset, batch_size, samples);
+	cube& inputs = data.first;
+	cube& outputs = data.second;
 
 	std::cout << " training..." << std::endl;
 	auto start = std::chrono::system_clock::now();

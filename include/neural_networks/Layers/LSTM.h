@@ -325,6 +325,27 @@ public:
 
 		loader.load_variable(c, "c");
 	}
+
+	auto get_learning_rate() const { return lr; }
+
+#define LSTM_GETTER(name, var_name)\
+	auto& get_##name() const { return var_name; }\
+	auto& get_##name() { return var_name; }
+
+#define LSTM_GATE_GETTER(name, charname)\
+		LSTM_GETTER(name##_weight, w##charname)\
+		LSTM_GETTER(name##_recurrent_weight, r##charname)\
+		LSTM_GETTER(name##_bias, b##charname)
+
+	LSTM_GATE_GETTER(forget, f)
+	LSTM_GATE_GETTER(input, i)
+	LSTM_GATE_GETTER(write, z)
+	LSTM_GATE_GETTER(output, o)
+	LSTM_GETTER(cellstate, c)
+
+#undef LSTM_GETTER
+#undef LSTM_GATE_GETTER
+
 };
 
 #ifndef BC_CLING_JIT
