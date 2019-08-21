@@ -37,7 +37,7 @@ static std::string format_value(const ValueType& s,  features f) {
 	if (fstr.length() < (unsigned)f.precision)
 		return fstr.append(f.precision - fstr.length(), ' ');
 	else
-		return fstr.substr(0, f.precision);
+		return fstr;
 }
 
 
@@ -112,7 +112,7 @@ std::string to_string(const Tensor& tensor, features f, BC::traits::Integer<X>) 
 	if (f.pretty)
 		s += '[';
 
-	for (auto it = tensor.nd_begin(); it!= tensor.nd_end(); ++it) {
+	for (auto it = tensor.nd_begin(); it != tensor.nd_end(); ++it) {
 		s += to_string(*it, f, BC::traits::Integer<X-1>());
 
 		if (it != tensor.nd_end() - 1)

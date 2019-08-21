@@ -92,7 +92,7 @@ auto forward_iterator_begin(derived_t& derived) {
 }
 template<class derived_t>//, typename=std::enable_if_t<derived_t::tensor_dimension != 1>>
 auto forward_iterator_end(derived_t& derived) {
-     return Multidimensional_Iterator<direction::forward, derived_t>(derived, derived.outer_dimension());
+     return Multidimensional_Iterator<direction::forward, derived_t>(derived, derived.outer_dimension()-1);
 }
 
 template<class derived_t>//, typename=std::enable_if_t<derived_t::tensor_dimension != 1>>
