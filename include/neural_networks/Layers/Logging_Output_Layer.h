@@ -13,28 +13,31 @@
 namespace BC {
 namespace nn {
 
-struct Mean_Absolut_Error {
+class Mean_Absolute_Error {
+public:
 	template<class T>
-	auto operator () (const T& expression) {
+	auto operator () (const T& expression) const {
 		return BC::sum(BC::abs(expression)) / expression.size();
 	}
 } MAE;
 
-struct Root_Mean_Squared_Error {
+class Root_Mean_Squared_Error {
+public:
 	template<class T>
-	auto operator () (const T& expression) {
+	auto operator () (const T& expression) const {
 		return BC::sqrt(BC::sum(BC::pow2(expression)) / expression.size());
 	}
 } RMSE;
 
-struct Mean_Squared_Error {
+class Mean_Squared_Error {
+public:
 	template<class T>
-	auto operator () (const T& expression) {
+	auto operator () (const T& expression) const {
 		return BC::sum(BC::pow2(expression)) / expression.size();
 	}
 } MSE;
 
-template<class SystemTag, class ValueType, class ErrorFunction=Mean_Absolut_Error>
+template<class SystemTag, class ValueType, class ErrorFunction=Mean_Absolute_Error>
 struct Logging_Output_Layer : Output_Layer<SystemTag,ValueType> {
 
 	using parent = Output_Layer<SystemTag,ValueType>;
@@ -82,7 +85,7 @@ struct Logging_Output_Layer : Output_Layer<SystemTag,ValueType> {
 template<
 	class ValueType,
 	class SystemTag,
-	class ErrorFunction=Mean_Absolut_Error>
+	class ErrorFunction=Mean_Absolute_Error>
 Logging_Output_Layer<SystemTag, ValueType> logging_output_layer(
 		SystemTag system_tag,
 		BC::size_t inputs,
@@ -91,7 +94,7 @@ Logging_Output_Layer<SystemTag, ValueType> logging_output_layer(
 }
 template<
 	class SystemTag,
-	class ErrorFunction=Mean_Absolut_Error>
+	class ErrorFunction=Mean_Absolute_Error>
 auto logging_output_layer(
 		SystemTag system_tag,
 		BC::size_t inputs,
@@ -105,7 +108,7 @@ auto logging_output_layer(
 }
 #endif
 
-template<class ErrorFunction=Mean_Absolut_Error>
+template<class ErrorFunction=Mean_Absolute_Error>
 auto logging_output_layer(int inputs, ErrorFunction error_function=ErrorFunction(), std::ostream& os=std::cout) {
 	return Logging_Output_Layer<BLACKCAT_DEFAULT_SYSTEM_T,
 			typename BLACKCAT_DEFAULT_SYSTEM_T::default_floating_point_type, ErrorFunction>(os, inputs, error_function);

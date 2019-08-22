@@ -61,7 +61,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 
 	auto network = neuralnetwork(
 		lstm(system_tag, 784/4, 64),
-		feedforward(system_tag, 64, 10),
+		recurrent(system_tag, 64, 10),
 		softmax(system_tag, 10),
 		logging_output_layer(system_tag, 10).skip_every(100)
 	);
