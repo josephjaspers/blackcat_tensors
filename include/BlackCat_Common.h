@@ -155,6 +155,23 @@ inline void BC_cuda_assert(cublasStatus_t code, const char *file, const char* fu
 	   throw code;
    }
 }
+
+
+#if __has_include(<cudnn.h>)
+#include <cudnn.h>
+inline void BC_cuda_assert(cudnnStatus_t code, const char *file, const char* function,  int line)
+{
+   if (code != CUDNN_STATUS_SUCCESS)
+   {
+	   std::cout << "BC_CUBLAS CALL_FAILURE: " <<
+	   "cudnn error: " << cudnnGetErrorString(code) <<
+	   "\nfile: " << file <<
+	   "\nfunction: " << function <<
+	   "\tline: " << line << std::endl;
+	   throw code;
+   }
+}
+#endif
 }
 
 #endif

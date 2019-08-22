@@ -256,6 +256,11 @@ public:
 
 	// --------------- host_to_device/device_to_host copy function --------------- //
 
+	template<class rightDeriv>
+	auto multichannel_conv2d(const Tensor_Operations<rightDeriv>& rv) {
+		return bi_expr<BC::tensors::exprs::multichannel_conv2d<system_tag>> (rv);
+	}
+
     template<class right_value>
     void copy(const Tensor_Operations<right_value>& rv) {
         static_assert(exprs::expression_traits<Expression>::is_copy_assignable, "copy lv must be array");
@@ -368,7 +373,7 @@ private:
     template<class deriv>
     void assert_valid(const Tensor_Operations<deriv>& tensor) const {
 //#ifdef NDEBUG
-    	assert_same_system(tensor);                 //static_assert same allocation (gpu/cpu)
+    	assert_same_system(tensor); //static_assert same allocation (gpu/cpu)
 
     	if (BC::tensors::exprs::expression_traits<deriv>::is_auto_broadcasted) {
     		return; //If it will be a broadcast expression do not validate dimensions

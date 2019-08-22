@@ -75,8 +75,6 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>
 					beta.memptr(), injection.memptr(), injection.leading_dimension(0));
 
         blas_util::post_parse_expression_evaluation(stream, contents);
-
-
     }
 };
 

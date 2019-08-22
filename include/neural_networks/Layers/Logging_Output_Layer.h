@@ -8,7 +8,7 @@
 #ifndef BLACKCATTENSORS_NEURALNETWORKS_LAYERS_LOGGING_LAYER_H_
 #define BLACKCATTENSORS_NEURALNETWORKS_LAYERS_LOGGING_LAYER_H_
 
-#include "OutputLayer.h"
+#include "Output_Layer.h"
 
 namespace BC {
 namespace nn {
@@ -35,9 +35,9 @@ struct Mean_Squared_Error {
 } MSE;
 
 template<class SystemTag, class ValueType, class ErrorFunction=Mean_Absolut_Error>
-struct Logging_Output_Layer : OutputLayer<SystemTag,ValueType> {
+struct Logging_Output_Layer : Output_Layer<SystemTag,ValueType> {
 
-	using parent = OutputLayer<SystemTag,ValueType>;
+	using parent = Output_Layer<SystemTag,ValueType>;
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 

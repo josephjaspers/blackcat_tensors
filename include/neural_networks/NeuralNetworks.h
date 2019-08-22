@@ -12,11 +12,11 @@
 #include "common.h"
 #include "Layers/GreedyFeedForward.h"
 #include "Layers/FeedForward.h"
-#include "Layers/OutputLayer.h"
 #include "Layers/UnaryFunction.h"
 #include "Layers/Nonlinear.h"
 #include "Layers/Softmax.h"
 #include "Layers/LSTM.h"
+#include "Layers/Output_Layer.h"
 #include "Layers/Logging_Output_Layer.h"
 //#include "Layers/GRU.h"		//TODO
 #include "Layers/Recurrent.h"

@@ -78,12 +78,6 @@ struct Shape {
         return index;
     }
 
-protected:
-
-    void swap_shape(Shape& b) {
-        std::swap(m_inner_shape, b.m_inner_shape);
-        std::swap(m_block_shape, b.m_block_shape);
-    }
 
 private:
 
@@ -121,8 +115,6 @@ struct Shape<0> {
     BCINLINE BC::size_t  leading_dimension(int i) const { return 0; }
     BCINLINE BC::size_t  block_dimension(int i) const { return 1; }
 
-    static void swap_shape(Shape& a) {}
-
     template<class... integers>
     BCINLINE BC::size_t dims_to_index(integers... ints) const {
     	return 0;
@@ -152,7 +144,7 @@ struct Shape<1> {
         m_block_shape[0] = 1; //shape.m_block_shape[0];
     }
 
-    BCINLINE Shape(int length, BC::size_t  leading_dimension) {
+    BCINLINE Shape(BC::size_t length, BC::size_t leading_dimension) {
         m_inner_shape[0] = length;
         m_block_shape[0] = leading_dimension;
     }
@@ -169,12 +161,6 @@ struct Shape<1> {
     BCINLINE const auto& outer_shape() const { return m_block_shape; }
     BCINLINE const auto& block_shape() const { return m_inner_shape; }
 
-    void swap_shape(Shape<1>& shape){
-        std::swap(m_inner_shape, shape.m_inner_shape);
-        std::swap(m_block_shape, shape.m_block_shape);
-    }
-
-
     template<class... integers>
     BCINLINE constexpr BC::size_t dims_to_index(BC::size_t i, integers... ints) const {
     	return m_block_shape[0] * i;
@@ -189,7 +175,6 @@ struct SubShape : Shape<ndims, SubShape<ndims>> {
 	BC::utility::array<ndims, BC::size_t> m_outer_shape;
 
 	SubShape() = default;
-
 
 	template<class der>
 	SubShape(const BC::utility::array<ndims, BC::size_t>& new_shape, const Shape<ndims, der>& parent_shape)
@@ -222,7 +207,6 @@ struct SubShape : Shape<ndims, SubShape<ndims>> {
 		}
 	}
 
-
     template<class... integers, typename=std::enable_if_t<BC::traits::sequence_of_v<BC::size_t, integers...>>>
     BCINLINE BC::size_t dims_to_index(integers... ints) const {
         return dims_to_index(BC::utility::make_array(ints...));
@@ -240,11 +224,6 @@ struct SubShape : Shape<ndims, SubShape<ndims>> {
     BCINLINE const auto& outer_shape() const { return m_outer_shape; }
     BCINLINE BC::size_t  leading_dimension(int i) const { return m_outer_shape[i]; }
 
-
-
-private:
-	//hide from external sources
-	using Shape<ndims, SubShape<ndims>>::swap_shape;
 };
 
 template<>
@@ -259,8 +238,6 @@ struct SubShape<1> : Shape<1, SubShape<1>> {
 //push shape into BC namespace
 template<int x>
 using Shape = tensors::exprs::Shape<x>;
-
-
 
 template<class... integers, typename=std::enable_if_t<traits::sequence_of_v<BC::size_t, integers...>>>
 auto make_shape(integers... ints) {
