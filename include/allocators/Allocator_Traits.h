@@ -22,8 +22,7 @@ namespace detail {
 	using query_system_tag = typename T::system_tag;
 
 	template<class T>
-	using query_managed_memory
-			= std::conditional_t<T::managed_memory, std::true_type, std::false_type>;
+	using query_managed_memory = BC::traits::truth_type<T::managed_memory>;
 }
 
 /// Inherits from std::allocator_traits, defines additional features relative to gpu-memory management.

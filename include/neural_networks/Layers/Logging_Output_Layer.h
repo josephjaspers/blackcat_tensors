@@ -15,24 +15,24 @@ namespace nn {
 
 struct Mean_Absolute_Error {
 	template<class T>
-	auto operator () (const T& expression) const {
+	auto operator () (T expression) const {
 		return BC::sum(BC::abs(expression)) / expression.size();
 	}
-} MAE;
+};
 
 struct Root_Mean_Squared_Error {
 	template<class T>
-	auto operator () (const T& expression) const {
+	auto operator () (T expression) const {
 		return BC::sqrt(BC::sum(BC::pow2(expression)) / expression.size());
 	}
-} RMSE;
+};
 
 struct Mean_Squared_Error {
 	template<class T>
-	auto operator () (const T& expression) const {
+	auto operator () (T expression) const {
 		return BC::sum(BC::pow2(expression)) / expression.size();
 	}
-} MSE;
+};
 
 template<class SystemTag, class ValueType, class ErrorFunction=Mean_Absolute_Error>
 struct Logging_Output_Layer : Output_Layer<SystemTag,ValueType> {
