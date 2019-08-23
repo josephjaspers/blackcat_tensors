@@ -13,24 +13,21 @@
 namespace BC {
 namespace nn {
 
-class Mean_Absolute_Error {
-public:
+struct Mean_Absolute_Error {
 	template<class T>
 	auto operator () (const T& expression) const {
 		return BC::sum(BC::abs(expression)) / expression.size();
 	}
 } MAE;
 
-class Root_Mean_Squared_Error {
-public:
+struct Root_Mean_Squared_Error {
 	template<class T>
 	auto operator () (const T& expression) const {
 		return BC::sqrt(BC::sum(BC::pow2(expression)) / expression.size());
 	}
 } RMSE;
 
-class Mean_Squared_Error {
-public:
+struct Mean_Squared_Error {
 	template<class T>
 	auto operator () (const T& expression) const {
 		return BC::sum(BC::pow2(expression)) / expression.size();
