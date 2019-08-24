@@ -11,8 +11,11 @@ namespace detail {
 	template<class T>
 	using query_layer_type = typename T::layer_type;
 
-	template<bool Recurrent, int Index, class Derived, class Layer>
-	using LayerManager = Layer_Manager<Derived,Layer, BC::traits::truth_type<Recurrent>>;
+	template<
+		class Neural_Network_Is_Recurrent,
+		class Derived,
+		class Layer>
+	using LayerManager = Layer_Manager<Derived, Layer, Neural_Network_Is_Recurrent>;
 }
 
 /**
@@ -21,19 +24,53 @@ namespace detail {
  *
  * It supports reverse and forward iteration which allows it to be good container for neural networks.
  * (Forward iteration for forward propagation, reverse for back-prop)
+ *
+ *
+ * Neural_Network_Is_Recurrent --> expects std::true_type || std::is_false_type
  */
-template<bool Recurrent, int Index, class Derived, class...>
+template<class Index, class Neural_Network_Is_Recurrent, class Derived, class...>
 struct LayerChain {};
 
-template<bool Recurrent, int Index, class Derived,class CurrentLayer, class... Layers>
-struct LayerChain<Recurrent, Index, Derived, CurrentLayer, Layers...>:
-	LayerChain<Recurrent,Index + 1, LayerChain<Recurrent,Index, Derived, CurrentLayer, Layers...>, Layers...>, //parent_type class
-	detail::LayerManager<Recurrent, Index, LayerChain<Recurrent,Index, Derived, CurrentLayer, Layers...>, CurrentLayer> {	 //if not first layer
+template<
+	class Index,
+	class Neural_Network_Is_Recurrent,
+	class Derived,
+	class CurrentLayer,
+	class... Layers>
+struct LayerChain<
+	Index,
+	Neural_Network_Is_Recurrent,
+	Derived,
+	CurrentLayer,
+	Layers...>:
 
+	LayerChain<
+		BC::traits::Integer<Index::value + 1>,
+		Neural_Network_Is_Recurrent,
+		LayerChain<Index, Neural_Network_Is_Recurrent, Derived, CurrentLayer, Layers...>,
+		Layers...>,
+	detail::LayerManager<
+		Neural_Network_Is_Recurrent,
+		LayerChain<Index, Neural_Network_Is_Recurrent, Derived, CurrentLayer, Layers...>,
+		CurrentLayer> {	 //if not first layer
 
-	using self_type   = LayerChain<Recurrent, Index, Derived, CurrentLayer, Layers...>;
-	using parent_type = LayerChain<Recurrent, Index + 1, self_type, Layers...>;
-	using layer_type  = detail::LayerManager<Recurrent, Index, self_type, CurrentLayer>;
+	using self_type = LayerChain<
+		Index,
+		Neural_Network_Is_Recurrent,
+		Derived,
+		CurrentLayer,
+		Layers...>;
+
+	using parent_type = LayerChain<
+			BC::traits::Integer<Index::value + 1>,
+			Neural_Network_Is_Recurrent,
+			self_type,
+			Layers...>;
+
+	using layer_type = detail::LayerManager<
+			Neural_Network_Is_Recurrent,
+			self_type,
+			CurrentLayer>;
 
 	using next_layer_type = BC::traits::conditional_detected<
 			detail::query_layer_type, parent_type, void>;
@@ -42,8 +79,8 @@ struct LayerChain<Recurrent, Index, Derived, CurrentLayer, Layers...>:
 	using value_type = typename CurrentLayer::value_type;
 	using system_tag = typename CurrentLayer::system_tag;
 
-	using is_input_layer	  = BC::traits::truth_type<Index==0>;
-	using is_output_layer	 = BC::traits::truth_type<sizeof...(Layers)==0>;
+	using is_input_layer	  = BC::traits::truth_type<Index::value==0>;
+	using is_output_layer	  = BC::traits::truth_type<sizeof...(Layers)==0>;
 	using is_not_input_layer  = BC::traits::not_type<is_input_layer::value>;
 	using is_not_output_layer = BC::traits::not_type<is_output_layer::value>;
 
@@ -170,7 +207,6 @@ private:
 		return layer_type::back_propagation(tensor);
 	}
 };
-
 }
 }
 #endif

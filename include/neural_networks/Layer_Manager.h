@@ -142,7 +142,7 @@ struct Recurrent_Tensor_Cache {
 template<
 	class Derived, //The LayerChain base
 	class Layer,
-	class Recurrent=std::false_type, //must be std::true_type or false_type or have "value"
+	class Neural_Network_Is_Recurrent=std::false_type, //must be std::true_type or false_type or have "value"
 	class Allocator=BC::Allocator<
 		typename layer_traits<Layer>::system_tag,
 		typename layer_traits<Layer>::value_type>>
@@ -174,7 +174,7 @@ struct Layer_Manager: Layer {
 	using extra_batched_cache_type = typename layer_traits<Layer>::extra_batched_cache_args;
 
 	template<class Tensor, class BatchedTensor>
-	using tensor_cache_type = std::conditional_t<Recurrent::value,
+	using tensor_cache_type = std::conditional_t<Neural_Network_Is_Recurrent::value,
 			Recurrent_Tensor_Cache<Tensor, BatchedTensor>, Forward_Tensor_Cache<Tensor, BatchedTensor>>;
 
 	///delta cache is always a 'forward' cache -> It is only when delta is expected to be reused in the layer
@@ -288,6 +288,8 @@ private:
 		return dy;
 	}
 };
+
+
 }  // namespace nn
 }  // namespace BC
 

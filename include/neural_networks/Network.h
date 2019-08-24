@@ -27,11 +27,12 @@ using is_recurrent_layer = BC::traits::conditional_detected_t<
 template<class... Layers>
 struct NeuralNetwork {
 
-	static constexpr bool recurrent_neural_network =
-			BC::traits::any<detail::is_recurrent_layer, Layers...>::value;
-
 	using self = NeuralNetwork<Layers...>;
-	using layer_chain = LayerChain<recurrent_neural_network, 0, void, Layers...>;
+	using layer_chain = LayerChain<
+			BC::traits::Integer<0>,
+			BC::traits::any<detail::is_recurrent_layer, Layers...>,
+			void,
+			Layers...>;
 
 	layer_chain m_layer_chain;
 
