@@ -45,8 +45,6 @@ template<class System=BC::host_tag>
 int percept_MNIST(System system_tag, const char* mnist_dataset,
 		int epochs=10, int batch_size=128, int samples=32*1024) {
 
-	using namespace BC::nn;
-
 	using value_type = typename System::default_floating_point_type;
 	using allocator_type = BC::Allocator<System, value_type>;
 	using cube = BC::Cube<value_type, allocator_type>;
@@ -54,11 +52,11 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	using clock = std::chrono::duration<double>;
 
 	auto network = neuralnetwork(
-		feedforward(system_tag, 784, 256),
-		logistic(system_tag, 256),
-		feedforward(system_tag, 256, 10),
-		softmax(system_tag, 10),
-		logging_output_layer(system_tag, 10, BC::nn::MAPE).skip_every(100)
+		BC::nn::feedforward(system_tag, 784, 256),
+		BC::nn::logistic(system_tag, 256),
+		BC::nn::feedforward(system_tag, 256, 10),
+		BC::nn::softmax(system_tag, 10),
+		BC::nn::logging_output_layer(system_tag, 10, BC::nn::RMSE).skip_every(100)
 	);
 
 	network.set_batch_size(batch_size);

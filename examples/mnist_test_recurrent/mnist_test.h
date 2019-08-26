@@ -51,19 +51,17 @@ template<class System=BC::host_tag>
 int percept_MNIST(System system_tag, const char* mnist_dataset,
 		int epochs=10, int batch_size=32, int samples=32*1024) {
 
-	using namespace BC::nn;
-
 	using value_type = typename System::default_floating_point_type;
 	using allocator_type = BC::Allocator<System, value_type>;
 	using cube = BC::Cube<value_type, allocator_type>;
 	using mat  = BC::Matrix<value_type, allocator_type>;
 	using clock = std::chrono::duration<double>;
 
-	auto network = neuralnetwork(
-		lstm(system_tag, 784/4, 64),
-		recurrent(system_tag, 64, 10),
-		softmax(system_tag, 10),
-		logging_output_layer(system_tag, 10, BC::nn::RMSE).skip_every(100)
+	auto network = BC::nn::neuralnetwork(
+		BC::nn::lstm(system_tag, 784/4, 64),
+		BC::nn::recurrent(system_tag, 64, 10),
+		BC::nn::softmax(system_tag, 10),
+		BC::nn::logging_output_layer(system_tag, 10, BC::nn::RMSE).skip_every(100)
 	);
 
 	std::cout << "Neural Network architecture: \n" <<
@@ -78,9 +76,6 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 
 	std::cout << " training..." << std::endl;
 	auto start = std::chrono::system_clock::now();
-
-
-
 
 	for (int i = 0; i < epochs; ++i){
 		std::cout << " current epoch: " << i << std::endl;
