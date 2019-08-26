@@ -14,25 +14,38 @@ namespace BC {
 namespace nn {
 
 struct Mean_Absolute_Error {
-	template<class T>
-	auto operator () (T expression) const {
-		return BC::sum(BC::abs(expression)) / expression.size();
+	template<class Actual, class Expected>
+	auto operator () (const Actual& a, const Expected& e) const {
+		auto residual = a-e;
+		return BC::sum(BC::abs(residual)) / (residual).size();
 	}
-};
+} MAE;
 
 struct Root_Mean_Squared_Error {
-	template<class T>
-	auto operator () (T expression) const {
-		return BC::sqrt(BC::sum(BC::pow2(expression)) / expression.size());
+	template<class Actual, class Expected>
+	auto operator () (const Actual& a, const Expected& e) const {
+		auto residual = a-e;
+		return BC::sqrt(BC::sum(BC::pow2(residual)) / residual.size());
 	}
-};
+} RMSE;
 
 struct Mean_Squared_Error {
-	template<class T>
-	auto operator () (T expression) const {
-		return BC::sum(BC::pow2(expression)) / expression.size();
+	template<class Actual, class Expected>
+	auto operator () (const Actual& a, const Expected& e) const {
+		auto residual = a-e;
+		return BC::sum(BC::pow2(residual)) / residual.size();
 	}
-};
+} MSE;
+
+struct Mean_Absolute_Percent_Error {
+	template<class Actual, class Expected>
+	auto operator () (const Actual& a, const Expected& e) const {
+		auto residual = a-e;
+		static constexpr typename Actual::value_type epsilon = .001;
+		return BC::sum(BC::abs(residual/(a+epsilon))) / residual.size();
+	}
+} MAPE;
+
 
 template<class SystemTag, class ValueType, class ErrorFunction=Mean_Absolute_Error>
 struct Logging_Output_Layer : Output_Layer<SystemTag,ValueType> {
@@ -73,7 +86,7 @@ struct Logging_Output_Layer : Output_Layer<SystemTag,ValueType> {
 		curr_index++;
 
 		if (logging_enabled && curr_index % skip_every_n_backprops == 0)
-			logger << "Batch index: " << curr_index << " loss: " << error_function(x-y) << "\n";
+			logger << "Batch index: " << curr_index << " loss: " << error_function(x, y) << "\n";
 		return x - y;
 	}
 };

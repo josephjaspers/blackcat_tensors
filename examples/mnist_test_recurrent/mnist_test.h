@@ -63,7 +63,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 		lstm(system_tag, 784/4, 64),
 		recurrent(system_tag, 64, 10),
 		softmax(system_tag, 10),
-		logging_output_layer(system_tag, 10, Root_Mean_Squared_Error()).skip_every(100)
+		logging_output_layer(system_tag, 10, BC::nn::RMSE).skip_every(100)
 	);
 
 	std::cout << "Neural Network architecture: \n" <<

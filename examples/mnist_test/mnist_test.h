@@ -58,7 +58,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 		logistic(system_tag, 256),
 		feedforward(system_tag, 256, 10),
 		softmax(system_tag, 10),
-		logging_output_layer(system_tag, 10, Root_Mean_Squared_Error()).skip_every(100)
+		logging_output_layer(system_tag, 10, BC::nn::MAPE).skip_every(100)
 	);
 
 	network.set_batch_size(batch_size);
