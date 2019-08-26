@@ -59,7 +59,8 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 		BC::nn::logging_output_layer(system_tag, 10, BC::nn::RMSE).skip_every(100)
 	);
 
-	network.set_batch_size(batch_size);
+	network.set_batch_size(batch_size);.
+	network.set_learning_rate(.001);
 
 	std::cout << "Neural Network architecture: \n" <<
 			network.get_string_architecture() << std::endl;

@@ -130,6 +130,66 @@ int test_accessors(int sz=128) {
 		return BC::tensors::all(validation) && ensure_correct_size && ensure_correct_cols && ensure_correct_rows;
 	)
 
+
+	//----------------------- test valid ranges ---------------------------//
+
+	//assert invalid scalar exception
+	BC_TEST_DEF(
+			try {
+				a.scalar(-1);
+			} catch(...) {
+				return true;
+			}
+			return false;
+	)
+	//assert invalid range check
+	BC_TEST_DEF(
+			try {
+				a.slice(-1);
+			} catch(...) {
+				return true;
+			}
+			return false;
+	)
+
+	BC_TEST_DEF(
+			try {
+				a.diagnol(-(a.rows()+1));
+			} catch(...) {
+				return true;
+			}
+			return false;
+	)
+	BC_TEST_DEF(
+			try {
+				a.diagnol((a.rows()+1));
+			} catch(...) {
+				return true;
+			}
+			return false;
+	)
+
+	BC_TEST_DEF(
+			try {
+				a.row(a.rows());
+			} catch(...) {
+				return true;
+			}
+			return false;
+	)
+
+	BC_TEST_DEF(
+			try {
+				a.row(-a.rows());
+			} catch(...) {
+				return true;
+			}
+			return false;
+	)
+
+
+
+
 	BC_TEST_BODY_TAIL
 }
 }
