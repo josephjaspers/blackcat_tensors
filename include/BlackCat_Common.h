@@ -118,8 +118,8 @@ inline void bc_assert(bool condition, str_type msg, const char* file, const char
 			std::cout << "BC_ASSERT FAILURE: " <<
 		   "\nfile: " << file <<
 		   "\nfunction: " << function <<
-		   "\tline: " << line <<
-		   "\terror: " << msg << std::endl;
+		   "\nline: " << line <<
+		   "\nerror: " << msg << std::endl;
 
 		   throw 1;
 	   }
