@@ -29,12 +29,14 @@ struct Convolution_Implementation;
  *
  */
 template<class Stream, class Output, class Image, class Kernel>
-static void conv2d(
-			Stream stream,
-			Output output,
-			Kernel krnl,
-			Image img,
-			size_t stride=1, size_t padding=0) {
+static void convolution_common_assert(
+		Stream stream,
+		Output output,
+		Image krnl,
+		Kernel img,
+		BC::size_t padding=0,
+		BC::size_t stride=1) {
+
 	using system_tag = typename Stream::system_tag;
 
 	static_assert(std::is_same<system_tag, typename Output::system_tag>::value,
@@ -57,7 +59,26 @@ static void conv2d(
 			"Invalid output column dimension");
 	BC_ASSERT(output.dimension(2) == krnl.dimension(3),
 			"Invalid output column dimension");
+}
 
+
+template<class Stream, class Output, class Image, class Kernel>
+static void conv2d(
+			Stream stream,
+			Output output,
+			Kernel krnl,
+			Image img,
+			BC::size_t stride=1, BC::size_t padding=0) {
+
+	convolution_common_assert(
+			stream,
+			output,
+			krnl,
+			img,
+			stride,
+			padding);
+
+	using system_tag = typename Stream::system_tag;
 	using implementation = Convolution_Implementation<system_tag>;
 	implementation::conv2d(stream, output, krnl, img);
 }

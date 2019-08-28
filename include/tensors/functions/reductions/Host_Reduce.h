@@ -1,0 +1,15 @@
+/*
+ * Host_Add.h
+ *
+ *  Created on: Aug 27, 2019
+ *      Author: joseph
+ */
+
+#ifndef BLACKCATTENSORS_TENSORS_FUNCTIONS_REDUCTIONS_HOST_REDUCE_H_
+#define BLACKCATTENSORS_TENSORS_FUNCTIONS_REDUCTIONS_HOST_REDUCE_H_
+
+
+
+
+
+#endif /* HOST_ADD_H_ */

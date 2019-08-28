@@ -6,8 +6,8 @@
  *      Author: joseph
  */
 
-#ifndef BCNN_GLOBAL_UNIFIER_H_
-#define BCNN_GLOBAL_UNIFIER_H_
+#ifndef BLACKCATTENSORS_NEURALNETWORKS_NETWORKNETWORKS_H_
+#define BLACKCATTENSORS_NEURALNETWORKS_NETWORKNETWORKS_H_
 
 #include "common.h"
 #include "Layers/GreedyFeedForward.h"
@@ -19,7 +19,8 @@
 #include "Layers/Output_Layer.h"
 #include "Layers/Logging_Output_Layer.h"
 //#include "Layers/GRU.h"		//TODO
+//#include "Layers/Convolution.h" //TODO
 #include "Layers/Recurrent.h"
 #include "Network.h"
 
-#endif /* BCNN_GLOBAL_UNIFIER_H_ */
+#endif

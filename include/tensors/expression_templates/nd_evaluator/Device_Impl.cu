@@ -12,8 +12,6 @@
 
 #include <cuda_runtime_api.h>
 #include <cuda.h>
-#include <curand.h>
-#include <curand_kernel.h>
 
 namespace BC {
 namespace tensors {
