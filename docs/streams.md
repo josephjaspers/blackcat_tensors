@@ -16,9 +16,9 @@ The stream used for any given expression is based upon the assignment operator o
 
 BC::Matrix<float> y, w, x;
 
-y.create_stream();
-w.create_stream();
-x.create_stream();
+y.get_Stream().create();
+w.get_Stream().create();
+x.get_Stream().create();
 
 y = w * x; //will use y's stream 
 ```
@@ -33,9 +33,9 @@ y.get_stream() == y[0].get_stream();
 
 BC::Stream<system_tag> stream;
 
-stream.create_stream();		  //calls cudaCreateStream
-stream.set_stream(cudaStream_t);  //sets the stream 
-stream.set_stream(another_bc_stream_object); 
+stream.get_stream().create();		  //calls cudaCreateStream
+stream.get_stream().set_stream(cudaStream_t);  //sets the stream 
+stream.get_stream().set_stream(another_bc_stream_object); 
 
 ```
 
