@@ -26,6 +26,7 @@
 #include "Function_BatchedReduce.h"
 #include "Function_AutoBroadcast.h"
 #include "Function_Conv2d.h"
+#include "Function_Sum.h"
 
 #include "Tree_Evaluator.h"
 

@@ -17,6 +17,7 @@
 
 namespace BC {
 namespace tensors {
+namespace exprs {
 namespace functions {
 namespace convolutions {
 
@@ -83,6 +84,7 @@ static void conv2d(
 	implementation::conv2d(stream, output, krnl, img);
 }
 
+}
 }
 }
 }

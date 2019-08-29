@@ -12,11 +12,12 @@
 
 namespace BC {
 namespace tensors {
+namespace exprs {
 namespace functions {
 
 }
 }
 }
-
+}
 
 #endif /* FUNCTIONS_H_ */

@@ -10,6 +10,7 @@
 
 namespace BC {
 namespace tensors {
+namespace exprs {
 namespace functions {
 namespace convolutions {
 
@@ -118,6 +119,7 @@ struct Convolution_Implementation<BC::host_tag> {
 
 };
 
+}
 }
 }
 }

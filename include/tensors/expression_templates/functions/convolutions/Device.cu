@@ -3,6 +3,7 @@
 
 namespace BC {
 namespace tensors {
+namespace exprs {
 namespace functions {
 
 
@@ -10,6 +11,6 @@ namespace functions {
 }
 }
 }
-
+}
 
 #endif

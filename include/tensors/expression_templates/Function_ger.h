@@ -54,6 +54,8 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>
 
 	template<class core, int alpha_mod, int beta_mod, class Stream>
 	void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
+    	static_assert(core::tensor_dimension==2, "Ger injection must be a matrix");
+
 		auto& injection = injection_values.data();
 
         //if we need to negate or zero the output

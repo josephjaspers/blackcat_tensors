@@ -66,7 +66,7 @@ private:
     							typename ExpressionTemplate::value_type,
     							BC::Allocator<host_tag, value_type>>>;
 
-    				host_tensor host_(as_derived().inner_shape());
+    				host_tensor host_(BC::Shape<tensor_dimension>(as_derived().inner_shape()));
     				host_.copy(as_derived());
     				return BC::tensors::io::to_string(host_, fs, BC::traits::Integer<tensor_dimension>());
     }

@@ -55,6 +55,7 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>
 
     template<class core, int alpha_mod, int beta_mod, class Stream>
     void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
+    	static_assert(core::tensor_dimension==2, "Gemm injection must be a matrix");
     	BC_ASSERT(left.cols() == right.rows(), "gemm requires left.cols() == right.rows()");
 
         //get the data of the injection --> injector simply stores the alpha/beta scalar modifiers

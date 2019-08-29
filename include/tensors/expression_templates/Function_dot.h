@@ -49,6 +49,7 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>
 
     template<class core, int alpha_mod, int beta_mod, class Stream>
     void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
+    	static_assert(core::tensor_dimension==0, "Ger injection must be a scalar");
 
 		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
 		auto& injection = injection_values.data();

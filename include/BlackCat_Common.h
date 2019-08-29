@@ -111,7 +111,6 @@ using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 
 namespace BC {
 
-#define BC_ASSERT(condition, message) { bc_assert(condition, message, __FILE__, __PRETTY_FUNCTION__, __LINE__); }
 template<class str_type>
 inline void bc_assert(bool condition, str_type msg, const char* file, const char* function, int line) {
 	   if (!condition) {
@@ -124,6 +123,8 @@ inline void bc_assert(bool condition, str_type msg, const char* file, const char
 		   throw 1;
 	   }
 }
+#define BC_ASSERT(condition, message) { BC::bc_assert(condition, message, __FILE__, __PRETTY_FUNCTION__, __LINE__); }
+
 }
 
 #ifdef __CUDACC__

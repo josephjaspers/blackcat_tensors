@@ -32,7 +32,7 @@ template<class T> using query_move_assignable    = BC::traits::truth_type<T::mov
 template<class T> using query_move_constructible = BC::traits::truth_type<T::move_constructible>;
 
 template<class T> using query_auto_broadcast = typename T::auto_broadcast;
-
+template<class T> using query_requires_greedy_evaluation = typename T::requires_greedy_evaluation;
 
 template<class T>
 struct remove_scalar_mul {
@@ -213,20 +213,23 @@ struct expression_traits {
 template<class T>
 struct blas_expression_traits : expression_traits<T> {
 
-	 using remove_scalar_mul_type		= typename detail::remove_scalar_mul<T>::type;
-	 using remove_transpose_type		= typename detail::remove_transpose<T>::type;
-	 using remove_blas_features_type	= typename detail::remove_transpose<remove_scalar_mul_type>::type;
-	 using scalar_multiplier_type		= typename detail::remove_scalar_mul<T>::scalar_type;
-	 using value_type					= typename T::value_type;
+	using requires_greedy_evaluation = BC::traits::conditional_detected_t<
+			 detail::query_requires_greedy_evaluation, T, std::false_type>;
 
-	 static constexpr bool is_scalar_multiplied = !std::is_same<remove_scalar_mul_type, T>::value;
-	 static constexpr bool is_transposed 		= !std::is_same<remove_transpose_type,  T>::value;
+	using remove_scalar_mul_type	= typename detail::remove_scalar_mul<T>::type;
+	using remove_transpose_type		= typename detail::remove_transpose<T>::type;
+	using remove_blas_features_type	= typename detail::remove_transpose<remove_scalar_mul_type>::type;
+	using scalar_multiplier_type	= typename detail::remove_scalar_mul<T>::scalar_type;
+	using value_type				= typename T::value_type;
 
-	 static remove_transpose_type remove_transpose(T expression) { return detail::remove_transpose<T>::rm(expression); }
-	 static remove_scalar_mul_type remove_scalar_mul(T expression) { return detail::remove_scalar_mul<T>::rm(expression); }
-	 static remove_blas_features_type remove_blas_modifiers(T expression) {
-		 return detail::remove_transpose<remove_scalar_mul_type>::rm(remove_scalar_mul(expression));
-	 }
+	static constexpr bool is_scalar_multiplied = !std::is_same<remove_scalar_mul_type, T>::value;
+	static constexpr bool is_transposed 		= !std::is_same<remove_transpose_type,  T>::value;
+
+	static remove_transpose_type remove_transpose(T expression) { return detail::remove_transpose<T>::rm(expression); }
+	static remove_scalar_mul_type remove_scalar_mul(T expression) { return detail::remove_scalar_mul<T>::rm(expression); }
+	static remove_blas_features_type remove_blas_modifiers(T expression) {
+		return detail::remove_transpose<remove_scalar_mul_type>::rm(remove_scalar_mul(expression));
+	}
 
 	 //If an expression with a scalar, returns the scalar, else returns a nullpointer of the valuetype == to T::value_type
 	static auto get_scalar(const T& expression)

@@ -17,7 +17,10 @@ struct basic_operation {};
 struct assignment_operation : basic_operation{};
 struct linear_operation : basic_operation {};
 struct linear_assignment_operation : linear_operation, assignment_operation {};
-struct BLAS_Function {};
+struct BLAS_Function {
+	///BLAS functions cannot be lazy evaluated
+	using requires_greedy_evaluation = std::true_type;
+};
 
 }
 }
