@@ -199,6 +199,10 @@ struct expression_traits {
 					BC::traits::conditional_detected_t<
 						detail::query_auto_broadcast, T, std::false_type>::value;
 
+	static constexpr bool requires_greedy_evaluation =
+					BC::traits::conditional_detected_t<
+						detail::query_requires_greedy_evaluation,T, std::false_type>::value;
+
 	static constexpr bool is_bc_type  	 = std::is_base_of<BC_Type, T>::value;
 	static constexpr bool is_array  	 = std::is_base_of<BC_Array, T>::value;
 	static constexpr bool is_view 		 = std::is_base_of<BC_View, T>::value;
