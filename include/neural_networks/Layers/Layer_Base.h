@@ -22,7 +22,7 @@ namespace nn {
 
 class Layer_Base {
 
-	const std::string m_classname;
+	std::string m_classname;
 	std::string m_directory_save_path;
 	std::string m_additional_architecture_features;
 

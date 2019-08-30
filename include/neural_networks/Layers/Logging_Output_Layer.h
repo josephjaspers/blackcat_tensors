@@ -59,12 +59,12 @@ struct Logging_Output_Layer : Output_Layer<SystemTag,ValueType> {
 	unsigned skip_every_n_backprops = 10;
 
 	ErrorFunction error_function;
-	std::ostream& logger;
+	std::ostream* logger;
 
 	Logging_Output_Layer(std::ostream& logger_, BC::size_t inputs, ErrorFunction error_function_):
 		parent(inputs),
 		error_function(error_function_),
-		logger(logger_) {}
+		logger(&logger_) {}
 
 	template <class Tensor>
 	const auto& forward_propagation(const Tensor& x) {
@@ -86,7 +86,7 @@ struct Logging_Output_Layer : Output_Layer<SystemTag,ValueType> {
 		curr_index++;
 
 		if (logging_enabled && curr_index % skip_every_n_backprops == 0)
-			logger << "Batch index: " << curr_index << " loss: " << error_function(x, y) << "\n";
+			(*logger) << "Batch index: " << curr_index << " loss: " << error_function(x, y) << "\n";
 		return x - y;
 	}
 };
