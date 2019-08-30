@@ -275,8 +275,8 @@ using  size_t   = BC_SIZE_T_OVERRIDE;
         return sz > CUDA_BASE_THREADS ? CUDA_BASE_THREADS : sz;
     }
 
-    static  BC::size_t blocks(BC::size_t size) {
-        return std::ceil((float)size / (float)threads(size));
+    static  BC::size_t blocks(int size) {
+        return 1 + (int)(size / CUDA_BASE_THREADS);
     }
 #endif
 

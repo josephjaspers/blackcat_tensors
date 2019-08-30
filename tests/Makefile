@@ -1,4 +1,4 @@
-CXXVERSION = -std=c++14 -Wall
+CXXVERSION = -std=c++14 
 CXXFLAGS = -O3 -o blackcat_tests
 CUFLAGS = -O3 -o blackcat_tests_cu
 
