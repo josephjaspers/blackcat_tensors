@@ -480,10 +480,12 @@ public:
 		return tensor.template un_expr<exprs::BatchedReduce<typename Expression::system_tag>>();
 	}
 
-//    template<class Expression>
-//	auto sum(const Tensor_Base<Expression>& tensor) {
-//		return tensor.template un_expr<exprs::Sum<typename Expression::system_tag>>();
-//	}
+    namespace experimental {
+    template<class Expression>
+	auto fast_sum(const Tensor_Base<Expression>& tensor) {
+		return tensor.template un_expr<exprs::Sum<typename Expression::system_tag>>();
+	}
+    }
 
 
     //For enabling broadcasting of same-dimension tensors

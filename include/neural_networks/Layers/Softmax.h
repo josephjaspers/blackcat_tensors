@@ -36,22 +36,17 @@ public:
 
 	template<class Allocator>
 	const auto& forward_propagation(const BC::Matrix<value_type, Allocator>& x) {
-		using BC::exp;
-		using BC::sum;
-
 		//TODO -- convert this into an operation, need 'broadcasted' sum
 		for (int i = 0; i < x.cols(); ++i) {
-			y[i] = exp(x[i]) / sum(exp(x[i]));
+			y[i] = BC::exp(x[i]) / BC::tensors::experimental::fast_sum(exp(x[i]));
 		}
 
 		return y;
 	}
 	template<class Allocator>
 	auto forward_propagation(const BC::Vector<value_type, Allocator>& x) {
-		using BC::exp;
-		using BC::sum;
 		//TODO -- convert this into an operation, need 'broadcasted' sum
-		return  exp(x) / sum(exp(x));
+		return  BC::exp(x) / BC::tensors::experimental::fast_sum(exp(x));
 	}
 
 
@@ -61,7 +56,6 @@ public:
 	}
 
 	void update_weights() {}
-
 	void set_batch_size(int bs) {
 		Layer_Base::set_batch_size(bs);
 		y = mat(this->output_size(), bs);

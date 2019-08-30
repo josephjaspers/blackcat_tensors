@@ -80,7 +80,9 @@ public:
     BCINLINE const shape_type& get_shape() const { return static_cast<const shape_type&>(*this); }
 
     BCINLINE const auto& operator [](int index) const {
-    	if (!expression_traits<self_type>::is_continuous && tensor_dimension==1) {
+    	if (tensor_dimension==0) {
+    		return array[0];
+    	} else if (!expression_traits<self_type>::is_continuous && tensor_dimension==1) {
     		return array[this->leading_dimension(0) * index];
     	} else {
     		return array[index];
@@ -88,7 +90,9 @@ public:
     }
 
     BCINLINE auto& operator [](int index) {
-    	if (!expression_traits<self_type>::is_continuous && tensor_dimension==1) {
+    	if (tensor_dimension==0) {
+    		return array[0];
+    	} else if (!expression_traits<self_type>::is_continuous && tensor_dimension==1) {
     		return array[this->leading_dimension(0) * index];
     	} else {
     		return array[index];
@@ -97,12 +101,20 @@ public:
 
     template<class ... integers>
     BCINLINE const auto& operator ()(integers ... ints) const {
-        return array[this->dims_to_index(ints...)];
+    	if (tensor_dimension==0) {
+    		return array[0];
+    	} else {
+    		return array[this->dims_to_index(ints...)];
+    	}
     }
 
     template<class ... integers>
     BCINLINE auto& operator ()(integers ... ints) {
-        return array[this->dims_to_index(ints...)];
+    	if (tensor_dimension==0) {
+    		return array[0];
+    	} else {
+    		return array[this->dims_to_index(ints...)];
+    	}
     }
 
     BCINLINE auto slice_ptr_index(int i) const {
@@ -247,7 +259,7 @@ public:
 
 template<class ValueType, int dims, class Stream>
 auto make_temporary_kernel_array(Shape<dims> shape, Stream stream) {
-	static_assert(dims >= 1, "make_temporary_tensor_array: assumes dimension is 1 or greater");
+//	static_assert(dims >= 1, "make_temporary_tensor_array: assumes dimension is 1 or greater");
 	using system_tag = typename Stream::system_tag;
 	using Array = Kernel_Array<dims, ValueType, system_tag, BC_Temporary>;
 	return Array(shape, stream.template get_allocator_rebound<ValueType>().allocate(shape.size()));
