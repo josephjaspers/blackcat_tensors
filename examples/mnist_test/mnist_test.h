@@ -1,5 +1,6 @@
 #include "../../include/BlackCat_Tensors.h"
 #include "../../include/BlackCat_NeuralNetworks.h"
+#include <cuda_profiler_api.h>
 
 #include <chrono>
 
@@ -56,7 +57,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 		BC::nn::logistic(system_tag, 256),
 		BC::nn::feedforward(system_tag, 256, 10),
 		BC::nn::softmax(system_tag, 10),
-		BC::nn::logging_output_layer(system_tag, 10, BC::nn::RMSE).skip_every(100)
+		BC::nn::logging_output_layer(system_tag, 10, BC::nn::RMSE).skip_every(100/5)
 	);
 
 	network.set_batch_size(batch_size);
@@ -71,7 +72,6 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 
 	std::cout << " training..." << std::endl;
 	auto start = std::chrono::system_clock::now();
-
 	for (int i = 0; i < epochs; ++i){
 		std::cout << " current epoch: " << i << std::endl;
 		for (int j = 0; j < samples/batch_size; ++j) {

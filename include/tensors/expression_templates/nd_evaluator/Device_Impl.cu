@@ -28,24 +28,24 @@ static void eval(T t) {
 }
 
 template<typename T> __global__  static void eval2d(T t) {
-    int n = blockIdx.y * blockDim.y + threadIdx.y;
-    for (; n < t.cols(); n += blockDim.y * gridDim.y) {
+    int n = blockIdx.x * blockDim.x + threadIdx.x;
+    for (; n < t.cols(); n += blockDim.x * gridDim.x) {
 
-        int m = blockIdx.x * blockDim.x + threadIdx.x;
-        for (; m < t.rows(); m += blockDim.x * gridDim.x) {
+        int m = blockIdx.y * blockDim.y + threadIdx.y;
+        for (; m < t.rows(); m += blockDim.y * gridDim.y) {
             t(m, n);
         }
     }
 }
 template<typename T> __global__ static void eval3d(T t) {
-    int k = blockIdx.z * blockDim.z + threadIdx.z;
-    for (; k < t.dimension(2); k += blockDim.z * gridDim.z) {
+    int k = blockIdx.x * blockDim.x + threadIdx.x;
+    for (; k < t.dimension(2); k += blockDim.x * gridDim.x) {
 
     	int n = blockIdx.y * blockDim.y + threadIdx.y;
         for (; n < t.cols(); n += blockDim.y * gridDim.y) {
 
-            int m = blockIdx.x * blockDim.x + threadIdx.x;
-            for (; m < t.rows(); m += blockDim.x * gridDim.x) {
+            int m = blockIdx.z * blockDim.z + threadIdx.z;
+            for (; m < t.rows(); m += blockDim.z * gridDim.z) {
                 t(m,n,k);
             }
         }
@@ -53,14 +53,14 @@ template<typename T> __global__ static void eval3d(T t) {
 }
 //dont know how to do this
 template<typename T> __global__ static void eval4d(T t) {
-    int l = blockIdx.z * blockDim.z + threadIdx.z;
-    for (; l < t.dimension(3); l += blockDim.z * gridDim.z) {
+    int l = blockIdx.x * blockDim.x + threadIdx.x;
+    for (; l < t.dimension(3); l += blockDim.x * gridDim.x) {
 
         int k = blockIdx.y * blockDim.y + threadIdx.y;
         for (;k < t.dimension(2); k += blockDim.y * gridDim.y) {
 
-            int n = blockIdx.x * blockDim.x + threadIdx.x;
-            for (; n < t.cols(); n += blockDim.x * gridDim.x) {
+            int n = blockIdx.z * blockDim.z + threadIdx.z;
+            for (; n < t.cols(); n += blockDim.z * gridDim.z) {
 
                 for (int m = 0; m < t.rows(); ++m) {
                     t(m,n,k,l);
@@ -71,14 +71,14 @@ template<typename T> __global__ static void eval4d(T t) {
 }
 //don't know how to do this
 template<typename T> __global__ static void eval5d(T t) {
-    int p = blockIdx.z * blockDim.z + threadIdx.z;
-    for (; p < t.dimension(4); p += blockDim.z * gridDim.z) {
+    int p = blockIdx.z * blockDim.x + threadIdx.x;
+    for (; p < t.dimension(4); p += blockDim.x * gridDim.x) {
 
         int l = blockIdx.y * blockDim.y + threadIdx.y;
         for (; l < t.dimension(3); l += blockDim.y * gridDim.y) {
 
-            int k = blockIdx.x * blockDim.x + threadIdx.x;
-            for (; k < t.dimension(2); k += blockDim.x * gridDim.x) {
+            int k = blockIdx.x * blockDim.z + threadIdx.z;
+            for (; k < t.dimension(2); k += blockDim.z * gridDim.z) {
 
                 for (int n = 0; n < t.dimension(1); ++n) {
 
