@@ -1,7 +1,5 @@
 #include "../../include/BlackCat_Tensors.h"
 #include "../../include/BlackCat_NeuralNetworks.h"
-#include <cuda_profiler_api.h>
-
 #include <chrono>
 
 template<class System>
