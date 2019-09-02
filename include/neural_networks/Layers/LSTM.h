@@ -56,7 +56,7 @@ private:
 	vec bf, bz, bi, bo;
 	vec bf_gradients, bz_gradients, bi_gradients, bo_gradients;
 
-	mat dc, df, dz, di, do_;
+	mat dc, df, dz, di, do_, dy;
 	mat c;
 
 	std::vector<mat> cs, fs, zs, is, os;
@@ -192,7 +192,7 @@ public:
 		mat& cm1 = time_index(cs, -1);
 		mat& c = time_index(cs);
 
-		mat dy = delta_outputs +
+		dy = delta_outputs +
 				rz.t() * dz +
 				ri.t() * di +
 				rf.t() * df +
@@ -253,7 +253,7 @@ public:
 	}
 
 	void set_batch_size(int bs) {
-		for (auto& delta: reference_list(dc, df, dz, di, do_, c)) {
+		for (auto& delta: reference_list(dc, df, dz, di, do_, c, dy)) {
 			delta = mat(this->output_size(), bs);
 		}
 
@@ -268,7 +268,7 @@ public:
 	}
 
 	void zero_deltas() {
-		for (auto& delta : reference_list(dc, df, di, dz, do_)) {
+		for (auto& delta : reference_list(dc, df, di, dz, do_, dy)) {
 			delta.zero();
 		}
 	}

@@ -71,7 +71,7 @@ public:
 
 	template<class Matrix>
 	auto forward_propagation(const Matrix& x) {
-		w.conv2d(x);
+		return w.conv2d(x);
 	}
 
 	template<class X, class Delta>

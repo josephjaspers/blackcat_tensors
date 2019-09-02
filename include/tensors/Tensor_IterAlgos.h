@@ -277,7 +277,7 @@ using BC_sum_t = std::conditional_t<std::is_same<typename Expression::value_type
 }
 
 template<class Expression>
-auto sum(const Tensor_Base<Expression>& tensor) {
+auto value_sum(const Tensor_Base<Expression>& tensor) {
 	using sum_value_type = BC_sum_t<Expression>;
 	return BC::algorithms::accumulate(BC::streams::select_on_get_stream(tensor),
 			tensor.cw_cbegin(), tensor.cw_cend(), sum_value_type(0));
@@ -292,12 +292,12 @@ auto prod(const Tensor_Base<Expression>& tensor) {
 
 template<class Expression>
 static bool all(const Tensor_Base<Expression>& tensor) {
-	return tensor.size() == sum(logical(tensor));
+	return tensor.size() == value_sum(logical(tensor));
 }
 
 template<class Expression>
 static bool any(const Tensor_Base<Expression>& tensor) {
-	return sum(logical(tensor)) != 0;
+	return value_sum(logical(tensor)) != 0;
 }
 
 

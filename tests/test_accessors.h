@@ -20,6 +20,7 @@ int test_accessors(int sz=128) {
 
 	using mat = BC::Matrix<value_type, allocator<value_type>>;
 	using vec = BC::Vector<value_type, allocator<value_type>>;
+	using scalar = BC::Scalar<value_type, allocator<value_type>>;
 	using bmat = BC::Matrix<bool, allocator<bool>>;
 
 	mat a(sz,sz);
@@ -29,6 +30,17 @@ int test_accessors(int sz=128) {
 	for (auto col : a.nd_iter()) {
 		col = val++;
 	}
+
+	BC_TEST_DEF(
+			mat x(3,3);
+			vec y(3,3);
+			scalar s;
+
+			x.print();
+			y.print();
+			s.print();
+	)
+
 
 	//test slice
 	BC_TEST_DEF(

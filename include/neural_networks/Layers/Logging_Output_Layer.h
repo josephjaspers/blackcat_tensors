@@ -86,7 +86,7 @@ struct Logging_Output_Layer : Output_Layer<SystemTag,ValueType> {
 		curr_index++;
 
 		if (logging_enabled && curr_index % skip_every_n_backprops == 0)
-			(*logger) << "Batch index: " << curr_index << " loss: " << error_function(x, y) << "\n";
+			(*logger) << "Batch index: " << curr_index << " loss: " << error_function(x, y).to_string() << "\n";
 		return x - y;
 	}
 };

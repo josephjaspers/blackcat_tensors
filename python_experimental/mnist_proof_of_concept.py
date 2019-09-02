@@ -28,7 +28,7 @@ network = bc.nn.neuralnetwork(
 	bc.nn.logistic(256),
 	bc.nn.feedforward(256, 10),
 	bc.nn.softmax(10),
-	bc.nn.outputlayer(10)
+	bc.nn.output_layer(10)
 )
 
 samples = outputs.cols()

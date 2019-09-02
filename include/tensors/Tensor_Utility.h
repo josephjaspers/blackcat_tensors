@@ -70,6 +70,18 @@ private:
     				host_.copy(as_derived());
     				return BC::tensors::io::to_string(host_, fs, BC::traits::Integer<tensor_dimension>());
     }
+    template<template<int> class Integer>
+    std::string to_string(Integer<-1>, BC::tensors::io::features fs) const {
+    	using host_tensor = Tensor_Base<exprs::Array<
+    							tensor_dimension,
+    							typename ExpressionTemplate::value_type,
+    							BC::Allocator<host_tag, value_type>>>;
+
+    				host_tensor host_;
+    				host_.copy(as_derived());
+    				return BC::tensors::io::to_string(host_, fs, BC::traits::Integer<tensor_dimension>());
+    }
+
 
     //If expression_type
     template<template<int> class Integer>
@@ -89,7 +101,10 @@ public:
     			std::conditional_t<
     				BC::tensors::exprs::expression_traits<ExpressionTemplate>::is_expr, BC::traits::Integer<2>,
     			std::conditional_t<
-    				std::is_same<host_tag, system_tag>::value, BC::traits::Integer<0>, BC::traits::Integer<1>>>;
+    				std::is_same<host_tag, system_tag>::value, BC::traits::Integer<0>,
+    			std::conditional_t<
+    				ExpressionTemplate::tensor_dimension == 0,
+    				BC::traits::Integer<-1>, BC::traits::Integer<1>>>>;
 
     		return this->to_string(specialization(), BC::tensors::io::features(precision, pretty, sparse));
     	}

@@ -487,6 +487,21 @@ public:
 	}
     }
 
+    template<class Expression>
+    	auto sum(const Tensor_Base<Expression>& tensor) {
+    		return experimental::fast_sum(tensor);
+    }
+//
+//    template<class Expression>
+//    static bool all(const Tensor_Base<Expression>& tensor) {
+//    	return tensor.size() == sum(logical(tensor));
+//    }
+//
+//    template<class Expression>
+//    static bool any(const Tensor_Base<Expression>& tensor) {
+//    	return sum(logical(tensor)) != 0;
+//    }
+//
 
     //For enabling broadcasting of same-dimension tensors
     template<class Expression>

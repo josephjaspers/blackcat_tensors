@@ -120,7 +120,7 @@ int test_blas(int sz=128) {
 			//test dot
 		y[0][0] = a[0] * b[0];
 
-		return BC::tensors::all(y[0][0].approx_equal(sum(a[0] % b[0])));
+		return BC::tensors::all(y[0][0].approx_equal(value_sum(a[0] % b[0])));
 	)
 
 	//scalar left test -------------------
@@ -169,7 +169,7 @@ int test_blas(int sz=128) {
 			//test dot
 		y[0][0] = a[0] * b[0];
 
-		return BC::tensors::all(y[0][0].approx_equal(sum(a[0] % b[0])));
+		return BC::tensors::all(y[0][0].approx_equal(value_sum(a[0] % b[0])));
 	)
 
 	// scalar right test -------------------------------------------
@@ -218,7 +218,7 @@ int test_blas(int sz=128) {
 			//test dot
 		y[0][0] = a[0] * b[0];
 
-		return BC::tensors::all(y[0][0].approx_equal(sum(a[0] % b[0])));
+		return BC::tensors::all(y[0][0].approx_equal(value_sum(a[0] % b[0])));
 	)
 
 	//--------------------------------------------------------------
@@ -341,7 +341,7 @@ int test_blas(int sz=128) {
 			//test dot
 		y[0][0] = a[0] * b[0];
 
-		return BC::tensors::all(y[0][0].approx_equal(sum(a[0] % b[0])));
+		return BC::tensors::all(y[0][0].approx_equal(value_sum(a[0] % b[0])));
 	)
 
 	// scalar right test -------------------------------------------
