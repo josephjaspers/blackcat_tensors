@@ -4,7 +4,7 @@ CUFLAGS = -O3 -o mnist_test_exec_cu
 CXXFILES = mnist_test.cpp
 CUFILES  = mnist_test.cu
 
-LIBS = -lcblas
+LIBS = -lblas
 
 ATLAS_BLAS_LINKAGE = -D BC_BLAS_USE_C_LINKAGE=1
 ATLASLIBS =  -lf77blas -lcblas -latlas

@@ -22,10 +22,10 @@ struct Scalar_Constant_Base : Shape<0>, Kernel_Array_Base<Derived> {
     static constexpr int tensor_iterator_dimension = 0;
     static constexpr int tensor_dimension     = 0;
 
-    static constexpr bool copy_constructible = false;
-    static constexpr bool move_constructible = false;
-    static constexpr bool copy_assignable    = false;
-    static constexpr bool move_assignable    = false;
+    using copy_constructible = std::false_type;
+    using move_constructible = std::false_type;
+    using copy_assignable    = std::false_type;
+    using move_assignable    = std::false_type;
 };
 
 template<class Scalar, class SystemTag>

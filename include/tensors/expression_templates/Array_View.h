@@ -29,13 +29,13 @@ struct Array_Const_View
 	using parent =  Kernel_Array<Dimension, Scalar, system_tag, BC_Noncontinuous>;
 	using allocator_t = Allocator;
 
-    static constexpr bool copy_constructible = true;
-    static constexpr bool move_constructible = true;
-    static constexpr bool copy_assignable    = false;
-    static constexpr bool move_assignable    = true;
+	using copy_constructible = std::true_type;
+	using move_constructible = std::true_type;
+	using copy_assignable    = std::false_type;
+	using move_assignable    = std::true_type;
 
-    static constexpr int tensor_dimension = Dimension;
-    static constexpr int tensor_iterator_dimension = tensor_dimension;
+	static constexpr int tensor_dimension = Dimension;
+	static constexpr int tensor_iterator_dimension = tensor_dimension;
 
 	stream_type stream;
 	Allocator alloc;

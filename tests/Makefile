@@ -5,7 +5,7 @@ CUFLAGS = -O3 -o blackcat_tests_cu
 CXXFILES = run.cpp
 CUFILES  = run.cu
 
-LIBS = -lcblas
+LIBS = -lblas
 
 ATLAS_BLAS_LINKAGE = -D BC_BLAS_USE_C_LINKAGE=1
 ATLASLIBS =  -lf77blas -lcblas -latlas

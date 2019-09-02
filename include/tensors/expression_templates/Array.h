@@ -49,11 +49,6 @@ struct Kernel_Array
 	static constexpr bool self_is_view = BC::traits::sequence_contains_v<BC_View, Tags...>;
 	static constexpr bool is_continuous = ! BC::traits::sequence_contains_v<BC_Noncontinuous, Tags...>;
 
-	static constexpr bool copy_constructible = !self_is_view;
-	static constexpr bool move_constructible = !self_is_view;
-    static constexpr bool copy_assignable    = true;
-	static constexpr bool move_assignable    = !self_is_view;
-
     static constexpr int tensor_dimension = Dimension;
     static constexpr int tensor_iterator_dimension = is_continuous ? 1 : tensor_dimension;
 

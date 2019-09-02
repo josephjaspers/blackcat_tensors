@@ -26,10 +26,10 @@ template<class T> using query_value_type = typename T::value_type;
 template<class T> using query_allocation_type = typename T::allocation_tag;
 template<class T> using query_dx_is_defined = typename T::dx_is_defined;
 
-template<class T> using query_copy_assignable    = BC::traits::truth_type<T::copy_assignable>;
-template<class T> using query_copy_constructible = BC::traits::truth_type<T::copy_constructible>;
-template<class T> using query_move_assignable    = BC::traits::truth_type<T::move_assignable>;
-template<class T> using query_move_constructible = BC::traits::truth_type<T::move_constructible>;
+template<class T> using query_copy_assignable    = typename T::copy_assignable;
+template<class T> using query_copy_constructible = typename T::copy_constructible;
+template<class T> using query_move_assignable    = typename T::move_assignable;
+template<class T> using query_move_constructible = typename T::move_constructible;
 
 template<class T> using query_auto_broadcast = typename T::auto_broadcast;
 template<class T> using query_requires_greedy_evaluation = typename T::requires_greedy_evaluation;
@@ -137,7 +137,12 @@ class BC_Expr  {};
 class BC_Temporary {};
 class BC_Scalar_Constant {};
 class BC_Stack_Allocated {};
-class BC_View {};
+class BC_View {
+	using copy_constructible = std::false_type;
+	using move_constructible = std::false_type;
+    using copy_assignable    = std::true_type;
+	using move_assignable    = std::false_type;
+};
 class BC_Noncontinuous {};
 class BC_Immutable {};
 
@@ -171,28 +176,28 @@ struct expression_traits {
 	 }
 
 //Succeeds in CUDA version 10 and up, sometimes causes failure with 9.2 and 9.1
-#if ! defined(__CUDACC__) ||  __CUDACC_VER_MAJOR__ >= 10
+//#if ! defined(__CUDACC__) ||  __CUDACC_VER_MAJOR__ >= 10
 	static constexpr bool is_move_constructible =
 					BC::traits::conditional_detected_t<
-						detail::query_move_constructible, T, std::false_type>::value;
+						detail::query_move_constructible, T, std::true_type>::value;
 
 	static constexpr bool is_copy_constructible =
 					BC::traits::conditional_detected_t<
-						detail::query_copy_constructible, T, std::false_type>::value;
+						detail::query_copy_constructible, T, std::true_type>::value;
 
 	static constexpr bool is_move_assignable 	=
 					BC::traits::conditional_detected_t<
-						detail::query_move_assignable, T, std::false_type>::value;
+						detail::query_move_assignable, T, std::true_type>::value;
 
 	static constexpr bool is_copy_assignable 	=
 					BC::traits::conditional_detected_t<
-						detail::query_copy_assignable, T, std::false_type>::value;
-#else
-		static constexpr bool is_move_constructible = T::move_constructible;
-		static constexpr bool is_copy_constructible = T::copy_consructible;
-		static constexpr bool is_move_assignable 	= T::move_assignable;
-		static constexpr bool is_copy_assignable 	= T::copy_assignable;
-#endif
+						detail::query_copy_assignable, T, std::true_type>::value;
+//#else
+//		static constexpr bool is_move_constructible = T::move_constructible;
+//		static constexpr bool is_copy_constructible = T::copy_consructible;
+//		static constexpr bool is_move_assignable 	= T::move_assignable;
+//		static constexpr bool is_copy_assignable 	= T::copy_assignable;
+//#endif
 
 	static constexpr bool is_auto_broadcasted =
 					BC::traits::conditional_detected_t<

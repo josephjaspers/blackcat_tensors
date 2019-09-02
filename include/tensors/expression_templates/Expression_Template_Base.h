@@ -41,10 +41,10 @@ public:
 		static_assert(std::is_same<decltype(std::declval<derived>().rows()), int>::value, "INTERNAL_TYPE MUST DEFINE rows()");
 		static_assert(std::is_same<decltype(std::declval<derived>().cols()), int>::value, "INTERNAL_TYPE MUST DEFINE cols()");
 		static_assert(std::is_same<decltype(std::declval<derived>().dimension(0)), int>::value, "INTERNAL_TYPE MUST DEFINE dimension(int)");
-		static_assert(std::is_same<bool, std::decay_t<decltype(derived::copy_constructible)>>::value, "Internal Types must define 'static constexpr bool copy_constructible'");
-		static_assert(std::is_same<bool, std::decay_t<decltype(derived::move_constructible)>>::value, "Internal Types must define 'static constexpr bool move_constructible'");
-		static_assert(std::is_same<bool, std::decay_t<decltype(derived::copy_assignable)>>::value, "Internal Types must define 'static constexpr bool copy_assignable'");
-		static_assert(std::is_same<bool, std::decay_t<decltype(derived::move_assignable)>>::value, "Internal Types must define 'static constexpr bool move_assignable'");
+//		static_assert(std::is_same<bool, std::decay_t<decltype(derived::copy_constructible)>>::value, "Internal Types must define 'static constexpr bool copy_constructible'");
+//		static_assert(std::is_same<bool, std::decay_t<decltype(derived::move_constructible)>>::value, "Internal Types must define 'static constexpr bool move_constructible'");
+//		static_assert(std::is_same<bool, std::decay_t<decltype(derived::copy_assignable)>>::value, "Internal Types must define 'static constexpr bool copy_assignable'");
+//		static_assert(std::is_same<bool, std::decay_t<decltype(derived::move_assignable)>>::value, "Internal Types must define 'static constexpr bool move_assignable'");
 		static_assert(std::is_same<int, std::decay_t<decltype(derived::tensor_dimension)>>::value, "Internal Types must define 'static constexpr int tensor_dimension'");
 		static_assert(std::is_same<int, std::decay_t<decltype(derived::tensor_iterator_dimension)>>::value, "Internal Types must define 'static constexpr int tensor_iterator_dimension'");
     }
@@ -58,10 +58,10 @@ struct Expression_Base
         : Expression_Template_Base<derived>,
           BC_Expr {
 
-            static constexpr bool copy_constructible = false;
-            static constexpr bool move_constructible = false;
-            static constexpr bool copy_assignable    = false;
-            static constexpr bool move_assignable    = false;
+            using copy_constructible = std::false_type;
+            using move_constructible = std::false_type;
+            using copy_assignable    = std::false_type;
+            using move_assignable    = std::false_type;
 
             BCINLINE const auto inner_shape() const {
             	return utility::make_lambda_array<derived::tensor_dimension>([&](int i) {
