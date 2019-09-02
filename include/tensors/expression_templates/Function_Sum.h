@@ -38,7 +38,6 @@ struct Unary_Expression<Sum<SystemTag>, ArrayType>
     ArrayType array;
 
     using Shape<0>::inner_shape;
-    using Shape<0>::block_shape;
 
     Unary_Expression(ArrayType array_, Sum<SystemTag> sum=Sum<SystemTag>()):
     	array(array_) {}

@@ -56,10 +56,7 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>
 		return utility::make_lambda_array<tensor_dimension>(
 				[&](int i) {return i == 0 ? left.rows() : 1;});
 	}
-	BCINLINE const auto block_shape() const {
-		return utility::make_lambda_array<tensor_dimension>(
-				[&](int i) {return i == 0 ? rows() : 1;});
-	}
+
 
     template<class core, int alpha_mod, int beta_mod, class Stream>
     void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {

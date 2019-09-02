@@ -31,17 +31,16 @@ public:
     operator const derived&() const { return as_derived(); }
 
     BCINLINE Expression_Template_Base() {
+
 #ifndef _MSC_VER
 		static_assert(std::is_trivially_copy_constructible<derived>::value, "INTERNAL_TYPES TYPES MUST BE TRIVIALLY COPYABLE");
 		static_assert(std::is_trivially_copyable<derived>::value, "INTERNAL_TYPES MUST BE TRIVIALLY COPYABLE");
 #endif
 		static_assert(!std::is_same<void, typename derived::value_type>::value, "INTERNAL_TYPES MUST HAVE A 'using value_type = some_Type'");
 		static_assert(!std::is_same<decltype(std::declval<derived>().inner_shape()), void>::value, "INTERNAL_TYPE MUST DEFINE inner_shape()");
-		static_assert(!std::is_same<decltype(std::declval<derived>().block_shape()), void>::value, "INTERNAL_TYPE MUST DEFINE block_shape()");
 		static_assert(std::is_same<decltype(std::declval<derived>().rows()), int>::value, "INTERNAL_TYPE MUST DEFINE rows()");
 		static_assert(std::is_same<decltype(std::declval<derived>().cols()), int>::value, "INTERNAL_TYPE MUST DEFINE cols()");
 		static_assert(std::is_same<decltype(std::declval<derived>().dimension(0)), int>::value, "INTERNAL_TYPE MUST DEFINE dimension(int)");
-		static_assert(std::is_same<decltype(std::declval<derived>().block_dimension(0)), int>::value, "INTERNAL_TYPE MUST DEFINE block_dimension(int)");
 		static_assert(std::is_same<bool, std::decay_t<decltype(derived::copy_constructible)>>::value, "Internal Types must define 'static constexpr bool copy_constructible'");
 		static_assert(std::is_same<bool, std::decay_t<decltype(derived::move_constructible)>>::value, "Internal Types must define 'static constexpr bool move_constructible'");
 		static_assert(std::is_same<bool, std::decay_t<decltype(derived::copy_assignable)>>::value, "Internal Types must define 'static constexpr bool copy_assignable'");
@@ -67,12 +66,6 @@ struct Expression_Base
             BCINLINE const auto inner_shape() const {
             	return utility::make_lambda_array<derived::tensor_dimension>([&](int i) {
             		return static_cast<const derived&>(*this).dimension(i);
-            	});
-            }
-
-            BCINLINE const auto block_shape() const {
-            	return utility::make_lambda_array<derived::tensor_dimension>([&](int i) {
-            		return static_cast<const derived&>(*this).block_dimension(i);
             	});
             }
         };

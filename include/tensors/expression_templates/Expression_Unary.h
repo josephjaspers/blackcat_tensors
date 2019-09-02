@@ -92,7 +92,6 @@ struct Unary_Expression : public Expression_Base<Unary_Expression<Operation, Arr
     }
 
     BCINLINE const auto inner_shape() const { return array.inner_shape(); }
-    BCINLINE const auto block_shape() const { return array.block_shape(); }
     BCINLINE BC::size_t size() const { return array.size(); }
     BCINLINE BC::size_t rows() const { return array.rows(); }
     BCINLINE BC::size_t cols() const { return array.cols(); }

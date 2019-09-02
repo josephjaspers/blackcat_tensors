@@ -53,13 +53,6 @@ struct Unary_Expression<oper::transpose<System_Tag>, Value>
     }
 
     BCINLINE
-    const auto block_shape() const {
-        return utility::make_lambda_array<tensor_dimension>([=](int i) {
-            return i == 0 ? array.cols() : 1 == 1 ? array.rows() : array.block_dimension(i);
-        });
-    }
-
-    BCINLINE
     auto operator [] (int i) const -> decltype(array[0]) {
         return array[i];
     }
@@ -75,10 +68,6 @@ struct Unary_Expression<oper::transpose<System_Tag>, Value>
     		return array.rows();
     	else
     		return array.dimension(i);
-    }
-
-    BCINLINE BC::size_t block_dimension(int i) const {
-    	return block_shape()[i];
     }
 
     template<class... ints> BCINLINE

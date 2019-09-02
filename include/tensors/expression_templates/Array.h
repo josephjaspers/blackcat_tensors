@@ -37,13 +37,13 @@ namespace exprs {
 template<int Dimension, class ValueType, class SystemTag, class... Tags>
 struct Kernel_Array
 		: Kernel_Array_Base<Kernel_Array<Dimension, ValueType, SystemTag, Tags...>>,
-		  std::conditional_t<BC::traits::sequence_contains_v<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>,
+		  Shape<Dimension>,
 		  public Tags... {
 
     using value_type = ValueType;
     using system_tag = SystemTag;
     using pointer_type = value_type*;
-    using shape_type = std::conditional_t<BC::traits::sequence_contains_v<BC_Noncontinuous, Tags...> && (Dimension>1), SubShape<Dimension>, Shape<Dimension>>;
+    using shape_type = Shape<Dimension>;
     using self_type  = Kernel_Array<Dimension, ValueType, SystemTag, Tags...>;
 
 	static constexpr bool self_is_view = BC::traits::sequence_contains_v<BC_View, Tags...>;

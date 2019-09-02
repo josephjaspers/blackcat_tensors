@@ -103,7 +103,6 @@ public:
     BCINLINE BC::size_t dimension(int i) const { return shape().dimension(i); }
     BCINLINE BC::size_t block_dimension(int i) const { return shape().block_dimension(i); }
     BCINLINE const auto inner_shape() const { return shape().inner_shape(); }
-    BCINLINE const auto block_shape() const { return shape().block_shape(); }
 };
 
 template<class Op, class Lv, class Rv, class... Args> BCHOT

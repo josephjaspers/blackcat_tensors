@@ -142,8 +142,7 @@ class BC_Noncontinuous {};
 class BC_Immutable {};
 
 //forward declare
-template<int> class SubShape;
-template<int,class> class Shape;
+template<int> class Shape;
 
 
 template<class T>

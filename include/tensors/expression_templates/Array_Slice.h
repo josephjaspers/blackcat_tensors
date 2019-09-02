@@ -143,7 +143,7 @@ auto make_chunk(Parent& parent,
 	using slice_type = slice_type_from_parent<Dimension, Parent, BC_Noncontinuous>;
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
-						SubShape<Dimension>(shape, parent.get_shape()),
+						Shape<Dimension>(shape, parent.get_shape()),
 						parent.memptr() + parent.dims_to_index(index_points));
 }
 

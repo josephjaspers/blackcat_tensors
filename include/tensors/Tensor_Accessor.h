@@ -25,7 +25,6 @@ auto shape(Ts... ts) {
 	return BC::utility::make_array_t<BC::size_t>(ts...);
 }
 
-
 template<class T, class Shape>
 auto reshape(Tensor_Base<T>& tensor, Shape shape) {
 	static_assert(BC::tensors::exprs::expression_traits<T>::is_array &&

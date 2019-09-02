@@ -43,7 +43,6 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>
     rv right;
 
     using Shape<0>::inner_shape;
-    using Shape<0>::block_shape;
 
     Binary_Expression(lv left, rv right) : left(left), right(right) {}
 

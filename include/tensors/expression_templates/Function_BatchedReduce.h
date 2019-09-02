@@ -90,16 +90,11 @@ struct Unary_Expression<BatchedReduce<SystemTag>, ArrayType>:
 			return i == 0 ? array.dimension(tensor_dimension - 1) :  1;
 		});
 	}
-	BCINLINE
-	auto block_shape() const {
-		return inner_shape();
-	}
 
     BCINLINE BC::size_t size() const { return array.dimension(ArrayType::tensor_dimension-1); }
     BCINLINE BC::size_t rows() const { return size(); }
     BCINLINE BC::size_t cols() const { return 1; }
     BCINLINE BC::size_t dimension(int i) const { return i == 0 ? size() : 1; }
-    BCINLINE BC::size_t block_dimension(int i) const { return dimension(i); }
 
 };
 
