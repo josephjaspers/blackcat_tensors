@@ -33,12 +33,14 @@ int test_accessors(int sz=128) {
 
 	BC_TEST_DEF(
 			mat x(3,3);
-			vec y(3,3);
+			vec y(3);
 			scalar s;
 
 			x.print();
 			y.print();
 			s.print();
+
+			return true;
 	)
 
 
