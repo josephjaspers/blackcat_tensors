@@ -41,6 +41,8 @@ struct Shape {
         }
     }
 
+
+    BCINLINE
 	Shape(
 			const BC::utility::array<dims, BC::size_t>& new_shape,
 			const Shape<dims>& parent_shape) {
@@ -100,7 +102,7 @@ private:
         calculate_size();
     }
 
-
+    BCINLINE
     void calculate_size() {       //calculate size
 		m_block_shape[dims-1] = m_inner_shape[0];
 		for(int i = 1; i < dims; ++i) {

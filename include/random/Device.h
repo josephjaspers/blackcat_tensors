@@ -40,7 +40,7 @@ struct Random<device_tag> {
 
     template<class Stream, typename T>
     static void randomize(Stream stream, T t, float lower_bound, float upper_bound) {
-    	device_impl::randomize<<<blocks(t.size()),threads(), 0, stream>>>(
+    	device_impl::randomize<<<calculate_block_dim(t.size()),calculate_threads(t.size()), 0, stream>>>(
     			bc_curand_state(), t, lower_bound, upper_bound);
     }
 };

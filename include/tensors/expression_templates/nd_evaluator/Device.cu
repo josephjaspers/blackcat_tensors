@@ -31,27 +31,27 @@ struct Evaluator<device_tag> {
 
 		struct n1 {
 			static void eval(Expression expression, cudaStream_t stream) {
-				gpu_impl::eval<<<blocks(expression.size()), threads(), 0, stream>>>(expression);
+				gpu_impl::eval<<<calculate_block_dim(expression.size()), calculate_threads(), 0, stream>>>(expression);
 			}
 		};
 		struct n2 {
 			static void eval(Expression expression, cudaStream_t stream) {
-				gpu_impl::eval2d<<<blocks(expression.size()), threads(), 0, stream>>>(expression);
+				gpu_impl::eval2d<<<calculate_block_dim(expression.size()), calculate_threads(), 0, stream>>>(expression);
 			}
 		};
 		struct n3 {
 			static void eval(Expression expression, cudaStream_t stream) {
-				gpu_impl::eval3d<<<blocks(expression.size()), threads(), 0, stream>>>(expression);
+				gpu_impl::eval3d<<<calculate_block_dim(expression.size()), calculate_threads(), 0, stream>>>(expression);
 			}
 		};
 		struct n4 {
 			static void eval(Expression expression, cudaStream_t stream) {
-				gpu_impl::eval4d<<<blocks(expression.size()), threads(), 0, stream>>>(expression);
+				gpu_impl::eval4d<<<calculate_block_dim(expression.size()), calculate_threads(), 0, stream>>>(expression);
 			}
 		};
 		struct n5 {
 			static void eval(Expression expression, cudaStream_t stream) {
-				gpu_impl::eval5d<<<blocks(expression.size()), threads(), 0, stream>>>(expression);
+				gpu_impl::eval5d<<<calculate_block_dim(expression.size()), calculate_threads(), 0, stream>>>(expression);
 			}
 		};
 

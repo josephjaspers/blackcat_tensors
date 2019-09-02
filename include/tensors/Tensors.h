@@ -13,45 +13,47 @@
 #include "Tensor_Common.h"
 #include "Tensor_Base.h"
 #include "../BlackCat_Allocator.h"
+
 namespace BC {
 namespace tensors {
-namespace common_using {
+namespace detail{
 
-namespace {
 template<class T>
 using default_allocator = BC::Allocator<default_system_tag_t, T>;
-}
 
-template<int dimension, class ValueType, class Allocator=default_allocator<ValueType>>
-using Tensor = BC::tensors::Tensor_Base<exprs::Array<dimension, ValueType, Allocator>>;
-
-template<class ValueType, class Allocator = default_allocator<ValueType>> using Scalar = Tensor<0, ValueType, Allocator>;
-template<class ValueType, class Allocator = default_allocator<ValueType>> using Vector = Tensor<1, ValueType, Allocator>;
-template<class ValueType, class Allocator = default_allocator<ValueType>> using Matrix = Tensor<2, ValueType, Allocator>;
-template<class ValueType, class Allocator = default_allocator<ValueType>> using Cube = Tensor<3, ValueType, Allocator>;
-
-template<int dimension, class ValueType, class Allocator=default_allocator<ValueType>>
-using Tensor_View = Tensor_Base<BC::tensors::exprs::Array_Const_View<dimension, ValueType, Allocator>>;
-
-template<class ValueType, class Allocator = default_allocator<ValueType>> using Scalar_View = Tensor_View<0, ValueType, Allocator>;
-template<class ValueType, class Allocator = default_allocator<ValueType>> using Vector_View = Tensor_View<1, ValueType, Allocator>;
-template<class ValueType, class Allocator = default_allocator<ValueType>> using Matrix_View = Tensor_View<2, ValueType, Allocator>;
-template<class ValueType, class Allocator = default_allocator<ValueType>> using Cube_View   = Tensor_View<3, ValueType, Allocator>;
-
-
-//TODO RE-ADD SOMETHING WITH SIMILAR FEATURES, THIS IS TOO FRAGILE
-//template<int X, class Expression, class=std::enable_if_t<Expression::tensor_dimension == X>>
-//using TensorXpr = Tensor_Base<Expression>;
-
-//template<class Expression> using ScalarXpr = TensorXpr<0, Expression>;
-//template<class Expression> using VectorXpr = TensorXpr<1, Expression>;
-//template<class Expression> using MatrixXpr = TensorXpr<2, Expression>;
-//template<class Expression> using CubeXpr = TensorXpr<3, Expression>;
-
-} //end of ns common_using
+} //end of ns detail
 } //end of ns tensors
 
-using namespace BC::tensors::common_using;
+template<int dimension, class ValueType, class Allocator=tensors::detail::default_allocator<ValueType>>
+using Tensor = BC::tensors::Tensor_Base<BC::tensors::exprs::Array<dimension, ValueType, Allocator>>;
+
+template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
+using Scalar = Tensor<0, ValueType, Allocator>;
+
+template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
+using Vector = Tensor<1, ValueType, Allocator>;
+
+template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
+using Matrix = Tensor<2, ValueType, Allocator>;
+
+template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
+using Cube = Tensor<3, ValueType, Allocator>;
+
+template<int dimension, class ValueType, class Allocator=tensors::detail::default_allocator<ValueType>>
+using Tensor_View = BC::tensors::Tensor_Base<BC::tensors::exprs::Array_Const_View<dimension, ValueType, Allocator>>;
+
+template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
+using Scalar_View = Tensor_View<0, ValueType, Allocator>;
+
+template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
+using Vector_View = Tensor_View<1, ValueType, Allocator>;
+
+template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
+using Matrix_View = Tensor_View<2, ValueType, Allocator>;
+
+template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
+using Cube_View   = Tensor_View<3, ValueType, Allocator>;
+
 
 } //end of ns BC
 

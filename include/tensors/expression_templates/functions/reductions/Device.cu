@@ -100,7 +100,7 @@ struct Reduce<BC::device_tag> {
 
 		if (expression.size() > 32) {
 			using value_type = typename Expression::value_type;
-			BC::size_t buffer_size = BC::blocks(expression.size());	///num blocks the kernel will be called
+			BC::size_t buffer_size = BC::calculate_block_dim(expression.size());	///num blocks the kernel will be called
 			value_type* buffer = stream.template get_allocator_rebound<value_type>().allocate(buffer_size);
 			stream.enqueue([&]() { sum_implementation(stream, output, expression, buffer); });
 			stream.template get_allocator_rebound<value_type>().deallocate(buffer, buffer_size);
@@ -122,8 +122,8 @@ private:
 
 		using value_type = typename Expression::value_type;
 		BC::size_t n = expression.size();
-		BC::size_t blocks = BC::blocks(n);	///num blocks the kernel will be called
-		BC::size_t threads = BC::threads(n); ///num threads the kernel will be called with
+		BC::size_t blocks = BC::calculate_block_dim(n);	///num blocks the kernel will be called
+		BC::size_t threads = BC::calculate_threads(n); ///num threads the kernel will be called with
 		BC::size_t smemSize = threads * sizeof(typename Expression::value_type);
 
 		switch (threads)

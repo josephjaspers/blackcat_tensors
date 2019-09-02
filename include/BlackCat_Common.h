@@ -271,11 +271,11 @@ using  size_t   = BC_SIZE_T_OVERRIDE;
     	return CUDA_BASE_THREADS;
     }
 
-    static  BC::size_t threads(BC::size_t sz = CUDA_BASE_THREADS) {
+    static  BC::size_t calculate_threads(BC::size_t sz = CUDA_BASE_THREADS) {
         return sz > CUDA_BASE_THREADS ? CUDA_BASE_THREADS : sz;
     }
 
-    static  BC::size_t blocks(int size) {
+    static  BC::size_t calculate_block_dim(int size) {
         return 1 + (int)(size / CUDA_BASE_THREADS);
     }
 #endif
