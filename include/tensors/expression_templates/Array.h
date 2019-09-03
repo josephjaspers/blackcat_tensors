@@ -77,7 +77,7 @@ public:
     BCINLINE const auto& operator [](int index) const {
     	if (tensor_dimension==0) {
     		return array[0];
-    	} else if (!expression_traits<self_type>::is_continuous && tensor_dimension==1) {
+    	} else if (!expression_traits<self_type>::is_continuous::value && tensor_dimension==1) {
     		return array[this->leading_dimension(0) * index];
     	} else {
     		return array[index];
@@ -87,7 +87,7 @@ public:
     BCINLINE auto& operator [](int index) {
     	if (tensor_dimension==0) {
     		return array[0];
-    	} else if (!expression_traits<self_type>::is_continuous && tensor_dimension==1) {
+    	} else if (!expression_traits<self_type>::is_continuous::value && tensor_dimension==1) {
     		return array[this->leading_dimension(0) * index];
     	} else {
     		return array[index];
@@ -186,8 +186,8 @@ public:
     template<
     	class ShapeLike,
     	class=std::enable_if_t<
-    		!expression_traits<ShapeLike>::is_array &&
-    		!expression_traits<ShapeLike>::is_expr &&
+    		!expression_traits<ShapeLike>::is_array::value &&
+    		!expression_traits<ShapeLike>::is_expr::value &&
     		Dimension != 0>
     >
     Array(ShapeLike param, Allocator allocator=Allocator()):
@@ -207,7 +207,7 @@ public:
 	//Shape-like object with maybe allocator
     template<
     	class Expression,
-    	class=std::enable_if_t<expression_traits<Expression>::is_array || expression_traits<Expression>::is_expr>>
+    	class=std::enable_if_t<expression_traits<Expression>::is_array::value || expression_traits<Expression>::is_expr::value>>
 	Array(const Expression& expression, Allocator allocator=Allocator()):
 		Allocator(allocator),
 		parent(typename parent::shape_type(expression.inner_shape()), get_allocator_ref()) {

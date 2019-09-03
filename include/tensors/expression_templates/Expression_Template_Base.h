@@ -17,7 +17,9 @@ namespace tensors {
 namespace exprs {
 
 template<class derived>
-class Expression_Template_Base : BC_Type {
+struct Expression_Template_Base: BC_Type {
+
+private:
 
     BCINLINE const derived& as_derived() const { return static_cast<const derived&>(*this); }
     BCINLINE       derived& as_derived()       { return static_cast<      derived&>(*this); }

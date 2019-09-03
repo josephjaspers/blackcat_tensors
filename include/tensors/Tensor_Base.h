@@ -45,10 +45,10 @@ public:
 	using value_type  = typename ExpressionTemplate::value_type;
 	using system_tag  = typename ExpressionTemplate::system_tag;
 
-	static constexpr bool move_constructible = exprs::expression_traits<ExpressionTemplate>::is_move_constructible;
-	static constexpr bool copy_constructible = exprs::expression_traits<ExpressionTemplate>::is_move_constructible;
-	static constexpr bool move_assignable = exprs::expression_traits<ExpressionTemplate>::is_move_assignable;
-	static constexpr bool copy_assignable = exprs::expression_traits<ExpressionTemplate>::is_copy_assignable;
+	static constexpr bool move_constructible = exprs::expression_traits<ExpressionTemplate>::is_move_constructible::value;
+	static constexpr bool copy_constructible = exprs::expression_traits<ExpressionTemplate>::is_move_constructible::value;
+	static constexpr bool move_assignable = exprs::expression_traits<ExpressionTemplate>::is_move_assignable::value;
+	static constexpr bool copy_assignable = exprs::expression_traits<ExpressionTemplate>::is_copy_assignable::value;
 
 	using operations::operator=;
 	using operations::operator+;

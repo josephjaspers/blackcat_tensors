@@ -88,13 +88,15 @@ struct binary_optimizer_default {
 
 //-------------------------------- Array ----------------------------------------------------//
 template<class T>
-struct optimizer<T, std::enable_if_t<expression_traits<T>::is_array && !expression_traits<T>::is_temporary>>
+struct optimizer<T, std::enable_if_t<
+	expression_traits<T>::is_array::value &&
+	!expression_traits<T>::is_temporary::value>>
 : optimizer_default<T> {};
 
 //--------------Temporary---------------------------------------------------------------------//
 
 template<class Array>
-struct optimizer<Array, std::enable_if_t<expression_traits<Array>::is_temporary>>
+struct optimizer<Array, std::enable_if_t<expression_traits<Array>::is_temporary::value>>
  : optimizer_default<Array> {
 
 	template<class StreamType>
@@ -159,7 +161,7 @@ public:
 template<class op, class lv, class rv>
 struct optimizer<
 	Binary_Expression<op, lv, rv>,
-	std::enable_if_t<expression_traits<Binary_Expression<op, lv, rv>>::requires_greedy_evaluation>>:
+	std::enable_if_t<expression_traits<Binary_Expression<op, lv, rv>>::requires_greedy_evaluation::value>>:
 	binary_optimizer_default<op, lv, rv>,
 	optimizer_greedy_evaluations<Binary_Expression<op, lv, rv>> {
 
@@ -169,7 +171,7 @@ struct optimizer<
 template<class op, class value>
 struct optimizer<
 	Unary_Expression<op, value>,
-	std::enable_if_t<expression_traits<Unary_Expression<op, value>>::requires_greedy_evaluation>>:
+	std::enable_if_t<expression_traits<Unary_Expression<op, value>>::requires_greedy_evaluation::value>>:
 	unary_optimizer_default<op, value>,
 	optimizer_greedy_evaluations<Unary_Expression<op, value>> {
 
@@ -313,8 +315,8 @@ struct optimizer<Binary_Expression<op, lv, rv>, std::enable_if_t<oper::operation
 
 template<class Op, class Array>
 struct optimizer<Unary_Expression<Op, Array>,
-std::enable_if_t<!expression_traits<Array>::is_auto_broadcasted &&
- !expression_traits<Unary_Expression<Op, Array>>::requires_greedy_evaluation>>:
+std::enable_if_t<!expression_traits<Array>::is_auto_broadcasted::value &&
+ !expression_traits<Unary_Expression<Op, Array>>::requires_greedy_evaluation::value>>:
  unary_optimizer_default<Op, Array>
 {
     static constexpr bool entirely_blas_expr 	= false;

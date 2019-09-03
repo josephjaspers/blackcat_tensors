@@ -56,7 +56,7 @@ struct Array_Const_View
 		class tensor_t,
 		typename = std::enable_if_t<
 			tensor_t::tensor_dimension == Dimension &&
-			expression_traits<tensor_t>::is_array>
+			expression_traits<tensor_t>::is_array::value>
 	>
 	Array_Const_View(const tensor_t& tensor)
 	: parent(typename parent::shape_type(tensor.get_shape()), tensor.memptr()),
@@ -67,7 +67,7 @@ struct Array_Const_View
 		class tensor_t,
 		typename = std::enable_if_t<
 			tensor_t::tensor_dimension == Dimension &&
-			expression_traits<tensor_t>::is_array>
+			expression_traits<tensor_t>::is_array::value>
 	>
 	Array_Const_View(const tensor_t& tensor, allocator_t allocator)
 	: parent(typename parent::shape_type(tensor.get_shape()), tensor.memptr()),

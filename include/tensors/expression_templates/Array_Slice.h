@@ -80,7 +80,7 @@ auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
 }
 
 
-template<class Parent, class=std::enable_if_t<!expression_traits<Parent>::is_continuous>>
+template<class Parent, class=std::enable_if_t<!expression_traits<Parent>::is_continuous::value>>
 static auto make_slice(Parent& parent, BC::size_t index) {
 	using slice_type = slice_type_from_parent<BC::traits::max(0,Parent::tensor_dimension-1), Parent, BC_Noncontinuous>;
 	using scalar_type = slice_type_from_parent<0, Parent>;
@@ -90,7 +90,7 @@ static auto make_slice(Parent& parent, BC::size_t index) {
 			parent.get_shape(),
 			parent.memptr() + parent.slice_ptr_index(index));
 }
-template<class Parent, class=std::enable_if_t<expression_traits<Parent>::is_continuous>, int differentiator=0>
+template<class Parent, class=std::enable_if_t<expression_traits<Parent>::is_continuous::value>, int differentiator=0>
 static auto make_slice(Parent& parent, BC::size_t index) {
 
 	using slice_type = slice_type_from_parent<BC::traits::max(0,Parent::tensor_dimension-1), Parent>;

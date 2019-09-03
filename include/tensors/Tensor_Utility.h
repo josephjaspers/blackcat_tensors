@@ -31,7 +31,7 @@ template<class ExpressionTemplate>
 struct Tensor_Utility {
 
 	#define BC_ASSERT_ARRAY_ONLY(literal)\
-	static_assert(exprs::expression_traits<ExpressionTemplate>::is_array\
+	static_assert(exprs::expression_traits<ExpressionTemplate>::is_array::value\
 			, "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
 
 	using system_tag = typename ExpressionTemplate::system_tag;
@@ -99,7 +99,7 @@ public:
     std::string to_string(int precision=8, bool pretty=true, bool sparse=false) const {
     	using specialization =
     			std::conditional_t<
-    				BC::tensors::exprs::expression_traits<ExpressionTemplate>::is_expr, BC::traits::Integer<2>,
+    				BC::tensors::exprs::expression_traits<ExpressionTemplate>::is_expr::value, BC::traits::Integer<2>,
     			std::conditional_t<
     				std::is_same<host_tag, system_tag>::value, BC::traits::Integer<0>,
     			std::conditional_t<

@@ -79,8 +79,8 @@ private:
     		static BCINLINE
     		const Rv& get_shape(const Lv& left, const Rv& right) { return right; }
     	};
-    	constexpr bool lv_is_auto_broadcast = expression_traits<Lv>::is_auto_broadcasted;
-    	constexpr bool rv_is_auto_broadcast = expression_traits<Rv>::is_auto_broadcasted;
+    	constexpr bool lv_is_auto_broadcast = expression_traits<Lv>::is_auto_broadcasted::value;
+    	constexpr bool rv_is_auto_broadcast = expression_traits<Rv>::is_auto_broadcasted::value;
 
     	constexpr bool rv_is_greater_dim = Rv::tensor_dimension > Lv::tensor_dimension;
     	constexpr bool lv_is_greater_dim = Lv::tensor_dimension > Rv::tensor_dimension;

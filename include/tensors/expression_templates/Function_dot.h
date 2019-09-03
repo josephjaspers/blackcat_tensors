@@ -33,8 +33,8 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>
     using blas_impl  = BC::blas::implementation<system_tag>;
     using blas_util	 = BC::tensors::exprs::blas_tools::implementation<system_tag>;
 
-    static constexpr bool lv_scalar = blas_expression_traits<lv>::is_scalar_multiplied;
-    static constexpr bool rv_scalar = blas_expression_traits<rv>::is_scalar_multiplied;
+    static constexpr bool lv_scalar = blas_expression_traits<lv>::is_scalar_multiplied::value;
+    static constexpr bool rv_scalar = blas_expression_traits<rv>::is_scalar_multiplied::value;
 
     static constexpr int tensor_dimension  = 0;
     static constexpr int tensor_iterator_dimension = 0;

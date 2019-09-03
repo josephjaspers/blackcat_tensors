@@ -27,7 +27,7 @@ auto shape(Ts... ts) {
 
 template<class T, class Shape>
 auto reshape(Tensor_Base<T>& tensor, Shape shape) {
-	static_assert(BC::tensors::exprs::expression_traits<T>::is_array &&
+	static_assert(BC::tensors::exprs::expression_traits<T>::is_array::value &&
 					T::tensor_iterator_dimension <= 1,
 					"Reshape is only available to continuous tensors");
 	return make_tensor(exprs::make_view(tensor, shape));
@@ -40,7 +40,7 @@ auto chunk(Tensor_Base<T>& tensor, Index index, Shape shape) {
 
 template<class T, class Shape>
 const auto reshape(const Tensor_Base<T>& tensor, Shape shape) {
-	static_assert(BC::tensors::exprs::expression_traits<T>::is_array &&
+	static_assert(BC::tensors::exprs::expression_traits<T>::is_array::value &&
 		T::tensor_iterator_dimension <= 1,
 		"Reshape is only available to continuous tensors");
 	return make_tensor(exprs::make_view(tensor, shape));
@@ -170,7 +170,7 @@ public:
 #ifdef BC_CLING_JIT
 template<class ExpressionTemplate>
 class Tensor_Accessor<ExpressionTemplate,
-std::enable_if_t<exprs::expression_traits<ExpressionTemplate>::is_expr ||
+std::enable_if_t<exprs::expression_traits<ExpressionTemplate>::is_expr::value ||
 	ExpressionTemplate::tensor_dimension == 0>>	 {
 
 	const auto& as_derived() const { return static_cast<const Tensor_Base<ExpressionTemplate>&>(*this); }

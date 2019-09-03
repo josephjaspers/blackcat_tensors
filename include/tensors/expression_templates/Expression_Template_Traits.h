@@ -43,7 +43,6 @@ struct remove_scalar_mul {
 		return expression;
 	}
 
-	//TODO fix me, a value_type should never be a reference type
 	static scalar_type get_scalar(const T& expression) {
 		return nullptr;
 	};
@@ -118,6 +117,7 @@ struct select_on_dx_when_defined {
 		return array.dx(indicies...);
 	}
 };
+
 struct select_on_dx_when_not_defined {
 	template<class T> BCINLINE
 	static auto impl(const T& array, BC::size_t index) {
@@ -131,24 +131,33 @@ struct select_on_dx_when_not_defined {
 
 }
 
-class BC_Type  {}; //a type inherited by expressions and tensor_cores, it is used a flag and lacks a "genuine" implementation
-class BC_Array {};
-class BC_Expr  {};
-class BC_Temporary {};
-class BC_Scalar_Constant {};
-class BC_Stack_Allocated {};
+#define BC_TAG_DEFINITION(name, using_name, default_value)\
+struct name { using using_name = default_value; };\
+namespace detail { template<class T> using query_##using_name = typename T::using_name; }
+
+BC_TAG_DEFINITION(BC_Type, is_bc_type, std::true_type);
+BC_TAG_DEFINITION(BC_Array, is_tensor_type, std::true_type);
+BC_TAG_DEFINITION(BC_Expr, is_expression_type, std::true_type);
+BC_TAG_DEFINITION(BC_Temporary, is_temporary_value, std::true_type);
+BC_TAG_DEFINITION(BC_Stack_Allocated, is_stack_allocated, std::true_type);
+BC_TAG_DEFINITION(BC_Noncontinuous, is_noncontinuous_in_memory, std::true_type);
+BC_TAG_DEFINITION(BC_Immutable, is_not_mutable, std::true_type);
+
+#undef BC_TAG_DEFINITION
+
 class BC_View {
+	using is_view_type = std::true_type;
 	using copy_constructible = std::false_type;
 	using move_constructible = std::false_type;
     using copy_assignable    = std::true_type;
 	using move_assignable    = std::false_type;
 };
-class BC_Noncontinuous {};
-class BC_Immutable {};
+
+namespace detail { template<class T> using query_is_view_type = typename T::is_view_type; }
 
 //forward declare
-template<int> class Shape;
-
+template<int>
+class Shape;
 
 template<class T>
 struct expression_traits {
@@ -175,47 +184,44 @@ struct expression_traits {
 		 return selector::impl(expression, indicies...);
 	 }
 
-//Succeeds in CUDA version 10 and up, sometimes causes failure with 9.2 and 9.1
-//#if ! defined(__CUDACC__) ||  __CUDACC_VER_MAJOR__ >= 10
-	static constexpr bool is_move_constructible =
-					BC::traits::conditional_detected_t<
-						detail::query_move_constructible, T, std::true_type>::value;
+	using is_move_constructible = BC::traits::conditional_detected_t<
+						detail::query_move_constructible, T, std::true_type>;
 
-	static constexpr bool is_copy_constructible =
-					BC::traits::conditional_detected_t<
-						detail::query_copy_constructible, T, std::true_type>::value;
+	using is_copy_constructible = BC::traits::conditional_detected_t<
+						detail::query_copy_constructible, T, std::true_type>;
 
-	static constexpr bool is_move_assignable 	=
-					BC::traits::conditional_detected_t<
-						detail::query_move_assignable, T, std::true_type>::value;
+	using is_move_assignable = BC::traits::conditional_detected_t<
+						detail::query_move_assignable, T, std::true_type>;
 
-	static constexpr bool is_copy_assignable 	=
-					BC::traits::conditional_detected_t<
-						detail::query_copy_assignable, T, std::true_type>::value;
-//#else
-//		static constexpr bool is_move_constructible = T::move_constructible;
-//		static constexpr bool is_copy_constructible = T::copy_consructible;
-//		static constexpr bool is_move_assignable 	= T::move_assignable;
-//		static constexpr bool is_copy_assignable 	= T::copy_assignable;
-//#endif
+	using is_copy_assignable = BC::traits::conditional_detected_t<
+						detail::query_copy_assignable, T, std::true_type>;
 
-	static constexpr bool is_auto_broadcasted =
-					BC::traits::conditional_detected_t<
-						detail::query_auto_broadcast, T, std::false_type>::value;
+	using is_auto_broadcasted = BC::traits::conditional_detected_t<
+						detail::query_auto_broadcast, T, std::false_type>;
 
-	static constexpr bool requires_greedy_evaluation =
-					BC::traits::conditional_detected_t<
-						detail::query_requires_greedy_evaluation,T, std::false_type>::value;
+	using requires_greedy_evaluation = BC::traits::conditional_detected_t<
+						detail::query_requires_greedy_evaluation,T, std::false_type>;
 
-	static constexpr bool is_bc_type  	 = std::is_base_of<BC_Type, T>::value;
-	static constexpr bool is_array  	 = std::is_base_of<BC_Array, T>::value;
-	static constexpr bool is_view 		 = std::is_base_of<BC_View, T>::value;
-	static constexpr bool is_continuous  = !std::is_base_of<BC_Noncontinuous, T>::value;
+	using is_bc_type = BC::traits::conditional_detected_t<
+						detail::query_is_bc_type, T, std::false_type>;
 
-	static constexpr bool is_expr  		     = std::is_base_of<BC_Expr, T>::value;
-	static constexpr bool is_temporary 	     = std::is_base_of<BC_Temporary, T>::value;
-	static constexpr bool is_stack_allocated = std::is_base_of<BC_Stack_Allocated, T>::value;
-	static constexpr bool is_immutable  	 = std::is_base_of<BC_Immutable, T>::value;
+	using is_array = BC::traits::conditional_detected_t<
+				detail::query_is_tensor_type, T, std::false_type>;
+
+	using is_expr = BC::traits::conditional_detected_t<
+				detail::query_is_expression_type, T, std::false_type>;
+
+	using is_temporary = BC::traits::conditional_detected_t<
+				detail::query_is_temporary_value, T, std::false_type>;
+
+	using is_stack_allocated = BC::traits::conditional_detected_t<
+				detail::query_is_stack_allocated, T, std::false_type>;
+
+	using is_noncontinuous = BC::traits::conditional_detected_t<
+				detail::query_is_noncontinuous_in_memory, T, std::false_type>;
+
+	using is_continuous = BC::traits::truth_type<!is_noncontinuous::value>;
+
 };
 
 template<class T>
@@ -230,8 +236,8 @@ struct blas_expression_traits : expression_traits<T> {
 	using scalar_multiplier_type	= typename detail::remove_scalar_mul<T>::scalar_type;
 	using value_type				= typename T::value_type;
 
-	static constexpr bool is_scalar_multiplied = !std::is_same<remove_scalar_mul_type, T>::value;
-	static constexpr bool is_transposed 		= !std::is_same<remove_transpose_type,  T>::value;
+	using is_scalar_multiplied = BC::traits::truth_type<!std::is_same<remove_scalar_mul_type, T>::value>;
+	using is_transposed = BC::traits::truth_type<!std::is_same<remove_transpose_type,  T>::value>;
 
 	static remove_transpose_type remove_transpose(T expression) { return detail::remove_transpose<T>::rm(expression); }
 	static remove_scalar_mul_type remove_scalar_mul(T expression) { return detail::remove_scalar_mul<T>::rm(expression); }

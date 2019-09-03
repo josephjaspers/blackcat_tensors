@@ -96,12 +96,12 @@ struct Binary_Expression<multichannel_conv2d<System_Tag>, lv, rv>
         		right_evaluated.memptr(), right_evaluated.rows(), right_evaluated.cols(), right_evaluated.dimension(2));
 
         //deallocate if need be
-        if (expression_traits<decltype(left_evaluated)>::is_temporary) {
+        if (expression_traits<decltype(left_evaluated)>::is_temporary::value) {
         	using vt = typename decltype(left_evaluated)::value_type;
 
         	stream.template get_allocator_rebound<vt>().deallocate(left_evaluated.memptr(), left_evaluated.size());
         }
-        if (expression_traits<decltype(right_evaluated)>::is_temporary) {
+        if (expression_traits<decltype(right_evaluated)>::is_temporary::value) {
         	using vt = typename decltype(right_evaluated)::value_type;
 
         	stream.template get_allocator_rebound<vt>().deallocate(right_evaluated.memptr(), right_evaluated.size());

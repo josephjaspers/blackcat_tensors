@@ -21,7 +21,7 @@ template<class> class Tensor_Base;
 
 template<class internal_t>
 auto make_tensor(internal_t internal) {
-	static_assert(BC::tensors::exprs::expression_traits<internal_t>::is_bc_type,
+	static_assert(BC::tensors::exprs::expression_traits<internal_t>::is_bc_type::value,
 			"Make Tensor can only be used with BC_Types");
 
     return Tensor_Base<internal_t>(internal);

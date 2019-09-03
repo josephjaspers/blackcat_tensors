@@ -31,7 +31,7 @@ struct Tensor_Operations {
 private:
 
     #define BC_ASSERT_ASSIGNABLE(literal) \
-    static_assert(exprs::expression_traits<Expression>::is_copy_assignable, \
+    static_assert(exprs::expression_traits<Expression>::is_copy_assignable::value, \
     		"ASSERT COPY ASSIGNABLE: " literal)
 
     const derived& as_derived() const { return static_cast<const derived&>(*this); }
@@ -60,7 +60,7 @@ public:
     }
 
     //specialization for explicit copy operator
-    derived& operator = (const BC::traits::only_if<exprs::expression_traits<Expression>::is_copy_assignable, derived>& param) {
+    derived& operator = (const BC::traits::only_if<exprs::expression_traits<Expression>::is_copy_assignable::value, derived>& param) {
         BC_ASSERT_ASSIGNABLE("derived& operator = (const derived& param)");
         assert_valid(param);
         evaluate(bi_expr< oper::Assign >(param));
@@ -77,7 +77,7 @@ public:
     }
 
     //specialization for explicit copy operator
-    derived& assign(const BC::traits::only_if<exprs::expression_traits<Expression>::is_copy_assignable, derived>& param) {
+    derived& assign(const BC::traits::only_if<exprs::expression_traits<Expression>::is_copy_assignable::value, derived>& param) {
         BC_ASSERT_ASSIGNABLE("derived& operator = (const derived& param)");
         assert_valid(param);
         evaluate(bi_expr< oper::Assign >(param));
@@ -192,8 +192,8 @@ public:
     auto operator *(const Tensor_Operations<param_deriv>& param) const {
 
     	using rv_expression_t = typename Tensor_Operations<param_deriv>::expression_t;
-        static constexpr bool lv_trans = exprs::blas_expression_traits<expression_t>::is_transposed;
-        static constexpr bool rv_trans = exprs::blas_expression_traits<rv_expression_t>::is_transposed;
+        static constexpr bool lv_trans = exprs::blas_expression_traits<expression_t>::is_transposed::value;
+        static constexpr bool rv_trans = exprs::blas_expression_traits<rv_expression_t>::is_transposed::value;
 
         static constexpr bool scalmul = derived::tensor_dimension == 0 || param_deriv::tensor_dimension == 0;
         static constexpr bool gemm    = derived::tensor_dimension == 2 && param_deriv::tensor_dimension == 2;
@@ -263,8 +263,8 @@ public:
 
     template<class right_value>
     void copy(const Tensor_Operations<right_value>& rv) {
-        static_assert(exprs::expression_traits<Expression>::is_copy_assignable, "copy lv must be array");
-        static_assert(exprs::expression_traits<right_value>::is_copy_assignable, "copy rv most be array");
+        static_assert(exprs::expression_traits<Expression>::is_copy_assignable::value, "copy lv must be array");
+        static_assert(exprs::expression_traits<right_value>::is_copy_assignable::value, "copy rv most be array");
         static_assert(Expression::tensor_iterator_dimension <= 1, "copy only accepts continuous");
         static_assert(right_value::tensor_iterator_dimension <= 1, "copy only accepts continuous");
 
@@ -375,7 +375,7 @@ private:
 //#ifdef NDEBUG
     	assert_same_system(tensor); //static_assert same allocation (gpu/cpu)
 
-    	if (BC::tensors::exprs::expression_traits<deriv>::is_auto_broadcasted) {
+    	if (BC::tensors::exprs::expression_traits<deriv>::is_auto_broadcasted::value) {
     		return; //If it will be a broadcast expression do not validate dimensions
     	}
 
@@ -442,7 +442,7 @@ public:
 			class expression_t, 							\
         	class = std::enable_if_t<						\
         					std::is_convertible<p_value_type, typename expression_t::value_type>::value && 							 \
-        					!BC::tensors::exprs::expression_traits<p_value_type>::is_bc_type>							 \
+        					!BC::tensors::exprs::expression_traits<p_value_type>::is_bc_type::value>							 \
 		>        					 																			 \
          auto operator op (const p_value_type& param, const Tensor_Base<expression_t>& tensor) {   \
             using value_type = typename expression_t::value_type;                                                \

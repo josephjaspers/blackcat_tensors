@@ -25,8 +25,8 @@ struct Common_Tools {
 	template<class ValueType, int alpha_mod, bool lv_scalar, bool rv_scalar, class Stream, class lv_scalar_t, class rv_scalar_t>
 	static auto calculate_alpha(Stream stream, lv_scalar_t lv, rv_scalar_t rv) {
 
-		static constexpr bool lv_host_mode = (BC::tensors::exprs::expression_traits<lv_scalar_t>::is_stack_allocated);
-		static constexpr bool rv_host_mode = (BC::tensors::exprs::expression_traits<rv_scalar_t>::is_stack_allocated);
+		static constexpr bool lv_host_mode = BC::tensors::exprs::expression_traits<lv_scalar_t>::is_stack_allocated::value;
+		static constexpr bool rv_host_mode = BC::tensors::exprs::expression_traits<rv_scalar_t>::is_stack_allocated::value;
 		static_assert(lv_host_mode == rv_host_mode || lv_scalar != rv_scalar,
 				"Host and Device Scalars may not be mixed Blas calculations");
 		static constexpr bool host_mode    = lv_host_mode || rv_host_mode;
@@ -119,8 +119,8 @@ struct Common_Tools {
 		 *	to access the shape of the returned value.
 		 */
 
-	    static constexpr bool lv_scalar = blas_expression_traits<Lv>::is_scalar_multiplied;
-	    static constexpr bool rv_scalar = blas_expression_traits<Rv>::is_scalar_multiplied;
+	    static constexpr bool lv_scalar = blas_expression_traits<Lv>::is_scalar_multiplied::value;
+	    static constexpr bool rv_scalar = blas_expression_traits<Rv>::is_scalar_multiplied::value;
 	    using value_type = typename Lv::value_type;
 
 	    auto alpha_lv = blas_expression_traits<Lv>::get_scalar(left);
@@ -142,16 +142,16 @@ struct Common_Tools {
 	    		right_t,
 	    		alpha_t,
 	    		beta_t,
-	    	    blas_expression_traits<Lv>::is_transposed,
-	    	    blas_expression_traits<Rv>::is_transposed,
-	    	    blas_expression_traits<Lv>::is_scalar_multiplied,
-	    	    blas_expression_traits<Rv>::is_scalar_multiplied> { left_, right_, alpha_, beta_ };
+	    	    blas_expression_traits<Lv>::is_transposed::value,
+	    	    blas_expression_traits<Rv>::is_transposed::value,
+	    	    blas_expression_traits<Lv>::is_scalar_multiplied::value,
+	    	    blas_expression_traits<Rv>::is_scalar_multiplied::value> { left_, right_, alpha_, beta_ };
 	}
 
 	template<class Stream, class Contents>
 	static void post_parse_expression_evaluation(Stream stream, Contents contents) {
 		using value_type = typename decltype(contents.alpha)::value_type;
-        BC::traits::constexpr_if<(BC::tensors::exprs::expression_traits<decltype(contents.alpha)>::is_temporary)>(
+        BC::traits::constexpr_if<(BC::tensors::exprs::expression_traits<decltype(contents.alpha)>::is_temporary::value)>(
             BC::traits::bind([&](auto alpha) {
         		stream.template get_allocator_rebound<value_type>().deallocate(alpha, 1);
         	}, 	contents.alpha));

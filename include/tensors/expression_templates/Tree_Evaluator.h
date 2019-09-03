@@ -46,7 +46,7 @@ static void nd_evaluate(const Expression expression, Stream stream) {
 	using system_tag    = typename Stream::system_tag;
 	using nd_evaluator  = typename BC::tensors::exprs::evaluator::Evaluator<system_tag>;
 
-	BC::traits::constexpr_if<expression_traits<Expression>::is_expr> ([&]() {
+	BC::traits::constexpr_if<expression_traits<Expression>::is_expr::value> ([&]() {
 		nd_evaluator::template nd_evaluate<Expression::tensor_iterator_dimension>(expression, stream);
 	});
 }
@@ -149,7 +149,7 @@ evaluate_aliased(Expression expression, Stream stream) {
 
 template<class Array, class Expression, class Stream>
 auto greedy_evaluate(Array array, Expression expr, Stream stream) {
-    static_assert(expression_traits<Array>::is_array, "MAY ONLY EVALUATE TO ARRAYS");
+    static_assert(expression_traits<Array>::is_array::value, "MAY ONLY EVALUATE TO ARRAYS");
     detail::evaluate(make_bin_expr<oper::Assign>(array, expr), stream, std::true_type());
     return array;
 }
@@ -158,7 +158,7 @@ auto greedy_evaluate(Array array, Expression expr, Stream stream) {
 template<
 	class Expression,
 	class Stream,
-	class=std::enable_if_t<expression_traits<Expression>::is_array>
+	class=std::enable_if_t<expression_traits<Expression>::is_array::value>
 >
 static auto greedy_evaluate(Expression expression, Stream stream) {
 	return expression;
@@ -168,7 +168,7 @@ static auto greedy_evaluate(Expression expression, Stream stream) {
 template<
 	class Expression,
 	class Stream,
-	class=std::enable_if_t<expression_traits<Expression>::is_expr>,
+	class=std::enable_if_t<expression_traits<Expression>::is_expr::value>,
 	int=0
 >
 static auto greedy_evaluate(Expression expression, Stream stream) {

@@ -35,7 +35,7 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>
 
     static_assert(lv::tensor_dimension == 1 &&
     				rv::tensor_dimension == 1 &&
-    				blas_expression_traits<rv>::is_transposed,
+    				blas_expression_traits<rv>::is_transposed::value,
     				"GER DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
 
     lv left;
@@ -65,8 +65,8 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>
 			evaluate(expr, stream);
 		}
 
-		if (blas_expression_traits<lv>::is_scalar_multiplied ||
-				blas_expression_traits<rv>::is_scalar_multiplied) {
+		if (blas_expression_traits<lv>::is_scalar_multiplied::value ||
+				blas_expression_traits<rv>::is_scalar_multiplied::value) {
 
 	        auto contents = blas_util::template parse_expression<alpha_mod, beta_mod>(stream, left, right);
 	        auto A = contents.left;
