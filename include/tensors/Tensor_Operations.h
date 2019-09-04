@@ -52,8 +52,8 @@ public:
     template<class pDeriv> BCHOT
     derived& operator = (const Tensor_Operations<pDeriv>& param) {
         BC_ASSERT_ASSIGNABLE("derived& operator = (const Tensor_Operations<pDeriv>& param)");
-//        static_assert(derived::tensor_dimension >= pDeriv::tensor_dimension,
-//        		"BlackCat_Tensors: Operator= is not a valid operation for (reduction) broadcasting");
+        static_assert(derived::tensor_dimension >= pDeriv::tensor_dimension,
+        		"BlackCat_Tensors: Operator= is not a valid operation for (reduction) broadcasting");
         assert_valid(param);
 		evaluate(bi_expr< BC::oper::Assign >(param));
         return as_derived();
@@ -69,8 +69,8 @@ public:
     template<class pDeriv> BCHOT
     derived& assign(const Tensor_Operations<pDeriv>& param) {
         BC_ASSERT_ASSIGNABLE("derived& operator = (const Tensor_Operations<pDeriv>& param)");
-//        static_assert(derived::tensor_dimension >= pDeriv::tensor_dimension,
-//        		"BlackCat_Tensors: Operator= is not a valid operation for (reduction) broadcasting");
+        static_assert(derived::tensor_dimension >= pDeriv::tensor_dimension,
+        		"BlackCat_Tensors: Operator= is not a valid operation for (reduction) broadcasting");
         assert_valid(param);
 		evaluate(bi_expr< BC::oper::Assign >(param));
         return as_derived();
@@ -258,7 +258,17 @@ public:
 
 	template<class rightDeriv>
 	auto multichannel_conv2d(const Tensor_Operations<rightDeriv>& rv) {
-		return bi_expr<BC::tensors::exprs::multichannel_conv2d<system_tag>> (rv);
+		return bi_expr<BC::tensors::exprs::multichannel_conv2d> (rv);
+	}
+
+	template<class rightDeriv>
+	auto multichannel_conv2d_data_backwards(const Tensor_Operations<rightDeriv>& rv) {
+		return bi_expr<BC::tensors::exprs::multichannel_conv2d_data_backwards> (rv);
+	}
+
+	template<class rightDeriv>
+	auto multichannel_conv2d_kernel_backwards(const Tensor_Operations<rightDeriv>& rv) {
+		return bi_expr<BC::tensors::exprs::multichannel_conv2d_kernel_backwards> (rv);
 	}
 
     template<class right_value>

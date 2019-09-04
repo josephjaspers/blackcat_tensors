@@ -277,7 +277,10 @@ struct optimizer<Binary_Expression<op, lv, rv>, std::enable_if_t<oper::operation
 //------------------------------Non linear-------------------------------------------//
 
 template<class op, class lv, class rv>
-struct optimizer<Binary_Expression<op, lv, rv>, std::enable_if_t<oper::operation_traits<op>::is_nonlinear_operation>>:
+struct optimizer<
+Binary_Expression<op, lv, rv>, std::enable_if_t<
+	oper::operation_traits<op>::is_nonlinear_operation &&
+	!expression_traits<Binary_Expression<op, lv, rv>>::requires_greedy_evaluation::value>>:
  binary_optimizer_default<op, lv, rv> {
 
     static constexpr bool entirely_blas_expr = false;

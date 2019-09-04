@@ -20,9 +20,9 @@ namespace tensors {
 namespace exprs {
 namespace functions {
 namespace convolutions {
-
 template<class SystemTag>
 struct Convolution_Implementation;
+}
 
 /**
  * 2d Convolution of a 3d tensor with multiple 3d kernels.
@@ -33,8 +33,8 @@ template<class Stream, class Output, class Image, class Kernel>
 static void convolution_common_assert(
 		Stream stream,
 		Output output,
-		Image krnl,
-		Kernel img,
+		Kernel krnl,
+		Image img,
 		BC::size_t padding=0,
 		BC::size_t stride=1) {
 
@@ -46,7 +46,6 @@ static void convolution_common_assert(
 			"Kernel must have same system_tag as Stream argument");
 	static_assert(std::is_same<system_tag, typename Image::system_tag>::value,
 			"Image must have same system_tag as Stream argument");
-
 	static_assert(Image::tensor_dimension == Kernel::tensor_dimension-1 ||
 			Image::tensor_dimension == Kernel::tensor_dimension,
 			"img tensor_dimension must equal krnl tensor_dimension - 1");
@@ -54,12 +53,15 @@ static void convolution_common_assert(
 			Output::tensor_dimension == Kernel::tensor_dimension,
 			"output tensor_dimension must equal krnl tensor_dimension - 1");
 
-	BC_ASSERT(output.cols() == img.cols() + padding - krnl.cols() + 1,
+	BC_ASSERT(output.cols() == (img.cols() + padding*2 - krnl.cols() + 1),
 			"Invalid output column dimension");
-	BC_ASSERT(output.rows() == img.rows() + padding - krnl.rows() + 1,
+	BC_ASSERT(output.rows() == (img.rows() + padding*2 - krnl.rows() + 1),
 			"Invalid output column dimension");
 	BC_ASSERT(output.dimension(2) == krnl.dimension(3),
 			"Invalid output column dimension");
+	BC_ASSERT(padding >= 0, "Padding cannot be a negative value");
+	BC_ASSERT(stride >= 1, "Stride must be greater than 0");
+
 }
 
 
@@ -69,22 +71,75 @@ static void conv2d(
 			Output output,
 			Kernel krnl,
 			Image img,
-			BC::size_t stride=1, BC::size_t padding=0) {
+			BC::size_t padding=0,
+			BC::size_t stride=1) {
 
 	convolution_common_assert(
 			stream,
 			output,
 			krnl,
 			img,
-			stride,
-			padding);
+			padding,
+			stride);
 
 	using system_tag = typename Stream::system_tag;
-	using implementation = Convolution_Implementation<system_tag>;
-	implementation::conv2d(stream, output, krnl, img);
+	using implementation = convolutions::Convolution_Implementation<system_tag>;
+
+	stream.enqueue([&](){
+		implementation::conv2d(output, krnl, img, padding, stride);
+	});
 }
 
+template<class Stream, class Output, class Image, class Kernel>
+static void conv2d_data_backwards(
+			Stream stream,
+			Image img,
+			Kernel krnl,
+			Output output,
+			BC::size_t padding=0, BC::size_t stride=1) {
+
+	convolution_common_assert(
+			stream,
+			output,
+			krnl,
+			img,
+			padding,
+			stride);
+
+	using system_tag = typename Stream::system_tag;
+	using implementation = convolutions::Convolution_Implementation<system_tag>;
+
+	stream.enqueue([&](){
+		implementation::conv2d_data_backwards(output, krnl, img);
+	});
 }
+
+template<class Stream, class Output, class Image, class Kernel>
+static void conv2d_kernel_backwards(
+			Stream stream,
+			Kernel krnl,
+			Image img,
+			Output output,
+			BC::size_t padding=0, BC::size_t stride=1) {
+
+	convolution_common_assert(
+			stream,
+			output,
+			krnl,
+			img,
+			padding,
+			stride);
+
+	using system_tag = typename Stream::system_tag;
+	using implementation = convolutions::Convolution_Implementation<system_tag>;
+	stream.enqueue([&](){
+		implementation::conv2d_kernel_backwards(output, krnl, img);
+	});
+}
+
+
+
+
 }
 }
 }
