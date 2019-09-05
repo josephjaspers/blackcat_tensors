@@ -40,9 +40,19 @@ private:
 
 public:
 
+	BC::Shape<3> get_input_shape() const { return m_input_shape; }
+	BC::Shape<3> get_output_shape() const { return m_output_shape; }
+	BC::Shape<4> get_batched_input_shape() const { return m_output_shape; }
+	BC::Shape<4> get_batched_output_shape() const { return m_batched_output_shape; }
+
 	BC::size_t rows, cols, depth;
 	BC::size_t krnl_rows, krnl_cols, nkrnls;
 	BC::size_t padding, stride;
+
+	BC::Shape<3> m_input_shape;
+	BC::Shape<4> m_batched_input_shape;
+	BC::Shape<3> m_output_shape;
+	BC::Shape<4> m_batched_output_shape;
 
 	template<class Shape>
 	Convolution(
@@ -64,20 +74,26 @@ public:
 		nkrnls(nkrnls),
 		padding(padding),
 		stride(stride),
-		w(krnl_rows, krnl_cols, depth, nkrnls)
+		w(krnl_rows, krnl_cols, depth, nkrnls),
+		m_input_shape(rows, cols, depth),
+		m_output_shape(rows + padding*2 + 1 - krnl_rows,
+				cols + padding*2 + 1 - krnl_cols, nkrnls),
+		m_batched_input_shape(rows, cols, depth, this->batch_size()),
+		m_batched_output_shape(rows + padding*2 + 1 - krnl_rows,
+				cols + padding*2 + 1 - krnl_cols, nkrnls, this->batch_size())
 	{
 		w.randomize(0, 3);
 	}
 
 	template<class Matrix>
 	auto forward_propagation(const Matrix& x) {
-		return w.conv2d(x);
+		return w.multichannel_conv2d(x);
 	}
 
 	template<class X, class Delta>
 	auto back_propagation(const X& x, const Delta& dy) {
 		w_gradients -= x.conv2d_filter_backwards(dy);
-		return w.conv2d_data_backwards(dy);
+		return w.multichannel_conv2d_data_backwards(dy);
 	}
 
 	void update_weights() {
@@ -92,6 +108,23 @@ public:
 
 	void load(Layer_Loader& loader) {
 		loader.load_variable(w, "w");
+	}
+
+
+	void set_batch_size(BC::size_t batch_sz) {
+		Layer_Base::set_batch_size(batch_sz);
+
+		for (int i = 0; i < input_tensor_dimension::value; ++i) {
+			m_batched_input_shape[i] = m_input_shape[i];
+		}
+		m_batched_input_shape[input_tensor_dimension::value] = batch_sz;
+
+
+		for (int i = 0; i < output_tensor_dimension::value; ++i) {
+			m_batched_output_shape[i] = m_output_shape[i];
+		}
+		m_batched_output_shape[output_tensor_dimension::value] = batch_sz;
+
 	}
 
 	auto& get_weight() const { return w; }

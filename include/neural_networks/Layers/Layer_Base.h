@@ -81,6 +81,12 @@ public:
 		m_additional_architecture_features = "";
 	}
 
+	///get_shape must be shadowed (over-ridden) for Convolution/layers that expect non-vector input/outputs
+	BC::Shape<1> get_input_shape() const { return BC::Shape<1>(m_input_sz); }
+	BC::Shape<1> get_output_shape() const { return BC::Shape<1>(m_output_sz); }
+	BC::Shape<2> get_batched_input_shape() const { return BC::Shape<2>(m_input_sz, m_batch_sz); }
+	BC::Shape<2> get_batched_output_shape() const { return BC::Shape<2>(m_output_sz, m_batch_sz); }
+
 	BC::size_t  input_size() const { return m_input_sz; }
 	BC::size_t  output_size() const { return m_output_sz; }
 	BC::size_t  batch_size()   const { return m_batch_sz; }

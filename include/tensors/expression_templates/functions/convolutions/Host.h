@@ -31,7 +31,10 @@ struct Convolution_Implementation<BC::host_tag> {
 				Output output,
 				Kernel krnl,
 				Image img,
-				size_t padding=0, size_t stride=1) {
+				size_t padding=0,
+				size_t stride=1,
+				typename Output::value_type alpha=1,
+				typename Output::value_type beta=0) {
 
 		BC::size_t numb_krnls = krnl.dimension(3);
 		BC::size_t depth = krnl.dimension(2);
@@ -54,7 +57,7 @@ struct Convolution_Implementation<BC::host_tag> {
 							}
 						}
 					}
-					output(r, c, k) = sum;
+					output(r, c, k) = output(r, c, k) * beta + sum * alpha;
 				}
 			}
 		}
@@ -66,10 +69,19 @@ struct Convolution_Implementation<BC::host_tag> {
 				Delta delta,
 				Kernel krnl,
 				Image img,
-				size_t stride=1, size_t padding=0) {
+				size_t stride=1,
+				size_t padding=0,
+				typename Image::value_type alpha=1,
+				typename Image::value_type beta=0) {
 
 		BC::size_t numb_krnls = krnl.dimension(3);
 		BC::size_t depth = krnl.dimension(2);
+
+		if (alpha != 1) {
+			for (BC::size_t i = 0; i < img.size(); ++i) {
+				img[i] *= alpha;
+			}
+		}
 
 		for (int c = -padding; c < img.cols() + padding - krnl.cols() + 1; c += stride) {
 			for (int r = -padding; r < img.rows() + padding - krnl.rows() + 1; r += stride) {
@@ -79,7 +91,7 @@ struct Convolution_Implementation<BC::host_tag> {
 							for (int d = 0; d < depth; ++d) {
 								if (c+kc >= 0 && c+kc < img.cols() &&
 									r+kr >= 0 && r+kr < img.rows()) {
-									img(r+kr, c+kc, d) += krnl(kr, kc, d, k) * delta(r, c, k);
+									img(r+kr, c+kc, d) += krnl(kr, kc, d, k) * delta(r, c, k) * alpha;
 								}
 							}
 						}
@@ -95,7 +107,16 @@ struct Convolution_Implementation<BC::host_tag> {
 				Output output,
 				Kernel krnl,
 				Image img,
-				size_t stride=1, size_t padding=0) {
+				size_t stride=1,
+				size_t padding=0,
+				typename Image::value_type alpha=1,
+				typename Image::value_type beta=0) {
+
+		if (beta != 1) {
+			for (BC::size_t i = 0; i < krnl.size(); ++i) {
+				krnl[i] *= beta;
+			}
+		}
 
 		BC::size_t numb_krnls = krnl.dimension(3);
 		BC::size_t depth = krnl.dimension(2);
@@ -108,7 +129,7 @@ struct Convolution_Implementation<BC::host_tag> {
 							for (int d = 0; d < depth; ++d) {
 								if (c+kc >= 0 && c+kc < img.cols() &&
 									r+kr >= 0 && r+kr < img.rows()) {
-									krnl(kr, kc, d, k) += img(r+kr, c+kc, d) * output(r, c, k);
+									krnl(kr, kc, d, k) += img(r+kr, c+kc, d) * output(r, c, k) * alpha;
 								}
 							}
 						}

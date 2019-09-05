@@ -253,6 +253,7 @@ public:
 	}
 
 	void set_batch_size(int bs) {
+		Layer_Base::set_batch_size(bs);
 		for (auto& delta: reference_list(dc, df, dz, di, do_, c, dy)) {
 			delta = mat(this->output_size(), bs);
 		}

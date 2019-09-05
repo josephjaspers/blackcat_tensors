@@ -2,6 +2,8 @@
 #include "../../include/BlackCat_NeuralNetworks.h"
 #include <chrono>
 
+//#include "cuda_profiler_api.h"
+
 template<class System>
 auto load_mnist(System system, const char* mnist_dataset, int batch_size, int samples) {
 
@@ -68,6 +70,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	cube& inputs = data.first;
 	cube& outputs = data.second;
 
+//	cudaProfilerStart();
 	std::cout << " training..." << std::endl;
 	auto start = std::chrono::system_clock::now();
 	for (int i = 0; i < epochs; ++i){
@@ -78,6 +81,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 			network.update_weights();
 		}
 	}
+//	cudaProfilerStop();
 
 	//	network.save("mnist_test_feedforward"); //Uncomment to add saving/loading
 	//	network.load("mnist_test_feedforward");

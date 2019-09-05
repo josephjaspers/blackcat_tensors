@@ -68,10 +68,10 @@ struct Layer_Manager: Layer {
 
 	void set_batch_size(BC::size_t batch_sz) {
 		Layer::set_batch_size(batch_sz);
-		m_input_cache.init_batched(batched_input_tensor_type(Layer::input_size(), batch_sz));
+		m_input_cache.init_batched(batched_input_tensor_type(Layer::get_batched_input_shape()));
 
 		if (layer_traits<Layer>::greedy_evaluate_delta::value) {
-			m_delta_cache.init_batched(batched_output_tensor_type(Layer::output_size(), batch_sz));
+			m_delta_cache.init_batched(batched_output_tensor_type(Layer::get_batched_output_shape()));
 		}
 	}
 

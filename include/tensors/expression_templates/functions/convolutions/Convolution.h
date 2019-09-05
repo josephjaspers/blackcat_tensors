@@ -72,7 +72,9 @@ static void conv2d(
 			Kernel krnl,
 			Image img,
 			BC::size_t padding=0,
-			BC::size_t stride=1) {
+			BC::size_t stride=1,
+			typename Output::value_type alpha=1,
+			typename Output::value_type beta=0) {
 
 	convolution_common_assert(
 			stream,
@@ -96,7 +98,10 @@ static void conv2d_data_backwards(
 			Image img,
 			Kernel krnl,
 			Output output,
-			BC::size_t padding=0, BC::size_t stride=1) {
+			BC::size_t padding=0,
+			BC::size_t stride=1,
+			typename Output::value_type alpha=1,
+			typename Output::value_type beta=0) {
 
 	convolution_common_assert(
 			stream,
@@ -120,7 +125,10 @@ static void conv2d_kernel_backwards(
 			Kernel krnl,
 			Image img,
 			Output output,
-			BC::size_t padding=0, BC::size_t stride=1) {
+			BC::size_t padding=0,
+			BC::size_t stride=1,
+			typename Output::value_type alpha=1,
+			typename Output::value_type beta=0) {
 
 	convolution_common_assert(
 			stream,

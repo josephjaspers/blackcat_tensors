@@ -32,9 +32,8 @@ struct Shape {
         init(BC::utility::make_array(ints...));
     }
 
-    template<int x> BCINLINE
+    template<int x, class=std::enable_if_t<(x >= dims)>> BCINLINE
     Shape(const Shape<x>& shape) {
-        static_assert(x >= dims, "Shape Construction internal error");
         for (int i = 0; i < dims; ++i) {
             m_inner_shape[i] = shape.m_inner_shape[i];
             m_block_shape[i] = shape.m_block_shape[i];
