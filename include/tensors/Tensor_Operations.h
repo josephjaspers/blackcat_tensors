@@ -257,17 +257,17 @@ public:
 	// --------------- host_to_device/device_to_host copy function --------------- //
 
 	template<class rightDeriv>
-	auto multichannel_conv2d(const Tensor_Operations<rightDeriv>& rv) {
+	auto multichannel_conv2d(const Tensor_Operations<rightDeriv>& rv) const {
 		return bi_expr<BC::tensors::exprs::multichannel_conv2d> (rv);
 	}
 
 	template<class rightDeriv>
-	auto multichannel_conv2d_data_backwards(const Tensor_Operations<rightDeriv>& rv) {
+	auto multichannel_conv2d_data_backwards(const Tensor_Operations<rightDeriv>& rv) const {
 		return bi_expr<BC::tensors::exprs::multichannel_conv2d_data_backwards> (rv);
 	}
 
 	template<class rightDeriv>
-	auto multichannel_conv2d_kernel_backwards(const Tensor_Operations<rightDeriv>& rv) {
+	auto multichannel_conv2d_kernel_backwards(const Tensor_Operations<rightDeriv>& rv) const {
 		return bi_expr<BC::tensors::exprs::multichannel_conv2d_kernel_backwards> (rv);
 	}
 

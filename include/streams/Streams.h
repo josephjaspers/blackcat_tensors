@@ -28,8 +28,7 @@ static auto select_on_get_stream(const T& type) {
 	static_assert(std::is_same<system_tag, host_tag>::value ||
 				std::is_same<system_tag, device_tag>::value, "must be same ");
 
-	return
-			traits::constexpr_ternary<defines_get_stream>(
+	return traits::constexpr_ternary<defines_get_stream>(
 					traits::bind([](const auto& type) {
 						return type.get_stream();
 			}, type),

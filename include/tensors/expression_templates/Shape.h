@@ -79,9 +79,9 @@ struct Shape {
 
     template<int D> BCINLINE
     BC::size_t dims_to_index(const BC::utility::array<D, int>& var) const {
-        BC::size_t  index = var[0];
+        BC::size_t index = var[D-1];
         for(int i = 1; i < dims; ++i) {
-            index += leading_dimension(i - 1) * var[i];
+            index += leading_dimension(i - 1) * var[D-1-i];
         }
         return index;
     }

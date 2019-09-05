@@ -116,12 +116,12 @@ static auto make_ranged_slice(Parent& parent, BC::size_t from, BC::size_t to) {
 						parent.memptr() + index);
 }
 
-template<class Parent, int Dimension>
-static auto make_view(Parent& parent, BC::utility::array<Dimension, BC::size_t> shape) {
-	using slice_type = slice_type_from_parent<Dimension, Parent>;
+template<class Parent, class ShapeLike>
+static auto make_view(Parent& parent, ShapeLike shape) {
+	using slice_type = slice_type_from_parent<ShapeLike::tensor_dimension, Parent>;
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
-						BC::Shape<Dimension>(shape),
+						BC::Shape<ShapeLike::tensor_dimension>(shape),
 						parent.memptr());
 }
 
@@ -134,16 +134,17 @@ static auto make_scalar(Parent& parent, BC::size_t index) {
 						parent.memptr() + index);
 }
 
-template<class Parent, int Dimension>
+template<class Parent, class ShapeLike>
 auto make_chunk(Parent& parent,
 			BC::utility::array<Parent::tensor_dimension, BC::size_t> index_points,
-			BC::utility::array<Dimension, int> shape) {
-	static_assert(Dimension > 1, "TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, USE SCALAR OR RANGED_SLICE OTHERWISE");
+			ShapeLike shape) {
+	static_assert(ShapeLike::tensor_dimension > 1,
+			"TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, USE SCALAR OR RANGED_SLICE OTHERWISE");
 
-	using slice_type = slice_type_from_parent<Dimension, Parent, BC_Noncontinuous>;
+	using slice_type = slice_type_from_parent<ShapeLike::tensor_dimension, Parent, BC_Noncontinuous>;
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
-						Shape<Dimension>(shape, parent.get_shape()),
+						Shape<ShapeLike::tensor_dimension>(shape, parent.get_shape()),
 						parent.memptr() + parent.dims_to_index(index_points));
 }
 

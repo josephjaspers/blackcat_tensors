@@ -33,7 +33,7 @@ template<typename T> __global__  static void eval2d(T t) {
 
         int m = blockIdx.y * blockDim.y + threadIdx.y;
         for (; m < t.rows(); m += blockDim.y * gridDim.y) {
-            t(m, n);
+            t(n, m);
         }
     }
 }
@@ -46,7 +46,7 @@ template<typename T> __global__ static void eval3d(T t) {
 
             int m = blockIdx.z * blockDim.z + threadIdx.z;
             for (; m < t.rows(); m += blockDim.z * gridDim.z) {
-                t(m,n,k);
+                t(k,n,m);
             }
         }
     }
@@ -63,7 +63,7 @@ template<typename T> __global__ static void eval4d(T t) {
             for (; n < t.cols(); n += blockDim.z * gridDim.z) {
 
                 for (int m = 0; m < t.rows(); ++m) {
-                    t(m,n,k,l);
+                    t(l, k, n, m);
                 }
             }
         }
@@ -83,7 +83,7 @@ template<typename T> __global__ static void eval5d(T t) {
                 for (int n = 0; n < t.dimension(1); ++n) {
 
                     for (int m = 0; m < t.dimension(0); ++m) {
-                        t(m, n, k, l, p);
+                        t(p, l, k, n, m);
                     }
                 }
             }

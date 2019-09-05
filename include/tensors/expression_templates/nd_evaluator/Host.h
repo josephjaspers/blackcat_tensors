@@ -22,14 +22,14 @@ struct evaluator_impl {
     static void impl(Expression& expression, indexes... indicies) {
         BC_omp_for__
         for (int i = 0; i < expression.dimension(Dimension-1); ++i) {
-        	evaluator_impl<Dimension-1>::impl(expression, i, indicies...);
+        	evaluator_impl<Dimension-1>::impl(expression, indicies..., i);
         }
     }
     template<class Expression, class... indexes>
     static void endpoint_call(Expression expression, indexes... indicies) {
         BC_omp_for__
         for (int i = 0; i < expression.dimension(Dimension-1); ++i) {
-        	evaluator_impl<Dimension-1>::impl(expression, i, indicies...);
+        	evaluator_impl<Dimension-1>::impl(expression, indicies..., i);
         }
     }
 };
@@ -39,7 +39,7 @@ struct evaluator_impl<1> {
     static void impl(Expression& expression, indexes... indicies) {
         BC_omp_for__
         for (int i = 0; i < expression.dimension(0); ++i) {
-            expression(i, indicies...);
+            expression(indicies..., i);
         }
     }
     template<class Expression>
@@ -53,7 +53,7 @@ struct evaluator_impl<1> {
     static void endpoint_call(Expression expression, indexes... indicies) {
         BC_omp_for__
         for (int i = 0; i < expression.dimension(0); ++i) {
-            expression(i, indicies...);
+            expression(indicies..., i);
         }
     }
     template<class Expression>

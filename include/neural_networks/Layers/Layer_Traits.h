@@ -59,7 +59,7 @@ struct layer_traits {
 	using input_tensor_dimension
 			= BC::traits::conditional_detected_t<detail::query_input_tensor_dimension, T, BC::traits::Integer<1>>;
 	using output_tensor_dimension
-			= BC::traits::conditional_detected_t<detail::query_output_tensor_dimension, T, BC::traits::Integer<1>>;
+			= BC::traits::conditional_detected_t<detail::query_output_tensor_dimension, T, input_tensor_dimension>;
 
 	using forward_requires_inputs
 			= BC::traits::conditional_detected_t<detail::query_forward_requires_inputs, T, std::true_type>;

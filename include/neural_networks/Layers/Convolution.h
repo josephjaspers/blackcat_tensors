@@ -25,7 +25,7 @@ struct Convolution : public Layer_Base {
 	using allocator_type = BC::Allocator<SystemTag, ValueType>;
 
 	using tensor4 = BC::Tensor<4, value_type, allocator_type>;
-	using tensor3 = BC::Cube<value_type, allocator_type>;
+	using cube = BC::Cube<value_type, allocator_type>;
 
 	using greedy_evaluate_delta = std::true_type;
 	using input_tensor_dimension = BC::traits::Integer<3>;
@@ -42,7 +42,7 @@ public:
 
 	BC::Shape<3> get_input_shape() const { return m_input_shape; }
 	BC::Shape<3> get_output_shape() const { return m_output_shape; }
-	BC::Shape<4> get_batched_input_shape() const { return m_output_shape; }
+	BC::Shape<4> get_batched_input_shape() const { return m_batched_input_shape; }
 	BC::Shape<4> get_batched_output_shape() const { return m_batched_output_shape; }
 
 	BC::size_t rows, cols, depth;
@@ -54,14 +54,13 @@ public:
 	BC::Shape<3> m_output_shape;
 	BC::Shape<4> m_batched_output_shape;
 
-	template<class Shape>
 	Convolution(
 			BC::size_t rows,
 			BC::size_t cols,
 			BC::size_t depth,
-			BC::size_t krnl_rows,
-			BC::size_t krnl_cols,
-			BC::size_t nkrnls,
+			BC::size_t krnl_rows=3,
+			BC::size_t krnl_cols=3,
+			BC::size_t nkrnls=32,
 			BC::size_t padding=0,
 			BC::size_t stride=1) :
 		Layer_Base(__func__,
@@ -87,13 +86,25 @@ public:
 
 	template<class Matrix>
 	auto forward_propagation(const Matrix& x) {
-		return w.multichannel_conv2d(x);
+		return x;
+//		cube y(26, 26, nkrnls);
+//		for (auto x_ : x) {
+//			y[0] = w.multichannel_conv2d(x_);
+//		}
+//		return y;
 	}
 
 	template<class X, class Delta>
 	auto back_propagation(const X& x, const Delta& dy) {
-		w_gradients -= x.conv2d_filter_backwards(dy);
-		return w.multichannel_conv2d_data_backwards(dy);
+		return dy;
+//		for (int i = 0; i < this->batch_size(); ++i)
+//			w_gradients -= x[i].multichannel_conv2d_kernel_backwards(dy[i]);
+//
+//		tensor4 dx(m_batched_input_shape);
+//		for (int i = 0; i < this->batch_size(); ++i) {
+//			dx[i] = w.multichannel_conv2d_data_backwards(dy[i]);
+//		}
+//		return dx;
 	}
 
 	void update_weights() {
@@ -110,21 +121,20 @@ public:
 		loader.load_variable(w, "w");
 	}
 
-
 	void set_batch_size(BC::size_t batch_sz) {
 		Layer_Base::set_batch_size(batch_sz);
 
-		for (int i = 0; i < input_tensor_dimension::value; ++i) {
-			m_batched_input_shape[i] = m_input_shape[i];
-		}
-		m_batched_input_shape[input_tensor_dimension::value] = batch_sz;
+		m_batched_input_shape = BC::Shape<4>(
+				m_input_shape.m_inner_shape[0],
+				m_input_shape.m_inner_shape[1],
+				m_input_shape.m_inner_shape[2],
+				batch_sz);
 
-
-		for (int i = 0; i < output_tensor_dimension::value; ++i) {
-			m_batched_output_shape[i] = m_output_shape[i];
-		}
-		m_batched_output_shape[output_tensor_dimension::value] = batch_sz;
-
+		m_batched_output_shape = BC::Shape<4>(
+				m_output_shape.m_inner_shape[0],
+				m_output_shape.m_inner_shape[1],
+				m_output_shape.m_inner_shape[2],
+				batch_sz);
 	}
 
 	auto& get_weight() const { return w; }
