@@ -25,15 +25,31 @@ struct Layer_Manager: Layer {
 	template<class... Args>
 	Layer_Manager(Args... args):
 		Layer(args...) {
-		m_input_cache.init_tensor(Layer::input_size());
+		m_input_cache.init_tensor(Layer::get_input_shape());
 
 		if (layer_traits<Layer>::greedy_evaluate_delta::value) {
-			m_delta_cache.init_tensor(Layer::output_size());
+			m_delta_cache.init_tensor(Layer::get_output_shape());
 		}
 	} 	//TODO must change once we support more dimension for Neural Nets
 
 	using input_tensor_dimension = typename layer_traits<Layer>::input_tensor_dimension;
 	using output_tensor_dimension = typename layer_traits<Layer>::output_tensor_dimension;
+
+	static_assert(input_tensor_dimension::value == decltype(std::declval<Layer>().get_input_shape())::tensor_dimension,
+			"Input tensor_dimension must be equal to Layer::get_input_shape() dimension"
+			"\n, did you forget to override get_input_shape()?");
+
+	static_assert(output_tensor_dimension::value == decltype(std::declval<Layer>().get_output_shape())::tensor_dimension,
+			"output tensor_dimension must be equal to Layer::get_input_shape() dimension"
+			"\n, did you forget to override get_output_shape()?");
+
+	static_assert(input_tensor_dimension::value+1 == decltype(std::declval<Layer>().get_batched_input_shape())::tensor_dimension,
+			"Input tensor_dimension must be equal to Layer::get_input_shape() dimension"
+			"\n, did you forget to override get_batched_input_shape()?");
+
+	static_assert(output_tensor_dimension::value+1 == decltype(std::declval<Layer>().get_batched_output_shape())::tensor_dimension,
+			"output tensor_dimension must be equal to Layer::get_input_shape() dimension"
+			"\n, did you forget to override get_batched_output_shape()?");
 
 	using value_type = typename layer_traits<Layer>::value_type;
 

@@ -17,6 +17,7 @@ namespace exprs {
 template<int dims>
 struct Shape {
 
+	static constexpr int tensor_dimension = dims;
 	static_assert(dims >= 0, "BC: SHAPE OBJECT MUST HAVE AT LEAST 0 OR MORE DIMENSIONS");
 
     BC::utility::array<dims, int> m_inner_shape = {0};
@@ -114,6 +115,8 @@ private:
 template<>
 struct Shape<0> {
 
+	static constexpr int tensor_dimension = 0;
+
     template<int x> BCINLINE
     Shape(const Shape<x>&) {} //empty
 
@@ -139,6 +142,8 @@ struct Shape<0> {
 
 template<>
 struct Shape<1> {
+
+	static constexpr int tensor_dimension = 1;
 
     BC::utility::array<1, int> m_inner_shape = {0};
     BC::utility::array<1, int> m_block_shape = {1};
@@ -176,7 +181,11 @@ struct Shape<1> {
     BCINLINE const auto& outer_shape() const { return m_block_shape; }
 
     template<class... integers>
-    BCINLINE constexpr BC::size_t dims_to_index(BC::size_t i, integers... ints) const {
+    BCINLINE BC::size_t dims_to_index(BC::size_t i, integers... ints) const {
+    	return dims_to_index(ints...);
+    }
+    template<class... integers>
+    BCINLINE BC::size_t dims_to_index(BC::size_t i) const {
     	return m_block_shape[0] * i;
     }
 

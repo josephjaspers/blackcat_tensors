@@ -1,12 +1,12 @@
 /*
- * FeedForward.cu
+ * Flatten.cu
  *
  *  Created on: Jan 28, 2018
  *	  Author: joseph
  */
 
-#ifndef BLACKCATTENSORS_NEURALNETWORKS_LAYERS_FEEDFORWARD_H_
-#define BLACKCATTENSORS_NEURALNETWORKS_LAYERS_FEEDFORWARD_H_
+#ifndef BLACKCATTENSORS_NEURALNETWORKS_LAYERS_FLATTEN_H_
+#define BLACKCATTENSORS_NEURALNETWORKS_LAYERS_FLATTEN_H_
 
 #include "Layer_Base.h"
 
@@ -15,95 +15,85 @@ namespace nn {
 
 template<
 	class SystemTag,
-	class ValueType>
-struct FeedForward : public Layer_Base {
+	class ValueType,
+	class InputTensorDimension=BC::traits::Integer<3>>
+struct Flatten : public Layer_Base {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 	using allocator_type = BC::Allocator<SystemTag, ValueType>;
 
-	using mat = BC::Matrix<value_type, allocator_type>;
-	using vec = BC::Vector<value_type, allocator_type>;
-
 	using greedy_evaluate_delta = std::true_type;
+
+	using input_tensor_dimension = InputTensorDimension;
+	using output_tensor_dimension = BC::traits::Integer<1>;
+
+	using requires_inputs = std::false_type;
 
 private:
 
-	ValueType lr = Layer_Base::default_learning_rate;
-
-	mat w;  //weights
-	vec b;  //biases
-
-	mat w_gradients;
-	vec b_gradients;
+	BC::Shape<input_tensor_dimension::value> m_input_shape;
+	BC::Shape<input_tensor_dimension::value+1> m_batched_input_shape;
+	BC::Shape<1> m_output_shape;
+	BC::Shape<2> m_batched_output_shape;
 
 public:
 
-	FeedForward(BC::size_t inputs, BC::size_t outputs) :
-		Layer_Base(__func__, inputs, outputs),
-		w(outputs, inputs),
-		b(outputs),
-		w_gradients(outputs, inputs),
-		b_gradients(outputs)
+	Flatten(BC::Shape<input_tensor_dimension::value> input_shape):
+		Layer_Base(__func__, input_shape.size(), input_shape.size()),
+		m_input_shape(input_shape),
+		m_output_shape(input_shape.size()),
+		m_batched_output_shape(input_shape.size(), 1)
 	{
-		w.randomize(-2, 2);
-		b.randomize(-2, 2);
-		w_gradients.zero();
-		b_gradients.zero();
+		set_batch_size(1);
 	}
 
 	template<class Matrix>
 	auto forward_propagation(const Matrix& x) {
-		return w * x + b;
+		return BC::reshape(x, m_batched_output_shape);
 	}
 
 	template<class X, class Delta>
 	auto back_propagation(const X& x, const Delta& dy) {
-		w_gradients -= dy  * x.t();
-		b_gradients -= dy;
-		return w.t() * dy;
+		return BC::reshape(dy, m_batched_input_shape);
 	}
 
-	void update_weights() {
-		ValueType lr = this->lr / this->batch_size();
-		w += w_gradients * lr;
-		b += b_gradients * lr;
-		w_gradients.zero();
-		b_gradients.zero();
+
+	void set_batch_size(BC::size_t batch_sz) {
+		Layer_Base::set_batch_size(batch_sz);
+
+		BC::utility::array<input_tensor_dimension::value+1, BC::size_t> batched_shape;
+		for (int i = 0; i < input_tensor_dimension::value; ++i) {
+			batched_shape[i] = m_input_shape.dimension(i);
+		}
+		batched_shape[input_tensor_dimension::value] = batch_sz;
+		m_batched_input_shape = BC::Shape<input_tensor_dimension::value+1>(batched_shape);
+		m_batched_output_shape =  BC::Shape<2>(this->input_size(), batch_sz);
 	}
 
-	void save(Layer_Loader& loader) {
-		loader.save_variable(w, "w");
-		loader.save_variable(b, "b");
-	}
+	auto get_input_shape() const { return m_input_shape; }
+	auto get_output_shape() const { return m_output_shape; }
+	auto get_batched_input_shape() const { return m_batched_input_shape; }
+	auto get_batched_output_shape() const { return m_batched_output_shape; }
 
-	void load(Layer_Loader& loader) {
-		loader.load_variable(w, "w");
-		loader.load_variable(b, "b");
-	}
-
-	auto& get_weight() const { return w; }
-	auto& get_weight() { return w; }
-	auto& get_bias() const { return b; }
-	auto& get_bias() { return b; }
-	auto get_learning_rate() const { return lr; }
 };
 
 #ifndef BC_CLING_JIT
-template<class ValueType, class SystemTag>
-FeedForward<SystemTag, ValueType> feedforward(SystemTag system_tag, int inputs, int outputs) {
-	return FeedForward<SystemTag, ValueType>(inputs, outputs);
+template<class ValueType, class SystemTag, int X>
+auto flatten(SystemTag system_tag, Shape<X> shape) {
+	return Flatten<SystemTag, ValueType, BC::traits::Integer<X>>(shape);
 }
 #endif
 
-template<class SystemTag>
-auto feedforward(SystemTag system_tag, int inputs, int outputs) {
-	return FeedForward<SystemTag, typename SystemTag::default_floating_point_type>(inputs, outputs);
+template<class SystemTag, int X>
+auto flatten(SystemTag system_tag, BC::Shape<X> shape) {
+	return Flatten<SystemTag, typename SystemTag::default_floating_point_type, BC::traits::Integer<X>>(shape);
 }
 
-auto feedforward(int inputs, int outputs) {
-	return FeedForward<BLACKCAT_DEFAULT_SYSTEM_T,
-			typename BLACKCAT_DEFAULT_SYSTEM_T::default_floating_point_type>(inputs, outputs);
+template<int X>
+auto flatten(BC::Shape<X> shape) {
+	return Flatten<BLACKCAT_DEFAULT_SYSTEM_T,
+			typename BLACKCAT_DEFAULT_SYSTEM_T::default_floating_point_type, BC::traits::Integer<X>>(shape);
 }
 
 

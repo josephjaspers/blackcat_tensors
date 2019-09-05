@@ -82,10 +82,10 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 		for (int j = 0; j < samples/batch_size; j++) {
 
 			//Feed 1/4th of the image at a time
-			network.forward_propagation(chunk(inputs[j], BC::index(0,		0), BC::shape(784/4, batch_size)));
-			network.forward_propagation(chunk(inputs[j], BC::index(784* 1/4, 0), BC::shape(784/4, batch_size)));
-			network.forward_propagation(chunk(inputs[j], BC::index(784* 2/4, 0), BC::shape(784/4, batch_size)));
-			network.forward_propagation(chunk(inputs[j], BC::index(784* 3/4, 0), BC::shape(784/4, batch_size)));
+			network.forward_propagation(chunk(inputs[j], BC::index(0,	0), BC::shape(784/4, batch_size)));
+			network.forward_propagation(chunk(inputs[j], BC::index(0, 784* 1/4), BC::shape(784/4, batch_size)));
+			network.forward_propagation(chunk(inputs[j], BC::index(0, 784* 2/4), BC::shape(784/4, batch_size)));
+			network.forward_propagation(chunk(inputs[j], BC::index(0, 784* 3/4), BC::shape(784/4, batch_size)));
 
 			//Apply backprop on the last two images (images 3/4 and 4/4)
 			network.back_propagation(outputs[j]);
@@ -103,9 +103,9 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	BC::size_t test_images = 10;
 	cube img = cube(reshape(inputs[0], BC::shape(28,28, batch_size)));
 	network.forward_propagation(chunk(inputs[0], BC::index(0,		0), BC::shape(784/4, batch_size)));
-	network.forward_propagation(chunk(inputs[0], BC::index(784* 1/4, 0), BC::shape(784/4, batch_size)));
-	network.forward_propagation(chunk(inputs[0], BC::index(784* 2/4, 0), BC::shape(784/4, batch_size)));
-	mat hyps =network.forward_propagation(chunk(inputs[0], BC::index(784* 3/4, 0), BC::shape(784/4, batch_size)));
+	network.forward_propagation(chunk(inputs[0], BC::index(0,784* 1/4), BC::shape(784/4, batch_size)));
+	network.forward_propagation(chunk(inputs[0], BC::index(0,784* 2/4), BC::shape(784/4, batch_size)));
+	mat hyps =network.forward_propagation(chunk(inputs[0], BC::index(0,784* 3/4), BC::shape(784/4, batch_size)));
 
 	for (int i = 0; i < test_images; ++i) {
 		img[i].t().print_sparse(3);

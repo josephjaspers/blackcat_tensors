@@ -13,7 +13,7 @@
 
 namespace BC {
 namespace nn {
-namespace not_implemented {
+//namespace not_implemented {
 
 template<
 	class SystemTag,
@@ -86,25 +86,24 @@ public:
 
 	template<class Matrix>
 	auto forward_propagation(const Matrix& x) {
-		return x;
-//		cube y(26, 26, nkrnls);
-//		for (auto x_ : x) {
-//			y[0] = w.multichannel_conv2d(x_);
-//		}
-//		return y;
+		cube y(26, 26, nkrnls);
+		for (auto x_ : x) {
+			y[0] = w.multichannel_conv2d(x_);
+		}
+		return y;
 	}
 
 	template<class X, class Delta>
 	auto back_propagation(const X& x, const Delta& dy) {
-		return dy;
-//		for (int i = 0; i < this->batch_size(); ++i)
-//			w_gradients -= x[i].multichannel_conv2d_kernel_backwards(dy[i]);
-//
-//		tensor4 dx(m_batched_input_shape);
-//		for (int i = 0; i < this->batch_size(); ++i) {
-//			dx[i] = w.multichannel_conv2d_data_backwards(dy[i]);
-//		}
-//		return dx;
+		static_assert(Delta::tensor_dimensions == 4,"Delta must be a 4d tensor");
+		for (int i = 0; i < this->batch_size(); ++i)
+			w_gradients -= x[i].multichannel_conv2d_kernel_backwards(dy[i]);
+
+		tensor4 dx(m_batched_input_shape);
+		for (int i = 0; i < this->batch_size(); ++i) {
+			dx[i] = w.multichannel_conv2d_data_backwards(dy); //dy[i]);
+		}
+		return dx;
 	}
 
 	void update_weights() {
@@ -142,7 +141,7 @@ public:
 	auto get_learning_rate() const { return lr; }
 };
 
-}
+//}
 }
 }
 

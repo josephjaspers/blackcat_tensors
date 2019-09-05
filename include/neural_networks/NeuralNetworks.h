@@ -19,7 +19,8 @@
 #include "Layers/Output_Layer.h"
 #include "Layers/Logging_Output_Layer.h"
 //#include "Layers/GRU.h"		//TODO
-//#include "Layers/Convolution.h" //TODO
+#include "Layers/Convolution.h" //TODO
+#include "Layers/Flatten.h"
 #include "Layers/Recurrent.h"
 #include "Network.h"
 

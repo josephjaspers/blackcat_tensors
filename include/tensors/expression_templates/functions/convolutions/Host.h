@@ -50,8 +50,8 @@ struct Convolution_Implementation<BC::host_tag> {
 							for (int d = 0; d < depth; ++d) {
 								if (c+kc >= 0 && c+kc < img.cols() &&
 									r+kr >= 0 && r+kr < img.rows()) {
-									auto x = img(r+kr, c+kc, d);
-									auto w = krnl(kr, kc, d, k);
+									auto x = img(d, c+kc, r+kr);
+									auto w = krnl(k, d, kc, kr);
 									sum += w * x;
 								}
 							}
@@ -91,7 +91,7 @@ struct Convolution_Implementation<BC::host_tag> {
 							for (int d = 0; d < depth; ++d) {
 								if (c+kc >= 0 && c+kc < img.cols() &&
 									r+kr >= 0 && r+kr < img.rows()) {
-									img(d, c + kc, r+kr) += krnl(k,d,kc,kr) * delta(k,c,r) * alpha;
+									img(d, c+kc, r+kr) += krnl(k, d, kc, kr) * delta(k, c, r) * alpha;
 								}
 							}
 						}
@@ -129,7 +129,7 @@ struct Convolution_Implementation<BC::host_tag> {
 							for (int d = 0; d < depth; ++d) {
 								if (c+kc >= 0 && c+kc < img.cols() &&
 									r+kr >= 0 && r+kr < img.rows()) {
-									krnl(k,d,kc,kr) += img( d, c+kc, r+kr) * output(k, c, r) * alpha;
+									krnl(k, d, kc, kr) += img(d, c+kc, r+kr) * output(k, c, r) * alpha;
 								}
 							}
 						}

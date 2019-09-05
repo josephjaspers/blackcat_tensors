@@ -190,9 +190,6 @@ template<class lv, class rv>
 struct Binary_Expression<multichannel_conv2d_data_backwards, lv, rv>
 : Expression_Base<Binary_Expression<multichannel_conv2d_data_backwards, lv, rv>>, multichannel_conv2d_data_backwards {
 
-	static_assert((lv::tensor_dimension == 3 || lv::tensor_dimension==4) && rv::tensor_dimension==3,
-			"CONVOLUTION_MULTICHANNEL_CONV2D DIMENSION MISMATCH");
-
 	using value_type = typename lv::value_type;
 	using system_tag = typename lv::system_tag;
 	using blas_impl  = BC::blas::implementation<system_tag>;
