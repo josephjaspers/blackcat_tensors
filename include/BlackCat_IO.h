@@ -172,14 +172,14 @@ static BC::Matrix<ValueType, Allocator> read_uniform(csv_descriptor csv, Allocat
 
 	  std::copy(cell_buf.begin(), cell_buf.end(), data.cw_begin());
 	  if (csv.transpose()) {
-		  BC::Matrix<ValueType, Allocator> data_t(BC::make_shape(n_cols, n_rows), alloc);
+		  BC::Matrix<ValueType, Allocator> data_t(BC::shape(n_cols, n_rows), alloc);
 		  data_t.copy(data);
 		  return data_t;
 	  } else {
 		  BC::Matrix<ValueType> data_transposed(n_rows, n_cols);
 		  data_transposed = data.transpose();
 
-		  BC::Matrix<ValueType, Allocator> data_correct_system(BC::make_shape(n_rows, n_cols), alloc);
+		  BC::Matrix<ValueType, Allocator> data_correct_system(BC::shape(n_rows, n_cols), alloc);
 		  data_correct_system.copy(data_transposed);
 		  return data_correct_system;
 	  }

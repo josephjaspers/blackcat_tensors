@@ -10,21 +10,22 @@
 
 #include "Expression_Template_Base.h"
 #include "Array_Kernel_Array.h"
+#include "Array.h"
 #include "Shape.h"
 
 namespace BC {
 namespace tensors {
 namespace exprs {
 
-template<int Dimensions, class ValueType, class Allocator, class... Tags>
+template<class Shape, class ValueType, class Allocator, class... Tags>
 struct Array_Slice:
-		Kernel_Array<Dimensions, ValueType, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
+		Kernel_Array<Shape, ValueType, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
 
 	using value_type = ValueType;
 	using allocator_t 	 = Allocator;
 	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
 	using stream_t 	 = BC::Stream<system_tag>;
-	using parent = Kernel_Array<Dimensions, ValueType, system_tag, Tags...>;
+	using parent = Kernel_Array<Shape, ValueType, system_tag, Tags...>;
 
 	stream_t m_stream;
 	allocator_t m_allocator;
@@ -52,7 +53,7 @@ struct Array_Slice:
 namespace {
 
 template<int Dimension, class Parent, class... Tags>
-using slice_type_from_parent = Array_Slice<BC::traits::max(Dimension,0),
+using slice_type_from_parent = Array_Slice<BC::Shape<BC::traits::max(Dimension,0)>,
 		typename Parent::value_type,
 		typename Parent::allocator_t,
 		BC_View, Tags...>;

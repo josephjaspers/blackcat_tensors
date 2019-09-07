@@ -17,17 +17,17 @@ namespace BC {
 namespace tensors {
 namespace exprs {
 
-template<int, class, class, class...>
+template<class, class, class, class...>
 class Array_Slice;
 
 
-template<int Dimension, class Scalar, class Allocator, class... Tags>
+template<class Shape, class Scalar, class Allocator, class... Tags>
 class Array :
 			private Allocator,
-			public Kernel_Array<Dimension, Scalar, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
+			public Kernel_Array<Shape, Scalar, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
 
-	using self = Array<Dimension, Scalar, Allocator, Tags...>;
-	using parent = Kernel_Array<Dimension, Scalar,  typename BC::allocator_traits<Allocator>::system_tag, Tags...>;
+	using self = Array<Shape, Scalar, Allocator, Tags...>;
+	using parent = Kernel_Array<Shape, Scalar,  typename BC::allocator_traits<Allocator>::system_tag, Tags...>;
 	using stream_type = Stream<typename BC::allocator_traits<Allocator>::system_tag>;
 
 public:
@@ -48,7 +48,7 @@ public:
 	Allocator get_allocator() const { return static_cast<const Allocator&>(*this); }
 
 	Array() {
-		if (Dimension == 0) {
+		if (Shape::tensor_dimension == 0) {
 			this->memptr_ref() = get_allocator().allocate(1);
 		}
 	}
@@ -75,7 +75,7 @@ public:
     	class=std::enable_if_t<
     		!expression_traits<ShapeLike>::is_array::value &&
     		!expression_traits<ShapeLike>::is_expr::value &&
-    		Dimension != 0>>
+    		Shape::tensor_dimension != 0>>
     Array(ShapeLike param, Allocator allocator=Allocator()):
     	Allocator(allocator),
     	parent(typename parent::shape_type(param), get_allocator()) {}
@@ -85,7 +85,7 @@ public:
 		class... ShapeDims,
 		class=std::enable_if_t<
 			traits::sequence_of_v<BC::size_t, ShapeDims...> &&
-			sizeof...(ShapeDims) == Dimension>
+			sizeof...(ShapeDims) == Shape::tensor_dimension>
 	>
 	Array(const ShapeDims&... shape_dims):
 		parent(typename parent::shape_type(shape_dims...), get_allocator()) {}
@@ -105,7 +105,7 @@ public:
     //Restrict to same value_type (obviously), same dimensions (for fast-copy)
     //And restrict to continuous (as we should attempt to support Sparse matrices in the future)
     template<class... SliceTags>
-	Array(const Array_Slice<Dimension, value_type, allocator_t, SliceTags...>& expression):
+	Array(const Array_Slice<Shape, value_type, allocator_t, SliceTags...>& expression):
 		Allocator(BC::allocator_traits<Allocator>::select_on_container_copy_construction(expression.get_allocator())),
 		parent(typename parent::shape_type(expression.inner_shape()), get_allocator()),
 		m_stream(expression.get_stream()) {
@@ -141,7 +141,7 @@ public:
 
 template<class Shape, class Allocator>
 auto make_tensor_array(Shape shape, Allocator alloc) {
-	return Array<Shape::tensor_dimension, typename Allocator::value_type, Allocator>(shape, alloc);
+	return Array<Shape, typename Allocator::value_type, Allocator>(shape, alloc);
 }
 
 

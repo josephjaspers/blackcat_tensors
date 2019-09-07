@@ -33,23 +33,25 @@ namespace exprs {
  */
 
 
-template<int Dimension, class ValueType, class SystemTag, class... Tags>
+template<class Shape, class ValueType, class SystemTag, class... Tags>
 struct Kernel_Array
-		: Kernel_Array_Base<Kernel_Array<Dimension, ValueType, SystemTag, Tags...>>,
-		  Shape<Dimension>,
+		: Kernel_Array_Base<Kernel_Array<Shape, ValueType, SystemTag, Tags...>>,
+		  Shape,
 		  public Tags... {
-
-    using value_type = ValueType;
-    using system_tag = SystemTag;
-    using pointer_type = value_type*;
-    using shape_type = Shape<Dimension>;
-    using self_type  = Kernel_Array<Dimension, ValueType, SystemTag, Tags...>;
 
 	static constexpr bool self_is_view = BC::traits::sequence_contains_v<BC_View, Tags...>;
 	static constexpr bool is_continuous = ! BC::traits::sequence_contains_v<BC_Noncontinuous, Tags...>;
 
-    static constexpr int tensor_dimension = Dimension;
-    static constexpr int tensor_iterator_dimension = is_continuous ? 1 : tensor_dimension;
+	static constexpr int tensor_dimension = Shape::tensor_dimension;
+	static constexpr int tensor_iterator_dimension = is_continuous ? 1 : tensor_dimension;
+
+    using value_type = ValueType;
+    using system_tag = SystemTag;
+    using pointer_type = value_type*;
+    using shape_type = Shape;
+    using self_type  = Kernel_Array<Shape, ValueType, SystemTag, Tags...>;
+
+
 
 private:
     pointer_type array = nullptr;
@@ -117,23 +119,23 @@ public:
         else if (tensor_dimension == 1)
             return i;
         else
-            return this->leading_dimension(Dimension - 2) * i;
+            return this->leading_dimension(Shape::tensor_dimension - 2) * i;
     }
 
 };
 
 
-template<class ValueType, int dims, class Stream>
-auto make_temporary_kernel_array(Shape<dims> shape, Stream stream) {
+template<class ValueType, int Dimension, class Stream>
+auto make_temporary_kernel_array(Shape<Dimension> shape, Stream stream) {
 //	static_assert(dims >= 1, "make_temporary_tensor_array: assumes dimension is 1 or greater");
 	using system_tag = typename Stream::system_tag;
-	using Array = Kernel_Array<dims, ValueType, system_tag, BC_Temporary>;
+	using Array = Kernel_Array<Shape<Dimension>, ValueType, system_tag, BC_Temporary>;
 	return Array(shape, stream.template get_allocator_rebound<ValueType>().allocate(shape.size()));
 }
 template<class ValueType, class Stream>
 auto make_temporary_kernel_scalar(Stream stream) {
 	using system_tag = typename Stream::system_tag;
-	using Array = Kernel_Array<0, ValueType, system_tag, BC_Temporary>;
+	using Array = Kernel_Array<Shape<0>, ValueType, system_tag, BC_Temporary>;
 	return Array(BC::Shape<0>(), stream.template get_allocator_rebound<ValueType>().allocate(1));
 }
 
@@ -144,7 +146,7 @@ template<
 	class... Tags,
 	class=std::enable_if_t<BC::traits::sequence_contains_v<BC_Temporary, Tags...>>>
 void destroy_temporary_kernel_array(
-		Kernel_Array<Dimension, ValueType, typename Stream::system_tag, Tags...> temporary, Stream stream) {
+		Kernel_Array<Shape<Dimension>, ValueType, typename Stream::system_tag, Tags...> temporary, Stream stream) {
 	stream.template get_allocator_rebound<ValueType>().deallocate(temporary.memptr(), temporary.size());
 }
 

@@ -62,7 +62,7 @@ private:
     template<template<int> class Integer>
     std::string to_string(Integer<1>, BC::tensors::io::features fs) const {
     	using host_tensor = Tensor_Base<exprs::Array<
-    							tensor_dimension,
+    							BC::Shape<tensor_dimension>,
     							typename ExpressionTemplate::value_type,
     							BC::Allocator<host_tag, value_type>>>;
 
@@ -73,7 +73,7 @@ private:
     template<template<int> class Integer>
     std::string to_string(Integer<-1>, BC::tensors::io::features fs) const {
     	using host_tensor = Tensor_Base<exprs::Array<
-    							tensor_dimension,
+    							BC::Shape<tensor_dimension>,
     							typename ExpressionTemplate::value_type,
     							BC::Allocator<host_tag, value_type>>>;
 
@@ -87,7 +87,7 @@ private:
     template<template<int> class Integer>
     std::string to_string(Integer<2>, BC::tensors::io::features fs) const {
 		using tensor = Tensor_Base<exprs::Array<
-					tensor_dimension,
+					BC::Shape<tensor_dimension>,
 					typename ExpressionTemplate::value_type,
 					BC::Allocator<system_tag, value_type>>>;
 

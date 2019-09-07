@@ -21,11 +21,14 @@ namespace detail{
 template<class T>
 using default_allocator = BC::Allocator<default_system_tag_t, T>;
 
+template<int X>
+using default_shape = BC::Shape<X>;
+
 } //end of ns detail
 } //end of ns tensors
 
 template<int dimension, class ValueType, class Allocator=tensors::detail::default_allocator<ValueType>>
-using Tensor = BC::tensors::Tensor_Base<BC::tensors::exprs::Array<dimension, ValueType, Allocator>>;
+using Tensor = BC::tensors::Tensor_Base<BC::tensors::exprs::Array<BC::Shape<dimension>, ValueType, Allocator>>;
 
 template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
 using Scalar = Tensor<0, ValueType, Allocator>;
@@ -40,7 +43,7 @@ template<class ValueType, class Allocator = tensors::detail::default_allocator<V
 using Cube = Tensor<3, ValueType, Allocator>;
 
 template<int dimension, class ValueType, class Allocator=tensors::detail::default_allocator<ValueType>>
-using Tensor_View = BC::tensors::Tensor_Base<BC::tensors::exprs::Array_Const_View<dimension, ValueType, Allocator>>;
+using Tensor_View = BC::tensors::Tensor_Base<BC::tensors::exprs::Array_Const_View<BC::Shape<dimension>, ValueType, Allocator>>;
 
 template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
 using Scalar_View = Tensor_View<0, ValueType, Allocator>;
