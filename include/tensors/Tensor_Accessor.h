@@ -20,10 +20,9 @@ template<class... Ts>
 auto index(Ts... ts) {
 	return BC::utility::make_array_t<BC::size_t>(ts...);
 }
-template<class... Ts>
-auto shape(Ts... ts) {
-	return BC::utility::make_array_t<BC::size_t>(ts...);
-}
+template<int Dimension>
+using index_type = BC::utility::array<Dimension, BC::size_t>;
+
 
 template<class T, class Shape>
 auto reshape(Tensor_Base<T>& tensor, Shape shape) {
@@ -34,7 +33,7 @@ auto reshape(Tensor_Base<T>& tensor, Shape shape) {
 }
 
 template<class T, class Index, class Shape>
-auto chunk(Tensor_Base<T>& tensor, Index index, Shape shape) {
+[[deprecated]]  auto chunk(Tensor_Base<T>& tensor, Index index, Shape shape) {
 	return make_tensor(exprs::make_chunk(tensor, index, shape));
 }
 
@@ -47,33 +46,61 @@ const auto reshape(const Tensor_Base<T>& tensor, Shape shape) {
 }
 
 template<class T, class Index, class Shape>
-const auto chunk(const Tensor_Base<T>& tensor, Index index, Shape shape) {
+[[deprecated]] const auto chunk(const Tensor_Base<T>& tensor, Index index, Shape shape) {
 	return make_tensor(exprs::make_chunk(tensor, index, shape));
 }
 
 template<class ExpressionTemplate, class voider=void>
 class Tensor_Accessor {
 
-    const auto& as_derived() const { return static_cast<const Tensor_Base<ExpressionTemplate>&>(*this); }
-          auto& as_derived()       { return static_cast<      Tensor_Base<ExpressionTemplate>&>(*this); }
+	const auto& as_derived() const { return static_cast<const Tensor_Base<ExpressionTemplate>&>(*this); }
+		  auto& as_derived()	   { return static_cast<	  Tensor_Base<ExpressionTemplate>&>(*this); }
 
 public:
 
-    auto data() const { return this->as_derived().memptr(); }
-    auto data()       { return this->as_derived().memptr(); }
+	auto data() const { return this->as_derived().memptr(); }
+	auto data()	   { return this->as_derived().memptr(); }
 
-    const auto operator [] (BC::size_t i) const { return slice(i); }
-          auto operator [] (BC::size_t i)       { return slice(i); }
+	const auto operator [] (BC::size_t i) const { return slice(i); }
+		  auto operator [] (BC::size_t i)	   { return slice(i); }
 
-    struct range { BC::size_t  from, to; };	//enables syntax: `tensor[{start, end}]`
-    const auto operator [] (range r) const { return slice(r.from, r.to); }
-          auto operator [] (range r)       { return slice(r.from, r.to); }
+	struct range { BC::size_t  from, to; };	//enables syntax: `tensor[{start, end}]`
+	const auto operator [] (range r) const { return slice(r.from, r.to); }
+		  auto operator [] (range r)	   { return slice(r.from, r.to); }
+
+	const auto subblock(
+				index_type<ExpressionTemplate::tensor_dimension> index,
+				BC::Shape<ExpressionTemplate::tensor_dimension> shape) const {
+		return make_tensor(exprs::make_chunk(as_derived(), index, shape));
+
+	}
+
+	auto subblock(
+			index_type<ExpressionTemplate::tensor_dimension> index,
+			BC::Shape<ExpressionTemplate::tensor_dimension> shape) {
+		return make_tensor(exprs::make_chunk(as_derived(), index, shape));
+	}
+
+	const auto operator [] (
+			std::tuple<
+				index_type<ExpressionTemplate::tensor_dimension>,
+				BC::Shape<ExpressionTemplate::tensor_dimension>> index_shape) const {
+		return subblock(std::get<0>(index_shape), std::get<1>(index_shape));
+	}
+
+	auto operator [] (
+			std::tuple<
+				index_type<ExpressionTemplate::tensor_dimension>,
+				BC::Shape<ExpressionTemplate::tensor_dimension>> index_shape) {
+		return subblock(std::get<0>(index_shape), std::get<1>(index_shape));
+	}
+
 
 	const auto row_range(int begin, int end) const {
-        static_assert(ExpressionTemplate::tensor_dimension  == 2, "ROW_RANGE ONLY AVAILABLE TO MATRICES");
-        BC_ASSERT(begin < end, "Row range, begin-range must be smaller then end-range");
-        BC_ASSERT(begin >= 0 && begin < as_derived().rows(), "Row range, begin-range must be between 0 and rows()");
-        BC_ASSERT(end   >= 0 && end   < as_derived().rows(), "Row range, end-range must be be between begin-range and rows()");
+		static_assert(ExpressionTemplate::tensor_dimension  == 2, "ROW_RANGE ONLY AVAILABLE TO MATRICES");
+		BC_ASSERT(begin < end, "Row range, begin-range must be smaller then end-range");
+		BC_ASSERT(begin >= 0 && begin < as_derived().rows(), "Row range, begin-range must be between 0 and rows()");
+		BC_ASSERT(end   >= 0 && end   < as_derived().rows(), "Row range, end-range must be be between begin-range and rows()");
 		return chunk(this->as_derived(), begin, 0)(end-begin, this->as_derived().cols());
 	}
 	auto row_range(int begin, int end) {
@@ -120,47 +147,47 @@ public:
 		return make_tensor(exprs::make_ranged_slice(as_derived(), from, to));
 	}
 
-    const auto diagnol(BC::size_t index = 0) const {
+	const auto diagnol(BC::size_t index = 0) const {
 		BC_ASSERT(index > -as_derived().rows() && index < as_derived().rows(),
 				"diagnol `index` must be -rows() and rows())");
-        static_assert(ExpressionTemplate::tensor_dimension  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
-        return make_tensor(exprs::make_diagnol(as_derived(),index));
-    }
+		static_assert(ExpressionTemplate::tensor_dimension  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
+		return make_tensor(exprs::make_diagnol(as_derived(),index));
+	}
 
-    auto diagnol(BC::size_t index = 0) {
+	auto diagnol(BC::size_t index = 0) {
 		BC_ASSERT(index > -as_derived().rows() && index < as_derived().rows(),
 				"diagnol `index` must be -rows() and rows())");
-    	static_assert(ExpressionTemplate::tensor_dimension  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
-        return make_tensor(exprs::make_diagnol(as_derived(),index));
-    }
+		static_assert(ExpressionTemplate::tensor_dimension  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
+		return make_tensor(exprs::make_diagnol(as_derived(),index));
+	}
 
-    const auto col(BC::size_t i) const {
-        static_assert(ExpressionTemplate::tensor_dimension == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
-        return slice(i);
-    }
+	const auto col(BC::size_t i) const {
+		static_assert(ExpressionTemplate::tensor_dimension == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		return slice(i);
+	}
 
-    auto col(BC::size_t i) {
-        static_assert(ExpressionTemplate::tensor_dimension == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
-        return slice(i);
-    }
+	auto col(BC::size_t i) {
+		static_assert(ExpressionTemplate::tensor_dimension == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		return slice(i);
+	}
 
-    const auto row(BC::size_t index) const {
+	const auto row(BC::size_t index) const {
 		BC_ASSERT(index >= 0 && index < as_derived().rows(),
 				"Row index must be between 0 and rows()");
-        static_assert(ExpressionTemplate::tensor_dimension == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
-        return make_tensor(exprs::make_row(as_derived(), index));
-    }
+		static_assert(ExpressionTemplate::tensor_dimension == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		return make_tensor(exprs::make_row(as_derived(), index));
+	}
 
-    auto row(BC::size_t index) {
+	auto row(BC::size_t index) {
 		BC_ASSERT(index >= 0 && index < as_derived().rows(),
 				"Row index must be between 0 and rows()");
 
-        static_assert(ExpressionTemplate::tensor_dimension == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
-        return make_tensor(exprs::make_row(as_derived(), index));
-    }
+		static_assert(ExpressionTemplate::tensor_dimension == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		return make_tensor(exprs::make_row(as_derived(), index));
+	}
 
-    const auto operator() (BC::size_t i) const { return scalar(i); }
-          auto operator() (BC::size_t i)       { return scalar(i); }
+	const auto operator() (BC::size_t i) const { return scalar(i); }
+		  auto operator() (BC::size_t i)	   { return scalar(i); }
 
 };
 
@@ -174,7 +201,7 @@ std::enable_if_t<exprs::expression_traits<ExpressionTemplate>::is_expr::value ||
 	ExpressionTemplate::tensor_dimension == 0>>	 {
 
 	const auto& as_derived() const { return static_cast<const Tensor_Base<ExpressionTemplate>&>(*this); }
-		  auto& as_derived()       { return static_cast<      Tensor_Base<ExpressionTemplate>&>(*this); }
+		  auto& as_derived()	   { return static_cast<	  Tensor_Base<ExpressionTemplate>&>(*this); }
 
 
 public:

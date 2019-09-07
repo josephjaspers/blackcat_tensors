@@ -77,21 +77,22 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	std::cout << " training..." << std::endl;
 	auto start = std::chrono::system_clock::now();
 
+	int img_partitions = 4;
 	for (int i = 0; i < epochs; ++i){
 		std::cout << " current epoch: " << i << std::endl;
 		for (int j = 0; j < samples/batch_size; j++) {
+			for (int p = 0; p < img_partitions; ++p) {
+				auto batch = inputs[j];
+				auto index = BC::index(0,784 * (p/(float)img_partitions));
+				auto shape = BC::shape(784/4, batch_size);
 
-			//Feed 1/4th of the image at a time
-			network.forward_propagation(chunk(inputs[j], BC::index(0,	0), BC::shape(784/4, batch_size)));
-			network.forward_propagation(chunk(inputs[j], BC::index(0, 784* 1/4), BC::shape(784/4, batch_size)));
-			network.forward_propagation(chunk(inputs[j], BC::index(0, 784* 2/4), BC::shape(784/4, batch_size)));
-			network.forward_propagation(chunk(inputs[j], BC::index(0, 784* 3/4), BC::shape(784/4, batch_size)));
+				network.forward_propagation(batch[{index, shape}]);
+			}
+				//Apply backprop on the last two images (images 3/4 and 4/4)
+				network.back_propagation(outputs[j]);
+				network.back_propagation(outputs[j]);
 
-			//Apply backprop on the last two images (images 3/4 and 4/4)
-			network.back_propagation(outputs[j]);
-			network.back_propagation(outputs[j]);
-
-			network.update_weights();
+				network.update_weights();
 		}
 	}
 
@@ -100,13 +101,18 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	std::cout << " training time: " <<  total.count() << std::endl;
 
 	std::cout << " testing... " << std::endl;
+
+	auto batch = inputs[0];
+	auto shape = BC::shape(784/4, batch_size);
+	for (int p = 0; p < img_partitions-1; ++p) {
+		auto index = BC::index(0,784 * (p/(float)img_partitions));
+		network.forward_propagation(batch[{index, shape}]);
+	}
+	auto last_index = BC::index(0,784 * ((img_partitions-1)/(float)img_partitions));
+	mat hyps =network.forward_propagation(batch[{last_index, shape}]);
+
 	BC::size_t test_images = 10;
 	cube img = cube(reshape(inputs[0], BC::shape(28,28, batch_size)));
-	network.forward_propagation(chunk(inputs[0], BC::index(0,		0), BC::shape(784/4, batch_size)));
-	network.forward_propagation(chunk(inputs[0], BC::index(0,784* 1/4), BC::shape(784/4, batch_size)));
-	network.forward_propagation(chunk(inputs[0], BC::index(0,784* 2/4), BC::shape(784/4, batch_size)));
-	mat hyps =network.forward_propagation(chunk(inputs[0], BC::index(0,784* 3/4), BC::shape(784/4, batch_size)));
-
 	for (int i = 0; i < test_images; ++i) {
 		img[i].t().print_sparse(3);
 		hyps[i].print();

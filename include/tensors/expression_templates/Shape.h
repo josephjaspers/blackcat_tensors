@@ -41,10 +41,7 @@ struct Shape {
         }
     }
 
-
-    BCINLINE
-	Shape(
-			const BC::utility::array<dims, BC::size_t>& new_shape,
+    BCINLINE Shape(const BC::utility::array<dims, BC::size_t>& new_shape,
 			const Shape<dims>& parent_shape) {
 		m_inner_shape = new_shape;
 		for (int i = 0; i < dims; ++i ) {
@@ -52,6 +49,12 @@ struct Shape {
 		}
         calculate_size();
 	}
+
+    BCINLINE Shape(Shape<dims> new_shape, Shape<dims> parent_shape):
+    	m_inner_shape(new_shape.m_inner_shape),
+    	m_block_shape(parent_shape.m_block_shape) {
+        calculate_size();
+    }
 
     template<int dim, class int_t, class=std::enable_if_t<(dim>=dims)>>
     BCINLINE Shape (BC::utility::array<dim, int_t> param) {
@@ -207,6 +210,17 @@ template<class InnerShape, typename=std::enable_if_t<!traits::sequence_of_v<BC::
 auto make_shape(InnerShape is) {
 	return Shape<InnerShape::tensor_dimension>(is);
 }
+
+template<class... integers, typename=std::enable_if_t<traits::sequence_of_v<BC::size_t, integers...>>>
+auto shape(integers... ints) {
+	return Shape<sizeof...(integers)>(ints...);
+}
+
+template<class InnerShape, typename=std::enable_if_t<!traits::sequence_of_v<BC::size_t, InnerShape>>>
+auto shape(InnerShape is) {
+	return Shape<InnerShape::tensor_dimension>(is);
+}
+
 
 } //ns BC
 

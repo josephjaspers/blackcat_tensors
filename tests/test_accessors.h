@@ -103,7 +103,7 @@ int test_accessors(int sz=128) {
 		vec a2(a[2]);
 		vec a3(a[3]);
 
-		auto block_of_a = chunk(a, BC::index(1,1), BC::shape(4,3)); //a 3x3 matrix starting at point 1,1
+		auto block_of_a = a[{BC::index(1,1), BC::shape(4,3)}]; //a 3x3 matrix starting at point 1,1
 
 		bool ensure_correct_size = block_of_a.size() == 4 * 3;
 		bool ensure_correct_rows = block_of_a.rows() == 4;
@@ -128,10 +128,8 @@ int test_accessors(int sz=128) {
 		vec a2(a[2]);
 		vec a3(a[3]);
 
-
-		auto primary_block_of_a = chunk(a, BC::index(0, 0), BC::shape(5,5));
-		auto block_of_a = chunk(primary_block_of_a, BC::index(1,1), BC::shape(4,3)); //a 3x3 matrix starting at point 1,1
-
+		auto primary_block_of_a = a[{BC::index(0, 0), BC::shape(5,5)}];
+		auto block_of_a = primary_block_of_a[{BC::index(1,1), BC::shape(4,3)}]; //a 3x3 matrix starting at point 1,1
 
 		block_of_a.print_dimensions();
 		block_of_a.print_leading_dimensions();
@@ -150,63 +148,60 @@ int test_accessors(int sz=128) {
 
 
 	//----------------------- test valid ranges ---------------------------//
-//
-//	//assert invalid scalar exception
-//	BC_TEST_DEF(
-//			try {
-//				a.scalar(-1);
-//			} catch(...) {
-//				return true;
-//			}
-//			return false;
-//	)
-//	//assert invalid range check
-//	BC_TEST_DEF(
-//			try {
-//				a.slice(-1);
-//			} catch(...) {
-//				return true;
-//			}
-//			return false;
-//	)
-//
-//	BC_TEST_DEF(
-//			try {
-//				a.diagnol(-(a.rows()+1));
-//			} catch(...) {
-//				return true;
-//			}
-//			return false;
-//	)
-//	BC_TEST_DEF(
-//			try {
-//				a.diagnol((a.rows()+1));
-//			} catch(...) {
-//				return true;
-//			}
-//			return false;
-//	)
-//
-//	BC_TEST_DEF(
-//			try {
-//				a.row(a.rows());
-//			} catch(...) {
-//				return true;
-//			}
-//			return false;
-//	)
-//
-//	BC_TEST_DEF(
-//			try {
-//				a.row(-a.rows());
-//			} catch(...) {
-//				return true;
-//			}
-//			return false;
-//	)
-//
-//
 
+	//assert invalid scalar exception
+	BC_TEST_DEF(
+			try {
+				a.scalar(-1);
+			} catch(...) {
+				return true;
+			}
+			return false;
+	)
+	//assert invalid range check
+	BC_TEST_DEF(
+			try {
+				a.slice(-1);
+			} catch(...) {
+				return true;
+			}
+			return false;
+	)
+
+	BC_TEST_DEF(
+			try {
+				a.diagnol(-(a.rows()+1));
+			} catch(...) {
+				return true;
+			}
+			return false;
+	)
+	BC_TEST_DEF(
+			try {
+				a.diagnol((a.rows()+1));
+			} catch(...) {
+				return true;
+			}
+			return false;
+	)
+
+	BC_TEST_DEF(
+			try {
+				a.row(a.rows());
+			} catch(...) {
+				return true;
+			}
+			return false;
+	)
+
+	BC_TEST_DEF(
+			try {
+				a.row(-a.rows());
+			} catch(...) {
+				return true;
+			}
+			return false;
+	)
 
 	BC_TEST_BODY_TAIL
 }
