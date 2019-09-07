@@ -10,9 +10,8 @@
 #define BC_EXPRESSION_TEMPLATES_ARRAY_VIEW_H_
 
 #include "Expression_Template_Base.h"
+#include "Array_Kernel_Array.h"
 #include "Shape.h"
-#include "Array.h"
-
 
 namespace BC {
 namespace tensors {

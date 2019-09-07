@@ -32,10 +32,6 @@ auto reshape(Tensor_Base<T>& tensor, Shape shape) {
 	return make_tensor(exprs::make_view(tensor, shape));
 }
 
-template<class T, class Index, class Shape>
-[[deprecated]]  auto chunk(Tensor_Base<T>& tensor, Index index, Shape shape) {
-	return make_tensor(exprs::make_chunk(tensor, index, shape));
-}
 
 template<class T, class Shape>
 const auto reshape(const Tensor_Base<T>& tensor, Shape shape) {
@@ -49,6 +45,12 @@ template<class T, class Index, class Shape>
 [[deprecated]] const auto chunk(const Tensor_Base<T>& tensor, Index index, Shape shape) {
 	return make_tensor(exprs::make_chunk(tensor, index, shape));
 }
+
+template<class T, class Index, class Shape>
+[[deprecated]]  auto chunk(Tensor_Base<T>& tensor, Index index, Shape shape) {
+	return make_tensor(exprs::make_chunk(tensor, index, shape));
+}
+
 
 template<class ExpressionTemplate, class voider=void>
 class Tensor_Accessor {

@@ -9,6 +9,7 @@
 #define BC_EXPRESSION_TEMPLATES_ARRAY_SLICE_H_
 
 #include "Expression_Template_Base.h"
+#include "Array_Kernel_Array.h"
 #include "Shape.h"
 
 namespace BC {
@@ -50,8 +51,8 @@ struct Array_Slice:
 
 namespace {
 
-template<int dimension, class Parent, class... Tags>
-using slice_type_from_parent = Array_Slice<BC::traits::max(dimension,0),
+template<int Dimension, class Parent, class... Tags>
+using slice_type_from_parent = Array_Slice<BC::traits::max(Dimension,0),
 		typename Parent::value_type,
 		typename Parent::allocator_t,
 		BC_View, Tags...>;
@@ -79,7 +80,6 @@ auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
 						parent.memptr() + ptr_index);
 }
 
-
 template<class Parent, class=std::enable_if_t<!expression_traits<Parent>::is_continuous::value>>
 static auto make_slice(Parent& parent, BC::size_t index) {
 	using slice_type = slice_type_from_parent<BC::traits::max(0,Parent::tensor_dimension-1), Parent, BC_Noncontinuous>;
@@ -90,6 +90,7 @@ static auto make_slice(Parent& parent, BC::size_t index) {
 			parent.get_shape(),
 			parent.memptr() + parent.slice_ptr_index(index));
 }
+
 template<class Parent, class=std::enable_if_t<expression_traits<Parent>::is_continuous::value>, int differentiator=0>
 static auto make_slice(Parent& parent, BC::size_t index) {
 

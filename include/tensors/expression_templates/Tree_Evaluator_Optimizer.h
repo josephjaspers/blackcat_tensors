@@ -151,7 +151,7 @@ public:
     template<class StreamType>
     static auto temporary_injection(Expression branch, StreamType stream) {
     	using value_type = typename Expression::value_type;
-    	auto temporary = make_temporary_kernel_array<value_type>(make_shape(branch.inner_shape()), stream);
+    	auto temporary = make_temporary_kernel_array<value_type>(BC::tensors::exprs::shape(branch.inner_shape()), stream);
         branch.eval(make_injection<1, 0>(temporary), stream);
         return temporary;
     }
