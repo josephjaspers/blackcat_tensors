@@ -33,8 +33,8 @@ template<class lv, class rv>
 struct Binary_Expression<multichannel_conv2d, lv, rv>
 : Expression_Base<Binary_Expression<multichannel_conv2d, lv, rv>>, multichannel_conv2d {
 
-	static_assert((lv::tensor_dimension == 3 || lv::tensor_dimension==4) && rv::tensor_dimension==3,
-			"CONVOLUTION_MULTICHANNEL_CONV2D DIMENSION MISMATCH");
+	static_assert((lv::tensor_dimension == 3 || lv::tensor_dimension==4),"Kernel must have 3 or 4 dimensions");
+	static_assert(rv::tensor_dimension==3, "Image (rv) dimension must be 3");
 
 	using value_type = typename lv::value_type;
 	using system_tag = typename lv::system_tag;

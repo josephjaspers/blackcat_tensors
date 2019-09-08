@@ -29,7 +29,7 @@ struct Reduce<BC::host_tag> {
 			value_type& total = output[0];
 			total = 0;
 	#if defined(_OPENMP) && !defined(BC_NO_OPENMP)
-	#pragma omp parallel for reduction(+, total)
+	#pragma omp parallel for reduction(+:total)
 	#endif
 			for (BC::size_t i = 0; i < expression.size(); ++i) {
 				total += expression[i];

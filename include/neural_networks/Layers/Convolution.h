@@ -64,7 +64,8 @@ public:
 			BC::size_t padding=0,
 			BC::size_t stride=1) :
 		Layer_Base(__func__,
-				((rows+padding-krnl_rows+1)/stride) * ((cols+padding-krnl_cols+1)/stride) * depth, nkrnls),
+				((rows+padding-krnl_rows+1)/stride) * ((cols+padding-krnl_cols+1)/stride) * depth,
+				((rows+padding-krnl_rows+1)/stride) * ((cols+padding-krnl_cols+1)/stride) * nkrnls),
 		rows(rows),
 		cols(cols),
 		depth(depth),
@@ -74,6 +75,7 @@ public:
 		padding(padding),
 		stride(stride),
 		w(krnl_rows, krnl_cols, depth, nkrnls),
+		w_gradients(krnl_rows, krnl_cols, depth, nkrnls),
 		m_input_shape(rows, cols, depth),
 		m_output_shape(rows + padding*2 + 1 - krnl_rows,
 				cols + padding*2 + 1 - krnl_cols, nkrnls),
@@ -81,27 +83,33 @@ public:
 		m_batched_output_shape(rows + padding*2 + 1 - krnl_rows,
 				cols + padding*2 + 1 - krnl_cols, nkrnls, this->batch_size())
 	{
-		w.randomize(0, 3);
+		w.randomize(-3, 3);
 	}
 
-	template<class Matrix>
-	auto forward_propagation(const Matrix& x) {
-		cube y(26, 26, nkrnls);
-		for (auto x_ : x) {
-			y[0] = w.multichannel_conv2d(x_);
+	template<class X>
+	auto forward_propagation(const X& x) {
+		static_assert(X::tensor_dimension == 4,"Input must be a 4d tensor (3d image + 1d for batch_size)");
+		tensor4 y(m_batched_output_shape);
+		y.zero();
+		for (int i = 0; i < this->batch_size(); ++i) {
+			y[i] = w.multichannel_conv2d(x[i]);
 		}
+//		y.print_sparse(3);
 		return y;
 	}
 
 	template<class X, class Delta>
 	auto back_propagation(const X& x, const Delta& dy) {
-		static_assert(Delta::tensor_dimensions == 4,"Delta must be a 4d tensor");
+		static_assert(Delta::tensor_dimension == 4,"Delta must be a 4d tensor");
+		static_assert(X::tensor_dimension == 4,"Input must be a 4d tensor (3d image + 1d for batch_size)");
+
 		for (int i = 0; i < this->batch_size(); ++i)
 			w_gradients -= x[i].multichannel_conv2d_kernel_backwards(dy[i]);
 
 		tensor4 dx(m_batched_input_shape);
 		for (int i = 0; i < this->batch_size(); ++i) {
-			dx[i] = w.multichannel_conv2d_data_backwards(dy); //dy[i]);
+			static_assert(decltype(dy[i])::tensor_dimension==3, "must be 3");
+			dx[i] = w.multichannel_conv2d_data_backwards(dy[i]); //dy[i]);
 		}
 		return dx;
 	}

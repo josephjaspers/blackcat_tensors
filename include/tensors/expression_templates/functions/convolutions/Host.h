@@ -41,6 +41,7 @@ struct Convolution_Implementation<BC::host_tag> {
 
 		using value_type = typename Output::value_type;
 
+		BC_omp_parallel__
 		for (int c = -padding; c < img.cols() + padding - krnl.cols() + 1; c += stride) {
 			for (int r = -padding; r < img.rows() + padding - krnl.rows() + 1; r += stride) {
 				for (int k = 0; k < numb_krnls; ++k) {
@@ -83,6 +84,7 @@ struct Convolution_Implementation<BC::host_tag> {
 			}
 		}
 
+		BC_omp_parallel__
 		for (int c = -padding; c < img.cols() + padding - krnl.cols() + 1; c += stride) {
 			for (int r = -padding; r < img.rows() + padding - krnl.rows() + 1; r += stride) {
 				for (int k = 0; k < numb_krnls; ++k) {
@@ -121,6 +123,7 @@ struct Convolution_Implementation<BC::host_tag> {
 		BC::size_t numb_krnls = krnl.dimension(3);
 		BC::size_t depth = krnl.dimension(2);
 
+		BC_omp_parallel__
 		for (int c = -padding; c < img.cols() + padding - krnl.cols() + 1; c += stride) {
 			for (int r = -padding; r < img.rows() + padding - krnl.rows() + 1; r += stride) {
 				for (int k = 0; k < numb_krnls; ++k) {
