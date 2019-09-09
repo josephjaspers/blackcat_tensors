@@ -46,9 +46,9 @@ struct Convolution_Implementation<BC::host_tag> {
 			for (int r = -padding; r < img.rows() + padding - krnl.rows() + 1; r += stride) {
 				for (int k = 0; k < numb_krnls; ++k) {
 					value_type sum = 0;
-					for (int kc = 0; kc < krnl.cols(); ++kc) {
-						for (int kr = 0; kr < krnl.rows(); ++kr) {
-							for (int d = 0; d < depth; ++d) {
+					for (int d = 0; d < depth; ++d) {
+						for (int kc = 0; kc < krnl.cols(); ++kc) {
+							for (int kr = 0; kr < krnl.rows(); ++kr) {
 								if (c+kc >= 0 && c+kc < img.cols() &&
 									r+kr >= 0 && r+kr < img.rows()) {
 									auto x = img(d, c+kc, r+kr);
@@ -78,9 +78,10 @@ struct Convolution_Implementation<BC::host_tag> {
 		BC::size_t numb_krnls = krnl.dimension(3);
 		BC::size_t depth = krnl.dimension(2);
 
-		if (alpha != 1) {
+		if (beta != 1) {
+			BC_omp_parallel__
 			for (BC::size_t i = 0; i < img.size(); ++i) {
-				img[i] *= alpha;
+				img[i] *= beta;
 			}
 		}
 
@@ -88,9 +89,9 @@ struct Convolution_Implementation<BC::host_tag> {
 		for (int c = -padding; c < img.cols() + padding - krnl.cols() + 1; c += stride) {
 			for (int r = -padding; r < img.rows() + padding - krnl.rows() + 1; r += stride) {
 				for (int k = 0; k < numb_krnls; ++k) {
-					for (int kc = 0; kc < krnl.cols(); ++kc) {
-						for (int kr = 0; kr < krnl.rows(); ++kr) {
-							for (int d = 0; d < depth; ++d) {
+					for (int d = 0; d < depth; ++d) {
+						for (int kc = 0; kc < krnl.cols(); ++kc) {
+							for (int kr = 0; kr < krnl.rows(); ++kr) {
 								if (c+kc >= 0 && c+kc < img.cols() &&
 									r+kr >= 0 && r+kr < img.rows()) {
 									img(d, c+kc, r+kr) += krnl(k, d, kc, kr) * delta(k, c, r) * alpha;
@@ -115,6 +116,7 @@ struct Convolution_Implementation<BC::host_tag> {
 				typename Image::value_type beta=0) {
 
 		if (beta != 1) {
+			BC_omp_parallel__
 			for (BC::size_t i = 0; i < krnl.size(); ++i) {
 				krnl[i] *= beta;
 			}
@@ -127,9 +129,9 @@ struct Convolution_Implementation<BC::host_tag> {
 		for (int c = -padding; c < img.cols() + padding - krnl.cols() + 1; c += stride) {
 			for (int r = -padding; r < img.rows() + padding - krnl.rows() + 1; r += stride) {
 				for (int k = 0; k < numb_krnls; ++k) {
-					for (int kc = 0; kc < krnl.cols(); ++kc) {
-						for (int kr = 0; kr < krnl.rows(); ++kr) {
-							for (int d = 0; d < depth; ++d) {
+					for (int d = 0; d < depth; ++d) {
+						for (int kc = 0; kc < krnl.cols(); ++kc) {
+							for (int kr = 0; kr < krnl.rows(); ++kr) {
 								if (c+kc >= 0 && c+kc < img.cols() &&
 									r+kr >= 0 && r+kr < img.rows()) {
 									krnl(k, d, kc, kr) += img(d, c+kc, r+kr) * output(k, c, r) * alpha;
