@@ -18,7 +18,7 @@ class Tensor_Base;
 //aliases
 template<class... Ts>
 auto index(Ts... ts) {
-	return BC::utility::make_array_t<BC::size_t>(ts...);
+	return BC::utility::make_array_t<BC::size_t>(BC::size_t(ts)...);
 }
 template<int Dimension>
 using index_type = BC::utility::array<Dimension, BC::size_t>;
