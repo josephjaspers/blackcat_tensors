@@ -67,14 +67,14 @@ static void convolution_common_assert(
 
 template<class Stream, class Output, class Image, class Kernel>
 static void conv2d(
-			Stream stream,
-			Output output,
-			Kernel krnl,
-			Image img,
-			BC::size_t padding=0,
-			BC::size_t stride=1,
-			typename Output::value_type alpha=1,
-			typename Output::value_type beta=0) {
+		Stream stream,
+		Output output,
+		Kernel krnl,
+		Image img,
+		BC::size_t padding=0,
+		BC::size_t stride=1,
+		typename Output::value_type alpha=1,
+		typename Output::value_type beta=0) {
 
 	convolution_common_assert(
 			stream,
@@ -87,8 +87,8 @@ static void conv2d(
 	using system_tag = typename Stream::system_tag;
 	using implementation = convolutions::Convolution_Implementation<system_tag>;
 
-	stream.enqueue([&](){
-		implementation::conv2d(output, krnl, img, padding, stride);
+	stream.enqueue([=](){
+		implementation::conv2d(output, krnl, img, padding, stride, alpha, beta);
 	});
 }
 
@@ -114,8 +114,8 @@ static void conv2d_data_backwards(
 	using system_tag = typename Stream::system_tag;
 	using implementation = convolutions::Convolution_Implementation<system_tag>;
 
-	stream.enqueue([&](){
-		implementation::conv2d_data_backwards(output, krnl, img);
+	stream.enqueue([=](){
+		implementation::conv2d_data_backwards(output, krnl, img, padding, stride, alpha, beta);
 	});
 }
 
@@ -140,13 +140,34 @@ static void conv2d_kernel_backwards(
 
 	using system_tag = typename Stream::system_tag;
 	using implementation = convolutions::Convolution_Implementation<system_tag>;
-	stream.enqueue([&](){
-		implementation::conv2d_kernel_backwards(output, krnl, img);
+	stream.enqueue([=](){
+		implementation::conv2d_kernel_backwards(output, krnl, img, padding, stride, alpha, beta);
 	});
-}
+	}
 
+	template<class Stream, class Output, class Image, int X>
+	static void img2col(
+				Stream stream,
+				Output output,
+				Image img,
+				BC::Shape<X> krnl,
+				BC::size_t padding=0,
+				BC::size_t stride=1) {
 
-
+//		convolution_common_assert(
+//				stream,
+//				output,
+//				krnl,
+//				img,
+//				padding,
+//				stride);
+std::cout << " in img 2 col " << std::endl;
+		using system_tag = typename Stream::system_tag;
+		using implementation = convolutions::Convolution_Implementation<system_tag>;
+		stream.enqueue([=](){
+			implementation::img2col(output, krnl, img, padding, stride);
+		});
+	}
 
 }
 }

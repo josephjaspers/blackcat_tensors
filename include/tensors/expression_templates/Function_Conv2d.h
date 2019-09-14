@@ -29,6 +29,11 @@ struct multichannel_conv2d_kernel_backwards {
 	using requires_greedy_evaluation = std::true_type;
 };
 
+struct img2col {
+	using requires_greedy_evaluation = std::true_type;
+};
+
+
 template<class lv, class rv>
 struct Binary_Expression<multichannel_conv2d, lv, rv>
 : Expression_Base<Binary_Expression<multichannel_conv2d, lv, rv>>, multichannel_conv2d {
@@ -126,7 +131,10 @@ struct Binary_Expression<multichannel_conv2d_kernel_backwards, lv, rv>:
 	BC::size_t stride = 1;
 	BC::size_t padding = 0;
 
-	BCINLINE BC::size_t  size() const { return rows() * cols() * this->dimension(2); }
+	BCINLINE
+	BC::size_t size() const {
+		return rows() * cols() * dimension(2) * dimension(3);
+	}
 	BCINLINE BC::size_t  rows() const { return left.rows() - right.rows() + padding*2 + 1;  }
 	BCINLINE BC::size_t  cols() const { return left.cols() - right.cols() + padding*2 + 1; }
 	BCINLINE BC::size_t  dimension(int i) const {
@@ -135,6 +143,8 @@ struct Binary_Expression<multichannel_conv2d_kernel_backwards, lv, rv>:
 		else if (i == 1)
 			return cols();
 		else if (i == 2)
+			return left.dimension(2);
+		else if (i == 3)
 			return right.dimension(2);
 		else
 			return 1;
@@ -257,6 +267,79 @@ struct Binary_Expression<multichannel_conv2d_data_backwards, lv, rv>
 			using vt = typename decltype(right_evaluated)::value_type;
 
 			stream.template get_allocator_rebound<vt>().deallocate(right_evaluated.memptr(), right_evaluated.size());
+		}
+	}
+};
+
+template<class Array>
+struct Unary_Expression<img2col, Array>
+: Expression_Base<Unary_Expression<img2col, Array>>, img2col {
+
+	using value_type = typename Array::value_type;
+	using system_tag = typename Array::system_tag;
+	using blas_impl  = BC::blas::implementation<system_tag>;
+
+	static_assert(Array::tensor_dimension>=3, "img2col expects at least a cube");
+	static constexpr int tensor_dimension  = Array::tensor_dimension-1;
+	static constexpr int tensor_iterator_dimension = tensor_dimension;
+
+	Array array;
+
+	BC::size_t stride = 1;
+	BC::size_t padding = 0;
+	BC::Shape<3> krnl_shape;
+
+	BCINLINE BC::size_t size() const {
+		return rows() * cols() * dimension(2) * dimension(3);
+	}
+
+	BCINLINE BC::size_t  rows() const { return dimension(0); }
+	BCINLINE BC::size_t  cols() const { return dimension(1); }
+	BCINLINE BC::size_t  dimension(int i) const {
+		if (i == 0)
+			return krnl_shape.size();
+		else if (i == 1) //number of krnl_positions
+			return ((array.dimension(0) - krnl_shape.dimension(0) + padding*2)/stride) *
+					 ((array.dimension(1) - krnl_shape.dimension(1) + padding*2)/stride);
+		else if (i == 2)
+			return array.dimension(3); //batch_size
+		else
+			return 1;
+	}
+
+	Unary_Expression(Array array, BC::Shape<3> krnl_shape, BC::size_t stride_, BC::size_t padding_):
+		array(array), krnl_shape(krnl_shape), stride(stride_), padding(padding_) {}
+
+	template<class core, int alpha_mod, int beta_mod, class Stream>
+	void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
+
+		for (int i = 0; i < tensor_dimension; ++i) {
+			BC_ASSERT(dimension(0) == injection_values.data().dimension(0),
+					"INVALID TENSOR INJECTION INCORRECT DIMENSIONS");
+		}
+
+		auto& injection = injection_values.data();
+
+		if (expression_traits<Array>::requires_greedy_evaluation::value) {
+			auto evaluated = greedy_evaluate(array, stream);
+
+			BC::tensors::exprs::functions::conv2d_data_backwards(
+					stream,
+					injection,
+					evaluated,
+					padding, stride,
+					alpha_mod, beta_mod);
+
+				using vt = typename decltype(evaluated)::value_type;
+				stream.template get_allocator_rebound<vt>().deallocate(evaluated.memptr(), evaluated.size());
+		} else {
+
+			BC::tensors::exprs::functions::conv2d_data_backwards(
+					stream,
+					injection,
+					array,
+					padding, stride,
+					alpha_mod, beta_mod);
 		}
 	}
 };

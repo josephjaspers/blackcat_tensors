@@ -17,6 +17,14 @@ namespace convolutions {
 template<class SystemTag>
 struct Convolution_Implementation;
 
+
+/**
+ * A class of various (host) Convolution algorithms
+ * Expects col-major 3d or 4d Tensors in NCWH format.
+ *
+ * (BlackCat_Tensors are constructed in HWCN format but indexed via NCWH)
+ *
+ */
 template<>
 struct Convolution_Implementation<BC::host_tag> {
 
@@ -70,8 +78,8 @@ struct Convolution_Implementation<BC::host_tag> {
 				Delta delta,
 				Kernel krnl,
 				Image img,
-				size_t stride=1,
 				size_t padding=0,
+				size_t stride=1,
 				typename Image::value_type alpha=1,
 				typename Image::value_type beta=0) {
 
@@ -110,8 +118,8 @@ struct Convolution_Implementation<BC::host_tag> {
 				Output output,
 				Kernel krnl,
 				Image img,
-				size_t stride=1,
 				size_t padding=0,
+				size_t stride=1,
 				typename Image::value_type alpha=1,
 				typename Image::value_type beta=0) {
 
@@ -125,8 +133,14 @@ struct Convolution_Implementation<BC::host_tag> {
 		BC::size_t numb_krnls = krnl.dimension(3);
 		BC::size_t depth = krnl.dimension(2);
 
+
+
+		BC::print(
+				numb_krnls,
+				depth, stride, padding, alpha, beta, img.cols() + padding - krnl.cols() + 1, img.rows() + padding - krnl.rows() + 1);
 		BC_omp_parallel__
 		for (int c = -padding; c < img.cols() + padding - krnl.cols() + 1; c += stride) {
+
 			for (int r = -padding; r < img.rows() + padding - krnl.rows() + 1; r += stride) {
 				for (int k = 0; k < numb_krnls; ++k) {
 					for (int d = 0; d < depth; ++d) {
@@ -143,7 +157,46 @@ struct Convolution_Implementation<BC::host_tag> {
 			}
 		}
 	}
+	template<class Output, int KernelDimension, class Image> BCHOT
+	static void img2col(
+				Output output,
+				BC::Shape<KernelDimension> krnl,
+				Image img,
+				size_t padding=0,
+				size_t stride=1) {
 
+		BC::size_t depth = krnl.dimension(2);
+		BC::size_t numb_imgs = img.dimension(3);
+		BC::Shape<6> dimension_set(
+				krnl.rows(),
+				krnl.cols(),
+				depth,
+				img.rows() - krnl.rows() + 1 + padding * 2,
+				img.cols() - krnl.cols() + 1 + padding * 2,
+				numb_imgs);
+
+		BC_omp_parallel__
+		for (int i = 0; i < numb_imgs; ++i) {
+			BC_omp_parallel__
+			for (int d = 0; d < depth; ++d) {
+				for (int c = -padding; c < img.cols() + padding - krnl.cols() + 1; c += stride) {
+					for (int r = -padding; r < img.rows() + padding - krnl.rows() + 1; r += stride) {
+						for (int kc = 0; kc < krnl.cols(); ++kc) {
+							for (int kr = 0; kr < krnl.rows(); ++kr) {
+								auto output_index = dimension_set.dims_to_index(i, c, r, d, kc, kr);
+								if (c+kc >= 0 && c+kc < img.cols() &&
+									r+kr >= 0 && r+kr < img.rows()) {
+									output.memptr()[output_index] = img(d, c+kc, r+kr);
+								} else {
+									output.memptr()[output_index] = 0;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 };
 
 }

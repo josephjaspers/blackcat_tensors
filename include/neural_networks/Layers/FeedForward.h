@@ -16,7 +16,7 @@ namespace nn {
 template<
 	class SystemTag,
 	class ValueType>
-struct FeedForward : public Layer_Base {
+struct FeedForward: public Layer_Base {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
@@ -39,7 +39,7 @@ private:
 
 public:
 
-	FeedForward(BC::size_t inputs, BC::size_t outputs) :
+	FeedForward(BC::size_t inputs, BC::size_t outputs):
 		Layer_Base(__func__, inputs, outputs),
 		w(outputs, inputs),
 		b(outputs),

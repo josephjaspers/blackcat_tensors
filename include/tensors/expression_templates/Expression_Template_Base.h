@@ -66,6 +66,11 @@ struct Expression_Base
             		return static_cast<const derived&>(*this).dimension(i);
             	});
             }
+
+            BCINLINE const auto get_shape() const {
+            	return make_shape<derived::tensor_dimension>(
+            			static_cast<const derived&>(*this).inner_shape());
+            }
         };
 
 template<class Derived>

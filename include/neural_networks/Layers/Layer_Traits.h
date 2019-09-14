@@ -32,6 +32,9 @@ template<class T> using query_backwards_delta_should_be_cached = typename T::que
 template<class T> using query_extra_cache_args = typename T::extra_cache_args;
 template<class T> using query_extra_batched_cache_args = typename T::extra_batched_cache_args;
 
+template<class T, class Delta> using detect_back_propagation_type =
+		decltype(std::declval<T>().back_propagation(std::declval<T>(), std::declval<Delta>()));
+
 }
 
 template<class T>
@@ -48,6 +51,9 @@ struct layer_traits {
 	 *  If backwards_requires_outputs==std::true_type, outputs will be supplied in backward prop
 	 *
 	 */
+
+	template<class Delta, class=void>
+	auto select_on_backpropagation(T& expression, const Delta& delta);
 
 	using system_tag = typename T::system_tag;
 	using value_type
@@ -84,9 +90,13 @@ struct layer_traits {
 			= BC::traits::conditional_detected_t<detail::query_extra_cache_args, T, std::tuple<>>;
 	using extra_batched_cache_args
 			= BC::traits::conditional_detected_t<detail::query_extra_batched_cache_args, T, std::tuple<>>;
-
-
 };
+
+template<class T, class Delta>
+auto layer_traits<T>::select_on_backpropagation<Delta, std::enable_if_t<BC::traits::is_detected_v<detect_back_propgation_type<T>>>>
+(T& expression, const Delta& delta) {
+
+}
 
 }  // namespace nn
 }  // namespace BC
