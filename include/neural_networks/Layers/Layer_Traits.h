@@ -52,9 +52,6 @@ struct layer_traits {
 	 *
 	 */
 
-	template<class Delta, class=void>
-	auto select_on_backpropagation(T& expression, const Delta& delta);
-
 	using system_tag = typename T::system_tag;
 	using value_type
 			= BC::traits::conditional_detected_t<BC::traits::query_value_type, T,
@@ -91,13 +88,6 @@ struct layer_traits {
 	using extra_batched_cache_args
 			= BC::traits::conditional_detected_t<detail::query_extra_batched_cache_args, T, std::tuple<>>;
 };
-
-template<class T, class Delta>
-auto layer_traits<T>::select_on_backpropagation<Delta, std::enable_if_t<BC::traits::is_detected_v<detect_back_propgation_type<T>>>>
-(T& expression, const Delta& delta) {
-
-}
-
 }  // namespace nn
 }  // namespace BC
 

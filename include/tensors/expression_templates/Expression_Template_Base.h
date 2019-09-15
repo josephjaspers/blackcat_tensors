@@ -68,7 +68,7 @@ struct Expression_Base
             }
 
             BCINLINE const auto get_shape() const {
-            	return make_shape<derived::tensor_dimension>(
+            	return BC::Shape<derived::tensor_dimension>(
             			static_cast<const derived&>(*this).inner_shape());
             }
         };
