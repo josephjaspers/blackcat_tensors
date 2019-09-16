@@ -154,14 +154,19 @@ static void conv2d_kernel_backwards(
 				BC::size_t padding=0,
 				BC::size_t stride=1) {
 
-//		convolution_common_assert(
-//				stream,
-//				output,
-//				krnl,
-//				img,
-//				padding,
-//				stride);
-std::cout << " in img 2 col " << std::endl;
+		static_assert(
+			Output::tensor_dimension == 2 || Output::tensor_dimension == 3,
+			"Output must be 2d for img2col or 3d for batched img2col");
+
+		static_assert(
+			Image::tensor_dimension == 3 || Image::tensor_dimension == 4,
+			"Image must be 3d for img2col or 4d for batched img2col");
+
+		static_assert(X  <= 3, "Kernel Shape must be at most 3dimensions");
+
+		BC_ASSERT(padding >= 0, "Padding cannot be a negative value");
+		BC_ASSERT(stride >= 1, "Stride must be greater than 0");
+
 		using system_tag = typename Stream::system_tag;
 		using implementation = convolutions::Convolution_Implementation<system_tag>;
 		stream.enqueue([=](){

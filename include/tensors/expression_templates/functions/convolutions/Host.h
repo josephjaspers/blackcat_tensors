@@ -133,11 +133,6 @@ struct Convolution_Implementation<BC::host_tag> {
 		BC::size_t numb_krnls = krnl.dimension(3);
 		BC::size_t depth = krnl.dimension(2);
 
-
-
-		BC::print(
-				numb_krnls,
-				depth, stride, padding, alpha, beta, img.cols() + padding - krnl.cols() + 1, img.rows() + padding - krnl.rows() + 1);
 		BC_omp_parallel__
 		for (int c = -padding; c < img.cols() + padding - krnl.cols() + 1; c += stride) {
 

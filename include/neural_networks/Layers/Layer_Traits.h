@@ -5,8 +5,8 @@
  *      Author: joseph
  */
 
-#ifndef LAYER_TRAITS_H_
-#define LAYER_TRAITS_H_
+#ifndef BLACKCAT_TENSORS_LAYER_TRAITS_H_
+#define BLACKCAT_TENSORS_LAYER_TRAITS_H_
 
 namespace BC {
 namespace nn {
@@ -82,7 +82,6 @@ struct layer_traits {
 
 	using greedy_evaluate_delta
 			= BC::traits::conditional_detected_t<detail::query_greedy_evaluate_delta, T, std::false_type>;
-
 	using extra_cache_args
 			= BC::traits::conditional_detected_t<detail::query_extra_cache_args, T, std::tuple<>>;
 	using extra_batched_cache_args
