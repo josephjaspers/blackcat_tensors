@@ -10,8 +10,6 @@
 
 #include "Array.h"
 #include "Array_Slice.h"
-#include "Array_View.h"
-
 #include "Array_Scalar_Constant.h"
 
 #include "Expression_Unary.h"
@@ -23,8 +21,6 @@
 #include "Function_gemv.h"
 #include "Function_gemm.h"
 
-#include "Function_BatchedReduce.h"
-#include "Function_AutoBroadcast.h"
 #include "Function_Conv2d.h"
 #include "Function_Sum.h"
 

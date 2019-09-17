@@ -318,8 +318,7 @@ Binary_Expression<op, lv, rv>, std::enable_if_t<
 
 template<class Op, class Array>
 struct optimizer<Unary_Expression<Op, Array>,
-std::enable_if_t<!expression_traits<Array>::is_auto_broadcasted::value &&
- !expression_traits<Unary_Expression<Op, Array>>::requires_greedy_evaluation::value>>:
+std::enable_if_t<!expression_traits<Unary_Expression<Op, Array>>::requires_greedy_evaluation::value>>:
  unary_optimizer_default<Op, Array>
 {
     static constexpr bool entirely_blas_expr 	= false;

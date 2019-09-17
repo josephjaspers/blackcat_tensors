@@ -24,8 +24,6 @@ public:
 	using mat = BC::Matrix<ValueType, BC::Allocator<SystemTag, ValueType>>;
 	using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
 
-	using mat_view = BC::Matrix_View<ValueType, BC::Allocator<SystemTag, ValueType>>;
-
 private:
 	mat y;
 
@@ -38,7 +36,7 @@ public:
 	const auto& forward_propagation(const BC::Matrix<value_type, Allocator>& x) {
 		//TODO -- convert this into an operation, need 'broadcasted' sum
 		for (int i = 0; i < x.cols(); ++i) {
-			y[i] = BC::exp(x[i]) / BC::tensors::experimental::fast_sum(exp(x[i]));
+			y[i] = BC::exp(x[i]) / BC::tensors::sum(exp(x[i]));
 		}
 
 		return y;
@@ -46,7 +44,7 @@ public:
 	template<class Allocator>
 	auto forward_propagation(const BC::Vector<value_type, Allocator>& x) {
 		//TODO -- convert this into an operation, need 'broadcasted' sum
-		return  BC::exp(x) / BC::tensors::experimental::fast_sum(exp(x));
+		return  BC::exp(x) / BC::tensors::sum(exp(x));
 	}
 
 

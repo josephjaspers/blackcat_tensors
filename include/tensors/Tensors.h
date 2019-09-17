@@ -42,22 +42,6 @@ using Matrix = Tensor<2, ValueType, Allocator>;
 template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
 using Cube = Tensor<3, ValueType, Allocator>;
 
-template<int dimension, class ValueType, class Allocator=tensors::detail::default_allocator<ValueType>>
-using Tensor_View = BC::tensors::Tensor_Base<BC::tensors::exprs::Array_Const_View<BC::Shape<dimension>, ValueType, Allocator>>;
-
-template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
-using Scalar_View = Tensor_View<0, ValueType, Allocator>;
-
-template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
-using Vector_View = Tensor_View<1, ValueType, Allocator>;
-
-template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
-using Matrix_View = Tensor_View<2, ValueType, Allocator>;
-
-template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
-using Cube_View   = Tensor_View<3, ValueType, Allocator>;
-
-
 } //end of ns BC
 
 #endif /* TENSOR_ALIASES_H_ */

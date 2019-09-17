@@ -33,8 +33,6 @@ BC_EXTERN_C_END
 #undef BC_EXTERN_C_BEGIN
 #undef BC_EXTERN_C_END 
 
-#include "Host_Convolution2d.h"
-
 namespace BC {
 namespace blas {
 /*
@@ -234,38 +232,6 @@ struct BLAS<host_tag> {
 
         stream.enqueue([=]() {
         	cblas_sger(CblasColMajor, m, n, *alpha, X, incX, Y, incY, A, lda);
-        });
-	}
-
-	template<class Stream, class OutputPtr, class ImgPtr, class KrnlPtr>
-	static void conv2d_3dtensor_multichannel(
-			Stream stream,
-			OutputPtr output,
-			KrnlPtr krnl, size_t k_rows, size_t k_cols, size_t k_depth, size_t nkrnls,
-			ImgPtr img, size_t rows, size_t cols, size_t depth,
-			size_t stride=1, size_t padding=0) {
-
-        stream.enqueue([=]() {
-        	BC::blas::impl::conv2d_3dtensor_multichannel(output,
-        			krnl, k_rows, k_cols, k_depth, nkrnls,
-        			img, rows, cols, depth,
-        			stride, padding);
-        });
-	}
-
-	template<class Stream, class OutputPtr, class ImgPtr, class KrnlPtr>
-	static void backward_data_conv2d_3dtensor_multichannel(
-			Stream stream,
-			OutputPtr output,
-			KrnlPtr krnl, size_t k_rows, size_t k_cols, size_t k_depth, size_t nkrnls,
-			ImgPtr img, size_t rows, size_t cols, size_t depth,
-			size_t stride=1, size_t padding=0) {
-
-        stream.enqueue([=]() {
-        	BC::blas::impl::backward_data_conv2d_3dtensor_multichannel(output,
-        			krnl, k_rows, k_cols, k_depth, nkrnls,
-        			img, rows, cols, depth,
-        			stride, padding);
         });
 	}
 };

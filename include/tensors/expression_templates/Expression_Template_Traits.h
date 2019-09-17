@@ -24,14 +24,11 @@ namespace detail {
 template<class T> using query_system_tag = typename T::system_tag;
 template<class T> using query_value_type = typename T::value_type;
 template<class T> using query_allocation_type = typename T::allocation_tag;
-template<class T> using query_dx_is_defined = typename T::dx_is_defined;
 
 template<class T> using query_copy_assignable    = typename T::copy_assignable;
 template<class T> using query_copy_constructible = typename T::copy_constructible;
 template<class T> using query_move_assignable    = typename T::move_assignable;
 template<class T> using query_move_constructible = typename T::move_constructible;
-
-template<class T> using query_auto_broadcast = typename T::auto_broadcast;
 template<class T> using query_requires_greedy_evaluation = typename T::requires_greedy_evaluation;
 
 template<class T>
@@ -104,31 +101,6 @@ struct remove_transpose<
 	}
 };
 
-
-
-
-struct select_on_dx_when_defined {
-	template<class T> BCINLINE
-	static auto impl(const T& array, BC::size_t index) {
-		return array.dx(index);
-	}
-	template<class T, class... Indicies> BCINLINE
-	static auto impl(const T& array, Indicies... indicies) {
-		return array.dx(indicies...);
-	}
-};
-
-struct select_on_dx_when_not_defined {
-	template<class T> BCINLINE
-	static auto impl(const T& array, BC::size_t index) {
-    	return BC::traits::make_pair(array[index], 1);
-	}
-	template<class T, class... Indicies> BCINLINE
-	static auto impl(const T& array, Indicies... indicies) {
-    	return BC::traits::make_pair(array(indicies...), 1);
-	}
-};
-
 }
 
 #define BC_TAG_DEFINITION(name, using_name, default_value)\
@@ -162,27 +134,9 @@ class Shape;
 template<class T>
 struct expression_traits {
 
-	 using system_tag	  = typename BC::traits::conditional_detected<detail::query_system_tag, T, host_tag>::type;
-	 using allocation_tag = typename BC::traits::conditional_detected<detail::query_allocation_type, T, system_tag>::type;
-	 using value_type	  = typename BC::traits::conditional_detected<detail::query_value_type, T, void>::type;
-
-	 static constexpr bool derivative_is_defined =
-			 BC::traits::conditional_detected_t<detail::query_dx_is_defined, T, std::false_type>::value;
-
-	 template<class... Indicies>
-	 BCINLINE static auto select_on_dx(T&& expression, Indicies... indicies) {
-		 using selector = std::conditional_t<derivative_is_defined,
-				 detail::select_on_dx_when_defined,
-				 detail::select_on_dx_when_not_defined>;
-		 return selector::impl(expression, indicies...);
-	 }
-	 template<class... Indicies>
-	 BCINLINE static auto select_on_dx(const T& expression, Indicies... indicies) {
-		 using selector = std::conditional_t<derivative_is_defined,
-				 detail::select_on_dx_when_defined,
-				 detail::select_on_dx_when_not_defined>;
-		 return selector::impl(expression, indicies...);
-	 }
+	using system_tag	  = typename BC::traits::conditional_detected<detail::query_system_tag, T, host_tag>::type;
+	using allocation_tag = typename BC::traits::conditional_detected<detail::query_allocation_type, T, system_tag>::type;
+	using value_type	  = typename BC::traits::conditional_detected<detail::query_value_type, T, void>::type;
 
 	using is_move_constructible = BC::traits::conditional_detected_t<
 						detail::query_move_constructible, T, std::true_type>;
@@ -195,9 +149,6 @@ struct expression_traits {
 
 	using is_copy_assignable = BC::traits::conditional_detected_t<
 						detail::query_copy_assignable, T, std::true_type>;
-
-	using is_auto_broadcasted = BC::traits::conditional_detected_t<
-						detail::query_auto_broadcast, T, std::false_type>;
 
 	using requires_greedy_evaluation = BC::traits::conditional_detected_t<
 						detail::query_requires_greedy_evaluation,T, std::false_type>;

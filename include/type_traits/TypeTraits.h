@@ -29,7 +29,6 @@ using namespace BC::traits::common;
 	template<bool x,class T> using only_if = conditional_t<x, T, detail::DISABLE<T>>;
 
 	template<int x> struct Integer { static constexpr int value = x; };
-	template<class T> struct Type { using type = T; };
 	template<class T, class... Ts> using front_t = T;
 
 	template<class...> using void_t = void;
@@ -232,12 +231,20 @@ using namespace BC::traits::common;
 		static constexpr bool defines_system_tag = is_detected_v<query_system_tag, T>;
 		static constexpr bool defines_get_stream = is_detected_v<query_get_stream, T>;
 
+		using type = T;
+
 		using value_type =
 				traits::conditional_detected_t<query_value_type, T, None>;
 		using allocator_type =
 				traits::conditional_detected_t<query_allocator_type, T, None>;
 		using system_tag =
 				traits::conditional_detected_t<query_system_tag, T, host_tag>;
+	};
+
+
+	template<class T>
+	struct Type : common_traits<T> {
+		using type = T;
 	};
 
 }

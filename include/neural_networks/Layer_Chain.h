@@ -8,14 +8,15 @@ namespace BC {
 namespace nn {
 namespace detail {
 
-	template<class T>
-	using query_layer_type = typename T::layer_type;
+template<class T>
+using query_layer_type = typename T::layer_type;
 
-	template<
-		class Neural_Network_Is_Recurrent,
-		class Derived,
-		class Layer>
-	using LayerManager = Layer_Manager<Derived, Layer, Neural_Network_Is_Recurrent>;
+template<
+	class Neural_Network_Is_Recurrent,
+	class Derived,
+	class Layer>
+using LayerManager = Layer_Manager<Derived, Layer, Neural_Network_Is_Recurrent>;
+
 }
 
 /**

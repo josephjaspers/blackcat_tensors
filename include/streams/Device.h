@@ -31,8 +31,8 @@ class Stream<device_tag> {
 
 		HostStream	   m_host_stream;
 		cublasHandle_t m_cublas_handle;
-		cudaStream_t   m_stream_handle =nullptr;
-		cudaEvent_t    m_event_handle  =nullptr;
+		cudaStream_t   m_stream_handle=nullptr;
+		cudaEvent_t    m_event_handle=nullptr;
 
 		BC::allocators::fancy::Workspace<device_tag> m_workspace;
 
@@ -146,13 +146,16 @@ public:
     		BC_CUDA_ASSERT(cudaStreamSynchronize(device_contents.get()->m_stream_handle));
     }
 
-    //Enqueue is to ensure-same interface as the HostStream, as well as the LoggingStream (To be implemented)
+    //Functions (even functions using the internal stream)
+    //should use 'enqueue'
     template<class Function>
     void enqueue(Function f) {
     	f();
     }
 
-    template<class function, class=std::enable_if_t<std::is_void<decltype(std::declval<function>()())>::value>>
+    template<
+    	class function,
+    	class=std::enable_if_t<std::is_void<decltype(std::declval<function>()())>::value>>
     void enqueue_callback(function func) {
 
     	if (is_default()){
@@ -171,7 +174,9 @@ public:
     			}
     	);
     }
-    template<class function, class=std::enable_if_t<!std::is_void<decltype(std::declval<function>()())>::value>, int ADL=0>
+    template<
+    	class function,
+    	class=std::enable_if_t<!std::is_void<decltype(std::declval<function>()())>::value>, int ADL=0>
     auto enqueue_callback(function func) {
     	std::promise<decltype(func())> promise;
 
@@ -203,18 +208,6 @@ public:
     bool operator != (const Stream& dev) {
 		return device_contents != dev.device_contents;
 	}
-
-    Stream() = default;
-    Stream(const Stream& dev) = default;
-    Stream(Stream&&) = default;
-    Stream<device_tag>& operator = (const Stream& device) {
-    	this->device_contents = device.device_contents;
-    	return *this;
-    }
-    Stream<device_tag>& operator = (Stream&& device) {
-    	this->device_contents = std::move(device.device_contents);
-    	return *this;
-    }
 };
 
 

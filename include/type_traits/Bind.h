@@ -31,21 +31,23 @@ namespace {
 template<int index>
 struct get_impl {
     template<class T, class... Ts>
-    static auto impl(T&& head, Ts&&... params) {
+    static auto impl(T&& head, Ts&&... params) -> decltype(get_impl<index - 1>::impl(params...)) {
          return get_impl<index - 1>::impl(params...);
     }
 };
 template<>
 struct get_impl<0> {
     template<class T, class... Ts>
-    static auto impl(T&& head, Ts&&... params) {
+    static T&& impl(T&& head, Ts&&... params) {
          return head;
     }
 };
 }
 
+/** Returns the Nth argument in the argument_pack
+ */
 template<int index, class... Ts>
-auto get(Ts&&... params) {
+auto get(Ts&&... params) -> decltype(get_impl<index>::impl(params...)) {
 	return get_impl<index>::impl(params...);
 }
 

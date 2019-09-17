@@ -45,16 +45,6 @@ namespace oper {
 	}																				\
 	BC_FORWARD_TO_APPLY
 
-
-#define BC_BACKWARD_DEF(...)														\
-	template<class Lv, class Rv>													\
-	BCINLINE 																		\
-	static auto dx (Lv lv, Rv rv) 												\
-	-> decltype(__VA_ARGS__) {														\
-		return __VA_ARGS__;															\
-	}																				\
-
-
     struct Scalar_Mul {
     	BC_FORWARD_DEF(lv * rv)
     } scalar_mul;
@@ -63,31 +53,20 @@ namespace oper {
     struct Add : linear_operation {
     	using alpha_modifier = BC::traits::Integer<1>;
     	BC_FORWARD_DEF(lv + rv)
-    	BC_BACKWARD_DEF(lv.second + rv.second)
     } add;
 
     struct Mul {
     	BC_FORWARD_DEF(lv * rv)
-    	BC_BACKWARD_DEF(lv.second*rv.first + rv.second*lv.first)
 
     } mul;
 
     struct Sub : linear_operation {
     	using alpha_modifier = BC::traits::Integer<-1>;
     	BC_FORWARD_DEF(lv - rv)
-    	BC_BACKWARD_DEF(lv.second - rv.second)
-
     } sub;
 
     struct Div {
     	BC_FORWARD_DEF(lv / rv)
-    	//d(f(x)/g(x)) == [g(x) * f`(x) - f(x)*g`(x)] / g(x)^2
-    	//lv.first == f(x)
-    	//lv.second == f`(x)
-    	//rv.first == g(x)
-    	//rv.second == g`(x)
-    	BC_BACKWARD_DEF((rv.first * lv.second - lv.first * rv.second) / (rv.first*rv.first))
-
     } div;
 
     struct Assign : assignment_operation {
@@ -296,7 +275,6 @@ using Atomic_Mul = std::enable_if_t<detail::is_host<SystemTag>,
 }
 
 #undef BC_FORWARD_DEF
-#undef BC_BACKWARD_DEF
 #undef BC_FORWARD_TO_APPLY
 
 #endif /* EXPRESSION_BINARY_FUNCTORS_H_ */

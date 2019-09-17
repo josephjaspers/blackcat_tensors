@@ -24,7 +24,6 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Operation, L
     using return_type = decltype(std::declval<Operation>()(std::declval<lv_value_t&>(), std::declval<rv_value_t&>()));
     using value_type  = std::remove_reference_t<std::decay_t<return_type>>;
     using system_tag  = typename Lv::system_tag;
-    using dx_is_defined = std::true_type;
 
     static constexpr int tensor_dimension = BC::traits::max(Lv::tensor_dimension, Rv::tensor_dimension);
     static constexpr int tensor_iterator_dimension = Lv::tensor_dimension != Rv::tensor_dimension ? tensor_dimension : BC::traits::max(Lv::tensor_iterator_dimension, Rv::tensor_iterator_dimension);
@@ -60,15 +59,6 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Operation, L
      	return Operation::operator()(left(ints...), right(ints...));
     }
 
-    template<class... Indicies>
-    BCINLINE auto dx(Indicies... indicies) const {
-    	auto lv_dx = expression_traits<Lv>::select_on_dx(left, indicies...);
-    	auto rv_dx = expression_traits<Rv>::select_on_dx(right, indicies...);
-    	auto cache_out = Operation::operator()(lv_dx.first, rv_dx.first);
-    	auto deriv_out = Operation::dx(lv_dx, rv_dx);
-    	return BC::traits::make_pair(cache_out, deriv_out);
-    }
-
 private:
     BCINLINE const auto& shape() const {
     	struct Lv_shape {
@@ -79,20 +69,9 @@ private:
     		static BCINLINE
     		const Rv& get_shape(const Lv& left, const Rv& right) { return right; }
     	};
-    	constexpr bool lv_is_auto_broadcast = expression_traits<Lv>::is_auto_broadcasted::value;
-    	constexpr bool rv_is_auto_broadcast = expression_traits<Rv>::is_auto_broadcasted::value;
 
-    	constexpr bool rv_is_greater_dim = Rv::tensor_dimension > Lv::tensor_dimension;
-    	constexpr bool lv_is_greater_dim = Lv::tensor_dimension > Rv::tensor_dimension;
-
-    	using impl =
-    		std::conditional_t<lv_is_greater_dim, Lv_shape,
-    			std::conditional_t<rv_is_greater_dim, Rv_shape,
-    				std::conditional_t<lv_is_auto_broadcast, Rv_shape,
-    					std::conditional_t<rv_is_auto_broadcast, Lv_shape, Lv_shape>>>>;
-    	static_assert(!(lv_is_auto_broadcast && rv_is_auto_broadcast),
-    			"Lv and Rv are autobroadcasted functions, error cannot deduce shape of this expression,"
-    			"in a binary_expression only one branch maybe auto-broadcasted");
+    	using impl = std::conditional_t<
+    			(Lv::tensor_dimension >= Rv::tensor_dimension), Lv_shape, Rv_shape>;
     	return impl::get_shape(left, right);
     }
 
