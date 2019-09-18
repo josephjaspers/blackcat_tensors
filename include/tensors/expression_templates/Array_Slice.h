@@ -58,13 +58,21 @@ using slice_type_from_parent = Array_Slice<BC::Shape<BC::traits::max(Dimension,0
 		typename Parent::allocator_t,
 		BC_View, Tags...>;
 
+template<int Dimension, class Parent, class... Tags>
+using strided_slice_type_from_parent = Array_Slice<
+		std::enable_if_t<Dimension==1, Strided_Vector_Shape>,
+		typename Parent::value_type,
+		typename Parent::allocator_t,
+		BC_View, Tags...>;
+
+
 }
 
 template<class Parent>
 auto make_row(Parent& parent, BC::size_t index) {
-	using slice_type = slice_type_from_parent<1, Parent, BC_Noncontinuous>;
+	using slice_type = strided_slice_type_from_parent<1, Parent, BC_Noncontinuous>;
 	return slice_type(parent.get_stream(), parent.get_allocator(),
-						Shape<1>(parent.cols(), parent.leading_dimension(0)),
+						Strided_Vector_Shape(parent.cols(), parent.leading_dimension(0)),
 						parent.memptr() + index);
 }
 
@@ -74,10 +82,10 @@ auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
     BC::size_t length = BC::traits::min(parent.rows(), parent.cols() - diagnol_index);
     BC::size_t ptr_index = diagnol_index > 0 ? parent.leading_dimension(0) * diagnol_index : std::abs(diagnol_index);
 
-    using slice_type = slice_type_from_parent<1, Parent, BC_Noncontinuous>;
+    using slice_type = strided_slice_type_from_parent<1, Parent, BC_Noncontinuous>;
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
-						Shape<1>(length, stride),
+						Strided_Vector_Shape(length, stride),
 						parent.memptr() + ptr_index);
 }
 

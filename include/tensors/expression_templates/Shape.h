@@ -81,6 +81,10 @@ struct Shape {
         return dims_to_index(BC::utility::make_array(ints...));
     }
 
+    BCINLINE BC::size_t coefficientwise_dims_to_index(BC::size_t index) const {
+        return index;
+    }
+
     template<int D> BCINLINE
     BC::size_t dims_to_index(const BC::utility::array<D, int>& var) const {
         BC::size_t index = var[D-1];
@@ -141,6 +145,10 @@ struct Shape<0> {
     BCINLINE BC::size_t dims_to_index(integers... ints) const {
     	return 0;
     }
+
+    BCINLINE BC::size_t coefficientwise_dims_to_index(BC::size_t i) const {
+        return 0;
+    }
 };
 
 template<>
@@ -149,31 +157,59 @@ struct Shape<1> {
 	static constexpr int tensor_dimension = 1;
 
     BC::utility::array<1, int> m_inner_shape = {0};
-    BC::utility::array<1, int> m_block_shape = {1};
 
     BCINLINE Shape() {};
-    BCINLINE Shape (BC::utility::array<1, int> param) : m_inner_shape {param}, m_block_shape { 1 }  {}
+    BCINLINE Shape (BC::utility::array<1, int> param) : m_inner_shape {param} {}
 
     template<int dim, class f, class int_t> BCINLINE
     Shape (utility::lambda_array<dim, int_t, f> param) {
         static_assert(dim >= 1, "SHAPE MUST BE CONSTRUCTED FROM ARRAY OF AT LEAST SAME dimension");
         m_inner_shape[0] = param[0];
-        m_block_shape[0] = 1;
     }
 
     template<int x>
     BCINLINE Shape(const Shape<x>& shape) {
         static_assert(x >= 1, "BC: CANNOT CONSTRUCT A VECTOR SHAPE FROM A SCALAR SHAPE");
         m_inner_shape[0] = shape.m_inner_shape[0];
-        m_block_shape[0] = 1; //shape.m_block_shape[0];
     }
 
-    BCINLINE Shape(BC::size_t length, BC::size_t leading_dimension) {
+    BCINLINE Shape(int length_) : m_inner_shape { length_ } {}
+    BCINLINE BC::size_t  size() const { return m_inner_shape[0]; }
+    BCINLINE BC::size_t  rows() const { return m_inner_shape[0]; }
+    BCINLINE BC::size_t  cols() const { return 1; }
+    BCINLINE BC::size_t  dimension(int i) const { return i == 0 ? m_inner_shape[0] : 1; }
+    BCINLINE BC::size_t  outer_dimension() const { return m_inner_shape[0]; }
+    BCINLINE BC::size_t  leading_dimension(int i) const { return i == 0 ? 1 : 0; }
+    BCINLINE const auto& inner_shape() const { return m_inner_shape; }
+    BCINLINE auto outer_shape() const { return utility::make_lambda_array<0>([](int i) { return i == 0 ? 1 : 0; }); }
+
+    template<class... integers>
+    BCINLINE BC::size_t dims_to_index(BC::size_t i, integers... ints) const {
+    	return dims_to_index(ints...);
+    }
+    template<class... integers>
+    BCINLINE BC::size_t dims_to_index(BC::size_t i) const {
+    	return i;
+    }
+
+    BCINLINE BC::size_t coefficientwise_dims_to_index(BC::size_t i) const {
+        return i;
+    }
+};
+
+
+struct Strided_Vector_Shape {
+
+	static constexpr int tensor_dimension = 1;
+
+    BC::utility::array<1, int> m_inner_shape = {0};
+    BC::utility::array<1, int> m_block_shape = {1};
+
+    BCINLINE Strided_Vector_Shape(BC::size_t length, BC::size_t leading_dimension) {
         m_inner_shape[0] = length;
         m_block_shape[0] = leading_dimension;
     }
 
-    BCINLINE Shape(int length_) : m_inner_shape { length_ }, m_block_shape {1} {}
     BCINLINE BC::size_t  size() const { return m_inner_shape[0]; }
     BCINLINE BC::size_t  rows() const { return m_inner_shape[0]; }
     BCINLINE BC::size_t  cols() const { return 1; }
@@ -187,11 +223,20 @@ struct Shape<1> {
     BCINLINE BC::size_t dims_to_index(BC::size_t i, integers... ints) const {
     	return dims_to_index(ints...);
     }
+
     template<class... integers>
     BCINLINE BC::size_t dims_to_index(BC::size_t i) const {
     	return m_block_shape[0] * i;
     }
 
+    template<class... integers>
+    BCINLINE BC::size_t slice_ptr_index(BC::size_t i) const {
+    	return m_block_shape[0] * i;
+    }
+
+    BCINLINE BC::size_t coefficientwise_dims_to_index(BC::size_t index) const {
+        return m_block_shape[0] * index;
+    }
 };
 
 template<class... integers, typename=std::enable_if_t<traits::sequence_of_v<BC::size_t, integers...>>>

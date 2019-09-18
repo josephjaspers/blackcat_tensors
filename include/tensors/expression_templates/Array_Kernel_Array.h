@@ -75,42 +75,22 @@ public:
     BCINLINE pointer_type memptr() const { return array; }
     BCINLINE const shape_type& get_shape() const { return static_cast<const shape_type&>(*this); }
 
-    BCINLINE const auto& operator [](int index) const {
-    	if (tensor_dimension==0) {
-    		return array[0];
-    	} else if (!expression_traits<self_type>::is_continuous::value && tensor_dimension==1) {
-    		return array[this->leading_dimension(0) * index];
-    	} else {
-    		return array[index];
-    	}
+    BCINLINE const auto& operator [](BC::size_t index) const {
+		return array[this->coefficientwise_dims_to_index(index)];
     }
 
-    BCINLINE auto& operator [](int index) {
-    	if (tensor_dimension==0) {
-    		return array[0];
-    	} else if (!expression_traits<self_type>::is_continuous::value && tensor_dimension==1) {
-    		return array[this->leading_dimension(0) * index];
-    	} else {
-    		return array[index];
-    	}
+    BCINLINE auto& operator [](BC::size_t index) {
+		return array[this->coefficientwise_dims_to_index(index)];
     }
 
     template<class ... integers>
     BCINLINE const auto& operator ()(integers ... ints) const {
-    	if (tensor_dimension==0) {
-    		return array[0];
-    	} else {
-    		return array[this->dims_to_index(ints...)];
-    	}
+		return array[this->dims_to_index(ints...)];
     }
 
     template<class ... integers>
     BCINLINE auto& operator ()(integers ... ints) {
-    	if (tensor_dimension==0) {
-    		return array[0];
-    	} else {
-    		return array[this->dims_to_index(ints...)];
-    	}
+		return array[this->dims_to_index(ints...)];
     }
 
     BCINLINE auto slice_ptr_index(int i) const {

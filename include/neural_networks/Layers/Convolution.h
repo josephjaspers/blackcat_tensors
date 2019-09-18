@@ -94,7 +94,6 @@ public:
 		for (int i = 0; i < this->batch_size(); ++i) {
 			y[i] = w.multichannel_conv2d(x[i]);
 		}
-//		y.print_sparse(3);
 		return y;
 	}
 
