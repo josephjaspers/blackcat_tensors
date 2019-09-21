@@ -34,44 +34,45 @@ struct img2col {
 };
 
 
-template<class lv, class rv>
-struct Binary_Expression<multichannel_conv2d, lv, rv>
-: Expression_Base<Binary_Expression<multichannel_conv2d, lv, rv>>, multichannel_conv2d {
+template<class Kernel, class Image>
+struct Binary_Expression<multichannel_conv2d, Kernel, Image>
+: Expression_Base<Binary_Expression<multichannel_conv2d, Kernel, Image>>, multichannel_conv2d {
 
-	static_assert((lv::tensor_dimension == 3 || lv::tensor_dimension==4),"Kernel must have 3 or 4 dimensions");
-	static_assert(rv::tensor_dimension==3, "Image (rv) dimension must be 3");
+	static_assert((Kernel::tensor_dimension == 3 || Kernel::tensor_dimension==4),"Kernel must have 3 or 4 dimensions");
+	static_assert((Image::tensor_dimension == 3 || Image::tensor_dimension==4),"Image must have 3 or 4 dimensions");
 
-	using value_type = typename lv::value_type;
-	using system_tag = typename lv::system_tag;
+	using value_type = typename Kernel::value_type;
+	using system_tag = typename Kernel::system_tag;
 	using blas_impl  = BC::blas::implementation<system_tag>;
 
-	static constexpr int tensor_dimension  = 3;
-	static constexpr int tensor_iterator_dimension = 3;
+	static constexpr bool kernel_is_batched = Kernel::tensor_dimension==4;
+	static constexpr bool image_is_batched = Image::tensor_dimension==4;
+	static constexpr int tensor_dimension  = 2 + image_is_batched + kernel_is_batched;
+	static constexpr int tensor_iterator_dimension = tensor_dimension;
 
-	lv left;
-	rv right;
+	Kernel left;
+	Image right;
 
 	BC::size_t stride = 1;
 	BC::size_t padding = 0;
 
-	BCINLINE BC::size_t  size() const { return rows() * cols() * this->dimension(2); }
+	BCINLINE BC::size_t  size() const { return rows() * cols() * this->dimension(2) * this->dimension(3); }
 	BCINLINE BC::size_t  rows() const { return right.rows() - left.rows() + padding*2 + 1;  }
 	BCINLINE BC::size_t  cols() const { return right.cols() - left.cols() + padding*2 + 1; }
 	BCINLINE BC::size_t  dimension(int i) const {
-		if (i == 0)
-			return rows();
-		else if (i == 1)
-			return cols();
-		else if (i == 2)
-			return left.dimension(3);
-		else
-			return 1;
+		switch (i) {
+			case 0: return rows();
+			case 1: return cols();
+			case 2: return left.dimension(3);
+			case 3: return right.dimension(3);
+			default: return 1;
+		}
 	}
 
-	Binary_Expression(lv left, rv right, BC::size_t stride_, BC::size_t padding_):
+	Binary_Expression(Kernel left, Image right, BC::size_t stride_, BC::size_t padding_):
 		left(left), right(right), stride(stride_), padding(padding_) {}
 
-	Binary_Expression(lv left, rv right, multichannel_conv2d default_=multichannel_conv2d()):
+	Binary_Expression(Kernel left, Image right, multichannel_conv2d default_=multichannel_conv2d()):
 		left(left), right(right), stride(1), padding(0) {}
 
 
@@ -138,16 +139,13 @@ struct Binary_Expression<multichannel_conv2d_kernel_backwards, lv, rv>:
 	BCINLINE BC::size_t  rows() const { return left.rows() - right.rows() + padding*2 + 1;  }
 	BCINLINE BC::size_t  cols() const { return left.cols() - right.cols() + padding*2 + 1; }
 	BCINLINE BC::size_t  dimension(int i) const {
-		if (i == 0)
-			return rows();
-		else if (i == 1)
-			return cols();
-		else if (i == 2)
-			return left.dimension(2);
-		else if (i == 3)
-			return right.dimension(2);
-		else
-			return 1;
+		switch (i) {
+			case 0: return rows();
+			case 1: return cols();
+			case 2: return left.dimension(2);
+			case 3: return right.dimension(2);
+			default: return 1;
+		}
 	}
 
 	Binary_Expression(lv left, rv right, BC::size_t stride_, BC::size_t padding_):
@@ -204,8 +202,8 @@ struct Binary_Expression<multichannel_conv2d_data_backwards, lv, rv>
 	using system_tag = typename lv::system_tag;
 	using blas_impl  = BC::blas::implementation<system_tag>;
 
-	static constexpr int tensor_dimension  = 3;
-	static constexpr int tensor_iterator_dimension = 3;
+	static constexpr int tensor_dimension  = rv::tensor_dimension;
+	static constexpr int tensor_iterator_dimension = rv::tensor_dimension;
 
 	lv left;
 	rv right;
@@ -213,18 +211,23 @@ struct Binary_Expression<multichannel_conv2d_data_backwards, lv, rv>
 	BC::size_t stride = 1;
 	BC::size_t padding = 0;
 
-	BCINLINE BC::size_t  size() const { return rows() * cols() * this->dimension(2); }
+	BCINLINE BC::size_t size() const {
+		return dimension(0) *
+				dimension(1) *
+				dimension(2) *
+				dimension(3);
+	}
 	BCINLINE BC::size_t  rows() const { return right.rows() + left.rows() - padding*2 - 1;  }
 	BCINLINE BC::size_t  cols() const { return right.cols() + left.cols() - padding*2 - 1; }
 	BCINLINE BC::size_t  dimension(int i) const {
-		if (i == 0)
-			return rows();
-		else if (i == 1)
-			return cols();
-		else if (i == 2)
-			return left.dimension(2);
-		else
-			return 1;
+		switch (i) {
+			case 0: return rows();
+			case 1: return cols();
+			case 2: return left.dimension(2);
+			case 3: return tensor_dimension>=4? right.dimension(3):1;
+			default: return 1;
+		}
+
 	}
 
 	Binary_Expression(lv left, rv right, BC::size_t stride_, BC::size_t padding_):

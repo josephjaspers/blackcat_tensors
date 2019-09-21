@@ -153,7 +153,7 @@ private:
 //		return Layer::back_propagation(args...);
 //	}
 	template<class Input, class Dy>
-	auto backward_supply_outputs(std::true_type,  const Input& inputs, const Dy& delta) {
+	auto&& backward_supply_outputs(std::true_type,  const Input& inputs, const Dy& delta) {
 		using is_batched = BC::traits::truth_type<Input::tensor_dimension==input_tensor_dimension::value+1>;
 		auto& outputs = BC::traits::derived_cast(*this).next().layer().m_input_cache.load(is_batched());
 		return Layer::back_propagation(inputs, outputs, delta);
@@ -168,15 +168,15 @@ private:
 //
 
 	template<class T>
-	auto maybe_cache_delta(const T& dy) {
-		return maybe_cache_delta_impl(dy, typename layer_traits<Layer>::greedy_evaluate_delta());
+	auto&& maybe_cache_delta(const T& dy) {
+		return maybe_cache_delta_impl(dy, typename layer_traits<Layer>::greedy_evaluate_delta());;
 	}
 	template<class T>
-	auto& maybe_cache_delta_impl(const T& dy, std::true_type cache_delta) {
+	auto&& maybe_cache_delta_impl(const T& dy, std::true_type cache_delta) {
 		return m_delta_cache.store(dy);
 	}
 	template<class T>
-	auto maybe_cache_delta_impl(const T& dy, std::false_type cache_delta) {
+	const T& maybe_cache_delta_impl(const T& dy, std::false_type cache_delta) {
 		return dy;
 	}
 };

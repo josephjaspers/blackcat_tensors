@@ -29,7 +29,9 @@ auto reshape(Tensor_Base<T>& tensor, Shape shape) {
 	static_assert(BC::tensors::exprs::expression_traits<T>::is_array::value &&
 					T::tensor_iterator_dimension <= 1,
 					"Reshape is only available to continuous tensors");
-	return make_tensor(exprs::make_view(tensor, shape));
+	auto reshaped_tensor =  make_tensor(exprs::make_view(tensor, shape));
+	BC_ASSERT(reshaped_tensor.size() == tensor.size(), "Reshape requires same size");
+	return reshaped_tensor;
 }
 
 
@@ -38,7 +40,9 @@ const auto reshape(const Tensor_Base<T>& tensor, Shape shape) {
 	static_assert(BC::tensors::exprs::expression_traits<T>::is_array::value &&
 		T::tensor_iterator_dimension <= 1,
 		"Reshape is only available to continuous tensors");
-	return make_tensor(exprs::make_view(tensor, shape));
+	auto reshaped_tensor =  make_tensor(exprs::make_view(tensor, shape));
+	BC_ASSERT(reshaped_tensor.size() == tensor.size(), "Reshape requires same size");
+	return reshaped_tensor;
 }
 
 template<class T, class Index, class Shape>

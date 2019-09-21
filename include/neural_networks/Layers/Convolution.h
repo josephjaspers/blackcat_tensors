@@ -13,7 +13,6 @@
 
 namespace BC {
 namespace nn {
-//namespace not_implemented {
 
 template<
 	class SystemTag,
@@ -88,29 +87,13 @@ public:
 
 	template<class X>
 	auto forward_propagation(const X& x) {
-		static_assert(X::tensor_dimension == 4,"Input must be a 4d tensor (3d image + 1d for batch_size)");
-		tensor4 y(m_batched_output_shape);
-		y.zero();
-		for (int i = 0; i < this->batch_size(); ++i) {
-			y[i] = w.multichannel_conv2d(x[i]);
-		}
-		return y;
+		return w.multichannel_conv2d(x);
 	}
 
 	template<class X, class Delta>
 	auto back_propagation(const X& x, const Delta& dy) {
-		static_assert(Delta::tensor_dimension == 4,"Delta must be a 4d tensor");
-		static_assert(X::tensor_dimension == 4,"Input must be a 4d tensor (3d image + 1d for batch_size)");
-
-		for (int i = 0; i < this->batch_size(); ++i)
-			w_gradients -= x[i].multichannel_conv2d_kernel_backwards(dy[i]);
-
-		tensor4 dx(m_batched_input_shape);
-		for (int i = 0; i < this->batch_size(); ++i) {
-			static_assert(decltype(dy[i])::tensor_dimension==3, "must be 3");
-			dx[i] = w.multichannel_conv2d_data_backwards(dy[i]); //dy[i]);
-		}
-		return dx;
+		w_gradients -= x.multichannel_conv2d_kernel_backwards(dy);
+		return w.multichannel_conv2d_data_backwards(dy);
 	}
 
 	void update_weights() {
@@ -148,7 +131,6 @@ public:
 	auto get_learning_rate() const { return lr; }
 };
 
-//}
 }
 }
 

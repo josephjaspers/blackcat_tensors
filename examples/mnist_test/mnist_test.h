@@ -53,7 +53,10 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	using clock = std::chrono::duration<double>;
 
 	auto network = neuralnetwork(
-		BC::nn::feedforward(system_tag, 784, 256),
+		BC::nn::Convolution<System, double>(28, 28, 1),
+		BC::nn::flatten(system_tag, BC::Shape<3>(26, 26, 32)),
+		BC::nn::relu(system_tag, 26*26*32),
+		BC::nn::feedforward(system_tag, 26*26*32, 256),
 		BC::nn::logistic(system_tag, 256),
 		BC::nn::feedforward(system_tag, 256, 10),
 		BC::nn::softmax(system_tag, 10),
@@ -76,7 +79,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	for (int i = 0; i < epochs; ++i){
 		std::cout << " current epoch: " << i << std::endl;
 		for (int j = 0; j < samples/batch_size; ++j) {
-			network.forward_propagation(inputs[j]);
+			network.forward_propagation(BC::reshape(inputs[j], BC::shape(28,28, 1, batch_size)));
 			network.back_propagation(outputs[j]);
 			network.update_weights();
 		}
@@ -96,7 +99,8 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	for (int i = 0; i < test_images; ++i) {
 		//print transpose to orient the images correctly
 		images[i].t().print_sparse(3);
-		network.forward_propagation(inputs[0][i]).print();
+		network.forward_propagation(BC::reshape(inputs[0], BC::shape(28,28, 1, batch_size)))[i];
+//		network.forward_propagation(inputs[0][i]).print();
 		std::cout << "------------------------------------" <<std::endl;
 	}
 	std::cout << " success " << std::endl;

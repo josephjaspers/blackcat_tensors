@@ -28,8 +28,8 @@ namespace utility {
         T value[size_] = { 0 } ;
 
         BCINLINE const T& operator [] (int i) const { return value[i]; }
-        BCINLINE        T& operator [] (int i)         { return value[i]; }
-        BCINLINE static constexpr BC::size_t  size()         { return size_; }
+        BCINLINE        T& operator [] (int i)      { return value[i]; }
+        BCINLINE static constexpr BC::size_t size() { return size_; }
     };
 
     //---------------------base_case----------------------//

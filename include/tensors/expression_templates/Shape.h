@@ -72,17 +72,21 @@ struct Shape {
     BCINLINE BC::size_t  size() const { return m_block_shape[Dimension - 1]; }
     BCINLINE BC::size_t  rows() const { return m_inner_shape[0]; }
     BCINLINE BC::size_t  cols() const { return m_inner_shape[1]; }
-    BCINLINE BC::size_t  dimension(int i) const { return m_inner_shape[i]; }
+    BCINLINE BC::size_t  dimension(int i) const { return i < Dimension ?  m_inner_shape[i] : 1; }
     BCINLINE BC::size_t  outer_dimension() const { return m_inner_shape[Dimension - 1]; }
     BCINLINE BC::size_t  leading_dimension(int i) const { return i < Dimension ? m_block_shape[i] : 0; }
 
-    template<class... integers, typename=std::enable_if_t<BC::traits::sequence_of_v<BC::size_t, integers...>>>
-    BCINLINE BC::size_t dims_to_index(integers... ints) const {
-        return dims_to_index(BC::utility::make_array(ints...));
-    }
-
     BCINLINE BC::size_t coefficientwise_dims_to_index(BC::size_t index) const {
         return index;
+    }
+
+    template<
+    	class... integers,
+    	class=std::enable_if_t<
+    		BC::traits::sequence_of_v<BC::size_t, integers...> &&
+    		(sizeof...(integers) >= Dimension)>>
+    BCINLINE BC::size_t dims_to_index(integers... ints) const {
+        return dims_to_index(BC::utility::make_array(ints...));
     }
 
     template<int D> BCINLINE
