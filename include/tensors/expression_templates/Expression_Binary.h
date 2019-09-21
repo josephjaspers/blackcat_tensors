@@ -26,8 +26,14 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Operation, L
     using system_tag  = typename Lv::system_tag;
 
     static constexpr int tensor_dimension = BC::traits::max(Lv::tensor_dimension, Rv::tensor_dimension);
-    static constexpr int tensor_iterator_dimension = Lv::tensor_dimension != Rv::tensor_dimension ? tensor_dimension : BC::traits::max(Lv::tensor_iterator_dimension, Rv::tensor_iterator_dimension);
-
+    static constexpr int tensor_iterator_dimension =
+    		Lv::tensor_dimension != Rv::tensor_dimension ?
+    		tensor_dimension :
+    		BC::traits::max(
+    				Lv::tensor_iterator_dimension,
+    				Rv::tensor_iterator_dimension,
+    				Lv::tensor_dimension,
+    				Rv::tensor_dimension);
     Lv left;
     Rv right;
 
@@ -44,7 +50,7 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Operation, L
     	return Operation::operator()(left[index], right[index]);
     }
 
-    template<class... integers>
+    template<class... integers, class=std::enable_if_t<(sizeof...(integers)>=tensor_iterator_dimension)>>
     BCINLINE auto  operator ()(integers... ints) const {
     	return Operation::operator()(left(ints...), right(ints...));
     }
@@ -54,7 +60,7 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Operation, L
     	return Operation::operator()(left[index], right[index]);
     }
 
-    template<class... integers>
+    template<class... integers, class=std::enable_if_t<(sizeof...(integers)>=tensor_iterator_dimension)>>
     BCINLINE auto  operator ()(integers... ints) {
      	return Operation::operator()(left(ints...), right(ints...));
     }

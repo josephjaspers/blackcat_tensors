@@ -26,34 +26,43 @@ namespace evaluator {
 template<>
 struct Evaluator<device_tag> {
 
-	template<int Dimensions, class Expression, class Stream>
-	static void nd_evaluate(Expression expression, Stream stream) {
-
 		struct n1 {
-			static void eval(Expression expression, cudaStream_t stream) {
-				gpu_impl::eval<<<calculate_block_dim(expression.size()), calculate_threads(), 0, stream>>>(expression);
-			}
-		};
+		template<class Expression>
+				static void eval(Expression expression, cudaStream_t stream) {
+					gpu_impl::eval<<<calculate_block_dim(expression.size()), calculate_threads(), 0, stream>>>(expression);
+				}
+			};
 		struct n2 {
+			template<class Expression>
 			static void eval(Expression expression, cudaStream_t stream) {
 				gpu_impl::eval2d<<<calculate_block_dim(expression.size()), calculate_threads(), 0, stream>>>(expression);
 			}
 		};
 		struct n3 {
+			template<class Expression>
 			static void eval(Expression expression, cudaStream_t stream) {
 				gpu_impl::eval3d<<<calculate_block_dim(expression.size()), calculate_threads(), 0, stream>>>(expression);
 			}
 		};
 		struct n4 {
+			template<class Expression>
 			static void eval(Expression expression, cudaStream_t stream) {
 				gpu_impl::eval4d<<<calculate_block_dim(expression.size()), calculate_threads(), 0, stream>>>(expression);
 			}
 		};
 		struct n5 {
+			template<class Expression>
 			static void eval(Expression expression, cudaStream_t stream) {
 				gpu_impl::eval5d<<<calculate_block_dim(expression.size()), calculate_threads(), 0, stream>>>(expression);
 			}
+
 		};
+
+	template<int Dimensions, class Expression, class Stream>
+	static void nd_evaluate(Expression expression, Stream stream) {
+		static_assert(Expression::tensor_dimension <= Dimensions,
+				"Iterator Dimension must be greater than or equal to the tensor_dimension");
+
 
 		using run = std::conditional_t<(Dimensions <= 1), n1,
 						std::conditional_t<(Dimensions == 2), n2,
