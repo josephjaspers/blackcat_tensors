@@ -45,16 +45,6 @@ const auto reshape(const Tensor_Base<T>& tensor, Shape shape) {
 	return reshaped_tensor;
 }
 
-template<class T, class Index, class Shape>
-[[deprecated]] const auto chunk(const Tensor_Base<T>& tensor, Index index, Shape shape) {
-	return make_tensor(exprs::make_chunk(tensor, index, shape));
-}
-
-template<class T, class Index, class Shape>
-[[deprecated]]  auto chunk(Tensor_Base<T>& tensor, Index index, Shape shape) {
-	return make_tensor(exprs::make_chunk(tensor, index, shape));
-}
-
 
 template<class ExpressionTemplate, class voider=void>
 class Tensor_Accessor {
@@ -87,26 +77,31 @@ public:
 		return make_tensor(exprs::make_chunk(as_derived(), index, shape));
 	}
 
-	const auto operator [] (
-			std::tuple<
-				index_type<ExpressionTemplate::tensor_dimension>,
-				BC::Shape<ExpressionTemplate::tensor_dimension>> index_shape) const {
+private:
+	using subblock_index_type = std::tuple<
+			index_type<ExpressionTemplate::tensor_dimension>,
+			BC::Shape<ExpressionTemplate::tensor_dimension>>;
+public:
+
+	const auto operator [] (subblock_index_type index_shape) const {
 		return subblock(std::get<0>(index_shape), std::get<1>(index_shape));
 	}
 
-	auto operator [] (
-			std::tuple<
-				index_type<ExpressionTemplate::tensor_dimension>,
-				BC::Shape<ExpressionTemplate::tensor_dimension>> index_shape) {
+	auto operator [] (subblock_index_type index_shape) {
 		return subblock(std::get<0>(index_shape), std::get<1>(index_shape));
 	}
-
 
 	const auto row_range(int begin, int end) const {
-		static_assert(ExpressionTemplate::tensor_dimension  == 2, "ROW_RANGE ONLY AVAILABLE TO MATRICES");
-		BC_ASSERT(begin < end, "Row range, begin-range must be smaller then end-range");
-		BC_ASSERT(begin >= 0 && begin < as_derived().rows(), "Row range, begin-range must be between 0 and rows()");
-		BC_ASSERT(end   >= 0 && end   < as_derived().rows(), "Row range, end-range must be be between begin-range and rows()");
+		static_assert(ExpressionTemplate::tensor_dimension  == 2,
+				"ROW_RANGE ONLY AVAILABLE TO MATRICES");
+
+		BC_ASSERT(begin < end,
+				"Row range, begin-range must be smaller then end-range");
+		BC_ASSERT(begin >= 0 && begin < as_derived().rows(),
+				"Row range, begin-range must be between 0 and rows()");
+		BC_ASSERT(end   >= 0 && end   < as_derived().rows(),
+				"Row range, end-range must be be between begin-range and rows()");
+
 		return chunk(this->as_derived(), begin, 0)(end-begin, this->as_derived().cols());
 	}
 	auto row_range(int begin, int end) {
@@ -165,6 +160,11 @@ public:
 				"diagnol `index` must be -rows() and rows())");
 		static_assert(ExpressionTemplate::tensor_dimension  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
 		return make_tensor(exprs::make_diagnol(as_derived(),index));
+	}
+
+	//returns a copy of the tensor without actually copying the elements
+	auto shallow_copy() const {
+		return make_tensor(exprs::make_view(as_derived(), as_derived().get_shape()));
 	}
 
 	const auto col(BC::size_t i) const {

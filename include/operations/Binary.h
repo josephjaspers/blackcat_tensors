@@ -69,6 +69,11 @@ namespace oper {
     	BC_FORWARD_DEF(lv / rv)
     } div;
 
+    struct Fuse {
+    	BC_FORWARD_DEF(lv)
+    } fuse;
+
+
     struct Assign : assignment_operation {
     	using alpha_modifier = BC::traits::Integer<1>;
     	using beta_modifier = BC::traits::Integer<0>;

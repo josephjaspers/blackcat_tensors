@@ -114,12 +114,12 @@ public:
 
 public:
     Array& operator = (Array&& array) {
-    		if (BC::allocator_traits<Allocator>::is_always_equal::value ||
-    			array.get_allocator() == this->get_allocator()) {
+		if (BC::allocator_traits<Allocator>::is_always_equal::value ||
+				array.get_allocator() == this->get_allocator()) {
 			std::swap(this->memptr_ref(), array.memptr_ref());
 			this->get_shape_ref() = array.get_shape_ref();
 
-	    	if (BC::allocator_traits<Allocator>::propagate_on_container_move_assignment::value) {
+			if (BC::allocator_traits<Allocator>::propagate_on_container_move_assignment::value) {
 				static_cast<Allocator&>(*this) = static_cast<Allocator&&>(array);
 			}
     	} else {
@@ -131,9 +131,11 @@ public:
     		return *this;
     }
 
-    void deallocate() {
-       Allocator::deallocate(this->memptr_ref(), this->size());
-       this->memptr_ref() = nullptr;
+	void deallocate() {
+		if (this->memptr_ref()) {
+			Allocator::deallocate(this->memptr(), this->size());
+			this->memptr_ref() = nullptr;
+		}
 	}
 
 };

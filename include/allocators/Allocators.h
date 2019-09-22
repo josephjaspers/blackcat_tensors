@@ -43,6 +43,18 @@ using Cuda_Managed = allocators::Device_Managed<value_type>;
 //	 Fancy Allocators depend on allocators_traits/basic_allocator
 #include "fancy/Polymorphic_Allocator.h"
 #include "fancy/Workspace.h"
+#include "fancy/Recycle_Allocator.h"
+#include "fancy/Atomic_Allocator.h"
+#include "fancy/Shared_Allocator.h"
+
+namespace BC {
+namespace allocators {
+
+template<class Allocator>
+using Shared_Atomic_Allocator = fancy::Shared_Allocator<fancy::Atomic_Allocator<Allocator>>;
+
+}
+}
 
 
 #endif

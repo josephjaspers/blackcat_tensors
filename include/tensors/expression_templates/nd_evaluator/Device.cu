@@ -60,7 +60,7 @@ struct Evaluator<device_tag> {
 
 	template<int Dimensions, class Expression, class Stream>
 	static void nd_evaluate(Expression expression, Stream stream) {
-		static_assert(Expression::tensor_dimension <= Dimensions,
+		static_assert(Expression::tensor_dimension <= Dimensions || Expression::tensor_iterator_dimension <= 1,
 				"Iterator Dimension must be greater than or equal to the tensor_dimension");
 
 

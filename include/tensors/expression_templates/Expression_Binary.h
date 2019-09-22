@@ -27,13 +27,14 @@ struct Binary_Expression : public Expression_Base<Binary_Expression<Operation, L
 
     static constexpr int tensor_dimension = BC::traits::max(Lv::tensor_dimension, Rv::tensor_dimension);
     static constexpr int tensor_iterator_dimension =
-    		Lv::tensor_dimension != Rv::tensor_dimension ?
-    		tensor_dimension :
+    		Lv::tensor_dimension != Rv::tensor_dimension && (Lv::tensor_dimension!=0 && Rv::tensor_dimension!=0) ?
     		BC::traits::max(
     				Lv::tensor_iterator_dimension,
     				Rv::tensor_iterator_dimension,
     				Lv::tensor_dimension,
-    				Rv::tensor_dimension);
+    				Rv::tensor_dimension)
+    		: BC::traits::max(Lv::tensor_iterator_dimension,
+    				Rv::tensor_iterator_dimension);
     Lv left;
     Rv right;
 
