@@ -76,7 +76,7 @@ struct Dim<0> {
 
 };
 
-template<class... Integers>
+template<class... Integers> BCINLINE
 auto make_dim(const Integers&... ints) {
 	return Dim<sizeof...(Integers)> { ints... };
 }

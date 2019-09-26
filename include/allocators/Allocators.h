@@ -8,9 +8,7 @@
 #ifndef BLACKCAT_ALLOCATOR_ALLOCATOR_H_
 #define BLACKCAT_ALLOCATOR_ALLOCATOR_H_
 
-#include "Host.h"
-#include "Device.h"
-#include "Device_Managed.h"
+#include "Basic_Allocators.h"
 #include "Allocator_Traits.h"
 
 namespace BC {

@@ -240,41 +240,6 @@ template<class InnerShape, typename=std::enable_if_t<!traits::sequence_of_v<BC::
 auto shape(InnerShape is) {
 	return Shape<InnerShape::tensor_dimension>(is);
 }
-//
-//template<int N>
-//struct Shape {
-//
-//	static_assert(N>=0,"Shape Dimension must be at least 0");
-//
-//	using value_type = typename Dim<N>::value_type;
-//	static constexpr int tensor_dimension = N;
-//
-//	Dim<N> m_inner_shape;
-//	Dim<N-1> m_outer_shape;
-//
-//	BCINLINE
-//	value_type dimension(value_type index) const {
-//		return m_inner_shape.dimension(index);
-//	}
-//
-//	BCINLINE
-//
-//	BCINLINE
-//	value_type outer_dimension() const {
-//		return m_inner_shape.dimension(N-1);
-//	}
-//
-//	BCINLINE
-//	value_type operator [] (value_type index) const {
-//		return m_inner_shape[index];
-//	}
-//
-//	BCINLINE
-//	value_type size() const {
-//		return m_inner_shape.size();
-//	}
-//};
-
 
 }
 
