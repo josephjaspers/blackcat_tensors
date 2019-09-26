@@ -39,7 +39,7 @@ struct log_allocator : Allocator {
 		return Allocator::allocate(sz);
 	}
 
-	auto deallocate(typename Allocator::value_type*& memptr, BC::size_t sz) {
+	auto deallocate(typename Allocator::value_type* memptr, BC::size_t sz) {
 		(*total_deallocated) += sz* sizeof(typename Allocator::value_type);
 		return Allocator::deallocate(memptr, sz);
 

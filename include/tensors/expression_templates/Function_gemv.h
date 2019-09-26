@@ -52,12 +52,6 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>
     BCINLINE BC::size_t M() const { return left.rows(); }
     BCINLINE BC::size_t N() const { return left.cols(); }
 
-	BCINLINE const auto inner_shape() const {
-		return utility::make_lambda_array<tensor_dimension>(
-				[&](int i) {return i == 0 ? left.rows() : 1;});
-	}
-
-
     template<class core, int alpha_mod, int beta_mod, class Stream>
     void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
     	static_assert(core::tensor_dimension==1, "Gemv injection must be a vector");

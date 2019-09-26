@@ -62,13 +62,13 @@ public:
 	void set_batch_size(BC::size_t batch_sz) {
 		Layer_Base::set_batch_size(batch_sz);
 
-		BC::utility::array<input_tensor_dimension::value+1, BC::size_t> batched_shape;
+		BC::Dim<input_tensor_dimension::value+1> batched_shape;
 		for (int i = 0; i < input_tensor_dimension::value; ++i) {
 			batched_shape[i] = m_input_shape.dimension(i);
 		}
 		batched_shape[input_tensor_dimension::value] = batch_sz;
 		m_batched_input_shape = BC::Shape<input_tensor_dimension::value+1>(batched_shape);
-		m_batched_output_shape =  BC::Shape<2>(this->input_size(), batch_sz);
+		m_batched_output_shape = BC::Shape<2>(this->input_size(), batch_sz);
 	}
 
 	auto get_input_shape() const { return m_input_shape; }
@@ -87,13 +87,17 @@ auto flatten(SystemTag system_tag, Shape<X> shape) {
 
 template<class SystemTag, int X>
 auto flatten(SystemTag system_tag, BC::Shape<X> shape) {
-	return Flatten<SystemTag, typename SystemTag::default_floating_point_type, BC::traits::Integer<X>>(shape);
+	return Flatten<
+			SystemTag,
+			typename SystemTag::default_floating_point_type,
+			BC::traits::Integer<X>>(shape);
 }
 
 template<int X>
 auto flatten(BC::Shape<X> shape) {
 	return Flatten<BLACKCAT_DEFAULT_SYSTEM_T,
-			typename BLACKCAT_DEFAULT_SYSTEM_T::default_floating_point_type, BC::traits::Integer<X>>(shape);
+			typename BLACKCAT_DEFAULT_SYSTEM_T::default_floating_point_type,
+			BC::traits::Integer<X>>(shape);
 }
 
 

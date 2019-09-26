@@ -39,19 +39,6 @@ struct Unary_Expression<oper::transpose<System_Tag>, Value>
     Unary_Expression(Value p) : array(p) {}
     Unary_Expression(Value p, const oper::transpose<System_Tag>&) : array(p) {}
 
-    BCINLINE const auto inner_shape() const {
-        return utility::make_lambda_array<tensor_dimension>([=](int i) {
-            if (tensor_dimension >= 2)
-                return i == 0 ? array.cols() : i == 1 ? array.rows() : array.dimension(i);
-            else if (tensor_dimension == 2)
-                return i == 0 ? array.cols() : i == 1 ? array.rows() : 1;
-            else if (tensor_dimension == 1)
-                return i == 0 ? array.rows() : 1;
-            else
-                return 1;
-        });
-    }
-
     BCINLINE
     auto operator [] (int i) const -> decltype(array[0]) {
         return array[i];

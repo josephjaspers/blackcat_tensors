@@ -116,7 +116,7 @@ static auto make_ranged_slice(Parent& parent, BC::size_t from, BC::size_t to) {
 	BC::size_t range = to - from;
 	BC::size_t index = parent.slice_ptr_index(from);
 
-	BC::utility::array<Parent::tensor_dimension, BC::size_t> inner_shape = parent.inner_shape();
+	BC::Dim<Parent::tensor_dimension> inner_shape = parent.inner_shape();
 	inner_shape[Parent::tensor_dimension-1] = range;
 
 	using slice_type = slice_type_from_parent<Parent::tensor_dimension, Parent>;
@@ -146,7 +146,7 @@ static auto make_scalar(Parent& parent, BC::size_t index) {
 
 template<class Parent, class ShapeLike>
 auto make_chunk(Parent& parent,
-			BC::utility::array<Parent::tensor_dimension, BC::size_t> index_points,
+			BC::Dim<Parent::tensor_dimension> index_points,
 			ShapeLike shape) {
 	static_assert(ShapeLike::tensor_dimension > 1,
 			"TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, USE SCALAR OR RANGED_SLICE OTHERWISE");

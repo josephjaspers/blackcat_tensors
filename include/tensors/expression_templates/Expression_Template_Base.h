@@ -62,9 +62,11 @@ struct Expression_Base
             using move_assignable    = std::false_type;
 
             BCINLINE const auto inner_shape() const {
-            	return utility::make_lambda_array<derived::tensor_dimension>([&](int i) {
-            		return static_cast<const derived&>(*this).dimension(i);
-            	});
+            	BC::Dim<derived::tensor_dimension> dim;
+            	for (BC::size_t i = 0; i < derived::tensor_dimension; ++i) {
+            		dim[i] = static_cast<const derived&>(*this).dimension(i);
+            	}
+            	return dim;
             }
 
             BCINLINE const auto get_shape() const {
@@ -79,7 +81,8 @@ struct Kernel_Array_Base : Expression_Template_Base<Derived>, BC_Array {
     BCINLINE Kernel_Array_Base() {
 		static_assert(!std::is_same<
 					typename Derived::value_type,
-					std::remove_pointer<decltype(std::declval<Derived>().memptr())>
+					std::remove_pointer<
+						decltype(std::declval<Derived>().memptr())>
 				>::value, "Array types must define memptr");
     }
 

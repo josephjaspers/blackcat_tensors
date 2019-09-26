@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include "BlackCat_Common.h"
+#include "BlackCat_Shape.h"
 #include "BlackCat_TypeTraits.h"
 #include "BlackCat_Allocator.h"
 #include "BlackCat_Stream.h"

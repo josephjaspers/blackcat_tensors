@@ -10,7 +10,7 @@ ATLAS_BLAS_LINKAGE = -D BC_BLAS_USE_C_LINKAGE=1
 ATLASLIBS =  -lf77blas -lcblas -latlas
 CULIBS = -lcublas
 
-INCLUDE = ../include/  -I /usr/include/
+INCLUDE = ../include/  -I /usr/include/ -I /home/joseph/BlackCat_Tensors/BlackCat_Tensors/include/
 LIBINCLUDE = /usr/lib/
 
 default:
