@@ -9,7 +9,6 @@
 #ifndef BC_INTERNAL_BASE_H_
 #define BC_INTERNAL_BASE_H_
 
-#include "Shape.h"
 #include "Expression_Template_Traits.h"
 
 namespace BC {

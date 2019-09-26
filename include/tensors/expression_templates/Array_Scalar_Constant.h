@@ -10,7 +10,6 @@
 #define BC_EXPRESSION_TEMPLATES_ARRAY_SCALAR_CONSTANT_H_
 
 #include "Expression_Template_Base.h"
-#include "Shape.h"
 
 namespace BC {
 namespace tensors {

@@ -9,7 +9,6 @@
 #define BLACKCATTENSOR_TENSORS_EXPRESSION_TEMPLATES_ARRAY_KERNEL_ARRAY_H_
 
 #include "Expression_Template_Base.h"
-#include "Shape.h"
 
 namespace BC {
 namespace tensors {

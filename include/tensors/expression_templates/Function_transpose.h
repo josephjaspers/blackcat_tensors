@@ -9,10 +9,7 @@
 #ifndef BC_EXPRESSION_TEMPLATES_FUNCTION_TRANSPOSE_H_
 #define BC_EXPRESSION_TEMPLATES_FUNCTION_TRANSPOSE_H_
 
-#include <vector>
 #include "Expression_Template_Base.h"
-#include "Shape.h"
-
 
 namespace BC {
 namespace tensors {

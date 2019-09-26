@@ -11,7 +11,6 @@
 #include "Expression_Template_Base.h"
 #include "Array_Kernel_Array.h"
 #include "Array.h"
-#include "Shape.h"
 
 namespace BC {
 namespace tensors {
