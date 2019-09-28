@@ -35,6 +35,8 @@ struct NeuralNetwork {
 			Layers...>;
 
 	layer_chain m_layer_chain;
+	double m_learning_rate = Layer_Base::default_learning_rate;
+	BC::size_t m_batch_size = 1;
 
 	NeuralNetwork(Layers... layers):
 		m_layer_chain(layers...) {}
@@ -53,8 +55,11 @@ struct NeuralNetwork {
 	template<int X> auto& get_layer() const { return m_layer_chain.get(BC::traits::Integer<X>()); }
 	template<int X> auto& get_layer() { return m_layer_chain.get(BC::traits::Integer<X>()); }
 
-	void set_learning_rate(double lr) { m_layer_chain.for_each([&](auto& layer) { layer.set_learning_rate(lr); }); }
-	void set_batch_size(int x) { m_layer_chain.for_each([&](auto& layer) { layer.set_batch_size(x);	});}
+	void set_learning_rate(double lr) { m_learning_rate = lr; m_layer_chain.for_each([&](auto& layer) { layer.set_learning_rate(lr); }); }
+	double get_learning_rate() const { return m_learning_rate; }
+
+	void set_batch_size(int x) { m_batch_size = x; m_layer_chain.for_each([&](auto& layer) { layer.set_batch_size(x);	});}
+	BC::size_t get_batch_size() const { return m_batch_size; }
 	void update_weights()	  { m_layer_chain.for_each([ ](auto& layer) { layer.update_weights(); });}
 
 	BC::size_t input_size() const { return m_layer_chain.head().layer().input_size(); }
@@ -84,11 +89,24 @@ struct NeuralNetwork {
 			int error = system(std::string("mkdir " + directory_name).c_str());
 		}
 
-		//Create a yaml file with network description/architecture
-		std::string architecture_yaml = directory_name + bc_directory_separator() + "architecture.yaml";
-		std::ofstream os(architecture_yaml);
-		os << get_string_architecture();
+		auto get_filepath = [&](std::string filename) {
+			return directory_name + bc_directory_separator() + filename;
+		};
 
+		{
+			//Create a yaml file with network description/architecture
+			std::ofstream os(get_filepath("architecture.yaml"));
+			os << get_string_architecture();
+		}
+
+		{
+			//Store meta-data about the current state
+			std::ofstream os(get_filepath("meta"));
+			os << this->get_learning_rate() << '\n';
+			os << this->get_batch_size() << '\n';
+		}
+
+		//Initialize a layer loader object to load each layer
 		Layer_Loader loader(directory_name);
 
 		int index = 0;
@@ -102,6 +120,11 @@ struct NeuralNetwork {
 	}
 
 	void load(std::string directory_name) {
+
+		auto get_filepath = [&](std::string filename) {
+			return directory_name + bc_directory_separator() + filename;
+		};
+
 		Layer_Loader loader(directory_name);
 		int index = 0;
 		m_layer_chain.for_each([&](auto& layer){
@@ -110,6 +133,14 @@ struct NeuralNetwork {
 			layer.load(loader);
 			index++;
 		});
+
+		std::ifstream is(get_filepath("meta"));
+		std::string tmp;
+
+		std::getline(is, tmp);
+		set_learning_rate(std::stod(tmp));
+		std::getline(is, tmp);
+		set_batch_size(std::stoi(tmp));
 	}
 };
 
