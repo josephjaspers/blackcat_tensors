@@ -16,6 +16,7 @@
 #include "Layers/Nonlinear.h"
 #include "Layers/Softmax.h"
 #include "Layers/LSTM.h"
+#include "Layers/LSTM_Experimental.h"
 #include "Layers/Output_Layer.h"
 #include "Layers/Logging_Output_Layer.h"
 //#include "Layers/GRU.h"		//TODO
