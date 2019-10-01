@@ -41,17 +41,20 @@ struct Shape {
         }
     }
 
-    BCINLINE Shape(
-    		const BC::Dim<Dimension>& new_shape,
-			const Shape<Dimension>& parent_shape):
-				m_inner_shape(new_shape),
-				m_block_shape(parent_shape.outer_shape()) {}
+    BCINLINE Shape(const BC::Dim<Dimension>& new_shape,
+			const Shape<Dimension>& parent_shape) {
+		m_inner_shape = new_shape;
+		for (int i = 0; i < Dimension; ++i ) {
+			m_block_shape[i] = parent_shape.leading_dimension(i);
+		}
+        calculate_size();
+	}
 
-    BCINLINE Shape(
-    		Shape<Dimension> new_shape,
-    		Shape<Dimension> parent_shape):
+    BCINLINE Shape(Shape<Dimension> new_shape, Shape<Dimension> parent_shape):
     	m_inner_shape(new_shape.m_inner_shape),
-    	m_block_shape(parent_shape.m_block_shape) {}
+    	m_block_shape(parent_shape.m_block_shape) {
+        calculate_size();
+    }
 
     template<int N, class=std::enable_if_t<(N>=Dimension)>>
     BCINLINE Shape (BC::Dim<N> param) {
@@ -90,13 +93,6 @@ struct Shape {
         return index;
     }
 
-    bool operator == (const Shape& other) const {
-    	return m_inner_shape == other.m_inner_shape &&
-    			m_block_shape == other.m_block_shape;
-    }
-    bool operator != (const Shape& other) const {
-    	return !(*this == other);
-    }
 
 private:
 
@@ -119,6 +115,7 @@ private:
 			m_block_shape[Dimension-1] *= m_inner_shape[i];
 		}
     }
+
 };
 
 template<>
@@ -152,13 +149,6 @@ struct Shape<0> {
     BCINLINE BC::size_t coefficientwise_dims_to_index(BC::size_t i) const {
         return 0;
     }
-
-    bool operator == (const Shape& other) const {
-    	return true;
-    }
-	bool operator != (const Shape& other) const {
-		return false;
-	}
 };
 
 template<>
@@ -198,13 +188,6 @@ struct Shape<1> {
     BCINLINE BC::size_t coefficientwise_dims_to_index(BC::size_t i) const {
         return i;
     }
-
-    bool operator == (const Shape& other) const {
-		return m_inner_shape == other.m_inner_shape;
-	}
-	bool operator != (const Shape& other) const {
-		return !(*this == other);
-	}
 };
 
 
@@ -246,26 +229,14 @@ struct Strided_Vector_Shape {
     BCINLINE BC::size_t coefficientwise_dims_to_index(BC::size_t index) const {
         return m_block_shape[0] * index;
     }
-
-    bool operator == (const Strided_Vector_Shape& other) const {
-    	return m_inner_shape == other.m_inner_shape &&
-    			m_block_shape == other.m_block_shape;
-    }
-    bool operator != (const Strided_Vector_Shape& other) const {
-    	return !(*this == other);
-    }
 };
 
-template<
-	class... Integers,
-	class=std::enable_if_t<traits::sequence_of_v<BC::size_t, Integers...>>>
-auto shape(Integers... ints) {
-	return Shape<sizeof...(Integers)>(ints...);
+template<class... integers, typename=std::enable_if_t<traits::sequence_of_v<BC::size_t, integers...>>>
+auto shape(integers... ints) {
+	return Shape<sizeof...(integers)>(ints...);
 }
 
-template<
-	class InnerShape,
-	class=std::enable_if_t<!traits::sequence_of_v<BC::size_t, InnerShape>>>
+template<class InnerShape, typename=std::enable_if_t<!traits::sequence_of_v<BC::size_t, InnerShape>>>
 auto shape(InnerShape is) {
 	return Shape<InnerShape::tensor_dimension>(is);
 }
