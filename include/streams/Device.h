@@ -34,7 +34,7 @@ class Stream<device_tag> {
 		cudaStream_t   m_stream_handle=nullptr;
 		cudaEvent_t    m_event_handle=nullptr;
 
-		BC::allocators::fancy::Workspace<device_tag> m_workspace;
+		BC::allocators::Stack_Allocator<device_tag> m_workspace;
 
 		Device_Stream_Contents(bool init_stream=true) {
 			BC_CUDA_ASSERT(cublasCreate(&m_cublas_handle));
@@ -67,9 +67,9 @@ class Stream<device_tag> {
 public:
 
 	using system_tag = device_tag;
-	using allocator_type = BC::allocators::fancy::Workspace<device_tag>;
+	using allocator_type = BC::allocators::fancy::Stack_Allocator<device_tag>;
 
-	BC::allocators::fancy::Workspace<device_tag>& get_allocator() {
+	BC::allocators::fancy::Stack_Allocator<device_tag>& get_allocator() {
     	return device_contents.get()->m_workspace;
     }
 

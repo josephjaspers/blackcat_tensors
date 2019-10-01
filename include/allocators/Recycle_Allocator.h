@@ -14,7 +14,6 @@
 
 namespace BC {
 namespace allocators {
-namespace fancy {
 
 //TODO make friend class and private members
 struct Recycle_Allocator_Globals {
@@ -119,8 +118,6 @@ public:
 	}
 };
 
-
-}
 }
 }
 

@@ -10,7 +10,6 @@
 
 namespace BC {
 namespace allocators {
-namespace fancy {
 
 /**
  * An allocator that wraps another with a shared ptr and forwards functions to it.
@@ -90,8 +89,6 @@ public:
 
 }
 }
-}
-
 
 
 #endif /* SHARED_ALLOCATOR_H_ */

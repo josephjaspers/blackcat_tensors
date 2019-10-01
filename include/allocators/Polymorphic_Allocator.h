@@ -12,7 +12,6 @@
 
 namespace BC {
 namespace allocators {
-namespace fancy {
 /**
  * Similar to the C++17 std::pmr::polymorphic_allocator.
  *
@@ -127,7 +126,6 @@ public:
 	}
 };
 
-}
 }
 }
 

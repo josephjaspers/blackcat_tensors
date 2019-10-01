@@ -12,7 +12,6 @@
 
 namespace BC {
 namespace allocators {
-namespace fancy {
 
 /**
  * An allocator that wraps another but makes accesses to its functions atomic.
@@ -78,7 +77,6 @@ struct Atomic_Allocator {
     }
 };
 
-}
 }
 }
 

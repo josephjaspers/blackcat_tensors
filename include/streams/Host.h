@@ -23,7 +23,7 @@ class Stream<host_tag> {
 	struct Contents {
 		std::unique_ptr<HostEvent> m_event;
 		HostStream m_stream;
-		BC::allocators::fancy::Workspace<host_tag> m_workspace;
+		BC::allocators::Stack_Allocator<host_tag> m_workspace;
 	};
 
 	static std::shared_ptr<Contents> get_default_contents() {
@@ -38,9 +38,9 @@ class Stream<host_tag> {
 public:
 
 	using system_tag = host_tag;
-	using allocator_type = BC::allocators::fancy::Workspace<host_tag>;
+	using allocator_type = BC::allocators::Stack_Allocator<host_tag>;
 
-    BC::allocators::fancy::Workspace<host_tag>& get_allocator() {
+    BC::allocators::Stack_Allocator<host_tag>& get_allocator() {
     	return m_contents->m_workspace;
     }
     template<class RebindType>

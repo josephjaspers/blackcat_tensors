@@ -1,5 +1,5 @@
 /*
- * Workspace.h
+ * Stack_Allocator.h
  *
  *  Created on: Mar 16, 2019
  *      Author: joseph
@@ -13,11 +13,10 @@
 
 namespace BC {
 namespace allocators {
-namespace fancy {
 namespace detail {
 
 template<class SystemTag>
-class Workspace_Base {
+class Stack_Allocator_Base {
 
 	using system_tag = SystemTag;
 
@@ -34,7 +33,7 @@ class Workspace_Base {
 	Polymorphic_Allocator<SystemTag, Byte> m_allocator = get_default_allocator();
 
 public:
-	Workspace_Base(std::size_t sz=0) : m_memptr_sz(sz){
+	Stack_Allocator_Base(std::size_t sz=0) : m_memptr_sz(sz){
 		if (sz)
 			m_memptr = m_allocator.allocate(sz);
 	}
@@ -50,7 +49,7 @@ public:
 		}
 
 		BC_ASSERT(m_curr_index==0,
-				"Workspace reserve called while memory is still allocated");
+				"Stack_Allocator reserve called while memory is still allocated");
 
 		if (m_memptr_sz < sz) {
 			if (m_memptr_sz > 0) {
@@ -62,7 +61,7 @@ public:
 	}
 	void free() {
 		BC_ASSERT(m_curr_index==0,
-				"Workspace free called while memory is still allocated");
+				"Stack_Allocator free called while memory is still allocated");
 		m_allocator.deallocate(m_memptr, m_memptr_sz);
 		m_memptr_sz = 0;
 		m_memptr = nullptr;
@@ -81,7 +80,7 @@ public:
 	template<class Allocator>
 	void set_allocator(Allocator alloc) {
 		BC_ASSERT(m_curr_index==0,
-				"Workspace set_allocator called while memory is still allocated");
+				"Stack_Allocator set_allocator called while memory is still allocated");
 		m_allocator.set_allocator(alloc);
 	}
 
@@ -106,7 +105,7 @@ public:
 
 		BC_ASSERT(memptr == (m_memptr + m_curr_index - sz),
 				"BC_Memory Deallocation failure, attempting to deallocate memory out of order,"
-				"\nWorkspace memory functions as a stack, deallocations must be in reverse order of allocations.");
+				"\nStack_Allocator memory functions as a stack, deallocations must be in reverse order of allocations.");
 
 
 		m_curr_index -= sz;
@@ -127,9 +126,9 @@ public:
 		deallocate(reinterpret_cast<Byte*>(memptr), sz * sizeof(T));
 	}
 
-	~Workspace_Base(){
+	~Stack_Allocator_Base(){
 		BC_ASSERT(m_curr_index==0,
-				"Workspace Destructor called while memory is still allocated, Memory Leak Detected");
+				"Stack_Allocator Destructor called while memory is still allocated, Memory Leak Detected");
 		m_allocator.deallocate(m_memptr, m_memptr_sz);
 	}
 };
@@ -140,12 +139,12 @@ public:
 /// Deallocation must happen in reverse order of deallocation.
 /// This class is used with BC::Tensor_Base expressions to enable very fast allocations of temporaries.
 template<class SystemTag, class ValueType=BC::allocators::Byte>
-class Workspace {
+class Stack_Allocator {
 
 	template<class, class>
-	friend class Workspace;
+	friend class Stack_Allocator;
 
-	using ws_base_t = detail::Workspace_Base<SystemTag>;
+	using ws_base_t = detail::Stack_Allocator_Base<SystemTag>;
 	std::shared_ptr<ws_base_t> ws_ptr;
 
 public:
@@ -156,17 +155,17 @@ public:
 
 	template<class T>
 	struct rebind {
-		using other = Workspace<SystemTag,  T>;
+		using other = Stack_Allocator<SystemTag,  T>;
 	};
 
-	Workspace(int sz=0)
+	Stack_Allocator(int sz=0)
 	: ws_ptr(new ws_base_t(sz)) {}
 
 	template<class T>
-	Workspace(const Workspace<SystemTag, T>& ws) : ws_ptr(ws.ws_ptr) {}
+	Stack_Allocator(const Stack_Allocator<SystemTag, T>& ws) : ws_ptr(ws.ws_ptr) {}
 
-	Workspace(const Workspace&)=default;
-	Workspace(Workspace&&)=default;
+	Stack_Allocator(const Stack_Allocator&)=default;
+	Stack_Allocator(Stack_Allocator&&)=default;
 
 	///Reserve an amount of memory in bytes.
 	void reserve(std::size_t sz)  { ws_ptr->reserve(sz * sizeof(value_type)); }
@@ -200,8 +199,9 @@ public:
 		ws_ptr->template deallocate<ValueType>(memptr, sz);
 	}
 };
+
 }
 }
-}
+
 
 #endif /* WORKSPACE_H_ */
