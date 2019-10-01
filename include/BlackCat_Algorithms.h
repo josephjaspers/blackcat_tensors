@@ -11,4 +11,8 @@
 #include "BlackCat_Stream.h"
 #include "algorithms/Algorithms.h"
 
+namespace BC {
+	using namespace algorithms;
+}
+
 #endif /* BLACKCAT_ALGORITHMS_H_ */
