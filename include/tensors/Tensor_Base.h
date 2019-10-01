@@ -39,16 +39,21 @@ public:
 
 	using ExpressionTemplate::ExpressionTemplate;
 	using ExpressionTemplate::internal;
-	static constexpr int tensor_dimension = ExpressionTemplate::tensor_dimension;
-	static constexpr int tensor_iterator_dimension = ExpressionTemplate::tensor_iterator_dimension;
+
+	static constexpr int tensor_dimension =
+			ExpressionTemplate::tensor_dimension;
+
+	static constexpr int tensor_iterator_dimension =
+			ExpressionTemplate::tensor_iterator_dimension;
 
 	using value_type  = typename ExpressionTemplate::value_type;
 	using system_tag  = typename ExpressionTemplate::system_tag;
+	using traits_type = exprs::expression_traits<ExpressionTemplate>;
 
-	static constexpr bool move_constructible = exprs::expression_traits<ExpressionTemplate>::is_move_constructible::value;
-	static constexpr bool copy_constructible = exprs::expression_traits<ExpressionTemplate>::is_move_constructible::value;
-	static constexpr bool move_assignable = exprs::expression_traits<ExpressionTemplate>::is_move_assignable::value;
-	static constexpr bool copy_assignable = exprs::expression_traits<ExpressionTemplate>::is_copy_assignable::value;
+	using move_constructible = typename traits_type::is_move_constructible;
+	using copy_constructible = typename traits_type::is_move_constructible;
+	using move_assignable = typename traits_type::is_move_assignable;
+	using copy_assignable = typename traits_type::is_copy_assignable;
 
 	using operations::operator=;
 	using operations::operator+;
@@ -78,18 +83,18 @@ public:
 		parent(tensor.as_parent()) {}
 
 
-	Tensor_Base(BC::traits::only_if<copy_constructible, const self_type&> tensor):
+	Tensor_Base(BC::traits::only_if<copy_constructible::value, const self_type&> tensor):
 		parent(tensor.as_parent()) {}
 
-	Tensor_Base(BC::traits::only_if<move_constructible, self_type&&> tensor):
+	Tensor_Base(BC::traits::only_if<move_constructible::value, self_type&&> tensor):
 		parent(std::move(tensor.as_parent())) {}
 
-	Tensor_Base& operator =(BC::traits::only_if<move_assignable, self_type&&> tensor) noexcept {
+	Tensor_Base& operator =(BC::traits::only_if<move_assignable::value, self_type&&> tensor) noexcept {
 		this->as_parent() = std::move(tensor.as_parent());
 		return *this;
 	}
 
-	Tensor_Base& operator =(BC::traits::only_if<copy_assignable, const self_type&> tensor) {
+	Tensor_Base& operator =(BC::traits::only_if<copy_assignable::value, const self_type&> tensor) {
 		 operations::operator=(tensor);
 		 return *this;
 	}

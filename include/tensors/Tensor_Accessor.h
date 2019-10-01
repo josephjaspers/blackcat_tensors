@@ -18,7 +18,7 @@ class Tensor_Base;
 //aliases
 template<class... Ts>
 auto index(Ts... ts) {
-	return BC::make_dim(ts...);
+	return BC::dim(ts...);
 }
 template<int Dimension>
 using index_type = BC::Dim<Dimension>;

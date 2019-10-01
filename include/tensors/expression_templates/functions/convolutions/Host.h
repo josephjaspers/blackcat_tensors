@@ -47,9 +47,6 @@ struct Convolution_Implementation<BC::host_tag> {
 		BC::size_t depth = krnl.dimension(2);
 		BC::size_t numb_imgs = img.dimension(3);
 
-		using value_type = typename Output::value_type;
-
-
 		if (beta != 1) {
 			BC_omp_parallel__
 			for (BC::size_t i = 0; i < img.size(); ++i) {

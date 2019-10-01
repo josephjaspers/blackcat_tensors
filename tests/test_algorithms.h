@@ -32,7 +32,7 @@ int test_algorithms(int sz=128) {
 	)
 	BC_TEST_DEF(
 		mat a(sz, sz);
-		BC::algorithms::fill(a, 3);
+		BC::algorithms::fill(a.get_stream(), a.cw_begin(), a.cw_end(), 3);
 
 		return BC::tensors::all(a == 3);
 	)

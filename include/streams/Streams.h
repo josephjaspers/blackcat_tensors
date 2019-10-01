@@ -23,7 +23,8 @@ namespace streams {
 template<class T>
 static auto select_on_get_stream(const T& type) {
 	using system_tag = typename BC::traits::common_traits<T>::system_tag;
-	constexpr bool defines_get_stream = BC::traits::common_traits<T>::defines_get_stream;
+	constexpr bool defines_get_stream =
+			BC::traits::common_traits<T>::defines_get_stream::value;
 
 	static_assert(std::is_same<system_tag, host_tag>::value ||
 				std::is_same<system_tag, device_tag>::value, "must be same ");

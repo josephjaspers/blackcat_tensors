@@ -1,5 +1,5 @@
 /*
- * Dim.h
+  * Dim.h
  *
  *  Created on: Sep 26, 2019
  *      Author: joseph
@@ -45,7 +45,101 @@ struct Dim {
 	BCINLINE value_type outer_dimension() {
 		return this->dimension(N-1);
 	}
+
+	BCINLINE bool operator == (const Dim& other) const {
+		for (int i = 0; i < N; ++i) {
+			if (other[i] != this->m_index[i])
+				return false;
+		}
+		return true;
+	}
+	BCINLINE bool operator != (const Dim& other) const {
+		return !(*this == other);
+	}
+
+	BCINLINE auto begin() const { return m_index; }
+	BCINLINE auto end()   const { return m_index + N; }
+	BCINLINE auto begin() { return m_index; }
+	BCINLINE auto end()   { return m_index + N; }
+
+
+private:
+
+	template<class Operator> BCINLINE
+	Dim op_impl(Operator op, const Dim& other) const {
+		Dim<N> result;
+		for (int i = 0; i < N; ++i) {
+			result[i] = op(m_index[i], other[i]);
+		}
+		return result;
+	}
+
+	template<class Operator> BCINLINE
+	Dim& inplace_op_impl(Operator op, const Dim& other) const {
+		for (int i = 0; i < N; ++i) {
+			m_index[i] = op(m_index[i], other[i]);
+		}
+		return *this;
+	}
+
+public:
+	BCINLINE auto operator + (const Dim& other) const {
+		return op_impl(BC::oper::Add(), other);
+	}
+
+	BCINLINE auto operator - (const Dim& other) const {
+		return op_impl(BC::oper::Sub(), other);
+	}
+
+	BCINLINE auto operator / (const Dim& other) const {
+		return op_impl(BC::oper::Div(), other);
+	}
+
+	BCINLINE auto operator * (const Dim& other) const {
+		return op_impl(BC::oper::Mul(), other);
+	}
+
+	BCINLINE Dim& operator += (const Dim& other) {
+		return inplace_op_impl(BC::oper::add, other);
+	}
+
+	BCINLINE Dim& operator -= (const Dim& other) {
+		return inplace_op_impl(BC::oper::sub, other);
+	}
+
+	BCINLINE Dim& operator /= (const Dim& other) {
+		return inplace_op_impl(BC::oper::div, other);
+	}
+
+	BCINLINE Dim& operator *= (const Dim& other) {
+		return inplace_op_impl(BC::oper::mul, other);
+	}
+
+	BCINLINE value_type sum() const {
+		value_type s = 0;
+		for (auto& v : *this) {
+			s+= v;
+		}
+		return s;
+	}
+
+	BCINLINE value_type prod() const {
+		value_type s = 1;
+		for (auto& v : *this) {
+			s *= v;
+		}
+		return s;
+	}
+
+	BCINLINE Dim reverse() const {
+		Dim rev;
+		for (int i = 0; i < N; ++i) {
+			rev[i] = m_index[N-1-i];
+		}
+		return rev;
+	}
 };
+
 
 
 template<>
@@ -74,10 +168,17 @@ struct Dim<0> {
 		return 1;
 	}
 
+	BCINLINE bool operator == (const Dim& other) const {
+		return true;
+	}
+	BCINLINE bool operator != (const Dim& other) const {
+		return false;
+	}
+
 };
 
 template<class... Integers> BCINLINE
-auto make_dim(const Integers&... ints) {
+auto dim(const Integers&... ints) {
 	return Dim<sizeof...(Integers)> { BC::size_t(ints)... };
 }
 

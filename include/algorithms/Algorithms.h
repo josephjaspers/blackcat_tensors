@@ -24,38 +24,21 @@ BC_DEFAULT_MODULE_BODY(algorithms, Algorithm)
 namespace BC {
 namespace algorithms {
 
-
 #define BC_ALGORITHM_DEF(function)\
 BC_IF_CUDA(\
 template<class Begin, class End, class... Args>\
-static auto function (BC::streams::Stream<BC::device_tag> stream, Begin begin, End end, Args... args) {\
-	return thrust::function(thrust::cuda::par.on(stream), begin, end, args...);\
-}\
-template<class Begin, class End, class... Args>\
-static auto function (cudaStream_t stream, Begin begin, End end, Args... args) {\
+static auto function(BC::streams::Stream<BC::device_tag> stream, Begin begin, End end, Args... args) {\
 	return thrust::function(thrust::cuda::par.on(stream), begin, end, args...);\
 })\
 template<class Begin, class End, class... Args>\
 static auto function (BC::streams::Stream<BC::host_tag> stream, Begin begin, End end, Args... args) {   \
 	return stream.enqueue([&](){std::function(begin, end, args...); });\
-}\
-template<class Container, class... Args>\
-static auto function (const Container& container, Args&&... args) {\
-	return function(BC::streams::select_on_get_stream(container), container.cw_begin(), container.cw_end(), args...);\
-}\
-template<class Container, class... Args>\
-static auto function (Container& container, Args&&... args) {\
-	return function(BC::streams::select_on_get_stream(container), container.cw_begin(), container.cw_end(), args...);\
-}\
+}
 
 #define BC_REDUCE_ALGORITHM_DEF(function)\
 BC_IF_CUDA(\
 template<class Begin, class End, class... Args>\
-static auto function (const BC::streams::Stream<BC::device_tag>& stream, Begin begin, End end, Args... args) {\
-	return thrust::function(thrust::cuda::par.on(stream), begin, end, args...);\
-}\
-template<class Begin, class End, class... Args>\
-static auto function (cudaStream_t stream, Begin begin, End end, Args... args) {\
+static auto function(BC::streams::Stream<BC::device_tag> stream, Begin begin, End end, Args... args) {\
 	return thrust::function(thrust::cuda::par.on(stream), begin, end, args...);\
 })\
 template<class Begin, class End, class... Args>\
@@ -64,14 +47,6 @@ static auto function (BC::streams::Stream<BC::host_tag> stream, Begin begin, End
 	stream.enqueue([&](){ value = std::function(begin, end, args...); });\
 	stream.sync();\
 	return value;\
-}\
-template<class Container, class... Args>\
-static auto function (const Container& container, Args&&... args) {\
-	return function(BC::streams::select_on_get_stream(container), container.cw_begin(), container.cw_end(), args...);\
-}\
-template<class Container, class... Args>\
-static auto function (Container& container, Args&&... args) {\
-	return function(BC::streams::select_on_get_stream(container), container.cw_begin(), container.cw_end(), args...);\
 }\
 
 //---------------------------non-modifying sequences---------------------------//

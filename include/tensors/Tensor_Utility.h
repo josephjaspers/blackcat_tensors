@@ -37,7 +37,6 @@ struct Tensor_Utility {
 	using system_tag = typename ExpressionTemplate::system_tag;
     using derived = Tensor_Base<ExpressionTemplate>;
     using value_type  = typename ExpressionTemplate::value_type;
-    using utility_l = BC::utility::implementation<system_tag>;
 
     template<class>
     friend struct Tensor_Utility;
@@ -166,7 +165,7 @@ public:
         }
 
         int copy_size = (unsigned)as_derived().size() > file_data.size() ? file_data.size() : as_derived().size();
-        utility_l::HostToDevice(as_derived().internal().memptr(), file_data.data(), copy_size);
+        BC::utility::implementation<system_tag>::HostToDevice(as_derived().internal().memptr(), file_data.data(), copy_size);
 
     }
 

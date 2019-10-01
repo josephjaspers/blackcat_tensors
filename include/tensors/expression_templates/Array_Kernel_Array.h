@@ -82,6 +82,14 @@ public:
 		return array[this->coefficientwise_dims_to_index(index)];
     }
 
+    BCINLINE const auto& operator [](const BC::Dim<tensor_dimension>& index) const {
+		return array[this->dims_to_index(index)];
+    }
+
+    BCINLINE auto& operator [](const BC::Dim<tensor_dimension>& index) {
+ 		return array[this->dims_to_index(index)];
+     }
+
     template<class ... integers>
     BCINLINE const auto& operator ()(integers ... ints) const {
 		return array[this->dims_to_index(ints...)];

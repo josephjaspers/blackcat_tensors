@@ -26,7 +26,9 @@ namespace traits {
 using namespace BC::traits::common;
 
 	namespace detail { template<class> struct DISABLE; }
-	template<bool x,class T> using only_if = conditional_t<x, T, detail::DISABLE<T>>;
+
+	template<bool x,class T>
+	using only_if = conditional_t<x, T, detail::DISABLE<T>>;
 
 	template<int x> struct Integer { static constexpr int value = x; };
 	template<class T, class... Ts> using front_t = T;
@@ -35,8 +37,16 @@ using namespace BC::traits::common;
 	template<class...> static constexpr bool true_v  = true;
 	template<class...> static constexpr bool false_v = false;
 
-	template<bool cond> using truth_type = conditional_t<cond, true_type, false_type>;
-	template<bool cond> using not_type = conditional_t<cond, false_type, true_type>;
+	template<class...> using void_t = void;
+	template<class...> using true_t  = true_type;
+	template<class...> using false_t = false_type;
+
+
+	template<bool cond>
+	using truth_type = conditional_t<cond, true_type, false_type>;
+
+	template<bool cond>
+	using not_type = conditional_t<cond, false_type, true_type>;
 
 	//----------------------------------
 
@@ -51,17 +61,31 @@ using namespace BC::traits::common;
 
 	//----------------------------------
 
-	template<template<class> class func, class TestType, class DefaultType, class enabler=void>
+	template<
+		template<class> class func,
+		class TestType,
+		class DefaultType=void,
+		class enabler=void>
 	struct conditional_detected {
 		using type = DefaultType;
 	};
-	template<template<class> class func, class TestType, class DefaultType>
-	struct conditional_detected<func, TestType, DefaultType, enable_if_t<is_detected_v<func,TestType>>> {
+
+	template<
+		template<class> class func,
+		class TestType,
+		class DefaultType>
+	struct conditional_detected<
+			func,
+			TestType,
+			DefaultType,
+			enable_if_t<is_detected_v<func,TestType>>> {
+
 		using type = func<TestType>;
 	};
 
 	template<template<class> class func, class TestType, class DefaultType>
-	using conditional_detected_t = typename conditional_detected<func, TestType, DefaultType>::type;
+	using conditional_detected_t =
+			typename conditional_detected<func, TestType, DefaultType>::type;
 
 	//----------------------------------
 
@@ -110,7 +134,8 @@ using namespace BC::traits::common;
     struct all: true_type {};
 
     template<template<class> class Function, class T, class... Ts>
-    struct all<Function, T, Ts...>: conditional_t<Function<T>::value, all<Function, Ts...>, false_type> {};
+    struct all<Function, T, Ts...>:
+    	conditional_t<Function<T>::value, all<Function, Ts...>, false_type> {};
 
     template<template<class> class Function, class... Ts>
     static constexpr bool all_v = all<Function, Ts...>::value;
@@ -119,13 +144,15 @@ using namespace BC::traits::common;
     struct any: false_type {};
 
     template<template<class> class Function, class T, class... Ts>
-    struct any<Function, T, Ts...>: conditional_t<Function<T>::value, true_type, any<Function, Ts...>> {};
+    struct any<Function, T, Ts...>:
+    	conditional_t<Function<T>::value, true_type, any<Function, Ts...>> {};
 
     template<template<class> class Function, class... Ts>
     static constexpr bool any_v = any<Function, Ts...>::value;
 
     template<template<class> class Function, class... Ts>
-    struct none: conditional_t<any<Function, Ts...>::value, false_type, true_type> {};
+    struct none:
+    	conditional_t<any<Function, Ts...>::value, false_type, true_type> {};
 
     template<template<class> class Function, class... Ts>
     static constexpr bool none_v = none<Function, Ts...>::value;
@@ -204,7 +231,7 @@ using namespace BC::traits::common;
 		return const_cast<T*>(param);
 	}
 
-	template<class T> //for removing GCC warning "const modifier doesn't do anything"
+	template<class T>
 	using apply_const_t = conditional_t<is_const<T>::value, T, const T>;
 
 
@@ -226,10 +253,17 @@ using namespace BC::traits::common;
 	template<class T>
 	struct common_traits {
 
-		static constexpr bool defines_value_type = is_detected_v<query_value_type, T>;
-		static constexpr bool defines_allocator_type = is_detected_v<query_allocator_type, T>;
-		static constexpr bool defines_system_tag = is_detected_v<query_system_tag, T>;
-		static constexpr bool defines_get_stream = is_detected_v<query_get_stream, T>;
+		using defines_value_type =
+				truth_type<is_detected_v<query_value_type, T>>;
+
+		using defines_allocator_type =
+				truth_type<is_detected_v<query_allocator_type, T>>;
+
+		using defines_system_tag =
+				truth_type<is_detected_v<query_system_tag, T>>;
+
+		using defines_get_stream =
+				truth_type<is_detected_v<query_get_stream, T>>;
 
 		using type = T;
 

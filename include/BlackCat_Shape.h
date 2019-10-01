@@ -10,6 +10,7 @@
 
 #include "BlackCat_Common.h"
 #include "BlackCat_TypeTraits.h"
+#include "BlackCat_Operations.h"
 #include "shape/Shape.h"
 
 #endif /* BLACKCAT_SHAPE_H_ */

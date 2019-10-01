@@ -31,7 +31,7 @@ public:
 
 	//------------------------ iterator-algorthims---------------------------//
 
-    void fill(value_type value) { BC::algorithms::fill(as_derived(), value);}
+    void fill(value_type value) { BC::algorithms::fill(as_derived().get_stream(), cw_begin(), cw_end(), value);}
     void zero()                 { fill(0); }
     void ones()                 { fill(1); }
 
@@ -44,8 +44,9 @@ public:
     	as_derived() = as_derived().un_expr(func);
     }
 
-    void sort() {
+    Tensor_Base<Expression>& sort() {
     	BC::algorithms::sort(this->as_derived().get_stream(), this->cw_begin(), this->cw_end());
+    	return as_derived();
     }
 
     void rand(value_type lb=0, value_type ub=1) {

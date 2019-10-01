@@ -25,6 +25,10 @@ enum direction {
     reverse = -1
 };
 
+enum initpos {
+	start=0,
+	end=1
+};
 
 template<class T>
 struct iterator_traits : std::iterator_traits<T> {
