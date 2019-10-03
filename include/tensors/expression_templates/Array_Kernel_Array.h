@@ -106,7 +106,7 @@ public:
         else if (tensor_dimension == 1)
             return i;
         else
-            return this->leading_dimension(Shape::tensor_dimension - 2) * i;
+            return this->leading_dimension(Shape::tensor_dimension - 1) * i;
     }
 
 };

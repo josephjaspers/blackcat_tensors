@@ -58,9 +58,10 @@ public:
 	auto data()	   { return this->as_derived().memptr(); }
 
 	const auto operator [] (BC::size_t i) const { return slice(i); }
-		  auto operator [] (BC::size_t i)	   { return slice(i); }
+		  auto operator [] (BC::size_t i)	    { return slice(i); }
 
-	struct range { BC::size_t  from, to; };	//enables syntax: `tensor[{start, end}]`
+	//enables syntax: `tensor[{start, end}]`
+	struct range { BC::size_t  from, to; };
 	const auto operator [] (range r) const { return slice(r.from, r.to); }
 		  auto operator [] (range r)	   { return slice(r.from, r.to); }
 
@@ -105,8 +106,9 @@ public:
 		return chunk(this->as_derived(), begin, 0)(end-begin, this->as_derived().cols());
 	}
 	auto row_range(int begin, int end) {
+		using self = const Tensor_Accessor<ExpressionTemplate>&;
 		return BC::traits::auto_remove_const(
-				const_cast<const Tensor_Accessor<ExpressionTemplate>&>(*this).row_range(begin, end));
+				const_cast<self>(*this).row_range(begin, end));
 	}
 
 	const auto scalar(BC::size_t i) const {
@@ -151,36 +153,42 @@ public:
 	const auto diagnol(BC::size_t index = 0) const {
 		BC_ASSERT(index > -as_derived().rows() && index < as_derived().rows(),
 				"diagnol `index` must be -rows() and rows())");
-		static_assert(ExpressionTemplate::tensor_dimension  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
+		static_assert(ExpressionTemplate::tensor_dimension  == 2,
+				"DIAGNOL ONLY AVAILABLE TO MATRICES");
 		return make_tensor(exprs::make_diagnol(as_derived(),index));
 	}
 
 	auto diagnol(BC::size_t index = 0) {
 		BC_ASSERT(index > -as_derived().rows() && index < as_derived().rows(),
 				"diagnol `index` must be -rows() and rows())");
-		static_assert(ExpressionTemplate::tensor_dimension  == 2, "DIAGNOL ONLY AVAILABLE TO MATRICES");
+		static_assert(ExpressionTemplate::tensor_dimension  == 2,
+				"DIAGNOL ONLY AVAILABLE TO MATRICES");
 		return make_tensor(exprs::make_diagnol(as_derived(),index));
 	}
 
 	//returns a copy of the tensor without actually copying the elements
 	auto shallow_copy() const {
-		return make_tensor(exprs::make_view(as_derived(), as_derived().get_shape()));
+		return make_tensor(
+				exprs::make_view(as_derived(), as_derived().get_shape()));
 	}
 
 	const auto col(BC::size_t i) const {
-		static_assert(ExpressionTemplate::tensor_dimension == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		static_assert(ExpressionTemplate::tensor_dimension == 2,
+				"MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return slice(i);
 	}
 
 	auto col(BC::size_t i) {
-		static_assert(ExpressionTemplate::tensor_dimension == 2, "MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		static_assert(ExpressionTemplate::tensor_dimension == 2,
+				"MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return slice(i);
 	}
 
 	const auto row(BC::size_t index) const {
 		BC_ASSERT(index >= 0 && index < as_derived().rows(),
 				"Row index must be between 0 and rows()");
-		static_assert(ExpressionTemplate::tensor_dimension == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		static_assert(ExpressionTemplate::tensor_dimension == 2,
+				"MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return make_tensor(exprs::make_row(as_derived(), index));
 	}
 
@@ -188,7 +196,8 @@ public:
 		BC_ASSERT(index >= 0 && index < as_derived().rows(),
 				"Row index must be between 0 and rows()");
 
-		static_assert(ExpressionTemplate::tensor_dimension == 2, "MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		static_assert(ExpressionTemplate::tensor_dimension == 2,
+				"MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return make_tensor(exprs::make_row(as_derived(), index));
 	}
 

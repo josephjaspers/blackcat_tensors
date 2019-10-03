@@ -75,7 +75,7 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>
 			blas_impl::ger(stream, left.rows(), right.cols(),
 					alpha.memptr(), A.memptr(), A.leading_dimension(0),
 					B.memptr(), B.leading_dimension(0),
-					injection.memptr(), injection.leading_dimension(0));
+					injection.memptr(), injection.leading_dimension(1));
 	        blas_util::post_parse_expression_evaluation(stream, contents);
 		} else {
 			auto alpha = make_constexpr_scalar<BC::host_tag, (alpha_mod == 0 ? 1 : alpha_mod), value_type>();
@@ -85,7 +85,7 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>
 			blas_impl::ger(stream, left.rows(), right.cols(),
 					alpha.memptr(), A.memptr(), A.leading_dimension(0),
 					B.memptr(), B.leading_dimension(0),
-					injection.memptr(), injection.leading_dimension(0));
+					injection.memptr(), injection.leading_dimension(1));
 		}
 	}
 };

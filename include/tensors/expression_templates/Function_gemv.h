@@ -67,7 +67,7 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>
         bool transA = contents.lv_is_transposed;
 
 		blas_impl::gemv(stream, transA,  M(), N(),
-				alpha.memptr(), A.memptr(), A.leading_dimension(0),
+				alpha.memptr(), A.memptr(), A.leading_dimension(1),
 				X.memptr(), X.leading_dimension(0)/*inc_X*/,
 				beta.memptr(),
 				injection.memptr()/*Y*/, injection.leading_dimension(0)/*incy*/);

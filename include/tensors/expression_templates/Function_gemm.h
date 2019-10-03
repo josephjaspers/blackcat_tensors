@@ -71,9 +71,9 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>
 
 		//call matrix_mul
         blas_impl::gemm(stream, transA, transB,  left.rows(), right.cols(), left.cols(),
-					alpha.memptr(), A.memptr(), A.leading_dimension(0),
-					B.memptr(), B.leading_dimension(0),
-					beta.memptr(), injection.memptr(), injection.leading_dimension(0));
+					alpha.memptr(), A.memptr(), A.leading_dimension(1),
+					B.memptr(), B.leading_dimension(1),
+					beta.memptr(), injection.memptr(), injection.leading_dimension(1));
 
         blas_util::post_parse_expression_evaluation(stream, contents);
     }
