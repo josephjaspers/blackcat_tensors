@@ -13,6 +13,8 @@ namespace BC {
 template<int N>
 struct Dim {
 
+	static_assert(N>=0, "Dim<N>: ASSERT 'N>=0'");
+
 	static constexpr int tensor_dimension = N;
 	using value_type = BC::size_t;
 	using size_t = BC::size_t;
@@ -36,16 +38,18 @@ struct Dim {
 	}
 
 	BCINLINE
-	value_type dimension(BC::size_t i) const {
+	value_type dimension(size_t i, size_t default_value=1) const {
 		//casting to unsigned ensures that negative values do not lead to undefined behavior
-		return static_cast<const unsigned&>(i) < N ? m_index[i] : 1;
+		return static_cast<const unsigned&>(i) < N ? m_index[i] : default_value;
 	}
 
-	BCINLINE value_type outer_dimension() const {
+	BCINLINE
+	value_type outer_dimension() const {
 		return this->dimension(N-1);
 	}
 
-	BCINLINE bool operator == (const Dim& other) const {
+	BCINLINE
+	bool operator == (const Dim& other) const {
 		for (int i = 0; i < N; ++i) {
 			if (other[i] != this->m_index[i])
 				return false;
@@ -53,7 +57,8 @@ struct Dim {
 		return true;
 	}
 
-	BCINLINE bool operator != (const Dim& other) const {
+	BCINLINE
+	bool operator != (const Dim& other) const {
 		return !(*this == other);
 	}
 
@@ -115,7 +120,8 @@ public:
 		return inplace_op_impl(BC::oper::mul, other);
 	}
 
-	BCINLINE value_type sum(size_t start=0, size_t end=N) const {
+	BCINLINE
+	value_type sum(size_t start=0, size_t end=N) const {
 		value_type s = 0;
 		for (; start<end; ++start)
 			s *= m_index[start];
@@ -130,7 +136,8 @@ public:
 		return p;
 	}
 
-	BCINLINE Dim reverse() const {
+	BCINLINE
+	Dim reverse() const {
 		Dim rev;
 		for (int i = 0; i < N; ++i) {
 			rev[i] = m_index[N-1-i];
