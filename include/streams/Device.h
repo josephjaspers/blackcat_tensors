@@ -67,9 +67,9 @@ class Stream<device_tag> {
 public:
 
 	using system_tag = device_tag;
-	using allocator_type = BC::allocators::fancy::Stack_Allocator<device_tag>;
+	using allocator_type = BC::allocators::Stack_Allocator<device_tag>;
 
-	BC::allocators::fancy::Stack_Allocator<device_tag>& get_allocator() {
+	BC::allocators::Stack_Allocator<device_tag>& get_allocator() {
     	return device_contents.get()->m_workspace;
     }
 
