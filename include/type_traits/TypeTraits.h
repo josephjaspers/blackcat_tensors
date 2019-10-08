@@ -2,7 +2,7 @@
  * TypeTraits.h
  *
  *  Created on: Jun 30, 2019
- *      Author: joseph
+ *	  Author: joseph
  */
 
 #ifndef BLACKCAT_TYPETRAITS_H_
@@ -113,99 +113,109 @@ using namespace BC::traits::common;
 
 
 	template<class T>
-    BCINLINE static constexpr BC::size_t  max(const T& x) { return x; }
+	BCINLINE static constexpr BC::size_t  max(const T& x) { return x; }
 
 	template<class T>
-    BCINLINE static constexpr BC::size_t  min(const T& x) { return x; }
+	BCINLINE static constexpr BC::size_t  min(const T& x) { return x; }
 
-    template<class T, class... Ts> BCINLINE
-    static constexpr size_t max(const T& x, const Ts&... xs) {
-    	return x > max(xs...) ? x : max(xs...);
-    }
+	template<class T, class... Ts> BCINLINE
+	static constexpr size_t max(const T& x, const Ts&... xs) {
+		return x > max(xs...) ? x : max(xs...);
+	}
 
-    template<class T, class... Ts> BCINLINE
-    static constexpr size_t min(const T& x, const Ts&... xs) {
-    	return x < min(xs...) ? x : min(xs...);
-    }
+	template<class T, class... Ts> BCINLINE
+	static constexpr size_t min(const T& x, const Ts&... xs) {
+		return x < min(xs...) ? x : min(xs...);
+	}
 
 	//----------------------------------
 
-    template<template<class> class Function, class... Ts>
-    struct all: true_type {};
+	template<template<class> class Function, class... Ts>
+	struct all: true_type {};
 
-    template<template<class> class Function, class T, class... Ts>
-    struct all<Function, T, Ts...>:
-    	conditional_t<Function<T>::value, all<Function, Ts...>, false_type> {};
+	template<template<class> class Function, class T, class... Ts>
+	struct all<Function, T, Ts...>:
+		conditional_t<Function<T>::value, all<Function, Ts...>, false_type> {};
 
-    template<template<class> class Function, class... Ts>
-    static constexpr bool all_v = all<Function, Ts...>::value;
+	template<template<class> class Function, class... Ts>
+	static constexpr bool all_v = all<Function, Ts...>::value;
 
-    template<template<class> class Function, class... Ts>
-    struct any: false_type {};
+	template<template<class> class Function, class... Ts>
+	struct any: false_type {};
 
-    template<template<class> class Function, class T, class... Ts>
-    struct any<Function, T, Ts...>:
-    	conditional_t<Function<T>::value, true_type, any<Function, Ts...>> {};
+	template<template<class> class Function, class T, class... Ts>
+	struct any<Function, T, Ts...>:
+		conditional_t<Function<T>::value, true_type, any<Function, Ts...>> {};
 
-    template<template<class> class Function, class... Ts>
-    static constexpr bool any_v = any<Function, Ts...>::value;
+	template<template<class> class Function, class... Ts>
+	static constexpr bool any_v = any<Function, Ts...>::value;
 
-    template<template<class> class Function, class... Ts>
-    struct none:
-    	conditional_t<any<Function, Ts...>::value, false_type, true_type> {};
+	template<template<class> class Function, class... Ts>
+	struct none:
+		conditional_t<any<Function, Ts...>::value, false_type, true_type> {};
 
-    template<template<class> class Function, class... Ts>
-    static constexpr bool none_v = none<Function, Ts...>::value;
+	template<template<class> class Function, class... Ts>
+	static constexpr bool none_v = none<Function, Ts...>::value;
 
-    // ---------------------
+	// ---------------------
 
-    template<class T, class... Ts>
-    class sequence_of {
-    	template<class U> using is_same_ = std::is_same<U, T>;
-    public:
-    	static constexpr bool value = all_v<is_same_, Ts...>;
-    };
+	template<class T, class... Ts>
+	class sequence_of {
+		template<class U> using is_same_ = std::is_same<U, T>;
+	public:
+		static constexpr bool value = all_v<is_same_, Ts...>;
+	};
 
-    template<class... Ts>
-    static constexpr bool sequence_of_v = sequence_of<Ts...>::value;
-
-
-    template<class T, class... Ts>
-    class sequence_contains {
-    	template<class U> using is_same_ = std::is_same<U, T>;
-    public:
-    	static constexpr bool value = any_v<is_same_, Ts...>;
-    };
-
-    template<class... Ts>
-    static constexpr bool sequence_contains_v = sequence_contains<Ts...>::value;
-
-    // -------- new addition, other code will use static_cast
-
-    template<template<class...> class Type, class Derived, class... Ts>
-    auto& derived_cast(const Type<Derived, Ts...>& t) {
-    	return static_cast<const Derived&>(t);
-    }
-
-    template<template<class...> class Type, class Derived, class... Ts>
-    auto& derived_cast(Type<Derived, Ts...>& t) {
-    	return static_cast<Derived&>(t);
-    }
-
-    template<class Derived, class Type>
-    const auto& derived_cast(const Type& t) {
-    	return static_cast<const Derived&>(t);
-    }
-
-    template<class Derived, class Type>
-    auto& derived_cast(Type& t) {
-    	return static_cast<Derived&>(t);
-    }
+	template<class... Ts>
+	static constexpr bool sequence_of_v = sequence_of<Ts...>::value;
 
 
-    //---------------------
+	template<class T, class... Ts>
+	class sequence_contains {
+		template<class U> using is_same_ = std::is_same<U, T>;
+	public:
+		static constexpr bool value = any_v<is_same_, Ts...>;
+	};
 
-    //Only required for NVCC (can't pass std::pair to cuda kernels)
+	template<class... Ts>
+	static constexpr bool sequence_contains_v = sequence_contains<Ts...>::value;
+
+
+
+	// -------- new addition, other code will use static_cast
+	template<class T>
+	using query_derived_type = typename T::derived_type;
+
+	template<template<class...> class Type, class Derived, class... Ts>
+	auto& derived_cast(const Type<Derived, Ts...>& t) {
+		using derived_type = conditional_detected_t<
+				query_derived_type, Type<Derived,Ts...>, Derived>;
+
+		return static_cast<const derived_type&>(t);
+	}
+
+	template<template<class...> class Type, class Derived, class... Ts>
+	auto& derived_cast(Type<Derived, Ts...>& t) {
+		using derived_type = conditional_detected_t<
+				query_derived_type, Type<Derived,Ts...>, Derived>;
+
+		return static_cast<derived_type&>(t);
+	}
+
+	template<class Type>
+	const auto& derived_cast(const Type& t) {
+		return static_cast<const typename Type::derived_type&>(t);
+	}
+
+	template<class Type>
+	auto& derived_cast(Type& t) {
+		return static_cast<typename Type::derived_type&>(t);
+	}
+
+
+	//---------------------
+
+	//Only required for NVCC (can't pass std::pair to cuda kernels)
 	template<class T, class U>
 	struct Pair {
 		T first;
@@ -214,7 +224,7 @@ using namespace BC::traits::common;
 	template<class T, class U> BCINLINE
 	Pair<T, U> make_pair(T t, U u) { return Pair<T, U>{t, u}; }
 
-    //---------------------
+	//---------------------
 
 	template<class T> BCINLINE
 	T& auto_remove_const(const T& param) {

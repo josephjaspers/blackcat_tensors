@@ -43,7 +43,7 @@ namespace detail {
 
 template<class Expression, class Stream>
 static void nd_evaluate(const Expression expression, Stream stream) {
-	using system_tag    = typename Stream::system_tag;
+	using system_tag	= typename Stream::system_tag;
 	using nd_evaluator  = typename BC::tensors::exprs::evaluator::Evaluator<system_tag>;
 
 	static_assert(Expression::tensor_iterator_dimension >= Expression::tensor_dimension
@@ -153,9 +153,9 @@ evaluate_aliased(Expression expression, Stream stream) {
 
 template<class Array, class Expression, class Stream>
 auto greedy_evaluate(Array array, Expression expr, Stream stream) {
-    static_assert(expression_traits<Array>::is_array::value, "MAY ONLY EVALUATE TO ARRAYS");
-    detail::evaluate(make_bin_expr<oper::Assign>(array, expr), stream, std::true_type());
-    return array;
+	static_assert(expression_traits<Array>::is_array::value, "MAY ONLY EVALUATE TO ARRAYS");
+	detail::evaluate(make_bin_expr<oper::Assign>(array, expr), stream, std::true_type());
+	return array;
 }
 
 //The branch is an array, no evaluation required

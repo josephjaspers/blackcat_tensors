@@ -24,33 +24,35 @@ template<class SystemTag>
 struct Sum {};
 
 template<class ArrayType, class SystemTag>
-struct Unary_Expression<Sum<SystemTag>, ArrayType>
-: Expression_Base<Unary_Expression<Sum<SystemTag>, ArrayType>>, Shape<0>, Sum<SystemTag> {
+struct Unary_Expression<Sum<SystemTag>, ArrayType>:
+	Expression_Base<Unary_Expression<Sum<SystemTag>, ArrayType>>,
+	Shape<0>,
+	Sum<SystemTag> {
 
-    using value_type = typename ArrayType::value_type;
-    using system_tag = SystemTag;
-    using requires_greedy_evaluation = std::true_type;
+	using value_type = typename ArrayType::value_type;
+	using system_tag = SystemTag;
+	using requires_greedy_evaluation = std::true_type;
 
 
-    static constexpr int tensor_dimension  = 0;
-    static constexpr int tensor_iterator_dimension = 0;
+	static constexpr int tensor_dimension  = 0;
+	static constexpr int tensor_iterator_dimension = 0;
 
-    ArrayType array;
+	ArrayType array;
 
-    using Shape<0>::inner_shape;
+	using Shape<0>::inner_shape;
 
-    Unary_Expression(ArrayType array_, Sum<SystemTag> sum=Sum<SystemTag>()):
-    	array(array_) {}
+	Unary_Expression(ArrayType array_, Sum<SystemTag> sum=Sum<SystemTag>()):
+		array(array_) {}
 
-    template<class core, int alpha_mod, int beta_mod, class Stream>
-    void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
-    	static_assert(core::tensor_dimension==0, "Injection must be a scalar type");
+	template<class core, int alpha_mod, int beta_mod, class Stream>
+	void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
+		static_assert(core::tensor_dimension==0, "Injection must be a scalar type");
 
-    	BC::tensors::exprs::functions::Reduce<system_tag>::sum(
-    			stream,
-    			injection_values.data(),
-    			array);
-    }
+		BC::tensors::exprs::functions::Reduce<system_tag>::sum(
+				stream,
+				injection_values.data(),
+				array);
+	}
 };
 
 

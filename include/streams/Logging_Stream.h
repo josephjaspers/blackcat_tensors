@@ -2,7 +2,7 @@
  * Logging_Stream.h
  *
  *  Created on: Jul 26, 2019
- *      Author: joseph
+ *	  Author: joseph
  */
 
 #ifndef BLACKAT_TENSORS_STREAMS_LOGGING_STREAM_H_
@@ -71,7 +71,8 @@ struct Logging_Stream: Logging_Stream_Base<SystemTag> {
 		using system_tag = SystemTag;
 		using value_type = T;
 
-		std::shared_ptr<log_info> info = std::shared_ptr<log_info>(new log_info {0, 0});
+		std::shared_ptr<log_info> info=
+				std::shared_ptr<log_info>(new log_info {0, 0});
 
 		template<class altT>
 		struct rebind { using other = Allocator<T>; };
@@ -100,8 +101,11 @@ struct Logging_Stream: Logging_Stream_Base<SystemTag> {
 			}
 		}
 
-		void deallocate(T* t, BC::size_t size) {
-			BC_ASSERT(info->current_allocated >= size * sizeof(value_type), "BC_DEALLOCATION ERROR, DOUBLE DUPLICATION")
+		void deallocate(T* ptr, BC::size_t size) {
+			BC_ASSERT(ptr == nullptr,
+					"LOGGING_ALLOCATOR CAN ONLY DEALLOCATE NULLPTRS");
+			BC_ASSERT(info->current_allocated >= size * sizeof(value_type),
+					"BC_DEALLOCATION ERROR, DOUBLE DUPLICATION")
 			info->current_allocated -= size * sizeof(value_type);
 		}
 	};
@@ -139,22 +143,23 @@ struct Logging_Stream: Logging_Stream_Base<SystemTag> {
 	void record_event() {}
 
 	template<class T>
-    void wait_event(const T&) {}
+	void wait_event(const T&) {}
 
 	template<class T>
-    void wait_stream(const T&) {}
+	void wait_stream(const T&) {}
 
 	template<class Functor>
 	void enqueue(const Functor& functor) {}
+
 	template<class Functor>
 	void enqueue_callback(const Functor& functor) {}
 
-    bool operator == (const Logging_Stream<SystemTag>& dev) {
-    	return true;
-    }
-    bool operator != (const Logging_Stream<SystemTag>& dev) {
-    	return false;
-    }
+	bool operator == (const Logging_Stream<SystemTag>& dev) {
+		return true;
+	}
+	bool operator != (const Logging_Stream<SystemTag>& dev) {
+		return false;
+	}
 };
 
 

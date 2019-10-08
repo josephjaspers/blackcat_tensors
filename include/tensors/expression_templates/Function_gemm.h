@@ -19,64 +19,68 @@ namespace exprs {
 
 
 template<class lv, class rv, class SystemTag>
-struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>
-: Expression_Base<Binary_Expression<oper::gemm<SystemTag>, lv, rv>>,
-  oper::gemm<SystemTag> {
+struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
+		Expression_Base<Binary_Expression<oper::gemm<SystemTag>, lv, rv>>,
+		oper::gemm<SystemTag> {
 
-	static_assert(std::is_same<typename lv::value_type, typename rv::value_type>::value,
-    		"MATRIX MULTIPLICATION ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
+	static_assert(std::is_same<
+				typename lv::value_type,
+				typename rv::value_type>::value,
+			"GEMM arguments must have the same value_type");
+
 	static_assert(lv::tensor_dimension==2 && rv::tensor_dimension==2,
-    		"GEMM Expression initialized with non matrix tensor");
+			"Error: GEMM Expression initialized with non matrix tensor");
 
+	using value_type = typename lv::value_type;
+	using system_tag = SystemTag;
+	using blas_impl  = BC::blas::implementation<system_tag>;
+	using blas_util  = blas_tools::implementation<system_tag>;
 
-    using value_type	= typename lv::value_type;
-    using system_tag	= SystemTag;
-    using blas_impl		= BC::blas::implementation<system_tag>;
-    using blas_util	    = BC::tensors::exprs::blas_tools::implementation<system_tag>;
+	static constexpr int tensor_dimension = rv::tensor_dimension;
+	static constexpr int tensor_iterator_dimension  = 1;
 
-    static constexpr int tensor_dimension 	   = rv::tensor_dimension;
-    static constexpr int tensor_iterator_dimension  = 1;
+	lv left;
+	rv right;
 
-    lv left;
-    rv right;
+	BCHOT Binary_Expression(lv left, rv right):
+			left(left),
+			right(right) {}
 
-    BCHOT Binary_Expression(lv left, rv right)
-     : left(left), right(right) {}
-
-    BCINLINE BC::size_t  size() const { return left.rows() * right.cols(); }
-    BCINLINE BC::size_t  rows() const { return left.rows();  }
-    BCINLINE BC::size_t  cols() const { return right.cols(); }
-    BCINLINE BC::size_t  dimension(int i) const {
+	BCINLINE BC::size_t  size() const { return left.rows() * right.cols(); }
+	BCINLINE BC::size_t  rows() const { return left.rows();  }
+	BCINLINE BC::size_t  cols() const { return right.cols(); }
+	BCINLINE BC::size_t  dimension(int i) const {
 		return i == 0 ? left.rows() : i == 1 ? right.cols() : 1;
-    }
-    BCINLINE BC::size_t  block_dimension(int i) const {
-			return i == 0 ? left.rows() : i == 1 ? size() : 1;
-    }
+}
 
-    template<class core, int alpha_mod, int beta_mod, class Stream>
-    void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
-    	static_assert(core::tensor_dimension==2, "Gemm injection must be a matrix");
-    	BC_ASSERT(left.cols() == right.rows(), "gemm requires left.cols() == right.rows()");
+	template<class Core, int Alpha, int Beta, class Stream>
+	void eval(injector<Core, Alpha, Beta> output, Stream stream) const {
 
-        //get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
-        auto& injection = injection_values.data();
+		static_assert(Core::tensor_dimension == 2,
+				"Gemm out must be a matrix");
+		BC_ASSERT(left.cols() == right.rows(),
+				"gemm requires left.cols() == right.rows()");
 
-        auto contents = blas_util::template parse_expression<alpha_mod, beta_mod>(stream, left, right);
-        auto A = contents.left;
-        auto B = contents.right;
-        auto alpha = contents.alpha;
-        auto beta  = contents.beta;
-        auto transA = contents.lv_is_transposed;
-        auto transB = contents.rv_is_transposed;
+	//get the data of the out --> injector simply stores the alpha/beta scalar modifiers
+	auto& out = output.data();
+
+	auto contents = blas_util::template parse_expression<Alpha, Beta>(stream, left, right);
+	auto A = contents.left;
+	auto B = contents.right;
+	auto alpha = contents.alpha;
+	auto beta  = contents.beta;
+	auto transA = contents.lv_is_transposed;
+	auto transB = contents.rv_is_transposed;
 
 		//call matrix_mul
-        blas_impl::gemm(stream, transA, transB,  left.rows(), right.cols(), left.cols(),
-					alpha.memptr(), A.memptr(), A.leading_dimension(1),
-					B.memptr(), B.leading_dimension(1),
-					beta.memptr(), injection.memptr(), injection.leading_dimension(1));
+	blas_impl::gemm(
+				stream, transA, transB,  left.rows(), right.cols(), left.cols(),
+				alpha.memptr(), A.memptr(), A.leading_dimension(1),
+				B.memptr(), B.leading_dimension(1),
+				beta.memptr(), out.memptr(), out.leading_dimension(1));
 
-        blas_util::post_parse_expression_evaluation(stream, contents);
-    }
+		blas_util::post_parse_expression_evaluation(stream, contents);
+	}
 };
 
 

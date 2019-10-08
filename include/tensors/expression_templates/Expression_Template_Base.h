@@ -15,83 +15,106 @@ namespace BC {
 namespace tensors {
 namespace exprs {
 
-template<class derived>
+
+template<class Derived>
 struct Expression_Template_Base: BC_Type {
 
-private:
+	BCINLINE
+	const Derived& internal() const {
+		return BC::traits::derived_cast(*this);
+	}
 
-    BCINLINE const derived& as_derived() const { return static_cast<const derived&>(*this); }
-    BCINLINE       derived& as_derived()       { return static_cast<      derived&>(*this); }
+	BCINLINE
+	Derived& internal() {
+		return BC::traits::derived_cast(*this);
+	}
 
-public:
 
-    BCINLINE const auto& internal() const { return as_derived(); }
-    BCINLINE       auto& internal()       { return as_derived(); }
+	BCINLINE Expression_Template_Base() {
 
-    operator       derived&()       { return as_derived(); }
-    operator const derived&() const { return as_derived(); }
-
-    BCINLINE Expression_Template_Base() {
+		using BC::traits::true_v;
+		using BC::traits::Integer;
 
 #ifndef _MSC_VER
-		static_assert(std::is_trivially_copy_constructible<derived>::value, "INTERNAL_TYPES TYPES MUST BE TRIVIALLY COPYABLE");
-		static_assert(std::is_trivially_copyable<derived>::value, "INTERNAL_TYPES MUST BE TRIVIALLY COPYABLE");
+		static_assert(std::is_trivially_copy_constructible<Derived>::value,
+				"ExpressionTemplates must be trivially constructible");
+
+		static_assert(std::is_trivially_copyable<Derived>::value,
+				"ExpressionTemplates must be tricially copyable");
 #endif
-		static_assert(!std::is_same<void, typename derived::value_type>::value, "INTERNAL_TYPES MUST HAVE A 'using value_type = some_Type'");
-		static_assert(!std::is_same<decltype(std::declval<derived>().inner_shape()), void>::value, "INTERNAL_TYPE MUST DEFINE inner_shape()");
-		static_assert(std::is_same<decltype(std::declval<derived>().rows()), int>::value, "INTERNAL_TYPE MUST DEFINE rows()");
-		static_assert(std::is_same<decltype(std::declval<derived>().cols()), int>::value, "INTERNAL_TYPE MUST DEFINE cols()");
-		static_assert(std::is_same<decltype(std::declval<derived>().dimension(0)), int>::value, "INTERNAL_TYPE MUST DEFINE dimension(int)");
-		static_assert(std::is_same<int, std::decay_t<decltype(derived::tensor_dimension)>>::value, "Internal Types must define 'static constexpr int tensor_dimension'");
-		static_assert(std::is_same<int, std::decay_t<decltype(derived::tensor_iterator_dimension)>>::value, "Internal Types must define 'static constexpr int tensor_iterator_dimension'");
-    }
+		static_assert(true_v<typename Derived::value_type>,
+				"ExpressionTemplates must define: 'using value_type = <T>;'");
 
-    void deallocate() const {}
+		static_assert(true_v<decltype(std::declval<Derived>().inner_shape())>,
+				"ExpressionTemplates must define: inner_shape()");
 
+		static_assert(true_v<decltype(std::declval<Derived>().rows())>,
+				"ExpressionTemplates must define: rows()");
+
+		static_assert(true_v<decltype(std::declval<Derived>().cols())>,
+				"ExpressionTemplates must define: cols()");
+
+		static_assert(true_v<decltype(std::declval<Derived>().dimension(0))>,
+				"ExpressionTemplates must define: dimension(int)");
+
+		static_assert(true_v<Integer<Derived::tensor_dimension>>,
+				"ExpressionTemplates must define: "
+				"static constexpr int tensor_dimension");
+
+		static_assert(true_v<Integer<Derived::tensor_iterator_dimension>>,
+				"ExpressionTemplates must define: "
+				"static constexpr int tensor_iterator_dimension");
+	}
+
+	void deallocate() const {}
 };
 
-template<class derived>
-struct Expression_Base
-        : Expression_Template_Base<derived>,
-          BC_Expr {
 
-            using copy_constructible = std::false_type;
-            using move_constructible = std::false_type;
-            using copy_assignable    = std::false_type;
-            using move_assignable    = std::false_type;
+template<class Derived>
+struct Expression_Base:
+		Expression_Template_Base<Derived>,
+		BC_Expr {
 
-            BCINLINE const auto inner_shape() const {
-            	BC::Dim<derived::tensor_dimension> dim;
-            	for (BC::size_t i = 0; i < derived::tensor_dimension; ++i) {
-            		dim[i] = static_cast<const derived&>(*this).dimension(i);
-            	}
-            	return dim;
-            }
+	using copy_constructible = std::false_type;
+	using move_constructible = std::false_type;
+	using copy_assignable    = std::false_type;
+	using move_assignable    = std::false_type;
 
-            BCINLINE const auto get_shape() const {
-            	return BC::Shape<derived::tensor_dimension>(
-            			static_cast<const derived&>(*this).inner_shape());
-            }
-        };
+	BCINLINE const auto inner_shape() const {
+		BC::Dim<Derived::tensor_dimension> dim;
+		for (BC::size_t i = 0; i < Derived::tensor_dimension; ++i) {
+			dim[i] = static_cast<const Derived&>(*this).dimension(i);
+		}
+		return dim;
+	}
+
+	BCINLINE const auto get_shape() const {
+		return BC::Shape<Derived::tensor_dimension>(
+				static_cast<const Derived&>(*this).inner_shape());
+	}
+};
+
 
 template<class Derived>
 struct Kernel_Array_Base : Expression_Template_Base<Derived>, BC_Array {
 
-    BCINLINE Kernel_Array_Base() {
-		static_assert(!std::is_same<
-					typename Derived::value_type,
-					std::remove_pointer<
-						decltype(std::declval<Derived>().memptr())>
-				>::value, "Array types must define memptr");
-    }
+	BCINLINE
+	Kernel_Array_Base() {
+		using value_type = typename Derived::value_type;
+		using memptr_type = decltype(std::declval<Derived>().memptr());
+		using memptr_value_type =
+				std::remove_const_t<std::remove_pointer_t<memptr_type>>;
 
-
+		static_assert(std::is_same<value_type, memptr_value_type>::value,
+			"Array_Types must define: memptr() \n"
+			"which returns a pointer of the ExpressionTemplate's value_type");
+	}
 };
+
 
 } //ns BC
 } //ns exprs
 } //ns tensors
-
 
 
 #endif /* BC_INTERNAL_BASE_H_ */

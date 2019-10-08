@@ -18,19 +18,23 @@ namespace exprs {
 
 template<class Shape, class ValueType, class Allocator, class... Tags>
 struct Array_Slice:
-		Kernel_Array<Shape, ValueType, typename BC::allocator_traits<Allocator>::system_tag, Tags...> {
+		Kernel_Array<
+				Shape,
+				ValueType,
+				typename BC::allocator_traits<Allocator>::system_tag,
+				Tags...> {
 
 	using value_type = ValueType;
-	using allocator_t 	 = Allocator;
+	using allocator_type = Allocator;
 	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
-	using stream_t 	 = BC::Stream<system_tag>;
+	using stream_type = BC::Stream<system_tag>;
 	using parent = Kernel_Array<Shape, ValueType, system_tag, Tags...>;
 
-	stream_t m_stream;
-	allocator_t m_allocator;
+	stream_type m_stream;
+	allocator_type m_allocator;
 
 	template<class... Args>
-	BCHOT Array_Slice(stream_t stream_, allocator_t allocator_, Args... args_)
+	BCHOT Array_Slice(stream_type stream_, allocator_type allocator_, Args... args_)
 	: parent(args_...),
 	  m_stream(stream_),
 	  m_allocator(allocator_) {}
@@ -42,11 +46,11 @@ struct Array_Slice:
 	BCHOT Array_Slice(const Array_Slice&) = default;
 	BCHOT Array_Slice(Array_Slice&&) = default;
 
-	const allocator_t& get_allocator() const { return m_allocator; }
-		  allocator_t& get_allocator() 	   { return m_allocator; }
+	const allocator_type& get_allocator() const { return m_allocator; }
+		  allocator_type& get_allocator() 	   { return m_allocator; }
 
-	const stream_t& get_stream() const  { return m_stream; }
-		  stream_t& get_stream()  		{ return m_stream; }
+	const stream_type& get_stream() const  { return m_stream; }
+		  stream_type& get_stream()  		{ return m_stream; }
 };
 
 namespace {
@@ -54,14 +58,14 @@ namespace {
 template<int Dimension, class Parent, class... Tags>
 using slice_type_from_parent = Array_Slice<BC::Shape<BC::traits::max(Dimension,0)>,
 		typename Parent::value_type,
-		typename Parent::allocator_t,
+		typename Parent::allocator_type,
 		BC_View, Tags...>;
 
 template<int Dimension, class Parent, class... Tags>
 using strided_slice_type_from_parent = Array_Slice<
 		std::enable_if_t<Dimension==1, Strided_Vector_Shape>,
 		typename Parent::value_type,
-		typename Parent::allocator_t,
+		typename Parent::allocator_type,
 		BC_View, Tags...>;
 }
 

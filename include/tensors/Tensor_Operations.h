@@ -271,6 +271,10 @@ public:
 		return bi_expr<BC::tensors::exprs::multichannel_conv2d_kernel_backwards> (rv);
 	}
 
+	auto img2col() const {
+		return un_expr<BC::tensors::exprs::img2col>();
+	}
+
     template<class right_value>
     void copy(const Tensor_Operations<right_value>& rv) {
         static_assert(exprs::expression_traits<Expression>::is_copy_assignable::value, "copy lv must be array");

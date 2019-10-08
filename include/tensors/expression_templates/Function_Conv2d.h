@@ -8,6 +8,9 @@
 #ifndef FUNCTION_CONV2D_H_
 #define FUNCTION_CONV2D_H_
 
+#include "Expression_Binary.h"
+#include "Expression_Unary.h"
+
 #include "functions/convolutions/Convolution.h"
 #include "Expression_Template_Base.h"
 #include "Tree_Evaluator.h"

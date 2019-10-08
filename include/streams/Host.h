@@ -10,7 +10,7 @@
 #define BC_STREAMS_COMMON_H_
 
 #include <memory>
-#include "HostStream.h"
+#include "Host_Stream.h"
 
 namespace BC {
 namespace streams {

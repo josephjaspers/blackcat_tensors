@@ -20,25 +20,23 @@ namespace allocators {
 template<class SystemTag, class ValueType>
 struct Basic_Allocator_Base {
 
-    using system_tag = SystemTag;	//BC tag
-    using value_type = ValueType;
-    using pointer = value_type*;
-    using const_pointer = value_type*;
-    using size_type = int;
-    using propagate_on_container_copy_assignment = std::false_type;
-    using propagate_on_container_move_assignment = std::false_type;
-    using propagate_on_container_swap = std::false_type;
-    using is_always_equal = std::true_type;
+	using system_tag = SystemTag;	//BC tag
+	using value_type = ValueType;
+	using pointer = value_type*;
+	using const_pointer = value_type*;
+	using size_type = int;
+	using propagate_on_container_copy_assignment = std::false_type;
+	using propagate_on_container_move_assignment = std::false_type;
+	using propagate_on_container_swap = std::false_type;
+	using is_always_equal = std::true_type;
 
 	template<class U>
-	constexpr bool operator ==(
-			const Basic_Allocator_Base<SystemTag, U>&) const {
+	bool operator == (const Basic_Allocator_Base<SystemTag, U>&) const {
 		return true;
 	}
 
 	template<class U>
-	constexpr bool operator !=(
-			const Basic_Allocator_Base<SystemTag, U>&) const {
+	bool operator != (const Basic_Allocator_Base<SystemTag, U>&) const {
 		return false;
 	}
 };
@@ -57,13 +55,13 @@ struct Allocator<host_tag, T>: Basic_Allocator_Base<host_tag, T> {
 	Allocator(const Allocator<host_tag, U>&) {}
 	Allocator() = default;
 
-    T* allocate(int size) {
-        return new T[size];
-    }
+	T* allocate(int size) {
+		return new T[size];
+	}
 
-    void deallocate(T* t, BC::size_t  size) {
-        delete[] t;
-    }
+	void deallocate(T* t, BC::size_t  size) {
+		delete[] t;
+	}
 };
 
 
@@ -80,15 +78,15 @@ struct Allocator<device_tag, T>: Basic_Allocator_Base<device_tag, T> {
 	Allocator(const Allocator<device_tag, U>&) {}
 	Allocator() = default;
 
-    T* allocate(std::size_t sz) const {
-    	T* data_ptr;
-    	BC_CUDA_ASSERT((cudaMalloc((void**) &data_ptr, sizeof(T) * sz)));
-        return data_ptr;
-    }
+	T* allocate(std::size_t sz) const {
+		T* data_ptr;
+		BC_CUDA_ASSERT((cudaMalloc((void**) &data_ptr, sizeof(T) * sz)));
+		return data_ptr;
+	}
 
-    void deallocate(T* data_ptr, std::size_t size) const {
-    	BC_CUDA_ASSERT((cudaFree((void*)data_ptr)));
-    }
+	void deallocate(T* data_ptr, std::size_t size) const {
+		BC_CUDA_ASSERT((cudaFree((void*)data_ptr)));
+	}
 };
 
 template<class T>
@@ -100,12 +98,12 @@ struct Device_Managed : Allocator<device_tag, T> {
 	template<class altT>
 	struct rebind { using other = Device_Managed<altT>; };
 
-    T* allocate(BC::size_t sz) {
-    	T* memptr = nullptr;
-    	BC_CUDA_ASSERT((cudaMallocManaged((void**) &memptr, sizeof(T) * sz)));
-    	BC_CUDA_ASSERT((cudaDeviceSynchronize()));
-        return memptr;
-    }
+	T* allocate(BC::size_t sz) {
+		T* memptr = nullptr;
+		BC_CUDA_ASSERT((cudaMallocManaged((void**) &memptr, sizeof(T) * sz)));
+		BC_CUDA_ASSERT((cudaDeviceSynchronize()));
+		return memptr;
+	}
 };
 
 
