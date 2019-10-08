@@ -62,30 +62,27 @@ class Stream<device_tag> {
 		return default_contents;
 	}
 
-	std::shared_ptr<Device_Stream_Contents>device_contents = get_default_contents();
+	std::shared_ptr<Device_Stream_Contents> device_contents = get_default_contents();
 
 public:
 
 	using system_tag = device_tag;
-	using allocator_type = BC::allocators::fancy::Stack_Allocator<device_tag>;
+	using allocator_type = BC::allocators::Stack_Allocator<device_tag>;
 
-	BC::allocators::fancy::Stack_Allocator<device_tag>& get_allocator() {
+	BC::allocators::Stack_Allocator<device_tag>& get_allocator() {
 		return device_contents.get()->m_workspace;
 	}
 
 	template<class RebindType>
 	auto get_allocator_rebound() {
-		return typename allocator_type::
-				template rebind<RebindType>::other(get_allocator());
+		return typename allocator_type::template rebind<RebindType>::other(get_allocator());
 	}
 
 	auto set_blas_pointer_mode_host() {
-		cublasSetPointerMode(
-				device_contents.get()->m_cublas_handle, CUBLAS_POINTER_MODE_HOST);
+		cublasSetPointerMode(device_contents.get()->m_cublas_handle, CUBLAS_POINTER_MODE_HOST);
 	}
 	auto set_blas_pointer_mode_device() {
-		cublasSetPointerMode(
-				device_contents.get()->m_cublas_handle, CUBLAS_POINTER_MODE_DEVICE);
+		cublasSetPointerMode(device_contents.get()->m_cublas_handle, CUBLAS_POINTER_MODE_DEVICE);
 	}
 
 	const cublasHandle_t& get_cublas_handle() const {
@@ -146,8 +143,7 @@ public:
 
 	void sync() {
 		if (!is_default())
-			BC_CUDA_ASSERT(
-				cudaStreamSynchronize(device_contents.get()->m_stream_handle));
+			BC_CUDA_ASSERT(cudaStreamSynchronize(device_contents.get()->m_stream_handle));
 	}
 
 	//Functions (even functions using the internal stream)
@@ -198,8 +194,7 @@ public:
 		device_contents.get()->m_host_stream.push(
 				BC::traits::bind(
 				[this, func](std::promise<decltype(func())> promise) {
-					cudaEventSynchronize(
-							this->device_contents.get()->m_event_handle);
+					cudaEventSynchronize(this->device_contents.get()->m_event_handle);
 					promise.set_value(func());
 		}, std::move(promise))
 		);

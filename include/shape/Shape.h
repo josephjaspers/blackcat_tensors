@@ -32,7 +32,7 @@ private:
 
 public:
 
-	BCINLINE Shape()=default;
+	BCINLINE Shape() {};
 
 	template<
 		class... Integers,
@@ -159,7 +159,7 @@ private:
 
 public:
 
-	BCINLINE Shape()=default;
+	BCINLINE Shape() {};
 	BCINLINE Shape (BC::Dim<1> param):
 		m_inner_shape {param} {}
 
@@ -172,7 +172,7 @@ public:
 	Shape(int length):
 		m_inner_shape { length } {}
 
-	BCINLINE size_t operator [] (size_t i) const { dimension(i); }
+	BCINLINE size_t operator [] (size_t i) const { return dimension(i); }
 	BCINLINE size_t size() const { return m_inner_shape[0]; }
 	BCINLINE size_t rows() const { return m_inner_shape[0]; }
 	BCINLINE size_t cols() const { return 1; }
