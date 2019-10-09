@@ -21,26 +21,42 @@ struct Binary_Expression:
 		Expression_Base<Binary_Expression<Operation, Lv, Rv>>,
 		Operation {\
 
-	using result_type = decltype(std::declval<Operation>().operator()(
-			std::declval<typename Lv::value_type>(),
-			std::declval<typename Rv::value_type>()));
-
-	using value_type  = std::decay_t<result_type>;
 	using system_tag  = typename Lv::system_tag;
+	using value_type = std::decay_t<decltype(
+			std::declval<Operation>().operator()(
+					std::declval<typename Lv::value_type>(),
+					std::declval<typename Rv::value_type>()))>;
 
 	static constexpr int tensor_dimension =
 			BC::traits::max(Lv::tensor_dimension, Rv::tensor_dimension);
 
-	static constexpr int tensor_iterator_dimension =
-			(Lv::tensor_dimension != Rv::tensor_dimension &&
-			(Lv::tensor_dimension!=0 && Rv::tensor_dimension!=0)) ?
-			BC::traits::max(
+private:
+
+	static constexpr bool is_broadcast_expression =
+			Lv::tensor_dimension != Rv::tensor_dimension &&
+			Lv::tensor_dimension != 0 &&
+			Rv::tensor_dimension != 0;
+
+	static constexpr int max_dimension = BC::traits::max(
 					Lv::tensor_iterator_dimension,
 					Rv::tensor_iterator_dimension,
 					Lv::tensor_dimension,
-					Rv::tensor_dimension)
-			: BC::traits::max(Lv::tensor_iterator_dimension,
+					Rv::tensor_dimension);
+
+	static constexpr int max_iterator = BC::traits::max(
+					Lv::tensor_iterator_dimension,
 					Rv::tensor_iterator_dimension);
+
+	static constexpr bool continuous_mem_layout =
+		Lv::tensor_iterator_dimension <= 1 &&
+		Rv::tensor_iterator_dimension <= 1;
+
+public:
+
+	static constexpr int tensor_iterator_dimension =
+		is_broadcast_expression || !continuous_mem_layout ?
+			max_dimension :
+			max_iterator;
 
 	Lv left;
 	Rv right;

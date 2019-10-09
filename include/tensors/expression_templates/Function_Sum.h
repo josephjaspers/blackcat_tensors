@@ -1,4 +1,4 @@
-/*  Project: BlackCat_Tensors
+/*  Project: BlackCat_Scalars
  *  Author: JosephJaspers
  *  Copyright 2018
  *
@@ -33,7 +33,6 @@ struct Unary_Expression<Sum<SystemTag>, ArrayType>:
 	using system_tag = SystemTag;
 	using requires_greedy_evaluation = std::true_type;
 
-
 	static constexpr int tensor_dimension  = 0;
 	static constexpr int tensor_iterator_dimension = 0;
 
@@ -41,16 +40,17 @@ struct Unary_Expression<Sum<SystemTag>, ArrayType>:
 
 	using Shape<0>::inner_shape;
 
-	Unary_Expression(ArrayType array_, Sum<SystemTag> sum=Sum<SystemTag>()):
-		array(array_) {}
+	Unary_Expression(ArrayType array, Sum<system_tag> = Sum<system_tag>()):
+		array(array) {}
 
-	template<class core, int alpha_mod, int beta_mod, class Stream>
-	void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
-		static_assert(core::tensor_dimension==0, "Injection must be a scalar type");
+	template<class Scalar, int Alpha, int Beta, class Stream>
+	void eval(Output_Data<Scalar, Alpha, Beta> output, Stream stream) const {
+		static_assert(Scalar::tensor_dimension==0, "Output must be a scalar");
 
+		//TODO handle alpha/beta scalars
 		BC::tensors::exprs::functions::Reduce<system_tag>::sum(
 				stream,
-				injection_values.data(),
+				output.data(),
 				array);
 	}
 };

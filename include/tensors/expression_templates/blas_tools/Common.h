@@ -22,6 +22,18 @@ namespace blas_tools {
 template<class derived>
 struct Common_Tools {
 
+
+private:
+
+	template<class ValueType, class Stream>
+	static auto make_kernel_scalar(Stream stream) {
+		using system_tag = typename Stream::system_tag;
+		using Array = Kernel_Array<Shape<0>, ValueType, system_tag, BC_Temporary>;
+		return Array(BC::Shape<0>(), stream.template get_allocator_rebound<ValueType>().allocate(1));
+	}
+
+public:
+
 	template<class ValueType, int alpha_mod, bool lv_scalar, bool rv_scalar, class Stream, class lv_scalar_t, class rv_scalar_t>
 	static auto calculate_alpha(Stream stream, lv_scalar_t lv, rv_scalar_t rv) {
 
@@ -54,7 +66,7 @@ struct Common_Tools {
 								[&](){
 									return make_scalar_constant<BC::host_tag, ValueType>(alpha_mod * lv[0] * rv[0]);
 								},[&](){
-									auto tmp_scalar =  make_temporary_kernel_scalar<ValueType>(stream);
+									auto tmp_scalar = make_kernel_scalar<ValueType>(stream);
 									derived::scalar_multiply(stream, tmp_scalar, alpha_mod, lv, rv);
 									return tmp_scalar;
 								});
@@ -65,7 +77,7 @@ struct Common_Tools {
 									[&](){
 										return make_scalar_constant<BC::host_tag, ValueType>(alpha_mod * lv[0]);
 									},[&](){
-										auto tmp_scalar =  make_temporary_kernel_scalar<ValueType>(stream);
+										auto tmp_scalar = make_kernel_scalar<ValueType>(stream);
 										derived::scalar_multiply(stream, tmp_scalar, alpha_mod, lv);
 										return tmp_scalar;
 									});
@@ -74,7 +86,7 @@ struct Common_Tools {
 									[&](){
 										return make_scalar_constant<BC::host_tag, ValueType>(alpha_mod * rv[0]);
 									},[&](){
-										auto tmp_scalar =  make_temporary_kernel_scalar<ValueType>(stream);
+										auto tmp_scalar = make_kernel_scalar<ValueType>(stream);
 										derived::scalar_multiply(stream, tmp_scalar, alpha_mod, rv);
 										return tmp_scalar;
 									});

@@ -16,16 +16,19 @@ namespace tensors {
 namespace exprs {
 
 template<class Derived>
-struct Scalar_Constant_Base : Shape<0>, Kernel_Array_Base<Derived> {
+struct Scalar_Constant_Base:
+		Shape<0>,
+		Kernel_Array_Base<Derived> {
 
 	static constexpr int tensor_iterator_dimension = 0;
-	static constexpr int tensor_dimension	 = 0;
+	static constexpr int tensor_dimension = 0;
 
 	using copy_constructible = std::false_type;
 	using move_constructible = std::false_type;
 	using copy_assignable	= std::false_type;
 	using move_assignable	= std::false_type;
 };
+
 
 template<class Scalar, class SystemTag>
 struct Scalar_Constant:
@@ -124,14 +127,14 @@ private:
 			Scalar value = Value;
 			Scalar* scalar = nullptr;
 			BC_CUDA_ASSERT(cudaMalloc((void**)&scalar, sizeof(Scalar)));
-			BC_CUDA_ASSERT(cudaMemcpy(
-					scalar, &value, sizeof(Scalar), cudaMemcpyHostToDevice));
+			BC_CUDA_ASSERT(cudaMemcpy(scalar, &value, sizeof(Scalar), cudaMemcpyHostToDevice));
 			return scalar;
 		}();
 		return scalar;
 	}
 };
 #endif
+
 
 template<class SystemTag, int Value, class Scalar>
 auto make_constexpr_scalar() {

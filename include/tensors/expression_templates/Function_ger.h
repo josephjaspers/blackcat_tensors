@@ -23,8 +23,11 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 		Expression_Base<Binary_Expression<oper::ger<System_Tag>, lv, rv>>,
 		oper::ger<System_Tag> {
 
-	static_assert(std::is_same<typename lv::value_type, typename rv::value_type>::value,
-			"GER ONLY AVAILABLE TO SAME TYPE TENSORS (FLOAT/DOUBLE)");
+	static_assert(
+			std::is_same<
+					typename lv::value_type,
+					typename rv::value_type>::value,
+			"GER arguments must have the same value_type");
 
 	static_assert(lv::tensor_dimension == 1 &&
 			rv::tensor_dimension == 1 &&
@@ -33,8 +36,6 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 
 	using value_type = typename lv::value_type;
 	using system_tag = System_Tag;
-	using blas_impl  = BC::blas::implementation<system_tag>;
-	using blas_util  = BC::tensors::exprs::blas_tools::implementation<system_tag>;
 
 	static constexpr int tensor_dimension = 2;
 	static constexpr int tensor_iterator_dimension = 1;
@@ -55,7 +56,7 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 
 
 	template<class core, int Alpha, int Beta, class Stream>
-	void eval(injector<core, Alpha, Beta> output, Stream stream) const {
+	void eval(Output_Data<core, Alpha, Beta> output, Stream stream) const {
 		static_assert(core::tensor_dimension==2, "Ger out must be a matrix");
 
 		auto& out = output.data();
@@ -70,21 +71,23 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 		if (blas_expression_traits<lv>::is_scalar_multiplied::value ||
 				blas_expression_traits<rv>::is_scalar_multiplied::value) {
 
-			auto contents = blas_util::template parse_expression<Alpha, Beta>(stream, left, right);
+			auto contents = blas_tools::BLAS_Tools<system_tag>::
+					template parse_expression<Alpha, Beta>(stream, left, right);
 			auto A = contents.left;
 			auto B = contents.right;
 			auto alpha = contents.alpha;
-			blas_impl::ger(stream, left.rows(), right.cols(),
+			BC::blas::BLAS<system_tag>::ger(stream, left.rows(), right.cols(),
 					alpha.memptr(), A.memptr(), A.leading_dimension(0),
 					B.memptr(), B.leading_dimension(0),
 					out.memptr(), out.leading_dimension(1));
-			blas_util::post_parse_expression_evaluation(stream, contents);
+			blas_tools::BLAS_Tools<system_tag>::
+					post_parse_expression_evaluation(stream, contents);
 		} else {
 			auto alpha = make_constexpr_scalar<BC::host_tag, (Alpha == 0 ? 1 : Alpha), value_type>();
 			auto A = greedy_evaluate(blas_expression_traits<lv>::remove_blas_modifiers(left), stream);
 			auto B = greedy_evaluate(blas_expression_traits<rv>::remove_blas_modifiers(right), stream);
 			stream.set_blas_pointer_mode_host();
-			blas_impl::ger(stream, left.rows(), right.cols(),
+			BC::blas::BLAS<system_tag>::ger(stream, left.rows(), right.cols(),
 					alpha.memptr(), A.memptr(), A.leading_dimension(0),
 					B.memptr(), B.leading_dimension(0),
 					out.memptr(), out.leading_dimension(1));

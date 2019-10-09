@@ -75,7 +75,7 @@ auto make_un_expr(Expression expression, Operation operation=Operation()) {
 }
 
 template<class Operation, class Expression, class... Args> BCHOT
-auto make_un_expr(Expression expression, Args&... args) {
+auto make_un_expr(Expression expression, Args&&... args) {
 	return Unary_Expression<Operation, Expression>(expression, args...);
 }
 

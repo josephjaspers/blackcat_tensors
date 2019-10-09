@@ -37,8 +37,6 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>:
 
 	using value_type = typename lv::value_type;
 	using system_tag = System_Tag;
-	using blas_impl  = BC::blas::implementation<system_tag>;
-	using blas_util	 = blas_tools::implementation<system_tag>;
 
 	static constexpr int tensor_dimension  = 0;
 	static constexpr int tensor_iterator_dimension = 0;
@@ -53,11 +51,11 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>:
 		right(right) {}
 
 	template<class Core, int Alpha, int Beta, class Stream>
-	void eval(injector<Core, Alpha, Beta> output, Stream stream) const {
+	void eval(Output_Data<Core, Alpha, Beta> output, Stream stream) const {
 
 		static_assert(Core::tensor_dimension == 0,"Output must be a scalar");
 
-		//get the data of the out --> injector simply stores the alpha/beta scalar modifiers
+		//get the data of the out --> Output_Data simply stores the alpha/beta scalar modifiers
 		auto& out = output.data();
 
 		//evaluate the left and right branches (computes only if necessary)
@@ -68,7 +66,7 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>:
 		auto Y = greedy_evaluate(right, stream);
 
 		//call outer product
-		blas_impl::dot(stream, X.rows(), out.memptr(), X.memptr(), X.leading_dimension(0),
+		BC::blas::BLAS<system_tag>::dot(stream, X.rows(), out.memptr(), X.memptr(), X.leading_dimension(0),
 				Y.memptr(), Y.leading_dimension(0));
 
 		constexpr int beta_value = Beta == 0 ? 1 : Beta;
@@ -78,9 +76,11 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>:
 		if (lv_scalar || rv_scalar) {
 			auto alpha_lv = blas_expression_traits<lv>::get_scalar(left);
 			auto alpha_rv = blas_expression_traits<rv>::get_scalar(right);
-			blas_util::scalar_multiply(stream, out.memptr(), beta_value, alpha_lv, alpha_rv);
+			blas_tools::BLAS_Tools<system_tag>::
+					scalar_multiply(stream, out.memptr(), beta_value, alpha_lv, alpha_rv);
 		} else if (beta_value != 1) {
-			blas_util::scalar_multiply(stream, out.memptr(), out.memptr(), beta_value);
+			blas_tools::BLAS_Tools<system_tag>::
+					scalar_multiply(stream, out.memptr(), out.memptr(), beta_value);
 		}
     }
 };

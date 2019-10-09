@@ -34,8 +34,6 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
 
 	using value_type = typename lv::value_type;
 	using system_tag = System_Tag;
-	using blas_impl  = BC::blas::implementation<system_tag>;
-	using blas_util  = blas_tools::implementation<system_tag>;
 
 	static constexpr int tensor_dimension = 1;
 	static constexpr int tensor_iterator_dimension = 1;
@@ -55,27 +53,29 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
 	BCINLINE BC::size_t N() const { return left.cols(); }
 
 	template<class core, int Alpha, int Beta, class Stream>
-	void eval(injector<core, Alpha, Beta> output, Stream stream) const {
+	void eval(Output_Data<core, Alpha, Beta> output, Stream stream) const {
 		static_assert(core::tensor_dimension==1, "Gemv out must be a vector");
 
-		//get the data of the out --> injector simply stores the alpha/beta scalar modifiers
+		//get the data of the out --> Output_Data simply stores the alpha/beta scalar modifiers
 		auto& out = output.data();
 
 		//evaluate the left and right branches (computes only if necessary)
-		auto contents = blas_util::template parse_expression<Alpha, Beta>(stream, left, right);
+		auto contents = blas_tools::BLAS_Tools<system_tag>::
+				template parse_expression<Alpha, Beta>(stream, left, right);
 		auto A = contents.left;
 		auto X = contents.right;
 		auto alpha = contents.alpha;
 		auto beta  = contents.beta;
 		bool transA = contents.lv_is_transposed;
 
-		blas_impl::gemv(stream, transA,  M(), N(),
+		BC::blas::BLAS<system_tag>::gemv(stream, transA,  M(), N(),
 				alpha.memptr(), A.memptr(), A.leading_dimension(1),
 				X.memptr(), X.leading_dimension(0)/*inc_X*/,
 				beta.memptr(),
 				out.memptr()/*Y*/, out.leading_dimension(0)/*incy*/);
 
-		blas_util::post_parse_expression_evaluation(stream, contents);
+		blas_tools::BLAS_Tools<system_tag>::
+				post_parse_expression_evaluation(stream, contents);
 	}
 };
 

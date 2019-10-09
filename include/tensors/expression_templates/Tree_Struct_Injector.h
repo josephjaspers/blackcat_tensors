@@ -14,14 +14,11 @@ namespace BC {
 namespace tensors {
 namespace exprs {
 
-template<class Tensor, int alpha_modifier_ = 1, int beta_modifier_= 0>
-struct injector {
+template<class Tensor, int AlphaModifer=1, int BetaModifer=0>
+struct Output_Data {
 
-	static constexpr size_t ALPHA = alpha_modifier_;
-	static constexpr size_t BETA = beta_modifier_;
-
-	injector(Tensor& array_):
-		array(array_) {}
+	static constexpr size_t ALPHA = AlphaModifer;
+	static constexpr size_t BETA = BetaModifer;
 
 	Tensor array;
 
@@ -30,17 +27,17 @@ struct injector {
 };
 
 
-template<class op, bool prior_eval, class core, int a, int b>
-auto update_injection(injector<core,a,b> tensor) {
-	static constexpr int alpha =  a * BC::oper::operation_traits<op>::alpha_modifier;
-	static constexpr int beta  = prior_eval ? 1 : 0;
-	return injector<core, alpha, beta>(tensor.data());
+template<class Op, bool PriorEval, class Tensor, int A, int B>
+auto update_alpha_beta_modifiers(Output_Data<Tensor, A, B> tensor) {
+	constexpr int alpha =  A * BC::oper::operation_traits<Op>::alpha_modifier;
+	constexpr int beta  = PriorEval ? 1 : 0;
+	return Output_Data<Tensor, alpha, beta> {tensor.data()};
 }
 
 
-template<int a, int b, class core>
-auto make_injection(core c) {
-	return injector<core, a, b>(c);
+template<int AlphaModifer=1, int BetaModifer=0, class Tensor>
+auto make_output_data(Tensor tensor) {
+	return Output_Data<Tensor, AlphaModifer, BetaModifer> { tensor };
 }
 
 

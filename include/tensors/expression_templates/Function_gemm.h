@@ -33,8 +33,6 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 
 	using value_type = typename lv::value_type;
 	using system_tag = SystemTag;
-	using blas_impl  = BC::blas::implementation<system_tag>;
-	using blas_util  = blas_tools::implementation<system_tag>;
 
 	static constexpr int tensor_dimension = rv::tensor_dimension;
 	static constexpr int tensor_iterator_dimension  = 1;
@@ -54,17 +52,18 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 }
 
 	template<class Core, int Alpha, int Beta, class Stream>
-	void eval(injector<Core, Alpha, Beta> output, Stream stream) const {
+	void eval(Output_Data<Core, Alpha, Beta> output, Stream stream) const {
 
 		static_assert(Core::tensor_dimension == 2,
 				"Gemm out must be a matrix");
 		BC_ASSERT(left.cols() == right.rows(),
 				"gemm requires left.cols() == right.rows()");
 
-	//get the data of the out --> injector simply stores the alpha/beta scalar modifiers
+	//get the data of the out --> Output_Data simply stores the alpha/beta scalar modifiers
 	auto& out = output.data();
 
-	auto contents = blas_util::template parse_expression<Alpha, Beta>(stream, left, right);
+	auto contents = blas_tools::BLAS_Tools<system_tag>::
+			template parse_expression<Alpha, Beta>(stream, left, right);
 	auto A = contents.left;
 	auto B = contents.right;
 	auto alpha = contents.alpha;
@@ -73,13 +72,14 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 	auto transB = contents.rv_is_transposed;
 
 		//call matrix_mul
-	blas_impl::gemm(
+	BC::blas::BLAS<system_tag>::gemm(
 				stream, transA, transB,  left.rows(), right.cols(), left.cols(),
 				alpha.memptr(), A.memptr(), A.leading_dimension(1),
 				B.memptr(), B.leading_dimension(1),
 				beta.memptr(), out.memptr(), out.leading_dimension(1));
 
-		blas_util::post_parse_expression_evaluation(stream, contents);
+	blas_tools::BLAS_Tools<system_tag>::
+		post_parse_expression_evaluation(stream, contents);
 	}
 };
 

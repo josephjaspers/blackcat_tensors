@@ -50,41 +50,27 @@ struct Kernel_Array:
 
 	using value_type = ValueType;
 	using system_tag = SystemTag;
-	using pointer_type = value_type*;
 	using shape_type = Shape;
-	using self_type  = Kernel_Array<Shape, ValueType, SystemTag, Tags...>;
-
-private:
-
-	pointer_type array = nullptr;
 
 protected:
 
-	BCINLINE
-	pointer_type& memptr_ref() {
-		return array;
-	}
-
-	BCINLINE
-	shape_type& get_shape_ref() {
-		return static_cast<shape_type&>(*this);
-	}
+	value_type* m_memptr = nullptr;
 
 public:
 
 	Kernel_Array()=default;
-	Kernel_Array(const Kernel_Array&)=default;
-	Kernel_Array(Kernel_Array&&)=default;
-	Kernel_Array(shape_type shape, pointer_type ptr):
-		shape_type(shape), array(ptr) {};
+
+	Kernel_Array(shape_type shape, value_type* ptr):
+		shape_type(shape), m_memptr(ptr) {};
 
 	template<class AllocatorType>
 	Kernel_Array(shape_type shape, AllocatorType allocator):
-		shape_type(shape), array(allocator.allocate(this->size())) {};
+		shape_type(shape),
+		m_memptr(allocator.allocate(this->size())) {};
 
 	BCINLINE
-	pointer_type memptr() const {
-		return array;
+	value_type* memptr() const {
+		return m_memptr;
 	}
 
 	BCINLINE
@@ -94,22 +80,22 @@ public:
 
 	BCINLINE
 	const auto& operator [](BC::size_t index) const {
-		return array[this->coefficientwise_dims_to_index(index)];
+		return m_memptr[this->coefficientwise_dims_to_index(index)];
 	}
 
 	BCINLINE
 	auto& operator [](BC::size_t index) {
-		return array[this->coefficientwise_dims_to_index(index)];
+		return m_memptr[this->coefficientwise_dims_to_index(index)];
 	}
 
 	template<class ... Integers> BCINLINE
 	const auto& operator ()(Integers ... ints) const {
-		return array[this->dims_to_index(ints...)];
+		return m_memptr[this->dims_to_index(ints...)];
 	}
 
 	template<class ... Integers> BCINLINE
 	auto& operator ()(Integers ... ints) {
-		return array[this->dims_to_index(ints...)];
+		return m_memptr[this->dims_to_index(ints...)];
 	}
 
 	BCINLINE
@@ -122,33 +108,29 @@ public:
 			return this->leading_dimension(Shape::tensor_dimension - 1) * i;
 	}
 
+
+	template<class Allocator> BCHOT
+	void deallocate(Allocator allocator) {
+		allocator.deallocate(memptr(), this->size());
+	}
+
+
+	//TODO remove
+	void deallocate() const {};
+
+	template<class Allocator> BCHOT
+	void reset(Allocator allocator) {
+		deallocate(allocator);
+		static_cast<shape_type&>(*this) = shape_type();
+	}
 };
 
 
-template<class ValueType, int Dimension, class Stream>
-auto make_temporary_kernel_array(Shape<Dimension> shape, Stream stream) {
-	using system_tag = typename Stream::system_tag;
-	using Array = Kernel_Array<Shape<Dimension>, ValueType, system_tag, BC_Temporary>;
-	return Array(shape, stream.template get_allocator_rebound<ValueType>().allocate(shape.size()));
-}
-
-template<class ValueType, class Stream>
-auto make_temporary_kernel_scalar(Stream stream) {
-	using system_tag = typename Stream::system_tag;
-	using Array = Kernel_Array<Shape<0>, ValueType, system_tag, BC_Temporary>;
-	return Array(BC::Shape<0>(), stream.template get_allocator_rebound<ValueType>().allocate(1));
-}
-
-template<
-	int Dimension,
-	class ValueType,
-	class Stream,
-	class... Tags,
-	class=std::enable_if_t<
-		BC::traits::sequence_contains_v<BC_Temporary, Tags...>>>
-void destroy_temporary_kernel_array(
-		Kernel_Array<Shape<Dimension>, ValueType, typename Stream::system_tag, Tags...> temporary, Stream stream) {
-	stream.template get_allocator_rebound<ValueType>().deallocate(temporary.memptr(), temporary.size());
+template<int N, class Allocator, class... Tags>
+auto make_kernel_array(Shape<N> shape, Allocator allocator, Tags...) {
+	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
+	using value_type = typename BC::allocator_traits<Allocator>::value_type;
+	return Kernel_Array<Shape<N>, value_type, system_tag, Tags...>(shape, allocator);
 }
 
 

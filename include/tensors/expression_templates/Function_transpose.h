@@ -28,18 +28,13 @@ struct Unary_Expression<oper::transpose<System_Tag>, Value>:
 	static constexpr int tensor_iterator_dimension =
 			tensor_dimension > 1? tensor_dimension :0;
 
-	BCINLINE
-	const oper::transpose<System_Tag>& get_operation() const {
-		return static_cast<const oper::transpose<System_Tag>&>(*this);
-	}
-
 	Value array;
 
-	Unary_Expression(Value p):
-		array(p) {}
 
-	Unary_Expression(Value p, const oper::transpose<System_Tag>&):
-		array(p) {}
+	Unary_Expression(
+			Value array,
+			oper::transpose<System_Tag> = oper::transpose<System_Tag>()):
+		array(array) {}
 
 	BCINLINE
 	auto operator [] (int i) const -> decltype(array[0]) {

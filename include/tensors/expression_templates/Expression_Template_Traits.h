@@ -142,6 +142,7 @@ struct remove_scalar_mul<Binary_Expression<oper::Scalar_Mul, lv, rv>> {
 				[&]() { return expression.left;  }
 		);
 	}
+
 	static scalar_type get_scalar(
 			Binary_Expression<oper::Scalar_Mul, lv, rv> expression) {
 		return BC::traits::constexpr_ternary<lv::tensor_dimension==0>(

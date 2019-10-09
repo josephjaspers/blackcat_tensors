@@ -22,7 +22,7 @@ class Array_Slice;
 
 
 template<class Shape, class Scalar, class Allocator, class... Tags>
-struct Array :
+struct Array:
 			private Allocator,
 			public Kernel_Array<
 					Shape,
@@ -33,23 +33,21 @@ struct Array :
 
 	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
 	using allocator_type = Allocator;
-	using stream_t   = Stream<system_tag>;
+	using shape_type = Shape;
 	using value_type = Scalar;
 	using stream_type = Stream<system_tag>;
 
 private:
 
-	using self = Array<Shape, Scalar, Allocator, Tags...>;
-	using parent = Kernel_Array<Shape, Scalar, system_tag, Tags...>;
+	using parent_type = Kernel_Array<Shape, Scalar, system_tag, Tags...>;
+	using allocator_traits_t = BC::allocator_traits<allocator_type>;
 
 	stream_type m_stream;
 
-	using allocator_traits_t = BC::allocator_traits<allocator_type>;
-
 public:
 
-	const stream_t& get_stream() const { return m_stream; }
-		  stream_t& get_stream()	   { return m_stream; }
+	const stream_type& get_stream() const { return m_stream; }
+		  stream_type& get_stream()       { return m_stream; }
 
 	Allocator get_allocator() const {
 		return static_cast<const Allocator&>(*this);
@@ -57,14 +55,14 @@ public:
 
 	Array() {
 		if (Shape::tensor_dimension == 0) {
-			this->memptr_ref() = get_allocator().allocate(1);
+			this->m_memptr = get_allocator().allocate(1);
 		}
 	}
 
 	Array(const Array& array):
 		Allocator(allocator_traits_t::
 			select_on_container_copy_construction(array)),
-		parent(array.get_shape(), get_allocator()),
+		parent_type(array.get_shape(), get_allocator()),
 		m_stream(array.get_stream())
 	{
 		greedy_evaluate(this->internal(), array.internal(), get_stream());
@@ -72,10 +70,10 @@ public:
 
 	Array(Array&& array):
 		Allocator(array.get_allocator()),
-		parent(array),
+		parent_type(array),
 			m_stream(array.get_stream())
 	{
-		array.memptr_ref() = nullptr;
+		array.m_memptr = nullptr;
 	}
 
 	//Construct via shape-like object and Allocator
@@ -87,7 +85,7 @@ public:
 			Shape::tensor_dimension != 0>>
 	Array(ShapeLike param, Allocator allocator=Allocator()):
 		Allocator(allocator),
-		parent(typename parent::shape_type(param), get_allocator()) {}
+		parent_type(typename parent_type::shape_type(param), get_allocator()) {}
 
 	//Constructor for integer sequence, IE Matrix(m, n)
 	template<
@@ -97,7 +95,7 @@ public:
 			sizeof...(ShapeDims) == Shape::tensor_dimension>
 	>
 	Array(const ShapeDims&... shape_dims):
-		parent(typename parent::shape_type(shape_dims...), get_allocator()) {}
+		parent_type(typename parent_type::shape_type(shape_dims...), get_allocator()) {}
 
 	//Shape-like object with maybe allocator
 	template<
@@ -107,8 +105,8 @@ public:
 			expression_traits<Expression>::is_expr::value>>
 	Array(const Expression& expression, Allocator allocator=Allocator()):
 		Allocator(allocator),
-		parent(
-			typename parent::shape_type(expression.inner_shape()),
+		parent_type(
+			typename parent_type::shape_type(expression.inner_shape()),
 			get_allocator())
 	{
 		greedy_evaluate(this->internal(), expression.internal(), get_stream());
@@ -126,7 +124,7 @@ public:
 		Allocator(allocator_traits_t::
 			select_on_container_copy_construction(expression.get_allocator())),
 
-		parent(typename parent::shape_type(
+		parent_type(typename parent_type::shape_type(
 				expression.inner_shape()),
 				get_allocator()),
 
@@ -140,8 +138,8 @@ public:
 		if (allocator_traits_t::is_always_equal::value ||
 			array.get_allocator() == this->get_allocator())
 		{
-			std::swap(this->get_shape_ref(), array.get_shape_ref());
-			std::swap(this->memptr_ref(), array.memptr_ref());
+			std::swap((shape_type&)(*this), (shape_type&)array);
+			std::swap(this->m_memptr, array.m_memptr);
 
 			if (allocator_traits_t::
 					propagate_on_container_move_assignment::value) {
@@ -150,17 +148,17 @@ public:
 			}
 		} else {
 			get_allocator().deallocate(this->memptr(), this->size());
-			this->get_shape_ref() = array.get_shape_ref();
-			this->memptr_ref() = get_allocator().allocate(this->size());
+			(shape_type&)(*this) = (shape_type&)array;
+			this->m_memptr = get_allocator().allocate(this->size());
 			greedy_evaluate(this->internal(), array.internal(), get_stream());
 		}
 		return *this;
 	}
 
 	void deallocate() {
-		if (this->memptr_ref()) {
+		if (this->m_memptr) {
 			Allocator::deallocate(this->memptr(), this->size());
-			this->memptr_ref() = nullptr;
+			this->m_memptr= nullptr;
 		}
 	}
 

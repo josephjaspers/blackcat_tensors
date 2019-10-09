@@ -80,14 +80,14 @@ struct Binary_Expression<multichannel_conv2d, Kernel, Image>
 
 
 	template<class core, int alpha_mod, int beta_mod, class Stream>
-	void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
+	void eval(Output_Data<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
 
 		for (int i = 0; i < tensor_dimension; ++i) {
 			BC_ASSERT(dimension(0) == injection_values.data().dimension(0),
 					"INVALID TENSOR INJECTION INCORRECT DIMENSIONS");
 		}
 
-		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
+		//get the data of the injection --> Output_Data simply stores the alpha/beta scalar modifiers
 		auto& injection = injection_values.data();
 
 		//greedy evaluate the whole expression, currently we do not support transposition/scalars/etc
@@ -159,14 +159,14 @@ struct Binary_Expression<multichannel_conv2d_kernel_backwards, lv, rv>:
 
 
 	template<class core, int alpha_mod, int beta_mod, class Stream>
-	void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
+	void eval(Output_Data<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
 
 		for (int i = 0; i < tensor_dimension; ++i) {
 			BC_ASSERT(dimension(0) == injection_values.data().dimension(0),
 					"INVALID TENSOR INJECTION INCORRECT DIMENSIONS");
 		}
 
-		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
+		//get the data of the injection --> Output_Data simply stores the alpha/beta scalar modifiers
 		auto& injection = injection_values.data();
 
 		//greedy evaluate the whole expression, currently we do not support transposition/scalars/etc
@@ -241,14 +241,14 @@ struct Binary_Expression<multichannel_conv2d_data_backwards, lv, rv>
 
 
 	template<class core, int alpha_mod, int beta_mod, class Stream>
-	void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
+	void eval(Output_Data<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
 
 		for (int i = 0; i < tensor_dimension; ++i) {
 			BC_ASSERT(dimension(0) == injection_values.data().dimension(0),
 					"INVALID TENSOR INJECTION INCORRECT DIMENSIONS");
 		}
 
-		//get the data of the injection --> injector simply stores the alpha/beta scalar modifiers
+		//get the data of the injection --> Output_Data simply stores the alpha/beta scalar modifiers
 		auto& injection = injection_values.data();
 
 		//greedy evaluate the whole expression, currently we do not support transposition/scalars/etc
@@ -317,7 +317,7 @@ struct Unary_Expression<img2col, Array>
 		array(array), krnl_shape(krnl_shape), stride(stride_), padding(padding_) {}
 
 	template<class core, int alpha_mod, int beta_mod, class Stream>
-	void eval(injector<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
+	void eval(Output_Data<core, alpha_mod, beta_mod> injection_values, Stream stream) const {
 
 		for (int i = 0; i < tensor_dimension; ++i) {
 			BC_ASSERT(dimension(0) == injection_values.data().dimension(0),

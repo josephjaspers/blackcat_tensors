@@ -33,24 +33,17 @@ struct Array_Slice:
 	stream_type m_stream;
 	allocator_type m_allocator;
 
-	template<class... Args>
-	BCHOT Array_Slice(stream_type stream_, allocator_type allocator_, Args... args_)
-	: parent(args_...),
-	  m_stream(stream_),
-	  m_allocator(allocator_) {}
-
-	template<class... Args>
-	BCHOT Array_Slice(value_type* ptr, Args... shape_arguments):
-		parent(typename parent::shape_type(shape_arguments...), ptr) {}
-
-	BCHOT Array_Slice(const Array_Slice&) = default;
-	BCHOT Array_Slice(Array_Slice&&) = default;
+	template<class... Args> BCHOT
+	Array_Slice(stream_type stream, allocator_type allocator, Args... args):
+			parent(args...),
+			m_stream(stream),
+			m_allocator(allocator) {}
 
 	const allocator_type& get_allocator() const { return m_allocator; }
-		  allocator_type& get_allocator() 	   { return m_allocator; }
+	      allocator_type& get_allocator()       { return m_allocator; }
 
-	const stream_type& get_stream() const  { return m_stream; }
-		  stream_type& get_stream()  		{ return m_stream; }
+	const stream_type& get_stream() const { return m_stream; }
+	      stream_type& get_stream()       { return m_stream; }
 };
 
 namespace {

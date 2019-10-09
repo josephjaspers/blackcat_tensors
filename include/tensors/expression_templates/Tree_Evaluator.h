@@ -79,7 +79,7 @@ evaluate(Binary_Expression<Op, lv, rv> expression, Stream stream, TruthType is_s
 	static constexpr int alpha_mod = BC::oper::operation_traits<Op>::alpha_modifier;
 	static constexpr int beta_mod = BC::oper::operation_traits<Op>::beta_modifier;
 
-	auto output = injector<lv, alpha_mod, beta_mod>(expression.left);
+	auto output = make_output_data<alpha_mod, beta_mod>(expression.left);
 	auto right = optimizer<rv>::linear_evaluation(expression.right, output, stream);
 
 	if /*constexpr*/ (!entirely_blas_expression)
@@ -98,12 +98,12 @@ template<
 static
 std::enable_if_t<optimizer<Binary_Expression<oper::Assign, lv, rv>>::requires_greedy_eval>
 evaluate(Binary_Expression<oper::Assign, lv, rv> expression, Stream stream, TruthType is_subexpression=TruthType()) {
-	static constexpr int alpha_mod = BC::oper::operation_traits<oper::Assign>::alpha_modifier; //1
-	static constexpr int beta_mod = BC::oper::operation_traits<oper::Assign>::beta_modifier;   //0
-
+	static constexpr int alpha = BC::oper::operation_traits<oper::Assign>::alpha_modifier; //1
+	static constexpr int beta = BC::oper::operation_traits<oper::Assign>::beta_modifier;   //0
 	static constexpr bool entirely_blas_expr = optimizer<rv>::entirely_blas_expr;
 
-	auto right = optimizer<rv>::injection(expression.right, injector<lv, alpha_mod, beta_mod>(expression.left), stream);
+	auto output = make_output_data<alpha, beta>(expression.left);
+	auto right = optimizer<rv>::injection(expression.right, output, stream);
 
 	BC::traits::constexpr_if<!entirely_blas_expr>([&]() {
 		detail::greedy_optimization<oper::Assign>(expression.left, right, stream, is_subexpression);
@@ -183,8 +183,11 @@ static auto greedy_evaluate(Expression expression, Stream stream) {
 	 * Users may query this tag via 'BC::expression_traits<Expression>::is_temporary'
 	 */
 	using value_type = typename Expression::value_type;
-	auto shape = BC::shape(expression.inner_shape());
-	auto temporary = make_temporary_kernel_array<value_type>(shape, stream);
+	auto temporary = make_kernel_array(
+			expression.get_shape(),
+			stream.template get_allocator_rebound<value_type>(),
+			BC_Temporary());
+
 	return detail::greedy_evaluate(temporary, expression, stream);
 }
 
