@@ -64,7 +64,7 @@ using strided_slice_type_from_parent = Array_Slice<
 
 template<class Parent>
 auto make_row(Parent& parent, BC::size_t index) {
-	using slice_type = strided_slice_type_from_parent<1, Parent, BC_Noncontinuous>;
+	using slice_type = strided_slice_type_from_parent<1, Parent, noncontinuous_memory_tag>;
 
 	BC::print(__func__);
 	BC::print(parent.rows(), parent.cols());
@@ -89,7 +89,7 @@ auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
     BC::print(parent.rows(), parent.cols());
     BC::print(stride, length);
 
-    using slice_type = strided_slice_type_from_parent<1, Parent, BC_Noncontinuous>;
+    using slice_type = strided_slice_type_from_parent<1, Parent, noncontinuous_memory_tag>;
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
 						Strided_Vector_Shape(length, stride),
@@ -98,7 +98,7 @@ auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
 
 template<class Parent, class=std::enable_if_t<!expression_traits<Parent>::is_continuous::value>>
 static auto make_slice(Parent& parent, BC::size_t index) {
-	using slice_type = slice_type_from_parent<BC::traits::max(0,Parent::tensor_dimension-1), Parent, BC_Noncontinuous>;
+	using slice_type = slice_type_from_parent<BC::traits::max(0,Parent::tensor_dimension-1), Parent, noncontinuous_memory_tag>;
 	using scalar_type = slice_type_from_parent<0, Parent>;
 	return std::conditional_t<Parent::tensor_dimension == 1, scalar_type, slice_type>(
 			parent.get_stream(),
@@ -158,7 +158,7 @@ auto make_chunk(Parent& parent,
 	static_assert(ShapeLike::tensor_dimension > 1,
 			"TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, USE SCALAR OR RANGED_SLICE OTHERWISE");
 
-	using slice_type = slice_type_from_parent<ShapeLike::tensor_dimension, Parent, BC_Noncontinuous>;
+	using slice_type = slice_type_from_parent<ShapeLike::tensor_dimension, Parent, noncontinuous_memory_tag>;
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
 						Shape<ShapeLike::tensor_dimension>(shape, parent.get_shape()),

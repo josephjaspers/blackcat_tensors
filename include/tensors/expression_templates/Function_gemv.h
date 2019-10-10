@@ -11,7 +11,7 @@
 
 #include "Expression_Template_Base.h"
 #include "Tree_Evaluator.h"
-#include "blas_tools/Blas_tools.h"
+#include "Blas_Expression_Template_Traits.h"
 
 
 namespace BC {
@@ -46,36 +46,35 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
 		 right(right) {}
 
 	BCINLINE BC::size_t size() const { return left.rows(); }
-	BCINLINE BC::size_t rows() const { return left.rows(); }
-	BCINLINE BC::size_t cols() const { return 1; }
-	BCINLINE BC::size_t dimension(int i) const { return i == 0 ? rows() : 1; }
-	BCINLINE BC::size_t M() const { return left.rows(); }
-	BCINLINE BC::size_t N() const { return left.cols(); }
+	BCINLINE BC::size_t dimension(int i) const { return i == 0 ? left.rows() : 1; }
+	BCINLINE BC::size_t rows() const { return dimension(0); }
+	BCINLINE BC::size_t cols() const { return dimension(1); }
 
 	template<class core, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<core, Alpha, Beta> output, Stream stream) const {
+
 		static_assert(core::tensor_dimension==1, "Gemv out must be a vector");
+
+		using traits = blas_expression_traits<Binary_Expression<oper::gemv<System_Tag>, lv, rv>>;
 
 		//get the data of the out --> Output_Data simply stores the alpha/beta scalar modifiers
 		auto& out = output.data();
 
 		//evaluate the left and right branches (computes only if necessary)
-		auto contents = blas_tools::BLAS_Tools<system_tag>::
-				template parse_expression<Alpha, Beta>(stream, left, right);
+		auto contents = traits::template parse_expression<Alpha, Beta>(stream, *this);
 		auto A = contents.left;
 		auto X = contents.right;
 		auto alpha = contents.alpha;
 		auto beta  = contents.beta;
 		bool transA = contents.lv_is_transposed;
 
-		BC::blas::BLAS<system_tag>::gemv(stream, transA,  M(), N(),
+		BC::blas::BLAS<system_tag>::gemv(stream, transA,  left.rows(), left.cols(),
 				alpha.memptr(), A.memptr(), A.leading_dimension(1),
 				X.memptr(), X.leading_dimension(0)/*inc_X*/,
 				beta.memptr(),
 				out.memptr()/*Y*/, out.leading_dimension(0)/*incy*/);
 
-		blas_tools::BLAS_Tools<system_tag>::
-				post_parse_expression_evaluation(stream, contents);
+		traits::post_parse_expression_evaluation(stream, contents);
 	}
 };
 

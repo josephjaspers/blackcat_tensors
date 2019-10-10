@@ -452,7 +452,7 @@ public:
 			class expression_t, 							\
         	class = std::enable_if_t<						\
         					std::is_convertible<p_value_type, typename expression_t::value_type>::value && 							 \
-        					!BC::tensors::exprs::expression_traits<p_value_type>::is_bc_type::value>							 \
+        					!BC::tensors::exprs::expression_traits<p_value_type>::is_expression_template::value>							 \
 		>        					 																			 \
          auto operator op (const p_value_type& param, const Tensor_Base<expression_t>& tensor) {   \
             using value_type = typename expression_t::value_type;                                                \

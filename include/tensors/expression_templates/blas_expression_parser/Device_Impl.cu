@@ -1,8 +1,8 @@
 namespace BC {
 namespace tensors {
 namespace exprs { 
-namespace blas_tools {
-namespace device_impl {
+namespace blas_expression_parser {
+namespace device_detail {
 
 template<class T, class enabler = void>
 struct get_value_impl {

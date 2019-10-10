@@ -177,7 +177,7 @@ template<
 >
 static auto greedy_evaluate(Expression expression, Stream stream) {
 	/*
-	 * Returns a kernel_array containing the tag BC_Temporary,
+	 * Returns a kernel_array containing the tag temporary_tag,
 	 * the caller of the function is responsible for its deallocation.
 	 *
 	 * Users may query this tag via 'BC::expression_traits<Expression>::is_temporary'
@@ -186,7 +186,7 @@ static auto greedy_evaluate(Expression expression, Stream stream) {
 	auto temporary = make_kernel_array(
 			expression.get_shape(),
 			stream.template get_allocator_rebound<value_type>(),
-			BC_Temporary());
+			temporary_tag());
 
 	return detail::greedy_evaluate(temporary, expression, stream);
 }

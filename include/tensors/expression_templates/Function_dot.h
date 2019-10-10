@@ -11,8 +11,7 @@
 
 #include "Expression_Template_Base.h"
 #include "Tree_Evaluator.h"
-#include "blas_tools/Blas_tools.h"
-
+#include "Blas_Expression_Template_Traits.h"
 
 namespace BC {
 namespace tensors {
@@ -55,6 +54,7 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>:
 
 		static_assert(Core::tensor_dimension == 0,"Output must be a scalar");
 
+		using blas_tools = blas_expression_parser::Blas_Expression_Parser<system_tag>;
 		//get the data of the out --> Output_Data simply stores the alpha/beta scalar modifiers
 		auto& out = output.data();
 
@@ -76,11 +76,9 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>:
 		if (lv_scalar || rv_scalar) {
 			auto alpha_lv = blas_expression_traits<lv>::get_scalar(left);
 			auto alpha_rv = blas_expression_traits<rv>::get_scalar(right);
-			blas_tools::BLAS_Tools<system_tag>::
-					scalar_multiply(stream, out.memptr(), beta_value, alpha_lv, alpha_rv);
+			blas_tools::scalar_multiply(stream, out.memptr(), beta_value, alpha_lv, alpha_rv);
 		} else if (beta_value != 1) {
-			blas_tools::BLAS_Tools<system_tag>::
-					scalar_multiply(stream, out.memptr(), out.memptr(), beta_value);
+			blas_tools::scalar_multiply(stream, out.memptr(), out.memptr(), beta_value);
 		}
     }
 };

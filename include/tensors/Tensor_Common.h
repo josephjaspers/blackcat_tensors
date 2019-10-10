@@ -19,12 +19,12 @@ namespace tensors {
 
 template<class> class Tensor_Base;
 
-template<class internal_t>
-auto make_tensor(internal_t internal) {
-	static_assert(BC::tensors::exprs::expression_traits<internal_t>::is_bc_type::value,
-			"Make Tensor can only be used with BC_Types");
-
-    return Tensor_Base<internal_t>(internal);
+template<class ExpressionTemplate>
+auto make_tensor(ExpressionTemplate expression) {
+	static_assert(
+		exprs::expression_traits<ExpressionTemplate>::is_expression_template::value,
+		"Make Tensor can only be used with Expression_Template");
+	return Tensor_Base<ExpressionTemplate>(expression);
 }
 }
 

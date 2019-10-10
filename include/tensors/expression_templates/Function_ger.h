@@ -12,7 +12,7 @@
 #include "Expression_Template_Base.h"
 #include "Tree_Evaluator.h"
 #include "Array_Scalar_Constant.h"
-#include "blas_tools/Blas_tools.h"
+#include "Blas_Expression_Template_Traits.h"
 
 namespace BC {
 namespace tensors {
@@ -43,22 +43,20 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 	lv left;
 	rv right;
 
-	Binary_Expression(lv left, rv right) : left(left), right(right) {}
-	BCINLINE BC::size_t  size() const { return left.size() * right.size(); }
-	BCINLINE BC::size_t  rows() const { return left.rows(); }
-	BCINLINE BC::size_t  cols() const { return right.cols(); }
-	BCINLINE BC::size_t  dimension(int i) const {
-		return i == 0 ? rows() : i == 1 ? cols() : 1;
-	}
+	Binary_Expression(lv left, rv right):
+		left(left),
+		right(right) {}
 
-	BCINLINE BC::size_t  M() const { return left.rows();  }
-	BCINLINE BC::size_t  N() const { return right.cols(); }
+	BCINLINE BC::size_t  size() const { return left.size() * right.size(); }
+	BCINLINE BC::size_t  dimension(int i) const { return i == 0 ? left.rows() : i == 1 ? right.cols() : 1; }
+	BCINLINE BC::size_t rows() const { return dimension(0); }
+	BCINLINE BC::size_t cols() const { return dimension(1); }
 
 
 	template<class core, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<core, Alpha, Beta> output, Stream stream) const {
 		static_assert(core::tensor_dimension==2, "Ger out must be a matrix");
-
+		using traits = blas_expression_traits<Binary_Expression<oper::ger<System_Tag>, lv, rv>>;
 		auto& out = output.data();
 
 		//if we need to negate or zero the output
@@ -71,8 +69,7 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 		if (blas_expression_traits<lv>::is_scalar_multiplied::value ||
 				blas_expression_traits<rv>::is_scalar_multiplied::value) {
 
-			auto contents = blas_tools::BLAS_Tools<system_tag>::
-					template parse_expression<Alpha, Beta>(stream, left, right);
+			auto contents = traits::template parse_expression<Alpha, Beta>(stream, *this);
 			auto A = contents.left;
 			auto B = contents.right;
 			auto alpha = contents.alpha;
@@ -80,8 +77,7 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 					alpha.memptr(), A.memptr(), A.leading_dimension(0),
 					B.memptr(), B.leading_dimension(0),
 					out.memptr(), out.leading_dimension(1));
-			blas_tools::BLAS_Tools<system_tag>::
-					post_parse_expression_evaluation(stream, contents);
+			traits::post_parse_expression_evaluation(stream, contents);
 		} else {
 			auto alpha = make_constexpr_scalar<BC::host_tag, (Alpha == 0 ? 1 : Alpha), value_type>();
 			auto A = greedy_evaluate(blas_expression_traits<lv>::remove_blas_modifiers(left), stream);

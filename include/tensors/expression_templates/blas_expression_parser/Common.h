@@ -17,7 +17,7 @@ namespace exprs {
 template<class,class,class>
 struct Binary_Expression;
 
-namespace blas_tools {
+namespace blas_expression_parser {
 
 template<class derived>
 struct Common_Tools {
@@ -28,7 +28,7 @@ private:
 	template<class ValueType, class Stream>
 	static auto make_kernel_scalar(Stream stream) {
 		using system_tag = typename Stream::system_tag;
-		using Array = Kernel_Array<Shape<0>, ValueType, system_tag, BC_Temporary>;
+		using Array = Kernel_Array<Shape<0>, ValueType, system_tag, temporary_tag>;
 		return Array(BC::Shape<0>(), stream.template get_allocator_rebound<ValueType>().allocate(1));
 	}
 

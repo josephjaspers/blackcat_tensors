@@ -14,14 +14,14 @@
 namespace BC {
 namespace tensors {
 namespace exprs { 
-namespace blas_tools {
+namespace blas_expression_parser {
 
 template<>
-struct BLAS_Tools<device_tag> : Common_Tools<BLAS_Tools<device_tag>> {
+struct Blas_Expression_Parser<device_tag> : Common_Tools<Blas_Expression_Parser<device_tag>> {
 
 	template<class Stream, class Scalar, class... Scalars>
 	static void scalar_multiply(Stream stream, Scalar output, Scalars... vals) {
-		device_impl::calculate_alpha<<<1, 1, 0, stream>>>(output, vals...);
+		device_detail::calculate_alpha<<<1, 1, 0, stream>>>(output, vals...);
 	}
 
 	template<class scalar_t, int value>

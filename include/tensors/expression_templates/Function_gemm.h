@@ -11,7 +11,7 @@
 
 #include "Expression_Template_Base.h"
 #include "Tree_Evaluator.h"
-#include "blas_tools/Blas_tools.h"
+#include "Blas_Expression_Template_Traits.h"
 
 namespace BC {
 namespace tensors {
@@ -45,14 +45,18 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 			right(right) {}
 
 	BCINLINE BC::size_t  size() const { return left.rows() * right.cols(); }
-	BCINLINE BC::size_t  rows() const { return left.rows();  }
-	BCINLINE BC::size_t  cols() const { return right.cols(); }
 	BCINLINE BC::size_t  dimension(int i) const {
 		return i == 0 ? left.rows() : i == 1 ? right.cols() : 1;
-}
+	}
+
+	BCINLINE BC::size_t rows() const { return dimension(0); }
+	BCINLINE BC::size_t cols() const { return dimension(1); }
 
 	template<class Core, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<Core, Alpha, Beta> output, Stream stream) const {
+
+		using traits = blas_expression_traits<
+				Binary_Expression<oper::gemm<SystemTag>, lv, rv>>;
 
 		static_assert(Core::tensor_dimension == 2,
 				"Gemm out must be a matrix");
@@ -62,8 +66,7 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 	//get the data of the out --> Output_Data simply stores the alpha/beta scalar modifiers
 	auto& out = output.data();
 
-	auto contents = blas_tools::BLAS_Tools<system_tag>::
-			template parse_expression<Alpha, Beta>(stream, left, right);
+	auto contents = traits::template parse_expression<Alpha, Beta>(stream, *this);
 	auto A = contents.left;
 	auto B = contents.right;
 	auto alpha = contents.alpha;
@@ -78,8 +81,7 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 				B.memptr(), B.leading_dimension(1),
 				beta.memptr(), out.memptr(), out.leading_dimension(1));
 
-	blas_tools::BLAS_Tools<system_tag>::
-		post_parse_expression_evaluation(stream, contents);
+	traits::template post_parse_expression_evaluation(stream, contents);
 	}
 };
 

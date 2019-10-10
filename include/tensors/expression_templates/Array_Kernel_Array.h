@@ -45,7 +45,7 @@ struct Kernel_Array:
 
 	static constexpr int tensor_dimension = Shape::tensor_dimension;
 	static constexpr int tensor_iterator_dimension =
-		BC::traits::sequence_contains_v<BC_Noncontinuous, Tags...> ?
+		BC::traits::sequence_contains_v<noncontinuous_memory_tag, Tags...> ?
 				tensor_dimension : 1;
 
 	using value_type = ValueType;

@@ -156,7 +156,7 @@ public:
 		auto temporary = make_kernel_array(
 				branch.get_shape(),
 				stream.template get_allocator_rebound<value_type>(),
-				BC_Temporary());
+				temporary_tag());
 
 		branch.eval(make_output_data<1, 0>(temporary), stream);
 		return temporary;

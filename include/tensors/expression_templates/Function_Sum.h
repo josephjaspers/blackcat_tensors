@@ -11,7 +11,6 @@
 
 #include "Expression_Template_Base.h"
 #include "Tree_Evaluator.h"
-#include "blas_tools/Blas_tools.h"
 
 #include "functions/reductions/Reductions.h"
 

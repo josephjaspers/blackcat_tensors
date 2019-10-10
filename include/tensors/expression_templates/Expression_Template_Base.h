@@ -15,9 +15,8 @@ namespace BC {
 namespace tensors {
 namespace exprs {
 
-
 template<class Derived>
-struct Expression_Template_Base: BC_Type {
+struct Expression_Template_Base  {
 
 	BCINLINE
 	const Derived& internal() const {
@@ -72,13 +71,13 @@ struct Expression_Template_Base: BC_Type {
 
 template<class Derived>
 struct Expression_Base:
-		Expression_Template_Base<Derived>,
-		BC_Expr {
+		Expression_Template_Base<Derived>  {
 
 	using copy_constructible = std::false_type;
 	using move_constructible = std::false_type;
 	using copy_assignable    = std::false_type;
 	using move_assignable    = std::false_type;
+	using expression_template_expression_type = std::true_type;
 
 	BCINLINE const auto inner_shape() const {
 		BC::Dim<Derived::tensor_dimension> dim;
@@ -96,7 +95,9 @@ struct Expression_Base:
 
 
 template<class Derived>
-struct Kernel_Array_Base : Expression_Template_Base<Derived>, BC_Array {
+struct Kernel_Array_Base : Expression_Template_Base<Derived> {
+
+	using expression_template_array_type = std::true_type;
 
 	BCINLINE
 	Kernel_Array_Base() {
@@ -116,5 +117,6 @@ struct Kernel_Array_Base : Expression_Template_Base<Derived>, BC_Array {
 } //ns exprs
 } //ns tensors
 
+#include "Blas_Expression_Template_Traits.h"
 
 #endif /* BC_INTERNAL_BASE_H_ */

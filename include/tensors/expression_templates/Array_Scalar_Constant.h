@@ -32,12 +32,12 @@ struct Scalar_Constant_Base:
 
 template<class Scalar, class SystemTag>
 struct Scalar_Constant:
-		Scalar_Constant_Base<Scalar_Constant<Scalar, SystemTag>>,
-		BC_Stack_Allocated {
+		Scalar_Constant_Base<Scalar_Constant<Scalar, SystemTag>> {
 
 	using value_type = Scalar;
 	using system_tag = SystemTag;
 	using allocation_tag = BC::host_tag;
+	using stack_allocated = std::true_type;
 
 	value_type scalar;
 
