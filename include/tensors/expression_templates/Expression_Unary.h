@@ -74,10 +74,12 @@ auto make_un_expr(Expression expression, Operation operation=Operation()) {
 	return Unary_Expression<Operation, Expression>(expression, operation);
 }
 
+#ifndef _MSC_VER //Causes ambiguous overload error with MSVC
 template<class Operation, class Expression, class... Args> BCHOT
 auto make_un_expr(Expression expression, Args&&... args) {
 	return Unary_Expression<Operation, Expression>(expression, args...);
 }
+#endif 
 
 
 } //ns BC
