@@ -42,7 +42,11 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 
 	BCHOT Binary_Expression(lv left, rv right):
 			left(left),
-			right(right) {}
+			right(right)
+	{
+		BC_ASSERT(left.cols() == right.rows(),
+				"gemm requires left.cols() == right.rows()");
+	}
 
 	BCINLINE BC::size_t  size() const { return left.rows() * right.cols(); }
 	BCINLINE BC::size_t  dimension(int i) const {
@@ -54,34 +58,28 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 
 	template<class Core, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<Core, Alpha, Beta> output, Stream stream) const {
+		static_assert(Core::tensor_dimension == 2, "Gemm out must be a matrix");
 
 		using traits = blas_expression_traits<
 				Binary_Expression<oper::gemm<SystemTag>, lv, rv>>;
 
-		static_assert(Core::tensor_dimension == 2,
-				"Gemm out must be a matrix");
-		BC_ASSERT(left.cols() == right.rows(),
-				"gemm requires left.cols() == right.rows()");
+		auto contents = traits::template parse_expression<Alpha, Beta>(stream, *this);
+		auto A = contents.left;
+		auto B = contents.right;
+		auto alpha = contents.alpha;
+		auto beta  = contents.beta;
+		auto transA = contents.lv_is_transposed;
+		auto transB = contents.rv_is_transposed;
 
-	//get the data of the out --> Output_Data simply stores the alpha/beta scalar modifiers
-	auto& out = output.data();
+		auto& out = output.data();
 
-	auto contents = traits::template parse_expression<Alpha, Beta>(stream, *this);
-	auto A = contents.left;
-	auto B = contents.right;
-	auto alpha = contents.alpha;
-	auto beta  = contents.beta;
-	auto transA = contents.lv_is_transposed;
-	auto transB = contents.rv_is_transposed;
+		BC::blas::BLAS<system_tag>::gemm(
+					stream, transA, transB, left.rows(), right.cols(), left.cols(),
+					alpha.memptr(), A.memptr(), A.leading_dimension(1),
+					B.memptr(), B.leading_dimension(1),
+					beta.memptr(), out.memptr(), out.leading_dimension(1));
 
-		//call matrix_mul
-	BC::blas::BLAS<system_tag>::gemm(
-				stream, transA, transB,  left.rows(), right.cols(), left.cols(),
-				alpha.memptr(), A.memptr(), A.leading_dimension(1),
-				B.memptr(), B.leading_dimension(1),
-				beta.memptr(), out.memptr(), out.leading_dimension(1));
-
-	traits::template post_parse_expression_evaluation(stream, contents);
+		traits::template post_parse_expression_evaluation(stream, contents);
 	}
 };
 

@@ -69,7 +69,6 @@ public:
 				index_type<ExpressionTemplate::tensor_dimension> index,
 				BC::Shape<ExpressionTemplate::tensor_dimension> shape) const {
 		return make_tensor(exprs::make_chunk(as_derived(), index, shape));
-
 	}
 
 	auto subblock(

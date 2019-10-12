@@ -21,28 +21,28 @@ namespace BC {
 namespace oper {
 
 #define BC_FORWARD_TO_APPLY\
-		template<class Lv, class Rv>													\
-		BCINLINE auto operator () (Lv&& lv, Rv&& rv) const 								\
-		-> decltype(apply(lv, rv)) {													\
-			return apply(lv, rv);														\
-		}																				\
-																						\
+		template<class Lv, class Rv>							\
+		BCINLINE auto operator () (Lv&& lv, Rv&& rv) const 		\
+		-> decltype(apply(lv, rv)) {							\
+			return apply(lv, rv);								\
+		}														\
+																\
 
-#define BC_FORWARD_DEF(...)															\
-	template<class Lv, class Rv>													\
-	BCINLINE 																		\
-	static auto apply (Lv&& lv, Rv&& rv) 											\
-	-> decltype(__VA_ARGS__) {														\
-		return __VA_ARGS__;															\
-	}																				\
+#define BC_FORWARD_DEF(...)						\
+	template<class Lv, class Rv>				\
+	BCINLINE 									\
+	static auto apply (Lv&& lv, Rv&& rv) 		\
+	-> decltype(__VA_ARGS__) {					\
+		return __VA_ARGS__;						\
+	}											\
 	BC_FORWARD_TO_APPLY
 
-#define BC_ADVANCED_FORWARD_DEF(...)												\
-	template<class Lv, class Rv>													\
-	BCINLINE 																		\
-	static Lv&& apply (Lv&& lv, Rv&& rv) {											\
-		__VA_ARGS__;																\
-	}																				\
+#define BC_ADVANCED_FORWARD_DEF(...)			\
+	template<class Lv, class Rv>				\
+	BCINLINE 									\
+	static Lv&& apply (Lv&& lv, Rv&& rv) {		\
+		__VA_ARGS__;							\
+	}											\
 	BC_FORWARD_TO_APPLY
 
     struct Scalar_Mul {

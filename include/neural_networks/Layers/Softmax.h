@@ -48,10 +48,12 @@ public:
 	}
 
 
-	template<class Matrix>
-	auto back_propagation(const mat& x, const Matrix& dy) {
+	template<class X, class Matrix>
+	auto back_propagation(const X& x, const Matrix& dy) {
 		return dy;
 	}
+
+
 
 	void update_weights() {}
 	void set_batch_size(int bs) {

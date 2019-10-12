@@ -20,6 +20,10 @@ struct Forward_Tensor_Cache {
 	Type tensor;
 	BatchedType batched_tensor;
 
+	int get_time_index() const {
+		return 0;
+	}
+
 	void init_tensor(Type init) {
 		this->tensor = std::move(init);
 	}
@@ -76,6 +80,7 @@ struct Recurrent_Tensor_Cache {
 	std::vector<Type> tensor;
 	std::vector<BatchedType> batched_tensor;
 
+	int get_time_index() const { return time_index; }
 	void increment_time_index() { time_index++; }
 	void decrement_time_index() { time_index--; }
 	void zero_time_index() { time_index = 0; }
@@ -99,17 +104,17 @@ struct Recurrent_Tensor_Cache {
 		batched_tensor.back().zero();
 	}
 
-	Type& load(std::false_type is_batched = std::false_type()) {
-		return tensor[tensor.size() - 1 - time_index];
+	Type& load(std::false_type is_batched = std::false_type(), int tmodifier=0) {
+		return tensor[tensor.size() - 1 - time_index + tmodifier];
 	}
-	BatchedType& load(std::true_type is_batched) {
-		return batched_tensor[batched_tensor.size() - 1 - time_index];
+	BatchedType& load(std::true_type is_batched, int tmodifier=0) {
+		return batched_tensor[batched_tensor.size() - 1 - time_index + tmodifier];
 	}
-	const Type& load(std::false_type is_batched = std::false_type()) const {
-		return tensor[tensor.size() - 1 - time_index];
+	const Type& load(std::false_type is_batched = std::false_type(), int tmodifier=0) const {
+		return tensor[tensor.size() - 1 - time_index + tmodifier];
 	}
-	const BatchedType& load(std::true_type is_batched) const {
-		return batched_tensor[batched_tensor.size() - 1 - time_index];
+	const BatchedType& load(std::true_type is_batched, int tmodifier=0) const {
+		return batched_tensor[batched_tensor.size() - 1 - time_index + tmodifier];
 	}
 
 	template<class T>

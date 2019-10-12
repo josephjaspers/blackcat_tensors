@@ -104,6 +104,26 @@ public:
 		return op_impl(BC::oper::Mul(), other);
 	}
 
+	BCINLINE auto operator > (const Dim& other) const {
+		return op_impl(BC::oper::Greater(), other);
+	}
+
+	BCINLINE auto operator < (const Dim& other) const {
+		return op_impl(BC::oper::Lesser(), other);
+	}
+
+	BCINLINE auto operator >= (const Dim& other) const {
+		return op_impl(BC::oper::Greater_Equal(), other);
+	}
+
+	BCINLINE auto operator <= (const Dim& other) const {
+		return op_impl(BC::oper::Lesser_Equal(), other);
+	}
+
+	BCINLINE auto equal(const Dim& other) const {
+		return op_impl(BC::oper::Equal(), other);
+	}
+
 	BCINLINE Dim& operator += (const Dim& other) {
 		return inplace_op_impl(BC::oper::add, other);
 	}
@@ -118,6 +138,13 @@ public:
 
 	BCINLINE Dim& operator *= (const Dim& other) {
 		return inplace_op_impl(BC::oper::mul, other);
+	}
+
+	BCINLINE bool all(size_t start=0, size_t end=N) const {
+		for (; start<end; ++start)
+			if (m_index[start] == 0)
+				return false;
+		return true;
 	}
 
 	BCINLINE

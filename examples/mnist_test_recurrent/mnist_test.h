@@ -111,6 +111,8 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	auto last_index = BC::index(0,784 * ((img_partitions-1)/(float)img_partitions));
 	mat hyps =network.forward_propagation(batch[{last_index, shape}]);
 
+//	auto hyps2 = network.forward_propagation(batch[{last_index, shape}][0]);
+
 	BC::size_t test_images = 10;
 	cube img = cube(reshape(inputs[0], BC::shape(28,28, batch_size)));
 	for (int i = 0; i < test_images; ++i) {

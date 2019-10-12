@@ -52,13 +52,10 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
 
 	template<class core, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<core, Alpha, Beta> output, Stream stream) const {
-
 		static_assert(core::tensor_dimension==1, "Gemv out must be a vector");
 
-		using traits = blas_expression_traits<Binary_Expression<oper::gemv<System_Tag>, lv, rv>>;
-
-		//get the data of the out --> Output_Data simply stores the alpha/beta scalar modifiers
-		auto& out = output.data();
+		using self_t = Binary_Expression<oper::gemv<System_Tag>, lv, rv>;
+		using traits = blas_expression_traits<self_t>;
 
 		//evaluate the left and right branches (computes only if necessary)
 		auto contents = traits::template parse_expression<Alpha, Beta>(stream, *this);
@@ -68,7 +65,10 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
 		auto beta  = contents.beta;
 		bool transA = contents.lv_is_transposed;
 
-		BC::blas::BLAS<system_tag>::gemv(stream, transA,  left.rows(), left.cols(),
+		auto& out = output.data();
+
+		BC::blas::BLAS<system_tag>::gemv(
+				stream, transA, left.rows(), left.cols(),
 				alpha.memptr(), A.memptr(), A.leading_dimension(1),
 				X.memptr(), X.leading_dimension(0)/*inc_X*/,
 				beta.memptr(),

@@ -56,7 +56,10 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 	template<class core, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<core, Alpha, Beta> output, Stream stream) const {
 		static_assert(core::tensor_dimension==2, "Ger out must be a matrix");
-		using traits = blas_expression_traits<Binary_Expression<oper::ger<System_Tag>, lv, rv>>;
+
+		using self_t = Binary_Expression<oper::ger<System_Tag>, lv, rv>;
+		using traits = blas_expression_traits<self_t>;
+
 		auto& out = output.data();
 
 		//if we need to negate or zero the output

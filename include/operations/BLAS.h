@@ -15,10 +15,10 @@
 namespace BC   {
 namespace oper {
 
-//tags, no definition
-template<class system_tag> struct transpose  { };
 template<class system_tag>
+struct transpose  {};
 
+template<class system_tag>
 struct gemm: BLAS_Function {
 	static constexpr int tensor_dimension = 2;
 };

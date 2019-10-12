@@ -51,22 +51,19 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>:
 
 	template<class Core, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<Core, Alpha, Beta> output, Stream stream) const {
-
 		static_assert(Core::tensor_dimension == 0,"Output must be a scalar");
 
 		using blas_tools = blas_expression_parser::Blas_Expression_Parser<system_tag>;
-		//get the data of the out --> Output_Data simply stores the alpha/beta scalar modifiers
-		auto& out = output.data();
 
-		//evaluate the left and right branches (computes only if necessary)
-		//Note: dot does not accept a scalar Alpha,
-		//therefor we don't extract the array from left/right
-		//The CacheEvaluator will generate a temporary if need be
 		auto X = greedy_evaluate(left, stream);
 		auto Y = greedy_evaluate(right, stream);
+		auto& out = output.data();
 
 		//call outer product
-		BC::blas::BLAS<system_tag>::dot(stream, X.rows(), out.memptr(), X.memptr(), X.leading_dimension(0),
+		BC::blas::BLAS<system_tag>::dot(
+				stream,
+				X.rows(), out.memptr(),
+				X.memptr(), X.leading_dimension(0),
 				Y.memptr(), Y.leading_dimension(0));
 
 		constexpr int beta_value = Beta == 0 ? 1 : Beta;
