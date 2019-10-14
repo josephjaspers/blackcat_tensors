@@ -42,8 +42,12 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
 	rv right;
 
 	 Binary_Expression(lv left, rv right):
-		 left(left),
-		 right(right) {}
+			 left(left),
+			 right(right) {
+
+		BC_ASSERT(left.cols() == right.rows(),
+				"gemv requires left.cols() == right.rows()");
+	 }
 
 	BCINLINE BC::size_t size() const { return left.rows(); }
 	BCINLINE BC::size_t dimension(int i) const { return i == 0 ? left.rows() : 1; }
@@ -67,8 +71,15 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
 
 		auto& out = output.data();
 
+		BC::print("ARsG\n",transA, left.rows(), left.cols(),
+				A.leading_dimension(1),
+				X.leading_dimension(0)/*inc_X*/,
+				out.leading_dimension(0)/*incy*/);
+
+		//gemv uses the [m,n] to refer to dimension ignoring op(A)
+		//http://www.netlib.org/lapack/explore-html/d6/d30/group__single__blas__level2_gafc92361b74c6d41c7e5afa0aa5d13ec9.html#gafc92361b74c6d41c7e5afa0aa5d13ec9
 		BC::blas::BLAS<system_tag>::gemv(
-				stream, transA, left.rows(), left.cols(),
+				stream, transA, A.rows(), A.cols(),
 				alpha.memptr(), A.memptr(), A.leading_dimension(1),
 				X.memptr(), X.leading_dimension(0)/*inc_X*/,
 				beta.memptr(),

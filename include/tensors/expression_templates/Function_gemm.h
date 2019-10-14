@@ -59,9 +59,8 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 	template<class Core, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<Core, Alpha, Beta> output, Stream stream) const {
 		static_assert(Core::tensor_dimension == 2, "Gemm out must be a matrix");
-
-		using traits = blas_expression_traits<
-				Binary_Expression<oper::gemm<SystemTag>, lv, rv>>;
+		using self_t = Binary_Expression<oper::gemm<SystemTag>, lv, rv>;
+		using traits = blas_expression_traits<self_t>;
 
 		auto contents = traits::template parse_expression<Alpha, Beta>(stream, *this);
 		auto A = contents.left;
@@ -73,6 +72,8 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 
 		auto& out = output.data();
 
+		//gemm uses the [m,n] to refer to dimension regarding op(A)
+		//http://www.netlib.org/lapack/explore-html/db/dc9/group__single__blas__level3_gafe51bacb54592ff5de056acabd83c260.html#gafe51bacb54592ff5de056acabd83c260
 		BC::blas::BLAS<system_tag>::gemm(
 					stream, transA, transB, left.rows(), right.cols(), left.cols(),
 					alpha.memptr(), A.memptr(), A.leading_dimension(1),
