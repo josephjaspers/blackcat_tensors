@@ -43,10 +43,12 @@ public:
     BC::allocators::Stack_Allocator<host_tag>& get_allocator() {
     	return m_contents->m_workspace;
     }
+
     template<class RebindType>
     auto get_allocator_rebound() {
     	return typename allocator_type::template rebind<RebindType>::other(m_contents->m_workspace);
     }
+
     void set_blas_pointer_mode_host() {}
     void set_blas_pointer_mode_device() {}
 

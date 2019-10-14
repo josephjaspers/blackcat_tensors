@@ -65,7 +65,10 @@ public:
 		parent_type(array.get_shape(), get_allocator()),
 		m_stream(array.get_stream())
 	{
-		greedy_evaluate(this->internal(), array.internal(), get_stream());
+		evaluate(
+				make_bin_expr<BC::oper::Assign>(
+						this->internal(),
+						array.internal()), get_stream());
 	}
 
 	Array(Array&& array):
@@ -109,7 +112,10 @@ public:
 			typename parent_type::shape_type(expression.inner_shape()),
 			get_allocator())
 	{
-		greedy_evaluate(this->internal(), expression.internal(), get_stream());
+		evaluate(
+				make_bin_expr<BC::oper::Assign>(
+						this->internal(),
+						expression.internal()), get_stream());
 	}
 
 
@@ -130,7 +136,10 @@ public:
 
 		m_stream(expression.get_stream())
 	{
-		greedy_evaluate(this->internal(), expression.internal(), get_stream());
+		evaluate(
+				make_bin_expr<BC::oper::Assign>(
+						this->internal(),
+						expression.internal()), get_stream());
 	}
 
 public:
@@ -150,7 +159,10 @@ public:
 			get_allocator().deallocate(this->memptr(), this->size());
 			(shape_type&)(*this) = (shape_type&)array;
 			this->m_memptr = get_allocator().allocate(this->size());
-			greedy_evaluate(this->internal(), array.internal(), get_stream());
+			evaluate(
+					make_bin_expr<BC::oper::Assign>(
+							this->internal(),
+							array.internal()), get_stream());
 		}
 		return *this;
 	}

@@ -160,8 +160,7 @@ public:
 		auto& i = is.load(is_batched());
 		auto& o = os.load(is_batched());
 
-		c %= f; 	//%= element-wise assign-multiplication
-		c += z % i; //%  element-wise multiplication
+		c = c % f + z % i; //%  element-wise multiplication
 		cs.store(c, is_batched());
 
 		return c_g(c) % o;
@@ -244,8 +243,7 @@ public:
 		auto& i = is.load(is_batched());
 		auto& o = os.load(is_batched());
 
-		c[0] %= f[0]; 	//%= element-wise assign-multiplication
-		c[0] += z[0] % i[0]; //%  element-wise multiplication
+		c[0] = f[0] % c[0] + z[0] % i[0]; //%  element-wise multiplication
 		cs.store(c[0], is_batched());
 
 		return c_g(c[0]) % o[0];

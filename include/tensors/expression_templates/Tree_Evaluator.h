@@ -151,12 +151,6 @@ evaluate_aliased(Expression expression, Stream stream) {
 
 // ----------------- greedy evaluation --------------------- //
 
-template<class Array, class Expression, class Stream>
-auto greedy_evaluate(Array array, Expression expr, Stream stream) {
-	static_assert(expression_traits<Array>::is_array::value, "MAY ONLY EVALUATE TO ARRAYS");
-	detail::evaluate(make_bin_expr<oper::Assign>(array, expr), stream, std::true_type());
-	return array;
-}
 
 //The branch is an array, no evaluation required
 template<
@@ -188,7 +182,8 @@ static auto greedy_evaluate(Expression expression, Stream stream) {
 			stream.template get_allocator_rebound<value_type>(),
 			temporary_tag());
 
-	return detail::greedy_evaluate(temporary, expression, stream);
+	detail::evaluate(make_bin_expr<oper::Assign>(temporary, expression), stream, std::true_type());
+	return temporary;
 }
 
 
@@ -207,15 +202,6 @@ static auto greedy_evaluate(Expression expression, Stream stream) {
 	return detail::greedy_evaluate(expression, stream);	//Do the actual calculation
 }
 
-template<class ArrayType, class Expression, class Stream>
-static auto greedy_evaluate(ArrayType array, Expression expression, Stream stream) {
-	if (optimizer<Expression>::requires_greedy_eval) {
-		BC::streams::Logging_Stream<typename Stream::system_tag> logging_stream;
-		detail::greedy_evaluate(array, expression, logging_stream);
-		stream.get_allocator().reserve(logging_stream.get_max_allocated());
-	}
-	return detail::greedy_evaluate(array, expression, stream);
-}
 
 template<class Expression, class Stream>
 static auto evaluate(Expression expression, Stream stream) {
@@ -240,11 +226,6 @@ static auto evaluate_aliased(Expression expression, Stream stream) {
 template<class Expression, class SystemTag>
 static auto greedy_evaluate(Expression expression, BC::streams::Logging_Stream<SystemTag> logging_stream) {
 	return detail::greedy_evaluate(expression, logging_stream);	//record allocations/deallocations
-}
-
-template<class ArrayType, class Expression, class SystemTag>
-static auto greedy_evaluate(ArrayType array, Expression expression, BC::streams::Logging_Stream<SystemTag> logging_stream) {
-	return detail::greedy_evaluate(array, expression, logging_stream);
 }
 
 template<class Expression, class SystemTag>

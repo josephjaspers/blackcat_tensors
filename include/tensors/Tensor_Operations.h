@@ -39,12 +39,23 @@ private:
 
     template<class derived_t>
     void evaluate(Tensor_Operations<derived_t>&& tensor) {
+    	BC_ASSERT(this->as_derived().get_stream().get_allocator().allocated_bytes() == 0,
+    			"Evaluation expects streams allocate_bytes to be 0 pre-evaluation");
         exprs::evaluate(tensor.as_derived().internal(), this->as_derived().get_stream());
+
+        BC_ASSERT(this->as_derived().get_stream().get_allocator().allocated_bytes() == 0,
+    			"Evaluation expects streams allocate_bytes to be 0 post-evaluation");
     }
 
     template<class derived_t>
     void evaluate(const Tensor_Operations<derived_t>& tensor) {
-        exprs::evaluate(tensor.as_derived().internal(), this->as_derived().get_stream());
+    	BC_ASSERT(this->as_derived().get_stream().get_allocator().allocated_bytes() == 0,
+    			"Evaluation expects streams allocate_bytes to be 0 pre-evaluation");
+
+    	exprs::evaluate(tensor.as_derived().internal(), this->as_derived().get_stream());
+
+        BC_ASSERT(this->as_derived().get_stream().get_allocator().allocated_bytes() == 0,
+    			"Evaluation expects streams allocate_bytes to be 0 post-evaluation");
     }
 
 public:

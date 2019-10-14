@@ -134,17 +134,17 @@ public:
 	}
 
 	const auto slice(BC::size_t from, BC::size_t to) const {
-		BC_ASSERT(from >= 0 && to < as_derived().outer_dimension(),
+		BC_ASSERT(from >= 0 && to <= as_derived().outer_dimension(),
 				"slice `from` must be between 0 and outer_dimension()");
-		BC_ASSERT(to > from && to < as_derived().outer_dimension(),
+		BC_ASSERT(to > from && to <= as_derived().outer_dimension(),
 				"slice `to` must be between `from` and outer_dimension()");
 		return make_tensor(exprs::make_ranged_slice(as_derived(), from, to));
 	}
 
 	auto slice(BC::size_t from, BC::size_t to) {
-		BC_ASSERT(from >= 0 && to < as_derived().outer_dimension(),
+		BC_ASSERT(from >= 0 && to <= as_derived().outer_dimension(),
 				"slice `from` must be between 0 and outer_dimension()");
-		BC_ASSERT(to > from && to < as_derived().outer_dimension(),
+		BC_ASSERT(to > from && to <= as_derived().outer_dimension(),
 				"slice `to` must be between `from` and outer_dimension()");
 		return make_tensor(exprs::make_ranged_slice(as_derived(), from, to));
 	}

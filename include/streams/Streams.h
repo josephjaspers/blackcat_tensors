@@ -27,23 +27,34 @@ static auto select_on_get_stream(const T& type) {
 			BC::traits::common_traits<T>::defines_get_stream::value;
 
 	static_assert(std::is_same<system_tag, host_tag>::value ||
-				std::is_same<system_tag, device_tag>::value, "must be same ");
+			std::is_same<system_tag, device_tag>::value, "SystemTag Mismatch");
 
 	return traits::constexpr_ternary<defines_get_stream>(
-					traits::bind([](const auto& type) {
-						return type.get_stream();
+			traits::bind([](const auto& type) {
+					return type.get_stream();
 			}, type),
-			traits::constexpr_else(
-					[]() {
-						return BC::streams::Stream<system_tag>();
-					}
-			));
+			[]() {
+					return BC::streams::Stream<system_tag>();
+			}
+	);
+}
+
+template<class>
+struct Logging_Stream;
+
+template<class SystemTag>
+static auto select_logging_stream(Stream<SystemTag> stream) {
+	return Logging_Stream<SystemTag>();
+}
+
+template<class SystemTag>
+static auto select_logging_stream(Logging_Stream<SystemTag> stream) {
+	return stream;
 }
 
 
 }
 }
-
 
 
 #endif /* CONTEXT_H_ */
