@@ -110,35 +110,11 @@ public:
 		bo.randomize(0, .5);
 
 		zero_gradients();
-		init_cache();
 		set_batch_size(1);
-	}
-private:
 
-	void init_cache() {
 		for (auto& cache : reference_list(cs, fs, zs, is, os)) {
-			cache.init_tensor(BC::shape(this->input_size()));
+			cache.init_tensor(BC::shape(this->output_size()));
 			cache.load(std::false_type()).zero();
-		}
-	}
-
-	void init_batched_cache() {
-		for (auto& cache : reference_list(cs, fs, zs, is, os)) {
-			cache.init_batched(BC::shape(this->input_size(), this->batch_size()));
-			cache.load(std::true_type()).zero();
-
-		}
-	}
-
-	void increment_time_index() {
-		for (auto& cache : reference_list(cs, fs, zs, is, os)) {
-			cache.increment_time_index();
-		}
-	}
-
-	void zero_time_index() {
-		for (auto& cache : reference_list(cs, fs, zs, is, os)) {
-			cache.zero_time_index();
 		}
 	}
 
@@ -337,14 +313,11 @@ public:
 		for (auto& delta: reference_list(dc, df, dz, di, do_, c, dy)) {
 			delta = mat(this->output_size(), bs);
 		}
-		init_batched_cache();
 		zero_deltas();
-	}
 
-	void clear_bp_storage() {
-		//remove all but the last element
-		for (auto& bp_storage : reference_list(cs, fs, zs, is, os)) {
-			bp_storage.clear_bp_storage();
+		for (auto& cache : reference_list(cs, fs, zs, is, os)) {
+			cache.init_batched(BC::shape(this->output_size(), this->batch_size()));
+			cache.load(std::true_type()).zero();
 		}
 	}
 
@@ -364,6 +337,25 @@ public:
 		for (auto& grad : reference_list(
 				bf_gradients, bz_gradients, bi_gradients, bo_gradients)) {
 			grad.zero();
+		}
+	}
+
+	void clear_bp_storage() {
+		//remove all but the last element
+		for (auto& bp_storage : reference_list(cs, fs, zs, is, os)) {
+			bp_storage.clear_bp_storage();
+		}
+	}
+
+	void increment_time_index() {
+		for (auto& cache : reference_list(cs, fs, zs, is, os)) {
+			cache.increment_time_index();
+		}
+	}
+
+	void zero_time_index() {
+		for (auto& cache : reference_list(cs, fs, zs, is, os)) {
+			cache.zero_time_index();
 		}
 	}
 

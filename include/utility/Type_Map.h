@@ -10,6 +10,7 @@
 
 #include <unordered_map>
 #include <memory>
+#include <typeinfo>
 
 namespace BC {
 namespace utility {
