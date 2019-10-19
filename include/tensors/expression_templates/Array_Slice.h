@@ -65,12 +65,6 @@ using strided_slice_type_from_parent = Array_Slice<
 template<class Parent>
 auto make_row(Parent& parent, BC::size_t index) {
 	using slice_type = strided_slice_type_from_parent<1, Parent, noncontinuous_memory_tag>;
-
-	BC::print(__func__);
-	BC::print(parent.rows(), parent.cols());
-	BC::print(parent.leading_dimension(1));
-
-
 	return slice_type(
 			parent.get_stream(),
 			parent.get_allocator(),
