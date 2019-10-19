@@ -58,7 +58,9 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	using clock = std::chrono::duration<double>;
 
 	auto network = BC::nn::neuralnetwork(
-		BC::nn::lstm(system_tag, 784/4, 64),
+		BC::nn::lstm(system_tag, 784/4, 128),
+		BC::nn::lstm(system_tag, 128, 64),
+
 		BC::nn::feedforward(system_tag, 64, 10),
 		BC::nn::softmax(system_tag, 10),
 		BC::nn::logging_output_layer(system_tag, 10, BC::nn::RMSE).skip_every(100)

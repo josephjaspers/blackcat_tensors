@@ -113,12 +113,12 @@ static auto accumulate (BC::streams::Stream<BC::host_tag> stream, Begin begin, E
 
 template<class Container, class... Args>
 static auto accumulate (const Container& container, Args&&... args) {
-	return accumulate(BC::streams::select_on_get_stream(container), container.cw_begin(), container.cw_end(), args...);
+	return accumulate(BC::streams::select_on_get_stream(container), container.cw_begin(), container.cw_end(), std::forward(args)...);
 }
 
 template<class Container, class... Args>
 static auto accumulate (Container& container, Args&&... args) {
-	return accumulate(BC::streams::select_on_get_stream(container), container.cw_begin(), container.cw_end(), args...);
+	return accumulate(BC::streams::select_on_get_stream(container), container.cw_begin(), container.cw_end(), std::forward(args)...);
 }
 
 BC_DEF_IF_CPP17(BC_ALGORITHM_DEF(adjacent_difference))

@@ -12,8 +12,10 @@
 #include <vector>
 #include <mutex>
 
+
 namespace BC {
 namespace utility {
+
 
 template<>
 struct Utility<device_tag> {
@@ -22,18 +24,20 @@ struct Utility<device_tag> {
 	static void HostToDevice(T* t, const T* u, BC::size_t  size = 1) {
 		cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyHostToDevice);
 	}
+
 	template<class T>
 	static void DeviceToHost(T* t, const T* u, BC::size_t  size = 1) {
 		cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyDeviceToHost);
 	}
+
 	template<class T>
 	static T extract(const T* data_ptr, BC::size_t index=0) {
 		T host_data;
 		cudaMemcpy(&host_data, &data_ptr[index], sizeof(T), cudaMemcpyDeviceToHost);
 		return host_data;
 	}
-
 };
+
 
 }
 }

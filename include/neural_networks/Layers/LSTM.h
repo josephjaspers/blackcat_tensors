@@ -58,7 +58,16 @@ private:
 	mat dc, df, dz, di, do_, dy;
 	mat c;
 
-	Recurrent_Tensor_Cache<vec, mat> cs, fs, zs, is, os;
+	Cache m_cache;
+
+	template<char C>
+	using key_type = BC::nn::cache_key<BC::utility::Name<C>, mat, std::true_type>;
+
+	using cell_key = key_type<'c'>;
+	using forget_key = key_type<'f'>;
+	using input_key = key_type<'i'>;
+	using write_key = key_type<'z'>;
+	using output_key = key_type<'o'>;
 
 public:
 
@@ -110,60 +119,44 @@ public:
 		bo.randomize(0, .5);
 
 		zero_gradients();
-		set_batch_size(1);
-
-		for (auto& cache : reference_list(cs, fs, zs, is, os)) {
-			cache.init_tensor(BC::shape(this->output_size()));
-			cache.load(std::false_type()).zero();
-		}
 	}
 
 public:
 
 	template<class X, class Y, class=std::enable_if_t<X::tensor_dimension==2>>
 	auto forward_propagation(const X& x, const Y& y) {
-		using is_batched = std::true_type;
-
 		zero_time_index();
 
-		fs.store( f_g(wf * x + rf * y + bf), is_batched());
-		zs.store( z_g(wz * x + rz * y + bz), is_batched());
-		is.store( i_g(wi * x + ri * y + bi), is_batched());
-		os.store( o_g(wo * x + ro * y + bo), is_batched());
-
-		auto& f = fs.load(is_batched());
-		auto& z = zs.load(is_batched());
-		auto& i = is.load(is_batched());
-		auto& o = os.load(is_batched());
+		auto& f = m_cache.store(forget_key(), f_g(wf * x + rf * y + bf));
+		auto& z = m_cache.store(write_key(),  z_g(wz * x + rz * y + bz));
+		auto& i = m_cache.store(input_key(),  i_g(wi * x + ri * y + bi));
+		auto& o = m_cache.store(output_key(), o_g(wo * x + ro * y + bo));
 
 		c = c % f + z % i; //%  element-wise multiplication
-		cs.store(c, is_batched());
-
+		m_cache.store(cell_key(), c);
 		return c_g(c) % o;
 	}
 
 	template<class X, class Y, class Delta, class=std::enable_if_t<X::tensor_dimension==2>>
 	auto back_propagation(const X& x, const Y& y, const Delta& delta_outputs) {
-		using is_batched = std::true_type;
-
 		//LSTM Backprop reference
 		//Reference: https://arxiv.org/pdf/1503.04069.pdf
 		//delta_t+1 (deltas haven't 13been updated from previous step yet)
 
 		//If time_index == 0, than deltas are set to 0
-		if (cs.get_time_index() != 0) {
+		if (m_cache.get_time_index() != 0) {
 			rz_gradients -= dz * y.t();
 			rf_gradients -= df * y.t();
 			ri_gradients -= di * y.t();
 			ro_gradients -= do_ * y.t();
 		}
 
-		auto& f = fs.load(is_batched());
-		auto& z = zs.load(is_batched());
-		auto& i = is.load(is_batched());
-		auto& o = os.load(is_batched());
-		auto& cm1 = cs.load(is_batched(), -1);
-		auto& c = cs.load(is_batched());
+		auto& z = m_cache.load(write_key());
+		auto& i = m_cache.load(input_key());
+		auto& f = m_cache.load(forget_key());
+		auto& o = m_cache.load(output_key());
+		auto& cm1 = m_cache.load(cell_key(), -1);
+		auto& c = m_cache.load(cell_key());
 
 		dy = delta_outputs +
 				rz.t() * dz +
@@ -173,8 +166,9 @@ public:
 
 		do_ = dy % c_g(c) % o_g.cached_dx(o);
 
-		if (cs.get_time_index() != 0) {
-			dc = dy % o % c_g.dx(c) + dc % fs.load(is_batched(), 1);
+		if (m_cache.get_time_index() != 0) {
+			auto& fp1 = m_cache.load(forget_key(), 1);
+			dc = dy % o % c_g.dx(c) + dc % fp1;
 		} else {
 			dc = dy % o % c_g.dx(c);
 		}
@@ -203,89 +197,6 @@ public:
 				wo.t() * do_;
 	}
 
-	template<class X, class Y, class=std::enable_if_t<X::tensor_dimension==1>, int ADL=0>
-	auto forward_propagation(const X& x, const Y& y) {
-		using is_batched = std::false_type;
-
-		zero_time_index();
-
-		fs.store( f_g(wf * x + rf * y + bf));
-		zs.store( z_g(wz * x + rz * y + bz));
-		is.store( i_g(wi * x + ri * y + bi));
-		os.store( o_g(wo * x + ro * y + bo));
-
-		auto& f = fs.load(is_batched());
-		auto& z = zs.load(is_batched());
-		auto& i = is.load(is_batched());
-		auto& o = os.load(is_batched());
-
-		c[0] = f[0] % c[0] + z[0] % i[0]; //%  element-wise multiplication
-		cs.store(c[0], is_batched());
-
-		return c_g(c[0]) % o[0];
-	}
-
-	template<class X, class Y, class Delta, class=std::enable_if_t<X::tensor_dimension==1>, int ADL=0>
-	auto back_propagation(const X& x, const Y& y, const Delta& delta_outputs) {
-		using is_batched = std::false_type;
-
-		//LSTM Backprop reference
-		//Reference: https://arxiv.org/pdf/1503.04069.pdf
-		//delta_t+1 (deltas haven't 13been updated from previous step yet)
-
-		//If time_index == 0, than deltas are set to 0
-		if (cs.get_time_index() != 0) {
-			rz_gradients -= dz[0] * y.t();
-			rf_gradients -= df[0] * y.t();
-			ri_gradients -= di[0] * y.t();
-			ro_gradients -= do_[0] * y.t();
-		}
-
-		auto& f = fs.load(is_batched());
-		auto& z = zs.load(is_batched());
-		auto& i = is.load(is_batched());
-		auto& o = os.load(is_batched());
-		auto& cm1 = cs.load(is_batched(), -1);
-		auto& c = cs.load(is_batched());
-
-		dy[0] = delta_outputs +
-				rz.t() * dz[0] +
-				ri.t() * di[0] +
-				rf.t() * df[0] +
-				ro.t() * do_[0] ;
-
-		do_[0] = dy[0] % c_g(c) % o_g.cached_dx(o);
-
-		if (cs.get_time_index() != 0) {
-			dc[0] = dy[0] % o % c_g.dx(c) + dc[0] % fs.load(is_batched(), 1);
-		} else {
-			dc[0] = dy[0] % o % c_g.dx(c);
-		}
-
-		df[0] = dc[0] % cm1  % f_g.cached_dx(f);
-		di[0] = dc[0] % z % i_g.cached_dx(i);
-		dz[0] = dc[0] % i % z_g.cached_dx(z);
-
-		wz_gradients -= dz[0] * x.t();
-		wf_gradients -= df[0] * x.t();
-		wi_gradients -= di[0] * x.t();
-		wo_gradients -= do_[0] * x.t();
-
-		bz_gradients -= dz[0];
-		bf_gradients -= df[0];
-		bi_gradients -= di[0];
-		bo_gradients -= do_[0];
-
-		//Increment the current index
-		//of the internal cell-state
-		increment_time_index();
-
-		return wz.t() * dz[0] +
-				wi.t() * dz[0] +
-				wf.t() * df[0] +
-				wo.t() * do_[0];
-	}
-
 	void update_weights() {
 		ValueType lr = this->lr / this->batch_size();
 
@@ -310,15 +221,23 @@ public:
 
 	void set_batch_size(int bs) {
 		Layer_Base::set_batch_size(bs);
-		for (auto& delta: reference_list(dc, df, dz, di, do_, c, dy)) {
-			delta = mat(this->output_size(), bs);
-		}
-		zero_deltas();
 
-		for (auto& cache : reference_list(cs, fs, zs, is, os)) {
-			cache.init_batched(BC::shape(this->output_size(), this->batch_size()));
-			cache.load(std::true_type()).zero();
+		auto make_default =  [&](){
+				mat m(this->output_size(), bs);
+				m.zero();
+				return m;
+		};
+
+		for (auto& tensor: reference_list(dc, df, dz, di, do_, dy, c)) {
+			tensor = make_default();
 		}
+
+		m_cache.store(forget_key(), make_default());
+		m_cache.store(write_key(),  make_default());
+		m_cache.store(input_key(),  make_default());
+		m_cache.store(output_key(), make_default());
+		m_cache.store(cell_key(), make_default());
+
 	}
 
 	void zero_deltas() {
@@ -341,22 +260,19 @@ public:
 	}
 
 	void clear_bp_storage() {
-		//remove all but the last element
-		for (auto& bp_storage : reference_list(cs, fs, zs, is, os)) {
-			bp_storage.clear_bp_storage();
-		}
+		m_cache.clear_bp_storage(cell_key());
+		m_cache.clear_bp_storage(write_key());
+		m_cache.clear_bp_storage(input_key());
+		m_cache.clear_bp_storage(forget_key());
+		m_cache.clear_bp_storage(output_key());
 	}
 
 	void increment_time_index() {
-		for (auto& cache : reference_list(cs, fs, zs, is, os)) {
-			cache.increment_time_index();
-		}
+		m_cache.increment_time_index();
 	}
 
 	void zero_time_index() {
-		for (auto& cache : reference_list(cs, fs, zs, is, os)) {
-			cache.zero_time_index();
-		}
+		m_cache.zero_time_index();
 	}
 
 	void save(Layer_Loader& loader) {

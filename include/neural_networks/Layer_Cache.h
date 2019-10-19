@@ -14,62 +14,93 @@
 namespace BC {
 namespace nn {
 
-template<class Type, class BatchedType>
-struct Forward_Tensor_Cache {
+template<class K, class V, class IsRecurrent>
+struct cache_key : BC::utility::Any_Key<K, V> {
+	static_assert(
+			std::is_same<IsRecurrent, std::true_type>::value ||
+					std::is_same<IsRecurrent, std::false_type>::value,
+			"Cache_Key `IsRecurrent` must be std::true_type or std::false_type");
 
-	Type tensor;
-	BatchedType batched_tensor;
-
-	int get_time_index() const {
-		return 0;
-	}
-
-	void init_tensor(Type init) {
-		this->tensor = std::move(init);
-	}
-
-	void init_batched(BatchedType init) {
-		this->batched_tensor = std::move(init);
-	}
-
-	template<class... Args>
-	void init_tensor(const Args&... init) {
-		this->tensor = Type(init...);
-	}
-
-	template<class... Args>
-	void init_batched(const Args&... init) {
-		this->batched_tensor = BatchedType(init...);
-	}
-
-	auto& load(std::false_type is_batched=std::false_type()) { return tensor; }
-	auto& load(std::true_type is_batched) { return batched_tensor; }
-	auto& load(std::false_type is_batched=std::false_type()) const { return tensor; }
-	auto& load(std::true_type is_batched) const { return batched_tensor; }
-
-	template<class T>
-	auto& store(const T& expression) {
-		using is_batched = BC::traits::truth_type<(T::tensor_dimension == BatchedType::tensor_dimension)>;
-		return store(expression, is_batched());
-	}
-
-	template<class T>
-	auto& store(const T& expression, std::true_type is_batched) {
-		this->batched_tensor = expression;
-		return this->batched_tensor;
-	}
-
-	template<class T>
-	auto& store(const T& expression, std::false_type is_batched) {
-		return this->tensor = expression;
-	}
-
-	void clear_bp_storage() {}
-	void increment_time_index() {}
-	void decrement_time_index() {}
-	void zero_time_index() {}
-
+	using is_recurrent = IsRecurrent;
 };
+
+struct Cache {
+
+	template<class K, class V, class R>
+	using key_type = cache_key<K, V, R>;
+
+	int m_time_index = 0;
+
+	BC::utility::Any_Map cache;
+
+
+private:
+
+	template<class K, class V>
+	auto hash(key_type<K, V, std::true_type> key) {
+		return BC::utility::Any_Key<K, std::vector<V>>();
+	}
+
+	template<class K, class V>
+	auto hash(key_type<K, V, std::false_type> key) {
+		return BC::utility::Any_Key<K, V>();
+	}
+
+public:
+
+	template<class K, class V>
+	auto& load(key_type<K, V, std::true_type> key, int t_modifier=0) {
+		std::vector<V>& history = cache[hash(key)];
+		int index = history.size()- 1 - m_time_index + t_modifier;
+
+		BC_ASSERT(index < history.size(),
+			"Load recurrent_variable index out of bounds"
+				"\nHistory size: " + std::to_string(history.size()) +
+				"\nIndex:" + std::to_string(index));
+
+		return history[index];
+	}
+
+	template<class K, class V>
+	auto& load(key_type<K, V, std::false_type> key) {
+		return cache[hash(key)];
+	}
+
+	template<class K, class V, class U>
+	auto& store(key_type<K, V, std::true_type> key, U&& expression) {
+		cache[hash(key)].push_back(V(expression));
+		return cache[hash(key)].back();
+	}
+
+	template<class K, class V, class U>
+	auto& store(key_type<K, V, std::false_type> key, U&& expression) {
+		if (cache.contains(hash(key))) {
+			return cache[hash(key)] = expression;
+		} else {
+			return cache[hash(key)] = V(expression);
+		}
+	}
+
+	int get_time_index() const { return m_time_index; }
+	void increment_time_index() { m_time_index++; }
+	void decrement_time_index() { m_time_index--; }
+	void zero_time_index() { m_time_index=0; }
+
+	template<class K, class V>
+	void clear_bp_storage(key_type<K, V, std::false_type> key) {}
+
+	template<class K, class V>
+	void clear_bp_storage(key_type<K, V, std::true_type> key) {
+		auto& storage = cache[hash(key)];
+
+		if (storage.size() > 1) {
+			auto last = std::move(storage.back());
+			storage.clear();
+			storage.push_back(std::move(last));
+		}
+	}
+};
+
 
 template<class Type, class BatchedType>
 struct Recurrent_Tensor_Cache {
@@ -89,15 +120,18 @@ struct Recurrent_Tensor_Cache {
 		tensor.push_back(std::move(init));
 		tensor.back().zero();
 	}
+
 	void init_batched(BatchedType init) {
 		batched_tensor.push_back(std::move(init));
 		batched_tensor.back().zero();
 	}
+
 	template<class... Args>
 	void init_tensor(const Args&... init) {
 		tensor.push_back(Type(init...));
 		tensor.back().zero();
 	}
+
 	template<class... Args>
 	void init_batched(const Args&... init) {
 		batched_tensor.push_back(BatchedType(init...));
@@ -107,12 +141,15 @@ struct Recurrent_Tensor_Cache {
 	Type& load(std::false_type is_batched = std::false_type(), int tmodifier=0) {
 		return tensor[tensor.size() - 1 - time_index + tmodifier];
 	}
+
 	BatchedType& load(std::true_type is_batched, int tmodifier=0) {
 		return batched_tensor[batched_tensor.size() - 1 - time_index + tmodifier];
 	}
+
 	const Type& load(std::false_type is_batched = std::false_type(), int tmodifier=0) const {
 		return tensor[tensor.size() - 1 - time_index + tmodifier];
 	}
+
 	const BatchedType& load(std::true_type is_batched, int tmodifier=0) const {
 		return batched_tensor[batched_tensor.size() - 1 - time_index + tmodifier];
 	}

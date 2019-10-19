@@ -29,6 +29,8 @@ namespace algorithms {
 template<class T>
 struct ReferenceIterator:
 		public std::vector<T*>::iterator {
+
+	using iterator_category = std::random_access_iterator_tag;
 	using parent = typename std::vector<T*>::iterator;
 
 	ReferenceIterator(parent p): parent(p) {}
@@ -55,7 +57,6 @@ template<class T, class... Ts>
 ReferenceList<T> reference_list(T& t, Ts&... ts) {
 	 return ReferenceList<T>(t, ts...);
 }
-
 
 }
 }

@@ -44,7 +44,7 @@ auto load_mnist(System system, const char* mnist_dataset, int batch_size, int sa
 
 template<class System=BC::host_tag>
 int percept_MNIST(System system_tag, const char* mnist_dataset,
-		int epochs=10, int batch_size=128, int samples=32*1024) {
+		int epochs=5, int batch_size=32, int samples=32*1024) {
 
 	using value_type = typename System::default_floating_point_type;
 	using allocator_type = BC::Allocator<System, value_type>;
@@ -54,7 +54,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 
 	auto network = neuralnetwork(
 		BC::nn::feedforward(system_tag, 784, 256),
-		BC::nn::logistic(system_tag, 256),
+		BC::nn::tanh(system_tag, 256),
 		BC::nn::feedforward(system_tag, 256, 10),
 		BC::nn::softmax(system_tag, 10),
 		BC::nn::logging_output_layer(system_tag, 10, BC::nn::RMSE).skip_every(100/5)
@@ -92,11 +92,11 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	std::cout << " testing... " << std::endl;
 	int test_images = 10;
 	auto images = reshape(inputs[0], BC::shape(28,28, batch_size));
-
+	mat hyps = network.forward_propagation(inputs[0]);
 	for (int i = 0; i < test_images; ++i) {
 		//print transpose to orient the images correctly
 		images[i].t().print_sparse(3);
-		network.forward_propagation(inputs[0][i]).print();
+		hyps[i].print();
 		std::cout << "------------------------------------" <<std::endl;
 	}
 	std::cout << " success " << std::endl;

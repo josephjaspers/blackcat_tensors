@@ -30,7 +30,7 @@ struct NeuralNetwork {
 	using self = NeuralNetwork<Layers...>;
 	using layer_chain = LayerChain<
 			BC::traits::Integer<0>,
-			BC::traits::any<detail::is_recurrent_layer, Layers...>,
+			BC::traits::truth_type<BC::traits::any<detail::is_recurrent_layer, Layers...>::value>,
 			void,
 			Layers...>;
 
