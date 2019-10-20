@@ -30,9 +30,7 @@ struct Cache {
 	using key_type = cache_key<K, V, R>;
 
 	int m_time_index = 0;
-
 	BC::utility::Any_Map cache;
-
 
 private:
 
@@ -64,6 +62,37 @@ public:
 	template<class K, class V>
 	auto& load(key_type<K, V, std::false_type> key) {
 		return cache[hash(key)];
+	}
+
+	template<class K, class V, class DefaultFactory>
+	auto& load(key_type<K, V, std::true_type> key,
+			DefaultFactory function,
+			int t_modifier=0) {
+
+		std::vector<V>& history = cache[hash(key)];
+
+		unsigned index = history.size()- 1 - m_time_index + t_modifier;
+		if (index >= history.size()) {
+			history[index] = key;
+		}
+
+		BC_ASSERT(index < history.size(),
+			"Load recurrent_variable index out of bounds"
+				"\nHistory size: " + std::to_string(history.size()) +
+				"\nIndex:" + std::to_string(index));
+
+		return history[index];
+	}
+
+	template<class K, class V, class DefaultFactory>
+	auto& load(key_type<K, V, std::false_type> key, DefaultFactory function) {
+		auto hkey = hash(key);
+
+		if (cache.contains(hkey)) {
+			return cache[hkey];
+		} else {
+			return cache[hkey] = function();
+		}
 	}
 
 	template<class K, class V, class U>
@@ -101,90 +130,6 @@ public:
 	}
 };
 
-
-template<class Type, class BatchedType>
-struct Recurrent_Tensor_Cache {
-
-	//time index refers to 'the past index' IE time_index==3 means '3 timestamps in the past'
-	int time_index = 0;
-
-	std::vector<Type> tensor;
-	std::vector<BatchedType> batched_tensor;
-
-	int get_time_index() const { return time_index; }
-	void increment_time_index() { time_index++; }
-	void decrement_time_index() { time_index--; }
-	void zero_time_index() { time_index = 0; }
-
-	void init_tensor(Type init) {
-		tensor.push_back(std::move(init));
-		tensor.back().zero();
-	}
-
-	void init_batched(BatchedType init) {
-		batched_tensor.push_back(std::move(init));
-		batched_tensor.back().zero();
-	}
-
-	template<class... Args>
-	void init_tensor(const Args&... init) {
-		tensor.push_back(Type(init...));
-		tensor.back().zero();
-	}
-
-	template<class... Args>
-	void init_batched(const Args&... init) {
-		batched_tensor.push_back(BatchedType(init...));
-		batched_tensor.back().zero();
-	}
-
-	Type& load(std::false_type is_batched = std::false_type(), int tmodifier=0) {
-		return tensor[tensor.size() - 1 - time_index + tmodifier];
-	}
-
-	BatchedType& load(std::true_type is_batched, int tmodifier=0) {
-		return batched_tensor[batched_tensor.size() - 1 - time_index + tmodifier];
-	}
-
-	const Type& load(std::false_type is_batched = std::false_type(), int tmodifier=0) const {
-		return tensor[tensor.size() - 1 - time_index + tmodifier];
-	}
-
-	const BatchedType& load(std::true_type is_batched, int tmodifier=0) const {
-		return batched_tensor[batched_tensor.size() - 1 - time_index + tmodifier];
-	}
-
-	template<class T>
-	auto& store(const T& expression) {
-		using is_batched = BC::traits::truth_type<(T::tensor_dimension == BatchedType::tensor_dimension)>;
-		return store(expression, is_batched());
-	}
-
-	template<class T>
-	auto& store(const T& expression, std::true_type is_batched) {
-		this->batched_tensor.push_back(expression);
-		return this->batched_tensor.back();
-	}
-
-	template<class T>
-	auto& store(const T& expression, std::false_type is_batched) {
-		this->tensor.push_back(expression);
-		return this->tensor.back();
-	}
-
-	void clear_bp_storage() {
-		if (tensor.size() > 1) {
-			auto last = std::move(tensor.back());
-			tensor.clear();
-			tensor.push_back(std::move(last));
-		}
-		if (batched_tensor.size() > 1) {
-			auto last = std::move(batched_tensor.back());
-			batched_tensor.clear();
-			batched_tensor.push_back(std::move(last));
-		}
-	}
-};
 
 }
 }

@@ -29,7 +29,7 @@ template<class T> using query_greedy_evaluate_delta = typename T::greedy_evaluat
 //This tag is used to prevent recalculating the same error values multiple times (and saving on reallocations)
 template<class T> using query_backwards_delta_should_be_cached = typename T::query_backwards_delta_should_be_cached;
 
-template<class T> using query_extra_cache_args = typename T::extra_cache_args;
+template<class T> using query_requires_extra_cache = typename T::requires_extra_cache;
 template<class T> using query_extra_batched_cache_args = typename T::extra_batched_cache_args;
 
 template<class T, class Delta> using detect_back_propagation_type =
@@ -57,7 +57,7 @@ struct layer_traits {
 			= BC::traits::conditional_detected_t<BC::traits::query_value_type, T,
 				typename system_tag::default_floating_point_type>;
 
-	using requires_extra_cache = BC::traits::truth_type<BC::traits::is_detected_v<detail::query_extra_cache_args, T>>;
+	using requires_extra_cache = BC::traits::truth_type<BC::traits::is_detected_v<detail::query_requires_extra_cache, T>>;
 
 	using input_tensor_dimension
 			= BC::traits::conditional_detected_t<detail::query_input_tensor_dimension, T, BC::traits::Integer<1>>;
@@ -82,10 +82,6 @@ struct layer_traits {
 
 	using greedy_evaluate_delta
 			= BC::traits::conditional_detected_t<detail::query_greedy_evaluate_delta, T, std::false_type>;
-	using extra_cache_args
-			= BC::traits::conditional_detected_t<detail::query_extra_cache_args, T, std::tuple<>>;
-	using extra_batched_cache_args
-			= BC::traits::conditional_detected_t<detail::query_extra_batched_cache_args, T, std::tuple<>>;
 };
 }  // namespace nn
 }  // namespace BC

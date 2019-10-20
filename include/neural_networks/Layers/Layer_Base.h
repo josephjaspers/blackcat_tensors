@@ -97,6 +97,7 @@ public:
 	void set_batch_size(int bs) { m_batch_sz = bs;}
 	void set_learning_rate(int) {}
 	void update_weights() {}
+	void clear_bp_storage(Cache&) {}
 
 	void save(Layer_Loader&) {};
 	void load(Layer_Loader&) {};

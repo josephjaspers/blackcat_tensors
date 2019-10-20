@@ -10,6 +10,7 @@
 #define BLACKCATTENSORS_NEURALNETWORKS_NETWORKNETWORKS_H_
 
 #include "common.h"
+#include "Layer_Cache.h"
 #include "Layers/GreedyFeedForward.h"
 #include "Layers/FeedForward.h"
 #include "Layers/UnaryFunction.h"

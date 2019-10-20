@@ -34,6 +34,7 @@ struct LSTM : public Layer_Base {
 	using greedy_evaluate_delta = std::true_type;
 	using forward_requires_outputs = std::true_type;
 	using backward_requires_outputs = std::true_type;
+	using requires_extra_cache = std::true_type;
 
 
 private:
@@ -58,10 +59,10 @@ private:
 	mat dc, df, dz, di, do_, dy;
 	mat c;
 
-	Cache m_cache;
+	using is_recurrent = std::true_type;
 
 	template<char C>
-	using key_type = BC::nn::cache_key<BC::utility::Name<C>, mat, std::true_type>;
+	using key_type = BC::nn::cache_key<BC::utility::Name<C>, mat, is_recurrent>;
 
 	using cell_key = key_type<'c'>;
 	using forget_key = key_type<'f'>;
@@ -123,40 +124,36 @@ public:
 
 public:
 
-	template<class X, class Y, class=std::enable_if_t<X::tensor_dimension==2>>
-	auto forward_propagation(const X& x, const Y& y) {
-		zero_time_index();
-
-		auto& f = m_cache.store(forget_key(), f_g(wf * x + rf * y + bf));
-		auto& z = m_cache.store(write_key(),  z_g(wz * x + rz * y + bz));
-		auto& i = m_cache.store(input_key(),  i_g(wi * x + ri * y + bi));
-		auto& o = m_cache.store(output_key(), o_g(wo * x + ro * y + bo));
+	template<class X, class Y>
+	auto forward_propagation(const X& x, const Y& y, Cache& cache) {
+		auto& f = cache.store(forget_key(), f_g(wf * x + rf * y + bf));
+		auto& z = cache.store(write_key(),  z_g(wz * x + rz * y + bz));
+		auto& i = cache.store(input_key(),  i_g(wi * x + ri * y + bi));
+		auto& o = cache.store(output_key(), o_g(wo * x + ro * y + bo));
 
 		c = c % f + z % i; //%  element-wise multiplication
-		m_cache.store(cell_key(), c);
+		cache.store(cell_key(), c);
 		return c_g(c) % o;
 	}
 
-	template<class X, class Y, class Delta, class=std::enable_if_t<X::tensor_dimension==2>>
-	auto back_propagation(const X& x, const Y& y, const Delta& delta_outputs) {
+	template<class X, class Y, class Delta>
+	auto back_propagation(const X& x, const Y& y, const Delta& delta_outputs, class Cache& cache) {
 		//LSTM Backprop reference
 		//Reference: https://arxiv.org/pdf/1503.04069.pdf
-		//delta_t+1 (deltas haven't 13been updated from previous step yet)
 
-		//If time_index == 0, than deltas are set to 0
-		if (m_cache.get_time_index() != 0) {
+		if (cache.get_time_index() != 0) {
 			rz_gradients -= dz * y.t();
 			rf_gradients -= df * y.t();
 			ri_gradients -= di * y.t();
 			ro_gradients -= do_ * y.t();
 		}
 
-		auto& z = m_cache.load(write_key());
-		auto& i = m_cache.load(input_key());
-		auto& f = m_cache.load(forget_key());
-		auto& o = m_cache.load(output_key());
-		auto& cm1 = m_cache.load(cell_key(), -1);
-		auto& c = m_cache.load(cell_key());
+		auto& z = cache.load(write_key());
+		auto& i = cache.load(input_key());
+		auto& f = cache.load(forget_key());
+		auto& o = cache.load(output_key());
+		auto& cm1 = cache.load(cell_key(), -1);
+		auto& c = cache.load(cell_key());
 
 		dy = delta_outputs +
 				rz.t() * dz +
@@ -166,8 +163,8 @@ public:
 
 		do_ = dy % c_g(c) % o_g.cached_dx(o);
 
-		if (m_cache.get_time_index() != 0) {
-			auto& fp1 = m_cache.load(forget_key(), 1);
+		if (cache.get_time_index() != 0) {
+			auto& fp1 = cache.load(forget_key(), 1);
 			dc = dy % o % c_g.dx(c) + dc % fp1;
 		} else {
 			dc = dy % o % c_g.dx(c);
@@ -186,10 +183,6 @@ public:
 		bf_gradients -= df;
 		bi_gradients -= di;
 		bo_gradients -= do_;
-
-		//Increment the current index
-		//of the internal cell-state
-		increment_time_index();
 
 		return wz.t() * dz +
 				wi.t() * dz +
@@ -216,7 +209,6 @@ public:
 		bo += bo_gradients * lr;
 
 		zero_gradients();
-		clear_bp_storage();
 	}
 
 	void set_batch_size(int bs) {
@@ -231,13 +223,6 @@ public:
 		for (auto& tensor: reference_list(dc, df, dz, di, do_, dy, c)) {
 			tensor = make_default();
 		}
-
-		m_cache.store(forget_key(), make_default());
-		m_cache.store(write_key(),  make_default());
-		m_cache.store(input_key(),  make_default());
-		m_cache.store(output_key(), make_default());
-		m_cache.store(cell_key(), make_default());
-
 	}
 
 	void zero_deltas() {
@@ -259,20 +244,12 @@ public:
 		}
 	}
 
-	void clear_bp_storage() {
+	void clear_bp_storage(Cache& m_cache) {
 		m_cache.clear_bp_storage(cell_key());
 		m_cache.clear_bp_storage(write_key());
 		m_cache.clear_bp_storage(input_key());
 		m_cache.clear_bp_storage(forget_key());
 		m_cache.clear_bp_storage(output_key());
-	}
-
-	void increment_time_index() {
-		m_cache.increment_time_index();
-	}
-
-	void zero_time_index() {
-		m_cache.zero_time_index();
 	}
 
 	void save(Layer_Loader& loader) {

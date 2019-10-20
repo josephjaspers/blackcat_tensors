@@ -1,4 +1,3 @@
-
 #ifndef BLACKCAT_TUPLE
 #define BLACKCAT_TUPLE
 

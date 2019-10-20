@@ -182,6 +182,12 @@ public:
 		}
 	}
 
+	template<class K, class V, class... Args>
+	void emplace(Any_Key<K, V> key, Args&&... args) {
+		//Todo should return pair<iterator, bool> of correct type
+		m_any_map.emplace(hash(key), args...);
+	}
+
 	int empty() const { return m_any_map.empty(); }
 	int size() const { return m_any_map.size(); }
 	int max_size() const { return m_any_map.size(); }
