@@ -22,7 +22,6 @@ namespace detail {
 template<class T>
 using is_recurrent_layer = BC::traits::conditional_detected_t<
 			detail::query_forward_requires_outputs, T, std::false_type>;
-}
 
 template<class... Layers>
 struct NeuralNetwork {
@@ -41,24 +40,59 @@ struct NeuralNetwork {
 	NeuralNetwork(Layers... layers):
 		m_layer_chain(layers...) {}
 
-	template<class T> auto back_propagation(const T& tensor) {
-		auto dx =  m_layer_chain.tail().bp(tensor);
-		m_layer_chain.for_each([&](auto& layer) { layer.increment_time_index(); });
+	template<class T>
+	auto forward_propagation(const T& tensor) {
+		auto fp_caller = [](auto& layer, const auto& X) {
+			return layer.forward_propagation(X);
+		};
+
+		m_layer_chain.for_each([&](auto& layer) {
+			layer.zero_time_index();
+		});
+
+		return m_layer_chain.for_each_propagate(fp_caller, tensor);
+	}
+
+	template<class T>
+	auto back_propagation(const T& tensor) {
+		auto bp_caller = [](auto& layer, const auto& Dy) {
+			return layer.back_propagation(Dy);
+		};
+
+		auto& last_layer = m_layer_chain.tail();
+		auto dx = last_layer.reverse_for_each_propagate(bp_caller, tensor);
+
+		m_layer_chain.for_each([&](auto& layer) {
+			layer.increment_time_index();
+		});
+
 		return dx;
 	}
 
-	template<class T> auto forward_propagation(const T& tensor) {
-		m_layer_chain.for_each([&](auto& layer) { layer.zero_time_index(); });
-		return m_layer_chain.head().fp(tensor);
+	template<class T>
+	auto predict(const T& tensor) {
+		m_layer_chain.for_each([&](auto& layer) {
+			layer.zero_time_index();
+		});
+
+		auto fp_caller = [](auto& layer, const auto& X) {
+			return layer.predict(X);
+		};
+
+		return m_layer_chain.for_each_propagate(fp_caller, tensor);
 	}
 
-	template<class T> auto predict(const T& tensor) {
-		m_layer_chain.for_each([&](auto& layer) { layer.zero_time_index(); });
-		return m_layer_chain.head().predict(tensor);
-	}
+	template<class T>
+	auto single_predict(const T& tensor) {
+		m_layer_chain.for_each([&](auto& layer) {
+			layer.zero_time_index();
+		});
 
-	template<class T> auto single_predict(const T& tensor) {
-		return m_layer_chain.head().single_predict(tensor);
+		auto fp_caller = [](auto& layer, const auto& X) {
+			return layer.single_predict(X);
+		};
+
+		return m_layer_chain.for_each_propagate(fp_caller, tensor);
 	}
 
 	template<int X> auto& get_layer() const { return m_layer_chain.get(BC::traits::Integer<X>()); }

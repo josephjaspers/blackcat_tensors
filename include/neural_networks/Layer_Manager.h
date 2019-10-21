@@ -230,8 +230,9 @@ private:
 
 	template<class Input, class Dy>
 	auto backward_supply_outputs(std::true_type,  const Input& inputs, const Dy& delta) {
-		using key_type = typename std::decay_t<decltype(BC::traits::derived_cast(*this).next().layer())>::batched_input_key;
-		auto& outputs = BC::traits::derived_cast(*this).next().layer().m_cache.load(key_type(), default_batched_output_tensor_factory());
+		auto& next_layer = BC::traits::derived_cast(*this).next().layer();
+		using key_type = typename std::decay_t<decltype(next_layer)>::batched_input_key;
+		auto& outputs = next_layer.m_cache.load(key_type(), default_batched_output_tensor_factory());
 		return backward_supply_cache(requires_extra_cache(), inputs, outputs, delta);
 	}
 
@@ -242,7 +243,6 @@ private:
 
 	template<class... Args>
 	auto backward_supply_cache(std::true_type, Args&... args) {
-		using key_type = typename std::decay_t<decltype(BC::traits::derived_cast(*this).next().layer())>::batched_input_key;
 		return Layer::back_propagation(args..., m_cache);
 	}
 
