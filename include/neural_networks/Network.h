@@ -22,6 +22,7 @@ namespace detail {
 template<class T>
 using is_recurrent_layer = BC::traits::conditional_detected_t<
 			detail::query_forward_requires_outputs, T, std::false_type>;
+}
 
 template<class... Layers>
 struct NeuralNetwork {
