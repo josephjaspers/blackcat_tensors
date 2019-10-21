@@ -66,14 +66,15 @@ public:
 
 	template<class K, class V, class DefaultFactory>
 	auto& load(key_type<K, V, std::true_type> key,
-			DefaultFactory function,
-			int t_modifier=0) {
+			int t_modifier,
+			DefaultFactory function) {
 
 		std::vector<V>& history = cache[hash(key)];
 
 		unsigned index = history.size()- 1 - m_time_index + t_modifier;
 		if (index >= history.size()) {
-			history[index] = key;
+			history.push_back(function());
+			return history.back();
 		}
 
 		BC_ASSERT(index < history.size(),
@@ -83,6 +84,12 @@ public:
 
 		return history[index];
 	}
+
+	template<class K, class V, class DefaultFactory>
+	auto& load(key_type<K, V, std::true_type> key, DefaultFactory function) {
+		return load(key, 0, function);
+	}
+
 
 	template<class K, class V, class DefaultFactory>
 	auto& load(key_type<K, V, std::false_type> key, DefaultFactory function) {
@@ -97,7 +104,7 @@ public:
 
 	template<class K, class V, class U>
 	auto& store(key_type<K, V, std::true_type> key, U&& expression) {
-		cache[hash(key)].push_back(V(expression));
+		cache[hash(key)].push_back(expression);
 		return cache[hash(key)].back();
 	}
 

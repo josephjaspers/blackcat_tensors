@@ -92,7 +92,7 @@ struct LayerChain<
 	auto& layer() { return static_cast<layer_type&>(*this); }
 
 	const auto& get(BC::traits::Integer<0>) const { return layer(); }
-		  auto& get(BC::traits::Integer<0>)	   { return layer(); }
+		  auto& get(BC::traits::Integer<0>)       { return layer(); }
 
 	template<int X>
 	const auto& get(BC::traits::Integer<X>) const { return next().get(BC::traits::Integer<X-1>()); }
@@ -117,6 +117,15 @@ struct LayerChain<
 	template<class T> const auto bp(const T& tensor) {
 		return bp_impl(tensor, is_not_input_layer());
 	}
+
+	template<class T> auto predict(const T& tensor) {
+		return predict_impl(tensor, is_not_output_layer());
+	}
+
+	template<class T> const auto single_predict(const T& tensor) {
+		return single_predict_impl(tensor, is_not_output_layer());
+	}
+
 
 	template<class function> void for_each(function f) {
 		for_each_impl(f, is_not_output_layer());
@@ -190,6 +199,14 @@ private:
 		f(*this);
 	}
 
+	template<class T> const auto single_inference_impl(const T& tensor, std::true_type has_next) {
+		return this->next().fp(layer_type::single_inference(tensor));
+	}
+
+	template<class T> const auto single_inference_impl(const T& tensor, std::false_type has_next) {
+		return layer_type::single_inference(tensor);
+	}
+
 
 	template<class T> const auto fp_impl(const T& tensor, std::true_type has_next) {
 		return this->next().fp(layer_type::forward_propagation(tensor));
@@ -205,6 +222,22 @@ private:
 
 	template<class T> const auto bp_impl(const T& tensor, std::false_type) {
 		return layer_type::back_propagation(tensor);
+	}
+
+	template<class T> const auto predict_impl(const T& tensor, std::true_type has_next) {
+		return this->next().predict(layer_type::predict(tensor));
+	}
+
+	template<class T> const auto predict_impl(const T& tensor, std::false_type has_next) {
+		return layer_type::predict(tensor);
+	}
+
+	template<class T> const auto single_predict_impl(const T& tensor, std::true_type has_next) {
+		return this->next().single_predict(layer_type::single_predict(tensor));
+	}
+
+	template<class T> const auto single_predict_impl(const T& tensor, std::false_type has_next) {
+		return layer_type::single_predict(tensor);
 	}
 };
 }

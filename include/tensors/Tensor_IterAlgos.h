@@ -2,7 +2,7 @@
  * Tensor_STL_interface.h
  *
  *  Created on: Oct 18, 2018
- *      Author: joseph
+ *	  Author: joseph
  */
 
 #ifndef BLACKCAT_TENSOR_tensor_iterator_dimension_H_
@@ -31,26 +31,35 @@ public:
 
 	//------------------------ iterator-algorthims---------------------------//
 
-    void fill(value_type value) { BC::algorithms::fill(as_derived().get_stream(), cw_begin(), cw_end(), value);}
-    void zero()                 { fill(0); }
-    void ones()                 { fill(1); }
+	auto& fill(value_type value) {
+		BC::algorithms::fill(
+				as_derived().get_stream(), cw_begin(), cw_end(), value);
+		return as_derived();
+	}
 
-    template<class function>
-    void for_each(function func) {
-    	as_derived() = as_derived().un_expr(func);
-    }
-    template<class function>
+	auto& zero() {
+		return fill(0);
+	}
+	auto& ones() {
+		return fill(1);
+	}
+
+	template<class function>
+	void for_each(function func) {
+		as_derived() = as_derived().un_expr(func);
+	}
+	template<class function>
 	void for_each(function func) const {
-    	as_derived() = as_derived().un_expr(func);
-    }
+		as_derived() = as_derived().un_expr(func);
+	}
 
-    Tensor_Base<Expression>& sort() {
-    	BC::algorithms::sort(this->as_derived().get_stream(), this->cw_begin(), this->cw_end());
-    	return as_derived();
-    }
+	Tensor_Base<Expression>& sort() {
+		BC::algorithms::sort(this->as_derived().get_stream(), this->cw_begin(), this->cw_end());
+		return as_derived();
+	}
 
-    void rand(value_type lb=0, value_type ub=1) {
-    	randomize(lb, ub);
+	void rand(value_type lb=0, value_type ub=1) {
+		randomize(lb, ub);
 	}
 
    void randomize(value_type lb=0, value_type ub=1)  {
@@ -178,50 +187,50 @@ public:
 	auto cw_rend() const {
 		return iterators::reverse_cwise_iterator_end(as_derived().internal());
 	}
-        //----------------------iterator wrappers---------------------------//
+		//----------------------iterator wrappers---------------------------//
 
 #define BC_TENSOR_tensor_iterator_dimension_DEF(iterator_name, begin_func, end_func)\
-    template<class der_t>                                        \
-    struct iterator_name {                                       \
-                                                                 \
-        der_t& tensor;                                           \
-                                                                 \
-        using begin_t = decltype(tensor.begin_func ());          \
-        using end_t = decltype(tensor.end_func ());              \
-                                                                 \
-        begin_t _begin = tensor.begin_func();                    \
-        end_t _end = tensor.end_func();                          \
-                                                                 \
-        iterator_name(der_t& tensor_) :                          \
-                tensor(tensor_) {                                \
-        }                                                        \
-                                                                 \
-        iterator_name(der_t& tensor_, BC::size_t  start) :       \
-                tensor(tensor_) {                                \
-                                                                 \
-            _begin += start;                                     \
-        }                                                        \
-        iterator_name(der_t& tensor_, BC::size_t  start, BC::size_t  end) :      \
-                tensor(tensor_) {                                \
-            _begin += start;                                     \
-            _end = end;                                          \
-        }                                                        \
-        auto begin() {                                           \
-            return _begin;                                       \
-        }                                                        \
-        const begin_t& cbegin() const {                          \
-            return _begin;                                       \
-        }                                                        \
-        const end_t& end() const {                               \
-            return _end;                                         \
-        }                                                        \
-                                                                 \
-    };                                                           \
-                                                                 \
- template<class der_t, class... args>                            \
- static auto make_##iterator_name (der_t& p_derived, args... params) {    \
-       return iterator_name<der_t>(p_derived, params...);                 \
- }                                                                        \
+	template<class der_t>									\
+	struct iterator_name {									\
+															\
+		der_t& tensor;										\
+															\
+		using begin_t = decltype(tensor.begin_func ());		\
+		using end_t = decltype(tensor.end_func ());			\
+															\
+		begin_t _begin = tensor.begin_func();				\
+		end_t _end = tensor.end_func();						\
+															\
+		iterator_name(der_t& tensor_) :						\
+				tensor(tensor_) {							\
+		}													\
+															\
+		iterator_name(der_t& tensor_, BC::size_t  start):	\
+				tensor(tensor_) {							\
+															\
+			_begin += start;								\
+		}													\
+		iterator_name(der_t& tensor_, BC::size_t  start, BC::size_t  end):	\
+				tensor(tensor_) {							\
+			_begin += start;								\
+			_end = end;										\
+		}													\
+		auto begin() {										\
+			return _begin;									\
+		}													\
+		const begin_t& cbegin() const {						\
+			return _begin;									\
+		}													\
+		const end_t& end() const {							\
+			return _end;									\
+		}													\
+															\
+	};														\
+															\
+ template<class der_t, class... args>						\
+ static auto make_##iterator_name (der_t& p_derived, args... params) {	\
+	   return iterator_name<der_t>(p_derived, params...);				 \
+ }																		\
 
 BC_TENSOR_tensor_iterator_dimension_DEF(ND_ForwardIterator, nd_begin, nd_end)
 BC_TENSOR_tensor_iterator_dimension_DEF(ND_ReverseIterator, nd_rbegin, nd_rend)
@@ -230,28 +239,34 @@ BC_TENSOR_tensor_iterator_dimension_DEF(CW_ReverseIterator, cw_rbegin, cw_rend)
 
 #undef BC_TENSOR_tensor_iterator_dimension_DEF
 
-	template<class... params> auto cw_iter(params ... ps) {
+	template<class... params> auto cw_iter(params... ps) {
 		return make_CW_ForwardIterator(as_derived(), ps...);
 	}
-	template<class... params> auto cw_reverse_iter(params ... ps) {
-		return make_CW_ReverseIterator(as_derived(), ps...);
-	}
-	template<class... params> auto cw_iter(params ... ps) const {
-		return make_CW_ForwardIterator(as_derived(), ps...);
-	}
-	template<class... params> auto cw_reverse_iter(params ... ps) const {
+
+	template<class... params> auto cw_reverse_iter(params... ps) {
 		return make_CW_ReverseIterator(as_derived(), ps...);
 	}
 
-	template<class... params> auto nd_iter(params ... ps) {
+	template<class... params> auto cw_iter(params... ps) const {
+		return make_CW_ForwardIterator(as_derived(), ps...);
+	}
+
+	template<class... params> auto cw_reverse_iter(params... ps) const {
+		return make_CW_ReverseIterator(as_derived(), ps...);
+	}
+
+	template<class... params> auto nd_iter(params... ps) {
 		return make_ND_ForwardIterator(as_derived(), ps...);
 	}
+
 	template<class... params> auto nd_reverse_iter(params ... ps) {
 		return make_ND_ReverseIterator(as_derived(), ps...);
 	}
+
 	template<class... params> auto nd_iter(params ... ps) const {
 		return make_ND_ForwardIterator(as_derived(), ps...);
 	}
+
 	template<class... params> auto nd_reverse_iter(params ... ps) const {
 		return make_ND_ReverseIterator(as_derived(), ps...);
 	}
@@ -259,12 +274,15 @@ BC_TENSOR_tensor_iterator_dimension_DEF(CW_ReverseIterator, cw_rbegin, cw_rend)
 	template<class... params> auto iter(params ... ps) {
 		return nd_iter();
 	}
+
 	template<class... params> auto reverse_iter(params ... ps) {
 		return nd_reverse_iter();
 	}
+
 	template<class... params> auto iter(params ... ps) const {
 		return nd_iter();
 	}
+
 	template<class... params> auto reverse_iter(params ... ps) const {
 		return nd_reverse_iter();
 	}
@@ -278,17 +296,26 @@ using BC_sum_t = std::conditional_t<std::is_same<typename Expression::value_type
 }
 
 template<class Expression>
-auto value_sum(const Tensor_Base<Expression>& tensor) {
+auto value_sum(const Tensor_Base<Expression>& tensor)
+{
 	using sum_value_type = BC_sum_t<Expression>;
-	return BC::algorithms::accumulate(BC::streams::select_on_get_stream(tensor),
-			tensor.cw_cbegin(), tensor.cw_cend(), sum_value_type(0));
+	return BC::algorithms::accumulate(
+			BC::streams::select_on_get_stream(tensor),
+			tensor.cw_cbegin(),
+			tensor.cw_cend(),
+			sum_value_type(0));
 }
 
 template<class Expression>
-auto prod(const Tensor_Base<Expression>& tensor) {
+auto prod(const Tensor_Base<Expression>& tensor)
+{
 	using value_type = typename Expression::value_type;
-	return BC::algorithms::accumulate(BC::streams::select_on_get_stream(tensor),
-			tensor.cw_cbegin(), tensor.cw_cend(), value_type(1), BC::oper::mul);
+	return BC::algorithms::accumulate(
+			BC::streams::select_on_get_stream(tensor),
+			tensor.cw_cbegin(),
+			tensor.cw_cend(),
+			value_type(1),
+			BC::oper::mul);
 }
 
 template<class Expression>
@@ -297,20 +324,30 @@ static bool all(const Tensor_Base<Expression>& tensor) {
 }
 
 template<class Expression>
-static bool any(const Tensor_Base<Expression>& tensor) {
+static bool any(const Tensor_Base<Expression>& tensor){
 	return value_sum(logical(tensor)) != 0;
 }
 
 
 template<class Expression>
-static auto max(const Tensor_Base<Expression>& tensor) {
-	auto max_index = BC::algorithms::max_element(BC::streams::select_on_get_stream(tensor), tensor.cbegin(), tensor.cend());
+static auto max(const Tensor_Base<Expression>& tensor)
+{
+	auto max_index = BC::algorithms::max_element(
+			BC::streams::select_on_get_stream(tensor),
+			tensor.cbegin(),
+			tensor.cend());
+
 	return tensor(max_index);
 }
 
 template<class Expression>
-static auto min(const Tensor_Base<Expression>& tensor) {
-	auto min_index = BC::algorithms::min_element(BC::streams::select_on_get_stream(tensor), tensor.cbegin(), tensor.cend());
+static auto min(const Tensor_Base<Expression>& tensor)
+{
+	auto min_index = BC::algorithms::min_element(
+			BC::streams::select_on_get_stream(tensor),
+			tensor.cbegin(),
+			tensor.cend());
+
 	return tensor(min_index);
 }
 

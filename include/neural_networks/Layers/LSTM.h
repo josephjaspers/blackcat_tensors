@@ -35,7 +35,8 @@ struct LSTM : public Layer_Base {
 	using forward_requires_outputs = std::true_type;
 	using backward_requires_outputs = std::true_type;
 	using requires_extra_cache = std::true_type;
-
+	using defines_predict = std::true_type;
+	using defines_single_predict = std::true_type;
 
 private:
 
@@ -62,13 +63,18 @@ private:
 	using is_recurrent = std::true_type;
 
 	template<char C>
-	using key_type = BC::nn::cache_key<BC::utility::Name<C>, mat, is_recurrent>;
+	using key_type = BC::nn::cache_key<
+			BC::utility::Name<C>, mat, is_recurrent>;
 
 	using cell_key = key_type<'c'>;
 	using forget_key = key_type<'f'>;
 	using input_key = key_type<'i'>;
 	using write_key = key_type<'z'>;
 	using output_key = key_type<'o'>;
+
+	using predict_cell_key = BC::nn::cache_key<
+			BC::utility::Name<'p','c'>, vec, is_recurrent>;
+
 
 public:
 
@@ -122,17 +128,40 @@ public:
 		zero_gradients();
 	}
 
-public:
-
 	template<class X, class Y>
 	auto forward_propagation(const X& x, const Y& y, Cache& cache) {
-		auto& f = cache.store(forget_key(), f_g(wf * x + rf * y + bf));
-		auto& z = cache.store(write_key(),  z_g(wz * x + rz * y + bz));
-		auto& i = cache.store(input_key(),  i_g(wi * x + ri * y + bi));
-		auto& o = cache.store(output_key(), o_g(wo * x + ro * y + bo));
+		mat& f = cache.store(forget_key(), f_g(wf * x + rf * y + bf));
+		mat& z = cache.store(write_key(),  z_g(wz * x + rz * y + bz));
+		mat& i = cache.store(input_key(),  i_g(wi * x + ri * y + bi));
+		mat& o = cache.store(output_key(), o_g(wo * x + ro * y + bo));
+		mat& c = cache.load(cell_key(), default_tensor_factory());
+		c = c % f + z % i; //% element-wise multiplication
+
+		mat& c_ = cache.store(cell_key(), c);
+		return c_g(c_) % o;
+	}
+
+	template<class X, class Y>
+	auto predict(const X& x, const Y& y, Cache& cache) {
+		mat f = f_g(wf * x + rf * y + bf);
+		mat z = z_g(wz * x + rz * y + bz);
+		mat i = i_g(wi * x + ri * y + bi);
+		mat o = o_g(wo * x + ro * y + bo);
+		mat& c = cache.load(cell_key(), default_tensor_factory());
+		c = c % f + z % i; //%  element-wise multiplication
+		mat& c_ = cache.store(cell_key(), c);
+		return c_g(c_) % o;
+	}
+
+	template<class X, class Y>
+	auto single_predict(const X& x, const Y& y, Cache& cache) {
+		vec f = f_g(wf * x + rf * y + bf);
+		vec z = z_g(wz * x + rz * y + bz);
+		vec i = i_g(wi * x + ri * y + bi);
+		vec o = o_g(wo * x + ro * y + bo);
+		vec& c = cache.load(predict_cell_key(), [&]() { return vec(this->output_size()).zero(); });
 
 		c = c % f + z % i; //%  element-wise multiplication
-		cache.store(cell_key(), c);
 		return c_g(c) % o;
 	}
 
@@ -148,12 +177,12 @@ public:
 			ro_gradients -= do_ * y.t();
 		}
 
-		auto& z = cache.load(write_key());
-		auto& i = cache.load(input_key());
-		auto& f = cache.load(forget_key());
-		auto& o = cache.load(output_key());
-		auto& cm1 = cache.load(cell_key(), -1);
-		auto& c = cache.load(cell_key());
+		auto& z = cache.load(write_key(), default_tensor_factory());
+		auto& i = cache.load(input_key(), default_tensor_factory());
+		auto& f = cache.load(forget_key(), default_tensor_factory());
+		auto& o = cache.load(output_key(), default_tensor_factory());
+		auto& cm1 = cache.load(cell_key(), -1, default_tensor_factory());
+		auto& c = cache.load(cell_key(), default_tensor_factory());
 
 		dy = delta_outputs +
 				rz.t() * dz +
@@ -164,7 +193,7 @@ public:
 		do_ = dy % c_g(c) % o_g.cached_dx(o);
 
 		if (cache.get_time_index() != 0) {
-			auto& fp1 = cache.load(forget_key(), 1);
+			auto& fp1 = cache.load(forget_key(), 1, default_tensor_factory());
 			dc = dy % o % c_g.dx(c) + dc % fp1;
 		} else {
 			dc = dy % o % c_g.dx(c);
@@ -311,6 +340,17 @@ public:
 
 #undef LSTM_GETTER
 #undef LSTM_GATE_GETTER
+
+private:
+
+	auto default_tensor_factory() {
+		return [&]() {
+			mat m(this->output_size(), this->batch_size());
+			m.zero();
+			return m;
+		};
+	}
+
 
 };
 

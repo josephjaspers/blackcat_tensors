@@ -41,15 +41,24 @@ struct NeuralNetwork {
 	NeuralNetwork(Layers... layers):
 		m_layer_chain(layers...) {}
 
-	template<class T> auto back_propagation(const T& tensor_expected) {
-		auto dx =  m_layer_chain.tail().bp(tensor_expected);
-		m_layer_chain.for_each([&](auto& layer) { layer.inc_bp_index(); });
+	template<class T> auto back_propagation(const T& tensor) {
+		auto dx =  m_layer_chain.tail().bp(tensor);
+		m_layer_chain.for_each([&](auto& layer) { layer.increment_time_index(); });
 		return dx;
 	}
 
-	template<class T> auto forward_propagation(const T& tensor_expected) {
-		m_layer_chain.for_each([&](auto& layer) { layer.zero_bp_index(); });
-		return m_layer_chain.head().fp(tensor_expected);
+	template<class T> auto forward_propagation(const T& tensor) {
+		m_layer_chain.for_each([&](auto& layer) { layer.zero_time_index(); });
+		return m_layer_chain.head().fp(tensor);
+	}
+
+	template<class T> auto predict(const T& tensor) {
+		m_layer_chain.for_each([&](auto& layer) { layer.zero_time_index(); });
+		return m_layer_chain.head().predict(tensor);
+	}
+
+	template<class T> auto single_predict(const T& tensor) {
+		return m_layer_chain.head().single_predict(tensor);
 	}
 
 	template<int X> auto& get_layer() const { return m_layer_chain.get(BC::traits::Integer<X>()); }
