@@ -58,7 +58,7 @@ private:
 	vec bf_gradients, bz_gradients, bi_gradients, bo_gradients;
 
 	mat dc, df, dz, di, do_, dy;
-	mat c;
+
 
 	using is_recurrent = std::true_type;
 
@@ -249,7 +249,7 @@ public:
 				return m;
 		};
 
-		for (auto& tensor: reference_list(dc, df, dz, di, do_, dy, c)) {
+		for (auto& tensor: reference_list(dc, df, dz, di, do_, dy)) {
 			tensor = make_default();
 		}
 	}
@@ -297,8 +297,17 @@ public:
 		loader.save_variable(wo, "wo");
 		loader.save_variable(ro, "ro");
 		loader.save_variable(bo, "bo");
+	}
 
-		loader.save_variable(c, "c");
+	void save_from_cache(Layer_Loader& loader, Cache& cache) {
+		auto& c = cache.load(cell_key(), default_tensor_factory());
+		loader.save_variable(c, "cellstate");
+
+
+		if (cache.contains(predict_cell_key())) {
+			auto& pc = cache.load(predict_cell_key());
+			loader.save_variable(pc, "predict_celltate");
+		}
 	}
 
 	void load(Layer_Loader& loader) {
@@ -317,9 +326,18 @@ public:
 		loader.load_variable(wo, "wo");
 		loader.load_variable(ro, "ro");
 		loader.load_variable(bo, "bo");
-
-		loader.load_variable(c, "c");
 	}
+
+	void load_from_cache(Layer_Loader& loader, Cache& cache) {
+		auto& c = cache.load(cell_key(), default_tensor_factory());
+		loader.load_variable(c, "cellstate");
+
+		if (loader.file_exists(1, "cellstate")) {
+			auto& pc = cache.load(predict_cell_key());
+			loader.load_variable(pc, "predict_celltate");
+		}
+	}
+
 
 	auto get_learning_rate() const { return lr; }
 
@@ -336,7 +354,6 @@ public:
 	LSTM_GATE_GETTER(input, i)
 	LSTM_GATE_GETTER(write, z)
 	LSTM_GATE_GETTER(output, o)
-	LSTM_GETTER(cellstate, c)
 
 #undef LSTM_GETTER
 #undef LSTM_GATE_GETTER

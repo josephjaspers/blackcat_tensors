@@ -26,6 +26,9 @@ struct Layer_Manager: Layer {
 	Layer_Manager(Args... args):
 		Layer(args...) {}
 
+	template<class D, class L, class R, class A>
+	friend class Layer_Manager;
+
 	using input_tensor_dimension = typename layer_traits<Layer>::input_tensor_dimension;
 	using output_tensor_dimension = typename layer_traits<Layer>::output_tensor_dimension;
 	using is_recurrent = Neural_Network_Is_Recurrent;
@@ -56,27 +59,18 @@ struct Layer_Manager: Layer {
 
 	using requires_extra_cache = typename layer_traits<Layer>::requires_extra_cache;
 
-	using batched_input_key = cache_key<
-			BC::utility::Name<'X'>,
-			batched_input_tensor_type,
-			is_recurrent>;
+	template<char C, class Tensor, class isRecurrent=std::true_type>
+	using key_type = cache_key<BC::utility::Name<C>, Tensor, isRecurrent>;
 
-	using batched_delta_key = cache_key<
-			BC::utility::Name<'D'>,
-			batched_output_tensor_type,
-			std::false_type>;
-
-	using input_key = cache_key<
-			BC::utility::Name<'X'>,
-			input_tensor_type,
-			is_recurrent>;
-
-	using delta_key = cache_key<
-			BC::utility::Name<'D'>,
-			output_tensor_type,
-			std::false_type>;
+	using batched_input_key = key_type<'X', batched_input_tensor_type>;
+	using batched_delta_key = key_type<'D', batched_input_tensor_type, std::false_type>;
+	using input_key = key_type<'X', input_tensor_type>;
+	using delta_key = key_type<'D', input_tensor_type, std::false_type>;
 
 	Cache m_cache;
+
+	Cache& get_cache() { return m_cache; }
+	const Cache& get_cache() const { return m_cache; }
 
 	void zero_time_index() {
 		m_cache.zero_time_index();
@@ -88,7 +82,7 @@ struct Layer_Manager: Layer {
 
 private:
 
-	auto default_batched_input_tensor_factory() {
+	auto default_batched_input_tensor_factory() const {
 		return [&]() {
 			batched_input_tensor_type in(this->get_batched_input_shape());
 			in.zero();
@@ -96,7 +90,7 @@ private:
 		};
 	}
 
-	auto default_batched_output_tensor_factory() {
+	auto default_batched_output_tensor_factory() const {
 		return [&]() {
 			batched_output_tensor_type out(this->get_batched_output_shape());
 			out.zero();
@@ -104,35 +98,60 @@ private:
 		};
 	}
 
-
 public:
 
 	template<class T>
 	auto forward_propagation(const T& expression) {
+		BC_ASSERT(expression.get_shape() == this->get_batched_input_shape(),
+				"forward_propagation input must have the same shape as "
+					"get_batched_input_shape() of the current layer "
+					"(Invalid input dimensions)");
+
 		return forward_supply_outputs(
 				typename layer_traits<Layer>::forward_requires_outputs(),
-				this->m_cache.store(batched_input_key(), expression));
+				store_batched_inputs(expression));
 	}
 
 	template<class T>
 	auto back_propagation(const T& dy) {
+		BC_ASSERT(dy.get_shape() == this->get_batched_output_shape(),
+				"back_propagation input must have the same shape as "
+					"get_batched_output_shape() of the current layer "
+					"(Invalid input dimensions)");
+
+
 		return backward_supply_outputs(
 				typename layer_traits<Layer>::backward_requires_outputs(),
-				m_cache.load(batched_input_key(), default_batched_input_tensor_factory()),
+				get_batched_inputs(),
 				maybe_cache_delta(dy));
 	}
 
+	//TODO batched_predict_input_key
 	template<class T>
 	auto predict(const T& expression) {
+		BC_ASSERT(expression.get_shape() == this->get_batched_input_shape(),
+				"predict<T> input must have the same shape as "
+					"get_batched_input_shape() of the current layer "
+					"(Invalid input dimensions)");
+
+
 		return predict_supply_outputs(
 				typename layer_traits<Layer>::forward_requires_outputs(),
-				this->m_cache.store(batched_input_key(), expression));
+				store_batched_inputs(expression));
 	}
 
+	//TODO input_key -> predict_input_key
 	template<class T>
 	auto single_predict(const T& expression) {
-		static_assert(T::tensor_dimension == layer_traits<Layer>::input_tensor_dimension::value,
-				"assert same dimension as layer");
+		BC_ASSERT(expression.get_shape() == this->get_input_shape(),
+				"single_predict<T> input must have the same shape as "
+					"get_input_shape() of the current layer "
+					"(Invalid input dimensions)");
+
+		static_assert(T::tensor_dimension ==
+						layer_traits<Layer>::input_tensor_dimension::value,
+						"assert same dimension as layer");
+
 		return single_predict_supply_outputs(
 				typename layer_traits<Layer>::forward_requires_outputs(),
 				this->m_cache.store(input_key(), expression));
@@ -144,7 +163,45 @@ public:
 		Layer::clear_bp_storage(m_cache);
 	}
 
+	void save(Layer_Loader& loader) {
+		int t_index = m_cache.get_time_index();
+		m_cache.zero_time_index();
+		loader.save_variable(get_batched_inputs(), "x");
+
+		Layer::save(loader);
+		Layer::save_from_cache(loader, m_cache);
+
+		m_cache.set_time_index(t_index);
+	}
+
+	void load (Layer_Loader& loader) {
+		int t_index = m_cache.get_time_index();
+		m_cache.zero_time_index();
+		loader.load_variable(get_batched_inputs(), "x");
+
+		Layer::load(loader);
+		Layer::load_to_cache(loader, m_cache);
+
+		m_cache.set_time_index(t_index);
+	}
+
 private:
+
+	auto& get_batched_inputs() {
+		return m_cache.load(
+				batched_input_key(),
+				default_batched_input_tensor_factory());
+	}
+
+	template<class X>
+	auto& store_batched_inputs(const X& x) {
+		return this->m_cache.store(batched_input_key(), x);
+	}
+
+	auto& next_layer() {
+		return BC::traits::derived_cast(*this).next().layer();
+	}
+
 
 
 	// Handle Forward Args ------------------------------------------------
@@ -156,8 +213,7 @@ private:
 
 	template<class Input>
 	auto forward_supply_outputs(std::true_type, const Input& inputs) {
-		using key_type = typename std::decay_t<decltype(BC::traits::derived_cast(*this).next().layer())>::batched_input_key;
-		auto& outputs = BC::traits::derived_cast(*this).next().layer().m_cache.load(key_type(), default_batched_output_tensor_factory());
+		auto& outputs = next_layer().get_batched_inputs();
 		return forward_supply_cache(requires_extra_cache(), inputs, outputs);
 	}
 
@@ -180,8 +236,7 @@ private:
 
 	template<class Input>
 	auto predict_supply_outputs(std::true_type, const Input& inputs) {
-		using key_type = typename std::decay_t<decltype(BC::traits::derived_cast(*this).next().layer())>::batched_input_key;
-		auto& outputs = BC::traits::derived_cast(*this).next().layer().m_cache.load(key_type(), default_batched_output_tensor_factory());
+		auto& outputs = next_layer().get_batched_inputs();
 		return predict_supply_cache(requires_extra_cache(), inputs, outputs);
 	}
 
@@ -199,15 +254,19 @@ private:
 
 	template<class X>
 	auto single_predict_supply_outputs(std::false_type, const X& inputs) {
-		static_assert(X::tensor_dimension == input_tensor_dimension::value, "dim == input_shape");
+		static_assert(X::tensor_dimension == input_tensor_dimension::value,
+				"Assert single-batch dim for Neural_Network.predict()");
 		return single_predict_supply_cache(requires_extra_cache(), inputs);
 	}
 
 	template<class Input>
 	auto single_predict_supply_outputs(std::true_type, const Input& inputs) {
-		using key_type = typename std::decay_t<decltype(BC::traits::derived_cast(*this).next().layer())>::input_key;
-		auto& outputs = BC::traits::derived_cast(*this).next().layer().m_cache.load(key_type(),
-				[&]() { input_tensor_type x(this->get_output_shape()); x.zero(); return x; });
+		auto default_factory = [&]() {
+			return input_tensor_type(this->get_output_shape()).zero();
+		};
+
+		using key_type = typename std::decay_t<decltype(next_layer())>::input_key;
+		auto& outputs = next_layer().m_cache.load(key_type(), default_factory);
 		return single_predict_supply_cache(requires_extra_cache(), inputs, outputs);
 	}
 
@@ -230,9 +289,7 @@ private:
 
 	template<class Input, class Dy>
 	auto backward_supply_outputs(std::true_type,  const Input& inputs, const Dy& delta) {
-		auto& next_layer = BC::traits::derived_cast(*this).next().layer();
-		using key_type = typename std::decay_t<decltype(next_layer)>::batched_input_key;
-		auto& outputs = next_layer.m_cache.load(key_type(), default_batched_output_tensor_factory());
+		auto& outputs = next_layer().get_batched_inputs();
 		return backward_supply_cache(requires_extra_cache(), inputs, outputs, delta);
 	}
 
@@ -248,16 +305,17 @@ private:
 
 	template<class T>
 	auto&& maybe_cache_delta(const T& dy) {
-		return maybe_cache_delta_impl(dy, typename layer_traits<Layer>::greedy_evaluate_delta());;
+		return maybe_cache_delta_impl(
+				typename layer_traits<Layer>::greedy_evaluate_delta(), dy);
 	}
 
 	template<class T>
-	auto&& maybe_cache_delta_impl(const T& dy, std::true_type cache_delta) {
+	auto&& maybe_cache_delta_impl(std::true_type cache_delta, const T& dy) {
 		return m_cache.store(batched_delta_key(), dy);
 	}
 
 	template<class T>
-	const T& maybe_cache_delta_impl(const T& dy, std::false_type cache_delta) {
+	const T& maybe_cache_delta_impl(std::false_type cache_delta, const T& dy) {
 		return dy;
 	}
 };

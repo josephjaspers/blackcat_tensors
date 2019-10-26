@@ -13,6 +13,11 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#if __has_include(<experimental/filesystem>)
+#include <experimental/filesystem>
+#define BC_USE_EXPERIMENTAL_FILE_SYSTEM 1
+#endif
+
 namespace BC {
 namespace nn {
 
@@ -54,17 +59,6 @@ struct Layer_Loader {
 		load_variable(tensor, variable_name, BC::traits::Integer<T::tensor_dimension>());
 	}
 
-
-private:
-
-	template<class T>
-	std::string path_from_args(const T& tensor,std::string variable_name) {
-		return current_layer_subdir()
-				+ bc_directory_separator()
-				+ variable_name
-				+ "." + dimension_to_tensor(BC::traits::Integer<T::tensor_dimension>());
-	}
-
 	template<class T>
 	void load_variable(T& tensor, std::string variable_name, BC::traits::Integer<1>) {
 		using value_type = typename T::value_type;
@@ -79,13 +73,42 @@ private:
 		tensor = BC::io::read_uniform<value_type>(descriptor, tensor.get_allocator());
 	}
 
-	static std::string dimension_to_tensor(BC::traits::Integer<0>) { return "scl"; }
-	static std::string dimension_to_tensor(BC::traits::Integer<1>) { return "vec"; }
-	static std::string dimension_to_tensor(BC::traits::Integer<2>) { return "mat"; }
-	static std::string dimension_to_tensor(BC::traits::Integer<3>) { return "cube"; }
-	static std::string dimension_to_tensor(BC::traits::Integer<4>) { return "t4"; }
-	static std::string dimension_to_tensor(BC::traits::Integer<5>) { return "t5"; }
 
+private:
+
+	std::string path_from_args(int dimension, std::string variable_name) {
+		return current_layer_subdir()
+				+ bc_directory_separator()
+				+ variable_name
+				+ "." + dimension_to_tensor_name(dimension);
+	}
+
+	template<class T>
+	std::string path_from_args(const T& tensor,std::string variable_name) {
+		return path_from_args(T::tensor_dimension, variable_name);
+	}
+
+	bool file_exists(int dimension, std::string filename) {
+		return file_exists(path_from_args(dimension, filename));
+	}
+
+	bool file_exists(std::string filename) {
+#ifdef BC_USE_EXPERIMENTAL_FILE_SYSTEM
+		return std::experimental::filesystem::exists(filename);
+#else
+		return std::ifstream(filename).good();
+#endif
+	}
+
+	static std::string dimension_to_tensor_name(int dimension) {
+		switch(dimension) {
+		case 0: return "scl";
+		case 1: return "vec";
+		case 2: return "mat";
+		case 3: return "cube";
+		default: return "t" + std::to_string(dimension);
+		}
+	}
 };
 
 
@@ -94,5 +117,5 @@ private:
 
 
 
-
+#undef BC_USE_EXPERIMENTAL_FILE_SYSTEM
 #endif /* LAYER_LOADER_H_ */

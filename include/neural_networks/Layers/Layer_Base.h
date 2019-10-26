@@ -56,6 +56,9 @@ public:
 		m_output_sz = outputs;
 	}
 
+	/**Returns the derived_classes class name.
+	 * Note: Architecture dependent
+	 */
 	std::string classname() const { return m_classname; }
 	std::string get_string_architecture() const {
 		std::string yaml_str =  classname() + ':'
@@ -77,6 +80,7 @@ public:
 	void add_architecture_features(std::string features) {
 		m_additional_architecture_features+= features;
 	}
+
 	void clear_architecture_features() {
 		m_additional_architecture_features = "";
 	}
@@ -87,12 +91,12 @@ public:
 	BC::Shape<2> get_batched_input_shape() const { return BC::Shape<2>(m_input_sz, m_batch_sz); }
 	BC::Shape<2> get_batched_output_shape() const { return BC::Shape<2>(m_output_sz, m_batch_sz); }
 
-	BC::size_t  input_size() const { return m_input_sz; }
-	BC::size_t  output_size() const { return m_output_sz; }
-	BC::size_t  batch_size()   const { return m_batch_sz; }
+	BC::size_t input_size() const { return m_input_sz; }
+	BC::size_t output_size() const { return m_output_sz; }
+	BC::size_t batch_size() const { return m_batch_sz; }
 
-	BC::size_t  batched_input_size() const { return m_input_sz * m_batch_sz; }
-	BC::size_t  batched_output_size() const { return m_output_sz * m_batch_sz; }
+	BC::size_t batched_input_size() const { return m_input_sz * m_batch_sz; }
+	BC::size_t batched_output_size() const { return m_output_sz * m_batch_sz; }
 
 	void set_batch_size(int bs) { m_batch_sz = bs;}
 	void set_learning_rate(int) {}
@@ -100,7 +104,9 @@ public:
 	void clear_bp_storage(Cache&) {}
 
 	void save(Layer_Loader&) {};
+	void save_from_cache(Layer_Loader&, Cache&) {}
 	void load(Layer_Loader&) {};
+	void load_to_cache(Layer_Loader&, Cache&) {}
 
 
 };

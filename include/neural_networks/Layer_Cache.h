@@ -46,6 +46,11 @@ private:
 
 public:
 
+	template<class K, class V, class R>
+	bool contains(key_type<K,V,R> key) {
+		return cache.contains(key);
+	}
+
 	template<class K, class V>
 	auto& load(key_type<K, V, std::true_type> key, int t_modifier=0) {
 		std::vector<V>& history = cache[hash(key)];
@@ -60,7 +65,8 @@ public:
 	}
 
 	template<class K, class V>
-	auto& load(key_type<K, V, std::false_type> key) {
+	auto& load(key_type<K, V, std::false_type> key, int t_modifier=0) {
+		BC_ASSERT(t_modifier==0, "Nonrecurrent keys cannot have a time_offset");
 		return cache[hash(key)];
 	}
 
@@ -120,7 +126,8 @@ public:
 	int get_time_index() const { return m_time_index; }
 	void increment_time_index() { m_time_index++; }
 	void decrement_time_index() { m_time_index--; }
-	void zero_time_index() { m_time_index=0; }
+	void zero_time_index() { set_time_index(0); }
+	void set_time_index(int idx) { m_time_index = idx; }
 
 	template<class K, class V>
 	void clear_bp_storage(key_type<K, V, std::false_type> key) {}

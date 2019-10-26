@@ -28,9 +28,6 @@ auto funcName(SystemTag system, BC::size_t inputs) {\
 	return Function<SystemTag, typename SystemTag::default_floating_point_type, BC::TypeName>(inputs); \
 }
 
-
-
-
 BC_NONLINEAR_DEF(Tanh, tanh)
 BC_NONLINEAR_DEF(Logistic, logistic)
 BC_NONLINEAR_DEF(Relu, relu)

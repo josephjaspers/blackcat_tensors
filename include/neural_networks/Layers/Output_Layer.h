@@ -24,7 +24,7 @@ struct Output_Layer : Layer_Base {
 
 	template <class Tensor>
 	const auto& forward_propagation(const Tensor& x) {
-		return x;
+		return x.shallow_copy();
 	}
 
 	template <class TensorX, class TensorY>

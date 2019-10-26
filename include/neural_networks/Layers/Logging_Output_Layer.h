@@ -61,14 +61,17 @@ struct Logging_Output_Layer : Output_Layer<SystemTag,ValueType> {
 	ErrorFunction error_function;
 	std::ostream* logger;
 
-	Logging_Output_Layer(std::ostream& logger_, BC::size_t inputs, ErrorFunction error_function_):
+	Logging_Output_Layer(
+			std::ostream& logger,
+			BC::size_t inputs,
+			ErrorFunction error_function_):
 		parent(inputs),
 		error_function(error_function_),
-		logger(&logger_) {}
+		logger(&logger) {}
 
 	template <class Tensor>
-	const auto& forward_propagation(const Tensor& x) {
-		return x;
+	auto forward_propagation(const Tensor& x) {
+		return x.shallow_copy();
 	}
 
 	Logging_Output_Layer& skip_every(unsigned skip_every_n_backprops_) {

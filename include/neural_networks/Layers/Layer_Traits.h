@@ -130,7 +130,6 @@ struct layer_traits {
 	static auto select_on_single_predict(T& layer, Args&&... args) {
 		return select_on_predict(layer, args...);
 	}
-
 };
 }  // namespace nn
 }  // namespace BC
