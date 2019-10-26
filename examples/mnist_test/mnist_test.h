@@ -52,7 +52,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	using mat  = BC::Matrix<value_type, allocator_type>;
 	using clock = std::chrono::duration<double>;
 
-	auto network = neuralnetwork(
+	auto network = BC::nn::neuralnetwork(
 		BC::nn::feedforward(system_tag, 784, 256),
 		BC::nn::tanh(system_tag, 256),
 		BC::nn::feedforward(system_tag, 256, 10),
@@ -88,7 +88,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 
 	auto end = std::chrono::system_clock::now();
 	std::cout << " training time: " <<  clock(end - start).count() << std::endl;
-
+	{
 	std::cout << " testing... " << std::endl;
 	int test_images = 10;
 	auto images = reshape(inputs[0], BC::shape(28,28, batch_size));
@@ -98,6 +98,32 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 		images[i].t().print_sparse(3);
 		hyps[i].print();
 		std::cout << "------------------------------------" <<std::endl;
+	}
+	}
+	{
+	std::cout << " testing... " << std::endl;
+	int test_images = 10;
+	auto images = reshape(inputs[0], BC::shape(28,28, batch_size));
+	mat hyps = network.predict(inputs[0]);
+	for (int i = 0; i < test_images; ++i) {
+		//print transpose to orient the images correctly
+		images[i].t().print_sparse(3);
+		hyps[i].print();
+		std::cout << "------------------------------------" <<std::endl;
+	}
+	}
+
+	{
+	std::cout << " testing... " << std::endl;
+	int test_images = 10;
+	auto images = reshape(inputs[0], BC::shape(28,28, batch_size));
+	for (int i = 0; i < test_images; ++i) {
+		//print transpose to orient the images correctly
+		images[i].t().print_sparse(3);
+		network.single_predict(inputs[0][i]).print();
+
+		std::cout << "------------------------------------" <<std::endl;
+	}
 	}
 	std::cout << " success " << std::endl;
 	return 0;
