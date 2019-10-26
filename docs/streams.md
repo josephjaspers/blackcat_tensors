@@ -33,9 +33,9 @@ y.get_stream() == y[0].get_stream();
 
 BC::Stream<system_tag> stream;
 
-stream.get_stream().create();		  //calls cudaCreateStream
-stream.get_stream().set_stream(cudaStream_t);  //sets the stream 
-stream.get_stream().set_stream(another_bc_stream_object); 
+stream.create();		  //calls cudaCreateStream
+stream.set_stream(cudaStream_t);  //sets the stream 
+stream.set_stream(another_bc_stream_object); 
 
 ```
 
