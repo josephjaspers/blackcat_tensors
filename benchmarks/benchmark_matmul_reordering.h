@@ -112,8 +112,6 @@ float HC_logistic_matmul_assign(int size, BC::size_t  iters) {
         cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, size, size, size,
                 1.0, b_, size, c_, size, 0, a_, size);
 
-
-//        BC_omp_for__
         for (int j = 0; j < size; ++j) {
             a_[j] = BC::tanh(a_[j] + d_[j]);
         }

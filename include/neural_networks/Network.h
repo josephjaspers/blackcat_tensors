@@ -54,7 +54,7 @@ struct NeuralNetwork {
 	/** Calls forward propagation on each of the neural_network's layers
 	 * The time index will be set to zero prior to each call forward_call.
 	 *
-	 * @param:
+	 * Arguments:
 	 *	A Tensor type with the same shape as the first layer's
 	 *	return value of 'get_batched_input_shape()'
 	 *
@@ -248,6 +248,9 @@ struct NeuralNetwork {
 		});
 	}
 
+	/** Loads a neural network from a previously saved instance.
+	 *  Load expects the neural-network to have been unused in the previous state.
+	 */
 	void load(std::string directory_name) {
 
 		auto get_filepath = [&](std::string filename) {
@@ -274,6 +277,12 @@ struct NeuralNetwork {
 	}
 };
 
+
+/**Factory method for creating neural_networks.
+ * Each layer defines its own respective factory_methods.
+ * It is generally recommended to use these factory methods opposed to
+ * instantiating a layer object manually.
+ */
 template<class ... Layers>
 auto neuralnetwork(Layers ... layers) {
 	return NeuralNetwork<Layers...>(layers...);
