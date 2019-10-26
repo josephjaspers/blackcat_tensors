@@ -41,6 +41,7 @@ auto network = neuralnetwork(
 ```
 [MNIST example](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/examples/mnist_test/mnist_test.h)  
 [MNIST example output](https://travis-ci.org/josephjaspers/BlackCat_Tensors)  
+[Neural Network Documentation](file:///home/joseph/BlackCat_Tensors/BlackCat_Tensors/autodocs/docs/html/namespaceBC_1_1nn.html)
 
 #### Setup:
 BCT is a header only library that supports compilation with the NVCC and G++ BCT does not support any default BLAS routines, and must be linked with an apropriate BLAS library. Setting up simply requires adding the BlackCat_Tensors your path and including "BlackCat_Tensors.h"
