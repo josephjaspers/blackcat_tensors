@@ -1,0 +1,18 @@
+LSTM:
+	inputs: 196
+	outputs: 128
+FeedForward:
+	inputs: 128
+	outputs: 64
+Tanh:
+	inputs: 64
+	outputs: 64
+FeedForward:
+	inputs: 64
+	outputs: 10
+SoftMax:
+	inputs: 10
+	outputs: 10
+Output_Layer:
+	inputs: 10
+	outputs: 10

@@ -97,39 +97,49 @@ struct layer_traits {
 	using greedy_evaluate_delta = BC::traits::conditional_detected_t<
 			detail::query_greedy_evaluate_delta, T, std::false_type>;
 
-	template<
-		class... Args,
-		class=std::enable_if_t<BC::traits::is_detected_v<
-				detail::query_defines_predict, T>>>
+
+	template<class... Args>
 	static auto select_on_predict(T& layer, Args&&... args) {
+		using detected =
+				BC::traits::truth_type<
+						BC::traits::is_detected_v<
+								detail::query_defines_predict, T>>;
+		return select_on_predict(detected(), layer, std::forward<Args>(args)...);
+	}
+
+	template<class... Args>
+	static auto select_on_single_predict(T& layer, Args&&... args) {
+		using detected =
+				BC::traits::truth_type<
+						BC::traits::is_detected_v<
+								detail::query_defines_single_predict, T>>;
+		return select_on_single_predict(detected(), layer, std::forward<Args>(args)...);
+	}
+
+
+private:
+
+	template<class... Args>
+	static auto select_on_predict(std::true_type, T& layer, Args&&... args) {
 		return layer.predict(args...);
 	}
 
-	template<
-		class... Args,
-		class=std::enable_if_t<!BC::traits::is_detected_v<
-				detail::query_defines_predict, T>>,
-		int ADL=0>
-	static auto select_on_predict(T& layer, Args&&... args) {
+	template<class... Args>
+	static auto select_on_predict(std::false_type, T& layer, Args&&... args) {
 		return layer.forward_propagation(args...);
 	}
 
-	template<
-		class... Args,
-		class=std::enable_if_t<BC::traits::is_detected_v<
-				detail::query_defines_single_predict, T>>>
-	static auto select_on_single_predict(T& layer, Args&&... args) {
+	template<class... Args>
+	static auto select_on_single_predict(std::true_type, T& layer, Args&&... args) {
 		return layer.single_predict(args...);
 	}
 
-	template<
-		class... Args,
-		class=std::enable_if_t<!BC::traits::is_detected_v<
-				detail::query_defines_single_predict, T>>,
-		int ADL=0>
-	static auto select_on_single_predict(T& layer, Args&&... args) {
+	template<class... Args>
+	static auto select_on_single_predict(std::false_type, T& layer, Args&&... args) {
 		return select_on_predict(layer, args...);
 	}
+
+
 };
 }  // namespace nn
 }  // namespace BC

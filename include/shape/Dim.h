@@ -172,7 +172,7 @@ public:
 		return rev;
 	}
 
-	template<int Start, int End=N>
+	template<int Start, int End=N> BCINLINE
 	Dim<End-Start> subdim() const {
 		return *(reinterpret_cast<const Dim<End-Start>*>(m_index + Start));
 	}
