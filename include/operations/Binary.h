@@ -111,8 +111,7 @@ namespace oper {
     } equal;
 
     struct Approx_Equal {
-    	static constexpr float epsilon = .01;
-    	BC_FORWARD_DEF(std::abs(lv - rv) < epsilon)
+    	BC_FORWARD_DEF(std::abs(lv - rv) < .00001)
     } approx_equal;
 
     struct Greater {

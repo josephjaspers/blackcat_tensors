@@ -38,7 +38,7 @@ public:
 		class... Integers,
 		class=std::enable_if_t<
 			BC::traits::sequence_of_v<size_t, Integers...> &&
-			(sizeof...(Integers) == N)>>
+			(sizeof...(Integers) == N)>> BCINLINE
 	Shape(Integers... ints):
 		m_inner_shape {ints...} {
 
@@ -47,21 +47,24 @@ public:
 			m_block_shape[i] = m_inner_shape[i-1] * m_block_shape[i-1];
 	}
 
-	template<int X, class=std::enable_if_t<(X > N)>>
+	template<int X, class=std::enable_if_t<(X > N)>> BCINLINE
 	Shape(const Shape<X>& shape):
 		m_inner_shape(shape.m_inner_shape.template subdim<0, N>()),
 		m_block_shape(shape.m_block_shape.template subdim<0, N>()) {}
 
+	BCINLINE
 	Shape(Dim<N> new_shape, const Shape<N>& parent_shape):
 		m_inner_shape(new_shape),
 		m_block_shape(parent_shape.m_block_shape) {}
 
+	BCINLINE
 	Shape(const Shape<N>& new_shape, const Shape<N>& parent_shape):
 		m_inner_shape(new_shape.m_inner_shape),
 		m_block_shape(parent_shape.m_block_shape) {
 	}
 
-	template<int X, class=std::enable_if_t<(X>=N)>>
+
+	template<int X, class=std::enable_if_t<(X>=N)>> BCINLINE
 	Shape(Dim<X> dims):
 		m_inner_shape(dims.template subdim<0, N>()) {
 
@@ -247,12 +250,12 @@ struct Strided_Vector_Shape {
 };
 
 template<class... Integers, typename=std::enable_if_t<traits::sequence_of_v<size_t, Integers...>>>
-auto shape(Integers... ints) {
+BCINLINE auto shape(Integers... ints) {
 	return Shape<sizeof...(Integers)>(ints...);
 }
 
 template<class InnerShape, typename=std::enable_if_t<!traits::sequence_of_v<size_t, InnerShape>>>
-auto shape(InnerShape is) {
+BCINLINE auto shape(InnerShape is) {
 	return Shape<InnerShape::tensor_dimension>(is);
 }
 

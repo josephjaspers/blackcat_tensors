@@ -82,7 +82,6 @@ public:
 	Tensor_Base(const Tensor_Base<U>& tensor):
 		parent(tensor.as_parent()) {}
 
-
 	Tensor_Base(BC::traits::only_if<copy_constructible::value, const self_type&> tensor):
 		parent(tensor.as_parent()) {}
 

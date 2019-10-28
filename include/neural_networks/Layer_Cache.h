@@ -110,16 +110,16 @@ public:
 
 	template<class K, class V, class U>
 	auto& store(key_type<K, V, std::true_type> key, U&& expression) {
-		cache[hash(key)].push_back(expression);
+		cache[hash(key)].push_back(std::forward<U>(expression));
 		return cache[hash(key)].back();
 	}
 
 	template<class K, class V, class U>
 	auto& store(key_type<K, V, std::false_type> key, U&& expression) {
 		if (cache.contains(hash(key))) {
-			return cache[hash(key)] = expression;
+			return cache[hash(key)] = std::forward<U>(expression);
 		} else {
-			return cache[hash(key)] = V(expression);
+			return cache.emplace(hash(key), std::forward<U>(expression));
 		}
 	}
 

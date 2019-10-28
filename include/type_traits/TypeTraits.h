@@ -37,6 +37,19 @@ using namespace BC::traits::common;
 	template<class...> static constexpr bool true_v  = true;
 	template<class...> static constexpr bool false_v = false;
 
+
+	/**
+	 * true_call and false_call are CUDA-supported alternatives for true_v and false_v
+	 * -- CUDA does not support using 'host_variables' on the device (including static-constexpr values)
+	 */
+	template<class T>
+	BCINLINE static constexpr bool true_call() { return true; }
+
+	template<class T>
+	BCINLINE static constexpr bool false_call() { return false; }
+
+
+
 	template<class...> using void_t = void;
 	template<class...> using true_t  = true_type;
 	template<class...> using false_t = false_type;
@@ -202,25 +215,24 @@ using namespace BC::traits::common;
 		return static_cast<derived_type&>(t);
 	}
 
-	template<class Type>
+	template<class Type, class=std::enable_if_t<is_detected_v<query_derived_type, Type>>>
 	const auto& derived_cast(const Type& t) {
 		return static_cast<const typename Type::derived_type&>(t);
 	}
 
-	template<class Type>
+	template<class Type, class=std::enable_if_t<is_detected_v<query_derived_type, Type>>>
 	auto& derived_cast(Type& t) {
 		return static_cast<typename Type::derived_type&>(t);
 	}
 
-
 	//---------------------
-
 	//Only required for NVCC (can't pass std::pair to cuda kernels)
 	template<class T, class U>
 	struct Pair {
 		T first;
 		U second;
 	};
+
 	template<class T, class U> BCINLINE
 	Pair<T, U> make_pair(T t, U u) { return Pair<T, U>{t, u}; }
 
@@ -287,9 +299,7 @@ using namespace BC::traits::common;
 
 
 	template<class T>
-	struct Type : common_traits<T> {
-		using type = T;
-	};
+	struct Type : common_traits<T> {};
 
 }
 

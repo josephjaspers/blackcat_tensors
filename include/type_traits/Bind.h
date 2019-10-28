@@ -30,14 +30,14 @@ using namespace BC::traits::common;
 namespace {
 template<int index>
 struct get_impl {
-    template<class T, class... Ts>
+    template<class T, class... Ts> BCINLINE
     static auto impl(T&& head, Ts&&... params) -> decltype(get_impl<index - 1>::impl(params...)) {
          return get_impl<index - 1>::impl(params...);
     }
 };
 template<>
 struct get_impl<0> {
-    template<class T, class... Ts>
+    template<class T, class... Ts> BCINLINE
     static T&& impl(T&& head, Ts&&... params) {
          return head;
     }
@@ -46,7 +46,7 @@ struct get_impl<0> {
 
 /** Returns the Nth argument in the argument_pack
  */
-template<int index, class... Ts>
+template<int index, class... Ts> BCINLINE
 auto get(Ts&&... params) -> decltype(get_impl<index>::impl(params...)) {
 	return get_impl<index>::impl(params...);
 }

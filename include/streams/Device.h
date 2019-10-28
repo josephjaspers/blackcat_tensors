@@ -9,7 +9,7 @@
 #ifndef BC_CONTEXT_DEVICE_H_
 #define BC_CONTEXT_DEVICE_H_
 
-#include "HostStream.h"
+#include "Host_Stream.h"
 
 #include <cuda.h>
 #include <cuda_runtime.h>

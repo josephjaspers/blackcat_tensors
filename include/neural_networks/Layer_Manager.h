@@ -164,25 +164,15 @@ public:
 	}
 
 	void save(Layer_Loader& loader) {
-		int t_index = m_cache.get_time_index();
-		m_cache.zero_time_index();
 		loader.save_variable(get_batched_inputs(), "x");
-
 		Layer::save(loader);
 		Layer::save_from_cache(loader, m_cache);
-
-		m_cache.set_time_index(t_index);
 	}
 
 	void load (Layer_Loader& loader) {
-		int t_index = m_cache.get_time_index();
-		m_cache.zero_time_index();
 		loader.load_variable(get_batched_inputs(), "x");
-
 		Layer::load(loader);
 		Layer::load_to_cache(loader, m_cache);
-
-		m_cache.set_time_index(t_index);
 	}
 
 private:
@@ -241,13 +231,13 @@ private:
 	}
 
 	template<class... Args>
-	auto predict_supply_cache(std::false_type, const Args&... args) {
-		return layer_traits<Layer>::select_on_predict(*this, args...);
+	auto predict_supply_cache(std::false_type, Args&&... args) {
+		return layer_traits<Layer>::select_on_predict(*this, std::forward<Args>(args)...);
 	}
 
 	template<class... Args>
-	auto predict_supply_cache(std::true_type, const Args&... args) {
-		return layer_traits<Layer>::select_on_predict(*this, args..., m_cache);
+	auto predict_supply_cache(std::true_type, Args&&... args) {
+		return layer_traits<Layer>::select_on_predict(*this, std::forward<Args>(args)..., m_cache);
 	}
 
 	//Handle Single Predict Args  -------------------------------------------
@@ -310,7 +300,7 @@ private:
 	}
 
 	template<class T>
-	auto&& maybe_cache_delta_impl(std::true_type cache_delta, const T& dy) {
+	auto& maybe_cache_delta_impl(std::true_type cache_delta, const T& dy) {
 		return m_cache.store(batched_delta_key(), dy);
 	}
 

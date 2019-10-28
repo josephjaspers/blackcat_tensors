@@ -72,10 +72,7 @@ struct NeuralNetwork {
 			return layer.forward_propagation(X);
 		};
 
-		m_layer_chain.for_each([&](auto& layer) {
-			layer.zero_time_index();
-		});
-
+		zero_time_index();
 		return m_layer_chain.for_each_propagate(fp_caller, tensor);
 	}
 
@@ -109,14 +106,11 @@ struct NeuralNetwork {
 	 */
 	template<class T>
 	auto predict(const T& tensor) {
-		m_layer_chain.for_each([&](auto& layer) {
-			layer.zero_time_index();
-		});
-
 		auto fp_caller = [](auto& layer, const auto& X) {
 			return layer.predict(X);
 		};
 
+		zero_time_index();
 		return m_layer_chain.for_each_propagate(fp_caller, tensor);
 	}
 
@@ -127,14 +121,11 @@ struct NeuralNetwork {
 	 */
 	template<class T>
 	auto single_predict(const T& tensor) {
-		m_layer_chain.for_each([&](auto& layer) {
-			layer.zero_time_index();
-		});
-
 		auto fp_caller = [](auto& layer, const auto& X) {
 			return layer.single_predict(X);
 		};
 
+		zero_time_index();
 		return m_layer_chain.for_each_propagate(fp_caller, tensor);
 	}
 
@@ -168,10 +159,17 @@ struct NeuralNetwork {
 	/**Sets the batch_size of the entire Neural_Network
 	 * The intermediate values are discarded when setting the batch_size.
 	 */
-	void set_batch_size(int x) {
-		m_batch_size = x;
+	void set_batch_size(int batch_sz) {
+		m_batch_size = batch_sz;
 		m_layer_chain.for_each([&](auto& layer) {
-			layer.set_batch_size(x);
+			layer.set_batch_size(batch_sz);
+		});
+	}
+
+
+	void zero_time_index() {
+		m_layer_chain.for_each([&](auto& layer) {
+			layer.zero_time_index();
 		});
 	}
 
@@ -213,6 +211,7 @@ struct NeuralNetwork {
 	 * Than iterates through each layer and calls 'save(int layer_index, std::string directory_name)'
 	 */
 	void save(std::string directory_name) {
+		zero_time_index();
 		//Attempt to create a directory to save our model in
 		if ((directory_name != "") && (directory_name != ".")) {
 			int error = system(std::string("mkdir " + directory_name).c_str());
@@ -252,6 +251,7 @@ struct NeuralNetwork {
 	 *  Load expects the neural-network to have been unused in the previous state.
 	 */
 	void load(std::string directory_name) {
+		zero_time_index();
 
 		auto get_filepath = [&](std::string filename) {
 			return directory_name + bc_directory_separator() + filename;

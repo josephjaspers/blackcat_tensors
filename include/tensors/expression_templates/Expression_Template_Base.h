@@ -20,18 +20,18 @@ struct Expression_Template_Base  {
 
 	BCINLINE
 	const Derived& internal() const {
-		return BC::traits::derived_cast(*this);
+		return static_cast<const Derived&>(*this);
 	}
 
 	BCINLINE
 	Derived& internal() {
-		return BC::traits::derived_cast(*this);
+		return static_cast<Derived&>(*this);
 	}
 
 
 	BCINLINE Expression_Template_Base() {
 
-		using BC::traits::true_v;
+		using BC::traits::true_call;
 		using BC::traits::Integer;
 
 #ifndef _MSC_VER
@@ -41,26 +41,26 @@ struct Expression_Template_Base  {
 		static_assert(std::is_trivially_copyable<Derived>::value,
 				"ExpressionTemplates must be tricially copyable");
 #endif
-		static_assert(true_v<typename Derived::value_type>,
+		static_assert(true_call<typename Derived::value_type>(),
 				"ExpressionTemplates must define: 'using value_type = <T>;'");
 
-		static_assert(true_v<decltype(std::declval<Derived>().inner_shape())>,
+		static_assert(true_call<decltype(std::declval<Derived>().inner_shape())>(),
 				"ExpressionTemplates must define: inner_shape()");
 
-		static_assert(true_v<decltype(std::declval<Derived>().rows())>,
+		static_assert(true_call<decltype(std::declval<Derived>().rows())>(),
 				"ExpressionTemplates must define: rows()");
 
-		static_assert(true_v<decltype(std::declval<Derived>().cols())>,
+		static_assert(true_call<decltype(std::declval<Derived>().cols())>(),
 				"ExpressionTemplates must define: cols()");
 
-		static_assert(true_v<decltype(std::declval<Derived>().dimension(0))>,
+		static_assert(true_call<decltype(std::declval<Derived>().dimension(0))>(),
 				"ExpressionTemplates must define: dimension(int)");
 
-		static_assert(true_v<Integer<Derived::tensor_dimension>>,
+		static_assert(true_call<Integer<Derived::tensor_dimension>>(),
 				"ExpressionTemplates must define: "
 				"static constexpr int tensor_dimension");
 
-		static_assert(true_v<Integer<Derived::tensor_iterator_dimension>>,
+		static_assert(true_call<Integer<Derived::tensor_iterator_dimension>>(),
 				"ExpressionTemplates must define: "
 				"static constexpr int tensor_iterator_dimension");
 	}

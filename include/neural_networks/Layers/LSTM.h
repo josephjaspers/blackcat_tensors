@@ -75,40 +75,39 @@ private:
 	using predict_cell_key = BC::nn::cache_key<
 			BC::utility::Name<'p','c'>, vec, is_recurrent>;
 
-
 public:
 
 	LSTM(int inputs, BC::size_t  outputs):
-		Layer_Base(__func__, inputs, outputs),
-		wf(outputs, inputs),
-		wz(outputs, inputs),
-		wi(outputs, inputs),
-		wo(outputs, inputs),
+			Layer_Base(__func__, inputs, outputs),
+			wf(outputs, inputs),
+			wz(outputs, inputs),
+			wi(outputs, inputs),
+			wo(outputs, inputs),
 
-		wf_gradients(outputs, inputs),
-		wz_gradients(outputs, inputs),
-		wi_gradients(outputs, inputs),
-		wo_gradients(outputs, inputs),
+			wf_gradients(outputs, inputs),
+			wz_gradients(outputs, inputs),
+			wi_gradients(outputs, inputs),
+			wo_gradients(outputs, inputs),
 
-		rf(outputs, outputs),
-		rz(outputs, outputs),
-		ri(outputs, outputs),
-		ro(outputs, outputs),
+			rf(outputs, outputs),
+			rz(outputs, outputs),
+			ri(outputs, outputs),
+			ro(outputs, outputs),
 
-		rf_gradients(outputs, outputs),
-		rz_gradients(outputs, outputs),
-		ri_gradients(outputs, outputs),
-		ro_gradients(outputs, outputs),
+			rf_gradients(outputs, outputs),
+			rz_gradients(outputs, outputs),
+			ri_gradients(outputs, outputs),
+			ro_gradients(outputs, outputs),
 
-		bf(outputs),
-		bz(outputs),
-		bi(outputs),
-		bo(outputs),
+			bf(outputs),
+			bz(outputs),
+			bi(outputs),
+			bo(outputs),
 
-		bf_gradients(outputs),
-		bz_gradients(outputs),
-		bi_gradients(outputs),
-		bo_gradients(outputs) {
+			bf_gradients(outputs),
+			bz_gradients(outputs),
+			bi_gradients(outputs),
+			bo_gradients(outputs) {
 
 		wf.randomize(-1, 0);
 		wz.randomize(-.1, .1);
@@ -149,6 +148,7 @@ public:
 		mat o = o_g(wo * x + ro * y + bo);
 		mat& c = cache.load(cell_key(), default_tensor_factory());
 		c = c % f + z % i; //%  element-wise multiplication
+
 		mat& c_ = cache.store(cell_key(), c);
 		return c_g(c_) % o;
 	}
