@@ -119,7 +119,7 @@ public:
 		if (cache.contains(hash(key))) {
 			return cache[hash(key)] = std::forward<U>(expression);
 		} else {
-			return cache.emplace(hash(key), std::forward<U>(expression));
+			return cache[hash(key)] = V(std::forward<U>(expression));
 		}
 	}
 
