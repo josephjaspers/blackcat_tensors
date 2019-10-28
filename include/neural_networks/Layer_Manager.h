@@ -69,36 +69,13 @@ struct Layer_Manager: Layer {
 
 	Cache m_cache;
 
-	Cache& get_cache() { return m_cache; }
-	const Cache& get_cache() const { return m_cache; }
-
-	void zero_time_index() {
-		m_cache.zero_time_index();
+	const Cache& get_cache() const {
+		return m_cache;
 	}
 
-	void increment_time_index() {
-		m_cache.increment_time_index();
+	Cache& get_cache() {
+		return m_cache;
 	}
-
-private:
-
-	auto default_batched_input_tensor_factory() const {
-		return [&]() {
-			batched_input_tensor_type in(this->get_batched_input_shape());
-			in.zero();
-			return in;
-		};
-	}
-
-	auto default_batched_output_tensor_factory() const {
-		return [&]() {
-			batched_output_tensor_type out(this->get_batched_output_shape());
-			out.zero();
-			return out;
-		};
-	}
-
-public:
 
 	template<class T>
 	auto forward_propagation(const T& expression) {
@@ -175,12 +152,59 @@ public:
 		Layer::load_to_cache(loader, m_cache);
 	}
 
+	void move_training_data_to_single_predict(int batch_index) {
+		Layer::move_training_data_to_single_predict(m_cache, batch_index);
+		get_predict_inputs() = get_batched_inputs()[batch_index];
+	}
+
+	void zero_time_index() {
+		m_cache.zero_time_index();
+	}
+
+	void increment_time_index() {
+		m_cache.increment_time_index();
+	}
+
 private:
 
 	auto& get_batched_inputs() {
 		return m_cache.load(
 				batched_input_key(),
 				default_batched_input_tensor_factory());
+	}
+
+	auto& get_predict_inputs() {
+		return m_cache.load(
+				input_key(),
+				default_input_tensor_factory());
+	}
+
+	auto default_batched_input_tensor_factory() const {
+		return [&]() {
+			auto shape = this->get_batched_input_shape();
+			return batched_input_tensor_type(shape).zero();
+		};
+	}
+
+	auto default_batched_output_tensor_factory() const {
+		return [&]() {
+			auto shape = this->get_batched_output_shape();
+			return batched_output_tensor_type(shape).zero();
+		};
+	}
+
+	auto default_input_tensor_factory() const {
+		return [&]() {
+			auto shape = this->get_input_shape();
+			return input_tensor_type(shape).zero();
+		};
+	}
+
+	auto default_output_tensor_factory() const {
+		return [&]() {
+			auto shape = this->get_output_shape();
+			return output_tensor_type(shape).zero();
+		};
 	}
 
 	template<class X>
@@ -191,8 +215,6 @@ private:
 	auto& next_layer() {
 		return BC::traits::derived_cast(*this).next().layer();
 	}
-
-
 
 	// Handle Forward Args ------------------------------------------------
 

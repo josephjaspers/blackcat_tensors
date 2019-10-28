@@ -159,7 +159,7 @@ public:
 		vec z = z_g(wz * x + rz * y + bz);
 		vec i = i_g(wi * x + ri * y + bi);
 		vec o = o_g(wo * x + ro * y + bo);
-		vec& c = cache.load(predict_cell_key(), [&]() { return vec(this->output_size()).zero(); });
+		vec& c = cache.load(predict_cell_key(), default_predict_tensor_factory());
 
 		c = c % f + z % i; //%  element-wise multiplication
 		return c_g(c) % o;
@@ -338,6 +338,13 @@ public:
 		}
 	}
 
+	void move_training_data_to_single_predict(Cache& cache, int batch_index) {
+		auto& pc = cache.load(predict_cell_key(), default_predict_tensor_factory());
+		auto& c = cache.load(cell_key(), default_tensor_factory());
+		pc = c[batch_index];
+	}
+
+
 
 	auto get_learning_rate() const { return lr; }
 
@@ -368,6 +375,11 @@ private:
 		};
 	}
 
+	auto default_predict_tensor_factory() {
+		 return [&]() {
+			 return vec(this->output_size()).zero();
+		 };
+	}
 
 };
 

@@ -108,6 +108,7 @@ public:
 	void load(Layer_Loader&) {};
 	void load_to_cache(Layer_Loader&, Cache&) {}
 
+	void move_training_data_to_single_predict(Cache&, int batch_index) {}
 
 };
 
