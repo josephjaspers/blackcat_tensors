@@ -140,6 +140,8 @@ public:
 		return c_g(c_) % o;
 	}
 
+#ifndef _MSC_VER
+
 	template<class X, class Y>
 	auto predict(const X& x, const Y& y, Cache& cache) {
 		mat f = f_g(wf * x + rf * y + bf);
@@ -152,6 +154,8 @@ public:
 		mat& c_ = cache.store(cell_key(), c);
 		return c_g(c_) % o;
 	}
+
+#endif
 
 	template<class X, class Y>
 	auto single_predict(const X& x, const Y& y, Cache& cache) {
