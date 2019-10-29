@@ -35,7 +35,11 @@ struct LSTM : public Layer_Base {
 	using forward_requires_outputs = std::true_type;
 	using backward_requires_outputs = std::true_type;
 	using requires_extra_cache = std::true_type;
+
+#ifndef _MSC_VER
 	using defines_predict = std::true_type;
+#endif
+
 	using defines_single_predict = std::true_type;
 
 private:
