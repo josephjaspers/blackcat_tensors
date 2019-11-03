@@ -26,15 +26,11 @@ class Layer_Base {
 	std::string m_directory_save_path;
 	std::string m_additional_architecture_features;
 
+protected:
+
 	BC::size_t m_input_sz;
 	BC::size_t m_output_sz;
 	BC::size_t m_batch_sz;
-
-	static std::string parse_classname(std::string classname) {
-		auto classname_ns = std::find(classname.rbegin(), classname.rend(), ':');
-		classname.erase(classname.rend().base(), classname_ns.base());
-		return classname;
-	}
 
 public:
 
@@ -45,7 +41,7 @@ public:
 	 * of the Layer_Base. `parse_classname()` will normalize the string
 	 * as `__func__` is compiler dependent.
 	 */
-	Layer_Base(std::string classname_, BC::size_t inputs, BC::size_t outputs):
+	Layer_Base(std::string classname_, BC::size_t inputs=0, BC::size_t outputs=0):
 		m_classname(parse_classname(classname_)),
 		m_input_sz(inputs),
 		m_output_sz(outputs),
@@ -61,15 +57,15 @@ public:
 	 */
 	std::string classname() const { return m_classname; }
 	std::string get_string_architecture() const {
-		std::string yaml_str =  classname() + ':'
+		std::string yaml =  classname() + ':'
 				+ "\n\tinputs: " + std::to_string(input_size())
 				+ "\n\toutputs: " + std::to_string(output_size());
 
 		if (m_additional_architecture_features != "") {
-			yaml_str += "\n\t" + m_additional_architecture_features;
+			yaml += "\n\t" + m_additional_architecture_features;
 		}
 
-		return yaml_str;
+		return yaml;
 	}
 
 	/**
@@ -110,6 +106,11 @@ public:
 
 	void move_training_data_to_single_predict(Cache&, int batch_index) {}
 
+	static std::string parse_classname(std::string classname) {
+		auto classname_ns = std::find(classname.rbegin(), classname.rend(), ':');
+		classname.erase(classname.rend().base(), classname_ns.base());
+		return classname;
+	}
 };
 
 }

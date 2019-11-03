@@ -11,4 +11,5 @@
 #include "BlackCat_Stream.h"
 #include "BlackCat_Tensors.h"
 #include "BlackCat_IO.h"
+#include "BlackCat_Caffe.h"
 #include "neural_networks/NeuralNetworks.h"

@@ -77,14 +77,14 @@ struct Dim {
 	template<
 		class... Ints,
 		class=std::enable_if_t<
-				BC::traits::is_sequence_of<BC::size_t, Ints...>>>
+				BC::traits::sequence_of_v<BC::size_t, Ints...>>>
 	BCINLINE
-	auto concat(Ints... value) {
+	auto concat(Ints... value) const {
 		return concat(BC::Dim<sizeof...(Ints)> { value... });
 	}
 
 	template <int X> BCINLINE
-	Dim<N+X> concat(const Dim<X>& other) {
+	Dim<N+X> concat(const Dim<X>& other) const {
 		Dim<N+X> concat_dim;
 
 		for (int i = 0; i < N; ++i)
@@ -181,7 +181,7 @@ public:
 
 
 	BCINLINE
-	bool all(size_t start=0, size_t end=N) const {
+	bool all(size_t start, size_t end) const {
 		for (; start<end; ++start)
 			if (m_index[start] == 0)
 				return false;
@@ -189,13 +189,13 @@ public:
 	}
 
 	BCINLINE
-	bool all(size_t end) const {
+	bool all(size_t end=N) const {
 		return all(0, end);
 	}
 
 
 	BCINLINE
-	value_type sum(size_t start=0, size_t end=N) const {
+	value_type sum(size_t start, size_t end) const {
 		value_type s = 0;
 		for (; start<end; ++start)
 			s *= m_index[start];
@@ -203,13 +203,13 @@ public:
 	}
 
 	BCINLINE
-	value_type sum(size_t end) const {
+	value_type sum(size_t end=N) const {
 		return sum(0, end);
 	}
 
 
 	BCINLINE
-	value_type prod(size_t start=0, size_t end=N) const {
+	value_type prod(size_t start, size_t end) const {
 		value_type p = 1;
 		for (; start<end; ++start)
 			p *= m_index[start];
@@ -217,7 +217,7 @@ public:
 	}
 
 	BCINLINE
-	value_type prod(size_t end) const {
+	value_type prod(size_t end=N) const {
 		return prod(0, end);
 	}
 

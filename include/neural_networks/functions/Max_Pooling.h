@@ -37,8 +37,8 @@ for (int d##value = 0; d##value < input_tensor.dimension(value); ++d##value)
 
 		using value_type = typename InputTensor::value_type;
 
-//		MP_FOR(4) {
-//		MP_FOR(3) {
+		MP_FOR(4) {
+		MP_FOR(3) {
 		MP_FOR(2) {
 		MP_FOR(1) {
 		MP_FOR(0) {
@@ -58,8 +58,8 @@ for (int d##value = 0; d##value < input_tensor.dimension(value); ++d##value)
 		}
 		}
 		}
-//		}
-//		}
+		}
+		}
 	}
 
 };
