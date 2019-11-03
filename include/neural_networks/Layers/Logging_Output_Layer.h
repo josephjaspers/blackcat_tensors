@@ -48,7 +48,8 @@ struct Mean_Absolute_Percent_Error {
 
 
 template<class SystemTag, class ValueType, class ErrorFunction=Mean_Absolute_Error>
-struct Logging_Output_Layer : Output_Layer<SystemTag,ValueType> {
+struct Logging_Output_Layer:
+		Output_Layer<SystemTag,ValueType> {
 
 	using parent = Output_Layer<SystemTag,ValueType>;
 	using system_tag = SystemTag;

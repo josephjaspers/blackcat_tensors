@@ -22,11 +22,12 @@ auto load_mnist(System system, const char* mnist_dataset, int batch_size, int sa
 		std::cout << " error opening file. " << mnist_dataset << std::endl;
 		throw std::invalid_argument("Failure opening mnist_train.csv");
 	}
+
 	//move the file_ptr of the csv past the headers
 	std::string tmp;
 	std::getline(read_data, tmp, '\n');
 
-	int img_sz = 784; //28 * 28 greyscale handwritten digits
+	int img_sz = 784; //28 * 28 gray-scale handwritten digits
 	int training_sets = samples / batch_size;
 
 	cube inputs(img_sz, batch_size, training_sets);
@@ -69,7 +70,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	std::cout << "Neural Network architecture: \n" <<
 			network.get_string_architecture() << std::endl;
 
-	network.set_learning_rate(0.001);
+	network.set_learning_rate(0.03);
 	network.set_batch_size(batch_size);
 
 	std::pair<cube, cube> data = load_mnist(system_tag, mnist_dataset, batch_size, samples);
@@ -105,46 +106,48 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	std::cout << " testing... " << std::endl;
 
 	{
-	auto batch = inputs[0];
-	auto shape = BC::shape(784/4, batch_size);
-	for (int p = 0; p < img_partitions-1; ++p) {
-		auto index = BC::index(0,784 * (p/(float)img_partitions));
-		network.predict(batch[{index, shape}]);
-	}
-	auto last_index = BC::index(0,784 * ((img_partitions-1)/(float)img_partitions));
-	mat hyps =network.predict(batch[{last_index, shape}]);
+		auto batch = inputs[0];
+		auto shape = BC::shape(784/4, batch_size);
+		for (int p = 0; p < img_partitions-1; ++p) {
+			auto index = BC::index(0,784 * (p/(float)img_partitions));
+			network.predict(batch[{index, shape}]);
+		}
 
-	BC::size_t test_images = 10;
-	cube img = cube(reshape(inputs[0], BC::shape(28,28, batch_size)));
-	for (int i = 0; i < test_images; ++i) {
-		img[i].t().print_sparse(3);
-		hyps[i].print();
-		std::cout << "------------------------------------" <<std::endl;
-	}
+		auto last_index = BC::index(0,784 * ((img_partitions-1)/(float)img_partitions));
+		mat hyps =network.predict(batch[{last_index, shape}]);
+
+		BC::size_t test_images = 10;
+		cube img = cube(reshape(inputs[0], BC::shape(28,28, batch_size)));
+		for (int i = 0; i < test_images; ++i) {
+			img[i].t().print_sparse(3);
+			hyps[i].print();
+			std::cout << "------------------------------------" <<std::endl;
+		}
 	}
 
 
 	{
 
-	BC::size_t test_images = 10;
-	cube img = cube(reshape(inputs[0], BC::shape(28,28, batch_size)));
-	for (int i = 0; i < test_images; ++i) {
+		BC::size_t test_images = 10;
+		cube img = cube(reshape(inputs[0], BC::shape(28,28, batch_size)));
+		for (int i = 0; i < test_images; ++i) {
 
-		auto batch = inputs[0];
-		auto shape = BC::shape(784/4, batch_size);
-		for (int p = 0; p < img_partitions-1; ++p) {
-			auto index = BC::index(0,784 * (p/(float)img_partitions));
-			network.single_predict(batch[{index, shape}][i]);
+			auto batch = inputs[0];
+			auto shape = BC::shape(784/4, batch_size);
+			for (int p = 0; p < img_partitions-1; ++p) {
+				auto index = BC::index(0,784 * (p/(float)img_partitions));
+				network.single_predict(batch[{index, shape}][i]);
+			}
+			auto last_index = BC::index(0,784 * ((img_partitions-1)/(float)img_partitions));
+			vec hyps = network.single_predict(batch[{last_index, shape}][i]);
+
+
+			img[i].t().print_sparse(3);
+			hyps.print();
+			std::cout << "------------------------------------" <<std::endl;
 		}
-		auto last_index = BC::index(0,784 * ((img_partitions-1)/(float)img_partitions));
-		vec hyps = network.single_predict(batch[{last_index, shape}][i]);
-
-
-		img[i].t().print_sparse(3);
-		hyps.print();
-		std::cout << "------------------------------------" <<std::endl;
 	}
-	}
+
 	std::cout << " success " << std::endl;
 	return 0;
 }

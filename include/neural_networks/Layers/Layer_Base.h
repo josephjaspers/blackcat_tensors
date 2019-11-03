@@ -20,22 +20,34 @@
 namespace BC {
 namespace nn {
 
+template<class DerivedLayer>
 class Layer_Base {
+
+	using traits = layer_traits<DerivedLayer>;
 
 	std::string m_classname;
 	std::string m_directory_save_path;
 	std::string m_additional_architecture_features;
+
+	auto& as_derived() const {
+		return static_cast<const DerivedLayer&>(*this);
+	}
+	auto& as_derived() {
+		return static_cast<DerivedLayer&>(*this);
+	}
+
+public:
+
+	static constexpr double default_learning_rate = .01;
 
 protected:
 
 	BC::size_t m_input_sz;
 	BC::size_t m_output_sz;
 	BC::size_t m_batch_sz;
+	double m_learning_rate = default_learning_rate;
 
 public:
-
-	static constexpr double default_learning_rate = .01;
-
 	/**
 	 * m_classname should be initialized by supplying `__func__` to the first argument
 	 * of the Layer_Base. `parse_classname()` will normalize the string
@@ -82,10 +94,16 @@ public:
 	}
 
 	///get_shape must be shadowed (over-ridden) for Convolution/layers that expect non-vector input/outputs
-	BC::Shape<1> get_input_shape() const { return BC::Shape<1>(m_input_sz); }
-	BC::Shape<1> get_output_shape() const { return BC::Shape<1>(m_output_sz); }
-	BC::Shape<2> get_batched_input_shape() const { return BC::Shape<2>(m_input_sz, m_batch_sz); }
-	BC::Shape<2> get_batched_output_shape() const { return BC::Shape<2>(m_output_sz, m_batch_sz); }
+	auto get_input_shape() const { return BC::Dim<1>{m_input_sz}; }
+	auto get_output_shape() const { return BC::Dim<1>{m_output_sz}; }
+
+	auto get_batched_input_shape() const {
+		return as_derived().get_input_shape().concat(m_batch_sz);
+	}
+
+	auto get_batched_output_shape() const {
+		return as_derived().get_output_shape().concat(m_batch_sz);
+	}
 
 	BC::size_t input_size() const { return m_input_sz; }
 	BC::size_t output_size() const { return m_output_sz; }
@@ -95,7 +113,10 @@ public:
 	BC::size_t batched_output_size() const { return m_output_sz * m_batch_sz; }
 
 	void set_batch_size(int bs) { m_batch_sz = bs;}
-	void set_learning_rate(int) {}
+
+	void set_learning_rate(double lr) { m_learning_rate = lr; }
+	auto get_learning_rate() const { return m_learning_rate; }
+	auto get_batched_learning_rate() const { return m_learning_rate / m_batch_sz; }
 	void update_weights() {}
 	void clear_bp_storage(Cache&) {}
 
@@ -111,6 +132,44 @@ public:
 		classname.erase(classname.rend().base(), classname_ns.base());
 		return classname;
 	}
+
+
+	template<int ADL=0>
+	void default_input_tensor_factory() const {
+		using dimension      = typename traits::input_tensor_dimension;
+		using value_type     = typename traits::value_type;
+		using allocator_type = typename traits::allocator_type;
+
+		return BC::Tensor<dimension::value, value_type, allocator_type>(get_input_shape());
+	}
+
+	template<int ADL=0>
+	void default_tensor_output_factory() const {
+		using dimension      = typename traits::output_tensor_dimension;
+		using value_type     = typename traits::value_type;
+		using allocator_type = typename traits::allocator_type;
+
+		return BC::Tensor<dimension::value, value_type, allocator_type>(get_output_shape());
+	}
+
+	template<int ADL=0>
+	void default_batched_input_tensor_factory() const {
+		using dimension      = typename traits::input_tensor_dimension;
+		using value_type     = typename traits::value_type;
+		using allocator_type = typename traits::allocator_type;
+
+		return BC::Tensor<dimension::value+1, value_type, allocator_type>(get_batched_input_shape());
+	}
+
+	template<int ADL=0>
+	void default_batched_tensor_output_factory() const {
+		using dimension      = typename traits::output_tensor_dimension;
+		using value_type     = typename traits::value_type;
+		using allocator_type = typename traits::allocator_type;
+
+		return BC::Tensor<dimension::value+1, value_type, allocator_type>(get_batched_output_shape());
+	}
+
 };
 
 }

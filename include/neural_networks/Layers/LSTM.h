@@ -22,10 +22,27 @@ template<class SystemTag,
 		class InputGateNonlinearity=BC::Logistic,
 		class OutputGateNonlinearity=BC::Logistic,
 		class CellStateNonLinearity=BC::Tanh>
-struct LSTM : public Layer_Base {
+struct LSTM:
+		public Layer_Base<LSTM<
+				SystemTag,
+				ValueType,
+				ForgetGateNonlinearity,
+				WriteGateNonlinearity,
+				InputGateNonlinearity,
+				OutputGateNonlinearity,
+				CellStateNonLinearity>> {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
+	using parent_type = Layer_Base<LSTM<
+			SystemTag,
+			ValueType,
+			ForgetGateNonlinearity,
+			WriteGateNonlinearity,
+			InputGateNonlinearity,
+			OutputGateNonlinearity,
+			CellStateNonLinearity>>;
+
 	using allocator_type = BC::Allocator<SystemTag, ValueType>;
 
 	using mat = BC::Matrix<value_type, allocator_type>;
@@ -43,8 +60,6 @@ struct LSTM : public Layer_Base {
 	using defines_single_predict = std::true_type;
 
 private:
-
-	ValueType lr = Layer_Base::default_learning_rate;
 
 	CellStateNonLinearity  c_g;
 	ForgetGateNonlinearity f_g;
@@ -82,7 +97,7 @@ private:
 public:
 
 	LSTM(int inputs, BC::size_t  outputs):
-			Layer_Base(__func__, inputs, outputs),
+			parent_type(__func__, inputs, outputs),
 			wf(outputs, inputs),
 			wz(outputs, inputs),
 			wi(outputs, inputs),
@@ -228,8 +243,7 @@ public:
 	}
 
 	void update_weights() {
-		ValueType lr = this->lr / this->batch_size();
-
+		ValueType lr = this->get_batched_learning_rate();
 		wz += wz_gradients * lr;
 		wf += wf_gradients * lr;
 		wi += wi_gradients * lr;
@@ -249,7 +263,7 @@ public:
 	}
 
 	void set_batch_size(int bs) {
-		Layer_Base::set_batch_size(bs);
+		parent_type::set_batch_size(bs);
 
 		auto make_default =  [&](){
 				mat m(this->output_size(), bs);
@@ -351,27 +365,6 @@ public:
 		auto& c = cache.load(cell_key(), default_tensor_factory());
 		pc = c[batch_index];
 	}
-
-
-
-	auto get_learning_rate() const { return lr; }
-
-#define LSTM_GETTER(name, var_name)\
-	auto& get_##name() const { return var_name; }\
-	auto& get_##name() { return var_name; }
-
-#define LSTM_GATE_GETTER(name, charname)\
-		LSTM_GETTER(name##_weight, w##charname)\
-		LSTM_GETTER(name##_recurrent_weight, r##charname)\
-		LSTM_GETTER(name##_bias, b##charname)
-
-	LSTM_GATE_GETTER(forget, f)
-	LSTM_GATE_GETTER(input, i)
-	LSTM_GATE_GETTER(write, z)
-	LSTM_GATE_GETTER(output, o)
-
-#undef LSTM_GETTER
-#undef LSTM_GATE_GETTER
 
 private:
 

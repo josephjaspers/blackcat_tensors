@@ -13,15 +13,20 @@
 namespace BC {
 namespace nn {
 namespace experimental {
+
 template<
 	class SystemTag,
 	class ValueType,
 	class IsRecurrent=std::false_type>
-struct Convolution : public Layer_Base {
+struct Convolution:
+		public Layer_Base<
+				Convolution<SystemTag, ValueType, IsRecurrent>> {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 	using allocator_type = BC::Allocator<SystemTag, ValueType>;
+	using parent_type = Layer_Base<
+			Convolution<SystemTag, ValueType, IsRecurrent>>;
 
 	using mat = BC::Matrix<value_type, allocator_type>;
 	using tensor4 = BC::Tensor<4, value_type, allocator_type>;
@@ -37,7 +42,6 @@ struct Convolution : public Layer_Base {
 private:
 
 	allocator_type m_allocator;
-	ValueType lr = Layer_Base::default_learning_rate;
 
 	mat w;  //dims=[kernel_size, numb_kernels]
 	mat w_gradients;
@@ -57,13 +61,15 @@ private:
 
 public:
 
-	Shape<3> get_input_shape() const { return Shape<3>(m_input_shape); }
-	Shape<3> get_output_shape() const { return Shape<3>(m_output_shape); }
-	Shape<4> get_batched_input_shape() const { return Shape<4>(m_input_shape.concat(this->batch_size())); }
-	Shape<4> get_batched_output_shape() const { return Shape<4>(m_output_shape.concat(this->batch_size())); }
-	Shape<3> get_batched_column_image_shape() { return Shape<3>(m_column_image_shape.concat(this->batch_size())); }
-	Shape<4> get_kernel_shape() {
-		return BC::Shape<4>(m_krnl_shape[0], m_krnl_shape[1], m_input_shape[2], m_krnl_shape[2]);
+	Dim<3> get_input_shape() const { return m_input_shape; }
+	Dim<3> get_output_shape() const { return m_output_shape; }
+	Dim<3> get_batched_column_image_shape() { return m_column_image_shape.concat(this->batch_size()); }
+	Dim<4> get_kernel_shape() {
+		return BC::Dim<4>(
+				m_krnl_shape[0],
+				m_krnl_shape[1],
+				m_input_shape[2],
+				m_krnl_shape[2]);
 	}
 
 	Convolution(
@@ -72,7 +78,7 @@ public:
 			Dim<2> padding=Dim<2>().fill(0),
 			Dim<2> strides=Dim<2>().fill(1),
 			Dim<2> dilation=Dim<2>().fill(1)):
-		Layer_Base(__func__),
+		parent_type(__func__),
 		w(krnl_dims.prod(2), krnl_dims[2]),
 		w_gradients(w.get_shape()),
 		m_input_shape(img_dims),
@@ -100,9 +106,10 @@ public:
 
 	template<class X>
 	auto forward_propagation(const X& x, Cache& cache) {
-		tensor4 y(get_batched_output_shape());
+		tensor4 y(this->get_batched_output_shape());
 		cube col_x(get_batched_column_image_shape());
 
+		BC_omp_for__
 		for (int i = 0; i < this->batch_size(); ++i) {
 			BC::im2col(x.get_stream(),
 					col_x[i].internal(),
@@ -127,6 +134,7 @@ public:
 
 		cube& col_x = cache.load(col_image_key());
 
+		BC_omp_for__
 		for (int i = 0; i < this->batch_size(); ++i) {
 			auto mat_dy = reshape(dy[i], shape(m_output_shape.prod(2), w.cols()));
 			w_gradients -= col_x[i] * mat_dy;
@@ -135,8 +143,7 @@ public:
 	}
 
 	void update_weights() {
-		ValueType lr = this->lr / this->batch_size();
-		w += w_gradients * lr;
+		w += w_gradients * this->get_batched_learning_rate();
 		w_gradients.zero();
 	}
 
@@ -147,10 +154,6 @@ public:
 	void load(Layer_Loader& loader) {
 		loader.load_variable(w, "w");
 	}
-
-	auto& get_weight() const { return w; }
-	auto& get_weight() { return w; }
-	auto get_learning_rate() const { return lr; }
 };
 
 }

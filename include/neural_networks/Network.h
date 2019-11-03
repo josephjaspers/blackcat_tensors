@@ -41,7 +41,7 @@ struct NeuralNetwork {
 	Layers...>;
 
 	layer_chain m_layer_chain;
-	double m_learning_rate = Layer_Base::default_learning_rate;
+	double m_learning_rate = m_layer_chain.head().layer().get_learning_rate();
 	BC::size_t m_batch_size = 1;
 
 	/**Basic Constructor for Neural Networks.

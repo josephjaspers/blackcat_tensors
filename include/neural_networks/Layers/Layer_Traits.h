@@ -18,10 +18,8 @@ template<class T> using query_forward_requires_extra_cache = typename T::forward
 template<class T> using query_backward_requires_inputs  = typename T::backward_requires_inputs;
 template<class T> using query_backward_requires_outputs = typename T::backward_requires_outputs;
 template<class T> using query_backward_requires_extra_cache = typename T::backward_requires_extra_cache;
-
 template<class T> using query_input_tensor_dimension  = typename T::input_tensor_dimension;
 template<class T> using query_output_tensor_dimension = typename T::output_tensor_dimension;
-
 template<class T> using query_greedy_evaluate_delta = typename T::greedy_evaluate_delta;
 
 //If true we cache the delta- into a matrix/vector. This is not stored in recurrent layers.
@@ -32,17 +30,13 @@ template<class T> using query_backwards_delta_should_be_cached = typename T::que
 template<class T> using query_requires_extra_cache = typename T::requires_extra_cache;
 template<class T> using query_extra_batched_cache_args = typename T::extra_batched_cache_args;
 
-template<class T, class Delta> using detect_back_propagation_type =
-		decltype(std::declval<T>().back_propagation(std::declval<T>(), std::declval<Delta>()));
-
 template<class T>
 using query_defines_single_predict = typename T::defines_single_predict;
-
 
 template<class T>
 using query_defines_predict = typename T::defines_predict;
 
-}
+} // ns detail
 
 template<class T>
 struct layer_traits {
@@ -53,16 +47,22 @@ struct layer_traits {
 	 *  If forwards_requires_inputs==std::true_type, inputs will be supplied in forward prop
 	 *  If forwards_requires_outputs==std::true_type, outputs will be supplied in forward prop
 	 *
-	 *
 	 *  If backwards_requires_inputs==std::true_type, inputs will be supplied in backward prop
 	 *  If backwards_requires_outputs==std::true_type, outputs will be supplied in backward prop
 	 *
 	 */
 
 	using system_tag = typename T::system_tag;
-	using value_type
-			= BC::traits::conditional_detected_t<BC::traits::query_value_type, T,
-				typename system_tag::default_floating_point_type>;
+
+	using value_type =
+			BC::traits::conditional_detected_t<
+					BC::traits::query_value_type, T,
+					typename system_tag::default_floating_point_type>;
+
+	using allocator_type =
+			BC::traits::conditional_detected_t<
+					BC::traits::query_allocator_type, T,
+					BC::Allocator<system_tag, value_type>>;
 
 	using requires_extra_cache = BC::traits::conditional_detected_t<
 			detail::query_requires_extra_cache, T, std::false_type>;

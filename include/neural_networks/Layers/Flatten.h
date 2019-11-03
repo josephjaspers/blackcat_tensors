@@ -17,11 +17,15 @@ template<
 	class SystemTag,
 	class ValueType,
 	class InputTensorDimension=BC::traits::Integer<3>>
-struct Flatten : public Layer_Base {
+struct Flatten:
+		public Layer_Base<
+				Flatten<SystemTag, ValueType, InputTensorDimension>> {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 	using allocator_type = BC::Allocator<SystemTag, ValueType>;
+	using parent_type = Layer_Base<
+			Flatten<SystemTag, ValueType, InputTensorDimension>>;
 
 	using greedy_evaluate_delta = std::true_type;
 
@@ -40,7 +44,7 @@ private:
 public:
 
 	Flatten(BC::Shape<input_tensor_dimension::value> input_shape):
-		Layer_Base(__func__, input_shape.size(), input_shape.size()),
+		parent_type(__func__, input_shape.size(), input_shape.size()),
 		m_input_shape(input_shape),
 		m_output_shape(input_shape.size()),
 		m_batched_output_shape(input_shape.size(), 1)
@@ -60,7 +64,7 @@ public:
 
 
 	void set_batch_size(BC::size_t batch_sz) {
-		Layer_Base::set_batch_size(batch_sz);
+		parent_type::set_batch_size(batch_sz);
 
 		BC::Dim<input_tensor_dimension::value+1> batched_shape;
 		for (int i = 0; i < input_tensor_dimension::value; ++i) {
@@ -73,9 +77,6 @@ public:
 
 	auto get_input_shape() const { return m_input_shape; }
 	auto get_output_shape() const { return m_output_shape; }
-	auto get_batched_input_shape() const { return m_batched_input_shape; }
-	auto get_batched_output_shape() const { return m_batched_output_shape; }
-
 };
 
 #ifndef BC_CLING_JIT

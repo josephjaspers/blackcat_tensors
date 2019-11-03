@@ -14,23 +14,26 @@ namespace BC {
 namespace nn {
 
 template<class SystemTag, class ValueType>
-class SoftMax : public Layer_Base {
+class SoftMax:
+		public Layer_Base<SoftMax<SystemTag, ValueType>> {
 
 public:
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
+	using parent_type = Layer_Base<SoftMax<SystemTag, ValueType>>;
 
 	using mat = BC::Matrix<ValueType, BC::Allocator<SystemTag, ValueType>>;
 	using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
 
 private:
+
 	mat y;
 
 public:
 
 	SoftMax(int inputs):
-		Layer_Base(__func__, inputs, inputs) {}
+		parent_type(__func__, inputs, inputs) {}
 
 	template<class Allocator>
 	const auto& forward_propagation(const BC::Matrix<value_type, Allocator>& x) {
@@ -53,11 +56,9 @@ public:
 		return dy;
 	}
 
-
-
 	void update_weights() {}
 	void set_batch_size(int bs) {
-		Layer_Base::set_batch_size(bs);
+		parent_type::set_batch_size(bs);
 		y = mat(this->output_size(), bs);
 	}
 };

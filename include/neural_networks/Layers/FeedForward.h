@@ -16,10 +16,12 @@ namespace nn {
 template<
 	class SystemTag,
 	class ValueType>
-struct FeedForward: public Layer_Base {
+struct FeedForward:
+		public Layer_Base<FeedForward<SystemTag, ValueType>> {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
+	using parent_type = Layer_Base<FeedForward<SystemTag, ValueType>>;
 	using allocator_type = BC::Allocator<SystemTag, ValueType>;
 
 	using mat = BC::Matrix<value_type, allocator_type>;
@@ -29,7 +31,7 @@ struct FeedForward: public Layer_Base {
 
 private:
 
-	ValueType lr = Layer_Base::default_learning_rate;
+	ValueType lr = FeedForward::default_learning_rate;
 
 	mat w;  //weights
 	vec b;  //biases
@@ -40,7 +42,7 @@ private:
 public:
 
 	FeedForward(BC::size_t inputs, BC::size_t outputs):
-		Layer_Base(__func__, inputs, outputs),
+		parent_type(__func__, inputs, outputs),
 		w(outputs, inputs),
 		b(outputs),
 		w_gradients(outputs, inputs),
@@ -81,12 +83,6 @@ public:
 		loader.load_variable(w, "w");
 		loader.load_variable(b, "b");
 	}
-
-	auto& get_weight() const { return w; }
-	auto& get_weight() { return w; }
-	auto& get_bias() const { return b; }
-	auto& get_bias() { return b; }
-	auto get_learning_rate() const { return lr; }
 };
 
 #ifndef BC_CLING_JIT

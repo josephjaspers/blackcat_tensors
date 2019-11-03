@@ -14,13 +14,15 @@ namespace BC {
 namespace nn {
 
 template<class SystemTag, class ValueType>
-struct Output_Layer : Layer_Base {
+struct Output_Layer:
+		Layer_Base<Output_Layer<SystemTag, ValueType>> {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
+	using parent_type = Layer_Base<Output_Layer<SystemTag, ValueType>>;
 
 	Output_Layer(int inputs):
-		Layer_Base(__func__, inputs, inputs) {}
+		parent_type(__func__, inputs, inputs) {}
 
 	template <class Tensor>
 	const auto forward_propagation(const Tensor& x) {

@@ -8,15 +8,17 @@ namespace BC {
 namespace nn {
 
 template<class SystemTag, class ValueType, class Functor>
-struct Function: Layer_Base {
+struct Function:
+		Layer_Base<Function<SystemTag, ValueType, Functor>> {
 
 	Functor function;
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
+	using parent_type = Layer_Base<Function<SystemTag, ValueType, Functor>>;
 
 	Function(int inputs, Functor function_=Functor()):
-		Layer_Base(bc_get_classname_of(function), inputs, inputs),
+		parent_type(bc_get_classname_of(function), inputs, inputs),
 		function(function_) {}
 
 	template<class Matrix>

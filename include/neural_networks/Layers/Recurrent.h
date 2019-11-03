@@ -14,11 +14,15 @@ namespace BC {
 namespace nn {
 
 template<class SystemTag, class ValueType, class RecurrentNonLinearity=BC::Tanh>
-struct Recurrent : public Layer_Base {
+struct Recurrent:
+		public Layer_Base<
+				Recurrent<SystemTag, ValueType, RecurrentNonLinearity>> {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 	using allocator_type = BC::Allocator<SystemTag, ValueType>;
+	using parent_type = Layer_Base<
+			Recurrent<SystemTag, ValueType, RecurrentNonLinearity>>;
 
 	using mat = BC::Matrix<value_type, allocator_type>;
 	using vec = BC::Vector<value_type, allocator_type>;
@@ -28,7 +32,7 @@ struct Recurrent : public Layer_Base {
 	using greedy_evaluate_delta = std::true_type;
 
 	RecurrentNonLinearity g;
-	ValueType lr = Layer_Base::default_learning_rate;
+	ValueType lr = parent_type::default_learning_rate;
 
 	mat dc; //delta cell_state
 	mat w, w_gradients;  //weights
@@ -36,7 +40,7 @@ struct Recurrent : public Layer_Base {
 	vec b, b_gradients;  //biases
 
 	Recurrent(int inputs, int outputs) :
-		Layer_Base(__func__, inputs, outputs),
+		parent_type(__func__, inputs, outputs),
 		w(outputs, inputs),
 		w_gradients(outputs, inputs),
 		r(outputs, outputs),
@@ -82,7 +86,7 @@ struct Recurrent : public Layer_Base {
 	}
 
 	void set_batch_size(BC::size_t bs) {
-		Layer_Base::set_batch_size(bs);
+		parent_type::set_batch_size(bs);
 		dc = mat(this->output_size(), bs);
 		zero_deltas();
 	}
@@ -107,13 +111,6 @@ struct Recurrent : public Layer_Base {
 		loader.load_variable(r, "r");
 		loader.load_variable(b, "b");
 	}
-
-	auto& get_weight() const { return w; }
-	auto& get_weight() { return w; }
-	auto& get_recurrent_weight() const { return r; }
-	auto& get_recurrent_weight() { return r; }
-	auto& get_bias() const { return b; }
-	auto& get_bias() { return b; }
 };
 
 #ifndef BC_CLING_JIT
