@@ -44,7 +44,7 @@ auto load_mnist(System system, const char* mnist_dataset, int batch_size, int sa
 
 template<class System=BC::host_tag>
 int percept_MNIST(System system_tag, const char* mnist_dataset,
-		int epochs=2, int batch_size=32, int samples=32*1024) {
+		int epochs=1, int batch_size=32, int samples=32*1024) {
 
 	using value_type = typename System::default_floating_point_type;
 	using allocator_type = BC::Allocator<System, value_type>;
@@ -52,8 +52,9 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	using mat  = BC::Matrix<value_type, allocator_type>;
 	using clock = std::chrono::duration<double>;
 
+	using isRecurrent = std::false_type;
 	auto network = BC::nn::neuralnetwork(
-		BC::nn::experimental::Convolution<System, double>(
+		BC::nn::experimental::Convolution<System, double, isRecurrent>(
 				BC::dim(28,28,1),
 				BC::dim(3,3,4)),
 		BC::nn::flatten(system_tag, BC::shape(26,26,4)),
@@ -75,8 +76,6 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	cube& inputs = data.first;
 	cube& outputs = data.second;
 
-//	cudaProfilerStart();
-
 	auto image_shape = BC::shape(28,28,1,batch_size);
 	std::cout << " training..." << std::endl;
 	auto start = std::chrono::system_clock::now();
@@ -88,53 +87,22 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 			network.update_weights();
 		}
 	}
-//	cudaProfilerStop();
 
-	//	network.save("mnist_test_feedforward"); //Uncomment to add saving/loading
-	//	network.load("mnist_test_feedforward");
+	auto end = std::chrono::system_clock::now();
+	std::cout << " training time: " <<  clock(end - start).count() << std::endl;
 
-//	auto end = std::chrono::system_clock::now();
-//	std::cout << " training time: " <<  clock(end - start).count() << std::endl;
-//	{
-//	std::cout << " testing... " << std::endl;
-//	int test_images = 10;
-//	auto images = reshape(inputs[0], image_shape);
-//	mat hyps = network.forward_propagation(BC::reshape(inputs[0], image_shape));
-//	for (int i = 0; i < test_images; ++i) {
-//		//print transpose to orient the images correctly
-//		images[i].t().print_sparse(3);
-//		hyps[i].print();
-//		std::cout << "------------------------------------" <<std::endl;
-//	}
-//	}
+	{
+	std::cout << " testing... " << std::endl;
+	int test_images = 10;
+	auto images = reshape(inputs[0], BC::shape(28,28,batch_size));
+	mat hyps = network.forward_propagation(BC::reshape(inputs[0], image_shape));
+	for (int i = 0; i < test_images; ++i) {
+		images[i].t().print_sparse(3);
+		hyps[i].print();
+		std::cout << "------------------------------------" <<std::endl;
+	}
+	}
 
-//	network.move_training_data_to_single_predict(0);
-
-	//	{
-	//	std::cout << " testing... " << std::endl;
-	//	int test_images = 10;
-	//	auto images = reshape(inputs[0], BC::shape(28,28, batch_size));
-	//	mat hyps = network.predict(BC::reshape(inputs[0], image_shape));
-	//	for (int i = 0; i < test_images; ++i) {
-	//		//print transpose to orient the images correctly
-	//		images[i].t().print_sparse(3);
-	//		hyps[i].print();
-	//		std::cout << "------------------------------------" <<std::endl;
-	//	}
-	//	}
-
-//	{
-//	std::cout << " testing... " << std::endl;
-//	int test_images = 10;
-//	auto images = reshape(inputs[0], BC::shape(28,28, batch_size));
-//	for (int i = 0; i < test_images; ++i) {
-//		//print transpose to orient the images correctly
-//		images[i].t().print_sparse(3);
-//		network.single_predict(inputs[0][i]).print();
-//
-//		std::cout << "------------------------------------" <<std::endl;
-//	}
-//	}
 	std::cout << " success " << std::endl;
 	return 0;
 }
