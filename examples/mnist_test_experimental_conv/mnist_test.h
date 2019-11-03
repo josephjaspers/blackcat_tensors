@@ -57,7 +57,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 		BC::nn::experimental::Convolution<System, double, isRecurrent>(
 				BC::dim(28,28,1),
 				BC::dim(3,3,4)),
-		BC::nn::flatten(system_tag, BC::shape(26,26,4)),
+		BC::nn::flatten(system_tag, BC::dim(26,26,4)),
 		BC::nn::relu(system_tag, 26*26*4),
 		BC::nn::feedforward(system_tag, 26*26*4, 256),
 		BC::nn::tanh(system_tag, 256),

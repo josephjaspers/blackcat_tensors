@@ -65,11 +65,9 @@ public:
 	Dim<3> get_output_shape() const { return m_output_shape; }
 	Dim<3> get_batched_column_image_shape() { return m_column_image_shape.concat(this->batch_size()); }
 	Dim<4> get_kernel_shape() {
-		return BC::Dim<4>(
-				m_krnl_shape[0],
-				m_krnl_shape[1],
-				m_input_shape[2],
-				m_krnl_shape[2]);
+		return BC::Dim<4> {
+				m_krnl_shape[0], m_krnl_shape[1],
+				m_input_shape[2], m_krnl_shape[2] };
 	}
 
 	Convolution(
