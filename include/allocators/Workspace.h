@@ -20,10 +20,10 @@ class Stack_Allocator_Base {
 
 	using system_tag = SystemTag;
 
-	std::size_t m_memptr_sz=0;
+	std::size_t m_data_sz=0;
 	std::size_t m_curr_index=0;
 
-	Byte* m_memptr=nullptr;
+	Byte* m_data=nullptr;
 
 	static Polymorphic_Allocator<SystemTag, BC::allocators::Byte>& get_default_allocator() {
 		static Polymorphic_Allocator<SystemTag, BC::allocators::Byte> default_allocator;
@@ -33,48 +33,48 @@ class Stack_Allocator_Base {
 	Polymorphic_Allocator<SystemTag, Byte> m_allocator = get_default_allocator();
 
 public:
-	Stack_Allocator_Base(std::size_t sz=0) : m_memptr_sz(sz){
+	Stack_Allocator_Base(std::size_t sz=0) : m_data_sz(sz){
 		if (sz)
-			m_memptr = m_allocator.allocate(sz);
+			m_data = m_allocator.allocate(sz);
 	}
 	void reserve(std::size_t sz)  {
-		if (sz == 0 || (m_memptr_sz - m_curr_index) > sz) {
+		if (sz == 0 || (m_data_sz - m_curr_index) > sz) {
 			return;
 		}
 
 		if (!(m_curr_index==0)){
 			std::cout << "BC_Memory Allocation failure: \n" <<
-					"\tcurrent_stack_index == " << m_curr_index << " out of " << m_memptr_sz << \
+					"\tcurrent_stack_index == " << m_curr_index << " out of " << m_data_sz << \
 					"attempting to reserve " << sz  << " bytes " << std::endl;
 		}
 
 		BC_ASSERT(m_curr_index==0,
 				"Stack_Allocator reserve called while memory is still allocated");
 
-		if (m_memptr_sz < sz) {
-			if (m_memptr_sz > 0) {
-				m_allocator.deallocate(m_memptr, m_memptr_sz);
+		if (m_data_sz < sz) {
+			if (m_data_sz > 0) {
+				m_allocator.deallocate(m_data, m_data_sz);
 			}
-			m_memptr = m_allocator.allocate(sz);
-			m_memptr_sz = sz;
+			m_data = m_allocator.allocate(sz);
+			m_data_sz = sz;
 		}
 	}
 	void free() {
 		BC_ASSERT(m_curr_index==0,
 				"Stack_Allocator free called while memory is still allocated");
-		m_allocator.deallocate(m_memptr, m_memptr_sz);
-		m_memptr_sz = 0;
-		m_memptr = nullptr;
+		m_allocator.deallocate(m_data, m_data_sz);
+		m_data_sz = 0;
+		m_data = nullptr;
 	}
 
 	size_t available_bytes() const {
-		 return m_memptr_sz - m_curr_index;
+		 return m_data_sz - m_curr_index;
 	}
 	size_t allocated_bytes() const {
 		 return m_curr_index;
 	}
 	size_t reserved_bytes() const {
-		 return m_memptr_sz;
+		 return m_data_sz;
 	}
 
 	template<class Allocator>
@@ -85,25 +85,25 @@ public:
 	}
 
 	Byte* allocate(std::size_t sz) {
-		if (m_curr_index + sz > m_memptr_sz) {
+		if (m_curr_index + sz > m_data_sz) {
 			std::cout << "BC_Memory Allocation failure: \n" <<
-					"\tcurrent_stack_index == " << m_curr_index << " out of " << m_memptr_sz
-					<<"\n\t attempting to allocate " << sz << " bytes, error: " << (m_curr_index + sz <= m_memptr_sz) << std::endl;
+					"\tcurrent_stack_index == " << m_curr_index << " out of " << m_data_sz
+					<<"\n\t attempting to allocate " << sz << " bytes, error: " << (m_curr_index + sz <= m_data_sz) << std::endl;
 		}
 
-		BC_ASSERT(!(m_curr_index + sz > m_memptr_sz),
+		BC_ASSERT(!(m_curr_index + sz > m_data_sz),
 				"BC_Memory Allocation failure, attempting to allocate memory larger that workspace size");
 
-		Byte* mem = m_memptr + m_curr_index;
+		Byte* mem = m_data + m_curr_index;
 		m_curr_index += sz;
 		return mem;
 	}
 
-	void deallocate(Byte* memptr, std::size_t sz) {
+	void deallocate(Byte* data, std::size_t sz) {
 		BC_ASSERT(m_curr_index!=0,
 				"BC_Memory Deallocation failure, attempting to deallocate already deallocated memory.");
 
-		BC_ASSERT(memptr == (m_memptr + m_curr_index - sz),
+		BC_ASSERT(data == (m_data + m_curr_index - sz),
 				"BC_Memory Deallocation failure, attempting to deallocate memory out of order,"
 				"\nStack_Allocator memory functions as a stack, deallocations must be in reverse order of allocations.");
 
@@ -122,14 +122,14 @@ public:
 	}
 
 	template<class T>
-	void deallocate(T* memptr, std::size_t sz) {
-		deallocate(reinterpret_cast<Byte*>(memptr), sz * sizeof(T));
+	void deallocate(T* data, std::size_t sz) {
+		deallocate(reinterpret_cast<Byte*>(data), sz * sizeof(T));
 	}
 
 	~Stack_Allocator_Base(){
 		BC_ASSERT(m_curr_index==0,
 				"Stack_Allocator Destructor called while memory is still allocated, Memory Leak Detected");
-		m_allocator.deallocate(m_memptr, m_memptr_sz);
+		m_allocator.deallocate(m_data, m_data_sz);
 	}
 };
 } //end of ns detail
@@ -195,8 +195,8 @@ public:
 	ValueType* allocate(std::size_t sz) {
 		return ws_ptr->template allocate<ValueType>(sz);
 	}
-	void deallocate(ValueType* memptr, std::size_t sz) {
-		ws_ptr->template deallocate<ValueType>(memptr, sz);
+	void deallocate(ValueType* data, std::size_t sz) {
+		ws_ptr->template deallocate<ValueType>(data, sz);
 	}
 };
 

@@ -71,7 +71,7 @@ auto make_row(Parent& parent, BC::size_t index) {
 			parent.get_stream(),
 			parent.get_allocator(),
 			Strided_Vector_Shape(parent.cols(), parent.leading_dimension(1)),
-			parent.memptr() + index);
+			parent.data() + index);
 }
 
 template<class Parent>
@@ -89,7 +89,7 @@ auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
 						Strided_Vector_Shape(length, stride),
-						parent.memptr() + ptr_index);
+						parent.data() + ptr_index);
 }
 
 template<class Parent, class=std::enable_if_t<!expression_traits<Parent>::is_continuous::value>>
@@ -100,7 +100,7 @@ static auto make_slice(Parent& parent, BC::size_t index) {
 			parent.get_stream(),
 			parent.get_allocator(),
 			parent.get_shape(),
-			parent.memptr() + parent.slice_ptr_index(index));
+			parent.data() + parent.slice_ptr_index(index));
 }
 
 template<class Parent, class=std::enable_if_t<expression_traits<Parent>::is_continuous::value>, int differentiator=0>
@@ -112,7 +112,7 @@ static auto make_slice(Parent& parent, BC::size_t index) {
 			parent.get_stream(),
 			parent.get_allocator(),
 			parent.get_shape(),
-			parent.memptr() + parent.slice_ptr_index(index));
+			parent.data() + parent.slice_ptr_index(index));
 }
 template<class Parent>
 static auto make_ranged_slice(Parent& parent, BC::size_t from, BC::size_t to) {
@@ -126,7 +126,7 @@ static auto make_ranged_slice(Parent& parent, BC::size_t from, BC::size_t to) {
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
 						BC::Shape<Parent::tensor_dimension>(inner_shape),
-						parent.memptr() + index);
+						parent.data() + index);
 }
 
 template<class Parent, class ShapeLike>
@@ -135,7 +135,7 @@ static auto make_view(Parent& parent, ShapeLike shape) {
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
 						BC::Shape<ShapeLike::tensor_dimension>(shape),
-						parent.memptr());
+						parent.data());
 }
 
 template<class Parent>
@@ -144,7 +144,7 @@ static auto make_scalar(Parent& parent, BC::size_t index) {
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
 						BC::Shape<0>(),
-						parent.memptr() + index);
+						parent.data() + index);
 }
 
 template<class Parent, class ShapeLike>
@@ -158,7 +158,7 @@ auto make_chunk(Parent& parent,
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
 						Shape<ShapeLike::tensor_dimension>(shape, parent.get_shape()),
-						parent.memptr() + parent.dims_to_index(index_points));
+						parent.data() + parent.dims_to_index(index_points));
 }
 
 

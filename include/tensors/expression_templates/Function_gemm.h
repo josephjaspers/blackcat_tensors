@@ -76,9 +76,9 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 		//http://www.netlib.org/lapack/explore-html/db/dc9/group__single__blas__level3_gafe51bacb54592ff5de056acabd83c260.html#gafe51bacb54592ff5de056acabd83c260
 		BC::blas::BLAS<system_tag>::gemm(
 					stream, transA, transB, left.rows(), right.cols(), left.cols(),
-					alpha.memptr(), A.memptr(), A.leading_dimension(1),
-					B.memptr(), B.leading_dimension(1),
-					beta.memptr(), out.memptr(), out.leading_dimension(1));
+					alpha.data(), A.data(), A.leading_dimension(1),
+					B.data(), B.leading_dimension(1),
+					beta.data(), out.data(), out.leading_dimension(1));
 
 		traits::template post_parse_expression_evaluation(stream, contents);
 	}

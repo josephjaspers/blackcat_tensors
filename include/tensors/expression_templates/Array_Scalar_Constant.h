@@ -53,7 +53,7 @@ struct Scalar_Constant:
 		return scalar;
 	}
 
-	BCINLINE const value_type* memptr() const {
+	BCINLINE const value_type* data() const {
 		return &scalar;
 	}
 };
@@ -91,7 +91,7 @@ struct Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>:
 	BCINLINE auto operator [] (int i ) const { return Value; }
 	BCINLINE auto operator [] (int i )  	 { return Value; }
 
-	BCHOT const Scalar* memptr() const { return &value; }
+	BCHOT const Scalar* data() const { return &value; }
 };
 
 
@@ -119,7 +119,7 @@ struct Constexpr_Scalar_Constant<Value, Scalar, BC::device_tag>:
 	BCINLINE auto operator [] (int i ) const { return Value; }
 	BCINLINE auto operator [] (int i )       { return Value; }
 
-	BCHOT const Scalar* memptr() const { return value; }
+	BCHOT const Scalar* data() const { return value; }
 
 private:
 	static const Scalar* cuda_constexpr_scalar_ptr() {

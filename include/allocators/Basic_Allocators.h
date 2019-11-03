@@ -99,10 +99,10 @@ struct Device_Managed : Allocator<device_tag, T> {
 	struct rebind { using other = Device_Managed<altT>; };
 
 	T* allocate(BC::size_t sz) {
-		T* memptr = nullptr;
-		BC_CUDA_ASSERT((cudaMallocManaged((void**) &memptr, sizeof(T) * sz)));
+		T* data = nullptr;
+		BC_CUDA_ASSERT((cudaMallocManaged((void**) &data, sizeof(T) * sz)));
 		BC_CUDA_ASSERT((cudaDeviceSynchronize()));
-		return memptr;
+		return data;
 	}
 };
 

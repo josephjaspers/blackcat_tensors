@@ -66,17 +66,17 @@ int test_constructors(int sz=128) {
 		mat a(5,5); a.rand(0, 10);
 		mat b(a);
 
-		return BC::tensors::all(b.approx_equal(a)) && b.rows() == 5 && b.cols() == 5 && a.memptr() != b.memptr();
+		return BC::tensors::all(b.approx_equal(a)) && b.rows() == 5 && b.cols() == 5 && a.data() != b.data();
 	)
 	//-----------------------------------Move Constructor-----------------------------//
 	BC_TEST_DEF(
 		mat a(5,5); a.rand(0, 10);
 
-		auto* original_ptr = a.memptr();
+		auto* original_ptr = a.data();
 		mat b(std::move(a));
 
-		bool ensure_move = b.memptr() == original_ptr;
-		bool ensure_diff = a.memptr() != original_ptr;
+		bool ensure_move = b.data() == original_ptr;
+		bool ensure_diff = a.data() != original_ptr;
 		bool ensure_swap_dims = true; //a.rows() ==0 && a.cols() ==0; //No longer guaranteed
 
 		return ensure_move && ensure_diff && ensure_swap_dims;
@@ -95,10 +95,10 @@ int test_constructors(int sz=128) {
 		mat c(a); //copy to compare
 		mat b;
 
-		auto* original_ptr = a.memptr();
+		auto* original_ptr = a.data();
 		b = std::move(a);
 
-		return BC::tensors::all(b.approx_equal(c)) && a.memptr() != b.memptr() && b.memptr() == original_ptr;
+		return BC::tensors::all(b.approx_equal(c)) && a.data() != b.data() && b.data() == original_ptr;
 	)
 
 	BC_TEST_BODY_TAIL

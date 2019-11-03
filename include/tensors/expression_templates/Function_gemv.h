@@ -76,10 +76,10 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
 		//http://www.netlib.org/lapack/explore-html/d6/d30/group__single__blas__level2_gafc92361b74c6d41c7e5afa0aa5d13ec9.html#gafc92361b74c6d41c7e5afa0aa5d13ec9
 		BC::blas::BLAS<system_tag>::gemv(
 				stream, transA, A.rows(), A.cols(),
-				alpha.memptr(), A.memptr(), A.leading_dimension(1),
-				X.memptr(), X.leading_dimension(0)/*inc_X*/,
-				beta.memptr(),
-				out.memptr()/*Y*/, out.leading_dimension(0)/*incy*/);
+				alpha.data(), A.data(), A.leading_dimension(1),
+				X.data(), X.leading_dimension(0)/*inc_X*/,
+				beta.data(),
+				out.data()/*Y*/, out.leading_dimension(0)/*incy*/);
 
 		traits::post_parse_expression_evaluation(stream, contents);
 	}

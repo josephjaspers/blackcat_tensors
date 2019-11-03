@@ -59,7 +59,7 @@ std::string to_string(const Tensor& tensor, features f, BC::traits::Integer<2>) 
 			s += "[";
 
 		for (BC::size_t n = 0; n < tensor.cols(); ++n) {
-			s += format_value(tensor[n][m].memptr()[0], f);
+			s += format_value(tensor[n][m].data()[0], f);
 
 			if (n != tensor.cols() - 1)
 				s+=", ";
@@ -85,7 +85,7 @@ std::string to_string(const Tensor& tensor, features f, BC::traits::Integer<1>) 
 		s += "[";
 
 	for (BC::size_t m = 0; m < tensor.rows(); ++m) {
-		s += format_value(tensor[m].memptr()[0], f);
+		s += format_value(tensor[m].data()[0], f);
 
 		if(m!=tensor.rows()-1)
 			s+=", ";
@@ -103,7 +103,7 @@ std::string to_string(const Tensor& tensor,  features f, BC::traits::Integer<0>)
 	if (f.pretty)
 		s += '[';
 
-	s += format_value(tensor.memptr()[0], f);
+	s += format_value(tensor.data()[0], f);
 
 	if (f.pretty)
 		s += "]";

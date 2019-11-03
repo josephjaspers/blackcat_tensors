@@ -195,9 +195,9 @@ struct Convolution_Implementation<BC::host_tag> {
 								auto output_index = dimension_set.dims_to_index(i, c, r, d, kc, kr);
 								if (c+kc >= 0 && c+kc < img.cols() &&
 									r+kr >= 0 && r+kr < img.rows()) {
-									output.memptr()[output_index] = img(i, d, c+kc, r+kr);
+									output.data()[output_index] = img(i, d, c+kc, r+kr);
 								} else {
-									output.memptr()[output_index] = 0;
+									output.data()[output_index] = 0;
 								}
 							}
 						}

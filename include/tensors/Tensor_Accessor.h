@@ -51,9 +51,6 @@ class Tensor_Accessor {
 
 public:
 
-	auto data() const noexcept { return this->as_derived().memptr(); }
-	auto data()       noexcept { return this->as_derived().memptr(); }
-
 	const auto operator [] (BC::size_t i) const { return slice(i); }
 	      auto operator [] (BC::size_t i)       { return slice(i); }
 

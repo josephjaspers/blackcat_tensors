@@ -36,14 +36,14 @@ void im2col(
 	stream.enqueue([=]() {
 		 im2col(
 				system_tag(),
-				image.memptr(),
+				image.data(),
 				image.dimension(2),
 				image.dimension(1), image.dimension(0),
 				krnl_shape[1], krnl_shape[0],
 				padding[1], padding[0],
 				strides[1], strides[0],
 				dilation[1], dilation[0],
-				col_image.memptr());
+				col_image.data());
 	});
 }
 
@@ -76,7 +76,7 @@ void im2col_nd(
 	stream.enqueue([=]() {
 		 im2col_nd(
 				system_tag(),
-				image.memptr(),
+				image.data(),
 				SpacialAxis,
 				img_shape.data(),
 				col_shape.data(),
@@ -84,7 +84,7 @@ void im2col_nd(
 				padding.reverse().data(),
 				strides.reverse().data(),
 				dilation.reverse().data(),
-				col_image.memptr());
+				col_image.data());
 	});
 }
 template <typename Dtype>

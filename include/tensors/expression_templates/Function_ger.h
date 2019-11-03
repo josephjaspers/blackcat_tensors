@@ -77,9 +77,9 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 			auto B = contents.right;
 			auto alpha = contents.alpha;
 			BC::blas::BLAS<system_tag>::ger(stream, left.rows(), right.cols(),
-					alpha.memptr(), A.memptr(), A.leading_dimension(0),
-					B.memptr(), B.leading_dimension(0),
-					out.memptr(), out.leading_dimension(1));
+					alpha.data(), A.data(), A.leading_dimension(0),
+					B.data(), B.leading_dimension(0),
+					out.data(), out.leading_dimension(1));
 			traits::post_parse_expression_evaluation(stream, contents);
 		} else {
 			auto alpha = make_constexpr_scalar<BC::host_tag, (Alpha == 0 ? 1 : Alpha), value_type>();
@@ -87,9 +87,9 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 			auto B = greedy_evaluate(blas_expression_traits<rv>::remove_blas_modifiers(right), stream);
 			stream.set_blas_pointer_mode_host();
 			BC::blas::BLAS<system_tag>::ger(stream, left.rows(), right.cols(),
-					alpha.memptr(), A.memptr(), A.leading_dimension(0),
-					B.memptr(), B.leading_dimension(0),
-					out.memptr(), out.leading_dimension(1));
+					alpha.data(), A.data(), A.leading_dimension(0),
+					B.data(), B.leading_dimension(0),
+					out.data(), out.leading_dimension(1));
 		}
 	}
 };

@@ -55,7 +55,7 @@ public:
 
 	Array() {
 		if (Shape::tensor_dimension == 0) {
-			this->m_memptr = get_allocator().allocate(1);
+			this->m_data = get_allocator().allocate(1);
 		}
 	}
 
@@ -76,7 +76,7 @@ public:
 		parent_type(array),
 			m_stream(array.get_stream())
 	{
-		array.m_memptr = nullptr;
+		array.m_data = nullptr;
 	}
 
 	//Construct via shape-like object and Allocator
@@ -148,7 +148,7 @@ public:
 			array.get_allocator() == this->get_allocator())
 		{
 			std::swap((shape_type&)(*this), (shape_type&)array);
-			std::swap(this->m_memptr, array.m_memptr);
+			std::swap(this->m_data, array.m_data);
 
 			if (allocator_traits_t::
 					propagate_on_container_move_assignment::value) {
@@ -156,9 +156,9 @@ public:
 						static_cast<Allocator&&>(array);
 			}
 		} else {
-			get_allocator().deallocate(this->memptr(), this->size());
+			get_allocator().deallocate(this->data(), this->size());
 			(shape_type&)(*this) = (shape_type&)array;
-			this->m_memptr = get_allocator().allocate(this->size());
+			this->m_data = get_allocator().allocate(this->size());
 			evaluate(
 					make_bin_expr<BC::oper::Assign>(
 							this->internal(),
@@ -168,9 +168,9 @@ public:
 	}
 
 	void deallocate() {
-		if (this->m_memptr) {
-			Allocator::deallocate(this->memptr(), this->size());
-			this->m_memptr= nullptr;
+		if (this->m_data) {
+			Allocator::deallocate(this->data(), this->size());
+			this->m_data= nullptr;
 		}
 	}
 

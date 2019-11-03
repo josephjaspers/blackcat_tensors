@@ -308,12 +308,12 @@ public:
 						self = rv;
 			}, *this, rv));
 		} else if (std::is_same<system_tag, device_tag>::value) {
-			copy_impl::HostToDevice(as_derived().memptr(),
-					rv.as_derived().memptr(),
+			copy_impl::HostToDevice(as_derived().data(),
+					rv.as_derived().data(),
 					as_derived().size());
 		} else {
-			copy_impl::DeviceToHost(as_derived().memptr(),
-					rv.as_derived().memptr(),
+			copy_impl::DeviceToHost(as_derived().data(),
+					rv.as_derived().data(),
 					as_derived().size());
 		}
 #else

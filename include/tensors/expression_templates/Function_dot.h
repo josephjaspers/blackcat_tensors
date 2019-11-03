@@ -62,9 +62,9 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>:
 		//call outer product
 		BC::blas::BLAS<system_tag>::dot(
 				stream,
-				X.rows(), out.memptr(),
-				X.memptr(), X.leading_dimension(0),
-				Y.memptr(), Y.leading_dimension(0));
+				X.rows(), out.data(),
+				X.data(), X.leading_dimension(0),
+				Y.data(), Y.leading_dimension(0));
 
 		constexpr int beta_value = Beta == 0 ? 1 : Beta;
 		constexpr bool lv_scalar = blas_expression_traits<lv>::is_scalar_multiplied::value;
@@ -73,9 +73,9 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>:
 		if (lv_scalar || rv_scalar) {
 			auto alpha_lv = blas_expression_traits<lv>::get_scalar(left);
 			auto alpha_rv = blas_expression_traits<rv>::get_scalar(right);
-			blas_tools::scalar_multiply(stream, out.memptr(), beta_value, alpha_lv, alpha_rv);
+			blas_tools::scalar_multiply(stream, out.data(), beta_value, alpha_lv, alpha_rv);
 		} else if (beta_value != 1) {
-			blas_tools::scalar_multiply(stream, out.memptr(), out.memptr(), beta_value);
+			blas_tools::scalar_multiply(stream, out.data(), out.data(), beta_value);
 		}
     }
 };

@@ -106,12 +106,12 @@ struct Binary_Expression<multichannel_conv2d, Kernel, Image>
 		if (expression_traits<decltype(left_evaluated)>::is_temporary::value) {
 			using vt = typename decltype(left_evaluated)::value_type;
 
-			stream.template get_allocator_rebound<vt>().deallocate(left_evaluated.memptr(), left_evaluated.size());
+			stream.template get_allocator_rebound<vt>().deallocate(left_evaluated.data(), left_evaluated.size());
 		}
 		if (expression_traits<decltype(right_evaluated)>::is_temporary::value) {
 			using vt = typename decltype(right_evaluated)::value_type;
 
-			stream.template get_allocator_rebound<vt>().deallocate(right_evaluated.memptr(), right_evaluated.size());
+			stream.template get_allocator_rebound<vt>().deallocate(right_evaluated.data(), right_evaluated.size());
 		}
 	}
 };
@@ -186,12 +186,12 @@ struct Binary_Expression<multichannel_conv2d_kernel_backwards, lv, rv>:
 		if (expression_traits<decltype(left_evaluated)>::is_temporary::value) {
 			using vt = typename decltype(left_evaluated)::value_type;
 
-			stream.template get_allocator_rebound<vt>().deallocate(left_evaluated.memptr(), left_evaluated.size());
+			stream.template get_allocator_rebound<vt>().deallocate(left_evaluated.data(), left_evaluated.size());
 		}
 		if (expression_traits<decltype(right_evaluated)>::is_temporary::value) {
 			using vt = typename decltype(right_evaluated)::value_type;
 
-			stream.template get_allocator_rebound<vt>().deallocate(right_evaluated.memptr(), right_evaluated.size());
+			stream.template get_allocator_rebound<vt>().deallocate(right_evaluated.data(), right_evaluated.size());
 		}
 	}
 };
@@ -267,12 +267,12 @@ struct Binary_Expression<multichannel_conv2d_data_backwards, lv, rv>
 		if (expression_traits<decltype(left_evaluated)>::is_temporary::value) {
 			using vt = typename decltype(left_evaluated)::value_type;
 
-			stream.template get_allocator_rebound<vt>().deallocate(left_evaluated.memptr(), left_evaluated.size());
+			stream.template get_allocator_rebound<vt>().deallocate(left_evaluated.data(), left_evaluated.size());
 		}
 		if (expression_traits<decltype(right_evaluated)>::is_temporary::value) {
 			using vt = typename decltype(right_evaluated)::value_type;
 
-			stream.template get_allocator_rebound<vt>().deallocate(right_evaluated.memptr(), right_evaluated.size());
+			stream.template get_allocator_rebound<vt>().deallocate(right_evaluated.data(), right_evaluated.size());
 		}
 	}
 };
@@ -337,7 +337,7 @@ struct Unary_Expression<img2col, Array>
 					alpha_mod, beta_mod);
 
 				using vt = typename decltype(evaluated)::value_type;
-				stream.template get_allocator_rebound<vt>().deallocate(evaluated.memptr(), evaluated.size());
+				stream.template get_allocator_rebound<vt>().deallocate(evaluated.data(), evaluated.size());
 		} else {
 
 			BC::tensors::exprs::functions::conv2d_data_backwards(

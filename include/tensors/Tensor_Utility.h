@@ -166,7 +166,7 @@ public:
 		}
 
 		int copy_size = (unsigned)as_derived().size() > file_data.size() ? file_data.size() : as_derived().size();
-		BC::utility::implementation<system_tag>::HostToDevice(as_derived().internal().memptr(), file_data.data(), copy_size);
+		BC::utility::implementation<system_tag>::HostToDevice(as_derived().internal().data(), file_data.data(), copy_size);
 
 	}
 

@@ -31,7 +31,7 @@ private:
 
 	struct Virtual_Allocator {
 		virtual value_type* allocate(std::size_t sz) = 0;
-		virtual void deallocate(value_type* memptr, std::size_t sz) = 0;
+		virtual void deallocate(value_type* data, std::size_t sz) = 0;
 		virtual Virtual_Allocator* clone() const = 0;
 	};
 
@@ -80,8 +80,8 @@ private:
 			return retrieve_allocator(m_allocator).allocate(sz);
 		}
 
-		virtual void deallocate(value_type* memptr, std::size_t sz) override final {
-			retrieve_allocator(m_allocator).deallocate(memptr, sz);
+		virtual void deallocate(value_type* data, std::size_t sz) override final {
+			retrieve_allocator(m_allocator).deallocate(data, sz);
 		}
 	};
 
@@ -113,8 +113,8 @@ public:
 	value_type* allocate(std::size_t sz) {
 		return m_allocator.get()->allocate(sz);
 	}
-	void deallocate(value_type* memptr, std::size_t sz) {
-		m_allocator.get()->deallocate(memptr, sz);
+	void deallocate(value_type* data, std::size_t sz) {
+		m_allocator.get()->deallocate(data, sz);
 	}
 
 	template<class Allocator>
