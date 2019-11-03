@@ -26,6 +26,23 @@ struct Dim {
 		return prod();
 	}
 
+	BCINLINE
+	Dim& fill(BC::size_t value) {
+		for (int i = 0; i < N; ++i)
+			m_index[i] = value;
+		return *this;
+	}
+
+	BCINLINE
+	const value_type* data() const {
+		return m_index;
+	}
+
+	BCINLINE
+	value_type* data() {
+		return m_index;
+	}
+
 	///unchecked version of dimension
 	BCINLINE
 	const value_type& operator [](int i) const {
@@ -55,6 +72,28 @@ struct Dim {
 				return false;
 		}
 		return true;
+	}
+
+	template<
+		class... Ints,
+		class=std::enable_if_t<
+				BC::traits::is_sequence_of<BC::size_t, Ints...>>>
+	BCINLINE
+	auto concat(Ints... value) {
+		return concat(BC::Dim<sizeof...(Ints)> { value... });
+	}
+
+	template <int X> BCINLINE
+	Dim<N+X> concat(const Dim<X>& other) {
+		Dim<N+X> concat_dim;
+
+		for (int i = 0; i < N; ++i)
+			concat_dim[i] = m_index[i];
+
+		for (int i = 0; i < X; ++i)
+			concat_dim[i+N] = other[i];
+
+		return concat_dim;
 	}
 
 	BCINLINE
@@ -125,27 +164,35 @@ public:
 	}
 
 	BCINLINE Dim& operator += (const Dim& other) {
-		return inplace_op_impl(BC::oper::add, other);
+		return inplace_op_impl(BC::oper::Add(), other);
 	}
 
 	BCINLINE Dim& operator -= (const Dim& other) {
-		return inplace_op_impl(BC::oper::sub, other);
+		return inplace_op_impl(BC::oper::Sub(), other);
 	}
 
 	BCINLINE Dim& operator /= (const Dim& other) {
-		return inplace_op_impl(BC::oper::div, other);
+		return inplace_op_impl(BC::oper::Div(), other);
 	}
 
 	BCINLINE Dim& operator *= (const Dim& other) {
-		return inplace_op_impl(BC::oper::mul, other);
+		return inplace_op_impl(BC::oper::Mul(), other);
 	}
 
-	BCINLINE bool all(size_t start=0, size_t end=N) const {
+
+	BCINLINE
+	bool all(size_t start=0, size_t end=N) const {
 		for (; start<end; ++start)
 			if (m_index[start] == 0)
 				return false;
 		return true;
 	}
+
+	BCINLINE
+	bool all(size_t end) const {
+		return all(0, end);
+	}
+
 
 	BCINLINE
 	value_type sum(size_t start=0, size_t end=N) const {
@@ -156,11 +203,22 @@ public:
 	}
 
 	BCINLINE
+	value_type sum(size_t end) const {
+		return sum(0, end);
+	}
+
+
+	BCINLINE
 	value_type prod(size_t start=0, size_t end=N) const {
 		value_type p = 1;
 		for (; start<end; ++start)
 			p *= m_index[start];
 		return p;
+	}
+
+	BCINLINE
+	value_type prod(size_t end) const {
+		return prod(0, end);
 	}
 
 	BCINLINE
