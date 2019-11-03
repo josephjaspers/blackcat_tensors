@@ -20,6 +20,7 @@ class Tensor_IterAlgos {
 	Tensor_Base<Expression>& as_derived() {
 		return static_cast<Tensor_Base<Expression>&>(*this);
 	}
+
 	const Tensor_Base<Expression>& as_derived() const {
 		return static_cast<const Tensor_Base<Expression>&>(*this);
 	}
@@ -40,6 +41,7 @@ public:
 	auto& zero() {
 		return fill(0);
 	}
+
 	auto& ones() {
 		return fill(1);
 	}
@@ -48,6 +50,7 @@ public:
 	void for_each(function func) {
 		as_derived() = as_derived().un_expr(func);
 	}
+
 	template<class function>
 	void for_each(function func) const {
 		as_derived() = as_derived().un_expr(func);
@@ -75,76 +78,97 @@ public:
 	auto begin() {
 		return iterators::forward_iterator_begin(as_derived());
 	}
+
 	auto end() {
 		return iterators::forward_iterator_end(as_derived());
 	}
+
 	const auto cbegin() const {
 		return iterators::forward_iterator_begin(as_derived());
 	}
+
 	const auto cend() const {
 		return iterators::forward_iterator_end(as_derived());
 	}
+
 	auto rbegin() {
 		return iterators::reverse_iterator_begin(as_derived());
 	}
+
 	auto rend() {
 		return iterators::reverse_iterator_end(as_derived());
 	}
+
 	const auto crbegin() const {
 		return iterators::reverse_iterator_begin(as_derived());
 	}
+
 	const auto crend() const {
 		return iterators::reverse_iterator_end(as_derived());
 	}
+
 	//----------const versions----------//
 	auto begin() const {
 		return iterators::forward_iterator_begin(as_derived());
 	}
+
 	auto end() const {
 		return iterators::forward_iterator_end(as_derived());
 	}
+
 	auto rbegin() const {
 		return iterators::reverse_iterator_begin(as_derived());
 	}
+
 	auto rend() const {
 		return iterators::reverse_iterator_end(as_derived());
 	}
 
-
 	auto nd_begin() {
 		return iterators::forward_iterator_begin(as_derived());
 	}
+
 	auto nd_end() {
 		return iterators::forward_iterator_end(as_derived());
 	}
+
 	const auto nd_cbegin() const {
 		return iterators::forward_iterator_begin(as_derived());
 	}
+
 	const auto nd_cend() const {
 		return iterators::forward_iterator_end(as_derived());
 	}
+
 	auto nd_rbegin() {
 		return iterators::reverse_iterator_begin(as_derived());
 	}
+
 	auto nd_rend() {
 		return iterators::reverse_iterator_end(as_derived());
 	}
+
 	const auto nd_crbegin() const {
 		return iterators::reverse_iterator_begin(as_derived());
 	}
+
 	const auto nd_crend() const {
 		return iterators::reverse_iterator_end(as_derived());
 	}
+
 	//----------const versions----------//
 	auto nd_begin() const {
 		return iterators::forward_iterator_begin(as_derived());
 	}
+
 	auto nd_end() const {
 		return iterators::forward_iterator_end(as_derived());
 	}
+
 	auto nd_rbegin() const {
 		return iterators::reverse_iterator_begin(as_derived());
 	}
+
 	auto nd_rend() const {
 		return iterators::reverse_iterator_end(as_derived());
 	}
@@ -153,41 +177,52 @@ public:
 	auto cw_begin() {
 		return iterators::forward_cwise_iterator_begin(as_derived().internal());
 	}
+
 	auto cw_end() {
 		return iterators::forward_cwise_iterator_end(as_derived().internal());
 	}
+
 	const auto cw_cbegin() const {
 		return iterators::forward_cwise_iterator_begin(as_derived().internal());
 	}
+
 	const auto cw_cend() const {
 		return iterators::forward_cwise_iterator_end(as_derived().internal());
 	}
+
 	auto cw_rbegin() {
 		return iterators::reverse_cwise_iterator_begin(as_derived().internal());
 	}
+
 	auto cw_rend() {
 		return iterators::reverse_cwise_iterator_end(as_derived().internal());
 	}
+
 	const auto cw_crbegin() const {
 		return iterators::reverse_cwise_iterator_begin(as_derived().internal());
 	}
+
 	const auto cw_crend() const {
 		return iterators::reverse_cwise_iterator_end(as_derived().internal());
 	}
-	//const versions
+
+	//----------const versions----------//
 	auto cw_begin() const {
 		return iterators::forward_cwise_iterator_begin(as_derived().internal());
 	}
+
 	auto cw_end() const {
 		return iterators::forward_cwise_iterator_end(as_derived().internal());
 	}
+
 	auto cw_rbegin() const {
 		return iterators::reverse_cwise_iterator_begin(as_derived().internal());
 	}
+
 	auto cw_rend() const {
 		return iterators::reverse_cwise_iterator_end(as_derived().internal());
 	}
-		//----------------------iterator wrappers---------------------------//
+	//----------------------iterator wrappers---------------------------//
 
 #define BC_TENSOR_tensor_iterator_dimension_DEF(iterator_name, begin_func, end_func)\
 	template<class der_t>									\
@@ -229,7 +264,7 @@ public:
 															\
  template<class der_t, class... args>						\
  static auto make_##iterator_name (der_t& p_derived, args... params) {	\
-	   return iterator_name<der_t>(p_derived, params...);				 \
+	   return iterator_name<der_t>(p_derived, params...);				\
  }																		\
 
 BC_TENSOR_tensor_iterator_dimension_DEF(ND_ForwardIterator, nd_begin, nd_end)
@@ -286,13 +321,17 @@ BC_TENSOR_tensor_iterator_dimension_DEF(CW_ReverseIterator, cw_rbegin, cw_rend)
 	template<class... params> auto reverse_iter(params ... ps) const {
 		return nd_reverse_iter();
 	}
+
 };
 
-#ifdef BC_CPP17 //------------------------------------------------------------------------------------------
+#ifdef BC_CPP17
+
 namespace {
 template<class Expression>
-using BC_sum_t = std::conditional_t<std::is_same<typename Expression::value_type, bool>::value,
-		BC::size_t, typename Expression::value_type>;
+using BC_sum_t = std::conditional_t<
+		std::is_same<typename Expression::value_type, bool>::value,
+		BC::size_t,
+		typename Expression::value_type>;
 }
 
 template<class Expression>

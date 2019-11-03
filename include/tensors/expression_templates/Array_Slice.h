@@ -29,6 +29,7 @@ struct Array_Slice:
 	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
 	using stream_type = BC::Stream<system_tag>;
 	using parent = Kernel_Array<Shape, ValueType, system_tag, Tags...>;
+	using move_assignable = std::false_type;
 
 	stream_type m_stream;
 	allocator_type m_allocator;
@@ -49,7 +50,8 @@ struct Array_Slice:
 namespace {
 
 template<int Dimension, class Parent, class... Tags>
-using slice_type_from_parent = Array_Slice<BC::Shape<BC::traits::max(Dimension,0)>,
+using slice_type_from_parent = Array_Slice<
+		BC::Shape<BC::traits::max(Dimension,0)>,
 		typename Parent::value_type,
 		typename Parent::allocator_type,
 		BC_View, Tags...>;

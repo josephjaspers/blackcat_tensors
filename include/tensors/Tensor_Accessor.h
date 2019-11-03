@@ -20,9 +20,6 @@ template<class... Ts>
 auto index(Ts... ts) {
 	return BC::dim(ts...);
 }
-template<int Dimension>
-using index_type = BC::Dim<Dimension>;
-
 
 template<class T, class Shape>
 auto reshape(Tensor_Base<T>& tensor, Shape shape) {
@@ -50,76 +47,19 @@ template<class ExpressionTemplate, class voider=void>
 class Tensor_Accessor {
 
 	const auto& as_derived() const { return static_cast<const Tensor_Base<ExpressionTemplate>&>(*this); }
-		  auto& as_derived()	   { return static_cast<	  Tensor_Base<ExpressionTemplate>&>(*this); }
+	      auto& as_derived()       { return static_cast<      Tensor_Base<ExpressionTemplate>&>(*this); }
 
 public:
 
-	auto data() const { return this->as_derived().memptr(); }
-	auto data()	   { return this->as_derived().memptr(); }
+	auto data() const noexcept { return this->as_derived().memptr(); }
+	auto data()       noexcept { return this->as_derived().memptr(); }
 
 	const auto operator [] (BC::size_t i) const { return slice(i); }
-		  auto operator [] (BC::size_t i)	    { return slice(i); }
+	      auto operator [] (BC::size_t i)       { return slice(i); }
 
 	//enables syntax: `tensor[{start, end}]`
-	struct range { BC::size_t  from, to; };
-	const auto operator [] (range r) const { return slice(r.from, r.to); }
-		  auto operator [] (range r)	   { return slice(r.from, r.to); }
-
-	const auto subblock(
-				index_type<ExpressionTemplate::tensor_dimension> index,
-				BC::Shape<ExpressionTemplate::tensor_dimension> shape) const {
-		return make_tensor(exprs::make_chunk(as_derived(), index, shape));
-	}
-
-	auto subblock(
-			index_type<ExpressionTemplate::tensor_dimension> index,
-			BC::Shape<ExpressionTemplate::tensor_dimension> shape) {
-		return make_tensor(exprs::make_chunk(as_derived(), index, shape));
-	}
-
-private:
-	using subblock_index_type = std::tuple<
-			index_type<ExpressionTemplate::tensor_dimension>,
-			BC::Shape<ExpressionTemplate::tensor_dimension>>;
-public:
-
-	const auto operator [] (subblock_index_type index_shape) const {
-		return subblock(std::get<0>(index_shape), std::get<1>(index_shape));
-	}
-
-	auto operator [] (subblock_index_type index_shape) {
-		return subblock(std::get<0>(index_shape), std::get<1>(index_shape));
-	}
-
-	const auto row_range(int begin, int end) const {
-		static_assert(ExpressionTemplate::tensor_dimension  == 2,
-				"ROW_RANGE ONLY AVAILABLE TO MATRICES");
-
-		BC_ASSERT(begin < end,
-				"Row range, begin-range must be smaller then end-range");
-		BC_ASSERT(begin >= 0 && begin < as_derived().rows(),
-				"Row range, begin-range must be between 0 and rows()");
-		BC_ASSERT(end   >= 0 && end   < as_derived().rows(),
-				"Row range, end-range must be be between begin-range and rows()");
-
-		return chunk(this->as_derived(), begin, 0)(end-begin, this->as_derived().cols());
-	}
-	auto row_range(int begin, int end) {
-		using self = const Tensor_Accessor<ExpressionTemplate>&;
-		return BC::traits::auto_remove_const(
-				const_cast<self>(*this).row_range(begin, end));
-	}
-
-	const auto scalar(BC::size_t i) const {
-		BC_ASSERT(i >= 0 && i < as_derived().size(),
-				"Scalar index must be between 0 and size()");
-		return make_tensor(exprs::make_scalar(as_derived(), i));
-	}
-	auto scalar(BC::size_t i) {
-		BC_ASSERT(i >= 0 && i < as_derived().size(),
-				"Scalar index must be between 0 and size()");
-		return make_tensor(exprs::make_scalar(as_derived(), i));
-	}
+	const auto operator [] (BC::Dim<2> range) const { return slice(range[0], range[1]); }
+	      auto operator [] (BC::Dim<2> range)       { return slice(range[0], range[1]); }
 
 	const auto slice(BC::size_t i) const {
 		BC_ASSERT(i >= 0 && i < as_derived().outer_dimension(),
@@ -149,19 +89,31 @@ public:
 		return make_tensor(exprs::make_ranged_slice(as_derived(), from, to));
 	}
 
+	const auto scalar(BC::size_t i) const {
+		BC_ASSERT(i >= 0 && i < as_derived().size(),
+				"Scalar index must be between 0 and size()");
+		return make_tensor(exprs::make_scalar(as_derived(), i));
+	}
+
+	auto scalar(BC::size_t i) {
+		BC_ASSERT(i >= 0 && i < as_derived().size(),
+				"Scalar index must be between 0 and size()");
+		return make_tensor(exprs::make_scalar(as_derived(), i));
+	}
+
 	const auto diagnol(BC::size_t index = 0) const {
+		static_assert(ExpressionTemplate::tensor_dimension  == 2,
+				"diagnol method is only available to matrices");
 		BC_ASSERT(index > -as_derived().rows() && index < as_derived().rows(),
 				"diagnol `index` must be -rows() and rows())");
-		static_assert(ExpressionTemplate::tensor_dimension  == 2,
-				"DIAGNOL ONLY AVAILABLE TO MATRICES");
 		return make_tensor(exprs::make_diagnol(as_derived(),index));
 	}
 
 	auto diagnol(BC::size_t index = 0) {
+		static_assert(ExpressionTemplate::tensor_dimension  == 2,
+				"diagnol method is only available to matrices");
 		BC_ASSERT(index > -as_derived().rows() && index < as_derived().rows(),
 				"diagnol `index` must be -rows() and rows())");
-		static_assert(ExpressionTemplate::tensor_dimension  == 2,
-				"DIAGNOL ONLY AVAILABLE TO MATRICES");
 		return make_tensor(exprs::make_diagnol(as_derived(),index));
 	}
 
@@ -184,20 +136,61 @@ public:
 	}
 
 	const auto row(BC::size_t index) const {
-		BC_ASSERT(index >= 0 && index < as_derived().rows(),
-				"Row index must be between 0 and rows()");
 		static_assert(ExpressionTemplate::tensor_dimension == 2,
 				"MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		BC_ASSERT(index >= 0 && index < as_derived().rows(),
+				"Row index must be between 0 and rows()");
 		return make_tensor(exprs::make_row(as_derived(), index));
 	}
 
 	auto row(BC::size_t index) {
-		BC_ASSERT(index >= 0 && index < as_derived().rows(),
-				"Row index must be between 0 and rows()");
-
 		static_assert(ExpressionTemplate::tensor_dimension == 2,
 				"MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		BC_ASSERT(index >= 0 && index < as_derived().rows(),
+				"Row index must be between 0 and rows()");
 		return make_tensor(exprs::make_row(as_derived(), index));
+	}
+
+private:
+	using subblock_index  = BC::Dim<ExpressionTemplate::tensor_dimension>;
+	using subblock_shape = BC::Shape<ExpressionTemplate::tensor_dimension>;
+	using subblock_index_shape = std::tuple<subblock_index, subblock_shape>;
+public:
+
+	const auto subblock(subblock_index index, subblock_shape shape) const {
+		return make_tensor(exprs::make_chunk(as_derived(), index, shape));
+	}
+
+	auto subblock(subblock_index index, subblock_shape shape) {
+		return make_tensor(exprs::make_chunk(as_derived(), index, shape));
+	}
+
+	const auto operator [] (subblock_index_shape index_shape) const {
+		return subblock(std::get<0>(index_shape), std::get<1>(index_shape));
+	}
+
+	auto operator [] (subblock_index_shape index_shape) {
+		return subblock(std::get<0>(index_shape), std::get<1>(index_shape));
+	}
+
+	const auto row_range(int begin, int end) const {
+		static_assert(ExpressionTemplate::tensor_dimension  == 2,
+				"ROW_RANGE ONLY AVAILABLE TO MATRICES");
+
+		BC_ASSERT(begin < end,
+				"Row range, begin-range must be smaller then end-range");
+		BC_ASSERT(begin >= 0 && begin < as_derived().rows(),
+				"Row range, begin-range must be between 0 and rows()");
+		BC_ASSERT(end   >= 0 && end   < as_derived().rows(),
+				"Row range, end-range must be be between begin-range and rows()");
+
+		return chunk(this->as_derived(), begin, 0)(end-begin, this->as_derived().cols());
+	}
+
+	auto row_range(int begin, int end) {
+		using self = Tensor_Accessor<ExpressionTemplate>;
+		return BC::traits::auto_remove_const(
+				const_cast<const self&>(*this).row_range(begin, end));
 	}
 
 	const auto operator() (BC::size_t i) const { return scalar(i); }
