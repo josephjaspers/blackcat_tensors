@@ -87,8 +87,6 @@ int test_constructors(int sz=128) {
 		mat b(5,5);
 
 		b = a;
-		a.print();
-		b.print();
 		return BC::tensors::all(b.approx_equal(a));
 	)
 //	//-----------------------------------Move Oper-----------------------------//
