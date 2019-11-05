@@ -70,9 +70,9 @@ public:
 		stride(stride),
 		w(krnl_rows, krnl_cols, depth, nkrnls),
 		w_gradients(krnl_rows, krnl_cols, depth, nkrnls),
-		m_input_shape(rows, cols, depth),
-		m_output_shape(rows + padding*2 + 1 - krnl_rows,
-				cols + padding*2 + 1 - krnl_cols, nkrnls)
+		m_input_shape{rows, cols, depth},
+		m_output_shape{rows + padding*2 + 1 - krnl_rows,
+				cols + padding*2 + 1 - krnl_cols, nkrnls}
 	{
 		w.randomize(-3, 3);
 	}

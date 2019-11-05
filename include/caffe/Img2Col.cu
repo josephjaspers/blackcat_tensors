@@ -90,7 +90,7 @@ void im2col_gpu(const Dtype* data_im, const int channels,
 			num_kernels, data_im, height, width, kernel_h, kernel_w, pad_h,
 			pad_w, stride_h, stride_w, dilation_h, dilation_w, height_col,
 			width_col, data_col);
-	CUDA_POST_KERNEL_CHECK;
+//	CUDA_POST_KERNEL_CHECK;
 }
 
 // Explicit instantiation
@@ -194,7 +194,7 @@ void im2col_nd_gpu(const Dtype* data_im, const int num_spatial_axes,
 		const int* kernel_shape, const int* pad, const int* stride,
 		const int* dilation, Dtype* data_col) {
 	// num_axes should be smaller than block size
-	DCHECK_LT(num_spatial_axes, CAFFE_CUDA_NUM_THREADS);
+//	DCHECK_LT(num_spatial_axes, CAFFE_CUDA_NUM_THREADS);
 	switch (num_spatial_axes) {
 	case 1:
 		im2col_nd_gpu_kernel<Dtype, 1>	// NOLINT_NEXT_LINE(whitespace/operators)
@@ -257,10 +257,10 @@ void im2col_nd_gpu(const Dtype* data_im, const int num_spatial_axes,
 				kernel_shape, pad, stride, dilation, data_col);
 		break;
 	default:
-		LOG(FATAL) << "im2col_nd_gpu does not support computation with "
+		std::cout << "im2col_nd_gpu does not support computation with "
 							 << num_spatial_axes << " spatial axes";
 	}
-	CUDA_POST_KERNEL_CHECK;
+//	CUDA_POST_KERNEL_CHECK;
 }
 
 // Explicit instantiation
@@ -294,10 +294,10 @@ __global__ void col2im_gpu_kernel(const int n, const Dtype* data_col,
 		// compute the start and end of the output
 		const int w_col_start =
 				(w_im < kernel_extent_w) ? 0 : (w_im - kernel_extent_w) / stride_w + 1;
-		const int w_col_end = min(w_im / stride_w + 1, width_col);
+		const int w_col_end = BC::traits::min(w_im / stride_w + 1, width_col);
 		const int h_col_start =
 				(h_im < kernel_extent_h) ? 0 : (h_im - kernel_extent_h) / stride_h + 1;
-		const int h_col_end = min(h_im / stride_h + 1, height_col);
+		const int h_col_end = BC::traits::min(h_im / stride_h + 1, height_col);
 		// TODO: use LCM of stride and dilation to avoid unnecessary loops
 		for (int h_col = h_col_start; h_col < h_col_end; h_col += 1) {
 			for (int w_col = w_col_start; w_col < w_col_end; w_col += 1) {
@@ -335,7 +335,7 @@ void col2im_gpu(const Dtype* data_col, const int channels,
 			num_kernels, data_col, height, width, channels, kernel_h, kernel_w,
 			pad_h, pad_w, stride_h, stride_w, dilation_h, dilation_w,
 			height_col, width_col, data_im);
-	CUDA_POST_KERNEL_CHECK;
+//	CUDA_POST_KERNEL_CHECK;
 }
 
 // Explicit instantiation
@@ -397,7 +397,7 @@ __global__ void col2im_nd_gpu_kernel(const int n, const Dtype* data_col,
 					(d_im[i] < kernel_extent) ? 0 :
 					(d_im[i] - kernel_extent) / shared_stride[i] + 1;
 			d_col_end[i] =
-					min(d_im[i] / shared_stride[i] + 1, shared_col_shape[i + 1]);
+					BC::traits::min(d_im[i] / shared_stride[i] + 1, shared_col_shape[i + 1]);
 			if (d_col_start[i] >= d_col_end[i]) {
 				// Skip computation if the dimension is 0 at any spatial axis --
 				// final val will be 0.
@@ -460,7 +460,7 @@ void col2im_nd_gpu(const Dtype* data_col, const int num_spatial_axes,
 		const int* kernel_shape, const int* pad, const int* stride,
 		const int* dilation, Dtype* data_im) {
 	// num_axes should be smaller than block size
-	DCHECK_LT(num_spatial_axes, CAFFE_CUDA_NUM_THREADS);
+//	DCHECK_LT(num_spatial_axes, CAFFE_CUDA_NUM_THREADS);
 	switch (num_spatial_axes) {
 	case 1:
 		col2im_nd_gpu_kernel<Dtype, 1>	// NOLINT_NEXT_LINE(whitespace/operators)
@@ -526,7 +526,7 @@ void col2im_nd_gpu(const Dtype* data_col, const int num_spatial_axes,
 		std::cout << "col2im_nd_gpu does not support computation with "
 							 << num_spatial_axes << " spatial axes";
 	}
-	CUDA_POST_KERNEL_CHECK;
+//	CUDA_POST_KERNEL_CHECK;
 }
 
 // Explicit instantiation

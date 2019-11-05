@@ -135,7 +135,7 @@ public:
 
 
 	template<int ADL=0>
-	void default_input_tensor_factory() const {
+	auto default_input_tensor_factory() const {
 		using dimension      = typename traits::input_tensor_dimension;
 		using value_type     = typename traits::value_type;
 		using allocator_type = typename traits::allocator_type;
@@ -144,7 +144,7 @@ public:
 	}
 
 	template<int ADL=0>
-	void default_tensor_output_factory() const {
+	auto default_tensor_output_factory() const {
 		using dimension      = typename traits::output_tensor_dimension;
 		using value_type     = typename traits::value_type;
 		using allocator_type = typename traits::allocator_type;
@@ -153,7 +153,7 @@ public:
 	}
 
 	template<int ADL=0>
-	void default_batched_input_tensor_factory() const {
+	auto default_batched_input_tensor_factory() const {
 		using dimension      = typename traits::input_tensor_dimension;
 		using value_type     = typename traits::value_type;
 		using allocator_type = typename traits::allocator_type;
@@ -162,7 +162,7 @@ public:
 	}
 
 	template<int ADL=0>
-	void default_batched_tensor_output_factory() const {
+	auto default_batched_tensor_output_factory() const {
 		using dimension      = typename traits::output_tensor_dimension;
 		using value_type     = typename traits::value_type;
 		using allocator_type = typename traits::allocator_type;
