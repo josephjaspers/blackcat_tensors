@@ -54,7 +54,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 
 	using isRecurrent = std::false_type;
 	auto network = BC::nn::neuralnetwork(
-		BC::nn::experimental::Convolution<System, double, isRecurrent>(
+		BC::nn::experimental::Convolution<System, typename System::default_floating_point_type, isRecurrent>(
 				BC::dim(28,28,1),
 				BC::dim(3,3,4)),
 		BC::nn::flatten(system_tag, BC::dim(26,26,4)),

@@ -140,16 +140,22 @@ public:
 		using value_type     = typename traits::value_type;
 		using allocator_type = typename traits::allocator_type;
 
-		return BC::Tensor<dimension::value, value_type, allocator_type>(get_input_shape());
+		return [&]() {
+			return BC::Tensor<dimension::value, value_type, allocator_type>(
+					get_input_shape()).zero();
+		};
 	}
 
 	template<int ADL=0>
-	auto default_tensor_output_factory() const {
+	auto default_output_tensor_factory() const {
 		using dimension      = typename traits::output_tensor_dimension;
 		using value_type     = typename traits::value_type;
 		using allocator_type = typename traits::allocator_type;
 
-		return BC::Tensor<dimension::value, value_type, allocator_type>(get_output_shape());
+		return [&]() {
+			return BC::Tensor<dimension::value, value_type, allocator_type>(
+					get_output_shape()).zero();
+		};
 	}
 
 	template<int ADL=0>
@@ -158,16 +164,22 @@ public:
 		using value_type     = typename traits::value_type;
 		using allocator_type = typename traits::allocator_type;
 
-		return BC::Tensor<dimension::value+1, value_type, allocator_type>(get_batched_input_shape());
+		return [&]() {
+			return BC::Tensor<dimension::value+1, value_type, allocator_type>(
+				get_batched_input_shape()).zero();
+		};
 	}
 
 	template<int ADL=0>
-	auto default_batched_tensor_output_factory() const {
+	auto default_batched_output_tensor_factory() const {
 		using dimension      = typename traits::output_tensor_dimension;
 		using value_type     = typename traits::value_type;
 		using allocator_type = typename traits::allocator_type;
 
-		return BC::Tensor<dimension::value+1, value_type, allocator_type>(get_batched_output_shape());
+		return [&]() {
+			return BC::Tensor<dimension::value+1, value_type, allocator_type>(
+					get_batched_output_shape()).zero();
+		};
 	}
 
 };

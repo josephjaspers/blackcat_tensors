@@ -27,7 +27,14 @@ struct BLAS<device_tag> {
 
         stream.enqueue([=]() {
 			cublasHandle_t handle = stream.get_cublas_handle();
-			BC_CUDA_ASSERT((cublasSgemm(handle, TRANS_A, TRANS_B, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc)));
+			BC_CUDA_ASSERT(
+					(cublasSgemm(
+							handle, TRANS_A, TRANS_B,
+							m, n, k,
+							alpha,
+							A, lda,
+							B, ldb,
+							beta, C, ldc)));
         });
     }
 

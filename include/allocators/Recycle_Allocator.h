@@ -2,7 +2,7 @@
  * RecyclerAllocator.h
  *
  *  Created on: Sep 21, 2019
- *      Author: joseph
+ *	  Author: joseph
  */
 
 #ifndef BLACKCATTENSORS_ALLOCATORS_FANCY_H_
@@ -21,6 +21,7 @@ struct Recycle_Allocator_Globals {
 		static std::unordered_map<BC::size_t, std::vector<Byte*>> m_recycler;
 		return m_recycler;
 	}
+
 	static auto& get_locker() {
 		static std::mutex m_locker;
 		return m_locker;
@@ -28,11 +29,13 @@ struct Recycle_Allocator_Globals {
 };
 
 
-template<class SystemTag, class T, class AlternateAllocator=BC::Allocator<SystemTag, Byte>>
+template<
+		class SystemTag,
+		class T,
+		class AlternateAllocator=BC::Allocator<SystemTag, Byte>>
 struct Recycle_Allocator {
 
 	using system_tag = SystemTag;	//BC tag
-
 	using value_type = T;
 	using pointer = value_type*;
 	using const_pointer = const value_type*;
@@ -49,6 +52,7 @@ struct Recycle_Allocator {
 			"AlternateAllocator of Recycle_Allocator must have same system_tag");
 
 private:
+
 	AlternateAllocator m_allocator;
 
 	static auto& get_recycler() {
@@ -61,7 +65,8 @@ private:
 public:
 
 	template<class altT>
-	struct rebind { using other = Recycle_Allocator<Recycle_Allocator, altT, AlternateAllocator>;
+	struct rebind {
+		using other = Recycle_Allocator<SystemTag, altT, AlternateAllocator>;
 	};
 
 	Recycle_Allocator()=default;
@@ -75,36 +80,38 @@ public:
 	Recycle_Allocator(const Recycle_Allocator<SystemTag, U, AlternateAllocator>& other) {}
 
 
-    T* allocate(BC::size_t size) {
-    	if (size == 0) { return nullptr; }
-    	std::lock_guard<std::mutex> lck(get_locker());
+	T* allocate(BC::size_t size) {
+		if (size == 0) { return nullptr; }
 
-    	size *= sizeof(value_type);
-    	if (get_recycler().find(size) != get_recycler().end() &&
-    			!get_recycler()[size].empty()) {
-    		T* data = reinterpret_cast<value_type*>(get_recycler()[size].back());
-    		get_recycler()[size].pop_back();
-    		return data;
-    	} else {
-    		return reinterpret_cast<value_type*>(m_allocator.allocate(size));
-    	}
-    }
+		std::lock_guard<std::mutex> lck(get_locker());
+		size *= sizeof(value_type);
 
-    void deallocate(T* ptr, BC::size_t size) {
-    	if (size == 0 || ptr==nullptr) { return; }
-    	std::lock_guard<std::mutex> lck(get_locker());
-    	size *= sizeof(value_type);
-    	get_recycler()[size].push_back(reinterpret_cast<Byte*>(ptr));
-    }
+		auto& recycler = get_recycler();
 
-    void clear_cache() {
-    	std::lock_guard<std::mutex>(get_locker());
-    	for (auto kv : get_recycler()) {
-    		for (Byte* ptr: kv.second) {
-    			m_allocator.deallocate(ptr, kv.first);
-    		}
-    	}
-    }
+		if (recycler.find(size) != recycler.end() && !recycler[size].empty()) {
+			T* data = reinterpret_cast<value_type*>(recycler[size].back());
+			recycler[size].pop_back();
+			return data;
+		} else {
+			return reinterpret_cast<value_type*>(m_allocator.allocate(size));
+		}
+	}
+
+	void deallocate(T* ptr, BC::size_t size) {
+		if (size == 0 || ptr==nullptr) { return; }
+		std::lock_guard<std::mutex> lck(get_locker());
+		size *= sizeof(value_type);
+		get_recycler()[size].push_back(reinterpret_cast<Byte*>(ptr));
+	}
+
+	void clear_cache() {
+		std::lock_guard<std::mutex>(get_locker());
+		for (auto kv : get_recycler()) {
+			for (Byte* ptr: kv.second) {
+				m_allocator.deallocate(ptr, kv.first);
+			}
+		}
+	}
 
 	template<class U>
 	constexpr bool operator == (

@@ -71,6 +71,7 @@ struct Evaluator<device_tag> {
 
 		stream.enqueue([=]() {
 			run::eval(expression, stream);
+			BC_CUDA_ASSERT(cudaPeekAtLastError());
 		});
 	}
 

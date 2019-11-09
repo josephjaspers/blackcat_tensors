@@ -23,12 +23,14 @@ class host_tag : system_tag_base {
 public:
 	using default_floating_point_type = double;
 	using default_integer_type = int;
+	static const char* name() { return "BC::host_tag"; }
 };
 
 class device_tag : system_tag_base {
 public:
 	using default_floating_point_type = float;
 	using default_integer_type = int;
+	static const char* name() { return "BC::device_tag"; }
 };
 
 template<class T>
@@ -131,7 +133,7 @@ inline void bc_assert(bool condition, str_type msg, const char* file, const char
 #include <cublas.h>
 namespace BC {
 
-#define BC_CUDA_ASSERT(ans) { BC_cuda_assert((ans), __FILE__, __PRETTY_FUNCTION__, __LINE__); }
+#define BC_CUDA_ASSERT(...) { BC_cuda_assert((__VA_ARGS__), __FILE__, __PRETTY_FUNCTION__, __LINE__); }
 inline void BC_cuda_assert(cudaError_t code, const char *file, const char* function, int line)
 {
    if (code != cudaSuccess)

@@ -164,7 +164,23 @@ int test_matrix_muls(int sz=128) {
 		return BC::tensors::all(validation);
 	)
 
+
+
+//	BC_TEST_DEF(
+//		scal two(2.f);
+//
+//		c = a * b * two;
+//		d = two * a * b;
+//
+//		validation = c.approx_equal(d);
+//		return BC::tensors::all(validation);
+//	)
+
+
 	BC_TEST_DEF(
+		a.print();
+		b.print();
+
 		c = a * b * 2;
 		d = 2 * a * b;
 

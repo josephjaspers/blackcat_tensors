@@ -23,7 +23,7 @@ struct Flatten:
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	using allocator_type = BC::Allocator<SystemTag, ValueType>;
+	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
 	using parent_type = Layer_Base<
 			Flatten<SystemTag, ValueType, InputTensorDimension>>;
 

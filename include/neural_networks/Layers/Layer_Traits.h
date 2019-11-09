@@ -39,7 +39,7 @@ using query_defines_predict = typename T::defines_predict;
 } // ns detail
 
 template<class T>
-struct layer_traits {
+struct layer_traits: BC::traits::common_traits<T> {
 	/**
 	 *  Layers have the function: backward_propagate(Args...);
 	 *  -- The arguments supplied are based upon these traits.

@@ -39,6 +39,7 @@ public:
 
 		static constexpr bool lv_host_mode = BC::tensors::exprs::expression_traits<lv_scalar_t>::is_stack_allocated::value;
 		static constexpr bool rv_host_mode = BC::tensors::exprs::expression_traits<rv_scalar_t>::is_stack_allocated::value;
+
 		static_assert(lv_host_mode == rv_host_mode || lv_scalar != rv_scalar,
 				"Host and Device Scalars may not be mixed Blas calculations");
 		static constexpr bool host_mode    = lv_host_mode || rv_host_mode;
@@ -56,8 +57,10 @@ public:
 				BC::traits::constexpr_else_if<(lv_scalar != rv_scalar) && (alpha_mod == 1)>(
 					[&](){
 						return BC::traits::constexpr_ternary<lv_scalar>(
-								[&]() { return lv; },
-								[&]() { return rv; }
+								[=]() {
+							return lv; },
+								[=]() {
+									return rv; }
 						);
 					},
 				BC::traits::constexpr_else_if<lv_scalar && rv_scalar>(
@@ -132,13 +135,16 @@ public:
 		 */
 	    static constexpr bool lv_scalar = blas_expression_traits<Lv>::is_scalar_multiplied::value;
 	    static constexpr bool rv_scalar = blas_expression_traits<Rv>::is_scalar_multiplied::value;
+
 	    using value_type = typename Lv::value_type;
 
 	    auto alpha_lv = blas_expression_traits<Lv>::get_scalar(left);
 		auto alpha_rv = blas_expression_traits<Rv>::get_scalar(right);
-
+//		BC::print("alpha_lv: ", typeid(alpha_lv).name());
+//		BC::print("alpha_rv: ", typeid(alpha_rv).name());
 		auto alpha_ = calculate_alpha<value_type, alpha_mod, lv_scalar, rv_scalar>(stream, alpha_lv, alpha_rv);
 	    auto beta_  = make_constexpr_scalar<typename expression_traits<decltype(alpha_)>::allocation_tag, beta_mod, value_type>();//blas_impl::template scalar_constant<value_type, beta_mod>();
+//		BC::print("beta alloc_tag: ", typename expression_traits<decltype(alpha_)>::allocation_tag::name());
 
 		auto left_ = greedy_evaluate(blas_expression_traits<Lv>::remove_blas_modifiers(left), stream);
 	    auto right_ = greedy_evaluate(blas_expression_traits<Rv>::remove_blas_modifiers(right), stream);

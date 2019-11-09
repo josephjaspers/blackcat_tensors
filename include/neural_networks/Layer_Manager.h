@@ -16,21 +16,19 @@ namespace nn {
 template<
 	class Derived, //The LayerChain base
 	class Layer,
-	class Neural_Network_Is_Recurrent=std::false_type, //must be std::true_type or false_type or have "value"
-	class Allocator=BC::Allocator<
-		typename layer_traits<Layer>::system_tag,
-		typename layer_traits<Layer>::value_type>>
+	class Neural_Network_Is_Recurrent=std::false_type>
 struct Layer_Manager: Layer {
 
 	template<class... Args>
 	Layer_Manager(Args... args):
 		Layer(args...) {}
 
-	template<class D, class L, class R, class A>
+	template<class D, class L, class R>
 	friend class Layer_Manager;
 
 	using input_tensor_dimension = typename layer_traits<Layer>::input_tensor_dimension;
 	using output_tensor_dimension = typename layer_traits<Layer>::output_tensor_dimension;
+	using allocator_type = typename layer_traits<Layer>::allocator_type;
 	using is_recurrent = Neural_Network_Is_Recurrent;
 
 	static_assert(input_tensor_dimension::value == decltype(std::declval<Layer>().get_input_shape())::tensor_dimension,
@@ -51,9 +49,9 @@ struct Layer_Manager: Layer {
 
 	using value_type = typename layer_traits<Layer>::value_type;
 
-	using input_tensor_type = BC::Tensor<input_tensor_dimension::value, value_type, Allocator>;
-	using batched_input_tensor_type = BC::Tensor<input_tensor_dimension::value+1, value_type, Allocator>;
-	using batched_output_tensor_type = BC::Tensor<output_tensor_dimension::value+1, value_type, Allocator>;
+	using input_tensor_type = BC::Tensor<input_tensor_dimension::value, value_type, allocator_type>;
+	using batched_input_tensor_type = BC::Tensor<input_tensor_dimension::value+1, value_type, allocator_type>;
+	using batched_output_tensor_type = BC::Tensor<output_tensor_dimension::value+1, value_type, allocator_type>;
 
 	template<char C, class Tensor, class isRecurrent=std::true_type>
 	using key_type = cache_key<BC::utility::Name<C>, Tensor, isRecurrent>;
@@ -181,32 +179,18 @@ private:
 	auto& get_batched_inputs() {
 		return m_cache.load(
 				batched_input_key(),
-				default_batched_input_tensor_factory());
+				this->default_batched_input_tensor_factory());
 	}
 
 	auto& get_predict_inputs() {
 		return m_cache.load(
 				input_key(),
-				default_input_tensor_factory());
+				this->default_input_tensor_factory());
 	}
 
 	template<class X>
 	auto& store_batched_inputs(const X& x) {
 		return this->m_cache.store(batched_input_key(), x);
-	}
-
-	auto default_batched_input_tensor_factory() const {
-		return [&]() {
-			auto shape = this->get_batched_input_shape();
-			return batched_input_tensor_type(shape).zero();
-		};
-	}
-
-	auto default_input_tensor_factory() const {
-		return [&]() {
-			auto shape = this->get_input_shape();
-			return input_tensor_type(shape).zero();
-		};
 	}
 
 	auto& next_layer() {

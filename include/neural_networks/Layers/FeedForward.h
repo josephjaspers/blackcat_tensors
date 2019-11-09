@@ -22,7 +22,7 @@ struct FeedForward:
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 	using parent_type = Layer_Base<FeedForward<SystemTag, ValueType>>;
-	using allocator_type = BC::Allocator<SystemTag, ValueType>;
+	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
 
 	using mat = BC::Matrix<value_type, allocator_type>;
 	using vec = BC::Vector<value_type, allocator_type>;

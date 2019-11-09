@@ -15,6 +15,7 @@ struct Function:
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
+	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
 	using parent_type = Layer_Base<Function<SystemTag, ValueType, Functor>>;
 
 	Function(int inputs, Functor function_=Functor()):
