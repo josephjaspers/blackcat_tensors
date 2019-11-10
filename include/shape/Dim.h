@@ -8,6 +8,8 @@
 #ifndef BLACKCATTENSORS_SHAPE_DIM_H_
 #define BLACKCATTENSORS_SHAPE_DIM_H_
 
+#include <string>
+
 namespace BC {
 
 template<int N>
@@ -224,15 +226,31 @@ public:
 	BCINLINE
 	Dim reverse() const {
 		Dim rev;
-		for (int i = 0; i < N; ++i) {
+		for (int i = 0; i < N; ++i)
 			rev[i] = m_index[N-1-i];
-		}
+
 		return rev;
 	}
 
 	template<int Start, int End=N> BCINLINE
 	Dim<End-Start> subdim() const {
 		return *(reinterpret_cast<const Dim<End-Start>*>(m_index + Start));
+	}
+
+	std::string to_string(int begin, int end) const {
+		std::string str= "[";
+		while (begin < end) {
+			str += std::to_string(m_index[begin++]);
+
+			if (begin != end-1)
+				str += ", ";
+		}
+
+		return str + "]";
+	}
+
+	std::string to_string(int end=N) const {
+		return to_string(0, end);
 	}
 };
 
@@ -269,6 +287,10 @@ struct Dim<0> {
 	}
 	BCINLINE bool operator != (const Dim& other) const {
 		return false;
+	}
+
+	std::string to_string() const {
+		return "[0]";
 	}
 
 };

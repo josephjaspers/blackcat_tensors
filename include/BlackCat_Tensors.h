@@ -17,7 +17,6 @@
 #include "BlackCat_Algorithms.h"
 
 #include "random/Random.h"
-
 #include "tensors/Tensors.h"
 
 namespace BC {

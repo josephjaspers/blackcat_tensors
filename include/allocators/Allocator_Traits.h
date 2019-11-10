@@ -19,19 +19,16 @@ namespace allocators {
 namespace detail {
 
 	template<class T>
-	using query_system_tag = typename T::system_tag;
-
-	template<class T>
 	using query_managed_memory = BC::traits::truth_type<T::managed_memory>;
+
 }
 
-/// Inherits from std::allocator_traits, defines additional features relative to gpu-memory management.
 template<class Allocator>
 struct allocator_traits : std::allocator_traits<Allocator> {
 
 	using system_tag =
 			BC::traits::conditional_detected_t<
-			detail::query_system_tag, Allocator, host_tag>;
+			BC::traits::query_system_tag, Allocator, host_tag>;
 
 	static constexpr bool is_managed_memory =
 			BC::traits::conditional_detected_t<

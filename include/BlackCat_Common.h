@@ -318,7 +318,7 @@ void print(const T& arg) {
 }
 template<class T, class... Ts>
 void print(const T& arg, const Ts&... args) {
-	std::cout << arg << ", ";
+	std::cout << arg << " ";
 	print(args...);
 }
 
