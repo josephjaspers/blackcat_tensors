@@ -13,6 +13,7 @@
 
 namespace BC {
 namespace nn {
+namespace deprecated {
 
 template<
 	class SystemTag,
@@ -102,6 +103,7 @@ public:
 	}
 };
 
+}
 }
 }
 

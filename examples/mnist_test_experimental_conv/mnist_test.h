@@ -52,18 +52,18 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	using mat  = BC::Matrix<value_type, allocator_type>;
 	using clock = std::chrono::duration<double>;
 
-	using isRecurrent = std::false_type;
 	auto network = BC::nn::neuralnetwork(
-		BC::nn::experimental::Convolution<System, typename System::default_floating_point_type, isRecurrent>(
-				BC::dim(28,28,1),
-				BC::dim(3,3,2)),
-		BC::nn::experimental::Convolution<System, typename System::default_floating_point_type, isRecurrent>(
-					BC::dim(26,26,2),
-					BC::dim(5,5,2)),
-
-		BC::nn::flatten(system_tag, BC::dim(22,22,2)),
-		BC::nn::relu(system_tag, 22*22*2),
-		BC::nn::feedforward(system_tag, 22*22*2, 256),
+		BC::nn::convolution(
+				system_tag,
+				BC::dim(28,28,1),  //input_image shape
+				BC::dim(13,13,4)), //krnl_rows, krnl_cols, numb_krnls
+		BC::nn::convolution(
+				system_tag,
+				BC::dim(16,16,4), //input_image shape
+				BC::dim(7,7,4)),  //krnl_rows, krnl_cols, numb_krnls
+		BC::nn::flatten(system_tag, BC::dim(10,10,4)),
+		BC::nn::relu(system_tag, 10*10*4),
+		BC::nn::feedforward(system_tag, 10*10*4, 256),
 		BC::nn::tanh(system_tag, 256),
 		BC::nn::feedforward(system_tag, 256, 10),
 		BC::nn::softmax(system_tag, 10),

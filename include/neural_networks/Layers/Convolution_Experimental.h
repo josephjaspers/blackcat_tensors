@@ -12,7 +12,7 @@
 
 namespace BC {
 namespace nn {
-namespace experimental {
+//namespace experimental {
 
 template<
 	class SystemTag,
@@ -154,7 +154,52 @@ public:
 	}
 };
 
+#ifndef BC_CLING_JIT
+template<class ValueType, class SystemTag, bool isRecurrent=false>
+auto convolution(
+		SystemTag system_tag,
+		Dim<3> img_dims,
+		Dim<3> krnl_dims,
+		Dim<2> padding=Dim<2>().fill(0),
+		Dim<2> strides=Dim<2>().fill(1),
+		Dim<2> dilation=Dim<2>().fill(1))
+{
+	return Convolution<
+			SystemTag,
+			ValueType,
+			BC::traits::truth_type<isRecurrent>>(
+					img_dims,
+					krnl_dims,
+					padding,
+					strides,
+					dilation);
 }
+#endif
+
+template<
+		class SystemTag=BLACKCAT_DEFAULT_SYSTEM_T,
+		bool isRecurrent=false>
+auto convolution(
+		SystemTag system_tag,
+		Dim<3> img_dims,
+		Dim<3> krnl_dims,
+		Dim<2> padding=Dim<2>().fill(0),
+		Dim<2> strides=Dim<2>().fill(1),
+		Dim<2> dilation=Dim<2>().fill(1))
+{
+	using value_type = typename SystemTag::default_floating_point_type;
+	return Convolution<
+			SystemTag,
+			value_type,
+			BC::traits::truth_type<isRecurrent>>(
+					img_dims,
+					krnl_dims,
+					padding,
+					strides,
+					dilation);
+}
+
+//}
 }
 }
 
