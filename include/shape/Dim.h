@@ -242,7 +242,7 @@ public:
 		while (begin < end) {
 			str += std::to_string(m_index[begin++]);
 
-			if (begin != end-1)
+			if (begin != end)
 				str += ", ";
 		}
 

@@ -193,6 +193,46 @@ public:
 	const auto operator() (BC::size_t i) const { return scalar(i); }
 		  auto operator() (BC::size_t i)	   { return scalar(i); }
 
+
+	template<int X>
+	auto reshaped(BC::Dim<X> shape)
+	{
+		static_assert(
+				exprs::expression_traits<ExpressionTemplate>::is_array::value &&
+						ExpressionTemplate::tensor_iterator_dimension <= 1,
+			"Reshape is only available to continuous tensors");
+
+		BC_ASSERT(shape.size() == as_derived().size(),
+				"Reshape requires the new and old shape be same sizes");
+
+		return make_tensor(exprs::make_view(as_derived(), shape));
+	}
+
+	template<int X>
+	const auto reshaped(BC::Dim<X> shape) const
+	{
+		static_assert(
+				exprs::expression_traits<ExpressionTemplate>::is_array::value &&
+						ExpressionTemplate::tensor_iterator_dimension <= 1,
+			"Reshape is only available to continuous tensors");
+
+		BC_ASSERT(shape.size() == as_derived().size(),
+				"Reshape requires the new and old shape be same sizes");
+
+		return make_tensor(exprs::make_view(as_derived(), shape));
+	}
+
+	template<class... Integers>
+	const auto reshaped(Integers... ints) const {
+		return reshaped(BC::dim(ints...));
+	}
+
+	template<class... Integers>
+	auto reshaped(Integers... ints) {
+		return reshaped(BC::dim(ints...));
+	}
+
+
 };
 
 //Disable accessors for expression types

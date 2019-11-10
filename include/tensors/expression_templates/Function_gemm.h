@@ -57,8 +57,17 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 	BCINLINE BC::size_t cols() const { return dimension(1); }
 
 	template<class Core, int Alpha, int Beta, class Stream>
-	void eval(Output_Data<Core, Alpha, Beta> output, Stream stream) const {
-		static_assert(Core::tensor_dimension == 2, "Gemm out must be a matrix");
+	void eval(Output_Data<Core, Alpha, Beta> output, Stream stream) const
+	{
+		auto& out = output.data();
+
+		static_assert(Core::tensor_dimension == 2,
+				"Gemm out must be a matrix");
+		BC_ASSERT(out.rows() == left.rows(),
+				"Output dimension (rows) mismatch for GEMM");
+		BC_ASSERT(out.cols() == right.cols(),
+				"Output dimension (cols) mismatch for GEMM");
+
 		using self_t = Binary_Expression<oper::gemm<SystemTag>, lv, rv>;
 		using traits = blas_expression_traits<self_t>;
 
@@ -70,12 +79,8 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 		auto transA = contents.lv_is_transposed;
 		auto transB = contents.rv_is_transposed;
 
-		auto& out = output.data();
-
-		//gemm uses the [m,n] to refer to dimension regarding op(A)
-		//http://www.netlib.org/lapack/explore-html/db/dc9/group__single__blas__level3_gafe51bacb54592ff5de056acabd83c260.html#gafe51bacb54592ff5de056acabd83c260
 		BC::blas::BLAS<system_tag>::gemm(
-					stream, transA, transB, left.rows(), right.cols(), left.cols(),
+					stream, transA, transB, out.rows(), out.cols(), left.cols(),
 					alpha.data(), A.data(), A.leading_dimension(1),
 					B.data(), B.leading_dimension(1),
 					beta.data(), out.data(), out.leading_dimension(1));
