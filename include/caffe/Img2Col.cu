@@ -13,29 +13,13 @@
  * THESE FILES HAVE BEEN MODIFIED FROM THEIR ORIGINAL SOURCE
  */
 
+#include "Caffe_Cuda.h"
 #include <algorithm>
 #include "Img2Col.h"
 #include <iostream>
 
 namespace BC {
 namespace caffe {
-
-#define CUDA_KERNEL_LOOP(i, n) \
-  for (int i = blockIdx.x * blockDim.x + threadIdx.x; \
-       i < (n); \
-       i += blockDim.x * gridDim.x)
-
-
-// CUDA: use 512 threads per block
-static constexpr int CAFFE_CUDA_NUM_THREADS = 512;
-#define CUDA_POST_KERNEL_CHECK CUDA_CHECK(cudaPeekAtLastError())
-
-//This is actually the same way BC calculates blocks
-// CUDA: number of blocks for threads.
-inline int CAFFE_GET_BLOCKS(const int N) {
-  return (N + CAFFE_CUDA_NUM_THREADS - 1) / CAFFE_CUDA_NUM_THREADS;
-}
-
 
 template <typename Dtype>
 __global__ void im2col_gpu_kernel(const int n, const Dtype* data_im,

@@ -12,7 +12,6 @@
 
 namespace BC {
 namespace nn {
-//namespace experimental {
 
 template<
 	class SystemTag,
@@ -63,8 +62,12 @@ public:
 
 	Dim<3> get_input_shape() const { return m_input_shape; }
 	Dim<3> get_output_shape() const { return m_output_shape; }
-	Dim<3> get_batched_column_image_shape() { return m_column_image_shape.concat(this->batch_size()); }
-	Dim<4> get_kernel_shape() {
+
+	Dim<3> get_batched_column_image_shape() const {
+		return m_column_image_shape.concat(this->batch_size());
+	}
+
+	Dim<4> get_kernel_shape() const {
 		return BC::Dim<4> {
 				m_krnl_shape[0], m_krnl_shape[1],
 				m_input_shape[2], m_krnl_shape[2] };
@@ -199,7 +202,6 @@ auto convolution(
 					dilation);
 }
 
-//}
 }
 }
 

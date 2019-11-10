@@ -22,7 +22,8 @@ auto index(Ts... ts) {
 }
 
 template<class T, class Shape>
-auto reshape(Tensor_Base<T>& tensor, Shape shape) {
+auto reshape(Tensor_Base<T>& tensor, Shape shape)
+{
 	static_assert(BC::tensors::exprs::expression_traits<T>::is_array::value &&
 					T::tensor_iterator_dimension <= 1,
 					"Reshape is only available to continuous tensors");
@@ -31,9 +32,9 @@ auto reshape(Tensor_Base<T>& tensor, Shape shape) {
 	return reshaped_tensor;
 }
 
-
 template<class T, class Shape>
-const auto reshape(const Tensor_Base<T>& tensor, Shape shape) {
+const auto reshape(const Tensor_Base<T>& tensor, Shape shape)
+{
 	static_assert(BC::tensors::exprs::expression_traits<T>::is_array::value &&
 		T::tensor_iterator_dimension <= 1,
 		"Reshape is only available to continuous tensors");
@@ -58,19 +59,22 @@ public:
 	const auto operator [] (BC::Dim<2> range) const { return slice(range[0], range[1]); }
 	      auto operator [] (BC::Dim<2> range)       { return slice(range[0], range[1]); }
 
-	const auto slice(BC::size_t i) const {
+	const auto slice(BC::size_t i) const
+	{
 		BC_ASSERT(i >= 0 && i < as_derived().outer_dimension(),
 				"slice index must be between 0 and outer_dimension()");
 		return make_tensor(exprs::make_slice(as_derived(), i));
 	}
 
-	auto slice(BC::size_t i) {
+	auto slice(BC::size_t i)
+	{
 		BC_ASSERT(i >= 0 && i < as_derived().outer_dimension(),
 				"slice index must be between 0 and outer_dimension()");
 		return make_tensor(exprs::make_slice(as_derived(), i));
 	}
 
-	const auto slice(BC::size_t from, BC::size_t to) const {
+	const auto slice(BC::size_t from, BC::size_t to) const
+	{
 		BC_ASSERT(from >= 0 && to <= as_derived().outer_dimension(),
 				"slice `from` must be between 0 and outer_dimension()");
 		BC_ASSERT(to > from && to <= as_derived().outer_dimension(),
@@ -78,7 +82,8 @@ public:
 		return make_tensor(exprs::make_ranged_slice(as_derived(), from, to));
 	}
 
-	auto slice(BC::size_t from, BC::size_t to) {
+	auto slice(BC::size_t from, BC::size_t to)
+	{
 		BC_ASSERT(from >= 0 && to <= as_derived().outer_dimension(),
 				"slice `from` must be between 0 and outer_dimension()");
 		BC_ASSERT(to > from && to <= as_derived().outer_dimension(),
@@ -86,19 +91,22 @@ public:
 		return make_tensor(exprs::make_ranged_slice(as_derived(), from, to));
 	}
 
-	const auto scalar(BC::size_t i) const {
+	const auto scalar(BC::size_t i) const
+	{
 		BC_ASSERT(i >= 0 && i < as_derived().size(),
 				"Scalar index must be between 0 and size()");
 		return make_tensor(exprs::make_scalar(as_derived(), i));
 	}
 
-	auto scalar(BC::size_t i) {
+	auto scalar(BC::size_t i)
+	{
 		BC_ASSERT(i >= 0 && i < as_derived().size(),
 				"Scalar index must be between 0 and size()");
 		return make_tensor(exprs::make_scalar(as_derived(), i));
 	}
 
-	const auto diagnol(BC::size_t index = 0) const {
+	const auto diagnol(BC::size_t index = 0) const
+	{
 		static_assert(ExpressionTemplate::tensor_dimension  == 2,
 				"diagnol method is only available to matrices");
 		BC_ASSERT(index > -as_derived().rows() && index < as_derived().rows(),
@@ -106,7 +114,8 @@ public:
 		return make_tensor(exprs::make_diagnol(as_derived(),index));
 	}
 
-	auto diagnol(BC::size_t index = 0) {
+	auto diagnol(BC::size_t index = 0)
+	{
 		static_assert(ExpressionTemplate::tensor_dimension  == 2,
 				"diagnol method is only available to matrices");
 		BC_ASSERT(index > -as_derived().rows() && index < as_derived().rows(),
@@ -115,24 +124,28 @@ public:
 	}
 
 	//returns a copy of the tensor without actually copying the elements
-	auto shallow_copy() const {
+	auto shallow_copy() const
+	{
 		return make_tensor(
 				exprs::make_view(as_derived(), as_derived().get_shape()));
 	}
 
-	const auto col(BC::size_t i) const {
+	const auto col(BC::size_t i) const
+	{
 		static_assert(ExpressionTemplate::tensor_dimension == 2,
 				"MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return slice(i);
 	}
 
-	auto col(BC::size_t i) {
+	auto col(BC::size_t i)
+	{
 		static_assert(ExpressionTemplate::tensor_dimension == 2,
 				"MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return slice(i);
 	}
 
-	const auto row(BC::size_t index) const {
+	const auto row(BC::size_t index) const
+	{
 		static_assert(ExpressionTemplate::tensor_dimension == 2,
 				"MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		BC_ASSERT(index >= 0 && index < as_derived().rows(),
@@ -140,7 +153,8 @@ public:
 		return make_tensor(exprs::make_row(as_derived(), index));
 	}
 
-	auto row(BC::size_t index) {
+	auto row(BC::size_t index)
+	{
 		static_assert(ExpressionTemplate::tensor_dimension == 2,
 				"MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		BC_ASSERT(index >= 0 && index < as_derived().rows(),
@@ -170,7 +184,8 @@ public:
 		return subblock(std::get<0>(index_shape), std::get<1>(index_shape));
 	}
 
-	const auto row_range(int begin, int end) const {
+	const auto row_range(int begin, int end) const
+	{
 		static_assert(ExpressionTemplate::tensor_dimension  == 2,
 				"ROW_RANGE ONLY AVAILABLE TO MATRICES");
 
@@ -184,14 +199,15 @@ public:
 		return chunk(this->as_derived(), begin, 0)(end-begin, this->as_derived().cols());
 	}
 
-	auto row_range(int begin, int end) {
+	auto row_range(int begin, int end)
+	{
 		using self = Tensor_Accessor<ExpressionTemplate>;
 		return BC::traits::auto_remove_const(
 				const_cast<const self&>(*this).row_range(begin, end));
 	}
 
 	const auto operator() (BC::size_t i) const { return scalar(i); }
-		  auto operator() (BC::size_t i)	   { return scalar(i); }
+		  auto operator() (BC::size_t i)       { return scalar(i); }
 
 
 	template<int X>
