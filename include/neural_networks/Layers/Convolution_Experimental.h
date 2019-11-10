@@ -77,7 +77,7 @@ public:
 			Dim<2> strides=Dim<2>().fill(1),
 			Dim<2> dilation=Dim<2>().fill(1)):
 		parent_type(__func__),
-		w(krnl_dims.prod(2), krnl_dims[2]),
+		w(krnl_dims.prod(2)*img_dims[2], krnl_dims[2]),
 		w_gradients(w.get_shape()),
 		m_input_shape(img_dims),
 		m_krnl_shape(krnl_dims),
@@ -93,7 +93,7 @@ public:
 		};
 
 		m_output_shape = BC::dim(out_dim(0), out_dim(1), krnl_dims[2]);
-		m_column_image_shape = BC::dim(m_krnl_shape.prod(2), out_dim(0) * out_dim(1));
+		m_column_image_shape = BC::dim(m_krnl_shape.prod(2) * img_dims[2], out_dim(0) * out_dim(1));
 
 		this->m_input_sz = m_input_shape.size();
 		this->m_output_sz = m_output_shape.size();
@@ -107,7 +107,6 @@ public:
 		tensor4 y(this->get_batched_output_shape());
 		cube col_x(get_batched_column_image_shape());
 
-		BC_omp_for__
 		for (int i = 0; i < this->batch_size(); ++i) {
 			BC::im2col(x.get_stream(),
 					col_x[i].internal(),
@@ -117,8 +116,8 @@ public:
 					m_strides,
 					m_dilation);
 
-			auto mat_y = reshape(y[i], shape(y.rows() * y.cols(), w.cols()));
-			mat_y = col_x[i].t() * w;
+			BC::Dim<2> mat_y_shape = {y.rows() * y.cols(), w.cols() };
+			y[i].reshaped(mat_y_shape) = col_x[i].t() * w;
 		}
 
 		cache.store(col_image_key(), col_x);
@@ -134,10 +133,11 @@ public:
 
 		BC_omp_for__
 		for (int i = 0; i < this->batch_size(); ++i) {
-			auto mat_dy = reshape(dy[i], shape(m_output_shape.prod(2), w.cols()));
+			auto mat_dy = reshape(dy[i], shape(dy.rows() * dy.cols(), w.cols()));
 			w_gradients -= col_x[i] * mat_dy;
 		}
-		return reshape(w, get_kernel_shape()).multichannel_conv2d_data_backwards(dy);
+
+		return w.reshaped(get_kernel_shape()).multichannel_conv2d_data_backwards(dy);
 	}
 
 	void update_weights() {

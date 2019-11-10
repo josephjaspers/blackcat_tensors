@@ -44,7 +44,7 @@ auto load_mnist(System system, const char* mnist_dataset, int batch_size, int sa
 
 template<class System=BC::host_tag>
 int percept_MNIST(System system_tag, const char* mnist_dataset,
-		int epochs=1, int batch_size=32, int samples=32*1024) {
+		int epochs=10, int batch_size=32, int samples=32*1024) {
 
 	using value_type = typename System::default_floating_point_type;
 	using allocator_type = BC::Allocator<System, value_type>;
@@ -56,10 +56,14 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	auto network = BC::nn::neuralnetwork(
 		BC::nn::experimental::Convolution<System, typename System::default_floating_point_type, isRecurrent>(
 				BC::dim(28,28,1),
-				BC::dim(3,3,4)),
-		BC::nn::flatten(system_tag, BC::dim(26,26,4)),
-		BC::nn::relu(system_tag, 26*26*4),
-		BC::nn::feedforward(system_tag, 26*26*4, 256),
+				BC::dim(3,3,2)),
+		BC::nn::experimental::Convolution<System, typename System::default_floating_point_type, isRecurrent>(
+					BC::dim(26,26,2),
+					BC::dim(5,5,2)),
+
+		BC::nn::flatten(system_tag, BC::dim(22,22,2)),
+		BC::nn::relu(system_tag, 22*22*2),
+		BC::nn::feedforward(system_tag, 22*22*2, 256),
 		BC::nn::tanh(system_tag, 256),
 		BC::nn::feedforward(system_tag, 256, 10),
 		BC::nn::softmax(system_tag, 10),

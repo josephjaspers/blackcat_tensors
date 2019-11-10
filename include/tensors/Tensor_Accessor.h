@@ -231,8 +231,6 @@ public:
 	auto reshaped(Integers... ints) {
 		return reshaped(BC::dim(ints...));
 	}
-
-
 };
 
 //Disable accessors for expression types
