@@ -66,10 +66,11 @@ private:
 								typename ExpressionTemplate::value_type,
 								BC::Allocator<host_tag, value_type>>>;
 
-					host_tensor host_(BC::Shape<tensor_dimension>(as_derived().inner_shape()));
-					host_.copy(as_derived());
-					return BC::tensors::io::to_string(host_, fs, BC::traits::Integer<tensor_dimension>());
+		host_tensor host_(BC::Shape<tensor_dimension>(as_derived().get_shape()));
+		host_.copy(as_derived());
+		return BC::tensors::io::to_string(host_, fs, BC::traits::Integer<tensor_dimension>());
 	}
+
 	template<template<int> class Integer>
 	std::string to_string(Integer<-1>, BC::tensors::io::features fs) const {
 		using host_tensor = Tensor_Base<exprs::Array<
@@ -102,9 +103,7 @@ public:
 					BC::tensors::exprs::expression_traits<ExpressionTemplate>::is_expr::value, BC::traits::Integer<2>,
 				std::conditional_t<
 					std::is_same<host_tag, system_tag>::value, BC::traits::Integer<0>,
-				std::conditional_t<
-					ExpressionTemplate::tensor_dimension == 0,
-					BC::traits::Integer<-1>, BC::traits::Integer<1>>>>;
+				BC::traits::Integer<1>>>;
 
 			return this->to_string(specialization(), BC::tensors::io::features(precision, pretty, sparse));
 		}
@@ -125,7 +124,7 @@ public:
 		std::cout << this->to_string(precision, false, sparse) << std::endl;
 	}
 
-	void read_as_one_hot(std::ifstream& is) {
+	[[deprecated]] void read_as_one_hot(std::ifstream& is) {
 		BC_ASSERT_ARRAY_ONLY("void read_as_one_hot(std::ifstream& is)");
 
 		if (derived::tensor_dimension != 1)
@@ -139,7 +138,7 @@ public:
 		as_derived()(std::stoi(tmp)) = 1;
 	}
 
-	void read_csv_row(std::ifstream& is) {
+	[[deprecated]] void read_csv_row(std::ifstream& is) {
 		BC_ASSERT_ARRAY_ONLY("void read(std::ifstream& is)");
 
 		if (!is.good()) {

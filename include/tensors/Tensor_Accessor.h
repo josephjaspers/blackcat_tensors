@@ -247,6 +247,14 @@ public:
 	auto reshaped(Integers... ints) {
 		return reshaped(BC::dim(ints...));
 	}
+
+	auto flattened() {
+		return this->reshaped(this->as_derived().size());
+	}
+
+	const auto flattened() const {
+		return this->reshaped(this->as_derived().size());
+	}
 };
 
 //Disable accessors for expression types

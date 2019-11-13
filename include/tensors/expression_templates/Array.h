@@ -85,6 +85,7 @@ public:
 		class=std::enable_if_t<
 			!expression_traits<ShapeLike>::is_array::value &&
 			!expression_traits<ShapeLike>::is_expr::value &&
+			ShapeLike::tensor_dimension == parent_type::tensor_dimension &&
 			Shape::tensor_dimension != 0>>
 	Array(ShapeLike param, Allocator allocator=Allocator()):
 		Allocator(allocator),

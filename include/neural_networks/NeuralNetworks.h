@@ -20,7 +20,7 @@
 #include "Layers/Output_Layer.h"
 #include "Layers/Logging_Output_Layer.h"
 #include "Layers/Convolution.h"
-#include "Layers/Convolution_Experimental.h"
+#include "Layers/Convolution_Reference.h"
 #include "Layers/Flatten.h"
 #include "Layers/Recurrent.h"
 #include "Network.h"

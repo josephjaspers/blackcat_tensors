@@ -11,6 +11,7 @@
 
 #include "BlackCat_Common.h"
 #include "BlackCat_Tensors.h"
+#include "BlackCat_String.h"
 #include <algorithm>
 #include <sstream>
 #include <fstream>
@@ -20,6 +21,7 @@
 
 namespace BC {
 namespace io {
+
 template<class T>
 static T from_string(const std::string& str);
 
@@ -32,8 +34,6 @@ from_string_def(double, std::stod(str))
 from_string_def(float, std::stof(str))
 from_string_def(int, std::stoi(str))
 from_string_def(std::string, str)
-
-
 
 template<class T>
 struct Range {
@@ -49,25 +49,28 @@ auto range(T begin, T end=T()) {
 
 struct csv_descriptor {
 
-#define FORWARDED_PARAM(dtype, name, default_value,  return_dtype)	\
+#define FORWARDED_PARAM(dtype, name, default_value)	\
 dtype name##_ = default_value;											\
 csv_descriptor& name(dtype name) {	\
 	name##_ = name; 				\
 	return *this; 					\
 }									\
-return_dtype name() const {			\
+const dtype& name() const { 		\
 	return name##_; 				\
 }									\
 
 	csv_descriptor(std::string fname) : filename_(fname) {}
 
-	FORWARDED_PARAM(std::string, filename, "", const std::string&)
-	FORWARDED_PARAM(bool, header, true, bool)
-	FORWARDED_PARAM(char, mode, 'r', char)
-	FORWARDED_PARAM(char, delim, ',', char)
-	FORWARDED_PARAM(bool, transpose, false, bool)
-	FORWARDED_PARAM(std::vector<int>, skip_rows, {}, const std::vector<int>&)
-	FORWARDED_PARAM(std::vector<int>, skip_cols, {}, const std::vector<int>&)
+	FORWARDED_PARAM(std::string, filename, "")
+	FORWARDED_PARAM(bool, header, true)
+	FORWARDED_PARAM(bool, index, false)
+	FORWARDED_PARAM(char, mode, 'r')
+	FORWARDED_PARAM(char, delim, ',')
+	FORWARDED_PARAM(char, row_delim, '\n')
+	FORWARDED_PARAM(bool, transpose, false)
+
+	FORWARDED_PARAM(std::vector<int>, skip_rows, {})
+	FORWARDED_PARAM(std::vector<int>, skip_cols, {})
 
 	template<class... Integers>
 	csv_descriptor& skip_rows(int x, Integers... args_) {
@@ -83,109 +86,102 @@ return_dtype name() const {			\
 
 };
 
+static std::vector<std::vector<BC::string>> parse(csv_descriptor desc)
+{
+	using BC::string;
+	using std::vector;
 
-template<class ValueType, class Allocator=BC::Allocator<BC::host_tag, ValueType>>
-static BC::Matrix<ValueType, Allocator> read_uniform(csv_descriptor csv, Allocator alloc=Allocator()) {
+	std::ifstream ifs(desc.filename());
 
-	  std::ifstream ifs(csv.filename());
-	  std::stringstream str_buf;
-	  std::vector<ValueType> cell_buf;
+	auto find = [](auto& collection, auto var) -> bool {
+		return std::find(
+				collection.begin(),
+				collection.end(),
+				var) != collection.end();
+	};
 
-	  bool header_skipped = !csv.header();
-	  bool cols_counted = false;
-	  int n_cols = 0;
-	  int curr_col = 0;
-	  int curr_col_with_skips = 0;
+	if (!ifs.good()) {
+		BC::print("Unable to open `", desc.filename(), '`');
+		throw 1;
+	}
 
-	  int n_rows = 0;
-	  int curr_row_with_skips = 0;
+	string csv_text = string(std::istreambuf_iterator<char>(ifs),
+			std::istreambuf_iterator<char>());
+	vector<string> rows = csv_text.split(desc.row_delim());
+	vector<vector<string>> split_rows;
 
-	  for (char c : range(std::istreambuf_iterator<char>(ifs))) {
-		  if (std::find(csv.skip_rows().begin(),
-				  	  	  csv.skip_rows().end(), curr_row_with_skips) != csv.skip_rows().end()) {
-			  if (c == '\n')
-				  curr_row_with_skips++;
-			  continue;
-		  }
+	int curr_col = 0;
 
-		  if (std::find(csv.skip_cols().begin(),
-				  	  	 csv.skip_cols().end(), curr_col_with_skips) != csv.skip_cols().end()) {
-			  if (c == csv.delim())
-				  curr_col_with_skips++;
-			  continue;
-		  }
+	for (string& row : rows) {
+		auto cells = row.split(desc.delim());
 
-		  if (c == '\n') {
-			  if (!cols_counted) {
-				  n_cols++;
-				  cols_counted=true;
-			  }
-			  curr_col++;
-			  curr_col_with_skips++;
+		if (!split_rows.empty() &&
+				split_rows.back().size() != cells.size()) {
+			BC::print("Column length mismatch."
+					"\nExpected: ",  split_rows.back().size(),
+					"\nReceived: ",  cells.size(),
+					"\nRow index: ", split_rows.size());
+			throw 1;
+		}
 
-			  if (header_skipped){
-				  n_rows++;
-				  curr_row_with_skips++;
-				  cell_buf.push_back(from_string<ValueType>(str_buf.str()));
-				  str_buf.str("");
-				  str_buf.clear();
-			  } else {
-				  header_skipped = true;
-			  }
+		if (!cells.empty() && !find(desc.skip_rows(), curr_col)) {
+			if (desc.skip_cols().empty())
+				split_rows.push_back(cells);
+			else {
+				vector<string> curr_row;
+				for (std::size_t i = 0; i < cells.size(); ++i) {
+					if (!find(desc.skip_cols(), i))
+						curr_row.push_back(std::move(cells[i]));
+				}
+				split_rows.push_back(curr_row);
+			}
+		}
+		++curr_col;
+	}
 
-			  BC_ASSERT(curr_col==n_cols, "Invalid row found on " + std::to_string(n_rows));
-			  curr_col=0;
-			  curr_col_with_skips=0;
-		  } else if (c == csv.delim()) {
-			  if (!cols_counted) {
-				  n_cols++;
-			  }
-			  curr_col++;
-			  curr_col_with_skips++;
-
-			  if (header_skipped) {
-				  cell_buf.push_back(from_string<ValueType>(str_buf.str()));
-			  }
-			  str_buf.str("");
-			  str_buf.clear();
-		  }
-		  else if (header_skipped) {
-			  str_buf << c;
-		  }
-	  }
-
-	  if (str_buf.str() != "") {
-		  n_rows++;
-		  curr_row_with_skips++;
-
-		  cell_buf.push_back(from_string<ValueType>(str_buf.str()));
-		  str_buf.str("");
-		  str_buf.clear();
-	  }
-
-	  if (n_rows == 1) {
-		  ++n_cols;
-	  }
-
-	  BC::Matrix<ValueType> data(
-			  n_cols, n_rows);
-
-	  std::copy(cell_buf.begin(), cell_buf.end(), data.cw_begin());
-	  if (csv.transpose()) {
-		  BC::Matrix<ValueType, Allocator> data_t(BC::shape(n_cols, n_rows), alloc);
-		  data_t.copy(data);
-		  return data_t;
-	  } else {
-		  BC::Matrix<ValueType> data_transposed(n_rows, n_cols);
-		  data_transposed = data.transpose();
-
-		  BC::Matrix<ValueType, Allocator> data_correct_system(BC::shape(n_rows, n_cols), alloc);
-		  data_correct_system.copy(data_transposed);
-		  return data_correct_system;
-	  }
+	return split_rows;
 }
 
+template<
+		class ValueType,
+		class Allocator=BC::Allocator<BC::host_tag, ValueType>>
+static BC::Matrix<ValueType, Allocator> read_uniform(
+		csv_descriptor desc,
+		Allocator alloc=Allocator()) {
 
+	using BC::string;
+	using std::vector;
+
+
+	if (desc.transpose()){
+		BC::print("Transpose is not supported for read_uniform");
+		BC::print("TODO implement transposition");
+		throw 1;
+	}
+
+	vector<vector<string>> data = parse(desc);
+
+	int rows = data.size() - desc.header();
+	int cols = data[0].size() - desc.index();
+
+	if (desc.transpose())
+		std::swap(rows, cols);
+
+	BC::Matrix<ValueType, Allocator> matrix(rows, cols);
+	for (int i = 0; i < rows; ++i) {
+		for (int j = 0; j < cols; ++j) {
+			int d_i = i + desc.header();
+			int d_j = j + desc.index();
+
+			if (desc.transpose())
+				matrix[i][j] = from_string<ValueType>(data[d_i][d_j]);
+			else
+				matrix[j][i] = from_string<ValueType>(data[d_i][d_j]);
+		}
+	}
+
+	return matrix;
+}
 
 }
 }
