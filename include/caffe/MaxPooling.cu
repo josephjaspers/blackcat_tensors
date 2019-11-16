@@ -5,8 +5,11 @@
  *      Author: joseph
  */
 
+
+#ifdef __CUDACC__
 #ifndef BLACKCAT_TENSORS_CAFFE_MAXPOOLING_CU_
 #define BLACKCAT_TENSORS_CAFFE_MAXPOOLING_CU_
+
 
 #include "Caffe_Cuda.h"
 
@@ -285,3 +288,4 @@ __global__ void StoPoolBackward(const int nthreads,
 }
 
 #endif /* MAXPOOLING_H_ */
+#endif // __CUDACC__

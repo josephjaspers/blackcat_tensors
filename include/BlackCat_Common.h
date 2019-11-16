@@ -312,8 +312,8 @@ inline char bc_directory_separator()
 }
 
 
-template<class T>
-void print(const T& arg) {
+template<class T=char>
+void print(const T& arg='\n') {
 	std::cout << arg << std::endl;
 }
 template<class T, class... Ts>

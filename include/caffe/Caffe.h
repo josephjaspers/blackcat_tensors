@@ -10,6 +10,8 @@
 
 #include "Img2Col.cu"
 #include "Img2Col.h"
+#include "MaxPooling.h"
+#include "MaxPooling.cu"
 
 namespace BC {
 

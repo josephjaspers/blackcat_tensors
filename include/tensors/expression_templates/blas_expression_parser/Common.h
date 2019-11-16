@@ -2,7 +2,7 @@
  * Common.h
  *
  *  Created on: Apr 24, 2019
- *      Author: joseph
+ *	  Author: joseph
  */
 
 #ifndef BC_BLAS_COMMON_H_
@@ -42,7 +42,7 @@ public:
 
 		static_assert(lv_host_mode == rv_host_mode || lv_scalar != rv_scalar,
 				"Host and Device Scalars may not be mixed Blas calculations");
-		static constexpr bool host_mode    = lv_host_mode || rv_host_mode;
+		static constexpr bool host_mode	= lv_host_mode || rv_host_mode;
 
 		if (host_mode || (!lv_scalar && !rv_scalar)) {
 			stream.set_blas_pointer_mode_host();
@@ -50,19 +50,17 @@ public:
 			stream.set_blas_pointer_mode_device();
 		}
 
-		return BC::traits::constexpr_if<!lv_scalar && !rv_scalar>(
-					[&](){
-						return make_constexpr_scalar<BC::host_tag, alpha_mod, ValueType>();
-					},
-				BC::traits::constexpr_else_if<(lv_scalar != rv_scalar) && (alpha_mod == 1)>(
+		return BC::traits::constexpr_if<(lv_scalar != rv_scalar) && (alpha_mod == 1)>(
 					[&](){
 						return BC::traits::constexpr_ternary<lv_scalar>(
-								[=]() {
-							return lv; },
-								[=]() {
-									return rv; }
+								[=]() { return lv; },
+								[=]() { return rv; }
 						);
-					},
+				},
+				BC::traits::constexpr_else_if<!lv_scalar && !rv_scalar>(
+				[&](){
+					return make_constexpr_scalar<BC::host_tag, alpha_mod, ValueType>();
+				},
 				BC::traits::constexpr_else_if<lv_scalar && rv_scalar>(
 					[&]() {
 						return BC::traits::constexpr_ternary<host_mode>(
@@ -84,7 +82,8 @@ public:
 										derived::scalar_multiply(stream, tmp_scalar, alpha_mod, lv);
 										return tmp_scalar;
 									});
-						}, [&]() { //else if rv_scalar
+						},
+				BC::traits::constexpr_else([&]() { //else if rv_scalar
 							return BC::traits::constexpr_if<host_mode>(
 									[&](){
 										return make_scalar_constant<BC::host_tag, ValueType>(alpha_mod * rv[0]);
@@ -93,7 +92,7 @@ public:
 										derived::scalar_multiply(stream, tmp_scalar, alpha_mod, rv);
 										return tmp_scalar;
 									});
-						})
+						}))
 				)));
 	}
 
@@ -107,15 +106,15 @@ public:
 			bool LvScalar,
 			bool RvScalar>
 	 struct contents {
-        static constexpr bool lv_is_transposed = LvTrans;
-        static constexpr bool rv_is_transposed = RvTrans;
-        static constexpr bool lv_is_scalar_multiplied = LvScalar;
-        static constexpr bool rv_is_scalar_multiplied = RvScalar;
+		static constexpr bool lv_is_transposed = LvTrans;
+		static constexpr bool rv_is_transposed = RvTrans;
+		static constexpr bool lv_is_scalar_multiplied = LvScalar;
+		static constexpr bool rv_is_scalar_multiplied = RvScalar;
 
-        using left_value_type = Lv;
-        using right_value_type = Rv;
-        using alpha_type = Alpha;
-        using beta_type = Beta;
+		using left_value_type = Lv;
+		using right_value_type = Rv;
+		using alpha_type = Alpha;
+		using beta_type = Beta;
 
 		Lv left;
 		Rv right;
@@ -133,48 +132,45 @@ public:
 		 *	will return the non-transposed dimensions/rows/cols. Ergo- you should use the original parameters
 		 *	to access the shape of the returned value.
 		 */
-	    static constexpr bool lv_scalar = blas_expression_traits<Lv>::is_scalar_multiplied::value;
-	    static constexpr bool rv_scalar = blas_expression_traits<Rv>::is_scalar_multiplied::value;
+		static constexpr bool lv_scalar = blas_expression_traits<Lv>::is_scalar_multiplied::value;
+		static constexpr bool rv_scalar = blas_expression_traits<Rv>::is_scalar_multiplied::value;
 
-	    using value_type = typename Lv::value_type;
+		using value_type = typename Lv::value_type;
 
-	    auto alpha_lv = blas_expression_traits<Lv>::get_scalar(left);
+		auto alpha_lv = blas_expression_traits<Lv>::get_scalar(left);
 		auto alpha_rv = blas_expression_traits<Rv>::get_scalar(right);
-//		BC::print("alpha_lv: ", typeid(alpha_lv).name());
-//		BC::print("alpha_rv: ", typeid(alpha_rv).name());
 		auto alpha_ = calculate_alpha<value_type, alpha_mod, lv_scalar, rv_scalar>(stream, alpha_lv, alpha_rv);
-	    auto beta_  = make_constexpr_scalar<typename expression_traits<decltype(alpha_)>::allocation_tag, beta_mod, value_type>();//blas_impl::template scalar_constant<value_type, beta_mod>();
-//		BC::print("beta alloc_tag: ", typename expression_traits<decltype(alpha_)>::allocation_tag::name());
+		auto beta_  = make_constexpr_scalar<typename expression_traits<decltype(alpha_)>::allocation_tag, beta_mod, value_type>();//blas_impl::template scalar_constant<value_type, beta_mod>();
 
 		auto left_ = greedy_evaluate(blas_expression_traits<Lv>::remove_blas_modifiers(left), stream);
-	    auto right_ = greedy_evaluate(blas_expression_traits<Rv>::remove_blas_modifiers(right), stream);
+		auto right_ = greedy_evaluate(blas_expression_traits<Rv>::remove_blas_modifiers(right), stream);
 
-	    using left_t = std::decay_t<decltype(left_)>;
-	    using right_t = std::decay_t<decltype(right_)>;
-	    using alpha_t = std::decay_t<decltype(alpha_)>;
-	    using beta_t = std::decay_t<decltype(beta_)>;
+		using left_t = std::decay_t<decltype(left_)>;
+		using right_t = std::decay_t<decltype(right_)>;
+		using alpha_t = std::decay_t<decltype(alpha_)>;
+		using beta_t = std::decay_t<decltype(beta_)>;
 
-	    return contents<
-	    		left_t,
-	    		right_t,
-	    		alpha_t,
-	    		beta_t,
-	    	    blas_expression_traits<Lv>::is_transposed::value,
-	    	    blas_expression_traits<Rv>::is_transposed::value,
-	    	    blas_expression_traits<Lv>::is_scalar_multiplied::value,
-	    	    blas_expression_traits<Rv>::is_scalar_multiplied::value> { left_, right_, alpha_, beta_ };
+		return contents<
+				left_t,
+				right_t,
+				alpha_t,
+				beta_t,
+				blas_expression_traits<Lv>::is_transposed::value,
+				blas_expression_traits<Rv>::is_transposed::value,
+				blas_expression_traits<Lv>::is_scalar_multiplied::value,
+				blas_expression_traits<Rv>::is_scalar_multiplied::value> { left_, right_, alpha_, beta_ };
 	}
 
 	template<class Stream, class Contents>
 	static void post_parse_expression_evaluation(Stream stream, Contents contents) {
 		using value_type = typename decltype(contents.alpha)::value_type;
-        BC::traits::constexpr_if<(BC::tensors::exprs::expression_traits<decltype(contents.alpha)>::is_temporary::value)>(
-            BC::traits::bind([&](auto alpha) {
-        		stream.template get_allocator_rebound<value_type>().deallocate(alpha, 1);
-        	}, 	contents.alpha));
+		BC::traits::constexpr_if<(BC::tensors::exprs::expression_traits<decltype(contents.alpha)>::is_temporary::value)>(
+			BC::traits::bind([&](auto alpha) {
+				stream.template get_allocator_rebound<value_type>().deallocate(alpha, 1);
+			}, 	contents.alpha));
 
-        optimizer<typename Contents::left_value_type>::deallocate_temporaries(contents.left, stream);
-        optimizer<typename Contents::right_value_type>::deallocate_temporaries(contents.right, stream);
+		optimizer<typename Contents::left_value_type>::deallocate_temporaries(contents.left, stream);
+		optimizer<typename Contents::right_value_type>::deallocate_temporaries(contents.right, stream);
 
 	}
 };
