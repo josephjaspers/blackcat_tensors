@@ -30,7 +30,7 @@ static auto select_on_get_stream(const T& type) {
 			std::is_same<system_tag, device_tag>::value, "SystemTag Mismatch");
 
 	return traits::constexpr_ternary<defines_get_stream>(
-			traits::bind([](const auto& type) {
+			BC::traits::bind([](const auto& type) {
 					return type.get_stream();
 			}, type),
 			[]() {

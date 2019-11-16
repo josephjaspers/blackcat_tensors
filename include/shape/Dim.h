@@ -58,7 +58,8 @@ struct Dim {
 
 	BCINLINE
 	value_type dimension(size_t i, size_t default_value=1) const {
-		//casting to unsigned ensures that negative values do not lead to undefined behavior
+		//casting to unsigned ensures that
+		//negative values do not lead to undefined behavior
 		return static_cast<const unsigned&>(i) < N ? m_index[i] : default_value;
 	}
 
@@ -128,7 +129,26 @@ private:
 		return *this;
 	}
 
+	template<class Operator> BCINLINE
+	Dim scalar_op_impl(Operator op, const value_type& other) const {
+		Dim<N> result;
+		for (int i = 0; i < N; ++i) {
+			result[i] = op(m_index[i], other);
+		}
+		return result;
+	}
+
+	template<class Operator> BCINLINE
+	Dim& inplace_scalar_op_impl(Operator op, const value_type& other) const {
+		for (int i = 0; i < N; ++i) {
+			m_index[i] = op(m_index[i], other);
+		}
+		return *this;
+	}
+
 public:
+
+
 	BCINLINE auto operator + (const Dim& other) const {
 		return op_impl(BC::oper::Add(), other);
 	}
@@ -170,7 +190,7 @@ public:
 	}
 
 	BCINLINE Dim& operator -= (const Dim& other) {
-		return inplace_op_impl(BC::oper::Sub(), other);
+		return inplace_opother_impl(BC::oper::Sub(), other);
 	}
 
 	BCINLINE Dim& operator /= (const Dim& other) {
@@ -180,6 +200,39 @@ public:
 	BCINLINE Dim& operator *= (const Dim& other) {
 		return inplace_op_impl(BC::oper::Mul(), other);
 	}
+
+
+#define BC_DIM_INPLACE_SCALAR_OP(op, functor)                           \
+	friend Dim operator op##=(Dim &dim, const value_type& scalar) {     \
+		return dim.inplace_scalar_op_impl(BC::oper::functor(), scalar); \
+	}                                                                   \
+
+#define BC_DIM_SCALAR_OP(op, functor)                                   \
+	friend Dim operator op(const Dim &dim, const value_type& scalar) {  \
+		return dim.scalar_op_impl(BC::oper::functor(), scalar);         \
+	}                                                                   \
+	                                                                    \
+	friend Dim operator op(const value_type& scalar, const Dim &dim) {  \
+		return dim.scalar_op_impl(BC::oper::functor(), scalar);         \
+	}
+
+#define BC_DIM_SCALAR_OP_BOTH(op, functor) \
+	BC_DIM_INPLACE_SCALAR_OP(op, functor)  \
+	BC_DIM_SCALAR_OP(op, functor)
+
+
+BC_DIM_SCALAR_OP_BOTH(+, Add)
+BC_DIM_SCALAR_OP_BOTH(-, Sub)
+BC_DIM_SCALAR_OP_BOTH(/, Div)
+BC_DIM_SCALAR_OP_BOTH(*, Mul)
+BC_DIM_SCALAR_OP(<, Lesser)
+BC_DIM_SCALAR_OP(<=, Lesser_Equal)
+BC_DIM_SCALAR_OP(>, Greater)
+BC_DIM_SCALAR_OP(>=, Greater_Equal)
+
+
+#undef BC_DIM_SCALAR_OP
+#undef BC_DIM_INPLACE_SCALAR_OP
 
 
 	BCINLINE

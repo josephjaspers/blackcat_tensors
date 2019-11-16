@@ -13,7 +13,95 @@
 #include "MaxPooling.h"
 #include "MaxPooling.cu"
 
+///THIS IS NOT A CAFFE FILE --
+///JOSEPH JASPERS IS THE AUTHOR OF THIS FILE
+
 namespace BC {
+
+template<
+	class Stream,
+	class Indexes,
+	class Image,
+	class ImageOut>
+void max_pooling_forward(
+		Stream stream,
+		Image image,
+		ImageOut out,
+		Indexes mask,
+		BC::Dim<2> krnl_shape,
+		BC::Dim<2> padding = BC::Dim<2>().fill(0),
+		BC::Dim<2> strides = {-1,-1}) {
+
+	if (strides == Dim<2>{ -1,-1 })
+		strides = krnl_shape;
+
+	BC_ASSERT((out.inner_shape().template subdim<0,2>() ==
+			(image.inner_shape().template subdim<0,2>() + padding*2)/strides),
+			"ASSERT MAX_POOLING_FORWARD"
+			"\nout.inner_shape() == "
+			"(image.inner_shape() + padding)/strides");
+	BC_ASSERT(out.dimension(2) == image.dimension(2), "numb channels must be the same");
+	BC_ASSERT(out.dimension(3) == image.dimension(3), "batch size must be the same");
+
+	using system_tag = typename Stream::system_tag;
+
+	stream.enqueue([=]() {
+		BC::caffe::MaxPoolForward(
+				system_tag(),
+				image.data(),
+				image.dimension(3),
+				image.dimension(2),
+				image.dimension(0), image.dimension(1),
+				out.dimension(0), out.dimension(1),
+				krnl_shape[0], krnl_shape[1],
+				strides[0], strides[1],
+				padding[0], padding[1],
+				out.data(), mask.data());
+	});
+}
+
+
+template<
+	class Stream,
+	class Indexes,
+	class Image,
+	class ImageOut>
+void max_pooling_backward(
+		Stream stream,
+		Image image,
+		ImageOut delta,
+		Indexes mask,
+		BC::Dim<2> krnl_shape,
+		BC::Dim<2> padding = BC::Dim<2>().fill(0),
+		BC::Dim<2> strides = {-1,-1}) {
+
+	if (strides == Dim<2>{ -1,-1 })
+		strides = krnl_shape;
+
+	BC_ASSERT((delta.inner_shape().template subdim<0,2>() ==
+			(image.inner_shape().template subdim<0,2>() + padding*2)/strides),
+			"ASSERT MAX_POOLING_FORWARD"
+			"\nout.inner_shape() == "
+			"(image.inner_shape() + padding)/strides");
+	BC_ASSERT(delta.dimension(2) == image.dimension(2), "numb channels must be the same");
+	BC_ASSERT(delta.dimension(3) == image.dimension(3), "batch size must be the same");
+
+	using system_tag = typename Stream::system_tag;
+
+	stream.enqueue([=]() {
+		BC::caffe::MaxPoolBackward(
+				system_tag(),
+				delta.data(), mask.data(),
+				image.dimension(3),
+				image.dimension(2),
+				image.dimension(0), image.dimension(1),
+				delta.dimension(0), delta.dimension(1),
+				krnl_shape[0], krnl_shape[1],
+				strides[0], strides[1],
+				padding[0], padding[1],
+				image.data());
+	});
+}
 
 template<
 	class Stream,
@@ -36,7 +124,7 @@ void im2col(
 	using system_tag = typename Stream::system_tag;
 
 	stream.enqueue([=]() {
-		 im2col(
+		 BC::caffe::im2col(
 				system_tag(),
 				image.data(),
 				image.dimension(2),
@@ -53,20 +141,20 @@ template<
 	class Stream,
 	class ColumnImage,
 	class Image,
-	int SpacialAxis>
+	int NumAxis>
 void im2col_nd(
 		Stream stream,
 		ColumnImage col_image,
 		Image image,
-		BC::Dim<SpacialAxis> krnl_shape,
-		BC::Dim<SpacialAxis> padding = BC::Dim<SpacialAxis>(),
-		BC::Dim<SpacialAxis> strides = BC::Dim<SpacialAxis>().fill(1),
-		BC::Dim<SpacialAxis> dilation = BC::Dim<SpacialAxis>().fill(1)) {
+		BC::Dim<NumAxis> krnl_shape,
+		BC::Dim<NumAxis> padding = BC::Dim<NumAxis>(),
+		BC::Dim<NumAxis> strides = BC::Dim<NumAxis>().fill(1),
+		BC::Dim<NumAxis> dilation = BC::Dim<NumAxis>().fill(1)) {
 
-	constexpr bool is_batched = Image::tensor_dimension == SpacialAxis + 1;
+	constexpr bool is_batched = Image::tensor_dimension == NumAxis + 1;
 	static_assert(ColumnImage::tensor_dimension == 2 + is_batched,
 			"Invalid ColumnImage dimension");
-	static_assert(Image::tensor_dimension == SpacialAxis + is_batched,
+	static_assert(Image::tensor_dimension == NumAxis + is_batched,
 			"Invalid Image dimension");
 
 	using system_tag = typename Stream::system_tag;
@@ -76,10 +164,10 @@ void im2col_nd(
 	auto col_shape = col_image.get_shape().inner_shape().reverse();
 
 	stream.enqueue([=]() {
-		 im2col_nd(
+		 BC::caffe::im2col_nd(
 				system_tag(),
 				image.data(),
-				SpacialAxis,
+				NumAxis,
 				img_shape.data(),
 				col_shape.data(),
 				krnl_shape.reverse().data(),
@@ -89,70 +177,6 @@ void im2col_nd(
 				col_image.data());
 	});
 }
-template <typename Dtype>
-void im2col(BC::host_tag, const Dtype* data_im, const int channels,
-		const int height, const int width,
-		const int kernel_h, const int kernel_w,
-		const int pad_h, const int pad_w,
-		const int stride_h, const int stride_w,
-		const int dilation_h, const int dilation_w,
-		Dtype* data_col) {
-
-	BC::caffe::im2col_cpu(
-			data_im, channels,
-			height, width,
-			kernel_h, kernel_w,
-			pad_h, pad_w,
-			stride_h, stride_w,
-			dilation_h, dilation_w, data_col);
-}
-
-#ifdef __CUDACC__
-template <typename Dtype>
-void im2col(BC::device_tag, const Dtype* data_im, const int channels,
-		const int height, const int width,
-		const int kernel_h, const int kernel_w,
-		const int pad_h, const int pad_w,
-		const int stride_h, const int stride_w,
-		const int dilation_h, const int dilation_w,
-		Dtype* data_col) {
-
-	BC::caffe::im2col_gpu(
-			data_im, channels,
-			height, width,
-			kernel_h, kernel_w,
-			pad_h, pad_w,
-			stride_h, stride_w,
-			dilation_h, dilation_w, data_col);
-}
-#endif
-
-
-template <typename Dtype>
-void im2col_nd(BC::host_tag, const Dtype* data_im, const int num_spatial_axes,
-		const int* im_shape, const int* col_shape,
-		const int* kernel_shape, const int* pad, const int* stride,
-		const int* dilation, Dtype* data_col) {
-	BC::caffe::im2col_nd_cpu(data_im, num_spatial_axes, im_shape, col_shape,
-									kernel_shape, pad, stride, dilation, data_col);
-}
-
-
-#ifdef __CUDACC__
-template <typename Dtype>
-void im2col_nd(BC::device_tag, const Dtype* data_im, const int num_spatial_axes,
-		const int* im_shape, const int* col_shape,
-		const int* kernel_shape, const int* pad, const int* stride,
-		const int* dilation, Dtype* data_col) {
-	const bool kIm2Col = true;
-	BC::caffe::im2col_nd_gpu(data_im, kIm2Col, num_spatial_axes, im_shape, col_shape,
-									kernel_shape, pad, stride, dilation, data_col);
-}
-#endif
-
-
-
-
 
 }
 

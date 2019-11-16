@@ -53,19 +53,23 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 	using clock = std::chrono::duration<double>;
 
 	auto network = BC::nn::neuralnetwork(
+		BC::nn::max_pooling(
+				BC::dim(28,28,1), //input dimension
+				BC::dim(3,3),     //pool dimensions
+				BC::dim(1,1)),    //pad_dimensions, out dims == (input_dims + pad_dims*2) / krnl_dims
 		BC::nn::convolution(
 				system_tag,
-				BC::dim(28,28,1),  //input_image shape
-				BC::dim(13,13,4)), //krnl_rows, krnl_cols, numb_krnls
+				BC::dim(10, 10,1),  //input_image shape
+				BC::dim(3, 3, 16)), //krnl_rows, krnl_cols, numb_krnls
 		BC::nn::convolution(
 				system_tag,
-				BC::dim(16,16,4), //input_image shape
-				BC::dim(7,7,4)),  //krnl_rows, krnl_cols, numb_krnls
-		BC::nn::flatten(system_tag, BC::dim(10,10,4)),
-		BC::nn::relu(system_tag, 10*10*4),
-		BC::nn::feedforward(system_tag, 10*10*4, 256),
-		BC::nn::tanh(system_tag, 256),
-		BC::nn::feedforward(system_tag, 256, 10),
+				BC::dim(8,8,16), //input_image shape
+				BC::dim(3, 3, 8)),  //krnl_rows, krnl_cols, numb_krnls
+		BC::nn::flatten(system_tag, BC::dim(6,6,8)),
+		BC::nn::relu(system_tag, BC::dim(6,6,8).size()),
+		BC::nn::feedforward(system_tag, BC::dim(6,6,8).size(), 64),
+		BC::nn::tanh(system_tag, 64),
+		BC::nn::feedforward(system_tag, 64, 10),
 		BC::nn::softmax(system_tag, 10),
 		BC::nn::logging_output_layer(system_tag, 10, BC::nn::RMSE).skip_every(100)
 	);

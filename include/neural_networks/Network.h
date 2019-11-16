@@ -8,7 +8,7 @@
 #ifndef BLACKCAT_NEURALNETWORK_NEURALNETWORK_H_
 #define BLACKCAT_NEURALNETWORK_NEURALNETWORK_H_
 
-#include "Layers/Layer_Traits.h"
+#include "layers/Layer_Traits.h"
 
 #include "Layer_Chain.h"
 #include "Layer_Loader.h"

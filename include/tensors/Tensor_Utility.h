@@ -124,7 +124,8 @@ public:
 		std::cout << this->to_string(precision, false, sparse) << std::endl;
 	}
 
-	[[deprecated]] void read_as_one_hot(std::ifstream& is) {
+	//TODO deprecate this
+	void read_as_one_hot(std::ifstream& is) {
 		BC_ASSERT_ARRAY_ONLY("void read_as_one_hot(std::ifstream& is)");
 
 		if (derived::tensor_dimension != 1)
@@ -138,7 +139,8 @@ public:
 		as_derived()(std::stoi(tmp)) = 1;
 	}
 
-	[[deprecated]] void read_csv_row(std::ifstream& is) {
+	//TODO deprecate this
+	void read_csv_row(std::ifstream& is) {
 		BC_ASSERT_ARRAY_ONLY("void read(std::ifstream& is)");
 
 		if (!is.good()) {

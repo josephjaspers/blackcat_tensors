@@ -90,9 +90,9 @@ public:
 	{
 		auto out_dim = [&](int dim_idx) {
 			return (m_input_shape[dim_idx] +
-					m_padding[dim_idx] + 1 -
+					m_padding[dim_idx]*2 -
 					m_krnl_shape[dim_idx]) /
-					m_strides[dim_idx];
+					m_strides[dim_idx] + 1;
 		};
 
 		m_output_shape = BC::dim(out_dim(0), out_dim(1), krnl_dims[2]);

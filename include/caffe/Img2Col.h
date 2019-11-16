@@ -49,6 +49,9 @@
  */
 
 namespace BC {
+
+class host_tag;
+
 namespace caffe {
 
 // Function uses casting from int to unsigned to compare if value of
@@ -62,7 +65,9 @@ inline bool is_a_ge_zero_and_a_lt_b(int a, int b) {
 }
 
 template <typename Dtype>
-void im2col_cpu(const Dtype* data_im, const int channels,
+void im2col(
+		BC::host_tag,
+		const Dtype* data_im, const int channels,
 		const int height, const int width,
 		const int kernel_h, const int kernel_w,
 
@@ -110,7 +115,8 @@ void im2col_cpu(const Dtype* data_im, const int channels,
  */
 
 template <typename Dtype>
-inline void im2col_nd_core_cpu(const Dtype* data_input, const bool im2col,
+inline void im2col_nd_core_cpu(
+		const Dtype* data_input, const bool im2col,
 		const int num_spatial_axes, const int* im_shape, const int* col_shape,
 		const int* kernel_shape, const int* pad, const int* stride,
 		const int* dilation, Dtype* data_output) {
@@ -187,7 +193,9 @@ inline void im2col_nd_core_cpu(const Dtype* data_input, const bool im2col,
 }
 
 template <typename Dtype>
-void im2col_nd_cpu(const Dtype* data_im, const int num_spatial_axes,
+void im2col_nd(
+		BC::host_tag,
+		const Dtype* data_im, const int num_spatial_axes,
 		const int* im_shape, const int* col_shape,
 		const int* kernel_shape, const int* pad, const int* stride,
 		const int* dilation, Dtype* data_col) {
@@ -198,7 +206,9 @@ void im2col_nd_cpu(const Dtype* data_im, const int num_spatial_axes,
 
 
 template <typename Dtype>
-void col2im_cpu(const Dtype* data_col, const int channels,
+void col2im(
+		BC::host_tag,
+		const Dtype* data_col, const int channels,
 		const int height, const int width, const int kernel_h, const int kernel_w,
 		const int pad_h, const int pad_w,
 		const int stride_h, const int stride_w,

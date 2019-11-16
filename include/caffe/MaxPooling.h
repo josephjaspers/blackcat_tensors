@@ -18,10 +18,14 @@
  */
 
 namespace BC {
+
+class host_tag;
+
 namespace caffe {
 
 template <class Dtype>
 void MaxPoolForward(
+		BC::host_tag,
 		const Dtype* img_data,
 		const int num,
 		const int channels,
@@ -73,6 +77,7 @@ void MaxPoolForward(
 
 template <typename Dtype>
 void MaxPoolBackward(
+		BC::host_tag,
 		const Dtype* top_diff, const int* mask,
 		const int num,      const int channels,
 		const int height,   const int width,

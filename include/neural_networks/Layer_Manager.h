@@ -19,10 +19,6 @@ template<
 	class Neural_Network_Is_Recurrent=std::false_type>
 struct Layer_Manager: Layer {
 
-	template<class... Args>
-	Layer_Manager(Args... args):
-		Layer(args...) {}
-
 	template<class D, class L, class R>
 	friend class Layer_Manager;
 
@@ -31,21 +27,6 @@ struct Layer_Manager: Layer {
 	using allocator_type = typename layer_traits<Layer>::allocator_type;
 	using is_recurrent = Neural_Network_Is_Recurrent;
 
-	static_assert(input_tensor_dimension::value == decltype(std::declval<Layer>().get_input_shape())::tensor_dimension,
-			"Input tensor_dimension must be equal to Layer::get_input_shape() dimension"
-			"\n, did you forget to override get_input_shape()?");
-
-	static_assert(output_tensor_dimension::value == decltype(std::declval<Layer>().get_output_shape())::tensor_dimension,
-			"output tensor_dimension must be equal to Layer::get_input_shape() dimension"
-			"\n, did you forget to override get_output_shape()?");
-
-	static_assert(input_tensor_dimension::value+1 == decltype(std::declval<Layer>().get_batched_input_shape())::tensor_dimension,
-			"Input tensor_dimension must be equal to Layer::get_input_shape() dimension"
-			"\n, did you forget to override get_batched_input_shape()?");
-
-	static_assert(output_tensor_dimension::value+1 == decltype(std::declval<Layer>().get_batched_output_shape())::tensor_dimension,
-			"output tensor_dimension must be equal to Layer::get_input_shape() dimension"
-			"\n, did you forget to override get_batched_output_shape()?");
 
 	using value_type = typename layer_traits<Layer>::value_type;
 
@@ -69,14 +50,39 @@ private:
 
 public:
 
+	template<class... Args>
+	Layer_Manager(Args... args):
+		Layer(args...) {
+
+		static_assert(input_tensor_dimension::value == decltype(std::declval<Layer>().get_input_shape())::tensor_dimension,
+				"Input tensor_dimension must be equal to Layer::get_input_shape() dimension"
+				"\n, did you forget to override get_input_shape()?");
+
+		static_assert(output_tensor_dimension::value == decltype(std::declval<Layer>().get_output_shape())::tensor_dimension,
+				"output tensor_dimension must be equal to Layer::get_input_shape() dimension"
+				"\n, did you forget to override get_output_shape()?");
+
+		static_assert(input_tensor_dimension::value+1 == decltype(std::declval<Layer>().get_batched_input_shape())::tensor_dimension,
+				"Input tensor_dimension must be equal to Layer::get_input_shape() dimension"
+				"\n, did you forget to override get_batched_input_shape()?");
+
+		static_assert(output_tensor_dimension::value+1 == decltype(std::declval<Layer>().get_batched_output_shape())::tensor_dimension,
+				"output tensor_dimension must be equal to Layer::get_input_shape() dimension"
+				"\n, did you forget to override get_batched_output_shape()?");
+	}
+
+
 	template<class T>
 	auto forward_propagation(const T& expression) {
 		static_assert(T::tensor_dimension == input_tensor_dimension::value + 1,
 				"Invalid tensor_domension in forward_propagation");
 		BC_ASSERT(expression.get_shape() == this->get_batched_input_shape(),
 				"forward_propagation input must have the same shape as "
-					"get_batched_input_shape() of the current layer "
-					"(Invalid input dimensions) \nLayer: " + Layer::classname());
+						"get_batched_input_shape() of the current layer "
+						"(Invalid input dimensions) "
+					"\nLayer: " + Layer::classname() +
+					"\nExpected shape: " + this->get_batched_input_shape().to_string() +
+					"\nReceived Shape: " + expression.get_shape().inner_shape().to_string());
 
 		return forward_supply_outputs(
 				typename traits::forward_requires_outputs(),
@@ -88,10 +94,12 @@ public:
 		static_assert(T::tensor_dimension == output_tensor_dimension::value + 1,
 				"Invalid tensor_domension in back_propagation");
 		BC_ASSERT(dy.get_shape() == this->get_batched_output_shape(),
-				"back_propagation input must have the same shape as "
+					"back_propagation input must have the same shape as "
 					"get_batched_output_shape() of the current layer "
-					"(Invalid input dimensions) \nLayer: " + Layer::classname());
-
+				"(Invalid input dimensions) "
+				"\nLayer: " + Layer::classname() +
+				"\nExpected shape: " + this->get_batched_input_shape().to_string() +
+				"\nReceived Shape: " + dy.get_shape().inner_shape().to_string());
 
 		return backward_supply_outputs(
 				typename traits::backward_requires_outputs(),
@@ -105,10 +113,12 @@ public:
 		static_assert(T::tensor_dimension == input_tensor_dimension::value + 1,
 				"Invalid tensor_domension in predict");
 		BC_ASSERT(expression.get_shape() == this->get_batched_input_shape(),
-				"predict<T> input must have the same shape as "
+					"predict<T> input must have the same shape as "
 					"get_batched_input_shape() of the current layer "
-					"(Invalid input dimensions) \nLayer: " + Layer::classname());
-
+				"(Invalid input dimensions) "
+				"\nLayer: " + Layer::classname() +
+				"\nExpected shape: " + this->get_batched_input_shape().to_string() +
+				"\nReceived Shape: " + expression.get_shape().inner_shape().to_string());
 
 		return predict_supply_outputs(
 				typename traits::forward_requires_outputs(),
@@ -121,9 +131,12 @@ public:
 		static_assert(T::tensor_dimension == input_tensor_dimension::value,
 				"Invalid tensor_domension in single_predict");
 		BC_ASSERT(expression.get_shape() == this->get_input_shape(),
-				"single_predict<T> input must have the same shape as "
+					"single_predict<T> input must have the same shape as "
 					"get_input_shape() of the current layer "
-					"(Invalid input dimensions) \nLayer: " + Layer::classname());
+				"(Invalid input dimensions) "
+				"\nLayer: " + Layer::classname() +
+				"\nExpected shape: " + this->get_input_shape().to_string() +
+				"\nReceived Shape: " + expression.get_shape().inner_shape().to_string());
 
 		static_assert(T::tensor_dimension ==
 						traits::input_tensor_dimension::value,
@@ -303,8 +316,11 @@ private:
 
 	template<class T>
 	auto&& maybe_cache_delta(const T& dy) {
-		return maybe_cache_delta_impl(
-				typename traits::greedy_evaluate_delta(), dy);
+		using should_greedy_eval = BC::traits::truth_type<
+				BC::tensors::exprs::expression_traits<T>::is_expr::value &&
+				traits::greedy_evaluate_delta::value>;
+
+		return maybe_cache_delta_impl(should_greedy_eval(), dy);
 	}
 
 	template<class T>
