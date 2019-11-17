@@ -149,58 +149,15 @@ private:
 public:
 
 
-	BCINLINE auto operator + (const Dim& other) const {
-		return op_impl(BC::oper::Add(), other);
+#define BC_DIM_OP(op, functor)\
+	Dim operator op(const Dim& other) const {                           \
+		return this->op_impl(BC::oper::functor(), other);                 \
 	}
 
-	BCINLINE auto operator - (const Dim& other) const {
-		return op_impl(BC::oper::Sub(), other);
+#define BC_DIM_INPLACE_OP(op, functor)\
+	Dim operator op##=(const Dim& other) {                              \
+		return this->inplace_op_impl(BC::oper::functor(), other);         \
 	}
-
-	BCINLINE auto operator / (const Dim& other) const {
-		return op_impl(BC::oper::Div(), other);
-	}
-
-	BCINLINE auto operator * (const Dim& other) const {
-		return op_impl(BC::oper::Mul(), other);
-	}
-
-	BCINLINE auto operator > (const Dim& other) const {
-		return op_impl(BC::oper::Greater(), other);
-	}
-
-	BCINLINE auto operator < (const Dim& other) const {
-		return op_impl(BC::oper::Lesser(), other);
-	}
-
-	BCINLINE auto operator >= (const Dim& other) const {
-		return op_impl(BC::oper::Greater_Equal(), other);
-	}
-
-	BCINLINE auto operator <= (const Dim& other) const {
-		return op_impl(BC::oper::Lesser_Equal(), other);
-	}
-
-	BCINLINE auto equal(const Dim& other) const {
-		return op_impl(BC::oper::Equal(), other);
-	}
-
-	BCINLINE Dim& operator += (const Dim& other) {
-		return inplace_op_impl(BC::oper::Add(), other);
-	}
-
-	BCINLINE Dim& operator -= (const Dim& other) {
-		return inplace_opother_impl(BC::oper::Sub(), other);
-	}
-
-	BCINLINE Dim& operator /= (const Dim& other) {
-		return inplace_op_impl(BC::oper::Div(), other);
-	}
-
-	BCINLINE Dim& operator *= (const Dim& other) {
-		return inplace_op_impl(BC::oper::Mul(), other);
-	}
-
 
 #define BC_DIM_INPLACE_SCALAR_OP(op, functor)                           \
 	friend Dim operator op##=(Dim &dim, const value_type& scalar) {     \
@@ -216,24 +173,30 @@ public:
 		return dim.scalar_op_impl(BC::oper::functor(), scalar);         \
 	}
 
-#define BC_DIM_SCALAR_OP_BOTH(op, functor) \
-	BC_DIM_INPLACE_SCALAR_OP(op, functor)  \
-	BC_DIM_SCALAR_OP(op, functor)
+#define BC_DIM_OP_FACTORY(op, functor) \
+BC_DIM_OP(op, functor)                 \
+BC_DIM_SCALAR_OP(op, functor)
 
+#define BC_DIM_OP_BOTH(op, functor)   \
+BC_DIM_OP_FACTORY(op, functor)        \
+BC_DIM_INPLACE_OP(op, functor)        \
+BC_DIM_INPLACE_SCALAR_OP(op, functor)
 
-BC_DIM_SCALAR_OP_BOTH(+, Add)
-BC_DIM_SCALAR_OP_BOTH(-, Sub)
-BC_DIM_SCALAR_OP_BOTH(/, Div)
-BC_DIM_SCALAR_OP_BOTH(*, Mul)
-BC_DIM_SCALAR_OP(<, Lesser)
-BC_DIM_SCALAR_OP(<=, Lesser_Equal)
-BC_DIM_SCALAR_OP(>, Greater)
-BC_DIM_SCALAR_OP(>=, Greater_Equal)
+BC_DIM_OP_BOTH(+, Add)
+BC_DIM_OP_BOTH(-, Sub)
+BC_DIM_OP_BOTH(/, Div)
+BC_DIM_OP_BOTH(*, Mul)
+BC_DIM_OP_FACTORY(<, Lesser)
+BC_DIM_OP_FACTORY(<=, Lesser_Equal)
+BC_DIM_OP_FACTORY(>, Greater)
+BC_DIM_OP_FACTORY(>=, Greater_Equal)
 
-
-#undef BC_DIM_SCALAR_OP
+#undef BC_DIM_OP
+#undef BC_DIM_INPLACE_OP
 #undef BC_DIM_INPLACE_SCALAR_OP
-
+#undef BC_DIM_SCALAR_OP
+#undef BC_DIM_OP_FACTORY
+#undef BC_DIM_OP_BOTH
 
 	BCINLINE
 	bool all(size_t start, size_t end) const {
