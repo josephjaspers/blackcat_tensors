@@ -122,7 +122,7 @@ private:
 	}
 
 	template<class Operator> BCINLINE
-	Dim& inplace_op_impl(Operator op, const Dim& other) const {
+	Dim& inplace_op_impl(Operator op, const Dim& other) {
 		for (int i = 0; i < N; ++i) {
 			m_index[i] = op(m_index[i], other[i]);
 		}
@@ -139,7 +139,7 @@ private:
 	}
 
 	template<class Operator> BCINLINE
-	Dim& inplace_scalar_op_impl(Operator op, const value_type& other) const {
+	Dim& inplace_scalar_op_impl(Operator op, const value_type& other) {
 		for (int i = 0; i < N; ++i) {
 			m_index[i] = op(m_index[i], other);
 		}
