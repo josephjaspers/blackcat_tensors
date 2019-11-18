@@ -166,10 +166,10 @@ struct NeuralNetwork {
 		});
 	}
 
-	void move_training_data_to_single_predict(int batch_index) {
+	void copy_training_data_to_single_predict(int batch_index) {
 		m_layer_chain.for_each([&](auto& layer) {
 			layer.zero_time_index();
-			layer.move_training_data_to_single_predict(batch_index);
+			layer.copy_training_data_to_single_predict(batch_index);
 		});
 	}
 	void zero_time_index() {

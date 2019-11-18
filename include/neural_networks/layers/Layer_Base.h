@@ -125,7 +125,7 @@ public:
 	void load(Layer_Loader&) {};
 	void load_to_cache(Layer_Loader&, Cache&) {}
 
-	void move_training_data_to_single_predict(Cache&, int batch_index) {}
+	void copy_training_data_to_single_predict(Cache&, int batch_index) {}
 
 	static std::string parse_classname(std::string classname) {
 		auto classname_ns = std::find(classname.rbegin(), classname.rend(), ':');

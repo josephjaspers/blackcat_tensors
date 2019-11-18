@@ -14,6 +14,14 @@
 namespace BC {
 namespace nn {
 
+/**A type designed to act as a key to the Cache object.
+ *
+ * Arguments:
+ * 	K - any class to use as a key, generally "Name<char...>" class is used to create a constexpr name to the class.
+ * 	V - the type to return from the given key
+ * 	IsRecurrent - Determines if the storing should override the most
+ * 		recent member store or if it should be stored in a separate location for back-propagation through time.
+ */
 template<class K, class V, class IsRecurrent>
 struct cache_key : BC::utility::Any_Key<K, V> {
 	static_assert(
@@ -24,6 +32,15 @@ struct cache_key : BC::utility::Any_Key<K, V> {
 	using is_recurrent = IsRecurrent;
 };
 
+
+/** A Dictionary designed to store any type using the 'store' and 'load' functions.
+ *
+ * The cache object stores any object that can be mapped from a unique cache_key.
+ * Additionally the Cache object stores an integer time-index which determines the current
+ * 'time' to return when loading a Value from a Recurrent key.
+ *
+ * The time_index is only relevant with recurrent keys.
+ */
 struct Cache {
 
 	template<class K, class V, class R>
@@ -51,6 +68,7 @@ public:
 		return cache.contains(key);
 	}
 
+	///Loads the current value at the current time_index
 	template<class K, class V>
 	auto& load(key_type<K, V, std::true_type> key, int t_modifier=0) {
 		std::vector<V>& history = cache[hash(key)];

@@ -165,8 +165,8 @@ public:
 		Layer::load_to_cache(loader, m_cache);
 	}
 
-	void move_training_data_to_single_predict(int batch_index) {
-		Layer::move_training_data_to_single_predict(m_cache, batch_index);
+	void copy_training_data_to_single_predict(int batch_index) {
+		Layer::copy_training_data_to_single_predict(m_cache, batch_index);
 		get_predict_inputs() = get_batched_inputs()[batch_index];
 	}
 

@@ -360,7 +360,7 @@ public:
 		}
 	}
 
-	void move_training_data_to_single_predict(Cache& cache, int batch_index) {
+	void copy_training_data_to_single_predict(Cache& cache, int batch_index) {
 		auto& pc = cache.load(predict_cell_key(), default_predict_tensor_factory());
 		auto& c = cache.load(cell_key(), default_tensor_factory());
 		pc = c[batch_index];
