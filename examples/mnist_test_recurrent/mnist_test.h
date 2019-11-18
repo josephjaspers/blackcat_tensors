@@ -105,6 +105,7 @@ int percept_MNIST(System system_tag, const char* mnist_dataset,
 
 	std::cout << " testing... " << std::endl;
 
+	network.copy_training_data_to_single_predict(0);
 	{
 		auto batch = inputs[0];
 		auto shape = BC::shape(784/4, batch_size);
