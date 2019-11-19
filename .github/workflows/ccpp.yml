@@ -3,7 +3,7 @@ name: C/C++ CI
 on: [push]
 
 jobs:
-  build_linux_travis:
+  build_linux:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -14,4 +14,26 @@ jobs:
       run: "CC=gcc-7 && CXX=g++-8"
 
     - name: test
-      run: cd tests; make travis; ./blackcat_tests;  cd ../examples/mnist_test/; make travis; ./mnist_test_exec mnist_train.csv; cd ../mnist_test_recurrent; make travis; ./mnist_test_exec mnist_train.csv 
+      run: cd tests; make travis; ./blackcat_tests;  
+    - name: mnist_test
+      run: cd examples/mnist_test/; make travis; ./mnist_test_exec mnist_train.csv; 
+    - name: mnist_test_recurrent 
+      run: cd examples/mnist_test/mnist_test_recurrent; make travis; ./mnist_test_exec mnist_train.csv
+       
+  build_windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: setup
+    #  run: sudo apt update && sudo apt install -y libblas-dev; sudo apt install -y g++-7; sudo apt install -y gcc-7;
+    #- name: set_gcc_version
+    #  run: "CC=gcc-7 && CXX=g++-8"
+    - name: test
+      run: cd tests; make travis; ./blackcat_tests;  
+    - name: mnist_test
+      run: cd examples/mnist_test/; make travis; ./mnist_test_exec mnist_train.csv; 
+    - name: mnist_test_recurrent 
+      run: cd examples/mnist_test/mnist_test_recurrent; make travis; ./mnist_test_exec mnist_train.csv
+    
+
+
