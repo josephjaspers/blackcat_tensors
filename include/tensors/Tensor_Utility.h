@@ -103,7 +103,7 @@ public:
 					BC::tensors::exprs::expression_traits<ExpressionTemplate>::is_expr::value, BC::traits::Integer<2>,
 				std::conditional_t<
 					std::is_same<host_tag, system_tag>::value, BC::traits::Integer<0>,
-				BC::traits::Integer<1>>>;
+				std::conditional_t<tensor_dimension==0, BC::traits::Integer<-1>, BC::traits::Integer<1>>>>;
 
 			return this->to_string(specialization(), BC::tensors::io::features(precision, pretty, sparse));
 		}
