@@ -21,6 +21,9 @@
 namespace BC {
 namespace caffe {
 
+using std::min;
+using std::max;
+
 template <typename Dtype>
 __global__ void MaxPoolForward(const int nthreads,
     const Dtype* const bottom_data, const int num, const int channels,
