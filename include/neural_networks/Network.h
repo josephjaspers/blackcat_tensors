@@ -166,12 +166,27 @@ struct NeuralNetwork {
 		});
 	}
 
+	/** Copies the given batch_index from the training cell_state to the inference cell_state.
+	 *
+	 * The time_index is set to zero after copying.
+	 *
+	 *
+	 */
 	void copy_training_data_to_single_predict(int batch_index) {
+		BC_ASSERT(batch_index<batch_size(), "Require: batch_index < batch_size");
+
 		m_layer_chain.for_each([&](auto& layer) {
 			layer.zero_time_index();
 			layer.copy_training_data_to_single_predict(batch_index);
 		});
 	}
+
+	/** Sets the internal time_index to zero.
+	 * The time_index dictates what intermediates to return during
+	 * back_propagation and forward_propagation of a recurrent neural network.
+	 *
+	 * This value is not relevant in non-recurrent neural networks.
+	 */
 	void zero_time_index() {
 		m_layer_chain.for_each([&](auto& layer) {
 			layer.zero_time_index();

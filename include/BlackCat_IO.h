@@ -105,8 +105,10 @@ static std::vector<std::vector<BC::string>> parse(csv_descriptor desc)
 		throw 1;
 	}
 
-	string csv_text = string(std::istreambuf_iterator<char>(ifs),
+	string csv_text = string(
+			std::istreambuf_iterator<char>(ifs),
 			std::istreambuf_iterator<char>());
+
 	vector<string> rows = csv_text.split(desc.row_delim());
 	vector<vector<string>> split_rows;
 
@@ -138,7 +140,6 @@ static std::vector<std::vector<BC::string>> parse(csv_descriptor desc)
 		}
 		++curr_col;
 	}
-
 	return split_rows;
 }
 
@@ -151,7 +152,6 @@ static BC::Matrix<ValueType, Allocator> read_uniform(
 
 	using BC::string;
 	using std::vector;
-
 
 	if (desc.transpose()){
 		BC::print("Transpose is not supported for read_uniform");

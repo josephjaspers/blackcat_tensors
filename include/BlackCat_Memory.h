@@ -38,7 +38,7 @@ class atomic_shared_ptr {
 public:
 
 	template<class... Args>
-	explicit atomic_shared_ptr(Args&&... args) : m_ptr(args...) {};
+	explicit atomic_shared_ptr(Args&&... args): m_ptr(args...) {};
 
 	atomic_shared_ptr(atomic_shared_ptr&& ptr) {
 		*this = ptr;

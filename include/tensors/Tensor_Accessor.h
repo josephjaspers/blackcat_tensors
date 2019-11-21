@@ -15,35 +15,6 @@ namespace tensors {
 template<class>
 class Tensor_Base;
 
-//aliases
-template<class... Ts>
-auto index(Ts... ts) {
-	return BC::dim(ts...);
-}
-
-template<class T, class Shape>
-auto reshape(Tensor_Base<T>& tensor, Shape shape)
-{
-	static_assert(BC::tensors::exprs::expression_traits<T>::is_array::value &&
-					T::tensor_iterator_dimension <= 1,
-					"Reshape is only available to continuous tensors");
-	auto reshaped_tensor =  make_tensor(exprs::make_view(tensor, shape));
-	BC_ASSERT(reshaped_tensor.size() == tensor.size(), "Reshape requires same size");
-	return reshaped_tensor;
-}
-
-template<class T, class Shape>
-const auto reshape(const Tensor_Base<T>& tensor, Shape shape)
-{
-	static_assert(BC::tensors::exprs::expression_traits<T>::is_array::value &&
-		T::tensor_iterator_dimension <= 1,
-		"Reshape is only available to continuous tensors");
-	auto reshaped_tensor =  make_tensor(exprs::make_view(tensor, shape));
-	BC_ASSERT(reshaped_tensor.size() == tensor.size(), "Reshape requires same size");
-	return reshaped_tensor;
-}
-
-
 template<class ExpressionTemplate, class voider=void>
 class Tensor_Accessor {
 
@@ -125,6 +96,12 @@ public:
 
 	//returns a copy of the tensor without actually copying the elements
 	auto shallow_copy() const
+	{
+		return make_tensor(
+				exprs::make_view(as_derived(), as_derived().get_shape()));
+	}
+
+	auto shallow_copy()
 	{
 		return make_tensor(
 				exprs::make_view(as_derived(), as_derived().get_shape()));
@@ -256,6 +233,28 @@ public:
 		return this->reshaped(this->as_derived().size());
 	}
 };
+
+template<class T, class Shape>
+auto reshape(Tensor_Base<T>& tensor, Shape shape)
+{
+	static_assert(BC::tensors::exprs::expression_traits<T>::is_array::value &&
+					T::tensor_iterator_dimension <= 1,
+					"Reshape is only available to continuous tensors");
+	auto reshaped_tensor =  make_tensor(exprs::make_view(tensor, shape));
+	BC_ASSERT(reshaped_tensor.size() == tensor.size(), "Reshape requires same size");
+	return reshaped_tensor;
+}
+
+template<class T, class Shape>
+const auto reshape(const Tensor_Base<T>& tensor, Shape shape)
+{
+	static_assert(BC::tensors::exprs::expression_traits<T>::is_array::value &&
+		T::tensor_iterator_dimension <= 1,
+		"Reshape is only available to continuous tensors");
+	auto reshaped_tensor =  make_tensor(exprs::make_view(tensor, shape));
+	BC_ASSERT(reshaped_tensor.size() == tensor.size(), "Reshape requires same size");
+	return reshaped_tensor;
+}
 
 //Disable accessors for expression types
 //This specialization is just for the cppyy interpretor,

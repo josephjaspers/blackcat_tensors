@@ -78,9 +78,9 @@ private:
 								typename ExpressionTemplate::value_type,
 								BC::Allocator<host_tag, value_type>>>;
 
-					host_tensor host_;
-					host_.copy(as_derived());
-					return BC::tensors::io::to_string(host_, fs, BC::traits::Integer<tensor_dimension>());
+		host_tensor host_;
+		host_.copy(as_derived());
+		return BC::tensors::io::to_string(host_, fs, BC::traits::Integer<tensor_dimension>());
 	}
 
 

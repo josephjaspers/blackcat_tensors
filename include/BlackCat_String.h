@@ -40,7 +40,7 @@ struct string:
 	}
 
 	std::vector<BC::string> split(char delim) const {
-		std::vector<BC::string> splts;
+		std::vector<BC::string> splits;
 
 		auto curr = this->begin();
 		auto end = this->end();
@@ -49,12 +49,12 @@ struct string:
 			auto next = std::find(curr, end, delim);
 
 			if (curr < end)
-				splts.push_back(BC::string(curr, next));
+				splits.push_back(BC::string(curr, next));
 
 			curr = next + 1;
 		}
 
-		return splts;
+		return splits;
 	}
 };
 

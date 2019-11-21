@@ -27,19 +27,35 @@ using default_shape = BC::Shape<X>;
 } //end of ns detail
 } //end of ns tensors
 
-template<int dimension, class ValueType, class Allocator=tensors::detail::default_allocator<ValueType>>
-using Tensor = BC::tensors::Tensor_Base<BC::tensors::exprs::Array<BC::Shape<dimension>, ValueType, Allocator>>;
+template<
+		int dimension,
+		class ValueType,
+		class Allocator=tensors::detail::default_allocator<ValueType>>
+using Tensor =
+		BC::tensors::Tensor_Base<
+				BC::tensors::exprs::Array<
+						BC::Shape<dimension>,
+						ValueType,
+						Allocator>>;
 
-template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
+template<
+		class ValueType,
+		class Allocator=tensors::detail::default_allocator<ValueType>>
 using Scalar = Tensor<0, ValueType, Allocator>;
 
-template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
+template<
+		class ValueType,
+		class Allocator=tensors::detail::default_allocator<ValueType>>
 using Vector = Tensor<1, ValueType, Allocator>;
 
-template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
+template<
+		class ValueType,
+		class Allocator=tensors::detail::default_allocator<ValueType>>
 using Matrix = Tensor<2, ValueType, Allocator>;
 
-template<class ValueType, class Allocator = tensors::detail::default_allocator<ValueType>>
+template<
+		class ValueType,
+		class Allocator=tensors::detail::default_allocator<ValueType>>
 using Cube = Tensor<3, ValueType, Allocator>;
 
 } //end of ns BC

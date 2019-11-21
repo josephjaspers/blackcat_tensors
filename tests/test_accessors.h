@@ -21,7 +21,6 @@ int test_accessors(int sz=128) {
 	using mat = BC::Matrix<value_type, allocator<value_type>>;
 	using vec = BC::Vector<value_type, allocator<value_type>>;
 	using scalar = BC::Scalar<value_type, allocator<value_type>>;
-	using bmat = BC::Matrix<bool, allocator<bool>>;
 
 	mat a(sz,sz);
 
