@@ -6,7 +6,7 @@
  */
 
 #ifdef __CUDACC__
-#ifndef BLAKCAT_TENSORS_CAFFE_IMG2COL_CU_
+#ifndef BLACKCAT_TENSOR_CAFFE_IMG2COL_CU_
 #define BLACKCAT_TENSOR_CAFFE_IMG2COL_CU_
 
 /**
@@ -55,7 +55,7 @@ __global__ void im2col_gpu_kernel(const int n, const Dtype* data_im,
 }
 
 template <typename Dtype>
-void im2col_gpu(const Dtype* data_im, const int channels,
+void im2col(BC::device_tag, const Dtype* data_im, const int channels,
 		const int height, const int width, const int kernel_h, const int kernel_w,
 		const int pad_h, const int pad_w,
 		const int stride_h, const int stride_w,
@@ -76,16 +76,6 @@ void im2col_gpu(const Dtype* data_im, const int channels,
 			width_col, data_col);
 //	CUDA_POST_KERNEL_CHECK;
 }
-
-// Explicit instantiation
-template void im2col_gpu<float>(const float* data_im, const int channels,
-		const int height, const int width, const int kernel_h, const int kernel_w,
-		const int pad_h, const int pad_w, const int stride_h, const int stride_w,
-		const int dilation_h, const int dilation_w, float* data_col);
-template void im2col_gpu<double>(const double* data_im, const int channels,
-		const int height, const int width, const int kernel_h, const int kernel_w,
-		const int pad_h, const int pad_w, const int stride_h, const int stride_w,
-		const int dilation_h, const int dilation_w, double* data_col);
 
 template <typename Dtype, int num_axes>
 __global__ void im2col_nd_gpu_kernel(const int n, const Dtype* data_im,
@@ -247,18 +237,6 @@ void im2col_nd_gpu(const Dtype* data_im, const int num_spatial_axes,
 //	CUDA_POST_KERNEL_CHECK;
 }
 
-// Explicit instantiation
-template void im2col_nd_gpu<float>(const float* data_im,
-		const int num_spatial_axes, const int col_size,
-		const int* im_shape, const int* col_shape,
-		const int* kernel_shape, const int* pad, const int* stride,
-		const int* dilation, float* data_col);
-template void im2col_nd_gpu<double>(const double* data_im,
-		const int num_spatial_axes, const int col_size,
-		const int* im_shape, const int* col_shape,
-		const int* kernel_shape, const int* pad, const int* stride,
-		const int* dilation, double* data_col);
-
 template <typename Dtype>
 __global__ void col2im_gpu_kernel(const int n, const Dtype* data_col,
 		const int height, const int width, const int channels,
@@ -301,7 +279,7 @@ __global__ void col2im_gpu_kernel(const int n, const Dtype* data_col,
 }
 
 template <typename Dtype>
-void col2im_gpu(const Dtype* data_col, const int channels,
+void col2im(BC::device_tag, const Dtype* data_col, const int channels,
 		const int height, const int width, const int kernel_h, const int kernel_w,
 		const int pad_h, const int pad_w, const int stride_h,
 		const int stride_w, const int dilation_h, const int dilation_w,
@@ -321,18 +299,6 @@ void col2im_gpu(const Dtype* data_col, const int channels,
 			height_col, width_col, data_im);
 //	CUDA_POST_KERNEL_CHECK;
 }
-
-// Explicit instantiation
-template void col2im_gpu<float>(const float* data_col, const int channels,
-		const int height, const int width, const int kernel_h, const int kernel_w,
-		const int pad_h, const int pad_w, const int stride_h,
-		const int stride_w, const int dilation_h, const int dilation_w,
-		float* data_im);
-template void col2im_gpu<double>(const double* data_col, const int channels,
-		const int height, const int width, const int kernel_h, const int kernel_w,
-		const int pad_h, const int pad_w, const int stride_h,
-		const int stride_w, const int dilation_h, const int dilation_w,
-		double* data_im);
 
 template <typename Dtype, int num_axes>
 __global__ void col2im_nd_gpu_kernel(const int n, const Dtype* data_col,
@@ -512,19 +478,6 @@ void col2im_nd_gpu(const Dtype* data_col, const int num_spatial_axes,
 	}
 //	CUDA_POST_KERNEL_CHECK;
 }
-
-// Explicit instantiation
-template void col2im_nd_gpu<float>(const float* data_col,
-		const int num_spatial_axes, const int im_size,
-		const int* im_shape, const int* col_shape,
-		const int* kernel_shape, const int* pad, const int* stride,
-		const int* dilation, float* data_im);
-template void col2im_nd_gpu<double>(const double* data_col,
-		const int num_spatial_axes, const int im_size,
-		const int* im_shape, const int* col_shape,
-		const int* kernel_shape, const int* pad, const int* stride,
-		const int* dilation, double* data_im);
-
 }	// namespace caffe
 }
 

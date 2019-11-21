@@ -75,6 +75,17 @@ void max_pooling_backward(
 		BC::Dim<2> padding = BC::Dim<2>().fill(0),
 		BC::Dim<2> strides = {-1,-1}) {
 
+	static_assert(std::is_same<
+			int,
+			typename Indexes::value_type>::value,
+			"Mask must be int");
+
+	static_assert(std::is_same<
+			typename Image::value_type,
+			typename ImageOut::value_type>::value,
+			"Delta/Image value_type must be the same");
+
+
 	if (strides == Dim<2>{ -1,-1 })
 		strides = krnl_shape;
 
@@ -89,9 +100,9 @@ void max_pooling_backward(
 	using system_tag = typename Stream::system_tag;
 
 	stream.enqueue([=]() {
-		BC::caffe::MaxPoolBackward(
+		BC::caffe::MaxPoolForward(
 				system_tag(),
-				delta.data(), mask.data(),
+				image.data(),
 				image.dimension(3),
 				image.dimension(2),
 				image.dimension(0), image.dimension(1),
@@ -99,7 +110,18 @@ void max_pooling_backward(
 				krnl_shape[0], krnl_shape[1],
 				strides[0], strides[1],
 				padding[0], padding[1],
-				image.data());
+				delta.data(), mask.data());
+
+//		BC::caffe::MaxPoolBackward(
+//				system_tag(),
+//				delta.data(), mask.data(),
+//				image.dimension(3), image.dimension(2),
+//				image.dimension(0), image.dimension(1),
+//				delta.dimension(0), delta.dimension(1),
+//				krnl_shape[0], krnl_shape[1],
+//				strides[0], strides[1],
+//				padding[0], padding[1],
+//				image.data());
 	});
 }
 
