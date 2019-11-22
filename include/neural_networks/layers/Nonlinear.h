@@ -31,6 +31,8 @@ auto funcName(SystemTag system, BC::size_t inputs) {\
 BC_NONLINEAR_DEF(Tanh, tanh)
 BC_NONLINEAR_DEF(Logistic, logistic)
 BC_NONLINEAR_DEF(Relu, relu)
+BC_NONLINEAR_DEF(SoftPlus, softplus)
+BC_NONLINEAR_DEF(Mish, mish)
 
 #undef BC_NONLINEAR_DEF
 }
