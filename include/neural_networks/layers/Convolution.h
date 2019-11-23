@@ -133,11 +133,9 @@ public:
 		static_assert(X::tensor_dimension==4, "4d X");
 
 		cube& col_x = cache.load(col_image_key());
-
 		tensor4 delta_dx(this->get_batched_input_shape());
 		mat mat_delta_dx(m_column_image_shape);
 
-		BC_omp_for__
 		for (int i = 0; i < this->batch_size(); ++i) {
 			auto mat_dy = dy[i].reshaped(dy.rows() * dy.cols(), w.cols());
 			w_gradients -= col_x[i] * mat_dy;
