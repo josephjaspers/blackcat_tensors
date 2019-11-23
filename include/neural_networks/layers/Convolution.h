@@ -134,13 +134,24 @@ public:
 
 		cube& col_x = cache.load(col_image_key());
 
+		tensor4 delta_dx(this->get_batched_input_shape());
+		mat mat_delta_dx(m_column_image_shape);
+
 		BC_omp_for__
 		for (int i = 0; i < this->batch_size(); ++i) {
-			auto mat_dy = reshape(dy[i], shape(dy.rows() * dy.cols(), w.cols()));
+			auto mat_dy = dy[i].reshaped(dy.rows() * dy.cols(), w.cols());
 			w_gradients -= col_x[i] * mat_dy;
-		}
+			mat_delta_dx = mat(mat_dy * w.t()).t();
 
-		return w.reshaped(get_kernel_shape()).multichannel_conv2d_data_backwards(dy);
+			BC::col2im(x.get_stream(),
+					mat_delta_dx.internal(),
+					delta_dx[i].internal(),
+					m_krnl_shape,
+					m_padding,
+					m_strides,
+					m_dilation);
+		}
+		return delta_dx;
 	}
 
 	void update_weights() {

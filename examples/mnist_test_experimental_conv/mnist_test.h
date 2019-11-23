@@ -16,6 +16,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 
 	auto network = BC::nn::neuralnetwork(
 		BC::nn::max_pooling(
+				system_tag,
 				BC::dim(28,28,1), //input dimension
 				BC::dim(3,3),     //pool dimensions
 				BC::dim(1,1)),    //pad_dimensions, out dims == (input_dims + pad_dims*2) / krnl_dims

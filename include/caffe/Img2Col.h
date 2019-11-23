@@ -114,6 +114,14 @@ void im2col(
  * --> author: Joseph Jaspers
  */
 
+
+//NOT THE ORIGINAL CAFFE SET
+template<class Dtype>
+void caffe_set(int size, Dtype value, Dtype* data) {
+	for (int i = 0; i < size; ++i)
+		data[i] = value;
+}
+
 template <typename Dtype>
 inline void im2col_nd_core_cpu(
 		const Dtype* data_input, const bool im2col,
@@ -126,10 +134,7 @@ inline void im2col_nd_core_cpu(
 		for (int i = 0; i < num_spatial_axes; ++i) {
 			im_size *= im_shape[1 + i];
 		}
-		//caffe_set(im_size, Dtype(0), data_output);
-		for (int i = 0; i < im_size; ++i) {
-			data_output[i] = 0;
-		}
+		caffe_set(im_size, Dtype(0), data_output);
 	}
 
 	int kernel_size = 1;

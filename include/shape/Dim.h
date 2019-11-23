@@ -240,7 +240,7 @@ BC_DIM_OP_FACTORY(>=, Greater_Equal)
 	}
 
 	BCINLINE
-	Dim reverse() const {
+	Dim reversed() const {
 		Dim rev;
 		for (int i = 0; i < N; ++i)
 			rev[i] = m_index[N-1-i];

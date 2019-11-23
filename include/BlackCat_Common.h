@@ -63,8 +63,10 @@ using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 // ------------- define if cuda is defined ----------------- //
 #ifdef __CUDACC__
 #define BC_IF_CUDA(...) __VA_ARGS__
+#define BC_IF_NO_CUDA(...)
 #else
 #define BC_IF_CUDA(...)
+#define BC_IF_NO_CUDA(...) __VA_ARGS__
 #endif
 
 // --------------------------------- inline macros -----------------------------------------//

@@ -38,10 +38,10 @@ void MaxPoolForward_gpu_kernel(const int nthreads,
 		const int n = index / pooled_width / pooled_height / channels;
 		int hstart = ph * stride_h - pad_h;
 		int wstart = pw * stride_w - pad_w;
-		const int hend = min(hstart + kernel_h, height);
-		const int wend = min(wstart + kernel_w, width);
-		hstart = max(hstart, 0);
-		wstart = max(wstart, 0);
+		const int hend = BC::traits::min(hstart + kernel_h, height);
+		const int wend = BC::traits::min(wstart + kernel_w, width);
+		hstart = BC::traits::max(hstart, 0);
+		wstart = BC::traits::max(wstart, 0);
 		Dtype maxval = -FLT_MAX;
 		int maxidx = -1;
 		const Dtype* const bottom_slice =
@@ -78,10 +78,10 @@ __global__ void MaxPoolBackward_gpu_kernel(
 		const int n = index / width / height / channels;
 		const int phstart =
 				 (h + pad_h < kernel_h) ? 0 : (h + pad_h - kernel_h) / stride_h + 1;
-		const int phend = min((h + pad_h) / stride_h + 1, pooled_height);
+		const int phend = BC::traits::min((h + pad_h) / stride_h + 1, pooled_height);
 		const int pwstart =
 				 (w + pad_w < kernel_w) ? 0 : (w + pad_w - kernel_w) / stride_w + 1;
-		const int pwend = min((w + pad_w) / stride_w + 1, pooled_width);
+		const int pwend = BC::traits::min((w + pad_w) / stride_w + 1, pooled_width);
 		Dtype gradient = 0;
 		const int offset = (n * channels + c) * pooled_height * pooled_width;
 		const Dtype* const top_diff_slice = top_diff + offset;

@@ -23,7 +23,6 @@ namespace convolutions {
 template<class SystemTag>
 struct Convolution_Implementation;
 }
-
 /**
  * 2d Convolution of a 3d tensor with multiple 3d kernels.
  * Assume packed format.
@@ -35,8 +34,8 @@ static void convolution_common_assert(
 		Output output,
 		Kernel krnl,
 		Image img,
-		BC::size_t padding=0,
-		BC::size_t stride=1) {
+		size_t padding=0,
+		size_t stride=1) {
 
 	using system_tag = typename Stream::system_tag;
 
@@ -71,8 +70,8 @@ static void conv2d(
 		Output output,
 		Kernel krnl,
 		Image img,
-		BC::size_t padding=0,
-		BC::size_t stride=1,
+		size_t padding=0,
+		size_t stride=1,
 		typename Output::value_type alpha=1,
 		typename Output::value_type beta=0) {
 
@@ -114,9 +113,7 @@ static void conv2d_data_backwards(
 	using system_tag = typename Stream::system_tag;
 	using implementation = convolutions::Convolution_Implementation<system_tag>;
 
-	stream.enqueue([=](){
-		implementation::conv2d_data_backwards(output, krnl, img, padding, stride, alpha, beta);
-	});
+	implementation::conv2d_data_backwards(stream, output, krnl, img, padding, stride, alpha, beta);
 }
 
 template<class Stream, class Output, class Image, class Kernel>
@@ -178,7 +175,5 @@ static void conv2d_kernel_backwards(
 }
 }
 }
-
-
 
 #endif /* CONVOLUTION_H_ */

@@ -159,6 +159,42 @@ void im2col(
 	});
 }
 
+
+template<
+	class Stream,
+	class ColumnImage,
+	class Image>
+void col2im(
+		Stream stream,
+		ColumnImage col_image,
+		Image image,
+		BC::Dim<3> krnl_shape,
+		BC::Dim<2> padding = BC::Dim<2>(),
+		BC::Dim<2> strides = BC::Dim<2>().fill(1),
+		BC::Dim<2> dilation = BC::Dim<2>().fill(1)) {
+
+	static_assert(ColumnImage::tensor_dimension == 2,
+			"ColumnImage must be a matrix");
+	static_assert(Image::tensor_dimension == 3,
+			"2d Convolution expects a 3d-image input");
+
+	using system_tag = typename Stream::system_tag;
+
+	stream.enqueue([=]() {
+		 BC::caffe::col2im(
+				system_tag(),
+				col_image.data(),
+				image.dimension(2),
+				image.dimension(1), image.dimension(0),
+				krnl_shape[1], krnl_shape[0],
+				padding[1], padding[0],
+				strides[1], strides[0],
+				dilation[1], dilation[0],
+				image.data());
+	});
+}
+
+
 template<
 	class Stream,
 	class ColumnImage,
