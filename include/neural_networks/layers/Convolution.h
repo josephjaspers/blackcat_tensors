@@ -139,7 +139,7 @@ public:
 		for (int i = 0; i < this->batch_size(); ++i) {
 			auto mat_dy = dy[i].reshaped(dy.rows() * dy.cols(), w.cols());
 			w_gradients -= col_x[i] * mat_dy;
-			mat_delta_dx = mat(mat_dy * w.t()).t();
+			mat_delta_dx = w * mat_dy.t();
 
 			BC::col2im(x.get_stream(),
 					mat_delta_dx.internal(),
