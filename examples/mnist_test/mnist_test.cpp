@@ -12,14 +12,18 @@
 #include <iostream>
 
 int main(int argc, const char* args[]) {
-	if (argc != 2) {
-		std::cout << "Please supply the path to the MNIST dataset " <<
-				"(default location is ../BlackCat_Tensors/examples/mnist_test/ )" << std::endl;
-		return 1;
-	}
-	std::cout << "Dataset location: " << args[1] << std::endl;
+	std::string mnist_filepath;
 
-	percept_MNIST(BC::host_tag(), args[1]);
+	if (argc > 1) {
+		mnist_filepath = args[1];
+	} else {
+		mnist_filepath = "../datasets/mnist_train.csv";
+	}
+#ifdef __CUDACC__
+	percept_MNIST(BC::device_tag(), mnist_filepath);
+#else
+	percept_MNIST(BC::host_tag(), mnist_filepath);
+#endif
 }
 
 #endif /* MNIST_TEST_CPP_ */

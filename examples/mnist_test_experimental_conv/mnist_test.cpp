@@ -19,7 +19,11 @@ int main(int argc, const char* args[]) {
 	}
 	std::cout << "Dataset location: " << args[1] << std::endl;
 
+#ifdef __CUDACC__
+	percept_MNIST(BC::device_tag(), args[1]);
+#else
 	percept_MNIST(BC::host_tag(), args[1]);
+#endif
 }
 
 #endif /* MNIST_TEST_CPP_ */
