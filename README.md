@@ -10,14 +10,11 @@ BlackCat_Tensors (BCT) is a highly efficient NeuralNetwork and Tensor library. B
 For a better source-tree/full method listing:
 	[Source Tree Documentation](https://josephjaspers.github.io/BlackCat_Tensors_Doxygen/html/annotated.html)
 
-#### Neural Networks Brief:
+#### Neural Networks:
 BlackCat_Tensors supports various Neural Network primitives including:
 
-Convolution,
-LSTM,  
-RNN,  
-FeedForward(Dense),  
-Tanh, Logistic, Relu, Softmax
+Convolution, LSTM, RNN, FeedForward(Dense),  
+Tanh, Logistic, Relu, Softmax, Softplus, Mish
 
 Brief example:
 ```cpp
@@ -50,6 +47,7 @@ BCT is a header only library that supports compilation with the NVCC and G++ BCT
 #### Tested Compilers:  
 NVCC: 9.2, 10, 10.1  
 GCC: 7.4, 8.0   
+clang: 6.0.0  
 MSVC: VS2019 (_MSC_VER=1921) //CPU-only  
 Cling: 0.6 //CPU-only
 
@@ -90,7 +88,7 @@ BlackCat Tensors attempts to align itself with the design of the C++ standard li
 
 
 #### Dependencies 
-	Cuda 10 (Only required for GPU-usage)
+	Cuda 9.2 (and up, Only required for GPU-usage)
 	GCC 7.4 (and up)
 
 	gomp  (Only required for CPU multithreading)
