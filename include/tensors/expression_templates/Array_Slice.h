@@ -2,7 +2,7 @@
  * Array_Slice.h
  *
  *  Created on: Dec 24, 2018
- *      Author: joseph
+ *	  Author: joseph
  */
 
 #ifndef BC_EXPRESSION_TEMPLATES_ARRAY_SLICE_H_
@@ -41,10 +41,10 @@ struct Array_Slice:
 			m_allocator(allocator) {}
 
 	const allocator_type& get_allocator() const { return m_allocator; }
-	      allocator_type& get_allocator()       { return m_allocator; }
+		  allocator_type& get_allocator()	   { return m_allocator; }
 
 	const stream_type& get_stream() const { return m_stream; }
-	      stream_type& get_stream()       { return m_stream; }
+		  stream_type& get_stream()	   { return m_stream; }
 };
 
 namespace {
@@ -76,16 +76,11 @@ auto make_row(Parent& parent, BC::size_t index) {
 
 template<class Parent>
 auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
+	BC::size_t stride = parent.leading_dimension(1) + 1;
+	BC::size_t length = BC::traits::min(parent.rows(), parent.cols() - diagnol_index);
+	BC::size_t ptr_index = diagnol_index > 0 ? parent.leading_dimension(1) * diagnol_index : std::abs(diagnol_index);
 
-	BC::print(__func__);
-    BC::size_t stride = parent.leading_dimension(1) + 1;
-    BC::size_t length = BC::traits::min(parent.rows(), parent.cols() - diagnol_index);
-    BC::size_t ptr_index = diagnol_index > 0 ? parent.leading_dimension(1) * diagnol_index : std::abs(diagnol_index);
-
-    BC::print(parent.rows(), parent.cols());
-    BC::print(stride, length);
-
-    using slice_type = strided_slice_type_from_parent<1, Parent, noncontinuous_memory_tag>;
+	using slice_type = strided_slice_type_from_parent<1, Parent, noncontinuous_memory_tag>;
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
 						Strided_Vector_Shape(length, stride),

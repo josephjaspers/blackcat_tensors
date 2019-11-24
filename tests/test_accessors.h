@@ -36,13 +36,14 @@ int test_accessors(int sz=128) {
 			vec y(3);
 			scalar s;
 
-			x.print();
-			y.print();
-			s.print();
+			auto print_compilation_test = [&]() {
+				x.print();
+				y.print();
+				s.print();
+			};
 
 			return true;
 	)
-
 
 	//test slice
 	BC_TEST_DEF(
@@ -111,9 +112,41 @@ int test_accessors(int sz=128) {
 				block_of_a[1].approx_equal(a2.slice(1, 5)) &&
 				block_of_a[2].approx_equal(a3.slice(1, 5));
 
-		return BC::tensors::all(validation) && ensure_correct_size && ensure_correct_cols && ensure_correct_rows;
+		return BC::tensors::all(validation) &&
+				ensure_correct_size &&
+				ensure_correct_cols &&
+				ensure_correct_rows;
 	)
 
+	//same as test_block but with subblock method
+	BC_TEST_DEF(
+
+		vec a1(a[1]);
+		vec a2(a[2]);
+		vec a3(a[3]);
+
+		auto block_of_a = a.subblock(BC::index(1,1), BC::shape(4,3));
+
+		bool ensure_correct_size = block_of_a.size() == 4 * 3;
+		bool ensure_correct_rows = block_of_a.rows() == 4;
+		bool ensure_correct_cols = block_of_a.cols() == 3;
+
+		vec validation =
+				block_of_a[0].approx_equal(a1.slice(1, 5)) &&
+				block_of_a[1].approx_equal(a2.slice(1, 5)) &&
+				block_of_a[2].approx_equal(a3.slice(1, 5));
+
+		return BC::tensors::all(validation) &&
+				ensure_correct_size &&
+				ensure_correct_cols &&
+				ensure_correct_rows;
+	)
+
+	BC_TEST_DEF(
+			return a.flattened().size() == a.size() &&
+					BC::all(a.flattened().slice(0,sz) == a[0]) &&
+					BC::all(a.flattened().slice(sz, sz*2) == a[1]);
+	)
 
 	//test chunk of chunk
 	BC_TEST_DEF(
