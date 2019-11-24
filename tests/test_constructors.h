@@ -34,7 +34,7 @@ int test_constructors(int sz=128) {
 	//Copy-oper
 	//Move-Oper
 
-	//-----------------------------------Default Constructor-----------------------------//
+	//---------- Default Constructor ---------- //
 	BC_TEST_DEF(
 		mat a;
 		vec b;
@@ -48,28 +48,42 @@ int test_constructors(int sz=128) {
 
 		return ensure_size and ensure_rows and ensure_cols;
 	)
-	//-----------------------------------Standard Constructor-----------------------------//
+
+	//---------- Standard Constructor ----------//
 	BC_TEST_DEF(
 		mat a(5,7);
-		return a.rows() == 5 && a.cols() == 7 && a.size() == 5*7;
-	)
-	BC_TEST_DEF(
-		vec a(5);
-		return a.rows() == 5 && a.cols() == 1 && a.size() == 5;
-	)
-	BC_TEST_DEF(
-		cube a(5,7, 8);
-		return a.rows() == 5 && a.cols() == 7 && a.size() == 5*7*8 && a.dimension(2) == 8; //dimension is 0 base
+		return a.rows() == 5 &&
+				a.cols() == 7 &&
+				a.size() == 5*7;
 	)
 
-	//-----------------------------------Copy Constructor-----------------------------//
+	BC_TEST_DEF(
+		vec a(5);
+		return a.rows() == 5 &&
+				a.cols() == 1 &&
+				a.size() == 5;
+	)
+
+	BC_TEST_DEF(
+		cube a(5,7, 8);
+		return a.rows() == 5 &&
+				a.cols() == 7 &&
+				a.size() == 5*7*8 &&
+				a.dimension(2) == 8;
+	)
+
+	//---------- Copy Constructor ----------//
 	BC_TEST_DEF(
 		mat a(5,5); a.rand(0, 10);
 		mat b(a);
 
-		return BC::tensors::all(b.approx_equal(a)) && b.rows() == 5 && b.cols() == 5 && a.data() != b.data();
+		return BC::tensors::all(b.approx_equal(a)) &&
+				b.rows() == 5 &&
+				b.cols() == 5 &&
+				a.data() != b.data();
 	)
-	//-----------------------------------Move Constructor-----------------------------//
+
+	//---------- Move Constructor ----------//
 	BC_TEST_DEF(
 		mat a(5,5); a.rand(0, 10);
 
@@ -78,11 +92,14 @@ int test_constructors(int sz=128) {
 
 		bool ensure_move = b.data() == original_ptr;
 		bool ensure_diff = a.data() != original_ptr;
-		bool ensure_swap_dims = true; //a.rows() ==0 && a.cols() ==0; //No longer guaranteed
+		bool ensure_swap_dims = true;
 
-		return ensure_move && ensure_diff && ensure_swap_dims;
+		return ensure_move &&
+				ensure_diff &&
+				ensure_swap_dims;
 	)
-	//-----------------------------------Copy Oper-----------------------------//
+
+	//---------- Copy Oper ----------//
 	BC_TEST_DEF(
 		mat a(5,5); a.rand(0, 10);
 		mat b(5,5);
@@ -90,7 +107,8 @@ int test_constructors(int sz=128) {
 		b = a;
 		return BC::tensors::all(b.approx_equal(a));
 	)
-//	//-----------------------------------Move Oper-----------------------------//
+
+	//---------- Move Oper ----------//
 	BC_TEST_DEF(
 		mat a(5,5); a.rand(0, 10);
 		mat c(a); //copy to compare
@@ -99,7 +117,9 @@ int test_constructors(int sz=128) {
 		auto* original_ptr = a.data();
 		b = std::move(a);
 
-		return BC::tensors::all(b.approx_equal(c)) && a.data() != b.data() && b.data() == original_ptr;
+		return BC::tensors::all(b.approx_equal(c)) &&
+				a.data() != b.data() &&
+				b.data() == original_ptr;
 	)
 
 	BC_TEST_BODY_TAIL

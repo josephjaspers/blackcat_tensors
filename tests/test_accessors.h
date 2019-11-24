@@ -32,17 +32,17 @@ int test_accessors(int sz=128) {
 	};
 
 	BC_TEST_DEF(
-			mat x(3,3);
-			vec y(3);
-			scalar s;
+		mat x(3,3);
+		vec y(3);
+		scalar s;
 
-			auto print_compilation_test = [&]() {
-				x.print();
-				y.print();
-				s.print();
-			};
+		auto print_compilation_test = [&]() {
+			x.print();
+			y.print();
+			s.print();
+		};
 
-			return true;
+		return true;
 	)
 
 	//test slice
@@ -51,7 +51,6 @@ int test_accessors(int sz=128) {
 		vec a1(a[1]);
 
 		vec validation = a[0].approx_equal(a0) && a[1].approx_equal(a1);
-
 		return BC::tensors::all(validation[0]);
 	)
 
@@ -60,7 +59,9 @@ int test_accessors(int sz=128) {
 		vec b3(a3.size());
 		b3 = a.diagnol();
 
-		return BC::tensors::all(a3.approx_equal(a.diagnol())) && BC::tensors::all(a.diagnol().approx_equal(b3)) && a3.size() == sz;
+		return BC::tensors::all(a3.approx_equal(a.diagnol())) &&
+				BC::tensors::all(a.diagnol().approx_equal(b3)) &&
+				a3.size() == sz;
 	)
 
 	//test ranged slice
@@ -75,8 +76,14 @@ int test_accessors(int sz=128) {
 		bool ensure_correct_cols = slice_range.cols() == 3;
 		bool ensure_correct_rows = a.rows() == sz;
 
-		vec validation = slice_range[0].approx_equal(a0) && slice_range[1].approx_equal(a1) && slice_range[2].approx_equal(a2);
-		return BC::tensors::all(validation) && ensure_correct_size && ensure_correct_cols && ensure_correct_rows;
+		vec validation = slice_range[0].approx_equal(a0) &&
+				slice_range[1].approx_equal(a1) &&
+				slice_range[2].approx_equal(a2);
+
+		return BC::tensors::all(validation) &&
+				ensure_correct_size &&
+				ensure_correct_cols &&
+				ensure_correct_rows;
 	)
 
 	//test ranged slice
@@ -91,9 +98,16 @@ int test_accessors(int sz=128) {
 		bool ensure_correct_cols = slice_range.cols() == 3;
 		bool ensure_correct_rows = a.rows() == sz;
 
-		vec validation = slice_range[0].approx_equal(a0) && slice_range[1].approx_equal(a1) && slice_range[2].approx_equal(a2);
-		return BC::tensors::all(validation) && ensure_correct_size && ensure_correct_cols && ensure_correct_rows;
+		vec validation = slice_range[0].approx_equal(a0) &&
+				slice_range[1].approx_equal(a1) &&
+				slice_range[2].approx_equal(a2);
+
+		return BC::tensors::all(validation) &&
+				ensure_correct_size &&
+				ensure_correct_cols &&
+				ensure_correct_rows;
 	)
+
 	//test chunk
 	BC_TEST_DEF(
 
@@ -101,7 +115,7 @@ int test_accessors(int sz=128) {
 		vec a2(a[2]);
 		vec a3(a[3]);
 
-		auto block_of_a = a[{BC::index(1,1), BC::shape(4,3)}]; //a 3x3 matrix starting at point 1,1
+		auto block_of_a = a[{BC::index(1,1), BC::shape(4,3)}];
 
 		bool ensure_correct_size = block_of_a.size() == 4 * 3;
 		bool ensure_correct_rows = block_of_a.rows() == 4;
@@ -156,7 +170,7 @@ int test_accessors(int sz=128) {
 		vec a3(a[3]);
 
 		auto primary_block_of_a = a[{BC::index(0, 0), BC::shape(5,5)}];
-		auto block_of_a = primary_block_of_a[{BC::index(1,1), BC::shape(4,3)}]; //a 3x3 matrix starting at point 1,1
+		auto block_of_a = primary_block_of_a[{BC::index(1,1), BC::shape(4,3)}];
 
 		bool ensure_correct_size = block_of_a.size() == 4 * 3;
 		bool ensure_correct_rows = block_of_a.rows() == 4;
@@ -167,7 +181,10 @@ int test_accessors(int sz=128) {
 				block_of_a[1].approx_equal(a2.slice(1, 5)) &&
 				block_of_a[2].approx_equal(a3.slice(1, 5));
 
-		return BC::tensors::all(validation) && ensure_correct_size && ensure_correct_cols && ensure_correct_rows;
+		return BC::tensors::all(validation) &&
+				ensure_correct_size &&
+				ensure_correct_cols &&
+				ensure_correct_rows;
 	)
 
 

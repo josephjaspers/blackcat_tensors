@@ -50,10 +50,7 @@ int test_blas(int sz=128) {
 
 	BC::Stream<system_tag> stream;
 
-	//The default allocator uses a global allocator, we free it to ensure that the next computations do not
-	//Use any temporaries
 	stream.get_allocator().free();
-
 	scalar A(value_type(2));
 	mat a(sz, sz);
 	mat b(sz, sz);
@@ -296,8 +293,9 @@ int test_blas(int sz=128) {
 		return BC::tensors::all(y.approx_equal(h_y));
 	)
 
-	//------------------------ Same blas tests as above but with scalar allocated on the stack ----------//
-	//scalar left test -------------------
+
+	// Same blas tests as above but with scalar allocated on the stack
+
 	BC_TEST_DEF(
 		y = 2 * a * b;
 
@@ -340,7 +338,7 @@ int test_blas(int sz=128) {
 	)
 
 	BC_TEST_DEF(
-			//test dot
+		//test dot
 		y[0][0] = a[0] * b[0];
 
 		return BC::tensors::all(y[0][0].approx_equal(value_sum(a[0] % b[0])));

@@ -28,7 +28,8 @@ int test_streams(int sz=128) {
 	BC_TEST_DEF(
 			mat a;
 			mat b;
-		return a.get_stream().is_default() && b.get_stream().is_default();
+		return a.get_stream().is_default() &&
+				b.get_stream().is_default();
 	)
 
 	BC_TEST_DEF(
@@ -37,12 +38,17 @@ int test_streams(int sz=128) {
 
 		a.get_stream().create();
 		b.get_stream().create();
-		bool new_stream =  !a.get_stream().is_default() && !b.get_stream().is_default();
+
+		bool new_stream =
+				!a.get_stream().is_default() &&
+				!b.get_stream().is_default();
 
 		a.get_stream().destroy();
 		b.get_stream().destroy();
 
-		bool destroy = a.get_stream().is_default() && b.get_stream().is_default();
+		bool destroy =
+				a.get_stream().is_default() &&
+				b.get_stream().is_default();
 
 		return new_stream && destroy;
 	)
@@ -62,7 +68,6 @@ int test_streams(int sz=128) {
 		mat b;
 
 		a.get_stream().create();
-
 		return a.get_stream() != b.get_stream();
 	)
 
@@ -73,7 +78,9 @@ int test_streams(int sz=128) {
 		a.get_stream().create();
 		b.get_stream().set_stream(a.get_stream());
 
-		return a.get_stream() == b.get_stream() && !a.get_stream().is_default() && !b.get_stream().is_default();
+		return a.get_stream() == b.get_stream() &&
+				!a.get_stream().is_default() &&
+				!b.get_stream().is_default();
 	)
 
 	BC_TEST_DEF(

@@ -32,6 +32,7 @@ int test_algorithms(int sz=128) {
 
 		return BC::tensors::all(a == 2);
 	)
+
 	BC_TEST_DEF(
 		mat a(sz, sz);
 		BC::algorithms::fill(a.get_stream(), a.cw_begin(), a.cw_end(), 3);
@@ -55,7 +56,6 @@ int test_algorithms(int sz=128) {
 		return BC::tensors::all(a == 5) && BC::tensors::all(b == 7);
 	)
 
-
 	//same test as above except B is using the default stream
 	BC_TEST_DEF(
 
@@ -70,7 +70,6 @@ int test_algorithms(int sz=128) {
 		a.get_stream().sync();
 		b.get_stream().sync();
 
-
 		return BC::tensors::all(a == 5) && BC::tensors::all(b == 7);
 	)
 
@@ -78,14 +77,8 @@ int test_algorithms(int sz=128) {
 }
 
 
-
-
-
 }
 }
-
-
-
 
 
 #endif /* TEST_ALGORITHMS_H_ */

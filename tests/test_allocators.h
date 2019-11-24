@@ -18,12 +18,16 @@ namespace tests {
 template<class Allocator>
 struct log_allocator : Allocator {
 
-	std::shared_ptr<BC::size_t> total_allocated = std::shared_ptr<BC::size_t>(new BC::size_t());
-	std::shared_ptr<BC::size_t> total_deallocated = std::shared_ptr<BC::size_t>(new BC::size_t());
+	std::shared_ptr<BC::size_t> total_allocated =
+			std::shared_ptr<BC::size_t>(new BC::size_t());
+
+	std::shared_ptr<BC::size_t> total_deallocated =
+			std::shared_ptr<BC::size_t>(new BC::size_t());
 
 	template<class T>
 	struct rebind {
-		using other = log_allocator<typename Allocator::template rebind<T>::other>;
+		using other = log_allocator<
+				typename Allocator::template rebind<T>::other>;
 	};
 
 	log_allocator() = default;
@@ -35,7 +39,8 @@ struct log_allocator : Allocator {
 	}
 
 	auto allocate(BC::size_t sz) {
-		(*total_allocated.get()) += sz * sizeof(typename Allocator::value_type);
+		(*total_allocated.get()) += sz *
+				sizeof(typename Allocator::value_type);
 		return Allocator::allocate(sz);
 	}
 
@@ -46,6 +51,7 @@ struct log_allocator : Allocator {
 	}
 };
 
+
 template<class value_type, template<class> class allocator>
 int test_allocators(int sz=128) {
 
@@ -53,21 +59,18 @@ int test_allocators(int sz=128) {
 
 	BC_TEST_BODY_HEAD
 
-	using mat = BC::Matrix<value_type, log_allocator<allocator<value_type>>>;
-	using vec = BC::Vector<value_type, log_allocator<allocator<value_type>>>;
-	using system_tag = typename allocator_traits<allocator<value_type>>::system_tag;
-
-	//A stream by default references the default stream and the default global memory_pool
-	//(Use 'create_stream' to initialize a new stream and a new memory_pool
-
+	using allocator_type = allocator<value_type>;
+	using mat = BC::Matrix<value_type, log_allocator<allocator_type>>;
+	using vec = BC::Vector<value_type, log_allocator<allocator_type>>;
+	using system_tag = typename allocator_traits<allocator_type>::system_tag;
 
 	Stream<system_tag> stream;
 
 	BC_TEST_ON_STARTUP {
 		stream.get_allocator().free();
-		stream.get_allocator().set_allocator(log_allocator<allocator<value_type>>());
+		stream.get_allocator().set_allocator(log_allocator<allocator_type>());
 		mat tmp;
-		tmp.get_stream().get_allocator().set_allocator(log_allocator<allocator<value_type>>());
+		tmp.get_stream().get_allocator().set_allocator(log_allocator<allocator_type>());
 	};
 
 	BC_TEST_DEF(
