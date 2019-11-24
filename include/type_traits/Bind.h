@@ -53,48 +53,60 @@ auto get(Ts&&... params) -> decltype(get_impl<index>::impl(params...)) {
 	return get_impl<index>::impl(params...);
 }
 
-template<class Function, class... args>
-struct Bind : tuple<args...> {
+template<class Function, class... Args>
+struct Bind : tuple<Args...>
+{
 	Function f;
 
-	Bind(Function f, args... args_)
-	: tuple<args...>(args_...), f(f) {}
+	Bind(Function f, Args... AdditionalArgs):
+		tuple<Args...>(AdditionalArgs...), f(f) {}
+
+	static constexpr int num_args = sizeof...(Args);
 
 	template<int ADL=0>
 	auto operator () () {
-		return call(conditional_t<sizeof...(args) == 0, true_type, false_type>());
+		return call(conditional_t<num_args == 0, true_type, false_type>());
 	}
 
 	template<int ADL=0>
 	auto operator () () const {
-		return call(conditional_t<sizeof...(args) == 0, true_type, false_type>());
+		return call(conditional_t<num_args == 0, true_type, false_type>());
 	}
 
 private:
-	template<class... args_>
-	auto call(true_type, args_... params) {
+
+	template<class... AdditionalArgs>
+	auto call(true_type, AdditionalArgs&&... params) {
 		return f(params...);
 	}
 
-	template<class... args_>
-	auto call(false_type, args_... params) {
+	template<class... AdditionalArgs>
+	auto call(false_type, AdditionalArgs&&... params) {
 		return call(
-				conditional_t<sizeof...(args_) + 1 == sizeof...(args), true_type, false_type>(),
-				forward<args_>(params)...,
-				get<sizeof...(args_)>(static_cast<tuple<args...>&>(*this)));
+				conditional_t<
+						sizeof...(AdditionalArgs) + 1 == num_args,
+						true_type,
+						false_type>(),
+				forward<AdditionalArgs>(params)...,
+				get<sizeof...(AdditionalArgs)>(
+						static_cast<tuple<Args...>&>(*this)));
 	}
 
-	template<class... args_>
-	auto call(true_type, args_... params) const {
-		return f(forward<args_>(params)...);
+	template<class... AdditionalArgs>
+	auto call(true_type, AdditionalArgs&&... params) const {
+		return f(forward<AdditionalArgs>(params)...);
 	}
 
-	template<class... args_>
-	auto call(false_type, args_... params) const {
+	template<class... AdditionalArgs>
+	auto call(false_type, AdditionalArgs&&... params) const {
 		return call(
-				conditional_t<sizeof...(args_) + 1 == sizeof...(args), true_type, false_type>(),
-				forward<args_>(params)...,
-				get<sizeof...(args_)>(static_cast<tuple<args...>&>(*this)));
+				conditional_t<
+						sizeof...(AdditionalArgs) + 1 == num_args,
+						true_type,
+						false_type>(),
+				forward<AdditionalArgs>(params)...,
+				get<sizeof...(AdditionalArgs)>(
+						static_cast<tuple<Args...>&>(*this)));
 	}
 
 };
