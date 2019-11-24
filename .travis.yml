@@ -18,8 +18,6 @@ matrix:
 before_install:
     - eval "${MATRIX_EVAL}"
     - export CC=/usr/bin/gcc-7
-    
-before_script: cd tests
 
 script: 
   - cd tests
