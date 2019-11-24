@@ -24,6 +24,8 @@ int test_algorithms(int sz=128) {
 
 	BC::streams::Stream<system_tag> stream;
 
+	BC_TEST_ON_STARTUP {};
+
 	BC_TEST_DEF(
 		mat a(sz, sz);
 		a.fill(2);

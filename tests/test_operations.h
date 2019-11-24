@@ -27,8 +27,11 @@ int test_operations(int sz=128) {
 	mat a(sz, sz);
 	mat b(sz, sz);
 
-	a.randomize(0, 10);
-	b.randomize(0, 10);
+
+	BC_TEST_ON_STARTUP {
+		a.randomize(0, 10);
+		b.randomize(0, 10);
+	};
 
 	BC_TEST_DEF(
 		mat c(a);
@@ -131,11 +134,12 @@ int test_matrix_muls(int sz=128) {
 	scal alpha2;
 	alpha2 = 2.0;
 
-	a.randomize(0, 12);
-	b.randomize(0, 12);
+	BC_TEST_ON_STARTUP {
+		a.randomize(0, 12);
+		b.randomize(0, 12);
 
-
-	validation.get_stream().get_allocator().force_deallocate();
+		validation.get_stream().get_allocator().force_deallocate();
+	};
 
 	//lv trans
 	BC_TEST_DEF(

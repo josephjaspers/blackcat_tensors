@@ -24,10 +24,12 @@ int test_accessors(int sz=128) {
 
 	mat a(sz,sz);
 
-	value_type val= 0;
-	for (auto col : a.nd_iter()) {
-		col = val++;
-	}
+	BC_TEST_ON_STARTUP {
+		value_type val= 0;
+		for (auto col : a.nd_iter()) {
+			col = val++;
+		}
+	};
 
 	BC_TEST_DEF(
 			mat x(3,3);

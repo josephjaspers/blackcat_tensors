@@ -21,6 +21,7 @@ int test_streams(int sz=128) {
 
 	using mat = BC::Matrix<value_type, log_allocator<allocator<value_type>>>;
 
+	BC_TEST_ON_STARTUP {};
 
 
 	//sanity check

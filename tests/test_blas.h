@@ -59,21 +59,23 @@ int test_blas(int sz=128) {
 	mat b(sz, sz);
 	mat y(sz, sz);
 
+	scalar one = 1;
+	scalar two = 2;
+	scalar zero = 0;
+
 	default_mat h_a(sz, sz);
 	default_mat h_b(sz, sz);
 	default_mat h_y(sz, sz);
 
-	a.randomize(0,10);
-	b.randomize(0,10);
-	y.randomize(0,10);
+	BC_TEST_ON_STARTUP {
+		a.randomize(0,10);
+		b.randomize(0,10);
+		y.randomize(0,10);
 
-	h_a = a;
-	h_b = b;
-	h_y = y;
-
-	scalar one = 1;
-	scalar two = 2;
-	scalar zero = 0;
+		h_a = a;
+		h_b = b;
+		h_y = y;
+	};
 
 	BC_TEST_DEF(
 		y = a * b;

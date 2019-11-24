@@ -14,18 +14,18 @@
 namespace BC {
 namespace tests {
 
-#define BC_TEST_ON_STARTUP(...)\
-		using BC_TEST_ON_STARTUP = std::true_type;\
-		auto BC_TEST_ON_STARTUP = [&](){ __VA_ARGS__; }; \
+#define BC_TEST_ON_STARTUP\
+		using BC_TEST_ASSERT_ON_STARTUP = std::true_type;\
+		auto BC_TEST_STARTER = [&]()
 
 #define BC_TEST_DEF(...)\
 	{\
 	\
-		static_assert(BC_TEST_ON_STARTUP::value, \
+		static_assert(BC_TEST_ASSERT_ON_STARTUP::value, \
 				"BC_TEST_ON_STARTUP HAS NOT BEEN DECLARED, "\
-				"use BC_TEST_ON_STARTUP(...) above this TEST_DEF")\
+				"use BC_TEST_ON_STARTUP(...) above this TEST_DEF");\
 		numtests++;\
-		BC_TEST_ON_STARTUP();\
+		BC_TEST_STARTER();\
 		auto test = [&]() { __VA_ARGS__ };\
 		try { \
 		if (!test()) {\

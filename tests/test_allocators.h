@@ -59,14 +59,16 @@ int test_allocators(int sz=128) {
 
 	//A stream by default references the default stream and the default global memory_pool
 	//(Use 'create_stream' to initialize a new stream and a new memory_pool
+
+
 	Stream<system_tag> stream;
 
-	stream.get_allocator().free();
-	stream.get_allocator().set_allocator(log_allocator<allocator<value_type>>());
-
-
-	mat tmp;
-	tmp.get_stream().get_allocator().set_allocator(log_allocator<allocator<value_type>>());
+	BC_TEST_ON_STARTUP {
+		stream.get_allocator().free();
+		stream.get_allocator().set_allocator(log_allocator<allocator<value_type>>());
+		mat tmp;
+		tmp.get_stream().get_allocator().set_allocator(log_allocator<allocator<value_type>>());
+	};
 
 	BC_TEST_DEF(
 		mat a(5,5);

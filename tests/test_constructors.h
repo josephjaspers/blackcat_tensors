@@ -25,6 +25,7 @@ int test_constructors(int sz=128) {
 	using cube = BC::Cube<value_type, alloc_t>;
 
 	BC_TEST_BODY_HEAD
+	BC_TEST_ON_STARTUP {};
 	//Need to cover
 	//Default
 	//Standard
