@@ -88,6 +88,8 @@ private:
 		return path_from_args(T::tensor_dimension, variable_name);
 	}
 
+public:
+
 	bool file_exists(int dimension, std::string filename) {
 		return file_exists(path_from_args(dimension, filename));
 	}

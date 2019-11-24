@@ -1,5 +1,5 @@
-CXXFLAGS = -O3 -o mnist_test_exec
-CUFLAGS = -O3 -o mnist_test_exec_cu --use_fast_math
+CXXFLAGS = -O3 -o mnist_test_exec -std=c++1z -lm
+CUFLAGS = -O3 -o mnist_test_exec_cu --use_fast_math -lm
 
 CXXFILES = mnist_test.cpp
 CUFILES  = mnist_test.cu
@@ -31,3 +31,6 @@ cuda_atlas:
 	
 clean:
 	rm -i mnist_test_exec; rm -i mnist_test_exec_cu;
+
+clang:
+	clang $(CXXFILES) $(LIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE) -lstdc++

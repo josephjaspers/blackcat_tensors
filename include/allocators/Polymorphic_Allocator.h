@@ -33,6 +33,7 @@ private:
 		virtual value_type* allocate(std::size_t sz) = 0;
 		virtual void deallocate(value_type* data, std::size_t sz) = 0;
 		virtual Virtual_Allocator* clone() const = 0;
+		virtual ~Virtual_Allocator() {};
 	};
 
 	template<class Allocator>
@@ -74,7 +75,7 @@ private:
 		: m_allocator(alloc) {}
 		Derived_Allocator(Allocator&& alloc)
 		: m_allocator(alloc) {}
-
+		virtual ~Derived_Allocator() override {}
 
 		virtual value_type* allocate(std::size_t sz) override final {
 			return retrieve_allocator(m_allocator).allocate(sz);

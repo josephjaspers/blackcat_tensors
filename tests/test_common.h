@@ -14,27 +14,25 @@
 namespace BC {
 namespace tests {
 
-#define BC_LOG_VARIABLE(variable) ON_ERROR_OUTPUT_VECTOR.push_back(#variable + std::string(": ") + std::to_string(variable))
-
-#define BC_ON_TEST_FAILURE\
-	for (std::string& str : ON_ERROR_OUTPUT_VECTOR) {\
-		std::cout << '\n\t' <<  str;\
-	if (!ON_ERROR_OUTPUT_VECTOR.empty())\
-	std::cout << '\n';\
-}
+#define BC_TEST_ON_STARTUP(...)\
+		using BC_TEST_ON_STARTUP = std::true_type;\
+		auto BC_TEST_ON_STARTUP = [&](){ __VA_ARGS__; }; \
 
 #define BC_TEST_DEF(...)\
 	{\
 	\
-		std::vector<std::string> ON_ERROR_OUTPUT_VECTOR;\
+		static_assert(BC_TEST_ON_STARTUP::value, \
+				"BC_TEST_ON_STARTUP HAS NOT BEEN DECLARED, "\
+				"use BC_TEST_ON_STARTUP(...) above this TEST_DEF")\
 		numtests++;\
+		BC_TEST_ON_STARTUP();\
 		auto test = [&]() { __VA_ARGS__ };\
 		try { \
 		if (!test()) {\
 			std::cout << "TEST FAILURE: " #__VA_ARGS__  << std::endl;\
 			errors++; \
 		} else {\
-			std::cout << "TEST SUCCESS: " #__VA_ARGS__  << std::endl;\
+			std::cout << "test success: " #__VA_ARGS__  << std::endl;\
 		}\
 } catch (...) { std::cout << "TEST ERROR: " #__VA_ARGS__  << '\n'; errors++; } }
 
@@ -50,20 +48,6 @@ namespace tests {
 	static_assert(std::is_void<BC_ASSERT_TEST_BODY_HEAD>::value, \
 			"BC_TEST_BODY_HEAD is not defined in function");\
 	return errors;
-
-#define BC_ON_ERROR(argument)
-
-template<class arg>
-void print(const arg& arg_) {
-	std::cout << arg_ << "\n";
-}
-
-template<class arg, class... args>
-void print(const arg& a, const args&... arg_) {
-	std::cout << a << " ";
-	print(arg_...);
-}
-
 }
 }
 
