@@ -21,7 +21,8 @@ static std::string sz80_substring(std::string test) {
 }
 
 #define BC_TEST_BODY_HEAD                               \
-	std::cout << '\n' << __PRETTY_FUNCTION__ << '\n';   \
+	std::cout << "\n\n" << __PRETTY_FUNCTION__ << '\n';   \
+	BC::print("------------------------------------------------------");  \
 	using BC_ASSERT_TEST_BODY_HEAD =  std::true_type;   \
 	int bc_test_num_errors = 0;                         \
 	int bc_test_index = 0;
