@@ -77,23 +77,6 @@ public:
 		evaluate(bi_expr< oper::Assign >(param));
 		return as_derived();
 	}
-	template<class Xpr> BCHOT
-	derived& assign(const Tensor_Operations<Xpr>& param) {
-		BC_ASSERT_ASSIGNABLE("derived& operator = (const Tensor_Operations<Xpr>& param)");
-		static_assert(derived::tensor_dimension >= Xpr::tensor_dimension,
-				"BlackCat_Tensors: Operator= is not a valid operation for (reduction) broadcasting");
-		assert_valid(param);
-		evaluate(bi_expr< BC::oper::Assign >(param));
-		return as_derived();
-	}
-
-	//specialization for explicit copy operator
-	derived& assign(const BC::traits::only_if<exprs::expression_traits<Expression>::is_copy_assignable::value, derived>& param) {
-		BC_ASSERT_ASSIGNABLE("derived& operator = (const derived& param)");
-		assert_valid(param);
-		evaluate(bi_expr< oper::Assign >(param));
-		return as_derived();
-	}
 
 #define BC_OPER_BASIC_ASSIGNMENT_DEF(op, op_functor)												\
 																									\
@@ -136,12 +119,6 @@ derived& operator = (const p_value_type& param) {
 	return as_derived();
 }
 
-template<class p_value_type, class=std::enable_if_t<std::is_convertible<p_value_type, value_type>::value>>
-derived& assign(const p_value_type& param) {
-	BC_ASSERT_ASSIGNABLE("derived& operator =(const Tensor_Operations<Xpr>& param)");
-	evaluate(bi_expr_scalar<oper::Assign>(exprs::make_scalar_constant<system_tag>((value_type)param)));
-	return as_derived();
-}
 	BC_OPER_ASSIGNMENT_DEF(+=, Add)
 	BC_OPER_ASSIGNMENT_DEF(-=, Sub)
 	BC_OPER_ASSIGNMENT_DEF(%=, Mul)
@@ -263,27 +240,6 @@ public:
 	auto operator +(const negated_t<Xpr>& param) const {
 		assert_valid(param);
 		return bi_expr<oper::sub>(param.array);
-	}
-
-	// --------------- host_to_device/device_to_host copy function --------------- //
-
-	template<class Xpr>
-	auto multichannel_conv2d(const Tensor_Operations<Xpr>& rv) const {
-		return bi_expr<BC::tensors::exprs::multichannel_conv2d> (rv);
-	}
-
-	template<class Xpr>
-	auto multichannel_conv2d_data_backwards(const Tensor_Operations<Xpr>& rv) const {
-		return bi_expr<BC::tensors::exprs::multichannel_conv2d_data_backwards> (rv);
-	}
-
-	template<class Xpr>
-	auto multichannel_conv2d_kernel_backwards(const Tensor_Operations<Xpr>& rv) const {
-		return bi_expr<BC::tensors::exprs::multichannel_conv2d_kernel_backwards> (rv);
-	}
-
-	auto img2col() const {
-		return un_expr<BC::tensors::exprs::img2col>();
 	}
 
 	template<class Xpr>
