@@ -24,6 +24,9 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 				system_tag,
 				BC::dim(10, 10,1),  //input_image shape
 				BC::dim(3, 3, 16)), //krnl_rows, krnl_cols, numb_krnls
+		BC::nn::relu(
+				system_tag,
+				BC::dim(8,8,16)),
 		BC::nn::convolution(
 				system_tag,
 				BC::dim(8,8,16), //input_image shape
@@ -52,11 +55,13 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	BC::print("training...");
 	auto start = std::chrono::system_clock::now();
 
+	auto image_shape = BC::Dim<4>{28, 28, 1, batch_size};
+
 	for (int i = 0; i < epochs; ++i){
 		BC::print("current epoch:", i);
 
 		for (int j = 0; j < samples/batch_size; ++j) {
-			network.forward_propagation(inputs[j]);
+			network.forward_propagation(inputs[j].reshaped(image_shape));
 			network.back_propagation(outputs[j]);
 			network.update_weights();
 		}
@@ -68,7 +73,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 
 	int test_images = 10;
 	auto images = inputs[0].reshaped(28,28, batch_size);
-	mat hyps = network.predict(inputs[0]);
+	mat hyps = network.predict(inputs[0].reshaped(28,28,1, batch_size));
 
 	for (int i = 0; i < test_images; ++i) {
 		images[i].t().print_sparse(3);

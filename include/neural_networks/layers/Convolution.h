@@ -45,12 +45,12 @@ private:
 	mat w;  //dims=[kernel_size, numb_kernels]
 	mat w_gradients;
 
+	Dim<3> m_input_shape;
 	Dim<3> m_krnl_shape; //dims=[rows, cols, numb_kernels]
 	Dim<2> m_padding;
 	Dim<2> m_strides;
 	Dim<2> m_dilation;
 
-	Dim<3> m_input_shape;
 	Dim<3> m_output_shape;
 
 	Dim<2> m_column_image_shape;
