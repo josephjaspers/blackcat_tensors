@@ -41,7 +41,7 @@ auto benchmark_forloop(int size, BC::size_t  iters, Allocator alloc, bool stdout
         auto wcts = std::chrono::system_clock::now();
 
         for (int i = 0; i < iters; ++i)
-            a = b + c - d / e;
+            a = b + c - d;// / e;
 
         bc_time = clock(std::chrono::system_clock::now() - wcts);
         
@@ -55,7 +55,7 @@ auto benchmark_forloop(int size, BC::size_t  iters, Allocator alloc, bool stdout
         for (int i = 0; i < iters; ++i)
 #pragma omp parallel for
             for (int j = 0; j < size; ++j) {
-                a_[j] = b_[j] + c_[j] - d_[j] / e_[j];
+                a_[j] = b_[j] + c_[j] - d_[j];// / e_[j];
             }
 #pragma omp barrier
         cptr_time = clock(std::chrono::system_clock::now() - wcts);
@@ -72,8 +72,8 @@ auto benchmark_forloop(int size, BC::size_t  iters, Allocator alloc, bool stdout
 
 template<class allocator=BC::Allocator<BC::host_tag, double>>
 void benchmark_forloop_suite(bool stdout=false, allocator alloc=allocator()) {
-	int size = 1000000;
-	int reps = 100;
+	int size = 10000;
+	int reps = 1000000;
 	float multiplier = 1.5;
 
 	std::string markdown_header = {

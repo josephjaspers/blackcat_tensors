@@ -82,7 +82,7 @@ using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 	#define BCHOT BC_INLINE_OVERRIDE
 #else
 	#if defined(__GNUG__) || defined(__GNUC__) || defined(__clang__) || defined(__cling__) 
-	#define BCINLINE BCHOSTDEV  inline __attribute__((always_inline)) __attribute__((hot))  //host_device inline
+	#define BCINLINE BCHOSTDEV inline __attribute__((always_inline)) __attribute__((hot))  //host_device inline
 	#define BCHOT   		   inline __attribute__((always_inline)) __attribute__((hot))  //device-only inline
 
 	#elif defined(_MSC_VER)

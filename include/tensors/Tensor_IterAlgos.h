@@ -30,319 +30,161 @@ public:
 	using system_tag = typename Expression::system_tag;
 	using value_type = typename Expression::value_type;
 
-	//------------------------ iterator-algorthims---------------------------//
-
 	auto& fill(value_type value) {
 		BC::algorithms::fill(
 				as_derived().get_stream(), cw_begin(), cw_end(), value);
 		return as_derived();
 	}
 
-	auto& zero() {
-		return fill(0);
-	}
+	auto& zero() { return fill(0); }
+	auto& ones() { return fill(1); }
 
-	auto& ones() {
-		return fill(1);
-	}
-
-	template<class function>
-	void for_each(function func) {
+	template<class Function>
+	void for_each(Function func) const {
 		as_derived() = as_derived().un_expr(func);
 	}
 
-	template<class function>
-	void for_each(function func) const {
+	template<class Function>
+	void for_each(Function func) {
 		as_derived() = as_derived().un_expr(func);
 	}
 
-	Tensor_Base<Expression>& sort() {
-		BC::algorithms::sort(this->as_derived().get_stream(), this->cw_begin(), this->cw_end());
+	Tensor_Base<Expression>& sort()
+	{
+		BC::algorithms::sort(
+				as_derived().get_stream(), cw_begin(), cw_end());
 		return as_derived();
 	}
 
-	void rand(value_type lb=0, value_type ub=1) {
-		randomize(lb, ub);
+	void randomize(value_type lb=0, value_type ub=1)
+	{
+		static_assert(
+				Expression::tensor_iterator_dimension == 0 ||
+				Expression::tensor_iterator_dimension == 1,
+				"randomize not available to non-continuous tensors");
+
+		using Random = BC::random::Random<system_tag>;
+		Random::randomize(
+				this->as_derived().get_stream(),
+				this->as_derived().internal(), lb, ub);
 	}
 
-   void randomize(value_type lb=0, value_type ub=1)  {
-	   static_assert(Expression::tensor_iterator_dimension == 0 || Expression::tensor_iterator_dimension == 1,
-			   	   	   "randomize not available to non-continuous tensors");
-
-	   using Random = BC::random::Random<system_tag>;
-	   //Note!! functions and BLAS calls use get_stream, iteralgos use get_stream
-	   Random::randomize(this->as_derived().get_stream(), this->as_derived().internal(), lb, ub);
-   }
-
-	//------------------------multidimension_iterator------------------------//
-	auto begin() {
-		return iterators::forward_iterator_begin(as_derived());
+#define BC_FORWARD_ITER(suffix, iter, access)              \
+	auto suffix##iter() const {                            \
+		return iterators::iter_##suffix##iter(access);     \
+	}                                                      \
+	auto suffix##iter() {                                  \
+		return iterators::iter_##suffix##iter(access);     \
+	}                                                      \
+	auto suffix##c##iter() const {                         \
+		return iterators::iter_##suffix##iter(access);     \
+	}                                                      \
+	auto suffix##r##iter() const {                         \
+		return iterators::iter_##suffix##r##iter(access);  \
+	}                                                      \
+	auto suffix##r##iter() {                               \
+		return iterators::iter_##suffix##r##iter(access);  \
+	}                                                      \
+	auto suffix##cr##iter() const {                        \
+		return iterators::iter_##suffix##r##iter(access);  \
 	}
 
-	auto end() {
-		return iterators::forward_iterator_end(as_derived());
-	}
+	BC_FORWARD_ITER(,begin, as_derived())
+	BC_FORWARD_ITER(,end, as_derived())
+	BC_FORWARD_ITER(cw_, begin, as_derived().internal())
+	BC_FORWARD_ITER(cw_, end, as_derived().internal())
 
-	const auto cbegin() const {
-		return iterators::forward_iterator_begin(as_derived());
-	}
+#undef BC_FORWARD_ITER
 
-	const auto cend() const {
-		return iterators::forward_iterator_end(as_derived());
-	}
 
-	auto rbegin() {
-		return iterators::reverse_iterator_begin(as_derived());
-	}
+#define BC_ITERATOR_DEF(suffix, iterator_name, begin_func, end_func)\
+	template<class Tensor>											\
+	struct iterator_name {											\
+																	\
+		using size_t = BC::size_t;									\
+		Tensor& tensor;												\
+																	\
+		using begin_t = decltype(tensor.begin_func ());				\
+		using end_t = decltype(tensor.end_func ());					\
+																	\
+		begin_t m_begin = tensor.begin_func();						\
+		end_t m_end = tensor.end_func();							\
+																	\
+		iterator_name(Tensor& tensor) :								\
+				tensor(tensor) {}									\
+																	\
+		iterator_name(Tensor& tensor, size_t start):				\
+			tensor(tensor)											\
+		{															\
+			m_begin += start;										\
+		}															\
+																	\
+		iterator_name(Tensor& tensor, size_t start, size_t end):	\
+				tensor(tensor) 										\
+		{															\
+			m_begin += start;										\
+			m_end = end;											\
+		}															\
+																	\
+		auto begin() {												\
+			return m_begin;											\
+		}															\
+																	\
+		const begin_t& cbegin() const {								\
+			return m_begin;											\
+		}															\
+																	\
+		const end_t& end() const {									\
+			return m_end;											\
+		}															\
+	};																\
+																		\
+private:																\
+																		\
+template<class der_t, class... args>									\
+static auto make_##iterator_name (der_t& p_derived, args... params) {	\
+	return iterator_name<der_t>(p_derived, params...);					\
+}																		\
+																		\
+public:																	\
+																		\
+template<class... params> auto suffix##iter(params... ps) const {		\
+	return make_##iterator_name (as_derived(), ps...);					\
+}																		\
+																		\
+template<class... params> auto suffix##const_iter(params... ps) const {	\
+	return make_##iterator_name (as_derived(), ps...);					\
+}																		\
+																		\
+template<class... params> auto suffix##iter(params... ps) {				\
+	return make_##iterator_name (as_derived(), ps...);					\
+}																		\
 
-	auto rend() {
-		return iterators::reverse_iterator_end(as_derived());
-	}
 
-	const auto crbegin() const {
-		return iterators::reverse_iterator_begin(as_derived());
-	}
+BC_ITERATOR_DEF(,nd_iterator_type, begin, end)
+BC_ITERATOR_DEF(reverse_, nd_reverse_iterator_type, rbegin, rend)
+BC_ITERATOR_DEF(cw_, cw_iterator_type, cw_begin, cw_end)
+BC_ITERATOR_DEF(cw_reverse_, cw_reverse_iterator_type, cw_rbegin, cw_rend)
 
-	const auto crend() const {
-		return iterators::reverse_iterator_end(as_derived());
-	}
-
-	//----------const versions----------//
-	auto begin() const {
-		return iterators::forward_iterator_begin(as_derived());
-	}
-
-	auto end() const {
-		return iterators::forward_iterator_end(as_derived());
-	}
-
-	auto rbegin() const {
-		return iterators::reverse_iterator_begin(as_derived());
-	}
-
-	auto rend() const {
-		return iterators::reverse_iterator_end(as_derived());
-	}
-
-	auto nd_begin() {
-		return iterators::forward_iterator_begin(as_derived());
-	}
-
-	auto nd_end() {
-		return iterators::forward_iterator_end(as_derived());
-	}
-
-	const auto nd_cbegin() const {
-		return iterators::forward_iterator_begin(as_derived());
-	}
-
-	const auto nd_cend() const {
-		return iterators::forward_iterator_end(as_derived());
-	}
-
-	auto nd_rbegin() {
-		return iterators::reverse_iterator_begin(as_derived());
-	}
-
-	auto nd_rend() {
-		return iterators::reverse_iterator_end(as_derived());
-	}
-
-	const auto nd_crbegin() const {
-		return iterators::reverse_iterator_begin(as_derived());
-	}
-
-	const auto nd_crend() const {
-		return iterators::reverse_iterator_end(as_derived());
-	}
-
-	//----------const versions----------//
-	auto nd_begin() const {
-		return iterators::forward_iterator_begin(as_derived());
-	}
-
-	auto nd_end() const {
-		return iterators::forward_iterator_end(as_derived());
-	}
-
-	auto nd_rbegin() const {
-		return iterators::reverse_iterator_begin(as_derived());
-	}
-
-	auto nd_rend() const {
-		return iterators::reverse_iterator_end(as_derived());
-	}
-
-	//------------------------elementwise_iterator------------------------//
-	auto cw_begin() {
-		return iterators::forward_cwise_iterator_begin(as_derived().internal());
-	}
-
-	auto cw_end() {
-		return iterators::forward_cwise_iterator_end(as_derived().internal());
-	}
-
-	const auto cw_cbegin() const {
-		return iterators::forward_cwise_iterator_begin(as_derived().internal());
-	}
-
-	const auto cw_cend() const {
-		return iterators::forward_cwise_iterator_end(as_derived().internal());
-	}
-
-	auto cw_rbegin() {
-		return iterators::reverse_cwise_iterator_begin(as_derived().internal());
-	}
-
-	auto cw_rend() {
-		return iterators::reverse_cwise_iterator_end(as_derived().internal());
-	}
-
-	const auto cw_crbegin() const {
-		return iterators::reverse_cwise_iterator_begin(as_derived().internal());
-	}
-
-	const auto cw_crend() const {
-		return iterators::reverse_cwise_iterator_end(as_derived().internal());
-	}
-
-	//----------const versions----------//
-	auto cw_begin() const {
-		return iterators::forward_cwise_iterator_begin(as_derived().internal());
-	}
-
-	auto cw_end() const {
-		return iterators::forward_cwise_iterator_end(as_derived().internal());
-	}
-
-	auto cw_rbegin() const {
-		return iterators::reverse_cwise_iterator_begin(as_derived().internal());
-	}
-
-	auto cw_rend() const {
-		return iterators::reverse_cwise_iterator_end(as_derived().internal());
-	}
-	//----------------------iterator wrappers---------------------------//
-
-#define BC_TENSOR_tensor_iterator_dimension_DEF(iterator_name, begin_func, end_func)\
-	template<class der_t>									\
-	struct iterator_name {									\
-															\
-		der_t& tensor;										\
-															\
-		using begin_t = decltype(tensor.begin_func ());		\
-		using end_t = decltype(tensor.end_func ());			\
-															\
-		begin_t _begin = tensor.begin_func();				\
-		end_t _end = tensor.end_func();						\
-															\
-		iterator_name(der_t& tensor_) :						\
-				tensor(tensor_) {							\
-		}													\
-															\
-		iterator_name(der_t& tensor_, BC::size_t  start):	\
-				tensor(tensor_) {							\
-															\
-			_begin += start;								\
-		}													\
-		iterator_name(der_t& tensor_, BC::size_t  start, BC::size_t  end):	\
-				tensor(tensor_) {							\
-			_begin += start;								\
-			_end = end;										\
-		}													\
-		auto begin() {										\
-			return _begin;									\
-		}													\
-		const begin_t& cbegin() const {						\
-			return _begin;									\
-		}													\
-		const end_t& end() const {							\
-			return _end;									\
-		}													\
-															\
-	};														\
-															\
- template<class der_t, class... args>						\
- static auto make_##iterator_name (der_t& p_derived, args... params) {	\
-	   return iterator_name<der_t>(p_derived, params...);				\
- }																		\
-
-BC_TENSOR_tensor_iterator_dimension_DEF(ND_ForwardIterator, nd_begin, nd_end)
-BC_TENSOR_tensor_iterator_dimension_DEF(ND_ReverseIterator, nd_rbegin, nd_rend)
-BC_TENSOR_tensor_iterator_dimension_DEF(CW_ForwardIterator, cw_begin, cw_end)
-BC_TENSOR_tensor_iterator_dimension_DEF(CW_ReverseIterator, cw_rbegin, cw_rend)
-
-#undef BC_TENSOR_tensor_iterator_dimension_DEF
-
-	template<class... params> auto cw_iter(params... ps) {
-		return make_CW_ForwardIterator(as_derived(), ps...);
-	}
-
-	template<class... params> auto cw_reverse_iter(params... ps) {
-		return make_CW_ReverseIterator(as_derived(), ps...);
-	}
-
-	template<class... params> auto cw_iter(params... ps) const {
-		return make_CW_ForwardIterator(as_derived(), ps...);
-	}
-
-	template<class... params> auto cw_reverse_iter(params... ps) const {
-		return make_CW_ReverseIterator(as_derived(), ps...);
-	}
-
-	template<class... params> auto nd_iter(params... ps) {
-		return make_ND_ForwardIterator(as_derived(), ps...);
-	}
-
-	template<class... params> auto nd_reverse_iter(params ... ps) {
-		return make_ND_ReverseIterator(as_derived(), ps...);
-	}
-
-	template<class... params> auto nd_iter(params ... ps) const {
-		return make_ND_ForwardIterator(as_derived(), ps...);
-	}
-
-	template<class... params> auto nd_reverse_iter(params ... ps) const {
-		return make_ND_ReverseIterator(as_derived(), ps...);
-	}
-
-	template<class... params> auto iter(params ... ps) {
-		return nd_iter();
-	}
-
-	template<class... params> auto reverse_iter(params ... ps) {
-		return nd_reverse_iter();
-	}
-
-	template<class... params> auto iter(params ... ps) const {
-		return nd_iter();
-	}
-
-	template<class... params> auto reverse_iter(params ... ps) const {
-		return nd_reverse_iter();
-	}
+#undef BC_ITERATOR_DEF
 
 };
 
 #ifdef BC_CPP17
 
-namespace {
-template<class Expression>
-using BC_sum_t = std::conditional_t<
-		std::is_same<typename Expression::value_type, bool>::value,
-		BC::size_t,
-		typename Expression::value_type>;
-}
-
 template<class Expression>
 auto value_sum(const Tensor_Base<Expression>& tensor)
 {
-	using sum_value_type = BC_sum_t<Expression>;
+	using value_type =  std::conditional_t<
+			std::is_same<typename Expression::value_type, bool>::value,
+			BC::size_t,
+			typename Expression::value_type>;
+
 	return BC::algorithms::accumulate(
 			BC::streams::select_on_get_stream(tensor),
 			tensor.cw_cbegin(),
 			tensor.cw_cend(),
-			sum_value_type(0));
+			value_type(0));
 }
 
 template<class Expression>

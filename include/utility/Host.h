@@ -20,7 +20,6 @@ struct Utility<host_tag> {
 		for (int i = 0; i < size; ++i) {
 			to[i] = from[i];
 		}
-		BC_omp_bar__
 	}
 
 	template<class T, class U>
@@ -36,7 +35,6 @@ struct Utility<host_tag> {
 
 }
 }
-
 
 
 #endif /* HOST_H_ */

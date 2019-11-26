@@ -74,7 +74,7 @@ int test_constructors(int sz=128) {
 
 	//---------- Copy Constructor ----------//
 	BC_TEST_DEF(
-		mat a(5,5); a.rand(0, 10);
+		mat a(5,5); a.randomize(0, 10);
 		mat b(a);
 
 		return BC::tensors::all(b.approx_equal(a)) &&
@@ -85,7 +85,7 @@ int test_constructors(int sz=128) {
 
 	//---------- Move Constructor ----------//
 	BC_TEST_DEF(
-		mat a(5,5); a.rand(0, 10);
+		mat a(5,5); a.randomize(0, 10);
 
 		auto* original_ptr = a.data();
 		mat b(std::move(a));
@@ -101,7 +101,7 @@ int test_constructors(int sz=128) {
 
 	//---------- Copy Oper ----------//
 	BC_TEST_DEF(
-		mat a(5,5); a.rand(0, 10);
+		mat a(5,5); a.randomize(0, 10);
 		mat b(5,5);
 
 		b = a;
@@ -110,7 +110,7 @@ int test_constructors(int sz=128) {
 
 	//---------- Move Oper ----------//
 	BC_TEST_DEF(
-		mat a(5,5); a.rand(0, 10);
+		mat a(5,5); a.randomize(0, 10);
 		mat c(a); //copy to compare
 		mat b;
 

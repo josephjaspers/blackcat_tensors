@@ -126,7 +126,7 @@ float HC_logistic_matmul_assign(int size, BC::size_t  iters) {
 
 void benchmark_matmul_suite(int count=10) {
 	int size = 128;
-	int reps = 100;
+	int reps = 1000;
 	float multiplier = 1.2;
 
 	std::string markdown_header = {

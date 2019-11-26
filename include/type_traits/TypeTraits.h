@@ -193,8 +193,6 @@ using namespace BC::traits::common;
 	template<class... Ts>
 	static constexpr bool sequence_contains_v = sequence_contains<Ts...>::value;
 
-
-
 	// -------- new addition, other code will use static_cast
 	template<class T>
 	using query_derived_type = typename T::derived_type;

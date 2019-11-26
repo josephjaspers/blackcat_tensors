@@ -26,7 +26,7 @@ int test_accessors(int sz=128) {
 
 	BC_TEST_ON_STARTUP {
 		value_type val= 0;
-		for (auto col : a.nd_iter()) {
+		for (auto col : a) {
 			col = val++;
 		}
 	};

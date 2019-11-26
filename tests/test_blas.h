@@ -346,7 +346,7 @@ int test_blas(int sz=128) {
 
 	// scalar right test -------------------------------------------
 	BC_TEST_DEF(
-		y =  a * 2 * b;
+		y = a * 2 * b;
 
 		stream.set_blas_pointer_mode_device();
 		blas::gemm(stream, false, false,  sz, sz, sz,
@@ -361,7 +361,7 @@ int test_blas(int sz=128) {
 		y[0].zero();
 		h_y[0].zero();
 
-		y[0] =   a * 2 * b[0];
+		y[0] = a * 2 * b[0];
 
 		stream.set_blas_pointer_mode_device();
 		blas::gemv(stream, false,  sz, sz,

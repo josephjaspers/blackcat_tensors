@@ -101,20 +101,23 @@ struct Coefficientwise_Iterator {
 };
 
 template<class Tensor>
-auto forward_cwise_iterator_begin(Tensor& tensor) {
-    return Coefficientwise_Iterator<direction::forward, Tensor>(tensor, 0);
+auto iter_cw_begin(Tensor& tensor) {
+	return Coefficientwise_Iterator<direction::forward, Tensor>(tensor, 0);
 }
+
 template<class Tensor>
-auto forward_cwise_iterator_end(Tensor& tensor) {
-    return Coefficientwise_Iterator<direction::forward, Tensor>(tensor, tensor.size());
+auto iter_cw_end(Tensor& tensor) {
+	return Coefficientwise_Iterator<direction::forward, Tensor>(tensor, tensor.size());
 }
+
 template<class Tensor>
-auto reverse_cwise_iterator_begin(Tensor& tensor) {
-    return Coefficientwise_Iterator<direction::reverse, Tensor>(tensor, tensor.size()-1);
+auto iter_cw_rbegin(Tensor& tensor) {
+	return Coefficientwise_Iterator<direction::reverse, Tensor>(tensor, tensor.size()-1);
 }
+
 template<class Tensor>
-auto reverse_cwise_iterator_end(Tensor& tensor) {
-    return Coefficientwise_Iterator<direction::reverse, Tensor>(tensor, -1);
+auto iter_cw_rend(Tensor& tensor) {
+	return Coefficientwise_Iterator<direction::reverse, Tensor>(tensor, -1);
 }
 
 

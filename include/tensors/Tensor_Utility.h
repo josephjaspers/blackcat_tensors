@@ -105,8 +105,10 @@ public:
 					std::is_same<host_tag, system_tag>::value, BC::traits::Integer<0>,
 				std::conditional_t<tensor_dimension==0, BC::traits::Integer<-1>, BC::traits::Integer<1>>>>;
 
-			return this->to_string(specialization(), BC::tensors::io::features(precision, pretty, sparse));
-		}
+		return this->to_string(
+				specialization(),
+				BC::tensors::io::features(precision, pretty, sparse));
+	}
 
 	std::string to_raw_string(int precision=8) const {
 		return this->to_string(precision, false, false);
@@ -122,53 +124,6 @@ public:
 
 	void raw_print(int precision=0, bool sparse=false) const {
 		std::cout << this->to_string(precision, false, sparse) << std::endl;
-	}
-
-	//TODO deprecate this
-	void read_as_one_hot(std::ifstream& is) {
-		BC_ASSERT_ARRAY_ONLY("void read_as_one_hot(std::ifstream& is)");
-
-		if (derived::tensor_dimension != 1)
-			throw std::invalid_argument("one_hot only supported by vectors");
-
-		as_derived().zero();
-
-		std::string tmp;
-		std::getline(is, tmp, ',');
-
-		as_derived()(std::stoi(tmp)) = 1;
-	}
-
-	//TODO deprecate this
-	void read_csv_row(std::ifstream& is) {
-		BC_ASSERT_ARRAY_ONLY("void read(std::ifstream& is)");
-
-		if (!is.good()) {
-			std::cout << "File open error - returning " << std::endl;
-			return;
-		}
-		std::vector<value_type> file_data;
-		value_type val;
-		std::string tmp;
-		unsigned read_values = 0;
-
-		std::getline(is, tmp, '\n');
-
-		std::stringstream ss(tmp);
-
-		if (ss.peek() == ',' || ss.peek() == ' ' || ss.peek() == '\t')
-			ss.ignore();
-
-		while (ss >> val) {
-			file_data.push_back(val);
-			++read_values;
-			if (ss.peek() == ',')
-				ss.ignore();
-		}
-
-		int copy_size = (unsigned)as_derived().size() > file_data.size() ? file_data.size() : as_derived().size();
-		BC::utility::implementation<system_tag>::HostToDevice(as_derived().internal().data(), file_data.data(), copy_size);
-
 	}
 
 	void print_dimensions() const {
@@ -190,6 +145,10 @@ public:
 			std::cout << "[" << as_derived().block_dimension(i) << "]";
 		}
 		std::cout << std::endl;
+	}
+
+	friend std::ostream& operator << (std::ostream& os, const Tensor_Utility& self) {
+		return os << self.to_string();
 	}
 };
 }

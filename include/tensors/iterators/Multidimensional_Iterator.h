@@ -18,7 +18,7 @@ namespace iterators {
 template<direction direction, class Tensor>
 struct Multidimensional_Iterator {
 
-    using self =Multidimensional_Iterator<direction, Tensor>;
+    using self = Multidimensional_Iterator<direction, Tensor>;
     using Iterator = Multidimensional_Iterator<direction, Tensor>;
     using iterator_category = std::random_access_iterator_tag;
     using value_type = decltype(std::declval<Tensor>().slice(0));
@@ -86,23 +86,24 @@ struct Multidimensional_Iterator {
 };
 
 
-template<class derived_t>//, typename=std::enable_if_t<derived_t::tensor_dimension != 1>>
-auto forward_iterator_begin(derived_t& derived) {
-     return Multidimensional_Iterator<direction::forward, derived_t>(derived, 0);
-}
-template<class derived_t>//, typename=std::enable_if_t<derived_t::tensor_dimension != 1>>
-auto forward_iterator_end(derived_t& derived) {
-     return Multidimensional_Iterator<direction::forward, derived_t>(derived, derived.outer_dimension());
+template<class Tensor>
+auto iter_begin(Tensor& derived) {
+	return Multidimensional_Iterator<direction::forward, Tensor>(derived, 0);
 }
 
-template<class derived_t>//, typename=std::enable_if_t<derived_t::tensor_dimension != 1>>
-auto reverse_iterator_begin(derived_t& derived) {
-     return Multidimensional_Iterator<direction::reverse, derived_t>(derived, derived.outer_dimension()-1);
+template<class Tensor>
+auto iter_end(Tensor& derived) {
+	return Multidimensional_Iterator<direction::forward, Tensor>(derived, derived.outer_dimension());
 }
 
-template<class derived_t>//, typename=std::enable_if_t<derived_t::tensor_dimension != 1>>
-auto reverse_iterator_end(derived_t& derived) {
-     return Multidimensional_Iterator<direction::reverse, derived_t>(derived, -1);
+template<class Tensor>
+auto iter_rbegin(Tensor& derived) {
+	return Multidimensional_Iterator<direction::reverse, Tensor>(derived, derived.outer_dimension()-1);
+}
+
+template<class Tensor>
+auto iter_rend(Tensor& derived) {
+	return Multidimensional_Iterator<direction::reverse, Tensor>(derived, -1);
 }
 
 }
