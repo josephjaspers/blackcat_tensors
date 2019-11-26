@@ -18,34 +18,31 @@ template<class> class Tensor_Base;
 
 namespace oper {
 namespace cmath_functions {
-//defines a function with a user defined implementation (not part of std::cmath.h)
-#define BLACKCAT_FUNCTOR_DEF(funcName, instance_name, math_function, ...) 	\
-														 	 	\
-struct funcName {				 					 			\
-	template<class value_type> BCINLINE    	     				\
-	value_type operator () (const value_type& x) const { 	 	\
-		return math_function; 									\
-	} 											     			\
-	template<class value_type> BCINLINE    	     				\
-	static auto apply(const value_type& x) { 		    	 	\
-		return math_function; 								 	\
-	}															\
-	template<class internal_t>									\
-	auto operator() (const BC::tensors::Tensor_Base<internal_t>& tensor) {   \
-		  return tensor.un_expr(funcName());               		\
-	}															\
-																\
-	__VA_ARGS__													\
-} instance_name; 										\
-																\
-																\
-template<class T> auto surpress_unused_variable_warning_workaround(funcName)\
-{return instance_name;}	   \
-																\
 
-#define DERIVATIVE_DEF(...) BLACKCAT_FUNCTOR_DEF(Derivative, dx, __VA_ARGS__)
+#define BLACKCAT_FUNCTOR_DEF(funcName, instance_name, math_function, ...)\
+                                                                         \
+	struct funcName {                                                    \
+	template<class value_type> BCINLINE                                  \
+	value_type operator () (const value_type& x) const {                 \
+		return math_function;                                            \
+	}                                                                    \
+	template<class value_type> BCINLINE                                  \
+	static auto apply(const value_type& x) {                             \
+		return math_function;                                            \
+	}                                                                    \
+	template<class Xpr>                                                  \
+	auto operator() (const BC::tensors::Tensor_Base<Xpr>& tensor) {      \
+		  return tensor.un_expr(funcName());                             \
+	}                                                                    \
+                                                                         \
+	__VA_ARGS__                                                          \
+	} instance_name;                                                     \
 
-#define DERIVATIVE_CACHED_DEF(...) BLACKCAT_FUNCTOR_DEF(Cached_Derivative, cached_dx, __VA_ARGS__)
+#define DERIVATIVE_DEF(...)\
+		BLACKCAT_FUNCTOR_DEF(Derivative, dx, __VA_ARGS__)
+
+#define DERIVATIVE_CACHED_DEF(...)\
+		BLACKCAT_FUNCTOR_DEF(Cached_Derivative, cached_dx, __VA_ARGS__)
 
 #define BLACKCAT_MATH_DEF(funcName, instanceName, ...) \
 		BLACKCAT_FUNCTOR_DEF(funcName, instanceName, std::instanceName(x), __VA_ARGS__)
@@ -167,24 +164,6 @@ BLACKCAT_FUNCTOR_DEF(Mish, mish,
 
 #undef BLACKCAT_FUNCTOR_DEF
 #undef BLACKCAT_MATH_DEF
-
-//--------------------------------------------not actually cmath--------------------------------------//
-template<class scalar>
-struct norm {
-    scalar min;
-    scalar max;
-
-    BCINLINE norm(scalar min_, scalar max_) : min(min_), max(max_) {}
-    BCINLINE auto operator () (scalar v) const {
-        return (v - min) / (max - min);
-    }
-};
-
-template<class internal_t, class min_, class max_>
-static auto normalize(const BC::tensors::Tensor_Base<internal_t>& tensor, min_ min, max_ max) {
-    using value_type = typename internal_t::value_type;
-    return tensor.un_expr(norm<value_type>(value_type(min), value_type(max)));
-}
 
 } //end of ns cmath_functions
 } //end of ns oper

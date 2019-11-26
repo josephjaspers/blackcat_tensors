@@ -1,6 +1,6 @@
 CXXVERSION = -std=c++14 
-CXXFLAGS = -O3 -o blackcat_tests
-CUFLAGS = -O3 -o blackcat_tests_cu
+CXXFLAGS = -O3 -o blackcat_tests -Wall
+CUFLAGS = -O3 -o blackcat_tests_cu -Wall
 
 CXXFILES = run.cpp
 CUFILES  = run.cu

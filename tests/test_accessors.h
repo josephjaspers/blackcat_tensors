@@ -42,6 +42,11 @@ int test_accessors(int sz=128) {
 			s.print();
 		};
 
+		//Get rid of unused variable warning
+		if (false) {
+			print_compilation_test();
+		}
+
 		return true;
 	)
 

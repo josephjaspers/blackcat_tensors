@@ -1,5 +1,5 @@
-CXXFLAGS = -O3 -o mnist_test_exec
-CUFLAGS = -O3 -o mnist_test_exec_cu --use_fast_math
+CXXFLAGS = -O3 -o mnist_test_exec -Wall
+CUFLAGS = -O3 -o mnist_test_exec_cu --use_fast_math -Wall
 
 CXXFILES = mnist_test.cpp
 CUFILES  = mnist_test.cu

@@ -61,7 +61,6 @@ int test_allocators(int sz=128) {
 
 	using allocator_type = allocator<value_type>;
 	using mat = BC::Matrix<value_type, log_allocator<allocator_type>>;
-	using vec = BC::Vector<value_type, log_allocator<allocator_type>>;
 	using system_tag = typename allocator_traits<allocator_type>::system_tag;
 
 	Stream<system_tag> stream;
