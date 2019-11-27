@@ -105,7 +105,7 @@ public:
 	}
 
 	void clear_cache() {
-		std::lock_guard<std::mutex>(get_locker());
+		std::lock_guard<std::mutex> lck(get_locker());
 		for (auto kv : get_recycler()) {
 			for (Byte* ptr: kv.second) {
 				m_allocator.deallocate(ptr, kv.first);

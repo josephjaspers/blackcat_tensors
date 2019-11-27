@@ -43,7 +43,8 @@ struct Tensor_Utility {
 
 private:
 
-	static constexpr int tensor_dimension = ExpressionTemplate::tensor_dimension;
+	static constexpr int tensor_dimension =
+			ExpressionTemplate::tensor_dimension;
 
 	derived& as_derived() {
 		return static_cast<derived&>(*this);
@@ -53,61 +54,58 @@ private:
 		return static_cast<const derived&>(*this);
 	}
 
-	//If host_tensor
-	template<template<int> class Integer>
-	std::string to_string(Integer<0>, BC::tensors::io::features fs) const {
-		return BC::tensors::io::to_string(as_derived(), fs, BC::traits::Integer<tensor_dimension>());
-	}
-	//If device_tensor
-	template<template<int> class Integer>
-	std::string to_string(Integer<1>, BC::tensors::io::features fs) const {
-		using host_tensor = Tensor_Base<exprs::Array<
-								BC::Shape<tensor_dimension>,
-								typename ExpressionTemplate::value_type,
-								BC::Allocator<host_tag, value_type>>>;
-
-		host_tensor host_(BC::Shape<tensor_dimension>(as_derived().get_shape()));
-		host_.copy(as_derived());
-		return BC::tensors::io::to_string(host_, fs, BC::traits::Integer<tensor_dimension>());
-	}
-
-	template<template<int> class Integer>
-	std::string to_string(Integer<-1>, BC::tensors::io::features fs) const {
-		using host_tensor = Tensor_Base<exprs::Array<
-								BC::Shape<tensor_dimension>,
-								typename ExpressionTemplate::value_type,
-								BC::Allocator<host_tag, value_type>>>;
-
-		host_tensor host_;
-		host_.copy(as_derived());
-		return BC::tensors::io::to_string(host_, fs, BC::traits::Integer<tensor_dimension>());
-	}
-
-
-	//If expression_type
-	template<template<int> class Integer>
-	std::string to_string(Integer<2>, BC::tensors::io::features fs) const {
-		using tensor = Tensor_Base<exprs::Array<
-					BC::Shape<tensor_dimension>,
-					typename ExpressionTemplate::value_type,
-					BC::Allocator<system_tag, value_type>>>;
-
-		return tensor(this->as_derived()).to_string(fs.precision, fs.pretty, fs.sparse);
-	}
-
 public:
 
-	std::string to_string(int precision=8, bool pretty=true, bool sparse=false) const {
-		using specialization =
-				std::conditional_t<
-					BC::tensors::exprs::expression_traits<ExpressionTemplate>::is_expr::value, BC::traits::Integer<2>,
-				std::conditional_t<
-					std::is_same<host_tag, system_tag>::value, BC::traits::Integer<0>,
-				std::conditional_t<tensor_dimension==0, BC::traits::Integer<-1>, BC::traits::Integer<1>>>>;
+	std::string to_string(
+			int precision=8,
+			bool pretty=true,
+			bool sparse=false) const
+	{
+		// TODO-to_string should not copy when the memory is allocated
+		// by cudaMallocManaged. However NVCC_9.2 fails to compile
+		// the code below. Ergo, cudaManaged tensors will incur a copy
+		// even though this should not be the case.
+		//
+		//	using self_alloc_t = typename
+		//		BC::traits::common_traits<ExpressionTemplate>::allocator_type;
+		//	using is_managed = typename
+		//	BC::allocators::allocator_traits<self_alloc_t>::is_managed_memory;
 
-		return this->to_string(
-				specialization(),
-				BC::tensors::io::features(precision, pretty, sparse));
+		using is_host = std::is_same<BC::host_tag, system_tag>;
+
+#ifdef __CUDACC__
+		using allocator_type = std::conditional_t<
+				is_host::value,
+				BC::Allocator<system_tag, value_type>,
+				BC::Cuda_Managed<value_type>>;
+#else
+		using allocator_type = BC::Allocator<system_tag, value_type>;
+#endif
+		using tensor_type = Tensor_Base<exprs::Array<
+				BC::Shape<tensor_dimension>,
+				value_type,
+				allocator_type>>;
+
+		auto fs = BC::tensors::io::features(precision, pretty, sparse);
+
+		static constexpr bool no_copy_required =
+				/*(is_managed::value || */ is_host::value /*)*/ &&
+				exprs::expression_traits<ExpressionTemplate>::is_array::value;
+
+		return BC::traits::constexpr_ternary<no_copy_required>(
+				BC::traits::bind([&](const auto& der)
+				{
+					return BC::tensors::io::to_string(
+							der, fs, BC::traits::Integer<tensor_dimension>());
+				}, as_derived()),
+
+				BC::traits::bind([&](const auto& der)
+				{
+					tensor_type copy(as_derived());
+					BC::device_sync();
+					return BC::tensors::io::to_string(
+							copy, fs, BC::traits::Integer<tensor_dimension>());
+				}, as_derived()));
 	}
 
 	std::string to_raw_string(int precision=8) const {
