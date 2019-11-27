@@ -18,17 +18,32 @@ class Tensor_Base;
 template<class ExpressionTemplate, class voider=void>
 class Tensor_Accessor {
 
-	const auto& as_derived() const { return static_cast<const Tensor_Base<ExpressionTemplate>&>(*this); }
-	      auto& as_derived()       { return static_cast<      Tensor_Base<ExpressionTemplate>&>(*this); }
+	const auto& as_derived() const {
+		return static_cast<const Tensor_Base<ExpressionTemplate>&>(*this);
+	}
+
+	auto& as_derived() {
+		return static_cast<Tensor_Base<ExpressionTemplate>&>(*this);
+	}
 
 public:
 
-	const auto operator [] (BC::size_t i) const { return slice(i); }
-	      auto operator [] (BC::size_t i)       { return slice(i); }
+	const auto operator [](BC::size_t i) const {
+		return slice(i);
+	}
+
+	auto operator [](BC::size_t i) {
+		return slice(i);
+	}
 
 	//enables syntax: `tensor[{start, end}]`
-	const auto operator [] (BC::Dim<2> range) const { return slice(range[0], range[1]); }
-	      auto operator [] (BC::Dim<2> range)       { return slice(range[0], range[1]); }
+	const auto operator [](BC::Dim<2> range) const {
+		return slice(range[0], range[1]);
+	}
+
+	auto operator [](BC::Dim<2> range) {
+		return slice(range[0], range[1]);
+	}
 
 	const auto slice(BC::size_t i) const
 	{
@@ -161,28 +176,6 @@ public:
 		return subblock(std::get<0>(index_shape), std::get<1>(index_shape));
 	}
 
-	const auto row_range(int begin, int end) const
-	{
-		static_assert(ExpressionTemplate::tensor_dimension  == 2,
-				"ROW_RANGE ONLY AVAILABLE TO MATRICES");
-
-		BC_ASSERT(begin < end,
-				"Row range, begin-range must be smaller then end-range");
-		BC_ASSERT(begin >= 0 && begin < as_derived().rows(),
-				"Row range, begin-range must be between 0 and rows()");
-		BC_ASSERT(end   >= 0 && end   < as_derived().rows(),
-				"Row range, end-range must be be between begin-range and rows()");
-
-		return chunk(this->as_derived(), begin, 0)(end-begin, this->as_derived().cols());
-	}
-
-	auto row_range(int begin, int end)
-	{
-		using self = Tensor_Accessor<ExpressionTemplate>;
-		return BC::traits::auto_remove_const(
-				const_cast<const self&>(*this).row_range(begin, end));
-	}
-
 	const auto operator() (BC::size_t i) const { return scalar(i); }
 		  auto operator() (BC::size_t i)       { return scalar(i); }
 
@@ -235,51 +228,16 @@ public:
 };
 
 template<class T, class Shape>
-auto reshape(Tensor_Base<T>& tensor, Shape shape)
+[[deprecated]] auto reshape(Tensor_Base<T>& tensor, Shape shape)
 {
-	static_assert(BC::tensors::exprs::expression_traits<T>::is_array::value &&
-					T::tensor_iterator_dimension <= 1,
-					"Reshape is only available to continuous tensors");
-	auto reshaped_tensor =  make_tensor(exprs::make_view(tensor, shape));
-	BC_ASSERT(reshaped_tensor.size() == tensor.size(), "Reshape requires same size");
-	return reshaped_tensor;
+	static_assert(std::is_void<T>::value, "reshape has been deprecated, please use: `tensor.reshaped(ints...)` or `tensor.reshaped(Dim<x>)`");
 }
 
 template<class T, class Shape>
-const auto reshape(const Tensor_Base<T>& tensor, Shape shape)
+[[deprecated]] const auto reshape(const Tensor_Base<T>& tensor, Shape shape)
 {
-	static_assert(BC::tensors::exprs::expression_traits<T>::is_array::value &&
-		T::tensor_iterator_dimension <= 1,
-		"Reshape is only available to continuous tensors");
-	auto reshaped_tensor =  make_tensor(exprs::make_view(tensor, shape));
-	BC_ASSERT(reshaped_tensor.size() == tensor.size(), "Reshape requires same size");
-	return reshaped_tensor;
+	static_assert(std::is_void<T>::value, "reshape has been deprecated, please use: `tensor.reshaped(ints...)` or `tensor.reshaped(Dim<x>)`;");
 }
-
-//Disable accessors for expression types
-//This specialization is just for the cppyy interpretor,
-//Tensor_Base has... using accessor[] ||
-#ifdef BC_CLING_JIT
-template<class ExpressionTemplate>
-class Tensor_Accessor<ExpressionTemplate,
-std::enable_if_t<exprs::expression_traits<ExpressionTemplate>::is_expr::value ||
-	ExpressionTemplate::tensor_dimension == 0>>	 {
-
-	const auto& as_derived() const { return static_cast<const Tensor_Base<ExpressionTemplate>&>(*this); }
-		  auto& as_derived()	   { return static_cast<	  Tensor_Base<ExpressionTemplate>&>(*this); }
-
-
-public:
-	const int operator [] (int i) const {
-		throw 1;
-	}
-
-	template<class... args>
-	const void operator () (args... i) const {
-		throw 1;
-	}
-};
-#endif
 
 }//end of module name space
 }//end of BC name space

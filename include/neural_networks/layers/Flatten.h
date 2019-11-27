@@ -44,12 +44,12 @@ public:
 
 	template<class Matrix>
 	auto forward_propagation(const Matrix& x) {
-		return BC::reshape(x, this->get_batched_output_shape());
+		return x.reshaped(this->get_batched_output_shape());
 	}
 
 	template<class X, class Delta>
 	auto back_propagation(const X& x, const Delta& dy) {
-		return BC::reshape(dy, this->get_batched_input_shape());
+		return dy.reshaped(this->get_batched_input_shape());
 	}
 
 	auto get_input_shape() const { return m_input_shape; }

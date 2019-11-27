@@ -76,7 +76,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	mat hyps =network.predict(batch[{last_index, shape}]);
 
 	BC::size_t test_images = 10;
-	cube img = cube(reshape(inputs[0], BC::shape(28,28, batch_size)));
+	cube img = cube(inputs[0].reshaped(28,28, batch_size));
 	for (int i = 0; i < test_images; ++i) {
 		img[i].t().print_sparse(3);
 		hyps[i].print();
