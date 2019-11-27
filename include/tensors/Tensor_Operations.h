@@ -37,6 +37,10 @@ private:
 	const derived& as_derived() const { return static_cast<const derived&>(*this); }
 	      derived& as_derived()       { return static_cast<      derived&>(*this); }
 
+	template<class ScalarType>
+	using enable_if_scalar = std::enable_if_t<
+			std::is_convertible<ScalarType, value_type>::value>;
+
 	template<class derived_t>
 	void evaluate(Tensor_Operations<derived_t>&& tensor) {
 		BC_ASSERT(this->as_derived().get_stream().get_allocator().allocated_bytes() == 0,
@@ -93,27 +97,20 @@ public:
 	}																								\
 
 #define BC_OPER_SCALAR_ASSIGNMENT_DEF(op, op_functor)																\
-	template<class p_value_type, class=std::enable_if_t<std::is_convertible<p_value_type, value_type>::value>>	   \
-	derived& operator  op (const p_value_type& param) {															  \
+	template<class ScalarType, class=enable_if_scalar<ScalarType>>	   \
+	derived& operator  op (const ScalarType& param) {															  \
 		BC_ASSERT_ASSIGNABLE("derived& operator " #op " (const Tensor_Operations<Xpr>& param)");				  \
 		evaluate(bi_expr_scalar<oper:: op_functor##_Assign >(exprs::make_scalar_constant<system_tag>((value_type)param)));  \
 		return as_derived();																						 \
 	}
-
-#define BC_NAMED_ASSIGNMENT_OPER(op, op_functor)\
-		template<class Arg>\
-		derived& op_functor##_assign (const Arg& arg) {\
-			return *this op arg;\
-		}
-
 
 #define BC_OPER_ASSIGNMENT_DEF(op, op_functor)\
 			BC_OPER_SCALAR_ASSIGNMENT_DEF(op, op_functor)\
 			BC_OPER_BASIC_ASSIGNMENT_DEF(op, op_functor)
 
 
-template<class p_value_type, class=std::enable_if_t<std::is_convertible<p_value_type, value_type>::value>>
-derived& operator = (const p_value_type& param) {
+template<class ScalarType, class=enable_if_scalar<ScalarType>>
+derived& operator = (const ScalarType& param) {
 	BC_ASSERT_ASSIGNABLE("derived& operator =(const Tensor_Operations<Xpr>& param)");
 	evaluate(bi_expr_scalar<oper::Assign>(exprs::make_scalar_constant<system_tag>((value_type)param)));
 	return as_derived();
@@ -130,26 +127,38 @@ derived& operator = (const p_value_type& param) {
 
 	//--------------------------------------elementwise expressions-------------------------------//
 
-#define BC_BASIC_COEFFICIENTWISE_DEF(op, op_functor)		 \
-															 \
-	template<class Xpr> BCHOT							 \
-	auto op (const Tensor_Operations<Xpr>& param) const { \
-		assert_valid(param);								 \
-		return bi_expr< oper:: op_functor >(param);		  \
-	}
-#define BC_SCALAR_COEFFICIENTWISE_DEF(op, op_functor)																   \
-		template<class p_value_type, typename = std::enable_if_t<std::is_convertible<p_value_type, value_type>::value>>									\
-		auto op (const p_value_type& param) const {																	 \
-			return bi_expr_scalar<oper:: op_functor >(exprs::make_scalar_constant<system_tag>((value_type)param));	\
-		}
+#define BC_BASIC_COEFFICIENTWISE_DEF(op, op_functor)       \
+    template<class Xpr>                                    \
+    auto op (const Tensor_Operations<Xpr>& param) const    \
+    {                                                      \
+        assert_valid(param);                               \
+        return bi_expr< oper:: op_functor >(param);        \
+    }
+
+#define BC_SCALAR_COEFFICIENTWISE_DEF(op, op_functor)                         \
+    template<class ScalarType, class=enable_if_scalar<ScalarType>>            \
+    auto op (const ScalarType& param) const                                   \
+	{                                                                         \
+        return bi_expr_scalar<oper::op_functor>(                              \
+                exprs::make_scalar_constant<system_tag>((value_type)param));  \
+    }                                                                         \
+                                                                              \
+    template<class ScalarType, class =enable_if_scalar<ScalarType>>           \
+    friend auto op (const ScalarType& param, const Tensor_Operations& tensor) \
+	{                                                                         \
+		value_type value = param;                                             \
+        auto scalar_obj = exprs::make_scalar_constant<system_tag>(value);     \
+        return make_tensor(scalar_obj).bi_expr(oper:: op_functor (), tensor); \
+    }
 
 #define BC_COEFFICIENTWISE_DEF(op, op_functor)\
-	BC_BASIC_COEFFICIENTWISE_DEF(op, op_functor)\
-	BC_SCALAR_COEFFICIENTWISE_DEF(op, op_functor)
+    BC_BASIC_COEFFICIENTWISE_DEF(op, op_functor)\
+    BC_SCALAR_COEFFICIENTWISE_DEF(op, op_functor)\
+
 
 #define BC_OPER_COEFFICIENTWISE_DEF(op, op_functor)\
-	BC_BASIC_COEFFICIENTWISE_DEF(operator op, op_functor)\
-	BC_SCALAR_COEFFICIENTWISE_DEF(operator op, op_functor)
+    BC_BASIC_COEFFICIENTWISE_DEF(operator op, op_functor)\
+    BC_SCALAR_COEFFICIENTWISE_DEF(operator op, op_functor)\
 
 	BC_OPER_COEFFICIENTWISE_DEF(+, Add)
 	BC_OPER_COEFFICIENTWISE_DEF(-, Sub)
@@ -216,67 +225,31 @@ public:
 	//-------------------------------- Negation Specializations ------------------------------//
 
 private:
-	 template<class expression_t>
-	 using negated_t = Tensor_Base<exprs::Unary_Expression<oper::negation, expression_t>>;
+	 template<class Xpr>
+	 using negated_t = Tensor_Base<exprs::Unary_Expression<oper::negation, Xpr>>;
 public:
 
-	template<class expression_t>
-	derived& operator +=(const negated_t<expression_t>& param) {
+	template<class Xpr>
+	derived& operator +=(const negated_t<Xpr>& param) {
 		BC_ASSERT_ASSIGNABLE("derived& operator +=(const Tensor_Operations<Xpr>& param)");
 		assert_valid(param);
-		evaluate(bi_expr<oper::sub_assign>(param.array));
+		evaluate(bi_expr<oper::Sub_Assign>(make_tensor(param.array)));
 		return as_derived();
 	}
 
-	template<class expression_t>
-	derived& operator -=(const negated_t<expression_t>& param) {
+	template<class Xpr>
+	derived& operator -=(const negated_t<Xpr>& param) {
 		BC_ASSERT_ASSIGNABLE("derived& operator -=(const Tensor_Operations<Xpr>& param)");
 		assert_valid(param);
-		evaluate(bi_expr<oper::add_assign>(param.array));
+		evaluate(bi_expr<oper::Add_Assign>(make_tensor(param.array)));
 		return as_derived();
 	}
 
 	template<class Xpr>
 	auto operator +(const negated_t<Xpr>& param) const {
 		assert_valid(param);
-		return bi_expr<oper::sub>(param.array);
+		return bi_expr<oper::Sub>(make_tensor(param.array));
 	}
-
-	template<class Xpr>
-	void copy(const Tensor_Operations<Xpr>& rv) {
-		static_assert(exprs::expression_traits<Expression>::is_copy_assignable::value, "copy lv must be array");
-		static_assert(exprs::expression_traits<Xpr>::is_copy_assignable::value, "copy rv most be array");
-		static_assert(Expression::tensor_iterator_dimension <= 1, "copy only accepts continuous");
-		static_assert(Xpr::tensor_iterator_dimension <= 1, "copy only accepts continuous");
-
-		if (!same_size(rv)) {
-			std::cout << "Attempting to copy two different size tensors (ERROR)"  << std::endl;
-			throw 1;
-		}
-
-#ifdef __CUDACC__
-		using copy_impl = BC::utility::implementation<device_tag>;
-
-		if (std::is_same<system_tag, typename Xpr::system_tag>::value) {
-			//Ensures it only compiles when true
-			BC::traits::constexpr_if<std::is_same<system_tag, typename Xpr::system_tag>::value>(
-					BC::traits::bind([](auto& self, const auto& rv){
-						self = rv;
-			}, *this, rv));
-		} else if (std::is_same<system_tag, device_tag>::value) {
-			copy_impl::HostToDevice(as_derived().data(),
-					rv.as_derived().data(),
-					as_derived().size());
-		} else {
-			copy_impl::DeviceToHost(as_derived().data(),
-					rv.as_derived().data(),
-					as_derived().size());
-		}
-#else
-		this->as_derived() = rv.as_derived();
-#endif
-	}
-
 
 	//-----------------------------------expression_factory--------------------------------------------------//
 
@@ -416,31 +389,7 @@ public:
 };
 
 //----------------------------------------------scalar element-wise operations--------------------------------------------------//
-#define BC_OPER_LV_SCALAR_DEF(op, op_functor)			   \
-		template<											\
-			class p_value_type, 							\
-			class expression_t, 							\
-			class = std::enable_if_t<						\
-							std::is_convertible<p_value_type, typename expression_t::value_type>::value && 							 \
-							!BC::tensors::exprs::expression_traits<p_value_type>::is_expression_template::value>							 \
-		>							 																			 \
-		 auto operator op (const p_value_type& param, const Tensor_Base<expression_t>& tensor) {   \
-			using value_type = typename expression_t::value_type;												\
-			auto scalar_obj = exprs::make_scalar_constant<typename expression_t::system_tag>((value_type)param); \
-			return make_tensor(scalar_obj).bi_expr(oper:: op_functor (), tensor);								\
-		}
 
-	BC_OPER_LV_SCALAR_DEF(+, Add)
-	BC_OPER_LV_SCALAR_DEF(-, Sub)
-	BC_OPER_LV_SCALAR_DEF(*, Scalar_Mul)
-	BC_OPER_LV_SCALAR_DEF(/, Div)
-	BC_OPER_LV_SCALAR_DEF(>, Greater)
-	BC_OPER_LV_SCALAR_DEF(<, Lesser)
-	BC_OPER_LV_SCALAR_DEF(>=, Greater_Equal)
-	BC_OPER_LV_SCALAR_DEF(<=, Lesser_Equal)
-	BC_OPER_LV_SCALAR_DEF(==, Equal)
-
-#undef BC_OPER_LV_SCALAR_DEF
 #undef BC_ASSERT_ASSIGNABLE
 
 	template<class Expression>
