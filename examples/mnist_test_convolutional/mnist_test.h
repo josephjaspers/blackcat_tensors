@@ -41,7 +41,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	);
 
 	network.set_batch_size(batch_size);
-	network.set_learning_rate(.003);
+	network.set_learning_rate(.0003);
 
 	BC::print("Neural Network architecture: \n",
 			network.get_string_architecture());
