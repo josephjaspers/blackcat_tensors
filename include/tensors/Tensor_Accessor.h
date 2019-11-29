@@ -230,13 +230,19 @@ public:
 template<class T, class Shape>
 [[deprecated]] auto reshape(Tensor_Base<T>& tensor, Shape shape)
 {
-	static_assert(std::is_void<T>::value, "reshape has been deprecated, please use: `tensor.reshaped(ints...)` or `tensor.reshaped(Dim<x>)`");
+	static_assert(
+			std::is_void<T>::value,
+			"reshape has been deprecated, please use: "
+			"`tensor.reshaped(ints...)` or `tensor.reshaped(Dim<x>)`");
 }
 
 template<class T, class Shape>
 [[deprecated]] const auto reshape(const Tensor_Base<T>& tensor, Shape shape)
 {
-	static_assert(std::is_void<T>::value, "reshape has been deprecated, please use: `tensor.reshaped(ints...)` or `tensor.reshaped(Dim<x>)`;");
+	static_assert(
+			std::is_void<T>::value,
+			"reshape has been deprecated, please use: "
+			"`tensor.reshaped(ints...)` or `tensor.reshaped(Dim<x>)`;");
 }
 
 }//end of module name space

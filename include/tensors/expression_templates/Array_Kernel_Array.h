@@ -105,7 +105,7 @@ public:
 		else if (tensor_dimension == 1)
 			return i;
 		else
-			return this->leading_dimension(Shape::tensor_dimension - 1) * i;
+			return this->leading_dimension(tensor_dimension - 1) * i;
 	}
 
 
@@ -130,7 +130,8 @@ template<int N, class Allocator, class... Tags>
 auto make_kernel_array(Shape<N> shape, Allocator allocator, Tags...) {
 	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
 	using value_type = typename BC::allocator_traits<Allocator>::value_type;
-	return Kernel_Array<Shape<N>, value_type, system_tag, Tags...>(shape, allocator);
+	using array_t = Kernel_Array<Shape<N>, value_type, system_tag, Tags...>;
+	return array_t(shape, allocator);
 }
 
 

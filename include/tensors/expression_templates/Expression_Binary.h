@@ -19,9 +19,9 @@ namespace exprs {
 template<class Operation, class Lv, class Rv>
 struct Binary_Expression:
 		Expression_Base<Binary_Expression<Operation, Lv, Rv>>,
-		Operation {\
-
-	using system_tag  = typename Lv::system_tag;
+		Operation
+{
+	using system_tag = typename Lv::system_tag;
 	using value_type = std::decay_t<decltype(
 			std::declval<Operation>().operator()(
 					std::declval<typename Lv::value_type>(),
