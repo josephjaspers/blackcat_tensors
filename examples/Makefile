@@ -1,36 +1,47 @@
-CXXFLAGS = -O3 -o mnist_test_exec -std=c++1z -lm  -Wall
-CUFLAGS = -O3 -o mnist_test_exec_cu --use_fast_math -lm 
-
-CXXFILES = mnist_test.cpp
-CUFILES  = mnist_test.cu
-
-LIBS = -lblas
-
-ATLAS_BLAS_LINKAGE = -D BC_BLAS_USE_C_LINKAGE=1
-ATLASLIBS =  -lf77blas -lcblas -latlas
-CULIBS = -lcublas
-
-INCLUDE = ../include/  -I /usr/include/ -I /home/joseph/BlackCat_Tensors/BlackCat_Tensors/include/
-LIBINCLUDE = /usr/lib/
-
 default:
-	$(CXX) $(CXXFILES) $(LIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)
+	make default -C mnist_test
+	make default -C mnist_test_recurrent
+	make default -C mnist_test_convolutional
 
 atlas:
-	 $(CXX) $(ATLAS_BLAS_LINKAGE) $(CXXFILES)  $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE) $(ATLASLIBS)
+	make atlas -C mnist_test
+	make atlas -C mnist_test_recurrent
+	make atlas -C mnist_test_convolutional
 
-TRAVIS_LIBS = -lblas
+
 travis:
-	$(CXX) $(CXXVERSION) $(CXXFILES) $(TRAVIS_LIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)
+	make travis -C mnist_test
+	make travis -C mnist_test_recurrent
+	make travis -C mnist_test_convolutional
 
 cuda:
-	nvcc $(CUFILES) $(CULIBS) $(LIBS) $(CUFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)
+	make cuda -C mnist_test
+	make cuda -C mnist_test_recurrent
+	make cuda -C mnist_test_convolutional
 
 cuda_atlas:
-	nvcc $(CUFILES) $(ATLAS_BLAS_LINKAGE) $(CULIBS) $(CUFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE) $(ATLASLIBS)
-	
+	make cuda_atlas -C mnist_test
+	make cuda_atlas -C mnist_test_recurrent
+	make cuda_atlas -C mnist_test_convolutional
+
+
 clean:
-	rm -i mnist_test_exec; rm -i mnist_test_exec_cu;
+	make clean -C mnist_test
+	make clean -C mnist_test_recurrent
+	make clean -C mnist_test_convolutional
 
 clang:
-	clang $(CXXFILES) $(LIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE) -lstdc++
+	make clang -C mnist_test
+	make clang -C mnist_test_recurrent
+	make clang -C mnist_test_convolutional
+
+run:
+	cd mnist_test && ./mnist_test_exec;
+	cd mnist_test_recurrent && ./mnist_test_exec;
+	cd mnist_test_convolutional && ./mnist_test_exec;
+
+run_cuda:
+	cd mnist_test && ./mnist_test_exec_cu;
+	cd mnist_test_recurrent && ./mnist_test_exec_cu;
+	cd mnist_test_convolutional && ./mnist_test_exec_cu;
+	
