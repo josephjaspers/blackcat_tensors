@@ -23,19 +23,18 @@ class Array_Slice;
 
 template<class Shape, class Scalar, class Allocator, class... Tags>
 struct Array:
-			private Allocator,
-			public Kernel_Array<
-					Shape,
-					Scalar,
-					typename BC::allocator_traits<Allocator>::system_tag,
-					Tags...> {
-
-
+		private Allocator,
+		public Kernel_Array<
+				Shape,
+				Scalar,
+				typename BC::allocator_traits<Allocator>::system_tag,
+				Tags...>
+{
 	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
-	using allocator_type = Allocator;
-	using shape_type = Shape;
 	using value_type = Scalar;
+	using allocator_type = Allocator;
 	using stream_type = Stream<system_tag>;
+	using shape_type = Shape;
 
 private:
 
@@ -47,7 +46,7 @@ private:
 public:
 
 	const stream_type& get_stream() const { return m_stream; }
-		  stream_type& get_stream()       { return m_stream; }
+	      stream_type& get_stream()       { return m_stream; }
 
 	Allocator get_allocator() const {
 		return static_cast<const Allocator&>(*this);
@@ -79,27 +78,19 @@ public:
 		array.m_data = nullptr;
 	}
 
-	//Construct via shape-like object and Allocator
-	template<
-		class ShapeLike,
-		class=std::enable_if_t<
-			!expression_traits<ShapeLike>::is_array::value &&
-			!expression_traits<ShapeLike>::is_expr::value &&
-			ShapeLike::tensor_dimension == parent_type::tensor_dimension &&
-			Shape::tensor_dimension != 0>>
-	Array(ShapeLike param, Allocator allocator=Allocator()):
-		Allocator(allocator),
-		parent_type(typename parent_type::shape_type(param), get_allocator()) {}
+	Array(BC::Dim<shape_type::tensor_dimension> shape):
+		parent_type(shape, get_allocator()) {}
 
-	//Constructor for integer sequence, IE Matrix(m, n)
+	Array(shape_type shape):
+			parent_type(shape, get_allocator()) {}
+
 	template<
 		class... ShapeDims,
 		class=std::enable_if_t<
 			traits::sequence_of_v<BC::size_t, ShapeDims...> &&
-			sizeof...(ShapeDims) == Shape::tensor_dimension>
-	>
+			sizeof...(ShapeDims) == Shape::tensor_dimension>>
 	Array(const ShapeDims&... shape_dims):
-		parent_type(typename parent_type::shape_type(shape_dims...), get_allocator()) {}
+		parent_type(shape_type(shape_dims...), get_allocator()) {}
 
 	//Shape-like object with maybe allocator
 	template<
@@ -110,7 +101,7 @@ public:
 	Array(const Expression& expression, Allocator allocator=Allocator()):
 		Allocator(allocator),
 		parent_type(
-			typename parent_type::shape_type(expression.inner_shape()),
+			Shape(expression.inner_shape()),
 			get_allocator())
 	{
 		evaluate(
@@ -119,31 +110,26 @@ public:
 						expression.internal()), get_stream());
 	}
 
-
 	//If Copy-constructing from a slice, attempt to query the allocator
 	//Restrict to same value_type (obviously), same dimensions (for fast-copy)
 	template<class AltShape, class... SliceTags>
-	Array(const Array_Slice<
-			AltShape,
-			value_type,
-			allocator_type,
-			SliceTags...>& expression):
+	Array(
+			const Array_Slice<
+					AltShape,
+					value_type,
+					allocator_type,
+					SliceTags...>& expression):
 		Allocator(allocator_traits_t::
 			select_on_container_copy_construction(expression.get_allocator())),
-
-		parent_type(typename parent_type::shape_type(
-				expression.inner_shape()),
-				get_allocator()),
-
+		parent_type(Shape(expression.inner_shape()), get_allocator()),
 		m_stream(expression.get_stream())
 	{
-		evaluate(
-				make_bin_expr<BC::oper::Assign>(
-						this->internal(),
-						expression.internal()), get_stream());
+		evaluate(make_bin_expr<BC::oper::Assign>(
+				this->internal(), expression.internal()), get_stream());
 	}
 
 public:
+
 	Array& operator = (Array&& array) {
 		if (allocator_traits_t::is_always_equal::value ||
 			array.get_allocator() == this->get_allocator())
@@ -153,42 +139,39 @@ public:
 
 			if (allocator_traits_t::
 					propagate_on_container_move_assignment::value) {
-				static_cast<Allocator&>(*this) =
-						static_cast<Allocator&&>(array);
+				(Allocator&)(*this) = (Allocator&&)(array);
 			}
 		} else {
 			get_allocator().deallocate(this->data(), this->size());
 			(shape_type&)(*this) = (shape_type&)array;
 			this->m_data = get_allocator().allocate(this->size());
-			evaluate(
-					make_bin_expr<BC::oper::Assign>(
-							this->internal(),
-							array.internal()), get_stream());
+			evaluate(make_bin_expr<BC::oper::Assign>(
+					this->internal(), array.internal()), get_stream());
 		}
 		return *this;
 	}
 
-	void deallocate() {
+protected:
+
+	void deallocate()
+	{
 		if (this->m_data) {
 			Allocator::deallocate(this->data(), this->size());
 			this->m_data= nullptr;
 		}
 	}
-
 };
 
 
 template<class Shape, class Allocator>
-auto make_tensor_array(Shape shape, Allocator alloc) {
+auto make_tensor_array(Shape shape, Allocator alloc)
+{
 	using value_type = typename Allocator::value_type;
 	return Array<Shape, value_type, Allocator>(shape, alloc);
 }
 
-
 } //ns BC
 } //ns exprs
 } //ns tensors
-
-
 
 #endif /* SHAPE_H_ */
