@@ -41,10 +41,10 @@ struct Array_Slice:
 			m_allocator(allocator) {}
 
 	const allocator_type& get_allocator() const { return m_allocator; }
-		  allocator_type& get_allocator()	   { return m_allocator; }
+		  allocator_type& get_allocator()       { return m_allocator; }
 
 	const stream_type& get_stream() const { return m_stream; }
-		  stream_type& get_stream()	   { return m_stream; }
+		  stream_type& get_stream()       { return m_stream; }
 };
 
 namespace {

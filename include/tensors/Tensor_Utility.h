@@ -1,63 +1,12 @@
-/*  Project: BlackCat_Tensors
- *  Author: JosephJaspers
- *  Copyright 2018
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
-#ifndef BLACKCAT_TENSOR_UTILITY_H_
-#define BLACKCAT_TENSOR_UTILITY_H_
-
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <sstream>
-
-#include "io/Print.h"
-
-namespace BC {
-namespace tensors {
-
-template<class>
-class Tensor_Base;
-
-/*
- * Defines standard utility methods related to I/O
- */
-
-template<class ExpressionTemplate>
-struct Tensor_Utility {
-
 	#define BC_ASSERT_ARRAY_ONLY(literal)\
-	static_assert(exprs::expression_traits<ExpressionTemplate>::is_array::value\
-			, "BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
-
-	using system_tag = typename ExpressionTemplate::system_tag;
-	using derived = Tensor_Base<ExpressionTemplate>;
-	using value_type  = typename ExpressionTemplate::value_type;
-
-	template<class>
-	friend struct Tensor_Utility;
-
-private:
-
-	static constexpr int tensor_dimension =
-			ExpressionTemplate::tensor_dimension;
-
-	derived& as_derived() {
-		return static_cast<derived&>(*this);
-	}
-
-	const derived& as_derived() const {
-		return static_cast<const derived&>(*this);
-	}
+	static_assert(\
+		exprs::expression_traits<ExpressionTemplate>::is_array::value,\
+		"BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
 
 public:
 
 	template<class Xpr>
-	void copy(const Tensor_Utility<Xpr>& rv) {
+	void copy(const Tensor_Base<Xpr>& rv) {
 		static_assert(exprs::expression_traits<ExpressionTemplate>::is_copy_assignable::value, "copy lv must be array");
 		static_assert(exprs::expression_traits<Xpr>::is_copy_assignable::value, "copy rv most be array");
 		static_assert(ExpressionTemplate::tensor_iterator_dimension <= 1, "copy only accepts continuous");
@@ -78,16 +27,16 @@ public:
 						self = rv;
 			}, *this, rv));
 		} else if (std::is_same<system_tag, device_tag>::value) {
-			copy_impl::HostToDevice(as_derived().data(),
-					rv.as_derived().data(),
-					as_derived().size());
+			copy_impl::HostToDevice(this->data(),
+					rv.this->data(),
+					this->size());
 		} else {
-			copy_impl::DeviceToHost(as_derived().data(),
-					rv.as_derived().data(),
-					as_derived().size());
+			copy_impl::DeviceToHost(this->data(),
+					rv.this->data(),
+					this->size());
 		}
 #else
-		this->as_derived() = rv.as_derived();
+		this->*this = rv.*this;
 #endif
 	}
 
@@ -132,15 +81,15 @@ public:
 				{
 					return BC::tensors::io::to_string(
 							der, fs, BC::traits::Integer<tensor_dimension>());
-				}, as_derived()),
+				}, *this),
 
 				BC::traits::bind([&](const auto& der)
 				{
-					tensor_type copy(as_derived());
+					tensor_type copy(*this);
 					BC::device_sync();
 					return BC::tensors::io::to_string(
 							copy, fs, BC::traits::Integer<tensor_dimension>());
-				}, as_derived()));
+				}, *this));
 	}
 
 	std::string to_raw_string(int precision=8) const {
@@ -161,33 +110,27 @@ public:
 
 	void print_dimensions() const {
 		for (int i = 0; i < tensor_dimension; ++i) {
-			std::cout << "[" << as_derived().dimension(i) << "]";
+			std::cout << "[" << this->dimension(i) << "]";
 		}
 		std::cout << std::endl;
 	}
 
 	void print_leading_dimensions() const {
 		for (int i = 0; i < tensor_dimension; ++i) {
-			std::cout << "[" << as_derived().leading_dimension(i) << "]";
+			std::cout << "[" << this->leading_dimension(i) << "]";
 		}
 		std::cout << std::endl;
 	}
 
 	void print_block_dimensions() const {
 		for (int i = 0; i < tensor_dimension; ++i) {
-			std::cout << "[" << as_derived().block_dimension(i) << "]";
+			std::cout << "[" << this->block_dimension(i) << "]";
 		}
 		std::cout << std::endl;
 	}
 
 	friend std::ostream& operator << (
 			std::ostream& os,
-			const Tensor_Utility& self) {
+			const Tensor_Base& self) {
 		return os << self.to_string();
 	}
-};
-}
-}
-
-#undef BC_ASSERT_ARRAY_ONLY
-#endif /* TENSOR_LV2_CORE_IMPL_H_ */

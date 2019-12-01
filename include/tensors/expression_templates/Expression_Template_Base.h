@@ -91,6 +91,11 @@ struct Expression_Base:
 		return BC::Shape<Derived::tensor_dimension>(
 				static_cast<const Derived&>(*this).inner_shape());
 	}
+
+	BCINLINE BC::size_t outer_dimension() const {
+		auto& derived = static_cast<const Derived&>(*this);
+		return derived.dimension(derived.tensor_dimension-1);
+	}
 };
 
 

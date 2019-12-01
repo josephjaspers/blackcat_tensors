@@ -17,7 +17,6 @@ namespace tensors {
 template<class>
 class Tensor_Base;
 
-
 template<class Expression>
 struct Tensor_Operations {
 
@@ -40,16 +39,6 @@ private:
 	template<class ScalarType>
 	using enable_if_scalar = std::enable_if_t<
 			std::is_convertible<ScalarType, value_type>::value>;
-
-	template<class derived_t>
-	void evaluate(Tensor_Operations<derived_t>&& tensor) {
-		BC_ASSERT(this->as_derived().get_stream().get_allocator().allocated_bytes() == 0,
-				"Evaluation expects streams allocate_bytes to be 0 pre-evaluation");
-		exprs::evaluate(tensor.as_derived().internal(), this->as_derived().get_stream());
-
-		BC_ASSERT(this->as_derived().get_stream().get_allocator().allocated_bytes() == 0,
-				"Evaluation expects streams allocate_bytes to be 0 post-evaluation");
-	}
 
 	template<class derived_t>
 	void evaluate(const Tensor_Operations<derived_t>& tensor) {
@@ -90,8 +79,7 @@ public:
 		assert_valid(param);																		\
 		using operation = std::conditional_t<(derived::tensor_dimension >= Xpr::tensor_dimension), 						\
 					oper::op_functor##_Assign, 														\
-					oper::Atomic_##op_functor<system_tag>														\
-		>;																							\
+					oper::Atomic_##op_functor<system_tag>>;																							\
 		evaluate(bi_expr< operation >(param));														\
 		return as_derived();																		\
 	}																								\
@@ -289,25 +277,6 @@ private:
 		return make_tensor(exprs::make_bin_expr<functor>(as_derived().internal(), rv));
 	}
 
-	//----------------------------------------------validity checks--------------------------------------------------//
-	template<class Xpr>
-	bool non_scalar_op(const Tensor_Operations<Xpr>& tensor) const {
-		return derived::tensor_dimension != 0 && Xpr::tensor_dimension != 0;
-	}
-	template<class Xpr>
-	bool same_rank(const Tensor_Operations<Xpr>& tensor) const {
-		return derived::tensor_dimension == Xpr::tensor_dimension;
-	}
-	template<class Xpr>
-	bool same_size(const Tensor_Operations<Xpr>& tensor) const {
-		return this->as_derived().size() == tensor.as_derived().size();
-	}
-	template<class Xpr>
-	void assert_same_system(const Tensor_Operations<Xpr>& tensor) const {
-		static_assert(std::is_same<typename Xpr::system_tag, system_tag>::value,
-				"TENSOR OPERATIONS BETWEEN THE CPU/GPU ARE PROHIBITED");
-	}
-
 	//ensures that the smaller tensor is a same-dimensioned "slice" of the other
 	template<class Xpr>
 	bool valid_slice(const Tensor_Operations<Xpr>& tensor) const {
@@ -330,12 +299,21 @@ private:
 		throw std::invalid_argument("Tensor by Tensor operation - size mismatch - ");
 	}
 
-	template<class deriv>
-	void assert_valid(const Tensor_Operations<deriv>& tensor) const {
-		assert_same_system(tensor); //static_assert same allocation (gpu/cpu)
-		if (non_scalar_op(tensor)) {				//check if a tensor by scalar operation
-			if (same_rank(tensor)) {				//else check is same dimension (element-wise function) (
-				if (!same_size(tensor))			 //if is same dimension, ensure same size
+	template<class Xpr>
+	void assert_valid(const Tensor_Operations<Xpr>& tensor) const {
+		static_assert(std::is_same<system_tag, typename Xpr::system_tag>::value,
+				"Operations between two tensors must have the same system_tag");
+
+		bool scalar_op =
+				expression_t::tensor_dimension == 0 ||  Xpr::tensor_dimension == 0;
+		bool same_dimension =
+				expression_t::tensor_dimension == Xpr::tensor_dimension;
+		bool same_size = as_derived().size() == tensor.as_derived().size();
+
+
+		if (!scalar_op) {				//check if a tensor by scalar operation
+			if (same_dimension) {				//else check is same dimension (element-wise function) (
+				if (!same_size)			 //if is same dimension, ensure same size
 					error_message(tensor);		  //else error
 			} else if (!valid_slice(tensor)) {  //if not same dimension check if valid slice operation
 				error_message(tensor);		  //else error

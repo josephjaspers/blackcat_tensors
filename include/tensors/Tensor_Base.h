@@ -11,20 +11,17 @@
 
 #include "Tensor_Common.h"
 #include "Tensor_Operations.h"
-#include "Tensor_Accessor.h"
 #include "Tensor_IterAlgos.h"
-#include "Tensor_Utility.h"
+#include "io/Print.h"
 
 namespace BC {
 namespace tensors {
 
 
 template<class ExpressionTemplate>
-class Tensor_Base :
+class Tensor_Base:
 		public ExpressionTemplate,
 		public Tensor_Operations<ExpressionTemplate>,
-		public Tensor_Utility<ExpressionTemplate>,
-		public Tensor_Accessor<ExpressionTemplate>,
 		public Tensor_IterAlgos<ExpressionTemplate> {
 
 	template<class>
@@ -33,7 +30,6 @@ class Tensor_Base :
 	using self_type = Tensor_Base<ExpressionTemplate>;
 	using parent = ExpressionTemplate;
 	using operations = Tensor_Operations<ExpressionTemplate>;
-	using accessor = Tensor_Accessor<ExpressionTemplate>;
 
 public:
 
@@ -71,8 +67,8 @@ public:
 	using operations::operator<=;
 	using operations::operator==;
 
-	using accessor::operator[];
-	using accessor::operator();
+#include "Tensor_Utility.h"
+#include "Tensor_Accessor.h"
 
 	Tensor_Base() = default;
 	Tensor_Base(const parent&  param): parent(param) {}
