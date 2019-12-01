@@ -6,7 +6,7 @@
 
 template<class System=BC::host_tag>
 int percept_MNIST(System system_tag, std::string mnist_dataset,
-		int epochs=5, int batch_size=32, int samples=32*1024) {
+		int epochs=10, int batch_size=32, int samples=32*1024) {
 
 	using value_type     = typename System::default_floating_point_type;
 	using allocator_type = BC::Allocator<System, value_type>;
@@ -33,9 +33,9 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 				BC::dim(3, 3, 8)),  //krnl_rows, krnl_cols, numb_krnls
 		BC::nn::flatten(system_tag, BC::dim(6,6,8)),
 		BC::nn::relu(system_tag, BC::dim(6,6,8).size()),
-		BC::nn::feedforward(system_tag, BC::dim(6,6,8).size(), 64),
-		BC::nn::tanh(system_tag, 64),
-		BC::nn::feedforward(system_tag, 64, 10),
+		BC::nn::feedforward(system_tag, BC::dim(6,6,8).size(), 32),
+		BC::nn::tanh(system_tag, 32),
+		BC::nn::feedforward(system_tag, 32, 10),
 		BC::nn::softmax(system_tag, 10),
 		BC::nn::logging_output_layer(system_tag, 10, BC::nn::RMSE).skip_every(100)
 	);
