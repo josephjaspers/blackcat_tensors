@@ -6,11 +6,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#define BC_ASSERT_VIEWABLE\
+	#define BC_ASSERT_VIEWABLE\
 		static_assert(\
 				exprs::expression_traits<ExpressionTemplate>::is_array::value,\
 				"Views are only available to Memory owning types");
-
 public:
 
 	const auto operator [](BC::size_t i) const {
@@ -227,3 +226,5 @@ public:
 	const auto flattened() const {
 		return this->reshaped(this->size());
 	}
+
+#undef BC_ASSERT_VIEWABLE
