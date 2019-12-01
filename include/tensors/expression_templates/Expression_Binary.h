@@ -117,6 +117,11 @@ public:
 };
 
 
+template<class Op, class Lv, class Rv> BCHOT
+auto make_bin_expr(Lv left, Rv right, Op oper) {
+	return Binary_Expression<Op,Lv, Rv>(left, right, oper);
+}
+
 template<class Op, class Lv, class Rv, class... Args> BCHOT
 auto make_bin_expr(Lv left, Rv right, Args&&... args) {
 	return Binary_Expression<Op,Lv, Rv>(left, right, args...);

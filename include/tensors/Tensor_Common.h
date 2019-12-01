@@ -28,7 +28,8 @@ template<class> class Tensor_Base;
 template<class ExpressionTemplate>
 auto make_tensor(ExpressionTemplate expression) {
 	static_assert(
-		exprs::expression_traits<ExpressionTemplate>::is_expression_template::value,
+		exprs::expression_traits<ExpressionTemplate>
+				::is_expression_template::value,
 		"Make Tensor can only be used with Expression_Template");
 	return Tensor_Base<ExpressionTemplate>(expression);
 }

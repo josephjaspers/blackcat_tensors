@@ -74,6 +74,13 @@ public:
 		return *this;
 	}
 
+	Tensor_Base& operator = (tensor_copy_type param) {
+		//From tensor_operations.h"
+		assert_valid(param);
+		evaluate(bi_expr< oper::Assign >(param));
+		return *this;
+	}
+
 	Tensor_Base(BC::traits::only_if<tensor_dimension==0, value_type> scalar) {
 		static_assert(tensor_dimension == 0,
 				"SCALAR_INITIALIZATION ONLY AVAILABLE TO SCALARS");
