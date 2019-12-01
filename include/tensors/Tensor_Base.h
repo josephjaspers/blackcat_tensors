@@ -69,7 +69,7 @@ public:
 	Tensor_Base(tensor_move_type tensor):
 		expression_type(std::move(tensor.as_expression_type())) {}
 
-	Tensor_Base& operator =(BC::traits::only_if<move_assignable::value, self_type&&> tensor) noexcept {
+	Tensor_Base& operator =(tensor_move_type tensor) noexcept {
 		this->as_expression_type() = std::move(tensor.as_expression_type());
 		return *this;
 	}
