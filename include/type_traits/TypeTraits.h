@@ -62,6 +62,20 @@ using truth_type = conditional_t<cond, true_type, false_type>;
 template<bool cond>
 using not_type = conditional_t<cond, false_type, true_type>;
 
+//--------------------------------
+template<class From, class To>
+struct propagate_const {
+	using type = To;
+};
+
+template<class From, class To>
+struct propagate_const<const From, To> {
+	using type = const To;
+};
+
+template<class From, class To>
+using propagate_const_t = typename propagate_const<From, To>::type;
+
 //----------------------------------
 
 template<template<class> class func, class T, class voider=void>

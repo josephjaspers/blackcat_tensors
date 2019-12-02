@@ -67,6 +67,9 @@
 
 
 #define BC_ITERATOR_DEF(suffix, iterator_name, begin_func, end_func)     \
+                                                                         \
+private:                                                                 \
+                                                                         \
     template<class Tensor>                                               \
     struct iterator_name {                                               \
                                                                          \
@@ -108,24 +111,17 @@
         }                                                                \
     };                                                                   \
                                                                          \
-private:                                                                 \
-                                                                         \
-template<class der_t, class... args>                                     \
-static auto make_##iterator_name (der_t& p_derived, args... params) {    \
-    return iterator_name<der_t>(p_derived, params...);                   \
-}                                                                        \
-                                                                         \
 public:                                                                  \
                                                                          \
 template<class... params> auto suffix##iter(params... ps) const {        \
     return make_##iterator_name (*this, ps...);                          \
 }                                                                        \
                                                                          \
-template<class... params> auto suffix##const_iter(params... ps) const {  \
+template<class... params> auto suffix##iter(params... ps) {              \
     return make_##iterator_name (*this, ps...);                          \
 }                                                                        \
                                                                          \
-template<class... params> auto suffix##iter(params... ps) {              \
+template<class... params> auto suffix##const_iter(params... ps) const {  \
     return make_##iterator_name (*this, ps...);                          \
 }                                                                        \
 

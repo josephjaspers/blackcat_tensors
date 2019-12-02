@@ -55,19 +55,29 @@ public:
 
 namespace {
 
-template<int Dimension, class Parent, class... Tags>
-using slice_type_from_parent = Array_Slice<
-		BC::Shape<BC::traits::max(Dimension,0)>,
+template<class Shape, class Parent, class... Tags>
+using slice_type_factory = Array_Slice<
+		Shape,
 		typename Parent::value_type,
 		typename Parent::allocator_type,
-		BC_View, Tags...>;
+		std::conditional_t<
+					std::is_const<Parent>::value ||
+					expression_traits<Parent>::is_const_view::value,
+				BC_Const_View,
+				BC_View>,
+		Tags...>;
 
 template<int Dimension, class Parent, class... Tags>
-using strided_slice_type_from_parent = Array_Slice<
+using slice_type_from_parent = slice_type_factory<
+		BC::Shape<BC::traits::max(Dimension,0)>,
+		Parent,
+		Tags...>;
+
+template<int Dimension, class Parent, class... Tags>
+using strided_slice_type_from_parent = slice_type_factory<
 		std::enable_if_t<Dimension==1, Strided_Vector_Shape>,
-		typename Parent::value_type,
-		typename Parent::allocator_type,
-		BC_View, Tags...>;
+		Parent,
+		Tags...>;
 }
 
 template<class Parent>

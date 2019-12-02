@@ -52,6 +52,13 @@ struct Kernel_Array:
 	using system_tag = SystemTag;
 	using shape_type = Shape;
 
+private:
+
+using return_type = std::conditional_t<
+		BC::traits::sequence_contains_v<BC_Const_View, Tags...>,
+		const value_type,
+		value_type>;
+
 protected:
 
 	value_type* m_data = nullptr;
@@ -63,7 +70,11 @@ public:
 	Kernel_Array(shape_type shape, value_type* ptr):
 		shape_type(shape), m_data(ptr) {};
 
-	template<class AllocatorType>
+	template<
+		class AllocatorType,
+		class=std::enable_if_t<
+				BC::traits::true_v<
+						decltype(std::declval<AllocatorType>().allocate(0))>>>
 	Kernel_Array(shape_type shape, AllocatorType allocator):
 		shape_type(shape),
 		m_data(allocator.allocate(this->size())) {};
@@ -79,22 +90,22 @@ public:
 	}
 
 	BCINLINE
-	const auto& operator [](BC::size_t index) const {
+	const return_type& operator [](BC::size_t index) const {
 		return m_data[this->coefficientwise_dims_to_index(index)];
 	}
 
 	BCINLINE
-	auto& operator [](BC::size_t index) {
+	return_type& operator [](BC::size_t index) {
 		return m_data[this->coefficientwise_dims_to_index(index)];
 	}
 
 	template<class ... Integers> BCINLINE
-	const auto& operator ()(Integers ... ints) const {
+	const return_type& operator ()(Integers ... ints) const {
 		return m_data[this->dims_to_index(ints...)];
 	}
 
 	template<class ... Integers> BCINLINE
-	auto& operator ()(Integers ... ints) {
+	return_type& operator ()(Integers ... ints) {
 		return m_data[this->dims_to_index(ints...)];
 	}
 

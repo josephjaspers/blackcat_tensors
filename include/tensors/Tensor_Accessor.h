@@ -112,7 +112,6 @@ public:
 	auto shallow_copy()
 	{
 		BC_ASSERT_VIEWABLE
-		BC_ASSERT_VIEWABLE
 		return make_tensor(
 				exprs::make_view(*this, this->get_shape()));
 	}

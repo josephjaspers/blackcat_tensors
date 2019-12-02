@@ -36,6 +36,8 @@ BC_QUERY_TAG(stack_allocated)
 BC_QUERY_TAG(optimizer_temporary)
 BC_QUERY_TAG(expression_template_expression_type);
 BC_QUERY_TAG(expression_template_array_type);
+BC_QUERY_TAG(is_view)
+BC_QUERY_TAG(is_const_view)
 
 } //end of ns detail
 
@@ -49,12 +51,20 @@ BC_TAG_DEFINITION(noncontinuous_memory_tag, is_noncontinuous_in_memory, std::tru
 #undef BC_TAG_DEFINITION
 #undef BC_QUERY_TAG
 
-
 class BC_View {
-	using is_view_type = std::true_type;
+	using is_view = std::true_type;
 	using copy_constructible = std::false_type;
 	using move_constructible = std::false_type;
     using copy_assignable    = std::true_type;
+	using move_assignable    = std::false_type;
+};
+
+class BC_Const_View {
+	using is_view = std::true_type;
+	using is_const_view = std::true_type;
+	using copy_constructible = std::false_type;
+	using move_constructible = std::false_type;
+    using copy_assignable    = std::false_type;
 	using move_assignable    = std::false_type;
 };
 
@@ -73,6 +83,12 @@ struct expression_traits {
 
 	using value_type = BC::traits::conditional_detected_t<
 			detail::query_value_type, T, void>;
+
+	using is_const_view = BC::traits::conditional_detected_t<
+			detail::query_is_const_view, T, std::false_type>;
+
+	using is_view = BC::traits::conditional_detected_t<
+			detail::query_is_view, T, is_const_view>;
 
 	using is_move_constructible = BC::traits::conditional_detected_t<
 			detail::query_move_constructible, T, std::true_type>;
