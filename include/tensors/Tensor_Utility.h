@@ -28,11 +28,11 @@ public:
 			}, *this, rv));
 		} else if (std::is_same<system_tag, device_tag>::value) {
 			copy_impl::HostToDevice(this->data(),
-					rv.this->data(),
+					rv.data(),
 					this->size());
 		} else {
 			copy_impl::DeviceToHost(this->data(),
-					rv.this->data(),
+					rv.data(),
 					this->size());
 		}
 #else
