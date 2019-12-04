@@ -17,6 +17,8 @@ using BC::algorithms::reference_list;
 
 template<class SystemTag,
 		class ValueType,
+		template<class>
+		class Optimizer=Momentum,
 		class ForgetGateNonlinearity=BC::Logistic,
 		class WriteGateNonlinearity=BC::Tanh,
 		class InputGateNonlinearity=BC::Logistic,
@@ -26,6 +28,7 @@ struct LSTM:
 		public Layer_Base<LSTM<
 				SystemTag,
 				ValueType,
+				Optimizer,
 				ForgetGateNonlinearity,
 				WriteGateNonlinearity,
 				InputGateNonlinearity,
@@ -37,6 +40,7 @@ struct LSTM:
 	using parent_type = Layer_Base<LSTM<
 			SystemTag,
 			ValueType,
+			Optimizer,
 			ForgetGateNonlinearity,
 			WriteGateNonlinearity,
 			InputGateNonlinearity,
@@ -67,6 +71,9 @@ private:
 	InputGateNonlinearity i_g;
 	OutputGateNonlinearity o_g;
 
+	using mat_opt_t = Optimizer<mat>;
+	using vec_opt_t = Optimizer<vec>;
+
 	mat wf, wz, wi, wo;
 	mat wf_gradients, wz_gradients, wi_gradients, wo_gradients;
 
@@ -75,6 +82,10 @@ private:
 
 	vec bf, bz, bi, bo;
 	vec bf_gradients, bz_gradients, bi_gradients, bo_gradients;
+
+	mat_opt_t wf_opt, wz_opt, wi_opt, wo_opt;
+	mat_opt_t rf_opt, rz_opt, ri_opt, ro_opt;
+	vec_opt_t bf_opt, bz_opt, bi_opt, bo_opt;
 
 	mat dc, df, dz, di, do_, dy;
 
@@ -126,8 +137,29 @@ public:
 			bf_gradients(outputs),
 			bz_gradients(outputs),
 			bi_gradients(outputs),
-			bo_gradients(outputs) {
+			bo_gradients(outputs),
 
+			wf_opt(outputs, inputs),
+			wz_opt(outputs, inputs),
+			wi_opt(outputs, inputs),
+			wo_opt(outputs, inputs),
+
+			rf_opt(outputs, outputs),
+			rz_opt(outputs, outputs),
+			ri_opt(outputs, outputs),
+			ro_opt(outputs, outputs),
+
+			bf_opt(outputs),
+			bz_opt(outputs),
+			bi_opt(outputs),
+			bo_opt(outputs)
+	{
+		randomize_weights();
+		zero_gradients();
+	}
+
+	void randomize_weights()
+	{
 		wf.randomize(-1, 0);
 		wz.randomize(-.1, .1);
 		wi.randomize(-.1, .1);
@@ -142,12 +174,11 @@ public:
 		bz.randomize(-.1, .1);
 		bi.randomize(-.1, .1);
 		bo.randomize(0, .5);
-
-		zero_gradients();
 	}
 
 	template<class X, class Y>
-	auto forward_propagation(const X& x, const Y& y, Cache& cache) {
+	auto forward_propagation(const X& x, const Y& y, Cache& cache)
+	{
 		mat& f = cache.store(forget_key(), f_g(wf * x + rf * y + bf));
 		mat& z = cache.store(write_key(),  z_g(wz * x + rz * y + bz));
 		mat& i = cache.store(input_key(),  i_g(wi * x + ri * y + bi));
@@ -162,7 +193,8 @@ public:
 #ifndef _MSC_VER
 
 	template<class X, class Y>
-	auto predict(const X& x, const Y& y, Cache& cache) {
+	auto predict(const X& x, const Y& y, Cache& cache)
+	{
 		mat f = f_g(wf * x + rf * y + bf);
 		mat z = z_g(wz * x + rz * y + bz);
 		mat i = i_g(wi * x + ri * y + bi);
@@ -177,7 +209,8 @@ public:
 #endif
 
 	template<class X, class Y>
-	auto single_predict(const X& x, const Y& y, Cache& cache) {
+	auto single_predict(const X& x, const Y& y, Cache& cache)
+	{
 		vec f = f_g(wf * x + rf * y + bf);
 		vec z = z_g(wz * x + rz * y + bz);
 		vec i = i_g(wi * x + ri * y + bi);
@@ -189,7 +222,9 @@ public:
 	}
 
 	template<class X, class Y, class Delta>
-	auto back_propagation(const X& x, const Y& y, const Delta& delta_outputs, class Cache& cache) {
+	auto back_propagation(const X& x, const Y& y,
+			const Delta& delta_outputs, class Cache& cache)
+	{
 		//LSTM Backprop reference
 		//Reference: https://arxiv.org/pdf/1503.04069.pdf
 
@@ -242,27 +277,46 @@ public:
 				wo.t() * do_;
 	}
 
-	void update_weights() {
-		ValueType lr = this->get_batched_learning_rate();
-		wz += wz_gradients * lr;
-		wf += wf_gradients * lr;
-		wi += wi_gradients * lr;
-		wo += wo_gradients * lr;
+	void update_weights()
+	{
+		wz_opt.update(wz, wz_gradients);
+		wf_opt.update(wf, wf_gradients);
+		wi_opt.update(wi, wi_gradients);
+		wo_opt.update(wo, wo_gradients);
 
-		rz += rz_gradients * lr;
-		rf += rf_gradients * lr;
-		ri += ri_gradients * lr;
-		ro += ro_gradients * lr;
+		rz_opt.update(rz, rz_gradients);
+		rf_opt.update(rf, rf_gradients);
+		ri_opt.update(ri, ri_gradients);
+		ro_opt.update(ro, ro_gradients);
 
-		bz += bz_gradients * lr;
-		bf += bf_gradients * lr;
-		bi += bi_gradients * lr;
-		bo += bo_gradients * lr;
+		bz_opt.update(bz, bz_gradients);
+		bf_opt.update(bf, bf_gradients);
+		bi_opt.update(bi, bi_gradients);
+		bo_opt.update(bo, bo_gradients);
 
 		zero_gradients();
 	}
 
-	void set_batch_size(int bs) {
+	void set_learning_rate(value_type lr)
+	{
+		parent_type::set_learning_rate(lr);
+
+		auto optimizers = reference_list(
+				wz_opt, wf_opt, wi_opt, wo_opt,
+				rz_opt, rf_opt, ri_opt, ro_opt);
+
+		auto bias_optimizers = reference_list(
+				bf_opt, bz_opt, bi_opt, bo_opt);
+
+		for (auto& optimizer : optimizers)
+			optimizer.set_learning_rate(lr);
+
+		for (auto& optimizer : bias_optimizers)
+			optimizer.set_learning_rate(lr);
+	}
+
+	void set_batch_size(int bs)
+	{
 		parent_type::set_batch_size(bs);
 
 		auto make_default =  [&](){
@@ -276,13 +330,15 @@ public:
 		}
 	}
 
-	void zero_deltas() {
+	void zero_deltas()
+	{
 		for (auto& delta : reference_list(dc, df, di, dz, do_, dy)) {
 			delta.zero();
 		}
 	}
 
-	void zero_gradients() {
+	void zero_gradients()
+	{
 		for (auto& grad : reference_list(
 				wf_gradients, wz_gradients, wi_gradients, wo_gradients,
 				rf_gradients, rz_gradients, ri_gradients, ro_gradients)) {
@@ -295,7 +351,8 @@ public:
 		}
 	}
 
-	void clear_bp_storage(Cache& m_cache) {
+	void clear_bp_storage(Cache& m_cache)
+	{
 		m_cache.clear_bp_storage(cell_key());
 		m_cache.clear_bp_storage(write_key());
 		m_cache.clear_bp_storage(input_key());
@@ -303,7 +360,8 @@ public:
 		m_cache.clear_bp_storage(output_key());
 	}
 
-	void save(Layer_Loader& loader) {
+	void save(Layer_Loader& loader)
+	{
 		loader.save_variable(wf, "wf");
 		loader.save_variable(rf, "rf");
 		loader.save_variable(bf, "bf");
@@ -321,7 +379,8 @@ public:
 		loader.save_variable(bo, "bo");
 	}
 
-	void save_from_cache(Layer_Loader& loader, Cache& cache) {
+	void save_from_cache(Layer_Loader& loader, Cache& cache)
+	{
 		auto& c = cache.load(cell_key(), default_tensor_factory());
 		loader.save_variable(c, "cellstate");
 
@@ -332,7 +391,8 @@ public:
 		}
 	}
 
-	void load(Layer_Loader& loader) {
+	void load(Layer_Loader& loader)
+	{
 		loader.load_variable(wf, "wf");
 		loader.load_variable(rf, "rf");
 		loader.load_variable(bf, "bf");
@@ -350,7 +410,8 @@ public:
 		loader.load_variable(bo, "bo");
 	}
 
-	void load_from_cache(Layer_Loader& loader, Cache& cache) {
+	void load_from_cache(Layer_Loader& loader, Cache& cache)
+	{
 		auto& c = cache.load(cell_key(), default_tensor_factory());
 		loader.load_variable(c, "cellstate");
 
@@ -360,7 +421,8 @@ public:
 		}
 	}
 
-	void copy_training_data_to_single_predict(Cache& cache, int batch_index) {
+	void copy_training_data_to_single_predict(Cache& cache, int batch_index)
+	{
 		auto& pc = cache.load(predict_cell_key(), default_predict_tensor_factory());
 		auto& c = cache.load(cell_key(), default_tensor_factory());
 		pc = c[batch_index];
@@ -368,7 +430,8 @@ public:
 
 private:
 
-	auto default_tensor_factory() {
+	auto default_tensor_factory()
+	{
 		return [&]() {
 			mat m(this->output_size(), this->batch_size());
 			m.zero();
@@ -376,7 +439,8 @@ private:
 		};
 	}
 
-	auto default_predict_tensor_factory() {
+	auto default_predict_tensor_factory()
+	{
 		 return [&]() {
 			 return vec(this->output_size()).zero();
 		 };

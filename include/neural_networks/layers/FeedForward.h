@@ -15,7 +15,8 @@ namespace nn {
 
 template<
 	class SystemTag,
-	class ValueType>
+	class ValueType,
+	template<class> class Optimizer=Momentum>
 struct FeedForward:
 		public Layer_Base<FeedForward<SystemTag, ValueType>> {
 
@@ -26,6 +27,9 @@ struct FeedForward:
 
 	using mat = BC::Matrix<value_type, allocator_type>;
 	using vec = BC::Vector<value_type, allocator_type>;
+
+	using mat_optimizer_t = Optimizer<mat>;
+	using vec_optimizer_t = Optimizer<vec>;
 
 	using greedy_evaluate_delta = std::true_type;
 
@@ -39,6 +43,10 @@ private:
 	mat w_gradients;
 	vec b_gradients;
 
+	mat_optimizer_t w_opt;
+	vec_optimizer_t b_opt;
+
+
 public:
 
 	FeedForward(BC::size_t inputs, BC::size_t outputs):
@@ -46,7 +54,9 @@ public:
 		w(outputs, inputs),
 		b(outputs),
 		w_gradients(outputs, inputs),
-		b_gradients(outputs)
+		b_gradients(outputs),
+		w_opt(w.get_shape()),
+		b_opt(b.get_shape())
 	{
 		w.randomize(-2, 2);
 		b.randomize(-2, 2);
@@ -55,31 +65,41 @@ public:
 	}
 
 	template<class Matrix>
-	auto forward_propagation(const Matrix& x) {
+	auto forward_propagation(const Matrix& x)
+	{
 		return w * x + b;
 	}
 
 	template<class X, class Delta>
-	auto back_propagation(const X& x, const Delta& dy) {
+	auto back_propagation(const X& x, const Delta& dy)
+	{
 		w_gradients -= dy  * x.t();
 		b_gradients -= dy;
 		return w.t() * dy;
 	}
 
-	void update_weights() {
-		ValueType lr = this->lr / this->batch_size();
-		w += w_gradients * lr;
-		b += b_gradients * lr;
+	void set_learning_rate(value_type lr) {
+		parent_type::set_learning_rate(lr);
+		w_opt.set_learning_rate(lr);
+		b_opt.set_learning_rate(lr);
+	}
+
+	void update_weights()
+	{
+		w_opt.update(w, w_gradients);
+		b_opt.update(b, b_gradients);
 		w_gradients.zero();
 		b_gradients.zero();
 	}
 
-	void save(Layer_Loader& loader) {
+	void save(Layer_Loader& loader)
+	{
 		loader.save_variable(w, "w");
 		loader.save_variable(b, "b");
 	}
 
-	void load(Layer_Loader& loader) {
+	void load(Layer_Loader& loader)
+	{
 		loader.load_variable(w, "w");
 		loader.load_variable(b, "b");
 	}
