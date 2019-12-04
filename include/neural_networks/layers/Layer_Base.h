@@ -68,14 +68,28 @@ public:
 	 * Note: Architecture dependent
 	 */
 	std::string classname() const { return m_classname; }
-	std::string get_string_architecture() const {
-		std::string yaml =  classname() + ':'
-				+ "\n\tinputs: " + std::to_string(input_size())
-				+ "\n\toutputs: " + std::to_string(output_size());
 
-		if (m_additional_architecture_features != "") {
-			yaml += "\n\t" + m_additional_architecture_features;
+private:
+	template<class T>
+	using query_optimizer_type = typename T::optimizer_type;
+public:
+
+	template<int ADL=0>
+	std::string get_string_architecture() const {
+		std::string yaml = classname() + ':'
+				+ "\n\tinput_shape: " +
+				as_derived().get_input_shape().to_string();
+
+		using optimizer_type = BC::traits::conditional_detected_t<
+				query_optimizer_type, DerivedLayer, BC::traits::None>;
+
+		if (!std::is_same<optimizer_type, BC::traits::None>::value) {
+			yaml += "\n\toptimizer: ";
+			yaml += parse_classname(bc_get_classname_of(optimizer_type()));
 		}
+
+		if (m_additional_architecture_features != "")
+			yaml += "\n\t" + m_additional_architecture_features;
 
 		return yaml;
 	}

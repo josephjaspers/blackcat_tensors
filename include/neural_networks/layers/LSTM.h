@@ -17,8 +17,7 @@ using BC::algorithms::reference_list;
 
 template<class SystemTag,
 		class ValueType,
-		template<class>
-		class Optimizer=Momentum,
+		class Optimizer=Stochastic_Gradient_Descent,
 		class ForgetGateNonlinearity=BC::Logistic,
 		class WriteGateNonlinearity=BC::Tanh,
 		class InputGateNonlinearity=BC::Logistic,
@@ -48,6 +47,7 @@ struct LSTM:
 			CellStateNonLinearity>>;
 
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
+	using optimizer_type = Optimizer;
 
 	using mat = BC::Matrix<value_type, allocator_type>;
 	using vec = BC::Vector<value_type, allocator_type>;
@@ -71,8 +71,8 @@ private:
 	InputGateNonlinearity i_g;
 	OutputGateNonlinearity o_g;
 
-	using mat_opt_t = Optimizer<mat>;
-	using vec_opt_t = Optimizer<vec>;
+	using mat_opt_t = typename Optimizer::template Optimizer<mat>;
+	using vec_opt_t = typename Optimizer::template Optimizer<vec>;
 
 	mat wf, wz, wi, wo;
 	mat wf_gradients, wz_gradients, wi_gradients, wo_gradients;
@@ -448,21 +448,20 @@ private:
 
 };
 
-#ifndef BC_CLING_JIT
-template<class ValueType, class SystemTag>
-LSTM<SystemTag, ValueType> lstm(SystemTag system_tag, int inputs, int outputs) {
-	return LSTM<SystemTag, ValueType>(inputs, outputs);
-}
-#endif
-
-template<class SystemTag>
-auto lstm(SystemTag system_tag, int inputs, int outputs) {
-	return LSTM<SystemTag, typename SystemTag::default_floating_point_type>(inputs, outputs);
+template<class SystemTag, class Optimizer=nn_default_optimizer_type>
+auto lstm(SystemTag system_tag, int inputs, int outputs, Optimizer=Optimizer()) {
+	return LSTM<
+			SystemTag,
+			typename SystemTag::default_floating_point_type,
+			Optimizer>(inputs, outputs);
 }
 
-auto lstm(int inputs, int outputs) {
-	return LSTM<BLACKCAT_DEFAULT_SYSTEM_T,
-			typename BLACKCAT_DEFAULT_SYSTEM_T::default_floating_point_type>(inputs, outputs);
+template<class Optimizer=nn_default_optimizer_type>
+auto lstm(int inputs, int outputs, Optimizer=Optimizer()) {
+	return LSTM<
+			BLACKCAT_DEFAULT_SYSTEM_T,
+			typename BLACKCAT_DEFAULT_SYSTEM_T::default_floating_point_type,
+			Optimizer>(inputs, outputs);
 }
 
 

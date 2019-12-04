@@ -16,20 +16,21 @@ namespace nn {
 template<
 	class SystemTag,
 	class ValueType,
-	template<class> class Optimizer=Momentum>
+	class Optimizer=Stochastic_Gradient_Descent>
 struct FeedForward:
-		public Layer_Base<FeedForward<SystemTag, ValueType>> {
+		public Layer_Base<FeedForward<SystemTag, ValueType, Optimizer>> {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	using parent_type = Layer_Base<FeedForward<SystemTag, ValueType>>;
+	using parent_type = Layer_Base<FeedForward<SystemTag, ValueType, Optimizer>>;
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
+	using optimizer_type = Optimizer;
 
 	using mat = BC::Matrix<value_type, allocator_type>;
 	using vec = BC::Vector<value_type, allocator_type>;
 
-	using mat_optimizer_t = Optimizer<mat>;
-	using vec_optimizer_t = Optimizer<vec>;
+	using mat_opt_t = typename Optimizer::template Optimizer<mat>;
+	using vec_opt_t = typename Optimizer::template Optimizer<vec>;
 
 	using greedy_evaluate_delta = std::true_type;
 
@@ -43,8 +44,8 @@ private:
 	mat w_gradients;
 	vec b_gradients;
 
-	mat_optimizer_t w_opt;
-	vec_optimizer_t b_opt;
+	mat_opt_t w_opt;
+	vec_opt_t b_opt;
 
 
 public:
@@ -78,7 +79,8 @@ public:
 		return w.t() * dy;
 	}
 
-	void set_learning_rate(value_type lr) {
+	void set_learning_rate(value_type lr)
+	{
 		parent_type::set_learning_rate(lr);
 		w_opt.set_learning_rate(lr);
 		b_opt.set_learning_rate(lr);
@@ -105,21 +107,17 @@ public:
 	}
 };
 
-#ifndef BC_CLING_JIT
-template<class ValueType, class SystemTag>
-FeedForward<SystemTag, ValueType> feedforward(SystemTag system_tag, int inputs, int outputs) {
-	return FeedForward<SystemTag, ValueType>(inputs, outputs);
-}
-#endif
-
-template<class SystemTag>
-auto feedforward(SystemTag system_tag, int inputs, int outputs) {
-	return FeedForward<SystemTag, typename SystemTag::default_floating_point_type>(inputs, outputs);
+template<class SystemTag, class Optimizer=nn_default_optimizer_type>
+auto feedforward(SystemTag system_tag, int inputs, int outputs, Optimizer=Optimizer()) {
+	using value_type = typename SystemTag::default_floating_point_type;
+	return FeedForward<SystemTag, value_type, Optimizer>(inputs, outputs);
 }
 
-auto feedforward(int inputs, int outputs) {
-	return FeedForward<BLACKCAT_DEFAULT_SYSTEM_T,
-			typename BLACKCAT_DEFAULT_SYSTEM_T::default_floating_point_type>(inputs, outputs);
+template<class Optimizer=nn_default_optimizer_type>
+auto feedforward(int inputs, int outputs, Optimizer=Optimizer()) {
+	using system_tag = BLACKCAT_DEFAULT_SYSTEM_T;
+	using value_type = typename system_tag::default_floating_point_type;
+	return FeedForward<system_tag, value_type, Optimizer>(inputs, outputs);
 }
 
 

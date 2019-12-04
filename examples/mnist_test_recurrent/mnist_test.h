@@ -25,7 +25,6 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	BC::print("Neural Network architecture:");
 	BC::print(network.get_string_architecture());
 
-	network.set_learning_rate(0.03);
 	network.set_batch_size(batch_size);
 
 	std::pair<cube, cube> data = load_mnist(

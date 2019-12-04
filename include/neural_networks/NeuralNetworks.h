@@ -14,7 +14,6 @@
 #include "optimzers/Momentum.h"
 
 #include "Layer_Cache.h"
-#include "layers/GreedyFeedForward.h"
 #include "layers/FeedForward.h"
 #include "layers/UnaryFunction.h"
 #include "layers/Nonlinear.h"

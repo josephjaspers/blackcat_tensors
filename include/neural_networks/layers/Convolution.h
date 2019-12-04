@@ -16,17 +16,19 @@ namespace nn {
 template<
 	class SystemTag,
 	class ValueType,
+	class Optimizer=Stochastic_Gradient_Descent,
 	class IsRecurrent=std::false_type>
 struct Convolution:
 		public Layer_Base<
-				Convolution<SystemTag, ValueType, IsRecurrent>> {
+				Convolution<SystemTag, ValueType, Optimizer, IsRecurrent>> {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
-	using parent_type = Layer_Base<
-			Convolution<SystemTag, ValueType, IsRecurrent>>;
+	using optimizer_type = Optimizer;
 
+	using parent_type = Layer_Base<
+			Convolution<SystemTag, ValueType, Optimizer, IsRecurrent>>;
 	using mat = BC::Matrix<value_type, allocator_type>;
 	using tensor4 = BC::Tensor<4, value_type, allocator_type>;
 	using cube = BC::Cube<value_type, allocator_type>;
@@ -40,10 +42,13 @@ struct Convolution:
 
 private:
 
+	using mat_opt_t = typename Optimizer::template Optimizer<mat>;
+
 	allocator_type m_allocator;
 
 	mat w;  //dims=[kernel_size, numb_kernels]
 	mat w_gradients;
+	mat_opt_t w_opt;
 
 	Dim<3> m_input_shape;
 	Dim<3> m_krnl_shape; //dims=[rows, cols, numb_kernels]
@@ -82,6 +87,7 @@ public:
 		parent_type(__func__),
 		w(krnl_dims.prod(2)*img_dims[2], krnl_dims[2]),
 		w_gradients(w.get_shape()),
+		w_opt(w.get_shape()),
 		m_input_shape(img_dims),
 		m_krnl_shape(krnl_dims),
 		m_padding(padding),
@@ -153,8 +159,13 @@ public:
 	}
 
 	void update_weights() {
-		w += w_gradients * this->get_batched_learning_rate();
+		w_opt.update(w, w_gradients);
 		w_gradients.zero();
+	}
+
+	void set_learning_rate(value_type lr) {
+		parent_type::set_learning_rate(lr);
+		w_opt.set_learning_rate(lr);
 	}
 
 	void save(Layer_Loader& loader) {
@@ -166,35 +177,92 @@ public:
 	}
 };
 
-#ifndef BC_CLING_JIT
-template<class ValueType, class SystemTag, bool isRecurrent=false>
+
+template<
+		class SystemTag=BLACKCAT_DEFAULT_SYSTEM_T,
+		class Optimizer=nn_default_optimizer_type>
 auto convolution(
 		SystemTag system_tag,
 		Dim<3> img_dims,
 		Dim<3> krnl_dims,
 		Dim<2> padding=Dim<2>().fill(0),
 		Dim<2> strides=Dim<2>().fill(1),
-		Dim<2> dilation=Dim<2>().fill(1))
+		Dim<2> dilation=Dim<2>().fill(1),
+		Optimizer=Optimizer())
 {
+	using value_type = typename SystemTag::default_floating_point_type;
 	return Convolution<
 			SystemTag,
-			ValueType,
-			BC::traits::truth_type<isRecurrent>>(
+			value_type,
+			Optimizer>(
 					img_dims,
 					krnl_dims,
 					padding,
 					strides,
 					dilation);
 }
-#endif
+
 
 template<
 		class SystemTag=BLACKCAT_DEFAULT_SYSTEM_T,
-		bool isRecurrent=false>
+		class Optimizer=nn_default_optimizer_type>
+auto recurrent_convolution(
+		SystemTag system_tag,
+		Dim<3> img_dims,
+		Dim<3> krnl_dims,
+		Dim<2> padding=Dim<2>().fill(0),
+		Dim<2> strides=Dim<2>().fill(1),
+		Dim<2> dilation=Dim<2>().fill(1),
+		Optimizer=Optimizer())
+{
+	using value_type = typename SystemTag::default_floating_point_type;
+	return Convolution<
+			SystemTag,
+			value_type,
+			Optimizer,
+			std::true_type>(
+					img_dims,
+					krnl_dims,
+					padding,
+					strides,
+					dilation);
+}
+
+
+template<
+		class SystemTag=BLACKCAT_DEFAULT_SYSTEM_T,
+		class Optimizer=nn_default_optimizer_type>
 auto convolution(
 		SystemTag system_tag,
 		Dim<3> img_dims,
 		Dim<3> krnl_dims,
+		Optimizer=Optimizer(),
+		Dim<2> padding=Dim<2>().fill(0),
+		Dim<2> strides=Dim<2>().fill(1),
+		Dim<2> dilation=Dim<2>().fill(1),
+		Optimizer=Optimizer())
+{
+	using value_type = typename SystemTag::default_floating_point_type;
+	return Convolution<
+			SystemTag,
+			value_type,
+			Optimizer>(
+					img_dims,
+					krnl_dims,
+					padding,
+					strides,
+					dilation);
+}
+
+
+template<
+		class SystemTag=BLACKCAT_DEFAULT_SYSTEM_T,
+		class Optimizer=nn_default_optimizer_type>
+auto recurrent_convolution(
+		SystemTag system_tag,
+		Dim<3> img_dims,
+		Dim<3> krnl_dims,
+		Optimizer=Optimizer(),
 		Dim<2> padding=Dim<2>().fill(0),
 		Dim<2> strides=Dim<2>().fill(1),
 		Dim<2> dilation=Dim<2>().fill(1))
@@ -203,13 +271,15 @@ auto convolution(
 	return Convolution<
 			SystemTag,
 			value_type,
-			BC::traits::truth_type<isRecurrent>>(
+			Optimizer,
+			std::true_type>(
 					img_dims,
 					krnl_dims,
 					padding,
 					strides,
 					dilation);
 }
+
 
 }
 }

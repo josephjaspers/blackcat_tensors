@@ -23,14 +23,16 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 		BC::nn::convolution(
 				system_tag,
 				BC::dim(10, 10,1),  //input_image shape
-				BC::dim(3, 3, 16)), //krnl_rows, krnl_cols, numb_krnls
+				BC::dim(3, 3, 16), //krnl_rows, krnl_cols, numb_krnls
+				BC::nn::momentum),
 		BC::nn::relu(
 				system_tag,
 				BC::dim(8,8,16)),
 		BC::nn::convolution(
 				system_tag,
 				BC::dim(8,8,16), //input_image shape
-				BC::dim(3, 3, 8)),  //krnl_rows, krnl_cols, numb_krnls
+				BC::dim(3, 3, 8),  //krnl_rows, krnl_cols, numb_krnls
+				BC::nn::momentum),
 		BC::nn::flatten(system_tag, BC::dim(6,6,8)),
 		BC::nn::relu(system_tag, BC::dim(6,6,8).size()),
 		BC::nn::feedforward(system_tag, BC::dim(6,6,8).size(), 64),

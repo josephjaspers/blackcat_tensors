@@ -15,9 +15,9 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	using clock          = std::chrono::duration<double>;
 
 	auto network = BC::nn::neuralnetwork(
-		BC::nn::feedforward(system_tag, 784, 256),
+		BC::nn::feedforward(system_tag, 784, 256, BC::nn::momentum),
 		BC::nn::tanh(system_tag, 256),
-		BC::nn::feedforward(system_tag, 256, 10),
+		BC::nn::feedforward(system_tag, 256, 10, BC::nn::momentum),
 		BC::nn::softmax(system_tag, 10),
 		BC::nn::logging_output_layer(system_tag, 10, BC::nn::RMSE).skip_every(100)
 	);
@@ -25,8 +25,8 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	network.set_batch_size(batch_size);
 	network.set_learning_rate(.003);
 
-	BC::print("Neural Network architecture: \n",
-			network.get_string_architecture());
+	BC::print("Neural Network architecture:");
+	BC::print(network.get_string_architecture());
 
 	std::pair<cube, cube> data = BC::load_mnist(
 			system_tag, mnist_dataset, batch_size, samples);
