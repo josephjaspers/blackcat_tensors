@@ -112,7 +112,8 @@ public:
 
 
 	template<class X>
-	auto forward_propagation(const X& x, Cache& cache) {
+	auto forward_propagation(const X& x, Cache& cache)
+	{
 		tensor4 y(this->get_batched_output_shape());
 		cube col_x(get_batched_column_image_shape());
 
@@ -134,10 +135,8 @@ public:
 	}
 
 	template<class X, class Delta>
-	auto back_propagation(const X& x, const Delta& dy, Cache& cache) {
-		static_assert(Delta::tensor_dimension==4, "3d delta");
-		static_assert(X::tensor_dimension==4, "4d X");
-
+	auto back_propagation(const X& x, const Delta& dy, Cache& cache)
+	{
 		cube& col_x = cache.load(col_image_key());
 		tensor4 delta_dx(this->get_batched_input_shape());
 		mat mat_delta_dx(m_column_image_shape);
@@ -158,22 +157,28 @@ public:
 		return delta_dx;
 	}
 
-	void update_weights() {
+	void update_weights()
+	{
 		w_opt.update(w, w_gradients);
 		w_gradients.zero();
 	}
 
-	void set_learning_rate(value_type lr) {
+	void set_learning_rate(value_type lr)
+	{
 		parent_type::set_learning_rate(lr);
-		w_opt.set_learning_rate(lr);
+		w_opt.set_learning_rate(this->get_batched_learning_rate());
 	}
 
-	void save(Layer_Loader& loader) {
+	void save(Layer_Loader& loader)
+	{
 		loader.save_variable(w, "w");
+		w_opt.save(loader, "w_opt");
 	}
 
-	void load(Layer_Loader& loader) {
+	void load(Layer_Loader& loader)
+	{
 		loader.load_variable(w, "w");
+		w_opt.load(loader, "w_opt");
 	}
 };
 

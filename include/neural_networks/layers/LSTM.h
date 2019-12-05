@@ -300,6 +300,7 @@ public:
 	void set_learning_rate(value_type lr)
 	{
 		parent_type::set_learning_rate(lr);
+		value_type batched_lr = this->get_batched_learning_rate();
 
 		auto optimizers = reference_list(
 				wz_opt, wf_opt, wi_opt, wo_opt,
@@ -309,10 +310,10 @@ public:
 				bf_opt, bz_opt, bi_opt, bo_opt);
 
 		for (auto& optimizer : optimizers)
-			optimizer.set_learning_rate(lr);
+			optimizer.set_learning_rate(batched_lr);
 
 		for (auto& optimizer : bias_optimizers)
-			optimizer.set_learning_rate(lr);
+			optimizer.set_learning_rate(batched_lr);
 	}
 
 	void set_batch_size(int bs)
@@ -377,6 +378,21 @@ public:
 		loader.save_variable(wo, "wo");
 		loader.save_variable(ro, "ro");
 		loader.save_variable(bo, "bo");
+
+		wf_opt.save(loader, "wf_opt");
+		wz_opt.save(loader, "wz_opt");
+		wi_opt.save(loader, "wi_opt");
+		wo_opt.save(loader, "wo_opt");
+
+		rf_opt.save(loader, "rf_opt");
+		rz_opt.save(loader, "rz_opt");
+		ri_opt.save(loader, "ri_opt");
+		ro_opt.save(loader, "ro_opt");
+
+		bf_opt.save(loader, "bf_opt");
+		bz_opt.save(loader, "bz_opt");
+		bi_opt.save(loader, "bi_opt");
+		bo_opt.save(loader, "bo_opt");
 	}
 
 	void save_from_cache(Layer_Loader& loader, Cache& cache)
@@ -408,6 +424,21 @@ public:
 		loader.load_variable(wo, "wo");
 		loader.load_variable(ro, "ro");
 		loader.load_variable(bo, "bo");
+
+		wf_opt.load(loader, "wf_opt");
+		wz_opt.load(loader, "wz_opt");
+		wi_opt.load(loader, "wi_opt");
+		wo_opt.load(loader, "wo_opt");
+
+		rf_opt.load(loader, "rf_opt");
+		rz_opt.load(loader, "rz_opt");
+		ri_opt.load(loader, "ri_opt");
+		ro_opt.load(loader, "ro_opt");
+
+		bf_opt.load(loader, "bf_opt");
+		bz_opt.load(loader, "bz_opt");
+		bi_opt.load(loader, "bi_opt");
+		bo_opt.load(loader, "bo_opt");
 	}
 
 	void load_from_cache(Layer_Loader& loader, Cache& cache)

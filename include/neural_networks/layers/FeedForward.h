@@ -82,8 +82,8 @@ public:
 	void set_learning_rate(value_type lr)
 	{
 		parent_type::set_learning_rate(lr);
-		w_opt.set_learning_rate(lr);
-		b_opt.set_learning_rate(lr);
+		w_opt.set_learning_rate(this->get_batched_learning_rate());
+		b_opt.set_learning_rate(this->get_batched_learning_rate());
 	}
 
 	void update_weights()
@@ -98,12 +98,16 @@ public:
 	{
 		loader.save_variable(w, "w");
 		loader.save_variable(b, "b");
+		w_opt.save(loader, "w_opt");
+		b_opt.save(loader, "b_opt");
 	}
 
 	void load(Layer_Loader& loader)
 	{
 		loader.load_variable(w, "w");
 		loader.load_variable(b, "b");
+		w_opt.load(loader, "w_opt");
+		b_opt.save(loader, "b_opt");
 	}
 };
 

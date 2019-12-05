@@ -11,8 +11,14 @@
 
 #include "common.h"
 
+#include "Layer_Cache.h"
+#include "Layer_Loader.h"
+#include "Layer_Manager.h"
+#include "Layer_Chain.h"
+
 #include "optimzers/Momentum.h"
 
+#include "layers/Layer_Traits.h"
 #include "Layer_Cache.h"
 #include "layers/FeedForward.h"
 #include "layers/UnaryFunction.h"

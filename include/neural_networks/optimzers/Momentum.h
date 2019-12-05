@@ -11,10 +11,15 @@
 namespace BC {
 namespace nn {
 
+struct Optimizer_Base {
+	void save(Layer_Loader& loader, std::string name) {}
+	void load(Layer_Loader& loader, std::string name) {}
+};
+
 struct Momentum {
 
 		template<class Tensor>
-		struct Optimizer {
+		struct Optimizer : Optimizer_Base{
 
 		using value_type = typename Tensor::value_type;
 
@@ -39,13 +44,22 @@ struct Momentum {
 		void set_learning_rate(value_type lr) {
 			learning_rate = lr;
 		}
+
+		void save(Layer_Loader& loader, std::string name) {
+			loader.save_variable(momentum, name);
+		}
+
+		void load(Layer_Loader& loader, std::string name) {
+			loader.load_variable(momentum, name);
+		}
+
 	};
 } momentum;
 
 struct Stochastic_Gradient_Descent {
 
 	template<class ValueType>
-	struct Optimizer {
+	struct Optimizer : Optimizer_Base {
 
 		using value_type = BC::traits::conditional_detected_t<
 				BC::traits::query_value_type, ValueType, ValueType>;

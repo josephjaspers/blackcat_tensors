@@ -8,10 +8,13 @@
 #ifndef BLACKCAT_NEURALNETWORKS_COMMON_H_
 #define BLACKCAT_NEURALNETWORKS_COMMON_H_
 
-#include "optimzers/Momentum.h"
+#include "layers/Layer_Traits.h"
 
 namespace BC {
 namespace nn {
+
+struct Layer_Loader;
+struct Momentum;
 
 template<class SystemTag, class ValueType, class... AltAllocator>
 using nn_default_allocator_type =
