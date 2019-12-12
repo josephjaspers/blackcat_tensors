@@ -21,7 +21,6 @@
 #include "Function_gemv.h"
 #include "Function_gemm.h"
 
-#include "Function_Conv2d.h"
 #include "Function_Sum.h"
 
 #include "Tree_Evaluator.h"

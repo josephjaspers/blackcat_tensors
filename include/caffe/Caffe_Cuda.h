@@ -14,9 +14,9 @@ namespace caffe {
 
 
 #define CUDA_KERNEL_LOOP(i, n) \
-  for (int i = blockIdx.x * blockDim.x + threadIdx.x; \
-       i < (n); \
-       i += blockDim.x * gridDim.x)
+	for (int i = blockIdx.x * blockDim.x + threadIdx.x; \
+		i < (n); \
+		i += blockDim.x * gridDim.x)
 
 
 // CUDA: use 512 threads per block

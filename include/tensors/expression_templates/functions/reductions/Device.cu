@@ -98,7 +98,7 @@ struct Reduce<BC::device_tag> {
 		 *
 		 */
 
-		if (expression.size() > 32) {
+		if (expression.size() >= 32) {
 			using value_type = typename Expression::value_type;
 			BC::size_t buffer_size = BC::calculate_block_dim(expression.size());	///num blocks the kernel will be called
 			value_type* buffer = stream.template get_allocator_rebound<value_type>().allocate(buffer_size);
@@ -106,7 +106,7 @@ struct Reduce<BC::device_tag> {
 			stream.template get_allocator_rebound<value_type>().deallocate(buffer, buffer_size);
 		} else {
 			stream.enqueue([&]() {
-				small_sum <<< 1, 1, 0, stream>>> (output, expression, expression.size());
+				small_sum <<<1, 1, 0, stream>>> (output, expression, expression.size());
 			});
 		}
 	}

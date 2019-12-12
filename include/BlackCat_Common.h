@@ -19,14 +19,17 @@ namespace BC {
 
 class system_tag_base {};
 
-class host_tag : system_tag_base {
+template<class DerivedTag>
+class system_tag : system_tag_base {};
+
+class host_tag : system_tag<host_tag> {
 public:
 	using default_floating_point_type = double;
 	using default_integer_type = int;
 	static const char* name() { return "BC::host_tag"; }
 };
 
-class device_tag : system_tag_base {
+class device_tag : system_tag<device_tag> {
 public:
 	using default_floating_point_type = float;
 	using default_integer_type = int;
@@ -148,6 +151,7 @@ inline void BC_cuda_assert(cudaError_t code, const char *file, const char* funct
 	   throw code;
    }
 }
+
 inline void BC_cuda_assert(cublasStatus_t code, const char *file, const char* function,  int line)
 {
    if (code != CUBLAS_STATUS_SUCCESS)
@@ -164,7 +168,11 @@ inline void BC_cuda_assert(cublasStatus_t code, const char *file, const char* fu
 
 #if __has_include(<cudnn.h>)
 #include <cudnn.h>
-inline void BC_cuda_assert(cudnnStatus_t code, const char *file, const char* function,  int line)
+inline void BC_cuda_assert(
+		cudnnStatus_t code,
+		const char *file,
+		const char* function,
+		int line)
 {
    if (code != CUDNN_STATUS_SUCCESS)
    {
@@ -181,19 +189,8 @@ inline void BC_cuda_assert(cudnnStatus_t code, const char *file, const char* fun
 
 #endif
 
-// --------------------------------- bc constexpr if (NVCC doesn't support cpp17) --------------------------------- //
-
-#define BC_CONSTEXPR_IF(conditional)\
-BC::traits::constexpr_if<conditional>([&]()
-
-#define BC_CONSTEXPR_ELSE_IF(conditional) \
-, BC::traits::constexpr_if<conditional>([&]()\
-
-
-#define BC_CONSTEXPR_IF_END );
-
-// --------------------------------- module body macro --------------------------------- //
-
+// todo deprecate
+// ---------------- module body macro ---------------- //
 
 #define BC_DEFAULT_MODULE_BODY(namespace_name, class_name)		\
 																\
@@ -213,15 +210,15 @@ namespace namespace_name {									   	\
 	}															\
 }
 
-// --------------------------------- openmp macros --------------------------------- //
+// ---------------- openmp macros ---------------- //
 
 #if defined(_OPENMP) && !defined(BC_NO_OPENMP)
 	#define BC_OPENMP
-	#define BC_omp_parallel__		_Pragma("omp parallel")
-	#define BC_omp_async__(...)    	BC_omp_parallel__ {_Pragma("omp single nowait") {__VA_ARGS__ } }
-	#define BC_omp_atomic__ 		_Pragma("omp atomic")
-	#define BC_omp_for__ 			_Pragma("omp parallel for")
-	#define BC_omp_bar__ 			_Pragma("omp barrier")
+	#define BC_omp_parallel__   _Pragma("omp parallel")
+	#define BC_omp_async__(...) BC_omp_parallel__ {_Pragma("omp single nowait") {__VA_ARGS__ } }
+	#define BC_omp_atomic__     _Pragma("omp atomic")
+	#define BC_omp_for__        _Pragma("omp parallel for")
+	#define BC_omp_bar__        _Pragma("omp barrier")
 	#define __BC_CONCAT_REDUCTION_LITERAL(oper, value) omp parallel for reduction(oper:value)
 	#define BC_omp_reduction__(oper, value) BC_omp_for__ reduction(oper:value)
 #else
@@ -238,9 +235,7 @@ namespace namespace_name {									   	\
 namespace BC {
 
 inline void host_sync() {
-#if defined(_OPENMP) && !defined(BC_NO_OPENMP) //if openmp is defined
 	BC_omp_bar__
-#endif
 }
 
 inline void device_sync() {
@@ -254,15 +249,13 @@ inline void synchronize() {
 	device_sync();
 }
 
-#ifndef BC_SIZE_T_OVERRIDE
-//Using a signed integer is preferable
-using  size_t   = int;
-#else
-using  size_t   = BC_SIZE_T_OVERRIDE;
+#ifndef BC_SIZE_T
+#define BC_SIZE_T int
 #endif
 
-static constexpr BC::size_t MULTITHREAD_THRESHOLD = 16384;
+using size_t = BC_SIZE_T;
 
+static constexpr BC::size_t MULTITHREAD_THRESHOLD = 16384;
 
 #ifdef __CUDACC__
 	namespace {
