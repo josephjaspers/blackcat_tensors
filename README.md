@@ -28,9 +28,9 @@ auto system_tag = BC::host_tag();   //for CPU/OpenMP
 auto system_tag = BC::device_tag(); //for CUDA 
 
 auto network = neuralnetwork(
-	feedforward(system_tag, 784, 256),
+	feedforward(system_tag, 784, 256, BC::nn::adam),
 	logistic(system_tag, 256),
-	feedforward(system_tag, 256, 10),
+	feedforward(system_tag, 256, 10, BC::mm::adam),
 	softmax(system_tag, 10),
 	outputlayer(system_tag, 10)
 );
