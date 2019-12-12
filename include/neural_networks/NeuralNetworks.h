@@ -16,6 +16,8 @@
 #include "Layer_Manager.h"
 #include "Layer_Chain.h"
 
+#include "optimzers/Stochastic_Gradient_Descent.h"
+#include "optimzers/Adam.h"
 #include "optimzers/Momentum.h"
 
 #include "layers/Layer_Traits.h"
