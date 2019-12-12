@@ -26,8 +26,8 @@ struct Stochastic_Gradient_Descent {
 		template<class... Args>
 		Optimizer(Args&&...) {}
 
-		template<class TensorX, class Gradeients>
-		void update(TensorX& tensor, Gradeients&& delta) {
+		template<class TensorX, class Gradients>
+		void update(TensorX& tensor, Gradients&& delta) {
 			tensor += learning_rate * delta;
 		}
 

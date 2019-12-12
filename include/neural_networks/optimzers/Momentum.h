@@ -31,8 +31,8 @@ struct Momentum {
 			momentum.zero();
 		}
 
-		template<class TensorX, class Gradeients>
-		void update(TensorX& tensor, Gradeients&& delta)
+		template<class TensorX, class Gradients>
+		void update(TensorX& tensor, Gradients&& delta)
 		{
 			momentum = alpha * momentum + delta * learning_rate;
 			tensor += momentum;

@@ -45,8 +45,8 @@ struct Adam::Optimizer: Optimizer_Base {
 		v_t.zero();
 	}
 
-	template<class TensorX, class Gradeients>
-	void update(TensorX& tensor, Gradeients&& delta)
+	template<class TensorX, class Gradients>
+	void update(TensorX& tensor, Gradients&& delta)
 	{
 		time_stamp++;
 		m_t = beta_1 * m_t + (1-beta_1) * delta;
