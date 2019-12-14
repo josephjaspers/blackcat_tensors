@@ -82,14 +82,17 @@ struct Evaluator<device_tag> {
 
 	template<int Dimensions, class Expression, class Stream>
 	static void nd_evaluate(Expression expression, Stream stream) {
-		static_assert(Expression::tensor_dimension <= Dimensions || Expression::tensor_iterator_dimension <= 1,
-				"Iterator Dimension must be greater than or equal to the tensor_dimension");
+		static_assert(
+				Expression::tensor_dimension <= Dimensions ||
+				Expression::tensor_iterator_dimension <= 1,
+				"Iterator Dimension must be "
+				"greater than or equal to the tensor_dimension");
 
-
-		using run = std::conditional_t<(Dimensions <= 1), n1,
-						std::conditional_t<(Dimensions == 2), n2,
-							std::conditional_t<(Dimensions == 3), n3,
-								std::conditional_t<(Dimensions == 4), n4, n5>>>>;
+		using run =
+				std::conditional_t<(Dimensions <= 1), n1,
+				std::conditional_t<(Dimensions == 2), n2,
+				std::conditional_t<(Dimensions == 3), n3,
+				std::conditional_t<(Dimensions == 4), n4, n5>>>>;
 
 		stream.enqueue([=]() {
 			run::eval(expression, stream);
