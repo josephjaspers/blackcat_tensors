@@ -40,8 +40,10 @@ template<class...> static constexpr bool false_v = false;
 
 
 /**
- * true_call and false_call are CUDA-supported alternatives for true_v and false_v
- * -- CUDA does not support using 'host_variables' on the device (including static-constexpr values)
+ * true_call and false_call are
+ * CUDA-supported alternatives for true_v and false_v
+ * -- CUDA does not support using 'host_variables' on the device
+ *    (including static-constexpr values)
  */
 template<class T>
 BCINLINE static constexpr bool true_call() { return true; }
@@ -49,12 +51,9 @@ BCINLINE static constexpr bool true_call() { return true; }
 template<class T>
 BCINLINE static constexpr bool false_call() { return false; }
 
-
-
 template<class...> using void_t = void;
 template<class...> using true_t  = true_type;
 template<class...> using false_t = false_type;
-
 
 template<bool cond>
 using truth_type = conditional_t<cond, true_type, false_type>;
@@ -79,10 +78,10 @@ using propagate_const_t = typename propagate_const<From, To>::type;
 //----------------------------------
 
 template<template<class> class func, class T, class voider=void>
-struct is_detected : false_type {};
+struct is_detected: false_type {};
 
 template<template<class> class func, class T>
-struct is_detected<func, T, enable_if_t<true_v<func<T>>>> : true_type {};
+struct is_detected<func, T, enable_if_t<true_v<func<T>>>>: true_type {};
 
 template<template<class> class func, class T>
 static constexpr bool is_detected_v = is_detected<func, T>::value;
@@ -117,34 +116,12 @@ using conditional_detected_t =
 
 //----------------------------------
 
-template<class Function, class voider=void>
-struct is_compileable : false_type {};
 
-template<class Function>
-struct is_compileable<Function,
-		enable_if_t<
-				true_v<
-					decltype(declval<Function>()())>
-			>
-		> : true_type {};
+template<class T> BCINLINE
+static constexpr BC::size_t  max(const T& x) { return x; }
 
-template<class Function>
-static constexpr bool compileable(Function&&) {
-	return is_compileable<Function>::value;
-}
-template<class Function>
-static constexpr bool compileable() {
-	return is_compileable<Function>::value;
-}
-
-//----------------------------------
-
-
-template<class T>
-BCINLINE static constexpr BC::size_t  max(const T& x) { return x; }
-
-template<class T>
-BCINLINE static constexpr BC::size_t  min(const T& x) { return x; }
+template<class T> BCINLINE
+static constexpr BC::size_t  min(const T& x) { return x; }
 
 template<class T, class... Ts> BCINLINE
 static constexpr size_t max(const T& x, const Ts&... xs) {
@@ -287,39 +264,35 @@ template<class T> using query_get_allocator = decltype(std::declval<T>().get_all
 class None {};
 
 template<class T>
-struct common_traits {
+class common_traits {
 
-	using defines_value_type =
-			truth_type<is_detected_v<query_value_type, T>>;
 
-	using defines_allocator_type =
-			truth_type<is_detected_v<query_allocator_type, T>>;
+	template<template<class> class Query>
+	using self_defines = is_detected<Query,T>;
 
-	using defines_system_tag =
-			truth_type<is_detected_v<query_system_tag, T>>;
+	template<template<class> class Query, class Default=None>
+	using type_or_default = traits::conditional_detected_t<Query, T, None>;
 
-	using defines_get_stream =
-			truth_type<is_detected_v<query_get_stream, T>>;
+public:
 
-	using defines_get_allocator =
-			truth_type<is_detected_v<query_get_allocator, T>>;
+	using defines_value_type = self_defines<query_value_type>;
+	using defines_allocator_type = self_defines<query_allocator_type>;
+	using defines_system_tag = self_defines<query_system_tag>;
+	using defines_get_stream = self_defines<query_get_stream>;
+	using defines_get_allocator = self_defines<query_get_allocator>;
 
 	using type = T;
 
-	using value_type =
-			traits::conditional_detected_t<query_value_type, T, None>;
-	using allocator_type =
-			traits::conditional_detected_t<query_allocator_type, T, None>;
-	using system_tag =
-			traits::conditional_detected_t<query_system_tag, T, host_tag>;
+	using value_type = type_or_default<query_value_type>;
+	using allocator_type = type_or_default<query_allocator_type>;
+	using system_tag = type_or_default<query_system_tag>;
+
+	template<class Other>
+	using compatible_system_tag_with = std::is_same<system_tag,
+			typename common_traits<Other>::system_tag>;
 
 	static auto select_on_get_stream(const T& type)
 	{
-		static_assert(
-				std::is_same<system_tag, host_tag>::value ||
-						std::is_same<system_tag, device_tag>::value,
-				"SystemTag Mismatch");
-
 		return traits::constexpr_ternary<defines_get_stream::value>(
 				BC::traits::bind([](const auto& type) {
 						return type.get_stream();
@@ -332,11 +305,6 @@ struct common_traits {
 
 	static auto select_on_get_allocator(const T& type)
 	{
-		static_assert(
-				std::is_same<system_tag, host_tag>::value ||
-						std::is_same<system_tag, device_tag>::value,
-				"SystemTag Mismatch");
-
 		return traits::constexpr_ternary<defines_get_allocator::value>(
 				BC::traits::bind([](const auto& type) {
 						return type.get_allocator();

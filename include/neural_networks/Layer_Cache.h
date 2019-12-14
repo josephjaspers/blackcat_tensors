@@ -17,26 +17,35 @@ namespace nn {
 /**A type designed to act as a key to the Cache object.
  *
  * Arguments:
- * 	K - any class to use as a key, generally "Name<char...>" class is used to create a constexpr name to the class.
+ * 	K - any class to use as a key, generally "Name<char...>"
+ * 	class is used to create a constexpr name to the class.
  * 	V - the type to return from the given key
  * 	IsRecurrent - Determines if the storing should override the most
- * 		recent member store or if it should be stored in a separate location for back-propagation through time.
+ * 		recent member store or if it should be stored in a
+ * 		separate location for back-propagation through time.
  */
-template<class K, class V, class IsRecurrent>
-struct cache_key : BC::utility::Any_Key<K, V> {
-	static_assert(
-			std::is_same<IsRecurrent, std::true_type>::value ||
-					std::is_same<IsRecurrent, std::false_type>::value,
-			"Cache_Key `IsRecurrent` must be std::true_type or std::false_type");
 
+namespace {
+template<class T>
+struct default_factory : BC::traits::common_traits<T> {
+	auto operator () () const {
+		return T();
+	}
+};
+}
+
+template<class K, class V, class IsRecurrent, class Factory=default_factory<V>>
+struct cache_key: BC::utility::Any_Key<K, V> {
 	using is_recurrent = IsRecurrent;
+	Factory factory;
 };
 
 
-/** A Dictionary designed to store any type using the 'store' and 'load' functions.
+/** A Dictionary which stores any type using the 'store' and 'load' functions.
  *
  * The cache object stores any object that can be mapped from a unique cache_key.
- * Additionally the Cache object stores an integer time-index which determines the current
+ * Additionally the Cache object stores an integer time-index which determines
+ * the current
  * 'time' to return when loading a Value from a Recurrent key.
  *
  * The time_index is only relevant with recurrent keys.
@@ -113,7 +122,6 @@ public:
 	auto& load(key_type<K, V, std::true_type> key, DefaultFactory function) {
 		return load(key, 0, function);
 	}
-
 
 	template<class K, class V, class DefaultFactory>
 	auto& load(key_type<K, V, std::false_type> key, DefaultFactory function) {

@@ -27,6 +27,7 @@
 #include "layers/Nonlinear.h"
 #include "layers/Softmax.h"
 #include "layers/LSTM.h"
+#include "layers/LSTM_Optimized.h"
 #include "layers/Output_Layer.h"
 #include "layers/Logging_Output_Layer.h"
 #include "layers/Convolution.h"
