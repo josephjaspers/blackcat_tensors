@@ -29,33 +29,55 @@ struct Evaluator<device_tag> {
 		struct n1 {
 		template<class Expression>
 				static void eval(Expression expression, cudaStream_t stream) {
-					gpu_impl::eval<<<calculate_block_dim(expression.size()), calculate_threads(), 0, stream>>>(expression);
+					gpu_impl::eval<<<calculate_block_dim(expression.size()),
+							calculate_threads(), 0, stream>>>(expression);
 				}
 			};
 		struct n2 {
 			template<class Expression>
 			static void eval(Expression expression, cudaStream_t stream) {
-				gpu_impl::eval2d<<<calculate_block_dim(expression.size()), calculate_threads(), 0, stream>>>(expression);
+				dim3 grid(calculate_block_dim(expression.dimension(0)),
+							calculate_block_dim(expression.dimension(1)));
+
+				gpu_impl::eval2d<<<
+						grid, calculate_threads(), 0, stream>>>(expression);
 			}
 		};
 		struct n3 {
 			template<class Expression>
 			static void eval(Expression expression, cudaStream_t stream) {
-				gpu_impl::eval3d<<<calculate_block_dim(expression.size()), calculate_threads(), 0, stream>>>(expression);
+				dim3 grid(
+						calculate_block_dim(expression.dimension(0)),
+						calculate_block_dim(expression.dimension(1)),
+						calculate_block_dim(expression.dimension(2)));
+
+				gpu_impl::eval3d<<<
+						grid, calculate_threads(), 0, stream>>>(expression);
 			}
 		};
 		struct n4 {
 			template<class Expression>
 			static void eval(Expression expression, cudaStream_t stream) {
-				gpu_impl::eval4d<<<calculate_block_dim(expression.size()), calculate_threads(), 0, stream>>>(expression);
+				dim3 grid(
+						calculate_block_dim(expression.dimension(0)),
+						calculate_block_dim(expression.dimension(1)),
+						calculate_block_dim(expression.dimension(2)));
+
+				gpu_impl::eval4d<<<
+						grid, calculate_threads(), 0, stream>>>(expression);
 			}
 		};
 		struct n5 {
 			template<class Expression>
 			static void eval(Expression expression, cudaStream_t stream) {
-				gpu_impl::eval5d<<<calculate_block_dim(expression.size()), calculate_threads(), 0, stream>>>(expression);
-			}
+				dim3 grid(
+						calculate_block_dim(expression.dimension(0)),
+						calculate_block_dim(expression.dimension(1)),
+						calculate_block_dim(expression.dimension(2)));
 
+				gpu_impl::eval5d<<<
+						grid, calculate_threads(), 0, stream>>>(expression);
+			}
 		};
 
 	template<int Dimensions, class Expression, class Stream>
