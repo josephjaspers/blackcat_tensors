@@ -160,20 +160,20 @@ public:
 
 	void randomize_weights()
 	{
-		wf.randomize(-1, 0);
+		wf.randomize(-.1, .1);
 		wz.randomize(-.1, .1);
 		wi.randomize(-.1, .1);
-		wo.randomize(0, .5);
+		wo.randomize(-.1, .1);
 
-		rf.randomize(-1, 1);
+		rf.randomize(-.1, .1);
 		rz.randomize(-.1, .1);
 		ri.randomize(-.1, .1);
-		ro.randomize(0, .5);
+		ro.randomize(-.1, .1);
 
-		bf.randomize(-1, 1);
+		bf.randomize(-.1, .1);
 		bz.randomize(-.1, .1);
 		bi.randomize(-.1, .1);
-		bo.randomize(0, .5);
+		bo.randomize(-.1, .1);
 	}
 
 	template<class X, class Y>
