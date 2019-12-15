@@ -17,15 +17,35 @@ namespace allocators {
 
 //TODO make friend class and private members
 struct Recycle_Allocator_Globals {
-	static auto& get_recycler() {
+
+	template<class SystemTag>
+	static auto& get_recycler(SystemTag=SystemTag()) {
 		static std::unordered_map<BC::size_t, std::vector<Byte*>> m_recycler;
 		return m_recycler;
 	}
 
-	static auto& get_locker() {
+	template<class SystemTag>
+	static auto& get_locker(SystemTag=SystemTag()) {
 		static std::mutex m_locker;
 		return m_locker;
 	}
+
+	template<class SystemTag>
+	static void clear_recycler(SystemTag system=SystemTag()) {
+		std::lock_guard<std::mutex> locker(get_locker(system));
+		BC::Allocator<SystemTag, Byte> allocator;
+
+		auto& recycler = get_recycler(system);
+		for (const auto& kv : recycler) {
+			std::size_t ptr_sz = kv.first;
+			std::vector<Byte*> ptrs = kv.second;
+
+			for (auto ptr : ptrs)
+				allocator.deallocate(ptr, ptr_sz);
+		}
+		recycler.clear();
+	}
+
 };
 
 
@@ -56,10 +76,10 @@ private:
 	AlternateAllocator m_allocator;
 
 	static auto& get_recycler() {
-		return Recycle_Allocator_Globals::get_recycler();
+		return Recycle_Allocator_Globals::get_recycler(system_tag());
 	}
 	static auto& get_locker() {
-		return Recycle_Allocator_Globals::get_locker();
+		return Recycle_Allocator_Globals::get_locker(system_tag());
 	}
 
 public:
