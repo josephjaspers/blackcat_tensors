@@ -5,8 +5,6 @@
  *      Author: joseph
  */
 
-#include "../common.h"
-
 #ifndef BLACKCAT_TENSORS_LAYER_TRAITS_H_
 #define BLACKCAT_TENSORS_LAYER_TRAITS_H_
 
@@ -14,67 +12,90 @@ namespace BC {
 namespace nn {
 namespace detail {
 
-#define BC_QUERY_TAG(tagname)\
-	template<class T> using query_##tagname = typename T::tagname;
+template<class T> using query_forward_requires_inputs  = typename T::forward_requires_inputs;
+template<class T> using query_forward_requires_outputs = typename T::forward_requires_outputs;
+template<class T> using query_forward_requires_extra_cache = typename T::forward_requires_extra_cache;
+template<class T> using query_backward_requires_inputs  = typename T::backward_requires_inputs;
+template<class T> using query_backward_requires_outputs = typename T::backward_requires_outputs;
+template<class T> using query_backward_requires_extra_cache = typename T::backward_requires_extra_cache;
+template<class T> using query_input_tensor_dimension  = typename T::input_tensor_dimension;
+template<class T> using query_output_tensor_dimension = typename T::output_tensor_dimension;
+template<class T> using query_greedy_evaluate_delta = typename T::greedy_evaluate_delta;
 
-BC_QUERY_TAG(forward_requires_inputs)
-BC_QUERY_TAG(forward_requires_outputs)
-BC_QUERY_TAG(backward_requires_inputs)
-BC_QUERY_TAG(backward_requires_outputs)
-BC_QUERY_TAG(input_tensor_dimension)
-BC_QUERY_TAG(output_tensor_dimension)
-BC_QUERY_TAG(greedy_evaluate_delta)
-BC_QUERY_TAG(requires_extra_cache)
-BC_QUERY_TAG(defines_single_predict)
-BC_QUERY_TAG(defines_predict)
+//If true we cache the delta- into a matrix/vector. This is not stored in recurrent layers.
+//It is used for things like feedforward backprop which require using the 'deltaY' error multiple times
+//This tag is used to prevent recalculating the same error values multiple times (and saving on reallocations)
+template<class T> using query_backwards_delta_should_be_cached = typename T::query_backwards_delta_should_be_cached;
 
-#undef BC_QUERY_TAG
+template<class T> using query_requires_extra_cache = typename T::requires_extra_cache;
+template<class T> using query_extra_batched_cache_args = typename T::extra_batched_cache_args;
+
+template<class T>
+using query_defines_single_predict = typename T::defines_single_predict;
+
+template<class T>
+using query_defines_predict = typename T::defines_predict;
+
 } // ns detail
 
 template<class T>
 struct layer_traits: BC::traits::common_traits<T> {
 	/**
-	 * Layers have the function: backward_propagate(Args...);
-	 * -- The arguments supplied are based upon these traits.
+	 *  Layers have the function: backward_propagate(Args...);
+	 *  -- The arguments supplied are based upon these traits.
 	 *
-	 * If forwards_requires_inputs==std::true_type,
-	 *     inputs will be supplied in forward prop
+	 *  If forwards_requires_inputs==std::true_type, inputs will be supplied in forward prop
+	 *  If forwards_requires_outputs==std::true_type, outputs will be supplied in forward prop
 	 *
-	 * If forwards_requires_outputs==std::true_type,
-	 *     outputs will be supplied in forward prop
+	 *  If backwards_requires_inputs==std::true_type, inputs will be supplied in backward prop
+	 *  If backwards_requires_outputs==std::true_type, outputs will be supplied in backward prop
 	 *
-	 * If backwards_requires_inputs==std::true_type, inputs will be supplied in backward prop
-	 * If backwards_requires_outputs==std::true_type, outputs will be supplied in backward prop
 	 */
-#define BC_LAYER_TRAITS_TAG(tagname, default_type)\
-	using tagname = BC::traits::conditional_detected_t<\
-			detail::query_##tagname, T, default_type>;
 
-	using system_tag = BC::traits::conditional_detected_t<
-			BC::traits::query_system_tag, T, nn_default_system_tag>;
+	using system_tag = typename T::system_tag;
 
-	using value_type = BC::traits::conditional_detected_t<
-			BC::traits::query_value_type, T,
-			typename system_tag::default_floating_point_type>;
+	using value_type =
+			BC::traits::conditional_detected_t<
+					BC::traits::query_value_type, T,
+					typename system_tag::default_floating_point_type>;
 
-	using allocator_type = BC::traits::conditional_detected_t<
-			BC::traits::query_allocator_type, T,
-			nn_default_allocator_type<system_tag, value_type>>;
+	using allocator_type =
+			BC::traits::conditional_detected_t<
+					BC::traits::query_allocator_type, T,
+					BC::Allocator<system_tag, value_type>>;
 
-	BC_LAYER_TRAITS_TAG(input_tensor_dimension, BC::traits::Integer<1>)
-	BC_LAYER_TRAITS_TAG(output_tensor_dimension, input_tensor_dimension)
+	using requires_extra_cache = BC::traits::conditional_detected_t<
+			detail::query_requires_extra_cache, T, std::false_type>;
 
-	BC_LAYER_TRAITS_TAG(forward_requires_inputs, std::true_type)
-	BC_LAYER_TRAITS_TAG(forward_requires_outputs, std::false_type)
+	using input_tensor_dimension = BC::traits::conditional_detected_t<
+			detail::query_input_tensor_dimension, T, BC::traits::Integer<1>>;
 
-	BC_LAYER_TRAITS_TAG(backward_requires_inputs, std::true_type)
-	BC_LAYER_TRAITS_TAG(backward_requires_outputs, std::false_type)
+	using output_tensor_dimension = BC::traits::conditional_detected_t<
+			detail::query_output_tensor_dimension, T, input_tensor_dimension>;
 
-	BC_LAYER_TRAITS_TAG(requires_extra_cache, std::false_type)
-	BC_LAYER_TRAITS_TAG(greedy_evaluate_delta, std::false_type)
+	using forward_requires_inputs = BC::traits::conditional_detected_t<
+			detail::query_forward_requires_inputs, T, std::true_type>;
 
-	BC_LAYER_TRAITS_TAG(defines_predict, std::false_type)
-	BC_LAYER_TRAITS_TAG(defines_single_predict, std::false_type)
+	using forward_requires_outputs = BC::traits::conditional_detected_t<
+			detail::query_forward_requires_outputs, T, std::false_type>;
+
+	using forward_requires_extra_cache = BC::traits::conditional_detected_t<
+			detail::query_forward_requires_extra_cache, T, std::false_type>;
+
+	using backward_requires_inputs = BC::traits::conditional_detected_t<
+			detail::query_backward_requires_inputs, T, std::true_type>;
+
+	using backward_requires_outputs = BC::traits::conditional_detected_t<
+			detail::query_backward_requires_outputs, T, std::false_type>;
+
+	using backward_delta_should_be_cached = BC::traits::conditional_detected_t<
+			detail::query_backward_requires_outputs, T, std::false_type>;
+
+	using backward_requires_extra_cache = BC::traits::conditional_detected_t<
+			detail::query_backward_requires_extra_cache, T, std::false_type>;
+
+	using greedy_evaluate_delta = BC::traits::conditional_detected_t<
+			detail::query_greedy_evaluate_delta, T, std::false_type>;
 
 
 	template<class... Args>
@@ -117,6 +138,8 @@ private:
 	static auto select_on_single_predict(std::false_type, T& layer, Args&&... args) {
 		return select_on_predict(layer, args...);
 	}
+
+
 };
 }  // namespace nn
 }  // namespace BC
