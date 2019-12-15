@@ -12,7 +12,7 @@ public:
 		static_assert(ExpressionTemplate::tensor_iterator_dimension <= 1, "copy only accepts continuous");
 		static_assert(Xpr::tensor_iterator_dimension <= 1, "copy only accepts continuous");
 
-		if (!same_size(rv)) {
+		if (this->size() != rv.size()) {
 			std::cout << "Attempting to copy two different size tensors (ERROR)"  << std::endl;
 			throw 1;
 		}
@@ -55,6 +55,7 @@ public:
 		//	using is_managed = typename
 		//	BC::allocators::allocator_traits<self_alloc_t>::is_managed_memory;
 
+		using traits = exprs::expression_traits<ExpressionTemplate>;
 		using is_host = std::is_same<BC::host_tag, system_tag>;
 
 #ifdef __CUDACC__
@@ -70,26 +71,41 @@ public:
 				value_type,
 				allocator_type>>;
 
+		using host_tensor_type = Tensor_Base<exprs::Array<
+				BC::Shape<tensor_dimension>,
+				value_type,
+				BC::Allocator<host_tag, value_type>>>;
+
 		auto fs = BC::tensors::io::features(precision, pretty, sparse);
+		auto tensor_dim = BC::traits::Integer<tensor_dimension>();
 
-		static constexpr bool no_copy_required =
-				/*(is_managed::value || */ is_host::value /*)*/ &&
-				exprs::expression_traits<ExpressionTemplate>::is_array::value;
 
-		return BC::traits::constexpr_ternary<no_copy_required>(
-				BC::traits::bind([&](const auto& der)
+		constexpr bool is_array = traits::is_array::value;
+		constexpr bool no_copy_required = /*(is_managed::value || */
+				is_host::value /*)*/ && is_array;
+
+		static constexpr bool is_continuous = traits::is_continuous::value;
+
+		return BC::traits::constexpr_if<no_copy_required>(
+			BC::traits::bind([&](const auto& der)
 				{
-					return BC::tensors::io::to_string(
-							der, fs, BC::traits::Integer<tensor_dimension>());
+					return BC::tensors::io::to_string(der, fs,tensor_dim);
 				}, *this),
-
+			BC::traits::constexpr_else_if<is_continuous && is_array>(
 				BC::traits::bind([&](const auto& der)
 				{
-					tensor_type copy(*this);
+					host_tensor_type tensor(der.get_shape());
+					tensor.copy(der);
+					return BC::tensors::io::to_string(tensor, fs, tensor_dim);
+				}, *this),
+			BC::traits::constexpr_else(
+				BC::traits::bind([&](const auto& der)
+				{
+					tensor_type copy(der);
 					BC::device_sync();
-					return BC::tensors::io::to_string(
-							copy, fs, BC::traits::Integer<tensor_dimension>());
-				}, *this));
+					return BC::tensors::io::to_string(copy, fs, tensor_dim);
+				}, *this))
+			));
 	}
 
 	std::string to_raw_string(int precision=8) const {
