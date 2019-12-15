@@ -38,7 +38,7 @@ struct Recycle_Allocator_Globals {
 		auto& recycler = get_recycler(system);
 		for (const auto& kv : recycler) {
 			std::size_t ptr_sz = kv.first;
-			std::vector<Byte*> ptrs = kv.second;
+			std::vector<Byte*>& ptrs = kv.second;
 
 			for (auto ptr : ptrs)
 				allocator.deallocate(ptr, ptr_sz);
