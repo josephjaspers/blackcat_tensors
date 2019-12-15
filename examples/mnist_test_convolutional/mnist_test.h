@@ -11,7 +11,6 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	using value_type     = typename System::default_floating_point_type;
 	using allocator_type = BC::Allocator<System, value_type>;
 	using cube           = BC::Cube<value_type, allocator_type>;
-	using mat            = BC::Matrix<value_type, allocator_type>;
 	using clock          = std::chrono::duration<double>;
 
 	auto network = BC::nn::neuralnetwork(
@@ -24,7 +23,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 				system_tag,
 				BC::dim(10, 10,1),  //input_image shape
 				BC::dim(3, 3, 16), //krnl_rows, krnl_cols, numb_krnls
-				BC::nn::momentum),
+				BC::nn::adam),
 		BC::nn::relu(
 				system_tag,
 				BC::dim(8,8,16)),
@@ -32,7 +31,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 				system_tag,
 				BC::dim(8,8,16), //input_image shape
 				BC::dim(3, 3, 8),  //krnl_rows, krnl_cols, numb_krnls
-				BC::nn::momentum),
+				BC::nn::adam),
 		BC::nn::flatten(system_tag, BC::dim(6,6,8)),
 		BC::nn::relu(system_tag, BC::dim(6,6,8).size()),
 		BC::nn::feedforward(system_tag, BC::dim(6,6,8).size(), 64),
@@ -43,7 +42,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	);
 
 	network.set_batch_size(batch_size);
-	network.set_learning_rate(.0003);
+	network.set_learning_rate(.003);
 
 	BC::print("Neural Network architecture: \n",
 			network.get_string_architecture());
@@ -75,11 +74,10 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 
 	int test_images = 10;
 	auto images = inputs[0].reshaped(28,28, batch_size);
-	mat hyps = network.predict(inputs[0].reshaped(28,28,1, batch_size));
 
 	for (int i = 0; i < test_images; ++i) {
 		images[i].t().print_sparse(3);
-		hyps[i].print();
+		network.single_predict(inputs[0][i].reshaped(28,28,1)).print();
 		BC::print("------------------------------------");
 	}
 

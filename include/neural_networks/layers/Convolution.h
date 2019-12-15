@@ -38,6 +38,7 @@ struct Convolution:
 	using output_tensor_dimension = BC::traits::Integer<3>;
 	using requires_extra_cache = std::true_type;
 
+	using defines_single_predict = std::true_type;
 	using is_recurrent = IsRecurrent;
 
 private:
@@ -57,26 +58,12 @@ private:
 	Dim<2> m_dilation;
 
 	Dim<3> m_output_shape;
-
 	Dim<2> m_column_image_shape;
 
 	using col_image_key = BC::nn::cache_key<
 			BC::utility::Name<'c','x'>, cube, is_recurrent>;
 
 public:
-
-	Dim<3> get_input_shape() const { return m_input_shape; }
-	Dim<3> get_output_shape() const { return m_output_shape; }
-
-	Dim<3> get_batched_column_image_shape() const {
-		return m_column_image_shape.concat(this->batch_size());
-	}
-
-	Dim<4> get_kernel_shape() const {
-		return BC::Dim<4> {
-				m_krnl_shape[0], m_krnl_shape[1],
-				m_input_shape[2], m_krnl_shape[2] };
-	}
 
 	Convolution(
 			Dim<3> img_dims,
@@ -102,7 +89,9 @@ public:
 		};
 
 		m_output_shape = BC::dim(out_dim(0), out_dim(1), krnl_dims[2]);
-		m_column_image_shape = BC::dim(m_krnl_shape.prod(2) * img_dims[2], out_dim(0) * out_dim(1));
+		m_column_image_shape = BC::dim(
+						m_krnl_shape.prod(2) * img_dims[2],
+						out_dim(0) * out_dim(1));
 
 		this->m_input_sz = m_input_shape.size();
 		this->m_output_sz = m_output_shape.size();
@@ -134,6 +123,27 @@ public:
 		return y;
 	}
 
+	template<class X>
+	auto single_predict(const X& x, Cache& cache)
+	{
+		cube y(this->get_output_shape());
+		mat col_x(m_column_image_shape);
+
+		BC::im2col(x.get_stream(),
+				col_x.internal(),
+				x.internal(),
+				m_krnl_shape,
+				m_padding,
+				m_strides,
+				m_dilation);
+
+			BC::Dim<2> mat_y_shape = {y.rows() * y.cols(), w.cols() };
+			y.reshaped(mat_y_shape) = col_x.t() * w;
+
+		return y;
+	}
+
+
 	template<class X, class Delta>
 	auto back_propagation(const X& x, const Delta& dy, Cache& cache)
 	{
@@ -155,6 +165,19 @@ public:
 					m_dilation);
 		}
 		return delta_dx;
+	}
+
+	Dim<3> get_input_shape() const { return m_input_shape; }
+	Dim<3> get_output_shape() const { return m_output_shape; }
+
+	Dim<3> get_batched_column_image_shape() const {
+		return m_column_image_shape.concat(this->batch_size());
+	}
+
+	Dim<4> get_kernel_shape() const {
+		return BC::Dim<4> {
+				m_krnl_shape[0], m_krnl_shape[1],
+				m_input_shape[2], m_krnl_shape[2] };
 	}
 
 	void update_weights()

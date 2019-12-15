@@ -47,6 +47,10 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 		}
 	}
 
+	network.save("test");
+	BC::allocators::Recycle_Allocator_Globals::clear_recycler(system_tag);
+
+
 	auto end = std::chrono::system_clock::now();
 	BC::print("training time:", clock(end - start).count());
 	BC::print("testing...");

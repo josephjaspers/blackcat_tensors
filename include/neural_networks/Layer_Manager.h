@@ -92,7 +92,7 @@ public:
 	template<class T>
 	auto back_propagation(const T& dy) {
 		static_assert(T::tensor_dimension == output_tensor_dimension::value + 1,
-				"Invalid tensor_domension in back_propagation");
+				"Invalid tensor_dimension in back_propagation");
 		BC_ASSERT(dy.get_shape() == this->get_batched_output_shape(),
 					"back_propagation input must have the same shape as "
 					"get_batched_output_shape() of the current layer "
@@ -111,7 +111,7 @@ public:
 	template<class T>
 	auto predict(const T& expression) {
 		static_assert(T::tensor_dimension == input_tensor_dimension::value + 1,
-				"Invalid tensor_domension in predict");
+				"Invalid tensor_dimension in predict");
 		BC_ASSERT(expression.get_shape() == this->get_batched_input_shape(),
 					"predict<T> input must have the same shape as "
 					"get_batched_input_shape() of the current layer "
@@ -129,7 +129,7 @@ public:
 	template<class T>
 	auto single_predict(const T& expression) {
 		static_assert(T::tensor_dimension == input_tensor_dimension::value,
-				"Invalid tensor_domension in single_predict");
+				"Invalid tensor_dimension in single_predict");
 		BC_ASSERT(expression.get_shape() == this->get_input_shape(),
 					"single_predict<T> input must have the same shape as "
 					"get_input_shape() of the current layer "

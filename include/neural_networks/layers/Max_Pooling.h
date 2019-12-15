@@ -38,6 +38,7 @@ struct Max_Pooling:
 
 	using greedy_evaluate_delta = std::true_type;
 	using requires_extra_cache = std::true_type;
+	using defines_single_predict = std::true_type;
 
 	Dim<3> m_img_dims;  //channel_width_height
 	Dim<3> m_pool_dims;
@@ -90,6 +91,26 @@ struct Max_Pooling:
 				m_strides);
 
 		cache.store(index_key_type(), mask);
+		return pooled_image;
+	}
+
+	template<class Image>
+	auto single_predict(const Image& image, Cache& cache) {
+		index_tensor_type mask(this->get_output_shape());
+		mask.zero();
+
+		tensor_type pooled_image(this->get_output_shape());
+		pooled_image.zero();
+
+		BC::max_pooling_forward(
+				BC::streams::select_on_get_stream(image),
+				image.internal(),
+				pooled_image.internal(),
+				mask.internal(),
+				m_krnl_dims,
+				m_padding,
+				m_strides);
+
 		return pooled_image;
 	}
 

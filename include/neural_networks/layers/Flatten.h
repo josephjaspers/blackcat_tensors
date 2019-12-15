@@ -31,6 +31,7 @@ struct Flatten:
 	using input_tensor_dimension = InputTensorDimension;
 	using output_tensor_dimension = BC::traits::Integer<1>;
 	using requires_inputs = std::false_type;
+	using defines_single_predict = std::true_type;
 
 private:
 
@@ -45,6 +46,11 @@ public:
 	template<class Matrix>
 	auto forward_propagation(const Matrix& x) {
 		return x.reshaped(this->get_batched_output_shape());
+	}
+
+	template<class Vector>
+	auto single_predict(const Vector& x) {
+		return x.flattened();
 	}
 
 	template<class X, class Delta>
