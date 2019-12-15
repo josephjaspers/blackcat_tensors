@@ -27,21 +27,23 @@ struct Convolution:
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
 	using optimizer_type = Optimizer;
 
-	using parent_type = Layer_Base<
-			Convolution<SystemTag, ValueType, Optimizer, IsRecurrent>>;
-	using mat = BC::Matrix<value_type, allocator_type>;
-	using tensor4 = BC::Tensor<4, value_type, allocator_type>;
-	using cube = BC::Cube<value_type, allocator_type>;
+	using self_type = Convolution<SystemTag, ValueType, Optimizer, IsRecurrent>;
+	using parent_type = Layer_Base<self_type>;
 
-	using greedy_evaluate_delta = std::true_type;
 	using input_tensor_dimension = BC::traits::Integer<3>;
 	using output_tensor_dimension = BC::traits::Integer<3>;
+
+	using greedy_evaluate_delta = std::true_type;
 	using requires_extra_cache = std::true_type;
 
 	using defines_single_predict = std::true_type;
 	using is_recurrent = IsRecurrent;
 
 private:
+
+	using mat = BC::Matrix<value_type, allocator_type>;
+	using tensor4 = BC::Tensor<4, value_type, allocator_type>;
+	using cube = BC::Cube<value_type, allocator_type>;
 
 	using mat_opt_t = typename Optimizer::template Optimizer<mat>;
 

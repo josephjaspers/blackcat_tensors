@@ -24,13 +24,12 @@ struct Flatten:
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
-	using parent_type = Layer_Base<
-			Flatten<SystemTag, ValueType, InputTensorDimension>>;
+	using self_type = Flatten<SystemTag, ValueType, InputTensorDimension>;
+	using parent_type = Layer_Base<self_type>;
 
 	using greedy_evaluate_delta = std::true_type;
 	using input_tensor_dimension = InputTensorDimension;
 	using output_tensor_dimension = BC::traits::Integer<1>;
-	using requires_inputs = std::false_type;
 	using defines_single_predict = std::true_type;
 
 private:

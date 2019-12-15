@@ -21,15 +21,17 @@ struct Recurrent:
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 	using allocator_type = BC::Allocator<SystemTag, ValueType>;
-	using parent_type = Layer_Base<
-			Recurrent<SystemTag, ValueType, RecurrentNonLinearity>>;
-
-	using mat = BC::Matrix<value_type, allocator_type>;
-	using vec = BC::Vector<value_type, allocator_type>;
+	using self_type = Recurrent<SystemTag, ValueType, RecurrentNonLinearity>;
+	using parent_type = Layer_Base<self_type>;
 
 	using forward_requires_outputs = std::true_type;
 	using backward_requires_outputs = std::true_type;
 	using greedy_evaluate_delta = std::true_type;
+
+private:
+
+	using mat = BC::Matrix<value_type, allocator_type>;
+	using vec = BC::Vector<value_type, allocator_type>;
 
 	RecurrentNonLinearity g;
 	ValueType lr = parent_type::default_learning_rate;
@@ -38,6 +40,8 @@ struct Recurrent:
 	mat w, w_gradients;  //weights
 	mat r, r_gradients;
 	vec b, b_gradients;  //biases
+
+public:
 
 	Recurrent(int inputs, int outputs) :
 		parent_type(__func__, inputs, outputs),

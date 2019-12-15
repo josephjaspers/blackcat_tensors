@@ -23,28 +23,32 @@ struct Max_Pooling:
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	using parent_type = Layer_Base<Max_Pooling<SystemTag, ValueType>>;
+	using self_type = Max_Pooling<SystemTag, ValueType>;
+	using parent_type = Layer_Base<self_type>;
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
-	using index_allocator_type = nn_default_allocator_type<SystemTag, BC::size_t>;
 
+	using greedy_evaluate_delta = std::true_type;
+	using requires_extra_cache = std::true_type;
+	using defines_single_predict = std::true_type;
+
+private:
+
+	using index_allocator_type = nn_default_allocator_type<SystemTag, BC::size_t>;
 	using index_tensor_type = BC::Cube<BC::size_t, index_allocator_type>;
 	using batched_index_tensor_type = BC::Tensor<4, BC::size_t, index_allocator_type>;
-
 	using tensor_type = BC::Cube<value_type, allocator_type>;
 	using batched_tensor_type = BC::Tensor<4, value_type, allocator_type>;
 
 	using index_key_type =  BC::nn::cache_key<
 			BC::utility::Name<'i','d','x'>, batched_index_tensor_type, IsRecurrent>;
 
-	using greedy_evaluate_delta = std::true_type;
-	using requires_extra_cache = std::true_type;
-	using defines_single_predict = std::true_type;
-
 	Dim<3> m_img_dims;  //channel_width_height
 	Dim<3> m_pool_dims;
 	Dim<2> m_krnl_dims;
 	Dim<2> m_padding;
 	Dim<2> m_strides;
+
+public:
 
 	Max_Pooling(
 			Dim<3> img_dims,

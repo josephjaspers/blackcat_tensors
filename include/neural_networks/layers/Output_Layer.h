@@ -19,7 +19,8 @@ struct Output_Layer:
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	using parent_type = Layer_Base<Output_Layer<SystemTag, ValueType>>;
+	using self_type = Output_Layer<SystemTag, ValueType>;
+	using parent_type = Layer_Base<self_type>;
 
 	Output_Layer(int inputs):
 		parent_type(__func__, inputs, inputs) {}

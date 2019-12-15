@@ -49,13 +49,11 @@ struct LSTM:
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
 	using optimizer_type = Optimizer;
 
-	using mat = BC::Matrix<value_type, allocator_type>;
-	using vec = BC::Vector<value_type, allocator_type>;
-
 	using greedy_evaluate_delta = std::true_type;
 	using forward_requires_outputs = std::true_type;
 	using backward_requires_outputs = std::true_type;
 	using requires_extra_cache = std::true_type;
+	using is_recurrent = std::true_type;
 
 #ifndef _MSC_VER
 	using defines_predict = std::true_type;
@@ -65,14 +63,17 @@ struct LSTM:
 
 private:
 
-	CellStateNonLinearity  c_g;
-	ForgetGateNonlinearity f_g;
-	WriteGateNonlinearity z_g;
-	InputGateNonlinearity i_g;
-	OutputGateNonlinearity o_g;
+	using mat = BC::Matrix<value_type, allocator_type>;
+	using vec = BC::Vector<value_type, allocator_type>;
 
 	using mat_opt_t = typename Optimizer::template Optimizer<mat>;
 	using vec_opt_t = typename Optimizer::template Optimizer<vec>;
+
+	CellStateNonLinearity  c_g;
+	ForgetGateNonlinearity f_g;
+	WriteGateNonlinearity  z_g;
+	InputGateNonlinearity  i_g;
+	OutputGateNonlinearity o_g;
 
 	mat wf, wz, wi, wo;
 	mat wf_gradients, wz_gradients, wi_gradients, wo_gradients;
@@ -88,9 +89,6 @@ private:
 	vec_opt_t bf_opt, bz_opt, bi_opt, bo_opt;
 
 	mat dc, df, dz, di, do_, dy;
-
-
-	using is_recurrent = std::true_type;
 
 	template<char C>
 	using key_type = BC::nn::cache_key<

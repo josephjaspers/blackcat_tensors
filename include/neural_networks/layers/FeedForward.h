@@ -22,19 +22,21 @@ struct FeedForward:
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	using parent_type = Layer_Base<FeedForward<SystemTag, ValueType, Optimizer>>;
+
+	using self_type = FeedForward<SystemTag, ValueType, Optimizer>;
+	using parent_type = Layer_Base<self_type>;
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
 	using optimizer_type = Optimizer;
+
+	using greedy_evaluate_delta = std::true_type;
+
+private:
 
 	using mat = BC::Matrix<value_type, allocator_type>;
 	using vec = BC::Vector<value_type, allocator_type>;
 
 	using mat_opt_t = typename Optimizer::template Optimizer<mat>;
 	using vec_opt_t = typename Optimizer::template Optimizer<vec>;
-
-	using greedy_evaluate_delta = std::true_type;
-
-private:
 
 	ValueType lr = FeedForward::default_learning_rate;
 
