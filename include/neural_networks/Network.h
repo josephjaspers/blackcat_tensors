@@ -263,6 +263,7 @@ struct NeuralNetwork {
 			loader.set_current_layer_name(layer.classname());
 			loader.make_current_directory();
 			layer.save(loader);
+			layer.save_from_cache(loader, layer.get_cache());
 			index++;
 		});
 	}
@@ -284,6 +285,7 @@ struct NeuralNetwork {
 			loader.set_current_layer_index(index);
 			loader.set_current_layer_name(layer.classname());
 			layer.load(loader);
+			layer.load_to_cache(loader, layer.get_cache());
 			index++;
 		});
 

@@ -95,11 +95,12 @@ public:
 	}
 
 	bool file_exists(std::string filename) {
-#ifdef BC_USE_EXPERIMENTAL_FILE_SYSTEM
-		return std::experimental::filesystem::exists(filename);
-#else
+//TODO re-add
+//#ifdef BC_USE_EXPERIMENTAL_FILE_SYSTEM
+//		return std::experimental::filesystem::exists(filename);
+//#else
 		return std::ifstream(filename).good();
-#endif
+//#endif
 	}
 
 	static std::string dimension_to_tensor_name(int dimension) {

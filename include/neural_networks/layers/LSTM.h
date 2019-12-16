@@ -395,13 +395,23 @@ public:
 
 	void save_from_cache(Layer_Loader& loader, Cache& cache)
 	{
+		auto& z = cache.load(write_key(), default_tensor_factory());
+		auto& i = cache.load(input_key(), default_tensor_factory());
+		auto& f = cache.load(forget_key(), default_tensor_factory());
+		auto& o = cache.load(output_key(), default_tensor_factory());
 		auto& c = cache.load(cell_key(), default_tensor_factory());
+
+		loader.save_variable(z, "write_gate_values");
+		loader.save_variable(i, "input_gate_values");
+		loader.save_variable(f, "forget_gate_values");
+		loader.save_variable(o, "output_gate_values");
 		loader.save_variable(c, "cellstate");
 
-
 		if (cache.contains(predict_cell_key())) {
-			auto& pc = cache.load(predict_cell_key());
-			loader.save_variable(pc, "predict_celltate");
+			auto& pc = cache.load(
+					predict_cell_key(),
+					default_predict_tensor_factory());
+			loader.save_variable(pc, "predict_cellstate");
 		}
 	}
 
@@ -439,14 +449,25 @@ public:
 		bo_opt.load(loader, "bo_opt");
 	}
 
-	void load_from_cache(Layer_Loader& loader, Cache& cache)
+	void load_to_cache(Layer_Loader& loader, Cache& cache)
 	{
+		auto& z = cache.load(write_key(), default_tensor_factory());
+		auto& i = cache.load(input_key(), default_tensor_factory());
+		auto& f = cache.load(forget_key(), default_tensor_factory());
+		auto& o = cache.load(output_key(), default_tensor_factory());
 		auto& c = cache.load(cell_key(), default_tensor_factory());
+
+		loader.load_variable(z, "write_gate_values");
+		loader.load_variable(i, "input_gate_values");
+		loader.load_variable(f, "forget_gate_values");
+		loader.load_variable(o, "output_gate_values");
 		loader.load_variable(c, "cellstate");
 
-		if (loader.file_exists(1, "cellstate")) {
-			auto& pc = cache.load(predict_cell_key());
-			loader.load_variable(pc, "predict_celltate");
+		if (loader.file_exists(1, "predict_cellstate")) {
+			auto& pc = cache.load(
+					predict_cell_key(),
+					default_predict_tensor_factory());
+			loader.load_variable(pc, "predict_cellstate");
 		}
 	}
 
@@ -462,9 +483,7 @@ private:
 	auto default_tensor_factory()
 	{
 		return [&]() {
-			mat m(this->output_size(), this->batch_size());
-			m.zero();
-			return m;
+			return mat(this->output_size(), this->batch_size()).zero();
 		};
 	}
 
