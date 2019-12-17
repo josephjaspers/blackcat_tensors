@@ -2,6 +2,8 @@
 #ifndef BC_CONTEXT_HOSTSTREAM_H_
 #define BC_CONTEXT_HOSTSTREAM_H_
 
+#include "Stream_Synchronization.h"
+
 #include <thread>
 #include <queue>
 #include <mutex>

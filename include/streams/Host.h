@@ -10,6 +10,7 @@
 #define BC_STREAMS_COMMON_H_
 
 #include <memory>
+#include "Stream_Synchronization.h"
 #include "Host_Stream.h"
 
 namespace BC {

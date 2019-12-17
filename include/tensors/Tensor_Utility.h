@@ -102,7 +102,7 @@ public:
 				BC::traits::bind([&](const auto& der)
 				{
 					tensor_type copy(der);
-					BC::device_sync();
+					BC::streams::device_sync();
 					return BC::tensors::io::to_string(copy, fs, tensor_dim);
 				}, *this))
 			));

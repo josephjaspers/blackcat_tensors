@@ -9,6 +9,7 @@
 #ifndef BC_CONTEXT_DEVICE_H_
 #define BC_CONTEXT_DEVICE_H_
 
+#include "Stream_Synchronization.h"
 #include "Host_Stream.h"
 
 #include <cuda.h>

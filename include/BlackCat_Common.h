@@ -234,20 +234,6 @@ namespace namespace_name {									   	\
 
 namespace BC {
 
-inline void host_sync() {
-	BC_omp_bar__
-}
-
-inline void device_sync() {
-#ifdef __CUDACC__
-	cudaDeviceSynchronize();
-#endif
-}
-
-inline void synchronize() {
-	host_sync();
-	device_sync();
-}
 
 #ifndef BC_SIZE_T
 #define BC_SIZE_T int
@@ -296,16 +282,6 @@ inline const char* bc_get_classname_of(const T& arg) {
 #endif
 
 //------ seperator ---------- //
-
-inline char bc_directory_separator()
-{
-#if defined _WIN32 || defined __CYGWIN__
-	return '\\';
-#else
-	return '/';
-#endif
-}
-
 
 template<class T=char>
 void print(const T& arg='\n') {

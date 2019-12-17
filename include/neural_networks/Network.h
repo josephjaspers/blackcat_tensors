@@ -233,12 +233,18 @@ struct NeuralNetwork {
 	void save(std::string directory_name) {
 		zero_time_index();
 		//Attempt to create a directory to save our model in
-		if ((directory_name != "") && (directory_name != ".")) {
-			int error = system(std::string("mkdir " + directory_name).c_str());
+		if (directory_name == ".")
+			directory_name = "";
+
+		if (directory_name != "" &&
+				!BC::filesystem::directory_exists(directory_name))
+		{
+			BC_ASSERT(BC::filesystem::mkdir(directory_name) == 0,
+				"Failure to create nonexistent directory: " + directory_name);
 		}
 
 		auto get_filepath = [&](std::string filename) {
-			return directory_name + bc_directory_separator() + filename;
+			return BC::filesystem::make_path(directory_name, filename);
 		};
 
 		{
@@ -275,7 +281,7 @@ struct NeuralNetwork {
 		zero_time_index();
 
 		auto get_filepath = [&](std::string filename) {
-			return directory_name + bc_directory_separator() + filename;
+			return BC::filesystem::make_path(directory_name, filename);
 		};
 
 		Layer_Loader loader(directory_name);

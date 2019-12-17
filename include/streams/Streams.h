@@ -10,6 +10,7 @@
 
 BC_DEFAULT_MODULE_BODY(streams, Stream)
 
+#include "Stream_Synchronization.h"
 #include "Host.h"
 #include "Device.h"
 #include "Logging_Stream.h"
@@ -51,7 +52,6 @@ template<class SystemTag>
 static auto select_logging_stream(Logging_Stream<SystemTag> stream) {
 	return stream;
 }
-
 
 }
 }

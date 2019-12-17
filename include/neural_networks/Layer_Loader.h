@@ -10,13 +10,6 @@
 
 #include <string>
 #include <ostream>
-#include <sys/types.h>
-#include <sys/stat.h>
-
-#if __has_include(<experimental/filesystem>)
-#include <experimental/filesystem>
-#define BC_USE_EXPERIMENTAL_FILE_SYSTEM 1
-#endif
 
 namespace BC {
 namespace nn {
@@ -40,12 +33,7 @@ struct Layer_Loader {
 
 	std::string current_layer_subdir() const {
 		std::string subdir = "l" + std::to_string(current_layer_index) + "_" + current_layername;
-		return root_directory + bc_directory_separator() + subdir;
-	}
-
-	int make_current_directory(){
-		std::string mkdir = "mkdir " + current_layer_subdir();
-		return system(mkdir.c_str());
+		return BC::filesystem::make_path(root_directory, subdir);
 	}
 
 	template<class T>
@@ -73,14 +61,17 @@ struct Layer_Loader {
 		tensor = BC::io::read_uniform<value_type>(descriptor, tensor.get_allocator());
 	}
 
+	void make_current_directory() {
+		if (!BC::filesystem::directory_exists(current_layer_subdir()))
+			BC::filesystem::mkdir(current_layer_subdir());
+	}
 
 private:
 
 	std::string path_from_args(int dimension, std::string variable_name) {
-		return current_layer_subdir()
-				+ bc_directory_separator()
-				+ variable_name
-				+ "." + dimension_to_tensor_name(dimension);
+		std::string extension = dimension_to_tensor_name(dimension);
+		return BC::filesystem::make_path(
+				current_layer_subdir(), variable_name + "." + extension);
 	}
 
 	template<class T>
@@ -91,17 +82,9 @@ private:
 public:
 
 	bool file_exists(int dimension, std::string filename) {
-		return file_exists(path_from_args(dimension, filename));
+		return BC::filesystem::file_exists(path_from_args(dimension, filename));
 	}
 
-	bool file_exists(std::string filename) {
-//TODO re-add
-//#ifdef BC_USE_EXPERIMENTAL_FILE_SYSTEM
-//		return std::experimental::filesystem::exists(filename);
-//#else
-		return std::ifstream(filename).good();
-//#endif
-	}
 
 	static std::string dimension_to_tensor_name(int dimension) {
 		switch(dimension) {

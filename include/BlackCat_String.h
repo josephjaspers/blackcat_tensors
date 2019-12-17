@@ -9,6 +9,7 @@
 #define BLACKCAT_TENSORS_STRING_EXTENSIONS_H_
 
 #include <string>
+#include <vector>
 #include <algorithm>
 
 namespace BC {
@@ -21,6 +22,9 @@ struct string:
 		std::string {
 
 	using std::string::string;
+
+	string(std::string s):
+		std::string(s) {}
 
 	int count(char value) const {
 		return std::count(this->begin(), this->end(), value);
@@ -38,6 +42,15 @@ struct string:
 		auto start_idx = this->size() - str.size();
 		return this->substr(start_idx, str.size()) == str;
 	}
+
+	bool startswith(char c) const {
+		return this->size() && (*this)[0] == c;
+	}
+
+	bool endswith(char c) const {
+		return this->size() && this->back() == c;
+	}
+
 
 	std::vector<BC::string> split(char delim) const {
 		std::vector<BC::string> splits;
