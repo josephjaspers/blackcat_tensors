@@ -9,7 +9,7 @@
 #define TEST_COMMON_H_
 
 #include <string>
-#include "../include/BlackCat_Tensors.h"
+#include "../blackcat/tensors.h"
 
 namespace BC {
 namespace tests {

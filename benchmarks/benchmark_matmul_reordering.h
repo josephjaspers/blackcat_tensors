@@ -8,7 +8,7 @@
 #ifndef BENCHMARK_MATMUL_REORDERING_H_
 #define BENCHMARK_MATMUL_REORDERING_H_
 
-#include "../include/BlackCat_Tensors.h"
+#include "../blackcat/tensors.h"
 #include <chrono>
 
 float BC_matmul_assign(int size, BC::size_t  iters) {

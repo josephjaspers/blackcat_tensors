@@ -1,5 +1,5 @@
-#include "../../include/BlackCat_Tensors.h"
-#include "../../include/BlackCat_NeuralNetworks.h"
+#include "../../blackcat/tensors.h"
+#include "../../blackcat/neural_networks.h"
 #include "../datasets/mnist_loader.h"
 #include <chrono>
 #include <string>

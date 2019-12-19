@@ -8,7 +8,7 @@
 #ifndef BC_BENCHMARK_BC_EWISE_H_
 #define BC_BENCHMARK_BC_EWISE_H_
 
-#include "../include/BlackCat_Tensors.h"
+#include "../../blackcat/tensors.h"
 #include "cu_cwise.cu"
 
 namespace BC {

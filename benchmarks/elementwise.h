@@ -9,7 +9,7 @@
 #define ELEMENTWISE_H_
 #include <vector>
 #include <chrono>
-#include "../../BlackCat_Tensors/include/BlackCat_Tensors.h"
+#include "../blackcat/tensors.h"
 
 template<class Allocator>
 auto benchmark_forloop(int size, BC::size_t  iters, Allocator alloc, bool stdout=false) {

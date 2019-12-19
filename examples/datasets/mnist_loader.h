@@ -8,7 +8,7 @@
 #ifndef MNIST_LOADER_H_
 #define MNIST_LOADER_H_
 
-#include "../../include/BlackCat_Tensors.h"
+#include "../../blackcat/tensors.h"
 
 namespace BC {
 

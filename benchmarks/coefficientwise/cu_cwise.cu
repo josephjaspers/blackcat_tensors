@@ -40,7 +40,7 @@ auto cu_cwise(int size, int reps) {
 
 		auto f = [&]() {
 
-			cuda_cwise_test_kernel<scalar_t><<<BC::blocks(size),BC::threads()>>>(
+			cuda_cwise_test_kernel<scalar_t><<<BC::calculate_block_dim(size),BC::calculate_threads()>>>(
 					a.data(), size, b.data(), c.data(), d.data(), e.data());
 
 		};
