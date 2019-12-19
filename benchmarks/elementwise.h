@@ -12,10 +12,10 @@
 #include "../blackcat/tensors.h"
 
 template<class Allocator>
-auto benchmark_forloop(int size, BC::size_t  iters, Allocator alloc, bool stdout=false) {
+auto benchmark_forloop(int size, bc::size_t  iters, Allocator alloc, bool stdout=false) {
 
     using clock = std::chrono::duration<double>;
-    using vec = BC::Vector<typename Allocator::value_type, Allocator>;
+    using vec = bc::Vector<typename Allocator::value_type, Allocator>;
 
     clock bc_time;
     clock cptr_time;
@@ -70,7 +70,7 @@ auto benchmark_forloop(int size, BC::size_t  iters, Allocator alloc, bool stdout
 }
 
 
-template<class allocator=BC::Allocator<BC::host_tag, double>>
+template<class allocator=bc::Allocator<bc::host_tag, double>>
 void benchmark_forloop_suite(bool stdout=false, allocator alloc=allocator()) {
 	int size = 10000;
 	int reps = 1000000;

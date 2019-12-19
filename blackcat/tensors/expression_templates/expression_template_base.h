@@ -11,7 +11,7 @@
 
 #include "expression_template_traits.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs {
 
@@ -31,8 +31,8 @@ struct Expression_Template_Base  {
 
 	BCINLINE Expression_Template_Base() {
 
-		using BC::traits::true_call;
-		using BC::traits::Integer;
+		using bc::traits::true_call;
+		using bc::traits::Integer;
 
 #ifndef _MSC_VER
 		static_assert(std::is_trivially_copy_constructible<Derived>::value,
@@ -80,19 +80,19 @@ struct Expression_Base:
 	using expression_template_expression_type = std::true_type;
 
 	BCINLINE const auto inner_shape() const {
-		BC::Dim<Derived::tensor_dimension> dim;
-		for (BC::size_t i = 0; i < Derived::tensor_dimension; ++i) {
+		bc::Dim<Derived::tensor_dimension> dim;
+		for (bc::size_t i = 0; i < Derived::tensor_dimension; ++i) {
 			dim[i] = static_cast<const Derived&>(*this).dimension(i);
 		}
 		return dim;
 	}
 
 	BCINLINE const auto get_shape() const {
-		return BC::Shape<Derived::tensor_dimension>(
+		return bc::Shape<Derived::tensor_dimension>(
 				static_cast<const Derived&>(*this).inner_shape());
 	}
 
-	BCINLINE BC::size_t outer_dimension() const {
+	BCINLINE bc::size_t outer_dimension() const {
 		auto& derived = static_cast<const Derived&>(*this);
 		return derived.dimension(derived.tensor_dimension-1);
 	}

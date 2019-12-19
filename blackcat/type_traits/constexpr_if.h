@@ -8,7 +8,7 @@
 #ifndef BLACKCAT_CONSTEXPRIF_H_
 #define BLACKCAT_CONSTEXPRIF_H_
 
-namespace BC {
+namespace bc {
 namespace traits {
 
 
@@ -45,7 +45,7 @@ auto constexpr_ternary(f1 true_path, f2 false_path) {
  *
  * int main() {
  *  static constexpr bool value = false;
- *	return BC::meta:constexpr_if<false>(
+ *	return bc::meta:constexpr_if<false>(
  *		[]() { std::cout << " constexpr_boolean is true " << std::endl;  return true;},
  *		[]() { std::cout << " constexpr_boolean is false " << std::endl; return false; }
  *	);

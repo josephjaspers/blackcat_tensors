@@ -17,25 +17,25 @@ BC_DEFAULT_MODULE_BODY(streams, Stream)
 #include "device.h"
 #include "logging_stream.h"
 
-namespace BC {
+namespace bc {
 
-using BC::streams::Stream;
+using bc::streams::Stream;
 
 namespace streams {
 
 template<class T>
 static auto select_on_get_stream(const T& type) {
-	using traits_t = BC::traits::common_traits<T>;
+	using traits_t = bc::traits::common_traits<T>;
 	using system_tag = typename traits_t::system_tag;
 
 	constexpr bool defines_get_stream = traits_t::defines_get_stream::value;
 
-	return BC::traits::constexpr_ternary<defines_get_stream>(
-			BC::traits::bind([](const auto& type) {
+	return bc::traits::constexpr_ternary<defines_get_stream>(
+			bc::traits::bind([](const auto& type) {
 					return type.get_stream();
 			}, type),
 			[]() {
-					return BC::streams::Stream<system_tag>();
+					return bc::streams::Stream<system_tag>();
 			}
 	);
 }

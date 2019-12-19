@@ -3,7 +3,7 @@
 
 #include "layer_manager.h"
 
-namespace BC {
+namespace bc {
 namespace nn {
 namespace detail {
 
@@ -46,7 +46,7 @@ struct LayerChain<
 		Layers...>:
 
 	LayerChain<
-			BC::traits::Integer<Index::value + 1>,
+			bc::traits::Integer<Index::value + 1>,
 			Neural_Network_Is_Recurrent,
 			LayerChain<Index, Neural_Network_Is_Recurrent, Derived, CurrentLayer, Layers...>,
 			Layers...>,
@@ -63,7 +63,7 @@ struct LayerChain<
 		Layers...>;
 
 	using parent_type = LayerChain<
-			BC::traits::Integer<Index::value + 1>,
+			bc::traits::Integer<Index::value + 1>,
 			Neural_Network_Is_Recurrent,
 			self_type,
 			Layers...>;
@@ -73,17 +73,17 @@ struct LayerChain<
 			CurrentLayer,
 			Neural_Network_Is_Recurrent>;
 
-	using next_layer_type = BC::traits::conditional_detected<
+	using next_layer_type = bc::traits::conditional_detected<
 			detail::query_layer_type, parent_type, void>;
 
 	using type   = CurrentLayer;
 	using value_type = typename CurrentLayer::value_type;
 	using system_tag = typename CurrentLayer::system_tag;
 
-	using is_input_layer      = BC::traits::truth_type<Index::value==0>;
-	using is_output_layer     = BC::traits::truth_type<sizeof...(Layers)==0>;
-	using is_not_input_layer  = BC::traits::not_type<is_input_layer::value>;
-	using is_not_output_layer = BC::traits::not_type<is_output_layer::value>;
+	using is_input_layer      = bc::traits::truth_type<Index::value==0>;
+	using is_output_layer     = bc::traits::truth_type<sizeof...(Layers)==0>;
+	using is_not_input_layer  = bc::traits::not_type<is_input_layer::value>;
+	using is_not_output_layer = bc::traits::not_type<is_output_layer::value>;
 
 	LayerChain(CurrentLayer f, Layers... layers):
 		parent_type(layers...),
@@ -92,17 +92,17 @@ struct LayerChain<
 	const auto& layer() const { return static_cast<const layer_type&>(*this); }
 	      auto& layer()       { return static_cast<      layer_type&>(*this); }
 
-	const auto& get(BC::traits::Integer<0>) const { return layer(); }
-	      auto& get(BC::traits::Integer<0>)       { return layer(); }
+	const auto& get(bc::traits::Integer<0>) const { return layer(); }
+	      auto& get(bc::traits::Integer<0>)       { return layer(); }
 
 	template<int X>
-	const auto& get(BC::traits::Integer<X>) const {
-		return next().get(BC::traits::Integer<X-1>());
+	const auto& get(bc::traits::Integer<X>) const {
+		return next().get(bc::traits::Integer<X-1>());
 	}
 
 	template<int X>
-	auto& get(BC::traits::Integer<X>) {
-		return next().get(BC::traits::Integer<X-1>());
+	auto& get(bc::traits::Integer<X>) {
+		return next().get(bc::traits::Integer<X-1>());
 	}
 
 	const auto& head() const { return head_impl(is_input_layer()); }

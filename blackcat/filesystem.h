@@ -7,7 +7,7 @@
 
 #include "string.h"
 
-namespace BC {
+namespace bc {
 namespace filesystem {
 
 #if defined _WIN32 || defined __CYGWIN__
@@ -33,13 +33,13 @@ inline bool file_exists(const std::string& name) {
 	return stat(name.c_str(), &buffer) == 0;
 }
 
-inline BC::string make_path(const BC::string& path) {
+inline bc::string make_path(const bc::string& path) {
 	return path;
 }
 
 template<class... Strs>
-inline BC::string make_path(const BC::string& str, const Strs&... strs) {
-	BC::string right_path = make_path(strs...);
+inline bc::string make_path(const bc::string& str, const Strs&... strs) {
+	bc::string right_path = make_path(strs...);
 	bool lsep = str.endswith(separator);
 	bool rsep = right_path.startswith(separator);
 

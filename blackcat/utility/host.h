@@ -8,7 +8,7 @@
 #ifndef BC_UTILITY_HOST_H_
 #define BC_UTILITY_HOST_H_
 
-namespace BC {
+namespace bc {
 namespace utility {
 
 template<>
@@ -23,12 +23,12 @@ struct Utility<host_tag> {
 	}
 
 	template<class T, class U>
-	static void HostToDevice(T* device_ptr, U* host_ptr, BC::size_t size) {
+	static void HostToDevice(T* device_ptr, U* host_ptr, bc::size_t size) {
 		copy(device_ptr, host_ptr, size);
 	}
 
 	template<class T, class U>
-	static void DeviceToHost(T* host_ptr, U* device_ptr, BC::size_t size) {
+	static void DeviceToHost(T* host_ptr, U* device_ptr, bc::size_t size) {
 		copy(host_ptr, device_ptr, size);
 	}
 };

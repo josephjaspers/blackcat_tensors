@@ -33,7 +33,7 @@ public:
 		BC_ASSERT_ASSIGNABLE(
 				"self_type& operator = (const Tensor_Base<Xpr>& param)");
 		assert_valid(param);
-		evaluate(bi_expr< BC::oper::Assign >(param));
+		evaluate(bi_expr< bc::oper::Assign >(param));
 		return *this;
 	}
 
@@ -277,7 +277,7 @@ private:
 
 	template<class Xpr>
 	bool valid_slice(const Tensor_Base<Xpr>& tensor) const {
-		constexpr BC::size_t min_dim =
+		constexpr bc::size_t min_dim =
 			traits::min(tensor_dimension, Xpr::tensor_dimension);
 
 		for (int i = 0; i < min_dim; ++i)

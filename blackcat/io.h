@@ -19,7 +19,7 @@
 #include <vector>
 #include <assert.h>
 
-namespace BC {
+namespace bc {
 namespace io {
 
 template<class T>
@@ -86,9 +86,9 @@ const dtype& name() const { 		\
 
 };
 
-static std::vector<std::vector<BC::string>> parse(csv_descriptor desc)
+static std::vector<std::vector<bc::string>> parse(csv_descriptor desc)
 {
-	using BC::string;
+	using bc::string;
 	using std::vector;
 
 	std::ifstream ifs(desc.filename());
@@ -101,7 +101,7 @@ static std::vector<std::vector<BC::string>> parse(csv_descriptor desc)
 	};
 
 	if (!ifs.good()) {
-		BC::print("Unable to open `", desc.filename(), '`');
+		bc::print("Unable to open `", desc.filename(), '`');
 		throw 1;
 	}
 
@@ -119,7 +119,7 @@ static std::vector<std::vector<BC::string>> parse(csv_descriptor desc)
 
 		if (!split_rows.empty() &&
 				split_rows.back().size() != cells.size()) {
-			BC::print("Column length mismatch."
+			bc::print("Column length mismatch."
 					"\nExpected: ",  split_rows.back().size(),
 					"\nReceived: ",  cells.size(),
 					"\nRow index: ", split_rows.size());
@@ -145,17 +145,17 @@ static std::vector<std::vector<BC::string>> parse(csv_descriptor desc)
 
 template<
 		class ValueType,
-		class Allocator=BC::Allocator<BC::host_tag, ValueType>>
-static BC::Matrix<ValueType, Allocator> read_uniform(
+		class Allocator=bc::Allocator<bc::host_tag, ValueType>>
+static bc::Matrix<ValueType, Allocator> read_uniform(
 		csv_descriptor desc,
 		Allocator alloc=Allocator()) {
 
-	using BC::string;
+	using bc::string;
 	using std::vector;
 
 	if (desc.transpose()){
-		BC::print("Transpose is not supported for read_uniform");
-		BC::print("TODO implement transposition");
+		bc::print("Transpose is not supported for read_uniform");
+		bc::print("TODO implement transposition");
 		throw 1;
 	}
 
@@ -167,7 +167,7 @@ static BC::Matrix<ValueType, Allocator> read_uniform(
 	if (desc.transpose())
 		std::swap(rows, cols);
 
-	BC::Matrix<ValueType, Allocator> matrix(rows, cols);
+	bc::Matrix<ValueType, Allocator> matrix(rows, cols);
 	for (int i = 0; i < rows; ++i) {
 		for (int j = 0; j < cols; ++j) {
 			int d_i = i + desc.header();

@@ -10,7 +10,7 @@
 
 #include "layer_base.h"
 
-namespace BC {
+namespace bc {
 namespace nn {
 
 template<
@@ -32,8 +32,8 @@ struct FeedForward:
 
 private:
 
-	using mat = BC::Matrix<value_type, allocator_type>;
-	using vec = BC::Vector<value_type, allocator_type>;
+	using mat = bc::Matrix<value_type, allocator_type>;
+	using vec = bc::Vector<value_type, allocator_type>;
 
 	using mat_opt_t = typename Optimizer::template Optimizer<mat>;
 	using vec_opt_t = typename Optimizer::template Optimizer<vec>;
@@ -52,7 +52,7 @@ private:
 
 public:
 
-	FeedForward(BC::size_t inputs, BC::size_t outputs):
+	FeedForward(bc::size_t inputs, bc::size_t outputs):
 		parent_type(__func__, inputs, outputs),
 		w(outputs, inputs),
 		b(outputs),

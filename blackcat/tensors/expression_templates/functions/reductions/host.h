@@ -8,7 +8,7 @@
 #ifndef BLACKCATTENSORS_TENSORS_FUNCTIONS_REDUCTIONS_HOST_REDUCE_H_
 #define BLACKCATTENSORS_TENSORS_FUNCTIONS_REDUCTIONS_HOST_REDUCE_H_
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs {
 namespace functions {
@@ -17,7 +17,7 @@ template<class>
 struct Reduce;
 
 template<>
-struct Reduce<BC::host_tag> {
+struct Reduce<bc::host_tag> {
 
 	template<class Stream, class ScalarOutput,  class Expression>
 	static void sum(Stream stream, ScalarOutput output, Expression expression) {
@@ -31,7 +31,7 @@ struct Reduce<BC::host_tag> {
 	#if defined(_OPENMP) && !defined(BC_NO_OPENMP)
 	#pragma omp parallel for reduction(+:total)
 	#endif
-			for (BC::size_t i = 0; i < expression.size(); ++i) {
+			for (bc::size_t i = 0; i < expression.size(); ++i) {
 				total += expression[i];
 			}
 		};

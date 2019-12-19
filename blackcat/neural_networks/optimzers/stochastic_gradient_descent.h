@@ -10,7 +10,7 @@
 
 #include "optimizer_base.h"
 
-namespace BC {
+namespace bc {
 namespace nn {
 
 struct Stochastic_Gradient_Descent {
@@ -18,8 +18,8 @@ struct Stochastic_Gradient_Descent {
 	template<class ValueType>
 	struct Optimizer : Optimizer_Base {
 
-		using value_type = BC::traits::conditional_detected_t<
-				BC::traits::query_value_type, ValueType, ValueType>;
+		using value_type = bc::traits::conditional_detected_t<
+				bc::traits::query_value_type, ValueType, ValueType>;
 
 		value_type learning_rate = 0.003;
 

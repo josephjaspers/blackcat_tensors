@@ -13,7 +13,7 @@
 #include "expression_templates/tree_evaluator.h"
 #include "io/print.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 
 
@@ -53,10 +53,10 @@ public:
 private:
 
 	using tensor_move_type =
-			BC::traits::only_if<move_constructible::value, self_type&&>;
+			bc::traits::only_if<move_constructible::value, self_type&&>;
 
 	using tensor_copy_type =
-			BC::traits::only_if<copy_constructible::value, const self_type&>;
+			bc::traits::only_if<copy_constructible::value, const self_type&>;
 public:
 
 	template<class U>
@@ -81,7 +81,7 @@ public:
 		return *this;
 	}
 
-	Tensor_Base(BC::traits::only_if<tensor_dimension==0, value_type> scalar) {
+	Tensor_Base(bc::traits::only_if<tensor_dimension==0, value_type> scalar) {
 		static_assert(tensor_dimension == 0,
 				"SCALAR_INITIALIZATION ONLY AVAILABLE TO SCALARS");
 		this->fill(scalar);

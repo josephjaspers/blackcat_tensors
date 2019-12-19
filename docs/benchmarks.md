@@ -13,7 +13,7 @@ handcoded-C versions. The fact that BC-times showcase occasional performance inc
 ----------------------------------------------------------------------------------------
 
 
-BC time represents the performance of BC::Vector<float>.   
+BC time represents the performance of bc::Vector<float>.   
 C-impl and Cuda-impl are 'handcoded' baslines t bench against.   
 The timings are the sum of each computation.  
 
@@ -40,7 +40,7 @@ OS: Ubuntu 18.04.
 Time represents the total sum of each rep.
 
 
-BC time represents the performance of BC::Vector<double>.  
+BC time represents the performance of bc::Vector<double>.  
 The baseline time is performance of the hardcoded implementation.  
   
 Operation: `a = b + c - d / e`  
@@ -63,7 +63,7 @@ Repetitions: 10
 
 ------------------------------------------------------------------------------------------
 
-BC time represents the performance of BC::Matrix<double>.  
+BC time represents the performance of bc::Matrix<double>.  
 The baseline time is performance of the hardcoded implementation.  
 Matrices are of dimension size*size. 
 

@@ -13,7 +13,7 @@
 #include "tree_evaluator.h"
 #include "blas_expression_template_traits.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs { 
 
@@ -60,7 +60,7 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>:
 		auto& out = output.data();
 
 		//call outer product
-		BC::blas::BLAS<system_tag>::dot(
+		bc::blas::BLAS<system_tag>::dot(
 				stream,
 				X.rows(), out.data(),
 				X.data(), X.leading_dimension(0),

@@ -10,13 +10,13 @@
 
 #include "layer_base.h"
 
-namespace BC {
+namespace bc {
 namespace nn {
 
 template<
 	class SystemTag,
 	class ValueType,
-	class InputTensorDimension=BC::traits::Integer<3>>
+	class InputTensorDimension=bc::traits::Integer<3>>
 struct Flatten:
 		public Layer_Base<
 				Flatten<SystemTag, ValueType, InputTensorDimension>> {
@@ -29,7 +29,7 @@ struct Flatten:
 
 	using greedy_evaluate_delta = std::true_type;
 	using input_tensor_dimension = InputTensorDimension;
-	using output_tensor_dimension = BC::traits::Integer<1>;
+	using output_tensor_dimension = bc::traits::Integer<1>;
 	using defines_single_predict = std::true_type;
 
 private:
@@ -38,7 +38,7 @@ private:
 
 public:
 
-	Flatten(BC::Dim<input_tensor_dimension::value> input_shape):
+	Flatten(bc::Dim<input_tensor_dimension::value> input_shape):
 		parent_type(__func__, input_shape.size(), input_shape.size()),
 		m_input_shape(input_shape) {}
 
@@ -63,7 +63,7 @@ public:
 #ifndef BC_CLING_JIT
 template<class ValueType, class SystemTag, int X>
 auto flatten(SystemTag system_tag, Dim<X> shape) {
-	return Flatten<SystemTag, ValueType, BC::traits::Integer<X>>(shape);
+	return Flatten<SystemTag, ValueType, bc::traits::Integer<X>>(shape);
 }
 #endif
 
@@ -72,14 +72,14 @@ auto flatten(SystemTag system_tag, Dim<X> shape) {
 	return Flatten<
 			SystemTag,
 			typename SystemTag::default_floating_point_type,
-			BC::traits::Integer<X>>(shape);
+			bc::traits::Integer<X>>(shape);
 }
 
 template<int X>
 auto flatten(Dim<X> shape) {
 	return Flatten<BLACKCAT_DEFAULT_SYSTEM_T,
 			typename BLACKCAT_DEFAULT_SYSTEM_T::default_floating_point_type,
-			BC::traits::Integer<X>>(shape);
+			bc::traits::Integer<X>>(shape);
 }
 
 

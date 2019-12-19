@@ -10,7 +10,7 @@
 
 #include "optimizer_base.h"
 
-namespace BC {
+namespace bc {
 namespace nn {
 
 struct Momentum {

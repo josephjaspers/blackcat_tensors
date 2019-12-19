@@ -18,18 +18,18 @@
 #include "coefficientwise/cu_cwise.cu"
 #endif
 
-namespace BC {
+namespace bc {
 namespace benchmarks {
 
 
 auto cwise_benchmark(int sz, int reps=10, bool stdout=false) {
 
 	auto c_time  =  c_cwise<float, std::allocator<float>>(sz, reps);
-	auto bc_time = bc_cwise<float, BC::Basic_Allocator<float>>(sz, reps);
+	auto bc_time = bc_cwise<float, bc::Basic_Allocator<float>>(sz, reps);
 
 #ifdef __CUDACC__
-	auto cu_time = cu_cwise<float, BC::Cuda_Allocator<float>>(sz, reps);
-	auto bc_cu_time = bc_cwise<float, BC::Cuda_Allocator<float>>(sz, reps);
+	auto cu_time = cu_cwise<float, bc::Cuda_Allocator<float>>(sz, reps);
+	auto bc_cu_time = bc_cwise<float, bc::Cuda_Allocator<float>>(sz, reps);
 
 	if (stdout) {
 		std::cout << "bc_time: " << bc_time \

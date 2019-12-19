@@ -11,7 +11,7 @@
 
 #include "common.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace iterators {
 
@@ -22,15 +22,15 @@ struct Coefficientwise_Iterator {
 
     using iterator_category = std::random_access_iterator_tag;
     using value_type = typename Tensor::value_type;
-    using difference_type = BC::size_t;
+    using difference_type = bc::size_t;
     using reference = value_type&;
     using pointer   = value_type*;
 
 
     Tensor tensor;
-    BC::size_t  index;
+    bc::size_t  index;
 
-    BCINLINE Coefficientwise_Iterator(Tensor tensor_, BC::size_t  index_=0) :
+    BCINLINE Coefficientwise_Iterator(Tensor tensor_, bc::size_t  index_=0) :
 	tensor(tensor_), index(index_) {}
 
     BCINLINE Coefficientwise_Iterator& operator =(const Coefficientwise_Iterator& iter) {
@@ -61,7 +61,7 @@ struct Coefficientwise_Iterator {
 
 #undef BC_Iter_Compare
 
-    BCINLINE operator BC::size_t  () const { return index; }
+    BCINLINE operator bc::size_t  () const { return index; }
 
     BCINLINE bool operator == (const Iterator& iter) {
         return index == iter.index;

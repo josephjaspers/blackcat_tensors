@@ -10,7 +10,7 @@
 
 #include "tags.h"
 
-namespace BC {
+namespace bc {
 namespace oper {
 namespace detail {
 
@@ -24,10 +24,10 @@ template<class T>
 struct operation_traits {
 
 	static constexpr int alpha_modifier =
-			BC::traits::conditional_detected_t<detail::query_alpha_modifier, T, BC::traits::Integer<1>>::value;
+			bc::traits::conditional_detected_t<detail::query_alpha_modifier, T, bc::traits::Integer<1>>::value;
 
 	static constexpr int beta_modifier =
-			BC::traits::conditional_detected_t<detail::query_beta_modifier, T, BC::traits::Integer<1>>::value;
+			bc::traits::conditional_detected_t<detail::query_beta_modifier, T, bc::traits::Integer<1>>::value;
 
 
 	static constexpr bool is_linear_operation            = std::is_base_of<linear_operation,T>::value;

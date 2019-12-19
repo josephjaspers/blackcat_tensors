@@ -10,7 +10,7 @@
 
 #include "optimizer_base.h"
 
-namespace BC {
+namespace bc {
 namespace nn {
 
 struct Adam {
@@ -27,7 +27,7 @@ struct Adam::Optimizer: Optimizer_Base {
 	using value_type = typename Tensor::value_type;
 	using system_tag = typename Tensor::system_tag;
 
-	value_type alpha = BC::nn::default_learning_rate;
+	value_type alpha = bc::nn::default_learning_rate;
 	value_type beta_1 = 0.9;
 	value_type beta_2 = 0.999;
 	value_type epsilon = 1e-8;
@@ -50,12 +50,12 @@ struct Adam::Optimizer: Optimizer_Base {
 	{
 		time_stamp++;
 		m_t = beta_1 * m_t + (1-beta_1) * delta;
-		v_t = beta_2 * v_t + (1-beta_2) * BC::pow2(delta);
+		v_t = beta_2 * v_t + (1-beta_2) * bc::pow2(delta);
 
-		auto m_cap = m_t/(1-(BC::pow(beta_1, time_stamp)));
-		auto v_cap = v_t/(1-(BC::pow(beta_2, time_stamp)));
+		auto m_cap = m_t/(1-(bc::pow(beta_1, time_stamp)));
+		auto v_cap = v_t/(1-(bc::pow(beta_2, time_stamp)));
 
-		tensor += (alpha*m_cap)/(BC::sqrt(v_cap)+epsilon);
+		tensor += (alpha*m_cap)/(bc::sqrt(v_cap)+epsilon);
 	}
 
 

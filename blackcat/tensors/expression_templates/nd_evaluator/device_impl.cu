@@ -13,7 +13,7 @@
 #include <cuda_runtime_api.h>
 #include <cuda.h>
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs {
 namespace evaluator {

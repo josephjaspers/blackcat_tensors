@@ -12,7 +12,7 @@
 #include <cmath>
 #include "tags.h"
 
-namespace BC {
+namespace bc {
 namespace oper {
 
     struct negation {

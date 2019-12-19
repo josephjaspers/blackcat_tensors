@@ -15,7 +15,7 @@
 #include "functions/reductions/reductions.h"
 
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs { 
 
@@ -47,7 +47,7 @@ struct Unary_Expression<Sum<SystemTag>, ArrayType>:
 		static_assert(Scalar::tensor_dimension==0, "Output must be a scalar");
 
 		//TODO handle alpha/beta scalars
-		BC::tensors::exprs::functions::Reduce<system_tag>::sum(
+		bc::tensors::exprs::functions::Reduce<system_tag>::sum(
 				stream,
 				output.data(),
 				array);

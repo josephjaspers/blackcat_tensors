@@ -15,7 +15,7 @@
 #include "tree_evaluator.h"
 #include "tree_evaluator_optimizer.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs {
 namespace detail {
@@ -23,7 +23,7 @@ namespace detail {
 template<class T>
 struct remove_scalar_mul {
 	using type = T;
-	using scalar_type = BC::traits::conditional_detected_t<
+	using scalar_type = bc::traits::conditional_detected_t<
 			query_value_type, T, T>*;
 
 	static T rm(T expression) {
@@ -41,7 +41,7 @@ struct remove_scalar_mul<Binary_Expression<oper::Scalar_Mul, lv, rv>> {
 	using scalar_type = std::conditional_t<lv::tensor_dimension == 0, lv ,rv>;
 
 	static type rm(Binary_Expression<oper::Scalar_Mul, lv, rv> expression) {
-		return BC::traits::constexpr_ternary<lv::tensor_dimension==0>(
+		return bc::traits::constexpr_ternary<lv::tensor_dimension==0>(
 				[&]() { return expression.right; },
 				[&]() { return expression.left;  }
 		);
@@ -49,7 +49,7 @@ struct remove_scalar_mul<Binary_Expression<oper::Scalar_Mul, lv, rv>> {
 
 	static scalar_type get_scalar(
 			Binary_Expression<oper::Scalar_Mul, lv, rv> expression) {
-		return BC::traits::constexpr_ternary<lv::tensor_dimension==0>(
+		return bc::traits::constexpr_ternary<lv::tensor_dimension==0>(
 				[&]() { return expression.left; },
 				[&]() { return expression.right;  }
 		);
@@ -126,7 +126,7 @@ template<class T>
 struct blas_expression_traits:
 		expression_traits<T> {
 
-	using requires_greedy_evaluation = BC::traits::conditional_detected_t<
+	using requires_greedy_evaluation = bc::traits::conditional_detected_t<
 			 detail::query_requires_greedy_evaluation, T, std::false_type>;
 
 	using remove_scalar_mul_type    = typename detail::remove_scalar_mul<T>::type;
@@ -135,10 +135,10 @@ struct blas_expression_traits:
 	using scalar_multiplier_type    = typename detail::remove_scalar_mul<T>::scalar_type;
 	using value_type                = typename T::value_type;
 
-	using is_scalar_multiplied = BC::traits::truth_type<
+	using is_scalar_multiplied = bc::traits::truth_type<
 			!std::is_same<remove_scalar_mul_type, T>::value>;
 
-	using is_transposed = BC::traits::truth_type<
+	using is_transposed = bc::traits::truth_type<
 			!std::is_same<remove_transpose_type,  T>::value>;
 
 	static remove_transpose_type remove_transpose(T expression) {

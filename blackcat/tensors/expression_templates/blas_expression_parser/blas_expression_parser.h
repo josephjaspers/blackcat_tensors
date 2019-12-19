@@ -10,7 +10,7 @@
 
 #include "../expression_template_traits.h"
 
-namespace BC {
+namespace bc {
 
 class host_tag;
 class device_tag;

@@ -14,7 +14,7 @@
 #include "array_scalar_constant.h"
 #include "blas_expression_template_traits.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs { 
 
@@ -47,10 +47,10 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 		left(left),
 		right(right) {}
 
-	BCINLINE BC::size_t  size() const { return left.size() * right.size(); }
-	BCINLINE BC::size_t  dimension(int i) const { return i == 0 ? left.rows() : i == 1 ? right.cols() : 1; }
-	BCINLINE BC::size_t rows() const { return dimension(0); }
-	BCINLINE BC::size_t cols() const { return dimension(1); }
+	BCINLINE bc::size_t  size() const { return left.size() * right.size(); }
+	BCINLINE bc::size_t  dimension(int i) const { return i == 0 ? left.rows() : i == 1 ? right.cols() : 1; }
+	BCINLINE bc::size_t rows() const { return dimension(0); }
+	BCINLINE bc::size_t cols() const { return dimension(1); }
 
 
 	template<class core, int Alpha, int Beta, class Stream>
@@ -76,17 +76,17 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 			auto A = contents.left;
 			auto B = contents.right;
 			auto alpha = contents.alpha;
-			BC::blas::BLAS<system_tag>::ger(stream, left.rows(), right.cols(),
+			bc::blas::BLAS<system_tag>::ger(stream, left.rows(), right.cols(),
 					alpha.data(), A.data(), A.leading_dimension(0),
 					B.data(), B.leading_dimension(0),
 					out.data(), out.leading_dimension(1));
 			traits::post_parse_expression_evaluation(stream, contents);
 		} else {
-			auto alpha = make_constexpr_scalar<BC::host_tag, (Alpha == 0 ? 1 : Alpha), value_type>();
+			auto alpha = make_constexpr_scalar<bc::host_tag, (Alpha == 0 ? 1 : Alpha), value_type>();
 			auto A = greedy_evaluate(blas_expression_traits<lv>::remove_blas_modifiers(left), stream);
 			auto B = greedy_evaluate(blas_expression_traits<rv>::remove_blas_modifiers(right), stream);
 			stream.set_blas_pointer_mode_host();
-			BC::blas::BLAS<system_tag>::ger(stream, left.rows(), right.cols(),
+			bc::blas::BLAS<system_tag>::ger(stream, left.rows(), right.cols(),
 					alpha.data(), A.data(), A.leading_dimension(0),
 					B.data(), B.leading_dimension(0),
 					out.data(), out.leading_dimension(1));

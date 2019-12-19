@@ -1,21 +1,21 @@
 # Algorithms
 
 BlackCat_Tensor's offer a wide range of the standard library's algorithms. 
-These methods exist in the `BC::algorithms` namespace.
+These methods exist in the `bc::algorithms` namespace.
 
 BlackCat_Tensor's does not implement any of these algorithms itself, instead forwarding to either the std implementation or thrust's implementation depending on how memory is allocated.
 
-The first argument must always be a stream argument, the possible 'stream' arguments are: BC::Stream<host_tag>, BC::Stream<device_tag>, or cudaStream_t.
+The first argument must always be a stream argument, the possible 'stream' arguments are: bc::Stream<host_tag>, bc::Stream<device_tag>, or cudaStream_t.
 
 
 ```cpp
-BC::Matrix<float, BC::Cuda_Allocator<float>> dev_mat(3,3);
-BC::for_each(dev_mat.get_stream(), dev_mat.cw_begin(), dev_mat.cw_end(), your_function);  //will call thrust::for_each
+bc::Matrix<float, bc::Cuda_Allocator<float>> dev_mat(3,3);
+bc::for_each(dev_mat.get_stream(), dev_mat.cw_begin(), dev_mat.cw_end(), your_function);  //will call thrust::for_each
 
-BC::Matrix<float, BC::Basic_Allocator<float>> host_mat(3,3);
-BC::for_each(dev_mat.get_stream(), dev_mat.cw_begin(), dev_mat.cw_end(), your_function); //will call std::for_each
+bc::Matrix<float, bc::Basic_Allocator<float>> host_mat(3,3);
+bc::for_each(dev_mat.get_stream(), dev_mat.cw_begin(), dev_mat.cw_end(), your_function); //will call std::for_each
 ```
-Using BC::algortihms is preferable to directly using `std` or `thrust`'s implementation as it enables user's to write allocation-generic code. Here we created a method that applies the sigmoid function to each element of a matrix. 
+Using bc::algortihms is preferable to directly using `std` or `thrust`'s implementation as it enables user's to write allocation-generic code. Here we created a method that applies the sigmoid function to each element of a matrix. 
 
 ```cpp
 struct Sigmoid {
@@ -27,8 +27,8 @@ struct Sigmoid {
 }; 
 
 template<class ValueType, class Allocator>
-void logistic_function(BC::Matrix<ValueType, Allocator>& matrix) {
-	BC::algorithms::for_each(matrix.get_stream(), matrix.cw_begin(), matrix.cw_end(), Sigmoid()); 
+void logistic_function(bc::Matrix<ValueType, Allocator>& matrix) {
+	bc::algorithms::for_each(matrix.get_stream(), matrix.cw_begin(), matrix.cw_end(), Sigmoid()); 
 }
 ```
 

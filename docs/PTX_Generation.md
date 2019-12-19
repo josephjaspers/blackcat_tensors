@@ -18,11 +18,11 @@ void cuda_cwise_test_kernel(T* out, int length, T* a, T* b, T* c, T* d) {
 
 
 int test() {
-	BC::Matrix<float, BC::Allocator<BC::device_tag, float>> m;
+	bc::Matrix<float, bc::Allocator<bc::device_tag, float>> m;
 	m = m + m - m / m;
 
 	float* mptr = m.memptr();
-	cuda_cwise_test_kernel<<<BC::threads(), BC::blocks(m.size())>>>(
+	cuda_cwise_test_kernel<<<bc::threads(), bc::blocks(m.size())>>>(
 			mptr, m.size(),
 			mptr,mptr,mptr,mptr);
 

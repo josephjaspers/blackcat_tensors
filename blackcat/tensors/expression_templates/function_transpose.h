@@ -11,7 +11,7 @@
 
 #include "expression_template_base.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs { 
 
@@ -41,11 +41,11 @@ struct Unary_Expression<oper::transpose<System_Tag>, Value>:
 		return array[i];
 	}
 
-	BCINLINE BC::size_t  size() const { return array.size(); }
-	BCINLINE BC::size_t  rows() const { return array.cols(); }
-	BCINLINE BC::size_t  cols() const { return array.rows(); }
+	BCINLINE bc::size_t  size() const { return array.size(); }
+	BCINLINE bc::size_t  rows() const { return array.cols(); }
+	BCINLINE bc::size_t  cols() const { return array.rows(); }
 
-	BCINLINE BC::size_t  dimension(int i) const {
+	BCINLINE bc::size_t  dimension(int i) const {
 		if (i == 0)
 			return array.cols();
 		else if (i == 1)
@@ -55,12 +55,12 @@ struct Unary_Expression<oper::transpose<System_Tag>, Value>:
 	}
 
 	template<class... ints> BCINLINE
-	auto operator ()(BC::size_t m, BC::size_t n, ints... integers) const
+	auto operator ()(bc::size_t m, bc::size_t n, ints... integers) const
 		-> decltype(array(n,m)) {
 		return array(n,m, integers...);
 	}
 	template<class... ints> BCINLINE
-	auto operator ()(BC::size_t m, BC::size_t n, ints... integers)
+	auto operator ()(bc::size_t m, bc::size_t n, ints... integers)
 		-> decltype(array(n,m)) {
 		return array(n,m, integers...);
 	}

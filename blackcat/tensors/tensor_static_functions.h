@@ -8,7 +8,7 @@
 #ifndef TENSOR_STATIC_FUNCTIONS_H_
 #define TENSOR_STATIC_FUNCTIONS_H_
 
-namespace BC {
+namespace bc {
 namespace tensors {
 
 template<class Expression>
@@ -23,11 +23,11 @@ auto value_sum(const Tensor_Base<Expression>& tensor)
 {
 	using value_type =  std::conditional_t<
 			std::is_same<typename Expression::value_type, bool>::value,
-			BC::size_t,
+			bc::size_t,
 			typename Expression::value_type>;
 
-	return BC::algorithms::accumulate(
-			BC::streams::select_on_get_stream(tensor),
+	return bc::algorithms::accumulate(
+			bc::streams::select_on_get_stream(tensor),
 			tensor.cw_cbegin(),
 			tensor.cw_cend(),
 			value_type(0));
@@ -37,12 +37,12 @@ template<class Expression>
 auto prod(const Tensor_Base<Expression>& tensor)
 {
 	using value_type = typename Expression::value_type;
-	return BC::algorithms::accumulate(
-			BC::streams::select_on_get_stream(tensor),
+	return bc::algorithms::accumulate(
+			bc::streams::select_on_get_stream(tensor),
 			tensor.cw_cbegin(),
 			tensor.cw_cend(),
 			value_type(1),
-			BC::oper::mul);
+			bc::oper::mul);
 }
 
 template<class Expression>
@@ -59,8 +59,8 @@ static bool any(const Tensor_Base<Expression>& tensor){
 template<class Expression>
 static auto max(const Tensor_Base<Expression>& tensor)
 {
-	auto max_index = BC::algorithms::max_element(
-			BC::streams::select_on_get_stream(tensor),
+	auto max_index = bc::algorithms::max_element(
+			bc::streams::select_on_get_stream(tensor),
 			tensor.cbegin(),
 			tensor.cend());
 
@@ -70,8 +70,8 @@ static auto max(const Tensor_Base<Expression>& tensor)
 template<class Expression>
 static auto min(const Tensor_Base<Expression>& tensor)
 {
-	auto min_index = BC::algorithms::min_element(
-			BC::streams::select_on_get_stream(tensor),
+	auto min_index = bc::algorithms::min_element(
+			bc::streams::select_on_get_stream(tensor),
 			tensor.cbegin(),
 			tensor.cend());
 

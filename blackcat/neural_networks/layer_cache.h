@@ -11,7 +11,7 @@
 #include <vector>
 #include <type_traits>
 
-namespace BC {
+namespace bc {
 namespace nn {
 
 /**A type designed to act as a key to the Cache object.
@@ -23,7 +23,7 @@ namespace nn {
  * 		recent member store or if it should be stored in a separate location for back-propagation through time.
  */
 template<class K, class V, class IsRecurrent>
-struct cache_key : BC::utility::Any_Key<K, V> {
+struct cache_key : bc::utility::Any_Key<K, V> {
 	static_assert(
 			std::is_same<IsRecurrent, std::true_type>::value ||
 					std::is_same<IsRecurrent, std::false_type>::value,
@@ -47,18 +47,18 @@ struct Cache {
 	using key_type = cache_key<K, V, R>;
 
 	int m_time_index = 0;
-	BC::utility::Any_Map cache;
+	bc::utility::Any_Map cache;
 
 private:
 
 	template<class K, class V>
 	auto hash(key_type<K, V, std::true_type> key) {
-		return BC::utility::Any_Key<K, std::vector<V>>();
+		return bc::utility::Any_Key<K, std::vector<V>>();
 	}
 
 	template<class K, class V>
 	auto hash(key_type<K, V, std::false_type> key) {
-		return BC::utility::Any_Key<K, V>();
+		return bc::utility::Any_Key<K, V>();
 	}
 
 public:

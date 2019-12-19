@@ -16,14 +16,14 @@ void cuda_cwise_test_kernel(T* out, unsigned length, T* a, T* b, T* c, T* d) {
 	    }
 }
 
-namespace BC {
+namespace bc {
 namespace benchmarks {
 
 
 template<class scalar_t, class allocator>
 auto cu_cwise(int size, int reps) {
 
-	    using vec   = BC::Vector<scalar_t, allocator>;
+	    using vec   = bc::Vector<scalar_t, allocator>;
 
 	    vec a(size);
 	    vec b(size);
@@ -40,7 +40,7 @@ auto cu_cwise(int size, int reps) {
 
 		auto f = [&]() {
 
-			cuda_cwise_test_kernel<scalar_t><<<BC::calculate_block_dim(size),BC::calculate_threads()>>>(
+			cuda_cwise_test_kernel<scalar_t><<<bc::calculate_block_dim(size),bc::calculate_threads()>>>(
 					a.data(), size, b.data(), c.data(), d.data(), e.data());
 
 		};

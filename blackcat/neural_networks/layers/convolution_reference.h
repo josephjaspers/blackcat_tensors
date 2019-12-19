@@ -11,7 +11,7 @@
 #include "layer_base.h"
 
 
-namespace BC {
+namespace bc {
 namespace nn {
 namespace deprecated {
 
@@ -23,14 +23,14 @@ struct Convolution:
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	using allocator_type = BC::Allocator<SystemTag, ValueType>;
+	using allocator_type = bc::Allocator<SystemTag, ValueType>;
 	using parent_type = Layer_Base<Convolution<SystemTag, ValueType>>;
-	using tensor4 = BC::Tensor<4, value_type, allocator_type>;
-	using cube = BC::Cube<value_type, allocator_type>;
+	using tensor4 = bc::Tensor<4, value_type, allocator_type>;
+	using cube = bc::Cube<value_type, allocator_type>;
 
 	using greedy_evaluate_delta = std::true_type;
-	using input_tensor_dimension = BC::traits::Integer<3>;
-	using output_tensor_dimension = BC::traits::Integer<3>;
+	using input_tensor_dimension = bc::traits::Integer<3>;
+	using output_tensor_dimension = bc::traits::Integer<3>;
 
 private:
 
@@ -42,22 +42,22 @@ public:
 	Dim<3> get_input_shape() const { return m_input_shape; }
 	Dim<3> get_output_shape() const { return m_output_shape; }
 
-	BC::size_t rows, cols, depth;
-	BC::size_t krnl_rows, krnl_cols, nkrnls;
-	BC::size_t padding, stride;
+	bc::size_t rows, cols, depth;
+	bc::size_t krnl_rows, krnl_cols, nkrnls;
+	bc::size_t padding, stride;
 
 	Dim<3> m_input_shape;
 	Dim<3> m_output_shape;
 
 	Convolution(
-			BC::size_t rows,
-			BC::size_t cols,
-			BC::size_t depth,
-			BC::size_t krnl_rows=3,
-			BC::size_t krnl_cols=3,
-			BC::size_t nkrnls=32,
-			BC::size_t padding=0,
-			BC::size_t stride=1) :
+			bc::size_t rows,
+			bc::size_t cols,
+			bc::size_t depth,
+			bc::size_t krnl_rows=3,
+			bc::size_t krnl_cols=3,
+			bc::size_t nkrnls=32,
+			bc::size_t padding=0,
+			bc::size_t stride=1) :
 		parent_type(__func__,
 				((rows+padding-krnl_rows+1)/stride) * ((cols+padding-krnl_cols+1)/stride) * depth,
 				((rows+padding-krnl_rows+1)/stride) * ((cols+padding-krnl_cols+1)/stride) * nkrnls),

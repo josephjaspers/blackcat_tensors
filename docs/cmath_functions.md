@@ -5,11 +5,11 @@ All element-wise functions are automatically scalarized when written in nested e
 
 ```cpp
 
-BC::Matrix<float> a(m,n);
-BC::Matrix<float> b(m,n);
-BC::Matrix<float> c(m,n);
+bc::Matrix<float> a(m,n);
+bc::Matrix<float> b(m,n);
+bc::Matrix<float> c(m,n);
 
-a =  b + BC::sin(c); //will lazily evaluate to become a single for-loop. See: [exprs](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/algorithms.md)
+a =  b + bc::sin(c); //will lazily evaluate to become a single for-loop. See: [exprs](https://github.com/josephjaspers/BlackCat_Tensors/blob/master/docs/algorithms.md)
 ```
 
 ##### Supported Functions

@@ -10,7 +10,7 @@
 #ifndef BC_ALLOCATOR_DEVICE_H_
 #define BC_ALLOCATOR_DEVICE_H_
 
-namespace BC {
+namespace bc {
 
 class device_tag;
 class host_tag;
@@ -59,7 +59,7 @@ struct Allocator<host_tag, T>: Basic_Allocator_Base<host_tag, T> {
 		return new T[size];
 	}
 
-	void deallocate(T* t, BC::size_t  size) {
+	void deallocate(T* t, bc::size_t  size) {
 		delete[] t;
 	}
 };
@@ -98,7 +98,7 @@ struct Device_Managed : Allocator<device_tag, T> {
 	template<class altT>
 	struct rebind { using other = Device_Managed<altT>; };
 
-	T* allocate(BC::size_t sz) {
+	T* allocate(bc::size_t sz) {
 		T* data = nullptr;
 		BC_CUDA_ASSERT((cudaMallocManaged((void**) &data, sizeof(T) * sz)));
 		BC_CUDA_ASSERT((cudaDeviceSynchronize()));

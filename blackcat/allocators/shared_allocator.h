@@ -8,7 +8,7 @@
 #ifndef BLACKCATTENSORS_ALLOCATORS_FANCY_SHARED_ALLOCATOR_H_
 #define BLACKCATTENSORS_ALLOCATORS_FANCY_SHARED_ALLOCATOR_H_
 
-namespace BC {
+namespace bc {
 namespace allocators {
 
 /**
@@ -17,7 +17,7 @@ namespace allocators {
 template<class Allocator>
 struct Shared_Allocator {
 
-    using system_tag = typename BC::allocator_traits<Allocator>::system_tag;	//BC tag
+    using system_tag = typename bc::allocator_traits<Allocator>::system_tag;	//BC tag
 
     using value_type = typename Allocator::value_type;
     using pointer = value_type*;
@@ -31,7 +31,7 @@ struct Shared_Allocator {
 	template<class altT>
 	struct rebind { using other =
 			Shared_Allocator<
-			typename BC::allocator_traits<Allocator>::template rebind_alloc<altT>>;
+			typename bc::allocator_traits<Allocator>::template rebind_alloc<altT>>;
 	};
 
 
@@ -43,7 +43,7 @@ public:
 	template<class U>
 	Shared_Allocator(const Shared_Allocator<U>& alloc):
 		m_allocator(
-				typename BC::allocator_traits<Allocator>::
+				typename bc::allocator_traits<Allocator>::
 					template rebind_alloc<value_type>(*(alloc.m_allocator))) {}
 
 	Shared_Allocator(Allocator allocator):
@@ -72,7 +72,7 @@ public:
 		return m_allocator->allocate(size);
     }
 
-    void deallocate(value_type* t, BC::size_t  size) {
+    void deallocate(value_type* t, bc::size_t  size) {
 		m_allocator->deallocate(t, size);
      }
 

@@ -15,7 +15,7 @@
 #include <cuda.h>
 #include "device_impl.cu"
 
-namespace BC {
+namespace bc {
 namespace random {
 
 template<>

@@ -10,7 +10,7 @@
 
 #include "layer_base.h"
 
-namespace BC {
+namespace bc {
 namespace nn {
 
 template<
@@ -30,8 +30,8 @@ struct Convolution:
 	using self_type = Convolution<SystemTag, ValueType, Optimizer, IsRecurrent>;
 	using parent_type = Layer_Base<self_type>;
 
-	using input_tensor_dimension = BC::traits::Integer<3>;
-	using output_tensor_dimension = BC::traits::Integer<3>;
+	using input_tensor_dimension = bc::traits::Integer<3>;
+	using output_tensor_dimension = bc::traits::Integer<3>;
 
 	using greedy_evaluate_delta = std::true_type;
 	using requires_extra_cache = std::true_type;
@@ -41,9 +41,9 @@ struct Convolution:
 
 private:
 
-	using mat = BC::Matrix<value_type, allocator_type>;
-	using tensor4 = BC::Tensor<4, value_type, allocator_type>;
-	using cube = BC::Cube<value_type, allocator_type>;
+	using mat = bc::Matrix<value_type, allocator_type>;
+	using tensor4 = bc::Tensor<4, value_type, allocator_type>;
+	using cube = bc::Cube<value_type, allocator_type>;
 
 	using mat_opt_t = typename Optimizer::template Optimizer<mat>;
 
@@ -62,8 +62,8 @@ private:
 	Dim<3> m_output_shape;
 	Dim<2> m_column_image_shape;
 
-	using col_image_key = BC::nn::cache_key<
-			BC::utility::Name<'c','x'>, cube, is_recurrent>;
+	using col_image_key = bc::nn::cache_key<
+			bc::utility::Name<'c','x'>, cube, is_recurrent>;
 
 public:
 
@@ -90,8 +90,8 @@ public:
 					m_strides[dim_idx] + 1;
 		};
 
-		m_output_shape = BC::dim(out_dim(0), out_dim(1), krnl_dims[2]);
-		m_column_image_shape = BC::dim(
+		m_output_shape = bc::dim(out_dim(0), out_dim(1), krnl_dims[2]);
+		m_column_image_shape = bc::dim(
 						m_krnl_shape.prod(2) * img_dims[2],
 						out_dim(0) * out_dim(1));
 
@@ -109,7 +109,7 @@ public:
 		cube col_x(get_batched_column_image_shape());
 
 		for (int i = 0; i < this->batch_size(); ++i) {
-			BC::im2col(x.get_stream(),
+			bc::im2col(x.get_stream(),
 					col_x[i].internal(),
 					x[i].internal(),
 					m_krnl_shape,
@@ -117,7 +117,7 @@ public:
 					m_strides,
 					m_dilation);
 
-			BC::Dim<2> mat_y_shape = {y.rows() * y.cols(), w.cols() };
+			bc::Dim<2> mat_y_shape = {y.rows() * y.cols(), w.cols() };
 			y[i].reshaped(mat_y_shape) = col_x[i].t() * w;
 		}
 
@@ -131,7 +131,7 @@ public:
 		cube y(this->get_output_shape());
 		mat col_x(m_column_image_shape);
 
-		BC::im2col(x.get_stream(),
+		bc::im2col(x.get_stream(),
 				col_x.internal(),
 				x.internal(),
 				m_krnl_shape,
@@ -139,7 +139,7 @@ public:
 				m_strides,
 				m_dilation);
 
-			BC::Dim<2> mat_y_shape = {y.rows() * y.cols(), w.cols() };
+			bc::Dim<2> mat_y_shape = {y.rows() * y.cols(), w.cols() };
 			y.reshaped(mat_y_shape) = col_x.t() * w;
 
 		return y;
@@ -158,7 +158,7 @@ public:
 			w_gradients -= col_x[i] * mat_dy;
 			mat_delta_dx = w * mat_dy.t();
 
-			BC::col2im(x.get_stream(),
+			bc::col2im(x.get_stream(),
 					mat_delta_dx.internal(),
 					delta_dx[i].internal(),
 					m_krnl_shape,
@@ -177,7 +177,7 @@ public:
 	}
 
 	Dim<4> get_kernel_shape() const {
-		return BC::Dim<4> {
+		return bc::Dim<4> {
 				m_krnl_shape[0], m_krnl_shape[1],
 				m_input_shape[2], m_krnl_shape[2] };
 	}

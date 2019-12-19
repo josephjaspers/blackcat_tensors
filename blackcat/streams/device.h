@@ -20,7 +20,7 @@
 #include <memory>
 #include <future>
 
-namespace BC {
+namespace bc {
 namespace streams {
 
 template<class> class Stream;
@@ -35,7 +35,7 @@ class Stream<device_tag> {
 		cudaStream_t   m_stream_handle=nullptr;
 		cudaEvent_t    m_event_handle=nullptr;
 
-		BC::allocators::Stack_Allocator<device_tag> m_workspace;
+		bc::allocators::Stack_Allocator<device_tag> m_workspace;
 
 		Device_Stream_Contents(bool init_stream=true) {
 			BC_CUDA_ASSERT(cublasCreate(&m_cublas_handle));
@@ -70,9 +70,9 @@ class Stream<device_tag> {
 public:
 
 	using system_tag = device_tag;
-	using allocator_type = BC::allocators::Stack_Allocator<device_tag>;
+	using allocator_type = bc::allocators::Stack_Allocator<device_tag>;
 
-	BC::allocators::Stack_Allocator<device_tag>& get_allocator() {
+	bc::allocators::Stack_Allocator<device_tag>& get_allocator() {
 		return m_contents->m_workspace;
 	}
 
@@ -196,7 +196,7 @@ public:
 				m_contents->m_stream_handle));
 
 		m_contents->m_host_stream.push(
-				BC::traits::bind(
+				bc::traits::bind(
 				[this, func](std::promise<decltype(func())> promise) {
 					cudaEventSynchronize(this->m_contents->m_event_handle);
 					promise.set_value(func());

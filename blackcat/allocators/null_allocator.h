@@ -8,7 +8,7 @@
 #ifndef BLACKCATTENSORS_ALLOCATORS_NULL_ALLOCATOR_H_
 #define BLACKCATTENSORS_ALLOCATORS_NULL_ALLOCATOR_H_
 
-namespace BC {
+namespace bc {
 namespace allocators {
 
 template<class SystemTag, class ValueType>
@@ -16,7 +16,7 @@ struct Null_Allocator {
 
 	using system_tag =  SystemTag;
 	using value_type = ValueType;
-	using size_t = BC::size_t;
+	using size_t = bc::size_t;
 
 	value_type* allocate(size_t sz) {
 		return nullptr;

@@ -14,7 +14,7 @@
 #include "array_kernel_array.h"
 #include "expression_binary.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs {
 
@@ -28,10 +28,10 @@ struct Array:
 		public Kernel_Array<
 				Shape,
 				Scalar,
-				typename BC::allocator_traits<Allocator>::system_tag,
+				typename bc::allocator_traits<Allocator>::system_tag,
 				Tags...>
 {
-	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
+	using system_tag = typename bc::allocator_traits<Allocator>::system_tag;
 	using value_type = Scalar;
 	using allocator_type = Allocator;
 	using stream_type = Stream<system_tag>;
@@ -40,7 +40,7 @@ struct Array:
 private:
 
 	using parent_type = Kernel_Array<Shape, Scalar, system_tag, Tags...>;
-	using allocator_traits_t = BC::allocator_traits<allocator_type>;
+	using allocator_traits_t = bc::allocator_traits<allocator_type>;
 
 	stream_type m_stream;
 
@@ -66,7 +66,7 @@ public:
 		m_stream(array.get_stream())
 	{
 		evaluate(
-				make_bin_expr<BC::oper::Assign>(
+				make_bin_expr<bc::oper::Assign>(
 						this->internal(),
 						array.internal()), get_stream());
 	}
@@ -79,7 +79,7 @@ public:
 		array.m_data = nullptr;
 	}
 
-	Array(BC::Dim<shape_type::tensor_dimension> shape):
+	Array(bc::Dim<shape_type::tensor_dimension> shape):
 		parent_type(shape, get_allocator()) {}
 
 	Array(shape_type shape):
@@ -88,7 +88,7 @@ public:
 	template<
 		class... ShapeDims,
 		class=std::enable_if_t<
-			traits::sequence_of_v<BC::size_t, ShapeDims...> &&
+			traits::sequence_of_v<bc::size_t, ShapeDims...> &&
 			sizeof...(ShapeDims) == Shape::tensor_dimension>>
 	Array(const ShapeDims&... shape_dims):
 		parent_type(shape_type(shape_dims...), get_allocator()) {}
@@ -106,7 +106,7 @@ public:
 			get_allocator())
 	{
 		evaluate(
-				make_bin_expr<BC::oper::Assign>(
+				make_bin_expr<bc::oper::Assign>(
 						this->internal(),
 						expression.internal()), get_stream());
 	}
@@ -125,7 +125,7 @@ public:
 		parent_type(Shape(expression.inner_shape()), get_allocator()),
 		m_stream(expression.get_stream())
 	{
-		evaluate(make_bin_expr<BC::oper::Assign>(
+		evaluate(make_bin_expr<bc::oper::Assign>(
 				this->internal(), expression.internal()), get_stream());
 	}
 
@@ -146,7 +146,7 @@ public:
 			get_allocator().deallocate(this->data(), this->size());
 			(shape_type&)(*this) = (shape_type&)array;
 			this->m_data = get_allocator().allocate(this->size());
-			evaluate(make_bin_expr<BC::oper::Assign>(
+			evaluate(make_bin_expr<bc::oper::Assign>(
 					this->internal(), array.internal()), get_stream());
 		}
 		return *this;

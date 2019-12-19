@@ -11,7 +11,7 @@
 #include "polymorphic_allocator.h"
 #include <vector>
 
-namespace BC {
+namespace bc {
 namespace allocators {
 namespace detail {
 
@@ -25,8 +25,8 @@ class Stack_Allocator_Base {
 
 	Byte* m_data=nullptr;
 
-	static Polymorphic_Allocator<SystemTag, BC::allocators::Byte>& get_default_allocator() {
-		static Polymorphic_Allocator<SystemTag, BC::allocators::Byte> default_allocator;
+	static Polymorphic_Allocator<SystemTag, bc::allocators::Byte>& get_default_allocator() {
+		static Polymorphic_Allocator<SystemTag, bc::allocators::Byte> default_allocator;
 		return default_allocator;
 	}
 
@@ -137,8 +137,8 @@ public:
 
 /// An unsynced memory pool implemented as a stack.
 /// Deallocation must happen in reverse order of deallocation.
-/// This class is used with BC::Tensor_Base expressions to enable very fast allocations of temporaries.
-template<class SystemTag, class ValueType=BC::allocators::Byte>
+/// This class is used with bc::Tensor_Base expressions to enable very fast allocations of temporaries.
+template<class SystemTag, class ValueType=bc::allocators::Byte>
 class Stack_Allocator {
 
 	template<class, class>

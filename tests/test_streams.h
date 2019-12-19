@@ -10,7 +10,7 @@
 
 #include "test_common.h"
 
-namespace BC {
+namespace bc {
 namespace tests {
 
 
@@ -19,7 +19,7 @@ int test_streams(int sz=128) {
 
 	BC_TEST_BODY_HEAD
 
-	using mat = BC::Matrix<value_type, log_allocator<allocator<value_type>>>;
+	using mat = bc::Matrix<value_type, log_allocator<allocator<value_type>>>;
 
 	BC_TEST_ON_STARTUP {};
 

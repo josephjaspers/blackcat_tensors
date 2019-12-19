@@ -10,38 +10,38 @@
 
 #include "unaryfunction.h"
 
-namespace BC {
+namespace bc {
 namespace nn {
 
 #define BC_NONLINEAR_DEF(TypeName, funcName)\
-auto funcName(BC::size_t inputs) {\
+auto funcName(bc::size_t inputs) {\
 	return Function<BLACKCAT_DEFAULT_SYSTEM_T,\
 					typename BLACKCAT_DEFAULT_SYSTEM_T::default_floating_point_type,\
-					BC::TypeName>(BC::Dim<1>{inputs}); \
+					bc::TypeName>(bc::Dim<1>{inputs}); \
 }\
 template<class ValueType, class SystemTag>\
-auto funcName(SystemTag system, BC::size_t inputs) {\
-	return Function<SystemTag, ValueType, BC::TypeName>(BC::Dim<1>{inputs}); \
+auto funcName(SystemTag system, bc::size_t inputs) {\
+	return Function<SystemTag, ValueType, bc::TypeName>(bc::Dim<1>{inputs}); \
 }\
 template<class SystemTag>\
-auto funcName(SystemTag system, BC::size_t inputs) {\
-	return Function<SystemTag, typename SystemTag::default_floating_point_type, BC::TypeName>(BC::Dim<1>{inputs}); \
+auto funcName(SystemTag system, bc::size_t inputs) {\
+	return Function<SystemTag, typename SystemTag::default_floating_point_type, bc::TypeName>(bc::Dim<1>{inputs}); \
 }\
 template<class ValueType, class SystemTag, int X>\
-auto funcName(SystemTag system, BC::Dim<X> inputs) {\
+auto funcName(SystemTag system, bc::Dim<X> inputs) {\
 	return Function<                                           \
 			SystemTag,                                          \
 			ValueType,                                           \
-			BC::TypeName,                                           \
-			BC::traits::Integer<X>>(inputs);                         \
+			bc::TypeName,                                           \
+			bc::traits::Integer<X>>(inputs);                         \
 }                                           \
 template<class SystemTag, int X>                                         \
-auto funcName(SystemTag system, BC::Dim<X> inputs) {                 \
+auto funcName(SystemTag system, bc::Dim<X> inputs) {                 \
 	return Function<                                           \
 			SystemTag,                                           \
 			typename SystemTag::default_floating_point_type,      \
-			BC::TypeName,                                           \
-			BC::traits::Integer<X>>(inputs);                        \
+			bc::TypeName,                                           \
+			bc::traits::Integer<X>>(inputs);                        \
 }
 
 BC_NONLINEAR_DEF(Tanh, tanh)

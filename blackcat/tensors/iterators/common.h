@@ -11,7 +11,7 @@
 
 #include <iterator>
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace iterators {
 
@@ -34,7 +34,7 @@ template<class T>
 struct iterator_traits : std::iterator_traits<T> {
 
 	using system_tag =
-			BC::traits::conditional_detected_t<
+			bc::traits::conditional_detected_t<
 			detail::query_system_tag, T, host_tag>;
 };
 

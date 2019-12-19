@@ -8,7 +8,7 @@
 #ifndef BLACKCAT_TENSORS_LAYER_TRAITS_H_
 #define BLACKCAT_TENSORS_LAYER_TRAITS_H_
 
-namespace BC {
+namespace bc {
 namespace nn {
 namespace detail {
 
@@ -39,7 +39,7 @@ using query_defines_predict = typename T::defines_predict;
 } // ns detail
 
 template<class T>
-struct layer_traits: BC::traits::common_traits<T> {
+struct layer_traits: bc::traits::common_traits<T> {
 	/**
 	 *  Layers have the function: backward_propagate(Args...);
 	 *  -- The arguments supplied are based upon these traits.
@@ -55,54 +55,54 @@ struct layer_traits: BC::traits::common_traits<T> {
 	using system_tag = typename T::system_tag;
 
 	using value_type =
-			BC::traits::conditional_detected_t<
-					BC::traits::query_value_type, T,
+			bc::traits::conditional_detected_t<
+					bc::traits::query_value_type, T,
 					typename system_tag::default_floating_point_type>;
 
 	using allocator_type =
-			BC::traits::conditional_detected_t<
-					BC::traits::query_allocator_type, T,
-					BC::Allocator<system_tag, value_type>>;
+			bc::traits::conditional_detected_t<
+					bc::traits::query_allocator_type, T,
+					bc::Allocator<system_tag, value_type>>;
 
-	using requires_extra_cache = BC::traits::conditional_detected_t<
+	using requires_extra_cache = bc::traits::conditional_detected_t<
 			detail::query_requires_extra_cache, T, std::false_type>;
 
-	using input_tensor_dimension = BC::traits::conditional_detected_t<
-			detail::query_input_tensor_dimension, T, BC::traits::Integer<1>>;
+	using input_tensor_dimension = bc::traits::conditional_detected_t<
+			detail::query_input_tensor_dimension, T, bc::traits::Integer<1>>;
 
-	using output_tensor_dimension = BC::traits::conditional_detected_t<
+	using output_tensor_dimension = bc::traits::conditional_detected_t<
 			detail::query_output_tensor_dimension, T, input_tensor_dimension>;
 
-	using forward_requires_inputs = BC::traits::conditional_detected_t<
+	using forward_requires_inputs = bc::traits::conditional_detected_t<
 			detail::query_forward_requires_inputs, T, std::true_type>;
 
-	using forward_requires_outputs = BC::traits::conditional_detected_t<
+	using forward_requires_outputs = bc::traits::conditional_detected_t<
 			detail::query_forward_requires_outputs, T, std::false_type>;
 
-	using forward_requires_extra_cache = BC::traits::conditional_detected_t<
+	using forward_requires_extra_cache = bc::traits::conditional_detected_t<
 			detail::query_forward_requires_extra_cache, T, std::false_type>;
 
-	using backward_requires_inputs = BC::traits::conditional_detected_t<
+	using backward_requires_inputs = bc::traits::conditional_detected_t<
 			detail::query_backward_requires_inputs, T, std::true_type>;
 
-	using backward_requires_outputs = BC::traits::conditional_detected_t<
+	using backward_requires_outputs = bc::traits::conditional_detected_t<
 			detail::query_backward_requires_outputs, T, std::false_type>;
 
-	using backward_delta_should_be_cached = BC::traits::conditional_detected_t<
+	using backward_delta_should_be_cached = bc::traits::conditional_detected_t<
 			detail::query_backward_requires_outputs, T, std::false_type>;
 
-	using backward_requires_extra_cache = BC::traits::conditional_detected_t<
+	using backward_requires_extra_cache = bc::traits::conditional_detected_t<
 			detail::query_backward_requires_extra_cache, T, std::false_type>;
 
-	using greedy_evaluate_delta = BC::traits::conditional_detected_t<
+	using greedy_evaluate_delta = bc::traits::conditional_detected_t<
 			detail::query_greedy_evaluate_delta, T, std::false_type>;
 
 
 	template<class... Args>
 	static auto select_on_predict(T& layer, Args&&... args) {
 		using detected =
-				BC::traits::truth_type<
-						BC::traits::is_detected_v<
+				bc::traits::truth_type<
+						bc::traits::is_detected_v<
 								detail::query_defines_predict, T>>;
 		return select_on_predict(detected(), layer, std::forward<Args>(args)...);
 	}
@@ -110,8 +110,8 @@ struct layer_traits: BC::traits::common_traits<T> {
 	template<class... Args>
 	static auto select_on_single_predict(T& layer, Args&&... args) {
 		using detected =
-				BC::traits::truth_type<
-						BC::traits::is_detected_v<
+				bc::traits::truth_type<
+						bc::traits::is_detected_v<
 								detail::query_defines_single_predict, T>>;
 		return select_on_single_predict(detected(), layer, std::forward<Args>(args)...);
 	}

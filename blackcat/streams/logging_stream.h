@@ -8,7 +8,7 @@
 #ifndef BLACKAT_TENSORS_STREAMS_LOGGING_STREAM_H_
 #define BLACKAT_TENSORS_STREAMS_LOGGING_STREAM_H_
 
-namespace BC {
+namespace bc {
 
 struct host_tag;
 struct device_tag;
@@ -101,7 +101,7 @@ struct Logging_Stream: Logging_Stream_Base<SystemTag> {
 			}
 		}
 
-		void deallocate(T* ptr, BC::size_t size) {
+		void deallocate(T* ptr, bc::size_t size) {
 			BC_ASSERT(ptr == nullptr,
 					"LOGGING_ALLOCATOR CAN ONLY DEALLOCATE NULLPTRS");
 			BC_ASSERT(info->current_allocated >= size * sizeof(value_type),
@@ -111,9 +111,9 @@ struct Logging_Stream: Logging_Stream_Base<SystemTag> {
 	};
 
 
-	Allocator<BC::allocators::Byte> allocator;
+	Allocator<bc::allocators::Byte> allocator;
 
-	Allocator<BC::allocators::Byte> get_allocator() const {
+	Allocator<bc::allocators::Byte> get_allocator() const {
 		return allocator;
 	}
 

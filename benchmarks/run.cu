@@ -4,9 +4,9 @@
 #include "elementwise.h"
 
 int main() {
-//	BC::print("matmul suite");
+//	bc::print("matmul suite");
 //	benchmark_matmul_suite();
 
-	BC::print("for loop suite");
+	bc::print("for loop suite");
 	benchmark_forloop_suite();
 }

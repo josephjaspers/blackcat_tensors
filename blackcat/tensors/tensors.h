@@ -14,15 +14,15 @@
 #include "tensor_base.h"
 #include "../allocator.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace detail{
 
 template<class T>
-using default_allocator = BC::Allocator<default_system_tag_t, T>;
+using default_allocator = bc::Allocator<default_system_tag_t, T>;
 
 template<int X>
-using default_shape = BC::Shape<X>;
+using default_shape = bc::Shape<X>;
 
 } //end of ns detail
 } //end of ns tensors
@@ -32,9 +32,9 @@ template<
 		class ValueType,
 		class Allocator=tensors::detail::default_allocator<ValueType>>
 using Tensor =
-		BC::tensors::Tensor_Base<
-				BC::tensors::exprs::Array<
-						BC::Shape<dimension>,
+		bc::tensors::Tensor_Base<
+				bc::tensors::exprs::Array<
+						bc::Shape<dimension>,
 						ValueType,
 						Allocator>>;
 

@@ -14,7 +14,7 @@ The stream used for any given expression is based upon the assignment operator o
 
 ```cpp
 
-BC::Matrix<float> y, w, x;
+bc::Matrix<float> y, w, x;
 
 y.get_Stream().create();
 w.get_Stream().create();
@@ -31,7 +31,7 @@ y.get_stream() == y[0].get_stream();
 
 ```cpp
 
-BC::Stream<system_tag> stream;
+bc::Stream<system_tag> stream;
 
 stream.create();		  //calls cudaCreateStream
 stream.set_stream(cudaStream_t);  //sets the stream 
@@ -48,11 +48,11 @@ stream.set_stream(another_bc_stream_object);
 | void | create | --- | creates a stream inplace, the stream will refer to a new non-default stream |
 | void | destroy | --- | destroys the stream, the stream used will be the default stream |
 | void | sync | --- | synchronizes the host stream with the current stream | 
-| void | set_stream | cudaStream_t or BC::Stream<system_tag> | Sets the stream to the same stream as the parameter | 
-| void | record_event | --- | Records an event (using a BC::HostEvent object or cudaEvent_t object) | 
-| void | wait_event | BC::Stream | Causes the current stream to wait on the last recorded event of the parameter-stream | 
-| void | wait_stream | BC::Stream | Shorthand for recording an event on the parameter-stream and synchronizing on that stream |
+| void | set_stream | cudaStream_t or bc::Stream<system_tag> | Sets the stream to the same stream as the parameter | 
+| void | record_event | --- | Records an event (using a bc::HostEvent object or cudaEvent_t object) | 
+| void | wait_event | bc::Stream | Causes the current stream to wait on the last recorded event of the parameter-stream | 
+| void | wait_stream | bc::Stream | Shorthand for recording an event on the parameter-stream and synchronizing on that stream |
 | void | enqueue_callback | Functor |Enques a host-call back function into the stream, a device stream will not wait for the completion of the host event to continue running | 
-| Workspace<ValueType> | get_allocator_rebound<value_type> | --- | Returns a BC::fancy::Workspace allocator contained inside the stream. | 
+| Workspace<ValueType> | get_allocator_rebound<value_type> | --- | Returns a bc::fancy::Workspace allocator contained inside the stream. | 
  
 

@@ -10,7 +10,7 @@
 
 #include "layer_cache.h"
 
-namespace BC {
+namespace bc {
 namespace nn {
 
 template<
@@ -30,12 +30,12 @@ struct Layer_Manager: Layer {
 
 	using value_type = typename layer_traits<Layer>::value_type;
 
-	using input_tensor_type = BC::Tensor<input_tensor_dimension::value, value_type, allocator_type>;
-	using batched_input_tensor_type = BC::Tensor<input_tensor_dimension::value+1, value_type, allocator_type>;
-	using batched_output_tensor_type = BC::Tensor<output_tensor_dimension::value+1, value_type, allocator_type>;
+	using input_tensor_type = bc::Tensor<input_tensor_dimension::value, value_type, allocator_type>;
+	using batched_input_tensor_type = bc::Tensor<input_tensor_dimension::value+1, value_type, allocator_type>;
+	using batched_output_tensor_type = bc::Tensor<output_tensor_dimension::value+1, value_type, allocator_type>;
 
 	template<char C, class Tensor, class isRecurrent=std::true_type>
-	using key_type = cache_key<BC::utility::Name<C>, Tensor, isRecurrent>;
+	using key_type = cache_key<bc::utility::Name<C>, Tensor, isRecurrent>;
 
 private:
 
@@ -207,7 +207,7 @@ private:
 	}
 
 	auto& next_layer() {
-		return BC::traits::derived_cast(*this).next().layer();
+		return bc::traits::derived_cast(*this).next().layer();
 	}
 
 	// Handle Forward Args ------------------------------------------------
@@ -316,8 +316,8 @@ private:
 
 	template<class T>
 	auto&& maybe_cache_delta(const T& dy) {
-		using should_greedy_eval = BC::traits::truth_type<
-				BC::tensors::exprs::expression_traits<T>::is_expr::value &&
+		using should_greedy_eval = bc::traits::truth_type<
+				bc::tensors::exprs::expression_traits<T>::is_expr::value &&
 				traits::greedy_evaluate_delta::value>;
 
 		return maybe_cache_delta_impl(should_greedy_eval(), dy);

@@ -15,7 +15,7 @@
 #include <curand.h>
 #include <curand_kernel.h>
 
-namespace BC {
+namespace bc {
 namespace random {
 namespace device_impl {
 

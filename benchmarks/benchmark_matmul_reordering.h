@@ -11,9 +11,9 @@
 #include "../blackcat/tensors.h"
 #include <chrono>
 
-float BC_matmul_assign(int size, BC::size_t  iters) {
+float BC_matmul_assign(int size, bc::size_t  iters) {
 
-    using mat = BC::Matrix<double>;
+    using mat = bc::Matrix<double>;
 
     mat a(size, size);
     mat b(size, size);
@@ -34,9 +34,9 @@ float BC_matmul_assign(int size, BC::size_t  iters) {
 
 }
 
-float HC_matmul_assign(int size, BC::size_t  iters) {
+float HC_matmul_assign(int size, bc::size_t  iters) {
 
-    using mat = BC::Matrix<double>;
+    using mat = bc::Matrix<double>;
 
     mat a(size, size);
     mat b(size, size);
@@ -64,9 +64,9 @@ float HC_matmul_assign(int size, BC::size_t  iters) {
 
 
 }
-float BC_logistic_matmul_assign(int size, BC::size_t  iters) {
+float BC_logistic_matmul_assign(int size, bc::size_t  iters) {
 
-    using mat = BC::Matrix<double>;
+    using mat = bc::Matrix<double>;
 
     mat a(size, size);
     mat b(size, size);
@@ -80,7 +80,7 @@ float BC_logistic_matmul_assign(int size, BC::size_t  iters) {
     auto wcts = std::chrono::system_clock::now();
 
     for (int i = 0; i < iters; ++i) {
-        a = BC::tanh(b * c + d);
+        a = bc::tanh(b * c + d);
     }
 
     std::chrono::duration<double> wctduration =
@@ -88,9 +88,9 @@ float BC_logistic_matmul_assign(int size, BC::size_t  iters) {
     return wctduration.count();
 }
 
-float HC_logistic_matmul_assign(int size, BC::size_t  iters) {
+float HC_logistic_matmul_assign(int size, bc::size_t  iters) {
 
-    using mat = BC::Matrix<double>;
+    using mat = bc::Matrix<double>;
 
     mat a(size, size);
     mat b(size, size);
@@ -113,7 +113,7 @@ float HC_logistic_matmul_assign(int size, BC::size_t  iters) {
                 1.0, b_, size, c_, size, 0, a_, size);
 
         for (int j = 0; j < size; ++j) {
-            a_[j] = BC::tanh(a_[j] + d_[j]);
+            a_[j] = bc::tanh(a_[j] + d_[j]);
         }
     }
     std::chrono::duration<double> wctduration =

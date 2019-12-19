@@ -10,7 +10,7 @@
 
 #include "layer_base.h"
 
-namespace BC {
+namespace bc {
 namespace nn {
 
 template<class SystemTag, class ValueType>

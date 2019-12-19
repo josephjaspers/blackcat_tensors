@@ -10,7 +10,7 @@
 
 #include "test_common.h"
 
-namespace BC {
+namespace bc {
 namespace tests {
 
 template<class value_type, template<class> class allocator>
@@ -18,9 +18,9 @@ int test_accessors(int sz=128) {
 
 	BC_TEST_BODY_HEAD
 
-	using mat = BC::Matrix<value_type, allocator<value_type>>;
-	using vec = BC::Vector<value_type, allocator<value_type>>;
-	using scalar = BC::Scalar<value_type, allocator<value_type>>;
+	using mat = bc::Matrix<value_type, allocator<value_type>>;
+	using vec = bc::Vector<value_type, allocator<value_type>>;
+	using scalar = bc::Scalar<value_type, allocator<value_type>>;
 
 	mat a(sz,sz);
 
@@ -56,7 +56,7 @@ int test_accessors(int sz=128) {
 		vec a1(a[1]);
 
 		vec validation = a[0].approx_equal(a0) && a[1].approx_equal(a1);
-		return BC::tensors::all(validation[0]);
+		return bc::tensors::all(validation[0]);
 	)
 
 	BC_TEST_DEF(
@@ -64,8 +64,8 @@ int test_accessors(int sz=128) {
 		vec b3(a3.size());
 		b3 = a.diagnol();
 
-		return BC::tensors::all(a3.approx_equal(a.diagnol())) &&
-				BC::tensors::all(a.diagnol().approx_equal(b3)) &&
+		return bc::tensors::all(a3.approx_equal(a.diagnol())) &&
+				bc::tensors::all(a.diagnol().approx_equal(b3)) &&
 				a3.size() == sz;
 	)
 
@@ -85,7 +85,7 @@ int test_accessors(int sz=128) {
 				slice_range[1].approx_equal(a1) &&
 				slice_range[2].approx_equal(a2);
 
-		return BC::tensors::all(validation) &&
+		return bc::tensors::all(validation) &&
 				ensure_correct_size &&
 				ensure_correct_cols &&
 				ensure_correct_rows;
@@ -107,7 +107,7 @@ int test_accessors(int sz=128) {
 				slice_range[1].approx_equal(a1) &&
 				slice_range[2].approx_equal(a2);
 
-		return BC::tensors::all(validation) &&
+		return bc::tensors::all(validation) &&
 				ensure_correct_size &&
 				ensure_correct_cols &&
 				ensure_correct_rows;
@@ -120,7 +120,7 @@ int test_accessors(int sz=128) {
 		vec a2(a[2]);
 		vec a3(a[3]);
 
-		auto block_of_a = a[{BC::index(1,1), BC::shape(4,3)}];
+		auto block_of_a = a[{bc::index(1,1), bc::shape(4,3)}];
 
 		bool ensure_correct_size = block_of_a.size() == 4 * 3;
 		bool ensure_correct_rows = block_of_a.rows() == 4;
@@ -131,7 +131,7 @@ int test_accessors(int sz=128) {
 				block_of_a[1].approx_equal(a2.slice(1, 5)) &&
 				block_of_a[2].approx_equal(a3.slice(1, 5));
 
-		return BC::tensors::all(validation) &&
+		return bc::tensors::all(validation) &&
 				ensure_correct_size &&
 				ensure_correct_cols &&
 				ensure_correct_rows;
@@ -144,7 +144,7 @@ int test_accessors(int sz=128) {
 		vec a2(a[2]);
 		vec a3(a[3]);
 
-		auto block_of_a = a.subblock(BC::index(1,1), BC::shape(4,3));
+		auto block_of_a = a.subblock(bc::index(1,1), bc::shape(4,3));
 
 		bool ensure_correct_size = block_of_a.size() == 4 * 3;
 		bool ensure_correct_rows = block_of_a.rows() == 4;
@@ -155,7 +155,7 @@ int test_accessors(int sz=128) {
 				block_of_a[1].approx_equal(a2.slice(1, 5)) &&
 				block_of_a[2].approx_equal(a3.slice(1, 5));
 
-		return BC::tensors::all(validation) &&
+		return bc::tensors::all(validation) &&
 				ensure_correct_size &&
 				ensure_correct_cols &&
 				ensure_correct_rows;
@@ -163,8 +163,8 @@ int test_accessors(int sz=128) {
 
 	BC_TEST_DEF(
 			return a.flattened().size() == a.size() &&
-					BC::all(a.flattened().slice(0,sz) == a[0]) &&
-					BC::all(a.flattened().slice(sz, sz*2) == a[1]);
+					bc::all(a.flattened().slice(0,sz) == a[0]) &&
+					bc::all(a.flattened().slice(sz, sz*2) == a[1]);
 	)
 
 	//test chunk of chunk
@@ -174,8 +174,8 @@ int test_accessors(int sz=128) {
 		vec a2(a[2]);
 		vec a3(a[3]);
 
-		auto primary_block_of_a = a[{BC::index(0, 0), BC::shape(5,5)}];
-		auto block_of_a = primary_block_of_a[{BC::index(1,1), BC::shape(4,3)}];
+		auto primary_block_of_a = a[{bc::index(0, 0), bc::shape(5,5)}];
+		auto block_of_a = primary_block_of_a[{bc::index(1,1), bc::shape(4,3)}];
 
 		bool ensure_correct_size = block_of_a.size() == 4 * 3;
 		bool ensure_correct_rows = block_of_a.rows() == 4;
@@ -186,7 +186,7 @@ int test_accessors(int sz=128) {
 				block_of_a[1].approx_equal(a2.slice(1, 5)) &&
 				block_of_a[2].approx_equal(a3.slice(1, 5));
 
-		return BC::tensors::all(validation) &&
+		return bc::tensors::all(validation) &&
 				ensure_correct_size &&
 				ensure_correct_cols &&
 				ensure_correct_rows;

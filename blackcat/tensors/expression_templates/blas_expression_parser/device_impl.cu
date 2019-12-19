@@ -1,4 +1,4 @@
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs { 
 namespace blas_expression_parser {

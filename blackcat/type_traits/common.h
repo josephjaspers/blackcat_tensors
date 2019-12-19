@@ -11,7 +11,7 @@
 #include <type_traits>
 #include <tuple>
 
-namespace BC {
+namespace bc {
 namespace traits {
 namespace common {
 

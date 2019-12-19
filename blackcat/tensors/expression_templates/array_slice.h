@@ -12,7 +12,7 @@
 #include "array_kernel_array.h"
 #include "array.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs {
 
@@ -21,13 +21,13 @@ struct Array_Slice:
 		Kernel_Array<
 				Shape,
 				ValueType,
-				typename BC::allocator_traits<Allocator>::system_tag,
+				typename bc::allocator_traits<Allocator>::system_tag,
 				Tags...> {
 
-	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
+	using system_tag = typename bc::allocator_traits<Allocator>::system_tag;
 	using value_type = ValueType;
 	using allocator_type = Allocator;
-	using stream_type = BC::Stream<system_tag>;
+	using stream_type = bc::Stream<system_tag>;
 	using shape_type = Shape;
 
 private:
@@ -69,7 +69,7 @@ using slice_type_factory = Array_Slice<
 
 template<int Dimension, class Parent, class... Tags>
 using slice_type_from_parent = slice_type_factory<
-		BC::Shape<BC::traits::max(Dimension,0)>,
+		bc::Shape<bc::traits::max(Dimension,0)>,
 		Parent,
 		Tags...>;
 
@@ -81,7 +81,7 @@ using strided_slice_type_from_parent = slice_type_factory<
 }
 
 template<class Parent>
-auto make_row(Parent& parent, BC::size_t index) {
+auto make_row(Parent& parent, bc::size_t index) {
 	using slice_type = strided_slice_type_from_parent<
 			1, Parent, noncontinuous_memory_tag>;
 	return slice_type(
@@ -92,12 +92,12 @@ auto make_row(Parent& parent, BC::size_t index) {
 }
 
 template<class Parent>
-auto make_diagnol(Parent& parent, BC::size_t diagnol_index) {
-	BC::size_t stride = parent.leading_dimension(1) + 1;
-	BC::size_t length = BC::traits::min(
+auto make_diagnol(Parent& parent, bc::size_t diagnol_index) {
+	bc::size_t stride = parent.leading_dimension(1) + 1;
+	bc::size_t length = bc::traits::min(
 			parent.rows(), parent.cols() - diagnol_index);
 
-	BC::size_t ptr_index = diagnol_index > 0
+	bc::size_t ptr_index = diagnol_index > 0
 			? parent.leading_dimension(1) * diagnol_index
 			: std::abs(diagnol_index);
 
@@ -115,11 +115,11 @@ template<
 		class Parent,
 		class=std::enable_if_t<
 				!expression_traits<Parent>::is_continuous::value>>
-static auto make_slice(Parent& parent, BC::size_t index)
+static auto make_slice(Parent& parent, bc::size_t index)
 {
 	using scalar_type = slice_type_from_parent<0, Parent>;
 	using slice_type = slice_type_from_parent<
-			BC::traits::max(0,Parent::tensor_dimension-1),
+			bc::traits::max(0,Parent::tensor_dimension-1),
 			Parent,
 			noncontinuous_memory_tag>;
 
@@ -138,11 +138,11 @@ template<
 		class=std::enable_if_t<
 				expression_traits<Parent>::is_continuous::value>,
 		int differentiator=0>
-static auto make_slice(Parent& parent, BC::size_t index)
+static auto make_slice(Parent& parent, bc::size_t index)
 {
 	using scalar_type = slice_type_from_parent<0, Parent>;
 	using slice_type = slice_type_from_parent<
-			BC::traits::max(0,Parent::tensor_dimension-1), Parent>;
+			bc::traits::max(0,Parent::tensor_dimension-1), Parent>;
 
 	using slice_t = std::conditional_t<
 			Parent::tensor_dimension == 1, scalar_type, slice_type>;
@@ -155,20 +155,20 @@ static auto make_slice(Parent& parent, BC::size_t index)
 }
 
 template<class Parent>
-static auto make_ranged_slice(Parent& parent, BC::size_t from, BC::size_t to)
+static auto make_ranged_slice(Parent& parent, bc::size_t from, bc::size_t to)
 {
 	using slice_type = slice_type_from_parent<
 			Parent::tensor_dimension, Parent>;
 
-	BC::size_t range = to - from;
-	BC::size_t index = parent.slice_ptr_index(from);
+	bc::size_t range = to - from;
+	bc::size_t index = parent.slice_ptr_index(from);
 
-	BC::Dim<Parent::tensor_dimension> inner_shape = parent.inner_shape();
+	bc::Dim<Parent::tensor_dimension> inner_shape = parent.inner_shape();
 	inner_shape[Parent::tensor_dimension-1] = range;
 
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
-						BC::Shape<Parent::tensor_dimension>(inner_shape),
+						bc::Shape<Parent::tensor_dimension>(inner_shape),
 						parent.data() + index);
 }
 
@@ -179,23 +179,23 @@ static auto make_view(Parent& parent, ShapeLike shape) {
 
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
-						BC::Shape<ShapeLike::tensor_dimension>(shape),
+						bc::Shape<ShapeLike::tensor_dimension>(shape),
 						parent.data());
 }
 
 template<class Parent>
-static auto make_scalar(Parent& parent, BC::size_t index) {
+static auto make_scalar(Parent& parent, bc::size_t index) {
 	using slice_type = slice_type_from_parent<0, Parent>;
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
-						BC::Shape<0>(),
+						bc::Shape<0>(),
 						parent.data() + index);
 }
 
 template<class Parent, class ShapeLike>
 auto make_chunk(
 		Parent& parent,
-		BC::Dim<Parent::tensor_dimension> index_points,
+		bc::Dim<Parent::tensor_dimension> index_points,
 		ShapeLike shape)
 {
 	static_assert(ShapeLike::tensor_dimension > 1,

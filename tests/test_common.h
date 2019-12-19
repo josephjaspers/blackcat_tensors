@@ -11,7 +11,7 @@
 #include <string>
 #include "../blackcat/tensors.h"
 
-namespace BC {
+namespace bc {
 namespace tests {
 
 static std::string sz80_substring(std::string test) {
@@ -26,7 +26,7 @@ static std::string sz60_test_buffer() {
 
 #define BC_TEST_BODY_HEAD                                                 \
 	std::cout << "\n\n" << __PRETTY_FUNCTION__ << '\n';                   \
-	BC::print(sz60_test_buffer());                                        \
+	bc::print(sz60_test_buffer());                                        \
 	using BC_ASSERT_TEST_BODY_HEAD =  std::true_type;                     \
 	int bc_test_num_errors = 0;                                           \
 	int bc_test_index = 0;
@@ -46,13 +46,13 @@ static std::string sz60_test_buffer() {
 		auto test = [&]() { __VA_ARGS__ };                                \
 		try {                                                             \
 			if (!test()) {                                                \
-				BC::print(sz80_substring("TEST FAILURE: "#__VA_ARGS__));  \
+				bc::print(sz80_substring("TEST FAILURE: "#__VA_ARGS__));  \
 				bc_test_num_errors++;                                     \
 			} else {                                                      \
-				BC::print(sz80_substring("test success: "#__VA_ARGS__));  \
+				bc::print(sz80_substring("test success: "#__VA_ARGS__));  \
 			}                                                             \
 		} catch (...) {                                                   \
-			BC::print(sz80_substring("TEST ERROR: "#__VA_ARGS__));        \
+			bc::print(sz80_substring("TEST ERROR: "#__VA_ARGS__));        \
 			bc_test_num_errors++;                                         \
 		}                                                                 \
 	}
@@ -61,8 +61,8 @@ static std::string sz60_test_buffer() {
 		static_assert(BC_ASSERT_TEST_BODY_HEAD::value,                    \
 				"BC_TEST_BODY_HEAD is not defined in function");          \
                                                                           \
-	BC::print(sz60_test_buffer());                                        \
-	BC::print("Tests passed:",                                            \
+	bc::print(sz60_test_buffer());                                        \
+	bc::print("Tests passed:",                                            \
 			bc_test_index-  bc_test_num_errors, "/", bc_test_index);      \
 	return bc_test_num_errors;
 }

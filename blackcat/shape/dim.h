@@ -10,7 +10,7 @@
 
 #include <string>
 
-namespace BC {
+namespace bc {
 
 template<int N>
 struct Dim {
@@ -18,10 +18,10 @@ struct Dim {
 	static_assert(N>=0, "Dim<N>: ASSERT 'N>=0'");
 
 	static constexpr int tensor_dimension = N;
-	using value_type = BC::size_t;
-	using size_t = BC::size_t;
+	using value_type = bc::size_t;
+	using size_t = bc::size_t;
 
-	BC::size_t m_index[N] = { 0 };
+	bc::size_t m_index[N] = { 0 };
 
 	BCINLINE
 	value_type size() const {
@@ -29,7 +29,7 @@ struct Dim {
 	}
 
 	BCINLINE
-	Dim& fill(BC::size_t value) {
+	Dim& fill(bc::size_t value) {
 		for (int i = 0; i < N; ++i)
 			m_index[i] = value;
 		return *this;
@@ -80,10 +80,10 @@ struct Dim {
 	template<
 		class... Ints,
 		class=std::enable_if_t<
-				BC::traits::sequence_of_v<BC::size_t, Ints...>>>
+				bc::traits::sequence_of_v<bc::size_t, Ints...>>>
 	BCINLINE
 	auto concat(Ints... value) const {
-		return concat(BC::Dim<sizeof...(Ints)> { value... });
+		return concat(bc::Dim<sizeof...(Ints)> { value... });
 	}
 
 	template <int X> BCINLINE
@@ -151,26 +151,26 @@ public:
 
 #define BC_DIM_OP(op, functor)\
 	Dim operator op(const Dim& other) const {                           \
-		return this->op_impl(BC::oper::functor(), other);                 \
+		return this->op_impl(bc::oper::functor(), other);                 \
 	}
 
 #define BC_DIM_INPLACE_OP(op, functor)\
 	Dim operator op##=(const Dim& other) {                              \
-		return this->inplace_op_impl(BC::oper::functor(), other);         \
+		return this->inplace_op_impl(bc::oper::functor(), other);         \
 	}
 
 #define BC_DIM_INPLACE_SCALAR_OP(op, functor)                           \
 	friend Dim operator op##=(Dim &dim, const value_type& scalar) {     \
-		return dim.inplace_scalar_op_impl(BC::oper::functor(), scalar); \
+		return dim.inplace_scalar_op_impl(bc::oper::functor(), scalar); \
 	}                                                                   \
 
 #define BC_DIM_SCALAR_OP(op, functor)                                   \
 	friend Dim operator op(const Dim &dim, const value_type& scalar) {  \
-		return dim.scalar_op_impl(BC::oper::functor(), scalar);         \
+		return dim.scalar_op_impl(bc::oper::functor(), scalar);         \
 	}                                                                   \
 	                                                                    \
 	friend Dim operator op(const value_type& scalar, const Dim &dim) {  \
-		return dim.scalar_op_impl(BC::oper::functor(), scalar);         \
+		return dim.scalar_op_impl(bc::oper::functor(), scalar);         \
 	}
 
 #define BC_DIM_OP_FACTORY(op, functor) \
@@ -275,7 +275,7 @@ BC_DIM_OP_FACTORY(>=, Greater_Equal)
 template<>
 struct Dim<0> {
 	static constexpr int tensor_dimension = 0;
-	using value_type = BC::size_t;
+	using value_type = bc::size_t;
 
 	BCINLINE
 	value_type size(value_type base_sz=1, value_type base_index=0) const {
@@ -289,7 +289,7 @@ struct Dim<0> {
 	}
 
 	BCINLINE
-	value_type dimension(BC::size_t i) const {
+	value_type dimension(bc::size_t i) const {
 		return 1;
 	}
 
@@ -313,7 +313,7 @@ struct Dim<0> {
 
 template<class... Integers> BCINLINE
 auto dim(const Integers&... ints) {
-	return Dim<sizeof...(Integers)> { BC::size_t(ints)... };
+	return Dim<sizeof...(Integers)> { bc::size_t(ints)... };
 }
 
 

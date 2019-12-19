@@ -12,11 +12,11 @@
 #include <memory>
 #include <typeinfo>
 
-namespace BC {
+namespace bc {
 namespace utility {
 
 template<class T>
-using Type = BC::traits::Type<T>;
+using Type = bc::traits::Type<T>;
 
 class Any_Set {
 

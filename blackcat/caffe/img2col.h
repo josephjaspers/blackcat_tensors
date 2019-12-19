@@ -15,22 +15,22 @@
 /*
  *  EXAMPLE --------------- (Caffe stores their tensor-dims in reverse order of BCT)
  *  int main() {
-	 BC::Tensor<3,float> a(5,5, 1);
-	 BC::Tensor<3, float> b(9, 9, 1);
+	 bc::Tensor<3,float> a(5,5, 1);
+	 bc::Tensor<3, float> b(9, 9, 1);
 
 	 b.zero();
 
 	 for (int i = 0; i < a.size(); ++i)
 		 a(i) = i;
 
-	 auto i = BC::dim(1,5,5);//.data(), //img shape --channel width height
-	 auto c = BC::dim(9,3,3);//.data(), //cols
-	 auto k = BC::dim(3,3);//.data(),   //kernel shape
-	 auto p = BC::Dim<3>(); p.fill(0);  //.data(), //pad
-	 auto s = BC::Dim<3>(); s.fill(1);  //.data(), //strides
-	 auto d = BC::Dim<3>(); d.fill(1);  //.data(), //dilation
-//	BC::caffe::im2col_cpu(a.data(), 1, 5, 5, 3, 3, 0, 0, 1, 1, 1, 1, b.data());
-	 BC::caffe::im2col_nd_cpu(
+	 auto i = bc::dim(1,5,5);//.data(), //img shape --channel width height
+	 auto c = bc::dim(9,3,3);//.data(), //cols
+	 auto k = bc::dim(3,3);//.data(),   //kernel shape
+	 auto p = bc::Dim<3>(); p.fill(0);  //.data(), //pad
+	 auto s = bc::Dim<3>(); s.fill(1);  //.data(), //strides
+	 auto d = bc::Dim<3>(); d.fill(1);  //.data(), //dilation
+//	bc::caffe::im2col_cpu(a.data(), 1, 5, 5, 3, 3, 0, 0, 1, 1, 1, 1, b.data());
+	 bc::caffe::im2col_nd_cpu(
 			 a.data(), 2,
 			 i.data(), //img shape
 			 c.data(), //col_shape
@@ -41,14 +41,14 @@
 			 b.data()); //data col
 
 	 a.print();
-	 BC::print('\n');
+	 bc::print('\n');
 	 b.print();
-	 BC::print("success");
+	 bc::print("success");
  }
 
  */
 
-namespace BC {
+namespace bc {
 
 class host_tag;
 
@@ -66,7 +66,7 @@ inline bool is_a_ge_zero_and_a_lt_b(int a, int b) {
 
 template <typename Dtype>
 void im2col(
-		BC::host_tag,
+		bc::host_tag,
 		const Dtype* data_im, const int channels,
 		const int height, const int width,
 		const int kernel_h, const int kernel_w,
@@ -199,7 +199,7 @@ inline void im2col_nd_core_cpu(
 
 template <typename Dtype>
 void im2col_nd(
-		BC::host_tag,
+		bc::host_tag,
 		const Dtype* data_im, const int num_spatial_axes,
 		const int* im_shape, const int* col_shape,
 		const int* kernel_shape, const int* pad, const int* stride,
@@ -212,7 +212,7 @@ void im2col_nd(
 
 template <typename Dtype>
 void col2im(
-		BC::host_tag,
+		bc::host_tag,
 		const Dtype* data_col, const int channels,
 		const int height, const int width,
 		const int kernel_h, const int kernel_w,

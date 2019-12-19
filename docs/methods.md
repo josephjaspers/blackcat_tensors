@@ -8,12 +8,12 @@ Note: Many of the return types have been abreviated. The underlying implementati
 #### Data Access 
 | return type | method name | parameters | documentation |
 |--- | --- | --- | --- |
-| slice | operator[] | BC::size_t   | Returns a slice of the tensor |
-| scalar_obj | operator() | BC::size_t   | Returns a scalar object. Access to this data is safe. |
+| slice | operator[] | bc::size_t   | Returns a slice of the tensor |
+| scalar_obj | operator() | bc::size_t   | Returns a scalar object. Access to this data is safe. |
 | vector | diag | int=0  | Returns the diagnol of a matrix. A positive integer will have the diagnol start from the top left corner. A negative integer will have the diagnol end n from the bottom right |
-| slice | col | BC::size_t   | Returns a column of a matrix. |
+| slice | col | bc::size_t   | Returns a column of a matrix. |
 | transpose_view | transpose | ---  | returns a transpose view of a Matrix or Vector. Cannot transpose in place. Matrix = Matrix.transpose() is undefined. |
-| vector_view | row | BC::size_t  | returns a row of a matrix. |
+| vector_view | row | bc::size_t  | returns a row of a matrix. |
 | reshape | (static) reshape | tensor, and ints...  | returns a reshaped view of the tensor parameter. Does not modify the original tensor |
 | slice | (static) chunk | index, shape | returns a reshaped view of the tensor parameter. Does not modify the original tensor |
 
@@ -68,7 +68,7 @@ Note: Many of the return types have been abreviated. The underlying implementati
 | value_type | min | Tensor  | --- | --- |
 | value_type | max | Tensor  | --- | --- |
 | void | rand | Tensor | --- |
-| --- | for_each | functor | Convenient-definition of for_each. Identical to BC::for_each(tensor.begin(), tensor.end(), functor) |
+| --- | for_each | functor | Convenient-definition of for_each. Identical to bc::for_each(tensor.begin(), tensor.end(), functor) |
 | void | sort | Tensor | Implemenation is dependent upon gpu vs cpu allocation and std and thrust's implementation. |
 
 
@@ -126,7 +126,7 @@ cached_dx_relu        x > 0 ? 1 : 0
 ```
 #### Algorithms
 Algorithms are not implemented by BCT. They are forwarded to the standard library or thrust implementation. 
-The purpose of BC::Algorithms is to automatically forward to the correct implementation by detecting how the memory of a tensor was allocated at compile time.
+The purpose of bc::Algorithms is to automatically forward to the correct implementation by detecting how the memory of a tensor was allocated at compile time.
 ```
 for_each
 count

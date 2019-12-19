@@ -13,7 +13,7 @@
 #include "tree_evaluator.h"
 #include "blas_expression_template_traits.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs { 
 
@@ -48,13 +48,13 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 				"gemm requires left.cols() == right.rows()");
 	}
 
-	BCINLINE BC::size_t  size() const { return left.rows() * right.cols(); }
-	BCINLINE BC::size_t  dimension(int i) const {
+	BCINLINE bc::size_t  size() const { return left.rows() * right.cols(); }
+	BCINLINE bc::size_t  dimension(int i) const {
 		return i == 0 ? left.rows() : i == 1 ? right.cols() : 1;
 	}
 
-	BCINLINE BC::size_t rows() const { return dimension(0); }
-	BCINLINE BC::size_t cols() const { return dimension(1); }
+	BCINLINE bc::size_t rows() const { return dimension(0); }
+	BCINLINE bc::size_t cols() const { return dimension(1); }
 
 	template<class Core, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<Core, Alpha, Beta> output, Stream stream) const
@@ -79,7 +79,7 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 		auto transA = contents.lv_is_transposed;
 		auto transB = contents.rv_is_transposed;
 
-		BC::blas::BLAS<system_tag>::gemm(
+		bc::blas::BLAS<system_tag>::gemm(
 					stream, transA, transB, out.rows(), out.cols(), left.cols(),
 					alpha.data(), A.data(), A.leading_dimension(1),
 					B.data(), B.leading_dimension(1),

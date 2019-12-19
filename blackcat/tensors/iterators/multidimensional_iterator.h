@@ -11,7 +11,7 @@
 
 #include "common.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace iterators {
 
@@ -26,9 +26,9 @@ struct Multidimensional_Iterator {
     using reference = value_type;
 
     Tensor& tensor;
-    BC::size_t  index;
+    bc::size_t  index;
 
-    BCINLINE Multidimensional_Iterator(Tensor& tensor_, BC::size_t  index_=0) :
+    BCINLINE Multidimensional_Iterator(Tensor& tensor_, bc::size_t  index_=0) :
 			tensor(tensor_), index(index_) {}
 
 #define BC_ND_Iter_Compare(sign, rev)                          \
@@ -52,7 +52,7 @@ struct Multidimensional_Iterator {
     BC_ND_Iter_Compare(>=, <=)
 #undef BC_ND_Iter_Compare
 
-    BCINLINE operator BC::size_t  () const { return index; }
+    BCINLINE operator bc::size_t  () const { return index; }
 
     BCINLINE bool operator == (const Iterator& iter) {
         return index == iter.index;

@@ -23,14 +23,14 @@ Brief example:
 
 int main() {
 
-using namespace BC::nn;
-auto system_tag = BC::host_tag();   //for CPU/OpenMP
-auto system_tag = BC::device_tag(); //for CUDA 
+using namespace bc::nn;
+auto system_tag = bc::host_tag();   //for CPU/OpenMP
+auto system_tag = bc::device_tag(); //for CUDA 
 
 auto network = neuralnetwork(
-	feedforward(system_tag, 784, 256, BC::nn::adam),
+	feedforward(system_tag, 784, 256, bc::nn::adam),
 	logistic(system_tag, 256),
-	feedforward(system_tag, 256, 10, BC::mm::adam),
+	feedforward(system_tag, 256, 10, bc::mm::adam),
 	softmax(system_tag, 10),
 	outputlayer(system_tag, 10)
 );
@@ -59,9 +59,9 @@ GPU multithreading? Simply link CUDA
 How to choose allocation?
 
 ```cpp
-BC::Vector<float, BC::Cuda_Allocator<float>> myVec(sz);    //Allocates data on the gpu
-BC::Vector<double, BC::Basic_Allocator<double>> myVec(sz); //Allocates data on the cpu
-BC::Vector<double>  myVec(sz);                             //defaults to BC::Basic_Allocator
+bc::Vector<float, bc::Cuda_Allocator<float>> myVec(sz);    //Allocates data on the gpu
+bc::Vector<double, bc::Basic_Allocator<double>> myVec(sz); //Allocates data on the cpu
+bc::Vector<double>  myVec(sz);                             //defaults to bc::Basic_Allocator
 ```
 
 #### Important: 

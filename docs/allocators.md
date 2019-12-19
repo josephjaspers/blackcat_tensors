@@ -30,10 +30,10 @@ BlackCat Tensor's common-types (Vector, Matrix, Cube) are created using two temp
 	
 	`system_tag`
 
-	The system_tag, may be either BC::host_tag or BC::device_tag.
+	The system_tag, may be either bc::host_tag or bc::device_tag.
 	
 ```cppp
-using system_tag = BC::device_tag; //Will inform BC_Tensors your allocator allocates memory on the GPU.
+using system_tag = bc::device_tag; //Will inform BC_Tensors your allocator allocates memory on the GPU.
 ```	
 	`system_tag` informs if the memory is allocated on the GPU or CPU. 
 	Tensors constructed with 'device' allocators will have their computations run on the GPU.
@@ -44,15 +44,15 @@ using system_tag = BC::device_tag; //Will inform BC_Tensors your allocator alloc
 #### Choosing an allocator (example):
 
 ```cpp
-BC::Matrix<float> mat; 			    	   //defaults to Basic_Allocator<float>
-BC::Matrix<float, BC::Basic_Allocator<float>> mat; //identical to above   
-BC::Matrix<float, BC::Cuda_Allocator<float>> mat;  //allocates memory on the GPU 
-BC::Matrix<float, BC::Cuda_Managed<float>> mat;    //allocates memory on the GPU but data transfer is managed automatically. 
+bc::Matrix<float> mat; 			    	   //defaults to Basic_Allocator<float>
+bc::Matrix<float, bc::Basic_Allocator<float>> mat; //identical to above   
+bc::Matrix<float, bc::Cuda_Allocator<float>> mat;  //allocates memory on the GPU 
+bc::Matrix<float, bc::Cuda_Managed<float>> mat;    //allocates memory on the GPU but data transfer is managed automatically. 
 ```
 
 #### Fancy Allocators:
 
-	BlackCat_Tensors supports some more advanced allocators found in the namespace BC::allocators::fancy.
+	BlackCat_Tensors supports some more advanced allocators found in the namespace bc::allocators::fancy.
 	Allocators in the 'fancy' namespace have more advanced properties than the aforementioned allocators. 
 	They're generally used internally for performance-critical components of the BCT.
 	

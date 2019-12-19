@@ -10,7 +10,7 @@
 
 
 
-namespace BC {
+namespace bc {
 namespace oper {
 
 struct basic_operation {};

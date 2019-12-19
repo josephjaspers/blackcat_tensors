@@ -13,7 +13,7 @@
 #include "constexpr_if.h"
 #include "bind.h"
 
-namespace BC {
+namespace bc {
 
 namespace streams {
 
@@ -24,7 +24,7 @@ namespace streams {
 
 namespace traits {
 
-using namespace BC::traits::common;
+using namespace bc::traits::common;
 
 namespace detail { template<class> struct DISABLE; }
 
@@ -141,10 +141,10 @@ static constexpr bool compileable() {
 
 
 template<class T>
-BCINLINE static constexpr BC::size_t  max(const T& x) { return x; }
+BCINLINE static constexpr bc::size_t  max(const T& x) { return x; }
 
 template<class T>
-BCINLINE static constexpr BC::size_t  min(const T& x) { return x; }
+BCINLINE static constexpr bc::size_t  min(const T& x) { return x; }
 
 template<class T, class... Ts> BCINLINE
 static constexpr size_t max(const T& x, const Ts&... xs) {
@@ -321,11 +321,11 @@ struct common_traits {
 				"SystemTag Mismatch");
 
 		return traits::constexpr_ternary<defines_get_stream::value>(
-				BC::traits::bind([](const auto& type) {
+				bc::traits::bind([](const auto& type) {
 						return type.get_stream();
 				}, type),
 				[]() {
-					return BC::streams::Stream<system_tag>();
+					return bc::streams::Stream<system_tag>();
 				}
 		);
 	}
@@ -338,7 +338,7 @@ struct common_traits {
 				"SystemTag Mismatch");
 
 		return traits::constexpr_ternary<defines_get_allocator::value>(
-				BC::traits::bind([](const auto& type) {
+				bc::traits::bind([](const auto& type) {
 						return type.get_allocator();
 				}, type),
 				[]() {

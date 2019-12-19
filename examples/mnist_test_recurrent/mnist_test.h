@@ -4,26 +4,26 @@
 #include <chrono>
 #include <string>
 
-template<class System=BC::host_tag>
+template<class System=bc::host_tag>
 int percept_MNIST(System system_tag, std::string mnist_dataset,
 		int epochs=10, int batch_size=32, int samples=32*1024) {
 
 	using value_type     = typename System::default_floating_point_type;
-	using allocator_type = BC::Allocator<System, value_type>;
-	using cube           = BC::Cube<value_type, allocator_type>;
-	using mat            = BC::Matrix<value_type, allocator_type>;
+	using allocator_type = bc::Allocator<System, value_type>;
+	using cube           = bc::Cube<value_type, allocator_type>;
+	using mat            = bc::Matrix<value_type, allocator_type>;
 	using clock          = std::chrono::duration<double>;
 
-	auto network = BC::nn::neuralnetwork(
-		BC::nn::lstm(system_tag, 784/4, 128),
-		BC::nn::lstm(system_tag, 128, 64),
-		BC::nn::feedforward(system_tag, 64, 10),
-		BC::nn::softmax(system_tag, 10),
-		BC::nn::logging_output_layer(system_tag, 10, BC::nn::RMSE).skip_every(100)
+	auto network = bc::nn::neuralnetwork(
+		bc::nn::lstm(system_tag, 784/4, 128),
+		bc::nn::lstm(system_tag, 128, 64),
+		bc::nn::feedforward(system_tag, 64, 10),
+		bc::nn::softmax(system_tag, 10),
+		bc::nn::logging_output_layer(system_tag, 10, bc::nn::RMSE).skip_every(100)
 	);
 
-	BC::print("Neural Network architecture:");
-	BC::print(network.get_string_architecture());
+	bc::print("Neural Network architecture:");
+	bc::print(network.get_string_architecture());
 
 	network.set_batch_size(batch_size);
 
@@ -33,19 +33,19 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	cube& inputs = data.first;
 	cube& outputs = data.second;
 
-	BC::print("training...");
+	bc::print("training...");
 	auto start = std::chrono::system_clock::now();
 
 	int img_partitions = 4;
 	for (int i = 0; i < epochs; ++i){
-		BC::print("current epoch:  ", i);
+		bc::print("current epoch:  ", i);
 
 		for (int j = 0; j < samples/batch_size; j++) {
 			for (int p = 0; p < img_partitions; ++p) {
 
 				auto batch = inputs[j];
-				auto index = BC::index(0,784 * (p/(float)img_partitions));
-				auto shape = BC::shape(784/4, batch_size);
+				auto index = bc::index(0,784 * (p/(float)img_partitions));
+				auto shape = bc::shape(784/4, batch_size);
 
 				network.forward_propagation(batch[{index, shape}]);
 			}
@@ -58,30 +58,30 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	}
 
 	auto end = std::chrono::system_clock::now();
-	BC::print("training time:", clock(end - start).count());
+	bc::print("training time:", clock(end - start).count());
 
-	BC::print("testing...");
+	bc::print("testing...");
 	network.copy_training_data_to_single_predict(0);
 
 	auto batch = inputs[0];
-	auto shape = BC::shape(784/4, batch_size);
+	auto shape = bc::shape(784/4, batch_size);
 
 	for (int p = 0; p < img_partitions-1; ++p) {
-		auto index = BC::index(0, 784*(p/(float)img_partitions));
+		auto index = bc::index(0, 784*(p/(float)img_partitions));
 		network.predict(batch[{index, shape}]);
 	}
 
-	auto last_index = BC::index(0,784*((img_partitions-1)/(float)img_partitions));
+	auto last_index = bc::index(0,784*((img_partitions-1)/(float)img_partitions));
 	mat hyps =network.predict(batch[{last_index, shape}]);
 
-	BC::size_t test_images = 10;
+	bc::size_t test_images = 10;
 	cube img = cube(inputs[0].reshaped(28,28, batch_size));
 	for (int i = 0; i < test_images; ++i) {
 		img[i].t().print_sparse(3);
 		hyps[i].print();
-		BC::print("------------------------------------");
+		bc::print("------------------------------------");
 	}
 
-	BC::print("success");
+	bc::print("success");
 	return 0;
 }

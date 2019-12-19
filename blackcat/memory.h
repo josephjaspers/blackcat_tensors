@@ -13,7 +13,7 @@
 #include <memory>
 #include <mutex>
 
-namespace BC {
+namespace bc {
 namespace memory {
 namespace detail {
 

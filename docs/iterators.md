@@ -10,7 +10,7 @@ The coefficient-wise iterator returns references of the `value_type` of the tens
 ```cpp
 int main() {
 
-    BC::Matrix<float> matrix(5, 5); 
+    bc::Matrix<float> matrix(5, 5); 
     
     for (auto it = matrix.cw_begin(); it != matrix.cw_end(); ++it) {
       //do work 
@@ -35,7 +35,7 @@ The n-dimensional iterator returns slices of the current tensor.
 
 int main() { 
 
-  BC::Cube<float> cube(3,3,3); 
+  bc::Cube<float> cube(3,3,3); 
 
   for (auto mat_iter = cube.begin(); mat_iter != cube.end(); ++mat_iter) {       
     for (auto vec_iter = (*mat_iter).begin(); vec_iter != (*mat_iter).end(); ++vec_iter) {        
@@ -64,7 +64,7 @@ int main() {
 Formal `std` style iterators are supported; using `begin` and `end`. 
 
 ```cpp
-BC::Matrix<float> mat; 
+bc::Matrix<float> mat; 
 
   mat.begin();        
   mat.end();
@@ -80,7 +80,7 @@ BC::Matrix<float> mat;
 Convienant iterator proxies which support start and end ranges.
 
 ```cpp
-BC::Matrix<float> mat; 
+bc::Matrix<float> mat; 
 
   for (float& scalar : mat.cw_iter(start, finish)) {
     //do work

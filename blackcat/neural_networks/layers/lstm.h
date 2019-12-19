@@ -11,19 +11,19 @@
 #include "../layer_cache.h"
 #include "layer_base.h"
 
-namespace BC {
+namespace bc {
 namespace nn {
 
-using BC::algorithms::reference_list;
+using bc::algorithms::reference_list;
 
 template<class SystemTag,
 		class ValueType,
 		class Optimizer=Stochastic_Gradient_Descent,
-		class ForgetGateNonlinearity=BC::Logistic,
-		class WriteGateNonlinearity=BC::Tanh,
-		class InputGateNonlinearity=BC::Logistic,
-		class OutputGateNonlinearity=BC::Logistic,
-		class CellStateNonLinearity=BC::Tanh>
+		class ForgetGateNonlinearity=bc::Logistic,
+		class WriteGateNonlinearity=bc::Tanh,
+		class InputGateNonlinearity=bc::Logistic,
+		class OutputGateNonlinearity=bc::Logistic,
+		class CellStateNonLinearity=bc::Tanh>
 struct LSTM:
 		public Layer_Base<LSTM<
 				SystemTag,
@@ -64,8 +64,8 @@ struct LSTM:
 
 private:
 
-	using mat = BC::Matrix<value_type, allocator_type>;
-	using vec = BC::Vector<value_type, allocator_type>;
+	using mat = bc::Matrix<value_type, allocator_type>;
+	using vec = bc::Vector<value_type, allocator_type>;
 
 	using mat_opt_t = typename Optimizer::template Optimizer<mat>;
 	using vec_opt_t = typename Optimizer::template Optimizer<vec>;
@@ -92,8 +92,8 @@ private:
 	mat dc, df, dz, di, do_, dy;
 
 	template<char C>
-	using key_type = BC::nn::cache_key<
-			BC::utility::Name<C>, mat, is_recurrent>;
+	using key_type = bc::nn::cache_key<
+			bc::utility::Name<C>, mat, is_recurrent>;
 
 	using cell_key = key_type<'c'>;
 	using forget_key = key_type<'f'>;
@@ -101,12 +101,12 @@ private:
 	using write_key = key_type<'z'>;
 	using output_key = key_type<'o'>;
 
-	using predict_cell_key = BC::nn::cache_key<
-			BC::utility::Name<'p','c'>, vec, is_recurrent>;
+	using predict_cell_key = bc::nn::cache_key<
+			bc::utility::Name<'p','c'>, vec, is_recurrent>;
 
 public:
 
-	LSTM(int inputs, BC::size_t  outputs):
+	LSTM(int inputs, bc::size_t  outputs):
 			parent_type(__func__, inputs, outputs),
 			wf(outputs, inputs),
 			wz(outputs, inputs),

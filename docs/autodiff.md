@@ -8,7 +8,7 @@ asin, acos, atan,
 sinh, cosh, tanh,  
 pow, exp, sqrt  
 
-The dx function is found in the BC::tensors namespace and is supported by all Tensors (Vector/Matrices/Cube/etc).
+The dx function is found in the bc::tensors namespace and is supported by all Tensors (Vector/Matrices/Cube/etc).
 
 Example:
 
@@ -17,14 +17,14 @@ Example:
 #include "BlackCat_Tensors.h"
 
 int main() {
-	using BC::tanh;
-	using BC::cos;
-	using BC::sin;
-	using BC::atanh;
-	using BC::pow;
+	using bc::tanh;
+	using bc::cos;
+	using bc::sin;
+	using bc::atanh;
+	using bc::pow;
 
-	BC::Scalar<float> x;
-	BC::Scalar<float> y;
+	bc::Scalar<float> x;
+	bc::Scalar<float> y;
 
 	x = .5;
 	x.print();
@@ -36,7 +36,7 @@ int main() {
 	y = cos(cos(x)) * -sin(x);
 	y.print();
 
-	// dx(tanh(x)) == 1 - BC::pow(BC::tanh(x), 2)
+	// dx(tanh(x)) == 1 - bc::pow(bc::tanh(x), 2)
 	y = dx(tanh(x));
 	y.print();
 

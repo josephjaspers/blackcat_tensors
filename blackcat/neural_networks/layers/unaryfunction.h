@@ -5,14 +5,14 @@
 #include "layer_base.h"
 #include <string>
 
-namespace BC {
+namespace bc {
 namespace nn {
 
 template<
 	class SystemTag,
 	class ValueType,
 	class Functor,
-	class InputDimension = BC::traits::Integer<1>>
+	class InputDimension = bc::traits::Integer<1>>
 struct Function:
 		Layer_Base<Function<SystemTag, ValueType, Functor, InputDimension>>
 {
@@ -24,7 +24,7 @@ struct Function:
 	using input_tensor_dimension = InputDimension;
 	using output_tensor_dimension = InputDimension;
 
-	using shape_type = BC::Dim<input_tensor_dimension::value>;
+	using shape_type = bc::Dim<input_tensor_dimension::value>;
 
 	Functor function;
 	shape_type m_input_shape;
@@ -56,23 +56,23 @@ struct Function:
 
 template<class ValueType, class SystemTag, class Functor>
 Function<SystemTag, ValueType, Functor> function(SystemTag system_tag, int inputs, Functor function=Functor()) {
-	return Function<SystemTag, ValueType, Functor>(BC::Dim<1>{inputs}, function);
+	return Function<SystemTag, ValueType, Functor>(bc::Dim<1>{inputs}, function);
 }
 
 template<class SystemTag, class Functor>
 auto function(SystemTag system_tag, int inputs, Functor function=Functor()) {
-	return Function<SystemTag, typename SystemTag::default_floating_point_type, Functor>(BC::Dim<1>{inputs}, function);
+	return Function<SystemTag, typename SystemTag::default_floating_point_type, Functor>(bc::Dim<1>{inputs}, function);
 }
 
 
 template<class ValueType, class SystemTag, class Functor, int X>
 Function<SystemTag, ValueType, Functor> function(SystemTag system_tag, Dim<X> shape, Functor function=Functor()) {
-	return Function<SystemTag, ValueType, Functor, BC::traits::Integer<X>>(shape, function);
+	return Function<SystemTag, ValueType, Functor, bc::traits::Integer<X>>(shape, function);
 }
 
 template<class SystemTag, class Functor, int X>
-auto function(SystemTag system_tag, BC::Dim<X> shape, Functor function=Functor()) {
-	return Function<SystemTag, typename SystemTag::default_floating_point_type, Functor, BC::traits::Integer<X>>(shape, function);
+auto function(SystemTag system_tag, bc::Dim<X> shape, Functor function=Functor()) {
+	return Function<SystemTag, typename SystemTag::default_floating_point_type, Functor, bc::traits::Integer<X>>(shape, function);
 }
 
 

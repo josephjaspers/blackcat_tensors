@@ -10,7 +10,7 @@
 
 #include "layer_base.h"
 
-namespace BC {
+namespace bc {
 namespace nn {
 
 template<
@@ -20,8 +20,8 @@ template<
 struct Max_Pooling:
 		public Layer_Base<Max_Pooling<SystemTag, ValueType>> {
 
-	using input_tensor_dimension = BC::traits::Integer<3>;
-	using output_tensor_dimension = BC::traits::Integer<3>;
+	using input_tensor_dimension = bc::traits::Integer<3>;
+	using output_tensor_dimension = bc::traits::Integer<3>;
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
@@ -35,14 +35,14 @@ struct Max_Pooling:
 
 private:
 
-	using index_allocator_type = nn_default_allocator_type<SystemTag, BC::size_t>;
-	using index_tensor_type = BC::Cube<BC::size_t, index_allocator_type>;
-	using batched_index_tensor_type = BC::Tensor<4, BC::size_t, index_allocator_type>;
-	using tensor_type = BC::Cube<value_type, allocator_type>;
-	using batched_tensor_type = BC::Tensor<4, value_type, allocator_type>;
+	using index_allocator_type = nn_default_allocator_type<SystemTag, bc::size_t>;
+	using index_tensor_type = bc::Cube<bc::size_t, index_allocator_type>;
+	using batched_index_tensor_type = bc::Tensor<4, bc::size_t, index_allocator_type>;
+	using tensor_type = bc::Cube<value_type, allocator_type>;
+	using batched_tensor_type = bc::Tensor<4, value_type, allocator_type>;
 
-	using index_key_type =  BC::nn::cache_key<
-			BC::utility::Name<'i','d','x'>, batched_index_tensor_type, IsRecurrent>;
+	using index_key_type =  bc::nn::cache_key<
+			bc::utility::Name<'i','d','x'>, batched_index_tensor_type, IsRecurrent>;
 
 	Dim<3> m_img_dims;  //channel_width_height
 	Dim<3> m_pool_dims;
@@ -87,8 +87,8 @@ public:
 		batched_tensor_type pooled_image(this->get_batched_output_shape());
 		pooled_image.zero();
 
-		BC::max_pooling_forward(
-				BC::streams::select_on_get_stream(image),
+		bc::max_pooling_forward(
+				bc::streams::select_on_get_stream(image),
 				image.internal(),
 				pooled_image.internal(),
 				mask.internal(),
@@ -108,8 +108,8 @@ public:
 		tensor_type pooled_image(this->get_output_shape());
 		pooled_image.zero();
 
-		BC::max_pooling_forward(
-				BC::streams::select_on_get_stream(image),
+		bc::max_pooling_forward(
+				bc::streams::select_on_get_stream(image),
 				image.internal(),
 				pooled_image.internal(),
 				mask.internal(),
@@ -129,8 +129,8 @@ public:
 		batched_index_tensor_type& mask = cache.load(index_key_type());
 		batched_tensor_type delta_x(this->get_batched_input_shape());
 
-		BC::max_pooling_backward(
-				BC::streams::select_on_get_stream(image),
+		bc::max_pooling_backward(
+				bc::streams::select_on_get_stream(image),
 				delta_x.internal(),
 				pooled_delta.internal(),
 				mask.internal(),

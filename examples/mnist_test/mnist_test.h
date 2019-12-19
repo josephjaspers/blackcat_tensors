@@ -4,41 +4,41 @@
 #include <chrono>
 #include <string>
 
-template<class System=BC::host_tag>
+template<class System=bc::host_tag>
 int percept_MNIST(System system_tag, std::string mnist_dataset,
 		int epochs=5, int batch_size=32, int samples=32*1024) {
 
 	using value_type     = typename System::default_floating_point_type;
-	using allocator_type = BC::Allocator<System, value_type>;
-	using cube           = BC::Cube<value_type, allocator_type>;
-	using mat            = BC::Matrix<value_type, allocator_type>;
+	using allocator_type = bc::Allocator<System, value_type>;
+	using cube           = bc::Cube<value_type, allocator_type>;
+	using mat            = bc::Matrix<value_type, allocator_type>;
 	using clock          = std::chrono::duration<double>;
 
-	auto network = BC::nn::neuralnetwork(
-		BC::nn::feedforward(system_tag, 784, 256, BC::nn::momentum),
-		BC::nn::tanh(system_tag, 256),
-		BC::nn::feedforward(system_tag, 256, 10, BC::nn::momentum),
-		BC::nn::softmax(system_tag, 10),
-		BC::nn::logging_output_layer(system_tag, 10, BC::nn::RMSE).skip_every(100)
+	auto network = bc::nn::neuralnetwork(
+		bc::nn::feedforward(system_tag, 784, 256, bc::nn::momentum),
+		bc::nn::tanh(system_tag, 256),
+		bc::nn::feedforward(system_tag, 256, 10, bc::nn::momentum),
+		bc::nn::softmax(system_tag, 10),
+		bc::nn::logging_output_layer(system_tag, 10, bc::nn::RMSE).skip_every(100)
 	);
 
 	network.set_batch_size(batch_size);
 	network.set_learning_rate(.003);
 
-	BC::print("Neural Network architecture:");
-	BC::print(network.get_string_architecture());
+	bc::print("Neural Network architecture:");
+	bc::print(network.get_string_architecture());
 
-	std::pair<cube, cube> data = BC::load_mnist(
+	std::pair<cube, cube> data = bc::load_mnist(
 			system_tag, mnist_dataset, batch_size, samples);
 
 	cube& inputs = data.first;
 	cube& outputs = data.second;
 
-	BC::print("training...");
+	bc::print("training...");
 	auto start = std::chrono::system_clock::now();
 
 	for (int i = 0; i < epochs; ++i){
-		BC::print("current epoch:", i);
+		bc::print("current epoch:", i);
 
 		for (int j = 0; j < samples/batch_size; ++j) {
 			network.forward_propagation(inputs[j]);
@@ -48,8 +48,8 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	}
 
 	auto end = std::chrono::system_clock::now();
-	BC::print("training time:", clock(end - start).count());
-	BC::print("testing...");
+	bc::print("training time:", clock(end - start).count());
+	bc::print("testing...");
 
 	int test_images = 10;
 	auto images = inputs[0].reshaped(28,28, batch_size);
@@ -58,9 +58,9 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	for (int i = 0; i < test_images; ++i) {
 		images[i].t().print_sparse(3);
 		hyps[i].print();
-		BC::print("------------------------------------");
+		bc::print("------------------------------------");
 	}
 
-	BC::print("success");
+	bc::print("success");
 	return 0;
 }

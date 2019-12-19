@@ -17,9 +17,9 @@ int main(int argc, const char* args[]) {
 		mnist_filepath = "../datasets/mnist_train.csv";
 	}
 #ifdef __CUDACC__
-	percept_MNIST(BC::device_tag(), mnist_filepath);
+	percept_MNIST(bc::device_tag(), mnist_filepath);
 #else
-	percept_MNIST(BC::host_tag(), mnist_filepath);
+	percept_MNIST(bc::host_tag(), mnist_filepath);
 #endif
 
 }

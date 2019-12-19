@@ -10,19 +10,19 @@
 
 #include "test_common.h"
 
-namespace BC {
+namespace bc {
 namespace tests {
 
 template<class value_type, template<class> class allocator>
 int test_constructors(int sz=128) {
 
-	using BC::tensors::all;
+	using bc::tensors::all;
 
 	using alloc_t = allocator<value_type>;
-	using scal = BC::Scalar<value_type, alloc_t>;
-	using vec = BC::Vector<value_type, alloc_t>;
-	using mat = BC::Matrix<value_type, alloc_t>;
-	using cube = BC::Cube<value_type, alloc_t>;
+	using scal = bc::Scalar<value_type, alloc_t>;
+	using vec = bc::Vector<value_type, alloc_t>;
+	using mat = bc::Matrix<value_type, alloc_t>;
+	using cube = bc::Cube<value_type, alloc_t>;
 
 	BC_TEST_BODY_HEAD
 	BC_TEST_ON_STARTUP {};
@@ -77,7 +77,7 @@ int test_constructors(int sz=128) {
 		mat a(5,5); a.randomize(0, 10);
 		mat b(a);
 
-		return BC::tensors::all(b.approx_equal(a)) &&
+		return bc::tensors::all(b.approx_equal(a)) &&
 				b.rows() == 5 &&
 				b.cols() == 5 &&
 				a.data() != b.data();
@@ -105,7 +105,7 @@ int test_constructors(int sz=128) {
 		mat b(5,5);
 
 		b = a;
-		return BC::tensors::all(b.approx_equal(a));
+		return bc::tensors::all(b.approx_equal(a));
 	)
 
 	//---------- Move Oper ----------//
@@ -117,7 +117,7 @@ int test_constructors(int sz=128) {
 		auto* original_ptr = a.data();
 		b = std::move(a);
 
-		return BC::tensors::all(b.approx_equal(c)) &&
+		return bc::tensors::all(b.approx_equal(c)) &&
 				a.data() != b.data() &&
 				b.data() == original_ptr;
 	)

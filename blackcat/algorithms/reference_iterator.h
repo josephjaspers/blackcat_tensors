@@ -10,7 +10,7 @@
 
 #include <vector>
 
-namespace BC {
+namespace bc {
 namespace algorithms {
 
 template<class T>

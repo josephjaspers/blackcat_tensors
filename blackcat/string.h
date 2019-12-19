@@ -12,7 +12,7 @@
 #include <vector>
 #include <algorithm>
 
-namespace BC {
+namespace bc {
 
 /**
  * Inherits from std::string.
@@ -35,7 +35,7 @@ struct string:
 				this->substr(0, str.size()) == str;
 	}
 
-	bool endswith(const BC::string& str) const {
+	bool endswith(const bc::string& str) const {
 		if (this->size() < str.size())
 			return false;
 
@@ -52,8 +52,8 @@ struct string:
 	}
 
 
-	std::vector<BC::string> split(char delim) const {
-		std::vector<BC::string> splits;
+	std::vector<bc::string> split(char delim) const {
+		std::vector<bc::string> splits;
 
 		auto curr = this->begin();
 		auto end = this->end();
@@ -62,7 +62,7 @@ struct string:
 			auto next = std::find(curr, end, delim);
 
 			if (curr < end)
-				splits.push_back(BC::string(curr, next));
+				splits.push_back(bc::string(curr, next));
 
 			curr = next + 1;
 		}

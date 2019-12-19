@@ -10,7 +10,7 @@
 
 #include <memory>
 
-namespace BC {
+namespace bc {
 
 class host_tag;
 class device_tag;
@@ -19,7 +19,7 @@ namespace allocators {
 namespace detail {
 
 	template<class T>
-	using query_managed_memory = BC::traits::truth_type<T::managed_memory>;
+	using query_managed_memory = bc::traits::truth_type<T::managed_memory>;
 
 }
 
@@ -27,11 +27,11 @@ template<class Allocator>
 struct allocator_traits : std::allocator_traits<Allocator> {
 
 	using system_tag =
-			BC::traits::conditional_detected_t<
-			BC::traits::query_system_tag, Allocator, host_tag>;
+			bc::traits::conditional_detected_t<
+			bc::traits::query_system_tag, Allocator, host_tag>;
 
 	static constexpr bool is_managed_memory =
-			BC::traits::conditional_detected_t<
+			bc::traits::conditional_detected_t<
 			detail::query_managed_memory, Allocator, std::false_type>::value;
 };
 

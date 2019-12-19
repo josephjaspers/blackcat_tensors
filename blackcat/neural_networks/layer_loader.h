@@ -11,7 +11,7 @@
 #include <string>
 #include <ostream>
 
-namespace BC {
+namespace bc {
 namespace nn {
 
 struct Layer_Loader {
@@ -33,7 +33,7 @@ struct Layer_Loader {
 
 	std::string current_layer_subdir() const {
 		std::string subdir = "l" + std::to_string(current_layer_index) + "_" + current_layername;
-		return BC::filesystem::make_path(root_directory, subdir);
+		return bc::filesystem::make_path(root_directory, subdir);
 	}
 
 	template<class T>
@@ -44,33 +44,33 @@ struct Layer_Loader {
 
 	template<class T>
 	void load_variable(T& tensor, std::string variable_name) {
-		load_variable(tensor, variable_name, BC::traits::Integer<T::tensor_dimension>());
+		load_variable(tensor, variable_name, bc::traits::Integer<T::tensor_dimension>());
 	}
 
 	template<class T>
-	void load_variable(T& tensor, std::string variable_name, BC::traits::Integer<1>) {
+	void load_variable(T& tensor, std::string variable_name, bc::traits::Integer<1>) {
 		using value_type = typename T::value_type;
-		auto descriptor = BC::io::csv_descriptor(path_from_args(tensor, variable_name)).header(false);
-		tensor = T(BC::io::read_uniform<value_type>(descriptor, tensor.get_allocator()).row(0));
+		auto descriptor = bc::io::csv_descriptor(path_from_args(tensor, variable_name)).header(false);
+		tensor = T(bc::io::read_uniform<value_type>(descriptor, tensor.get_allocator()).row(0));
 	}
 
 	template<class T>
-	void load_variable(T& tensor, std::string variable_name, BC::traits::Integer<2>) {
+	void load_variable(T& tensor, std::string variable_name, bc::traits::Integer<2>) {
 		using value_type = typename T::value_type;
-		auto descriptor = BC::io::csv_descriptor(path_from_args(tensor, variable_name)).header(false);
-		tensor = BC::io::read_uniform<value_type>(descriptor, tensor.get_allocator());
+		auto descriptor = bc::io::csv_descriptor(path_from_args(tensor, variable_name)).header(false);
+		tensor = bc::io::read_uniform<value_type>(descriptor, tensor.get_allocator());
 	}
 
 	void make_current_directory() {
-		if (!BC::filesystem::directory_exists(current_layer_subdir()))
-			BC::filesystem::mkdir(current_layer_subdir());
+		if (!bc::filesystem::directory_exists(current_layer_subdir()))
+			bc::filesystem::mkdir(current_layer_subdir());
 	}
 
 private:
 
 	std::string path_from_args(int dimension, std::string variable_name) {
 		std::string extension = dimension_to_tensor_name(dimension);
-		return BC::filesystem::make_path(
+		return bc::filesystem::make_path(
 				current_layer_subdir(), variable_name + "." + extension);
 	}
 
@@ -82,7 +82,7 @@ private:
 public:
 
 	bool file_exists(int dimension, std::string filename) {
-		return BC::filesystem::file_exists(path_from_args(dimension, filename));
+		return bc::filesystem::file_exists(path_from_args(dimension, filename));
 	}
 
 

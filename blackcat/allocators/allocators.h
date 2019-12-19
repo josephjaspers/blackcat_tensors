@@ -11,7 +11,7 @@
 #include "basic_allocators.h"
 #include "allocator_traits.h"
 
-namespace BC {
+namespace bc {
 namespace allocators {
 
 class Byte {};

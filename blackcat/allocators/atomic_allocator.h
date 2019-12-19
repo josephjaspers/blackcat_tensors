@@ -10,7 +10,7 @@
 
 #include <mutex>
 
-namespace BC {
+namespace bc {
 namespace allocators {
 
 /**
@@ -19,7 +19,7 @@ namespace allocators {
 template<class Allocator>
 struct Atomic_Allocator {
 
-    using system_tag = typename BC::allocator_traits<Allocator>::system_tag;	//BC tag
+    using system_tag = typename bc::allocator_traits<Allocator>::system_tag;	//BC tag
 
     using value_type = typename Allocator::value_type;
     using pointer = value_type*;
@@ -33,7 +33,7 @@ struct Atomic_Allocator {
 	template<class altT>
 	struct rebind { using other =
 			Atomic_Allocator<
-			typename BC::allocator_traits<Allocator>::template rebind_alloc<altT>>;
+			typename bc::allocator_traits<Allocator>::template rebind_alloc<altT>>;
 	};
 
 	template<class U>
@@ -60,7 +60,7 @@ struct Atomic_Allocator {
 		return ptr;
     }
 
-    void deallocate(value_type* t, BC::size_t  size) {
+    void deallocate(value_type* t, bc::size_t  size) {
 		m_locker.lock();
 		m_allocator.deallocate(t, size);
 		m_locker.unlock();

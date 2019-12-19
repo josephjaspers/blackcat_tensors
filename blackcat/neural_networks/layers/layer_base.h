@@ -17,7 +17,7 @@
 #include <fstream>
 #include <ostream>
 
-namespace BC {
+namespace bc {
 namespace nn {
 
 template<class DerivedLayer>
@@ -42,9 +42,9 @@ public:
 
 protected:
 
-	BC::size_t m_input_sz;
-	BC::size_t m_output_sz;
-	BC::size_t m_batch_sz;
+	bc::size_t m_input_sz;
+	bc::size_t m_output_sz;
+	bc::size_t m_batch_sz;
 	double m_learning_rate = default_learning_rate;
 
 public:
@@ -53,13 +53,13 @@ public:
 	 * of the Layer_Base. `parse_classname()` will normalize the string
 	 * as `__func__` is compiler dependent.
 	 */
-	Layer_Base(std::string classname_, BC::size_t inputs=0, BC::size_t outputs=0):
+	Layer_Base(std::string classname_, bc::size_t inputs=0, bc::size_t outputs=0):
 		m_classname(parse_classname(classname_)),
 		m_input_sz(inputs),
 		m_output_sz(outputs),
 		m_batch_sz(1) {}
 
-	void resize(BC::size_t inputs, BC::size_t outputs) {
+	void resize(bc::size_t inputs, bc::size_t outputs) {
 		m_input_sz = inputs;
 		m_output_sz = outputs;
 	}
@@ -80,10 +80,10 @@ public:
 				+ "\n\tinput_shape: " +
 				as_derived().get_input_shape().to_string();
 
-		using optimizer_type = BC::traits::conditional_detected_t<
-				query_optimizer_type, DerivedLayer, BC::traits::None>;
+		using optimizer_type = bc::traits::conditional_detected_t<
+				query_optimizer_type, DerivedLayer, bc::traits::None>;
 
-		if (!std::is_same<optimizer_type, BC::traits::None>::value) {
+		if (!std::is_same<optimizer_type, bc::traits::None>::value) {
 			yaml += "\n\toptimizer: ";
 			yaml += parse_classname(bc_get_classname_of(optimizer_type()));
 		}
@@ -108,8 +108,8 @@ public:
 	}
 
 	///get_shape must be shadowed (over-ridden) for Convolution/layers that expect non-vector input/outputs
-	auto get_input_shape() const { return BC::Dim<1>{m_input_sz}; }
-	auto get_output_shape() const { return BC::Dim<1>{m_output_sz}; }
+	auto get_input_shape() const { return bc::Dim<1>{m_input_sz}; }
+	auto get_output_shape() const { return bc::Dim<1>{m_output_sz}; }
 
 	auto get_batched_input_shape() const {
 		return as_derived().get_input_shape().concat(m_batch_sz);
@@ -119,12 +119,12 @@ public:
 		return as_derived().get_output_shape().concat(m_batch_sz);
 	}
 
-	BC::size_t input_size() const { return m_input_sz; }
-	BC::size_t output_size() const { return m_output_sz; }
-	BC::size_t batch_size() const { return m_batch_sz; }
+	bc::size_t input_size() const { return m_input_sz; }
+	bc::size_t output_size() const { return m_output_sz; }
+	bc::size_t batch_size() const { return m_batch_sz; }
 
-	BC::size_t batched_input_size() const { return m_input_sz * m_batch_sz; }
-	BC::size_t batched_output_size() const { return m_output_sz * m_batch_sz; }
+	bc::size_t batched_input_size() const { return m_input_sz * m_batch_sz; }
+	bc::size_t batched_output_size() const { return m_output_sz * m_batch_sz; }
 
 	void set_batch_size(int bs) { m_batch_sz = bs;}
 
@@ -155,7 +155,7 @@ public:
 		using allocator_type = typename traits::allocator_type;
 
 		return [&]() {
-			return BC::Tensor<dimension::value, value_type, allocator_type>(
+			return bc::Tensor<dimension::value, value_type, allocator_type>(
 					get_input_shape()).zero();
 		};
 	}
@@ -167,7 +167,7 @@ public:
 		using allocator_type = typename traits::allocator_type;
 
 		return [&]() {
-			return BC::Tensor<dimension::value, value_type, allocator_type>(
+			return bc::Tensor<dimension::value, value_type, allocator_type>(
 					get_output_shape()).zero();
 		};
 	}
@@ -179,7 +179,7 @@ public:
 		using allocator_type = typename traits::allocator_type;
 
 		return [&]() {
-			return BC::Tensor<dimension::value+1, value_type, allocator_type>(
+			return bc::Tensor<dimension::value+1, value_type, allocator_type>(
 				get_batched_input_shape()).zero();
 		};
 	}
@@ -191,7 +191,7 @@ public:
 		using allocator_type = typename traits::allocator_type;
 
 		return [&]() {
-			return BC::Tensor<dimension::value+1, value_type, allocator_type>(
+			return bc::Tensor<dimension::value+1, value_type, allocator_type>(
 					get_batched_output_shape()).zero();
 		};
 	}

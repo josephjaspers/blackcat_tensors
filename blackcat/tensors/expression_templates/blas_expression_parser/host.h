@@ -10,7 +10,7 @@
 
 #include "common.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs { 
 namespace blas_expression_parser {
@@ -68,7 +68,7 @@ struct Blas_Expression_Parser<host_tag> : Common_Tools<Blas_Expression_Parser<ho
 
 	template<class value_type, int value>
 	static auto scalar_constant() {
-		return make_scalar_constant<BC::host_tag, value_type>(value);
+		return make_scalar_constant<bc::host_tag, value_type>(value);
 	}
 
 };

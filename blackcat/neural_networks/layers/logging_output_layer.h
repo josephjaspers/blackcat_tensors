@@ -10,14 +10,14 @@
 
 #include "output_layer.h"
 
-namespace BC {
+namespace bc {
 namespace nn {
 
 struct Mean_Absolute_Error {
 	template<class Actual, class Expected>
 	auto operator () (const Actual& a, const Expected& e) const {
 		auto residual = a-e;
-		return BC::sum(BC::abs(residual)) / (residual).size();
+		return bc::sum(bc::abs(residual)) / (residual).size();
 	}
 } MAE;
 
@@ -25,7 +25,7 @@ struct Root_Mean_Squared_Error {
 	template<class Actual, class Expected>
 	auto operator () (const Actual& a, const Expected& e) const {
 		auto residual = a-e;
-		return BC::sqrt(BC::sum(BC::pow2(residual)) / residual.size());
+		return bc::sqrt(bc::sum(bc::pow2(residual)) / residual.size());
 	}
 } RMSE;
 
@@ -33,7 +33,7 @@ struct Mean_Squared_Error {
 	template<class Actual, class Expected>
 	auto operator () (const Actual& a, const Expected& e) const {
 		auto residual = a-e;
-		return BC::sum(BC::pow2(residual)) / residual.size();
+		return bc::sum(bc::pow2(residual)) / residual.size();
 	}
 } MSE;
 
@@ -42,7 +42,7 @@ struct Mean_Absolute_Percent_Error {
 	auto operator () (const Actual& a, const Expected& e) const {
 		auto residual = a-e;
 		static constexpr typename Actual::value_type epsilon = .001;
-		return BC::sum(BC::abs(residual/(a+epsilon))) / residual.size();
+		return bc::sum(bc::abs(residual/(a+epsilon))) / residual.size();
 	}
 } MAPE;
 
@@ -64,7 +64,7 @@ struct Logging_Output_Layer:
 
 	Logging_Output_Layer(
 			std::ostream& logger,
-			BC::size_t inputs,
+			bc::size_t inputs,
 			ErrorFunction error_function_):
 		parent(inputs),
 		error_function(error_function_),
@@ -102,7 +102,7 @@ template<
 	class ErrorFunction=Mean_Absolute_Error>
 Logging_Output_Layer<SystemTag, ValueType> logging_output_layer(
 		SystemTag system_tag,
-		BC::size_t inputs,
+		bc::size_t inputs,
 		ErrorFunction error_function=ErrorFunction(), std::ostream& os=std::cout) {
 	return Logging_Output_Layer<SystemTag, ValueType>(os, inputs, error_function);
 }
@@ -111,7 +111,7 @@ template<
 	class ErrorFunction=Mean_Absolute_Error>
 auto logging_output_layer(
 		SystemTag system_tag,
-		BC::size_t inputs,
+		bc::size_t inputs,
 		ErrorFunction
 		error_function=ErrorFunction(), std::ostream& os=std::cout) {
 

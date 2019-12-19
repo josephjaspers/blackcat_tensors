@@ -9,7 +9,7 @@
 #define BLACKCAT_TENSORS_CAFFE_CAFFE_CUDA_H_
 
 
-namespace BC {
+namespace bc {
 namespace caffe {
 
 

@@ -10,17 +10,17 @@
 
 #include "layer_base.h"
 
-namespace BC {
+namespace bc {
 namespace nn {
 
-template<class SystemTag, class ValueType, class RecurrentNonLinearity=BC::Tanh>
+template<class SystemTag, class ValueType, class RecurrentNonLinearity=bc::Tanh>
 struct Recurrent:
 		public Layer_Base<
 				Recurrent<SystemTag, ValueType, RecurrentNonLinearity>> {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	using allocator_type = BC::Allocator<SystemTag, ValueType>;
+	using allocator_type = bc::Allocator<SystemTag, ValueType>;
 	using self_type = Recurrent<SystemTag, ValueType, RecurrentNonLinearity>;
 	using parent_type = Layer_Base<self_type>;
 
@@ -30,8 +30,8 @@ struct Recurrent:
 
 private:
 
-	using mat = BC::Matrix<value_type, allocator_type>;
-	using vec = BC::Vector<value_type, allocator_type>;
+	using mat = bc::Matrix<value_type, allocator_type>;
+	using vec = bc::Vector<value_type, allocator_type>;
 
 	RecurrentNonLinearity g;
 	ValueType lr = parent_type::default_learning_rate;
@@ -89,7 +89,7 @@ public:
 		zero_gradients();
 	}
 
-	void set_batch_size(BC::size_t bs) {
+	void set_batch_size(bc::size_t bs) {
 		parent_type::set_batch_size(bs);
 		dc = mat(this->output_size(), bs);
 		zero_deltas();

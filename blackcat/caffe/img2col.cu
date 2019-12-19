@@ -18,7 +18,7 @@
 #include "img2col.h"
 #include <iostream>
 
-namespace BC {
+namespace bc {
 namespace caffe {
 
 template <typename Dtype>
@@ -55,7 +55,7 @@ __global__ void im2col_gpu_kernel(const int n, const Dtype* data_im,
 }
 
 template <typename Dtype>
-void im2col(BC::device_tag, const Dtype* data_im, const int channels,
+void im2col(bc::device_tag, const Dtype* data_im, const int channels,
 		const int height, const int width, const int kernel_h, const int kernel_w,
 		const int pad_h, const int pad_w,
 		const int stride_h, const int stride_w,
@@ -256,10 +256,10 @@ __global__ void col2im_gpu_kernel(const int n, const Dtype* data_col,
 		// compute the start and end of the output
 		const int w_col_start =
 				(w_im < kernel_extent_w) ? 0 : (w_im - kernel_extent_w) / stride_w + 1;
-		const int w_col_end = BC::traits::min(w_im / stride_w + 1, width_col);
+		const int w_col_end = bc::traits::min(w_im / stride_w + 1, width_col);
 		const int h_col_start =
 				(h_im < kernel_extent_h) ? 0 : (h_im - kernel_extent_h) / stride_h + 1;
-		const int h_col_end = BC::traits::min(h_im / stride_h + 1, height_col);
+		const int h_col_end = bc::traits::min(h_im / stride_h + 1, height_col);
 		// TODO: use LCM of stride and dilation to avoid unnecessary loops
 		for (int h_col = h_col_start; h_col < h_col_end; h_col += 1) {
 			for (int w_col = w_col_start; w_col < w_col_end; w_col += 1) {
@@ -279,7 +279,7 @@ __global__ void col2im_gpu_kernel(const int n, const Dtype* data_col,
 }
 
 template <typename Dtype>
-void col2im(BC::device_tag, const Dtype* data_col, const int channels,
+void col2im(bc::device_tag, const Dtype* data_col, const int channels,
 		const int height, const int width, const int kernel_h, const int kernel_w,
 		const int pad_h, const int pad_w, const int stride_h,
 		const int stride_w, const int dilation_h, const int dilation_w,
@@ -347,7 +347,7 @@ __global__ void col2im_nd_gpu_kernel(const int n, const Dtype* data_col,
 					(d_im[i] < kernel_extent) ? 0 :
 					(d_im[i] - kernel_extent) / shared_stride[i] + 1;
 			d_col_end[i] =
-					BC::traits::min(d_im[i] / shared_stride[i] + 1, shared_col_shape[i + 1]);
+					bc::traits::min(d_im[i] / shared_stride[i] + 1, shared_col_shape[i + 1]);
 			if (d_col_start[i] >= d_col_end[i]) {
 				// Skip computation if the dimension is 0 at any spatial axis --
 				// final val will be 0.

@@ -11,7 +11,7 @@
 #include <string>
 //#include <BlackCat_TypeTraits.h>
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace io {
 
@@ -48,17 +48,17 @@ static std::string format_value(const ValueType& s,  features f) {
 
 
 template<class Tensor>
-std::string to_string(const Tensor& tensor, features f, BC::traits::Integer<2>) {
+std::string to_string(const Tensor& tensor, features f, bc::traits::Integer<2>) {
 	std::string s = "";
 	if (f.pretty)
 		s += "[";
 
-	for (BC::size_t m = 0; m < tensor.rows(); ++m) {
+	for (bc::size_t m = 0; m < tensor.rows(); ++m) {
 
 		if (f.pretty)
 			s += "[";
 
-		for (BC::size_t n = 0; n < tensor.cols(); ++n) {
+		for (bc::size_t n = 0; n < tensor.cols(); ++n) {
 			s += format_value(tensor[n][m].data()[0], f);
 
 			if (n != tensor.cols() - 1)
@@ -78,13 +78,13 @@ std::string to_string(const Tensor& tensor, features f, BC::traits::Integer<2>) 
 
 
 template<class Tensor>
-std::string to_string(const Tensor& tensor, features f, BC::traits::Integer<1>) {
+std::string to_string(const Tensor& tensor, features f, bc::traits::Integer<1>) {
 	std::string s;
 
 	if (f.pretty)
 		s += "[";
 
-	for (BC::size_t m = 0; m < tensor.rows(); ++m) {
+	for (bc::size_t m = 0; m < tensor.rows(); ++m) {
 		s += format_value(tensor[m].data()[0], f);
 
 		if(m!=tensor.rows()-1)
@@ -97,7 +97,7 @@ std::string to_string(const Tensor& tensor, features f, BC::traits::Integer<1>) 
 }
 
 template<class Tensor>
-std::string to_string(const Tensor& tensor,  features f, BC::traits::Integer<0>) {
+std::string to_string(const Tensor& tensor,  features f, bc::traits::Integer<0>) {
 	std::string s;
 
 	if (f.pretty)
@@ -112,14 +112,14 @@ std::string to_string(const Tensor& tensor,  features f, BC::traits::Integer<0>)
 }
 
 template<class Tensor, int X>
-std::string to_string(const Tensor& tensor, features f, BC::traits::Integer<X>) {
+std::string to_string(const Tensor& tensor, features f, bc::traits::Integer<X>) {
 	std::string s;
 
 	if (f.pretty)
 		s += '[';
 
 	for (auto it = tensor.nd_begin(); it != tensor.nd_end(); ++it) {
-		s += to_string(*it, f, BC::traits::Integer<X-1>());
+		s += to_string(*it, f, bc::traits::Integer<X-1>());
 
 		if (it != tensor.nd_end() - 1)
 			s += '\n';

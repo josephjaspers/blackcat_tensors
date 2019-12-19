@@ -17,7 +17,7 @@
 #include <cmath>
 
 
-namespace BC {
+namespace bc {
 namespace oper {
 
 #define BC_FORWARD_TO_APPLY\
@@ -45,32 +45,32 @@ namespace oper {
 	BC_FORWARD_TO_APPLY
 
 struct Assign : assignment_operation {
-	using alpha_modifier = BC::traits::Integer<1>;
-	using beta_modifier = BC::traits::Integer<0>;
+	using alpha_modifier = bc::traits::Integer<1>;
+	using beta_modifier = bc::traits::Integer<0>;
 	BC_FORWARD_DEF(lv = rv)
 } assign;
 
 struct Add_Assign : linear_assignment_operation {
-	using alpha_modifier = BC::traits::Integer<1>;
-	using beta_modifier = BC::traits::Integer<1>;
+	using alpha_modifier = bc::traits::Integer<1>;
+	using beta_modifier = bc::traits::Integer<1>;
 	BC_FORWARD_DEF(lv += rv)
 } add_assign;
 
 struct Mul_Assign : assignment_operation {
-	using alpha_modifier = BC::traits::Integer<1>;
-	using beta_modifier = BC::traits::Integer<1>;
+	using alpha_modifier = bc::traits::Integer<1>;
+	using beta_modifier = bc::traits::Integer<1>;
 	BC_FORWARD_DEF(lv *= rv)
 } mul_assign;
 
 struct Sub_Assign : linear_assignment_operation {
-	using alpha_modifier = BC::traits::Integer<-1>;
-	using beta_modifier = BC::traits::Integer<1>;
+	using alpha_modifier = bc::traits::Integer<-1>;
+	using beta_modifier = bc::traits::Integer<1>;
 	BC_FORWARD_DEF(lv -= rv)
 } sub_assign;
 
 struct Div_Assign : assignment_operation {
-	using alpha_modifier = BC::traits::Integer<1>;
-	using beta_modifier = BC::traits::Integer<1>;
+	using alpha_modifier = bc::traits::Integer<1>;
+	using beta_modifier = bc::traits::Integer<1>;
 	BC_FORWARD_DEF(lv /= rv)
 } div_assign;
 
@@ -79,7 +79,7 @@ struct Scalar_Mul {
 } scalar_mul;
 
 struct Add : linear_operation {
-	using alpha_modifier = BC::traits::Integer<1>;
+	using alpha_modifier = bc::traits::Integer<1>;
 	BC_FORWARD_DEF(lv + rv)
 } add;
 
@@ -88,7 +88,7 @@ struct Mul {
 } mul;
 
 struct Sub : linear_operation {
-	using alpha_modifier = BC::traits::Integer<-1>;
+	using alpha_modifier = bc::traits::Integer<-1>;
 	BC_FORWARD_DEF(lv - rv)
 } sub;
 

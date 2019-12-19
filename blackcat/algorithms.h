@@ -11,7 +11,7 @@
 #include "streams.h"
 #include "algorithms/algorithms.h"
 
-namespace BC {
+namespace bc {
 	using namespace algorithms;
 }
 

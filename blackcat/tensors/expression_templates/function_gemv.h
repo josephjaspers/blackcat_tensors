@@ -14,7 +14,7 @@
 #include "blas_expression_template_traits.h"
 
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs { 
 
@@ -50,10 +50,10 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
 
 	 }
 
-	BCINLINE BC::size_t size() const { return left.rows(); }
-	BCINLINE BC::size_t dimension(int i) const { return i == 0 ? left.rows() : 1; }
-	BCINLINE BC::size_t rows() const { return dimension(0); }
-	BCINLINE BC::size_t cols() const { return dimension(1); }
+	BCINLINE bc::size_t size() const { return left.rows(); }
+	BCINLINE bc::size_t dimension(int i) const { return i == 0 ? left.rows() : 1; }
+	BCINLINE bc::size_t rows() const { return dimension(0); }
+	BCINLINE bc::size_t cols() const { return dimension(1); }
 
 	template<class core, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<core, Alpha, Beta> output, Stream stream) const {
@@ -74,7 +74,7 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
 
 		//gemv uses the [m,n] to refer to dimension ignoring op(A)
 		//http://www.netlib.org/lapack/explore-html/d6/d30/group__single__blas__level2_gafc92361b74c6d41c7e5afa0aa5d13ec9.html#gafc92361b74c6d41c7e5afa0aa5d13ec9
-		BC::blas::BLAS<system_tag>::gemv(
+		bc::blas::BLAS<system_tag>::gemv(
 				stream, transA, A.rows(), A.cols(),
 				alpha.data(), A.data(), A.leading_dimension(1),
 				X.data(), X.leading_dimension(0)/*inc_X*/,

@@ -12,24 +12,24 @@
 				"Views are only available to Memory owning types");
 public:
 
-	const auto operator [](BC::size_t i) const {
+	const auto operator [](bc::size_t i) const {
 		return slice(i);
 	}
 
-	auto operator [](BC::size_t i) {
+	auto operator [](bc::size_t i) {
 		return slice(i);
 	}
 
 	//enables syntax: `tensor[{start, end}]`
-	const auto operator [](BC::Dim<2> range) const {
+	const auto operator [](bc::Dim<2> range) const {
 		return slice(range[0], range[1]);
 	}
 
-	auto operator [](BC::Dim<2> range) {
+	auto operator [](bc::Dim<2> range) {
 		return slice(range[0], range[1]);
 	}
 
-	const auto slice(BC::size_t i) const
+	const auto slice(bc::size_t i) const
 	{
 		BC_ASSERT_VIEWABLE
 		BC_ASSERT(i >= 0 && i < this->outer_dimension(),
@@ -37,7 +37,7 @@ public:
 		return make_tensor(exprs::make_slice(*this, i));
 	}
 
-	auto slice(BC::size_t i)
+	auto slice(bc::size_t i)
 	{
 		BC_ASSERT_VIEWABLE
 		BC_ASSERT(i >= 0 && i < this->outer_dimension(),
@@ -45,7 +45,7 @@ public:
 		return make_tensor(exprs::make_slice(*this, i));
 	}
 
-	const auto slice(BC::size_t from, BC::size_t to) const
+	const auto slice(bc::size_t from, bc::size_t to) const
 	{
 		BC_ASSERT_VIEWABLE
 		BC_ASSERT(from >= 0 && to <= this->outer_dimension(),
@@ -55,7 +55,7 @@ public:
 		return make_tensor(exprs::make_ranged_slice(*this, from, to));
 	}
 
-	auto slice(BC::size_t from, BC::size_t to)
+	auto slice(bc::size_t from, bc::size_t to)
 	{
 		BC_ASSERT_VIEWABLE
 		BC_ASSERT(from >= 0 && to <= this->outer_dimension(),
@@ -65,7 +65,7 @@ public:
 		return make_tensor(exprs::make_ranged_slice(*this, from, to));
 	}
 
-	const auto scalar(BC::size_t i) const
+	const auto scalar(bc::size_t i) const
 	{
 		BC_ASSERT_VIEWABLE
 		BC_ASSERT(i >= 0 && i < this->size(),
@@ -73,7 +73,7 @@ public:
 		return make_tensor(exprs::make_scalar(*this, i));
 	}
 
-	auto scalar(BC::size_t i)
+	auto scalar(bc::size_t i)
 	{
 		BC_ASSERT_VIEWABLE
 		BC_ASSERT(i >= 0 && i < this->size(),
@@ -81,7 +81,7 @@ public:
 		return make_tensor(exprs::make_scalar(*this, i));
 	}
 
-	const auto diagnol(BC::size_t index = 0) const
+	const auto diagnol(bc::size_t index = 0) const
 	{
 		BC_ASSERT_VIEWABLE
 		static_assert(ExpressionTemplate::tensor_dimension  == 2,
@@ -91,7 +91,7 @@ public:
 		return make_tensor(exprs::make_diagnol(*this,index));
 	}
 
-	auto diagnol(BC::size_t index = 0)
+	auto diagnol(bc::size_t index = 0)
 	{
 		BC_ASSERT_VIEWABLE
 		static_assert(ExpressionTemplate::tensor_dimension  == 2,
@@ -116,7 +116,7 @@ public:
 				exprs::make_view(*this, this->get_shape()));
 	}
 
-	const auto col(BC::size_t i) const
+	const auto col(bc::size_t i) const
 	{
 		BC_ASSERT_VIEWABLE
 		static_assert(ExpressionTemplate::tensor_dimension == 2,
@@ -124,7 +124,7 @@ public:
 		return slice(i);
 	}
 
-	auto col(BC::size_t i)
+	auto col(bc::size_t i)
 	{
 		BC_ASSERT_VIEWABLE
 		static_assert(ExpressionTemplate::tensor_dimension == 2,
@@ -132,7 +132,7 @@ public:
 		return slice(i);
 	}
 
-	const auto row(BC::size_t index) const
+	const auto row(bc::size_t index) const
 	{
 		BC_ASSERT_VIEWABLE
 		static_assert(ExpressionTemplate::tensor_dimension == 2,
@@ -142,7 +142,7 @@ public:
 		return make_tensor(exprs::make_row(*this, index));
 	}
 
-	auto row(BC::size_t index)
+	auto row(bc::size_t index)
 	{
 		BC_ASSERT_VIEWABLE
 		static_assert(ExpressionTemplate::tensor_dimension == 2,
@@ -153,8 +153,8 @@ public:
 	}
 
 private:
-	using subblock_index  = BC::Dim<ExpressionTemplate::tensor_dimension>;
-	using subblock_shape = BC::Shape<ExpressionTemplate::tensor_dimension>;
+	using subblock_index  = bc::Dim<ExpressionTemplate::tensor_dimension>;
+	using subblock_shape = bc::Shape<ExpressionTemplate::tensor_dimension>;
 	using subblock_index_shape = std::tuple<subblock_index, subblock_shape>;
 public:
 
@@ -178,12 +178,12 @@ public:
 		return subblock(std::get<0>(index_shape), std::get<1>(index_shape));
 	}
 
-	const auto operator() (BC::size_t i) const { return scalar(i); }
-		  auto operator() (BC::size_t i)       { return scalar(i); }
+	const auto operator() (bc::size_t i) const { return scalar(i); }
+		  auto operator() (bc::size_t i)       { return scalar(i); }
 
 
 	template<int X>
-	auto reshaped(BC::Dim<X> shape)
+	auto reshaped(bc::Dim<X> shape)
 	{
 		BC_ASSERT_VIEWABLE
 		static_assert(ExpressionTemplate::tensor_iterator_dimension <= 1,
@@ -196,7 +196,7 @@ public:
 	}
 
 	template<int X>
-	const auto reshaped(BC::Dim<X> shape) const
+	const auto reshaped(bc::Dim<X> shape) const
 	{
 		BC_ASSERT_VIEWABLE
 		static_assert(ExpressionTemplate::tensor_iterator_dimension <= 1,
@@ -210,12 +210,12 @@ public:
 
 	template<class... Integers>
 	const auto reshaped(Integers... ints) const {
-		return reshaped(BC::dim(ints...));
+		return reshaped(bc::dim(ints...));
 	}
 
 	template<class... Integers>
 	auto reshaped(Integers... ints) {
-		return reshaped(BC::dim(ints...));
+		return reshaped(bc::dim(ints...));
 	}
 
 	auto flattened() {

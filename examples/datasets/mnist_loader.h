@@ -10,7 +10,7 @@
 
 #include "../../blackcat/tensors.h"
 
-namespace BC {
+namespace bc {
 
 template<class TensorView>
 void read_as_one_hot(TensorView tensor, std::ifstream& is)
@@ -55,8 +55,8 @@ void read_csv_row(TensorView tensor, std::ifstream& is)
 			ss.ignore();
 	}
 
-	int copy_size = BC::traits::min(tensor.size(), file_data.size());
-	BC::utility::implementation<system_tag>::HostToDevice(
+	int copy_size = bc::traits::min(tensor.size(), file_data.size());
+	bc::utility::implementation<system_tag>::HostToDevice(
 			tensor.data(), file_data.data(), copy_size);
 }
 
@@ -65,8 +65,8 @@ template<class System>
 auto load_mnist(System system, std::string mnist_dataset, int batch_size, int samples) {
 
 	using value_type = typename System::default_floating_point_type;
-	using allocator_type = BC::Allocator<System, value_type>;
-	using cube = BC::Cube<value_type, allocator_type>;
+	using allocator_type = bc::Allocator<System, value_type>;
+	using cube = bc::Cube<value_type, allocator_type>;
 
 	std::ifstream read_data(mnist_dataset);
 	if (!read_data.is_open()){

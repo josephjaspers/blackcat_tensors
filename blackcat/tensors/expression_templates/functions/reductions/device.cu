@@ -16,7 +16,7 @@
 //https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf
 //-- Modified by Joseph Jaspers original kernel (predominantlywriter Mark Harris
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs {
 namespace functions {
@@ -32,7 +32,7 @@ void warpReduce(volatile T *sdata, unsigned int tid) {
 }
 
 template <class T, class Expression> __global__
-void small_sum(T output, Expression array, BC::size_t n) {
+void small_sum(T output, Expression array, bc::size_t n) {
 	if (threadIdx.x==0) {
 		output[0] = 0;
 		for (int i = 0; i < n; ++i) {
@@ -75,7 +75,7 @@ template<class>
 struct Reduce;
 
 template<>
-struct Reduce<BC::device_tag> {
+struct Reduce<bc::device_tag> {
 
 	template<class Stream, class ScalarOutput,  class Expression>
 	static void sum(Stream stream, ScalarOutput output, Expression expression) {
@@ -100,7 +100,7 @@ struct Reduce<BC::device_tag> {
 
 		if (expression.size() >= 32) {
 			using value_type = typename Expression::value_type;
-			BC::size_t buffer_size = BC::calculate_block_dim(expression.size());	///num blocks the kernel will be called
+			bc::size_t buffer_size = bc::calculate_block_dim(expression.size());	///num blocks the kernel will be called
 			value_type* buffer = stream.template get_allocator_rebound<value_type>().allocate(buffer_size);
 			stream.enqueue([&]() { sum_implementation(stream, output, expression, buffer); });
 			stream.template get_allocator_rebound<value_type>().deallocate(buffer, buffer_size);
@@ -121,10 +121,10 @@ private:
 			typename Expression::value_type* buffer) {
 
 		using value_type = typename Expression::value_type;
-		BC::size_t n = expression.size();
-		BC::size_t blocks = BC::calculate_block_dim(n);	///num blocks the kernel will be called
-		BC::size_t threads = BC::calculate_threads(n); ///num threads the kernel will be called with
-		BC::size_t smemSize = threads * sizeof(typename Expression::value_type);
+		bc::size_t n = expression.size();
+		bc::size_t blocks = bc::calculate_block_dim(n);	///num blocks the kernel will be called
+		bc::size_t threads = bc::calculate_threads(n); ///num threads the kernel will be called with
+		bc::size_t smemSize = threads * sizeof(typename Expression::value_type);
 
 		switch (threads)
 		{

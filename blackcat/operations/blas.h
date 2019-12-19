@@ -12,7 +12,7 @@
 #include "operation_traits.h"
 #include "tags.h"
 
-namespace BC   {
+namespace bc   {
 namespace oper {
 
 template<class system_tag>

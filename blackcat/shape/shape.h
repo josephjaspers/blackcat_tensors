@@ -10,7 +10,7 @@
 
 #include "dim.h"
 
-namespace BC {
+namespace bc {
 
 
 template<int N>
@@ -22,7 +22,7 @@ struct Shape {
 	friend struct Shape;
 
 	static constexpr int tensor_dimension = N;
-	using size_t = BC::size_t;
+	using size_t = bc::size_t;
 	using value_type = size_t;
 
 private:
@@ -37,7 +37,7 @@ public:
 	template<
 		class... Integers,
 		class=std::enable_if_t<
-			BC::traits::sequence_of_v<size_t, Integers...> &&
+			bc::traits::sequence_of_v<size_t, Integers...> &&
 			(sizeof...(Integers) == N)>> BCINLINE
 	Shape(Integers... ints):
 		m_inner_shape {ints...} {
@@ -94,10 +94,10 @@ public:
 	template<
 		class... Integers,
 		class=std::enable_if_t<
-			BC::traits::sequence_of_v<size_t, Integers...> &&
+			bc::traits::sequence_of_v<size_t, Integers...> &&
 			(sizeof...(Integers) >= N)>> BCINLINE
 	size_t dims_to_index(Integers... ints) const {
-		return dims_to_index(BC::dim(ints...));
+		return dims_to_index(bc::dim(ints...));
 	}
 
 	template<int D, class=std::enable_if_t<(D>=N)>> BCINLINE
@@ -113,7 +113,7 @@ public:
 template<>
 struct Shape<0> {
 
-	using size_t = BC::size_t;
+	using size_t = bc::size_t;
 	using value_type = size_t;
 
 	static constexpr int tensor_dimension = 0;
@@ -151,7 +151,7 @@ struct Shape<0> {
 template<>
 struct Shape<1> {
 
-	using size_t = BC::size_t;
+	using size_t = bc::size_t;
 	using value_type = size_t;
 
 	static constexpr int tensor_dimension = 1;
@@ -161,12 +161,12 @@ struct Shape<1> {
 
 private:
 
-	BC::Dim<1> m_inner_shape = {0};
+	bc::Dim<1> m_inner_shape = {0};
 
 public:
 
 	BCINLINE Shape() {};
-	BCINLINE Shape (BC::Dim<1> param):
+	BCINLINE Shape (bc::Dim<1> param):
 		m_inner_shape {param} {}
 
 	template<int X, class=std::enable_if_t<(X>=1)>> BCINLINE
@@ -208,8 +208,8 @@ struct Strided_Vector_Shape {
 
 	static constexpr int tensor_dimension = 1;
 
-	BC::Dim<1> m_inner_shape = {0};
-	BC::Dim<1> m_block_shape = {1};
+	bc::Dim<1> m_inner_shape = {0};
+	bc::Dim<1> m_block_shape = {1};
 
 	BCINLINE Strided_Vector_Shape(size_t length, size_t leading_dimension) {
 		m_inner_shape[0] = length;

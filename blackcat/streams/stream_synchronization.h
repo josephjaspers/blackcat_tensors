@@ -10,7 +10,7 @@
 
 #include "../common.h"
 
-namespace BC {
+namespace bc {
 namespace streams {
 
 inline void host_sync()   {

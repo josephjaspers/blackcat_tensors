@@ -21,7 +21,7 @@
 
 BC_DEFAULT_MODULE_BODY(algorithms, Algorithm)
 
-namespace BC {
+namespace bc {
 namespace algorithms {
 
 #define BC_ALGORITHM_DEF(function)                                          \
@@ -29,7 +29,7 @@ namespace algorithms {
 BC_IF_CUDA(                                                                 \
 template<class Begin, class End, class... Args>                             \
 static auto function(                                                       \
-		BC::streams::Stream<BC::device_tag> stream,                         \
+		bc::streams::Stream<bc::device_tag> stream,                         \
 		Begin begin,                                                        \
 		End end,                                                            \
 		Args... args)                                                       \
@@ -40,7 +40,7 @@ static auto function(                                                       \
                                                                             \
 template<class Begin, class End, class... Args>                             \
 static auto function (                                                      \
-		BC::streams::Stream<BC::host_tag> stream,                           \
+		bc::streams::Stream<bc::host_tag> stream,                           \
 		Begin begin,                                                        \
 		End end,                                                            \
 		Args... args)                                                       \
@@ -52,7 +52,7 @@ static auto function (                                                      \
 BC_IF_CUDA(                                                               \
 template<class Begin, class End, class... Args>                           \
 static auto function(                                                     \
-		BC::streams::Stream<BC::device_tag> stream,                       \
+		bc::streams::Stream<bc::device_tag> stream,                       \
 		Begin begin,                                                      \
 		End end,                                                          \
 		Args... args)                                                     \
@@ -63,7 +63,7 @@ static auto function(                                                     \
                                                                           \
 template<class Begin, class End, class... Args>                           \
 static auto function (                                                    \
-		BC::streams::Stream<BC::host_tag> stream,                         \
+		bc::streams::Stream<bc::host_tag> stream,                         \
 		Begin begin,                                                      \
 		End end,                                                          \
 		Args... args)                                                     \
@@ -121,7 +121,7 @@ BC_REDUCE_ALGORITHM_DEF(minmax_element)
 
 template<class Begin, class End, class... Args>
 static auto accumulate (
-		BC::streams::Stream<BC::device_tag> stream,
+		bc::streams::Stream<bc::device_tag> stream,
 		Begin begin,
 		End end,
 		Args... args)
@@ -145,7 +145,7 @@ static auto accumulate (
 
 template<class Begin, class End, class... Args>
 static auto accumulate (
-		BC::streams::Stream<BC::host_tag> stream,
+		bc::streams::Stream<bc::host_tag> stream,
 		Begin begin,
 		End end,
 		Args... args)
@@ -160,7 +160,7 @@ template<class Container, class... Args>
 static auto accumulate (const Container& container, Args&&... args)
 {
 	return accumulate(
-			BC::streams::select_on_get_stream(container),
+			bc::streams::select_on_get_stream(container),
 			container.cw_begin(),
 			container.cw_end(),
 			std::forward(args)...);
@@ -170,7 +170,7 @@ template<class Container, class... Args>
 static auto accumulate (Container& container, Args&&... args)
 {
 	return accumulate(
-			BC::streams::select_on_get_stream(container),
+			bc::streams::select_on_get_stream(container),
 			container.cw_begin(),
 			container.cw_end(),
 			std::forward(args)...);

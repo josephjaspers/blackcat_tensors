@@ -16,11 +16,11 @@
  * MAXPOOLING IMPLEMENTATION WAS ORIGINALLY CREATED BY THE CAFFE AUTHOR(S)
  */
 
-namespace BC {
+namespace bc {
 namespace caffe {
 
-using BC::traits::min;
-using BC::traits::max;
+using bc::traits::min;
+using bc::traits::max;
 
 template <typename Dtype> __global__
 void MaxPoolForward_gpu_kernel(const int nthreads,
@@ -37,10 +37,10 @@ void MaxPoolForward_gpu_kernel(const int nthreads,
 		const int n = index / pooled_width / pooled_height / channels;
 		int hstart = ph * stride_h - pad_h;
 		int wstart = pw * stride_w - pad_w;
-		const int hend = BC::traits::min(hstart + kernel_h, height);
-		const int wend = BC::traits::min(wstart + kernel_w, width);
-		hstart = BC::traits::max(hstart, 0);
-		wstart = BC::traits::max(wstart, 0);
+		const int hend = bc::traits::min(hstart + kernel_h, height);
+		const int wend = bc::traits::min(wstart + kernel_w, width);
+		hstart = bc::traits::max(hstart, 0);
+		wstart = bc::traits::max(wstart, 0);
 		Dtype maxval = -FLT_MAX;
 		int maxidx = -1;
 		const Dtype* const bottom_slice =
@@ -77,10 +77,10 @@ __global__ void MaxPoolBackward_gpu_kernel(
 		const int n = index / width / height / channels;
 		const int phstart =
 				 (h + pad_h < kernel_h) ? 0 : (h + pad_h - kernel_h) / stride_h + 1;
-		const int phend = BC::traits::min((h + pad_h) / stride_h + 1, pooled_height);
+		const int phend = bc::traits::min((h + pad_h) / stride_h + 1, pooled_height);
 		const int pwstart =
 				 (w + pad_w < kernel_w) ? 0 : (w + pad_w - kernel_w) / stride_w + 1;
-		const int pwend = BC::traits::min((w + pad_w) / stride_w + 1, pooled_width);
+		const int pwend = bc::traits::min((w + pad_w) / stride_w + 1, pooled_width);
 		Dtype gradient = 0;
 		const int offset = (n * channels + c) * pooled_height * pooled_width;
 		const Dtype* const top_diff_slice = top_diff + offset;
@@ -100,7 +100,7 @@ __global__ void MaxPoolBackward_gpu_kernel(
 
 template <typename Dtype>
 void MaxPoolForward(
-		BC::device_tag,
+		bc::device_tag,
 		const Dtype* const bottom_data,
 		const int num, const int channels,
 		const int height, const int width,
@@ -125,7 +125,7 @@ void MaxPoolForward(
 
 template <typename Dtype>
 void MaxPoolBackward(
-		BC::device_tag,
+		bc::device_tag,
 		const Dtype* const top_diff, const int* const mask,
 		const int num,      const int channels,
 		const int height,   const int width,

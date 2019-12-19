@@ -8,13 +8,13 @@
 #ifndef C_EWISE_H_
 #define C_EWISE_H_
 
-namespace BC {
+namespace bc {
 namespace benchmarks {
 
-template<class scalar_t, class allocator=BC::Basic_Allocator<scalar_t>>
+template<class scalar_t, class allocator=bc::Basic_Allocator<scalar_t>>
 auto c_cwise(int size, int reps) {
 
-    using vec   = BC::Vector<scalar_t, allocator>;
+    using vec   = bc::Vector<scalar_t, allocator>;
 
     vec a(size);
     vec b(size);

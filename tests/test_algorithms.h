@@ -10,7 +10,7 @@
 
 #include "test_common.h"
 
-namespace BC {
+namespace bc {
 namespace tests {
 
 template<class value_type, template<class> class allocator>
@@ -19,10 +19,10 @@ int test_algorithms(int sz=128) {
 	BC_TEST_BODY_HEAD
 
 	using allocator_type = allocator<value_type>;
-	using system_tag = typename BC::allocator_traits<allocator_type>::system_tag;
-	using mat = BC::Matrix<value_type, allocator_type>;
+	using system_tag = typename bc::allocator_traits<allocator_type>::system_tag;
+	using mat = bc::Matrix<value_type, allocator_type>;
 
-	BC::streams::Stream<system_tag> stream;
+	bc::streams::Stream<system_tag> stream;
 
 	BC_TEST_ON_STARTUP {};
 
@@ -30,14 +30,14 @@ int test_algorithms(int sz=128) {
 		mat a(sz, sz);
 		a.fill(2);
 
-		return BC::tensors::all(a == 2);
+		return bc::tensors::all(a == 2);
 	)
 
 	BC_TEST_DEF(
 		mat a(sz, sz);
-		BC::algorithms::fill(a.get_stream(), a.cw_begin(), a.cw_end(), 3);
+		bc::algorithms::fill(a.get_stream(), a.cw_begin(), a.cw_end(), 3);
 
-		return BC::tensors::all(a == 3);
+		return bc::tensors::all(a == 3);
 	)
 
 	BC_TEST_DEF(
@@ -47,13 +47,13 @@ int test_algorithms(int sz=128) {
 		a.get_stream().create();
 		b.get_stream().create();
 
-		BC::algorithms::fill(a.get_stream(), a.cw_begin(), a.cw_end(), 5);
-		BC::algorithms::fill(b.get_stream(), b.cw_begin(), b.cw_end(), 7);
+		bc::algorithms::fill(a.get_stream(), a.cw_begin(), a.cw_end(), 5);
+		bc::algorithms::fill(b.get_stream(), b.cw_begin(), b.cw_end(), 7);
 
 		a.get_stream().sync();
 		b.get_stream().sync();
 
-		return BC::tensors::all(a == 5) && BC::tensors::all(b == 7);
+		return bc::tensors::all(a == 5) && bc::tensors::all(b == 7);
 	)
 
 	//same test as above except B is using the default stream
@@ -64,13 +64,13 @@ int test_algorithms(int sz=128) {
 
 		a.get_stream().create();
 
-		BC::algorithms::fill(a.get_stream(), a.cw_begin(), a.cw_end(), 5);
-		BC::algorithms::fill(b.get_stream(), b.cw_begin(), b.cw_end(), 7);
+		bc::algorithms::fill(a.get_stream(), a.cw_begin(), a.cw_end(), 5);
+		bc::algorithms::fill(b.get_stream(), b.cw_begin(), b.cw_end(), 7);
 
 		a.get_stream().sync();
 		b.get_stream().sync();
 
-		return BC::tensors::all(a == 5) && BC::tensors::all(b == 7);
+		return bc::tensors::all(a == 5) && bc::tensors::all(b == 7);
 	)
 
 	BC_TEST_BODY_TAIL

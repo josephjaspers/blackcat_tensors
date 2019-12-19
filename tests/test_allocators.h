@@ -11,18 +11,18 @@
 #include "test_common.h"
 #include <memory>
 
-namespace BC {
+namespace bc {
 namespace tests {
 
 
 template<class Allocator>
 struct log_allocator : Allocator {
 
-	std::shared_ptr<BC::size_t> total_allocated =
-			std::shared_ptr<BC::size_t>(new BC::size_t());
+	std::shared_ptr<bc::size_t> total_allocated =
+			std::shared_ptr<bc::size_t>(new bc::size_t());
 
-	std::shared_ptr<BC::size_t> total_deallocated =
-			std::shared_ptr<BC::size_t>(new BC::size_t());
+	std::shared_ptr<bc::size_t> total_deallocated =
+			std::shared_ptr<bc::size_t>(new bc::size_t());
 
 	template<class T>
 	struct rebind {
@@ -38,13 +38,13 @@ struct log_allocator : Allocator {
 		total_deallocated = la.total_deallocated;
 	}
 
-	auto allocate(BC::size_t sz) {
+	auto allocate(bc::size_t sz) {
 		(*total_allocated.get()) += sz *
 				sizeof(typename Allocator::value_type);
 		return Allocator::allocate(sz);
 	}
 
-	auto deallocate(typename Allocator::value_type* data, BC::size_t sz) {
+	auto deallocate(typename Allocator::value_type* data, bc::size_t sz) {
 		(*total_deallocated) += sz* sizeof(typename Allocator::value_type);
 		return Allocator::deallocate(data, sz);
 
@@ -55,12 +55,12 @@ struct log_allocator : Allocator {
 template<class value_type, template<class> class allocator>
 int test_allocators(int sz=128) {
 
-	using BC::tensors::all;
+	using bc::tensors::all;
 
 	BC_TEST_BODY_HEAD
 
 	using allocator_type = allocator<value_type>;
-	using mat = BC::Matrix<value_type, log_allocator<allocator_type>>;
+	using mat = bc::Matrix<value_type, log_allocator<allocator_type>>;
 	using system_tag = typename allocator_traits<allocator_type>::system_tag;
 
 	Stream<system_tag> stream;
@@ -96,7 +96,7 @@ int test_allocators(int sz=128) {
 	BC_TEST_DEF(
 		mat a(5,5);  //mem sz = 25
 		a.get_stream().get_allocator().reserve(30 * sizeof(value_type));
-		a = BC::logistic(a * a + a); // should not allocate any memory
+		a = bc::logistic(a * a + a); // should not allocate any memory
 		return *(a.get_allocator().total_allocated.get()) == 25 * sizeof(value_type);
 	)
 

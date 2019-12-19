@@ -11,7 +11,7 @@
 #include <atomic>
 #include <condition_variable>
 
-namespace BC {
+namespace bc {
 namespace streams {
 
 class HostEvent {

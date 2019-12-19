@@ -10,7 +10,7 @@
 
 #include "expression_template_base.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs {
 
@@ -45,7 +45,7 @@ struct Kernel_Array:
 
 	static constexpr int tensor_dimension = Shape::tensor_dimension;
 	static constexpr int tensor_iterator_dimension =
-		BC::traits::sequence_contains_v<noncontinuous_memory_tag, Tags...> ?
+		bc::traits::sequence_contains_v<noncontinuous_memory_tag, Tags...> ?
 				tensor_dimension : 1;
 
 	using value_type = ValueType;
@@ -55,7 +55,7 @@ struct Kernel_Array:
 private:
 
 using return_type = std::conditional_t<
-		BC::traits::sequence_contains_v<BC_Const_View, Tags...>,
+		bc::traits::sequence_contains_v<BC_Const_View, Tags...>,
 		const value_type,
 		value_type>;
 
@@ -73,7 +73,7 @@ public:
 	template<
 		class AllocatorType,
 		class=std::enable_if_t<
-				BC::traits::true_v<
+				bc::traits::true_v<
 						decltype(std::declval<AllocatorType>().allocate(0))>>>
 	Kernel_Array(shape_type shape, AllocatorType allocator):
 		shape_type(shape),
@@ -90,12 +90,12 @@ public:
 	}
 
 	BCINLINE
-	const return_type& operator [](BC::size_t index) const {
+	const return_type& operator [](bc::size_t index) const {
 		return m_data[this->coefficientwise_dims_to_index(index)];
 	}
 
 	BCINLINE
-	return_type& operator [](BC::size_t index) {
+	return_type& operator [](bc::size_t index) {
 		return m_data[this->coefficientwise_dims_to_index(index)];
 	}
 
@@ -139,8 +139,8 @@ public:
 
 template<int N, class Allocator, class... Tags>
 auto make_kernel_array(Shape<N> shape, Allocator allocator, Tags...) {
-	using system_tag = typename BC::allocator_traits<Allocator>::system_tag;
-	using value_type = typename BC::allocator_traits<Allocator>::value_type;
+	using system_tag = typename bc::allocator_traits<Allocator>::system_tag;
+	using value_type = typename bc::allocator_traits<Allocator>::value_type;
 	using array_t = Kernel_Array<Shape<N>, value_type, system_tag, Tags...>;
 	return array_t(shape, allocator);
 }

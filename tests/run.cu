@@ -10,5 +10,5 @@ int main() {
 	cudaRuntimeGetVersion(&runtime_version);
 	std::cout << "Runtime version: " << runtime_version  << std::endl;
 	std::cout << "Driver version: " << driver_version << std::endl; 
-	BC::tests::run();
+	bc::tests::run();
 }

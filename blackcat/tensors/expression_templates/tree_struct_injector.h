@@ -10,7 +10,7 @@
 #define BC_TENSOR_EXPRESSION_TEMPLATES_INJECTION_H_
 
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs {
 
@@ -27,7 +27,7 @@ struct Output_Data {
 
 template<class Op, bool PriorEval, class Tensor, int A, int B>
 auto update_alpha_beta_modifiers(Output_Data<Tensor, A, B> tensor) {
-	constexpr int alpha =  A * BC::oper::operation_traits<Op>::alpha_modifier;
+	constexpr int alpha =  A * bc::oper::operation_traits<Op>::alpha_modifier;
 	constexpr int beta  = PriorEval ? 1 : 0;
 	return Output_Data<Tensor, alpha, beta> {tensor.data()};
 }

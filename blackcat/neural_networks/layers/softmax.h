@@ -10,7 +10,7 @@
 
 #include "layer_base.h"
 
-namespace BC {
+namespace bc {
 namespace nn {
 
 template<class SystemTag, class ValueType>
@@ -23,8 +23,8 @@ public:
 	using value_type = ValueType;
 	using parent_type = Layer_Base<SoftMax<SystemTag, ValueType>>;
 
-	using mat = BC::Matrix<ValueType, BC::Allocator<SystemTag, ValueType>>;
-	using vec = BC::Vector<ValueType, BC::Allocator<SystemTag, ValueType>>;
+	using mat = bc::Matrix<ValueType, bc::Allocator<SystemTag, ValueType>>;
+	using vec = bc::Vector<ValueType, bc::Allocator<SystemTag, ValueType>>;
 
 private:
 
@@ -36,18 +36,18 @@ public:
 		parent_type(__func__, inputs, inputs) {}
 
 	template<class Allocator>
-	const auto& forward_propagation(const BC::Matrix<value_type, Allocator>& x) {
+	const auto& forward_propagation(const bc::Matrix<value_type, Allocator>& x) {
 		//TODO -- convert this into an operation, need 'broadcasted' sum
 		for (int i = 0; i < x.cols(); ++i) {
-			y[i] = BC::exp(x[i]) / BC::tensors::sum(exp(x[i]));
+			y[i] = bc::exp(x[i]) / bc::tensors::sum(exp(x[i]));
 		}
 
 		return y;
 	}
 	template<class Allocator>
-	auto forward_propagation(const BC::Vector<value_type, Allocator>& x) {
+	auto forward_propagation(const bc::Vector<value_type, Allocator>& x) {
 		//TODO -- convert this into an operation, need 'broadcasted' sum
-		return  BC::exp(x) / BC::tensors::sum(exp(x));
+		return  bc::exp(x) / bc::tensors::sum(exp(x));
 	}
 
 

@@ -1,6 +1,6 @@
 
 	self_type& fill(value_type value) {
-		BC::algorithms::fill(
+		bc::algorithms::fill(
 				this->get_stream(), cw_begin(), cw_end(), value);
 		return *this;
 	}
@@ -20,7 +20,7 @@
 
 	self_type& sort()
 	{
-		BC::algorithms::sort(
+		bc::algorithms::sort(
 				this->get_stream(), cw_begin(), cw_end());
 		return *this;
 	}
@@ -32,7 +32,7 @@
 				expression_type::tensor_iterator_dimension == 1,
 				"randomize not available to non-continuous tensors");
 
-		using Random = BC::random::Random<system_tag>;
+		using Random = bc::random::Random<system_tag>;
 		Random::randomize(
 				this->get_stream(),
 				this->internal(), lb, ub);
@@ -73,7 +73,7 @@ private:                                                                 \
     template<class Tensor>                                               \
     struct iterator_name {                                               \
                                                                          \
-        using size_t = BC::size_t;                                       \
+        using size_t = bc::size_t;                                       \
         Tensor& tensor;                                                  \
                                                                          \
         using begin_t = decltype(tensor.begin_func ());                  \

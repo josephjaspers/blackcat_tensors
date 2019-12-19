@@ -11,7 +11,7 @@
 #include <functional>
 #include <cmath>
 
-namespace BC {
+namespace bc {
 namespace tensors {
 template<class> class Tensor_Base;
 }
@@ -31,7 +31,7 @@ namespace cmath_functions {
 		return math_function;                                            \
 	}                                                                    \
 	template<class Xpr>                                                  \
-	auto operator() (const BC::tensors::Tensor_Base<Xpr>& tensor) {      \
+	auto operator() (const bc::tensors::Tensor_Base<Xpr>& tensor) {      \
 		  return tensor.un_expr(funcName());                             \
 	}                                                                    \
                                                                          \
@@ -119,7 +119,7 @@ struct Pow {
 		return std::pow(x, exp);
 	}
 	template<class internal_t, class Exp>
-	auto operator() (const BC::tensors::Tensor_Base<internal_t>& tensor, Exp exp) {
+	auto operator() (const bc::tensors::Tensor_Base<internal_t>& tensor, Exp exp) {
 		struct FunctorPow {
 			typename internal_t::value_type exp;
 			 auto operator() (const typename internal_t::value_type value) const {
@@ -152,7 +152,7 @@ BLACKCAT_FUNCTOR_DEF(Logistic, logistic, (1 / (1 + std::exp(-x))),
 		DERIVATIVE_DEF(Logistic::apply(x) * (1 - Logistic::apply(x)))
 		DERIVATIVE_CACHED_DEF(x * (1 - x)));
 
-BLACKCAT_FUNCTOR_DEF(Relu, relu, BC::traits::max(0, x), DERIVATIVE_DEF(x > 0 ? 1 : 0));
+BLACKCAT_FUNCTOR_DEF(Relu, relu, bc::traits::max(0, x), DERIVATIVE_DEF(x > 0 ? 1 : 0));
 BLACKCAT_FUNCTOR_DEF(Logical, logical, x != 0 ? 1 : 0);
 BLACKCAT_FUNCTOR_DEF(SoftPlus, softplus, std::log(1 + std::exp(x)), DERIVATIVE_DEF(Logistic::apply(x)))
 BLACKCAT_FUNCTOR_DEF(Mish, mish,
@@ -168,7 +168,7 @@ BLACKCAT_FUNCTOR_DEF(Mish, mish,
 } //end of ns cmath_functions
 } //end of ns oper
 
-using namespace BC::oper::cmath_functions;
+using namespace bc::oper::cmath_functions;
 
 } //end of ns BC
 

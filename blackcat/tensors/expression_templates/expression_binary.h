@@ -12,7 +12,7 @@
 #include <type_traits>
 #include "expression_template_base.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs {
 
@@ -28,7 +28,7 @@ struct Binary_Expression:
 					std::declval<typename Rv::value_type>()))>;
 
 	static constexpr int tensor_dimension =
-			BC::traits::max(Lv::tensor_dimension, Rv::tensor_dimension);
+			bc::traits::max(Lv::tensor_dimension, Rv::tensor_dimension);
 
 private:
 
@@ -37,13 +37,13 @@ private:
 			Lv::tensor_dimension != 0 &&
 			Rv::tensor_dimension != 0;
 
-	static constexpr int max_dimension = BC::traits::max(
+	static constexpr int max_dimension = bc::traits::max(
 					Lv::tensor_iterator_dimension,
 					Rv::tensor_iterator_dimension,
 					Lv::tensor_dimension,
 					Rv::tensor_dimension);
 
-	static constexpr int max_iterator = BC::traits::max(
+	static constexpr int max_iterator = bc::traits::max(
 					Lv::tensor_iterator_dimension,
 					Rv::tensor_iterator_dimension);
 
@@ -109,10 +109,10 @@ private:
 
 public:
 
-	BCINLINE BC::size_t size() const { return shape().size(); }
-	BCINLINE BC::size_t rows() const { return shape().rows(); }
-	BCINLINE BC::size_t cols() const { return shape().cols(); }
-	BCINLINE BC::size_t dimension(int i) const { return shape().dimension(i); }
+	BCINLINE bc::size_t size() const { return shape().size(); }
+	BCINLINE bc::size_t rows() const { return shape().rows(); }
+	BCINLINE bc::size_t cols() const { return shape().cols(); }
+	BCINLINE bc::size_t dimension(int i) const { return shape().dimension(i); }
 	BCINLINE auto inner_shape() const { return shape().inner_shape(); }
 };
 

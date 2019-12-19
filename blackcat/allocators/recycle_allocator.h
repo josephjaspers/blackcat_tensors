@@ -12,7 +12,7 @@
 #include <vector>
 #include <mutex>
 
-namespace BC {
+namespace bc {
 namespace allocators {
 
 //TODO make friend class and private members
@@ -20,7 +20,7 @@ struct Recycle_Allocator_Globals {
 
 	template<class SystemTag>
 	static auto& get_recycler(SystemTag=SystemTag()) {
-		static std::unordered_map<BC::size_t, std::vector<Byte*>> m_recycler;
+		static std::unordered_map<bc::size_t, std::vector<Byte*>> m_recycler;
 		return m_recycler;
 	}
 
@@ -33,7 +33,7 @@ struct Recycle_Allocator_Globals {
 	template<class SystemTag>
 	static void clear_recycler(SystemTag system=SystemTag()) {
 		std::lock_guard<std::mutex> locker(get_locker(system));
-		BC::Allocator<SystemTag, Byte> allocator;
+		bc::Allocator<SystemTag, Byte> allocator;
 
 		auto& recycler = get_recycler(system);
 		for (const auto& kv : recycler) {
@@ -52,14 +52,14 @@ struct Recycle_Allocator_Globals {
 template<
 		class SystemTag,
 		class T,
-		class AlternateAllocator=BC::Allocator<SystemTag, Byte>>
+		class AlternateAllocator=bc::Allocator<SystemTag, Byte>>
 struct Recycle_Allocator {
 
 	using system_tag = SystemTag;	//BC tag
 	using value_type = T;
 	using pointer = value_type*;
 	using const_pointer = const value_type*;
-	using size_type = BC::size_t;
+	using size_type = bc::size_t;
 	using propagate_on_container_copy_assignment = std::false_type;
 	using propagate_on_container_move_assignment = std::false_type;
 	using propagate_on_container_swap = std::false_type;
@@ -100,7 +100,7 @@ public:
 	Recycle_Allocator(const Recycle_Allocator<SystemTag, U, AlternateAllocator>& other) {}
 
 
-	T* allocate(BC::size_t size) {
+	T* allocate(bc::size_t size) {
 		if (size == 0) { return nullptr; }
 
 		std::lock_guard<std::mutex> lck(get_locker());
@@ -117,7 +117,7 @@ public:
 		}
 	}
 
-	void deallocate(T* ptr, BC::size_t size) {
+	void deallocate(T* ptr, bc::size_t size) {
 		if (size == 0 || ptr==nullptr) { return; }
 		std::lock_guard<std::mutex> lck(get_locker());
 		size *= sizeof(value_type);

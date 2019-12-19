@@ -10,7 +10,7 @@
 
 #include "../array_scalar_constant.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs { 
 
@@ -29,7 +29,7 @@ private:
 	static auto make_kernel_scalar(Stream stream) {
 		using system_tag = typename Stream::system_tag;
 		using Array = Kernel_Array<Shape<0>, ValueType, system_tag, temporary_tag>;
-		return Array(BC::Shape<0>(), stream.template get_allocator_rebound<ValueType>().allocate(1));
+		return Array(bc::Shape<0>(), stream.template get_allocator_rebound<ValueType>().allocate(1));
 	}
 
 public:
@@ -37,8 +37,8 @@ public:
 	template<class ValueType, int alpha_mod, bool lv_scalar, bool rv_scalar, class Stream, class lv_scalar_t, class rv_scalar_t>
 	static auto calculate_alpha(Stream stream, lv_scalar_t lv, rv_scalar_t rv) {
 
-		static constexpr bool lv_host_mode = BC::tensors::exprs::expression_traits<lv_scalar_t>::is_stack_allocated::value;
-		static constexpr bool rv_host_mode = BC::tensors::exprs::expression_traits<rv_scalar_t>::is_stack_allocated::value;
+		static constexpr bool lv_host_mode = bc::tensors::exprs::expression_traits<lv_scalar_t>::is_stack_allocated::value;
+		static constexpr bool rv_host_mode = bc::tensors::exprs::expression_traits<rv_scalar_t>::is_stack_allocated::value;
 
 		static_assert(lv_host_mode == rv_host_mode || lv_scalar != rv_scalar,
 				"Host and Device Scalars may not be mixed Blas calculations");
@@ -50,43 +50,43 @@ public:
 			stream.set_blas_pointer_mode_device();
 		}
 
-		return BC::traits::constexpr_if<(lv_scalar != rv_scalar) && (alpha_mod == 1)>(
+		return bc::traits::constexpr_if<(lv_scalar != rv_scalar) && (alpha_mod == 1)>(
 					[&](){
-						return BC::traits::constexpr_ternary<lv_scalar>(
+						return bc::traits::constexpr_ternary<lv_scalar>(
 								[=]() { return lv; },
 								[=]() { return rv; }
 						);
 				},
-				BC::traits::constexpr_else_if<!lv_scalar && !rv_scalar>(
+				bc::traits::constexpr_else_if<!lv_scalar && !rv_scalar>(
 				[&](){
-					return make_constexpr_scalar<BC::host_tag, alpha_mod, ValueType>();
+					return make_constexpr_scalar<bc::host_tag, alpha_mod, ValueType>();
 				},
-				BC::traits::constexpr_else_if<lv_scalar && rv_scalar>(
+				bc::traits::constexpr_else_if<lv_scalar && rv_scalar>(
 					[&]() {
-						return BC::traits::constexpr_ternary<host_mode>(
+						return bc::traits::constexpr_ternary<host_mode>(
 								[&](){
-									return make_scalar_constant<BC::host_tag, ValueType>(alpha_mod * lv[0] * rv[0]);
+									return make_scalar_constant<bc::host_tag, ValueType>(alpha_mod * lv[0] * rv[0]);
 								},[&](){
 									auto tmp_scalar = make_kernel_scalar<ValueType>(stream);
 									derived::scalar_multiply(stream, tmp_scalar, alpha_mod, lv, rv);
 									return tmp_scalar;
 								});
 					},
-				BC::traits::constexpr_else_if<lv_scalar>(
+				bc::traits::constexpr_else_if<lv_scalar>(
 						[&]() {
-							return BC::traits::constexpr_if<host_mode>(
+							return bc::traits::constexpr_if<host_mode>(
 									[&](){
-										return make_scalar_constant<BC::host_tag, ValueType>(alpha_mod * lv[0]);
+										return make_scalar_constant<bc::host_tag, ValueType>(alpha_mod * lv[0]);
 									},[&](){
 										auto tmp_scalar = make_kernel_scalar<ValueType>(stream);
 										derived::scalar_multiply(stream, tmp_scalar, alpha_mod, lv);
 										return tmp_scalar;
 									});
 						},
-				BC::traits::constexpr_else([&]() { //else if rv_scalar
-							return BC::traits::constexpr_if<host_mode>(
+				bc::traits::constexpr_else([&]() { //else if rv_scalar
+							return bc::traits::constexpr_if<host_mode>(
 									[&](){
-										return make_scalar_constant<BC::host_tag, ValueType>(alpha_mod * rv[0]);
+										return make_scalar_constant<bc::host_tag, ValueType>(alpha_mod * rv[0]);
 									},[&](){
 										auto tmp_scalar = make_kernel_scalar<ValueType>(stream);
 										derived::scalar_multiply(stream, tmp_scalar, alpha_mod, rv);
@@ -164,8 +164,8 @@ public:
 	template<class Stream, class Contents>
 	static void post_parse_expression_evaluation(Stream stream, Contents contents) {
 		using value_type = typename decltype(contents.alpha)::value_type;
-		BC::traits::constexpr_if<(BC::tensors::exprs::expression_traits<decltype(contents.alpha)>::is_temporary::value)>(
-			BC::traits::bind([&](auto alpha) {
+		bc::traits::constexpr_if<(bc::tensors::exprs::expression_traits<decltype(contents.alpha)>::is_temporary::value)>(
+			bc::traits::bind([&](auto alpha) {
 				stream.template get_allocator_rebound<value_type>().deallocate(alpha, 1);
 			}, 	contents.alpha));
 

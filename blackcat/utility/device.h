@@ -13,7 +13,7 @@
 #include <mutex>
 
 
-namespace BC {
+namespace bc {
 namespace utility {
 
 
@@ -21,12 +21,12 @@ template<>
 struct Utility<device_tag> {
 
 	template<class T>
-	static void HostToDevice(T* t, const T* u, BC::size_t  size = 1) {
+	static void HostToDevice(T* t, const T* u, bc::size_t  size = 1) {
 		cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyHostToDevice);
 	}
 
 	template<class T>
-	static void DeviceToHost(T* t, const T* u, BC::size_t  size = 1) {
+	static void DeviceToHost(T* t, const T* u, bc::size_t  size = 1) {
 		cudaMemcpy(t, u, sizeof(T) * size, cudaMemcpyDeviceToHost);
 	}
 };

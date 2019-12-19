@@ -11,7 +11,7 @@
 
 #include "expression_template_base.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs {
 
@@ -35,9 +35,9 @@ struct Scalar_Constant:
 {
 	using value_type = Scalar;
 	using system_tag = SystemTag;
-	using allocation_tag = BC::host_tag;
+	using allocation_tag = bc::host_tag;
 	using stack_allocated = std::true_type;
-	using allocation_type = BC::host_tag;
+	using allocation_type = bc::host_tag;
 
 	value_type scalar;
 
@@ -68,12 +68,12 @@ template<int Value, class Scalar, class SystemTag>
 struct Constexpr_Scalar_Constant;
 
 template<int Value, class Scalar>
-struct Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>:
-	Scalar_Constant_Base<Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>> {
+struct Constexpr_Scalar_Constant<Value, Scalar, bc::host_tag>:
+	Scalar_Constant_Base<Constexpr_Scalar_Constant<Value, Scalar, bc::host_tag>> {
 
 	using value_type = Scalar;
-	using system_tag = BC::host_tag;
-	using allocation_tag = BC::host_tag;
+	using system_tag = bc::host_tag;
+	using allocation_tag = bc::host_tag;
 
 	Scalar value = Scalar(Value);
 
@@ -95,12 +95,12 @@ struct Constexpr_Scalar_Constant<Value, Scalar, BC::host_tag>:
 
 #ifdef __CUDACC__
 template<int Value, class Scalar>
-struct Constexpr_Scalar_Constant<Value, Scalar, BC::device_tag>:
-	Scalar_Constant_Base<Constexpr_Scalar_Constant<Value, Scalar, BC::device_tag>> {
+struct Constexpr_Scalar_Constant<Value, Scalar, bc::device_tag>:
+	Scalar_Constant_Base<Constexpr_Scalar_Constant<Value, Scalar, bc::device_tag>> {
 
 	using value_type = Scalar;
-	using system_tag = BC::host_tag;
-	using allocation_tag = BC::host_tag;
+	using system_tag = bc::host_tag;
+	using allocation_tag = bc::host_tag;
 
 	const Scalar* value = cuda_constexpr_scalar_ptr();
 

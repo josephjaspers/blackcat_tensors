@@ -11,7 +11,7 @@
 #include "host.h"
 #include "device.cu"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs {
 namespace functions {

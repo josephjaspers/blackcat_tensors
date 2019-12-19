@@ -10,7 +10,7 @@
 
 #include <random>
 
-namespace BC {
+namespace bc {
 namespace random {
 
 template<>

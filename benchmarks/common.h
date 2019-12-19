@@ -10,7 +10,7 @@
 
 #include <chrono>
 
-namespace BC {
+namespace bc {
 namespace benchmarks {
 
 template<class function>

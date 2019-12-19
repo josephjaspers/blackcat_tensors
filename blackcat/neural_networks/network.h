@@ -15,12 +15,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-namespace BC {
+namespace bc {
 namespace nn {
 namespace detail {
 
 template<class T>
-using is_recurrent_layer = BC::traits::conditional_detected_t<
+using is_recurrent_layer = bc::traits::conditional_detected_t<
 		detail::query_forward_requires_outputs, T, std::false_type>;
 }
 
@@ -35,14 +35,14 @@ struct NeuralNetwork {
 
 	using self = NeuralNetwork<Layers...>;
 	using layer_chain = LayerChain<
-	BC::traits::Integer<0>,
-	BC::traits::truth_type<BC::traits::any<detail::is_recurrent_layer, Layers...>::value>,
+	bc::traits::Integer<0>,
+	bc::traits::truth_type<bc::traits::any<detail::is_recurrent_layer, Layers...>::value>,
 	void,
 	Layers...>;
 
 	layer_chain m_layer_chain;
 	double m_learning_rate = m_layer_chain.head().layer().get_learning_rate();
-	BC::size_t m_batch_size = 1;
+	bc::size_t m_batch_size = 1;
 
 	/**Basic Constructor for Neural Networks.
 	 * Accepts a variadic parameter pack of Layer-like objects.
@@ -131,12 +131,12 @@ struct NeuralNetwork {
 
 	///Returns a const reference to the layer specified by the given index.
 	template<int X> auto& get_layer() const {
-		return m_layer_chain.get(BC::traits::Integer<X>());
+		return m_layer_chain.get(bc::traits::Integer<X>());
 	}
 
 	///Returns a reference to the layer specified by the given index.
 	template<int X> auto& get_layer() {
-		return m_layer_chain.get(BC::traits::Integer<X>());
+		return m_layer_chain.get(bc::traits::Integer<X>());
 	}
 
 	/** Sets the learning for each layer in the Neural_Network.
@@ -199,18 +199,18 @@ struct NeuralNetwork {
 	}
 
 	///returns the input_size of the first layer
-	BC::size_t input_size() const {
+	bc::size_t input_size() const {
 		return m_layer_chain.head().layer().input_size();
 	}
 
 
 	///returns the output_size of the last layer
-	BC::size_t output_size() const {
+	bc::size_t output_size() const {
 		return m_layer_chain.tail().layer().output_size();
 	}
 
 	///returns the batch_size of the neural network.
-	BC::size_t batch_size() const {
+	bc::size_t batch_size() const {
 		return m_layer_chain.head().layer().batch_size();
 	}
 
@@ -237,14 +237,14 @@ struct NeuralNetwork {
 			directory_name = "";
 
 		if (directory_name != "" &&
-				!BC::filesystem::directory_exists(directory_name))
+				!bc::filesystem::directory_exists(directory_name))
 		{
-			BC_ASSERT(BC::filesystem::mkdir(directory_name) == 0,
+			BC_ASSERT(bc::filesystem::mkdir(directory_name) == 0,
 				"Failure to create nonexistent directory: " + directory_name);
 		}
 
 		auto get_filepath = [&](std::string filename) {
-			return BC::filesystem::make_path(directory_name, filename);
+			return bc::filesystem::make_path(directory_name, filename);
 		};
 
 		{
@@ -281,7 +281,7 @@ struct NeuralNetwork {
 		zero_time_index();
 
 		auto get_filepath = [&](std::string filename) {
-			return BC::filesystem::make_path(directory_name, filename);
+			return bc::filesystem::make_path(directory_name, filename);
 		};
 
 		Layer_Loader loader(directory_name);

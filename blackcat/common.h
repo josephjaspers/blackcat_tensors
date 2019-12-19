@@ -11,7 +11,7 @@
 
 #include <type_traits>
 
-namespace BC {
+namespace bc {
 
 #ifndef BC_DEFAULT_SYSTEM_TAG
 #define BC_DEFAULT_SYSTEM_TAG host_tag
@@ -26,14 +26,14 @@ class host_tag : system_tag<host_tag> {
 public:
 	using default_floating_point_type = double;
 	using default_integer_type = int;
-	static const char* name() { return "BC::host_tag"; }
+	static const char* name() { return "bc::host_tag"; }
 };
 
 class device_tag : system_tag<device_tag> {
 public:
 	using default_floating_point_type = float;
 	using default_integer_type = int;
-	static const char* name() { return "BC::device_tag"; }
+	static const char* name() { return "bc::device_tag"; }
 };
 
 template<class T>
@@ -116,7 +116,7 @@ using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 
 #include <iostream>
 
-namespace BC {
+namespace bc {
 
 template<class str_type>
 inline void bc_assert(bool condition, str_type msg, const char* file, const char* function, int line) {
@@ -130,13 +130,13 @@ inline void bc_assert(bool condition, str_type msg, const char* file, const char
 		   throw 1;
 	   }
 }
-#define BC_ASSERT(condition, message) { BC::bc_assert(condition, message, __FILE__, __PRETTY_FUNCTION__, __LINE__); }
+#define BC_ASSERT(condition, message) { bc::bc_assert(condition, message, __FILE__, __PRETTY_FUNCTION__, __LINE__); }
 
 }
 
 #ifdef __CUDACC__
 #include <cublas.h>
-namespace BC {
+namespace bc {
 
 #define BC_CUDA_ASSERT(...) { BC_cuda_assert((__VA_ARGS__), __FILE__, __PRETTY_FUNCTION__, __LINE__); }
 inline void BC_cuda_assert(cudaError_t code, const char *file, const char* function, int line)
@@ -194,7 +194,7 @@ inline void BC_cuda_assert(
 
 #define BC_DEFAULT_MODULE_BODY(namespace_name, class_name)		\
 																\
-namespace BC { 													\
+namespace bc { 													\
 																\
 class host_tag;													\
 class device_tag;												\
@@ -232,7 +232,7 @@ namespace namespace_name {									   	\
 
 // --------------------------------- constants --------------------------------- //
 
-namespace BC {
+namespace bc {
 
 
 #ifndef BC_SIZE_T
@@ -241,26 +241,26 @@ namespace BC {
 
 using size_t = BC_SIZE_T;
 
-static constexpr BC::size_t MULTITHREAD_THRESHOLD = 16384;
+static constexpr bc::size_t MULTITHREAD_THRESHOLD = 16384;
 
 #ifdef __CUDACC__
 	namespace {
-    	static BC::size_t CUDA_BASE_THREADS = 128;
+    	static bc::size_t CUDA_BASE_THREADS = 128;
 	}
 
-    static void set_cuda_base_threads(BC::size_t nthreads) {
+    static void set_cuda_base_threads(bc::size_t nthreads) {
     	CUDA_BASE_THREADS = nthreads;
     }
 
-    static BC::size_t get_cuda_base_threads() {
+    static bc::size_t get_cuda_base_threads() {
     	return CUDA_BASE_THREADS;
     }
 
-    static  BC::size_t calculate_threads(BC::size_t sz = CUDA_BASE_THREADS) {
+    static  bc::size_t calculate_threads(bc::size_t sz = CUDA_BASE_THREADS) {
         return sz > CUDA_BASE_THREADS ? CUDA_BASE_THREADS : sz;
     }
 
-    static  BC::size_t calculate_block_dim(int size) {
+    static  bc::size_t calculate_block_dim(int size) {
         return 1 + (int)(size / CUDA_BASE_THREADS);
     }
 #endif

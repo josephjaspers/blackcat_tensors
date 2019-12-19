@@ -14,7 +14,7 @@
 #include "expression_binary.h"
 #include "expression_unary.h"
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs { 
 
@@ -140,13 +140,13 @@ public:
 	template<class core, int a, int b, class StreamType>
 	static auto linear_evaluation(Expression branch, Output_Data<core, a, b> tensor, StreamType stream) {
 		return evaluate_impl(branch, tensor, stream,
-				BC::traits::truth_type<Expression::tensor_dimension == core::tensor_dimension>());
+				bc::traits::truth_type<Expression::tensor_dimension == core::tensor_dimension>());
 	}
 
 	template<class core, int a, int b, class StreamType>
 	static auto injection(Expression branch, Output_Data<core, a, b> tensor, StreamType stream) {
 		return evaluate_impl(branch, tensor, stream,
-				BC::traits::truth_type<Expression::tensor_dimension == core::tensor_dimension>());
+				bc::traits::truth_type<Expression::tensor_dimension == core::tensor_dimension>());
 	}
 
 	template<class StreamType>
@@ -207,15 +207,15 @@ struct optimizer<Binary_Expression<op, lv, rv>, std::enable_if_t<oper::operation
 	template<class core, int a, int b, class StreamType>
 	static auto linear_evaluation(Binary_Expression<op, lv, rv>& branch, Output_Data<core, a, b> tensor, StreamType stream) {
 		return
-				BC::traits::constexpr_if<entirely_blas_expr>(
+				bc::traits::constexpr_if<entirely_blas_expr>(
 						[&](){
 							optimizer<lv>::linear_evaluation(branch.left, tensor, stream);
 							optimizer<rv>::linear_evaluation(branch.right, update_alpha_beta_modifiers<op, true>(tensor), stream);
 							return tensor.data();
 						},
-				BC::traits::constexpr_else_if<optimizer<lv>::entirely_blas_expr>(
+				bc::traits::constexpr_else_if<optimizer<lv>::entirely_blas_expr>(
 						[&]() {
-							return BC::traits::constexpr_ternary<std::is_same<op, oper::Sub>::value>(
+							return bc::traits::constexpr_ternary<std::is_same<op, oper::Sub>::value>(
 									[&]() {
 										/*auto left = */ optimizer<lv>::linear_evaluation(branch.left, tensor, stream);
 										auto right = optimizer<rv>::linear_evaluation(branch.right, update_alpha_beta_modifiers<op, true>(tensor), stream);
@@ -228,13 +228,13 @@ struct optimizer<Binary_Expression<op, lv, rv>, std::enable_if_t<oper::operation
 									}
 							);
 						},
-				BC::traits::constexpr_else_if<optimizer<rv>::entirely_blas_expr>(
+				bc::traits::constexpr_else_if<optimizer<rv>::entirely_blas_expr>(
 						[&]() {
 								auto left  = optimizer<lv>::linear_evaluation(branch.left, tensor, stream);
 							  /*auto right = */ optimizer<rv>::linear_evaluation(branch.right, update_alpha_beta_modifiers<op, b != 0>(tensor), stream);
 								return left;
 						},
-				BC::traits::constexpr_else(
+				bc::traits::constexpr_else(
 						[&]() {
 							static constexpr bool left_evaluated = optimizer<lv>::partial_blas_expr || b != 0;
 							auto left = optimizer<lv>::linear_evaluation(branch.left, tensor, stream);
@@ -255,25 +255,25 @@ struct optimizer<Binary_Expression<op, lv, rv>, std::enable_if_t<oper::operation
 		};
 
 		return
-				BC::traits::constexpr_if<entirely_blas_expr>(
+				bc::traits::constexpr_if<entirely_blas_expr>(
 						[&](){
 							optimizer<lv>::linear_evaluation(branch.left, tensor, stream);
 							optimizer<rv>::linear_evaluation(branch.right, update_alpha_beta_modifiers<op, true>(tensor), stream);
 							return tensor.data();
 						},
-				BC::traits::constexpr_else_if<optimizer<rv>::partial_blas_expr && optimizer<lv>::partial_blas_expr>(
+				bc::traits::constexpr_else_if<optimizer<rv>::partial_blas_expr && optimizer<lv>::partial_blas_expr>(
 							basic_eval,
-				BC::traits::constexpr_else_if<optimizer<lv>::requires_greedy_eval>(
+				bc::traits::constexpr_else_if<optimizer<lv>::requires_greedy_eval>(
 						[&]() {
 							auto left = optimizer<lv>::injection(branch.left, tensor, stream);
 							return make_bin_expr<op>(left, branch.right);
 						},
-				BC::traits::constexpr_else_if<optimizer<rv>::requires_greedy_eval>(
+				bc::traits::constexpr_else_if<optimizer<rv>::requires_greedy_eval>(
 						[&]() {
 							auto right = optimizer<rv>::injection(branch.right, tensor, stream);
 							return make_bin_expr<op>(branch.left, right);
 						},
-				BC::traits::constexpr_else(
+				bc::traits::constexpr_else(
 						basic_eval
 				)))));
 	}
@@ -301,7 +301,7 @@ Binary_Expression<op, lv, rv>, std::enable_if_t<
 
 	template<class core, int a, int b, class StreamType>
 	static auto injection(Binary_Expression<op, lv, rv> branch, Output_Data<core, a, b> tensor, StreamType stream) {
-		return BC::traits::constexpr_ternary<optimizer<lv>::partial_blas_expr || optimizer<lv>::requires_greedy_eval>(
+		return bc::traits::constexpr_ternary<optimizer<lv>::partial_blas_expr || optimizer<lv>::requires_greedy_eval>(
 					[&]() {
 						auto left = optimizer<lv>::injection(branch.left, tensor, stream);
 						auto right = branch.right;

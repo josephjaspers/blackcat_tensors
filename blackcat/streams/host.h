@@ -13,7 +13,7 @@
 #include "stream_synchronization.h"
 #include "host_stream.h"
 
-namespace BC {
+namespace bc {
 namespace streams {
 
 template<class> class Stream;
@@ -24,7 +24,7 @@ class Stream<host_tag> {
 	struct Contents {
 		std::unique_ptr<HostEvent> m_event;
 		HostStream m_stream;
-		BC::allocators::Stack_Allocator<host_tag> m_workspace;
+		bc::allocators::Stack_Allocator<host_tag> m_workspace;
 	};
 
 	static std::shared_ptr<Contents> get_default_contents() {
@@ -39,9 +39,9 @@ class Stream<host_tag> {
 public:
 
 	using system_tag = host_tag;
-	using allocator_type = BC::allocators::Stack_Allocator<host_tag>;
+	using allocator_type = bc::allocators::Stack_Allocator<host_tag>;
 
-    BC::allocators::Stack_Allocator<host_tag>& get_allocator() {
+    bc::allocators::Stack_Allocator<host_tag>& get_allocator() {
     	return m_contents->m_workspace;
     }
 

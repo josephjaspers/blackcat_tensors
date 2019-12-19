@@ -10,7 +10,7 @@
 
 #include <memory>
 
-namespace BC {
+namespace bc {
 namespace allocators {
 /**
  * Similar to the C++17 std::pmr::polymorphic_allocator.
@@ -25,7 +25,7 @@ struct Polymorphic_Allocator {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	using default_allocator_t = BC::Allocator<system_tag, value_type>;
+	using default_allocator_t = bc::Allocator<system_tag, value_type>;
 
 private:
 
@@ -46,7 +46,7 @@ private:
 		static_assert(std::is_same<value_type, typename Allocator::value_type>::value,
 				"SUPPLIED ALLOCATOR VALUE_TYPE MUST BE SAME AS POLYMORPHIC ALLOCATOR VALUE_TYPE");
 
-		static_assert(std::is_same<system_tag, typename BC::allocator_traits<Allocator>::system_tag>::value,
+		static_assert(std::is_same<system_tag, typename bc::allocator_traits<Allocator>::system_tag>::value,
 				"SUPPLIED ALLOCATOR VALUE_TYPE MUST BE SAME AS POLYMORPHIC ALLOCATOR VALUE_TYPE");
 
 		public:
@@ -121,7 +121,7 @@ public:
 	template<class Allocator>
 	void set_allocator(const Allocator& alloc) {
 		///Change the underlying allocator
-		using allocator_t = typename Allocator::template rebind<BC::allocators::Byte>::other;
+		using allocator_t = typename Allocator::template rebind<bc::allocators::Byte>::other;
 		m_allocator = std::unique_ptr<Virtual_Allocator>(
 				new Derived_Allocator<allocator_t>(alloc));
 	}

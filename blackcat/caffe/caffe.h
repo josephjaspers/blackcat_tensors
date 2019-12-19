@@ -16,7 +16,7 @@
 ///THIS IS NOT A CAFFE FILE --
 ///JOSEPH JASPERS IS THE AUTHOR OF THIS FILE
 
-namespace BC {
+namespace bc {
 
 template<
 	class Stream,
@@ -28,9 +28,9 @@ void max_pooling_forward(
 		Image image,
 		ImageOut out,
 		Indexes mask,
-		BC::Dim<2> krnl_shape,
-		BC::Dim<2> padding = BC::Dim<2>().fill(0),
-		BC::Dim<2> strides = {-1,-1}) {
+		bc::Dim<2> krnl_shape,
+		bc::Dim<2> padding = bc::Dim<2>().fill(0),
+		bc::Dim<2> strides = {-1,-1}) {
 
 	if (strides == Dim<2>{ -1,-1 })
 		strides = krnl_shape;
@@ -46,7 +46,7 @@ void max_pooling_forward(
 	using system_tag = typename Stream::system_tag;
 
 	stream.enqueue([=]() {
-		BC::caffe::MaxPoolForward(
+		bc::caffe::MaxPoolForward(
 				system_tag(),
 				image.data(),
 				image.dimension(3),
@@ -71,9 +71,9 @@ void max_pooling_backward(
 		Image image,         //output delta (not initialized)
 		ImageOut delta,      //delta from upper layer
 		Indexes mask,        //indicies of delta from upper layer
-		BC::Dim<2> krnl_shape,
-		BC::Dim<2> padding = BC::Dim<2>().fill(0),
-		BC::Dim<2> strides = {-1,-1})
+		bc::Dim<2> krnl_shape,
+		bc::Dim<2> padding = bc::Dim<2>().fill(0),
+		bc::Dim<2> strides = {-1,-1})
 {
 
 	static_assert(std::is_same<
@@ -101,7 +101,7 @@ void max_pooling_backward(
 	using system_tag = typename Stream::system_tag;
 
 	stream.enqueue([=]() {
-		BC::caffe::MaxPoolBackward(
+		bc::caffe::MaxPoolBackward(
 				system_tag(),
 				delta.data(), mask.data(),
 				image.dimension(3), image.dimension(2),
@@ -122,10 +122,10 @@ void im2col(
 		Stream stream,
 		ColumnImage col_image,
 		Image image,
-		BC::Dim<3> krnl_shape,
-		BC::Dim<2> padding = BC::Dim<2>(),
-		BC::Dim<2> strides = BC::Dim<2>().fill(1),
-		BC::Dim<2> dilation = BC::Dim<2>().fill(1)) {
+		bc::Dim<3> krnl_shape,
+		bc::Dim<2> padding = bc::Dim<2>(),
+		bc::Dim<2> strides = bc::Dim<2>().fill(1),
+		bc::Dim<2> dilation = bc::Dim<2>().fill(1)) {
 
 	static_assert(ColumnImage::tensor_dimension == 2,
 			"ColumnImage must be a matrix");
@@ -135,7 +135,7 @@ void im2col(
 	using system_tag = typename Stream::system_tag;
 
 	stream.enqueue([=]() {
-		 BC::caffe::im2col(
+		 bc::caffe::im2col(
 				system_tag(),
 				image.data(),
 				image.dimension(2),
@@ -157,10 +157,10 @@ void col2im(
 		Stream stream,
 		ColumnImage col_image,
 		Image image,
-		BC::Dim<3> krnl_shape,
-		BC::Dim<2> padding = BC::Dim<2>(),
-		BC::Dim<2> strides = BC::Dim<2>().fill(1),
-		BC::Dim<2> dilation = BC::Dim<2>().fill(1)) {
+		bc::Dim<3> krnl_shape,
+		bc::Dim<2> padding = bc::Dim<2>(),
+		bc::Dim<2> strides = bc::Dim<2>().fill(1),
+		bc::Dim<2> dilation = bc::Dim<2>().fill(1)) {
 
 	static_assert(ColumnImage::tensor_dimension == 2,
 			"ColumnImage must be a matrix");
@@ -170,7 +170,7 @@ void col2im(
 	using system_tag = typename Stream::system_tag;
 
 	stream.enqueue([=]() {
-		 BC::caffe::col2im(
+		 bc::caffe::col2im(
 				system_tag(),
 				col_image.data(),
 				image.dimension(2),
@@ -193,10 +193,10 @@ void im2col_nd(
 		Stream stream,
 		ColumnImage col_image,
 		Image image,
-		BC::Dim<NumAxis> krnl_shape,
-		BC::Dim<NumAxis> padding = BC::Dim<NumAxis>(),
-		BC::Dim<NumAxis> strides = BC::Dim<NumAxis>().fill(1),
-		BC::Dim<NumAxis> dilation = BC::Dim<NumAxis>().fill(1)) {
+		bc::Dim<NumAxis> krnl_shape,
+		bc::Dim<NumAxis> padding = bc::Dim<NumAxis>(),
+		bc::Dim<NumAxis> strides = bc::Dim<NumAxis>().fill(1),
+		bc::Dim<NumAxis> dilation = bc::Dim<NumAxis>().fill(1)) {
 
 	constexpr bool is_batched = Image::tensor_dimension == NumAxis + 1;
 	static_assert(ColumnImage::tensor_dimension == 2 + is_batched,
@@ -211,7 +211,7 @@ void im2col_nd(
 	auto col_shape = col_image.get_shape().inner_shape().reverse();
 
 	stream.enqueue([=]() {
-		 BC::caffe::im2col_nd(
+		 bc::caffe::im2col_nd(
 				system_tag(),
 				image.data(),
 				NumAxis,

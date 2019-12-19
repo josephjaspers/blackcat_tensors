@@ -11,7 +11,7 @@
 
 #include <type_traits>
 
-namespace BC {
+namespace bc {
 namespace tensors {
 namespace exprs { 
 
@@ -75,55 +75,55 @@ template<class T> using query_is_view_type = typename T::is_view_type;
 template<class T>
 struct expression_traits {
 
-	using system_tag = BC::traits::conditional_detected_t<
+	using system_tag = bc::traits::conditional_detected_t<
 			detail::query_system_tag, T, host_tag>;
 
-	using allocation_tag = BC::traits::conditional_detected_t<
+	using allocation_tag = bc::traits::conditional_detected_t<
 			detail::query_allocation_type, T, system_tag>;
 
-	using value_type = BC::traits::conditional_detected_t<
+	using value_type = bc::traits::conditional_detected_t<
 			detail::query_value_type, T, void>;
 
-	using is_const_view = BC::traits::conditional_detected_t<
+	using is_const_view = bc::traits::conditional_detected_t<
 			detail::query_is_const_view, T, std::false_type>;
 
-	using is_view = BC::traits::conditional_detected_t<
+	using is_view = bc::traits::conditional_detected_t<
 			detail::query_is_view, T, is_const_view>;
 
-	using is_move_constructible = BC::traits::conditional_detected_t<
+	using is_move_constructible = bc::traits::conditional_detected_t<
 			detail::query_move_constructible, T, std::true_type>;
 
-	using is_copy_constructible = BC::traits::conditional_detected_t<
+	using is_copy_constructible = bc::traits::conditional_detected_t<
 			detail::query_copy_constructible, T, std::true_type>;
 
-	using is_move_assignable = BC::traits::conditional_detected_t<
+	using is_move_assignable = bc::traits::conditional_detected_t<
 			detail::query_move_assignable, T, std::true_type>;
 
-	using is_copy_assignable = BC::traits::conditional_detected_t<
+	using is_copy_assignable = bc::traits::conditional_detected_t<
 			detail::query_copy_assignable, T, std::true_type>;
 
-	using requires_greedy_evaluation = BC::traits::conditional_detected_t<
+	using requires_greedy_evaluation = bc::traits::conditional_detected_t<
 			detail::query_requires_greedy_evaluation,T, std::false_type>;
 
-	using is_array = BC::traits::conditional_detected_t<
+	using is_array = bc::traits::conditional_detected_t<
 			detail::query_expression_template_array_type, T, std::false_type>;
 
-	using is_expr = BC::traits::conditional_detected_t<
+	using is_expr = bc::traits::conditional_detected_t<
 			detail::query_expression_template_expression_type, T, std::false_type>;
 
 	using is_expression_template =
-			BC::traits::truth_type<is_array::value || is_expr::value>;
+			bc::traits::truth_type<is_array::value || is_expr::value>;
 
-	using is_temporary = BC::traits::conditional_detected_t<
+	using is_temporary = bc::traits::conditional_detected_t<
 			detail::query_is_temporary_value, T, std::false_type>;
 
-	using is_stack_allocated = BC::traits::conditional_detected_t<
+	using is_stack_allocated = bc::traits::conditional_detected_t<
 			detail::query_stack_allocated, T, std::false_type>;
 
-	using is_noncontinuous = BC::traits::conditional_detected_t<
+	using is_noncontinuous = bc::traits::conditional_detected_t<
 			detail::query_is_noncontinuous_in_memory, T, std::false_type>;
 
-	using is_continuous = BC::traits::truth_type<!is_noncontinuous::value>;
+	using is_continuous = bc::traits::truth_type<!is_noncontinuous::value>;
 
 };
 

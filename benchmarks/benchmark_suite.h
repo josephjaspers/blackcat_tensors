@@ -12,7 +12,7 @@
 #include <vector>
 
 
-namespace BC {
+namespace bc {
 namespace benchmarks {
 
 //Requires Cuda to run
