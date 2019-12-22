@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string>
-
+#include <fstream>
 #include "string.h"
 
 namespace bc {
@@ -19,9 +19,13 @@ namespace filesystem {
 static constexpr char separator = BC_FILE_SEPERATOR;
 
 inline bool directory_exists(const std::string& name) {
+#ifdef _MSC_VER
 	struct stat info;
 	stat(name.c_str(), &info);
 	return info.st_mode & S_IFDIR;
+#else
+	return system(("test -d " + name).c_str()) == 0;
+#endif
 }
 
 inline int mkdir(const std::string& name) {

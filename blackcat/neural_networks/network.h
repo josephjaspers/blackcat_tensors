@@ -34,11 +34,12 @@ template<class ... Layers>
 struct NeuralNetwork {
 
 	using self = NeuralNetwork<Layers...>;
+	using is_recurrent = bc::traits::any<detail::is_recurrent_layer, Layers...>;
 	using layer_chain = LayerChain<
-	bc::traits::Integer<0>,
-	bc::traits::truth_type<bc::traits::any<detail::is_recurrent_layer, Layers...>::value>,
-	void,
-	Layers...>;
+			bc::traits::Integer<0>,
+			is_recurrent,
+			void,
+			Layers...>;
 
 	layer_chain m_layer_chain;
 	double m_learning_rate = m_layer_chain.head().layer().get_learning_rate();
@@ -239,8 +240,7 @@ struct NeuralNetwork {
 		if (directory_name != "" &&
 				!bc::filesystem::directory_exists(directory_name))
 		{
-			BC_ASSERT(bc::filesystem::mkdir(directory_name) == 0,
-				"Failure to create nonexistent directory: " + directory_name);
+			bc::filesystem::mkdir(directory_name);
 		}
 
 		auto get_filepath = [&](std::string filename) {

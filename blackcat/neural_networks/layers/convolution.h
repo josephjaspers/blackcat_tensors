@@ -269,8 +269,7 @@ auto convolution(
 		Optimizer=Optimizer(),
 		Dim<2> padding=Dim<2>().fill(0),
 		Dim<2> strides=Dim<2>().fill(1),
-		Dim<2> dilation=Dim<2>().fill(1),
-		Optimizer=Optimizer())
+		Dim<2> dilation=Dim<2>().fill(1))
 {
 	using value_type = typename SystemTag::default_floating_point_type;
 	return Convolution<

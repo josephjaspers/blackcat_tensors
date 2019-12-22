@@ -34,7 +34,7 @@ struct Layer_Manager: Layer {
 	using batched_input_tensor_type = bc::Tensor<input_tensor_dimension::value+1, value_type, allocator_type>;
 	using batched_output_tensor_type = bc::Tensor<output_tensor_dimension::value+1, value_type, allocator_type>;
 
-	template<char C, class Tensor, class isRecurrent=std::true_type>
+	template<char C, class Tensor, class isRecurrent=bc::traits::truth_type<is_recurrent::value>>
 	using key_type = cache_key<bc::utility::Name<C>, Tensor, isRecurrent>;
 
 private:
