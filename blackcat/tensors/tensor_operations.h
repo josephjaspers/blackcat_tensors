@@ -1,10 +1,5 @@
 private:
 
-	#define BC_ASSERT_ASSIGNABLE(literal)           \
-	static_assert(                                  \
-			traits_type::is_copy_assignable::value, \
-			"ASSERT COPY ASSIGNABLE: " literal)
-
 	template<class ScalarType>
 	using enable_if_scalar = std::enable_if_t<
 			std::is_convertible<ScalarType, value_type>::value>;

@@ -5,13 +5,10 @@
  *      Author: joseph
  */
 
-#ifndef EVALUATOR_H_
-#define EVALUATOR_H_
-
-BC_DEFAULT_MODULE_BODY(tensors { namespace exprs { namespace evaluator , Evaluator) } }
+#ifndef BLACKCAT_TENSORS_EXPRS_EVALUATOR_H_
+#define BLACKCAT_TENSORS_EXPRS_EVALUATOR_H_
 
 #include "device.cu"
 #include "host.h"
-
 
 #endif /* EVALUATOR_H_ */

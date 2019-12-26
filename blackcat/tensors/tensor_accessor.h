@@ -6,12 +6,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-	#define BC_ASSERT_VIEWABLE\
-		static_assert(\
-				exprs::expression_traits<ExpressionTemplate>::is_array::value,\
-				"Views are only available to Memory owning types");
-public:
-
 	const auto operator [](bc::size_t i) const {
 		return slice(i);
 	}
@@ -31,7 +25,7 @@ public:
 
 	const auto slice(bc::size_t i) const
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("const auto slice(bc::size_t i) const");
 		BC_ASSERT(i >= 0 && i < this->outer_dimension(),
 				"slice index must be between 0 and outer_dimension()");
 		return make_tensor(exprs::make_slice(*this, i));
@@ -39,7 +33,7 @@ public:
 
 	auto slice(bc::size_t i)
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("auto slice(bc::size_t i)");
 		BC_ASSERT(i >= 0 && i < this->outer_dimension(),
 				"slice index must be between 0 and outer_dimension()");
 		return make_tensor(exprs::make_slice(*this, i));
@@ -47,7 +41,7 @@ public:
 
 	const auto slice(bc::size_t from, bc::size_t to) const
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("const auto slice(bc::size_t from, bc::size_t to) const");
 		BC_ASSERT(from >= 0 && to <= this->outer_dimension(),
 				"slice `from` must be between 0 and outer_dimension()");
 		BC_ASSERT(to > from && to <= this->outer_dimension(),
@@ -57,7 +51,7 @@ public:
 
 	auto slice(bc::size_t from, bc::size_t to)
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("auto slice(bc::size_t from, bc::size_t to)");
 		BC_ASSERT(from >= 0 && to <= this->outer_dimension(),
 				"slice `from` must be between 0 and outer_dimension()");
 		BC_ASSERT(to > from && to <= this->outer_dimension(),
@@ -67,7 +61,7 @@ public:
 
 	const auto scalar(bc::size_t i) const
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("const auto scalar(bc::size_t i) const");
 		BC_ASSERT(i >= 0 && i < this->size(),
 				"Scalar index must be between 0 and size()");
 		return make_tensor(exprs::make_scalar(*this, i));
@@ -75,7 +69,7 @@ public:
 
 	auto scalar(bc::size_t i)
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("auto scalar(bc::size_t i)");
 		BC_ASSERT(i >= 0 && i < this->size(),
 				"Scalar index must be between 0 and size()");
 		return make_tensor(exprs::make_scalar(*this, i));
@@ -83,7 +77,7 @@ public:
 
 	const auto diagnol(bc::size_t index = 0) const
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("const auto diagnol(bc::size_t index = 0) const");
 		static_assert(ExpressionTemplate::tensor_dimension  == 2,
 				"diagnol method is only available to matrices");
 		BC_ASSERT(index > -this->rows() && index < this->rows(),
@@ -93,7 +87,7 @@ public:
 
 	auto diagnol(bc::size_t index = 0)
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("auto diagnol(bc::size_t index = 0)");
 		static_assert(ExpressionTemplate::tensor_dimension  == 2,
 				"diagnol method is only available to matrices");
 		BC_ASSERT(index > -this->rows() && index < this->rows(),
@@ -104,21 +98,21 @@ public:
 	//returns a copy of the tensor without actually copying the elements
 	auto shallow_copy() const
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("auto shallow_copy() const");
 		return make_tensor(
 				exprs::make_view(*this, this->get_shape()));
 	}
 
 	auto shallow_copy()
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("auto shallow_copy()");
 		return make_tensor(
 				exprs::make_view(*this, this->get_shape()));
 	}
 
 	const auto col(bc::size_t i) const
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("const auto col(bc::size_t i) const");
 		static_assert(ExpressionTemplate::tensor_dimension == 2,
 				"MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return slice(i);
@@ -126,7 +120,7 @@ public:
 
 	auto col(bc::size_t i)
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("auto col(bc::size_t i)");
 		static_assert(ExpressionTemplate::tensor_dimension == 2,
 				"MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return slice(i);
@@ -134,7 +128,7 @@ public:
 
 	const auto row(bc::size_t index) const
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("const auto row(bc::size_t index) const");
 		static_assert(ExpressionTemplate::tensor_dimension == 2,
 				"MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		BC_ASSERT(index >= 0 && index < this->rows(),
@@ -144,7 +138,7 @@ public:
 
 	auto row(bc::size_t index)
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("const auto row(bc::size_t index) const");
 		static_assert(ExpressionTemplate::tensor_dimension == 2,
 				"MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		BC_ASSERT(index >= 0 && index < this->rows(),
@@ -160,13 +154,13 @@ public:
 
 	const auto subblock(subblock_index index, subblock_shape shape) const
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("const auto subblock(subblock_index index, subblock_shape shape) const");
 		return make_tensor(exprs::make_chunk(*this, index, shape));
 	}
 
 	auto subblock(subblock_index index, subblock_shape shape)
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("auto subblock(subblock_index index, subblock_shape shape)");
 		return make_tensor(exprs::make_chunk(*this, index, shape));
 	}
 
@@ -185,7 +179,7 @@ public:
 	template<int X>
 	auto reshaped(bc::Dim<X> shape)
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("auto reshaped(bc::Dim<X> shape)");
 		static_assert(ExpressionTemplate::tensor_iterator_dimension <= 1,
 			"Reshape is only available to continuous tensors");
 
@@ -198,7 +192,7 @@ public:
 	template<int X>
 	const auto reshaped(bc::Dim<X> shape) const
 	{
-		BC_ASSERT_VIEWABLE
+		BC_ASSERT_ASSIGNABLE("const auto reshaped(bc::Dim<X> shape) const");
 		static_assert(ExpressionTemplate::tensor_iterator_dimension <= 1,
 			"Reshape is only available to continuous tensors");
 
@@ -225,5 +219,3 @@ public:
 	const auto flattened() const {
 		return this->reshaped(this->size());
 	}
-
-#undef BC_ASSERT_VIEWABLE

@@ -87,10 +87,17 @@ public:
 		this->fill(scalar);
 	}
 
+#define BC_ASSERT_ASSIGNABLE(literal)           \
+static_assert(                                  \
+		traits_type::is_copy_assignable::value, \
+		"ASSERT COPY ASSIGNABLE: " literal)
+
 #include "tensor_utility.h"
 #include "tensor_accessor.h"
 #include "tensor_iteralgos.h"
 #include "tensor_operations.h"
+
+#undef BC_ASSERT_ASSIGNABLE
 
 	~Tensor_Base() {
 		this->deallocate();

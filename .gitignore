@@ -30,6 +30,8 @@ BlackCat_Tensors.sln
 /include/bc_py.py
 /examples/mnist_test/mnist_test_exec_cu
 /examples/mnist_test/mnist_test_exec
+/examples/cifar10/cifar_test
+/examples/cifar10/cifar_test_cu
 /examples/mnist_test_recurrent/mnist_test_exec_cu
 /examples/mnist_test_recurrent/mnist_test_exec
 /examples/mnist_test*/mnist_test_exec*

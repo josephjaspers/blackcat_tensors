@@ -8,6 +8,9 @@
 #ifndef BLACKCAT_TENSORS_CAFFE_IMG2COL_H_
 #define BLACKCAT_TENSORS_CAFFE_IMG2COL_H_
 
+#include "../common.h"
+#include <vector>
+
 /**
  * THIS FILE HAS BEEN MODIFIED FROM ITS ORIGINAL SOURCE
  */

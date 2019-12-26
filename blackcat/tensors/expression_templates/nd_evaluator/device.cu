@@ -10,7 +10,7 @@
 #ifndef BC_MATHEMATICS_DEVICE_H_
 #define BC_MATHEMATICS_DEVICE_H_
 
-#include <cublas_v2.h>
+#include "../../../common.h"
 #include <cuda_runtime_api.h>
 #include <cuda.h>
 
@@ -19,9 +19,15 @@
 
 
 namespace bc {
+
+struct device_tag;
+
 namespace tensors {
 namespace exprs {
 namespace evaluator {
+
+template<class SystemTag>
+struct Evaluator;
 
 template<>
 struct Evaluator<device_tag> {

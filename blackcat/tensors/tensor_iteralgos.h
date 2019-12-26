@@ -68,8 +68,6 @@
 
 #define BC_ITERATOR_DEF(suffix, iterator_name, begin_func, end_func)     \
                                                                          \
-private:                                                                 \
-                                                                         \
     template<class Tensor>                                               \
     struct iterator_name {                                               \
                                                                          \
@@ -111,7 +109,6 @@ private:                                                                 \
         }                                                                \
     };                                                                   \
                                                                          \
-public:                                                                  \
                                                                          \
 template<class... params> auto suffix##iter(params... ps) const {        \
     return make_##iterator_name (*this, ps...);                          \

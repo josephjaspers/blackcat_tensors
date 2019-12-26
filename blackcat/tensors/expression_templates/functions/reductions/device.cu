@@ -9,6 +9,7 @@
 #ifndef BLACKCATTENSORS_TENSORS_FUNCTIONS_REDUCTIONS_DEVICE_REDUCE_CU_
 #define BLACKCATTENSORS_TENSORS_FUNCTIONS_REDUCTIONS_DEVICE_REDUCE_CU_
 
+#include "../../../../common.h"
 #include <cuda_runtime_api.h>
 #include <cuda.h>
 

@@ -17,6 +17,7 @@
 #include <algorithm>
 #include "img2col.h"
 #include <iostream>
+#include "../common.h"
 
 namespace bc {
 namespace caffe {

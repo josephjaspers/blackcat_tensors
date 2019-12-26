@@ -15,8 +15,8 @@
 #include "utility.h"
 #include "operations.h"
 #include "algorithms.h"
+#include "random.h"
 
-#include "random/random.h"
 #include "tensors/tensors.h"
 
 namespace bc {
