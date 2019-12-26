@@ -14,14 +14,6 @@
 #include "bind.h"
 
 namespace bc {
-
-namespace streams {
-
-	//forward declare stream for common_traits
-	template<class SystemTag>
-	class Stream;
-}
-
 namespace traits {
 
 using namespace bc::traits::common;
@@ -54,7 +46,6 @@ BCINLINE static constexpr bool false_call() { return false; }
 template<class...> using void_t = void;
 template<class...> using true_t  = true_type;
 template<class...> using false_t = false_type;
-
 
 template<bool cond>
 using truth_type = conditional_t<cond, true_type, false_type>;
@@ -117,28 +108,6 @@ using conditional_detected_t =
 
 //----------------------------------
 
-template<class Function, class voider=void>
-struct is_compileable : false_type {};
-
-template<class Function>
-struct is_compileable<Function,
-		enable_if_t<
-				true_v<
-					decltype(declval<Function>()())>
-			>
-		> : true_type {};
-
-template<class Function>
-static constexpr bool compileable(Function&&) {
-	return is_compileable<Function>::value;
-}
-template<class Function>
-static constexpr bool compileable() {
-	return is_compileable<Function>::value;
-}
-
-//----------------------------------
-
 
 template<class T>
 BCINLINE static constexpr bc::size_t  max(const T& x) { return x; }
@@ -179,8 +148,7 @@ template<template<class> class Function, class... Ts>
 static constexpr bool any_v = any<Function, Ts...>::value;
 
 template<template<class> class Function, class... Ts>
-struct none:
-	conditional_t<any<Function, Ts...>::value, false_type, true_type> {};
+struct none: truth_type<any<Function, Ts...>::value> {};
 
 template<template<class> class Function, class... Ts>
 static constexpr bool none_v = none<Function, Ts...>::value;
@@ -312,23 +280,6 @@ struct common_traits {
 			traits::conditional_detected_t<query_allocator_type, T, None>;
 	using system_tag =
 			traits::conditional_detected_t<query_system_tag, T, host_tag>;
-
-	static auto select_on_get_stream(const T& type)
-	{
-		static_assert(
-				std::is_same<system_tag, host_tag>::value ||
-						std::is_same<system_tag, device_tag>::value,
-				"SystemTag Mismatch");
-
-		return traits::constexpr_ternary<defines_get_stream::value>(
-				bc::traits::bind([](const auto& type) {
-						return type.get_stream();
-				}, type),
-				[]() {
-					return bc::streams::Stream<system_tag>();
-				}
-		);
-	}
 
 	static auto select_on_get_allocator(const T& type)
 	{

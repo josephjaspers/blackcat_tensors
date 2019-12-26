@@ -15,14 +15,9 @@ namespace bc {
 namespace tensors {
 namespace iterators {
 
-namespace detail {
-	template<class T>
-	using query_system_tag = typename T::system_tag;
-}
-
 enum direction {
-    forward = 1,
-    reverse = -1
+	forward = 1,
+	reverse = -1
 };
 
 enum initpos {
@@ -31,11 +26,11 @@ enum initpos {
 };
 
 template<class T>
-struct iterator_traits : std::iterator_traits<T> {
+struct iterator_traits: std::iterator_traits<T> {
 
 	using system_tag =
 			bc::traits::conditional_detected_t<
-			detail::query_system_tag, T, host_tag>;
+			bc::traits::query_system_tag, T, host_tag>;
 };
 
 

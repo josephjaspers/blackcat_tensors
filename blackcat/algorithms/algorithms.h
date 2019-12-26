@@ -45,7 +45,7 @@ static auto function (                                                      \
 		End end,                                                            \
 		Args... args)                                                       \
 {                                                                           \
-	return stream.enqueue([&](){std::function(begin, end, args...); });     \
+	return stream.enqueue([&](){ std::function(begin, end, args...); });    \
 }
 
 #define BC_REDUCE_ALGORITHM_DEF(function)                                 \

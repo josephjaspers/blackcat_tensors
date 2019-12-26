@@ -17,12 +17,6 @@
 namespace bc {
 namespace tensors {
 
-//aliases
-template<class... Ts>
-auto index(Ts... ts) {
-	return bc::dim(ts...);
-}
-
 template<class> class Tensor_Base;
 
 template<class ExpressionTemplate>

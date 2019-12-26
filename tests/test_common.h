@@ -10,6 +10,7 @@
 
 #include <string>
 #include "../blackcat/tensors.h"
+#include "../blackcat/shape.h"
 
 namespace bc {
 namespace tests {

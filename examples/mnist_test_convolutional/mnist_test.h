@@ -18,7 +18,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 				system_tag,
 				bc::dim(28,28,1), //input dimension
 				bc::dim(3,3),     //pool dimensions
-				bc::dim(1,1)),    //pad_dimensions, out dims == (input_dims + pad_dims*2) / krnl_dims
+				bc::dim(1,1)),    //pad_dimensions
 		bc::nn::convolution(
 				system_tag,
 				bc::dim(10, 10,1),  //input_image shape

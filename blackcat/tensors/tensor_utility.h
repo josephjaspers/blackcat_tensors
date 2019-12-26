@@ -138,13 +138,6 @@ public:
 		std::cout << std::endl;
 	}
 
-	void print_block_dimensions() const {
-		for (int i = 0; i < tensor_dimension; ++i) {
-			std::cout << "[" << this->block_dimension(i) << "]";
-		}
-		std::cout << std::endl;
-	}
-
 	friend std::ostream& operator << (
 			std::ostream& os,
 			const Tensor_Base& self) {

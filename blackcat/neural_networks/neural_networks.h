@@ -30,7 +30,6 @@
 #include "layers/output_layer.h"
 #include "layers/logging_output_layer.h"
 #include "layers/convolution.h"
-#include "layers/convolution_reference.h"
 #include "layers/max_pooling.h"
 #include "layers/flatten.h"
 #include "layers/recurrent.h"

@@ -197,7 +197,8 @@ struct Device_Atomic_Mul: Mul_Assign {
 		BC_ADVANCED_FORWARD_DEF(
 				static_assert(
 						std::is_same<void, Lv>::value,
-						"BLACKCAT_TENSORS: Atomic-reduction mul-assign is currently not available on the GPU");
+						"BLACKCAT_TENSORS: Atomic-reduction "
+						"mul-assign is currently not available on the GPU");
 	)
 } device_atomic_mul;
 
@@ -212,7 +213,8 @@ struct Device_Atomic_Div: Div_Assign {
 	BC_ADVANCED_FORWARD_DEF(
 			static_assert(
 					std::is_same<void, Lv>::value,
-					"BLACKCAT_TENSORS: Atomic-reduction div-assign is currently not available on the GPU");
+					"BLACKCAT_TENSORS: Atomic-reduction "
+					"div-assign is currently not available on the GPU");
 	)
 } device_atomic_div;
 

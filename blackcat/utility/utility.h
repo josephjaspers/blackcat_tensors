@@ -14,8 +14,7 @@ BC_DEFAULT_MODULE_BODY(utility, Utility)
 
 #include "host.h"
 #include "device.h"
-#include "any_collections.h"
-
+#include "any_map.h"
 
 #endif /* UTILITY_H_ */
 
