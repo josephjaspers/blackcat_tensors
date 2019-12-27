@@ -3,6 +3,8 @@
 #include "../datasets/mnist_loader.h"
 #include <chrono>
 #include <string>
+#include "../../blackcat/tensors/tensor_static_functions.h"
+
 
 template<class System=bc::host_tag>
 int percept_MNIST(System system_tag, std::string mnist_dataset,
@@ -13,6 +15,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	using cube           = bc::Cube<value_type, allocator_type>;
 	using mat            = bc::Matrix<value_type, allocator_type>;
 	using clock          = std::chrono::duration<double>;
+
 
 	auto network = bc::nn::neuralnetwork(
 		bc::nn::feedforward(system_tag, 784, 256, bc::nn::momentum),
@@ -34,23 +37,25 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	cube& inputs = data.first;
 	cube& outputs = data.second;
 
+	auto train = [&]() {
+		for (int i = 0; i < epochs; ++i){
+			bc::print("current epoch:", i);
+
+			for (int j = 0; j < samples/batch_size; ++j) {
+				network.forward_propagation(inputs[j]);
+				network.back_propagation(outputs[j]);
+				network.update_weights();
+			}
+		}
+	};
+
 	bc::print("training...");
 	auto start = std::chrono::system_clock::now();
-
-	for (int i = 0; i < epochs; ++i){
-		bc::print("current epoch:", i);
-
-		for (int j = 0; j < samples/batch_size; ++j) {
-			network.forward_propagation(inputs[j]);
-			network.back_propagation(outputs[j]);
-			network.update_weights();
-		}
-	}
-
+	train();
 	auto end = std::chrono::system_clock::now();
 	bc::print("training time:", clock(end - start).count());
-	bc::print("testing...");
 
+	bc::print("testing...");
 	int test_images = 10;
 	auto images = inputs[0].reshaped(28,28, batch_size);
 	mat hyps = network.predict(inputs[0]);
@@ -61,6 +66,19 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 		bc::print("------------------------------------");
 	}
 
+	//Test against training set (TODO split test/validation)
+	int correct = 0;
+	for (int i = 0; i < samples/batch_size; ++i) {
+		auto hyps = network.predict(inputs[i]);
+
+		for (int c = 0; c < hyps.cols(); ++c) {
+			if (max_index(hyps[c]) == max_index(outputs[i][c]))
+				correct++;
+		}
+	}
+
+	bc::print("Accuracy: ", correct, "/", inputs.size()/inputs.rows());
+	bc::print('%', float(correct)/(float(inputs.size())/inputs.rows()));
 	bc::print("success");
 	return 0;
 }
