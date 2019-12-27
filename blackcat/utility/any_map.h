@@ -113,9 +113,9 @@ public:
 	}
 
 	template<class K, class V, class... Args>
-	void emplace(Any_Key<K, V> key, Args&&... args) {
-		//Todo should return pair<iterator, bool> of correct type
-		m_any_map.emplace(hash(key), args...);
+	auto emplace(Any_Key<K, V> key, Args&&... args) {
+		auto result = m_any_map.emplace(hash(key), args...);
+		return std::pair<K&, bool> { *(result.first), result.second };
 	}
 
 	int empty() const { return m_any_map.empty(); }

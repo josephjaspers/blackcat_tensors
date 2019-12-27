@@ -45,16 +45,6 @@ public:
 			bool pretty=true,
 			bool sparse=false) const
 	{
-		// TODO-to_string should not copy when the memory is allocated
-		// by cudaMallocManaged. However NVCC_9.2 fails to compile
-		// the code below. Ergo, cudaManaged tensors will incur a copy
-		// even though this should not be the case.
-		//
-		//	using self_alloc_t = typename
-		//		bc::traits::common_traits<ExpressionTemplate>::allocator_type;
-		//	using is_managed = typename
-		//	bc::allocators::allocator_traits<self_alloc_t>::is_managed_memory;
-
 		using traits = exprs::expression_traits<ExpressionTemplate>;
 		using is_host = std::is_same<bc::host_tag, system_tag>;
 

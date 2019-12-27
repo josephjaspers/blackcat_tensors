@@ -28,7 +28,6 @@ struct features
 		sparse(sparse_) {}
 };
 
-//TODO
 template<class ValueType>
 static std::string format_value(const ValueType& s,  features f) {
 	std::string fstr  = !f.sparse || std::abs(s) > .1 ? std::to_string(s) : "";
@@ -43,7 +42,6 @@ static std::string format_value(const ValueType& s,  features f) {
 		}
 	}
 }
-
 
 template<class Tensor>
 std::string to_string(

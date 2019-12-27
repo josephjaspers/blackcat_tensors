@@ -61,6 +61,7 @@ int test_allocators(int sz=128) {
 
 	using allocator_type = allocator<value_type>;
 	using mat = bc::Matrix<value_type, log_allocator<allocator_type>>;
+	using vec = bc::Vector<value_type, log_allocator<allocator_type>>;
 	using system_tag = typename allocator_traits<allocator_type>::system_tag;
 
 	Stream<system_tag> stream;
@@ -83,15 +84,12 @@ int test_allocators(int sz=128) {
 		return *(b.get_allocator().total_allocated.get()) == 50 * sizeof(value_type);
 	)
 
-//TODO fix this test for MSV- causes compiler error
-#ifdef _MSV_VER
 	BC_TEST_DEF(
 		mat a(5,5);  //mem sz = 25
 		vec b(a[0]); //       = 30 (allocators should propagate from slices)
 
 		return *(b.get_allocator().total_allocated) == 30 * sizeof(value_type);
 	)
-#endif
 
 	BC_TEST_DEF(
 		mat a(5,5);  //mem sz = 25

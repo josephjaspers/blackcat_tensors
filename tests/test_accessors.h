@@ -206,6 +206,7 @@ int test_accessors(int sz=128) {
 			}
 			return false;
 	)
+
 	//assert invalid range check
 	BC_TEST_DEF(
 			try {

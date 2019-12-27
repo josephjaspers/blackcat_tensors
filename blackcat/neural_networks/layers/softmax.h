@@ -46,7 +46,6 @@ public:
 	}
 	template<class Allocator>
 	auto forward_propagation(const bc::Vector<value_type, Allocator>& x) {
-		//TODO -- convert this into an operation, need 'broadcasted' sum
 		return  bc::exp(x) / bc::tensors::sum(exp(x));
 	}
 
