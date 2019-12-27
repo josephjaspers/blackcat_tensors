@@ -18,7 +18,7 @@ public:
 		}
 
 #ifdef __CUDACC__
-		using copy_impl = bc::utility::implementation<device_tag>;
+		using copy_impl = bc::Utility<device_tag>;
 		using same_system = std::is_same<system_tag, typename Xpr::system_tag>;
 		if (std::is_same<system_tag, typename Xpr::system_tag>::value) {
 			//Ensures it only compiles when true

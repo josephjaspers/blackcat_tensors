@@ -205,8 +205,7 @@ inline void BC_cuda_assert(
 		bc::printerr("BC_CUDA_ASSERT FAILURE: ", cudaGetErrorString(code),
 				"\nfile: ", file,
 				"\nfunction: ", function,
-				"\nline: ", line,
-				"\nerror: ", msg);
+				"\nline: ", line);
 		throw code;
 	}
 }
@@ -223,8 +222,7 @@ inline void BC_cuda_assert(
 				"cublas error: ", code,
 				"\nfile: ", file,
 				"\nfunction: ", function,
-				"\nline: ", line,
-				"\nerror: ", msg);
+				"\nline: ", line);
 		throw code;
 	}
 }
@@ -252,27 +250,6 @@ inline void BC_cuda_assert(
 }
 
 #endif
-
-// todo deprecate
-// ---------------- module body macro ---------------- //
-
-#define BC_DEFAULT_MODULE_BODY(namespace_name, class_name)		\
-																\
-namespace bc { 													\
-																\
-class host_tag;													\
-class device_tag;												\
-																\
-namespace namespace_name {									   	\
-																\
-	template<class SystemTag>									\
-	class class_name;											\
-																\
-	template<class SystemTag>									\
-	using implementation = class_name<SystemTag>;				\
-																\
-	}															\
-}
 
 // ---------------- openmp macros ---------------- //
 

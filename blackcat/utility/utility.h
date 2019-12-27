@@ -10,11 +10,13 @@
 
 #include <sstream>
 
-BC_DEFAULT_MODULE_BODY(utility, Utility)
-
 #include "host.h"
 #include "device.h"
 #include "any_map.h"
+
+namespace bc {
+	using utility::Utility;
+}
 
 #endif /* UTILITY_H_ */
 

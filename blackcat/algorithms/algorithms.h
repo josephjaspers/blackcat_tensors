@@ -19,8 +19,6 @@
 #include <thrust/reduce.h>
 #endif
 
-BC_DEFAULT_MODULE_BODY(algorithms, Algorithm)
-
 namespace bc {
 namespace algorithms {
 

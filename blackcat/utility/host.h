@@ -11,6 +11,9 @@
 namespace bc {
 namespace utility {
 
+template<class SystemTag>
+struct Utility;
+
 template<>
 struct Utility<host_tag> {
 

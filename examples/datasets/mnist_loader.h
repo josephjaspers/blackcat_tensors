@@ -56,7 +56,7 @@ void read_csv_row(TensorView tensor, std::ifstream& is)
 	}
 
 	int copy_size = bc::traits::min(tensor.size(), file_data.size());
-	bc::utility::implementation<system_tag>::HostToDevice(
+	bc::Utility<system_tag>::HostToDevice(
 			tensor.data(), file_data.data(), copy_size);
 }
 

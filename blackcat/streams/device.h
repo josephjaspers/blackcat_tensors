@@ -23,7 +23,8 @@
 namespace bc {
 namespace streams {
 
-template<class> class Stream;
+template<class SystemTag>
+class Stream;
 
 template<>
 class Stream<device_tag> {

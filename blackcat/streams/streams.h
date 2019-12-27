@@ -9,9 +9,6 @@
 #define BC_CONTEXT_CONTEXT_H_
 
 #include "../common.h"
-
-BC_DEFAULT_MODULE_BODY(streams, Stream)
-
 #include "stream_synchronization.h"
 #include "host.h"
 #include "device.h"

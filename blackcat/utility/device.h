@@ -16,6 +16,8 @@
 namespace bc {
 namespace utility {
 
+template<class SystemTag>
+struct Utility;
 
 template<>
 struct Utility<device_tag> {

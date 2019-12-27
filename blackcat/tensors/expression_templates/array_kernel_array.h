@@ -125,7 +125,6 @@ public:
 		allocator.deallocate(data(), this->size());
 	}
 
-
 	//TODO remove
 	void deallocate() const {};
 

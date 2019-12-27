@@ -13,6 +13,9 @@
 namespace bc {
 namespace blas {
 
+template<class SystemTag>
+struct BLAS;
+
 template<>
 struct BLAS<device_tag> {
 

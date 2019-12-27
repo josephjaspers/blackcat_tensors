@@ -35,6 +35,10 @@ BC_EXTERN_C_END
 
 namespace bc {
 namespace blas {
+
+template<class SystemTag>
+struct BLAS;
+
 /*
  * creates a BLAS wrapper for BC_Tensors
  * -> uses generic function names but without the prefix of s/d for precision type.
