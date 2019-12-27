@@ -5,8 +5,8 @@
  *      Author: joseph
  */
 
-#ifndef TENSOR_STATIC_FUNCTIONS_H_
-#define TENSOR_STATIC_FUNCTIONS_H_
+#ifndef BC_TENSOR_STATIC_FUNCTIONS_H_
+#define BC_TENSOR_STATIC_FUNCTIONS_H_
 
 namespace bc {
 namespace tensors {
@@ -51,31 +51,44 @@ static bool all(const Tensor_Base<Expression>& tensor) {
 }
 
 template<class Expression>
-static bool any(const Tensor_Base<Expression>& tensor){
+static bool any(const Tensor_Base<Expression>& tensor) {
 	return value_sum(logical(tensor)) != 0;
 }
 
-
 template<class Expression>
-static auto max(const Tensor_Base<Expression>& tensor)
-{
-	auto max_index = bc::algorithms::max_element(
+static auto max_element(const Tensor_Base<Expression>& tensor) {
+	return bc::algorithms::max_element(
 			bc::streams::select_on_get_stream(tensor),
-			tensor.cbegin(),
-			tensor.cend());
-
-	return tensor(max_index);
+			tensor.cw_cbegin(),
+			tensor.cw_cend());
 }
 
 template<class Expression>
-static auto min(const Tensor_Base<Expression>& tensor)
-{
-	auto min_index = bc::algorithms::min_element(
+static auto min_element(const Tensor_Base<Expression>& tensor) {
+	return bc::algorithms::min_element(
 			bc::streams::select_on_get_stream(tensor),
-			tensor.cbegin(),
-			tensor.cend());
+			tensor.cw_cbegin(),
+			tensor.cw_cend());
+}
 
-	return tensor(min_index);
+template<class Expression>
+static bc::size_t max_index(const Tensor_Base<Expression>& tensor) {
+	return (max_element(tensor) - tensor.data());
+}
+
+template<class Expression>
+static bc::size_t min_index(const Tensor_Base<Expression>& tensor) {
+	return min_element(tensor) - tensor.data();
+}
+
+template<class Expression>
+static auto max(const Tensor_Base<Expression>& tensor) {
+	return tensor(max_element(tensor));
+}
+
+template<class Expression>
+static auto min(const Tensor_Base<Expression>& tensor) {
+	return tensor(min_element(tensor));
 }
 
 #endif

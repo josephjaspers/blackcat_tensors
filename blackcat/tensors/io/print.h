@@ -9,13 +9,16 @@
 #define BLACKCAT_TENSORS_TENSORS_UTILITY_PRINT_H_
 
 #include <string>
-//#include <BlackCat_TypeTraits.h>
 
 namespace bc {
 namespace tensors {
 namespace io {
 
-struct features {
+struct features
+{
+	std::size_t precision = 5;
+	bool pretty = false;
+	bool sparse = false;
 
 	features(std::size_t precision_,
 			bool pretty_=true,
@@ -23,11 +26,6 @@ struct features {
 		precision(precision_),
 		pretty(pretty_),
 		sparse(sparse_) {}
-
-
-	std::size_t precision = 5;
-	bool pretty = false;
-	bool sparse = false;
 };
 
 //TODO
@@ -48,7 +46,11 @@ static std::string format_value(const ValueType& s,  features f) {
 
 
 template<class Tensor>
-std::string to_string(const Tensor& tensor, features f, bc::traits::Integer<2>) {
+std::string to_string(
+		const Tensor& tensor,
+		features f,
+		bc::traits::Integer<2>)
+{
 	std::string s = "";
 	if (f.pretty)
 		s += "[";

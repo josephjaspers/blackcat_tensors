@@ -18,6 +18,7 @@
 #include "img2col.h"
 #include <iostream>
 #include "../common.h"
+#include "../type_traits.h"
 
 namespace bc {
 namespace caffe {

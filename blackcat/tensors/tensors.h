@@ -13,10 +13,11 @@
 #include "tensor_common.h"
 #include "tensor_base.h"
 #include "../allocator.h"
+#include "tensor_static_functions.h"
 
 namespace bc {
 namespace tensors {
-namespace detail{
+namespace detail {
 
 template<class T>
 using default_allocator = bc::Allocator<default_system_tag_t, T>;

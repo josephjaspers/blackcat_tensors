@@ -19,7 +19,6 @@ template<direction Direction, class Tensor, class enabler=void>
 struct Coefficientwise_Iterator {
 
     using Iterator = Coefficientwise_Iterator<Direction, Tensor>;
-
     using iterator_category = std::random_access_iterator_tag;
     using value_type = typename Tensor::value_type;
     using difference_type = bc::size_t;

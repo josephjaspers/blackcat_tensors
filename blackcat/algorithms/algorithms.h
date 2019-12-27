@@ -67,12 +67,54 @@ static auto function (                                                    \
 		Begin begin,                                                      \
 		End end,                                                          \
 		Args... args)                                                     \
+	{                                                                         \
+		std::decay_t<decltype(std::function(begin, end, args...))> value;     \
+		stream.enqueue([&](){ value = std::function(begin, end, args...); }); \
+		stream.sync();                                                        \
+		return value;                                                         \
+	}                                                                         \
+
+
+/**
+ * -- thrust fails to compile certain functions.
+ * /usr/local/cuda/bin/..
+ * /targets/x86_64-linux/include/thrust/iterator/detail/zip_iterator_base.h(96):
+ * error: qualifiers dropped in binding reference of type
+ * "bc::device_tag::default_floating_point_type &"
+ *
+ * Likewise functions that returns iterators in thrust may return integers
+ * in std::library (namely max_element/min_element), this will always
+ * return an iterator therefor unifying the two different interfaces
+ */
+#define BC_REDUCE_ALGORITHM_DEF_FIX_THRUST(function)                      \
+BC_IF_CUDA(                                                               \
+template<class Begin, class End, class... Args>                           \
+static auto function(                                                     \
+		bc::streams::Stream<bc::device_tag> stream,                       \
+		Begin begin,                                                      \
+		End end,                                                          \
+		Args... args)                                                     \
 {                                                                         \
-	double value = 1.0;                                                   \
-	stream.enqueue([&](){ value = std::function(begin, end, args...); }); \
-	stream.sync();                                                        \
-	return value;                                                         \
-}                                                                         \
+	static_assert(std::is_same<                                           \
+			std::random_access_iterator_tag,                              \
+			typename Begin::iterator_category>::value,                    \
+			"Assert random_access_iterator_tag");                         \
+                                                                          \
+	return thrust::function(                                              \
+			thrust::cuda::par.on(stream), &*begin, &*end, args...);       \
+})                                                                        \
+                                                                          \
+template<class Begin, class End, class... Args>                           \
+static auto function (                                                    \
+		bc::streams::Stream<bc::host_tag> stream,                         \
+		Begin begin,                                                      \
+		End end,                                                          \
+		Args... args)                                                     \
+	{                                                                     \
+		bc::streams::host_sync();                                         \
+		return &*begin + std::function(begin, end, args...);              \
+	}                                                                     \
+
 
 //---------------------------non-modifying sequences---------------------------//
 //BC_ALGORITHM_DEF(all_of)
@@ -110,10 +152,10 @@ BC_ALGORITHM_DEF(sort)
 BC_ALGORITHM_DEF(stable_sort)
 
 //--------------------------- min/max ---------------------------//
-BC_REDUCE_ALGORITHM_DEF(max)
-BC_REDUCE_ALGORITHM_DEF(max_element)
-BC_REDUCE_ALGORITHM_DEF(min)
-BC_REDUCE_ALGORITHM_DEF(min_element)
+BC_REDUCE_ALGORITHM_DEF_FIX_THRUST(max)
+BC_REDUCE_ALGORITHM_DEF_FIX_THRUST(max_element)
+BC_REDUCE_ALGORITHM_DEF_FIX_THRUST(min)
+BC_REDUCE_ALGORITHM_DEF_FIX_THRUST(min_element)
 //BC_ALGORITHM_DEF(minmax)
 BC_REDUCE_ALGORITHM_DEF(minmax_element)
 
