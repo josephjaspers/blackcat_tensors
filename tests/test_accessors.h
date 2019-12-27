@@ -194,6 +194,8 @@ int test_accessors(int sz=128) {
 
 
 	//----------------------- test valid ranges ---------------------------//
+	std::ostream* curr_error_stream = get_error_stream();
+	set_error_stream(nullptr);
 
 	//assert invalid scalar exception
 	BC_TEST_DEF(
@@ -249,6 +251,7 @@ int test_accessors(int sz=128) {
 			return false;
 	)
 
+	set_error_stream(curr_error_stream);
 	BC_TEST_BODY_TAIL
 }
 }

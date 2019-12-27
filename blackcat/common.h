@@ -118,19 +118,72 @@ using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 
 namespace bc {
 
+static std::ostream* global_output_stream = &std::cout;
+
+template<class RM_UNUSED_FUNCTION_WARNING=void>
+static void set_print_stream(std::ostream* ostream) {
+	global_output_stream = ostream;
+}
+
+template<class RM_UNUSED_FUNCTION_WARNING=void>
+static std::ostream* get_print_stream() {
+	return global_output_stream;
+}
+
+static std::ostream* global_error_output_stream = &std::cout;
+
+template<class RM_UNUSED_FUNCTION_WARNING=void>
+static void set_error_stream(std::ostream* ostream) {
+	global_error_output_stream = ostream;
+}
+
+template<class RM_UNUSED_FUNCTION_WARNING=void>
+static std::ostream* get_error_stream() {
+	return global_error_output_stream;
+}
+
+
+namespace detail {
+
+template<class T=char>
+void print_impl(std::ostream* os, const T& arg='\n') {
+	if (!os) return;
+	*os << arg << std::endl;
+}
+
+template<class T, class... Ts>
+void print_impl(std::ostream* os, const T& arg, const Ts&... args) {
+	if (!os) return;
+
+	*os << arg << " ";
+	print_impl(os, args...);
+}
+
+}
+
+template<class T=char, class... Ts>
+void print(const T& arg='c', const Ts&... args) {
+	detail::print_impl(get_print_stream(), arg, args...);
+}
+
+template<class T=char, class... Ts>
+void printerr(const T& arg='c', const Ts&... args) {
+	detail::print_impl(get_error_stream(), arg, args...);
+}
+
 template<class str_type>
 inline void bc_assert(bool condition, str_type msg, const char* file, const char* function, int line) {
-	   if (!condition) {
-			std::cout << "BC_ASSERT FAILURE: " <<
-		   "\nfile: " << file <<
-		   "\nfunction: " << function <<
-		   "\nline: " << line <<
-		   "\nerror: " << msg << std::endl;
-
-		   throw 1;
-	   }
+	if (!condition) {
+		bc::printerr("BC_ASSERT FAILURE: ",
+			"\nfile: ", file,
+			"\nfunction: ", function,
+			"\nline: ", line,
+			"\nerror: ", msg);
+		throw 1;
+	}
 }
-#define BC_ASSERT(condition, message) { bc::bc_assert(condition, message, __FILE__, __PRETTY_FUNCTION__, __LINE__); }
+#define BC_ASSERT(condition, message)\
+{ bc::bc_assert(condition, message, __FILE__, __PRETTY_FUNCTION__, __LINE__); }
 
 }
 
@@ -138,31 +191,42 @@ inline void bc_assert(bool condition, str_type msg, const char* file, const char
 #include <cublas.h>
 namespace bc {
 
-#define BC_CUDA_ASSERT(...) { BC_cuda_assert((__VA_ARGS__), __FILE__, __PRETTY_FUNCTION__, __LINE__); }
-inline void BC_cuda_assert(cudaError_t code, const char *file, const char* function, int line)
+#define BC_CUDA_ASSERT(...)\
+{ BC_cuda_assert((__VA_ARGS__), __FILE__, __PRETTY_FUNCTION__, __LINE__); }
+
+inline void BC_cuda_assert(
+		cudaError_t code,
+		const char *file,
+		const char* function,
+		int line)
 {
-   if (code != cudaSuccess)
-   {
-	   std::cout << "BC_CUDA CALL_FAILURE: " <<
-	   cudaGetErrorString(code) <<
-	   "\nfile: " << file <<
-	   "\nfunction: " << function <<
-	   "\tline: " << line << std::endl;
-	   throw code;
-   }
+	if (code != cudaSuccess)
+	{
+		bc::printerr("BC_CUDA_ASSERT FAILURE: ", cudaGetErrorString(code),
+				"\nfile: ", file,
+				"\nfunction: ", function,
+				"\nline: ", line,
+				"\nerror: ", msg);
+		throw code;
+	}
 }
 
-inline void BC_cuda_assert(cublasStatus_t code, const char *file, const char* function,  int line)
+inline void BC_cuda_assert(
+		cublasStatus_t code,
+		const char *file,
+		const char* function,
+		int line)
 {
-   if (code != CUBLAS_STATUS_SUCCESS)
-   {
-	   std::cout << "BC_CUBLAS CALL_FAILURE: " <<
-	   "cublas error: " << code <<
-	   "\nfile: " << file <<
-	   "\nfunction: " << function <<
-	   "\tline: " << line << std::endl;
-	   throw code;
-   }
+	if (code != CUBLAS_STATUS_SUCCESS)
+	{
+		bc::printerr("BC_CUBLAS CALL_FAILURE: ",
+				"cublas error: ", code,
+				"\nfile: ", file,
+				"\nfunction: ", function,
+				"\nline: ", line,
+				"\nerror: ", msg);
+		throw code;
+	}
 }
 
 
@@ -280,20 +344,6 @@ inline const char* bc_get_classname_of(const T& arg) {
 	return typeid(arg).name();
 }
 #endif
-
-//------ seperator ---------- //
-
-template<class T=char>
-void print(const T& arg='\n') {
-	std::cout << arg << std::endl;
-}
-template<class T, class... Ts>
-void print(const T& arg, const Ts&... args) {
-	std::cout << arg << " ";
-	print(args...);
-}
-
-
 }
 
 
