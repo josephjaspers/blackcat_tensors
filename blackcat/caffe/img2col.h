@@ -215,7 +215,7 @@ void im2col_nd(
 
 template <typename Dtype>
 void col2im(
-		bc::host_tag,
+		bc::Stream<bc::host_tag>,
 		const Dtype* data_col, const int channels,
 		const int height, const int width,
 		const int kernel_h, const int kernel_w,

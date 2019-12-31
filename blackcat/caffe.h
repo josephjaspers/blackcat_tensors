@@ -8,6 +8,7 @@
 #ifndef BLACKCAT_CAFFE_H_
 #define BLACKCAT_CAFFE_H_
 
+#include "algorithms.h"
 #include "caffe/caffe.h"
 
 #endif /* BLACKCAT_CAFFE_H_ */

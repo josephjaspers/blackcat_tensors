@@ -101,6 +101,12 @@ void max_pooling_backward(
 	using system_tag = typename Stream::system_tag;
 
 	stream.enqueue([=]() {
+		bc::algorithms::fill(
+				stream,
+				image.data(),
+				image.data() + image.size(),
+				0.0);
+
 		bc::caffe::MaxPoolBackward(
 				system_tag(),
 				delta.data(), mask.data(),
@@ -135,7 +141,7 @@ void im2col(
 	using system_tag = typename Stream::system_tag;
 
 	stream.enqueue([=]() {
-		 bc::caffe::im2col(
+		bc::caffe::im2col(
 				system_tag(),
 				image.data(),
 				image.dimension(2),
@@ -167,11 +173,16 @@ void col2im(
 	static_assert(Image::tensor_dimension == 3,
 			"2d Convolution expects a 3d-image input");
 
-	using system_tag = typename Stream::system_tag;
-
 	stream.enqueue([=]() {
-		 bc::caffe::col2im(
-				system_tag(),
+
+		bc::algorithms::fill(
+				stream,
+				image.data(),
+				image.data() + image.size(),
+				0.0);
+
+		bc::caffe::col2im(
+				stream,
 				col_image.data(),
 				image.dimension(2),
 				image.dimension(1), image.dimension(0),

@@ -118,10 +118,10 @@ std::string to_string(const Tensor& tensor, features f, bc::traits::Integer<X>) 
 	if (f.pretty)
 		s += '[';
 
-	for (auto it = tensor.nd_begin(); it != tensor.nd_end(); ++it) {
+	for (auto it = tensor.begin(); it != tensor.end(); ++it) {
 		s += to_string(*it, f, bc::traits::Integer<X-1>());
 
-		if (it != tensor.nd_end() - 1)
+		if (it != tensor.end() - 1)
 			s += '\n';
 	}
 

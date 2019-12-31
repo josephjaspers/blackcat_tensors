@@ -152,7 +152,10 @@ BLACKCAT_FUNCTOR_DEF(Logistic, logistic, (1 / (1 + std::exp(-x))),
 		DERIVATIVE_DEF(Logistic::apply(x) * (1 - Logistic::apply(x)))
 		DERIVATIVE_CACHED_DEF(x * (1 - x)));
 
-BLACKCAT_FUNCTOR_DEF(Relu, relu, bc::traits::max(0, x), DERIVATIVE_DEF(x > 0 ? 1 : 0));
+BLACKCAT_FUNCTOR_DEF(Relu, relu, bc::traits::max(0, x),
+		DERIVATIVE_DEF(x > 0 ? 1 : 0)
+		DERIVATIVE_CACHED_DEF(x))
+
 BLACKCAT_FUNCTOR_DEF(Logical, logical, x != 0 ? 1 : 0);
 BLACKCAT_FUNCTOR_DEF(SoftPlus, softplus, std::log(1 + std::exp(x)), DERIVATIVE_DEF(Logistic::apply(x)))
 BLACKCAT_FUNCTOR_DEF(Mish, mish,

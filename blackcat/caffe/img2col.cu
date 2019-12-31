@@ -281,7 +281,7 @@ __global__ void col2im_gpu_kernel(const int n, const Dtype* data_col,
 }
 
 template <typename Dtype>
-void col2im(bc::device_tag, const Dtype* data_col, const int channels,
+void col2im(bc::Stream<bc::device_tag> stream, const Dtype* data_col, const int channels,
 		const int height, const int width, const int kernel_h, const int kernel_w,
 		const int pad_h, const int pad_w, const int stride_h,
 		const int stride_w, const int dilation_h, const int dilation_w,
@@ -294,8 +294,8 @@ void col2im(bc::device_tag, const Dtype* data_col, const int channels,
 	// To avoid involving atomic operations, we will launch one kernel per
 	// bottom dimension, and then in the kernel add up the top dimensions.
 	// NOLINT_NEXT_LINE(whitespace/operators)
-	col2im_gpu_kernel<Dtype><<<CAFFE_GET_BLOCKS(num_kernels),
-														 CAFFE_CUDA_NUM_THREADS>>>(
+	col2im_gpu_kernel<Dtype><<<
+			CAFFE_GET_BLOCKS(num_kernels), CAFFE_CUDA_NUM_THREADS, 0, stream>>>(
 			num_kernels, data_col, height, width, channels, kernel_h, kernel_w,
 			pad_h, pad_w, stride_h, stride_w, dilation_h, dilation_w,
 			height_col, width_col, data_im);

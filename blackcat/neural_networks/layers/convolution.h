@@ -260,13 +260,13 @@ auto recurrent_convolution(
 
 
 template<
-		class SystemTag=BLACKCAT_DEFAULT_SYSTEM_T,
-		class Optimizer=nn_default_optimizer_type>
+		class SystemTag,
+		class Optimizer>
 auto convolution(
 		SystemTag system_tag,
 		Dim<3> img_dims,
 		Dim<3> krnl_dims,
-		Optimizer=Optimizer(),
+		Optimizer,
 		Dim<2> padding=Dim<2>().fill(0),
 		Dim<2> strides=Dim<2>().fill(1),
 		Dim<2> dilation=Dim<2>().fill(1))
@@ -285,13 +285,13 @@ auto convolution(
 
 
 template<
-		class SystemTag=BLACKCAT_DEFAULT_SYSTEM_T,
-		class Optimizer=nn_default_optimizer_type>
+		class SystemTag,
+		class Optimizer>
 auto recurrent_convolution(
 		SystemTag system_tag,
 		Dim<3> img_dims,
 		Dim<3> krnl_dims,
-		Optimizer=Optimizer(),
+		Optimizer,
 		Dim<2> padding=Dim<2>().fill(0),
 		Dim<2> strides=Dim<2>().fill(1),
 		Dim<2> dilation=Dim<2>().fill(1))
