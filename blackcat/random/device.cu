@@ -26,8 +26,8 @@ namespace device_impl {
 __global__
 static void bc_curand_init(curandState_t* state) {
 
-	int i = blockIdx.x * blockDim.x + threadIdx.x;
-	if (i==0)
+	int i = blockIdx.x + blockDim.x + threadIdx.x;
+	if (!state && i==0)
 		curand_init(0,0,0,state);
 }
 
