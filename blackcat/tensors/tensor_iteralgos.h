@@ -111,17 +111,16 @@
                                                                          \
                                                                          \
 template<class... params> auto suffix##iter(params... ps) const {        \
-    return make_##iterator_name (*this, ps...);                          \
+    return iterator_name<const self_type>(*this, ps...);                 \
 }                                                                        \
                                                                          \
 template<class... params> auto suffix##iter(params... ps) {              \
-    return make_##iterator_name (*this, ps...);                          \
+    return iterator_name<self_type>(*this, ps...);                       \
 }                                                                        \
                                                                          \
 template<class... params> auto suffix##const_iter(params... ps) const {  \
-    return make_##iterator_name (*this, ps...);                          \
+    return iterator_name<const self_type>(*this, ps...);                 \
 }                                                                        \
-
 
 BC_ITERATOR_DEF(,nd_iterator_type, begin, end)
 BC_ITERATOR_DEF(reverse_, nd_reverse_iterator_type, rbegin, rend)

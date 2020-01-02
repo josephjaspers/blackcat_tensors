@@ -16,10 +16,10 @@ namespace tensors {
 namespace iterators {
 
 template<direction direction, class Tensor>
-struct Multidimal_Iterator {
+struct Multidimensional_Iterator {
 
-    using self = Multidimal_Iterator<direction, Tensor>;
-    using Iterator = Multidimal_Iterator<direction, Tensor>;
+    using self = Multidimensional_Iterator<direction, Tensor>;
+    using Iterator = Multidimensional_Iterator<direction, Tensor>;
     using iterator_category = std::random_access_iterator_tag;
     using value_type = decltype(std::declval<Tensor>().slice(0));
     using difference_type = int;
@@ -28,7 +28,7 @@ struct Multidimal_Iterator {
     Tensor& tensor;
     bc::size_t  index;
 
-    BCINLINE Multidimal_Iterator(Tensor& tensor_, bc::size_t  index_=0) :
+    BCINLINE Multidimensional_Iterator(Tensor& tensor_, bc::size_t  index_=0) :
 			tensor(tensor_), index(index_) {}
 
 #define BC_ND_Iter_Compare(sign, rev)                          \
@@ -88,22 +88,22 @@ struct Multidimal_Iterator {
 
 template<class Tensor>
 auto iter_begin(Tensor& derived) {
-	return Multidimal_Iterator<direction::forward, Tensor>(derived, 0);
+	return Multidimensional_Iterator<direction::forward, Tensor>(derived, 0);
 }
 
 template<class Tensor>
 auto iter_end(Tensor& derived) {
-	return Multidimal_Iterator<direction::forward, Tensor>(derived, derived.outer_dim());
+	return Multidimensional_Iterator<direction::forward, Tensor>(derived, derived.outer_dim());
 }
 
 template<class Tensor>
 auto iter_rbegin(Tensor& derived) {
-	return Multidimal_Iterator<direction::reverse, Tensor>(derived, derived.outer_dim()-1);
+	return Multidimensional_Iterator<direction::reverse, Tensor>(derived, derived.outer_dim()-1);
 }
 
 template<class Tensor>
 auto iter_rend(Tensor& derived) {
-	return Multidimal_Iterator<direction::reverse, Tensor>(derived, -1);
+	return Multidimensional_Iterator<direction::reverse, Tensor>(derived, -1);
 }
 
 }
