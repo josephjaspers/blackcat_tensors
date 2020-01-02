@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef tensor_iterator_dimension_H_
-#define tensor_iterator_dimension_H_
+#ifndef tensor_iterator_dim_H_
+#define tensor_iterator_dim_H_
 
 #include "common.h"
 
@@ -16,10 +16,10 @@ namespace tensors {
 namespace iterators {
 
 template<direction direction, class Tensor>
-struct Multidimensional_Iterator {
+struct Multidimal_Iterator {
 
-    using self = Multidimensional_Iterator<direction, Tensor>;
-    using Iterator = Multidimensional_Iterator<direction, Tensor>;
+    using self = Multidimal_Iterator<direction, Tensor>;
+    using Iterator = Multidimal_Iterator<direction, Tensor>;
     using iterator_category = std::random_access_iterator_tag;
     using value_type = decltype(std::declval<Tensor>().slice(0));
     using difference_type = int;
@@ -28,7 +28,7 @@ struct Multidimensional_Iterator {
     Tensor& tensor;
     bc::size_t  index;
 
-    BCINLINE Multidimensional_Iterator(Tensor& tensor_, bc::size_t  index_=0) :
+    BCINLINE Multidimal_Iterator(Tensor& tensor_, bc::size_t  index_=0) :
 			tensor(tensor_), index(index_) {}
 
 #define BC_ND_Iter_Compare(sign, rev)                          \
@@ -88,26 +88,26 @@ struct Multidimensional_Iterator {
 
 template<class Tensor>
 auto iter_begin(Tensor& derived) {
-	return Multidimensional_Iterator<direction::forward, Tensor>(derived, 0);
+	return Multidimal_Iterator<direction::forward, Tensor>(derived, 0);
 }
 
 template<class Tensor>
 auto iter_end(Tensor& derived) {
-	return Multidimensional_Iterator<direction::forward, Tensor>(derived, derived.outer_dimension());
+	return Multidimal_Iterator<direction::forward, Tensor>(derived, derived.outer_dim());
 }
 
 template<class Tensor>
 auto iter_rbegin(Tensor& derived) {
-	return Multidimensional_Iterator<direction::reverse, Tensor>(derived, derived.outer_dimension()-1);
+	return Multidimal_Iterator<direction::reverse, Tensor>(derived, derived.outer_dim()-1);
 }
 
 template<class Tensor>
 auto iter_rend(Tensor& derived) {
-	return Multidimensional_Iterator<direction::reverse, Tensor>(derived, -1);
+	return Multidimal_Iterator<direction::reverse, Tensor>(derived, -1);
 }
 
 }
 }
 }
 
-#endif /* tensor_iterator_dimension_H_ */
+#endif /* tensor_iterator_dim_H_ */

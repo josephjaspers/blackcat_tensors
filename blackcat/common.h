@@ -163,12 +163,12 @@ void print_impl(std::ostream* os, const T& arg, const Ts&... args) {
 
 template<class T=char, class... Ts>
 void print(const T& arg='c', const Ts&... args) {
-	detail::print_impl(get_print_stream(), arg, args...);
+	bc::detail::print_impl(get_print_stream(), arg, args...);
 }
 
 template<class T=char, class... Ts>
 void printerr(const T& arg='c', const Ts&... args) {
-	detail::print_impl(get_error_stream(), arg, args...);
+	bc::detail::print_impl(get_error_stream(), arg, args...);
 }
 
 template<class str_type>

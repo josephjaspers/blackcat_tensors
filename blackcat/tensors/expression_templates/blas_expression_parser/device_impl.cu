@@ -26,7 +26,7 @@ struct get_value_impl<T*, void> {
     }
 };
 template<class T>
-struct get_value_impl<T, std::enable_if_t<T::tensor_dimension==0>>  {
+struct get_value_impl<T, std::enable_if_t<T::tensor_dim==0>>  {
 	__device__
 	static auto impl(T scalar) -> decltype(scalar[0]) {
         return scalar[0];

@@ -39,7 +39,7 @@ template<typename T> __global__  static void eval2d(T t) {
 }
 template<typename T> __global__ static void eval3d(T t) {
     int k = blockIdx.x * blockDim.x + threadIdx.x;
-    for (; k < t.dimension(2); k += blockDim.x * gridDim.x) {
+    for (; k < t.dim(2); k += blockDim.x * gridDim.x) {
 
     	int n = blockIdx.y * blockDim.y + threadIdx.y;
         for (; n < t.cols(); n += blockDim.y * gridDim.y) {
@@ -54,10 +54,10 @@ template<typename T> __global__ static void eval3d(T t) {
 //dont know how to do this
 template<typename T> __global__ static void eval4d(T t) {
     int l = blockIdx.x * blockDim.x + threadIdx.x;
-    for (; l < t.dimension(3); l += blockDim.x * gridDim.x) {
+    for (; l < t.dim(3); l += blockDim.x * gridDim.x) {
 
         int k = blockIdx.y * blockDim.y + threadIdx.y;
-        for (;k < t.dimension(2); k += blockDim.y * gridDim.y) {
+        for (;k < t.dim(2); k += blockDim.y * gridDim.y) {
 
             int n = blockIdx.z * blockDim.z + threadIdx.z;
             for (; n < t.cols(); n += blockDim.z * gridDim.z) {
@@ -72,17 +72,17 @@ template<typename T> __global__ static void eval4d(T t) {
 //don't know how to do this
 template<typename T> __global__ static void eval5d(T t) {
     int p = blockIdx.z * blockDim.x + threadIdx.x;
-    for (; p < t.dimension(4); p += blockDim.x * gridDim.x) {
+    for (; p < t.dim(4); p += blockDim.x * gridDim.x) {
 
         int l = blockIdx.y * blockDim.y + threadIdx.y;
-        for (; l < t.dimension(3); l += blockDim.y * gridDim.y) {
+        for (; l < t.dim(3); l += blockDim.y * gridDim.y) {
 
             int k = blockIdx.x * blockDim.z + threadIdx.z;
-            for (; k < t.dimension(2); k += blockDim.z * gridDim.z) {
+            for (; k < t.dim(2); k += blockDim.z * gridDim.z) {
 
-                for (int n = 0; n < t.dimension(1); ++n) {
+                for (int n = 0; n < t.dim(1); ++n) {
 
-                    for (int m = 0; m < t.dimension(0); ++m) {
+                    for (int m = 0; m < t.dim(0); ++m) {
                         t(p, l, k, n, m);
                     }
                 }

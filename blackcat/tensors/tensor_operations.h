@@ -22,7 +22,7 @@ public:
 	template<class Xpr> BCHOT
 	self_type& operator = (const Tensor_Base<Xpr>& param)
 	{
-		static_assert(tensor_dimension >= Xpr::tensor_dimension,
+		static_assert(tensor_dim >= Xpr::tensor_dim,
 				"BlackCat_Tensors: Operator= is not "
 					"a valid operation for (reduction) broadcasting");
 		BC_ASSERT_ASSIGNABLE(
@@ -40,7 +40,7 @@ public:
                 "operator " #op "(const Tensor_Base<Xpr>& param)");        \
         assert_valid(param);                                               \
         using operation = std::conditional_t<                              \
-                (tensor_dimension >= Xpr::tensor_dimension),               \
+                (tensor_dim >= Xpr::tensor_dim),               \
                     oper::op_functor##_Assign,                             \
                     oper::Atomic_##op_functor<system_tag>>;                \
         evaluate(bi_expr< operation >(param));                             \
@@ -88,7 +88,7 @@ public:
 
 #define BC_BASIC_COEFFICIENTWISE_DEF(op, op_functor)       \
     template<class Xpr>                                    \
-    auto op (const Tensor_Base<Xpr>& param) const    \
+    auto op (const Tensor_Base<Xpr>& param) const          \
     {                                                      \
         assert_valid(param);                               \
         return bi_expr< oper:: op_functor >(param);        \
@@ -151,24 +151,24 @@ public:
 		constexpr bool rv_trans = rv_blas_traits::is_transposed::value;
 
 		constexpr bool scalmul =
-				tensor_dimension == 0 || Xpr::tensor_dimension == 0;
+				tensor_dim == 0 || Xpr::tensor_dim == 0;
 		constexpr bool gemm =
-				tensor_dimension == 2 && Xpr::tensor_dimension == 2;
+				tensor_dim == 2 && Xpr::tensor_dim == 2;
 		constexpr bool gemv =
-				tensor_dimension == 2 && Xpr::tensor_dimension == 1;
+				tensor_dim == 2 && Xpr::tensor_dim == 1;
 		constexpr bool ger =
-				tensor_dimension == 1 && Xpr::tensor_dimension == 1 &&
+				tensor_dim == 1 && Xpr::tensor_dim == 1 &&
 				!lv_trans && rv_trans;
 		constexpr bool dot =
-				tensor_dimension == 1 && Xpr::tensor_dimension == 1 &&
+				tensor_dim == 1 && Xpr::tensor_dim == 1 &&
 				!lv_trans && !rv_trans;
 
 		using matmul_t =
-					 std::conditional_t<scalmul, oper::Scalar_Mul,
-					 std::conditional_t<gemm, oper::gemm<system_tag>,
-					 std::conditional_t<gemv, oper::gemv<system_tag>,
-					 std::conditional_t<ger,  oper::ger<system_tag>,
-					 std::conditional_t<dot,  oper::dot<system_tag>, void>>>>>;
+					std::conditional_t<scalmul, oper::Scalar_Mul,
+					std::conditional_t<gemm, oper::gemm<system_tag>,
+					std::conditional_t<gemv, oper::gemv<system_tag>,
+					std::conditional_t<ger,  oper::ger<system_tag>,
+					std::conditional_t<dot,  oper::dot<system_tag>, void>>>>>;
 
 		static_assert(!std::is_void<matmul_t>::value,
 				"INVALID USE OF OPERATOR *");
@@ -273,10 +273,10 @@ private:
 	template<class Xpr>
 	bool valid_slice(const Tensor_Base<Xpr>& tensor) const {
 		constexpr bc::size_t min_dim =
-			traits::min(tensor_dimension, Xpr::tensor_dimension);
+			traits::min(tensor_dim, Xpr::tensor_dim);
 
 		for (int i = 0; i < min_dim; ++i)
-			if (tensor.dimension(i) != this->dimension(i))
+			if (tensor.dim(i) != this->dim(i))
 				return false;
 		return true;
 	}
@@ -285,12 +285,12 @@ private:
 	bool error_message(const Tensor_Base<deriv>& tensor) const {
 		throw std::invalid_argument(
 				"Tensor by Tensor operation - size mismatch - "
-				"\nthis->tensor_dimension =" +
-						std::to_string(tensor_dimension) +
+				"\nthis->tensor_dim =" +
+						std::to_string(tensor_dim) +
 				"\nthis->size() =" + std::to_string(this->size()) +
 				"\nthis_dims:" + this->inner_shape().to_string() +
-				"\nparam->tensor_dimension =" +
-						std::to_string(deriv::tensor_dimension) +
+				"\nparam->tensor_dim =" +
+						std::to_string(deriv::tensor_dim) +
 				"\nparam.size() =" + std::to_string(tensor.size()) +
 				"\nparam_dims:" + tensor.inner_shape().to_string()
 		);
@@ -301,13 +301,13 @@ private:
 		static_assert(std::is_same<system_tag, typename Xpr::system_tag>::value,
 				"Tensor arguments must have compatible (same) system_tags");
 
-		bool scalar_op = tensor_dimension == 0 || Xpr::tensor_dimension == 0;
-		bool same_dimension = tensor_dimension == Xpr::tensor_dimension;
-		bool same_size = this->size() == tensor.size();
+		bool scalar_op = tensor_dim == 0 || Xpr::tensor_dim == 0;
+		bool same_dim = tensor_dim == Xpr::tensor_dim;
+		bool same_shape = this->inner_shape() != tensor.inner_shape();
 
 		if (!scalar_op) {
-			if (same_dimension) {
-				if (!same_size)
+			if (same_dim) {
+				if (same_shape)
 					error_message(tensor);
 			} else if (!valid_slice(tensor)) {
 				error_message(tensor);

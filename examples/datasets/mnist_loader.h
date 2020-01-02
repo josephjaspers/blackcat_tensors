@@ -15,7 +15,7 @@ namespace bc {
 template<class TensorView>
 void read_as_one_hot(TensorView tensor, std::ifstream& is)
 {
-	if (TensorView::tensor_dimension != 1)
+	if (TensorView::tensor_dim != 1)
 		throw std::invalid_argument("one_hot only supported by vectors");
 
 	tensor.zero();

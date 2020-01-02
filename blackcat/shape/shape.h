@@ -21,7 +21,7 @@ struct Shape {
 	template<int>
 	friend struct Shape;
 
-	static constexpr int tensor_dimension = N;
+	static constexpr int tensor_dim = N;
 	using size_t = bc::size_t;
 	using value_type = size_t;
 
@@ -80,9 +80,9 @@ public:
 	BCINLINE size_t size() const { return m_inner_shape.size(); }
 	BCINLINE size_t rows() const { return m_inner_shape[0]; }
 	BCINLINE size_t cols() const { return m_inner_shape[1]; }
-	BCINLINE size_t dimension(int i) const { return m_inner_shape.dimension(i); }
-	BCINLINE size_t outer_dimension() const { return m_inner_shape.outer_dimension(); }
-	BCINLINE size_t leading_dimension(int i) const { return i < N ? m_block_shape[i] : 0; }
+	BCINLINE size_t dim(int i) const { return m_inner_shape.dim(i); }
+	BCINLINE size_t outer_dim() const { return m_inner_shape.outer_dim(); }
+	BCINLINE size_t leading_dim(int i) const { return i < N ? m_block_shape[i] : 0; }
 	BCINLINE bool operator == (const Shape& other) const {
 		return m_inner_shape ==other.m_inner_shape;
 	}
@@ -104,7 +104,7 @@ public:
 	size_t dims_to_index(const Dim<D>& var) const {
 		size_t index = var[D-1];
 		for(int i = 1; i < N; ++i) {
-			index += leading_dimension(i) * var[D-1-i];
+			index += leading_dim(i) * var[D-1-i];
 		}
 		return index;
 	}
@@ -116,7 +116,7 @@ struct Shape<0> {
 	using size_t = bc::size_t;
 	using value_type = size_t;
 
-	static constexpr int tensor_dimension = 0;
+	static constexpr int tensor_dim = 0;
 
 	template<int>
 	friend struct Shape;
@@ -133,9 +133,9 @@ struct Shape<0> {
 	BCINLINE size_t size() const { return 1; }
 	BCINLINE size_t rows() const { return 1; }
 	BCINLINE size_t cols() const { return 1; }
-	BCINLINE size_t dimension(int i) const { return 1; }
-	BCINLINE size_t outer_dimension() const { return 1; }
-	BCINLINE size_t leading_dimension(int i) const { return 0; }
+	BCINLINE size_t dim(int i) const { return 1; }
+	BCINLINE size_t outer_dim() const { return 1; }
+	BCINLINE size_t leading_dim(int i) const { return 0; }
 	BCINLINE bool operator == (const Shape& other) const { return true; }
 	BCINLINE
 	size_t coefficientwise_dims_to_index(size_t i) const {
@@ -154,7 +154,7 @@ struct Shape<1> {
 	using size_t = bc::size_t;
 	using value_type = size_t;
 
-	static constexpr int tensor_dimension = 1;
+	static constexpr int tensor_dim = 1;
 
 	template<int>
 	friend struct Shape;
@@ -178,13 +178,13 @@ public:
 	Shape(int length):
 		m_inner_shape { length } {}
 
-	BCINLINE size_t operator [] (size_t i) const { return dimension(i); }
+	BCINLINE size_t operator [] (size_t i) const { return dim(i); }
 	BCINLINE size_t size() const { return m_inner_shape[0]; }
 	BCINLINE size_t rows() const { return m_inner_shape[0]; }
 	BCINLINE size_t cols() const { return 1; }
-	BCINLINE size_t dimension(size_t i) const { return i == 0 ? m_inner_shape[0] : 1; }
-	BCINLINE size_t outer_dimension() const { return m_inner_shape[0]; }
-	BCINLINE size_t leading_dimension(size_t i) const { return i == 0 ? 1 : 0; }
+	BCINLINE size_t dim(size_t i) const { return i == 0 ? m_inner_shape[0] : 1; }
+	BCINLINE size_t outer_dim() const { return m_inner_shape[0]; }
+	BCINLINE size_t leading_dim(size_t i) const { return i == 0 ? 1 : 0; }
 	BCINLINE const auto& inner_shape() const { return m_inner_shape; }
 	BCINLINE bool operator == (const Shape<1>& other) const { return rows() == other.rows(); }
 
@@ -206,14 +206,14 @@ public:
 
 struct Strided_Vector_Shape {
 
-	static constexpr int tensor_dimension = 1;
+	static constexpr int tensor_dim = 1;
 
 	bc::Dim<1> m_inner_shape = {0};
 	bc::Dim<1> m_block_shape = {1};
 
-	BCINLINE Strided_Vector_Shape(size_t length, size_t leading_dimension) {
+	BCINLINE Strided_Vector_Shape(size_t length, size_t leading_dim) {
 		m_inner_shape[0] = length;
-		m_block_shape[0] = leading_dimension;
+		m_block_shape[0] = leading_dim;
 	}
 
 	BCINLINE bool operator == (const Strided_Vector_Shape& other) const {
@@ -225,13 +225,13 @@ struct Strided_Vector_Shape {
 		return shape.rows() == other.rows();
 	}
 
-	BCINLINE size_t operator [] (size_t idx) const { return dimension(idx); }
+	BCINLINE size_t operator [] (size_t idx) const { return dim(idx); }
 	BCINLINE size_t size() const { return m_inner_shape[0]; }
 	BCINLINE size_t rows() const { return m_inner_shape[0]; }
 	BCINLINE size_t cols() const { return 1; }
-	BCINLINE size_t dimension(int i) const { return i == 0 ? m_inner_shape[0] : 1; }
-	BCINLINE size_t outer_dimension() const { return m_inner_shape[0]; }
-	BCINLINE size_t leading_dimension(int i) const { return i == 0 ? m_block_shape[0] : 0; }
+	BCINLINE size_t dim(int i) const { return i == 0 ? m_inner_shape[0] : 1; }
+	BCINLINE size_t outer_dim() const { return m_inner_shape[0]; }
+	BCINLINE size_t leading_dim(int i) const { return i == 0 ? m_block_shape[0] : 0; }
 	BCINLINE const auto& inner_shape() const { return m_inner_shape; }
 
 	template<class... Integers>
@@ -256,7 +256,7 @@ BCINLINE auto shape(Integers... ints) {
 
 template<class InnerShape, typename=std::enable_if_t<!traits::sequence_of_v<size_t, InnerShape>>>
 BCINLINE auto shape(InnerShape is) {
-	return Shape<InnerShape::tensor_dimension>(is);
+	return Shape<InnerShape::tensor_dim>(is);
 }
 
 }

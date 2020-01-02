@@ -65,7 +65,7 @@ Repetitions: 10
 
 BC time represents the performance of bc::Matrix<double>.  
 The baseline time is performance of the hardcoded implementation.  
-Matrices are of dimension size*size. 
+Matrices are of dim size*size. 
 
 Operation: `y = w * x + b`  
 Repetitions: 100

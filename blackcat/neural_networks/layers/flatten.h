@@ -28,17 +28,17 @@ struct Flatten:
 	using parent_type = Layer_Base<self_type>;
 
 	using greedy_evaluate_delta = std::true_type;
-	using input_tensor_dimension = InputTensorDimension;
-	using output_tensor_dimension = bc::traits::Integer<1>;
+	using input_tensor_dim = InputTensorDimension;
+	using output_tensor_dim = bc::traits::Integer<1>;
 	using defines_single_predict = std::true_type;
 
 private:
 
-	Dim<input_tensor_dimension::value> m_input_shape;
+	Dim<input_tensor_dim::value> m_input_shape;
 
 public:
 
-	Flatten(bc::Dim<input_tensor_dimension::value> input_shape):
+	Flatten(bc::Dim<input_tensor_dim::value> input_shape):
 		parent_type(__func__, input_shape.size(), input_shape.size()),
 		m_input_shape(input_shape) {}
 

@@ -292,7 +292,7 @@ void col2im(bc::Stream<bc::device_tag> stream, const Dtype* data_col, const int 
 			stride_w + 1;
 	int num_kernels = channels * height * width;
 	// To avoid involving atomic operations, we will launch one kernel per
-	// bottom dimension, and then in the kernel add up the top dimensions.
+	// bottom dim, and then in the kernel add up the top dims.
 	// NOLINT_NEXT_LINE(whitespace/operators)
 	col2im_gpu_kernel<Dtype><<<
 			CAFFE_GET_BLOCKS(num_kernels), CAFFE_CUDA_NUM_THREADS, 0, stream>>>(
@@ -335,7 +335,7 @@ __global__ void col2im_nd_gpu_kernel(const int n, const Dtype* data_col,
 		// Initialize channel_in, computed in the loop below, with intermediate
 		// computations used to compute the spatial indices.
 		int c_im = index;
-		// Calculate d_im (image dimensions).
+		// Calculate d_im (image dims).
 		for (int i = num_axes - 1; i >= 0; --i) {
 			d_im[i] = c_im % shared_im_shape[i + 1] + shared_pad[i];
 			c_im /= shared_im_shape[i + 1];
@@ -351,7 +351,7 @@ __global__ void col2im_nd_gpu_kernel(const int n, const Dtype* data_col,
 			d_col_end[i] =
 					bc::traits::min(d_im[i] / shared_stride[i] + 1, shared_col_shape[i + 1]);
 			if (d_col_start[i] >= d_col_end[i]) {
-				// Skip computation if the dimension is 0 at any spatial axis --
+				// Skip computation if the dim is 0 at any spatial axis --
 				// final val will be 0.
 				data_im[index] = 0;
 				done = true;

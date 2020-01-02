@@ -54,7 +54,7 @@ public:
 	}
 
 	Array() {
-		if (Shape::tensor_dimension == 0) {
+		if (Shape::tensor_dim == 0) {
 			this->m_data = get_allocator().allocate(1);
 		}
 	}
@@ -79,7 +79,7 @@ public:
 		array.m_data = nullptr;
 	}
 
-	Array(bc::Dim<shape_type::tensor_dimension> shape):
+	Array(bc::Dim<shape_type::tensor_dim> shape):
 		parent_type(shape, get_allocator()) {}
 
 	Array(shape_type shape):
@@ -89,7 +89,7 @@ public:
 		class... ShapeDims,
 		class=std::enable_if_t<
 			traits::sequence_of_v<bc::size_t, ShapeDims...> &&
-			sizeof...(ShapeDims) == Shape::tensor_dimension>>
+			sizeof...(ShapeDims) == Shape::tensor_dim>>
 	Array(const ShapeDims&... shape_dims):
 		parent_type(shape_type(shape_dims...), get_allocator()) {}
 
@@ -112,7 +112,7 @@ public:
 	}
 
 	//If Copy-constructing from a slice, attempt to query the allocator
-	//Restrict to same value_type (obviously), same dimensions (for fast-copy)
+	//Restrict to same value_type (obviously), same dims (for fast-copy)
 	template<class AltShape, class... SliceTags>
 	Array(
 			const Array_Slice<

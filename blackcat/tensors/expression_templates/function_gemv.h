@@ -29,14 +29,14 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
 			typename rv::value_type>::value,
 			"GEMV arguments must have the same value_type");
 
-	static_assert(lv::tensor_dimension == 2 && rv::tensor_dimension == 1,
+	static_assert(lv::tensor_dim == 2 && rv::tensor_dim == 1,
 			"Lv must be a Matrix and Rv must be a Vector");
 
 	using value_type = typename lv::value_type;
 	using system_tag = System_Tag;
 
-	static constexpr int tensor_dimension = 1;
-	static constexpr int tensor_iterator_dimension = 1;
+	static constexpr int tensor_dim = 1;
+	static constexpr int tensor_iterator_dim = 1;
 
 	lv left;
 	rv right;
@@ -51,13 +51,13 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
 	 }
 
 	BCINLINE bc::size_t size() const { return left.rows(); }
-	BCINLINE bc::size_t dimension(int i) const { return i == 0 ? left.rows() : 1; }
-	BCINLINE bc::size_t rows() const { return dimension(0); }
-	BCINLINE bc::size_t cols() const { return dimension(1); }
+	BCINLINE bc::size_t dim(int i) const { return i == 0 ? left.rows() : 1; }
+	BCINLINE bc::size_t rows() const { return dim(0); }
+	BCINLINE bc::size_t cols() const { return dim(1); }
 
 	template<class core, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<core, Alpha, Beta> output, Stream stream) const {
-		static_assert(core::tensor_dimension==1, "Gemv out must be a vector");
+		static_assert(core::tensor_dim==1, "Gemv out must be a vector");
 
 		using self_t = Binary_Expression<oper::gemv<System_Tag>, lv, rv>;
 		using traits = blas_expression_traits<self_t>;
@@ -72,14 +72,14 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
 
 		auto& out = output.data();
 
-		//gemv uses the [m,n] to refer to dimension ignoring op(A)
+		//gemv uses the [m,n] to refer to dim ignoring op(A)
 		//http://www.netlib.org/lapack/explore-html/d6/d30/group__single__blas__level2_gafc92361b74c6d41c7e5afa0aa5d13ec9.html#gafc92361b74c6d41c7e5afa0aa5d13ec9
 		bc::blas::BLAS<system_tag>::gemv(
 				stream, transA, A.rows(), A.cols(),
-				alpha.data(), A.data(), A.leading_dimension(1),
-				X.data(), X.leading_dimension(0)/*inc_X*/,
+				alpha.data(), A.data(), A.leading_dim(1),
+				X.data(), X.leading_dim(0)/*inc_X*/,
 				beta.data(),
-				out.data()/*Y*/, out.leading_dimension(0)/*incy*/);
+				out.data()/*Y*/, out.leading_dim(0)/*incy*/);
 
 		traits::post_parse_expression_evaluation(stream, contents);
 	}

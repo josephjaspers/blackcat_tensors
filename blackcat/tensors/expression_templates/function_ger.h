@@ -29,16 +29,16 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 					typename rv::value_type>::value,
 			"GER arguments must have the same value_type");
 
-	static_assert(lv::tensor_dimension == 1 &&
-			rv::tensor_dimension == 1 &&
+	static_assert(lv::tensor_dim == 1 &&
+			rv::tensor_dim == 1 &&
 			blas_expression_traits<rv>::is_transposed::value,
 			"GER DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
 
 	using value_type = typename lv::value_type;
 	using system_tag = System_Tag;
 
-	static constexpr int tensor_dimension = 2;
-	static constexpr int tensor_iterator_dimension = 1;
+	static constexpr int tensor_dim = 2;
+	static constexpr int tensor_iterator_dim = 1;
 
 	lv left;
 	rv right;
@@ -48,14 +48,14 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 		right(right) {}
 
 	BCINLINE bc::size_t  size() const { return left.size() * right.size(); }
-	BCINLINE bc::size_t  dimension(int i) const { return i == 0 ? left.rows() : i == 1 ? right.cols() : 1; }
-	BCINLINE bc::size_t rows() const { return dimension(0); }
-	BCINLINE bc::size_t cols() const { return dimension(1); }
+	BCINLINE bc::size_t  dim(int i) const { return i == 0 ? left.rows() : i == 1 ? right.cols() : 1; }
+	BCINLINE bc::size_t rows() const { return dim(0); }
+	BCINLINE bc::size_t cols() const { return dim(1); }
 
 
 	template<class core, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<core, Alpha, Beta> output, Stream stream) const {
-		static_assert(core::tensor_dimension==2, "Ger out must be a matrix");
+		static_assert(core::tensor_dim==2, "Ger out must be a matrix");
 
 		using self_t = Binary_Expression<oper::ger<System_Tag>, lv, rv>;
 		using traits = blas_expression_traits<self_t>;
@@ -77,9 +77,9 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 			auto B = contents.right;
 			auto alpha = contents.alpha;
 			bc::blas::BLAS<system_tag>::ger(stream, left.rows(), right.cols(),
-					alpha.data(), A.data(), A.leading_dimension(0),
-					B.data(), B.leading_dimension(0),
-					out.data(), out.leading_dimension(1));
+					alpha.data(), A.data(), A.leading_dim(0),
+					B.data(), B.leading_dim(0),
+					out.data(), out.leading_dim(1));
 			traits::post_parse_expression_evaluation(stream, contents);
 		} else {
 			auto alpha = make_constexpr_scalar<bc::host_tag, (Alpha == 0 ? 1 : Alpha), value_type>();
@@ -87,9 +87,9 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 			auto B = greedy_evaluate(blas_expression_traits<rv>::remove_blas_modifiers(right), stream);
 			stream.set_blas_pointer_mode_host();
 			bc::blas::BLAS<system_tag>::ger(stream, left.rows(), right.cols(),
-					alpha.data(), A.data(), A.leading_dimension(0),
-					B.data(), B.leading_dimension(0),
-					out.data(), out.leading_dimension(1));
+					alpha.data(), A.data(), A.leading_dim(0),
+					B.data(), B.leading_dim(0),
+					out.data(), out.leading_dim(1));
 		}
 	}
 };

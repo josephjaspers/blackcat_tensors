@@ -87,18 +87,18 @@ auto make_row(Parent& parent, bc::size_t index) {
 	return slice_type(
 			parent.get_stream(),
 			parent.get_allocator(),
-			Strided_Vector_Shape(parent.cols(), parent.leading_dimension(1)),
+			Strided_Vector_Shape(parent.cols(), parent.leading_dim(1)),
 			parent.data() + index);
 }
 
 template<class Parent>
 auto make_diagnol(Parent& parent, bc::size_t diagnol_index) {
-	bc::size_t stride = parent.leading_dimension(1) + 1;
+	bc::size_t stride = parent.leading_dim(1) + 1;
 	bc::size_t length = bc::traits::min(
 			parent.rows(), parent.cols() - diagnol_index);
 
 	bc::size_t ptr_index = diagnol_index > 0
-			? parent.leading_dimension(1) * diagnol_index
+			? parent.leading_dim(1) * diagnol_index
 			: std::abs(diagnol_index);
 
 	using slice_type = strided_slice_type_from_parent<
@@ -119,12 +119,12 @@ static auto make_slice(Parent& parent, bc::size_t index)
 {
 	using scalar_type = slice_type_from_parent<0, Parent>;
 	using slice_type = slice_type_from_parent<
-			bc::traits::max(0,Parent::tensor_dimension-1),
+			bc::traits::max(0,Parent::tensor_dim-1),
 			Parent,
 			noncontinuous_memory_tag>;
 
 	using slice_t = std::conditional_t<
-			Parent::tensor_dimension == 1, scalar_type, slice_type>;
+			Parent::tensor_dim == 1, scalar_type, slice_type>;
 
 	return slice_t(
 			parent.get_stream(),
@@ -142,10 +142,10 @@ static auto make_slice(Parent& parent, bc::size_t index)
 {
 	using scalar_type = slice_type_from_parent<0, Parent>;
 	using slice_type = slice_type_from_parent<
-			bc::traits::max(0,Parent::tensor_dimension-1), Parent>;
+			bc::traits::max(0,Parent::tensor_dim-1), Parent>;
 
 	using slice_t = std::conditional_t<
-			Parent::tensor_dimension == 1, scalar_type, slice_type>;
+			Parent::tensor_dim == 1, scalar_type, slice_type>;
 
 	return slice_t(
 			parent.get_stream(),
@@ -158,28 +158,28 @@ template<class Parent>
 static auto make_ranged_slice(Parent& parent, bc::size_t from, bc::size_t to)
 {
 	using slice_type = slice_type_from_parent<
-			Parent::tensor_dimension, Parent>;
+			Parent::tensor_dim, Parent>;
 
 	bc::size_t range = to - from;
 	bc::size_t index = parent.slice_ptr_index(from);
 
-	bc::Dim<Parent::tensor_dimension> inner_shape = parent.inner_shape();
-	inner_shape[Parent::tensor_dimension-1] = range;
+	bc::Dim<Parent::tensor_dim> inner_shape = parent.inner_shape();
+	inner_shape[Parent::tensor_dim-1] = range;
 
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
-						bc::Shape<Parent::tensor_dimension>(inner_shape),
+						bc::Shape<Parent::tensor_dim>(inner_shape),
 						parent.data() + index);
 }
 
 template<class Parent, class ShapeLike>
 static auto make_view(Parent& parent, ShapeLike shape) {
 	using slice_type = slice_type_from_parent<
-			ShapeLike::tensor_dimension, Parent>;
+			ShapeLike::tensor_dim, Parent>;
 
 	return slice_type(parent.get_stream(),
 						parent.get_allocator(),
-						bc::Shape<ShapeLike::tensor_dimension>(shape),
+						bc::Shape<ShapeLike::tensor_dim>(shape),
 						parent.data());
 }
 
@@ -195,20 +195,20 @@ static auto make_scalar(Parent& parent, bc::size_t index) {
 template<class Parent, class ShapeLike>
 auto make_chunk(
 		Parent& parent,
-		bc::Dim<Parent::tensor_dimension> index_points,
+		bc::Dim<Parent::tensor_dim> index_points,
 		ShapeLike shape)
 {
-	static_assert(ShapeLike::tensor_dimension > 1,
+	static_assert(ShapeLike::tensor_dim > 1,
 			"TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, "
 			"USE SCALAR OR RANGED_SLICE OTHERWISE");
 
 	using slice_type = slice_type_from_parent<
-			ShapeLike::tensor_dimension, Parent, noncontinuous_memory_tag>;
+			ShapeLike::tensor_dim, Parent, noncontinuous_memory_tag>;
 
 	return slice_type(
 			parent.get_stream(),
 			parent.get_allocator(),
-			Shape<ShapeLike::tensor_dimension>(shape, parent.get_shape()),
+			Shape<ShapeLike::tensor_dim>(shape, parent.get_shape()),
 			parent.data() + parent.dims_to_index(index_points));
 }
 

@@ -5,10 +5,10 @@
  *      Author: joseph
  */
 
-#ifndef BC_CORE_tensor_iterator_dimension_ALGORITHMS_tensor_iterator_dimensionS_tensor_iterator_dimensionS_H_
-#define BC_CORE_tensor_iterator_dimension_ALGORITHMS_tensor_iterator_dimensionS_tensor_iterator_dimensionS_H_
+#ifndef BC_CORE_tensor_iterator_dim_ALGORITHMS_tensor_iterator_dimS_tensor_iterator_dimS_H_
+#define BC_CORE_tensor_iterator_dim_ALGORITHMS_tensor_iterator_dimS_tensor_iterator_dimS_H_
 
 #include "coefficientwise_iterator.h"
 #include "multidimensional_iterator.h"
 
-#endif /* tensor_iterator_dimensionS_H_ */
+#endif /* tensor_iterator_dimS_H_ */

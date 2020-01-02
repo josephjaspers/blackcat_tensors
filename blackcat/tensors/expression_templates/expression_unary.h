@@ -26,8 +26,8 @@ struct Unary_Expression:
 	using value_type  = std::decay_t<return_type>;
 	using system_tag  = typename ArrayType::system_tag;
 
-	static constexpr int tensor_dimension = ArrayType::tensor_dimension;
-	static constexpr int tensor_iterator_dimension = ArrayType::tensor_iterator_dimension;
+	static constexpr int tensor_dim = ArrayType::tensor_dim;
+	static constexpr int tensor_iterator_dim = ArrayType::tensor_iterator_dim;
 
 	ArrayType array;
 
@@ -65,7 +65,7 @@ struct Unary_Expression:
 	BCINLINE bc::size_t size() const { return array.size(); }
 	BCINLINE bc::size_t rows() const { return array.rows(); }
 	BCINLINE bc::size_t cols() const { return array.cols(); }
-	BCINLINE bc::size_t dimension(int i) const { return array.dimension(i); }
+	BCINLINE bc::size_t dim(int i) const { return array.dim(i); }
 };
 
 

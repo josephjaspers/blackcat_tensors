@@ -30,8 +30,8 @@ struct Convolution:
 	using self_type = Convolution<SystemTag, ValueType, Optimizer, IsRecurrent>;
 	using parent_type = Layer_Base<self_type>;
 
-	using input_tensor_dimension = bc::traits::Integer<3>;
-	using output_tensor_dimension = bc::traits::Integer<3>;
+	using input_tensor_dim = bc::traits::Integer<3>;
+	using output_tensor_dim = bc::traits::Integer<3>;
 
 	using greedy_evaluate_delta = std::true_type;
 	using requires_extra_cache = std::true_type;

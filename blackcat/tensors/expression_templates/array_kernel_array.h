@@ -43,10 +43,10 @@ struct Kernel_Array:
 		Shape,
 		public Tags... {
 
-	static constexpr int tensor_dimension = Shape::tensor_dimension;
-	static constexpr int tensor_iterator_dimension =
+	static constexpr int tensor_dim = Shape::tensor_dim;
+	static constexpr int tensor_iterator_dim =
 		bc::traits::sequence_contains_v<noncontinuous_memory_tag, Tags...> ?
-				tensor_dimension : 1;
+				tensor_dim : 1;
 
 	using value_type = ValueType;
 	using system_tag = SystemTag;
@@ -111,12 +111,12 @@ public:
 
 	BCINLINE
 	auto slice_ptr_index(int i) const {
-		if (tensor_dimension == 0)
+		if (tensor_dim == 0)
 			return 0;
-		else if (tensor_dimension == 1)
+		else if (tensor_dim == 1)
 			return i;
 		else
-			return this->leading_dimension(tensor_dimension - 1) * i;
+			return this->leading_dim(tensor_dim - 1) * i;
 	}
 
 

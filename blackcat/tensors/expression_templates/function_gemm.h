@@ -28,14 +28,14 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 				typename rv::value_type>::value,
 			"GEMM arguments must have the same value_type");
 
-	static_assert(lv::tensor_dimension==2 && rv::tensor_dimension==2,
+	static_assert(lv::tensor_dim==2 && rv::tensor_dim==2,
 			"Error: GEMM Expression initialized with non matrix tensor");
 
 	using value_type = typename lv::value_type;
 	using system_tag = SystemTag;
 
-	static constexpr int tensor_dimension = rv::tensor_dimension;
-	static constexpr int tensor_iterator_dimension  = 1;
+	static constexpr int tensor_dim = rv::tensor_dim;
+	static constexpr int tensor_iterator_dim  = 1;
 
 	lv left;
 	rv right;
@@ -49,24 +49,24 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 	}
 
 	BCINLINE bc::size_t  size() const { return left.rows() * right.cols(); }
-	BCINLINE bc::size_t  dimension(int i) const {
+	BCINLINE bc::size_t  dim(int i) const {
 		return i == 0 ? left.rows() : i == 1 ? right.cols() : 1;
 	}
 
-	BCINLINE bc::size_t rows() const { return dimension(0); }
-	BCINLINE bc::size_t cols() const { return dimension(1); }
+	BCINLINE bc::size_t rows() const { return dim(0); }
+	BCINLINE bc::size_t cols() const { return dim(1); }
 
 	template<class Core, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<Core, Alpha, Beta> output, Stream stream) const
 	{
 		auto& out = output.data();
 
-		static_assert(Core::tensor_dimension == 2,
+		static_assert(Core::tensor_dim == 2,
 				"Gemm out must be a matrix");
 		BC_ASSERT(out.rows() == left.rows(),
-				"Output dimension (rows) mismatch for GEMM");
+				"Output dim (rows) mismatch for GEMM");
 		BC_ASSERT(out.cols() == right.cols(),
-				"Output dimension (cols) mismatch for GEMM");
+				"Output dim (cols) mismatch for GEMM");
 
 		using self_t = Binary_Expression<oper::gemm<SystemTag>, lv, rv>;
 		using traits = blas_expression_traits<self_t>;
@@ -81,9 +81,9 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 
 		bc::blas::BLAS<system_tag>::gemm(
 					stream, transA, transB, out.rows(), out.cols(), left.cols(),
-					alpha.data(), A.data(), A.leading_dimension(1),
-					B.data(), B.leading_dimension(1),
-					beta.data(), out.data(), out.leading_dimension(1));
+					alpha.data(), A.data(), A.leading_dim(1),
+					B.data(), B.leading_dim(1),
+					beta.data(), out.data(), out.leading_dim(1));
 
 		traits::template post_parse_expression_evaluation(stream, contents);
 	}

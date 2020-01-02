@@ -17,7 +17,7 @@ struct Dim {
 
 	static_assert(N>=0, "Dim<N>: ASSERT 'N>=0'");
 
-	static constexpr int tensor_dimension = N;
+	static constexpr int tensor_dim = N;
 	using value_type = bc::size_t;
 	using size_t = bc::size_t;
 
@@ -45,7 +45,7 @@ struct Dim {
 		return m_index;
 	}
 
-	///unchecked version of dimension
+	///unchecked version of dim
 	BCINLINE
 	const value_type& operator [](int i) const {
 		return m_index[i];
@@ -57,15 +57,15 @@ struct Dim {
 	}
 
 	BCINLINE
-	value_type dimension(size_t i, size_t default_value=1) const {
+	value_type dim(size_t i, size_t default_value=1) const {
 		//casting to unsigned ensures that
 		//negative values do not lead to undefined behavior
 		return static_cast<const unsigned&>(i) < N ? m_index[i] : default_value;
 	}
 
 	BCINLINE
-	value_type outer_dimension() const {
-		return this->dimension(N-1);
+	value_type outer_dim() const {
+		return this->dim(N-1);
 	}
 
 	BCINLINE
@@ -76,6 +76,23 @@ struct Dim {
 		}
 		return true;
 	}
+
+	BCINLINE
+	bool operator != (const Dim& other) const {
+		return !(*this == other);
+	}
+
+	template<int X> BCINLINE
+	bool operator == (const Dim<X>& other) const {
+		return false;
+	}
+
+	template<int X> BCINLINE
+	bool operator != (const Dim<X>& other) const {
+		return true;
+	}
+
+
 
 	template<
 		class... Ints,
@@ -99,16 +116,10 @@ struct Dim {
 		return concat_dim;
 	}
 
-	BCINLINE
-	bool operator != (const Dim& other) const {
-		return !(*this == other);
-	}
-
 	BCINLINE auto begin() const { return m_index; }
 	BCINLINE auto end()   const { return m_index + N; }
 	BCINLINE auto begin() { return m_index; }
 	BCINLINE auto end()   { return m_index + N; }
-
 
 private:
 
@@ -274,7 +285,7 @@ BC_DIM_OP_FACTORY(>=, Greater_Equal)
 
 template<>
 struct Dim<0> {
-	static constexpr int tensor_dimension = 0;
+	static constexpr int tensor_dim = 0;
 	using value_type = bc::size_t;
 
 	BCINLINE
@@ -282,19 +293,19 @@ struct Dim<0> {
 		return 1;
 	}
 
-	///unchecked version of dimension
+	///unchecked version of dim
 	BCINLINE
 	value_type operator [](int i) const {
 		return 1;
 	}
 
 	BCINLINE
-	value_type dimension(bc::size_t i) const {
+	value_type dim(bc::size_t i) const {
 		return 1;
 	}
 
 	BCINLINE
-	value_type outer_dimension() const {
+	value_type outer_dim() const {
 		return 1;
 	}
 

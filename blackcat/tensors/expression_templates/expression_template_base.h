@@ -53,16 +53,16 @@ struct Expression_Template_Base  {
 		static_assert(true_call<decltype(std::declval<Derived>().cols())>(),
 				"ExpressionTemplates must define: cols()");
 
-		static_assert(true_call<decltype(std::declval<Derived>().dimension(0))>(),
-				"ExpressionTemplates must define: dimension(int)");
+		static_assert(true_call<decltype(std::declval<Derived>().dim(0))>(),
+				"ExpressionTemplates must define: dim(int)");
 
-		static_assert(true_call<Integer<Derived::tensor_dimension>>(),
+		static_assert(true_call<Integer<Derived::tensor_dim>>(),
 				"ExpressionTemplates must define: "
-				"static constexpr int tensor_dimension");
+				"static constexpr int tensor_dim");
 
-		static_assert(true_call<Integer<Derived::tensor_iterator_dimension>>(),
+		static_assert(true_call<Integer<Derived::tensor_iterator_dim>>(),
 				"ExpressionTemplates must define: "
-				"static constexpr int tensor_iterator_dimension");
+				"static constexpr int tensor_iterator_dim");
 	}
 
 	void deallocate() const {}
@@ -80,21 +80,21 @@ struct Expression_Base:
 	using expression_template_expression_type = std::true_type;
 
 	BCINLINE const auto inner_shape() const {
-		bc::Dim<Derived::tensor_dimension> dim;
-		for (bc::size_t i = 0; i < Derived::tensor_dimension; ++i) {
-			dim[i] = static_cast<const Derived&>(*this).dimension(i);
+		bc::Dim<Derived::tensor_dim> dim;
+		for (bc::size_t i = 0; i < Derived::tensor_dim; ++i) {
+			dim[i] = static_cast<const Derived&>(*this).dim(i);
 		}
 		return dim;
 	}
 
 	BCINLINE const auto get_shape() const {
-		return bc::Shape<Derived::tensor_dimension>(
+		return bc::Shape<Derived::tensor_dim>(
 				static_cast<const Derived&>(*this).inner_shape());
 	}
 
-	BCINLINE bc::size_t outer_dimension() const {
+	BCINLINE bc::size_t outer_dim() const {
 		auto& derived = static_cast<const Derived&>(*this);
-		return derived.dimension(derived.tensor_dimension-1);
+		return derived.dim(derived.tensor_dim-1);
 	}
 };
 

@@ -18,11 +18,7 @@
 
 namespace bc {
 
-template<
-	class Stream,
-	class Indexes,
-	class Image,
-	class ImageOut>
+template<class Stream, class Indexes, class Image, class ImageOut>
 void max_pooling_forward(
 		Stream stream,
 		Image image,
@@ -40,8 +36,8 @@ void max_pooling_forward(
 			"ASSERT MAX_POOLING_FORWARD"
 			"\nout.inner_shape() == "
 			"(image.inner_shape() + padding)/strides");
-	BC_ASSERT(out.dimension(2) == image.dimension(2), "numb channels must be the same");
-	BC_ASSERT(out.dimension(3) == image.dimension(3), "batch size must be the same");
+	BC_ASSERT(out.dim(2) == image.dim(2), "numb channels must be the same");
+	BC_ASSERT(out.dim(3) == image.dim(3), "batch size must be the same");
 
 	using system_tag = typename Stream::system_tag;
 
@@ -49,10 +45,10 @@ void max_pooling_forward(
 		bc::caffe::MaxPoolForward(
 				system_tag(),
 				image.data(),
-				image.dimension(3),
-				image.dimension(2),
-				image.dimension(0), image.dimension(1),
-				out.dimension(0), out.dimension(1),
+				image.dim(3),
+				image.dim(2),
+				image.dim(0), image.dim(1),
+				out.dim(0), out.dim(1),
 				krnl_shape[0], krnl_shape[1],
 				strides[0], strides[1],
 				padding[0], padding[1],
@@ -95,8 +91,8 @@ void max_pooling_backward(
 			"ASSERT MAX_POOLING_FORWARD"
 			"\nout.inner_shape() == "
 			"(image.inner_shape() + padding)/strides");
-	BC_ASSERT(delta.dimension(2) == image.dimension(2), "numb channels must be the same");
-	BC_ASSERT(delta.dimension(3) == image.dimension(3), "batch size must be the same");
+	BC_ASSERT(delta.dim(2) == image.dim(2), "numb channels must be the same");
+	BC_ASSERT(delta.dim(3) == image.dim(3), "batch size must be the same");
 
 	using system_tag = typename Stream::system_tag;
 
@@ -110,9 +106,9 @@ void max_pooling_backward(
 		bc::caffe::MaxPoolBackward(
 				system_tag(),
 				delta.data(), mask.data(),
-				image.dimension(3), image.dimension(2),
-				image.dimension(0), image.dimension(1),
-				delta.dimension(0), delta.dimension(1),
+				image.dim(3), image.dim(2),
+				image.dim(0), image.dim(1),
+				delta.dim(0), delta.dim(1),
 				krnl_shape[0], krnl_shape[1],
 				strides[0], strides[1],
 				padding[0], padding[1],
@@ -133,9 +129,9 @@ void im2col(
 		bc::Dim<2> strides = bc::Dim<2>().fill(1),
 		bc::Dim<2> dilation = bc::Dim<2>().fill(1)) {
 
-	static_assert(ColumnImage::tensor_dimension == 2,
+	static_assert(ColumnImage::tensor_dim == 2,
 			"ColumnImage must be a matrix");
-	static_assert(Image::tensor_dimension == 3,
+	static_assert(Image::tensor_dim == 3,
 			"2d Convolution expects a 3d-image input");
 
 	using system_tag = typename Stream::system_tag;
@@ -144,8 +140,8 @@ void im2col(
 		bc::caffe::im2col(
 				system_tag(),
 				image.data(),
-				image.dimension(2),
-				image.dimension(1), image.dimension(0),
+				image.dim(2),
+				image.dim(1), image.dim(0),
 				krnl_shape[1], krnl_shape[0],
 				padding[1], padding[0],
 				strides[1], strides[0],
@@ -168,9 +164,9 @@ void col2im(
 		bc::Dim<2> strides = bc::Dim<2>().fill(1),
 		bc::Dim<2> dilation = bc::Dim<2>().fill(1)) {
 
-	static_assert(ColumnImage::tensor_dimension == 2,
+	static_assert(ColumnImage::tensor_dim == 2,
 			"ColumnImage must be a matrix");
-	static_assert(Image::tensor_dimension == 3,
+	static_assert(Image::tensor_dim == 3,
 			"2d Convolution expects a 3d-image input");
 
 	stream.enqueue([=]() {
@@ -184,8 +180,8 @@ void col2im(
 		bc::caffe::col2im(
 				stream,
 				col_image.data(),
-				image.dimension(2),
-				image.dimension(1), image.dimension(0),
+				image.dim(2),
+				image.dim(1), image.dim(0),
 				krnl_shape[1], krnl_shape[0],
 				padding[1], padding[0],
 				strides[1], strides[0],
@@ -209,11 +205,11 @@ void im2col_nd(
 		bc::Dim<NumAxis> strides = bc::Dim<NumAxis>().fill(1),
 		bc::Dim<NumAxis> dilation = bc::Dim<NumAxis>().fill(1)) {
 
-	constexpr bool is_batched = Image::tensor_dimension == NumAxis + 1;
-	static_assert(ColumnImage::tensor_dimension == 2 + is_batched,
-			"Invalid ColumnImage dimension");
-	static_assert(Image::tensor_dimension == NumAxis + is_batched,
-			"Invalid Image dimension");
+	constexpr bool is_batched = Image::tensor_dim == NumAxis + 1;
+	static_assert(ColumnImage::tensor_dim == 2 + is_batched,
+			"Invalid ColumnImage dim");
+	static_assert(Image::tensor_dim == NumAxis + is_batched,
+			"Invalid Image dim");
 
 	using system_tag = typename Stream::system_tag;
 

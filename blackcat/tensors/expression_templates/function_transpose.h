@@ -24,9 +24,9 @@ struct Unary_Expression<oper::transpose<System_Tag>, Value>:
 	using value_type  = typename Value::value_type;
 	using system_tag = System_Tag;
 
-	static constexpr int tensor_dimension = Value::tensor_dimension;
-	static constexpr int tensor_iterator_dimension =
-			tensor_dimension > 1? tensor_dimension :0;
+	static constexpr int tensor_dim = Value::tensor_dim;
+	static constexpr int tensor_iterator_dim =
+			tensor_dim > 1? tensor_dim :0;
 
 	Value array;
 
@@ -45,13 +45,13 @@ struct Unary_Expression<oper::transpose<System_Tag>, Value>:
 	BCINLINE bc::size_t  rows() const { return array.cols(); }
 	BCINLINE bc::size_t  cols() const { return array.rows(); }
 
-	BCINLINE bc::size_t  dimension(int i) const {
+	BCINLINE bc::size_t  dim(int i) const {
 		if (i == 0)
 			return array.cols();
 		else if (i == 1)
 			return array.rows();
 		else
-			return array.dimension(i);
+			return array.dim(i);
 	}
 
 	template<class... ints> BCINLINE

@@ -28,8 +28,8 @@
 	void randomize(value_type lb=0, value_type ub=1)
 	{
 		static_assert(
-				expression_type::tensor_iterator_dimension == 0 ||
-				expression_type::tensor_iterator_dimension == 1,
+				expression_type::tensor_iterator_dim == 0 ||
+				expression_type::tensor_iterator_dim == 1,
 				"randomize not available to non-continuous tensors");
 
 		using Random = bc::random::Random<system_tag>;

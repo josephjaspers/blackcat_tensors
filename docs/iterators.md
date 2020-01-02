@@ -1,6 +1,6 @@
 # Iterators 
 
-BlackCat_Tensors defines two types of iterators, coefficient-wise and n-dimensional. 
+BlackCat_Tensors defines two types of iterators, coefficient-wise and n-dimal. 
 
 ----------------------------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ int main() {
     
    
 ##### N-Dimensional     
-The n-dimensional iterator returns slices of the current tensor.
+The n-dimal iterator returns slices of the current tensor.
 
 ```cpp
 

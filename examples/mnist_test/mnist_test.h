@@ -21,12 +21,13 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 		bc::nn::feedforward(system_tag, 784, 256, bc::nn::momentum),
 		bc::nn::tanh(system_tag, 256),
 		bc::nn::feedforward(system_tag, 256, 10, bc::nn::momentum),
+		bc::nn::logistic(system_tag, 10),
 		bc::nn::softmax(system_tag, 10),
 		bc::nn::logging_output_layer(system_tag, 10, bc::nn::RMSE).skip_every(100)
 	);
 
 	network.set_batch_size(batch_size);
-	network.set_learning_rate(.003);
+	network.set_learning_rate(.3);
 
 	bc::print("Neural Network architecture:");
 	bc::print(network.get_string_architecture());

@@ -27,35 +27,35 @@ struct Binary_Expression:
 					std::declval<typename Lv::value_type>(),
 					std::declval<typename Rv::value_type>()))>;
 
-	static constexpr int tensor_dimension =
-			bc::traits::max(Lv::tensor_dimension, Rv::tensor_dimension);
+	static constexpr int tensor_dim =
+			bc::traits::max(Lv::tensor_dim, Rv::tensor_dim);
 
 private:
 
 	static constexpr bool is_broadcast_expression =
-			Lv::tensor_dimension != Rv::tensor_dimension &&
-			Lv::tensor_dimension != 0 &&
-			Rv::tensor_dimension != 0;
+			Lv::tensor_dim != Rv::tensor_dim &&
+			Lv::tensor_dim != 0 &&
+			Rv::tensor_dim != 0;
 
-	static constexpr int max_dimension = bc::traits::max(
-					Lv::tensor_iterator_dimension,
-					Rv::tensor_iterator_dimension,
-					Lv::tensor_dimension,
-					Rv::tensor_dimension);
+	static constexpr int max_dim = bc::traits::max(
+					Lv::tensor_iterator_dim,
+					Rv::tensor_iterator_dim,
+					Lv::tensor_dim,
+					Rv::tensor_dim);
 
 	static constexpr int max_iterator = bc::traits::max(
-					Lv::tensor_iterator_dimension,
-					Rv::tensor_iterator_dimension);
+					Lv::tensor_iterator_dim,
+					Rv::tensor_iterator_dim);
 
 	static constexpr bool continuous_mem_layout =
-		Lv::tensor_iterator_dimension <= 1 &&
-		Rv::tensor_iterator_dimension <= 1;
+		Lv::tensor_iterator_dim <= 1 &&
+		Rv::tensor_iterator_dim <= 1;
 
 public:
 
-	static constexpr int tensor_iterator_dimension =
+	static constexpr int tensor_iterator_dim =
 		is_broadcast_expression || !continuous_mem_layout ?
-			max_dimension :
+			max_dim :
 			max_iterator;
 
 	Lv left;
@@ -84,7 +84,7 @@ public:
 	template<
 		class... Integers,
 		class=std::enable_if_t<
-				(sizeof...(Integers)>=tensor_iterator_dimension)>>
+				(sizeof...(Integers)>=tensor_iterator_dim)>>
 	BCINLINE
 	auto  operator ()(Integers... ints) const {
 		return Operation::operator()(left(ints...), right(ints...));
@@ -93,7 +93,7 @@ public:
 	template<
 		class... Integers,
 		class=std::enable_if_t<(
-				sizeof...(Integers)>=tensor_iterator_dimension)>>
+				sizeof...(Integers)>=tensor_iterator_dim)>>
 	BCINLINE
 	auto operator ()(Integers... ints) {
 	 	return Operation::operator()(left(ints...), right(ints...));
@@ -103,7 +103,7 @@ private:
 
 	BCINLINE
 	const auto& shape() const {
-		constexpr int max_dim = Lv::tensor_dimension >= Rv::tensor_dimension;
+		constexpr int max_dim = Lv::tensor_dim >= Rv::tensor_dim;
 		return traits::get<max_dim>(right, left);
 	}
 
@@ -112,7 +112,7 @@ public:
 	BCINLINE bc::size_t size() const { return shape().size(); }
 	BCINLINE bc::size_t rows() const { return shape().rows(); }
 	BCINLINE bc::size_t cols() const { return shape().cols(); }
-	BCINLINE bc::size_t dimension(int i) const { return shape().dimension(i); }
+	BCINLINE bc::size_t dim(int i) const { return shape().dim(i); }
 	BCINLINE auto inner_shape() const { return shape().inner_shape(); }
 };
 

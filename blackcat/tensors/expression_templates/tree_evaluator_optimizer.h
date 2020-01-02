@@ -140,13 +140,13 @@ public:
 	template<class core, int a, int b, class StreamType>
 	static auto linear_evaluation(Expression branch, Output_Data<core, a, b> tensor, StreamType stream) {
 		return evaluate_impl(branch, tensor, stream,
-				bc::traits::truth_type<Expression::tensor_dimension == core::tensor_dimension>());
+				bc::traits::truth_type<Expression::tensor_dim == core::tensor_dim>());
 	}
 
 	template<class core, int a, int b, class StreamType>
 	static auto injection(Expression branch, Output_Data<core, a, b> tensor, StreamType stream) {
 		return evaluate_impl(branch, tensor, stream,
-				bc::traits::truth_type<Expression::tensor_dimension == core::tensor_dimension>());
+				bc::traits::truth_type<Expression::tensor_dim == core::tensor_dim>());
 	}
 
 	template<class StreamType>
@@ -194,7 +194,7 @@ struct optimizer<Binary_Expression<op, lv, rv>, std::enable_if_t<oper::operation
 	static constexpr bool entirely_blas_expr 	=
 			optimizer<lv>::entirely_blas_expr &&
 			optimizer<rv>::entirely_blas_expr &&
-			lv::tensor_dimension == rv::tensor_dimension;
+			lv::tensor_dim == rv::tensor_dim;
 
 	static constexpr bool partial_blas_expr =
 			optimizer<lv>::partial_blas_expr ||

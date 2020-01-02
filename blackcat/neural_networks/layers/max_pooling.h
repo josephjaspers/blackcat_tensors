@@ -20,8 +20,8 @@ template<
 struct Max_Pooling:
 		public Layer_Base<Max_Pooling<SystemTag, ValueType>> {
 
-	using input_tensor_dimension = bc::traits::Integer<3>;
-	using output_tensor_dimension = bc::traits::Integer<3>;
+	using input_tensor_dim = bc::traits::Integer<3>;
+	using output_tensor_dim = bc::traits::Integer<3>;
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;

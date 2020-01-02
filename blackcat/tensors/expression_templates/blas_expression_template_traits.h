@@ -37,11 +37,11 @@ struct remove_scalar_mul {
 
 template<class lv, class rv>
 struct remove_scalar_mul<Binary_Expression<oper::Scalar_Mul, lv, rv>> {
-	using type = std::conditional_t<lv::tensor_dimension == 0, rv, lv>;
-	using scalar_type = std::conditional_t<lv::tensor_dimension == 0, lv ,rv>;
+	using type = std::conditional_t<lv::tensor_dim == 0, rv, lv>;
+	using scalar_type = std::conditional_t<lv::tensor_dim == 0, lv ,rv>;
 
 	static type rm(Binary_Expression<oper::Scalar_Mul, lv, rv> expression) {
-		return bc::traits::constexpr_ternary<lv::tensor_dimension==0>(
+		return bc::traits::constexpr_ternary<lv::tensor_dim==0>(
 				[&]() { return expression.right; },
 				[&]() { return expression.left;  }
 		);
@@ -49,7 +49,7 @@ struct remove_scalar_mul<Binary_Expression<oper::Scalar_Mul, lv, rv>> {
 
 	static scalar_type get_scalar(
 			Binary_Expression<oper::Scalar_Mul, lv, rv> expression) {
-		return bc::traits::constexpr_ternary<lv::tensor_dimension==0>(
+		return bc::traits::constexpr_ternary<lv::tensor_dim==0>(
 				[&]() { return expression.left; },
 				[&]() { return expression.right;  }
 		);

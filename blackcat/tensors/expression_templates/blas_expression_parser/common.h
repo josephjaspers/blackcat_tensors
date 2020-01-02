@@ -128,8 +128,8 @@ public:
 		 *	Strips transposition and scalar-multiplied from and left and right,
 		 *	returns a 'contents' object. --
 		 *
-		 *	If left/right is/are transposed, calling 'dimensions(0), rows(), cols()'
-		 *	will return the non-transposed dimensions/rows/cols. Ergo- you should use the original parameters
+		 *	If left/right is/are transposed, calling 'dims(0), rows(), cols()'
+		 *	will return the non-transposed dims/rows/cols. Ergo- you should use the original parameters
 		 *	to access the shape of the returned value.
 		 */
 		static constexpr bool lv_scalar = blas_expression_traits<Lv>::is_scalar_multiplied::value;

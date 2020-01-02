@@ -46,12 +46,12 @@ static void nd_evaluate(const Expression expression, Stream stream) {
 	using system_tag	= typename Stream::system_tag;
 	using nd_evaluator  = typename bc::tensors::exprs::evaluator::Evaluator<system_tag>;
 
-	static_assert(Expression::tensor_iterator_dimension >= Expression::tensor_dimension
-			|| Expression::tensor_iterator_dimension <= 1,
-			"Iterator Dimension must be greater than or equal to the tensor_dimension");
+	static_assert(Expression::tensor_iterator_dim >= Expression::tensor_dim
+			|| Expression::tensor_iterator_dim <= 1,
+			"Iterator Dimension must be greater than or equal to the tensor_dim");
 
 	bc::traits::constexpr_if<expression_traits<Expression>::is_expr::value> ([&]() {
-		nd_evaluator::template nd_evaluate<Expression::tensor_iterator_dimension>(expression, stream);
+		nd_evaluator::template nd_evaluate<Expression::tensor_iterator_dim>(expression, stream);
 	});
 }
 

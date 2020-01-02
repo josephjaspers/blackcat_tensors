@@ -101,13 +101,19 @@ struct Reduce<bc::device_tag> {
 
 		if (expression.size() >= 32) {
 			using value_type = typename Expression::value_type;
-			bc::size_t buffer_size = bc::calculate_block_dim(expression.size());	///num blocks the kernel will be called
-			value_type* buffer = stream.template get_allocator_rebound<value_type>().allocate(buffer_size);
-			stream.enqueue([&]() { sum_implementation(stream, output, expression, buffer); });
-			stream.template get_allocator_rebound<value_type>().deallocate(buffer, buffer_size);
+			auto allocator = stream.template get_allocator_rebound<value_type>();
+			bc::size_t buffer_size = bc::calculate_block_dim(expression.size());
+			value_type* buffer = allocator.allocate(buffer_size);
+
+			stream.enqueue([&]() {
+				sum_implementation(stream, output, expression, buffer);
+			});
+
+			allocator.deallocate(buffer, buffer_size);
 		} else {
 			stream.enqueue([&]() {
-				small_sum <<<1, 1, 0, stream>>> (output, expression, expression.size());
+				small_sum<<<1, 1, 0, stream>>>(
+						output, expression, expression.size());
 			});
 		}
 	}

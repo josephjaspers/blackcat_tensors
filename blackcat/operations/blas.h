@@ -20,22 +20,22 @@ struct transpose  {};
 
 template<class system_tag>
 struct gemm: BLAS_Function {
-	static constexpr int tensor_dimension = 2;
+	static constexpr int tensor_dim = 2;
 };
 
 template<class system_tag>
 struct gemv: BLAS_Function {
-	static constexpr int tensor_dimension = 1;
+	static constexpr int tensor_dim = 1;
 };
 
 template<class system_tag>
 struct ger : BLAS_Function  {
-	static constexpr int tensor_dimension = 2;
+	static constexpr int tensor_dim = 2;
 };
 
 template<class system_tag>
 struct dot : BLAS_Function  {
-	static constexpr int tensor_dimension = 0;
+	static constexpr int tensor_dim = 0;
 };
 
 }

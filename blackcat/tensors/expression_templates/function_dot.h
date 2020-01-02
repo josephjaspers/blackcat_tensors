@@ -30,15 +30,15 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>:
 			"ValueType must be the same");
 
 	static_assert(
-			lv::tensor_dimension == 1 &&
-			(rv::tensor_dimension == 1 || rv::tensor_dimension ==0),
+			lv::tensor_dim == 1 &&
+			(rv::tensor_dim == 1 || rv::tensor_dim ==0),
 			"DOT DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
 
 	using value_type = typename lv::value_type;
 	using system_tag = System_Tag;
 
-	static constexpr int tensor_dimension  = 0;
-	static constexpr int tensor_iterator_dimension = 0;
+	static constexpr int tensor_dim  = 0;
+	static constexpr int tensor_iterator_dim = 0;
 
 	lv left;
 	rv right;
@@ -51,7 +51,7 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>:
 
 	template<class Core, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<Core, Alpha, Beta> output, Stream stream) const {
-		static_assert(Core::tensor_dimension == 0,"Output must be a scalar");
+		static_assert(Core::tensor_dim == 0,"Output must be a scalar");
 
 		using blas_tools = blas_expression_parser::Blas_Expression_Parser<system_tag>;
 
@@ -63,8 +63,8 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>:
 		bc::blas::BLAS<system_tag>::dot(
 				stream,
 				X.rows(), out.data(),
-				X.data(), X.leading_dimension(0),
-				Y.data(), Y.leading_dimension(0));
+				X.data(), X.leading_dim(0),
+				Y.data(), Y.leading_dim(0));
 
 		constexpr int beta_value = Beta == 0 ? 1 : Beta;
 		constexpr bool lv_scalar = blas_expression_traits<lv>::is_scalar_multiplied::value;

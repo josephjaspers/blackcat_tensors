@@ -32,8 +32,8 @@ struct Unary_Expression<Sum<SystemTag>, ArrayType>:
 	using system_tag = SystemTag;
 	using requires_greedy_evaluation = std::true_type;
 
-	static constexpr int tensor_dimension  = 0;
-	static constexpr int tensor_iterator_dimension = 0;
+	static constexpr int tensor_dim  = 0;
+	static constexpr int tensor_iterator_dim = 0;
 
 	ArrayType array;
 
@@ -44,7 +44,7 @@ struct Unary_Expression<Sum<SystemTag>, ArrayType>:
 
 	template<class Scalar, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<Scalar, Alpha, Beta> output, Stream stream) const {
-		static_assert(Scalar::tensor_dimension==0, "Output must be a scalar");
+		static_assert(Scalar::tensor_dim==0, "Output must be a scalar");
 
 		//TODO handle alpha/beta scalars
 		bc::tensors::exprs::functions::Reduce<system_tag>::sum(

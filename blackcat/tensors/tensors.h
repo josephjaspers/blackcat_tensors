@@ -29,13 +29,13 @@ using default_shape = bc::Shape<X>;
 } //end of ns tensors
 
 template<
-		int dimension,
+		int dim,
 		class ValueType,
 		class Allocator=tensors::detail::default_allocator<ValueType>>
 using Tensor =
 		bc::tensors::Tensor_Base<
 				bc::tensors::exprs::Array<
-						bc::Shape<dimension>,
+						bc::Shape<dim>,
 						ValueType,
 						Allocator>>;
 

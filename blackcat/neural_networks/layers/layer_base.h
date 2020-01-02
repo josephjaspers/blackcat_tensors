@@ -150,48 +150,48 @@ public:
 
 	template<int ADL=0>
 	auto default_input_tensor_factory() const {
-		using dimension      = typename traits::input_tensor_dimension;
+		using dim      = typename traits::input_tensor_dim;
 		using value_type     = typename traits::value_type;
 		using allocator_type = typename traits::allocator_type;
 
 		return [&]() {
-			return bc::Tensor<dimension::value, value_type, allocator_type>(
+			return bc::Tensor<dim::value, value_type, allocator_type>(
 					get_input_shape()).zero();
 		};
 	}
 
 	template<int ADL=0>
 	auto default_output_tensor_factory() const {
-		using dimension      = typename traits::output_tensor_dimension;
+		using dim      = typename traits::output_tensor_dim;
 		using value_type     = typename traits::value_type;
 		using allocator_type = typename traits::allocator_type;
 
 		return [&]() {
-			return bc::Tensor<dimension::value, value_type, allocator_type>(
+			return bc::Tensor<dim::value, value_type, allocator_type>(
 					get_output_shape()).zero();
 		};
 	}
 
 	template<int ADL=0>
 	auto default_batched_input_tensor_factory() const {
-		using dimension      = typename traits::input_tensor_dimension;
+		using dim      = typename traits::input_tensor_dim;
 		using value_type     = typename traits::value_type;
 		using allocator_type = typename traits::allocator_type;
 
 		return [&]() {
-			return bc::Tensor<dimension::value+1, value_type, allocator_type>(
+			return bc::Tensor<dim::value+1, value_type, allocator_type>(
 				get_batched_input_shape()).zero();
 		};
 	}
 
 	template<int ADL=0>
 	auto default_batched_output_tensor_factory() const {
-		using dimension      = typename traits::output_tensor_dimension;
+		using dim      = typename traits::output_tensor_dim;
 		using value_type     = typename traits::value_type;
 		using allocator_type = typename traits::allocator_type;
 
 		return [&]() {
-			return bc::Tensor<dimension::value+1, value_type, allocator_type>(
+			return bc::Tensor<dim::value+1, value_type, allocator_type>(
 					get_batched_output_shape()).zero();
 		};
 	}

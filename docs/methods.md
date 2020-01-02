@@ -20,20 +20,20 @@ Note: Many of the return types have been abreviated. The underlying implementati
 #### Iterator Methods
 | return type | method name | parameter | documentation |
 | --- | --- | --- | --- |
-| nd_iterator | begin | ---  | Returns the begining of a n-dimension iterator. |
-| nd_iterator | end | ---  | Returns the end of a n-dimension iterator. |
+| nd_iterator | begin | ---  | Returns the begining of a n-dim iterator. |
+| nd_iterator | end | ---  | Returns the end of a n-dim iterator. |
 | nd_iterator | cbegin | ---  | Explcit const version of begin. | 
 | nd_iterator | cend | ---  | Explcit const version of end. |
 | nd_iterator | rbegin | ---  | Returns the begining of a coefficientwise reverse iterator. | 
 | nd_iterator | rend | ---  | Returns the begining of a coefficientwise reverse iterator. | 
 | nd_iterator | crbegin | ---  | Explicit const version of rbegin. |
 | nd_iterator | crend | ---  | Explicit const version of rend. |
-| nd_iterator | nd_begin | ---  | Returns the begining of a multidimensional iterator (iterates along outer stride). |
-| nd_iterator | nd_end | ---  | Returns the end of a multidimensional iterator. |
+| nd_iterator | nd_begin | ---  | Returns the begining of a multidimal iterator (iterates along outer stride). |
+| nd_iterator | nd_end | ---  | Returns the end of a multidimal iterator. |
 | nd_iterator | nd_cbegin | ---  | Explicit const version of nd_begin. |
 | nd_iterator | nd_cend | ---  | Explicit const version of nd_end. |
-| nd_iterator | nd_rbegin | ---  | Returns the begining of a multidimensional reverse iterator. (Iterates along outer stride). |
-| nd_iterator | nd_rend | ---  | Returns the end of a multidimensional reverse iterator. |
+| nd_iterator | nd_rbegin | ---  | Returns the begining of a multidimal reverse iterator. (Iterates along outer stride). |
+| nd_iterator | nd_rend | ---  | Returns the end of a multidimal reverse iterator. |
 | nd_iterator | nd_crbegin | ---  | Explicit const version of nd_rbegin. |
 | nd_iterator | nd_crend | ---  | Explicit const version of nd_rend. |
 | cw_iterator | cw_iter | int=0, int=size  | Returns an iterator proxy, used for range-convienance. |
@@ -57,7 +57,7 @@ Note: Many of the return types have been abreviated. The underlying implementati
 | expression_t | < | tensor or scalar | --- | --- |
 | expression_t | >= | tensor or scalar | --- | --- |
 | expression_t | <= | tensor or scalar | --- | --- |
-| expression_t | * | tensor or scalar | Executes one of the following BLAS calls gemm, gemv, ger, dot, or scalarmul depending upon the dimensionality of the parameters. This is detected at compile-time, and does not incur any branching | --- |
+| expression_t | * | tensor or scalar | Executes one of the following BLAS calls gemm, gemv, ger, dot, or scalarmul depending upon the dimality of the parameters. This is detected at compile-time, and does not incur any branching | --- |
 | expression_t | - | --- | Negation of a tensor. |
 | expression_t | un_expr | functor | Returns a user-defined unary_expression object that will be laziliy evaluated. |
 | expression_t | bi_expr | functor, tensor or scalar | Returns a user-defined binary_expression object that will be laziliy evaluated. |
@@ -78,9 +78,9 @@ Note: Many of the return types have been abreviated. The underlying implementati
 | --- | --- | --- | --- |
 | void | print | ---  | Formatted print to console. | 
 | void | print_sparse | --- | Formatted print to console, ignoring 0's. | 
-| void | print_dimensions | --- | Output dimensions of a tensor. | 
-| void | print_leading_dimensions | --- | Output outer dimensions of a tensor (strides). | 
- | void | print_block_dimensions | --- | Output the block_dimensions of a tensor (IE a 3x4 matrix will output. `[3][12]`) |
+| void | print_dims | --- | Output dims of a tensor. | 
+| void | print_leading_dims | --- | Output outer dims of a tensor (strides). | 
+ | void | print_block_dims | --- | Output the block_dims of a tensor (IE a 3x4 matrix will output. `[3][12]`) |
 
 #### CMath
 The following Cmath functions are supported through the `BC` namespace. These expressions will automatically be scalarized. (lazy evaluated)

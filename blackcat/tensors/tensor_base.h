@@ -29,11 +29,11 @@ class Tensor_Base: public ExpressionTemplate {
 
 public:
 
-	static constexpr int tensor_dimension =
-			ExpressionTemplate::tensor_dimension;
+	static constexpr int tensor_dim =
+			ExpressionTemplate::tensor_dim;
 
-	static constexpr int tensor_iterator_dimension =
-			ExpressionTemplate::tensor_iterator_dimension;
+	static constexpr int tensor_iterator_dim =
+			ExpressionTemplate::tensor_iterator_dim;
 
 	using value_type  = typename ExpressionTemplate::value_type;
 	using system_tag  = typename ExpressionTemplate::system_tag;
@@ -81,8 +81,8 @@ public:
 		return *this;
 	}
 
-	Tensor_Base(bc::traits::only_if<tensor_dimension==0, value_type> scalar) {
-		static_assert(tensor_dimension == 0,
+	Tensor_Base(bc::traits::only_if<tensor_dim==0, value_type> scalar) {
+		static_assert(tensor_dim == 0,
 				"SCALAR_INITIALIZATION ONLY AVAILABLE TO SCALARS");
 		this->fill(scalar);
 	}

@@ -9,11 +9,12 @@ public:
 	void copy(const Tensor_Base<Xpr>& rv) {
 		static_assert(exprs::expression_traits<ExpressionTemplate>::is_copy_assignable::value, "copy lv must be array");
 		static_assert(exprs::expression_traits<Xpr>::is_copy_assignable::value, "copy rv most be array");
-		static_assert(ExpressionTemplate::tensor_iterator_dimension <= 1, "copy only accepts continuous");
-		static_assert(Xpr::tensor_iterator_dimension <= 1, "copy only accepts continuous");
+		static_assert(ExpressionTemplate::tensor_iterator_dim <= 1, "copy only accepts continuous");
+		static_assert(Xpr::tensor_iterator_dim <= 1, "copy only accepts continuous");
 
 		if (this->size() != rv.size()) {
-			std::cout << "Attempting to copy two different size tensors (ERROR)"  << std::endl;
+			bc::printerr(
+					"Attempting to copy two different size tensors (ERROR)");
 			throw 1;
 		}
 
@@ -57,18 +58,17 @@ public:
 		using allocator_type = bc::Allocator<system_tag, value_type>;
 #endif
 		using tensor_type = Tensor_Base<exprs::Array<
-				bc::Shape<tensor_dimension>,
+				bc::Shape<tensor_dim>,
 				value_type,
 				allocator_type>>;
 
 		using host_tensor_type = Tensor_Base<exprs::Array<
-				bc::Shape<tensor_dimension>,
+				bc::Shape<tensor_dim>,
 				value_type,
 				bc::Allocator<host_tag, value_type>>>;
 
 		auto fs = bc::tensors::io::features(precision, pretty, sparse);
-		auto tensor_dim = bc::traits::Integer<tensor_dimension>();
-
+		auto dim = bc::traits::Integer<tensor_dim>();
 
 		constexpr bool is_array = traits::is_array::value;
 		constexpr bool no_copy_required = /*(is_managed::value || */
@@ -79,21 +79,21 @@ public:
 		return bc::traits::constexpr_if<no_copy_required>(
 			bc::traits::bind([&](const auto& der)
 				{
-					return bc::tensors::io::to_string(der, fs,tensor_dim);
+					return bc::tensors::io::to_string(der, fs, dim);
 				}, *this),
 			bc::traits::constexpr_else_if<is_continuous && is_array>(
 				bc::traits::bind([&](const auto& der)
 				{
 					host_tensor_type tensor(der.get_shape());
 					tensor.copy(der);
-					return bc::tensors::io::to_string(tensor, fs, tensor_dim);
+					return bc::tensors::io::to_string(tensor, fs, dim);
 				}, *this),
 			bc::traits::constexpr_else(
 				bc::traits::bind([&](const auto& der)
 				{
 					tensor_type copy(der);
 					bc::streams::device_sync();
-					return bc::tensors::io::to_string(copy, fs, tensor_dim);
+					return bc::tensors::io::to_string(copy, fs, dim);
 				}, *this))
 			));
 	}
@@ -114,16 +114,16 @@ public:
 		std::cout << this->to_string(precision, false, sparse) << std::endl;
 	}
 
-	void print_dimensions() const {
-		for (int i = 0; i < tensor_dimension; ++i) {
-			std::cout << "[" << this->dimension(i) << "]";
+	void print_dims() const {
+		for (int i = 0; i < tensor_dim; ++i) {
+			std::cout << "[" << this->dim(i) << "]";
 		}
 		std::cout << std::endl;
 	}
 
-	void print_leading_dimensions() const {
-		for (int i = 0; i < tensor_dimension; ++i) {
-			std::cout << "[" << this->leading_dimension(i) << "]";
+	void print_leading_dims() const {
+		for (int i = 0; i < tensor_dim; ++i) {
+			std::cout << "[" << this->leading_dim(i) << "]";
 		}
 		std::cout << std::endl;
 	}

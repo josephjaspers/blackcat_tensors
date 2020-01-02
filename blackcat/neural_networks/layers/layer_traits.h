@@ -18,8 +18,8 @@ template<class T> using query_forward_requires_extra_cache = typename T::forward
 template<class T> using query_backward_requires_inputs  = typename T::backward_requires_inputs;
 template<class T> using query_backward_requires_outputs = typename T::backward_requires_outputs;
 template<class T> using query_backward_requires_extra_cache = typename T::backward_requires_extra_cache;
-template<class T> using query_input_tensor_dimension  = typename T::input_tensor_dimension;
-template<class T> using query_output_tensor_dimension = typename T::output_tensor_dimension;
+template<class T> using query_input_tensor_dim  = typename T::input_tensor_dim;
+template<class T> using query_output_tensor_dim = typename T::output_tensor_dim;
 template<class T> using query_greedy_evaluate_delta = typename T::greedy_evaluate_delta;
 
 //If true we cache the delta- into a matrix/vector. This is not stored in recurrent layers.
@@ -67,11 +67,11 @@ struct layer_traits: bc::traits::common_traits<T> {
 	using requires_extra_cache = bc::traits::conditional_detected_t<
 			detail::query_requires_extra_cache, T, std::false_type>;
 
-	using input_tensor_dimension = bc::traits::conditional_detected_t<
-			detail::query_input_tensor_dimension, T, bc::traits::Integer<1>>;
+	using input_tensor_dim = bc::traits::conditional_detected_t<
+			detail::query_input_tensor_dim, T, bc::traits::Integer<1>>;
 
-	using output_tensor_dimension = bc::traits::conditional_detected_t<
-			detail::query_output_tensor_dimension, T, input_tensor_dimension>;
+	using output_tensor_dim = bc::traits::conditional_detected_t<
+			detail::query_output_tensor_dim, T, input_tensor_dim>;
 
 	using forward_requires_inputs = bc::traits::conditional_detected_t<
 			detail::query_forward_requires_inputs, T, std::true_type>;

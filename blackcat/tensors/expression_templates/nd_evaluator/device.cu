@@ -42,8 +42,8 @@ struct Evaluator<device_tag> {
 		struct n2 {
 			template<class Expression>
 			static void eval(Expression expression, cudaStream_t stream) {
-				dim3 grid(calculate_block_dim(expression.dimension(0)),
-							calculate_block_dim(expression.dimension(1)));
+				dim3 grid(calculate_block_dim(expression.dim(0)),
+							calculate_block_dim(expression.dim(1)));
 
 				gpu_impl::eval2d<<<
 						grid, calculate_threads(), 0, stream>>>(expression);
@@ -53,9 +53,9 @@ struct Evaluator<device_tag> {
 			template<class Expression>
 			static void eval(Expression expression, cudaStream_t stream) {
 				dim3 grid(
-						calculate_block_dim(expression.dimension(0)),
-						calculate_block_dim(expression.dimension(1)),
-						calculate_block_dim(expression.dimension(2)));
+						calculate_block_dim(expression.dim(0)),
+						calculate_block_dim(expression.dim(1)),
+						calculate_block_dim(expression.dim(2)));
 
 				gpu_impl::eval3d<<<
 						grid, calculate_threads(), 0, stream>>>(expression);
@@ -65,9 +65,9 @@ struct Evaluator<device_tag> {
 			template<class Expression>
 			static void eval(Expression expression, cudaStream_t stream) {
 				dim3 grid(
-						calculate_block_dim(expression.dimension(0)),
-						calculate_block_dim(expression.dimension(1)),
-						calculate_block_dim(expression.dimension(2)));
+						calculate_block_dim(expression.dim(0)),
+						calculate_block_dim(expression.dim(1)),
+						calculate_block_dim(expression.dim(2)));
 
 				gpu_impl::eval4d<<<
 						grid, calculate_threads(), 0, stream>>>(expression);
@@ -77,9 +77,9 @@ struct Evaluator<device_tag> {
 			template<class Expression>
 			static void eval(Expression expression, cudaStream_t stream) {
 				dim3 grid(
-						calculate_block_dim(expression.dimension(0)),
-						calculate_block_dim(expression.dimension(1)),
-						calculate_block_dim(expression.dimension(2)));
+						calculate_block_dim(expression.dim(0)),
+						calculate_block_dim(expression.dim(1)),
+						calculate_block_dim(expression.dim(2)));
 
 				gpu_impl::eval5d<<<
 						grid, calculate_threads(), 0, stream>>>(expression);
@@ -89,10 +89,10 @@ struct Evaluator<device_tag> {
 	template<int Dimensions, class Expression, class Stream>
 	static void nd_evaluate(Expression expression, Stream stream) {
 		static_assert(
-				Expression::tensor_dimension <= Dimensions ||
-				Expression::tensor_iterator_dimension <= 1,
+				Expression::tensor_dim <= Dimensions ||
+				Expression::tensor_iterator_dim <= 1,
 				"Iterator Dimension must be "
-				"greater than or equal to the tensor_dimension");
+				"greater than or equal to the tensor_dim");
 
 		using run =
 				std::conditional_t<(Dimensions <= 1), n1,

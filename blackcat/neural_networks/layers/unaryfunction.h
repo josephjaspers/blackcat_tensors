@@ -21,10 +21,10 @@ struct Function:
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
 	using self_type = Function<SystemTag, ValueType, Functor,InputDimension>;
 	using parent_type = Layer_Base<self_type>;
-	using input_tensor_dimension = InputDimension;
-	using output_tensor_dimension = InputDimension;
+	using input_tensor_dim = InputDimension;
+	using output_tensor_dim = InputDimension;
 
-	using shape_type = bc::Dim<input_tensor_dimension::value>;
+	using shape_type = bc::Dim<input_tensor_dim::value>;
 
 	Functor function;
 	shape_type m_input_shape;

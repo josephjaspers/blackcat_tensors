@@ -44,7 +44,7 @@ struct Layer_Loader {
 
 	template<class T>
 	void load_variable(T& tensor, std::string variable_name) {
-		load_variable(tensor, variable_name, bc::traits::Integer<T::tensor_dimension>());
+		load_variable(tensor, variable_name, bc::traits::Integer<T::tensor_dim>());
 	}
 
 	template<class T>
@@ -68,31 +68,31 @@ struct Layer_Loader {
 
 private:
 
-	std::string path_from_args(int dimension, std::string variable_name) {
-		std::string extension = dimension_to_tensor_name(dimension);
+	std::string path_from_args(int dim, std::string variable_name) {
+		std::string extension = dim_to_tensor_name(dim);
 		return bc::filesystem::make_path(
 				current_layer_subdir(), variable_name + "." + extension);
 	}
 
 	template<class T>
 	std::string path_from_args(const T& tensor,std::string variable_name) {
-		return path_from_args(T::tensor_dimension, variable_name);
+		return path_from_args(T::tensor_dim, variable_name);
 	}
 
 public:
 
-	bool file_exists(int dimension, std::string filename) {
-		return bc::filesystem::file_exists(path_from_args(dimension, filename));
+	bool file_exists(int dim, std::string filename) {
+		return bc::filesystem::file_exists(path_from_args(dim, filename));
 	}
 
 
-	static std::string dimension_to_tensor_name(int dimension) {
-		switch(dimension) {
+	static std::string dim_to_tensor_name(int dim) {
+		switch(dim) {
 		case 0: return "scl";
 		case 1: return "vec";
 		case 2: return "mat";
 		case 3: return "cube";
-		default: return "t" + std::to_string(dimension);
+		default: return "t" + std::to_string(dim);
 		}
 	}
 };

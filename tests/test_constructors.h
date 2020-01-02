@@ -69,7 +69,7 @@ int test_constructors(int sz=128) {
 		return a.rows() == 5 &&
 				a.cols() == 7 &&
 				a.size() == 5*7*8 &&
-				a.dimension(2) == 8;
+				a.dim(2) == 8;
 	)
 
 	//---------- Copy Constructor ----------//

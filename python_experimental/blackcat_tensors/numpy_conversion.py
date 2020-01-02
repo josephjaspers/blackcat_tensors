@@ -14,13 +14,13 @@ def numpy_get_ptr(np_array):
 	return pointer 
 
 def from_np(np_array):
-	dimension = len(np_array.shape)
+	dim = len(np_array.shape)
 	array_slice = bc.tensors.exprs.Array_Slice
 	allocator_t = bc.Allocator[bc.host_tag, 'double'] 
-	slice_type  = array_slice[dimension, 'double', allocator_t]
+	slice_type  = array_slice[dim, 'double', allocator_t]
 	tensor_type = bc.Tensor_Base[slice_type]
 	
-	shape  = bc.Shape[dimension](*np_array.shape)
+	shape  = bc.Shape[dim](*np_array.shape)
 	np_ptr = numpy_get_ptr(np_array)
 	c_ptr  = integer_to_pointer['double'](np_ptr)
 	tensor = tensor_type(c_ptr, shape)

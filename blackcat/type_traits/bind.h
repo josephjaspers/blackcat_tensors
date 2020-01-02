@@ -9,6 +9,7 @@
 #define BLACKCAT_BIND_H_
 
 #include "common.h"
+#include "../common.h"
 
 namespace bc {
 namespace traits {
@@ -31,8 +32,10 @@ namespace {
 template<int index>
 struct get_impl {
     template<class T, class... Ts> BCINLINE
-    static auto impl(T&& head, Ts&&... params) -> decltype(get_impl<index - 1>::impl(params...)) {
-         return get_impl<index - 1>::impl(params...);
+    static auto impl(T&& head, Ts&&... params)
+    	-> decltype(get_impl<index - 1>::impl(params...))
+    {
+    	return get_impl<index - 1>::impl(params...);
     }
 };
 

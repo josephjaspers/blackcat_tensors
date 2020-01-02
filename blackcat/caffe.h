@@ -9,6 +9,7 @@
 #define BLACKCAT_CAFFE_H_
 
 #include "algorithms.h"
+#include "blas.h"
 #include "caffe/caffe.h"
 
 #endif /* BLACKCAT_CAFFE_H_ */
