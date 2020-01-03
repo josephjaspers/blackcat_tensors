@@ -63,9 +63,8 @@ public:
 		m_block_shape(parent_shape.m_block_shape) {
 	}
 
-
-	template<int X, class=std::enable_if_t<(X>=N)>> BCINLINE
-	Shape(Dim<X> dims):
+	BCINLINE
+	Shape(Dim<N> dims):
 		m_inner_shape(dims.template subdim<0, N>()) {
 
 		m_block_shape[0] = 1;
