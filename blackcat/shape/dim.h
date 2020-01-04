@@ -9,6 +9,7 @@
 #define BLACKCATTENSORS_SHAPE_DIM_H_
 
 #include <string>
+#include <ostream>
 
 namespace bc {
 
@@ -279,6 +280,10 @@ BC_DIM_OP_FACTORY(>=, Greater_Equal)
 	std::string to_string(int end=N) const {
 		return to_string(0, end);
 	}
+
+	friend std::ostream& operator << (std::ostream& os, const Dim& self) {
+		return os << self.to_string();
+	}
 };
 
 
@@ -320,6 +325,9 @@ struct Dim<0> {
 		return "[0]";
 	}
 
+	friend std::ostream& operator << (std::ostream& os, const Dim& self) {
+		return os << self.to_string();
+	}
 };
 
 template<class... Integers> BCINLINE

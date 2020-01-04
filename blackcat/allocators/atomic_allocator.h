@@ -19,16 +19,16 @@ namespace allocators {
 template<class Allocator>
 struct Atomic_Allocator {
 
-    using system_tag = typename bc::allocator_traits<Allocator>::system_tag;	//BC tag
+	using system_tag = typename bc::allocator_traits<Allocator>::system_tag;	//BC tag
 
-    using value_type = typename Allocator::value_type;
-    using pointer = value_type*;
-    using const_pointer = value_type*;
-    using size_type = int;
-    using propagate_on_container_copy_assignment = std::false_type;
-    using propagate_on_container_move_assignment = std::false_type;
-    using propagate_on_container_swap = std::false_type;
-    using is_always_equal = std::true_type;
+	using value_type = typename Allocator::value_type;
+	using pointer = value_type*;
+	using const_pointer = value_type*;
+	using size_type = int;
+	using propagate_on_container_copy_assignment = std::false_type;
+	using propagate_on_container_move_assignment = std::false_type;
+	using propagate_on_container_swap = std::false_type;
+	using is_always_equal = std::true_type;
 
 	template<class altT>
 	struct rebind { using other =

@@ -15,6 +15,7 @@ namespace bc {
 namespace allocators {
 
 class Byte {};
+
 template<class SystemTag, class ValueType>
 class Allocator;
 
@@ -39,7 +40,7 @@ using Cuda_Managed = allocators::Device_Managed<value_type>;
 
 //Assume All other Allocators may depend upon Allocator_Traits and Allocator
 #include "polymorphic_allocator.h"
-#include "workspace.h"
+#include "stack_allocator.h"
 #include "recycle_allocator.h"
 #include "atomic_allocator.h"
 #include "shared_allocator.h"

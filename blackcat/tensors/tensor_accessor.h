@@ -146,29 +146,33 @@
 		return make_tensor(exprs::make_row(*this, index));
 	}
 
-private:
-	using subblock_index  = bc::Dim<ExpressionTemplate::tensor_dim>;
-	using subblock_shape = bc::Shape<ExpressionTemplate::tensor_dim>;
-	using subblock_index_shape = std::tuple<subblock_index, subblock_shape>;
-public:
-
-	const auto subblock(subblock_index index, subblock_shape shape) const
+	const auto subblock(Dim<tensor_dim> index, Dim<tensor_dim> shape) const
 	{
 		BC_ASSERT_ASSIGNABLE("const auto subblock(subblock_index index, subblock_shape shape) const");
+		BC_ASSERT((index.reversed() + shape <= this->inner_shape()).all(),
+				"Index + Shape must be less parent shape");
+		BC_ASSERT(((index>=0).all() && (shape>=0).all()),
+				"Shape and Index must be greater than 0");
 		return make_tensor(exprs::make_chunk(*this, index, shape));
 	}
 
-	auto subblock(subblock_index index, subblock_shape shape)
+	auto subblock(Dim<tensor_dim> index, Dim<tensor_dim> shape)
 	{
 		BC_ASSERT_ASSIGNABLE("auto subblock(subblock_index index, subblock_shape shape)");
+		BC_ASSERT((index.reversed() + shape <= this->inner_shape()).all(),
+				"Index + Shape must be less parent shape");
+		BC_ASSERT(((index>=0).all() && (shape>=0).all()),
+				"Shape and Index must be greater than 0");
 		return make_tensor(exprs::make_chunk(*this, index, shape));
 	}
 
-	const auto operator [] (subblock_index_shape index_shape) const {
+	auto operator [] (
+			std::tuple<Dim<tensor_dim>, Dim<tensor_dim>> index_shape) const {
 		return subblock(std::get<0>(index_shape), std::get<1>(index_shape));
 	}
 
-	auto operator [] (subblock_index_shape index_shape) {
+	auto operator [] (
+			std::tuple<Dim<tensor_dim>, Dim<tensor_dim>> index_shape) {
 		return subblock(std::get<0>(index_shape), std::get<1>(index_shape));
 	}
 

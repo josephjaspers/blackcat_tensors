@@ -45,7 +45,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 
 				auto batch = inputs[j];
 				auto index = bc::dim(0,784 * (p/(float)img_partitions));
-				auto shape = bc::shape(784/4, batch_size);
+				auto shape = bc::dim(784/4, batch_size);
 
 				network.forward_propagation(batch[{index, shape}]);
 			}
@@ -64,7 +64,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	network.copy_training_data_to_single_predict(0);
 
 	auto batch = inputs[0];
-	auto shape = bc::shape(784/4, batch_size);
+	auto shape = bc::dim(784/4, batch_size);
 
 	for (int p = 0; p < img_partitions-1; ++p) {
 		auto index = bc::dim(0, 784*(p/(float)img_partitions));

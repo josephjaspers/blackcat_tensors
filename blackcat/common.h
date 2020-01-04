@@ -10,6 +10,7 @@
 #define BLACKCAT_COMMON_H_
 
 #include <type_traits>
+#include <cstdio>
 
 namespace bc {
 
@@ -121,24 +122,24 @@ namespace bc {
 static std::ostream* global_output_stream = &std::cout;
 
 template<class RM_UNUSED_FUNCTION_WARNING=void>
-static void set_print_stream(std::ostream* ostream) {
+inline void set_print_stream(std::ostream* ostream) {
 	global_output_stream = ostream;
 }
 
 template<class RM_UNUSED_FUNCTION_WARNING=void>
-static std::ostream* get_print_stream() {
+inline std::ostream* get_print_stream() {
 	return global_output_stream;
 }
 
-static std::ostream* global_error_output_stream = &std::cout;
+static std::ostream* global_error_output_stream = &std::cerr;
 
 template<class RM_UNUSED_FUNCTION_WARNING=void>
-static void set_error_stream(std::ostream* ostream) {
+inline void set_error_stream(std::ostream* ostream) {
 	global_error_output_stream = ostream;
 }
 
 template<class RM_UNUSED_FUNCTION_WARNING=void>
-static std::ostream* get_error_stream() {
+inline std::ostream* get_error_stream() {
 	return global_error_output_stream;
 }
 
@@ -161,14 +162,14 @@ void print_impl(std::ostream* os, const T& arg, const Ts&... args) {
 
 }
 
-template<class T=char, class... Ts>
-void print(const T& arg='c', const Ts&... args) {
-	bc::detail::print_impl(get_print_stream(), arg, args...);
+template<class... Ts>
+void print(const Ts&... args) {
+	bc::detail::print_impl(get_print_stream(), args...);
 }
 
-template<class T=char, class... Ts>
-void printerr(const T& arg='c', const Ts&... args) {
-	bc::detail::print_impl(get_error_stream(), arg, args...);
+template<class... Ts>
+void printerr(const Ts&... args) {
+	bc::detail::print_impl(get_error_stream(), args...);
 }
 
 template<class str_type>

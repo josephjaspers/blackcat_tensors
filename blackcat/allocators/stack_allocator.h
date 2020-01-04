@@ -100,7 +100,7 @@ public:
 	}
 
 	void deallocate(Byte* data, std::size_t sz) {
-		BC_ASSERT(m_curr_index!=0,
+		BC_ASSERT(m_curr_index != 0,
 				"BC_Memory Deallocation failure, attempting to deallocate already deallocated memory.");
 
 		BC_ASSERT(data == (m_data + m_curr_index - sz),
