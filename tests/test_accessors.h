@@ -120,7 +120,7 @@ int test_accessors(int sz=128) {
 		vec a2(a[2]);
 		vec a3(a[3]);
 
-		auto block_of_a = a[{bc::dim(1,1), bc::shape(4,3)}];
+		auto block_of_a = a[{bc::dim(1,1), bc::dim(4,3)}];
 
 		bool ensure_correct_size = block_of_a.size() == 4 * 3;
 		bool ensure_correct_rows = block_of_a.rows() == 4;
@@ -144,7 +144,7 @@ int test_accessors(int sz=128) {
 		vec a2(a[2]);
 		vec a3(a[3]);
 
-		auto block_of_a = a.subblock(bc::dim(1,1), bc::shape(4,3));
+		auto block_of_a = a.subblock(bc::dim(1,1), bc::dim(4,3));
 
 		bool ensure_correct_size = block_of_a.size() == 4 * 3;
 		bool ensure_correct_rows = block_of_a.rows() == 4;
@@ -174,8 +174,8 @@ int test_accessors(int sz=128) {
 		vec a2(a[2]);
 		vec a3(a[3]);
 
-		auto primary_block_of_a = a[{bc::dim(0, 0), bc::shape(5,5)}];
-		auto block_of_a = primary_block_of_a[{bc::dim(1,1), bc::shape(4,3)}];
+		auto primary_block_of_a = a[{bc::dim(0, 0), bc::dim(5,5)}];
+		auto block_of_a = primary_block_of_a[{bc::dim(1,1), bc::dim(4,3)}];
 
 		bool ensure_correct_size = block_of_a.size() == 4 * 3;
 		bool ensure_correct_rows = block_of_a.rows() == 4;
