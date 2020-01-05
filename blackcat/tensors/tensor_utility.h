@@ -37,7 +37,7 @@ public:
 					this->size());
 		}
 #else
-		this->*this = rv.*this;
+	 	(*this) = rv;
 #endif
 	}
 
