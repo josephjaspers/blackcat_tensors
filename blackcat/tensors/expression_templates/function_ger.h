@@ -47,6 +47,10 @@ struct Binary_Expression<oper::ger<System_Tag>, lv, rv>:
 		left(left),
 		right(right) {}
 
+	static oper::ger<System_Tag> get_operation() {
+		return oper::ger<System_Tag>();
+	}
+
 	BCINLINE bc::size_t  size() const { return left.size() * right.size(); }
 	BCINLINE bc::size_t  dim(int i) const { return i == 0 ? left.rows() : i == 1 ? right.cols() : 1; }
 	BCINLINE bc::size_t rows() const { return dim(0); }

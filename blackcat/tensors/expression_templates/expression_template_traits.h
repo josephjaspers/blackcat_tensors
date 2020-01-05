@@ -102,6 +102,8 @@ struct expression_traits {
 	using is_copy_assignable = bc::traits::conditional_detected_t<
 			detail::query_copy_assignable, T, std::true_type>;
 
+	using is_blas_expression = std::is_base_of<bc::oper::BLAS_Function, T>;
+
 	using requires_greedy_evaluation = bc::traits::conditional_detected_t<
 			detail::query_requires_greedy_evaluation,T, std::false_type>;
 

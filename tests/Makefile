@@ -1,6 +1,7 @@
 CXXVERSION = -std=c++14 
 CXXFLAGS = -O3 -o blackcat_tests -Wall
 CUFLAGS = -O3 -o blackcat_tests_cu 
+CXXDFLAGS = -g  -o blackcat_tests_debug
 
 CXXFILES = run.cpp
 CUFILES  = run.cu
@@ -17,6 +18,8 @@ LIBINCLUDE = /usr/lib/
 default:
 	$(CXX) $(CXXVERSION) $(CXXFILES) $(LIBS) $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)
 
+debug:
+	$(CXX) $(CXXVERSION) $(CXXFILES) $(LIBS) $(CXXDFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)
 
 TRAVIS_LIBS = -lblas
 travis:

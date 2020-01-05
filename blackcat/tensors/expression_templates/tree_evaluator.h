@@ -96,17 +96,34 @@ template<
 	class TruthType=std::false_type
 	>
 static
-std::enable_if_t<optimizer<Binary_Expression<oper::Assign, lv, rv>>::requires_greedy_eval>
+std::enable_if_t<
+	optimizer<Binary_Expression<oper::Assign, lv, rv>>::requires_greedy_eval>
 evaluate(Binary_Expression<oper::Assign, lv, rv> expression, Stream stream, TruthType is_subexpression=TruthType()) {
-	static constexpr int alpha = bc::oper::operation_traits<oper::Assign>::alpha_modifier; //1
-	static constexpr int beta = bc::oper::operation_traits<oper::Assign>::beta_modifier;   //0
-	static constexpr bool entirely_blas_expr = optimizer<rv>::entirely_blas_expr;
+	constexpr int alpha = bc::oper::operation_traits<oper::Assign>::alpha_modifier; //1
+	constexpr int beta = bc::oper::operation_traits<oper::Assign>::beta_modifier;   //0
+	constexpr bool entirely_blas_expr = optimizer<rv>::entirely_blas_expr;
+	constexpr bool partial_blas_expr = optimizer<rv>::partial_blas_expr;
 
 	auto output = make_output_data<alpha, beta>(expression.left);
-	auto right = optimizer<rv>::injection(expression.right, output, stream);
+	using expr_rv_t = std::decay_t<decltype(expression.right)>;
+
+	auto right = bc::traits::constexpr_ternary<partial_blas_expr>(
+		[&]() {
+			return optimizer<expr_rv_t>::linear_evaluation(
+					expression.right, output, stream);
+		},
+		[&]() {
+			return optimizer<expr_rv_t>::injection(
+					expression.right, output, stream);
+		});
 
 	bc::traits::constexpr_if<!entirely_blas_expr>([&]() {
-		detail::greedy_optimization<oper::Assign>(expression.left, right, stream, is_subexpression);
+
+		using assignment_oper = std::conditional_t<
+				partial_blas_expr, oper::Add_Assign, oper::Assign>;
+
+		detail::greedy_optimization<assignment_oper>(
+				expression.left, right, stream, is_subexpression);
 	});
 }
 

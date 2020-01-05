@@ -115,7 +115,6 @@ int test_operations(int sz=128) {
 template<class value_type, template<class> class allocator=bc::Basic_Allocator>
 int test_matrix_muls(int sz=128) {
 
-	sz =16;
 	BC_TEST_BODY_HEAD
 
 	using alloc_t = allocator<value_type>;
@@ -134,11 +133,34 @@ int test_matrix_muls(int sz=128) {
 	scal alpha2;
 	alpha2 = 2.0;
 
+	auto default_stream_allocator_no_reserve = [&]() {
+		return validation.get_stream().get_allocator().reserved_bytes() == 0;
+	};
+
+	auto default_stream_allocator_no_allocated= [&]() {
+		return validation.get_stream().get_allocator().allocated_bytes() == 0;
+	};
+
+	auto no_allocation = [&]() {
+		return default_stream_allocator_no_allocated() &&
+				default_stream_allocator_no_reserve();
+	};
+
 	BC_TEST_ON_STARTUP {
 		a.randomize(0, 12);
 		b.randomize(0, 12);
+		c.zero();
+		d.zero();
+
 		validation.get_stream().get_allocator().force_deallocate();
+		BC_ASSERT(default_stream_allocator_no_allocated(),
+				"Force deallocation expects no memory should be allocated");
+
+		validation.get_stream().get_allocator().free();
+		BC_ASSERT(default_stream_allocator_no_reserve(),
+						"Free expects no memory should be reserved");
 	};
+
 
 	//lv trans
 	BC_TEST_DEF(
@@ -147,7 +169,7 @@ int test_matrix_muls(int sz=128) {
 		d = a * b;
 
 		validation =  c.approx_equal(d);
-		return bc::tensors::all(validation);
+		return bc::tensors::all(validation) && no_allocation();
 	)
 
 	BC_TEST_DEF(
@@ -155,7 +177,7 @@ int test_matrix_muls(int sz=128) {
 		c = atrans.t() * b;
 		d = a * b;
 		validation =  c.approx_equal(d);
-		return bc::tensors::all(validation);
+		return bc::tensors::all(validation) && no_allocation();
 	)
 
 	//rv trans
@@ -164,7 +186,7 @@ int test_matrix_muls(int sz=128) {
 		c=(b * a);
 		d=(b * atrans.t());
 		validation = c.approx_equal(d);
-		return bc::tensors::all(validation);
+		return bc::tensors::all(validation) && no_allocation();
 	)
 
 	BC_TEST_DEF(
@@ -174,7 +196,7 @@ int test_matrix_muls(int sz=128) {
 		d = two * a * b;
 
 		validation = c.approx_equal(d);
-		return bc::tensors::all(validation);
+		return bc::tensors::all(validation) && no_allocation();
 	)
 
 	BC_TEST_DEF(
@@ -182,7 +204,7 @@ int test_matrix_muls(int sz=128) {
 		d = 2 * a * b;
 
 		validation = c.approx_equal(d);
-		return bc::tensors::all(validation);
+		return bc::tensors::all(validation) && no_allocation();
 	)
 
 	BC_TEST_DEF(
@@ -193,7 +215,7 @@ int test_matrix_muls(int sz=128) {
 		d = 2 * a.t() * b;
 
 		validation = c.approx_equal(d);
-		return bc::tensors::all(validation);
+		return bc::tensors::all(validation) && no_allocation();
 	)
 
 	BC_TEST_DEF(
@@ -203,7 +225,7 @@ int test_matrix_muls(int sz=128) {
 		d = 2 * a.t() * b;
 
 		validation = c.approx_equal(d);
-		return bc::tensors::all(validation);
+		return bc::tensors::all(validation) && no_allocation();
 	)
 
 	BC_TEST_DEF(
@@ -212,7 +234,7 @@ int test_matrix_muls(int sz=128) {
 		d = 2 * atrans * b;
 
 		validation = c.approx_equal(d);
-		return bc::tensors::all(validation);
+		return bc::tensors::all(validation) && no_allocation();
 	)
 
 	BC_TEST_DEF(
@@ -221,12 +243,13 @@ int test_matrix_muls(int sz=128) {
 		d = 3 + 2 * atrans * b + 5;
 
 		validation = c.approx_equal(d);
-		return bc::tensors::all(validation);
+		return bc::tensors::all(validation) && no_allocation();
 	)
 
 	BC_TEST_DEF(
 		mat atrans(a.t());
 		c = (atrans * b * 2.0f + 8.0f) + (atrans * b * 2.0f + 8.0f);
+		bool c_no_alloc = no_allocation();
 
 		d = (3 + 2 * atrans * b + 5) * 2;
 		mat e(sz, sz);
@@ -242,35 +265,48 @@ int test_matrix_muls(int sz=128) {
 				c.approx_equal(e) &&
 				c.approx_equal(f);
 
-		return bc::tensors::all(validation);
+		return bc::tensors::all(validation) && c_no_alloc;
 	)
 
 	BC_TEST_DEF(
 		mat atrans(a.t());
 
 		c = (atrans * b * 2.0f - 8.0f) - (atrans * b * 2.0f - 8.0f);
+		bool c_no_alloc = no_allocation();
+
 		d = (3 - 2 * atrans * b - 5) - (3 - 2 * atrans * b - 5);
+		bool d_no_alloc = no_allocation();
 
 		mat e(sz, sz);
 		e = (3 - 2 * atrans * b - 5);
 		e -= (-2 * atrans * b) - 2;
+		bool e_no_alloc = no_allocation();
 
 		mat f(sz, sz);
 		f = (3 - 2 * atrans * b - 5);
 		f -= f;
+		bool f_no_alloc = no_allocation();
+
 
 		mat g(sz, sz);
 		g =  (atrans * 5 * b - 5);
 		g -= (atrans * 5 * b - 5);
+		bool g_no_alloc = no_allocation();
 
 		mat h = (a.t() * b * 2.0f - 8.0f) - (atrans * b * 2.0f - 8.0f);
-
 
 		validation = c.approx_equal(d) &&
 				e.approx_equal(f) &&
 				g.approx_equal(h);
 
-		return bc::tensors::all(validation);
+		bool no_alloc =
+				c_no_alloc &&
+				d_no_alloc &&
+				e_no_alloc &&
+				f_no_alloc &&
+				g_no_alloc;
+
+		return bc::tensors::all(validation) && no_alloc;
 	)
 
 	BC_TEST_DEF(

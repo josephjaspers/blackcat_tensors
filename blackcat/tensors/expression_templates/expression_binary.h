@@ -117,14 +117,96 @@ public:
 };
 
 
+//forward declare
+template<class T>
+struct blas_expression_traits;
+
+namespace detail {
+
 template<class Op, class Lv, class Rv> BCHOT
-auto make_bin_expr(Lv left, Rv right, Op oper) {
+auto make_bin_expr_(Lv left, Rv right, Op oper) {
 	return Binary_Expression<Op,Lv, Rv>(left, right, oper);
 }
 
 template<class Op, class Lv, class Rv, class... Args> BCHOT
-auto make_bin_expr(Lv left, Rv right, Args&&... args) {
+auto make_bin_expr_(Lv left, Rv right, Args&&... args) {
 	return Binary_Expression<Op,Lv, Rv>(left, right, args...);
+}
+
+
+template<class Lv, class Rv, class Op, class=void>
+struct bin_expr_factory {
+	template<class... Args>
+	static auto make(Lv lv, Rv rv, Args&&... args...)
+	{
+		return Binary_Expression<Op, Lv, Rv>(
+				lv, rv, std::forward<Args>(args)...);
+	}
+};
+
+template<class Lv, class Rv>
+struct bin_expr_factory<
+		Lv,
+		Rv,
+		bc::oper::Scalar_Mul,
+		std::enable_if_t<
+				expression_traits<Lv>::is_blas_expression::value ||
+				expression_traits<Rv>::is_blas_expression::value>>
+{
+	static auto make(
+			Lv lv, Rv rv)
+	{
+		constexpr bool left_scalar = Lv::tensor_dim==0;
+		auto scalar_expr = bc::traits::constexpr_ternary<left_scalar>(
+			[=]() { return std::make_pair(lv, rv); },
+			[=]() { return std::make_pair(rv, lv); }
+		);
+
+		auto scalar = scalar_expr.first;
+		auto expr   = scalar_expr.second;
+
+		constexpr bool expr_left_is_scalar_multiplied =
+				blas_expression_traits<std::decay_t<decltype(expr.left)>
+				>::is_scalar_multiplied::value;
+
+		constexpr bool expr_right_is_scalar_multiplied =
+				blas_expression_traits<std::decay_t<decltype(expr.right)>
+				>::is_scalar_multiplied::value;
+
+
+		//TODO add support for when both left and right are scalar multiplied
+		static_assert(!(expr_left_is_scalar_multiplied &&
+				expr_right_is_scalar_multiplied),
+			"Cannot apply scalar_multiplication to a blas_expression where"
+			"both the left and right expressions of the blas expression"
+			"are already scalar multiplied");
+
+		bc::print("asdfasdfasdfasdf");
+		using blas_op_type = std::decay_t<decltype(expr.get_operation())>;
+		return bc::traits::constexpr_ternary<!expr_left_is_scalar_multiplied>(
+			[=]() {
+				auto newexpr = make_bin_expr_<bc::oper::Scalar_Mul>(scalar, expr.left);
+				return make_bin_expr_<blas_op_type>(newexpr,expr.right);
+			},
+			[=]() {
+				auto newexpr = make_bin_expr_<bc::oper::Scalar_Mul>(scalar, expr.right);
+				return make_bin_expr_<blas_op_type>(newexpr,expr.left);
+			});
+	}
+};
+
+}
+
+template<class Op, class Lv, class Rv> BCHOT
+auto make_bin_expr(Lv left, Rv right, Op oper) {
+	return detail::bin_expr_factory<Lv, Rv, Op>::make(left, right, oper);
+}
+
+template<class Op, class Lv, class Rv, class... Args> BCHOT
+auto make_bin_expr(Lv left, Rv right, Args&&... args)
+{
+	return detail::bin_expr_factory<Lv, Rv, Op>::make(
+			left, right, std::forward<Args>(args)...);
 }
 
 
@@ -132,6 +214,7 @@ auto make_bin_expr(Lv left, Rv right, Args&&... args) {
 } //ns exprs
 } //ns tensors
 
+#include "blas_expression_template_traits.h"
 
 #endif /* EXPRESSION_BINARY_POINTWISE_SAME_H_ */
 

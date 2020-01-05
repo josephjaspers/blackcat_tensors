@@ -48,6 +48,10 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 				"gemm requires left.cols() == right.rows()");
 	}
 
+	static oper::gemm<SystemTag> get_operation() {
+		return oper::gemm<SystemTag>();
+	}
+
 	BCINLINE bc::size_t  size() const { return left.rows() * right.cols(); }
 	BCINLINE bc::size_t  dim(int i) const {
 		return i == 0 ? left.rows() : i == 1 ? right.cols() : 1;

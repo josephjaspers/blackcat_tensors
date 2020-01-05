@@ -42,6 +42,10 @@ struct Unary_Expression<Sum<SystemTag>, ArrayType>:
 	Unary_Expression(ArrayType array, Sum<system_tag> = Sum<system_tag>()):
 		array(array) {}
 
+	static Sum<SystemTag> get_operation() {
+		return Sum<SystemTag>();
+	}
+
 	template<class Scalar, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<Scalar, Alpha, Beta> output, Stream stream) const {
 		static_assert(Scalar::tensor_dim==0, "Output must be a scalar");

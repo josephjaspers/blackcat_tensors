@@ -36,6 +36,10 @@ struct Unary_Expression<oper::transpose<System_Tag>, Value>:
 			oper::transpose<System_Tag> = oper::transpose<System_Tag>()):
 		array(array) {}
 
+	static oper::transpose<System_Tag> get_operation() {
+		return oper::transpose<System_Tag>();
+	}
+
 	BCINLINE
 	auto operator [] (int i) const -> decltype(array[0]) {
 		return array[i];

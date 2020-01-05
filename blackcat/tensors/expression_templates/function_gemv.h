@@ -41,14 +41,17 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
 	lv left;
 	rv right;
 
-	 Binary_Expression(lv left, rv right):
-			 left(left),
-			 right(right) {
-
+	Binary_Expression(lv left, rv right):
+			left(left),
+			right(right)
+	{
 		BC_ASSERT(left.cols() == right.rows(),
 				"gemv requires left.cols() == right.rows()");
+	}
 
-	 }
+	static oper::gemv<System_Tag> get_operation() {
+		return oper::gemv<System_Tag>();
+	}
 
 	BCINLINE bc::size_t size() const { return left.rows(); }
 	BCINLINE bc::size_t dim(int i) const { return i == 0 ? left.rows() : 1; }

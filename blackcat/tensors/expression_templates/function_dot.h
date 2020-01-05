@@ -49,6 +49,10 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>:
 		left(left),
 		right(right) {}
 
+	static oper::dot<System_Tag> get_operation() {
+		return oper::dot<System_Tag>();
+	}
+
 	template<class Core, int Alpha, int Beta, class Stream>
 	void eval(Output_Data<Core, Alpha, Beta> output, Stream stream) const {
 		static_assert(Core::tensor_dim == 0,"Output must be a scalar");
