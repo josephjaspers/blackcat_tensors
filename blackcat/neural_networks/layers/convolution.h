@@ -116,7 +116,6 @@ public:
 					m_padding,
 					m_strides,
 					m_dilation);
-
 			bc::Dim<2> mat_y_shape = {y.rows() * y.cols(), w.cols() };
 			y[i].reshaped(mat_y_shape) = col_x[i].t() * w;
 		}
@@ -205,6 +204,11 @@ public:
 		loader.load_variable(w, "w");
 		w_opt.load(loader, "w_opt");
 	}
+
+	auto& get_weights() const { return w; }
+	auto& get_weights()       { return w; }
+
+
 };
 
 

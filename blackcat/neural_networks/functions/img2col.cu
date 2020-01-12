@@ -57,8 +57,9 @@ __global__ void im2col_gpu_kernel(const int n, const Dtype* data_im,
 }
 
 template <typename Dtype>
-void im2col(bc::device_tag, const Dtype* data_im, const int channels,
-		const int height, const int width, const int kernel_h, const int kernel_w,
+void im2col(bc::device_tag, const Dtype* data_im,
+		const int channels, const int height, const int width,
+		const int kernel_h, const int kernel_w,
 		const int pad_h, const int pad_w,
 		const int stride_h, const int stride_w,
 		const int dilation_h, const int dilation_w,

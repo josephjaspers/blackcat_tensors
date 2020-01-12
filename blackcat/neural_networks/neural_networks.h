@@ -10,6 +10,7 @@
 #define BLACKCATTENSORS_NEURALNETWORKS_NETWORKNETWORKS_H_
 
 #include "common.h"
+#include "functions/caffe.h"
 
 #include "layer_cache.h"
 #include "layer_loader.h"

@@ -12,6 +12,7 @@
 #include "img2col.h"
 #include "maxpooling.h"
 #include "maxpooling.cu"
+#include "bc_im2col.h"
 
 ///THIS IS NOT A CAFFE FILE --
 ///JOSEPH JASPERS IS THE AUTHOR OF THIS FILE
@@ -68,8 +69,8 @@ void max_pooling_backward(
 		ImageOut delta,      //delta from upper layer
 		Indexes mask,        //indicies of delta from upper layer
 		bc::Dim<2> krnl_shape,
-		bc::Dim<2> padding = bc::Dim<2>().fill(0),
-		bc::Dim<2> strides = {-1,-1})
+		bc::Dim<2> padding = bc::Dim<2>().fill(0 ),
+		bc::Dim<2> strides = bc::Dim<2>().fill(-1))
 {
 
 	static_assert(std::is_same<
@@ -125,9 +126,10 @@ void im2col(
 		ColumnImage col_image,
 		Image image,
 		bc::Dim<3> krnl_shape,
-		bc::Dim<2> padding = bc::Dim<2>(),
+		bc::Dim<2> padding = bc::Dim<2>().fill(0),
 		bc::Dim<2> strides = bc::Dim<2>().fill(1),
-		bc::Dim<2> dilation = bc::Dim<2>().fill(1)) {
+		bc::Dim<2> dilation = bc::Dim<2>().fill(1),
+		int numb_spatial_axis=2) {
 
 	static_assert(ColumnImage::tensor_dim == 2,
 			"ColumnImage must be a matrix");
@@ -137,7 +139,21 @@ void im2col(
 	using system_tag = typename Stream::system_tag;
 
 	stream.enqueue([=]() {
-		bc::caffe::im2col(
+//		auto col_image_shape = bc::dim(
+//				krnl_shape[0], krnl_shape[1], image.dim(2));
+//
+//		 bc::caffe::im2col_nd(
+//				 bc::host_tag(),
+//				 image.data(), 2,
+//				 image.inner_shape().reversed().data(), //img shape
+//				 col_image_shape.reversed().data(), //col_shape
+//				 krnl_shape.reversed().data(), //kernel shape
+//				 padding.reversed().data(), //pad
+//				 strides.reversed().data(), //strides
+//				 dilation.reversed().data(), //dilation
+//				 col_image.data()); //data col
+
+		bc::nn::functions::im2col(
 				system_tag(),
 				image.data(),
 				image.dim(2),
@@ -177,16 +193,26 @@ void col2im(
 				image.data() + image.size(),
 				0.0);
 
-		bc::caffe::col2im(
-				stream,
-				col_image.data(),
+		bc::nn::functions::col2im(
+				typename Stream::system_tag(),
+				image.data(),
 				image.dim(2),
 				image.dim(1), image.dim(0),
 				krnl_shape[1], krnl_shape[0],
 				padding[1], padding[0],
 				strides[1], strides[0],
 				dilation[1], dilation[0],
-				image.data());
+				col_image.data());
+
+//		bc::nn::functions::col2im(
+//				stream,
+//				col_image.data(), 1,
+//				image.dim(2), image.dim(1), image.dim(0),
+//				krnl_shape[1], krnl_shape[0],
+//				padding[1], padding[0],
+//				strides[1], strides[0],
+//				dilation[1], dilation[0],
+//				image.data());
 	});
 }
 
