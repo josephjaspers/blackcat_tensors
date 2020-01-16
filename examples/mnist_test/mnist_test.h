@@ -21,7 +21,6 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 		bc::nn::feedforward(system_tag, 784, 256, bc::nn::momentum),
 		bc::nn::tanh(system_tag, 256),
 		bc::nn::feedforward(system_tag, 256, 10, bc::nn::momentum),
-		bc::nn::logistic(system_tag, 10),
 		bc::nn::softmax(system_tag, 10),
 		bc::nn::logging_output_layer(system_tag, 10, bc::nn::RMSE).skip_every(100)
 	);
