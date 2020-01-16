@@ -181,7 +181,6 @@ struct bin_expr_factory<
 			"both the left and right expressions of the blas expression"
 			"are already scalar multiplied");
 
-		bc::print("asdfasdfasdfasdf");
 		using blas_op_type = std::decay_t<decltype(expr.get_operation())>;
 		return bc::traits::constexpr_ternary<!expr_left_is_scalar_multiplied>(
 			[=]() {

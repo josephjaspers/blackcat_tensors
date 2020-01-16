@@ -117,11 +117,10 @@ evaluate(Binary_Expression<oper::Assign, lv, rv> expression, Stream stream, Trut
 					expression.right, output, stream);
 		});
 
+	using assignment_oper = std::conditional_t<
+			partial_blas_expr, oper::Add_Assign, oper::Assign>;
+
 	bc::traits::constexpr_if<!entirely_blas_expr>([&]() {
-
-		using assignment_oper = std::conditional_t<
-				partial_blas_expr, oper::Add_Assign, oper::Assign>;
-
 		detail::greedy_optimization<assignment_oper>(
 				expression.left, right, stream, is_subexpression);
 	});
