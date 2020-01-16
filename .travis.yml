@@ -9,15 +9,15 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-7
-            - gcc-7
+            - g++-8
+            - gcc-8
             - libblas-dev
       env:
          - MATRIX_EVAL="CC=gcc-7 && CXX=g++-8"
 
 before_install:
     - eval "${MATRIX_EVAL}"
-    - export CC=/usr/bin/gcc-7
+    - export CC=/usr/bin/gcc-8
 
 script: 
   - cd tests
