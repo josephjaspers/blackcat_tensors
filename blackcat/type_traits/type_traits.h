@@ -24,12 +24,15 @@ template<bool x,class T>
 using only_if = conditional_t<x, T, detail::DISABLE<T>>;
 
 template<int x> struct Integer { static constexpr int value = x; };
-template<class T, class... Ts> using front_t = T;
 
 template<class...> using void_t = void;
 template<class...> static constexpr bool true_v  = true;
 template<class...> static constexpr bool false_v = false;
 
+template<class T>
+struct using_type {
+	using type = T;
+};
 
 /**
  * true_call and false_call are CUDA-supported alternatives for true_v and false_v
@@ -55,14 +58,10 @@ using not_type = conditional_t<cond, false_type, true_type>;
 
 //--------------------------------
 template<class From, class To>
-struct propagate_const {
-	using type = To;
-};
+struct propagate_const: using_type<To> {};
 
 template<class From, class To>
-struct propagate_const<const From, To> {
-	using type = const To;
-};
+struct propagate_const<const From, To>: using_type<const To> {};
 
 template<class From, class To>
 using propagate_const_t = typename propagate_const<From, To>::type;
@@ -70,10 +69,10 @@ using propagate_const_t = typename propagate_const<From, To>::type;
 //----------------------------------
 
 template<template<class> class func, class T, class voider=void>
-struct is_detected : false_type {};
+struct is_detected: false_type {};
 
 template<template<class> class func, class T>
-struct is_detected<func, T, enable_if_t<true_v<func<T>>>> : true_type {};
+struct is_detected<func, T, enable_if_t<true_v<func<T>>>>: true_type {};
 
 template<template<class> class func, class T>
 static constexpr bool is_detected_v = is_detected<func, T>::value;
@@ -85,9 +84,7 @@ template<
 	class TestType,
 	class DefaultType=void,
 	class enabler=void>
-struct conditional_detected {
-	using type = DefaultType;
-};
+struct conditional_detected: using_type<DefaultType> {};
 
 template<
 	template<class> class func,
@@ -97,10 +94,8 @@ struct conditional_detected<
 		func,
 		TestType,
 		DefaultType,
-		enable_if_t<is_detected_v<func,TestType>>> {
-
-	using type = func<TestType>;
-};
+		enable_if_t<is_detected_v<func,TestType>>>:
+	using_type<func<TestType>> {};
 
 template<template<class> class func, class TestType, class DefaultType>
 using conditional_detected_t =
@@ -176,6 +171,17 @@ public:
 template<class... Ts>
 static constexpr bool sequence_contains_v = sequence_contains<Ts...>::value;
 
+
+template<class T, class... Ts>
+class sequence_first: using_type<T> {};
+
+template<class T, class... Ts>
+class sequence_last: using_type<typename sequence_last<Ts...>::type> {};
+
+template<class T>
+class sequence_last<T>: using_type<T> {};
+
+
 // -------- new addition, other code will use static_cast
 template<class T>
 using query_derived_type = typename T::derived_type;
@@ -196,28 +202,19 @@ auto& derived_cast(Type<Derived, Ts...>& t) {
 	return static_cast<derived_type&>(t);
 }
 
-template<class Type, class=std::enable_if_t<is_detected_v<query_derived_type, Type>>>
+template<
+	class Type,
+	class=std::enable_if_t<is_detected_v<query_derived_type, Type>>>
 const auto& derived_cast(const Type& t) {
 	return static_cast<const typename Type::derived_type&>(t);
 }
 
-template<class Type, class=std::enable_if_t<is_detected_v<query_derived_type, Type>>>
+template<
+	class Type,
+	class=std::enable_if_t<is_detected_v<query_derived_type, Type>>>
 auto& derived_cast(Type& t) {
 	return static_cast<typename Type::derived_type&>(t);
 }
-
-//---------------------
-//Only required for NVCC (can't pass std::pair to cuda kernels)
-template<class T, class U>
-struct Pair {
-	T first;
-	U second;
-};
-
-template<class T, class U> BCINLINE
-Pair<T, U> make_pair(T t, U u) { return Pair<T, U>{t, u}; }
-
-//---------------------
 
 template<class T> BCINLINE
 T& auto_remove_const(const T& param) {

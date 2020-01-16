@@ -74,7 +74,7 @@ public:
 			Dim<2> strides=Dim<2>().fill(1),
 			Dim<2> dilation=Dim<2>().fill(1)):
 		parent_type(__func__),
-		w(krnl_dims.prod(2)*img_dims[2], krnl_dims[2]),
+		w(krnl_dims[2], krnl_dims.prod(2)*img_dims[2]),
 		w_gradients(w.get_shape()),
 		w_opt(w.get_shape()),
 		m_input_shape(img_dims),
@@ -116,8 +116,10 @@ public:
 					m_padding,
 					m_strides,
 					m_dilation);
-			bc::Dim<2> mat_y_shape = {y.rows() * y.cols(), w.cols() };
-			y[i].reshaped(mat_y_shape) = col_x[i].t() * w;
+
+			bc::Dim<2> mat_y_shape = {y.rows() * y.cols(), w.rows() };
+			y[i].reshaped(mat_y_shape) = col_x[i].t() * w.t();
+
 		}
 
 		cache.store(col_image_key(), col_x);
@@ -138,8 +140,8 @@ public:
 				m_strides,
 				m_dilation);
 
-			bc::Dim<2> mat_y_shape = {y.rows() * y.cols(), w.cols() };
-			y.reshaped(mat_y_shape) = col_x.t() * w;
+			bc::Dim<2> mat_y_shape = {y.rows() * y.cols(), w.rows() };
+			y.reshaped(mat_y_shape) = col_x.t() * w.t();
 
 		return y;
 	}
@@ -150,13 +152,13 @@ public:
 	{
 		cube& col_x = cache.load(col_image_key());
 		tensor4 delta_dx(this->get_batched_input_shape());
+		delta_dx.zero();
 		mat mat_delta_dx(m_column_image_shape);
 
 		for (int i = 0; i < this->batch_size(); ++i) {
-			auto mat_dy = dy[i].reshaped(dy.rows() * dy.cols(), w.cols());
-			w_gradients -= col_x[i] * mat_dy;
-			mat_delta_dx = w * mat_dy.t();
-
+			auto mat_dy = dy[i].reshaped(w.rows(), dy.rows() * dy.cols());
+			w_gradients -= mat_dy * col_x[i].t();
+			mat_delta_dx = w.t() * mat_dy;
 			bc::col2im(x.get_stream(),
 					mat_delta_dx.internal(),
 					delta_dx[i].internal(),

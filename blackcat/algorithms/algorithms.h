@@ -22,55 +22,57 @@
 namespace bc {
 namespace algorithms {
 
-#define BC_ALGORITHM_DEF(function)                                          \
-                                                                            \
-BC_IF_CUDA(                                                                 \
-template<class Begin, class End, class... Args>                             \
-static auto function(                                                       \
-		bc::streams::Stream<bc::device_tag> stream,                         \
-		Begin begin,                                                        \
-		End end,                                                            \
-		Args... args)                                                       \
-{                                                                           \
-	return thrust::function(                                                \
-			thrust::cuda::par.on(stream), begin, end, args...);             \
-})                                                                          \
-                                                                            \
-template<class Begin, class End, class... Args>                             \
-static auto function (                                                      \
-		bc::streams::Stream<bc::host_tag> stream,                           \
-		Begin begin,                                                        \
-		End end,                                                            \
-		Args... args)                                                       \
-{                                                                           \
-	return stream.enqueue([&](){ std::function(begin, end, args...); });    \
+#define BC_ALGORITHM_DEF(function)                                        \
+                                                                          \
+BC_IF_CUDA(                                                               \
+template<class Begin, class End, class... Args>                           \
+static auto function(                                                     \
+        bc::streams::Stream<bc::device_tag> stream,                       \
+        Begin begin,                                                      \
+        End end,                                                          \
+        Args... args)                                                     \
+{                                                                         \
+    return thrust::function(                                              \
+            thrust::cuda::par.on(stream), begin, end, args...);           \
+})                                                                        \
+                                                                          \
+template<class Begin, class End, class... Args>                           \
+static auto function (                                                    \
+        bc::streams::Stream<bc::host_tag> stream,                         \
+        Begin begin,                                                      \
+        End end,                                                          \
+        Args... args)                                                     \
+{                                                                         \
+    return stream.enqueue([&](){ std::function(begin, end, args...); });  \
 }
 
 #define BC_REDUCE_ALGORITHM_DEF(function)                                 \
 BC_IF_CUDA(                                                               \
 template<class Begin, class End, class... Args>                           \
 static auto function(                                                     \
-		bc::streams::Stream<bc::device_tag> stream,                       \
-		Begin begin,                                                      \
-		End end,                                                          \
-		Args... args)                                                     \
+        bc::streams::Stream<bc::device_tag> stream,                       \
+        Begin begin,                                                      \
+        End end,                                                          \
+        Args... args)                                                     \
 {                                                                         \
-	return thrust::function(                                              \
-			thrust::cuda::par.on(stream), begin, end, args...);           \
+    return thrust::function(                                              \
+            thrust::cuda::par.on(stream), begin, end, args...);           \
 })                                                                        \
                                                                           \
 template<class Begin, class End, class... Args>                           \
 static auto function (                                                    \
-		bc::streams::Stream<bc::host_tag> stream,                         \
-		Begin begin,                                                      \
-		End end,                                                          \
-		Args... args)                                                     \
-	{                                                                         \
-		std::decay_t<decltype(std::function(begin, end, args...))> value;     \
-		stream.enqueue([&](){ value = std::function(begin, end, args...); }); \
-		stream.sync();                                                        \
-		return value;                                                         \
-	}                                                                         \
+        bc::streams::Stream<bc::host_tag> stream,                         \
+        Begin begin,                                                      \
+        End end,                                                          \
+        Args... args)                                                     \
+    {                                                                     \
+        std::decay_t<decltype(std::function(begin, end, args...))> value; \
+        stream.enqueue([&]() {                                            \
+                value = std::function(begin, end, args...);               \
+        });                                                               \
+        stream.sync();                                                    \
+        return value;                                                     \
+    }                                                                     \
 
 
 /**
@@ -88,30 +90,30 @@ static auto function (                                                    \
 BC_IF_CUDA(                                                               \
 template<class Begin, class End, class... Args>                           \
 static auto function(                                                     \
-		bc::streams::Stream<bc::device_tag> stream,                       \
-		Begin begin,                                                      \
-		End end,                                                          \
-		Args... args)                                                     \
+        bc::streams::Stream<bc::device_tag> stream,                       \
+        Begin begin,                                                      \
+        End end,                                                          \
+        Args... args)                                                     \
 {                                                                         \
-	static_assert(std::is_same<                                           \
-			std::random_access_iterator_tag,                              \
-			typename Begin::iterator_category>::value,                    \
-			"Assert random_access_iterator_tag");                         \
+    static_assert(std::is_same<                                           \
+            std::random_access_iterator_tag,                              \
+            typename Begin::iterator_category>::value,                    \
+            "Assert random_access_iterator_tag");                         \
                                                                           \
-	return thrust::function(                                              \
-			thrust::cuda::par.on(stream), &*begin, &*end, args...);       \
+    return thrust::function(                                              \
+            thrust::cuda::par.on(stream), &*begin, &*end, args...);       \
 })                                                                        \
                                                                           \
 template<class Begin, class End, class... Args>                           \
 static auto function (                                                    \
-		bc::streams::Stream<bc::host_tag> stream,                         \
-		Begin begin,                                                      \
-		End end,                                                          \
-		Args... args)                                                     \
-	{                                                                     \
-		bc::streams::host_sync();                                         \
-		return &*begin + std::function(begin, end, args...);              \
-	}                                                                     \
+        bc::streams::Stream<bc::host_tag> stream,                         \
+        Begin begin,                                                      \
+        End end,                                                          \
+        Args... args)                                                     \
+    {                                                                     \
+        bc::streams::host_sync();                                         \
+        return &*begin + std::function(begin, end, args...);              \
+    }                                                                     \
 
 
 //---------------------------non-modifying sequences---------------------------//

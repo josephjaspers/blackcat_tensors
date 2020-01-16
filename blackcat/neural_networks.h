@@ -13,5 +13,4 @@
 #include "streams.h"
 #include "tensors.h"
 #include "io.h"
-#include "caffe.h"
 #include "neural_networks/neural_networks.h"

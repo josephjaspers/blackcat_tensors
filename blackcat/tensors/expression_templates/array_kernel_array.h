@@ -65,8 +65,10 @@ protected:
 
 public:
 
-	Kernel_Array()=default;
+	BCINLINE
+	Kernel_Array() {}
 
+	BCINLINE
 	Kernel_Array(shape_type shape, value_type* ptr):
 		shape_type(shape), m_data(ptr) {};
 

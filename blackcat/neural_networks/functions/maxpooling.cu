@@ -10,7 +10,7 @@
 #define BLACKCAT_TENSORS_CAFFE_MAXPOOLING_CU_
 
 
-#include "caffe_cuda.h"
+#include "common.h"
 /*
  * THIS IS NOT AN ORIGINAL CAFFE FILE.
  * MAXPOOLING IMPLEMENTATION WAS ORIGINALLY CREATED BY THE CAFFE AUTHOR(S)
@@ -61,7 +61,7 @@ void MaxPoolForward_gpu_kernel(const int nthreads,
 
 template <typename Dtype>
 __global__ void MaxPoolBackward_gpu_kernel(
-		const int nthreads,
+		const int nthreads, //size
 		const Dtype* const top_diff,
 		const int* const mask, const int num,
 		const int channels, const int height, const int width,
@@ -110,7 +110,6 @@ void MaxPoolForward(
 		const int pad_h, const int pad_w,
 		Dtype* const top_data, int* mask)
 {
-
 	int size = pooled_height * pooled_width * channels * num;
 	MaxPoolForward_gpu_kernel<<<CAFFE_GET_BLOCKS(size), CAFFE_CUDA_NUM_THREADS>>>(
 			size, bottom_data,

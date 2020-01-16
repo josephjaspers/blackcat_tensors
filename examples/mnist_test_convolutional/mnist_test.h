@@ -6,7 +6,7 @@
 
 template<class System=bc::host_tag>
 int percept_MNIST(System system_tag, std::string mnist_dataset,
-		int epochs=5, int batch_size=32, int samples=32*1024) {
+		int epochs=5, int batch_size=16, int samples=32*1024) {
 
 	using value_type     = typename System::default_floating_point_type;
 	using allocator_type = bc::Allocator<System, value_type>;
@@ -42,7 +42,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	);
 
 	network.set_batch_size(batch_size);
-	network.set_learning_rate(.003);
+	network.set_learning_rate(.01);
 
 	bc::print("Neural Network architecture: \n",
 			network.get_string_architecture());

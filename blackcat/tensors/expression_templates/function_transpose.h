@@ -40,8 +40,8 @@ struct Unary_Expression<oper::transpose<System_Tag>, Value>:
 		return oper::transpose<System_Tag>();
 	}
 
-	BCINLINE
-	auto operator [] (int i) const -> decltype(array[0]) {
+	template<class ADL_Integer> BCINLINE
+	auto operator [] (ADL_Integer i) const -> decltype(array[i]) {
 		return array[i];
 	}
 
@@ -60,12 +60,12 @@ struct Unary_Expression<oper::transpose<System_Tag>, Value>:
 
 	template<class... ints> BCINLINE
 	auto operator ()(bc::size_t m, bc::size_t n, ints... integers) const
-		-> decltype(array(n,m)) {
+		-> decltype(array(n,m, integers...)) {
 		return array(n,m, integers...);
 	}
 	template<class... ints> BCINLINE
 	auto operator ()(bc::size_t m, bc::size_t n, ints... integers)
-		-> decltype(array(n,m)) {
+		-> decltype(array(n,m, integers...)) {
 		return array(n,m, integers...);
 	}
 };

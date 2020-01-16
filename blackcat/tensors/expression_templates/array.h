@@ -9,7 +9,6 @@
 #ifndef BC_EXPRESSION_TEMPLATES_ARRAY_H_
 #define BC_EXPRESSION_TEMPLATES_ARRAY_H_
 
-
 #include "expression_template_base.h"
 #include "array_kernel_array.h"
 #include "expression_binary.h"

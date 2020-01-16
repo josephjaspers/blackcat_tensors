@@ -102,7 +102,7 @@ void col2im(
 				for (int kernel_col = 0; kernel_col < kernel_w; kernel_col++) {
 					for (int kernel_row = 0; kernel_row < kernel_h; kernel_row++) {
 						image_tensor(channel, image_col+kernel_col, image_row+kernel_row)
-								= column_tensor(image_col, image_row, channel, kernel_col, kernel_row);
+								+= column_tensor(image_col, image_row, channel, kernel_col, kernel_row);
 					}
 				}
 			}

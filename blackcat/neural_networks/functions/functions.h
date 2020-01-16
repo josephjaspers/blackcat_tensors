@@ -5,17 +5,13 @@
  *      Author: joseph
  */
 
-#ifndef BLACKCAT_CAFFE_CAFFE_H_
-#define BLACKCAT_CAFFE_CAFFE_H_
+#ifndef BLACKCAT_NEURALNETWORK_FUNCTIONS_H_
+#define BLACKCAT_NEURALNETWORK_FUNCTIONS_H_
 
-#include "img2col.cu"
-#include "img2col.h"
 #include "maxpooling.h"
 #include "maxpooling.cu"
-#include "bc_im2col.h"
-
-///THIS IS NOT A CAFFE FILE --
-///JOSEPH JASPERS IS THE AUTHOR OF THIS FILE
+#include "im2col.h"
+#include "im2col.cu"
 
 namespace bc {
 
@@ -25,9 +21,9 @@ void max_pooling_forward(
 		Image image,
 		ImageOut out,
 		Indexes mask,
-		bc::Dim<2> krnl_shape,
-		bc::Dim<2> padding = bc::Dim<2>().fill(0),
-		bc::Dim<2> strides = {-1,-1}) {
+		Dim<2> krnl_shape,
+		Dim<2> padding = Dim<2>().fill(0),
+		Dim<2> strides = {-1,-1}) {
 
 	if (strides == Dim<2>{ -1,-1 })
 		strides = krnl_shape;
@@ -40,11 +36,9 @@ void max_pooling_forward(
 	BC_ASSERT(out.dim(2) == image.dim(2), "numb channels must be the same");
 	BC_ASSERT(out.dim(3) == image.dim(3), "batch size must be the same");
 
-	using system_tag = typename Stream::system_tag;
-
 	stream.enqueue([=]() {
 		bc::caffe::MaxPoolForward(
-				system_tag(),
+				typename Stream::system_tag(),
 				image.data(),
 				image.dim(3),
 				image.dim(2),
@@ -57,7 +51,6 @@ void max_pooling_forward(
 	});
 }
 
-
 template<
 	class Stream,
 	class Indexes,
@@ -68,11 +61,10 @@ void max_pooling_backward(
 		Image image,         //output delta (not initialized)
 		ImageOut delta,      //delta from upper layer
 		Indexes mask,        //indicies of delta from upper layer
-		bc::Dim<2> krnl_shape,
-		bc::Dim<2> padding = bc::Dim<2>().fill(0 ),
-		bc::Dim<2> strides = bc::Dim<2>().fill(-1))
+		Dim<2> krnl_shape,
+		Dim<2> padding = Dim<2>().fill(0 ),
+		Dim<2> strides = Dim<2>().fill(-1))
 {
-
 	static_assert(std::is_same<
 			int,
 			typename Indexes::value_type>::value,
@@ -82,7 +74,6 @@ void max_pooling_backward(
 			typename Image::value_type,
 			typename ImageOut::value_type>::value,
 			"Delta/Image value_type must be the same");
-
 
 	if (strides == Dim<2>{ -1,-1 })
 		strides = krnl_shape;
@@ -139,20 +130,6 @@ void im2col(
 	using system_tag = typename Stream::system_tag;
 
 	stream.enqueue([=]() {
-//		auto col_image_shape = bc::dim(
-//				krnl_shape[0], krnl_shape[1], image.dim(2));
-//
-//		 bc::caffe::im2col_nd(
-//				 bc::host_tag(),
-//				 image.data(), 2,
-//				 image.inner_shape().reversed().data(), //img shape
-//				 col_image_shape.reversed().data(), //col_shape
-//				 krnl_shape.reversed().data(), //kernel shape
-//				 padding.reversed().data(), //pad
-//				 strides.reversed().data(), //strides
-//				 dilation.reversed().data(), //dilation
-//				 col_image.data()); //data col
-
 		bc::nn::functions::im2col(
 				system_tag(),
 				image.data(),
@@ -165,7 +142,6 @@ void im2col(
 				col_image.data());
 	});
 }
-
 
 template<
 	class Stream,
@@ -203,61 +179,8 @@ void col2im(
 				strides[1], strides[0],
 				dilation[1], dilation[0],
 				col_image.data());
-
-//		bc::nn::functions::col2im(
-//				stream,
-//				col_image.data(), 1,
-//				image.dim(2), image.dim(1), image.dim(0),
-//				krnl_shape[1], krnl_shape[0],
-//				padding[1], padding[0],
-//				strides[1], strides[0],
-//				dilation[1], dilation[0],
-//				image.data());
 	});
 }
-
-
-template<
-	class Stream,
-	class ColumnImage,
-	class Image,
-	int NumAxis>
-void im2col_nd(
-		Stream stream,
-		ColumnImage col_image,
-		Image image,
-		bc::Dim<NumAxis> krnl_shape,
-		bc::Dim<NumAxis> padding = bc::Dim<NumAxis>(),
-		bc::Dim<NumAxis> strides = bc::Dim<NumAxis>().fill(1),
-		bc::Dim<NumAxis> dilation = bc::Dim<NumAxis>().fill(1)) {
-
-	constexpr bool is_batched = Image::tensor_dim == NumAxis + 1;
-	static_assert(ColumnImage::tensor_dim == 2 + is_batched,
-			"Invalid ColumnImage dim");
-	static_assert(Image::tensor_dim == NumAxis + is_batched,
-			"Invalid Image dim");
-
-	using system_tag = typename Stream::system_tag;
-
-	//assume non-strided data (must be packed format)
-	auto img_shape = image.get_shape().inner_shape().reverse();
-	auto col_shape = col_image.get_shape().inner_shape().reverse();
-
-	stream.enqueue([=]() {
-		 bc::caffe::im2col_nd(
-				system_tag(),
-				image.data(),
-				NumAxis,
-				img_shape.data(),
-				col_shape.data(),
-				krnl_shape.reverse().data(),
-				padding.reverse().data(),
-				strides.reverse().data(),
-				dilation.reverse().data(),
-				col_image.data());
-	});
-}
-
 }
 
 #endif /* CAFFE_H_ */

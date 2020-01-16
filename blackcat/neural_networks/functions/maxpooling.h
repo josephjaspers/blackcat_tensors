@@ -16,6 +16,7 @@
  * The data is also in col-major format despite the variables being the same.
  *
  */
+#include "common.h"
 
 namespace bc {
 
