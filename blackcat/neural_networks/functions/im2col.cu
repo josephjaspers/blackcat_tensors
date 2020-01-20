@@ -10,6 +10,7 @@
 
 #include "common.h"
 #include "../../operations.h"
+#include "../../common.h"
 #include <cuda_runtime_api.h>
 #include <cuda.h>
 
@@ -46,7 +47,7 @@ void im2col_kernel(
 			bc::Dim<3> { height, width, channels },
 			const_cast<Dtype*>(data_im));
 
-	CUDA_KERNEL_LOOP(index, size) {
+	BC_CUDA_KERNEL_LOOP_X(index, size) {
 		int kernel_row = index % kernel_h;
 		int kernel_col = (index / kernel_h) % kernel_w;
 		int channel = (index / kernel_h / kernel_w) % channels;
@@ -79,8 +80,8 @@ void im2col(
 			* kernel_h * kernel_w;
 
 	im2col_kernel<<<
-			bc::caffe::CAFFE_GET_BLOCKS(size),
-			bc::caffe::CAFFE_CUDA_NUM_THREADS>>>(
+			bc::calculate_block_dim(size),
+			bc::calculate_threads(size)>>>(
 					size,
 					data_im,
 					channels,
@@ -122,7 +123,7 @@ void col2im_kernel(int size,
 			Dim<3> { height, width, channels },
 			const_cast<Dtype*>(data_im));
 
-	CUDA_KERNEL_LOOP(index, size) {
+	BC_CUDA_KERNEL_LOOP_X(index, size) {
 		int kernel_row = index % kernel_h;
 		int kernel_col = (index / kernel_h) % kernel_w;
 		int channel = (index / kernel_h / kernel_w) % channels;
@@ -156,8 +157,8 @@ void col2im(
 			* kernel_h * kernel_w;
 
 	col2im_kernel<<<
-			bc::caffe::CAFFE_GET_BLOCKS(size),
-			bc::caffe::CAFFE_CUDA_NUM_THREADS>>>(
+			bc::calculate_block_dim(size),
+			bc::calculate_threads(size)>>>(
 					size,
 					data_im,
 					channels,

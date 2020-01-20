@@ -11,6 +11,7 @@
 
 
 #include "common.h"
+#include "../../common.h"
 /*
  * THIS IS NOT AN ORIGINAL CAFFE FILE.
  * MAXPOOLING IMPLEMENTATION WAS ORIGINALLY CREATED BY THE CAFFE AUTHOR(S)
@@ -30,7 +31,7 @@ void MaxPoolForward_gpu_kernel(const int nthreads,
 		const int stride_h, const int stride_w, const int pad_h, const int pad_w,
 		Dtype* const top_data, int* mask)
 {
-	CUDA_KERNEL_LOOP(index, nthreads) {
+	BC_CUDA_KERNEL_LOOP_X(index, nthreads) {
 		const int pw = index % pooled_width;
 		const int ph = (index / pooled_width) % pooled_height;
 		const int c = (index / pooled_width / pooled_height) % channels;
@@ -68,7 +69,7 @@ __global__ void MaxPoolBackward_gpu_kernel(
 		const int pooled_height, const int pooled_width, const int kernel_h,
 		const int kernel_w, const int stride_h, const int stride_w, const int pad_h,
 		const int pad_w, Dtype* const bottom_diff) {
-	CUDA_KERNEL_LOOP(index, nthreads) {
+	BC_CUDA_KERNEL_LOOP_X(index, nthreads) {
 		// find out the local index
 		// find out the local offset
 		const int w = index % width;
@@ -111,15 +112,17 @@ void MaxPoolForward(
 		Dtype* const top_data, int* mask)
 {
 	int size = pooled_height * pooled_width * channels * num;
-	MaxPoolForward_gpu_kernel<<<CAFFE_GET_BLOCKS(size), CAFFE_CUDA_NUM_THREADS>>>(
-			size, bottom_data,
-			num, channels,
-			height, width,
-			pooled_height, pooled_width,
-			kernel_h, kernel_w,
-			stride_h, stride_w,
-			pad_h, pad_w,
-			top_data, mask);
+	MaxPoolForward_gpu_kernel<<<
+			bc::calculate_block_dim(size),
+			bc::calculate_threads(size)>>>(
+					size, bottom_data,
+					num, channels,
+					height, width,
+					pooled_height, pooled_width,
+					kernel_h, kernel_w,
+					stride_h, stride_w,
+					pad_h, pad_w,
+					top_data, mask);
 }
 
 template <typename Dtype>
@@ -135,15 +138,17 @@ void MaxPoolBackward(
 		Dtype* bottom_diff)
 {
 	int size = pooled_height * pooled_width * channels * num;
-	MaxPoolBackward_gpu_kernel<Dtype><<<CAFFE_GET_BLOCKS(size), CAFFE_CUDA_NUM_THREADS>>>(
-			size, top_diff, mask,
-			num, channels,
-			height, width,
-			pooled_height, pooled_width,
-			kernel_h, kernel_w,
-			stride_h, stride_w,
-			pad_h, pad_w,
-			bottom_diff);
+	MaxPoolBackward_gpu_kernel<Dtype><<<
+			bc::calculate_block_dim(size),
+			bc::calculate_threads(size)>>>(
+					size, top_diff, mask,
+					num, channels,
+					height, width,
+					pooled_height, pooled_width,
+					kernel_h, kernel_w,
+					stride_h, stride_w,
+					pad_h, pad_w,
+					bottom_diff);
 }
 
 }

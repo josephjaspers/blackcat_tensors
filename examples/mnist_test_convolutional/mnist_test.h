@@ -35,14 +35,14 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 		bc::nn::flatten(system_tag, bc::dim(6,6,8)),
 		bc::nn::relu(system_tag, bc::dim(6,6,8).size()),
 		bc::nn::feedforward(system_tag, bc::dim(6,6,8).size(), 64),
-		bc::nn::tanh(system_tag, 64),
+		bc::nn::logistic(system_tag, 64),
 		bc::nn::feedforward(system_tag, 64, 10),
 		bc::nn::softmax(system_tag, 10),
 		bc::nn::logging_output_layer(system_tag, 10, bc::nn::RMSE).skip_every(100)
 	);
 
 	network.set_batch_size(batch_size);
-	network.set_learning_rate(.01);
+	network.set_learning_rate(.003);
 
 	bc::print("Neural Network architecture: \n",
 			network.get_string_architecture());

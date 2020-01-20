@@ -17,6 +17,11 @@
 namespace bc {
 namespace tensors {
 
+template<int X>
+struct Tensor_Dim : bc::traits::Integer<X> {
+	static constexpr int tensor_dim = X;
+};
+
 template<class> class Tensor_Base;
 
 template<class ExpressionTemplate>

@@ -21,26 +21,27 @@ namespace bc {
 class system_tag_base {};
 
 template<class DerivedTag>
-class system_tag : system_tag_base {};
+struct system_tag: system_tag_base {};
 
-class host_tag : system_tag<host_tag> {
-public:
+struct host_tag: system_tag<host_tag>
+{
 	using default_floating_point_type = double;
 	using default_integer_type = int;
-	static const char* name() { return "bc::host_tag"; }
 };
 
-class device_tag : system_tag<device_tag> {
-public:
+struct device_tag : system_tag<device_tag>
+{
 	using default_floating_point_type = float;
 	using default_integer_type = int;
-	static const char* name() { return "bc::device_tag"; }
 };
 
 template<class T>
 struct is_system_tag {
 	static constexpr bool value = std::is_base_of<system_tag_base, T>::value;
 };
+
+template<class T>
+static constexpr bool is_system_tag_v = is_system_tag<T>::value;
 
 using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 
@@ -53,11 +54,8 @@ using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 // --------------------------------- compile options --------------------------------- //
 
 //#define BC_NO_OPENMP                    //Disables automatic multi-threading of element-wise operations (if openmp is linked)
-#define BC_CPP17                          //Enables C++17 features -- Note: constexpr if is not supported by NVCC
 //#define BC_EXECUTION_POLICIES           //Enables execution policies
 //#define NDEBUG 		                  //Disables runtime checks
-//BC_CPP17_EXECUTION std::execution::par  //defines default execution as parallel
-//BC_CPP17_EXECUTION std::execution::seq  //defines default execution as sequential
 //#define BC_CPP20						  //enables C++20 features -- None: this is reserved for future, NVCC does not support cpp20 features
 //#define BC_CLING_JIT 			  		  //Defines certain code based upon if we are using a cling
 // --------------------------------- override macro-option s --------------------------------- //
@@ -286,25 +284,35 @@ using size_t = BC_SIZE_T;
 static constexpr bc::size_t MULTITHREAD_THRESHOLD = 16384;
 
 #ifdef __CUDACC__
-	namespace {
-    	static bc::size_t CUDA_BASE_THREADS = 128;
-	}
+namespace {
+		static bc::size_t CUDA_BASE_THREADS = 512;
+}
 
-    static void set_cuda_base_threads(bc::size_t nthreads) {
-    	CUDA_BASE_THREADS = nthreads;
-    }
+static void set_cuda_base_threads(bc::size_t nthreads) {
+	CUDA_BASE_THREADS = nthreads;
+}
 
-    static bc::size_t get_cuda_base_threads() {
-    	return CUDA_BASE_THREADS;
-    }
+static bc::size_t get_cuda_base_threads() {
+	return CUDA_BASE_THREADS;
+}
 
-    static  bc::size_t calculate_threads(bc::size_t sz = CUDA_BASE_THREADS) {
-        return sz > CUDA_BASE_THREADS ? CUDA_BASE_THREADS : sz;
-    }
+static bc::size_t calculate_threads(bc::size_t sz = CUDA_BASE_THREADS) {
+	return sz > CUDA_BASE_THREADS ? CUDA_BASE_THREADS : sz;
+}
 
-    static  bc::size_t calculate_block_dim(int size) {
-        return 1 + (int)(size / CUDA_BASE_THREADS);
-    }
+static bc::size_t calculate_block_dim(int size) {
+	return 1 + (int)(size / CUDA_BASE_THREADS);
+}
+
+#define BC_CUDA_KERNEL_LOOP_XYZ(i, n, xyz) \
+	for (int i = blockIdx.xyz * blockDim.xyz + threadIdx.xyz; \
+		i < (n); \
+		i += blockDim.xyz * gridDim.xyz)
+
+#define BC_CUDA_KERNEL_LOOP_X(i, n) BC_CUDA_KERNEL_LOOP_XYZ(i,n,x)
+#define BC_CUDA_KERNEL_LOOP_Y(i, n) BC_CUDA_KERNEL_LOOP_XYZ(i,n,y)
+#define BC_CUDA_KERNEL_LOOP_Z(i, n) BC_CUDA_KERNEL_LOOP_XYZ(i,n,z)
+
 #endif
 
 

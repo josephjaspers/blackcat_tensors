@@ -16,8 +16,6 @@ auto sum(const Tensor_Base<Expression>& tensor) {
 	return tensor.un_expr(exprs::Sum<typename Expression::system_tag>());
 }
 
-#ifdef BC_CPP17
-
 template<class Expression>
 auto value_sum(const Tensor_Base<Expression>& tensor)
 {
@@ -56,7 +54,8 @@ static bool any(const Tensor_Base<Expression>& tensor) {
 }
 
 template<class Expression>
-static auto max_element(const Tensor_Base<Expression>& tensor) {
+static auto max_element(const Tensor_Base<Expression>& tensor)
+{
 	return bc::algorithms::max_element(
 			bc::streams::select_on_get_stream(tensor),
 			tensor.cw_cbegin(),
@@ -64,7 +63,8 @@ static auto max_element(const Tensor_Base<Expression>& tensor) {
 }
 
 template<class Expression>
-static auto min_element(const Tensor_Base<Expression>& tensor) {
+static auto min_element(const Tensor_Base<Expression>& tensor)
+{
 	return bc::algorithms::min_element(
 			bc::streams::select_on_get_stream(tensor),
 			tensor.cw_cbegin(),
@@ -90,8 +90,6 @@ template<class Expression>
 static auto min(const Tensor_Base<Expression>& tensor) {
 	return tensor(min_element(tensor));
 }
-
-#endif
 
 }
 }

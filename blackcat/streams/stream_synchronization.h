@@ -13,7 +13,7 @@
 namespace bc {
 namespace streams {
 
-inline void host_sync()   {
+inline void host_sync() {
 	BC_omp_bar__
 }
 

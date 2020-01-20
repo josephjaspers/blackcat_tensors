@@ -30,21 +30,23 @@ using namespace bc::traits::common;
 
 namespace {
 template<int index>
-struct get_impl {
-    template<class T, class... Ts> BCINLINE
-    static auto impl(T&& head, Ts&&... params)
-    	-> decltype(get_impl<index - 1>::impl(params...))
-    {
-    	return get_impl<index - 1>::impl(params...);
-    }
+struct get_impl
+{
+	template<class T, class... Ts> BCINLINE
+	static auto impl(T&& head, Ts&&... params)
+		-> decltype(get_impl<index - 1>::impl(params...))
+	{
+		return get_impl<index - 1>::impl(params...);
+	}
 };
 
 template<>
-struct get_impl<0> {
-    template<class T, class... Ts> BCINLINE
-    static T&& impl(T&& head, Ts&&... params) {
-         return head;
-    }
+struct get_impl<0>
+{
+	template<class T, class... Ts> BCINLINE
+	static T&& impl(T&& head, Ts&&... params) {
+		 return head;
+	}
 };
 
 }
@@ -114,7 +116,7 @@ private:
 
 };
 template<class Function, class... Args>
-Bind<Function, Args...> bind(Function&& f, Args&&... args) {
+Bind<Function, Args&&...> bind(Function&& f, Args&&... args) {
 	return {std::forward<Function>(f), std::forward<Args>(args)...};
 }
 
