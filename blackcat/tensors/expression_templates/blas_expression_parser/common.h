@@ -51,49 +51,49 @@ public:
 		}
 
 		return bc::traits::constexpr_if<(lv_scalar != rv_scalar) && (alpha_mod == 1)>(
-					[&](){
-						return bc::traits::constexpr_ternary<lv_scalar>(
-								[=]() { return lv; },
-								[=]() { return rv; }
-						);
+		[&](){
+				return bc::traits::constexpr_ternary<lv_scalar>(
+						[=]() { return lv; },
+						[=]() { return rv; }
+				);
+		},
+		bc::traits::constexpr_else_if<!lv_scalar && !rv_scalar>(
+		[&](){
+			return make_constexpr_scalar<bc::host_tag, alpha_mod, ValueType>();
+		},
+		bc::traits::constexpr_else_if<lv_scalar && rv_scalar>(
+			[&]() {
+				return bc::traits::constexpr_ternary<host_mode>(
+						[&](){
+							return make_scalar_constant<bc::host_tag, ValueType>(alpha_mod * lv[0] * rv[0]);
+						},[&](){
+							auto tmp_scalar = make_kernel_scalar<ValueType>(stream);
+							derived::scalar_multiply(stream, tmp_scalar, alpha_mod, lv, rv);
+							return tmp_scalar;
+						});
+			},
+		bc::traits::constexpr_else_if<lv_scalar>(
+				[&]() {
+					return bc::traits::constexpr_if<host_mode>(
+							[&](){
+								return make_scalar_constant<bc::host_tag, ValueType>(alpha_mod * lv[0]);
+							},[&](){
+								auto tmp_scalar = make_kernel_scalar<ValueType>(stream);
+								derived::scalar_multiply(stream, tmp_scalar, alpha_mod, lv);
+								return tmp_scalar;
+							});
 				},
-				bc::traits::constexpr_else_if<!lv_scalar && !rv_scalar>(
-				[&](){
-					return make_constexpr_scalar<bc::host_tag, alpha_mod, ValueType>();
-				},
-				bc::traits::constexpr_else_if<lv_scalar && rv_scalar>(
-					[&]() {
-						return bc::traits::constexpr_ternary<host_mode>(
-								[&](){
-									return make_scalar_constant<bc::host_tag, ValueType>(alpha_mod * lv[0] * rv[0]);
-								},[&](){
-									auto tmp_scalar = make_kernel_scalar<ValueType>(stream);
-									derived::scalar_multiply(stream, tmp_scalar, alpha_mod, lv, rv);
-									return tmp_scalar;
-								});
-					},
-				bc::traits::constexpr_else_if<lv_scalar>(
-						[&]() {
-							return bc::traits::constexpr_if<host_mode>(
-									[&](){
-										return make_scalar_constant<bc::host_tag, ValueType>(alpha_mod * lv[0]);
-									},[&](){
-										auto tmp_scalar = make_kernel_scalar<ValueType>(stream);
-										derived::scalar_multiply(stream, tmp_scalar, alpha_mod, lv);
-										return tmp_scalar;
-									});
-						},
-				bc::traits::constexpr_else([&]() { //else if rv_scalar
-							return bc::traits::constexpr_if<host_mode>(
-									[&](){
-										return make_scalar_constant<bc::host_tag, ValueType>(alpha_mod * rv[0]);
-									},[&](){
-										auto tmp_scalar = make_kernel_scalar<ValueType>(stream);
-										derived::scalar_multiply(stream, tmp_scalar, alpha_mod, rv);
-										return tmp_scalar;
-									});
-						}))
-				)));
+		bc::traits::constexpr_else([&]() { //else if rv_scalar
+					return bc::traits::constexpr_if<host_mode>(
+							[&](){
+								return make_scalar_constant<bc::host_tag, ValueType>(alpha_mod * rv[0]);
+							},[&](){
+								auto tmp_scalar = make_kernel_scalar<ValueType>(stream);
+								derived::scalar_multiply(stream, tmp_scalar, alpha_mod, rv);
+								return tmp_scalar;
+							});
+				}))
+		)));
 	}
 
 	template<

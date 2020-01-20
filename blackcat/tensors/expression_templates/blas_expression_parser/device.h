@@ -17,31 +17,37 @@ namespace exprs {
 namespace blas_expression_parser {
 
 template<>
-struct Blas_Expression_Parser<device_tag> : Common_Tools<Blas_Expression_Parser<device_tag>> {
+struct Blas_Expression_Parser<device_tag>:
+		Common_Tools<Blas_Expression_Parser<device_tag>> {
 
 	template<class Stream, class Scalar, class... Scalars>
-	static void scalar_multiply(Stream stream, Scalar output, Scalars... vals) {
+	static void scalar_multiply(Stream stream, Scalar output, Scalars... vals)
+	{
 		device_detail::calculate_alpha<<<1, 1, 0, stream>>>(output, vals...);
 	}
 
-	template<class scalar_t, int value>
-	static const scalar_t* scalar_constant() {
+	template<class ValueType, int Value>
+	static const ValueType* scalar_constant() {
 
-		struct scalar_constant_initialize {
-			static scalar_t* init() {
-				scalar_t tmp_val = value;
-				scalar_t* scalar_constant_ = nullptr;
-				BC_CUDA_ASSERT(cudaMallocManaged((void**)&scalar_constant_, sizeof(scalar_t)));
-				BC_CUDA_ASSERT(cudaMemcpy(scalar_constant_, &tmp_val, sizeof(scalar_t), cudaMemcpyHostToDevice));
-				return scalar_constant_;
+		struct initializer {
+			static ValueType* init() {
+				ValueType tmp = Value;
+				ValueType* scalar = nullptr;
+
+				constexpr int size = sizeof(ValueType);
+
+				BC_CUDA_ASSERT(
+						cudaMallocManaged((void**)&scalar, size));
+				BC_CUDA_ASSERT(
+						cudaMemcpy(scalar, &tmp, size, cudaMemcpyHostToDevice));
+
+				return scalar;
 			}
 		};
 
-		static scalar_t* scalar_constant_ = scalar_constant_initialize::init();
-		return scalar_constant_;
+		static ValueType* scalar = initializer::init();
+		return scalar;
 	}
-
-
 };
 
 }

@@ -32,9 +32,10 @@ static void bc_curand_init(curandState_t* state) {
 }
 
 template<class T> __global__
-static void randomize(curandState_t* state, T t, float lower_bound, float upper_bound) {
+static void randomize(
+		curandState_t* state, T t, float lower_bound, float upper_bound) {
 
-	static constexpr unsigned float_decimal_length = 10000;
+	static constexpr unsigned float_decimal_length = 100000;
 
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
 	for (; i < t.size(); i += blockDim.x * gridDim.x) {
@@ -60,7 +61,7 @@ struct Random<device_tag> {
 
 	static curandState_t* bc_curand_state() {
 		struct bc_curandState_t {
-		    curandState_t* state = nullptr;
+			curandState_t* state = nullptr;
 
 			bc_curandState_t() {
 				BC_CUDA_ASSERT((cudaMalloc((void**) &state, sizeof(curandState_t))));

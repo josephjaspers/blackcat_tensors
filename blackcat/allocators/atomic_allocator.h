@@ -19,12 +19,9 @@ namespace allocators {
 template<class Allocator>
 struct Atomic_Allocator {
 
-	using system_tag = typename bc::allocator_traits<Allocator>::system_tag;	//BC tag
-
+	using system_tag = typename bc::allocator_traits<Allocator>::system_tag;
 	using value_type = typename Allocator::value_type;
-	using pointer = value_type*;
-	using const_pointer = value_type*;
-	using size_type = int;
+
 	using propagate_on_container_copy_assignment = std::false_type;
 	using propagate_on_container_move_assignment = std::false_type;
 	using propagate_on_container_swap = std::false_type;
@@ -32,8 +29,8 @@ struct Atomic_Allocator {
 
 	template<class altT>
 	struct rebind { using other =
-			Atomic_Allocator<
-			typename bc::allocator_traits<Allocator>::template rebind_alloc<altT>>;
+		Atomic_Allocator<typename bc::allocator_traits<Allocator>
+				::template rebind_alloc<altT>>;
 	};
 
 	template<class U>
@@ -58,30 +55,26 @@ struct Atomic_Allocator {
 		value_type* ptr = m_allocator.allocate(size);
 		m_locker.unlock();
 		return ptr;
-    }
+	}
 
-    void deallocate(value_type* t, bc::size_t  size) {
+	void deallocate(value_type* t, bc::size_t  size) {
 		m_locker.lock();
 		m_allocator.deallocate(t, size);
 		m_locker.unlock();
-    }
+	}
 
-    template<class U>
-    bool operator == (const Atomic_Allocator<U>& other) const {
-    	return m_allocator == other.m_allocator;
-    }
+	template<class U>
+	bool operator == (const Atomic_Allocator<U>& other) const {
+		return m_allocator == other.m_allocator;
+	}
 
-    template<class U>
-    bool operator != (const Atomic_Allocator<U>& other) const {
-    	return m_allocator != other.m_allocator;
-    }
+	template<class U>
+	bool operator != (const Atomic_Allocator<U>& other) const {
+		return m_allocator != other.m_allocator;
+	}
 };
 
 }
 }
-
-
-
-
 
 #endif /* ATOMIC_ALLOCATOR_H_ */

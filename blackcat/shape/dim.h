@@ -61,7 +61,9 @@ struct Dim {
 	value_type dim(size_t i, size_t default_value=1) const {
 		//casting to unsigned ensures that
 		//negative values do not lead to undefined behavior
-		return static_cast<const unsigned&>(i) < N ? m_index[i] : default_value;
+		return static_cast<const unsigned&>(i) < N
+				? m_index[i]
+				: default_value;
 	}
 
 	BCINLINE
@@ -162,28 +164,28 @@ public:
 
 
 #define BC_DIM_OP(op, functor)\
-	Dim operator op(const Dim& other) const {                           \
-		return this->op_impl(bc::oper::functor(), other);                 \
-	}
+    Dim operator op(const Dim& other) const {                           \
+        return this->op_impl(bc::oper::functor(), other);               \
+    }
 
 #define BC_DIM_INPLACE_OP(op, functor)\
-	Dim operator op##=(const Dim& other) {                              \
-		return this->inplace_op_impl(bc::oper::functor(), other);         \
-	}
+    Dim operator op##=(const Dim& other) {                              \
+        return this->inplace_op_impl(bc::oper::functor(), other);       \
+    }
 
 #define BC_DIM_INPLACE_SCALAR_OP(op, functor)                           \
-	friend Dim operator op##=(Dim &dim, const value_type& scalar) {     \
-		return dim.inplace_scalar_op_impl(bc::oper::functor(), scalar); \
-	}                                                                   \
+    friend Dim operator op##=(Dim &dim, const value_type& scalar) {     \
+        return dim.inplace_scalar_op_impl(bc::oper::functor(), scalar); \
+    }                                                                   \
 
 #define BC_DIM_SCALAR_OP(op, functor)                                   \
-	friend Dim operator op(const Dim &dim, const value_type& scalar) {  \
-		return dim.scalar_op_impl(bc::oper::functor(), scalar);         \
-	}                                                                   \
-	                                                                    \
-	friend Dim operator op(const value_type& scalar, const Dim &dim) {  \
-		return dim.scalar_op_impl(bc::oper::functor(), scalar);         \
-	}
+    friend Dim operator op(const Dim &dim, const value_type& scalar) {  \
+        return dim.scalar_op_impl(bc::oper::functor(), scalar);         \
+    }                                                                   \
+                                                                        \
+    friend Dim operator op(const value_type& scalar, const Dim &dim) {  \
+        return dim.scalar_op_impl(bc::oper::functor(), scalar);         \
+    }
 
 #define BC_DIM_OP_FACTORY(op, functor) \
 BC_DIM_OP(op, functor)                 \

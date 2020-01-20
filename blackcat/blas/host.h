@@ -41,10 +41,7 @@ struct BLAS;
 
 /*
  * creates a BLAS wrapper for BC_Tensors
- * -> uses generic function names but without the prefix of s/d for precision type.
- *  The automatic template deduction chooses the correct path
- *
- *  (this is to enable BC_Tensors's to not have to specialize the template system)
+ * -> uses generic function names but without the prefix of s/d for the type.
  */
 template<>
 struct BLAS<host_tag> {

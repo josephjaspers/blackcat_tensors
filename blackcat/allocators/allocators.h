@@ -24,17 +24,16 @@ class Allocator;
 using allocators::allocator_traits;
 using allocators::Allocator;
 
-template<class value_type>
-using Basic_Allocator = allocators::Allocator<host_tag, value_type>;
+template<class ValueType>
+using Basic_Allocator = allocators::Allocator<host_tag, ValueType>;
 
 #ifdef __CUDACC__
-template<class value_type>
-using Cuda_Allocator = allocators::Allocator<device_tag, value_type>;
+template<class ValueType>
+using Cuda_Allocator = allocators::Allocator<device_tag, ValueType>;
 
-template<class value_type>
-using Cuda_Managed = allocators::Device_Managed<value_type>;
+template<class ValueType>
+using Cuda_Managed = allocators::Device_Managed<ValueType>;
 #endif
-
 
 } //end of namespace BC
 

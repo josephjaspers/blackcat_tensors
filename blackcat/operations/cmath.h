@@ -19,33 +19,33 @@ template<class> class Tensor_Base;
 namespace oper {
 namespace cmath_functions {
 
-#define BLACKCAT_FUNCTOR_DEF(funcName, instance_name, math_function, ...)\
-                                                                         \
-	struct funcName {                                                    \
-	template<class value_type> BCINLINE                                  \
-	value_type operator () (const value_type& x) const {                 \
-		return math_function;                                            \
-	}                                                                    \
-	template<class value_type> BCINLINE                                  \
-	static auto apply(const value_type& x) {                             \
-		return math_function;                                            \
-	}                                                                    \
-	template<class Xpr>                                                  \
-	auto operator() (const bc::tensors::Tensor_Base<Xpr>& tensor) {      \
-		  return tensor.un_expr(funcName());                             \
-	}                                                                    \
-                                                                         \
-	__VA_ARGS__                                                          \
-	} instance_name;                                                     \
+#define BLACKCAT_FUNCTOR_DEF(funcName, instance_name, math_function, ...)  \
+                                                                           \
+    struct funcName {                                                      \
+    template<class value_type> BCINLINE                                    \
+    value_type operator () (const value_type& x) const {                   \
+        return math_function;                                              \
+    }                                                                      \
+    template<class value_type> BCINLINE                                    \
+    static auto apply(const value_type& x) {                               \
+        return math_function;                                              \
+    }                                                                      \
+    template<class Xpr>                                                    \
+    auto operator() (const bc::tensors::Tensor_Base<Xpr>& tensor) {        \
+          return tensor.un_expr(funcName());                               \
+    }                                                                      \
+                                                                           \
+    __VA_ARGS__                                                            \
+} instance_name;                                                           \
 
 #define DERIVATIVE_DEF(...)\
-		BLACKCAT_FUNCTOR_DEF(Derivative, dx, __VA_ARGS__)
+BLACKCAT_FUNCTOR_DEF(Derivative, dx, __VA_ARGS__)
 
 #define DERIVATIVE_CACHED_DEF(...)\
-		BLACKCAT_FUNCTOR_DEF(Cached_Derivative, cached_dx, __VA_ARGS__)
+BLACKCAT_FUNCTOR_DEF(Cached_Derivative, cached_dx, __VA_ARGS__)
 
 #define BLACKCAT_MATH_DEF(funcName, instanceName, ...) \
-		BLACKCAT_FUNCTOR_DEF(funcName, instanceName, std::instanceName(x), __VA_ARGS__)
+BLACKCAT_FUNCTOR_DEF(funcName, instanceName, std::instanceName(x), __VA_ARGS__)
 
 //UTILITY 'just returns x'
 BLACKCAT_FUNCTOR_DEF( Pass , pass, x, DERIVATIVE_DEF(1))
@@ -64,8 +64,9 @@ BLACKCAT_FUNCTOR_DEF( Sec, sec, 1/std::cos(x) )
 //Hyperbolic
 BLACKCAT_MATH_DEF( Sinh , sinh, DERIVATIVE_DEF(std::cosh(x)))
 BLACKCAT_MATH_DEF( Cosh , cosh, DERIVATIVE_DEF(std::sinh(x)))
-BLACKCAT_MATH_DEF( Tanh , tanh, DERIVATIVE_DEF(1 - std::pow(std::tanh(x), 2))
-										DERIVATIVE_CACHED_DEF(1 - std::pow(x,2)))
+BLACKCAT_MATH_DEF( Tanh , tanh,
+		DERIVATIVE_DEF(1 - std::pow(std::tanh(x), 2))
+		DERIVATIVE_CACHED_DEF(1 - std::pow(x,2)))
 //Arc
 BLACKCAT_MATH_DEF( Asin , asin, DERIVATIVE_DEF(1/std::sqrt(1-std::pow(x,2))))
 BLACKCAT_MATH_DEF( Acos , acos, DERIVATIVE_DEF(-1/std::sqrt(1-std::pow(x,2))))
@@ -110,29 +111,30 @@ BLACKCAT_MATH_DEF( Nexttoward , nexttoward )
 
 struct Pow {
 
-	template<class value_type, class Exp> BCINLINE
-	value_type operator () (const value_type& x, Exp exp) const {
+	template<class ValueType, class Exp> BCINLINE
+	ValueType operator () (const ValueType& x, Exp exp) const {
 		return std::pow(x, exp);
 	}
-	template<class value_type, class Exp> BCINLINE
-	static auto apply(const value_type& x, Exp exp) {
+
+	template<class ValueType, class Exp> BCINLINE
+	static auto apply(const ValueType& x, Exp exp) {
 		return std::pow(x, exp);
 	}
-	template<class internal_t, class Exp>
-	auto operator() (const bc::tensors::Tensor_Base<internal_t>& tensor, Exp exp) {
-		struct FunctorPow {
-			typename internal_t::value_type exp;
-			 auto operator() (const typename internal_t::value_type value) const {
+
+	template<class Xpr, class Exp>
+	auto operator() (const bc::tensors::Tensor_Base<Xpr>& tensor, Exp exp)
+	{
+		struct FunctorPow
+		{
+			typename Xpr::value_type exp;
+			 auto operator() (const typename Xpr::value_type value) const {
 				return std::pow(value, exp);
 			}
 		};
+
 		return tensor.un_expr(FunctorPow {exp});
 	}
-	template<class value_type, class Exp>
-	static auto dx(const value_type&);
 
-	template<class value_type, class Exp>
-	static auto cached_dx(const value_type&);
 } pow;
 
 BLACKCAT_MATH_DEF( Remainder , remainder )
@@ -157,16 +159,24 @@ BLACKCAT_FUNCTOR_DEF(Relu, relu, bc::traits::max(0, x),
 		DERIVATIVE_CACHED_DEF(x))
 
 BLACKCAT_FUNCTOR_DEF(Logical, logical, x != 0 ? 1 : 0);
-BLACKCAT_FUNCTOR_DEF(SoftPlus, softplus, std::log(1 + std::exp(x)), DERIVATIVE_DEF(Logistic::apply(x)))
+
+BLACKCAT_FUNCTOR_DEF(SoftPlus, softplus, std::log(1 + std::exp(x)),
+		DERIVATIVE_DEF(Logistic::apply(x)))
+
 BLACKCAT_FUNCTOR_DEF(Mish, mish,
 		x * std::tanh(SoftPlus::apply(x)),
-	DERIVATIVE_DEF(
-		std::exp(x)*
-			(4*(x+1) + 4*(std::exp(2*x)) + std::exp(3*x) + std::exp(x)*(4*x+6)) /
-			std::pow((2*std::exp(x) + std::exp(2*x) + 2),2)))
+		DERIVATIVE_DEF(
+				std::exp(x)
+					* (4*(x+1)
+					+ 4*(std::exp(2*x))
+					+ std::exp(3*x)
+					+ std::exp(x)*(4*x+6))
+						/ std::pow((2*std::exp(x) + std::exp(2*x) + 2),2)))
 
 #undef BLACKCAT_FUNCTOR_DEF
 #undef BLACKCAT_MATH_DEF
+#undef DERIVATIVE_DEF
+#undef DERIVATIVE_CACHED_DEF
 
 } //end of ns cmath_functions
 } //end of ns oper

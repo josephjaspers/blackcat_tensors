@@ -81,7 +81,11 @@ public:
 	BCINLINE size_t cols() const { return m_inner_shape[1]; }
 	BCINLINE size_t dim(int i) const { return m_inner_shape.dim(i); }
 	BCINLINE size_t outer_dim() const { return m_inner_shape.outer_dim(); }
-	BCINLINE size_t leading_dim(int i) const { return i < N ? m_block_shape[i] : 0; }
+
+	BCINLINE size_t leading_dim(int i) const {
+		return i < N ? m_block_shape[i] : 0;
+	}
+
 	BCINLINE bool operator == (const Shape& other) const {
 		return m_inner_shape ==other.m_inner_shape;
 	}
@@ -185,7 +189,10 @@ public:
 	BCINLINE size_t outer_dim() const { return m_inner_shape[0]; }
 	BCINLINE size_t leading_dim(size_t i) const { return i == 0 ? 1 : 0; }
 	BCINLINE const auto& inner_shape() const { return m_inner_shape; }
-	BCINLINE bool operator == (const Shape<1>& other) const { return rows() == other.rows(); }
+
+	BCINLINE bool operator == (const Shape<1>& other) const {
+		return rows() == other.rows();
+	}
 
 	template<class... Integers> BCINLINE
 	size_t dims_to_index(size_t i, Integers... ints) const {
@@ -230,7 +237,10 @@ struct Strided_Vector_Shape {
 	BCINLINE size_t cols() const { return 1; }
 	BCINLINE size_t dim(int i) const { return i == 0 ? m_inner_shape[0] : 1; }
 	BCINLINE size_t outer_dim() const { return m_inner_shape[0]; }
-	BCINLINE size_t leading_dim(int i) const { return i == 0 ? m_block_shape[0] : 0; }
+	BCINLINE size_t leading_dim(int i) const {
+		return i == 0 ? m_block_shape[0] : 0;
+	}
+
 	BCINLINE const auto& inner_shape() const { return m_inner_shape; }
 
 	template<class... Integers>
@@ -248,12 +258,18 @@ struct Strided_Vector_Shape {
 	}
 };
 
-template<class... Integers, typename=std::enable_if_t<traits::sequence_of_v<size_t, Integers...>>>
+template<
+		class... Integers,
+		typename=std::enable_if_t<
+				traits::sequence_of_v<size_t, Integers...>>>
 BCINLINE auto shape(Integers... ints) {
 	return Shape<sizeof...(Integers)>(ints...);
 }
 
-template<class InnerShape, typename=std::enable_if_t<!traits::sequence_of_v<size_t, InnerShape>>>
+template<
+		class InnerShape,
+		typename=std::enable_if_t<!
+				traits::sequence_of_v<size_t, InnerShape>>>
 BCINLINE auto shape(InnerShape is) {
 	return Shape<InnerShape::tensor_dim>(is);
 }
