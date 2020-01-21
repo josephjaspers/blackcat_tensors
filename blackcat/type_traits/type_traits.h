@@ -110,6 +110,15 @@ static constexpr size_t min(const T& x, const Ts&... xs) {
 	return x < min(xs...) ? x : min(xs...);
 }
 
+template<class T, class U>
+struct is_template_same: std::false_type {};
+
+template<template<class...> class T, class... Args1, class... Args2>
+struct is_template_same<T<Args1...>, T<Args2...>>: std::true_type {};
+
+template<class T, class U>
+static constexpr bool is_template_same_v = is_template_same<T, U>::value;
+
 //----------------------------------
 
 template<template<class> class Function, class... Ts>

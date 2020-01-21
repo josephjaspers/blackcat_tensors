@@ -22,6 +22,11 @@ struct Null_Allocator {
 		return nullptr;
 	}
 
+	template<class AltT>
+	struct rebind {
+		using other = Null_Allocator<system_tag, AltT>;
+	};
+
 	void deallocate(value_type* ptr, size_t sz) {
 		BC_ASSERT(ptr==nullptr, "Null_Allocator passed a non-null ptr");
 	}
@@ -39,7 +44,5 @@ struct Null_Allocator {
 
 }
 }
-
-
 
 #endif /* NULL_ALLOCATOR_H_ */

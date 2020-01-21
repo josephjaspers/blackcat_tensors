@@ -41,5 +41,7 @@ using Cuda_Managed = allocators::Device_Managed<ValueType>;
 #include "polymorphic_allocator.h"
 #include "stack_allocator.h"
 #include "recycle_allocator.h"
+#include "logging_allocator.h"
+#include "null_allocator.h"
 
 #endif

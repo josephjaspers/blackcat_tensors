@@ -33,16 +33,14 @@ namespace streams {
  */
 
 template<class SystemTag>
-struct Logging_Stream_Base {
-
-};
+struct Logging_Stream_Base {};
 
 #ifdef __CUDACC__
+
 template<>
 struct Logging_Stream_Base<device_tag> {
 
 	//This is required for matching the interface of Stream<device_tag>
-
 	cublasHandle_t get_cublas_handle() const {
 		return cublasHandle_t();
 	}
@@ -58,68 +56,22 @@ template<class SystemTag>
 struct Logging_Stream: Logging_Stream_Base<SystemTag> {
 
 	using system_tag = SystemTag;
+	using allocator_type =
+			bc::allocators::Logging_Allocator<
+					bc::allocators::Null_Allocator<
+							system_tag,
+							bc::allocators::Byte>>;
 
-	struct log_info {
+	allocator_type allocator;
 
-		unsigned max_allocated; //maximum number of bytes allocated
-		unsigned current_allocated;
-	};
-
-	template<class T>
-	struct Allocator {
-
-		using system_tag = SystemTag;
-		using value_type = T;
-
-		std::shared_ptr<log_info> info=
-				std::shared_ptr<log_info>(new log_info {0, 0});
-
-		template<class altT>
-		struct rebind { using other = Allocator<T>; };
-
-		template<class U>
-		Allocator(const Allocator<U>& other): info(other.info) {}
-		Allocator() = default;
-		Allocator(const Allocator&) = default;
-		Allocator(Allocator&&) = default;
-
-		Allocator& operator = (const Allocator&) = default;
-		Allocator& operator = (Allocator&&) = default;
-
-		T* allocate(int size) {
-			info->current_allocated += size * sizeof(value_type);
-			if (info->current_allocated > info->max_allocated){
-				info->max_allocated = info->current_allocated;
-			}
-			return nullptr;
-		}
-
-		void reserve(unsigned sz) {
-			info->current_allocated += sz * sizeof(value_type);
-			if (info->current_allocated > info->max_allocated){
-				info->max_allocated = info->current_allocated;
-			}
-		}
-
-		void deallocate(T* ptr, bc::size_t size) {
-			BC_ASSERT(ptr == nullptr,
-					"LOGGING_ALLOCATOR CAN ONLY DEALLOCATE NULLPTRS");
-			BC_ASSERT(info->current_allocated >= size * sizeof(value_type),
-					"BC_DEALLOCATION ERROR, DOUBLE DUPLICATION")
-			info->current_allocated -= size * sizeof(value_type);
-		}
-	};
-
-
-	Allocator<bc::allocators::Byte> allocator;
-
-	Allocator<bc::allocators::Byte> get_allocator() const {
+	allocator_type get_allocator() const {
 		return allocator;
 	}
 
 	template<class ValueType>
-	Allocator<ValueType> get_allocator_rebound() const {
-		return Allocator<ValueType>(allocator);
+	auto get_allocator_rebound() const {
+		return typename allocator_type::template
+				rebind<ValueType>::other(allocator);
 	}
 
 	void set_blas_pointer_mode_device() const {};
@@ -161,7 +113,6 @@ struct Logging_Stream: Logging_Stream_Base<SystemTag> {
 		return false;
 	}
 };
-
 
 }  // namespace streams
 }  // namespace BC
