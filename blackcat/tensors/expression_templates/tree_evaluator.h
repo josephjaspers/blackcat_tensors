@@ -72,9 +72,9 @@ template<
 	class Op,
 	class TruthType=std::false_type>
 static
-std::enable_if_t<optimizer<Binary_Expression<Op, lv, rv>>::requires_greedy_eval &&
+std::enable_if_t<optimizer<Bin_Op<Op, lv, rv>>::requires_greedy_eval &&
 					bc::oper::operation_traits<Op>::is_linear_assignment_operation>
-evaluate(Binary_Expression<Op, lv, rv> expression, Stream stream, TruthType is_subexpression=TruthType()) {
+evaluate(Bin_Op<Op, lv, rv> expression, Stream stream, TruthType is_subexpression=TruthType()) {
 	static constexpr bool entirely_blas_expression = optimizer<rv>::entirely_blas_expr; // all operations are +/- blas calls
 	static constexpr int alpha_mod = bc::oper::operation_traits<Op>::alpha_modifier;
 	static constexpr int beta_mod = bc::oper::operation_traits<Op>::beta_modifier;
@@ -97,8 +97,8 @@ template<
 	>
 static
 std::enable_if_t<
-	optimizer<Binary_Expression<oper::Assign, lv, rv>>::requires_greedy_eval>
-evaluate(Binary_Expression<oper::Assign, lv, rv> expression, Stream stream, TruthType is_subexpression=TruthType()) {
+	optimizer<Bin_Op<oper::Assign, lv, rv>>::requires_greedy_eval>
+evaluate(Bin_Op<oper::Assign, lv, rv> expression, Stream stream, TruthType is_subexpression=TruthType()) {
 	constexpr int alpha = bc::oper::operation_traits<oper::Assign>::alpha_modifier; //1
 	constexpr int beta = bc::oper::operation_traits<oper::Assign>::beta_modifier;   //0
 	constexpr bool entirely_blas_expr = optimizer<rv>::entirely_blas_expr;
@@ -133,9 +133,9 @@ template<
 	class Op,
 	class TruthType
 >
-static std::enable_if_t<optimizer<Binary_Expression<Op, lv, rv>>::requires_greedy_eval &&
+static std::enable_if_t<optimizer<Bin_Op<Op, lv, rv>>::requires_greedy_eval &&
 							!bc::oper::operation_traits<Op>::is_linear_assignment_operation>
-evaluate(Binary_Expression<Op, lv, rv> expression, Stream stream,  TruthType is_subexpression=TruthType()) {
+evaluate(Bin_Op<Op, lv, rv> expression, Stream stream,  TruthType is_subexpression=TruthType()) {
 	auto right = optimizer<rv>::temporary_injection(expression.right, stream);
 	detail::greedy_optimization<Op>(expression.left, right, stream, is_subexpression);
 }
@@ -145,8 +145,8 @@ template<
 	class rv,
 	class Op,
 	class Stream>
-static std::enable_if_t<optimizer<Binary_Expression<Op, lv, rv>>::requires_greedy_eval>
-evaluate_aliased(Binary_Expression<Op, lv, rv> expression, Stream stream) {
+static std::enable_if_t<optimizer<Bin_Op<Op, lv, rv>>::requires_greedy_eval>
+evaluate_aliased(Bin_Op<Op, lv, rv> expression, Stream stream) {
 	detail::greedy_optimization<Op>(expression.left, expression.right, stream, std::false_type());
 }
 //--------------------- lazy only ----------------------- //

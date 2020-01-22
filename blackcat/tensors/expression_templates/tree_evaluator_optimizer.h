@@ -58,13 +58,13 @@ template<class Op, class Array>
 struct unary_optimizer_default {
 
 	template<class StreamType>
-	static auto temporary_injection(Unary_Expression<Op, Array> branch, StreamType stream) {
+	static auto temporary_injection(Un_Op<Op, Array> branch, StreamType stream) {
 		auto expr = optimizer<Array>::temporary_injection(branch.array, stream);
 		return make_un_expr(expr, branch.get_operation());
 
 	}
 	template<class StreamType>
-	 static void deallocate_temporaries(Unary_Expression<Op, Array> branch, StreamType stream) {
+	 static void deallocate_temporaries(Un_Op<Op, Array> branch, StreamType stream) {
 		optimizer<Array>::deallocate_temporaries(branch.array, stream);
 	}
 };
@@ -73,14 +73,14 @@ template<class op, class lv, class rv>
 struct binary_optimizer_default {
 
 	template<class StreamType>
-	static auto temporary_injection(Binary_Expression<op, lv, rv> branch, StreamType stream) {
+	static auto temporary_injection(Bin_Op<op, lv, rv> branch, StreamType stream) {
 		auto left  = optimizer<lv>::temporary_injection(branch.left, stream);
 		auto right = optimizer<rv>::temporary_injection(branch.right, stream);
 		return make_bin_expr<op>(left, right, branch.get_operation());
 	}
 
 	template<class StreamType>
-	static void deallocate_temporaries(Binary_Expression<op, lv, rv> branch, StreamType stream) {
+	static void deallocate_temporaries(Bin_Op<op, lv, rv> branch, StreamType stream) {
 		optimizer<rv>::deallocate_temporaries(branch.right, stream);
 		optimizer<lv>::deallocate_temporaries(branch.left, stream);
 	}
@@ -166,29 +166,29 @@ public:
 
 template<class op, class lv, class rv>
 struct optimizer<
-	Binary_Expression<op, lv, rv>,
-	std::enable_if_t<expression_traits<Binary_Expression<op, lv, rv>>::requires_greedy_evaluation::value>>:
+	Bin_Op<op, lv, rv>,
+	std::enable_if_t<expression_traits<Bin_Op<op, lv, rv>>::requires_greedy_evaluation::value>>:
 	binary_optimizer_default<op, lv, rv>,
-	optimizer_greedy_evaluations<Binary_Expression<op, lv, rv>> {
+	optimizer_greedy_evaluations<Bin_Op<op, lv, rv>> {
 
-	using optimizer_greedy_evaluations<Binary_Expression<op, lv, rv>>::temporary_injection;
+	using optimizer_greedy_evaluations<Bin_Op<op, lv, rv>>::temporary_injection;
 };
 
 template<class op, class value>
 struct optimizer<
-	Unary_Expression<op, value>,
-	std::enable_if_t<expression_traits<Unary_Expression<op, value>>::requires_greedy_evaluation::value>>:
+	Un_Op<op, value>,
+	std::enable_if_t<expression_traits<Un_Op<op, value>>::requires_greedy_evaluation::value>>:
 	unary_optimizer_default<op, value>,
-	optimizer_greedy_evaluations<Unary_Expression<op, value>> {
+	optimizer_greedy_evaluations<Un_Op<op, value>> {
 
-	using optimizer_greedy_evaluations<Unary_Expression<op, value>>::temporary_injection;
+	using optimizer_greedy_evaluations<Un_Op<op, value>>::temporary_injection;
 };
 
 
 //-------------------------------- Linear ----------------------------------------------------//
 
 template<class op, class lv, class rv>
-struct optimizer<Binary_Expression<op, lv, rv>, std::enable_if_t<oper::operation_traits<op>::is_linear_operation>>:
+struct optimizer<Bin_Op<op, lv, rv>, std::enable_if_t<oper::operation_traits<op>::is_linear_operation>>:
  binary_optimizer_default<op, lv, rv> {
 
 	static constexpr bool entirely_blas_expr 	=
@@ -205,7 +205,7 @@ struct optimizer<Binary_Expression<op, lv, rv>, std::enable_if_t<oper::operation
 			optimizer<rv>::requires_greedy_eval;
 
 	template<class core, int a, int b, class StreamType>
-	static auto linear_evaluation(Binary_Expression<op, lv, rv>& branch, Output_Data<core, a, b> tensor, StreamType stream) {
+	static auto linear_evaluation(Bin_Op<op, lv, rv>& branch, Output_Data<core, a, b> tensor, StreamType stream) {
 		return
 				bc::traits::constexpr_if<entirely_blas_expr>(
 						[&](){
@@ -245,7 +245,7 @@ struct optimizer<Binary_Expression<op, lv, rv>, std::enable_if_t<oper::operation
 	}
 
 	template<class core, int a, int b, class StreamType>
-	static auto injection(Binary_Expression<op, lv, rv> branch, Output_Data<core, a, b> tensor, StreamType stream) {
+	static auto injection(Bin_Op<op, lv, rv> branch, Output_Data<core, a, b> tensor, StreamType stream) {
 
 		auto basic_eval = [&]() {
 			static constexpr bool left_evaluated = optimizer<lv>::partial_blas_expr || b != 0;
@@ -283,9 +283,9 @@ struct optimizer<Binary_Expression<op, lv, rv>, std::enable_if_t<oper::operation
 
 template<class op, class lv, class rv>
 struct optimizer<
-Binary_Expression<op, lv, rv>, std::enable_if_t<
+Bin_Op<op, lv, rv>, std::enable_if_t<
 	oper::operation_traits<op>::is_nonlinear_operation &&
-	!expression_traits<Binary_Expression<op, lv, rv>>::requires_greedy_evaluation::value>>:
+	!expression_traits<Bin_Op<op, lv, rv>>::requires_greedy_evaluation::value>>:
  binary_optimizer_default<op, lv, rv> {
 
 	static constexpr bool entirely_blas_expr = false;
@@ -295,12 +295,12 @@ Binary_Expression<op, lv, rv>, std::enable_if_t<
 			optimizer<rv>::requires_greedy_eval;
 
 	template<class core, int a, int b, class StreamType>
-	static auto linear_evaluation(Binary_Expression<op, lv, rv> branch, Output_Data<core, a, b> tensor, StreamType) {
+	static auto linear_evaluation(Bin_Op<op, lv, rv> branch, Output_Data<core, a, b> tensor, StreamType) {
 		return branch;
 	}
 
 	template<class core, int a, int b, class StreamType>
-	static auto injection(Binary_Expression<op, lv, rv> branch, Output_Data<core, a, b> tensor, StreamType stream) {
+	static auto injection(Bin_Op<op, lv, rv> branch, Output_Data<core, a, b> tensor, StreamType stream) {
 		return bc::traits::constexpr_ternary<optimizer<lv>::partial_blas_expr || optimizer<lv>::requires_greedy_eval>(
 					[&]() {
 						auto left = optimizer<lv>::injection(branch.left, tensor, stream);
@@ -322,8 +322,8 @@ Binary_Expression<op, lv, rv>, std::enable_if_t<
 //--------------Unary Expression---------------------------------------------------------------------//
 
 template<class Op, class Array>
-struct optimizer<Unary_Expression<Op, Array>,
-std::enable_if_t<!expression_traits<Unary_Expression<Op, Array>>::requires_greedy_evaluation::value>>:
+struct optimizer<Un_Op<Op, Array>,
+std::enable_if_t<!expression_traits<Un_Op<Op, Array>>::requires_greedy_evaluation::value>>:
  unary_optimizer_default<Op, Array>
 {
 	static constexpr bool entirely_blas_expr 	= false;
@@ -331,11 +331,11 @@ std::enable_if_t<!expression_traits<Unary_Expression<Op, Array>>::requires_greed
 	static constexpr bool requires_greedy_eval 	= optimizer<Array>::requires_greedy_eval;
 
 	template<class core, int a, int b, class StreamType>
-	static auto linear_evaluation(Unary_Expression<Op, Array> branch, Output_Data<core, a, b> tensor, StreamType) {
+	static auto linear_evaluation(Un_Op<Op, Array> branch, Output_Data<core, a, b> tensor, StreamType) {
 		return branch;
 	}
 	template<class core, int a, int b, class StreamType>
-	static auto injection(Unary_Expression<Op, Array> branch, Output_Data<core, a, b> tensor, StreamType stream) {
+	static auto injection(Un_Op<Op, Array> branch, Output_Data<core, a, b> tensor, StreamType stream) {
 		auto array =  optimizer<Array>::injection(branch.array, tensor, stream);
 		return make_un_expr(array, branch.get_operation());
 	}

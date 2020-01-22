@@ -17,8 +17,8 @@ namespace tensors {
 namespace exprs {
 
 template<class Operation, class Lv, class Rv>
-struct Binary_Expression:
-		Expression_Base<Binary_Expression<Operation, Lv, Rv>>,
+struct Bin_Op:
+		Expression_Base<Bin_Op<Operation, Lv, Rv>>,
 		Operation
 {
 	using system_tag = typename Lv::system_tag;
@@ -66,7 +66,7 @@ public:
 	}
 
 	template<class... Args> BCHOT
-	Binary_Expression(Lv lv, Rv rv, const Args&... args):
+	Bin_Op(Lv lv, Rv rv, const Args&... args):
 		Operation(args...),
 		left(lv),
 		right(rv) {}
@@ -125,12 +125,12 @@ namespace detail {
 
 template<class Op, class Lv, class Rv> BCHOT
 auto make_bin_expr_(Lv left, Rv right, Op oper) {
-	return Binary_Expression<Op,Lv, Rv>(left, right, oper);
+	return Bin_Op<Op,Lv, Rv>(left, right, oper);
 }
 
 template<class Op, class Lv, class Rv, class... Args> BCHOT
 auto make_bin_expr_(Lv left, Rv right, Args&&... args) {
-	return Binary_Expression<Op,Lv, Rv>(left, right, args...);
+	return Bin_Op<Op,Lv, Rv>(left, right, args...);
 }
 
 
@@ -139,7 +139,7 @@ struct bin_expr_factory {
 	template<class... Args>
 	static auto make(Lv lv, Rv rv, Args&&... args...)
 	{
-		return Binary_Expression<Op, Lv, Rv>(
+		return Bin_Op<Op, Lv, Rv>(
 				lv, rv, std::forward<Args>(args)...);
 	}
 };

@@ -23,8 +23,8 @@ template<class SystemTag>
 struct Sum {};
 
 template<class ArrayType, class SystemTag>
-struct Unary_Expression<Sum<SystemTag>, ArrayType>:
-	Expression_Base<Unary_Expression<Sum<SystemTag>, ArrayType>>,
+struct Un_Op<Sum<SystemTag>, ArrayType>:
+	Expression_Base<Un_Op<Sum<SystemTag>, ArrayType>>,
 	Shape<0>,
 	Sum<SystemTag> {
 
@@ -39,7 +39,7 @@ struct Unary_Expression<Sum<SystemTag>, ArrayType>:
 
 	using Shape<0>::inner_shape;
 
-	Unary_Expression(ArrayType array, Sum<system_tag> = Sum<system_tag>()):
+	Un_Op(ArrayType array, Sum<system_tag> = Sum<system_tag>()):
 		array(array) {}
 
 	static Sum<SystemTag> get_operation() {

@@ -20,8 +20,8 @@ namespace exprs {
 
 
 template<class lv, class rv, class System_Tag>
-struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
-			Expression_Base<Binary_Expression<oper::gemv<System_Tag>, lv, rv>>,
+struct Bin_Op<oper::gemv<System_Tag>, lv, rv>:
+			Expression_Base<Bin_Op<oper::gemv<System_Tag>, lv, rv>>,
 			oper::gemv<System_Tag> {
 
 	static_assert(std::is_same<
@@ -41,7 +41,7 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
 	lv left;
 	rv right;
 
-	Binary_Expression(lv left, rv right):
+	Bin_Op(lv left, rv right):
 			left(left),
 			right(right)
 	{
@@ -62,7 +62,7 @@ struct Binary_Expression<oper::gemv<System_Tag>, lv, rv>:
 	void eval(Output_Data<core, Alpha, Beta> output, Stream stream) const {
 		static_assert(core::tensor_dim==1, "Gemv out must be a vector");
 
-		using self_t = Binary_Expression<oper::gemv<System_Tag>, lv, rv>;
+		using self_t = Bin_Op<oper::gemv<System_Tag>, lv, rv>;
 		using traits = blas_expression_traits<self_t>;
 
 		//evaluate the left and right branches (computes only if necessary)

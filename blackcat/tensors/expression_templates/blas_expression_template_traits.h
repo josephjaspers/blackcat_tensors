@@ -36,11 +36,11 @@ struct remove_scalar_mul {
 };
 
 template<class lv, class rv>
-struct remove_scalar_mul<Binary_Expression<oper::Scalar_Mul, lv, rv>> {
+struct remove_scalar_mul<Bin_Op<oper::Scalar_Mul, lv, rv>> {
 	using type = std::conditional_t<lv::tensor_dim == 0, rv, lv>;
 	using scalar_type = std::conditional_t<lv::tensor_dim == 0, lv ,rv>;
 
-	static type rm(Binary_Expression<oper::Scalar_Mul, lv, rv> expression) {
+	static type rm(Bin_Op<oper::Scalar_Mul, lv, rv> expression) {
 		return bc::traits::constexpr_ternary<lv::tensor_dim==0>(
 				[&]() { return expression.right; },
 				[&]() { return expression.left;  }
@@ -48,7 +48,7 @@ struct remove_scalar_mul<Binary_Expression<oper::Scalar_Mul, lv, rv>> {
 	}
 
 	static scalar_type get_scalar(
-			Binary_Expression<oper::Scalar_Mul, lv, rv> expression) {
+			Bin_Op<oper::Scalar_Mul, lv, rv> expression) {
 		return bc::traits::constexpr_ternary<lv::tensor_dim==0>(
 				[&]() { return expression.left; },
 				[&]() { return expression.right;  }
@@ -65,29 +65,29 @@ struct remove_transpose {
 	}
 };
 template<class Array, class SystemTag>
-struct remove_transpose<Unary_Expression<oper::transpose<SystemTag>, Array>> {
+struct remove_transpose<Un_Op<oper::transpose<SystemTag>, Array>> {
 	using type = Array;
 
 	static type rm(
-			Unary_Expression<oper::transpose<SystemTag>, Array> expression) {
+			Un_Op<oper::transpose<SystemTag>, Array> expression) {
 		return expression.array;
 	}
 };
 
 template<class Array, class SystemTag, class Rv>
 struct remove_transpose<
-		Binary_Expression<
+		Bin_Op<
 			oper::Scalar_Mul,
-			Unary_Expression<oper::transpose<SystemTag>,
+			Un_Op<oper::transpose<SystemTag>,
 			Array>,
 			Rv>>
 {
 	using type = Array;
 
 	static type rm(
-			Binary_Expression<
+			Bin_Op<
 					oper::Scalar_Mul,
-					Unary_Expression<oper::transpose<SystemTag>,
+					Un_Op<oper::transpose<SystemTag>,
 					Array>,
 					Rv> expression) {
 		return expression.left.array;
@@ -96,19 +96,19 @@ struct remove_transpose<
 
 template<class Array, class SystemTag, class Lv>
 struct remove_transpose<
-		Binary_Expression<
+		Bin_Op<
 				oper::Scalar_Mul,
 				Lv,
-				Unary_Expression<oper::transpose<SystemTag>,
+				Un_Op<oper::transpose<SystemTag>,
 				Array>>>
 {
 	using type = Array;
 
 	static type rm(
-			Binary_Expression<
+			Bin_Op<
 					oper::Scalar_Mul,
 					Lv,
-					Unary_Expression<oper::transpose<SystemTag>,
+					Un_Op<oper::transpose<SystemTag>,
 					Array>> expression) {
 		return expression.right.array;
 	}

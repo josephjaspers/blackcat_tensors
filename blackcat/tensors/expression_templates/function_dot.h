@@ -19,8 +19,8 @@ namespace exprs {
 
 
 template<class lv, class rv, class System_Tag>
-struct Binary_Expression<oper::dot<System_Tag>, lv, rv>:
-		Expression_Base<Binary_Expression<oper::dot<System_Tag>, lv, rv>>,
+struct Bin_Op<oper::dot<System_Tag>, lv, rv>:
+		Expression_Base<Bin_Op<oper::dot<System_Tag>, lv, rv>>,
 		Shape<0>,
 		oper::dot<System_Tag> {
 
@@ -45,7 +45,7 @@ struct Binary_Expression<oper::dot<System_Tag>, lv, rv>:
 
 	using Shape<0>::inner_shape;
 
-	Binary_Expression(lv left, rv right):
+	Bin_Op(lv left, rv right):
 		left(left),
 		right(right) {}
 

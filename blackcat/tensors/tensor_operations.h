@@ -197,7 +197,7 @@ public:
 
 private:
 	 template<class Xpr>
-	 using negated_t = Tensor_Base<exprs::Unary_Expression<oper::negation, Xpr>>;
+	 using negated_t = Tensor_Base<exprs::Un_Op<oper::negation, Xpr>>;
 public:
 
 	template<class Xpr>

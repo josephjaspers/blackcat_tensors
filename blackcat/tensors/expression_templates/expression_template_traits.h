@@ -15,8 +15,8 @@ namespace bc {
 namespace tensors {
 namespace exprs { 
 
-template<class,class,class> struct Binary_Expression;
-template<class,class>		struct Unary_Expression;
+template<class,class,class> struct Bin_Op;
+template<class,class>		struct Un_Op;
 
 namespace detail {
 

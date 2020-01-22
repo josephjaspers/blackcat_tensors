@@ -16,8 +16,8 @@ namespace tensors {
 namespace exprs { 
 
 template<class Operation, class ArrayType>
-struct Unary_Expression:
-		Expression_Base<Unary_Expression<Operation, ArrayType>>,
+struct Un_Op:
+		Expression_Base<Un_Op<Operation, ArrayType>>,
 		Operation {
 
 	using return_type = decltype(std::declval<Operation>()(
@@ -37,7 +37,7 @@ struct Unary_Expression:
 	}
 
 	template<class... args> BCINLINE
-	Unary_Expression(ArrayType v, const args&... args_):
+	Un_Op(ArrayType v, const args&... args_):
 			Operation(args_...),
 			array(v) {}
 
@@ -71,7 +71,7 @@ struct Unary_Expression:
 
 template<class Operation, class Expression> BCHOT
 auto make_un_expr(Expression expression, Operation operation=Operation()) {
-	return Unary_Expression<Operation, Expression>(expression, operation);
+	return Un_Op<Operation, Expression>(expression, operation);
 }
 
 } //ns BC

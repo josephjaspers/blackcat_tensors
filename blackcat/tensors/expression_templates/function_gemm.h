@@ -19,8 +19,8 @@ namespace exprs {
 
 
 template<class lv, class rv, class SystemTag>
-struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
-		Expression_Base<Binary_Expression<oper::gemm<SystemTag>, lv, rv>>,
+struct Bin_Op<oper::gemm<SystemTag>, lv, rv>:
+		Expression_Base<Bin_Op<oper::gemm<SystemTag>, lv, rv>>,
 		oper::gemm<SystemTag> {
 
 	static_assert(std::is_same<
@@ -40,7 +40,7 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 	lv left;
 	rv right;
 
-	BCHOT Binary_Expression(lv left, rv right):
+	BCHOT Bin_Op(lv left, rv right):
 			left(left),
 			right(right)
 	{
@@ -72,7 +72,7 @@ struct Binary_Expression<oper::gemm<SystemTag>, lv, rv>:
 		BC_ASSERT(out.cols() == right.cols(),
 				"Output dim (cols) mismatch for GEMM");
 
-		using self_t = Binary_Expression<oper::gemm<SystemTag>, lv, rv>;
+		using self_t = Bin_Op<oper::gemm<SystemTag>, lv, rv>;
 		using traits = blas_expression_traits<self_t>;
 
 		auto contents = traits::template parse_expression<Alpha, Beta>(stream, *this);

@@ -15,7 +15,7 @@ namespace tensors {
 namespace exprs { 
 
 template<class,class,class>
-struct Binary_Expression;
+struct Bin_Op;
 
 namespace blas_expression_parser {
 
