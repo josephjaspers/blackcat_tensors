@@ -111,17 +111,6 @@ public:
 		return m_data[this->dims_to_index(ints...)];
 	}
 
-	BCINLINE
-	auto slice_ptr_index(int i) const {
-		if (tensor_dim == 0)
-			return 0;
-		else if (tensor_dim == 1)
-			return i;
-		else
-			return this->leading_dim(tensor_dim - 1) * i;
-	}
-
-
 	template<class Allocator> BCHOT
 	void deallocate(Allocator allocator) {
 		allocator.deallocate(data(), this->size());

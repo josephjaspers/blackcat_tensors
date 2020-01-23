@@ -130,7 +130,7 @@ static auto make_slice(Parent& parent, bc::size_t index)
 			parent.get_stream(),
 			parent.get_allocator(),
 			parent.get_shape(),
-			parent.data() + parent.slice_ptr_index(index));
+			parent.data() + parent.leading_dim() * index);
 }
 
 template<
@@ -151,7 +151,7 @@ static auto make_slice(Parent& parent, bc::size_t index)
 			parent.get_stream(),
 			parent.get_allocator(),
 			parent.get_shape(),
-			parent.data() + parent.slice_ptr_index(index));
+			parent.data() + parent.leading_dim() * index);
 }
 
 template<class Parent>
@@ -161,7 +161,7 @@ static auto make_ranged_slice(Parent& parent, bc::size_t from, bc::size_t to)
 			Parent::tensor_dim, Parent>;
 
 	bc::size_t range = to - from;
-	bc::size_t index = parent.slice_ptr_index(from);
+	bc::size_t index = parent.leading_dim() * from;
 
 	bc::Dim<Parent::tensor_dim> inner_shape = parent.inner_shape();
 	inner_shape[Parent::tensor_dim-1] = range;

@@ -23,8 +23,6 @@ namespace detail { template<class> struct DISABLE; }
 template<bool x,class T>
 using only_if = conditional_t<x, T, detail::DISABLE<T>>;
 
-template<int x> struct Integer { static constexpr int value = x; };
-
 template<class...> using void_t = void;
 template<class...> static constexpr bool true_v  = true;
 template<class...> static constexpr bool false_v = false;

@@ -8,31 +8,11 @@
 #ifndef BLACKCAT_CONSTEXPRIF_H_
 #define BLACKCAT_CONSTEXPRIF_H_
 
+#include "constexpr_int.h"
+#include "get.h"
+
 namespace bc {
 namespace traits {
-
-
-//-------------------------- constexpr ternary -----------------------//
-template<bool>
-struct constexpr_ternary_impl {
-    template<class f1, class f2>
-    static auto impl(f1 true_path, f2 false_path) {
-        return true_path();
-    }
-};
-
-template<>
-struct constexpr_ternary_impl<false> {
-    template<class f1, class f2>
-    static auto impl(f1 true_path, f2 false_path) {
-        return false_path();
-    }
-};
-
-template<bool cond, class f1, class f2>
-auto constexpr_ternary(f1 true_path, f2 false_path) {
-    return constexpr_ternary_impl<cond>::impl(true_path, false_path);
-}
 
 //-------------------------- constexpr if -----------------------//
 /*
@@ -52,110 +32,71 @@ auto constexpr_ternary(f1 true_path, f2 false_path) {
  *}
  * output:  constexpr_boolean is false
  */
+template<bool cond, class f1, class f2>
+auto constexpr_ternary(f1 true_path, f2 false_path) {
+	return bc::traits::get<int(!cond)>(true_path, false_path)();
+}
+
+namespace detail {
 
 template<bool>
-struct constexpr_if_impl {
-    template<class f1>
-    static auto impl(f1 path) {
-        return path();
-    }
+struct constexpr_if_impl
+{
+	template<class f1>
+	static auto impl(f1 path) {
+		return path();
+	}
 };
+
 template<>
-struct constexpr_if_impl<false> {
-    template<class f1>
-    static void impl(f1 path) {}
+struct constexpr_if_impl<false>
+{
+	template<class f1>
+	static void impl(f1 path) {}
 };
+
+}
+
 template<bool b,class f>
 auto constexpr_if(f path) {
-    return constexpr_if_impl<b>::impl(path);
+	return detail::constexpr_if_impl<b>::impl(path);
 }
+
 template<bool cond, class f1, class f2>
 auto constexpr_if(f1 true_path, f2 false_path) {
-    return constexpr_ternary_impl<cond>::impl(true_path, false_path);
+	return constexpr_ternary<cond>(true_path, false_path);
 }
-
-template<bool, class...> struct Constexpr_Else_If;
-
-template<class f1, class f2>
-struct Constexpr_Else_If<true, f1, f2> {
-	mutable f1 f1_;
-	f2 f2_;
-
-	template<int ADL=0>
-	auto operator () () {
-		return f1_();
-	}
-	template<int ADL=0>
-	auto operator () () const {
-		return f1_();
-	}
-};
-template<class f1, class f2>
-struct Constexpr_Else_If<false, f1, f2> {
-	f1 f1_;
-	f2 f2_;
-
-	template<int ADL=0>
-	auto operator () () {
-		return f2_();
-	}
-	template<int ADL=0>
-	auto operator () () const {
-		return f2_();
-	}
-};
-template<class f1>
-struct Constexpr_Else_If<true, f1> {
-	f1 f1_;
-
-	template<int ADL=0>
-	auto operator () () {
-		return f1_();
-	}
-	template<int ADL=0>
-	auto operator () () const {
-		return f1_();
-	}
-};
-template<class f1>
-struct Constexpr_Else_If<false, f1> {
-	f1 f1_;
-
-	template<int ADL=0>
-	void operator () () {
-	}
-	template<int ADL=0>
-	void operator () () const {
-	}
-};
 
 template<bool cond, class f1>
 auto constexpr_else_if(f1 f1_) {
-	return Constexpr_Else_If<cond, f1>{f1_};
+	return [&]() { return constexpr_if<cond>(f1_); };
 }
+
 template<bool cond, class f1, class f2>
 auto constexpr_else_if(f1 f1_, f2 f2_) {
-	return Constexpr_Else_If<cond, f1, f2>{f1_, f2_};
+	return [&]() { return constexpr_ternary<cond>(f1_, f2_); };
 }
 
 
-template<class f1>
+template<class Function>
 struct Constexpr_Else {
-	f1 f1_;
 
-	template<int adl=0>
+	Function function;
+
+	template<int ADL=0>
 	auto operator () () {
-		return f1_();
+		return function();
 	}
-	template<int adl=0>
+
+	template<int ADL=0>
 	auto operator () () const {
-		return f1_();
+		return function();
 	}
 };
 
-template<class f1>
-Constexpr_Else<f1> constexpr_else(f1 f1_) {
-	return Constexpr_Else<f1>{f1_};
+template<class Function>
+Constexpr_Else<Function> constexpr_else(Function function) {
+	return Constexpr_Else<Function>{ function };
 }
 
 

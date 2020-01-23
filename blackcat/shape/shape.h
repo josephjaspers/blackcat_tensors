@@ -82,7 +82,7 @@ public:
 	BCINLINE size_t dim(int i) const { return m_inner_shape.dim(i); }
 	BCINLINE size_t outer_dim() const { return m_inner_shape.outer_dim(); }
 
-	BCINLINE size_t leading_dim(int i) const {
+	BCINLINE size_t leading_dim(int i=N-1) const {
 		return i < N ? m_block_shape[i] : 0;
 	}
 
@@ -138,7 +138,7 @@ struct Shape<0> {
 	BCINLINE size_t cols() const { return 1; }
 	BCINLINE size_t dim(int i) const { return 1; }
 	BCINLINE size_t outer_dim() const { return 1; }
-	BCINLINE size_t leading_dim(int i) const { return 0; }
+	BCINLINE size_t leading_dim(int i=0) const { return 0; }
 	BCINLINE bool operator == (const Shape& other) const { return true; }
 	BCINLINE
 	size_t coefficientwise_dims_to_index(size_t i) const {
@@ -187,7 +187,7 @@ public:
 	BCINLINE size_t cols() const { return 1; }
 	BCINLINE size_t dim(size_t i) const { return i == 0 ? m_inner_shape[0] : 1; }
 	BCINLINE size_t outer_dim() const { return m_inner_shape[0]; }
-	BCINLINE size_t leading_dim(size_t i) const { return i == 0 ? 1 : 0; }
+	BCINLINE size_t leading_dim(size_t i=0) const { return i == 0 ? 1 : 0; }
 	BCINLINE const auto& inner_shape() const { return m_inner_shape; }
 
 	BCINLINE bool operator == (const Shape<1>& other) const {
@@ -237,7 +237,7 @@ struct Strided_Vector_Shape {
 	BCINLINE size_t cols() const { return 1; }
 	BCINLINE size_t dim(int i) const { return i == 0 ? m_inner_shape[0] : 1; }
 	BCINLINE size_t outer_dim() const { return m_inner_shape[0]; }
-	BCINLINE size_t leading_dim(int i) const {
+	BCINLINE size_t leading_dim(int i=0) const {
 		return i == 0 ? m_block_shape[0] : 0;
 	}
 
@@ -249,8 +249,8 @@ struct Strided_Vector_Shape {
 	}
 
 	template<class... Integers>
-	BCINLINE size_t dims_to_index(size_t i) const {
-		return m_block_shape[0] * i;
+	BCINLINE size_t dims_to_index(size_t index) const {
+		return m_block_shape[0] * index;
 	}
 
 	BCINLINE size_t coefficientwise_dims_to_index(size_t index) const {
