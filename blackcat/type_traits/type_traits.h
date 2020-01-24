@@ -10,8 +10,7 @@
 #define BLACKCAT_TYPETRAITS_H_
 
 #include "common.h"
-#include "constexpr_if.h"
-#include "bind.h"
+#include "../common.h"
 
 namespace bc {
 namespace traits {
@@ -42,14 +41,12 @@ BCINLINE static constexpr bool true_call() { return true; }
 template<class T>
 BCINLINE static constexpr bool false_call() { return false; }
 
-
-
 template<class...> using void_t = void;
 template<class...> using true_t  = true_type;
 template<class...> using false_t = false_type;
 
-template<bool cond>
-using truth_type = conditional_t<cond, true_type, false_type>;
+template<bool Bool>
+using truth_type = conditional_t<Bool, true_type, false_type>;
 
 template<bool cond>
 using not_type = conditional_t<cond, false_type, true_type>;
@@ -251,6 +248,8 @@ class None {};
 template<class T>
 struct common_traits {
 
+	using type = T;
+
 	using defines_value_type =
 			truth_type<is_detected_v<query_value_type, T>>;
 
@@ -266,31 +265,12 @@ struct common_traits {
 	using defines_get_allocator =
 			truth_type<is_detected_v<query_get_allocator, T>>;
 
-	using type = T;
-
 	using value_type =
 			traits::conditional_detected_t<query_value_type, T, None>;
 	using allocator_type =
 			traits::conditional_detected_t<query_allocator_type, T, None>;
 	using system_tag =
 			traits::conditional_detected_t<query_system_tag, T, host_tag>;
-
-	static auto select_on_get_allocator(const T& type)
-	{
-		static_assert(
-				std::is_same<system_tag, host_tag>::value ||
-						std::is_same<system_tag, device_tag>::value,
-				"SystemTag Mismatch");
-
-		return traits::constexpr_ternary<defines_get_allocator::value>(
-				bc::traits::bind([](const auto& type) {
-						return type.get_allocator();
-				}, type),
-				[]() {
-					return allocator_type();
-				}
-		);
-	}
 };
 
 template<class T>
@@ -303,5 +283,7 @@ using traits::common_traits; //import common_traits into BC namespace
 
 }
 
-
 #endif /* TYPETRAITS_H_ */
+
+#include "get.h"
+#include "constexpr_if.h"

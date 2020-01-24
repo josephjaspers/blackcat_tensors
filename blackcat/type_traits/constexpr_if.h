@@ -10,6 +10,7 @@
 
 #include "constexpr_int.h"
 #include "get.h"
+#include "bind.h"
 
 namespace bc {
 namespace traits {
@@ -37,74 +38,33 @@ auto constexpr_ternary(f1 true_path, f2 false_path) {
 	return bc::traits::get<int(!cond)>(true_path, false_path)();
 }
 
-namespace detail {
-
-template<bool>
-struct constexpr_if_impl
-{
-	template<class f1>
-	static auto impl(f1 path) {
-		return path();
-	}
-};
-
-template<>
-struct constexpr_if_impl<false>
-{
-	template<class f1>
-	static void impl(f1 path) {}
-};
-
+template<bool Bool,class Function>
+auto constexpr_if(Function function) {
+	return constexpr_ternary<Bool>(function, [](){});
 }
 
-template<bool b,class f>
-auto constexpr_if(f path) {
-	return detail::constexpr_if_impl<b>::impl(path);
+template<bool Bool, class F1, class F2>
+auto constexpr_if(F1 f1, F2 f2) {
+	return constexpr_ternary<Bool>(f1, f2);
 }
 
-template<bool cond, class f1, class f2>
-auto constexpr_if(f1 true_path, f2 false_path) {
-	return constexpr_ternary<cond>(true_path, false_path);
+template<bool Bool, class Function>
+auto constexpr_else_if(Function function) {
+	return [&]() { return constexpr_if<Bool>(function); };
 }
 
-template<bool cond, class f1>
-auto constexpr_else_if(f1 f1_) {
-	return [&]() { return constexpr_if<cond>(f1_); };
+template<bool Bool, class F1, class F2>
+auto constexpr_else_if(F1 f1, F2 f2) {
+	return [&]() { return constexpr_ternary<Bool>(f1, f2); };
 }
-
-template<bool cond, class f1, class f2>
-auto constexpr_else_if(f1 f1_, f2 f2_) {
-	return [&]() { return constexpr_ternary<cond>(f1_, f2_); };
-}
-
 
 template<class Function>
-struct Constexpr_Else {
-
-	Function function;
-
-	template<int ADL=0>
-	auto operator () () {
-		return function();
-	}
-
-	template<int ADL=0>
-	auto operator () () const {
-		return function();
-	}
-};
-
-template<class Function>
-Constexpr_Else<Function> constexpr_else(Function function) {
-	return Constexpr_Else<Function>{ function };
+auto constexpr_else(Function function) {
+	return bc::traits::bind(function);
+	//	return detail::constexpr_else_impl<Function>{ function };
 }
-
-
 
 }
 }
-
-
-
 
 #endif /* CONSTEXPRIF_H_ */

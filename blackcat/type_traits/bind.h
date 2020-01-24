@@ -8,6 +8,7 @@
 #ifndef BLACKCAT_BIND_H_
 #define BLACKCAT_BIND_H_
 
+#include "type_traits.h"
 #include "common.h"
 #include "../common.h"
 
@@ -28,65 +29,92 @@ using namespace bc::traits::common;
  *
  */
 template<class Function, class... Args>
-struct Bind : tuple<Args...>
+struct Bind: tuple<Args...>
 {
-	Function f;
+	Function func;
 
-	Bind(Function f, Args... AdditionalArgs):
-		tuple<Args...>(AdditionalArgs...), f(f) {}
+	Bind(Function func, Args... AdditionalArgs):
+		tuple<Args...>(AdditionalArgs...), func(func) {}
 
 	static constexpr int num_args = sizeof...(Args);
 
-	template<int ADL=0>
-	auto operator () () {
-		return call(conditional_t<num_args == 0, true_type, false_type>());
-	}
-
-	template<int ADL=0>
-	auto operator () () const {
-		return call(conditional_t<num_args == 0, true_type, false_type>());
-	}
-
 private:
 
-	template<class... AdditionalArgs>
-	auto call(true_type, AdditionalArgs&&... params) {
-		return f(params...);
+	template<class... TupleArgs>
+	auto call(true_type, TupleArgs&&... params) const
+		-> decltype(func(forward<TupleArgs>(params)...))
+	{
+		return func(forward<TupleArgs>(params)...);
 	}
 
-	template<class... AdditionalArgs>
-	auto call(false_type, AdditionalArgs&&... params) {
+	template<class... TupleArgs>
+	auto call(true_type, TupleArgs&&... params)
+		-> decltype(func(forward<TupleArgs>(params)...))
+	{
+		return func(forward<TupleArgs>(params)...);
+	}
+
+	template<class... TupleArgs, int ArgCount=sizeof...(TupleArgs)>
+	auto call(false_type, TupleArgs&&... params) const
+		-> decltype(call(
+			truth_type<ArgCount + 1 == num_args>(),
+			forward<TupleArgs>(params)...,
+			std::get<ArgCount>(static_cast<const tuple<Args...>&>(*this))))
+	{
 		return call(
-				conditional_t<
-						sizeof...(AdditionalArgs) + 1 == num_args,
-						true_type,
-						false_type>(),
-				forward<AdditionalArgs>(params)...,
-				get<sizeof...(AdditionalArgs)>(
-						static_cast<tuple<Args...>&>(*this)));
+			truth_type<ArgCount + 1 == num_args>(),
+			forward<TupleArgs>(params)...,
+			std::get<ArgCount>(static_cast<const tuple<Args...>&>(*this)));
 	}
 
-	template<class... AdditionalArgs>
-	auto call(true_type, AdditionalArgs&&... params) const {
-		return f(forward<AdditionalArgs>(params)...);
-	}
-
-	template<class... AdditionalArgs>
-	auto call(false_type, AdditionalArgs&&... params) const {
+	template<class... TupleArgs, int ArgCount=sizeof...(TupleArgs)>
+	auto call(false_type, TupleArgs&&... params)
+	-> decltype(call(
+			truth_type<ArgCount + 1 == num_args>(),
+			forward<TupleArgs>(params)...,
+			std::get<ArgCount>(static_cast<tuple<Args...>&>(*this))))
+	{
 		return call(
-				conditional_t<
-						sizeof...(AdditionalArgs) + 1 == num_args,
-						true_type,
-						false_type>(),
-				forward<AdditionalArgs>(params)...,
-				get<sizeof...(AdditionalArgs)>(
-						static_cast<tuple<Args...>&>(*this)));
+			truth_type<ArgCount + 1 == num_args>(),
+			forward<TupleArgs>(params)...,
+			std::get<ArgCount>(static_cast<tuple<Args...>&>(*this)));
 	}
 
+public:
+
+//TODO ADD SUPPORT FOR THIS
+//	template<class... OtherArgs>
+//	auto operator () (OtherArgs&&... other_args)
+//		-> decltype(call(truth_type<num_args == 0>(), std::forward<OtherArgs>(other_args)...))
+//	{
+//		return call(truth_type<num_args == 0>(), std::forward<OtherArgs>(other_args)...);
+//	}
+//
+//	template<class... OtherArgs>
+//	auto operator () (OtherArgs&&... other_args) const
+//		-> decltype(call(truth_type<num_args == 0>(), std::forward<OtherArgs>(other_args)...))
+//	{
+//		return call(truth_type<num_args == 0>(), std::forward<OtherArgs>(other_args)...);
+//	}
+
+	template<int ADL=0, class=std::enable_if_t<ADL==0>>
+	auto operator () ()
+		-> decltype(call(truth_type<num_args == 0 && ADL==0>()))
+	{
+		return call(truth_type<num_args == 0>());
+	}
+
+	template<int ADL=0, class=std::enable_if_t<ADL==0>>
+	auto operator () () const
+		-> decltype(call(truth_type<num_args == 0 && ADL==0>()))
+	{
+		return call(truth_type<num_args == 0>());
+	}
 };
+
 template<class Function, class... Args>
-Bind<Function, Args&&...> bind(Function&& f, Args&&... args) {
-	return {std::forward<Function>(f), std::forward<Args>(args)...};
+Bind<Function, Args&&...> bind(Function&& function, Args&&... args) {
+	return { std::forward<Function>(function), std::forward<Args>(args)... };
 }
 
 }
