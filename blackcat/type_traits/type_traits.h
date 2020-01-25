@@ -136,12 +136,6 @@ struct any<Function, T, Ts...>:
 template<template<class> class Function, class... Ts>
 static constexpr bool any_v = any<Function, Ts...>::value;
 
-template<template<class> class Function, class... Ts>
-struct none: truth_type<any<Function, Ts...>::value> {};
-
-template<template<class> class Function, class... Ts>
-static constexpr bool none_v = none<Function, Ts...>::value;
-
 // ---------------------
 
 template<class T, class... Ts>
@@ -175,68 +169,6 @@ class sequence_last: using_type<typename sequence_last<Ts...>::type> {};
 template<class T>
 class sequence_last<T>: using_type<T> {};
 
-
-// -------- new addition, other code will use static_cast
-template<class T>
-using query_derived_type = typename T::derived_type;
-
-template<template<class...> class Type, class Derived, class... Ts>
-auto& derived_cast(const Type<Derived, Ts...>& t) {
-	using derived_type = conditional_detected_t<
-			query_derived_type, Type<Derived,Ts...>, Derived>;
-
-	return static_cast<const derived_type&>(t);
-}
-
-template<template<class...> class Type, class Derived, class... Ts>
-auto& derived_cast(Type<Derived, Ts...>& t) {
-	using derived_type = conditional_detected_t<
-			query_derived_type, Type<Derived,Ts...>, Derived>;
-
-	return static_cast<derived_type&>(t);
-}
-
-template<
-	class Type,
-	class=std::enable_if_t<is_detected_v<query_derived_type, Type>>>
-const auto& derived_cast(const Type& t) {
-	return static_cast<const typename Type::derived_type&>(t);
-}
-
-template<
-	class Type,
-	class=std::enable_if_t<is_detected_v<query_derived_type, Type>>>
-auto& derived_cast(Type& t) {
-	return static_cast<typename Type::derived_type&>(t);
-}
-
-template<class T> BCINLINE
-T& auto_remove_const(const T& param) {
-	return const_cast<T&>(param);
-}
-
-template<class T> BCINLINE
-T&& auto_remove_const(const T&& param) {
-	return const_cast<T&&>(param);
-}
-
-template<class T> BCINLINE
-T* auto_remove_const(const T* param) {
-	return const_cast<T*>(param);
-}
-
-template<class T>
-using apply_const_t = conditional_t<is_const<T>::value, T, const T>;
-
-
-template<class T> BCINLINE
-apply_const_t<T>& auto_apply_const(T& param) { return param; }
-template<class T> BCINLINE
-apply_const_t<T>&& auto_apply_const(T&& param) { return param; }
-template<class T> BCINLINE
-apply_const_t<T>* auto_apply_const(T* param) { return param; }
-
-
 template<class T> using query_value_type = typename T::value_type;
 template<class T> using query_allocator_type = typename T::allocator_type;
 template<class T> using query_system_tag = typename T::system_tag;
@@ -267,8 +199,10 @@ struct common_traits {
 
 	using value_type =
 			traits::conditional_detected_t<query_value_type, T, None>;
+
 	using allocator_type =
 			traits::conditional_detected_t<query_allocator_type, T, None>;
+
 	using system_tag =
 			traits::conditional_detected_t<query_system_tag, T, host_tag>;
 };

@@ -178,7 +178,6 @@ public:
 		return m_cache;
 	}
 
-
 	void zero_time_index() {
 		m_cache.zero_time_index();
 	}
@@ -207,7 +206,7 @@ private:
 	}
 
 	auto& next_layer() {
-		return bc::traits::derived_cast(*this).next().layer();
+		return static_cast<Derived&>(*this).next().layer();
 	}
 
 	// Handle Forward Args ------------------------------------------------

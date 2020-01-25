@@ -8,6 +8,7 @@
 #ifndef BC_IM2COL_CU_
 #define BC_IM2COL_CU_
 
+#include "../../tensors.h"
 #include "common.h"
 #include "../../operations.h"
 #include "../../common.h"

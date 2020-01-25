@@ -16,7 +16,7 @@ namespace bc {
 namespace traits {
 
 //-------------------------- constexpr if -----------------------//
-/*
+/**
  * C++ 11/14 version of constexpr if.  (Required because NVCC doesn't support C++17)
  *
  * Accepts a constexpr bool template argument, and one or two functors (that take no arguments)
@@ -25,13 +25,12 @@ namespace traits {
  * Example:
  *
  * int main() {
- *  static constexpr bool value = false;
- *	return bc::meta:constexpr_if<false>(
- *		[]() { std::cout << " constexpr_boolean is true " << std::endl;  return true;},
+ *	return bc::traits::constexpr_if<true>(
+ *		[]() { std::cout << " constexpr_boolean is true  " << std::endl; return true;  },
  *		[]() { std::cout << " constexpr_boolean is false " << std::endl; return false; }
  *	);
  *}
- * output:  constexpr_boolean is false
+ * output: constexpr_boolean is true
  */
 template<bool cond, class f1, class f2>
 auto constexpr_ternary(f1 true_path, f2 false_path) {
@@ -61,7 +60,6 @@ auto constexpr_else_if(F1 f1, F2 f2) {
 template<class Function>
 auto constexpr_else(Function function) {
 	return bc::traits::bind(function);
-	//	return detail::constexpr_else_impl<Function>{ function };
 }
 
 }
