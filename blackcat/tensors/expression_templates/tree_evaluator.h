@@ -80,7 +80,7 @@ evaluate(Bin_Op<Op, lv, rv> expression, Stream stream, TruthType is_subexpressio
 	static constexpr int beta_mod = bc::oper::operation_traits<Op>::beta_modifier;
 
 	auto output = make_output_data<alpha_mod, beta_mod>(expression.left);
-	auto right = optimizer<rv>::linear_evaluation(expression.right, output, stream);
+	auto right = optimizer<rv>::linear_eval(expression.right, output, stream);
 
 	if /*constexpr*/ (!entirely_blas_expression)
 		detail::greedy_optimization<Op>(expression.left, right, stream, is_subexpression);
@@ -109,7 +109,7 @@ evaluate(Bin_Op<oper::Assign, lv, rv> expression, Stream stream, TruthType is_su
 
 	auto right = bc::traits::constexpr_ternary<partial_blas_expr>(
 		[&]() {
-			return optimizer<expr_rv_t>::linear_evaluation(
+			return optimizer<expr_rv_t>::linear_eval(
 					expression.right, output, stream);
 		},
 		[&]() {

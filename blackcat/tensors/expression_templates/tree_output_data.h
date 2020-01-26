@@ -15,25 +15,27 @@ namespace tensors {
 namespace exprs {
 
 template<class Tensor, int AlphaModifer=1, int BetaModifer=0>
-struct Output_Data {
-
+struct Output_Data
+{
+	static constexpr int tensor_dim = Tensor::tensor_dim;
 	static constexpr size_t ALPHA = AlphaModifer;
 	static constexpr size_t BETA = BetaModifer;
 
 	Tensor array;
+
 	const Tensor& data() const { return array; }
-		  Tensor& data()       { return array; }
+	      Tensor& data()       { return array; }
 };
 
 template<class Op, bool PriorEval, class Tensor, int A, int B>
-auto update_alpha_beta_modifiers(Output_Data<Tensor, A, B> tensor) {
+inline auto update_alpha_beta_modifiers(Output_Data<Tensor, A, B> tensor) {
 	constexpr int alpha =  A * bc::oper::operation_traits<Op>::alpha_modifier;
 	constexpr int beta  = PriorEval ? 1 : 0;
 	return Output_Data<Tensor, alpha, beta> {tensor.data()};
 }
 
 template<int AlphaModifer=1, int BetaModifer=0, class Tensor>
-auto make_output_data(Tensor tensor) {
+inline auto make_output_data(Tensor tensor) {
 	return Output_Data<Tensor, AlphaModifer, BetaModifer> { tensor };
 }
 
