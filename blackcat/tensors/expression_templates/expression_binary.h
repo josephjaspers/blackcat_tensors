@@ -123,19 +123,14 @@ struct blas_expression_traits;
 
 namespace detail {
 
-template<class Op, class Lv, class Rv> BCHOT
-auto make_bin_expr_(Lv left, Rv right, Op oper) {
-	return Bin_Op<Op,Lv, Rv>(left, right, oper);
-}
-
 template<class Op, class Lv, class Rv, class... Args> BCHOT
-auto make_bin_expr_(Lv left, Rv right, Args&&... args) {
-	return Bin_Op<Op,Lv, Rv>(left, right, args...);
+auto mk_bin_op(Lv left, Rv right, Args&&... args) {
+	return Bin_Op<Op,Lv, Rv>(left, right, std::forward<Args>(args)...);
 }
 
-
-template<class Lv, class Rv, class Op, class=void>
-struct bin_expr_factory {
+template<class Op, class Lv, class Rv, class=void>
+struct bin_expr_factory
+{
 	template<class... Args>
 	static auto make(Lv lv, Rv rv, Args&&... args...)
 	{
@@ -144,18 +139,121 @@ struct bin_expr_factory {
 	}
 };
 
+/// y + (-x) -> y - x
+template<class Lv, class Rv>
+struct bin_expr_factory<bc::oper::Add, Lv, Un_Op<bc::oper::Negation, Rv>>
+{
+	template<class... Args>
+	static auto make(Lv lv, Un_Op<bc::oper::Negation, Rv> rv, Args&&... args...)
+	{
+		return detail::mk_bin_op<bc::oper::Sub>(
+				lv, rv.array, std::forward<Args>(args)...);
+	}
+};
+
+/// y - (-x) -> y + x
+template<class Lv, class Rv>
+struct bin_expr_factory<bc::oper::Sub, Lv, Un_Op<bc::oper::Negation, Rv>>
+{
+	template<class... Args>
+	static auto make(Lv lv, Un_Op<bc::oper::Negation, Rv> rv, Args&&... args...)
+	{
+		return detail::mk_bin_op<bc::oper::Add>(
+				lv, rv.array, std::forward<Args>(args)...);
+	}
+};
+
+/// (-y) + x -> x - y
+template<class Lv, class Rv>
+struct bin_expr_factory<bc::oper::Sub, Un_Op<bc::oper::Negation, Lv>, Rv>
+{
+	template<class... Args>
+	static auto make(Un_Op<bc::oper::Negation, Lv> lv, Rv rv, Args&&... args...)
+	{
+		return detail::mk_bin_op<bc::oper::Sub>(
+				rv, lv.array, std::forward<Args>(args)...);
+	}
+};
+
+/// (-y) - (-x) -> (-y) + x --specialized to handle ambiguous overload
 template<class Lv, class Rv>
 struct bin_expr_factory<
+		bc::oper::Sub,
+		Un_Op<bc::oper::Negation, Lv>,
+		Un_Op<bc::oper::Negation, Rv>>
+{
+	template<class... Args>
+	static auto make(
+			Un_Op<bc::oper::Negation, Lv> lv,
+			Un_Op<bc::oper::Negation, Rv> rv,
+			Args&&... args...)
+	{
+		return detail::mk_bin_op<bc::oper::Add>(
+				lv, rv.array, std::forward<Args>(args)...);
+	}
+};
+
+/// (-y) + (-x) -> (-y) - x --specialized to handle ambiguous overload
+template<class Lv, class Rv>
+struct bin_expr_factory<
+		bc::oper::Add,
+		Un_Op<bc::oper::Negation, Lv>,
+		Un_Op<bc::oper::Negation, Rv>>
+{
+	template<class... Args>
+	static auto make(
+			Un_Op<bc::oper::Negation, Lv> lv,
+			Un_Op<bc::oper::Negation, Rv> rv,
+			Args&&... args...)
+	{
+		return detail::mk_bin_op<bc::oper::Sub>(
+				lv, rv.array, std::forward<Args>(args)...);
+	}
+};
+
+/// y += (-x) -> y -= x
+template<class Lv, class Rv>
+struct bin_expr_factory<
+		bc::oper::Add_Assign,
+		Lv,
+		Un_Op<bc::oper::Negation, Rv>>
+{
+	template<class... Args>
+	static auto make(Lv lv, Un_Op<bc::oper::Negation, Rv> rv, Args&&... args...)
+	{
+		return detail::mk_bin_op<bc::oper::Sub_Assign>(
+				lv, rv.array, std::forward<Args>(args)...);
+	}
+};
+
+/// y -= (-x) -> y += x
+template<class Lv, class Rv>
+struct bin_expr_factory<
+		bc::oper::Sub_Assign,
+		Lv,
+		Un_Op<bc::oper::Negation, Rv>>
+{
+	template<class... Args>
+	static auto make(Lv lv, Un_Op<bc::oper::Negation, Rv> rv, Args&&... args...)
+	{
+		return detail::mk_bin_op<bc::oper::Add_Assign>(
+				lv, rv.array, std::forward<Args>(args)...);
+	}
+};
+
+/// scalar * blas_op(a, b) -> blas_op(a * scalar, b) || blas_op(a, b * scalar)
+template<class Lv, class Rv>
+struct bin_expr_factory<
+		bc::oper::Scalar_Mul,
 		Lv,
 		Rv,
-		bc::oper::Scalar_Mul,
 		std::enable_if_t<
-				expression_traits<Lv>::is_blas_expression::value ||
+				expression_traits<Lv>::is_blas_expression::value !=
 				expression_traits<Rv>::is_blas_expression::value>>
 {
-	static auto make(
-			Lv lv, Rv rv)
+	static auto make(Lv lv, Rv rv)
 	{
+
 		constexpr bool left_scalar = Lv::tensor_dim==0;
 		auto scalar_expr = bc::traits::constexpr_ternary<left_scalar>(
 			[=]() { return std::make_pair(lv, rv); },
@@ -165,31 +263,32 @@ struct bin_expr_factory<
 		auto scalar = scalar_expr.first;
 		auto expr   = scalar_expr.second;
 
+		using expr_lv_t = std::decay_t<decltype(expr.left)>;
+		using expr_rv_t = std::decay_t<decltype(expr.right)>;
+		using expr_op_t = std::decay_t<decltype(expr.get_operation())>;
+
 		constexpr bool expr_left_is_scalar_multiplied =
-				blas_expression_traits<std::decay_t<decltype(expr.left)>
-				>::is_scalar_multiplied::value;
+				blas_expression_traits<expr_lv_t>::is_scalar_multiplied::value;
 
 		constexpr bool expr_right_is_scalar_multiplied =
-				blas_expression_traits<std::decay_t<decltype(expr.right)>
-				>::is_scalar_multiplied::value;
-
+				blas_expression_traits<expr_rv_t>::is_scalar_multiplied::value;
 
 		//TODO add support for when both left and right are scalar multiplied
-		static_assert(!(expr_left_is_scalar_multiplied &&
-				expr_right_is_scalar_multiplied),
+		static_assert(
+				!(expr_left_is_scalar_multiplied
+						&& expr_right_is_scalar_multiplied),
 			"Cannot apply scalar_multiplication to a blas_expression where"
 			"both the left and right expressions of the blas expression"
 			"are already scalar multiplied");
-
-		using blas_op_type = std::decay_t<decltype(expr.get_operation())>;
+		
 		return bc::traits::constexpr_ternary<!expr_left_is_scalar_multiplied>(
 			[=]() {
-				auto newexpr = make_bin_expr_<bc::oper::Scalar_Mul>(scalar, expr.left);
-				return make_bin_expr_<blas_op_type>(newexpr,expr.right);
+				auto newexpr = mk_bin_op<bc::oper::Scalar_Mul>(scalar, expr.left);
+				return mk_bin_op<expr_op_t>(newexpr, expr.right);
 			},
 			[=]() {
-				auto newexpr = make_bin_expr_<bc::oper::Scalar_Mul>(scalar, expr.right);
-				return make_bin_expr_<blas_op_type>(newexpr,expr.left);
+				auto newexpr = mk_bin_op<bc::oper::Scalar_Mul>(scalar, expr.right);
+				return mk_bin_op<expr_op_t>(newexpr, expr.left);
 			});
 	}
 };
@@ -198,13 +297,13 @@ struct bin_expr_factory<
 
 template<class Op, class Lv, class Rv> BCHOT
 auto make_bin_expr(Lv left, Rv right, Op oper) {
-	return detail::bin_expr_factory<Lv, Rv, Op>::make(left, right, oper);
+	return detail::bin_expr_factory<Op, Lv, Rv>::make(left, right, oper);
 }
 
 template<class Op, class Lv, class Rv, class... Args> BCHOT
 auto make_bin_expr(Lv left, Rv right, Args&&... args)
 {
-	return detail::bin_expr_factory<Lv, Rv, Op>::make(
+	return detail::bin_expr_factory<Op, Lv, Rv>::make(
 			left, right, std::forward<Args>(args)...);
 }
 

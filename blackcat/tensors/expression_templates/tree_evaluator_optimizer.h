@@ -219,7 +219,7 @@ struct optimizer<Bin_Op<op, lv, rv>, std::enable_if_t<oper::operation_traits<op>
 									[&]() {
 										/*auto left = */ optimizer<lv>::linear_evaluation(branch.left, tensor, stream);
 										auto right = optimizer<rv>::linear_evaluation(branch.right, update_alpha_beta_modifiers<op, true>(tensor), stream);
-										return make_un_expr<oper::negation>(right);
+										return make_un_expr<oper::Negation>(right);
 									},
 									[&]() {
 										/*auto left = */ optimizer<lv>::linear_evaluation(branch.left, tensor, stream);

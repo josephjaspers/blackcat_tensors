@@ -15,48 +15,48 @@
 namespace bc {
 namespace oper {
 
-    struct negation {
-        template<class lv> BCINLINE lv operator ()(lv val) const {
-            return -val;
-        }
-        template<class lv> BCINLINE static lv apply(lv val) {
-            return -val;
-        }
-    };
+struct Negation {
+	template<class lv> BCINLINE lv operator ()(lv val) const {
+		return -val;
+	}
+	template<class lv> BCINLINE static lv apply(lv val) {
+		return -val;
+	}
+} negation;
 
-    template<class SystemTag, class ValueType>
-    struct Sum;
+template<class SystemTag, class ValueType>
+struct Sum;
 
-    template<class ValueType>
-    struct Sum<host_tag, ValueType> {
-    	mutable ValueType total = 0;
-    	mutable int index = 0;
-    	template<class T>
-    	auto operator ()(T&& value) const {
+template<class ValueType>
+struct Sum<host_tag, ValueType> {
+	mutable ValueType total = 0;
+	mutable int index = 0;
+	template<class T>
+	auto operator ()(T&& value) const {
 #ifdef BC_OPENMP
-    		BC_omp_atomic__
-    		total += value;
-    		BC_omp_bar__
-    		return total;
+		BC_omp_atomic__
+		total += value;
+		BC_omp_bar__
+		return total;
 #else
-    		total += value;
-    		return total;
+		total += value;
+		return total;
 #endif
-    	}
-    };
+	}
+};
 
 #ifdef __CUDACC__
-    template<class ValueType>
-    struct Sum<device_tag, ValueType> {
-    	mutable ValueType total = 0;
+template<class ValueType>
+struct Sum<device_tag, ValueType> {
+	mutable ValueType total = 0;
 
-    	template<class T> __device__
-    	auto operator ()(T&& value) const {
-			atomicAdd(&total, value);
-			__syncthreads();
-    		return total;
-    	}
-    };
+	template<class T> __device__
+	auto operator ()(T&& value) const {
+		atomicAdd(&total, value);
+		__syncthreads();
+		return total;
+	}
+};
 #endif
 }
 }

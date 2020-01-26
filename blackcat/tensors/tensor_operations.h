@@ -189,37 +189,7 @@ public:
 	      auto t()       { return this->transpose(); }
 
 	auto operator - () const {
-		return un_expr<oper::negation>();
-	}
-
-
-	// ---- Negation Specializations ---- //
-
-private:
-	 template<class Xpr>
-	 using negated_t = Tensor_Base<exprs::Un_Op<oper::negation, Xpr>>;
-public:
-
-	template<class Xpr>
-	self_type& operator +=(const negated_t<Xpr>& param) {
-		BC_ASSERT_ASSIGNABLE("operator +=(const Tensor_Base<Xpr>& param)");
-		assert_valid(param);
-		evaluate(bi_expr<oper::Sub_Assign>(make_tensor(param.array)));
-		return *this;
-	}
-
-	template<class Xpr>
-	self_type& operator -=(const negated_t<Xpr>& param) {
-		BC_ASSERT_ASSIGNABLE("operator -=(const Tensor_Base<Xpr>& param)");
-		assert_valid(param);
-		evaluate(bi_expr<oper::Add_Assign>(make_tensor(param.array)));
-		return *this;
-	}
-
-	template<class Xpr>
-	auto operator +(const negated_t<Xpr>& param) const {
-		assert_valid(param);
-		return bi_expr<oper::Sub>(make_tensor(param.array));
+		return un_expr<oper::Negation>();
 	}
 
 	// ---- expression_factory ---- //
