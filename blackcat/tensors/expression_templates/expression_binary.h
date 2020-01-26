@@ -251,7 +251,7 @@ struct bin_expr_factory<
 				expression_traits<Lv>::is_blas_expression::value !=
 				expression_traits<Rv>::is_blas_expression::value>>
 {
-	static auto make(Lv lv, Rv rv)
+	static auto make(Lv lv, Rv rv, bc::oper::Scalar_Mul op=bc::oper::Scalar_Mul())
 	{
 
 		constexpr bool left_scalar = Lv::tensor_dim==0;

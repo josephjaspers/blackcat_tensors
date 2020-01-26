@@ -40,7 +40,8 @@ struct Bin_Op<oper::gemm<SystemTag>, lv, rv>:
 	lv left;
 	rv right;
 
-	BCHOT Bin_Op(lv left, rv right):
+	BCHOT Bin_Op(lv left, rv right,
+			oper::gemm<system_tag> op=oper::gemm<system_tag>()):
 			left(left),
 			right(right)
 	{

@@ -39,7 +39,7 @@ struct Un_Op<Sum<SystemTag>, ArrayType>:
 
 	using Shape<0>::inner_shape;
 
-	Un_Op(ArrayType array, Sum<system_tag> = Sum<system_tag>()):
+	Un_Op(ArrayType array, Sum<system_tag> op=Sum<system_tag>()):
 		array(array) {}
 
 	static Sum<SystemTag> get_operation() {

@@ -19,10 +19,10 @@ namespace tensors {
 namespace exprs { 
 
 
-template<class lv, class rv, class System_Tag>
-struct Bin_Op<oper::gemv<System_Tag>, lv, rv>:
-			Expression_Base<Bin_Op<oper::gemv<System_Tag>, lv, rv>>,
-			oper::gemv<System_Tag> {
+template<class lv, class rv, class SystemTag>
+struct Bin_Op<oper::gemv<SystemTag>, lv, rv>:
+			Expression_Base<Bin_Op<oper::gemv<SystemTag>, lv, rv>>,
+			oper::gemv<SystemTag> {
 
 	static_assert(std::is_same<
 			typename lv::value_type,
@@ -33,7 +33,7 @@ struct Bin_Op<oper::gemv<System_Tag>, lv, rv>:
 			"Lv must be a Matrix and Rv must be a Vector");
 
 	using value_type = typename lv::value_type;
-	using system_tag = System_Tag;
+	using system_tag = SystemTag;
 
 	static constexpr int tensor_dim = 1;
 	static constexpr int tensor_iterator_dim = 1;
@@ -41,7 +41,7 @@ struct Bin_Op<oper::gemv<System_Tag>, lv, rv>:
 	lv left;
 	rv right;
 
-	Bin_Op(lv left, rv right):
+	Bin_Op(lv left, rv right, oper::gemv<system_tag> op=oper::gemv<system_tag>()):
 			left(left),
 			right(right)
 	{
@@ -49,8 +49,8 @@ struct Bin_Op<oper::gemv<System_Tag>, lv, rv>:
 				"gemv requires left.cols() == right.rows()");
 	}
 
-	static oper::gemv<System_Tag> get_operation() {
-		return oper::gemv<System_Tag>();
+	static oper::gemv<system_tag> get_operation() {
+		return oper::gemv<system_tag>();
 	}
 
 	BCINLINE bc::size_t size() const { return left.rows(); }
@@ -62,7 +62,7 @@ struct Bin_Op<oper::gemv<System_Tag>, lv, rv>:
 	void eval(Output_Data<core, Alpha, Beta> output, Stream stream) const {
 		static_assert(core::tensor_dim==1, "Gemv out must be a vector");
 
-		using self_t = Bin_Op<oper::gemv<System_Tag>, lv, rv>;
+		using self_t = Bin_Op<oper::gemv<system_tag>, lv, rv>;
 		using traits = blas_expression_traits<self_t>;
 
 		//evaluate the left and right branches (computes only if necessary)

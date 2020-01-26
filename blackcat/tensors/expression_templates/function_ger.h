@@ -18,10 +18,10 @@ namespace bc {
 namespace tensors {
 namespace exprs { 
 
-template<class lv, class rv, class System_Tag>
-struct Bin_Op<oper::ger<System_Tag>, lv, rv>:
-		Expression_Base<Bin_Op<oper::ger<System_Tag>, lv, rv>>,
-		oper::ger<System_Tag> {
+template<class lv, class rv, class SystemTag>
+struct Bin_Op<oper::ger<SystemTag>, lv, rv>:
+		Expression_Base<Bin_Op<oper::ger<SystemTag>, lv, rv>>,
+		oper::ger<SystemTag> {
 
 	static_assert(
 			std::is_same<
@@ -35,7 +35,7 @@ struct Bin_Op<oper::ger<System_Tag>, lv, rv>:
 			"GER DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
 
 	using value_type = typename lv::value_type;
-	using system_tag = System_Tag;
+	using system_tag = SystemTag;
 
 	static constexpr int tensor_dim = 2;
 	static constexpr int tensor_iterator_dim = 1;
@@ -43,16 +43,16 @@ struct Bin_Op<oper::ger<System_Tag>, lv, rv>:
 	lv left;
 	rv right;
 
-	Bin_Op(lv left, rv right):
+	Bin_Op(lv left, rv right, oper::ger<system_tag> op=oper::ger<system_tag>()):
 		left(left),
 		right(right) {}
 
-	static oper::ger<System_Tag> get_operation() {
-		return oper::ger<System_Tag>();
+	static oper::ger<system_tag> get_operation() {
+		return oper::ger<system_tag>();
 	}
 
-	BCINLINE bc::size_t  size() const { return left.size() * right.size(); }
-	BCINLINE bc::size_t  dim(int i) const { return i == 0 ? left.rows() : i == 1 ? right.cols() : 1; }
+	BCINLINE bc::size_t size() const { return left.size() * right.size(); }
+	BCINLINE bc::size_t dim(int i) const { return i == 0 ? left.rows() : i == 1 ? right.cols() : 1; }
 	BCINLINE bc::size_t rows() const { return dim(0); }
 	BCINLINE bc::size_t cols() const { return dim(1); }
 
@@ -61,7 +61,7 @@ struct Bin_Op<oper::ger<System_Tag>, lv, rv>:
 	void eval(Output_Data<core, Alpha, Beta> output, Stream stream) const {
 		static_assert(core::tensor_dim==2, "Ger out must be a matrix");
 
-		using self_t = Bin_Op<oper::ger<System_Tag>, lv, rv>;
+		using self_t = Bin_Op<oper::ger<system_tag>, lv, rv>;
 		using traits = blas_expression_traits<self_t>;
 
 		auto& out = output.data();

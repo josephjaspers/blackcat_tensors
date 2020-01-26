@@ -18,11 +18,11 @@ namespace tensors {
 namespace exprs { 
 
 
-template<class lv, class rv, class System_Tag>
-struct Bin_Op<oper::dot<System_Tag>, lv, rv>:
-		Expression_Base<Bin_Op<oper::dot<System_Tag>, lv, rv>>,
+template<class lv, class rv, class SystemTag>
+struct Bin_Op<oper::dot<SystemTag>, lv, rv>:
+		Expression_Base<Bin_Op<oper::dot<SystemTag>, lv, rv>>,
 		Shape<0>,
-		oper::dot<System_Tag> {
+		oper::dot<SystemTag> {
 
 	static_assert(std::is_same<
 			typename lv::value_type,
@@ -35,7 +35,7 @@ struct Bin_Op<oper::dot<System_Tag>, lv, rv>:
 			"DOT DIMENSION MISMATCH, INTERNAL BUG, REPORT PLEASE");
 
 	using value_type = typename lv::value_type;
-	using system_tag = System_Tag;
+	using system_tag = SystemTag;
 
 	static constexpr int tensor_dim  = 0;
 	static constexpr int tensor_iterator_dim = 0;
@@ -45,12 +45,12 @@ struct Bin_Op<oper::dot<System_Tag>, lv, rv>:
 
 	using Shape<0>::inner_shape;
 
-	Bin_Op(lv left, rv right):
+	Bin_Op(lv left, rv right, oper::dot<system_tag> op=oper::dot<system_tag>()):
 		left(left),
 		right(right) {}
 
-	static oper::dot<System_Tag> get_operation() {
-		return oper::dot<System_Tag>();
+	static oper::dot<system_tag> get_operation() {
+		return oper::dot<system_tag>();
 	}
 
 	template<class Core, int Alpha, int Beta, class Stream>
