@@ -292,23 +292,25 @@ struct optimizer<
 		};
 
 		return constexpr_if<entirely_blas_expr>(
-				[&](){
-					lv_eval();
-					rv_eval(std::true_type());
-					return tensor.data();
-				},
-		constexpr_else_if<optimizer<rv>::partial_blas_expr
-				&& optimizer<lv>::partial_blas_expr>(basic_eval,
+			[&](){
+				lv_eval();
+				rv_eval(std::true_type());
+				return tensor.data();
+			},
+		constexpr_else_if<
+				optimizer<rv>::partial_blas_expr
+				&& optimizer<lv>::partial_blas_expr>(
+			basic_eval,
 		constexpr_else_if<optimizer<lv>::requires_greedy_eval>(
-				[&]() {
-					auto left = optimizer<lv>::injection(branch.left, tensor, stream);
-					return make_bin_expr<op>(left, branch.right);
-				},
+			[&]() {
+				auto left = optimizer<lv>::injection(branch.left, tensor, stream);
+				return make_bin_expr<op>(left, branch.right);
+			},
 		constexpr_else_if<optimizer<rv>::requires_greedy_eval>(
-				[&]() {
-					auto right = optimizer<rv>::injection(branch.right, tensor, stream);
-					return make_bin_expr<op>(branch.left, right);
-				},
+			[&]() {
+				auto right = optimizer<rv>::injection(branch.right, tensor, stream);
+				return make_bin_expr<op>(branch.left, right);
+			},
 		constexpr_else(
 				basic_eval
 		)))));
