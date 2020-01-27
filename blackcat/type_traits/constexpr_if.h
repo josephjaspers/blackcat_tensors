@@ -49,12 +49,12 @@ auto constexpr_if(F1 f1, F2 f2) {
 
 template<bool Bool, class Function>
 auto constexpr_else_if(Function function) {
-	return [&]() { return constexpr_if<Bool>(function); };
+	return [=]() { return constexpr_if<Bool>(function); };
 }
 
 template<bool Bool, class F1, class F2>
 auto constexpr_else_if(F1 f1, F2 f2) {
-	return [&]() { return constexpr_ternary<Bool>(f1, f2); };
+	return [=]() { return constexpr_ternary<Bool>(f1, f2); };
 }
 
 template<class Function>
