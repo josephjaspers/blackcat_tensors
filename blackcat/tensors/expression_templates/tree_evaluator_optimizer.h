@@ -238,7 +238,7 @@ struct optimizer<
 		return
 		constexpr_if<entirely_blas_expr>(
 			[&](){
-				auto right = rv_eval(std::true_type());
+				rv_eval(std::true_type());
 				return tensor.data();
 			},
 		constexpr_else_if<optimizer<lv>::entirely_blas_expr>(
@@ -255,8 +255,7 @@ struct optimizer<
 			},
 		constexpr_else_if<optimizer<rv>::entirely_blas_expr>(
 			[&]() {
-					auto right = rv_eval(
-							bc::traits::truth_type<OutputData::BETA>());
+					rv_eval(bc::traits::truth_type<OutputData::BETA>());
 					return left;
 			},
 		constexpr_else(
