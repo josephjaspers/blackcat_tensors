@@ -61,7 +61,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	mat hyps = network.predict(inputs[0]);
 
 	for (int i = 0; i < test_images; ++i) {
-		images[i].t().print_sparse(3);
+		bc::logical(images[i].t()).print_sparse(0);
 		hyps[i].print();
 		bc::print("------------------------------------");
 	}

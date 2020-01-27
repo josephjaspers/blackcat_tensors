@@ -4,6 +4,8 @@ CUFLAGS = -O3 -o mnist_test_exec_cu --use_fast_math -lm
 CXXFILES = mnist_test.cpp
 CUFILES  = mnist_test.cu
 
+CXX = g++-8
+
 LIBS = -lblas
 
 ATLAS_BLAS_LINKAGE = -D BC_BLAS_USE_C_LINKAGE=1

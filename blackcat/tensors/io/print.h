@@ -9,6 +9,7 @@
 #define BLACKCAT_TENSORS_TENSORS_UTILITY_PRINT_H_
 
 #include <string>
+#include <algorithm>
 
 namespace bc {
 namespace tensors {
@@ -54,14 +55,21 @@ struct features
 template<class ValueType>
 static std::string format_value(const ValueType& s, features f) {
 	std::string fstr  = !f.sparse || std::abs(s) > .1 ? std::to_string(s) : "";
-	if (fstr.length() < (unsigned)f.precision)
-		return fstr.append(f.precision - fstr.length(), ' ');
+	int min_precision = f.precision > 1u ? f.precision : 1u;
+	if (fstr.length() < (unsigned)min_precision)
+		return fstr.append(min_precision - fstr.length(), ' ');
 	else {
-		std::string substr = fstr.substr(0, f.precision);
-		if (std::find(substr.begin(), substr.end(), '.') != substr.end()) {
-			return fstr.substr(0, f.precision);
-		} else {
+		auto decimal_point = std::find(fstr.begin(), fstr.end(), '.');
+		if (decimal_point == fstr.end())
 			return fstr;
+
+		if (f.precision == 0)
+			return std::string(fstr.begin(), decimal_point);
+		else {
+			int decimal_length = std::min(
+					f.precision, (std::size_t)(fstr.end() - decimal_point));
+
+			return std::string(fstr.begin(), decimal_point + decimal_length);
 		}
 	}
 }
