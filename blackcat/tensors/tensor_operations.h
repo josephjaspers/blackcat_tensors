@@ -4,8 +4,8 @@ private:
 	using enable_if_scalar = std::enable_if_t<
 			std::is_convertible<ScalarType, value_type>::value>;
 
-	template<class self_type_t>
-	self_type& evaluate(const Tensor_Base<self_type_t>& tensor) {
+	template<class Xpr>
+	self_type& evaluate(const Tensor_Base<Xpr>& tensor) {
 		BC_ASSERT(this->get_stream().get_allocator().allocated_bytes() == 0,
 				"Evaluation expects streams allocate_bytes to be 0 pre-evaluation");
 
@@ -22,8 +22,7 @@ public:
 	self_type& operator = (const Tensor_Base<Xpr>& param)
 	{
 		static_assert(tensor_dim >= Xpr::tensor_dim,
-				"BlackCat_Tensors: Operator= is not "
-					"a valid operation for (reduction) broadcasting");
+				"BlackCat_Tensors: Operator= is not a valid operation for (reduction) broadcasting");
 		BC_ASSERT_ASSIGNABLE(
 				"self_type& operator = (const Tensor_Base<Xpr>& param)");
 		assert_valid(param);
@@ -212,6 +211,37 @@ public:
 				exprs::make_bin_expr(this->internal(), rv.internal(), func));
 	}
 
+	struct Alias; friend struct Alias;
+	struct Alias {
+
+		self_type& tensor;
+
+		template<class Xpr>
+		auto& operator = (const Tensor_Base<Xpr>& param) {
+			tensor.assert_valid(param);
+			return tensor.evaluate(
+					tensor.bi_expr(oper::alias_assign, param));
+		}
+
+		template<class Xpr>
+		auto& operator += (const Tensor_Base<Xpr>& param) {
+			tensor.assert_valid(param);
+			return tensor.evaluate(
+					tensor.bi_expr(oper::alias_add_assign, param));
+		}
+
+		template<class Xpr>
+		auto& operator -= (const Tensor_Base<Xpr>& param) {
+			tensor.assert_valid(param);
+			return tensor.evaluate(
+					tensor.bi_expr(oper::alias_sub_assign, param));
+		}
+	};
+
+	Alias alias() {
+		return Alias { *this };
+	}
+
 private:
 
 	template<class Xpr>
@@ -248,45 +278,4 @@ private:
 					"\nparam_dims:" + tensor.inner_shape().to_string()
 			);
 		}
-	}
-
-
-public:
-
-	struct Alias{
-
-		self_type& tensor;
-
-		Alias(self_type& tensor_) : tensor(tensor_) {}
-
-		template<class self_type_t>
-		self_type* evaluate(const Tensor_Base<self_type_t>& param)
-		{
-			evaluate_aliased(param.internal(), tensor.get_stream());
-			return tensor;
-		}
-
-		template<class self_type_t>
-		auto& operator = (const Tensor_Base<self_type_t>& param) {
-			tensor.assert_valid(param);
-			return evaluate(tensor.bi_expr(oper::Assign(), param));
-		}
-
-		template<class self_type_t>
-		auto& operator += (const Tensor_Base<self_type_t>& param) {
-			tensor.assert_valid(param);
-			return evaluate(tensor.bi_expr(oper::Add_Assign(), param));
-		}
-
-		template<class self_type_t>
-		auto& operator -= (const Tensor_Base<self_type_t>& param) {
-			tensor.assert_valid(param);
-			return evaluate(tensor.bi_expr(oper::Sub_Assign(), param));
-		}
-	};
-
-	friend class Alias;
-
-	Alias alias() {
-		return Alias (*this);
 	}

@@ -123,6 +123,13 @@ struct blas_expression_traits;
 
 namespace detail {
 
+using bc::oper::Add;
+using bc::oper::Sub;
+using bc::oper::Add_Assign;
+using bc::oper::Sub_Assign;
+using bc::oper::Negation;
+using bc::oper::Scalar_Mul;
+
 template<class Op, class Lv, class Rv, class... Args> BCHOT
 auto mk_bin_op(Lv left, Rv right, Args&&... args) {
 	return Bin_Op<Op,Lv, Rv>(left, right, std::forward<Args>(args)...);
@@ -132,128 +139,95 @@ template<class Op, class Lv, class Rv, class=void>
 struct bin_expr_factory
 {
 	template<class... Args>
-	static auto make(Lv lv, Rv rv, Args&&... args...)
-	{
-		return Bin_Op<Op, Lv, Rv>(
-				lv, rv, std::forward<Args>(args)...);
+	static auto make(Lv lv, Rv rv, Args&&... args...) {
+		return Bin_Op<Op, Lv, Rv>(lv, rv, std::forward<Args>(args)...);
 	}
 };
 
 /// y + (-x) -> y - x
 template<class Lv, class Rv>
-struct bin_expr_factory<bc::oper::Add, Lv, Un_Op<bc::oper::Negation, Rv>>
+struct bin_expr_factory<Add, Lv, Un_Op<Negation, Rv>>
 {
 	template<class... Args>
-	static auto make(Lv lv, Un_Op<bc::oper::Negation, Rv> rv, Args&&... args...)
-	{
-		return detail::mk_bin_op<bc::oper::Sub>(
-				lv, rv.array, std::forward<Args>(args)...);
+	static auto make(Lv lv, Un_Op<Negation, Rv> rv, Args&&... args...) {
+		return mk_bin_op<Sub>(lv, rv.array, std::forward<Args>(args)...);
 	}
 };
 
 /// y - (-x) -> y + x
 template<class Lv, class Rv>
-struct bin_expr_factory<bc::oper::Sub, Lv, Un_Op<bc::oper::Negation, Rv>>
+struct bin_expr_factory<Sub, Lv, Un_Op<Negation, Rv>>
 {
 	template<class... Args>
-	static auto make(Lv lv, Un_Op<bc::oper::Negation, Rv> rv, Args&&... args...)
-	{
-		return detail::mk_bin_op<bc::oper::Add>(
-				lv, rv.array, std::forward<Args>(args)...);
+	static auto make(Lv lv, Un_Op<Negation, Rv> rv, Args&&... args...) {
+		return mk_bin_op<Add>(lv, rv.array, std::forward<Args>(args)...);
 	}
 };
 
 /// (-y) + x -> x - y
 template<class Lv, class Rv>
-struct bin_expr_factory<bc::oper::Sub, Un_Op<bc::oper::Negation, Lv>, Rv>
+struct bin_expr_factory<Sub, Un_Op<Negation, Lv>, Rv>
 {
 	template<class... Args>
-	static auto make(Un_Op<bc::oper::Negation, Lv> lv, Rv rv, Args&&... args...)
-	{
-		return detail::mk_bin_op<bc::oper::Sub>(
-				rv, lv.array, std::forward<Args>(args)...);
+	static auto make(Un_Op<Negation, Lv> lv, Rv rv, Args&&... args...) {
+		return mk_bin_op<Sub>(rv, lv.array, std::forward<Args>(args)...);
 	}
 };
 
-/// (-y) - (-x) -> (-y) + x --specialized to handle ambiguous overload
+/// (-y) - (-x) -> (-y) + x //specialized to handle ambiguous overload
 template<class Lv, class Rv>
-struct bin_expr_factory<
-		bc::oper::Sub,
-		Un_Op<bc::oper::Negation, Lv>,
-		Un_Op<bc::oper::Negation, Rv>>
+struct bin_expr_factory<Sub, Un_Op<Negation, Lv>, Un_Op<Negation, Rv>>
 {
 	template<class... Args>
 	static auto make(
-			Un_Op<bc::oper::Negation, Lv> lv,
-			Un_Op<bc::oper::Negation, Rv> rv,
-			Args&&... args...)
+			Un_Op<Negation, Lv> lv, Un_Op<Negation, Rv> rv, Args&&... args...)
 	{
-		return detail::mk_bin_op<bc::oper::Add>(
-				lv, rv.array, std::forward<Args>(args)...);
+		return mk_bin_op<Add>(lv, rv.array, std::forward<Args>(args)...);
 	}
 };
 
-/// (-y) + (-x) -> (-y) - x --specialized to handle ambiguous overload
+/// (-y) + (-x) -> (-y) - x //specialized to handle ambiguous overload
 template<class Lv, class Rv>
-struct bin_expr_factory<
-		bc::oper::Add,
-		Un_Op<bc::oper::Negation, Lv>,
-		Un_Op<bc::oper::Negation, Rv>>
+struct bin_expr_factory<Add, Un_Op<Negation, Lv>, Un_Op<Negation, Rv>>
 {
 	template<class... Args>
 	static auto make(
-			Un_Op<bc::oper::Negation, Lv> lv,
-			Un_Op<bc::oper::Negation, Rv> rv,
-			Args&&... args...)
+			Un_Op<Negation, Lv> lv, Un_Op<Negation, Rv> rv, Args&&... args...)
 	{
-		return detail::mk_bin_op<bc::oper::Sub>(
+		return detail::mk_bin_op<Sub>(
 				lv, rv.array, std::forward<Args>(args)...);
 	}
 };
 
 /// y += (-x) -> y -= x
 template<class Lv, class Rv>
-struct bin_expr_factory<
-		bc::oper::Add_Assign,
-		Lv,
-		Un_Op<bc::oper::Negation, Rv>>
+struct bin_expr_factory<Add_Assign, Lv, Un_Op<Negation, Rv>>
 {
 	template<class... Args>
-	static auto make(Lv lv, Un_Op<bc::oper::Negation, Rv> rv, Args&&... args...)
-	{
-		return detail::mk_bin_op<bc::oper::Sub_Assign>(
-				lv, rv.array, std::forward<Args>(args)...);
+	static auto make(Lv lv, Un_Op<Negation, Rv> rv, Args&&... args...) {
+		return mk_bin_op<Sub_Assign>(lv, rv.array, std::forward<Args>(args)...);
 	}
 };
 
 /// y -= (-x) -> y += x
 template<class Lv, class Rv>
-struct bin_expr_factory<
-		bc::oper::Sub_Assign,
-		Lv,
-		Un_Op<bc::oper::Negation, Rv>>
+struct bin_expr_factory<Sub_Assign, Lv, Un_Op<Negation, Rv>>
 {
 	template<class... Args>
-	static auto make(Lv lv, Un_Op<bc::oper::Negation, Rv> rv, Args&&... args...)
-	{
-		return detail::mk_bin_op<bc::oper::Add_Assign>(
-				lv, rv.array, std::forward<Args>(args)...);
+	static auto make(Lv lv, Un_Op<Negation, Rv> rv, Args&&... args...) {
+		return mk_bin_op<Add_Assign>(lv, rv.array, std::forward<Args>(args)...);
 	}
 };
 
 /// scalar * blas_op(a, b) -> blas_op(a * scalar, b) || blas_op(a, b * scalar)
 template<class Lv, class Rv>
 struct bin_expr_factory<
-		bc::oper::Scalar_Mul,
-		Lv,
-		Rv,
-		std::enable_if_t<
+		bc::oper::Scalar_Mul, Lv, Rv, std::enable_if_t<
 				expression_traits<Lv>::is_blas_expression::value !=
 				expression_traits<Rv>::is_blas_expression::value>>
 {
-	static auto make(Lv lv, Rv rv, bc::oper::Scalar_Mul op=bc::oper::Scalar_Mul())
+	static auto make(Lv lv, Rv rv, Scalar_Mul op=Scalar_Mul())
 	{
-
 		constexpr bool left_scalar = Lv::tensor_dim==0;
 		auto scalar_expr = bc::traits::constexpr_ternary<left_scalar>(
 			[=]() { return std::make_pair(lv, rv); },
@@ -283,11 +257,11 @@ struct bin_expr_factory<
 		
 		return bc::traits::constexpr_ternary<!expr_left_is_scalar_multiplied>(
 			[=]() {
-				auto newexpr = mk_bin_op<bc::oper::Scalar_Mul>(scalar, expr.left);
+				auto newexpr = mk_bin_op<Scalar_Mul>(scalar, expr.left);
 				return mk_bin_op<expr_op_t>(newexpr, expr.right);
 			},
 			[=]() {
-				auto newexpr = mk_bin_op<bc::oper::Scalar_Mul>(scalar, expr.right);
+				auto newexpr = mk_bin_op<Scalar_Mul>(scalar, expr.right);
 				return mk_bin_op<expr_op_t>(newexpr, expr.left);
 			});
 	}

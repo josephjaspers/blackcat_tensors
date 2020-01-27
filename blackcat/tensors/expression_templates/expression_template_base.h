@@ -63,6 +63,10 @@ struct Expression_Template_Base  {
 		static_assert(true_call<Integer<Derived::tensor_iterator_dim>>(),
 				"ExpressionTemplates must define: "
 				"static constexpr int tensor_iterator_dim");
+
+		static_assert(Derived::tensor_iterator_dim >= Derived::tensor_dim
+				|| Derived::tensor_iterator_dim <= 1,
+				"Iterator Dimension must be greater than or equal to the tensor_dim");
 	}
 
 	void deallocate() const {}

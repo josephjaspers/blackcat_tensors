@@ -14,13 +14,11 @@
 
 
 /** @File
- *
- * 	This file defines the end-points for the Tree_Evaluator. The Tree Evaluator
- *  iterates through the tree and attempts use the the left-hand value as a cache (if possible)
- *  and to reduce the need for temporaries when applicable.
- *
- *  After utilizing the left-hand value as cache, the tree is iterated through again, greedy-evaluating
- *  any function calls when possible. A function call is generally any BLAS call.
+ *  The Evaluator determines if an expression needs to be greedily optimized.
+ *  If it attempts to use the left-hand variable (the output) as cache to
+ *  reduce temporaries as possible. Then, if functions still requiring
+ *  evaluating will use temporaries to replace the functions and finally
+ *  complete the evaluation of the expresssion with an elementwise (nd_evaluator).
  *
  *  Example: (assume matrices)
  *  	y += a * b + c * d
@@ -39,227 +37,176 @@
 namespace bc {
 namespace tensors {
 namespace exprs { 
-namespace detail {
 
-template<class Expression, class Stream>
-static void nd_evaluate(const Expression expression, Stream stream) {
-	using system_tag	= typename Stream::system_tag;
-	using nd_evaluator  = typename bc::tensors::exprs::evaluator::Evaluator<system_tag>;
+template<class Is_SubXpr=std::false_type>
+class Evaluator
+{
+	template<class Xpr, class Stream>
+	static void nd_evaluate(const Xpr expression, Stream stream)
+	{
+		constexpr int iter_dim = Xpr::tensor_iterator_dim;
+		using system_tag	= typename Stream::system_tag;
+		using nd_evaluator  = exprs::evaluator::Evaluator<system_tag>;
 
-	static_assert(Expression::tensor_iterator_dim >= Expression::tensor_dim
-			|| Expression::tensor_iterator_dim <= 1,
-			"Iterator Dimension must be greater than or equal to the tensor_dim");
-
-	bc::traits::constexpr_if<expression_traits<Expression>::is_expr::value> ([&]() {
-		nd_evaluator::template nd_evaluate<Expression::tensor_iterator_dim>(expression, stream);
-	});
-}
-
-template<class AssignmentOp, class Left, class Right, class Stream, class TruthType>
-void greedy_optimization(Left left, Right right, Stream stream, TruthType is_subexpression) {
-	auto temporaries_evaluated_expression = optimizer<Right>::template temporary_injection(right, stream);
-	auto assignment_expression = make_bin_expr<AssignmentOp>(left, temporaries_evaluated_expression);
-	detail::nd_evaluate(assignment_expression, stream);
-
-	if (!TruthType::value)
-	optimizer<decltype(temporaries_evaluated_expression)>::deallocate_temporaries(temporaries_evaluated_expression, stream);
-}
-
-template<
-	class lv,
-	class rv,
-	class Stream,
-	class Op,
-	class TruthType=std::false_type>
-static
-std::enable_if_t<optimizer<Bin_Op<Op, lv, rv>>::requires_greedy_eval &&
-					bc::oper::operation_traits<Op>::is_linear_assignment_operation>
-evaluate(Bin_Op<Op, lv, rv> expression, Stream stream, TruthType is_subexpression=TruthType()) {
-	static constexpr bool entirely_blas_expression = optimizer<rv>::entirely_blas_expr; // all operations are +/- blas calls
-	static constexpr int alpha_mod = bc::oper::operation_traits<Op>::alpha_modifier;
-	static constexpr int beta_mod = bc::oper::operation_traits<Op>::beta_modifier;
-
-	auto output = make_output_data<alpha_mod, beta_mod>(expression.left);
-	auto right = optimizer<rv>::linear_eval(expression.right, output, stream);
-
-	if /*constexpr*/ (!entirely_blas_expression)
-		detail::greedy_optimization<Op>(expression.left, right, stream, is_subexpression);
-	else if (!TruthType::value) {
-		optimizer<decltype(right)>::deallocate_temporaries(right, stream);
-	}
-}
-
-template<
-	class lv,
-	class rv,
-	class Stream,
-	class TruthType=std::false_type
-	>
-static
-std::enable_if_t<
-	optimizer<Bin_Op<oper::Assign, lv, rv>>::requires_greedy_eval>
-evaluate(Bin_Op<oper::Assign, lv, rv> expression, Stream stream, TruthType is_subexpression=TruthType()) {
-	constexpr int alpha = bc::oper::operation_traits<oper::Assign>::alpha_modifier; //1
-	constexpr int beta = bc::oper::operation_traits<oper::Assign>::beta_modifier;   //0
-	constexpr bool entirely_blas_expr = optimizer<rv>::entirely_blas_expr;
-	constexpr bool partial_blas_expr = optimizer<rv>::partial_blas_expr;
-
-	auto output = make_output_data<alpha, beta>(expression.left);
-	using expr_rv_t = std::decay_t<decltype(expression.right)>;
-
-	auto right = bc::traits::constexpr_ternary<partial_blas_expr>(
-		[&]() {
-			return optimizer<expr_rv_t>::linear_eval(
-					expression.right, output, stream);
-		},
-		[&]() {
-			return optimizer<expr_rv_t>::injection(
-					expression.right, output, stream);
+		bc::traits::constexpr_if<expression_traits<Xpr>::is_expr::value>([&]() {
+			nd_evaluator::template nd_evaluate<iter_dim>(expression, stream);
 		});
+	}
 
-	using assignment_oper = std::conditional_t<
-			partial_blas_expr, oper::Add_Assign, oper::Assign>;
+	template<class AssignmentOp, class Left, class Right, class Stream>
+	static void greedy_optimization(Left left, Right right, Stream stream)
+	{
+		auto right_xpr = optimizer<Right>::temporary_injection(right, stream);
+		auto assign_xpr = make_bin_expr<AssignmentOp>(left, right_xpr);
+		nd_evaluate(assign_xpr, stream);
 
-	bc::traits::constexpr_if<!entirely_blas_expr>([&]() {
-		detail::greedy_optimization<assignment_oper>(
-				expression.left, right, stream, is_subexpression);
-	});
-}
+		if (!Is_SubXpr::value) {
+			using right_xpr_t = std::decay_t<decltype(right_xpr)>;
+			optimizer<right_xpr_t>::deallocate_temporaries(right_xpr, stream);
+		}
+	}
 
-template<
-	class lv,
-	class rv,
-	class Stream,
-	class Op,
-	class TruthType
->
-static std::enable_if_t<optimizer<Bin_Op<Op, lv, rv>>::requires_greedy_eval &&
-							!bc::oper::operation_traits<Op>::is_linear_assignment_operation>
-evaluate(Bin_Op<Op, lv, rv> expression, Stream stream,  TruthType is_subexpression=TruthType()) {
-	auto right = optimizer<rv>::temporary_injection(expression.right, stream);
-	detail::greedy_optimization<Op>(expression.left, right, stream, is_subexpression);
-}
+public:
+	// y += blas_op(x1) +/- blas_op(x2) OR y -= blas_op(x1) +/- blas_op(x2)
+	template<class lv, class rv, class Stream, class Op>
+	static std::enable_if_t<
+			optimizer<Bin_Op<Op, lv, rv>>::requires_greedy_eval &&
+			bc::oper::operation_traits<Op>::is_linear_assignment_operation>
+	evaluate(Bin_Op<Op, lv, rv> expression, Stream stream)
+	{
+		static constexpr bool entirely_blas_expression = optimizer<rv>::entirely_blas_expr; // all operations are +/- blas calls
+		static constexpr int alpha_mod = bc::oper::operation_traits<Op>::alpha_modifier;
+		static constexpr int beta_mod = bc::oper::operation_traits<Op>::beta_modifier;
 
-template<
-	class lv,
-	class rv,
-	class Op,
-	class Stream>
-static std::enable_if_t<optimizer<Bin_Op<Op, lv, rv>>::requires_greedy_eval>
-evaluate_aliased(Bin_Op<Op, lv, rv> expression, Stream stream) {
-	detail::greedy_optimization<Op>(expression.left, expression.right, stream, std::false_type());
-}
-//--------------------- lazy only ----------------------- //
+		auto output = make_output_data<alpha_mod, beta_mod>(expression.left);
+		auto right = optimizer<rv>::linear_eval(expression.right, output, stream);
 
-//------------------------------------------------Greedy evaluation (BLAS function call detected), skip injection optimization--------------------//
-template<class Expression, class Stream, class TruthType=std::false_type>
-static std::enable_if_t<!optimizer<Expression>::requires_greedy_eval>
-evaluate(Expression expression, Stream stream, TruthType=TruthType()) {
-	detail::nd_evaluate(expression, stream);
-}
-//------------------------------------------------Purely lazy alias evaluation----------------------------------//
-template< class Expression, class Stream>
-static std::enable_if_t<!optimizer<Expression>::requires_greedy_eval>
-evaluate_aliased(Expression expression, Stream stream) {
-	detail::nd_evaluate(expression, stream);
-}
+		if /*constexpr*/ (!entirely_blas_expression)
+			greedy_optimization<Op>(expression.left, right, stream);
+		else if (!Is_SubXpr::value) {
+			optimizer<decltype(right)>::deallocate_temporaries(right, stream);
+		}
+	}
 
+	// y = <expression with at least 1 blas_op>
+	template<class lv, class rv, class Stream>
+	static std::enable_if_t<
+			optimizer<Bin_Op<bc::oper::Assign, lv, rv>>::requires_greedy_eval>
+	evaluate(Bin_Op<oper::Assign, lv, rv> expression, Stream stream)
+	{
+		constexpr int alpha = bc::oper::operation_traits<oper::Assign>::alpha_modifier; //1
+		constexpr int beta = bc::oper::operation_traits<oper::Assign>::beta_modifier;   //0
+		constexpr bool entirely_blas_expr = optimizer<rv>::entirely_blas_expr;
+		constexpr bool partial_blas_expr = optimizer<rv>::partial_blas_expr;
 
-// ----------------- greedy evaluation --------------------- //
+		auto output = make_output_data<alpha, beta>(expression.left);
+		using expr_rv_t = std::decay_t<decltype(expression.right)>;
 
+		auto right = bc::traits::constexpr_ternary<partial_blas_expr>(
+			[&]() {
+				return optimizer<expr_rv_t>::linear_eval(
+						expression.right, output, stream);
+			},
+			[&]() {
+				return optimizer<expr_rv_t>::injection(
+						expression.right, output, stream);
+			});
 
-//The branch is an array, no evaluation required
-template<
-	class Expression,
-	class Stream,
-	class=std::enable_if_t<expression_traits<Expression>::is_array::value>
->
-static auto greedy_evaluate(Expression expression, Stream stream) {
-	return expression;
-}
+		using assignment_oper = std::conditional_t<
+				partial_blas_expr, oper::Add_Assign, oper::Assign>;
 
+		bc::traits::constexpr_if<!entirely_blas_expr>([&]() {
+			greedy_optimization<assignment_oper>(expression.left, right, stream);
+		});
+	}
 
-template<
-	class Expression,
-	class Stream,
-	class=std::enable_if_t<expression_traits<Expression>::is_expr::value>,
-	int=0
->
-static auto greedy_evaluate(Expression expression, Stream stream) {
-	/*
+	// y %= <expression> OR y /= <expression>
+	template<class lv, class rv, class Stream, class Op>
+	static std::enable_if_t<
+			optimizer<Bin_Op<Op, lv, rv>>::requires_greedy_eval &&
+			!bc::oper::operation_traits<Op>::is_linear_assignment_operation>
+	evaluate(Bin_Op<Op, lv, rv> expression, Stream stream) {
+		greedy_optimization<Op>(expression.left, expression.right, stream);
+	}
+
+	// y <any assignment op> <elementwise-only expression>
+	template<class Xpr, class Stream>
+	static std::enable_if_t<!optimizer<Xpr>::requires_greedy_eval>
+	evaluate(Xpr expression, Stream stream) {
+		nd_evaluate(expression, stream);
+	}
+};
+
+struct GreedyEvaluator {
+
+	template<
+			class Xpr,
+			class Stream,
+			class=std::enable_if_t<expression_traits<Xpr>::is_array::value>>
+	static auto evaluate(Xpr expression, Stream stream) {
+		return expression;
+	}
+
+	/**
 	 * Returns a kernel_array containing the tag temporary_tag,
 	 * the caller of the function is responsible for its deallocation.
-	 *
-	 * Users may query this tag via 'bc::expression_traits<Expression>::is_temporary'
+	 * query this tag via 'exprs::expression_traits<Xpr>::is_temporary'
 	 */
-	using value_type = typename Expression::value_type;
-	auto temporary = make_kernel_array(
-			expression.get_shape(),
-			stream.template get_allocator_rebound<value_type>(),
-			temporary_tag());
+	template<
+			class Xpr,
+			class Stream,
+			class=std::enable_if_t<expression_traits<Xpr>::is_expr::value>,
+			int=0>
+	static auto evaluate(Xpr expression, Stream stream)
+	{
+		using value_type = typename Xpr::value_type;
+		auto allocator = stream.template get_allocator_rebound<value_type>();
+		auto shape = expression.get_shape();
+		auto temporary = make_kernel_array(shape, allocator, temporary_tag());
 
-	detail::evaluate(make_bin_expr<oper::Assign>(temporary, expression), stream, std::true_type());
-	return temporary;
-}
+		Evaluator<std::true_type>::evaluate(
+				make_bin_expr<oper::Assign>(temporary, expression), stream);
+		return temporary;
+	}
+};
 
-
-} //ns detail
-
-
-//----------------------------------- endpoints ---------------------------------------//
-template<class Expression, class Stream>
-static auto greedy_evaluate(Expression expression, Stream stream) {
-	if (optimizer<Expression>::requires_greedy_eval) {
+// ------------------------------ endpoints ------------------------------//
+template<class Xpr, class Stream>
+static auto greedy_evaluate(Xpr expression, Stream stream) {
+	if (optimizer<Xpr>::requires_greedy_eval) {
 		//Initialize a logging_stream (does not call any jobs-enqueued or allocate memory, simply logs memory requirements)
 		bc::streams::Logging_Stream<typename Stream::system_tag> logging_stream;
-		detail::greedy_evaluate(expression, logging_stream);	//record allocations/deallocations
+		GreedyEvaluator::evaluate(expression, logging_stream);	//record allocations/deallocations
 		stream.get_allocator().reserve(logging_stream.get_max_allocated());	//Reserve the maximum amount of memory
 	}
-	return detail::greedy_evaluate(expression, stream);	//Do the actual calculation
+	return GreedyEvaluator::evaluate(expression, stream);	//Do the actual calculation
 }
 
-
-template<class Expression, class Stream>
-static auto evaluate(Expression expression, Stream stream) {
-	if (optimizer<Expression>::requires_greedy_eval) {
+template<class Xpr, class Stream>
+static auto evaluate(Xpr expression, Stream stream) {
+	if (optimizer<Xpr>::requires_greedy_eval) {
 		bc::streams::Logging_Stream<typename Stream::system_tag> logging_stream;
-		detail::evaluate(expression, logging_stream);
+		Evaluator<>::evaluate(expression, logging_stream);
 		stream.get_allocator().reserve(logging_stream.get_max_allocated());
 	}
-	return detail::evaluate(expression, stream);
+
+	return Evaluator<>::evaluate(expression, stream);
 }
 
-template<class Expression, class Stream>
-static auto evaluate_aliased(Expression expression, Stream stream) {
-	if (optimizer<Expression>::requires_greedy_eval) {
-		bc::streams::Logging_Stream<typename Stream::system_tag> logging_stream;
-		detail::evaluate_aliased(expression, logging_stream);
-		stream.get_allocator().reserve(logging_stream.get_max_allocated());
-	}
-	return detail::evaluate_aliased(expression, stream);
+template<class Xpr, class SystemTag>
+static auto greedy_evaluate(
+		Xpr expression, bc::streams::Logging_Stream<SystemTag> logging_stream) {
+	return GreedyEvaluator::evaluate(expression, logging_stream);
 }
 
-template<class Expression, class SystemTag>
-static auto greedy_evaluate(Expression expression, bc::streams::Logging_Stream<SystemTag> logging_stream) {
-	return detail::greedy_evaluate(expression, logging_stream);	//record allocations/deallocations
+template<class Xpr, class SystemTag>
+static auto evaluate(
+		Xpr expression, bc::streams::Logging_Stream<SystemTag> logging_stream) {
+	return Evaluator<>::evaluate(expression, logging_stream);
 }
-
-template<class Expression, class SystemTag>
-static auto evaluate(Expression expression, bc::streams::Logging_Stream<SystemTag> logging_stream) {
-	return detail::evaluate(expression, logging_stream);
-}
-
-template<class Expression, class SystemTag>
-static auto evaluate_aliased(Expression expression, bc::streams::Logging_Stream<SystemTag> logging_stream) {
-	return detail::evaluate_aliased(expression, logging_stream);
-}
-
-
-
 
 } //ns exprs
 } //ns tensors
 } //ns BC
-
 
 #endif /* PARSE_TREE_COMPLEX_EVALUATOR_H_ */

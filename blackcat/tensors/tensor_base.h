@@ -99,12 +99,12 @@ static_assert(                                  \
 
 #undef BC_ASSERT_ASSIGNABLE
 
+public:
 	~Tensor_Base() {
 		this->deallocate();
 	}
 
 private:
-
 	expression_type& as_expression_type() {
 		return static_cast<expression_type&>(*this);
 	}
