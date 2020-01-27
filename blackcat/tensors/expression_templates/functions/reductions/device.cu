@@ -129,8 +129,8 @@ private:
 
 		using value_type = typename Expression::value_type;
 		bc::size_t n = expression.size();
-		bc::size_t blocks = bc::calculate_block_dim(n);	///num blocks the kernel will be called
-		bc::size_t threads = bc::calculate_threads(n); ///num threads the kernel will be called with
+		bc::size_t blocks = bc::calculate_block_dim(n);
+		bc::size_t threads = bc::calculate_threads();
 		bc::size_t smemSize = threads * sizeof(typename Expression::value_type);
 
 		switch (threads)
