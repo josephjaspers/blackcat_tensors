@@ -82,21 +82,6 @@ private:
 
 public:
 
-//TODO ADD SUPPORT FOR THIS
-//	template<class... OtherArgs>
-//	auto operator () (OtherArgs&&... other_args)
-//		-> decltype(call(truth_type<num_args == 0>(), std::forward<OtherArgs>(other_args)...))
-//	{
-//		return call(truth_type<num_args == 0>(), std::forward<OtherArgs>(other_args)...);
-//	}
-//
-//	template<class... OtherArgs>
-//	auto operator () (OtherArgs&&... other_args) const
-//		-> decltype(call(truth_type<num_args == 0>(), std::forward<OtherArgs>(other_args)...))
-//	{
-//		return call(truth_type<num_args == 0>(), std::forward<OtherArgs>(other_args)...);
-//	}
-
 	template<int ADL=0, class=std::enable_if_t<ADL==0>>
 	auto operator () ()
 		-> decltype(call(truth_type<num_args == 0 && ADL==0>()))
@@ -113,8 +98,8 @@ public:
 };
 
 template<class Function, class... Args>
-Bind<Function, Args&&...> bind(Function&& function, Args&&... args) {
-	return { std::forward<Function>(function), std::forward<Args>(args)... };
+Bind<Function, Args&&...> bind(Function function, Args&&... args) {
+	return { function, std::forward<Args>(args)... };
 }
 
 }
