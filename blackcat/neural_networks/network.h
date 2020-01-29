@@ -182,7 +182,7 @@ struct NeuralNetwork {
 		});
 	}
 
-	/** Sets the internal time_index to zero.
+	/** Sets the expression_template time_index to zero.
 	 * The time_index dictates what intermediates to return during
 	 * back_propagation and forward_propagation of a recurrent neural network.
 	 *

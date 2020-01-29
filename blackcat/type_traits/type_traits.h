@@ -169,11 +169,20 @@ class sequence_last: using_type<typename sequence_last<Ts...>::type> {};
 template<class T>
 class sequence_last<T>: using_type<T> {};
 
-template<class T> using query_value_type = typename T::value_type;
-template<class T> using query_allocator_type = typename T::allocator_type;
-template<class T> using query_system_tag = typename T::system_tag;
-template<class T> using query_get_stream = decltype(std::declval<T>().get_stream);
-template<class T> using query_get_allocator = decltype(std::declval<T>().get_allocator);
+template<class T>
+using query_value_type = typename T::value_type;
+
+template<class T>
+using query_allocator_type = typename T::allocator_type;
+
+template<class T>
+using query_system_tag = typename T::system_tag;
+
+template<class T>
+using query_get_stream = decltype(std::declval<T>().get_stream);
+
+template<class T>
+using query_get_allocator = decltype(std::declval<T>().get_allocator);
 
 class None {};
 
@@ -198,13 +207,13 @@ struct common_traits {
 			truth_type<is_detected_v<query_get_allocator, T>>;
 
 	using value_type =
-			traits::conditional_detected_t<query_value_type, T, None>;
+			conditional_detected_t<query_value_type, T, None>;
 
 	using allocator_type =
-			traits::conditional_detected_t<query_allocator_type, T, None>;
+			conditional_detected_t<query_allocator_type, T, None>;
 
 	using system_tag =
-			traits::conditional_detected_t<query_system_tag, T, host_tag>;
+			conditional_detected_t<query_system_tag, T, host_tag>;
 };
 
 template<class T>

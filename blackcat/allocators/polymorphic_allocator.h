@@ -16,7 +16,7 @@ namespace allocators {
  * Similar to the C++17 std::pmr::polymorphic_allocator.
  *
  * The polymorphic_allocator accepts an Allocator object on construction
- * and uses polymorphism to create an internal 'allocator.' All calls of allocate/deallocate
+ * and uses polymorphism to create an expression_template 'allocator.' All calls of allocate/deallocate
  * are forwarded to the stated allocator. The polymorphic_allocator there-for, cannot be rebound.
  *
  */

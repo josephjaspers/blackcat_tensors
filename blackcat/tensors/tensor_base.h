@@ -44,7 +44,7 @@ public:
 	using copy_assignable = typename traits_type::is_copy_assignable;
 
 	using ExpressionTemplate::ExpressionTemplate;
-	using ExpressionTemplate::internal;
+	using ExpressionTemplate::expression_template;
 
 	Tensor_Base() = default;
 	Tensor_Base(const expression_type&  param): expression_type(param) {}

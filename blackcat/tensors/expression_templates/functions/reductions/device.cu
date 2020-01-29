@@ -22,16 +22,6 @@ namespace tensors {
 namespace exprs {
 namespace functions {
 
-template <unsigned int blockSize, class T> __device__
-void warpReduce(volatile T *sdata, unsigned int tid) {
-	if (blockSize >= 64) sdata[tid] += sdata[tid + 32];
-	if (blockSize >= 32) sdata[tid] += sdata[tid + 16];
-	if (blockSize >= 16) sdata[tid] += sdata[tid + 8];
-	if (blockSize >= 8) sdata[tid] += sdata[tid + 4];
-	if (blockSize >= 4) sdata[tid] += sdata[tid + 2];
-	if (blockSize >= 2) sdata[tid] += sdata[tid + 1];
-}
-
 template <class T, class Expression> __global__
 void small_sum(T output, Expression array, bc::size_t n) {
 	if (threadIdx.x==0) {
@@ -42,15 +32,27 @@ void small_sum(T output, Expression array, bc::size_t n) {
 	}
 }
 
+template <unsigned int blockSize, class T> __device__
+void warpReduce(volatile T *sdata, unsigned int tid) {
+	if (blockSize >= 64) sdata[tid] += sdata[tid + 32];
+	if (blockSize >= 32) sdata[tid] += sdata[tid + 16];
+	if (blockSize >= 16) sdata[tid] += sdata[tid + 8];
+	if (blockSize >= 8) sdata[tid] += sdata[tid + 4];
+	if (blockSize >= 4) sdata[tid] += sdata[tid + 2];
+	if (blockSize >= 2) sdata[tid] += sdata[tid + 1];
+}
 
-template <unsigned int blockSize, class Expression, class Scalar, class T> __global__
-void reduce6(Expression g_idata, T *buffer, Scalar scalar_out, unsigned int n, unsigned buffer_size) {
-	extern __shared__ T sdata[];
+template <
+	unsigned int blockSize, class Expression, class Scalar, class ValueType>
+__global__
+void reduce6(Expression g_idata, ValueType *buffer, Scalar scalar_out,
+		std::size_t size, std::size_t buffer_size) {
+	extern __shared__ ValueType sdata[];
 	unsigned int tid = threadIdx.x;
 	unsigned int i = blockIdx.x*(blockSize*2) + tid;
 	unsigned int gridSize = blockSize*2*gridDim.x;
 	sdata[tid] = 0;
-	while (i < n) {
+	while (i < size) {
 		sdata[tid] += g_idata[i] + g_idata[i + blockSize];
 		i += gridSize;
 	}
@@ -95,7 +97,7 @@ struct Reduce<bc::device_tag> {
 		 *  If the sizeof the reserved memory is equal or exceeds the max amount of memory, obviously we don't have to have
 		 *  any cudaMalloc calls. (but we wouldn't be able to know this for sure without the first pass with the logging-stream)
 		 *
-		 *  This to explain why 'sum' is broken into two oddly separate functions. (sum and sum_implementation)
+		 *  This to explain why 'sum' is split across two separate functions. (sum and sum_implementation)
 		 *
 		 */
 

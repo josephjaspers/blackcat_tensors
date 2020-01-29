@@ -158,33 +158,38 @@ public:
 		using other = Stack_Allocator<SystemTag,  T>;
 	};
 
-	Stack_Allocator(int sz=0)
-	: ws_ptr(new ws_base_t(sz)) {}
+	Stack_Allocator(int sz=0):
+		ws_ptr(new ws_base_t(sz)) {}
 
 	template<class T>
-	Stack_Allocator(const Stack_Allocator<SystemTag, T>& ws) : ws_ptr(ws.ws_ptr) {}
+	Stack_Allocator(const Stack_Allocator<SystemTag, T>& ws):
+		ws_ptr(ws.ws_ptr) {}
 
 	Stack_Allocator(const Stack_Allocator&)=default;
 	Stack_Allocator(Stack_Allocator&&)=default;
 
 	///Reserve an amount of memory in bytes.
-	void reserve(std::size_t sz)  { ws_ptr->reserve(sz * sizeof(value_type)); }
+	void reserve(std::size_t sz) {
+		ws_ptr->reserve(sz * sizeof(value_type));
+	}
 
 	/// Delete all reserved memory, if memory is currently allocated an error is thrown.
-	void free() { ws_ptr->free(); }
+	void free() {
+		ws_ptr->free();
+	}
 
 	void force_deallocate() {
 		ws_ptr->force_deallocate();
 	}
 
 	size_t available_bytes() const {
-		 return ws_ptr->available_bytes();
+		return ws_ptr->available_bytes();
 	}
 	size_t allocated_bytes() const {
-		 return ws_ptr->allocated_bytes();
+		return ws_ptr->allocated_bytes();
 	}
 	size_t reserved_bytes() const {
-		 return ws_ptr->reserved_bytes();
+		return ws_ptr->reserved_bytes();
 	}
 
 	template<class Allocator>

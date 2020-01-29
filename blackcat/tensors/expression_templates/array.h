@@ -66,8 +66,8 @@ public:
 	{
 		evaluate(
 				make_bin_expr<bc::oper::Assign>(
-						this->internal(),
-						array.internal()), get_stream());
+						this->expression_template(),
+						array.expression_template()), get_stream());
 	}
 
 	Array(Array&& array):
@@ -106,8 +106,8 @@ public:
 	{
 		evaluate(
 				make_bin_expr<bc::oper::Assign>(
-						this->internal(),
-						expression.internal()), get_stream());
+						this->expression_template(),
+						expression.expression_template()), get_stream());
 	}
 
 	//If Copy-constructing from a slice, attempt to query the allocator
@@ -125,7 +125,7 @@ public:
 		m_stream(expression.get_stream())
 	{
 		evaluate(make_bin_expr<bc::oper::Assign>(
-				this->internal(), expression.internal()), get_stream());
+				this->expression_template(), expression.expression_template()), get_stream());
 	}
 
 public:
@@ -146,7 +146,7 @@ public:
 			(shape_type&)(*this) = (shape_type&)array;
 			this->m_data = get_allocator().allocate(this->size());
 			evaluate(make_bin_expr<bc::oper::Assign>(
-					this->internal(), array.internal()), get_stream());
+					this->expression_template(), array.expression_template()), get_stream());
 		}
 		return *this;
 	}

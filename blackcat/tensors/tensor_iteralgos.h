@@ -35,7 +35,7 @@
 		using Random = bc::random::Random<system_tag>;
 		Random::randomize(
 				this->get_stream(),
-				this->internal(), lb, ub);
+				this->expression_template(), lb, ub);
 	}
 
 #define BC_FORWARD_ITER(suffix, iter, access)              \
@@ -60,8 +60,8 @@
 
 	BC_FORWARD_ITER(,begin, *this)
 	BC_FORWARD_ITER(,end, *this)
-	BC_FORWARD_ITER(cw_, begin, this->internal())
-	BC_FORWARD_ITER(cw_, end, this->internal())
+	BC_FORWARD_ITER(cw_, begin, this->expression_template())
+	BC_FORWARD_ITER(cw_, end, this->expression_template())
 
 #undef BC_FORWARD_ITER
 

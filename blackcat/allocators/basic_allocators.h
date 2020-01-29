@@ -78,9 +78,12 @@ struct Allocator<device_tag, T>: Basic_Allocator_Base<device_tag, T> {
 	Allocator(const Allocator<device_tag, U>&) {}
 	Allocator() = default;
 
-	T* allocate(std::size_t sz) const {
+	T* allocate(std::size_t sz) const
+	{
 		T* data_ptr;
-		BC_CUDA_ASSERT((cudaMalloc((void**) &data_ptr, sizeof(T) * sz)));
+		unsigned memsz = sizeof(T) * sz;
+
+		BC_CUDA_ASSERT((cudaMalloc((void**) &data_ptr, memsz)));
 		return data_ptr;
 	}
 
@@ -90,17 +93,21 @@ struct Allocator<device_tag, T>: Basic_Allocator_Base<device_tag, T> {
 };
 
 template<class T>
-struct Device_Managed : Allocator<device_tag, T> {
-
+struct Device_Managed:
+	Allocator<device_tag, T>
+{
 	using Allocator<device_tag, T>::Allocator;
 	static constexpr bool managed_memory = true;
 
 	template<class altT>
 	struct rebind { using other = Device_Managed<altT>; };
 
-	T* allocate(bc::size_t sz) {
+	T* allocate(bc::size_t sz)
+	{
 		T* data = nullptr;
-		BC_CUDA_ASSERT((cudaMallocManaged((void**) &data, sizeof(T) * sz)));
+		unsigned memsz = sizeof(T) * sz;
+
+		BC_CUDA_ASSERT((cudaMallocManaged((void**) &data, memsz)));
 		BC_CUDA_ASSERT((cudaDeviceSynchronize()));
 		return data;
 	}

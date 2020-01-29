@@ -24,15 +24,15 @@ namespace detail {
 }
 
 template<class Allocator>
-struct allocator_traits : std::allocator_traits<Allocator> {
+struct allocator_traits : std::allocator_traits<Allocator>
+{
+	using system_tag = bc::traits::conditional_detected_t<
+		bc::traits::query_system_tag, Allocator, host_tag>;
 
-	using system_tag =
-			bc::traits::conditional_detected_t<
-			bc::traits::query_system_tag, Allocator, host_tag>;
+	using is_managed_memory_t = bc::traits::conditional_detected_t<
+		detail::query_managed_memory, Allocator, std::false_type>;
 
-	static constexpr bool is_managed_memory =
-			bc::traits::conditional_detected_t<
-			detail::query_managed_memory, Allocator, std::false_type>::value;
+	static constexpr bool is_managed_memory = is_managed_memory_t::value;
 };
 
 }

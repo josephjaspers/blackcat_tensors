@@ -9,7 +9,7 @@ private:
 		BC_ASSERT(this->get_stream().get_allocator().allocated_bytes() == 0,
 				"Evaluation expects streams allocate_bytes to be 0 pre-evaluation");
 
-		exprs::evaluate(tensor.internal(), this->get_stream());
+		exprs::evaluate(tensor.expression_template(), this->get_stream());
 
 		BC_ASSERT(this->get_stream().get_allocator().allocated_bytes() == 0,
 				"Evaluation expects streams allocate_bytes to be 0 post-evaluation");
@@ -168,11 +168,11 @@ public:
 	// ---- Unary Expressions ---- //
 
 	const auto transpose() const {
-		return make_tensor(make_transpose(this->internal()));
+		return make_tensor(make_transpose(this->expression_template()));
 	}
 
 	      auto transpose()       {
-		return make_tensor(make_transpose(this->internal()));
+		return make_tensor(make_transpose(this->expression_template()));
 	}
 
 	const auto t() const { return this->transpose(); }
@@ -186,7 +186,7 @@ public:
 
 	template<class functor>
 	auto un_expr(functor f) const {
-		return make_tensor(exprs::make_un_expr(this->internal(), f));
+		return make_tensor(exprs::make_un_expr(this->expression_template(), f));
 	}
 
 	template<
@@ -197,7 +197,7 @@ public:
 	auto bi_expr(Functor func, const Xpr& rv) const
 	{
 		return make_tensor(
-				exprs::make_bin_expr(this->internal(), rv.internal(), func));
+				exprs::make_bin_expr(this->expression_template(), rv.expression_template(), func));
 	}
 
 	template<
@@ -208,7 +208,7 @@ public:
 	auto bi_expr(Functor func, const Xpr& rv)
 	{
 		return make_tensor(
-				exprs::make_bin_expr(this->internal(), rv.internal(), func));
+				exprs::make_bin_expr(this->expression_template(), rv.expression_template(), func));
 	}
 
 	struct Alias; friend struct Alias;

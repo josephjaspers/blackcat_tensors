@@ -89,9 +89,9 @@ public:
 
 		bc::max_pooling_forward(
 				bc::streams::select_on_get_stream(image),
-				image.internal(),
-				pooled_image.internal(),
-				mask.internal(),
+				image.expression_template(),
+				pooled_image.expression_template(),
+				mask.expression_template(),
 				m_krnl_dims,
 				m_padding,
 				m_strides);
@@ -110,9 +110,9 @@ public:
 
 		bc::max_pooling_forward(
 				bc::streams::select_on_get_stream(image),
-				image.internal(),
-				pooled_image.internal(),
-				mask.internal(),
+				image.expression_template(),
+				pooled_image.expression_template(),
+				mask.expression_template(),
 				m_krnl_dims,
 				m_padding,
 				m_strides);
@@ -131,9 +131,9 @@ public:
 
 		bc::max_pooling_backward(
 				bc::streams::select_on_get_stream(image),
-				delta_x.internal(),
-				pooled_delta.internal(),
-				mask.internal(),
+				delta_x.expression_template(),
+				pooled_delta.expression_template(),
+				mask.expression_template(),
 				m_krnl_dims,
 				m_padding,
 				m_strides);

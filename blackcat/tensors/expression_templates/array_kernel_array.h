@@ -29,7 +29,7 @@ namespace exprs {
  *
  *  The Kernel_Array class should never be instantiated normally.
  *  It should only be accessed by instantiating an instance of the Array class,
- *  and calling 'my_array_object.internal()' to query it.
+ *  and calling 'my_array_object.expression_template()' to query it.
  *
  *  Additionally this design pattern (replicated in Array_View)
  *  enables expression-templates to define additional members

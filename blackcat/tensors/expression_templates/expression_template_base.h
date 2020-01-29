@@ -19,12 +19,12 @@ template<class Derived>
 struct Expression_Template_Base  {
 
 	BCINLINE
-	const Derived& internal() const {
+	const Derived& expression_template() const {
 		return static_cast<const Derived&>(*this);
 	}
 
 	BCINLINE
-	Derived& internal() {
+	Derived& expression_template() {
 		return static_cast<Derived&>(*this);
 	}
 

@@ -73,9 +73,9 @@ struct Un_Op<oper::transpose<System_Tag>, Value>:
 
 template<class expr_t>
 auto make_transpose(expr_t expr) {
-	using internal_t = std::decay_t<decltype(expr.internal())>;
-	using system_tag = typename internal_t::system_tag;
-	return Un_Op<oper::transpose<system_tag>, internal_t>(expr.internal());
+	using expression_template_t = std::decay_t<decltype(expr.expression_template())>;
+	using system_tag = typename expression_template_t::system_tag;
+	return Un_Op<oper::transpose<system_tag>, expression_template_t>(expr.expression_template());
 }
 
 template<class Array, class SystemTag>

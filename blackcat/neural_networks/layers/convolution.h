@@ -110,8 +110,8 @@ public:
 
 		for (int i = 0; i < this->batch_size(); ++i) {
 			bc::im2col(x.get_stream(),
-					col_x[i].internal(),
-					x[i].internal(),
+					col_x[i].expression_template(),
+					x[i].expression_template(),
 					m_krnl_shape,
 					m_padding,
 					m_strides,
@@ -133,8 +133,8 @@ public:
 		mat col_x(m_column_image_shape);
 
 		bc::im2col(x.get_stream(),
-				col_x.internal(),
-				x.internal(),
+				col_x.expression_template(),
+				x.expression_template(),
 				m_krnl_shape,
 				m_padding,
 				m_strides,
@@ -160,8 +160,8 @@ public:
 			w_gradients -= mat_dy * col_x[i].t();
 			mat_delta_dx = w.t() * mat_dy;
 			bc::col2im(x.get_stream(),
-					mat_delta_dx.internal(),
-					delta_dx[i].internal(),
+					mat_delta_dx.expression_template(),
+					delta_dx[i].expression_template(),
 					m_krnl_shape,
 					m_padding,
 					m_strides,
