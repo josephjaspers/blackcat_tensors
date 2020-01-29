@@ -41,19 +41,19 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 		bc::print("current epoch:  ", i);
 
 		for (int j = 0; j < samples/batch_size; j++) {
-			for (int p = 0; p < img_partitions; ++p) {
 
+			for (int p = 0; p < img_partitions; ++p) {
 				auto batch = inputs[j];
 				auto index = bc::dim(0,784 * (p/(float)img_partitions));
 				auto shape = bc::dim(784/4, batch_size);
-
 				network.forward_propagation(batch[{index, shape}]);
 			}
-				//Apply backprop on the last two images (images 3/4 and 4/4)
-				network.back_propagation(outputs[j]);
-				network.back_propagation(outputs[j]);
 
-				network.update_weights();
+			//Apply backprop on the last two images (images 3/4 and 4/4)
+			network.back_propagation(outputs[j]);
+			network.back_propagation(outputs[j]);
+
+			network.update_weights();
 		}
 	}
 
