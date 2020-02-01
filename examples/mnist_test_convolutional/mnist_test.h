@@ -17,19 +17,19 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 		bc::nn::convolution(
 				system_tag,
 				bc::dim(28, 28,1),  //input_image shape
-				bc::dim(3, 3, 16), //krnl_rows, krnl_cols, numb_krnls
+				bc::dim(7, 7, 16), //krnl_rows, krnl_cols, numb_krnls
 				bc::nn::adam),
 		bc::nn::relu(
 				system_tag,
-				bc::dim(26, 26,16)),
+				bc::dim(22, 22,16)),
 		bc::nn::convolution(
 				system_tag,
-				bc::dim(26,26,16), //input_image shape
-				bc::dim(3, 3, 8),  //krnl_rows, krnl_cols, numb_krnls
+				bc::dim(22,22,16), //input_image shape
+				bc::dim(7, 7, 8),  //krnl_rows, krnl_cols, numb_krnls
 				bc::nn::adam),
-		bc::nn::flatten(system_tag, bc::dim(24,24,8)),
-		bc::nn::relu(system_tag, bc::dim(24,24,8).size()),
-		bc::nn::feedforward(system_tag, bc::dim(24,24,8).size(), 64),
+		bc::nn::flatten(system_tag, bc::dim(16,16,8)),
+		bc::nn::relu(system_tag, bc::dim(16,16,8).size()),
+		bc::nn::feedforward(system_tag, bc::dim(16,16,8).size(), 64),
 		bc::nn::logistic(system_tag, 64),
 		bc::nn::feedforward(system_tag, 64, 10),
 		bc::nn::softmax(system_tag, 10),
