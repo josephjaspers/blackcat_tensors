@@ -14,11 +14,6 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	using clock          = std::chrono::duration<double>;
 
 	auto network = bc::nn::neuralnetwork(
-//		bc::nn::max_pooling(
-//				system_tag,
-//				bc::dim(28,28,1), //input dimension
-//				bc::dim(3,3),     //pool dimensions
-//				bc::dim(1,1)),    //pad_dimensions
 		bc::nn::convolution(
 				system_tag,
 				bc::dim(28, 28,1),  //input_image shape
