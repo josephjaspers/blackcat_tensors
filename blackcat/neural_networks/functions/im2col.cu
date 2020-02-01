@@ -51,9 +51,9 @@ void im2col_kernel(
 	BC_CUDA_KERNEL_LOOP_X(index, size) {
 		int kernel_row = index % kernel_h;
 		int kernel_col = (index / kernel_h) % kernel_w;
-		int channel = (index / kernel_h / kernel_w) % channels;
-		int image_row = (index / kernel_h / kernel_w) % (height-kernel_h+1);
-		int image_col = (index / kernel_h / kernel_w / (height-kernel_h+1)) % (width-kernel_w+1);
+		int channel = (index / kernel_h / kernel_w) % (channels);
+		int image_row = (index / kernel_h / kernel_w / channels) % (height-kernel_h+1);
+		int image_col = (index / kernel_h / kernel_w / channels / (height-kernel_h+1)) % (width-kernel_w+1);
 
 		column_tensor(image_col, image_row, channel, kernel_col, kernel_row)
 			= image_tensor(channel, image_col+kernel_col, image_row+kernel_row);
@@ -124,12 +124,13 @@ void col2im_kernel(int size,
 			Dim<3> { height, width, channels },
 			const_cast<Dtype*>(data_im));
 
+
 	BC_CUDA_KERNEL_LOOP_X(index, size) {
 		int kernel_row = index % kernel_h;
 		int kernel_col = (index / kernel_h) % kernel_w;
-		int channel = (index / kernel_h / kernel_w) % channels;
-		int image_row = (index / kernel_h / kernel_w) % (height-kernel_h+1);
-		int image_col = (index / kernel_h / kernel_w / (height-kernel_h+1)) % (width-kernel_w+1);
+		int channel = (index / kernel_h / kernel_w) % (channels);
+		int image_row = (index / kernel_h / kernel_w / channels) % (height-kernel_h+1);
+		int image_col = (index / kernel_h / kernel_w / channels / (height-kernel_h+1)) % (width-kernel_w+1);
 
 		bc::oper::Device_Atomic_Add::apply(
 			image_tensor(channel, image_col+kernel_col, image_row+kernel_row),
