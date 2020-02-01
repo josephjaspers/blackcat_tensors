@@ -162,13 +162,6 @@ void col2im(
 			"2d Convolution expects a 3d-image input");
 
 	stream.enqueue([=]() {
-
-		bc::algorithms::fill(
-				stream,
-				image.data(),
-				image.data() + image.size(),
-				0.0);
-
 		bc::nn::functions::col2im(
 				typename Stream::system_tag(),
 				image.data(),

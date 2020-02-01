@@ -24,23 +24,24 @@ namespace oper {
 	template<class Lv, class Rv>                        \
 	BCINLINE auto operator () (Lv&& lv, Rv&& rv) const  \
 	-> decltype(apply(lv, rv)) {                        \
-		return apply(lv, rv);                           \
+		return apply(lv, rv);                       \
 }
 
-#define BC_FORWARD_DEF(...)                             \
+#define BC_FORWARD_DEF(...)                                 \
 	template<class Lv, class Rv>                        \
 	BCINLINE                                            \
 	static auto apply (Lv&& lv, Rv&& rv)                \
 	-> decltype(__VA_ARGS__) {                          \
-		return __VA_ARGS__;                             \
+		return __VA_ARGS__;                         \
 	}                                                   \
 	BC_FORWARD_TO_APPLY
 
-#define BC_ADVANCED_FORWARD_DEF(...)                    \
+#define BC_ADVANCED_FORWARD_DEF(...)                        \
 	template<class Lv, class Rv>                        \
 	BCINLINE                                            \
-	static Lv&& apply (Lv&& lv, Rv&& rv) {              \
-		__VA_ARGS__;                                    \
+	static auto apply (Lv&& lv, Rv&& rv)                \
+	{                                                   \
+	    __VA_ARGS__;                                    \
 	}                                                   \
 	BC_FORWARD_TO_APPLY
 
@@ -205,34 +206,32 @@ static constexpr bool is_host = std::is_same<T, host_tag>::value;
 #ifdef __CUDACC__
 struct Device_Atomic_Add: Add_Assign {
 	BC_ADVANCED_FORWARD_DEF(
-			atomicAdd(&lv, rv);
-			return lv;
+		return atomicAdd(&lv, rv);
 	)
 } device_atomic_add;
 
 
 struct Device_Atomic_Mul: Mul_Assign {
-		BC_ADVANCED_FORWARD_DEF(
-				static_assert(
-						std::is_same<void, Lv>::value,
-						"BLACKCAT_TENSORS: Atomic-reduction "
-						"mul-assign is currently not available on the GPU");
+	BC_ADVANCED_FORWARD_DEF(
+		static_assert(
+			std::is_same<void, Lv>::value,
+			"BLACKCAT_TENSORS: Atomic-reduction "
+			"mul-assign is currently not available on the GPU");
 	)
 } device_atomic_mul;
 
 struct Device_Atomic_Sub: Sub_Assign{
-		BC_ADVANCED_FORWARD_DEF(
-				atomicAdd(&lv, -rv);
-				return lv;
-		)
+	BC_ADVANCED_FORWARD_DEF(
+		return atomicAdd(&lv, -rv);
+	)
 } device_atomic_sub;
 
 struct Device_Atomic_Div: Div_Assign {
 	BC_ADVANCED_FORWARD_DEF(
-			static_assert(
-					std::is_same<void, Lv>::value,
-					"BLACKCAT_TENSORS: Atomic-reduction "
-					"div-assign is currently not available on the GPU");
+		static_assert(
+			std::is_same<void, Lv>::value,
+			"BLACKCAT_TENSORS: Atomic-reduction "
+			"div-assign is currently not available on the GPU");
 	)
 } device_atomic_div;
 

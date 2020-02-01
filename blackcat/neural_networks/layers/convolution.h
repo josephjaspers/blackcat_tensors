@@ -107,6 +107,7 @@ public:
 	{
 		tensor4 y(this->get_batched_output_shape());
 		cube col_x(get_batched_column_image_shape());
+		col_x.zero();
 
 		for (int i = 0; i < this->batch_size(); ++i) {
 			bc::im2col(x.get_stream(),
@@ -130,6 +131,7 @@ public:
 	{
 		cube y(this->get_output_shape());
 		mat col_x(m_column_image_shape);
+		col_x.zero();
 
 		bc::im2col(x.get_stream(),
 				col_x.expression_template(),
@@ -156,7 +158,7 @@ public:
 
 		for (int i = 0; i < this->batch_size(); ++i) {
 			auto mat_dy = dy[i].reshaped(w.cols(), dy.rows() * dy.cols());
-			w_gradients -= (mat_dy * col_x[i].t()).t();
+			w_gradients -= col_x[i] * mat_dy.t();
 			mat_delta_dx = w * mat_dy;
 			bc::col2im(x.get_stream(),
 					mat_delta_dx.expression_template(),
