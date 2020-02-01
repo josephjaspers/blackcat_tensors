@@ -6,7 +6,7 @@
 
 template<class System=bc::host_tag>
 int percept_MNIST(System system_tag, std::string mnist_dataset,
-		int epochs=5, int batch_size=16, int samples=32*1024) {
+		int epochs=10, int batch_size=32, int samples=32*1024) {
 
 	using value_type     = typename System::default_floating_point_type;
 	using allocator_type = bc::Allocator<System, value_type>;
@@ -14,27 +14,27 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	using clock          = std::chrono::duration<double>;
 
 	auto network = bc::nn::neuralnetwork(
-		bc::nn::max_pooling(
-				system_tag,
-				bc::dim(28,28,1), //input dimension
-				bc::dim(3,3),     //pool dimensions
-				bc::dim(1,1)),    //pad_dimensions
+//		bc::nn::max_pooling(
+//				system_tag,
+//				bc::dim(28,28,1), //input dimension
+//				bc::dim(3,3),     //pool dimensions
+//				bc::dim(1,1)),    //pad_dimensions
 		bc::nn::convolution(
 				system_tag,
-				bc::dim(10, 10,1),  //input_image shape
+				bc::dim(28, 28,1),  //input_image shape
 				bc::dim(3, 3, 16), //krnl_rows, krnl_cols, numb_krnls
 				bc::nn::adam),
 		bc::nn::relu(
 				system_tag,
-				bc::dim(8,8,16)),
+				bc::dim(26, 26,16)),
 		bc::nn::convolution(
 				system_tag,
-				bc::dim(8,8,16), //input_image shape
+				bc::dim(26,26,16), //input_image shape
 				bc::dim(3, 3, 8),  //krnl_rows, krnl_cols, numb_krnls
 				bc::nn::adam),
-		bc::nn::flatten(system_tag, bc::dim(6,6,8)),
-		bc::nn::relu(system_tag, bc::dim(6,6,8).size()),
-		bc::nn::feedforward(system_tag, bc::dim(6,6,8).size(), 64),
+		bc::nn::flatten(system_tag, bc::dim(24,24,8)),
+		bc::nn::relu(system_tag, bc::dim(24,24,8).size()),
+		bc::nn::feedforward(system_tag, bc::dim(24,24,8).size(), 64),
 		bc::nn::logistic(system_tag, 64),
 		bc::nn::feedforward(system_tag, 64, 10),
 		bc::nn::softmax(system_tag, 10),
@@ -42,7 +42,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	);
 
 	network.set_batch_size(batch_size);
-	network.set_learning_rate(.003);
+	network.set_learning_rate(.03);
 
 	bc::print("Neural Network architecture: \n",
 			network.get_string_architecture());
@@ -81,6 +81,21 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 		bc::print("------------------------------------");
 	}
 
+
+	//Test against training set (TODO split test/validation)
+	int correct = 0;
+	for (int i = 0; i < samples/batch_size; ++i) {
+		auto hyps = network.predict(inputs[i].reshaped(image_shape));
+
+		for (int c = 0; c < hyps.cols(); ++c) {
+			if (max_index(hyps[c]) == max_index(outputs[i][c]))
+				correct++;
+		}
+	}
+
+	bc::print("Accuracy: ", correct, "/", inputs.size()/inputs.rows());
+	bc::print('%', float(correct)/(float(inputs.size())/inputs.rows()));
 	bc::print("success");
+
 	return 0;
 }

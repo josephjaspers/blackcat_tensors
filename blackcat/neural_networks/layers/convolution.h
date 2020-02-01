@@ -74,7 +74,7 @@ public:
 			Dim<2> strides=Dim<2>().fill(1),
 			Dim<2> dilation=Dim<2>().fill(1)):
 		parent_type(__func__),
-		w(krnl_dims[2], krnl_dims.prod(2)*img_dims[2]),
+		w(krnl_dims.prod(2)*img_dims[2], krnl_dims[2]),
 		w_gradients(w.get_shape()),
 		w_opt(w.get_shape()),
 		m_input_shape(img_dims),
@@ -117,9 +117,8 @@ public:
 					m_strides,
 					m_dilation);
 
-			bc::Dim<2> mat_y_shape = {y.rows() * y.cols(), w.rows() };
-			y[i].reshaped(mat_y_shape) = col_x[i].t() * w.t();
-
+			bc::Dim<2> mat_y_shape = {y.rows() * y.cols(), w.cols() };
+			y[i].reshaped(mat_y_shape) = col_x[i].t() * w;
 		}
 
 		cache.store(col_image_key(), col_x);
@@ -140,8 +139,8 @@ public:
 				m_strides,
 				m_dilation);
 
-			bc::Dim<2> mat_y_shape = {y.rows() * y.cols(), w.rows() };
-			y.reshaped(mat_y_shape) = col_x.t() * w.t();
+			bc::Dim<2> mat_y_shape = {y.rows() * y.cols(), w.cols() };
+			y.reshaped(mat_y_shape) = col_x.t() * w;
 
 		return y;
 	}
@@ -156,9 +155,9 @@ public:
 		mat mat_delta_dx(m_column_image_shape);
 
 		for (int i = 0; i < this->batch_size(); ++i) {
-			auto mat_dy = dy[i].reshaped(w.rows(), dy.rows() * dy.cols());
-			w_gradients -= mat_dy * col_x[i].t();
-			mat_delta_dx = w.t() * mat_dy;
+			auto mat_dy = dy[i].reshaped(w.cols(), dy.rows() * dy.cols());
+			w_gradients -= (mat_dy * col_x[i].t()).t();
+			mat_delta_dx = w * mat_dy;
 			bc::col2im(x.get_stream(),
 					mat_delta_dx.expression_template(),
 					delta_dx[i].expression_template(),
