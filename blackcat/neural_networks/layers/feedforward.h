@@ -16,15 +16,16 @@ namespace nn {
 template<
 	class SystemTag,
 	class ValueType,
-	class Optimizer=Stochastic_Gradient_Descent>
+	class Optimizer=Stochastic_Gradient_Descent,
+	class NonlinearityFunction=bc::Logistic>
 struct FeedForward:
-		public Layer_Base<FeedForward<SystemTag, ValueType, Optimizer>> {
-
+		Layer_Base<bc::traits::Integer<1>, ValueType, SystemTag>
+{
 	using system_tag = SystemTag;
 	using value_type = ValueType;
+	using parent_type = Layer_Base<bc::traits::Integer<1>, ValueType, SystemTag>;
 
 	using self_type = FeedForward<SystemTag, ValueType, Optimizer>;
-	using parent_type = Layer_Base<self_type>;
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
 	using optimizer_type = Optimizer;
 
@@ -32,14 +33,18 @@ struct FeedForward:
 
 private:
 
+	using typename parent_type::batched_output_tensor_type;
+	using typename parent_type::batched_input_tensor_type;
+
 	using mat = bc::Matrix<value_type, allocator_type>;
 	using vec = bc::Vector<value_type, allocator_type>;
 
 	using mat_opt_t = typename Optimizer::template Optimizer<mat>;
 	using vec_opt_t = typename Optimizer::template Optimizer<vec>;
 
-	ValueType lr = FeedForward::default_learning_rate;
+	NonlinearityFunction g;
 
+	batched_input_tensor_type x;
 	mat w;  //weights
 	vec b;  //biases
 
@@ -49,43 +54,73 @@ private:
 	mat_opt_t w_opt;
 	vec_opt_t b_opt;
 
-
 public:
 
-	FeedForward(bc::size_t inputs, bc::size_t outputs):
-		parent_type(__func__, inputs, outputs),
-		w(outputs, inputs),
-		b(outputs),
-		w_gradients(outputs, inputs),
-		b_gradients(outputs),
-		w_opt(w.get_shape()),
-		b_opt(b.get_shape())
+	FeedForward(int inputs, int outputs):
+		parent_type(__func__)
 	{
-		w.randomize(-2, 2);
-		b.randomize(-2, 2);
-		w_gradients.zero();
-		b_gradients.zero();
+		this->m_input_shape[0] = inputs;
+		this->m_output_shape[0] = outputs;
 	}
 
-	template<class Matrix>
-	auto forward_propagation(const Matrix& x)
+	FeedForward(int outputs):
+		parent_type(__func__)
 	{
-		return w * x + b;
+		this->m_output_shape[0] = outputs;
 	}
 
-	template<class X, class Delta>
-	auto back_propagation(const X& x, const Delta& dy)
+	void init() override
 	{
-		w_gradients -= dy  * x.t();
+		int inputs = this->m_input_shape[0];
+		int outputs = this->m_output_shape[0];
+
+		if (inputs == 0)
+			this->m_input_shape = this->prev()->input_shape();
+
+		inputs = this->m_input_shape[0];
+
+		w = mat(outputs, inputs);
+		w_opt = mat_opt_t(outputs, inputs);
+		w_gradients = mat(outputs, inputs);
+
+		b = vec(outputs);
+		b_opt = vec_opt_t(outputs);
+		b_gradients = vec(outputs);
+
+		w.randomize(-1, 1);
+		b.randomize(-1, 1);
+	}
+
+	virtual batched_output_tensor_type forward_propagation(
+			const batched_input_tensor_type& x) override
+	{
+		if (x.inner_shape() == this->x.inner_shape())
+			this->x = x;
+		else
+			this->x = batched_input_tensor_type(x);
+
+		return g(w * this->x + b);
+	}
+
+	virtual batched_input_tensor_type back_propagation(
+			const batched_output_tensor_type& dy1) override
+	{
+//		if (!this->prev())
+//			return batched_input_tensor_type();
+
+		auto& x = this->prev()->y;
+//		batched_output_tensor_type& dy = const_cast<batched_output_tensor_type&>(dy_);
+		batched_output_tensor_type dy = dy1 % g.cached_dx(this->y);
+
+		w_gradients -= dy * this->x.t();
 		b_gradients -= dy;
 		return w.t() * dy;
 	}
 
-	void set_learning_rate(value_type lr)
+	virtual void set_learning_rate_hook(double lr) override
 	{
-		parent_type::set_learning_rate(lr);
-		w_opt.set_learning_rate(this->get_batched_learning_rate());
-		b_opt.set_learning_rate(this->get_batched_learning_rate());
+		w_opt.set_learning_rate(this->batched_learning_rate());
+		b_opt.set_learning_rate(this->batched_learning_rate());
 	}
 
 	void update_weights()
@@ -96,7 +131,7 @@ public:
 		b_gradients.zero();
 	}
 
-	void save(Layer_Loader& loader)
+	virtual void save(Layer_Loader& loader) const override
 	{
 		loader.save_variable(w, "w");
 		loader.save_variable(b, "b");
@@ -104,7 +139,7 @@ public:
 		b_opt.save(loader, "b_opt");
 	}
 
-	void load(Layer_Loader& loader)
+	virtual void load(Layer_Loader& loader) override
 	{
 		loader.load_variable(w, "w");
 		loader.load_variable(b, "b");

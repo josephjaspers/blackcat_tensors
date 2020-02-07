@@ -12,5 +12,6 @@
 #include "common.h"
 #include "streams.h"
 #include "tensors.h"
+#include "allocator.h"
 #include "io.h"
 #include "neural_networks/neural_networks.h"

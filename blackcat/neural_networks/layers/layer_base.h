@@ -20,182 +20,187 @@
 namespace bc {
 namespace nn {
 
-template<class DerivedLayer>
-class Layer_Base {
+template<class LearningRateValueType>
+struct network_runtime_traits
+{
+	using value_type = LearningRateValueType;
+	value_type m_learning_rate;
+	int m_batch_size;
+};
 
-	using traits = layer_traits<DerivedLayer>;
+template<class SystemTag, class ValueType>
+using layer_default_allocator =
+		bc::allocators::Polymorphic_Allocator<SystemTag, ValueType>;
 
-	std::string m_classname;
-	std::string m_directory_save_path;
-	std::string m_additional_architecture_features;
+template<
+	class Dimension,
+	class ValueType,
+	class SystemTag,
+	class Allocator=layer_default_allocator<SystemTag, ValueType>,
+	class OutputDimension=Dimension,
+	class OutputValueType=ValueType,
+	class OutputSystemTag=SystemTag,
+	class OutputAllocator=Allocator>
+struct Layer_Base
+{
+	using allocator_type = Allocator;
+	using input_tensor_dimension = Dimension;
+	using batched_input_tensor_dimension = bc::traits::Integer<Dimension::value+1>;
 
-	auto& as_derived() const {
-		return static_cast<const DerivedLayer&>(*this);
-	}
-	auto& as_derived() {
-		return static_cast<DerivedLayer&>(*this);
-	}
+	using value_type = ValueType;
+	using system_tag = SystemTag;
 
-public:
+	using output_tensor_dimension = OutputDimension;
+	using batched_output_tensor_dimension = bc::traits::Integer<OutputDimension::value+1>;
+	using output_value_type = OutputValueType;
+	using output_system_tag = OutputSystemTag;
+	using output_allocator_type = OutputAllocator;
 
-	static constexpr double default_learning_rate = .01;
+	using next_layer_type = Layer_Base<
+			output_tensor_dimension,
+			output_value_type,
+			output_system_tag>;
+
+	using this_layer_type = Layer_Base<
+			input_tensor_dimension,
+			value_type,
+			system_tag>;
+
+	using input_tensor_type  = bc::Tensor< input_tensor_dimension::value, value_type, allocator_type>;
+	using output_tensor_type = bc::Tensor<output_tensor_dimension::value, value_type, output_allocator_type>;
+
+	using batched_input_tensor_type  = bc::Tensor<input_tensor_dimension::value  + 1, value_type, allocator_type>;
+	using batched_output_tensor_type = bc::Tensor<output_tensor_dimension::value + 1, value_type, output_allocator_type>;
+
+
+	using this_layer_pointer_type = std::shared_ptr<this_layer_type>;
+	using next_layer_pointer_type = std::shared_ptr<next_layer_type>;
+
+	using input_shape_type = bc::Dim<input_tensor_dimension::value>;
+	using output_shape_type = bc::Dim<output_tensor_dimension::value>;
+
+private:
+
+	const std::string m_classname;
+	std::shared_ptr<network_runtime_traits<value_type>> m_network_vars
+		= std::shared_ptr<network_runtime_traits<value_type>>(
+			new network_runtime_traits<value_type>());
+
+	//post constructor initialization
+	virtual void init() = 0;
 
 protected:
 
-	bc::size_t m_input_sz;
-	bc::size_t m_output_sz;
-	bc::size_t m_batch_sz;
-	double m_learning_rate = default_learning_rate;
+	std::shared_ptr<allocator_type> m_allocator;
+	std::weak_ptr<this_layer_type> m_input_layer;
+	std::shared_ptr<next_layer_type> m_output_layer;
+
+	input_shape_type m_input_shape;
+	output_shape_type m_output_shape; //ptr??
 
 public:
-	/**
-	 * m_classname should be initialized by supplying `__func__` to the first argument
-	 * of the Layer_Base. `parse_classname()` will normalize the string
-	 * as `__func__` is compiler dependent.
-	 */
-	Layer_Base(std::string classname_, bc::size_t inputs=0, bc::size_t outputs=0):
-		m_classname(parse_classname(classname_)),
-		m_input_sz(inputs),
-		m_output_sz(outputs),
-		m_batch_sz(1) {}
 
-	void resize(bc::size_t inputs, bc::size_t outputs) {
-		m_input_sz = inputs;
-		m_output_sz = outputs;
-	}
+	Layer_Base(std::string classname):
+		m_classname(parse_classname(classname)) {}
 
-	/**Returns the derived_classes class name.
-	 * Note: Architecture dependent
-	 */
-	std::string classname() const { return m_classname; }
+	batched_output_tensor_type y;
 
-private:
-	template<class T>
-	using query_optimizer_type = typename T::optimizer_type;
-public:
+	virtual ~Layer_Base()=default;
 
 	template<int ADL=0>
 	std::string get_string_architecture() const {
-		std::string yaml = classname() + ':'
-				+ "\n\tinput_shape: " +
-				as_derived().get_input_shape().to_string();
-
-		using optimizer_type = bc::traits::conditional_detected_t<
-				query_optimizer_type, DerivedLayer, bc::traits::None>;
-
-		if (!std::is_same<optimizer_type, bc::traits::None>::value) {
-			yaml += "\n\toptimizer: ";
-			yaml += parse_classname(bc_get_classname_of(optimizer_type()));
-		}
-
-		if (m_additional_architecture_features != "")
-			yaml += "\n\t" + m_additional_architecture_features;
-
-		return yaml;
+		return classname() + ':'
+			+ "\n\tinput_shape: " + m_input_shape.to_string();
 	}
 
-	/**
-	 * Add additional features to be stored in the yaml 'architecture' string.
-	 * This is a 'reserved' method. It will be used for user layers or more advanced layers
-	 * in the future.
-	 */
-	void add_architecture_features(std::string features) {
-		m_additional_architecture_features+= features;
+	virtual batched_output_tensor_type forward_propagation(
+			const batched_input_tensor_type&  inputs) = 0;
+
+	virtual batched_input_tensor_type back_propagation(
+			const batched_output_tensor_type& delta) = 0;
+
+	batched_output_tensor_type fp(
+			const batched_input_tensor_type&  inputs) {
+		return forward_propagation(inputs);
 	}
 
-	void clear_architecture_features() {
-		m_additional_architecture_features = "";
+	batched_input_tensor_type bp(
+			const batched_output_tensor_type& delta) {
+		return back_propagation(delta);
+
 	}
 
-	///get_shape must be shadowed (over-ridden) for Convolution/layers that expect non-vector input/outputs
-	auto get_input_shape() const { return bc::Dim<1>{m_input_sz}; }
-	auto get_output_shape() const { return bc::Dim<1>{m_output_sz}; }
-
-	auto get_batched_input_shape() const {
-		return as_derived().get_input_shape().concat(m_batch_sz);
+	void set_batch_size(int bs)
+	{
+		set_batch_size_hook(bs);
+		m_network_vars->m_batch_size = bs;
+		y = batched_output_tensor_type(this->batched_output_shape());
 	}
 
-	auto get_batched_output_shape() const {
-		return as_derived().get_output_shape().concat(m_batch_sz);
+	void set_learning_rate(double lr)
+	{
+		set_learning_rate_hook(lr);
+		m_network_vars->m_learning_rate = lr;
 	}
 
-	bc::size_t input_size() const { return m_input_sz; }
-	bc::size_t output_size() const { return m_output_sz; }
-	bc::size_t batch_size() const { return m_batch_sz; }
+	std::shared_ptr<this_layer_type> prev() {
+		return m_input_layer.lock();
+	}
 
-	bc::size_t batched_input_size() const { return m_input_sz * m_batch_sz; }
-	bc::size_t batched_output_size() const { return m_output_sz * m_batch_sz; }
+	std::shared_ptr<this_layer_type> prev() const {
+		return m_input_layer.lock();
+	}
 
-	void set_batch_size(int bs) { m_batch_sz = bs;}
+	std::shared_ptr<next_layer_type> next() {
+		return m_input_layer;
+	}
 
-	void set_learning_rate(double lr) { m_learning_rate = lr; }
-	auto get_learning_rate() const { return m_learning_rate; }
-	auto get_batched_learning_rate() const { return m_learning_rate / m_batch_sz; }
-	void update_weights() {}
-	void clear_bp_storage(Cache&) {}
+	std::shared_ptr<next_layer_type> next() const {
+		return m_output_layer;
+	}
 
-	void save(Layer_Loader&) {};
-	void save_from_cache(Layer_Loader&, Cache&) {}
-	void load(Layer_Loader&) {};
-	void load_to_cache(Layer_Loader&, Cache&) {}
+	void set_prev(this_layer_pointer_type prev_layer) {
+		m_input_layer = prev_layer;
+	}
+
+	void set_next(next_layer_pointer_type next_layer) {
+		m_output_layer = next_layer;
+	}
+
+
+
+protected:
+
+	virtual void set_batch_size_hook(int bs) {}
+	virtual void set_learning_rate_hook(double lr) {}
+
+public:
+
+	auto batch_size() const { return m_network_vars->m_batch_size; }
+
+	auto learning_rate() const         { return m_network_vars->m_learning_rate; }
+	auto batched_learning_rate() const { return learning_rate() / batch_size();  }
+
+	auto input_shape() const { return m_input_shape; }
+	auto output_shape() const { return m_output_shape; }
+
+	auto batched_input_shape()  const { return m_input_shape.concat(batch_size());  }
+	auto batched_output_shape() const { return m_output_shape.concat(batch_size()); }
+
+	std::string classname() const { return m_classname; }
+	virtual void save(Layer_Loader&) const = 0;
+	virtual void save_from_cache(Layer_Loader&, Cache&) const {}
+	virtual void load(Layer_Loader&) = 0;
+	virtual void load_to_cache(Layer_Loader&, Cache&) {}
 
 	void copy_training_data_to_single_predict(Cache&, int batch_index) {}
 
+	//push me
 	static std::string parse_classname(std::string classname) {
 		auto classname_ns = std::find(classname.rbegin(), classname.rend(), ':');
 		classname.erase(classname.rend().base(), classname_ns.base());
 		return classname;
 	}
-
-
-	template<int ADL=0>
-	auto default_input_tensor_factory() const {
-		using dim      = typename traits::input_tensor_dim;
-		using value_type     = typename traits::value_type;
-		using allocator_type = typename traits::allocator_type;
-
-		return [&]() {
-			return bc::Tensor<dim::value, value_type, allocator_type>(
-					get_input_shape()).zero();
-		};
-	}
-
-	template<int ADL=0>
-	auto default_output_tensor_factory() const {
-		using dim      = typename traits::output_tensor_dim;
-		using value_type     = typename traits::value_type;
-		using allocator_type = typename traits::allocator_type;
-
-		return [&]() {
-			return bc::Tensor<dim::value, value_type, allocator_type>(
-					get_output_shape()).zero();
-		};
-	}
-
-	template<int ADL=0>
-	auto default_batched_input_tensor_factory() const {
-		using dim      = typename traits::input_tensor_dim;
-		using value_type     = typename traits::value_type;
-		using allocator_type = typename traits::allocator_type;
-
-		return [&]() {
-			return bc::Tensor<dim::value+1, value_type, allocator_type>(
-				get_batched_input_shape()).zero();
-		};
-	}
-
-	template<int ADL=0>
-	auto default_batched_output_tensor_factory() const {
-		using dim      = typename traits::output_tensor_dim;
-		using value_type     = typename traits::value_type;
-		using allocator_type = typename traits::allocator_type;
-
-		return [&]() {
-			return bc::Tensor<dim::value+1, value_type, allocator_type>(
-					get_batched_output_shape()).zero();
-		};
-	}
-
 };
 
 }

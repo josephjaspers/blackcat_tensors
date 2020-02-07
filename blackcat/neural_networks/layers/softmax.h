@@ -14,26 +14,38 @@ namespace bc {
 namespace nn {
 
 template<class SystemTag, class ValueType>
-class SoftMax:
-		public Layer_Base<SoftMax<SystemTag, ValueType>> {
-
-public:
+struct SoftMax:
+		public Layer_Base<bc::traits::Integer<1>, ValueType, SystemTag>
+{
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	using parent_type = Layer_Base<SoftMax<SystemTag, ValueType>>;
+	using parent_type = Layer_Base<bc::traits::Integer<1>, ValueType, SystemTag>;
 
+	using self_type = SoftMax<SystemTag, ValueType>;
+	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
+
+	using greedy_evaluate_delta = std::true_type;
 	using mat = bc::Matrix<ValueType, bc::Allocator<SystemTag, ValueType>>;
 	using vec = bc::Vector<ValueType, bc::Allocator<SystemTag, ValueType>>;
 
 private:
+	using typename parent_type::batched_output_tensor_type;
+	using typename parent_type::batched_input_tensor_type;
 
 	mat y;
 
 public:
 
 	SoftMax(int inputs):
-		parent_type(__func__, inputs, inputs) {}
+		parent_type(__func__) {
+		this->m_input_shape[0] = inputs;
+		this->m_output_shape[0] = inputs;
+	}
+
+	void init() override {
+
+	}
 
 	template<class Allocator>
 	const auto& forward_propagation(const bc::Matrix<value_type, Allocator>& x) {
@@ -49,17 +61,43 @@ public:
 		return  bc::exp(x) / bc::tensors::sum(exp(x));
 	}
 
-
 	template<class X, class Matrix>
 	auto back_propagation(const X& x, const Matrix& dy) {
 		return dy;
 	}
 
-	void update_weights() {}
-	void set_batch_size(int bs) {
-		parent_type::set_batch_size(bs);
-		y = mat(this->output_size(), bs);
+
+	virtual batched_output_tensor_type forward_propagation(
+			const batched_input_tensor_type& x) override
+	{
+		//TODO -- convert this into an operation, need 'broadcasted' sum
+			for (int i = 0; i < x.cols(); ++i) {
+				y[i] = bc::exp(x[i]) / bc::tensors::sum(exp(x[i]));
+			}
+
+			return y;
 	}
+
+	virtual batched_input_tensor_type back_propagation(
+			const batched_output_tensor_type& dy) override
+	{
+		return dy;
+
+	}
+
+	virtual void set_batch_size_hook(int batch_size) override
+	{
+		y = mat(this->input_shape().concat(batch_size));
+	}
+
+	virtual void save(Layer_Loader& loader) const override
+	{
+	}
+
+	virtual void load(Layer_Loader& loader) override
+	{
+	}
+
 };
 
 

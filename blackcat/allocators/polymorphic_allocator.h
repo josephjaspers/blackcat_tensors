@@ -49,7 +49,7 @@ private:
 		static_assert(std::is_same<system_tag, typename bc::allocator_traits<Allocator>::system_tag>::value,
 				"SUPPLIED ALLOCATOR VALUE_TYPE MUST BE SAME AS POLYMORPHIC ALLOCATOR VALUE_TYPE");
 
-		public:
+	public:
 
 
 		Virtual_Allocator* clone() const override {
@@ -62,19 +62,25 @@ private:
 					"Attempting to retrieve allocator from shared_ptr resulted in nullptr");
 			return *(this_allocator.get());
 		}
+
 		template<class Alloc_t>
 		auto& retrieve_allocator(Alloc_t& this_allocator) {
 			return this_allocator;
 		}
+
 		template<class Alloc_t>
 		auto& retrieve_allocator(Alloc_t* this_allocator) {
 			return *this_allocator;
 		}
+
 		Derived_Allocator() = default;
-		Derived_Allocator(const Allocator& alloc)
-		: m_allocator(alloc) {}
-		Derived_Allocator(Allocator&& alloc)
-		: m_allocator(alloc) {}
+
+		Derived_Allocator(const Allocator& alloc):
+			m_allocator(alloc) {}
+
+		Derived_Allocator(Allocator&& alloc):
+			m_allocator(alloc) {}
+
 		virtual ~Derived_Allocator() override {}
 
 		virtual value_type* allocate(std::size_t sz) override final {
@@ -124,6 +130,16 @@ public:
 		using allocator_t = typename Allocator::template rebind<bc::allocators::Byte>::other;
 		m_allocator = std::unique_ptr<Virtual_Allocator>(
 				new Derived_Allocator<allocator_t>(alloc));
+	}
+
+	template<class U>
+	bool operator == (const Polymorphic_Allocator<SystemTag, U>&) const {
+		return false;
+	}
+
+	template<class U>
+	bool operator != (const Polymorphic_Allocator<SystemTag, U>&) const {
+		return true;
 	}
 };
 

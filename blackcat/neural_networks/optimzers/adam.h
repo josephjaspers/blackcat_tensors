@@ -63,7 +63,7 @@ struct Adam::Optimizer: Optimizer_Base {
 		alpha = lr;
 	}
 
-	void save(Layer_Loader& loader, std::string name) {
+	void save(Layer_Loader& loader, std::string name) const {
 		//TODO add support for loader saving primitives
 	}
 

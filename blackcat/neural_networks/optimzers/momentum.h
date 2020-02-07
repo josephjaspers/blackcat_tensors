@@ -42,7 +42,7 @@ struct Momentum {
 			learning_rate = lr;
 		}
 
-		void save(Layer_Loader& loader, std::string name) {
+		void save(Layer_Loader& loader, std::string name) const {
 			loader.save_variable(momentum, name);
 		}
 
