@@ -44,9 +44,8 @@ private:
 
 	NonlinearityFunction g;
 
-	batched_input_tensor_type x;
-	mat w;  //weights
-	vec b;  //biases
+	mat w; //weights
+	vec b; //biases
 
 	mat w_gradients;
 	vec b_gradients;
@@ -94,24 +93,18 @@ public:
 	virtual batched_output_tensor_type forward_propagation(
 			const batched_input_tensor_type& x) override
 	{
-		if (x.inner_shape() == this->x.inner_shape())
-			this->x = x;
-		else
-			this->x = batched_input_tensor_type(x);
-
-		return g(w * this->x + b);
+		return this->y = g(w * x + b);
 	}
 
 	virtual batched_input_tensor_type back_propagation(
-			const batched_output_tensor_type& dy1) override
+			const batched_output_tensor_type& dy_) override
 	{
-//		if (!this->prev())
-//			return batched_input_tensor_type();
+		batched_output_tensor_type& dy
+		 = const_cast<batched_output_tensor_type&>(dy_);
 
 		auto& x = this->prev()->y;
-//		batched_output_tensor_type& dy = const_cast<batched_output_tensor_type&>(dy_);
-		batched_output_tensor_type dy = dy1 % g.cached_dx(this->y);
 
+		dy %= g.cached_dx(x);
 		w_gradients -= dy * this->x.t();
 		b_gradients -= dy;
 		return w.t() * dy;

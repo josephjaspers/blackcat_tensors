@@ -44,14 +44,15 @@ template<
 struct Layer_Base
 {
 	using allocator_type = Allocator;
-	using input_tensor_dimension = Dimension;
-	using batched_input_tensor_dimension = bc::traits::Integer<Dimension::value+1>;
-
 	using value_type = ValueType;
 	using system_tag = SystemTag;
 
+	using input_tensor_dimension = Dimension;
+	using batched_input_tensor_dimension = bc::traits::Integer<Dimension::value+1>;
+
 	using output_tensor_dimension = OutputDimension;
 	using batched_output_tensor_dimension = bc::traits::Integer<OutputDimension::value+1>;
+
 	using output_value_type = OutputValueType;
 	using output_system_tag = OutputSystemTag;
 	using output_allocator_type = OutputAllocator;
@@ -71,7 +72,6 @@ struct Layer_Base
 
 	using batched_input_tensor_type  = bc::Tensor<input_tensor_dimension::value  + 1, value_type, allocator_type>;
 	using batched_output_tensor_type = bc::Tensor<output_tensor_dimension::value + 1, value_type, output_allocator_type>;
-
 
 	using this_layer_pointer_type = std::shared_ptr<this_layer_type>;
 	using next_layer_pointer_type = std::shared_ptr<next_layer_type>;
@@ -165,6 +165,11 @@ public:
 
 	void set_next(next_layer_pointer_type next_layer) {
 		m_output_layer = next_layer;
+	}
+
+	void link(next_layer_pointer_type& next_layer) {
+		set_next(next_layer);
+		next_layer.set_prev(next_layer);
 	}
 
 

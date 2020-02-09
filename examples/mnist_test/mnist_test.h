@@ -27,17 +27,26 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 
 	using ff = bc::nn::FeedForward<bc::host_tag, double, bc::nn::Stochastic_Gradient_Descent>;
 	using sm = bc::nn::SoftMax<bc::host_tag, double>;
+	using il = bc::nn::Input_Layer<bc::traits::Integer<1>, bc::host_tag, double>;
 	using smnode = std::shared_ptr<sm>;
 	using ffnode = std::shared_ptr<ff>;
+	using ilnode = std::shared_ptr<il>;
 
 	bc::print("construct");
 
 	ffnode a = ffnode(new ff(784, 256));
 	ffnode b = ffnode(new ff(256, 10));
+	ilnode input = ilnode(new il(784));
 	smnode softmax = smnode(new sm(10));
 
 	bc::print("setting");
+	input->set_next
+
+	a.link(b);
+	input.link(a);
+
 	a->set_next(b);
+	b.link(soft_max);
 
 
 	bc::print("init");

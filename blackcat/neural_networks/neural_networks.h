@@ -27,6 +27,7 @@
 //#include "layers/unaryfunction.h"
 //#include "layers/nonlinear.h"
 #include "layers/softmax.h"
+#include "layers/input_layer.h"
 //#include "layers/lstm.h"
 //#include "layers/output_layer.h"
 //#include "layers/logging_output_layer.h"
