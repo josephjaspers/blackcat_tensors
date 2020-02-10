@@ -73,39 +73,46 @@ public:
 		int inputs = this->m_input_shape[0];
 		int outputs = this->m_output_shape[0];
 
-		if (inputs == 0)
-			this->m_input_shape = this->prev()->input_shape();
-
+		if (inputs == 0) {
+			this->m_input_shape = this->prev()->output_shape();
+		}
 		inputs = this->m_input_shape[0];
 
 		w = mat(outputs, inputs);
 		w_opt = mat_opt_t(outputs, inputs);
 		w_gradients = mat(outputs, inputs);
+		w_gradients.zero();
 
 		b = vec(outputs);
 		b_opt = vec_opt_t(outputs);
 		b_gradients = vec(outputs);
+		b_gradients.zero();
 
 		w.randomize(-1, 1);
 		b.randomize(-1, 1);
+
+		auto out_shape = this->batched_output_shape();
+		this->y = batched_output_tensor_type(out_shape);
 	}
 
+	mat x;
 	virtual batched_output_tensor_type forward_propagation(
 			const batched_input_tensor_type& x) override
 	{
-		return this->y = g(w * x + b);
+		this->x = mat(x);
+		return this->y = g(w * this->x);
 	}
 
 	virtual batched_input_tensor_type back_propagation(
-			const batched_output_tensor_type& dy_) override
+			const batched_output_tensor_type& dy) override
 	{
-		batched_output_tensor_type& dy
-		 = const_cast<batched_output_tensor_type&>(dy_);
-
+		dy.print();
+//		int wait;
+//		std::cin>>wait;
 		auto& x = this->prev()->y;
+//		batched_output_tensor_type dy = dy_ % g.cached_dx(this->y);
 
-		dy %= g.cached_dx(x);
-		w_gradients -= dy * this->x.t();
+		w_gradients -= dy * x.t();
 		b_gradients -= dy;
 		return w.t() * dy;
 	}
@@ -116,10 +123,22 @@ public:
 		b_opt.set_learning_rate(this->batched_learning_rate());
 	}
 
-	void update_weights()
+	virtual void update_weights() override final
 	{
-		w_opt.update(w, w_gradients);
-		b_opt.update(b, b_gradients);
+//		bc::print("updating");
+//		w_opt.update(w, w_gradients);
+//		b_opt.update(b, b_gradients);
+//		w_gradients.zero();
+//		b_gradients.zero();
+		w += w_gradients/1000;
+		b += b_gradients/1000;
+
+//		if (this->output_shape()[0] == 10) {
+//			bc::print("\n	");
+//			w.print();
+//		}
+//		w.print();
+//		b.print();
 		w_gradients.zero();
 		b_gradients.zero();
 	}

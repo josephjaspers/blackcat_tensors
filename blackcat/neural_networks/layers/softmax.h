@@ -37,14 +37,19 @@ private:
 
 public:
 
-	SoftMax(int inputs):
+	SoftMax(int inputs=0):
 		parent_type(__func__) {
 		this->m_input_shape[0] = inputs;
 		this->m_output_shape[0] = inputs;
 	}
 
 	void init() override {
+		if(this->m_input_shape.size() == 0) {
+			this->m_input_shape = this->prev()->input_shape();
+			this->m_output_shape = this->m_input_shape;
+		}
 
+		y = mat(this->batched_output_shape());
 	}
 
 	template<class Allocator>
@@ -71,11 +76,11 @@ public:
 			const batched_input_tensor_type& x) override
 	{
 		//TODO -- convert this into an operation, need 'broadcasted' sum
-			for (int i = 0; i < x.cols(); ++i) {
-				y[i] = bc::exp(x[i]) / bc::tensors::sum(exp(x[i]));
-			}
+		for (int i = 0; i < x.cols(); ++i) {
+			y[i] = bc::exp(x[i]) / bc::tensors::sum(exp(x[i]));
+		}
 
-			return y;
+		return y;
 	}
 
 	virtual batched_input_tensor_type back_propagation(

@@ -9,7 +9,7 @@ namespace nn {
 template<
 	class SystemTag,
 	class ValueType,
-	class Dimension=bc::traits::Integer<1>>
+	class Dimension>
 struct Input_Layer:
 		Layer_Base<Dimension, ValueType, SystemTag>
 {
@@ -19,7 +19,6 @@ struct Input_Layer:
 
 	using self_type = Input_Layer<SystemTag, ValueType, Dimension>;
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
-	using optimizer_type = Optimizer;
 
 	using greedy_evaluate_delta = std::true_type;
 
@@ -28,26 +27,11 @@ private:
 	using typename parent_type::batched_output_tensor_type;
 	using typename parent_type::batched_input_tensor_type;
 
-	using mat = bc::Matrix<value_type, allocator_type>;
-	using vec = bc::Vector<value_type, allocator_type>;
-
-	using mat_opt_t = typename Optimizer::template Optimizer<mat>;
-	using vec_opt_t = typename Optimizer::template Optimizer<vec>;
-
-	NonlinearityFunction g;
-
-	mat w; //weights
-	vec b; //biases
-
-	mat w_gradients;
-	vec b_gradients;
-
-	mat_opt_t w_opt;
-	vec_opt_t b_opt;
+	batched_input_tensor_type x;
 
 public:
 
-	Input_Layer(bc::Dim<Dimension> input_shape):
+	Input_Layer(bc::Dim<Dimension::value> input_shape):
 		parent_type(__func__)
 	{
 		this->m_input_shape = input_shape;
@@ -58,10 +42,11 @@ public:
 	Input_Layer(InputShapeInts... dims):
 		parent_type(__func__)
 	{
-		static_assert(sizeof...(InputShapeInts) == Dimension, "Input_Layer constructor 'Input_Layer(ints... shape_dims)` requires number of params equal the input_shape dimension");
+		static_assert(sizeof...(InputShapeInts) == Dimension::value,
+				"Input_Layer constructor 'Input_Layer(ints... shape_dims)` requires number of params equal the input_shape dimension");
 
-		this->m_input_shape = bc::dims(dims);
-		this->m_output_shape = m_input_shape;
+		this->m_input_shape = bc::dim(dims...);
+		this->m_output_shape = this->m_input_shape;
 	}
 
 
@@ -69,8 +54,8 @@ public:
 
 	void init() override
 	{
-		x = batched_input_tensor_type(this->batched_input_shape());
-		y = batched_output_tensor_type(this->batched_output_shape());
+		this->x = batched_input_tensor_type(this->batched_input_shape());
+		this->y = batched_output_tensor_type(this->batched_output_shape());
 	}
 
 	virtual batched_output_tensor_type forward_propagation(
@@ -93,7 +78,7 @@ public:
 
 template<class Dtype, class SystemTag, int N>
 auto input_layer(bc::traits::Type<Dtype>, SystemTag, bc::Dim<N> shape) {
-	Input_Layer<SystemTag, Dtype, bc::traits::Integer<N>>(shape);
+	return Input_Layer<SystemTag, Dtype, bc::traits::Integer<N>>(shape);
 }
 
 }

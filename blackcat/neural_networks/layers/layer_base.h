@@ -86,13 +86,10 @@ private:
 		= std::shared_ptr<network_runtime_traits<value_type>>(
 			new network_runtime_traits<value_type>());
 
-	//post constructor initialization
-	virtual void init() = 0;
-
 protected:
 
 	std::shared_ptr<allocator_type> m_allocator;
-	std::weak_ptr<this_layer_type> m_input_layer;
+	std::shared_ptr<this_layer_type> m_input_layer;
 	std::shared_ptr<next_layer_type> m_output_layer;
 
 	input_shape_type m_input_shape;
@@ -127,8 +124,11 @@ public:
 	batched_input_tensor_type bp(
 			const batched_output_tensor_type& delta) {
 		return back_propagation(delta);
-
 	}
+
+	virtual void update_weights() {}
+	//post constructor initialization
+	virtual void init() = 0;
 
 	void set_batch_size(int bs)
 	{
@@ -144,11 +144,11 @@ public:
 	}
 
 	std::shared_ptr<this_layer_type> prev() {
-		return m_input_layer.lock();
+		return m_input_layer;//.lock();
 	}
 
 	std::shared_ptr<this_layer_type> prev() const {
-		return m_input_layer.lock();
+		return m_input_layer;//.lock();
 	}
 
 	std::shared_ptr<next_layer_type> next() {
@@ -166,13 +166,6 @@ public:
 	void set_next(next_layer_pointer_type next_layer) {
 		m_output_layer = next_layer;
 	}
-
-	void link(next_layer_pointer_type& next_layer) {
-		set_next(next_layer);
-		next_layer.set_prev(next_layer);
-	}
-
-
 
 protected:
 
@@ -207,6 +200,13 @@ public:
 		return classname;
 	}
 };
+
+template<class... ArgsA, class... ArgsB>
+void link(std::shared_ptr<Layer_Base<ArgsA...>> prev, std::shared_ptr<Layer_Base<ArgsB...>> next)
+{
+	prev->set_next(next);
+	next->set_prev(prev);
+}
 
 }
 }
