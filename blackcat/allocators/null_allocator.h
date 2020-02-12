@@ -18,9 +18,13 @@ struct Null_Allocator {
 	using value_type = ValueType;
 	using size_t = bc::size_t;
 
-	value_type* allocate(size_t sz) {
-		return nullptr;
-	}
+	Null_Allocator()=default;
+	Null_Allocator(const Null_Allocator&)=default;
+	Null_Allocator(Null_Allocator&&)=default;
+
+	template<class AltT>
+	Null_Allocator(Null_Allocator<SystemTag, AltT> copy) {}
+	value_type* allocate(size_t sz) { return nullptr; }
 
 	template<class AltT>
 	struct rebind {
