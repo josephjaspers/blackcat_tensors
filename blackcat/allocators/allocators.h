@@ -16,7 +16,7 @@ namespace allocators {
 
 class Byte {};
 
-template<class SystemTag, class ValueType>
+template<class ValueType, class SystemTag>
 class Allocator;
 
 }
@@ -25,15 +25,17 @@ using allocators::allocator_traits;
 using allocators::Allocator;
 
 template<class ValueType>
-using Basic_Allocator = allocators::Allocator<host_tag, ValueType>;
+using Basic_Allocator = allocators::Allocator<ValueType, host_tag>;
 
 #ifdef __CUDACC__
 template<class ValueType>
-using Cuda_Allocator = allocators::Allocator<device_tag, ValueType>;
+using Cuda_Allocator = allocators::Allocator<ValueType, device_tag>;
 
 template<class ValueType>
 using Cuda_Managed = allocators::Device_Managed<ValueType>;
 #endif
+
+using allocators::Byte;
 
 } //end of namespace BC
 

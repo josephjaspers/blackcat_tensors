@@ -28,13 +28,14 @@ struct Logging_Allocator: Allocator_Forwarder<Allocator> {
 	using pointer = typename parent_type::pointer;
 
 	template<class altT>
-	struct rebind {
+	struct rebind
+	{
 		using other = Logging_Allocator<
-				typename parent_type::template rebind<altT>::other>;
+			typename parent_type::template rebind<altT>::other>;
 	};
 
 	std::shared_ptr<detail::log_info> info =
-			std::shared_ptr<detail::log_info>(new detail::log_info {0, 0});
+		std::shared_ptr<detail::log_info>(new detail::log_info {0, 0});
 
 	template<class U>
 	Logging_Allocator(const Logging_Allocator<U>& other): info(other.info) {}
@@ -45,7 +46,8 @@ struct Logging_Allocator: Allocator_Forwarder<Allocator> {
 	Logging_Allocator& operator = (const Logging_Allocator&) = default;
 	Logging_Allocator& operator = (Logging_Allocator&&) = default;
 
-	pointer allocate(int size) {
+	pointer allocate(int size)
+	{
 		info->current_allocated += size * sizeof(value_type);
 		if (info->current_allocated > info->max_allocated){
 			info->max_allocated = info->current_allocated;
@@ -53,9 +55,10 @@ struct Logging_Allocator: Allocator_Forwarder<Allocator> {
 		return parent_type::allocate(size);
 	}
 
-	void deallocate(pointer ptr, bc::size_t size) {
+	void deallocate(pointer ptr, bc::size_t size)
+	{
 		BC_ASSERT(info->current_allocated >= size * sizeof(value_type),
-				"BC_DEALLOCATION ERROR, DOUBLE DUPLICATION")
+				"BC_DEALLOCATION ERROR, DOUBLE DUPLICATION");
 		info->current_allocated -= size * sizeof(value_type);
 
 		parent_type::deallocate(ptr, size);

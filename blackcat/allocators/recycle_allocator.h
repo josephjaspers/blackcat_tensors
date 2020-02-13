@@ -16,8 +16,8 @@ namespace bc {
 namespace allocators {
 
 //TODO make friend class and private members
-struct Recycle_Allocator_Globals {
-
+struct Recycle_Allocator_Globals
+{
 	template<class SystemTag>
 	static auto& get_recycler(SystemTag=SystemTag()) {
 		static std::unordered_map<bc::size_t, std::vector<Byte*>> m_recycler;
@@ -33,7 +33,7 @@ struct Recycle_Allocator_Globals {
 	template<class SystemTag>
 	static void clear_recycler(SystemTag system=SystemTag()) {
 		std::lock_guard<std::mutex> locker(get_locker(system));
-		bc::Allocator<SystemTag, Byte> allocator;
+		bc::Allocator<Byte, SystemTag> allocator;
 
 		auto& recycler = get_recycler(system);
 		for (const auto& kv : recycler) {
@@ -50,9 +50,9 @@ struct Recycle_Allocator_Globals {
 
 
 template<
-		class SystemTag,
 		class T,
-		class AlternateAllocator=bc::Allocator<SystemTag, Byte>>
+		class SystemTag,
+		class AlternateAllocator=bc::Allocator<Byte, SystemTag>>
 struct Recycle_Allocator {
 
 	using system_tag = SystemTag;	//BC tag
@@ -86,7 +86,7 @@ public:
 
 	template<class altT>
 	struct rebind {
-		using other = Recycle_Allocator<SystemTag, altT, AlternateAllocator>;
+		using other = Recycle_Allocator<altT, SystemTag, AlternateAllocator>;
 	};
 
 	Recycle_Allocator()=default;
@@ -97,7 +97,7 @@ public:
 
 
 	template<class U>
-	Recycle_Allocator(const Recycle_Allocator<SystemTag, U, AlternateAllocator>& other) {}
+	Recycle_Allocator(const Recycle_Allocator<U, SystemTag, AlternateAllocator>& other) {}
 
 
 	T* allocate(bc::size_t size) {
@@ -135,12 +135,12 @@ public:
 
 	template<class U>
 	constexpr bool operator == (
-		const Recycle_Allocator<SystemTag, U, AlternateAllocator>&) const {
+		const Recycle_Allocator<U, SystemTag, AlternateAllocator>&) const {
 		return true;
 	}
 	template<class U>
 	constexpr bool operator != (
-		const Recycle_Allocator<SystemTag, U, AlternateAllocator>&) const {
+		const Recycle_Allocator<U, SystemTag, AlternateAllocator>&) const {
 		return false;
 	}
 };

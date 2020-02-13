@@ -18,6 +18,8 @@ namespace tests {
 template<class Allocator>
 struct log_allocator : Allocator {
 
+	using value_type = typename Allocator::value_type;
+
 	std::shared_ptr<bc::size_t> total_allocated =
 			std::shared_ptr<bc::size_t>(new bc::size_t());
 
@@ -33,19 +35,21 @@ struct log_allocator : Allocator {
 	log_allocator() = default;
 
 	template<class T>
-	log_allocator(const log_allocator<T>& la) {
+	log_allocator(const log_allocator<T>& la)
+	{
 		total_allocated = la.total_allocated;
 		total_deallocated = la.total_deallocated;
 	}
 
-	auto allocate(bc::size_t sz) {
-		(*total_allocated.get()) += sz *
-				sizeof(typename Allocator::value_type);
+	auto allocate(bc::size_t sz)
+	{
+		(*total_allocated.get()) += sz * sizeof(value_type);
 		return Allocator::allocate(sz);
 	}
 
-	auto deallocate(typename Allocator::value_type* data, bc::size_t sz) {
-		(*total_deallocated) += sz* sizeof(typename Allocator::value_type);
+	auto deallocate(typename Allocator::value_type* data, bc::size_t sz)
+	{
+		(*total_deallocated) += sz * sizeof(value_type);
 		return Allocator::deallocate(data, sz);
 
 	}
@@ -66,7 +70,8 @@ int test_allocators(int sz=128) {
 
 	Stream<system_tag> stream;
 
-	BC_TEST_ON_STARTUP {
+	BC_TEST_ON_STARTUP
+	{
 		stream.get_allocator().free();
 		stream.get_allocator().set_allocator(log_allocator<allocator_type>());
 		mat tmp;
@@ -75,20 +80,23 @@ int test_allocators(int sz=128) {
 
 	BC_TEST_DEF(
 		mat a(5,5);
-		return *(a.get_allocator().total_allocated.get()) == 25 * sizeof(value_type);
+		return *(a.get_allocator().total_allocated.get())
+				== 25 * sizeof(value_type);
 	)
 
 	BC_TEST_DEF(
 		mat a(5,5);
 		mat b(a);
-		return *(b.get_allocator().total_allocated.get()) == 50 * sizeof(value_type);
+		return *(b.get_allocator().total_allocated.get())
+				== 50 * sizeof(value_type);
 	)
 
 	BC_TEST_DEF(
 		mat a(5,5);  //mem sz = 25
 		vec b(a[0]); //       = 30 (allocators should propagate from slices)
 
-		return *(b.get_allocator().total_allocated) == 30 * sizeof(value_type);
+		return *(b.get_allocator().total_allocated)
+				== 30 * sizeof(value_type);
 	)
 
 	BC_TEST_DEF(

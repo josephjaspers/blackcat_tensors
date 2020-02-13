@@ -23,53 +23,54 @@ namespace allocators {
 
 namespace pa_detail {
 
-template<class SystemTag, class ValueType>
+template<class ValueType, class SystemTag>
 struct Allocator_Base
 {
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	virtual value_type* allocate(std::size_t sz) = 0;
+
+	virtual
+	value_type* allocate(std::size_t sz) = 0;
 	virtual void deallocate(value_type* data, std::size_t sz) = 0;
+
 	virtual Allocator_Base* clone() const = 0;
 	virtual ~Allocator_Base() {};
 
-	virtual bool operator == (
-			const Allocator_Base& other) const = 0;
-
-	virtual bool operator != (
-			const Allocator_Base& other) const  {
+	virtual bool operator == (const Allocator_Base& other) const = 0;
+	virtual bool operator != (const Allocator_Base& other) const  {
 		return !((*this) == other);
 	}
 
 	virtual std::string rebound_to_byte_hash() const = 0;
 };
 
-template<
-	class Allocator,
-	class SystemTag=typename bc::allocator_traits<Allocator>::system_tag,
-	class ValueType=typename bc::allocator_traits<Allocator>::value_type>
+template<class Allocator>
 struct Derived_Allocator:
-	public Allocator_Base<SystemTag , ValueType>
+	Allocator_Base<
+			typename bc::allocator_traits<Allocator>::value_type,
+			typename bc::allocator_traits<Allocator>::system_tag>
 {
-	using traits = bc::allocator_traits<Allocator>;
-	using system_tag = SystemTag;
-	using value_type = ValueType;
+		using traits_type = bc::allocator_traits<Allocator>;
+		using system_tag = typename traits_type::system_tag;
+		using value_type = typename traits_type::value_type;
 
 private:
-	using parent_type = Allocator_Base<system_tag, value_type>;
-	using self_type = Derived_Allocator<Allocator, system_tag, value_type>;
+
+	using parent_type = Allocator_Base<value_type, system_tag>;
+	using self_type = Derived_Allocator<Allocator>;
 
 	Allocator m_allocator;
 
 public:
 
 	template<class altT>
-	struct rebind {
+	struct rebind
+	{
 		using other = Derived_Allocator<
-			typename traits::template rebind_alloc<altT>>;
+				typename traits_type::template rebind_alloc<altT>>;
 	};
 
-	Allocator_Base<SystemTag , ValueType>* clone() const override {
+	Allocator_Base<value_type, system_tag>* clone() const override {
 		return new Derived_Allocator(m_allocator);
 	}
 
@@ -91,9 +92,9 @@ public:
 
 	virtual std::string rebound_to_byte_hash() const final {
 		using hash_t = std::conditional_t<
-			std::is_same<value_type, bc::allocators::Byte>::value,
-			self_type,
-			typename rebind<bc::allocators::Byte>::other>;
+				std::is_same<value_type, bc::allocators::Byte>::value,
+				self_type,
+				typename rebind<bc::allocators::Byte>::other>;
 		return hash_t::static_hash();
 	}
 
@@ -105,11 +106,11 @@ public:
 		m_allocator.deallocate(data, sz);
 	}
 
-	virtual bool operator == (const Allocator_Base<system_tag, value_type>& other) const
+	virtual bool operator == (const Allocator_Base<value_type, system_tag>& other) const
 	{
 		//same derived class
 		if (rebound_to_byte_hash() == other.rebound_to_byte_hash()) {
-			if (traits::is_always_equal::value)
+			if (traits_type::is_always_equal::value)
 				return true;
 
 			auto& cast_other = static_cast<const self_type&>(other);
@@ -123,9 +124,9 @@ public:
 
 }
 
-template<class SystemTag, class ValueType>
-struct Polymorphic_Allocator {
-
+template<class ValueType, class SystemTag>
+struct Polymorphic_Allocator
+{
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 
@@ -137,9 +138,9 @@ private:
 	template<class... Args>
 	using Allocator_Base = pa_detail::Allocator_Base<Args...>;
 
-	using allocator_type =  Allocator_Base<system_tag, value_type>;
+	using allocator_type =  Allocator_Base<value_type, system_tag>;
 	using allocator_pointer_type = std::unique_ptr<allocator_type>;
-	using default_allocator_type = bc::Allocator<system_tag, value_type>;
+	using default_allocator_type = bc::Allocator<value_type, system_tag>;
 
 	allocator_pointer_type m_allocator;
 
@@ -188,13 +189,13 @@ public:
 	}
 
 	template<class AltT>
-	bool operator == (const Polymorphic_Allocator<system_tag, AltT>& other)
+	bool operator == (const Polymorphic_Allocator<AltT, system_tag>& other)
 	{
 		return *m_allocator == *(other.m_allocator);
 	}
 
 	template<class AltT>
-	bool operator != (const Polymorphic_Allocator<system_tag, AltT>& other)
+	bool operator != (const Polymorphic_Allocator<AltT, system_tag>& other)
 	{
 		return !(*this == other);
 	}

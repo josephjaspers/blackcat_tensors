@@ -19,18 +19,14 @@ template<class SystemTag>
 class Stack_Allocator_Base {
 
 	using system_tag = SystemTag;
+	using value_type = Byte;
+	using allocator_type = Polymorphic_Allocator<value_type, system_tag>;
 
 	std::size_t m_data_sz=0;
 	std::size_t m_curr_index=0;
 
 	Byte* m_data=nullptr;
-
-	static Polymorphic_Allocator<SystemTag, bc::allocators::Byte>& get_default_allocator() {
-		static Polymorphic_Allocator<SystemTag, bc::allocators::Byte> default_allocator;
-		return default_allocator;
-	}
-
-	Polymorphic_Allocator<SystemTag, Byte> m_allocator = get_default_allocator();
+	allocator_type m_allocator;
 
 public:
 	Stack_Allocator_Base(std::size_t sz=0) : m_data_sz(sz){
@@ -138,7 +134,7 @@ public:
 /// An unsynced memory pool implemented as a stack.
 /// Deallocation must happen in reverse order of deallocation.
 /// This class is used with bc::Tensor_Base expressions to enable very fast allocations of temporaries.
-template<class SystemTag, class ValueType=bc::allocators::Byte>
+template<class ValueType, class SystemTag>
 class Stack_Allocator {
 
 	template<class, class>
@@ -155,14 +151,14 @@ public:
 
 	template<class T>
 	struct rebind {
-		using other = Stack_Allocator<SystemTag,  T>;
+		using other = Stack_Allocator<T, SystemTag>;
 	};
 
 	Stack_Allocator(int sz=0):
 		ws_ptr(new ws_base_t(sz)) {}
 
 	template<class T>
-	Stack_Allocator(const Stack_Allocator<SystemTag, T>& ws):
+	Stack_Allocator(const Stack_Allocator<T, SystemTag>& ws):
 		ws_ptr(ws.ws_ptr) {}
 
 	Stack_Allocator(const Stack_Allocator&)=default;
@@ -185,9 +181,11 @@ public:
 	size_t available_bytes() const {
 		return ws_ptr->available_bytes();
 	}
+
 	size_t allocated_bytes() const {
 		return ws_ptr->allocated_bytes();
 	}
+
 	size_t reserved_bytes() const {
 		return ws_ptr->reserved_bytes();
 	}

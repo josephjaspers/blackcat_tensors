@@ -52,10 +52,10 @@ public:
 #ifdef __CUDACC__
 		using allocator_type = std::conditional_t<
 				is_host::value,
-				bc::Allocator<system_tag, value_type>,
+				bc::Allocator<value_type, system_tag>,
 				bc::Cuda_Managed<value_type>>;
 #else
-		using allocator_type = bc::Allocator<system_tag, value_type>;
+		using allocator_type = bc::Allocator<value_type, system_tag>;
 #endif
 		using tensor_type = Tensor_Base<exprs::Array<
 				bc::Shape<tensor_dim>,
@@ -65,7 +65,7 @@ public:
 		using host_tensor_type = Tensor_Base<exprs::Array<
 				bc::Shape<tensor_dim>,
 				value_type,
-				bc::Allocator<host_tag, value_type>>>;
+				bc::Allocator<value_type, host_tag>>>;
 
 		auto fs = bc::tensors::io::features(precision, pretty, sparse);
 		auto dim = bc::traits::Integer<tensor_dim>();

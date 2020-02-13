@@ -11,7 +11,7 @@
 namespace bc {
 namespace allocators {
 
-template<class SystemTag, class ValueType>
+template<class ValueType, class SystemTag>
 struct Null_Allocator {
 
 	using system_tag =  SystemTag;
@@ -23,25 +23,20 @@ struct Null_Allocator {
 	Null_Allocator(Null_Allocator&&)=default;
 
 	template<class AltT>
-	Null_Allocator(Null_Allocator<SystemTag, AltT> copy) {}
+	Null_Allocator(Null_Allocator<AltT, SystemTag> copy) {}
 	value_type* allocate(size_t sz) { return nullptr; }
-
-	template<class AltT>
-	struct rebind {
-		using other = Null_Allocator<system_tag, AltT>;
-	};
 
 	void deallocate(value_type* ptr, size_t sz) {
 		BC_ASSERT(ptr==nullptr, "Null_Allocator passed a non-null ptr");
 	}
 
 	template<class U>
-	constexpr bool operator ==(const Null_Allocator<SystemTag, U>&) const {
+	constexpr bool operator ==(const Null_Allocator<U, system_tag>&) const {
 		return true;
 	}
 
 	template<class U>
-	constexpr bool operator !=(const Null_Allocator<SystemTag, U>&) const {
+	constexpr bool operator !=(const Null_Allocator<U, system_tag>&) const {
 		return false;
 	}
 };

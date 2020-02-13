@@ -20,7 +20,7 @@ namespace tensors {
 namespace detail {
 
 template<class T>
-using default_allocator = bc::Allocator<default_system_tag_t, T>;
+using default_allocator = bc::Allocator<T, default_system_tag_t>;
 
 template<int X>
 using default_shape = bc::Shape<X>;

@@ -20,7 +20,7 @@ struct Recurrent:
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	using allocator_type = bc::Allocator<SystemTag, ValueType>;
+	using allocator_type = bc::Allocator<ValueType, SystemTag>;
 	using self_type = Recurrent<SystemTag, ValueType, RecurrentNonLinearity>;
 	using parent_type = Layer_Base<self_type>;
 

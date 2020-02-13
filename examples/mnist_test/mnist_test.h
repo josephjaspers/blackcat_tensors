@@ -11,7 +11,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 		int epochs=5, int batch_size=32, int samples=32*1024) {
 
 	using value_type     = typename System::default_floating_point_type;
-	using allocator_type = bc::Allocator<System, value_type>;
+	using allocator_type = bc::Allocator<value_type, System>;
 	using cube           = bc::Cube<value_type, allocator_type>;
 	using mat            = bc::Matrix<value_type, allocator_type>;
 	using clock          = std::chrono::duration<double>;
@@ -22,7 +22,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 		bc::nn::tanh(system_tag, 256),
 		bc::nn::feedforward(system_tag, 256, 10, bc::nn::momentum),
 		bc::nn::softmax(system_tag, 10),
-		bc::nn::logging_output_layer(system_tag, 10, bc::nn::RMSE).skip_every(100)
+		bc::nn::output_layer(system_tag, 10)
 	);
 
 	network.set_batch_size(batch_size);

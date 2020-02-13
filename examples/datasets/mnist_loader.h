@@ -65,7 +65,7 @@ template<class System>
 auto load_mnist(System system, std::string mnist_dataset, int batch_size, int samples) {
 
 	using value_type = typename System::default_floating_point_type;
-	using allocator_type = bc::Allocator<System, value_type>;
+	using allocator_type = bc::Allocator<value_type, System>;
 	using cube = bc::Cube<value_type, allocator_type>;
 
 	std::ifstream read_data(mnist_dataset);

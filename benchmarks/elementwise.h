@@ -70,7 +70,7 @@ auto benchmark_forloop(int size, bc::size_t  iters, Allocator alloc, bool stdout
 }
 
 
-template<class allocator=bc::Allocator<bc::host_tag, double>>
+template<class allocator=bc::Allocator<double, bc::host_tag>>
 void benchmark_forloop_suite(bool stdout=false, allocator alloc=allocator()) {
 	int size = 10000;
 	int reps = 1000000;

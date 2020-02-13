@@ -17,7 +17,7 @@ class host_tag;
 
 namespace allocators {
 
-template<class SystemTag, class ValueType>
+template<class ValueType, class SystemTag>
 struct Basic_Allocator_Base {
 
 	using system_tag = SystemTag;	//BC tag
@@ -31,28 +31,28 @@ struct Basic_Allocator_Base {
 	using is_always_equal = std::true_type;
 
 	template<class U>
-	bool operator == (const Basic_Allocator_Base<SystemTag, U>&) const {
+	bool operator == (const Basic_Allocator_Base<U, SystemTag>&) const {
 		return true;
 	}
 
 	template<class U>
-	bool operator != (const Basic_Allocator_Base<SystemTag, U>&) const {
+	bool operator != (const Basic_Allocator_Base<U, SystemTag>&) const {
 		return false;
 	}
 };
 
-template<class SystemTag, class ValueType>
+template<class ValueType, class SystemTag>
 class Allocator;
 
 /// Comparable to 'std::allocator.'
 template<class T>
-struct Allocator<host_tag, T>: Basic_Allocator_Base<host_tag, T> {
+struct Allocator<T, host_tag>: Basic_Allocator_Base<T, host_tag> {
 
 	template<class altT>
-	struct rebind { using other = Allocator<host_tag, altT>; };
+	struct rebind { using other = Allocator<altT, host_tag>; };
 
 	template<class U>
-	Allocator(const Allocator<host_tag, U>&) {}
+	Allocator(const Allocator<U, host_tag>&) {}
 	Allocator() = default;
 
 	T* allocate(int size) {
@@ -69,13 +69,14 @@ struct Allocator<host_tag, T>: Basic_Allocator_Base<host_tag, T> {
 
 /// The 'std::allocator' of GPU-allocators. Memory is allocated via 'cudaMalloc'
 template<class T>
-struct Allocator<device_tag, T>: Basic_Allocator_Base<device_tag, T> {
+struct Allocator<T, device_tag>: Basic_Allocator_Base<T, device_tag> {
 
 	template<class altT>
-	struct rebind { using other = Allocator<device_tag, altT>; };
+	struct rebind { using other = Allocator<altT, device_tag>; };
+
 
 	template<class U>
-	Allocator(const Allocator<device_tag, U>&) {}
+	Allocator(const Allocator<U, device_tag>&) {}
 	Allocator() = default;
 
 	T* allocate(std::size_t sz) const
@@ -94,9 +95,9 @@ struct Allocator<device_tag, T>: Basic_Allocator_Base<device_tag, T> {
 
 template<class T>
 struct Device_Managed:
-	Allocator<device_tag, T>
+	Allocator<T, device_tag>
 {
-	using Allocator<device_tag, T>::Allocator;
+	using Allocator<T, device_tag>::Allocator;
 	static constexpr bool managed_memory = true;
 
 	template<class altT>

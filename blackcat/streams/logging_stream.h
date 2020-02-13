@@ -56,11 +56,10 @@ template<class SystemTag>
 struct Logging_Stream: Logging_Stream_Base<SystemTag> {
 
 	using system_tag = SystemTag;
-	using allocator_type =
-			bc::allocators::Logging_Allocator<
-					bc::allocators::Null_Allocator<
-							system_tag,
-							bc::allocators::Byte>>;
+	using allocator_type = bc::allocators::Logging_Allocator<
+			bc::allocators::Null_Allocator<
+					bc::allocators::Byte,
+					system_tag>>;
 
 	allocator_type allocator;
 

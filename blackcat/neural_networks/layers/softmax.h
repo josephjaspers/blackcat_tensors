@@ -23,8 +23,8 @@ public:
 	using value_type = ValueType;
 	using parent_type = Layer_Base<SoftMax<SystemTag, ValueType>>;
 
-	using mat = bc::Matrix<ValueType, bc::Allocator<SystemTag, ValueType>>;
-	using vec = bc::Vector<ValueType, bc::Allocator<SystemTag, ValueType>>;
+	using mat = bc::Matrix<ValueType, bc::Allocator<ValueType, SystemTag>>;
+	using vec = bc::Vector<ValueType, bc::Allocator<ValueType, SystemTag>>;
 
 private:
 

@@ -19,7 +19,7 @@ using nn_default_system_tag = bc::host_tag;
 
 template<class SystemTag, class ValueType, class... AltAllocator>
 using nn_default_allocator_type =
-		bc::allocators::Recycle_Allocator<SystemTag, ValueType, AltAllocator...>;
+		bc::allocators::Recycle_Allocator<ValueType, SystemTag, AltAllocator...>;
 
 using nn_default_optimizer_type = Momentum;
 

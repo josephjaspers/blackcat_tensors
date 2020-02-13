@@ -25,7 +25,7 @@ class Stream<host_tag> {
 	struct Contents {
 		std::unique_ptr<HostEvent> m_event;
 		HostStream m_stream;
-		bc::allocators::Stack_Allocator<host_tag> m_workspace;
+		bc::allocators::Stack_Allocator<bc::Byte, host_tag> m_workspace;
 	};
 
 	static std::shared_ptr<Contents> get_default_contents()
@@ -41,9 +41,9 @@ class Stream<host_tag> {
 public:
 
 	using system_tag = host_tag;
-	using allocator_type = bc::allocators::Stack_Allocator<host_tag>;
+	using allocator_type = bc::allocators::Stack_Allocator<bc::Byte, host_tag>;
 
-	bc::allocators::Stack_Allocator<host_tag>& get_allocator() {
+	allocator_type& get_allocator() {
 		return m_contents->m_workspace;
 	}
 

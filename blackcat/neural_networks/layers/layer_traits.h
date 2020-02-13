@@ -62,7 +62,7 @@ struct layer_traits: bc::traits::common_traits<T> {
 	using allocator_type =
 			bc::traits::conditional_detected_t<
 					bc::traits::query_allocator_type, T,
-					bc::Allocator<system_tag, value_type>>;
+					bc::Allocator<value_type, system_tag>>;
 
 	using requires_extra_cache = bc::traits::conditional_detected_t<
 			detail::query_requires_extra_cache, T, std::false_type>;
