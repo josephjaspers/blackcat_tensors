@@ -63,7 +63,7 @@ private:
 	Dim<2> m_column_image_shape;
 
 	using col_image_key = bc::nn::cache_key<
-			bc::utility::Name<'c','x'>, cube, is_recurrent>;
+		bc::utility::Name<'c','x'>, cube, cache_key_type::inherit>;
 
 public:
 

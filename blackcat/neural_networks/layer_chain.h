@@ -29,49 +29,41 @@ using query_layer_type = typename T::layer_type;
  * for actual neural-network layers.
  *
  */
-template<class Index, class Neural_Network_Is_Recurrent, class Derived, class...>
+template<class Index, class Derived, class...>
 struct LayerChain {};
 
 template<
 	class Index,
-	class Neural_Network_Is_Recurrent,
 	class Derived,
 	class CurrentLayer,
 	class... Layers>
 struct LayerChain<
 		Index,
-		Neural_Network_Is_Recurrent,
 		Derived,
 		CurrentLayer,
 		Layers...>:
-
 	LayerChain<
 			bc::traits::Integer<Index::value + 1>,
-			Neural_Network_Is_Recurrent,
-			LayerChain<Index, Neural_Network_Is_Recurrent, Derived, CurrentLayer, Layers...>,
+			LayerChain<Index, Derived, CurrentLayer, Layers...>,
 			Layers...>,
 	Layer_Manager<
-			LayerChain<Index, Neural_Network_Is_Recurrent, Derived, CurrentLayer, Layers...>,
-			CurrentLayer,
-			Neural_Network_Is_Recurrent> {	 //if not first layer
-
+			LayerChain<Index, Derived, CurrentLayer, Layers...>,
+			CurrentLayer>
+{
 	using self_type = LayerChain<
 		Index,
-		Neural_Network_Is_Recurrent,
 		Derived,
 		CurrentLayer,
 		Layers...>;
 
 	using parent_type = LayerChain<
 			bc::traits::Integer<Index::value + 1>,
-			Neural_Network_Is_Recurrent,
 			self_type,
 			Layers...>;
 
 	using layer_type = Layer_Manager<
 			self_type,
-			CurrentLayer,
-			Neural_Network_Is_Recurrent>;
+			CurrentLayer>;
 
 	using next_layer_type = bc::traits::conditional_detected<
 			detail::query_layer_type, parent_type, void>;

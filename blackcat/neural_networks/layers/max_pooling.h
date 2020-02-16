@@ -42,7 +42,10 @@ private:
 	using batched_tensor_type = bc::Tensor<4, value_type, allocator_type>;
 
 	using index_key_type =  bc::nn::cache_key<
-			bc::utility::Name<'i','d','x'>, batched_index_tensor_type, IsRecurrent>;
+			bc::utility::Name<'i','d','x'>, batched_index_tensor_type,
+			IsRecurrent::value
+				? cache_key_type::always_recurrent
+				: cache_key_type::inherit>;
 
 	Dim<3> m_img_dims;  //channel_width_height
 	Dim<3> m_pool_dims;

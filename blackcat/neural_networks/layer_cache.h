@@ -22,14 +22,16 @@ namespace nn {
  * 	IsRecurrent - Determines if the storing should override the most
  * 		recent member store or if it should be stored in a separate location for back-propagation through time.
  */
-template<class K, class V, class IsRecurrent>
-struct cache_key : bc::utility::Any_Key<K, V> {
-	static_assert(
-			std::is_same<IsRecurrent, std::true_type>::value ||
-					std::is_same<IsRecurrent, std::false_type>::value,
-			"Cache_Key `IsRecurrent` must be std::true_type or std::false_type");
 
-	using is_recurrent = IsRecurrent;
+enum cache_key_type {
+	inherit,
+	always_recurrent,
+	always_forward
+};
+
+template<class K, class V, cache_key_type CacheKeyOverrider=inherit>
+struct cache_key : bc::utility::Any_Key<K, V> {
+	static constexpr cache_key_type cache_override_type = CacheKeyOverrider;
 };
 
 
@@ -43,38 +45,76 @@ struct cache_key : bc::utility::Any_Key<K, V> {
  */
 struct Cache {
 
-	template<class K, class V, class R>
+	template<class K, class V, cache_key_type R>
 	using key_type = cache_key<K, V, R>;
-
-	int m_time_index = 0;
-	bc::utility::Any_Map cache;
 
 private:
 
+	int m_time_index = 0;
+	bool is_recurrent = false;
+
+	bc::utility::Any_Map cache;
+
 	template<class K, class V>
-	auto hash(key_type<K, V, std::true_type> key) {
+	auto hash(key_type<K, V, cache_key_type::always_recurrent> key) {
 		return bc::utility::Any_Key<K, std::vector<V>>();
 	}
 
-	template<class K, class V>
-	auto hash(key_type<K, V, std::false_type> key) {
+	template<class K, class V, cache_key_type R>
+	auto hash(key_type<K, V, R> key) {
 		return bc::utility::Any_Key<K, V>();
 	}
 
 public:
 
-	template<class K, class V, class R>
+	void enable_recurrent_caching(bool enable=true) {
+		is_recurrent = enable;
+	}
+
+	template<class K, class V, cache_key_type R>
 	bool contains(key_type<K,V,R> key) {
 		return cache.contains(key);
 	}
 
+	template<class K, class V>
+	auto& load(key_type<K, V, cache_key_type::inherit> key, int t_modifier=0)
+	{
+		if (is_recurrent)
+			return load(key_type<K,V, always_recurrent>(), t_modifier);
+		else
+			return load(key_type<K,V, always_forward>(), t_modifier);
+	}
+
+	template<class K, class V, class Factory>
+	auto& load(key_type<K, V, cache_key_type::inherit> key, int t_modifier, Factory factory)
+	{
+		if (is_recurrent)
+			return load(key_type<K,V, cache_key_type::always_recurrent>(), t_modifier, factory);
+		else
+			return load(key_type<K,V, cache_key_type::always_forward>(), factory);
+	}
+
+	template<class K, class V, class Factory>
+	auto& load(key_type<K, V, cache_key_type::inherit> key, Factory factory)
+	{
+		return load(key, 0, factory);
+	}
+
+	template<class K, class V, class U>
+	auto& store(key_type<K, V, cache_key_type::inherit> key, U&& expression) {
+		if (is_recurrent)
+			return store(key_type<K,V, cache_key_type::always_recurrent>(), expression);
+		else
+			return store(key_type<K,V, cache_key_type::always_forward>(), expression);
+	}
+
 	///Loads the current value at the current time_index
 	template<class K, class V>
-	auto& load(key_type<K, V, std::true_type> key, int t_modifier=0) {
+	auto& load(key_type<K, V, cache_key_type::always_recurrent> key, int t_modifier=0) {
 		std::vector<V>& history = cache[hash(key)];
-		int index = history.size()- 1 - m_time_index + t_modifier;
+		unsigned index = history.size()- 1 - m_time_index + t_modifier;
 
-		BC_ASSERT(index < history.size(),
+		BC_ASSERT((int)index < (int)history.size(),
 			"Load recurrent_variable index out of bounds"
 				"\nHistory size: " + std::to_string(history.size()) +
 				"\nIndex:" + std::to_string(index));
@@ -83,16 +123,16 @@ public:
 	}
 
 	template<class K, class V>
-	auto& load(key_type<K, V, std::false_type> key, int t_modifier=0) {
+	auto& load(key_type<K, V, cache_key_type::always_forward> key, int t_modifier=0) {
 		BC_ASSERT(t_modifier==0, "Nonrecurrent keys cannot have a time_offset");
 		return cache[hash(key)];
 	}
 
 	template<class K, class V, class DefaultFactory>
-	auto& load(key_type<K, V, std::true_type> key,
+	auto& load(key_type<K, V, cache_key_type::always_recurrent> key,
 			int t_modifier,
-			DefaultFactory function) {
-
+			DefaultFactory function)
+	{
 		std::vector<V>& history = cache[hash(key)];
 
 		unsigned index = history.size()- 1 - m_time_index + t_modifier;
@@ -101,7 +141,7 @@ public:
 			return history.back();
 		}
 
-		BC_ASSERT(index < history.size(),
+		BC_ASSERT((int)index < (int)history.size(),
 			"Load recurrent_variable index out of bounds"
 				"\nHistory size: " + std::to_string(history.size()) +
 				"\nIndex:" + std::to_string(index));
@@ -110,13 +150,13 @@ public:
 	}
 
 	template<class K, class V, class DefaultFactory>
-	auto& load(key_type<K, V, std::true_type> key, DefaultFactory function) {
+	auto& load(key_type<K, V, cache_key_type::always_recurrent> key, DefaultFactory function) {
 		return load(key, 0, function);
 	}
 
 
 	template<class K, class V, class DefaultFactory>
-	auto& load(key_type<K, V, std::false_type> key, DefaultFactory function) {
+	auto& load(key_type<K, V, cache_key_type::always_forward> key, DefaultFactory function) {
 		auto hkey = hash(key);
 
 		if (cache.contains(hkey)) {
@@ -127,13 +167,13 @@ public:
 	}
 
 	template<class K, class V, class U>
-	auto& store(key_type<K, V, std::true_type> key, U&& expression) {
+	auto& store(key_type<K, V, cache_key_type::always_recurrent> key, U&& expression) {
 		cache[hash(key)].push_back(std::forward<U>(expression));
 		return cache[hash(key)].back();
 	}
 
 	template<class K, class V, class U>
-	auto& store(key_type<K, V, std::false_type> key, U&& expression) {
+	auto& store(key_type<K, V, cache_key_type::always_forward> key, U&& expression) {
 		if (cache.contains(hash(key))) {
 			return cache[hash(key)] = std::forward<U>(expression);
 		} else {
@@ -148,10 +188,19 @@ public:
 	void set_time_index(int idx) { m_time_index = idx; }
 
 	template<class K, class V>
-	void clear_bp_storage(key_type<K, V, std::false_type> key) {}
+	void clear_bp_storage(key_type<K, V, cache_key_type::always_forward> key) {}
 
 	template<class K, class V>
-	void clear_bp_storage(key_type<K, V, std::true_type> key) {
+	void clear_bp_storage(key_type<K, V, cache_key_type::inherit> key)
+	{
+		if (is_recurrent) {
+			auto k = key_type<K,V, cache_key_type::always_recurrent>();
+			clear_bp_storage(k);
+		}
+	}
+
+	template<class K, class V>
+	void clear_bp_storage(key_type<K, V, cache_key_type::always_recurrent> key) {
 		auto& storage = cache[hash(key)];
 
 		if (storage.size() > 1) {

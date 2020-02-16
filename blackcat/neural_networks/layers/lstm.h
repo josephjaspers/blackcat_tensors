@@ -93,7 +93,7 @@ private:
 
 	template<char C>
 	using key_type = bc::nn::cache_key<
-			bc::utility::Name<C>, mat, is_recurrent>;
+		bc::utility::Name<C>, mat, cache_key_type::always_recurrent>;
 
 	using cell_key = key_type<'c'>;
 	using forget_key = key_type<'f'>;
@@ -102,7 +102,7 @@ private:
 	using output_key = key_type<'o'>;
 
 	using predict_cell_key = bc::nn::cache_key<
-			bc::utility::Name<'p','c'>, vec, is_recurrent>;
+			bc::utility::Name<'p','c'>, vec, cache_key_type::always_recurrent>;
 
 public:
 

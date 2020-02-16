@@ -13,20 +13,15 @@
 namespace bc {
 namespace nn {
 
-template<
-	class Derived, //The LayerChain base
-	class Layer,
-	class Neural_Network_Is_Recurrent=std::false_type>
+template<class Derived, class Layer>
 struct Layer_Manager: Layer {
 
-	template<class D, class L, class R>
+	template<class D, class L>
 	friend class Layer_Manager;
 
 	using input_tensor_dim = typename layer_traits<Layer>::input_tensor_dim;
 	using output_tensor_dim = typename layer_traits<Layer>::output_tensor_dim;
 	using allocator_type = typename layer_traits<Layer>::allocator_type;
-	using is_recurrent = Neural_Network_Is_Recurrent;
-
 
 	using value_type = typename layer_traits<Layer>::value_type;
 
@@ -34,15 +29,15 @@ struct Layer_Manager: Layer {
 	using batched_input_tensor_type = bc::Tensor<input_tensor_dim::value+1, value_type, allocator_type>;
 	using batched_output_tensor_type = bc::Tensor<output_tensor_dim::value+1, value_type, allocator_type>;
 
-	template<char C, class Tensor, class isRecurrent=bc::traits::truth_type<is_recurrent::value>>
-	using key_type = cache_key<bc::utility::Name<C>, Tensor, isRecurrent>;
+	template<char C, class Tensor, cache_key_type override=cache_key_type::inherit>
+	using key_type = cache_key<bc::utility::Name<C>, Tensor, override>;
 
 private:
 
 	using batched_input_key = key_type<'X', batched_input_tensor_type>;
-	using batched_delta_key = key_type<'D', batched_output_tensor_type, std::false_type>;
+	using batched_delta_key = key_type<'D', batched_output_tensor_type>;
 	using input_key = key_type<'X', input_tensor_type>;
-	using delta_key = key_type<'D', input_tensor_type, std::false_type>;
+	using delta_key = key_type<'D', input_tensor_type, always_forward>;
 
 	using traits = layer_traits<Layer>;
 

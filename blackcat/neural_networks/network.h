@@ -37,7 +37,6 @@ struct NeuralNetwork {
 	using is_recurrent = bc::traits::any<detail::is_recurrent_layer, Layers...>;
 	using layer_chain = LayerChain<
 			bc::traits::Integer<0>,
-			is_recurrent,
 			void,
 			Layers...>;
 
@@ -49,7 +48,14 @@ struct NeuralNetwork {
 	 * Accepts a variadic parameter pack of Layer-like objects.
 	 */
 	NeuralNetwork(Layers... layers):
-			m_layer_chain(layers...) {
+			m_layer_chain(layers...)
+	{
+		bc::print("IS RECURRENT", is_recurrent::value);
+		if (is_recurrent::value) {
+			m_layer_chain.for_each([&](auto& layer) {
+				layer.get_cache().enable_recurrent_caching();
+			});
+		}
 	}
 
 	/** Calls forward propagation on each of the neural_network's layers
