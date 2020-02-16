@@ -50,7 +50,6 @@ struct NeuralNetwork {
 	NeuralNetwork(Layers... layers):
 			m_layer_chain(layers...)
 	{
-		bc::print("IS RECURRENT", is_recurrent::value);
 		if (is_recurrent::value) {
 			m_layer_chain.for_each([&](auto& layer) {
 				layer.get_cache().enable_recurrent_caching();
