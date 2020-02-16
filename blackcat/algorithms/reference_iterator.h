@@ -53,7 +53,7 @@ struct ReferenceList {
 };
 
 template<class T, class ... Ts>
-ReferenceList<T> reference_list(T& t, Ts&... ts) {
+ReferenceList<T> enumerate(T& t, Ts&... ts) {
 	return ReferenceList<T>(t, ts...);
 }
 

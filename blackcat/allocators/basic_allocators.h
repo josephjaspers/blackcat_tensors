@@ -18,8 +18,8 @@ class host_tag;
 namespace allocators {
 
 template<class ValueType, class SystemTag>
-struct Basic_Allocator_Base {
-
+struct Basic_Allocator_Base
+{
 	using system_tag = SystemTag;	//BC tag
 	using value_type = ValueType;
 	using pointer = value_type*;

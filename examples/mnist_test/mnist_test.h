@@ -8,7 +8,7 @@
 
 template<class System=bc::host_tag>
 int percept_MNIST(System system_tag, std::string mnist_dataset,
-		int epochs=5, int batch_size=32, int samples=32*1024) {
+		int epochs=20, int batch_size=200, int samples=32*1024) {
 
 	using value_type     = typename System::default_floating_point_type;
 	using allocator_type = bc::Allocator<value_type, System>;

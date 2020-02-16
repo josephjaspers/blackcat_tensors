@@ -14,7 +14,7 @@
 namespace bc {
 namespace nn {
 
-using bc::algorithms::reference_list;
+using bc::algorithms::enumerate;
 
 template<class SystemTag,
 		class ValueType,
@@ -301,11 +301,11 @@ public:
 		parent_type::set_learning_rate(lr);
 		value_type batched_lr = this->get_batched_learning_rate();
 
-		auto optimizers = reference_list(
+		auto optimizers = enumerate(
 				wz_opt, wf_opt, wi_opt, wo_opt,
 				rz_opt, rf_opt, ri_opt, ro_opt);
 
-		auto bias_optimizers = reference_list(
+		auto bias_optimizers = enumerate(
 				bf_opt, bz_opt, bi_opt, bo_opt);
 
 		for (auto& optimizer : optimizers)
@@ -325,27 +325,27 @@ public:
 				return m;
 		};
 
-		for (auto& tensor: reference_list(dc, df, dz, di, do_, dy)) {
+		for (auto& tensor: enumerate(dc, df, dz, di, do_, dy)) {
 			tensor = make_default();
 		}
 	}
 
 	void zero_deltas()
 	{
-		for (auto& delta : reference_list(dc, df, di, dz, do_, dy)) {
+		for (auto& delta : enumerate(dc, df, di, dz, do_, dy)) {
 			delta.zero();
 		}
 	}
 
 	void zero_gradients()
 	{
-		for (auto& grad : reference_list(
+		for (auto& grad : enumerate(
 				wf_gradients, wz_gradients, wi_gradients, wo_gradients,
 				rf_gradients, rz_gradients, ri_gradients, ro_gradients)) {
 			grad.zero();
 		}
 
-		for (auto& grad : reference_list(
+		for (auto& grad : enumerate(
 				bf_gradients, bz_gradients, bi_gradients, bo_gradients)) {
 			grad.zero();
 		}

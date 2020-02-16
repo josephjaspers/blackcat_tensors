@@ -34,6 +34,9 @@ cuda:
 cuda_atlas:
 	nvcc $(CUFILES) $(CXXVERSION) $(ATLAS_BLAS_LINKAGE) $(CULIBS) $(CUFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE) $(ATLASLIBS)
 	
+clang:
+	 clang $(CXXFILES) -std=c++17 -lblas  $(CXXFLAGS) -I $(INCLUDE) -L $(LIBINCLUDE)
 clean:
 	rm -i mnist_test_exec; rm -i mnist_test_exec_cu;
+
 

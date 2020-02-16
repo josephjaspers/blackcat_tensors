@@ -139,7 +139,7 @@ template<class Op, class Lv, class Rv, class=void>
 struct bin_expr_factory
 {
 	template<class... Args>
-	static auto make(Lv lv, Rv rv, Args&&... args...) {
+	static auto make(Lv lv, Rv rv, Args&&... args) {
 		return Bin_Op<Op, Lv, Rv>(lv, rv, std::forward<Args>(args)...);
 	}
 };
@@ -149,7 +149,7 @@ template<class Lv, class Rv>
 struct bin_expr_factory<Add, Lv, Un_Op<Negation, Rv>>
 {
 	template<class... Args>
-	static auto make(Lv lv, Un_Op<Negation, Rv> rv, Args&&... args...) {
+	static auto make(Lv lv, Un_Op<Negation, Rv> rv, Args&&... args) {
 		return mk_bin_op<Sub>(lv, rv.array, std::forward<Args>(args)...);
 	}
 };
@@ -159,7 +159,7 @@ template<class Lv, class Rv>
 struct bin_expr_factory<Sub, Lv, Un_Op<Negation, Rv>>
 {
 	template<class... Args>
-	static auto make(Lv lv, Un_Op<Negation, Rv> rv, Args&&... args...) {
+	static auto make(Lv lv, Un_Op<Negation, Rv> rv, Args&&... args) {
 		return mk_bin_op<Add>(lv, rv.array, std::forward<Args>(args)...);
 	}
 };
@@ -169,7 +169,7 @@ template<class Lv, class Rv>
 struct bin_expr_factory<Sub, Un_Op<Negation, Lv>, Rv>
 {
 	template<class... Args>
-	static auto make(Un_Op<Negation, Lv> lv, Rv rv, Args&&... args...) {
+	static auto make(Un_Op<Negation, Lv> lv, Rv rv, Args&&... args) {
 		return mk_bin_op<Sub>(rv, lv.array, std::forward<Args>(args)...);
 	}
 };
@@ -180,7 +180,7 @@ struct bin_expr_factory<Sub, Un_Op<Negation, Lv>, Un_Op<Negation, Rv>>
 {
 	template<class... Args>
 	static auto make(
-			Un_Op<Negation, Lv> lv, Un_Op<Negation, Rv> rv, Args&&... args...)
+			Un_Op<Negation, Lv> lv, Un_Op<Negation, Rv> rv, Args&&... args)
 	{
 		return mk_bin_op<Add>(lv, rv.array, std::forward<Args>(args)...);
 	}
@@ -192,7 +192,7 @@ struct bin_expr_factory<Add, Un_Op<Negation, Lv>, Un_Op<Negation, Rv>>
 {
 	template<class... Args>
 	static auto make(
-			Un_Op<Negation, Lv> lv, Un_Op<Negation, Rv> rv, Args&&... args...)
+			Un_Op<Negation, Lv> lv, Un_Op<Negation, Rv> rv, Args&&... args)
 	{
 		return detail::mk_bin_op<Sub>(
 				lv, rv.array, std::forward<Args>(args)...);
@@ -204,7 +204,7 @@ template<class Lv, class Rv>
 struct bin_expr_factory<Add_Assign, Lv, Un_Op<Negation, Rv>>
 {
 	template<class... Args>
-	static auto make(Lv lv, Un_Op<Negation, Rv> rv, Args&&... args...) {
+	static auto make(Lv lv, Un_Op<Negation, Rv> rv, Args&&... args) {
 		return mk_bin_op<Sub_Assign>(lv, rv.array, std::forward<Args>(args)...);
 	}
 };
@@ -214,7 +214,7 @@ template<class Lv, class Rv>
 struct bin_expr_factory<Sub_Assign, Lv, Un_Op<Negation, Rv>>
 {
 	template<class... Args>
-	static auto make(Lv lv, Un_Op<Negation, Rv> rv, Args&&... args...) {
+	static auto make(Lv lv, Un_Op<Negation, Rv> rv, Args&&... args) {
 		return mk_bin_op<Add_Assign>(lv, rv.array, std::forward<Args>(args)...);
 	}
 };

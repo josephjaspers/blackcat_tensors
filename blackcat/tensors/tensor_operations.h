@@ -269,13 +269,13 @@ private:
 
 		if (!scalar_op && !valid_broadcast_op && !valid_cwise_op) {
 			throw std::invalid_argument(
-					"Tensor by Tensor operation - size mismatch - "
-					"\nthis->tensor_dim =" + std::to_string(tensor_dim) +
-					"\nthis->size() =" + std::to_string(this->size()) +
-					"\nthis_dims:" + this->inner_shape().to_string() +
-					"\nparam->tensor_dim =" + std::to_string(Xpr::tensor_dim) +
-					"\nparam.size() =" + std::to_string(tensor.size()) +
-					"\nparam_dims:" + tensor.inner_shape().to_string()
+					"Tensor by Tensor operation error: shape mismatch."
+					"\nthis->tensor_dim  = " + std::to_string(tensor_dim) +
+					"\nthis->size()      = " + std::to_string(this->size()) +
+					"\nthis_dims         = " + this->inner_shape().to_string() +
+					"\nparam->tensor_dim = " + std::to_string(Xpr::tensor_dim) +
+					"\nparam.size()      = " + std::to_string(tensor.size()) +
+					"\nparam_dims        = " + tensor.inner_shape().to_string()
 			);
 		}
 	}

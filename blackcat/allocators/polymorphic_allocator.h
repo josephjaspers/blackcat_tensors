@@ -40,7 +40,6 @@ struct Allocator_Base
 	virtual bool operator != (const Allocator_Base& other) const  {
 		return !((*this) == other);
 	}
-
 	virtual std::string rebound_to_byte_hash() const = 0;
 };
 
@@ -106,7 +105,7 @@ public:
 		m_allocator.deallocate(data, sz);
 	}
 
-	virtual bool operator == (const Allocator_Base<value_type, system_tag>& other) const
+	virtual bool operator == (const Allocator_Base<value_type, system_tag>& other) const override
 	{
 		//same derived class
 		if (rebound_to_byte_hash() == other.rebound_to_byte_hash()) {

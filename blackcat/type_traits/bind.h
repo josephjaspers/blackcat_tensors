@@ -59,12 +59,12 @@ private:
 		-> decltype(call(
 			truth_type<ArgCount + 1 == num_args>(),
 			forward<TupleArgs>(params)...,
-			std::get<ArgCount>(static_cast<const tuple<Args...>&>(*this))))
+			std::get<ArgCount>(*this)))
 	{
 		return call(
 			truth_type<ArgCount + 1 == num_args>(),
 			forward<TupleArgs>(params)...,
-			std::get<ArgCount>(static_cast<const tuple<Args...>&>(*this)));
+			std::get<ArgCount>(*this));
 	}
 
 	template<class... TupleArgs, int ArgCount=sizeof...(TupleArgs)>
@@ -72,12 +72,12 @@ private:
 	-> decltype(call(
 			truth_type<ArgCount + 1 == num_args>(),
 			forward<TupleArgs>(params)...,
-			std::get<ArgCount>(static_cast<tuple<Args...>&>(*this))))
+			std::get<ArgCount>(*this)))
 	{
 		return call(
 			truth_type<ArgCount + 1 == num_args>(),
 			forward<TupleArgs>(params)...,
-			std::get<ArgCount>(static_cast<tuple<Args...>&>(*this)));
+			std::get<ArgCount>(*this));
 	}
 
 public:
