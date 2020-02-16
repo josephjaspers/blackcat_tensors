@@ -13,13 +13,10 @@
 namespace bc {
 namespace nn {
 
-template<
-	class SystemTag,
-	class ValueType,
-	class IsRecurrent=std::false_type>
+template<class SystemTag, class ValueType>
 struct Max_Pooling:
-		public Layer_Base<Max_Pooling<SystemTag, ValueType>> {
-
+		public Layer_Base<Max_Pooling<SystemTag, ValueType>>
+{
 	using input_tensor_dim = bc::traits::Integer<3>;
 	using output_tensor_dim = bc::traits::Integer<3>;
 
@@ -42,10 +39,7 @@ private:
 	using batched_tensor_type = bc::Tensor<4, value_type, allocator_type>;
 
 	using index_key_type =  bc::nn::cache_key<
-			bc::utility::Name<'i','d','x'>, batched_index_tensor_type,
-			IsRecurrent::value
-				? cache_key_type::always_recurrent
-				: cache_key_type::inherit>;
+		bc::utility::Name<'i','d','x'>, batched_index_tensor_type>;
 
 	Dim<3> m_img_dims;  //channel_width_height
 	Dim<3> m_pool_dims;
@@ -69,21 +63,18 @@ public:
 		Dim<2> img_hw = img_dims.template subdim<0,2>();
 		m_pool_dims = ((img_hw + padding*2)/m_strides ).concat(img_dims[2]);
 
-		BC_ASSERT((m_img_dims > 0).all(),
-				"Max_Pooling img_dims must be greater than 0");
-		BC_ASSERT((m_krnl_dims > 0).all(),
-				"Max_Pooling krnl_dims must be greater than 0");
-		BC_ASSERT((m_strides > 0).all(),
-				"Max_Pooling strides must be greater than 0");
-		BC_ASSERT((m_padding >= 0).all(),
-				"Max_Pooling krnl_dims must be greater than 0 or equal to 0");
+		BC_ASSERT((m_img_dims > 0).all(), "Max_Pooling img_dims must be greater than 0");
+		BC_ASSERT((m_krnl_dims > 0).all(), "Max_Pooling krnl_dims must be greater than 0");
+		BC_ASSERT((m_strides > 0).all(), "Max_Pooling strides must be greater than 0");
+		BC_ASSERT((m_padding >= 0).all(), "Max_Pooling krnl_dims must be greater than 0 or equal to 0");
 
 		this->m_input_sz = m_img_dims.size();
 		this->m_output_sz = m_pool_dims.size();
 	}
 
 	template<class Image>
-	auto forward_propagation(const Image& image, Cache& cache) {
+	auto forward_propagation(const Image& image, Cache& cache)
+	{
 		batched_index_tensor_type mask(this->get_batched_output_shape());
 		mask.zero();
 
@@ -104,7 +95,8 @@ public:
 	}
 
 	template<class Image>
-	auto single_predict(const Image& image, Cache& cache) {
+	auto single_predict(const Image& image, Cache& cache)
+	{
 		index_tensor_type mask(this->get_output_shape());
 		mask.zero();
 

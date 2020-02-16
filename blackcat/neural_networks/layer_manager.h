@@ -22,7 +22,6 @@ struct Layer_Manager: Layer {
 	using input_tensor_dim = typename layer_traits<Layer>::input_tensor_dim;
 	using output_tensor_dim = typename layer_traits<Layer>::output_tensor_dim;
 	using allocator_type = typename layer_traits<Layer>::allocator_type;
-
 	using value_type = typename layer_traits<Layer>::value_type;
 
 	using input_tensor_type = bc::Tensor<input_tensor_dim::value, value_type, allocator_type>;

@@ -19,7 +19,7 @@ namespace nn {
  * Arguments:
  * 	K - any class to use as a key, generally "Name<char...>" class is used to create a constexpr name to the class.
  * 	V - the type to return from the given key
- * 	IsRecurrent - Determines if the storing should override the most
+ * 	CacheKeyOverrider - Determines if the storing should override the most
  * 		recent member store or if it should be stored in a separate location for back-propagation through time.
  */
 
@@ -30,7 +30,7 @@ enum cache_key_type {
 };
 
 template<class K, class V, cache_key_type CacheKeyOverrider=inherit>
-struct cache_key : bc::utility::Any_Key<K, V> {
+struct cache_key: bc::utility::Any_Key<K, V> {
 	static constexpr cache_key_type cache_override_type = CacheKeyOverrider;
 };
 

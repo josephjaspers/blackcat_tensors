@@ -16,18 +16,17 @@ namespace nn {
 template<
 	class SystemTag,
 	class ValueType,
-	class Optimizer=Stochastic_Gradient_Descent,
-	class IsRecurrent=std::false_type>
+	class Optimizer=Stochastic_Gradient_Descent>
 struct Convolution:
 		public Layer_Base<
-				Convolution<SystemTag, ValueType, Optimizer, IsRecurrent>> {
+				Convolution<SystemTag, ValueType, Optimizer>> {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
 	using optimizer_type = Optimizer;
 
-	using self_type = Convolution<SystemTag, ValueType, Optimizer, IsRecurrent>;
+	using self_type = Convolution<SystemTag, ValueType, Optimizer>;
 	using parent_type = Layer_Base<self_type>;
 
 	using input_tensor_dim = bc::traits::Integer<3>;
@@ -37,7 +36,6 @@ struct Convolution:
 	using requires_extra_cache = std::true_type;
 
 	using defines_single_predict = std::true_type;
-	using is_recurrent = IsRecurrent;
 
 private:
 
@@ -62,8 +60,7 @@ private:
 	Dim<3> m_output_shape;
 	Dim<2> m_column_image_shape;
 
-	using col_image_key = bc::nn::cache_key<
-		bc::utility::Name<'c','x'>, cube, cache_key_type::inherit>;
+	using col_image_key = bc::nn::cache_key<bc::utility::Name<'c','x'>, cube>;
 
 public:
 
@@ -256,8 +253,7 @@ auto recurrent_convolution(
 	return Convolution<
 			SystemTag,
 			value_type,
-			Optimizer,
-			std::true_type>(
+			Optimizer>(
 					img_dims,
 					krnl_dims,
 					padding,
@@ -307,8 +303,7 @@ auto recurrent_convolution(
 	return Convolution<
 			SystemTag,
 			value_type,
-			Optimizer,
-			std::true_type>(
+			Optimizer>(
 					img_dims,
 					krnl_dims,
 					padding,
