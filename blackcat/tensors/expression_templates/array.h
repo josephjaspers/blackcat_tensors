@@ -81,6 +81,11 @@ public:
 	Array(bc::Dim<shape_type::tensor_dim> shape):
 		parent_type(shape, get_allocator()) {}
 
+	Array(bc::Dim<shape_type::tensor_dim> shape, allocator_type allocator):
+		allocator_type(allocator),
+		parent_type(shape, get_allocator()) {}
+
+
 	Array(shape_type shape):
 			parent_type(shape, get_allocator()) {}
 

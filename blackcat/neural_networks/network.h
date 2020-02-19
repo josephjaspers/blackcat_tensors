@@ -47,8 +47,7 @@ struct NeuralNetwork {
 	/**Basic Constructor for Neural Networks.
 	 * Accepts a variadic parameter pack of Layer-like objects.
 	 */
-	NeuralNetwork(Layers... layers):
-			m_layer_chain(layers...)
+	NeuralNetwork(Layers... layers): m_layer_chain(layers...)
 	{
 		if (is_recurrent::value) {
 			m_layer_chain.for_each([&](auto& layer) {

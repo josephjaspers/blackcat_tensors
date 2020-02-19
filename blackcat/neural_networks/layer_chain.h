@@ -98,14 +98,14 @@ struct LayerChain<
 	}
 
 	const auto& head() const { return head_impl(is_input_layer()); }
-		  auto& head()	   { return head_impl(is_input_layer()); }
+	      auto& head()       { return head_impl(is_input_layer()); }
 	const auto& tail() const { return tail_impl(is_output_layer()); }
-		  auto& tail()	   { return tail_impl(is_output_layer()); }
+	      auto& tail()       { return tail_impl(is_output_layer()); }
 
 	const auto& next() const { return next_impl(is_not_output_layer()); }
-		  auto& next()	   { return next_impl(is_not_output_layer()); }
+	      auto& next()       { return next_impl(is_not_output_layer()); }
 	const auto& prev() const { return prev_impl(is_not_input_layer()); }
-		  auto& prev()	   { return prev_impl(is_not_input_layer()); }
+	      auto& prev()       { return prev_impl(is_not_input_layer()); }
 
 	template<class function> void for_each(function f) {
 		for_each_impl(f, is_not_output_layer());
@@ -166,7 +166,8 @@ private:
 
 	template<class Function>
 	void for_each_impl(Function f, std::true_type) {
-		f(layer()); this->next().for_each(f);
+		f(layer());
+		this->next().for_each(f);
 	}
 
 	template<class Function>

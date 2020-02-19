@@ -14,33 +14,27 @@ template<
 	class Functor,
 	class InputDimension = bc::traits::Integer<1>>
 struct Function:
-		Layer_Base<Function<SystemTag, ValueType, Functor, InputDimension>>
+	Layer_Base<
+		Function<SystemTag, ValueType, Functor, InputDimension>,
+		Tensor_Descriptor<ValueType, SystemTag, InputDimension>>
 {
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
 	using self_type = Function<SystemTag, ValueType, Functor,InputDimension>;
-	using parent_type = Layer_Base<self_type>;
+
+	using input_descriptor_t = Tensor_Descriptor<ValueType, SystemTag, InputDimension>;
+	using parent_type = Layer_Base<self_type, input_descriptor_t>;
 	using input_tensor_dim = InputDimension;
 	using output_tensor_dim = InputDimension;
 
-	using shape_type = bc::Dim<input_tensor_dim::value>;
+	using typename parent_type::shape_type;
 
 	Functor function;
-	shape_type m_input_shape;
 
-	Function(shape_type inputs, Functor function_=Functor()):
-		parent_type(bc_get_classname_of(function), inputs.size(), inputs.size()),
-		function(function_),
-		m_input_shape (inputs) {}
-
-	shape_type get_input_shape() const {
-		return m_input_shape;
-	}
-
-	shape_type get_output_shape() const {
-		return m_input_shape;
-	}
+	Function(shape_type inputs, Functor function=Functor()):
+		parent_type(bc_get_classname_of(function), inputs, inputs),
+		function(function) {}
 
 	template<class Matrix>
 	auto forward_propagation(const Matrix& x) {
@@ -78,6 +72,5 @@ auto function(SystemTag system_tag, bc::Dim<X> shape, Functor function=Functor()
 
 }
 }
-
 
 #endif 

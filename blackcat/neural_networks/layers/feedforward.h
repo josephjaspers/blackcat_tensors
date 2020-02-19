@@ -18,13 +18,18 @@ template<
 	class ValueType,
 	class Optimizer=Stochastic_Gradient_Descent>
 struct FeedForward:
-		public Layer_Base<FeedForward<SystemTag, ValueType, Optimizer>> {
-
+		public Layer_Base<
+			FeedForward<SystemTag, ValueType, Optimizer>,
+			Tensor_Descriptor<ValueType, SystemTag, Integer<1>>>
+{
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 
 	using self_type = FeedForward<SystemTag, ValueType, Optimizer>;
-	using parent_type = Layer_Base<self_type>;
+
+	using input_descriptor_t = Tensor_Descriptor<ValueType, SystemTag, Integer<1>>;
+	using parent_type = Layer_Base<self_type, input_descriptor_t>;
+
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
 	using optimizer_type = Optimizer;
 
@@ -53,7 +58,7 @@ private:
 public:
 
 	FeedForward(bc::size_t inputs, bc::size_t outputs):
-		parent_type(__func__, inputs, outputs),
+		parent_type(__func__, {inputs}, {outputs}),
 		w(outputs, inputs),
 		b(outputs),
 		w_gradients(outputs, inputs),
@@ -66,6 +71,8 @@ public:
 		w_gradients.zero();
 		b_gradients.zero();
 	}
+
+	virtual ~FeedForward() {};
 
 	template<class Matrix>
 	auto forward_propagation(const Matrix& x)
@@ -81,9 +88,8 @@ public:
 		return w.t() * dy;
 	}
 
-	void set_learning_rate(value_type lr)
+	virtual void set_learning_rate_hook(value_type lr) override
 	{
-		parent_type::set_learning_rate(lr);
 		w_opt.set_learning_rate(this->get_batched_learning_rate());
 		b_opt.set_learning_rate(this->get_batched_learning_rate());
 	}
@@ -96,7 +102,7 @@ public:
 		b_gradients.zero();
 	}
 
-	void save(Layer_Loader& loader)
+	virtual void save(Layer_Loader& loader) const override
 	{
 		loader.save_variable(w, "w");
 		loader.save_variable(b, "b");
@@ -104,7 +110,7 @@ public:
 		b_opt.save(loader, "b_opt");
 	}
 
-	void load(Layer_Loader& loader)
+	virtual void load(Layer_Loader& loader) override
 	{
 		loader.load_variable(w, "w");
 		loader.load_variable(b, "b");

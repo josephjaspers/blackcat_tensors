@@ -14,7 +14,7 @@ namespace bc {
 namespace nn {
 
 struct Optimizer_Base {
-	void save(Layer_Loader& loader, std::string name) {}
+	void save(Layer_Loader& loader, std::string name) const {}
 	void load(Layer_Loader& loader, std::string name) {}
 };
 

@@ -16,31 +16,31 @@ namespace nn {
 template<
 	class SystemTag,
 	class ValueType,
-	class InputTensorDimension=bc::traits::Integer<3>>
+	class InputTensorDimension=bc::traits::Integer<3>,
+	class InputDescriptor=Tensor_Descriptor<ValueType, SystemTag, InputTensorDimension>,
+	class OutputDescriptor=Tensor_Descriptor<ValueType, SystemTag, Integer<1>>>
 struct Flatten:
-		public Layer_Base<
-				Flatten<SystemTag, ValueType, InputTensorDimension>> {
-
+	Layer_Base<
+		Flatten<SystemTag, ValueType, InputTensorDimension>,
+		InputDescriptor,
+		OutputDescriptor>
+{
 	using system_tag = SystemTag;
 	using value_type = ValueType;
+
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
 	using self_type = Flatten<SystemTag, ValueType, InputTensorDimension>;
-	using parent_type = Layer_Base<self_type>;
+	using parent_type = Layer_Base<self_type, InputDescriptor, OutputDescriptor>;
 
 	using greedy_evaluate_delta = std::true_type;
 	using input_tensor_dim = InputTensorDimension;
 	using output_tensor_dim = bc::traits::Integer<1>;
 	using defines_single_predict = std::true_type;
 
-private:
-
-	Dim<input_tensor_dim::value> m_input_shape;
-
 public:
 
 	Flatten(bc::Dim<input_tensor_dim::value> input_shape):
-		parent_type(__func__, input_shape.size(), input_shape.size()),
-		m_input_shape(input_shape) {}
+		parent_type(__func__, input_shape, {input_shape.size()}) {}
 
 	template<class Matrix>
 	auto forward_propagation(const Matrix& x) {
@@ -56,8 +56,6 @@ public:
 	auto back_propagation(const X& x, const Delta& dy) {
 		return dy.reshaped(this->get_batched_input_shape());
 	}
-
-	auto get_input_shape() const { return m_input_shape; }
 };
 
 #ifndef BC_CLING_JIT

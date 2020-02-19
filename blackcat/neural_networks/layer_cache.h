@@ -53,15 +53,15 @@ private:
 	int m_time_index = 0;
 	bool is_recurrent = false;
 
-	bc::utility::Any_Map cache;
+	mutable bc::utility::Any_Map cache;
 
 	template<class K, class V>
-	auto hash(key_type<K, V, cache_key_type::always_recurrent> key) {
+	auto hash(key_type<K, V, cache_key_type::always_recurrent> key) const {
 		return bc::utility::Any_Key<K, std::vector<V>>();
 	}
 
 	template<class K, class V, cache_key_type R>
-	auto hash(key_type<K, V, R> key) {
+	auto hash(key_type<K, V, R> key) const {
 		return bc::utility::Any_Key<K, V>();
 	}
 
@@ -72,12 +72,12 @@ public:
 	}
 
 	template<class K, class V, cache_key_type R>
-	bool contains(key_type<K,V,R> key) {
+	bool contains(key_type<K,V,R> key) const {
 		return cache.contains(key);
 	}
 
 	template<class K, class V>
-	auto& load(key_type<K, V, cache_key_type::inherit> key, int t_modifier=0)
+	auto& load(key_type<K, V, cache_key_type::inherit> key, int t_modifier=0) const
 	{
 		if (is_recurrent)
 			return load(key_type<K,V, always_recurrent>(), t_modifier);
@@ -86,7 +86,7 @@ public:
 	}
 
 	template<class K, class V, class Factory>
-	auto& load(key_type<K, V, cache_key_type::inherit> key, int t_modifier, Factory factory)
+	auto& load(key_type<K, V, cache_key_type::inherit> key, int t_modifier, Factory factory) const
 	{
 		if (is_recurrent)
 			return load(key_type<K,V, cache_key_type::always_recurrent>(), t_modifier, factory);
@@ -95,7 +95,7 @@ public:
 	}
 
 	template<class K, class V, class Factory>
-	auto& load(key_type<K, V, cache_key_type::inherit> key, Factory factory)
+	auto& load(key_type<K, V, cache_key_type::inherit> key, Factory factory) const
 	{
 		return load(key, 0, factory);
 	}
@@ -110,7 +110,7 @@ public:
 
 	///Loads the current value at the current time_index
 	template<class K, class V>
-	auto& load(key_type<K, V, cache_key_type::always_recurrent> key, int t_modifier=0) {
+	auto& load(key_type<K, V, cache_key_type::always_recurrent> key, int t_modifier=0) const {
 		std::vector<V>& history = cache[hash(key)];
 		unsigned index = history.size()- 1 - m_time_index + t_modifier;
 
@@ -123,7 +123,7 @@ public:
 	}
 
 	template<class K, class V>
-	auto& load(key_type<K, V, cache_key_type::always_forward> key, int t_modifier=0) {
+	auto& load(key_type<K, V, cache_key_type::always_forward> key, int t_modifier=0) const {
 		BC_ASSERT(t_modifier==0, "Nonrecurrent keys cannot have a time_offset");
 		return cache[hash(key)];
 	}
@@ -131,7 +131,7 @@ public:
 	template<class K, class V, class DefaultFactory>
 	auto& load(key_type<K, V, cache_key_type::always_recurrent> key,
 			int t_modifier,
-			DefaultFactory function)
+			DefaultFactory function) const
 	{
 		std::vector<V>& history = cache[hash(key)];
 
@@ -150,13 +150,13 @@ public:
 	}
 
 	template<class K, class V, class DefaultFactory>
-	auto& load(key_type<K, V, cache_key_type::always_recurrent> key, DefaultFactory function) {
+	auto& load(key_type<K, V, cache_key_type::always_recurrent> key, DefaultFactory function) const {
 		return load(key, 0, function);
 	}
 
 
 	template<class K, class V, class DefaultFactory>
-	auto& load(key_type<K, V, cache_key_type::always_forward> key, DefaultFactory function) {
+	auto& load(key_type<K, V, cache_key_type::always_forward> key, DefaultFactory function) const {
 		auto hkey = hash(key);
 
 		if (cache.contains(hkey)) {

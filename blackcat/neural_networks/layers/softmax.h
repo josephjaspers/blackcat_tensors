@@ -14,14 +14,16 @@ namespace bc {
 namespace nn {
 
 template<class SystemTag, class ValueType>
-class SoftMax:
-		public Layer_Base<SoftMax<SystemTag, ValueType>> {
-
-public:
-
+struct SoftMax:
+		public Layer_Base<
+			SoftMax<SystemTag, ValueType>,
+			Tensor_Descriptor<ValueType, SystemTag, Integer<1>>>
+{
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	using parent_type = Layer_Base<SoftMax<SystemTag, ValueType>>;
+
+	using input_descriptor_t = Tensor_Descriptor<ValueType, SystemTag, Integer<1>>;
+	using parent_type = Layer_Base<SoftMax<SystemTag, ValueType>, input_descriptor_t>;
 
 	using mat = bc::Matrix<ValueType, bc::Allocator<ValueType, SystemTag>>;
 	using vec = bc::Vector<ValueType, bc::Allocator<ValueType, SystemTag>>;
@@ -33,14 +35,12 @@ private:
 public:
 
 	SoftMax(int inputs):
-		parent_type(__func__, inputs, inputs) {}
+		parent_type(__func__, {inputs}, {inputs}) {}
 
 	template<class Allocator>
 	const auto& forward_propagation(const bc::Matrix<value_type, Allocator>& x) {
-		//TODO -- convert this into an operation, need 'broadcasted' sum
-		for (int i = 0; i < x.cols(); ++i) {
+		for (int i = 0; i < x.cols(); ++i)
 			y[i] = bc::exp(x[i]) / bc::tensors::sum(exp(x[i]));
-		}
 
 		return y;
 	}
@@ -55,9 +55,7 @@ public:
 		return dy;
 	}
 
-	void update_weights() {}
-	void set_batch_size(int bs) {
-		parent_type::set_batch_size(bs);
+	virtual void set_batch_size_hook(int bs) override {
 		y = mat(this->output_size(), bs);
 	}
 };

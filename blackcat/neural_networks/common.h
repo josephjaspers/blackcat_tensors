@@ -12,14 +12,33 @@
 namespace bc {
 namespace nn {
 
+template<class SystemTag, class ValueType, class... AltAllocator>
+using nn_default_allocator_type =
+		bc::allocators::Recycle_Allocator<ValueType, SystemTag, AltAllocator...>;
+
+template<
+	class ValueType,
+	class SystemTag,
+	class NumDimension,
+	class AllocatorType=bc::allocators::Polymorphic_Allocator<ValueType, SystemTag>>
+struct Tensor_Descriptor
+{
+	using value_type = ValueType;
+	using tensor_dim = NumDimension;
+	using allocator_type = AllocatorType;
+	using system_tag = SystemTag;
+
+	using type = bc::Tensor<tensor_dim::value, value_type, allocator_type>;
+	using batched_type = bc::Tensor<tensor_dim::value+1, value_type, allocator_type>;
+};
+
+using bc::traits::Integer;
+
 struct Layer_Loader;
 struct Momentum;
 
 using nn_default_system_tag = bc::host_tag;
 
-template<class SystemTag, class ValueType, class... AltAllocator>
-using nn_default_allocator_type =
-		bc::allocators::Recycle_Allocator<ValueType, SystemTag, AltAllocator...>;
 
 using nn_default_optimizer_type = Momentum;
 

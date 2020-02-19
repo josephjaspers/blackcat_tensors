@@ -46,30 +46,12 @@ public:
 
 	template<class... Args>
 	Layer_Manager(Args... args):
-		Layer(args...) {
+		Layer(args...) {}
 
-		static_assert(input_tensor_dim::value == decltype(std::declval<Layer>().get_input_shape())::tensor_dim,
-				"Input tensor_dim must be equal to Layer::get_input_shape() dim"
-				"\n, did you forget to override get_input_shape()?");
-
-		static_assert(output_tensor_dim::value == decltype(std::declval<Layer>().get_output_shape())::tensor_dim,
-				"output tensor_dim must be equal to Layer::get_input_shape() dim"
-				"\n, did you forget to override get_output_shape()?");
-
-		static_assert(input_tensor_dim::value+1 == decltype(std::declval<Layer>().get_batched_input_shape())::tensor_dim,
-				"Input tensor_dim must be equal to Layer::get_input_shape() dim"
-				"\n, did you forget to override get_batched_input_shape()?");
-
-		static_assert(output_tensor_dim::value+1 == decltype(std::declval<Layer>().get_batched_output_shape())::tensor_dim,
-				"output tensor_dim must be equal to Layer::get_input_shape() dim"
-				"\n, did you forget to override get_batched_output_shape()?");
-	}
-
-
-	template<class T>
+	template<class T, class l=Layer>
 	auto forward_propagation(const T& expression) {
-		static_assert(T::tensor_dim == input_tensor_dim::value + 1,
-				"Invalid tensor_domension in forward_propagation");
+		static_assert(T::tensor_dim == Layer::input_tensor_dim::value + 1,
+				"Invalid tensor_dim in forward_propagation");
 		BC_ASSERT(expression.get_shape() == this->get_batched_input_shape(),
 				"forward_propagation input must have the same shape as "
 						"get_batched_input_shape() of the current layer "
@@ -147,13 +129,13 @@ public:
 		Layer::clear_bp_storage(m_cache);
 	}
 
-	void save(Layer_Loader& loader) {
+	virtual void save(Layer_Loader& loader) const override {
 		loader.save_variable(get_batched_inputs(), "x");
 		Layer::save(loader);
 		Layer::save_from_cache(loader, m_cache);
 	}
 
-	void load (Layer_Loader& loader) {
+	virtual void load (Layer_Loader& loader) override {
 		loader.load_variable(get_batched_inputs(), "x");
 		Layer::load(loader);
 		Layer::load_to_cache(loader, m_cache);
@@ -182,13 +164,13 @@ public:
 
 private:
 
-	auto& get_batched_inputs() {
+	auto& get_batched_inputs() const {
 		return m_cache.load(
 				batched_input_key(),
 				this->default_batched_input_tensor_factory());
 	}
 
-	auto& get_predict_inputs() {
+	auto& get_predict_inputs() const {
 		return m_cache.load(
 				input_key(),
 				this->default_input_tensor_factory());

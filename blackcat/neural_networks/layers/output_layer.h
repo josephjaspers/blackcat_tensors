@@ -15,15 +15,17 @@ namespace nn {
 
 template<class SystemTag, class ValueType>
 struct Output_Layer:
-		Layer_Base<Output_Layer<SystemTag, ValueType>> {
-
+		Layer_Base<Output_Layer<SystemTag, ValueType>,
+		Tensor_Descriptor<ValueType, SystemTag, Integer<1>>>
+{
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 	using self_type = Output_Layer<SystemTag, ValueType>;
-	using parent_type = Layer_Base<self_type>;
+	using input_descriptor_t = Tensor_Descriptor<ValueType, SystemTag, Integer<1>>;
+	using parent_type = Layer_Base<self_type, input_descriptor_t>;
 
 	Output_Layer(int inputs):
-		parent_type(__func__, inputs, inputs) {}
+		parent_type(__func__, {inputs}, {inputs}) {}
 
 	template <class Tensor>
 	const auto forward_propagation(const Tensor& x) {

@@ -16,13 +16,15 @@ namespace nn {
 template<class SystemTag, class ValueType, class RecurrentNonLinearity=bc::Tanh>
 struct Recurrent:
 		public Layer_Base<
-				Recurrent<SystemTag, ValueType, RecurrentNonLinearity>> {
+				Recurrent<SystemTag, ValueType, RecurrentNonLinearity>,
+				Tensor_Descriptor<ValueType, SystemTag, Integer<1>>> {
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 	using allocator_type = bc::Allocator<ValueType, SystemTag>;
 	using self_type = Recurrent<SystemTag, ValueType, RecurrentNonLinearity>;
-	using parent_type = Layer_Base<self_type>;
+	using input_descriptor_t = Tensor_Descriptor<ValueType, SystemTag, Integer<1>>;
+	using parent_type = Layer_Base<self_type, input_descriptor_t>;
 
 	using forward_requires_outputs = std::true_type;
 	using backward_requires_outputs = std::true_type;
@@ -44,7 +46,7 @@ private:
 public:
 
 	Recurrent(int inputs, int outputs) :
-		parent_type(__func__, inputs, outputs),
+		parent_type(__func__, {inputs}, {outputs}),
 		w(outputs, inputs),
 		w_gradients(outputs, inputs),
 		r(outputs, outputs),
@@ -89,8 +91,7 @@ public:
 		zero_gradients();
 	}
 
-	void set_batch_size(bc::size_t bs) {
-		parent_type::set_batch_size(bs);
+	void set_batch_size_hook(bc::size_t bs) {
 		dc = mat(this->output_size(), bs);
 		zero_deltas();
 	}
@@ -98,19 +99,20 @@ public:
 	void zero_deltas() {
 		dc.zero();
 	}
+
 	void zero_gradients() {
 		w_gradients.zero();
 		b_gradients.zero();
 		r_gradients.zero();
 	}
 
-	void save(Layer_Loader& loader) {
+	virtual void save(Layer_Loader& loader) const override {
 		loader.save_variable(w, "w");
 		loader.save_variable(r, "r");
 		loader.save_variable(b, "b");
 	}
 
-	void load(Layer_Loader& loader) {
+	virtual void load(Layer_Loader& loader) {
 		loader.load_variable(w, "w");
 		loader.load_variable(r, "r");
 		loader.load_variable(b, "b");

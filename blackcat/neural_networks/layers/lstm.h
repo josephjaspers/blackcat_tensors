@@ -25,19 +25,8 @@ template<class SystemTag,
 		class OutputGateNonlinearity=bc::Logistic,
 		class CellStateNonLinearity=bc::Tanh>
 struct LSTM:
-		public Layer_Base<LSTM<
-				SystemTag,
-				ValueType,
-				Optimizer,
-				ForgetGateNonlinearity,
-				WriteGateNonlinearity,
-				InputGateNonlinearity,
-				OutputGateNonlinearity,
-				CellStateNonLinearity>> {
-
-	using system_tag = SystemTag;
-	using value_type = ValueType;
-	using parent_type = Layer_Base<LSTM<
+	public Layer_Base<
+		LSTM<
 			SystemTag,
 			ValueType,
 			Optimizer,
@@ -45,7 +34,30 @@ struct LSTM:
 			WriteGateNonlinearity,
 			InputGateNonlinearity,
 			OutputGateNonlinearity,
-			CellStateNonLinearity>>;
+			CellStateNonLinearity>,
+		Tensor_Descriptor<
+			ValueType,
+			SystemTag,
+			Integer<1>>>
+{
+	using system_tag = SystemTag;
+	using value_type = ValueType;
+	using input_descriptor_t = Tensor_Descriptor<
+			ValueType,
+			SystemTag,
+			Integer<1>>;
+
+	using parent_type = Layer_Base<
+			LSTM<
+				SystemTag,
+				ValueType,
+				Optimizer,
+				ForgetGateNonlinearity,
+				WriteGateNonlinearity,
+				InputGateNonlinearity,
+				OutputGateNonlinearity,
+				CellStateNonLinearity>,
+			input_descriptor_t>;
 
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
 	using optimizer_type = Optimizer;
@@ -107,7 +119,7 @@ private:
 public:
 
 	LSTM(int inputs, bc::size_t  outputs):
-			parent_type(__func__, inputs, outputs),
+			parent_type(__func__, {inputs}, {outputs}),
 			wf(outputs, inputs),
 			wz(outputs, inputs),
 			wi(outputs, inputs),
@@ -296,7 +308,8 @@ public:
 		zero_gradients();
 	}
 
-	void set_learning_rate(value_type lr)
+	virtual
+	void set_learning_rate_hook(value_type lr) override final
 	{
 		parent_type::set_learning_rate(lr);
 		value_type batched_lr = this->get_batched_learning_rate();
@@ -315,18 +328,11 @@ public:
 			optimizer.set_learning_rate(batched_lr);
 	}
 
-	void set_batch_size(int bs)
+	virtual
+	void set_batch_size_hook(int bs) override final
 	{
-		parent_type::set_batch_size(bs);
-
-		auto make_default =  [&](){
-				mat m(this->output_size(), bs);
-				m.zero();
-				return m;
-		};
-
 		for (auto& tensor: enumerate(dc, df, dz, di, do_, dy)) {
-			tensor = make_default();
+			tensor = std::move(mat(this->output_size(), bs).zero());
 		}
 	}
 
@@ -340,13 +346,16 @@ public:
 	void zero_gradients()
 	{
 		for (auto& grad : enumerate(
-				wf_gradients, wz_gradients, wi_gradients, wo_gradients,
-				rf_gradients, rz_gradients, ri_gradients, ro_gradients)) {
+				wf_gradients, wz_gradients,
+				wi_gradients, wo_gradients,
+				rf_gradients, rz_gradients,
+				ri_gradients, ro_gradients)) {
 			grad.zero();
 		}
 
 		for (auto& grad : enumerate(
-				bf_gradients, bz_gradients, bi_gradients, bo_gradients)) {
+				bf_gradients, bz_gradients,
+				bi_gradients, bo_gradients)) {
 			grad.zero();
 		}
 	}
@@ -360,7 +369,8 @@ public:
 		m_cache.clear_bp_storage(output_key());
 	}
 
-	void save(Layer_Loader& loader)
+	virtual
+	void save(Layer_Loader& loader) const
 	{
 		loader.save_variable(wf, "wf");
 		loader.save_variable(rf, "rf");
@@ -394,7 +404,8 @@ public:
 		bo_opt.save(loader, "bo_opt");
 	}
 
-	void save_from_cache(Layer_Loader& loader, Cache& cache)
+	virtual
+	void save_from_cache(Layer_Loader& loader, const Cache& cache) const override
 	{
 		auto& z = cache.load(write_key(), default_tensor_factory());
 		auto& i = cache.load(input_key(), default_tensor_factory());
@@ -416,7 +427,8 @@ public:
 		}
 	}
 
-	void load(Layer_Loader& loader)
+	virtual
+	void load(Layer_Loader& loader) override
 	{
 		loader.load_variable(wf, "wf");
 		loader.load_variable(rf, "rf");
@@ -450,7 +462,8 @@ public:
 		bo_opt.load(loader, "bo_opt");
 	}
 
-	void load_to_cache(Layer_Loader& loader, Cache& cache)
+	virtual
+	void load_to_cache(Layer_Loader& loader, const Cache& cache) override
 	{
 		auto& z = cache.load(write_key(), default_tensor_factory());
 		auto& i = cache.load(input_key(), default_tensor_factory());
@@ -481,14 +494,14 @@ public:
 
 private:
 
-	auto default_tensor_factory()
+	auto default_tensor_factory() const
 	{
 		return [&]() {
 			return mat(this->output_size(), this->batch_size()).zero();
 		};
 	}
 
-	auto default_predict_tensor_factory()
+	auto default_predict_tensor_factory() const
 	{
 		 return [&]() {
 			 return vec(this->output_size()).zero();

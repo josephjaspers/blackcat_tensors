@@ -15,15 +15,19 @@ namespace nn {
 
 template<class SystemTag, class ValueType>
 struct Max_Pooling:
-		public Layer_Base<Max_Pooling<SystemTag, ValueType>>
+		public Layer_Base<
+			Max_Pooling<SystemTag, ValueType>,
+			Tensor_Descriptor<ValueType, SystemTag, Integer<3>>>
 {
 	using input_tensor_dim = bc::traits::Integer<3>;
 	using output_tensor_dim = bc::traits::Integer<3>;
 
+	using input_tensor_descriptor_t = Tensor_Descriptor<ValueType, SystemTag, Integer<3>>;
+
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 	using self_type = Max_Pooling<SystemTag, ValueType>;
-	using parent_type = Layer_Base<self_type>;
+	using parent_type = Layer_Base<self_type, input_tensor_descriptor_t>;
 	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
 
 	using greedy_evaluate_delta = std::true_type;
@@ -41,8 +45,6 @@ private:
 	using index_key_type =  bc::nn::cache_key<
 		bc::utility::Name<'i','d','x'>, batched_index_tensor_type>;
 
-	Dim<3> m_img_dims;  //channel_width_height
-	Dim<3> m_pool_dims;
 	Dim<2> m_krnl_dims;
 	Dim<2> m_padding;
 	Dim<2> m_strides;
@@ -54,22 +56,19 @@ public:
 			Dim<2> krnl_dims={3,3},
 			Dim<2> padding={0,0},
 			Dim<2> strides={-1,-1}):
-		parent_type(__func__),
-		m_img_dims(img_dims),
+		parent_type(__func__, img_dims),
 		m_krnl_dims(krnl_dims),
 		m_padding(padding),
 		m_strides(strides == Dim<2>{-1,-1} ? krnl_dims : strides)
 	{
 		Dim<2> img_hw = img_dims.template subdim<0,2>();
-		m_pool_dims = ((img_hw + padding*2)/m_strides ).concat(img_dims[2]);
+		this->m_output_shape = ((img_hw + padding*2)/m_strides ).concat(img_dims[2]);
 
-		BC_ASSERT((m_img_dims > 0).all(), "Max_Pooling img_dims must be greater than 0");
+		BC_ASSERT((img_dims > 0).all(), "Max_Pooling img_dims must be greater than 0");
 		BC_ASSERT((m_krnl_dims > 0).all(), "Max_Pooling krnl_dims must be greater than 0");
 		BC_ASSERT((m_strides > 0).all(), "Max_Pooling strides must be greater than 0");
 		BC_ASSERT((m_padding >= 0).all(), "Max_Pooling krnl_dims must be greater than 0 or equal to 0");
 
-		this->m_input_sz = m_img_dims.size();
-		this->m_output_sz = m_pool_dims.size();
 	}
 
 	template<class Image>
@@ -134,14 +133,6 @@ public:
 				m_strides);
 
 		return delta_x;
-	}
-
-	Dim<3> get_input_shape() const {
-		return m_img_dims;
-	}
-
-	Dim<3> get_output_shape() const {
-		return m_pool_dims;
 	}
 };
 
