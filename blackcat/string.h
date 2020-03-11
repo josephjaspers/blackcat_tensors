@@ -22,6 +22,11 @@ struct string:
 		std::string {
 
 	using std::string::string;
+	string() = default;
+	string(const string&) = default;
+	string(string&&) = default; 
+	string& operator =(const string&) = default;
+	string& operator =(string&&) = default; 
 
 	string(std::string s):
 		std::string(s) {}
