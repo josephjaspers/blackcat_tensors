@@ -1,10 +1,3 @@
-	#define BC_ASSERT_ARRAY_ONLY(literal)\
-	static_assert(\
-		exprs::expression_traits<ExpressionTemplate>::is_array::value,\
-		"BC Method: '" literal "' IS NOT SUPPORTED FOR EXPRESSIONS")
-
-public:
-
 	template<class Xpr>
 	void copy(const Tensor_Base<Xpr>& rv) {
 		static_assert(exprs::expression_traits<ExpressionTemplate>::is_copy_assignable::value, "copy lv must be array");
