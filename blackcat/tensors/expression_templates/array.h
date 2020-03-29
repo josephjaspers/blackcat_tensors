@@ -104,7 +104,7 @@ public:
 			expression_traits<Expression>::is_array::value ||
 			expression_traits<Expression>::is_expr::value>>
 	Array(const Expression& expression, Allocator allocator=Allocator()):
-		Allocator(allocator),
+//		Allocator(allocator),
 		parent_type(
 			Shape(expression.inner_shape()),
 			get_allocator())

@@ -44,12 +44,11 @@ class Evaluator
 	template<class Xpr, class Stream>
 	static void nd_evaluate(const Xpr expression, Stream stream)
 	{
-		constexpr int iter_dim = Xpr::tensor_iterator_dim;
 		using system_tag	= typename Stream::system_tag;
 		using nd_evaluator  = exprs::evaluator::Evaluator<system_tag>;
 
 		bc::traits::constexpr_if<expression_traits<Xpr>::is_expr::value>([&]() {
-			nd_evaluator::template nd_evaluate<iter_dim>(expression, stream);
+			nd_evaluator::template nd_evaluate<Xpr::tensor_iterator_dim>(expression, stream);
 		});
 	}
 

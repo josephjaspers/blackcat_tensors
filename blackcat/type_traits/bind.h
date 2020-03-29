@@ -56,10 +56,12 @@ private:
 
 	template<class... TupleArgs, int ArgCount=sizeof...(TupleArgs)>
 	auto call(false_type, TupleArgs&&... params) const
+#ifndef _MSC_VER
 		-> decltype(call(
 			truth_type<ArgCount + 1 == num_args>(),
 			forward<TupleArgs>(params)...,
 			std::get<ArgCount>(*this)))
+#endif
 	{
 		return call(
 			truth_type<ArgCount + 1 == num_args>(),
@@ -69,10 +71,12 @@ private:
 
 	template<class... TupleArgs, int ArgCount=sizeof...(TupleArgs)>
 	auto call(false_type, TupleArgs&&... params)
+#ifndef _MSC_VER
 	-> decltype(call(
 			truth_type<ArgCount + 1 == num_args>(),
 			forward<TupleArgs>(params)...,
 			std::get<ArgCount>(*this)))
+#endif
 	{
 		return call(
 			truth_type<ArgCount + 1 == num_args>(),
