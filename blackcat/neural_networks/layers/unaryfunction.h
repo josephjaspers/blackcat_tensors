@@ -20,7 +20,7 @@ struct Function:
 {
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
+	using allocator_type = nn_default_allocator_type<ValueType, SystemTag>;
 	using self_type = Function<SystemTag, ValueType, Functor,InputDimension>;
 
 	using input_descriptor_t = Tensor_Descriptor<ValueType, SystemTag, InputDimension>;

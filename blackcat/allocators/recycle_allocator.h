@@ -8,6 +8,7 @@
 #ifndef BLACKCATTENSORS_ALLOCATORS_FANCY_H_
 #define BLACKCATTENSORS_ALLOCATORS_FANCY_H_
 
+#include "basic_allocators.h"
 #include <unordered_map>
 #include <vector>
 #include <mutex>
@@ -52,7 +53,7 @@ struct Recycle_Allocator_Globals
 template<
 		class T,
 		class SystemTag,
-		class AlternateAllocator=bc::Allocator<Byte, SystemTag>>
+		class AlternateAllocator=Allocator<Byte, SystemTag>>
 struct Recycle_Allocator {
 
 	using system_tag = SystemTag;	//BC tag

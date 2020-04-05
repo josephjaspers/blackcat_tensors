@@ -12,7 +12,7 @@
 namespace bc {
 namespace nn {
 
-template<class SystemTag, class ValueType, class... AltAllocator>
+template<class ValueType, class SystemTag, class... AltAllocator>
 using nn_default_allocator_type =
 		bc::allocators::Recycle_Allocator<ValueType, SystemTag, AltAllocator...>;
 

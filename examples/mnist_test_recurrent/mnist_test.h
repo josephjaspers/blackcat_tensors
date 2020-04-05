@@ -77,7 +77,7 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 	bc::size_t test_images = 10;
 	cube img = cube(inputs[0].reshaped(28,28, batch_size));
 	for (int i = 0; i < test_images; ++i) {
-		bc::logical(img[i].t()).print_sparse(0);
+		mat(bc::logical(img[i].t())).print_sparse(0);
 		hyps[i].print();
 		bc::print("------------------------------------");
 	}

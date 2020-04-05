@@ -28,7 +28,7 @@ struct Max_Pooling:
 	using value_type = ValueType;
 	using self_type = Max_Pooling<SystemTag, ValueType>;
 	using parent_type = Layer_Base<self_type, input_tensor_descriptor_t>;
-	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
+	using allocator_type = nn_default_allocator_type<ValueType, SystemTag>;
 
 	using greedy_evaluate_delta = std::true_type;
 	using requires_extra_cache = std::true_type;
@@ -36,7 +36,7 @@ struct Max_Pooling:
 
 private:
 
-	using index_allocator_type = nn_default_allocator_type<SystemTag, bc::size_t>;
+	using index_allocator_type = nn_default_allocator_type<bc::size_t, SystemTag>;
 	using index_tensor_type = bc::Cube<bc::size_t, index_allocator_type>;
 	using batched_index_tensor_type = bc::Tensor<4, bc::size_t, index_allocator_type>;
 	using tensor_type = bc::Cube<value_type, allocator_type>;

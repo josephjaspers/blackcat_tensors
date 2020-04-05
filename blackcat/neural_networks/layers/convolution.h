@@ -24,7 +24,7 @@ struct Convolution:
 
 	using system_tag = SystemTag;
 	using value_type = ValueType;
-	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
+	using allocator_type = nn_default_allocator_type<ValueType, SystemTag>;
 	using optimizer_type = Optimizer;
 
 	using self_type = Convolution<SystemTag, ValueType, Optimizer>;

@@ -13,6 +13,7 @@
 
 namespace bc {
 namespace tensors {
+template<class> class Expression_Base;
 template<class> class Tensor_Base;
 }
 
@@ -31,10 +32,13 @@ namespace cmath_functions {
         return math_function;                                              \
     }                                                                      \
     template<class Xpr>                                                    \
+    auto operator() (const bc::tensors::Expression_Base<Xpr>& tensor) {    \
+          return tensor.un_expr(funcName());                               \
+    }                                                                      \
+    template<class Xpr>                                                    \
     auto operator() (const bc::tensors::Tensor_Base<Xpr>& tensor) {        \
           return tensor.un_expr(funcName());                               \
     }                                                                      \
-                                                                           \
     __VA_ARGS__                                                            \
 } instance_name;                                                           \
 
@@ -122,7 +126,7 @@ struct Pow {
 	}
 
 	template<class Xpr, class Exp>
-	auto operator() (const bc::tensors::Tensor_Base<Xpr>& tensor, Exp exp)
+	auto operator() (const bc::tensors::Expression_Base<Xpr>& tensor, Exp exp)
 	{
 		struct FunctorPow
 		{

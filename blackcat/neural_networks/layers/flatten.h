@@ -28,7 +28,7 @@ struct Flatten:
 	using system_tag = SystemTag;
 	using value_type = ValueType;
 
-	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
+	using allocator_type = nn_default_allocator_type<ValueType, SystemTag>;
 	using self_type = Flatten<SystemTag, ValueType, InputTensorDimension>;
 	using parent_type = Layer_Base<self_type, InputDescriptor, OutputDescriptor>;
 

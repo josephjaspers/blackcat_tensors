@@ -1,13 +1,10 @@
 	template<class Xpr>
 	void copy(const Tensor_Base<Xpr>& rv) {
-		static_assert(exprs::expression_traits<ExpressionTemplate>::is_copy_assignable::value, "copy lv must be array");
-		static_assert(exprs::expression_traits<Xpr>::is_copy_assignable::value, "copy rv most be array");
 		static_assert(ExpressionTemplate::tensor_iterator_dim <= 1, "copy only accepts continuous");
 		static_assert(Xpr::tensor_iterator_dim <= 1, "copy only accepts continuous");
 
 		if (this->size() != rv.size()) {
-			bc::printerr(
-					"Attempting to copy two different size tensors (ERROR)");
+			bc::printerr("Attempting to copy two different size tensors (ERROR)");
 			throw 1;
 		}
 

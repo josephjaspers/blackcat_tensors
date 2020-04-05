@@ -12,12 +12,12 @@ public:
 
 
 	template<class Xpr> BCHOT
-	self_type& operator = (const Tensor_Base<Xpr>& param)
+	self_type& operator = (const Expression_Base<Xpr>& param)
 	{
 		static_assert(tensor_dim >= Xpr::tensor_dim,
 				"BlackCat_Tensors: Operator= is not a valid operation for (reduction) broadcasting");
 		BC_ASSERT_ASSIGNABLE(
-				"self_type& operator = (const Tensor_Base<Xpr>& param)");
+				"self_type& operator = (const Expression_Base<Xpr>& param)");
 		assert_valid(param);
 		return evaluate(assignment_bi_expr(bc::oper::assign, param));
 	}
@@ -25,9 +25,9 @@ public:
 #define BC_OPER_BASIC_ASSIGNMENT_DEF(op, op_functor)                       \
                                                                            \
     template<class Xpr> BCHOT                                              \
-    self_type& operator op (const Tensor_Base<Xpr>& param) {               \
+    self_type& operator op (const Expression_Base<Xpr>& param) {               \
         BC_ASSERT_ASSIGNABLE(                                              \
-                "operator " #op "(const Tensor_Base<Xpr>& param)");        \
+                "operator " #op "(const Expression_Base<Xpr>& param)");        \
         assert_valid(param);                                               \
         using operation = std::conditional_t<                              \
                 (tensor_dim >= Xpr::tensor_dim),                           \
@@ -41,7 +41,7 @@ public:
     template<class ScalarType, class=enable_if_scalar<ScalarType>>         \
     self_type& operator  op (const ScalarType& param) {                    \
         BC_ASSERT_ASSIGNABLE(                                              \
-                "operator " #op " (const Tensor_Base<Xpr>& param)");       \
+                "operator " #op " (const Expression_Base<Xpr>& param)");       \
         value_type value = param;                                          \
         return evaluate(assignment_bi_expr(                                \
                         oper:: op_functor##_Assign(),                      \
@@ -57,7 +57,7 @@ public:
 	self_type& operator = (const ScalarType& param)
 	{
 		BC_ASSERT_ASSIGNABLE(
-				"self_type& operator =(const Tensor_Base<Xpr>& param)");
+				"self_type& operator =(const Expression_Base<Xpr>& param)");
 		return evaluate(assignment_bi_expr(
 				bc::oper::assign,
 				exprs::make_scalar_constant<system_tag>((value_type)param)));
@@ -75,21 +75,21 @@ public:
 		self_type& tensor;
 
 		template<class Xpr>
-		auto& operator = (const Tensor_Base<Xpr>& param) {
+		auto& operator = (const Expression_Base<Xpr>& param) {
 			tensor.assert_valid(param);
 			return tensor.evaluate(
 					tensor.assignment_bi_expr(oper::alias_assign, param));
 		}
 
 		template<class Xpr>
-		auto& operator += (const Tensor_Base<Xpr>& param) {
+		auto& operator += (const Expression_Base<Xpr>& param) {
 			tensor.assert_valid(param);
 			return tensor.evaluate(
 					tensor.assignment_bi_expr(oper::alias_add_assign, param));
 		}
 
 		template<class Xpr>
-		auto& operator -= (const Tensor_Base<Xpr>& param) {
+		auto& operator -= (const Expression_Base<Xpr>& param) {
 			tensor.assert_valid(param);
 			return tensor.evaluate(
 					tensor.assignment_bi_expr(oper::alias_sub_assign, param));
@@ -114,7 +114,7 @@ private:
 	}
 
 	template<class Xpr>
-	self_type& evaluate(const Tensor_Base<Xpr>& tensor) {
+	self_type& evaluate(const Expression_Base<Xpr>& tensor) {
 		BC_ASSERT(this->get_stream().get_allocator().allocated_bytes() == 0,
 				"Evaluation expects streams allocate_bytes to be 0 pre-evaluation");
 

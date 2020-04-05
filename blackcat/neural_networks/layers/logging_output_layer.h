@@ -54,6 +54,7 @@ struct Logging_Output_Layer:
 	using parent = Output_Layer<SystemTag,ValueType>;
 	using system_tag = SystemTag;
 	using value_type = ValueType;
+	using scalar = bc::Scalar<value_type, nn_default_allocator_type<value_type, system_tag>>;
 
 	bool logging_enabled = true;
 	unsigned curr_index = 0;
@@ -90,7 +91,7 @@ struct Logging_Output_Layer:
 		curr_index++;
 
 		if (logging_enabled && curr_index % skip_every_n_backprops == 0)
-			(*logger) << "Batch index: " << curr_index << " loss: " << error_function(x, y).to_string() << "\n";
+			(*logger) << "Batch index: " << curr_index << " loss: " << scalar(error_function(x, y)).to_string() << "\n";
 		return x - y;
 	}
 };

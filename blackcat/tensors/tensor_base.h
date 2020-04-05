@@ -11,6 +11,7 @@
 
 #include "tensor_common.h"
 #include "expression_templates/tree_evaluator.h"
+#include "tensor_iterator_defs.h"
 #include "io/print.h"
 
 namespace bc {
@@ -55,11 +56,18 @@ public:
 
 	#include "tensor_operations.h"
 
+	//Expressions only support element-wise iteration
+	//Tensors support column and cwise iteration
+	BC_ITERATOR_DEF(cw_, cw_iterator_type, cw_begin, cw_end)
+	BC_ITERATOR_DEF(cw_reverse_, cw_reverse_iterator_type, cw_rbegin, cw_rend)
+	BC_FORWARD_ITER(cw_, begin, this->expression_template())
+	BC_FORWARD_ITER(cw_, end, this->expression_template())
+
 };
 
 template<class ExpressionTemplate>
-class Tensor_Base: public Expression_Base<ExpressionTemplate> {
-
+class Tensor_Base: public Expression_Base<ExpressionTemplate>
+{
 	template<class>
 	friend class Tensor_Base;
 
@@ -124,6 +132,11 @@ public:
 				"SCALAR_INITIALIZATION ONLY AVAILABLE TO SCALARS");
 		this->fill(scalar);
 	}
+
+	BC_FORWARD_ITER(,begin, *this)
+	BC_FORWARD_ITER(,end, *this)
+	BC_ITERATOR_DEF(,nd_iterator_type, begin, end)
+	BC_ITERATOR_DEF(reverse_, nd_reverse_iterator_type, rbegin, rend)
 
 #define BC_ASSERT_ASSIGNABLE(literal)           \
 static_assert(                                  \

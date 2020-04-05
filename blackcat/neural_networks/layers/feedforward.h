@@ -30,7 +30,7 @@ struct FeedForward:
 	using input_descriptor_t = Tensor_Descriptor<ValueType, SystemTag, Integer<1>>;
 	using parent_type = Layer_Base<self_type, input_descriptor_t>;
 
-	using allocator_type = nn_default_allocator_type<SystemTag, ValueType>;
+	using allocator_type = nn_default_allocator_type<ValueType, SystemTag>;
 	using optimizer_type = Optimizer;
 
 	using greedy_evaluate_delta = std::true_type;

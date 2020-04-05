@@ -43,7 +43,7 @@ auto make_expression(ExpressionTemplate expression) {
 		exprs::expression_traits<ExpressionTemplate>
 				::is_expression_template::value,
 		"Make Tensor can only be used with Expression_Template");
-	return Tensor_Base<ExpressionTemplate>(expression);
+	return Expression_Base<ExpressionTemplate>(expression);
 }
 }
 
