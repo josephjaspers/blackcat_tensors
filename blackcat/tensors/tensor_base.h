@@ -16,14 +16,17 @@
 namespace bc {
 namespace tensors {
 
+template<class>
+class Tensor_Base;
 
 template<class ExpressionTemplate>
-class Tensor_Base: public ExpressionTemplate {
+class Expression_Base: public ExpressionTemplate
+{
 
 	template<class>
 	friend class Tensor_Base;
 
-	using self_type = Tensor_Base<ExpressionTemplate>;
+	using self_type = Expression_Base<ExpressionTemplate>;
 	using expression_type = ExpressionTemplate;
 	using traits_type = exprs::expression_traits<ExpressionTemplate>;
 
@@ -46,9 +49,44 @@ public:
 	using ExpressionTemplate::ExpressionTemplate;
 	using ExpressionTemplate::expression_template;
 
+	//ets are trivially copyable
+	Expression_Base(const ExpressionTemplate& et): ExpressionTemplate(et) {}
+	Expression_Base(ExpressionTemplate&& et):  ExpressionTemplate(std::move(et)) {}
+
+	#include "tensor_operations.h"
+
+};
+
+template<class ExpressionTemplate>
+class Tensor_Base: public Expression_Base<ExpressionTemplate> {
+
+	template<class>
+	friend class Tensor_Base;
+
+	using self_type = Tensor_Base<ExpressionTemplate>;
+	using parent_type = Expression_Base<ExpressionTemplate>;
+	using expression_type = ExpressionTemplate;
+	using traits_type = exprs::expression_traits<ExpressionTemplate>;
+
+public:
+
+	static constexpr int tensor_dim = parent_type::tensor_dim;
+	static constexpr int tensor_iterator_dim = parent_type::tensor_iterator_dim;
+
+	using value_type  = typename parent_type::value_type;
+	using system_tag  = typename parent_type::system_tag;
+
+	using move_constructible = typename traits_type::is_move_constructible;
+	using copy_constructible = typename traits_type::is_move_constructible;
+	using move_assignable = typename traits_type::is_move_assignable;
+	using copy_assignable = typename traits_type::is_copy_assignable;
+
+	using parent_type::parent_type;
+	using parent_type::expression_template;
+
 	Tensor_Base() = default;
-	Tensor_Base(const expression_type&  param): expression_type(param) {}
-	Tensor_Base(expression_type&& param): expression_type(param) {}
+	Tensor_Base(const expression_type&  param): parent_type(param) {}
+	Tensor_Base(expression_type&& param): parent_type(param) {}
 
 private:
 
@@ -61,13 +99,13 @@ public:
 
 	template<class U>
 	Tensor_Base(const Tensor_Base<U>& tensor):
-		expression_type(tensor.as_expression_type()) {}
+		parent_type(tensor.as_expression_type()) {}
 
 	Tensor_Base(tensor_copy_type tensor):
-		expression_type(tensor.as_expression_type()) {}
+		parent_type(tensor.as_expression_type()) {}
 
 	Tensor_Base(tensor_move_type tensor):
-		expression_type(std::move(tensor.as_expression_type())) {}
+		parent_type(std::move(tensor.as_expression_type())) {}
 
 	Tensor_Base& operator =(tensor_move_type tensor) noexcept {
 		this->as_expression_type() = std::move(tensor.as_expression_type());
@@ -77,7 +115,7 @@ public:
 	Tensor_Base& operator = (tensor_copy_type param) {
 		//From tensor_operations.h"
 		assert_valid(param);
-		evaluate(bi_expr(bc::oper::assign, param));
+		evaluate(this->bi_expr(bc::oper::assign, param));
 		return *this;
 	}
 
@@ -92,10 +130,10 @@ static_assert(                                  \
 		traits_type::is_copy_assignable::value, \
 		"ASSERT COPY ASSIGNABLE: " literal)
 
-#include "tensor_utility.h"
-#include "tensor_accessor.h"
-#include "tensor_iteralgos.h"
-#include "tensor_operations.h"
+	#include "tensor_utility.h"
+	#include "tensor_accessor.h"
+	#include "tensor_iteralgos.h"
+	#include "tensor_assignment_operations.h"
 
 #undef BC_ASSERT_ASSIGNABLE
 

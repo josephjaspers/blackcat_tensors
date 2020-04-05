@@ -22,10 +22,23 @@ struct Tensor_Dim : bc::traits::Integer<X> {
 	static constexpr int tensor_dim = X;
 };
 
-template<class> class Tensor_Base;
+template<class ExpressionTemplate>
+class Tensor_Base;
 
 template<class ExpressionTemplate>
 auto make_tensor(ExpressionTemplate expression) {
+	static_assert(
+		exprs::expression_traits<ExpressionTemplate>
+				::is_expression_template::value,
+		"Make Tensor can only be used with Expression_Template");
+	return Tensor_Base<ExpressionTemplate>(expression);
+}
+
+template<class ExpressionTemplate>
+class Expression_Base;
+
+template<class ExpressionTemplate>
+auto make_expression(ExpressionTemplate expression) {
 	static_assert(
 		exprs::expression_traits<ExpressionTemplate>
 				::is_expression_template::value,

@@ -94,6 +94,8 @@ int test_constructors(int sz=128) {
 		bool ensure_diff = a.data() != original_ptr;
 		bool ensure_swap_dims = true;
 
+		bc::print(ensure_move, ensure_diff, ensure_swap_dims);
+
 		return ensure_move &&
 				ensure_diff &&
 				ensure_swap_dims;
