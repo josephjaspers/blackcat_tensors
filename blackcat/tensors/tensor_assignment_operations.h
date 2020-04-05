@@ -2,6 +2,10 @@ using parent_type::assert_valid;
 
 private:
 
+	#define BC_ASSERT_ASSIGNABLE(literal)           \
+	static_assert(                                  \
+		traits_type::is_copy_assignable::value, \
+		"ASSERT COPY ASSIGNABLE: " literal)
 
 	template<class ScalarType>
 	using enable_if_scalar = std::enable_if_t<
@@ -25,9 +29,9 @@ public:
 #define BC_OPER_BASIC_ASSIGNMENT_DEF(op, op_functor)                       \
                                                                            \
     template<class Xpr> BCHOT                                              \
-    self_type& operator op (const Expression_Base<Xpr>& param) {               \
+    self_type& operator op (const Expression_Base<Xpr>& param) {           \
         BC_ASSERT_ASSIGNABLE(                                              \
-                "operator " #op "(const Expression_Base<Xpr>& param)");        \
+                "operator " #op "(const Expression_Base<Xpr>& param)");    \
         assert_valid(param);                                               \
         using operation = std::conditional_t<                              \
                 (tensor_dim >= Xpr::tensor_dim),                           \
@@ -41,7 +45,7 @@ public:
     template<class ScalarType, class=enable_if_scalar<ScalarType>>         \
     self_type& operator  op (const ScalarType& param) {                    \
         BC_ASSERT_ASSIGNABLE(                                              \
-                "operator " #op " (const Expression_Base<Xpr>& param)");       \
+                "operator " #op " (const Expression_Base<Xpr>& param)");   \
         value_type value = param;                                          \
         return evaluate(assignment_bi_expr(                                \
                         oper:: op_functor##_Assign(),                      \
@@ -126,6 +130,7 @@ private:
 	}
 public:
 
+#undef BC_ASSERT_ASSIGNABLE
 #undef BC_OPER_ASSIGNMENT_DEF
 #undef BC_OPER_SCALAR_ASSIGNMENT_DEF
 #undef BC_OPER_BASIC_ASSIGNMENT_DEF

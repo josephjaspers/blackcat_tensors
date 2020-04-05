@@ -33,12 +33,14 @@ struct Array_Slice:
 private:
 
 	using parent = Kernel_Array<Shape, ValueType, system_tag, Tags...>;
-	using move_assignable = std::false_type;
 
 	stream_type m_stream;
 	allocator_type m_allocator;
 
 public:
+
+	using move_assignable = std::false_type;
+	using copy_assignable = bc::traits::not_type<bc::traits::sequence_contains_v<BC_Const_View, Tags...>>;
 
 	template<class... Args> BCHOT
 	Array_Slice(stream_type stream, allocator_type allocator, Args... args):

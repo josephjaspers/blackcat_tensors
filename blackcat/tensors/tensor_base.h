@@ -33,19 +33,11 @@ class Expression_Base: public ExpressionTemplate
 
 public:
 
-	static constexpr int tensor_dim =
-			ExpressionTemplate::tensor_dim;
-
-	static constexpr int tensor_iterator_dim =
-			ExpressionTemplate::tensor_iterator_dim;
+	static constexpr int tensor_dim = expression_type::tensor_dim;
+	static constexpr int tensor_iterator_dim = expression_type::tensor_iterator_dim;
 
 	using value_type  = typename ExpressionTemplate::value_type;
 	using system_tag  = typename ExpressionTemplate::system_tag;
-
-	using move_constructible = typename traits_type::is_move_constructible;
-	using copy_constructible = typename traits_type::is_move_constructible;
-	using move_assignable = typename traits_type::is_move_assignable;
-	using copy_assignable = typename traits_type::is_copy_assignable;
 
 	using ExpressionTemplate::ExpressionTemplate;
 	using ExpressionTemplate::expression_template;
@@ -138,17 +130,10 @@ public:
 	BC_ITERATOR_DEF(,nd_iterator_type, begin, end)
 	BC_ITERATOR_DEF(reverse_, nd_reverse_iterator_type, rbegin, rend)
 
-#define BC_ASSERT_ASSIGNABLE(literal)           \
-static_assert(                                  \
-		traits_type::is_copy_assignable::value, \
-		"ASSERT COPY ASSIGNABLE: " literal)
-
 	#include "tensor_utility.h"
 	#include "tensor_accessor.h"
 	#include "tensor_iteralgos.h"
 	#include "tensor_assignment_operations.h"
-
-#undef BC_ASSERT_ASSIGNABLE
 
 public:
 	~Tensor_Base() {

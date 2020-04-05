@@ -1,5 +1,3 @@
-// ---- elementwise operations ---- //
-
 protected:
 	template<class ScalarType>
 	using enable_if_scalar = std::enable_if_t<
@@ -20,7 +18,7 @@ public:
 
 #define BC_BASIC_COEFFICIENTWISE_DEF(op, op_functor)       \
     template<class Xpr>                                    \
-    auto op (const Expression_Base<Xpr>& param) const          \
+    auto op (const Expression_Base<Xpr>& param) const      \
     {                                                      \
         assert_valid(param);                               \
         return bi_expr(oper::op_functor(), param);         \
@@ -29,13 +27,13 @@ public:
 #define BC_SCALAR_COEFFICIENTWISE_DEF(op, op_functor)                         \
     template<class ScalarType, class=enable_if_scalar<ScalarType>>            \
     auto op (const ScalarType& param) const                                   \
-	{                                                                         \
+	{                                                                     \
         return bi_expr(oper::op_functor(),                                    \
                 exprs::make_scalar_constant<system_tag>((value_type)param));  \
     }                                                                         \
                                                                               \
     template<class ScalarType, class =enable_if_scalar<ScalarType>>           \
-    friend auto op (const ScalarType& param, const Expression_Base& tensor)       \
+    friend auto op (const ScalarType& param, const Expression_Base& tensor)   \
     {                                                                         \
         value_type value = param;                                             \
         auto scalar_obj = exprs::make_scalar_constant<system_tag>(value);     \
@@ -136,8 +134,6 @@ public:
 		return make_expression(
 				exprs::make_bin_expr(this->expression_template(), rv.expression_template(), func));
 	}
-
-
 
 	template<class Xpr>
 	void assert_valid(const Expression_Base<Xpr>& tensor) const {

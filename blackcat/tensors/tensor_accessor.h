@@ -25,144 +25,126 @@
 
 	const auto slice(bc::size_t i) const
 	{
-		BC_ASSERT_ASSIGNABLE("const auto slice(bc::size_t i) const");
 		BC_ASSERT(i >= 0 && i < this->outer_dim(),
-				"slice index must be between 0 and outer_dim()");
+			"slice index must be between 0 and outer_dim()");
 		return make_tensor(exprs::make_slice(*this, i));
 	}
 
 	auto slice(bc::size_t i)
 	{
-		BC_ASSERT_ASSIGNABLE("auto slice(bc::size_t i)");
 		BC_ASSERT(i >= 0 && i < this->outer_dim(),
-				"slice index must be between 0 and outer_dim()");
+			"slice index must be between 0 and outer_dim()");
 		return make_tensor(exprs::make_slice(*this, i));
 	}
 
 	const auto slice(bc::size_t from, bc::size_t to) const
 	{
-		BC_ASSERT_ASSIGNABLE("const auto slice(bc::size_t from, bc::size_t to) const");
 		BC_ASSERT(from >= 0 && to <= this->outer_dim(),
-				"slice `from` must be between 0 and outer_dim()");
+			"slice `from` must be between 0 and outer_dim()");
 		BC_ASSERT(to > from && to <= this->outer_dim(),
-				"slice `to` must be between `from` and outer_dim()");
+			"slice `to` must be between `from` and outer_dim()");
 		return make_tensor(exprs::make_ranged_slice(*this, from, to));
 	}
 
 	auto slice(bc::size_t from, bc::size_t to)
 	{
-		BC_ASSERT_ASSIGNABLE("auto slice(bc::size_t from, bc::size_t to)");
 		BC_ASSERT(from >= 0 && to <= this->outer_dim(),
-				"slice `from` must be between 0 and outer_dim()");
+			"slice `from` must be between 0 and outer_dim()");
 		BC_ASSERT(to > from && to <= this->outer_dim(),
-				"slice `to` must be between `from` and outer_dim()");
+			"slice `to` must be between `from` and outer_dim()");
 		return make_tensor(exprs::make_ranged_slice(*this, from, to));
 	}
 
 	const auto scalar(bc::size_t i) const
 	{
-		BC_ASSERT_ASSIGNABLE("const auto scalar(bc::size_t i) const");
 		BC_ASSERT(i >= 0 && i < this->size(),
-				"Scalar index must be between 0 and size()");
+			"Scalar index must be between 0 and size()");
 		return make_tensor(exprs::make_scalar(*this, i));
 	}
 
 	auto scalar(bc::size_t i)
 	{
-		BC_ASSERT_ASSIGNABLE("auto scalar(bc::size_t i)");
 		BC_ASSERT(i >= 0 && i < this->size(),
-				"Scalar index must be between 0 and size()");
+			"Scalar index must be between 0 and size()");
 		return make_tensor(exprs::make_scalar(*this, i));
 	}
 
 	const auto diagnol(bc::size_t index = 0) const
 	{
-		BC_ASSERT_ASSIGNABLE("const auto diagnol(bc::size_t index = 0) const");
 		static_assert(ExpressionTemplate::tensor_dim  == 2,
-				"diagnol method is only available to matrices");
+			"diagnol method is only available to matrices");
 		BC_ASSERT(index > -this->rows() && index < this->rows(),
-				"diagnol `index` must be -rows() and rows())");
+			"diagnol `index` must be -rows() and rows())");
 		return make_tensor(exprs::make_diagnol(*this,index));
 	}
 
 	auto diagnol(bc::size_t index = 0)
 	{
-		BC_ASSERT_ASSIGNABLE("auto diagnol(bc::size_t index = 0)");
 		static_assert(ExpressionTemplate::tensor_dim  == 2,
-				"diagnol method is only available to matrices");
+			"diagnol method is only available to matrices");
 		BC_ASSERT(index > -this->rows() && index < this->rows(),
-				"diagnol `index` must be -rows() and rows())");
+			"diagnol `index` must be -rows() and rows())");
 		return make_tensor(exprs::make_diagnol(*this,index));
 	}
 
 	//returns a copy of the tensor without actually copying the elements
 	auto shallow_copy() const
 	{
-		BC_ASSERT_ASSIGNABLE("auto shallow_copy() const");
-		return make_tensor(
-				exprs::make_view(*this, this->get_shape()));
+		return make_tensor(exprs::make_view(*this, this->get_shape()));
 	}
 
 	auto shallow_copy()
 	{
-		BC_ASSERT_ASSIGNABLE("auto shallow_copy()");
-		return make_tensor(
-				exprs::make_view(*this, this->get_shape()));
+		return make_tensor(exprs::make_view(*this, this->get_shape()));
 	}
 
 	const auto col(bc::size_t i) const
 	{
-		BC_ASSERT_ASSIGNABLE("const auto col(bc::size_t i) const");
 		static_assert(ExpressionTemplate::tensor_dim == 2,
-				"MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+			"MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return slice(i);
 	}
 
 	auto col(bc::size_t i)
 	{
-		BC_ASSERT_ASSIGNABLE("auto col(bc::size_t i)");
 		static_assert(ExpressionTemplate::tensor_dim == 2,
-				"MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+			"MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		return slice(i);
 	}
 
 	const auto row(bc::size_t index) const
 	{
-		BC_ASSERT_ASSIGNABLE("const auto row(bc::size_t index) const");
 		static_assert(ExpressionTemplate::tensor_dim == 2,
-				"MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+			"MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		BC_ASSERT(index >= 0 && index < this->rows(),
-				"Row index must be between 0 and rows()");
+			"Row index must be between 0 and rows()");
 		return make_tensor(exprs::make_row(*this, index));
 	}
 
 	auto row(bc::size_t index)
 	{
-		BC_ASSERT_ASSIGNABLE("const auto row(bc::size_t index) const");
 		static_assert(ExpressionTemplate::tensor_dim == 2,
-				"MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+			"MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
 		BC_ASSERT(index >= 0 && index < this->rows(),
-				"Row index must be between 0 and rows()");
+			"Row index must be between 0 and rows()");
 		return make_tensor(exprs::make_row(*this, index));
 	}
 
 	const auto subblock(Dim<tensor_dim> index, Dim<tensor_dim> shape) const
 	{
-		BC_ASSERT_ASSIGNABLE("const auto subblock(subblock_index index, subblock_shape shape) const");
 		BC_ASSERT((index.reversed() + shape <= this->inner_shape()).all(),
-				"Index + Shape must be less parent shape");
+			"Index + Shape must be less parent shape");
 		BC_ASSERT(((index>=0).all() && (shape>=0).all()),
-				"Shape and Index must be greater than 0");
+			"Shape and Index must be greater than 0");
 		return make_tensor(exprs::make_chunk(*this, index, shape));
 	}
 
 	auto subblock(Dim<tensor_dim> index, Dim<tensor_dim> shape)
 	{
-		BC_ASSERT_ASSIGNABLE("auto subblock(subblock_index index, subblock_shape shape)");
 		BC_ASSERT((index.reversed() + shape <= this->inner_shape()).all(),
-				"Index + Shape must be less parent shape");
+			"Index + Shape must be less parent shape");
 		BC_ASSERT(((index>=0).all() && (shape>=0).all()),
-				"Shape and Index must be greater than 0");
+			"Shape and Index must be greater than 0");
 		return make_tensor(exprs::make_chunk(*this, index, shape));
 	}
 
@@ -177,13 +159,12 @@
 	}
 
 	const auto operator() (bc::size_t i) const { return scalar(i); }
-		  auto operator() (bc::size_t i)       { return scalar(i); }
+	      auto operator() (bc::size_t i)       { return scalar(i); }
 
 
 	template<int X>
 	auto reshaped(bc::Dim<X> shape)
 	{
-		BC_ASSERT_ASSIGNABLE("auto reshaped(bc::Dim<X> shape)");
 		static_assert(ExpressionTemplate::tensor_iterator_dim <= 1,
 			"Reshape is only available to continuous tensors");
 
@@ -196,12 +177,11 @@
 	template<int X>
 	const auto reshaped(bc::Dim<X> shape) const
 	{
-		BC_ASSERT_ASSIGNABLE("const auto reshaped(bc::Dim<X> shape) const");
 		static_assert(ExpressionTemplate::tensor_iterator_dim <= 1,
 			"Reshape is only available to continuous tensors");
 
 		BC_ASSERT(shape.size() == this->size(),
-				"Reshape requires the new and old shape be same sizes");
+			"Reshape requires the new and old shape be same sizes");
 
 		return make_tensor(exprs::make_view(*this, shape));
 	}
