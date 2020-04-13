@@ -21,15 +21,15 @@ namespace bc {
 class system_tag_base {};
 
 template<class DerivedTag>
-struct system_tag: system_tag_base {};
+struct system_tag_type: system_tag_base {};
 
-struct host_tag: system_tag<host_tag>
+struct host_tag: system_tag_type<host_tag>
 {
 	using default_floating_point_type = double;
 	using default_integer_type = int;
 };
 
-struct device_tag : system_tag<device_tag>
+struct device_tag : system_tag_type<device_tag>
 {
 	using default_floating_point_type = float;
 	using default_integer_type = int;

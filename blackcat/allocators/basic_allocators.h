@@ -12,8 +12,8 @@
 
 namespace bc {
 
-class device_tag;
-class host_tag;
+struct device_tag;
+struct host_tag;
 
 namespace allocators {
 

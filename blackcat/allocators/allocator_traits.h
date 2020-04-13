@@ -12,7 +12,7 @@
 
 namespace bc {
 
-class host_tag;
+struct host_tag;
 
 namespace allocators {
 

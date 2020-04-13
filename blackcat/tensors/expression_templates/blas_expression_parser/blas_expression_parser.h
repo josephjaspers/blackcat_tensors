@@ -12,15 +12,15 @@
 
 namespace bc {
 
-class host_tag;
-class device_tag;
+struct host_tag;
+struct device_tag;
 
 namespace tensors {
 namespace exprs {
 namespace blas_expression_parser {
 
 	template<class SystemTag>
-	class Blas_Expression_Parser;
+	struct Blas_Expression_Parser;
 
 	template<class SystemTag>
 	using implementation = Blas_Expression_Parser<SystemTag>;

@@ -63,9 +63,9 @@ int test_allocators(int sz=128) {
 
 	BC_TEST_BODY_HEAD
 
-	using allocator_type = allocator<value_type>;
-	using mat = bc::Matrix<value_type, log_allocator<allocator_type>>;
-	using vec = bc::Vector<value_type, log_allocator<allocator_type>>;
+	using allocator_type = log_allocator<allocator<value_type>>;
+	using mat = bc::Matrix<value_type, allocator_type>;
+	using vec = bc::Vector<value_type, allocator_type>;
 	using system_tag = typename allocator_traits<allocator_type>::system_tag;
 
 	Stream<system_tag> stream;
@@ -73,37 +73,40 @@ int test_allocators(int sz=128) {
 	BC_TEST_ON_STARTUP
 	{
 		stream.get_allocator().free();
-		stream.get_allocator().set_allocator(log_allocator<allocator_type>());
+		stream.get_allocator().set_allocator(allocator_type());
 		mat tmp;
-		tmp.get_stream().get_allocator().set_allocator(log_allocator<allocator_type>());
+		tmp.get_stream().get_allocator().set_allocator(allocator_type());
 	};
 
 	BC_TEST_DEF(
 		mat a(5,5);
-		return *(a.get_allocator().total_allocated.get())
-				== 25 * sizeof(value_type);
+		allocator_type alloc = a.get_allocator(); 
+		return *(alloc.total_allocated) == 25 * sizeof(value_type);
 	)
 
 	BC_TEST_DEF(
 		mat a(5,5);
 		mat b(a);
-		return *(b.get_allocator().total_allocated.get())
-				== 50 * sizeof(value_type);
+
+		allocator_type alloc = a.get_allocator();
+		return *(alloc.total_allocated) == 50 * sizeof(value_type);
 	)
 
 	BC_TEST_DEF(
 		mat a(5,5);  //mem sz = 25
 		vec b(a[0]); //       = 30 (allocators should propagate from slices)
 
-		return *(b.get_allocator().total_allocated)
-				== 30 * sizeof(value_type);
+		allocator_type alloc = b.get_allocator();
+		return *(alloc.total_allocated) == 30 * sizeof(value_type);
 	)
 
 	BC_TEST_DEF(
 		mat a(5,5);  //mem sz = 25
 		a.get_stream().get_allocator().reserve(30 * sizeof(value_type));
 		a = bc::logistic(a * a + a); // should not allocate any memory
-		return *(a.get_allocator().total_allocated.get()) == 25 * sizeof(value_type);
+
+		allocator_type alloc = a.get_allocator();
+		return *(alloc.total_allocated) == 25 * sizeof(value_type);
 	)
 
 	BC_TEST_BODY_TAIL

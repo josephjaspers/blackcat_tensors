@@ -43,6 +43,7 @@ public:
 	using ExpressionTemplate::expression_template;
 
 	//ets are trivially copyable
+	Expression_Base() {} 
 	Expression_Base(const ExpressionTemplate& et): ExpressionTemplate(et) {}
 	Expression_Base(ExpressionTemplate&& et):  ExpressionTemplate(std::move(et)) {}
 
@@ -84,7 +85,7 @@ public:
 	using parent_type::parent_type;
 	using parent_type::expression_template;
 
-	Tensor_Base() = default;
+	Tensor_Base() {};
 	Tensor_Base(const expression_type&  param): parent_type(param) {}
 	Tensor_Base(expression_type&& param): parent_type(param) {}
 
@@ -119,10 +120,9 @@ public:
 		return *this;
 	}
 
-	Tensor_Base(bc::traits::only_if<tensor_dim==0, value_type> scalar) {
-		static_assert(tensor_dim == 0,
-				"SCALAR_INITIALIZATION ONLY AVAILABLE TO SCALARS");
-		this->fill(scalar);
+	template<class ValueType, class=std::enable_if_t<std::is_convertible<ValueType, value_type>::value && tensor_dim==0>>
+	Tensor_Base(ValueType scalar) {
+		this->fill((value_type)scalar);
 	}
 
 	BC_FORWARD_ITER(,begin, *this)

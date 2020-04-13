@@ -118,9 +118,9 @@ public:
 		return std::pair<K&, bool> { *(result.first), result.second };
 	}
 
-	int empty() const { return m_any_map.empty(); }
-	int size() const { return m_any_map.size(); }
-	int max_size() const { return m_any_map.size(); }
+	int empty() const  { return (int)m_any_map.empty(); }
+	int size()  const  { return (int)m_any_map.size(); }
+	int max_size() const { return (int)m_any_map.size(); }
 
 	auto begin() const { return m_any_map.begin(); }
 	auto end() const { return m_any_map.end(); }

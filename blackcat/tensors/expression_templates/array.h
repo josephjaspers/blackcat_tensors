@@ -21,18 +21,18 @@ template<class, class, class, class...>
 class Array_Slice;
 
 
-template<class Shape, class Scalar, class Allocator, class... Tags>
+template<class Shape, class Scalar, class AllocatorType, class... Tags>
 struct Array:
-		private Allocator,
+		private AllocatorType,
 		public Kernel_Array<
 				Shape,
 				Scalar,
-				typename bc::allocator_traits<Allocator>::system_tag,
+				typename bc::allocator_traits<AllocatorType>::system_tag,
 				Tags...>
 {
-	using system_tag = typename bc::allocator_traits<Allocator>::system_tag;
+	using system_tag = typename bc::allocator_traits<AllocatorType>::system_tag;
 	using value_type = Scalar;
-	using allocator_type = Allocator;
+	using allocator_type = AllocatorType;
 	using stream_type = Stream<system_tag>;
 	using shape_type = Shape;
 
@@ -48,8 +48,8 @@ public:
 	const stream_type& get_stream() const { return m_stream; }
 	      stream_type& get_stream()       { return m_stream; }
 
-	Allocator get_allocator() const {
-		return static_cast<const Allocator&>(*this);
+	allocator_type get_allocator() const {
+		return static_cast<const allocator_type&>(*this);
 	}
 
 	Array() {
@@ -59,7 +59,7 @@ public:
 	}
 
 	Array(const Array& array):
-		Allocator(allocator_traits_t::
+		allocator_type(allocator_traits_t::
 			select_on_container_copy_construction(array)),
 		parent_type(array.get_shape(), get_allocator()),
 		m_stream(array.get_stream())
@@ -71,7 +71,7 @@ public:
 	}
 
 	Array(Array&& array):
-		Allocator(array.get_allocator()),
+		allocator_type(array.get_allocator()),
 		parent_type(array),
 			m_stream(array.get_stream())
 	{
@@ -103,8 +103,8 @@ public:
 		class=std::enable_if_t<
 			expression_traits<Expression>::is_array::value ||
 			expression_traits<Expression>::is_expr::value>>
-	Array(const Expression& expression, Allocator allocator=Allocator()):
-//		Allocator(allocator),
+	Array(const Expression& expression, allocator_type allocator=allocator_type()):
+		allocator_type(allocator),
 		parent_type(
 			Shape(expression.inner_shape()),
 			get_allocator())
@@ -124,7 +124,7 @@ public:
 					value_type,
 					allocator_type,
 					SliceTags...>& expression):
-		Allocator(allocator_traits_t::
+		allocator_type(allocator_traits_t::
 			select_on_container_copy_construction(expression.get_allocator())),
 		parent_type(Shape(expression.inner_shape()), get_allocator()),
 		m_stream(expression.get_stream())
@@ -144,7 +144,7 @@ public:
 
 			if (allocator_traits_t::
 					propagate_on_container_move_assignment::value) {
-				(Allocator&)(*this) = (Allocator&&)(array);
+				(allocator_type&)(*this) = (allocator_type&&)(array);
 			}
 		} else {
 			get_allocator().deallocate(this->data(), this->size());
@@ -161,7 +161,7 @@ protected:
 	void deallocate()
 	{
 		if (this->m_data) {
-			Allocator::deallocate(this->data(), this->size());
+			AllocatorType::deallocate(this->data(), this->size());
 			this->m_data= nullptr;
 		}
 	}
