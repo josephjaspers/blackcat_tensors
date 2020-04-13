@@ -68,14 +68,6 @@ public:
 	BCINLINE
 	Kernel_Array() {}
 
-	BCINLINE Kernel_Array(Kernel_Array&& ka):
-		shape_type((const shape_type&&)ka)
-	{
-		this->m_data = ka.m_data;
-	}
-
-	BCINLINE Kernel_Array(const Kernel_Array& ka) = default; 
-
 	BCINLINE
 	Kernel_Array(shape_type shape, value_type* ptr):
 		shape_type(shape), m_data(ptr) {};
