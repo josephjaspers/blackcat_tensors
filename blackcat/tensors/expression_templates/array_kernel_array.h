@@ -89,20 +89,6 @@ public:
 		shape_type(shape),
 		m_data(allocator.allocate(this->size())) {};
 
-protected:
-
-	//if this constructor is used "initialize" is expected to called after. 
-	Kernel_Array(shape_type shape):
-		shape_type(shape) {}
-
-	template<class AllocatorType>
-	void initialize(AllocatorType& allocator) 
-	{
-		if (m_data)
-			allocator.deallocate(m_data, this->size());
-		m_data = allocator.allocate(this->size()); 
-	}
-
 public:
 
 
