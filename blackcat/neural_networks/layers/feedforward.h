@@ -72,8 +72,6 @@ public:
 		b_gradients.zero();
 	}
 
-	virtual ~FeedForward() {};
-
 	template<class Matrix>
 	auto forward_propagation(const Matrix& x)
 	{
