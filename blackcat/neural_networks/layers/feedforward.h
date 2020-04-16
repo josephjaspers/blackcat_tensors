@@ -54,7 +54,6 @@ private:
 	mat_opt_t w_opt;
 	vec_opt_t b_opt;
 
-
 public:
 
 	FeedForward(bc::size_t inputs, bc::size_t outputs):
