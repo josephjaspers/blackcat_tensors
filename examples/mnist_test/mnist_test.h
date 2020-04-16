@@ -25,6 +25,8 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 		bc::nn::output_layer(system_tag, 10)
 	);
 
+	auto net2 = std::move(network);
+
 	network.set_batch_size(batch_size);
 	network.set_learning_rate(.003);
 

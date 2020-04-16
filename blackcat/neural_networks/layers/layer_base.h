@@ -111,7 +111,7 @@ private:
 
 	value_type m_learning_rate = default_learning_rate;
 	bc::size_t m_batch_sz=1;
-	const std::string m_classname;
+	std::string m_classname;
 
 protected:
 	shape_type m_input_shape;

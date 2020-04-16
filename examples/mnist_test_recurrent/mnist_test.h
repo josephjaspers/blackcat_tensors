@@ -22,6 +22,17 @@ int percept_MNIST(System system_tag, std::string mnist_dataset,
 		bc::nn::logging_output_layer(system_tag, 10, bc::nn::RMSE).skip_every(100)
 	);
 
+	auto lstm = bc::nn::lstm(system_tag, 784 / 4, 128);
+	lstm = lstm;
+	auto ff = bc::nn::feedforward(system_tag, 64, 10);
+	ff = ff; 
+	auto softmax = bc::nn::softmax(system_tag, 10);
+	softmax = softmax; 
+
+	//Regression-test to ensure compilation 
+	if (false)
+		network = network; 
+
 	bc::print("Neural Network architecture:");
 	bc::print(network.get_string_architecture());
 
