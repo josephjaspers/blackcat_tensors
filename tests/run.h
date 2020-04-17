@@ -9,6 +9,7 @@
 #include "test_streams.h"
 #include "test_algorithms.h"
 #include "test_blas.h"
+#include "test_neuralnetworks.h"
 
 namespace bc {
 namespace tests {
@@ -27,7 +28,7 @@ int test_all(int sz) {
 	errors += test_streams<scalar_type, allocator>(sz);
 	errors += test_algorithms<scalar_type, allocator>(sz);
 	errors += test_blas<scalar_type, allocator>(sz);
-
+	errors += test_neuralnetworks<scalar_type, allocator>(sz); 
 	return errors;
 }
 
@@ -39,7 +40,7 @@ int run(int sz=64) {
 	errors += test_all<double, bc::Basic_Allocator>(sz);
 	errors += test_all<double, std::allocator>(sz);
 
-#ifdef __CUDACC__ //remember to change filename to main.cu
+#ifdef __CUDACC__
 	errors += test_all<float, bc::Cuda_Allocator>(sz);
 #endif
 
