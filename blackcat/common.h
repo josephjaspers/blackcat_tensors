@@ -53,14 +53,15 @@ using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 
 // --------------------------------- compile options --------------------------------- //
 
-//#define BC_NO_OPENMP                    //Disables automatic multi-threading of element-wise operations (if openmp is linked)
-//#define BC_EXECUTION_POLICIES           //Enables execution policies
-//#define NDEBUG 		                  //Disables runtime checks
-//#define BC_CPP20						  //enables C++20 features -- None: this is reserved for future, NVCC does not support cpp20 features
-//#define BC_CLING_JIT 			  		  //Defines certain code based upon if we are using a cling
+//#define BC_NO_OPENMP            //Disables automatic multi-threading of element-wise operations (if openmp is linked)
+//#define BC_EXECUTION_POLICIES   //Enables execution policies
+//#define NDEBUG                  //Disables runtime checks
+//#define BC_CPP20                //enables C++20 features -- None: this is reserved for future, NVCC does not support cpp20 features
+//#define BC_CLING_JIT            //Defines certain code based upon if we are using a cling
+
 // --------------------------------- override macro-option s --------------------------------- //
-//#define BC_INLINE_OVERRIDE <compiler_attribute>       //overloads the default inline attribute
-//#define BC_SIZE_T_OVERRIDE  <integer_type>			//overloads the default size_t (default is signed int)
+//#define BC_INLINE_OVERRIDE <compiler_attribute>     //overloads the default inline attribute
+//#define BC_SIZE_T_OVERRIDE  <integer_type>          //overloads the default size_t (default is signed int)
 
 // ------------- define if cuda is defined ----------------- //
 #ifdef __CUDACC__
@@ -85,7 +86,7 @@ using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 #else
 	#if defined(__GNUG__) || defined(__GNUC__) || defined(__clang__) || defined(__cling__) 
 	#define BCINLINE BCHOSTDEV inline __attribute__((always_inline)) __attribute__((hot))  //host_device inline
-	#define BCHOT   		   inline __attribute__((always_inline)) __attribute__((hot))  //device-only inline
+	#define BCHOT              inline __attribute__((always_inline)) __attribute__((hot))  //device-only inline
 
 	#elif defined(_MSC_VER)
 		#define BCINLINE BCHOSTDEV __forceinline

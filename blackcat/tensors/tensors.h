@@ -10,7 +10,7 @@
 #ifndef BLACKCAT_TENSOR_ALIASES_H_
 #define BLACKCAT_TENSOR_ALIASES_H_
 
-#include "tensor_common.h"
+#include "common.h"
 #include "tensor_base.h"
 #include "../allocator.h"
 #include "tensor_static_functions.h"

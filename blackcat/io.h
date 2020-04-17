@@ -49,15 +49,15 @@ auto range(T begin, T end=T()) {
 
 struct csv_descriptor {
 
-#define FORWARDED_PARAM(dtype, name, default_value)	\
-dtype name##_ = default_value;											\
-csv_descriptor& name(dtype name) {	\
-	name##_ = name; 				\
-	return *this; 					\
-}									\
-const dtype& name() const { 		\
-	return name##_; 				\
-}									\
+#define FORWARDED_PARAM(dtype, name, default_value)     \
+dtype name##_ = default_value;                          \
+csv_descriptor& name(dtype name) {                      \
+        name##_ = name;                                 \
+        return *this;                                   \
+}                                                       \
+const dtype& name() const {                             \
+        return name##_;                                 \
+}                                                       \
 
 	csv_descriptor(std::string fname) : filename_(fname) {}
 
@@ -119,7 +119,7 @@ static std::vector<std::vector<bc::string>> parse(csv_descriptor desc)
 
 		if (!split_rows.empty() &&
 				split_rows.back().size() != cells.size()) {
-			bc::print("Column length mismatch."
+			bc::printerr("Column length mismatch."
 					"\nExpected: ",  split_rows.back().size(),
 					"\nReceived: ",  cells.size(),
 					"\nRow index: ", split_rows.size());

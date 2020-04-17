@@ -174,15 +174,17 @@ struct bin_expr_factory<Sub, Un_Op<Negation, Lv>, Rv>
 	}
 };
 
-/// (-y) - (-x) -> (-y) + x //specialized to handle ambiguous overload
+/// (-y) - (-x) -> x - y //specialized to handle ambiguous overload
 template<class Lv, class Rv>
 struct bin_expr_factory<Sub, Un_Op<Negation, Lv>, Un_Op<Negation, Rv>>
 {
 	template<class... Args>
 	static auto make(
-			Un_Op<Negation, Lv> lv, Un_Op<Negation, Rv> rv, Args&&... args)
+			Un_Op<Negation, Lv> lv,
+			Un_Op<Negation, Rv> rv,
+			Args&&... args)
 	{
-		return mk_bin_op<Add>(lv, rv.array, std::forward<Args>(args)...);
+		return mk_bin_op<Sub>(rv.array, lv.array, std::forward<Args>(args)...);
 	}
 };
 

@@ -1,74 +1,54 @@
-protected:
-	template<class ScalarType>
-	using enable_if_scalar = std::enable_if_t<
-			std::is_convertible<ScalarType, value_type>::value>;
+#define BC_SCALAR_COEFFICIENTWISE_DEF(op, op_functor)                         \
+    template<                                                                 \
+        class ScalarType,                                                     \
+        class=std::enable_if_t<                                               \
+                std::is_convertible<ScalarType, value_type>::value>>          \
+    auto op (const ScalarType& param) const                                   \
+    {                                                                         \
+        return bi_expr(oper::op_functor(),                                    \
+                exprs::make_scalar_constant<system_tag>((value_type)param));  \
+    }                                                                         \
+                                                                              \
+    template<                                                                 \
+        class ScalarType,                                                     \
+        class=std::enable_if_t<                                               \
+                std::is_convertible<ScalarType, value_type>::value>>          \
+    friend auto op (const ScalarType& param, const Expression_Base& tensor)   \
+    {                                                                         \
+        value_type value = param;                                             \
+        auto scalar = exprs::make_scalar_constant<system_tag>(value);         \
+        return make_expression(scalar).bi_expr(oper:: op_functor (), tensor); \
+    }
 
-	template<class Xpr>
-	bool valid_slice(const Expression_Base<Xpr>& tensor) const {
-		constexpr bc::size_t min_dim = traits::min(tensor_dim, Xpr::tensor_dim);
-
-		for (int i = 0; i < min_dim; ++i)
-			if (tensor.dim(i) != this->dim(i))
-				return false;
-		return true;
-	}
-
-public:
-
-
-#define BC_BASIC_COEFFICIENTWISE_DEF(op, op_functor)       \
+#define BC_COEFFICIENTWISE_DEF(op, op_functor)             \
     template<class Xpr>                                    \
     auto op (const Expression_Base<Xpr>& param) const      \
     {                                                      \
         assert_valid(param);                               \
         return bi_expr(oper::op_functor(), param);         \
-    }
-
-#define BC_SCALAR_COEFFICIENTWISE_DEF(op, op_functor)                         \
-    template<class ScalarType, class=enable_if_scalar<ScalarType>>            \
-    auto op (const ScalarType& param) const                                   \
-	{                                                                     \
-        return bi_expr(oper::op_functor(),                                    \
-                exprs::make_scalar_constant<system_tag>((value_type)param));  \
-    }                                                                         \
-                                                                              \
-    template<class ScalarType, class =enable_if_scalar<ScalarType>>           \
-    friend auto op (const ScalarType& param, const Expression_Base& tensor)   \
-    {                                                                         \
-        value_type value = param;                                             \
-        auto scalar_obj = exprs::make_scalar_constant<system_tag>(value);     \
-        return make_expression(scalar_obj).bi_expr(oper:: op_functor (), tensor); \
-    }
-
-#define BC_COEFFICIENTWISE_DEF(op, op_functor)               \
-    BC_BASIC_COEFFICIENTWISE_DEF(op, op_functor)             \
-    BC_SCALAR_COEFFICIENTWISE_DEF(op, op_functor)            \
+    }                                                      \
+                                                           \
+    BC_SCALAR_COEFFICIENTWISE_DEF(op, op_functor)          \
 
 
-#define BC_OPER_COEFFICIENTWISE_DEF(op, op_functor)          \
-    BC_BASIC_COEFFICIENTWISE_DEF(operator op, op_functor)    \
-    BC_SCALAR_COEFFICIENTWISE_DEF(operator op, op_functor)   \
-
-	BC_OPER_COEFFICIENTWISE_DEF(+, Add)
-	BC_OPER_COEFFICIENTWISE_DEF(-, Sub)
-	BC_OPER_COEFFICIENTWISE_DEF(%, Mul)
-	BC_OPER_COEFFICIENTWISE_DEF(/, Div)
-	BC_OPER_COEFFICIENTWISE_DEF( == , Equal )
-	BC_OPER_COEFFICIENTWISE_DEF( >  , Greater)
-	BC_OPER_COEFFICIENTWISE_DEF( <  , Lesser)
-	BC_OPER_COEFFICIENTWISE_DEF( >= , Greater_Equal)
-	BC_OPER_COEFFICIENTWISE_DEF( <= , Lesser_Equal )
-	BC_OPER_COEFFICIENTWISE_DEF( && , And )
-	BC_OPER_COEFFICIENTWISE_DEF( || , Or )
+	BC_COEFFICIENTWISE_DEF(operator +, Add)
+	BC_COEFFICIENTWISE_DEF(operator -, Sub)
+	BC_COEFFICIENTWISE_DEF(operator %, Mul)
+	BC_COEFFICIENTWISE_DEF(operator /, Div)
+	BC_COEFFICIENTWISE_DEF(operator  == , Equal )
+	BC_COEFFICIENTWISE_DEF(operator  >  , Greater)
+	BC_COEFFICIENTWISE_DEF(operator  <  , Lesser)
+	BC_COEFFICIENTWISE_DEF(operator  >= , Greater_Equal)
+	BC_COEFFICIENTWISE_DEF(operator  <= , Lesser_Equal )
+	BC_COEFFICIENTWISE_DEF(operator  && , And )
+	BC_COEFFICIENTWISE_DEF(operator  || , Or )
 
 	BC_COEFFICIENTWISE_DEF(approx_equal, Approx_Equal)
 	BC_COEFFICIENTWISE_DEF(max_value, Max)
 	BC_COEFFICIENTWISE_DEF(min_value, Min)
 	BC_SCALAR_COEFFICIENTWISE_DEF(operator *, Scalar_Mul)
 
-#undef BC_BASIC_COEFFICIENTWISE_DEF
 #undef BC_SCALAR_COEFFICIENTWISE_DEF
-#undef BC_OPER_COEFFICIENTWISE_DEF
 #undef BC_COEFFICIENTWISE_DEF
 
 	template<class Xpr>
@@ -120,23 +100,30 @@ public:
 	// ---- expression_factory ---- //
 
 	template<class functor>
-	auto un_expr(functor f) const {
-		return make_expression(exprs::make_un_expr(this->expression_template(), f));
+	auto un_expr(functor f) const
+	{
+		return make_expression(
+			exprs::make_un_expr(
+				this->expression_template(), f));
 	}
 
 	template<
 		class Functor,
 		class Xpr,
 		class=std::enable_if_t<
-				exprs::expression_traits<Xpr>::is_expression_template::value>>
+			exprs::expression_traits<Xpr>::is_expression_template::value>>
 	auto bi_expr(Functor func, const Xpr& rv) const
 	{
 		return make_expression(
-				exprs::make_bin_expr(this->expression_template(), rv.expression_template(), func));
+			exprs::make_bin_expr(
+				this->expression_template(),
+				rv.expression_template(),
+				func));
 	}
 
 	template<class Xpr>
-	void assert_valid(const Expression_Base<Xpr>& tensor) const {
+	void assert_valid(const Expression_Base<Xpr>& tensor) const
+	{
 		static_assert(std::is_same<system_tag, typename Xpr::system_tag>::value,
 				"Tensor arguments must have compatible (same) system_tags");
 
@@ -150,13 +137,23 @@ public:
 
 		if (!scalar_op && !valid_broadcast_op && !valid_cwise_op) {
 			throw std::invalid_argument(
-					"Tensor by Tensor operation error: shape mismatch."
-					"\nthis->tensor_dim  = " + std::to_string(tensor_dim) +
-					"\nthis->size()      = " + std::to_string(this->size()) +
-					"\nthis_dims         = " + this->inner_shape().to_string() +
-					"\nparam->tensor_dim = " + std::to_string(Xpr::tensor_dim) +
-					"\nparam.size()      = " + std::to_string(tensor.size()) +
-					"\nparam_dims        = " + tensor.inner_shape().to_string()
+				"Tensor by Tensor operation error: shape mismatch."
+				"\nthis->tensor_dim  = " + std::to_string(tensor_dim) +
+				"\nthis->size()      = " + std::to_string(this->size()) +
+				"\nthis_dims         = " + this->inner_shape().to_string() +
+				"\nparam->tensor_dim = " + std::to_string(Xpr::tensor_dim) +
+				"\nparam.size()      = " + std::to_string(tensor.size()) +
+				"\nparam_dims        = " + tensor.inner_shape().to_string()
 			);
 		}
+	}
+
+	template<class Xpr>
+	bool valid_slice(const Expression_Base<Xpr>& tensor) const {
+		constexpr bc::size_t min_dim = traits::min(tensor_dim, Xpr::tensor_dim);
+
+		for (int i = 0; i < min_dim; ++i)
+			if (tensor.dim(i) != this->dim(i))
+				return false;
+		return true;
 	}

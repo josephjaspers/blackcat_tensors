@@ -16,48 +16,17 @@ namespace bc {
 namespace oper {
 
 struct Negation {
-	template<class lv> BCINLINE lv operator ()(lv val) const {
-		return -val;
+	template<class Value>
+	BCINLINE Value operator ()(Value value) const {
+		return -value;
 	}
-	template<class lv> BCINLINE static lv apply(lv val) {
-		return -val;
+
+	template<class Value>
+	BCINLINE static Value apply(Value value) {
+		return -value;
 	}
 } negation;
 
-template<class SystemTag, class ValueType>
-struct Sum;
-
-template<class ValueType>
-struct Sum<host_tag, ValueType> {
-	mutable ValueType total = 0;
-	mutable int index = 0;
-	template<class T>
-	auto operator ()(T&& value) const {
-#ifdef BC_OPENMP
-		BC_omp_atomic__
-		total += value;
-		BC_omp_bar__
-		return total;
-#else
-		total += value;
-		return total;
-#endif
-	}
-};
-
-#ifdef __CUDACC__
-template<class ValueType>
-struct Sum<device_tag, ValueType> {
-	mutable ValueType total = 0;
-
-	template<class T> __device__
-	auto operator ()(T&& value) const {
-		atomicAdd(&total, value);
-		__syncthreads();
-		return total;
-	}
-};
-#endif
 }
 }
 

@@ -29,8 +29,8 @@ struct Coefficientwise_Iterator {
     Tensor tensor;
     bc::size_t  index;
 
-    BCINLINE Coefficientwise_Iterator(Tensor tensor_, bc::size_t  index_=0) :
-	tensor(tensor_), index(index_) {}
+    BCINLINE Coefficientwise_Iterator(Tensor tensor, bc::size_t index=0) :
+	tensor(tensor), index(index) {}
 
     BCINLINE Coefficientwise_Iterator& operator =(const Coefficientwise_Iterator& iter) {
         this->index = iter.index;
@@ -38,14 +38,14 @@ struct Coefficientwise_Iterator {
     }
 
 #define BC_Iter_Compare(sign, rev)                          \
-	BCINLINE				            \
+    BCINLINE                                                \
     bool operator sign (const Iterator& iter) {             \
         if (Direction == direction::forward)                \
             return index sign iter.index;                   \
         else                                                \
             return index rev iter.index;                    \
     }                                                       \
-    BCINLINE 					    \
+    BCINLINE                                                \
     bool operator sign (int p_index) {                      \
         if (Direction == direction::forward)                \
             return index sign p_index;                      \
@@ -60,7 +60,7 @@ struct Coefficientwise_Iterator {
 
 #undef BC_Iter_Compare
 
-    BCINLINE operator bc::size_t  () const { return index; }
+    BCINLINE operator bc::size_t () const { return index; }
 
     BCINLINE bool operator == (const Iterator& iter) {
         return index == iter.index;
@@ -93,7 +93,7 @@ struct Coefficientwise_Iterator {
 
 
     BCINLINE auto operator*() const -> decltype(this->tensor[this->index]) { return this->tensor[this->index]; }
-    BCINLINE auto operator*() 	 	-> decltype(this->tensor[this->index]) { return this->tensor[this->index]; }
+    BCINLINE auto operator*()       -> decltype(this->tensor[this->index]) { return this->tensor[this->index]; }
     
     BCINLINE auto operator [] (int i) const -> decltype(this->tensor[i]) { return this->tensor[i]; }
     BCINLINE auto operator [] (int i)       -> decltype(this->tensor[i]) { return this->tensor[i]; }

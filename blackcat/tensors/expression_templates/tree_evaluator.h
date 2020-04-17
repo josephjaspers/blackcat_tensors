@@ -139,9 +139,9 @@ public:
 struct GreedyEvaluator {
 
 	template<
-			class Xpr,
-			class Stream,
-			class=std::enable_if_t<expression_traits<Xpr>::is_array::value>>
+		class Xpr,
+		class Stream,
+		class=std::enable_if_t<expression_traits<Xpr>::is_array::value>>
 	static auto evaluate(Xpr expression, Stream stream) {
 		return expression;
 	}
@@ -152,10 +152,10 @@ struct GreedyEvaluator {
 	 * query this tag via 'exprs::expression_traits<Xpr>::is_temporary'
 	 */
 	template<
-			class Xpr,
-			class Stream,
-			class=std::enable_if_t<expression_traits<Xpr>::is_expr::value>,
-			int=0>
+		class Xpr,
+		class Stream,
+		class=std::enable_if_t<expression_traits<Xpr>::is_expr::value>,
+		int=0>
 	static auto evaluate(Xpr expression, Stream stream)
 	{
 		using value_type = typename Xpr::value_type;

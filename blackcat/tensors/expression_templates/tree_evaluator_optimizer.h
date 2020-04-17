@@ -178,8 +178,8 @@ template<class op, class lv, class rv>
 struct optimizer<
 		Bin_Op<op, lv, rv>,
 		std::enable_if_t<
-				expression_traits<Bin_Op<op, lv, rv>>
-						::requires_greedy_evaluation::value>>:
+			expression_traits<Bin_Op<op, lv, rv>>
+				::requires_greedy_evaluation::value>>:
 	binary_optimizer_default<op, lv, rv>,
 	optimizer_greedy_evaluations<Bin_Op<op, lv, rv>>
 {
