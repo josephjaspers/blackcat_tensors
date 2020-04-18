@@ -26,7 +26,8 @@ template<class ExpressionTemplate>
 class Tensor_Base;
 
 template<class ExpressionTemplate>
-auto make_tensor(ExpressionTemplate expression) {
+auto make_tensor(ExpressionTemplate expression) 
+{
 	static_assert(
 		exprs::expression_traits<ExpressionTemplate>
 				::is_expression_template::value,

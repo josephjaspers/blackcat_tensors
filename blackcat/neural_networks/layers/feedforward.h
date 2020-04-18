@@ -94,8 +94,9 @@ public:
 	void update_weights()
 	{
 		w_opt.update(w, w_gradients);
-		b_opt.update(b, b_gradients);
 		w_gradients.zero();
+
+		b_opt.update(b, b_gradients);
 		b_gradients.zero();
 	}
 
