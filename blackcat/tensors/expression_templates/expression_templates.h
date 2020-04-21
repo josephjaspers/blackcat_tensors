@@ -11,6 +11,7 @@
 #include "array.h"
 #include "array_slice.h"
 #include "array_scalar_constant.h"
+#include "vector.h"
 
 #include "expression_unary.h"
 #include "expression_binary.h"

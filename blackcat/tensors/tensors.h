@@ -32,12 +32,11 @@ template<
 		int dim,
 		class ValueType,
 		class Allocator=tensors::detail::default_allocator<ValueType>>
-using Tensor =
-		bc::tensors::Tensor_Base<
-				bc::tensors::exprs::Array<
-						bc::Shape<dim>,
-						ValueType,
-						Allocator>>;
+using Tensor = bc::tensors::Tensor_Base<
+	bc::tensors::exprs::Array<
+		bc::Shape<dim>,
+		ValueType,
+		Allocator>>;
 
 template<
 		class ValueType,
@@ -58,6 +57,11 @@ template<
 		class ValueType,
 		class Allocator=tensors::detail::default_allocator<ValueType>>
 using Cube = Tensor<3, ValueType, Allocator>;
+
+template<
+		class ValueType,
+		 class Allocator=tensors::detail::default_allocator<ValueType>>
+using VecList = bc::tensors::Tensor_Base<bc::tensors::exprs::Vector<ValueType, Allocator>>; 
 
 } //end of ns BC
 

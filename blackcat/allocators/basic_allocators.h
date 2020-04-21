@@ -25,6 +25,8 @@ struct Basic_Allocator_Base
 	using pointer = value_type*;
 	using const_pointer = value_type*;
 	using size_type = int;
+	using reference = value_type&;
+	using const_reference = const value_type&;
 	using propagate_on_container_copy_assignment = std::false_type;
 	using propagate_on_container_move_assignment = std::false_type;
 	using propagate_on_container_swap = std::false_type;

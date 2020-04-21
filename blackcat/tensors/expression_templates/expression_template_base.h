@@ -110,14 +110,12 @@ struct Kernel_Array_Base : Expression_Template_Base<Derived> {
 
 	BCINLINE
 	Kernel_Array_Base() {
-		using value_type = typename Derived::value_type;
+		using value_type = std::remove_const_t<typename Derived::value_type>;
 		using data_type = decltype(std::declval<Derived>().data());
-		using data_value_type =
-				std::remove_const_t<std::remove_pointer_t<data_type>>;
+		using data_value_type = std::remove_const_t<std::remove_pointer_t<data_type>>;
 
 		static_assert(std::is_same<value_type, data_value_type>::value,
-			"Array_Types must define: data() \n"
-			"which returns a pointer of the ExpressionTemplate's value_type");
+			"Array_Types must define: data() which returns a pointer of the ExpressionTemplate's value_type");
 	}
 };
 

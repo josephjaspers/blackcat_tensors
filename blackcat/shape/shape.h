@@ -140,6 +140,7 @@ struct Shape<0> {
 	BCINLINE size_t outer_dim() const { return 1; }
 	BCINLINE size_t leading_dim(int i=0) const { return 0; }
 	BCINLINE bool operator == (const Shape& other) const { return true; }
+	
 	BCINLINE
 	size_t coefficientwise_dims_to_index(size_t i) const {
 		return 0;
