@@ -6,7 +6,7 @@
  */
 
 #ifndef BLACKCAT_TENSORS_EXPRESSION_BASE_H_
-#define BLACKCAT_TENSORSEXPRESSION_BASE_H_
+#define BLACKCAT_TENSORS_EXPRESSION_BASE_H_
 
 #include "common.h"
 #include "expression_templates/tree_evaluator.h"
