@@ -36,7 +36,7 @@
  */
 namespace bc {
 namespace tensors {
-namespace exprs { 
+namespace exprs {
 
 template<class Is_SubXpr=std::false_type>
 class Evaluator
@@ -193,14 +193,12 @@ static auto evaluate(Xpr expression, Stream stream) {
 }
 
 template<class Xpr, class SystemTag>
-static auto greedy_evaluate(
-		Xpr expression, bc::streams::Logging_Stream<SystemTag> logging_stream) {
+static auto greedy_evaluate(Xpr expression, bc::streams::Logging_Stream<SystemTag> logging_stream) {
 	return GreedyEvaluator::evaluate(expression, logging_stream);
 }
 
 template<class Xpr, class SystemTag>
-static auto evaluate(
-		Xpr expression, bc::streams::Logging_Stream<SystemTag> logging_stream) {
+static auto evaluate(Xpr expression, bc::streams::Logging_Stream<SystemTag> logging_stream) {
 	return Evaluator<>::evaluate(expression, logging_stream);
 }
 

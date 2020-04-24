@@ -199,57 +199,57 @@ int test_accessors(int sz=128) {
 
 	//assert invalid scalar exception
 	BC_TEST_DEF(
-			try {
-				a.scalar(-1);
-			} catch(...) {
-				return true;
-			}
-			return false;
+		try {
+			a.scalar(-1);
+		} catch(...) {
+			return true;
+		}
+		return false;
 	)
 
 	//assert invalid range check
 	BC_TEST_DEF(
-			try {
-				a.slice(-1);
-			} catch(...) {
-				return true;
-			}
-			return false;
+		try {
+			a.slice(-1);
+		} catch(...) {
+			return true;
+		}
+		return false;
 	)
 
 	BC_TEST_DEF(
-			try {
-				a.diagnol(-(a.rows()+1));
-			} catch(...) {
-				return true;
-			}
-			return false;
+		try {
+			a.diagnol(-(a.rows()+1));
+		} catch(...) {
+			return true;
+		}
+		return false;
 	)
 	BC_TEST_DEF(
-			try {
-				a.diagnol((a.rows()+1));
-			} catch(...) {
-				return true;
-			}
-			return false;
-	)
-
-	BC_TEST_DEF(
-			try {
-				a.row(a.rows());
-			} catch(...) {
-				return true;
-			}
-			return false;
+		try {
+			a.diagnol((a.rows()+1));
+		} catch(...) {
+			return true;
+		}
+		return false;
 	)
 
 	BC_TEST_DEF(
-			try {
-				a.row(-a.rows());
-			} catch(...) {
-				return true;
-			}
-			return false;
+		try {
+			a.row(a.rows());
+		} catch(...) {
+			return true;
+		}
+		return false;
+	)
+
+	BC_TEST_DEF(
+		try {
+			a.row(-a.rows());
+		} catch(...) {
+			return true;
+		}
+		return false;
 	)
 
 	set_error_stream(curr_error_stream);

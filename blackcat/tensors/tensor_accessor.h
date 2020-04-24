@@ -75,7 +75,7 @@
 			"diagnol method is only available to matrices");
 		BC_ASSERT(index > -this->rows() && index < this->rows(),
 			"diagnol `index` must be -rows() and rows())");
-		return make_tensor(exprs::make_diagnol(*this,index));
+		return make_tensor(exprs::make_diagnol(*this, index));
 	}
 
 	auto diagnol(bc::size_t index = 0)
@@ -84,7 +84,7 @@
 			"diagnol method is only available to matrices");
 		BC_ASSERT(index > -this->rows() && index < this->rows(),
 			"diagnol `index` must be -rows() and rows())");
-		return make_tensor(exprs::make_diagnol(*this,index));
+		return make_tensor(exprs::make_diagnol(*this, index));
 	}
 
 	//returns a copy of the tensor without actually copying the elements

@@ -63,10 +63,10 @@ using slice_type_factory = Array_Slice<
 		typename Parent::value_type,
 		typename Parent::allocator_type,
 		std::conditional_t<
-					std::is_const<Parent>::value ||
-					expression_traits<Parent>::is_const_view::value,
-				BC_Const_View,
-				BC_View>,
+			std::is_const<Parent>::value ||
+			expression_traits<Parent>::is_const_view::value,
+		BC_Const_View,
+		BC_View>,
 		Tags...>;
 
 template<int Dimension, class Parent, class... Tags>
@@ -105,7 +105,7 @@ auto make_diagnol(Parent& parent, bc::size_t diagnol_index) {
 		: std::abs(diagnol_index);
 
 	using slice_type = strided_slice_type_from_parent<
-		1, Parent, noncontinuous_memory_tag>;
+				1, Parent, noncontinuous_memory_tag>;
 
 	return slice_type(
 		parent.get_stream(),
@@ -160,19 +160,17 @@ static auto make_slice(Parent& parent, bc::size_t index)
 template<class Parent>
 static auto make_ranged_slice(Parent& parent, bc::size_t from, bc::size_t to)
 {
-	using slice_type = slice_type_from_parent<
-			Parent::tensor_dim, Parent>;
-
+	using slice_type = slice_type_from_parent<Parent::tensor_dim, Parent>;
 	bc::size_t range = to - from;
 	bc::size_t index = parent.leading_dim() * from;
 
-	bc::Dim<Parent::tensor_dim> inner_shape = parent.inner_shape();
-	inner_shape[Parent::tensor_dim-1] = range;
+	bc::Dim<Parent::tensor_dim> shape = parent.inner_shape();
+	shape[Parent::tensor_dim-1] = range;
 
 	return slice_type(
 		parent.get_stream(),
 		parent.get_allocator(),
-		bc::Shape<Parent::tensor_dim>(inner_shape),
+		bc::Shape<Parent::tensor_dim>(shape),
 		parent.data() + index);
 }
 
@@ -198,16 +196,15 @@ static auto make_scalar(Parent& parent, bc::size_t index) {
 		parent.data() + index);
 }
 
-template<class Parent, class ShapeLike>
+template<
+	class Parent,
+	class ShapeLike,
+	class = std::enable_if_t<Parent::tensor_dim != 1>>
 auto make_chunk(
 		Parent& parent,
 		bc::Dim<Parent::tensor_dim> index_points,
 		ShapeLike shape)
 {
-	static_assert(ShapeLike::tensor_dim > 1,
-			"TENSOR CHUNKS MUST HAVE DIMENSIONS GREATER THAN 1, "
-			"USE SCALAR OR RANGED_SLICE OTHERWISE");
-
 	using slice_type = slice_type_from_parent<
 		ShapeLike::tensor_dim, Parent, noncontinuous_memory_tag>;
 
@@ -217,6 +214,22 @@ auto make_chunk(
 		Shape<ShapeLike::tensor_dim>(shape, parent.get_shape()),
 		parent.data() + parent.dims_to_index(index_points));
 }
+
+template<
+	class Parent,
+	class ShapeLike,
+	class = std::enable_if_t<Parent::tensor_dim == 1>>
+auto make_chunk(
+		Parent& parent,
+		bc::Dim<1> index_points,
+		ShapeLike shape)
+{
+	return make_ranged_slice(
+		parent,
+		index_points[0],
+		index_points[0] + shape[0]);
+}
+
 
 
 } //ns BC

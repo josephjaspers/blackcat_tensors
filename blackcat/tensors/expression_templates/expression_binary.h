@@ -72,10 +72,18 @@ public:
 		right(rv) {}
 
 
-	BCINLINE auto operator [](int index) const {
+	template<class=std::enable_if_t<
+		!expression_traits<Lv>::requires_greedy_evaluation::value &&
+		!expression_traits<Rv>::requires_greedy_evaluation::value>>
+	BCINLINE
+	auto operator [](int index) const {
 		return Operation::operator()(left[index], right[index]);
 	}
 
+
+	template<class=std::enable_if_t<
+		!expression_traits<Lv>::requires_greedy_evaluation::value &&
+		!expression_traits<Rv>::requires_greedy_evaluation::value>>
 	BCINLINE
 	auto operator [](int index) {
 		return Operation::operator()(left[index], right[index]);
@@ -256,7 +264,7 @@ struct bin_expr_factory<
 			"Cannot apply scalar_multiplication to a blas_expression where"
 			"both the left and right expressions of the blas expression"
 			"are already scalar multiplied");
-		
+
 		return bc::traits::constexpr_ternary<!expr_left_is_scalar_multiplied>(
 			[=]() {
 				auto newexpr = mk_bin_op<Scalar_Mul>(scalar, expr.left);
@@ -291,5 +299,3 @@ auto make_bin_expr(Lv left, Rv right, Args&&... args)
 #include "blas_expression_template_traits.h"
 
 #endif /* EXPRESSION_BINARY_POINTWISE_SAME_H_ */
-
-
