@@ -124,14 +124,12 @@ struct Shape<0> {
 	template<int>
 	friend struct Shape;
 
-	static constexpr Dim<0> m_inner_shape = {};
-
 	BCINLINE Shape<0>() {}
 
 	template<class... Args>
 	BCINLINE Shape<0>(const Args&...) {}
 
-	BCINLINE Dim<0> inner_shape() const { return m_inner_shape; }
+	BCINLINE Dim<0> inner_shape() const { return bc::Dim<0>(); }
 	BCINLINE size_t operator [] (size_t i) { return 1; }
 	BCINLINE size_t size() const { return 1; }
 	BCINLINE size_t rows() const { return 1; }

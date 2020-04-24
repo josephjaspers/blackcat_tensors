@@ -74,4 +74,3 @@ template<class... params> auto suffix##iter(params... ps) {              \
 template<class... params> auto suffix##const_iter(params... ps) const {  \
     return iterator_name<const self_type>(*this, ps...);                 \
 }
-

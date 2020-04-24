@@ -163,7 +163,7 @@ static auto make_ranged_slice(Parent& parent, bc::size_t from, bc::size_t to)
 	using slice_type = slice_type_from_parent<Parent::tensor_dim, Parent>;
 	bc::size_t range = to - from;
 	bc::size_t index = parent.leading_dim() * from;
-
+	static_assert(Parent::tensor_dim > 0);
 	bc::Dim<Parent::tensor_dim> shape = parent.inner_shape();
 	shape[Parent::tensor_dim-1] = range;
 

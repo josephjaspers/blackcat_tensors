@@ -46,6 +46,7 @@ public:
 
 	Vector(const array_type& vector): m_vector(vector) {}
 	Vector(array_type&& vector): m_vector(vector) {}
+	Vector(bc::Dim<1> dim): m_vector(dim[0]) {}
 	Vector(bc::size_t size): m_vector(size) {}
 
 	auto get_shape() const { return bc::Shape<1>( m_vector.size());}

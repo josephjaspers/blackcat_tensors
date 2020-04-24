@@ -12,6 +12,7 @@
 #include "common.h"
 #include "expression_templates/tree_evaluator.h"
 #include "tensor_iterator_defs.h"
+#include "tensor_accessor.h"
 #include "expression_base.h"
 #include "io/print.h"
 
@@ -20,7 +21,9 @@ namespace bc {
 namespace tensors {
 
 template<class ExpressionTemplate>
-class Tensor_Base: public Expression_Base<ExpressionTemplate>
+class Tensor_Base:
+	public Expression_Base<ExpressionTemplate>,
+	public Tensor_Accessor<ExpressionTemplate>
 {
 	template<class>
 	friend class Tensor_Base;
@@ -45,6 +48,8 @@ public:
 
 	using parent_type::parent_type;
 	using parent_type::expression_template;
+
+	using Tensor_Accessor<ExpressionTemplate>::operator[];
 
 	Tensor_Base() {};
 	Tensor_Base(const expression_type&  param): parent_type(param) {}
@@ -92,7 +97,6 @@ public:
 	BC_ITERATOR_DEF(reverse_, nd_reverse_iterator_type, rbegin, rend)
 
 	#include "tensor_utility.h"
-	#include "tensor_accessor.h"
 	#include "tensor_iteralgos.h"
 	#include "tensor_operations.h"
 
