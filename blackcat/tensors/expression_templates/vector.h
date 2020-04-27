@@ -18,23 +18,29 @@ template<class ValueType, class AllocatorType>
 struct Vector {
 
 	using value_type = ValueType;
-	using allocator_type = AllocatorType;
-	using system_tag = typename bc::allocator_traits<allocator_type>::system_tag;
+	using system_tag = typename bc::allocator_traits<AllocatorType>::system_tag;
 	using stream_type = bc::streams::Stream<system_tag>;
 
 	static constexpr int tensor_dim = 1;
 	static constexpr int tensor_iterator_dim = 1;
 
-private:
-	#ifdef __CUDACC__
+
+#ifdef __CUDACC__
+	using allocator_type = std::conditional_t<
+			std::is_same<bc::device_tag, system_tag>::value,
+			bc::allocators::allocator_to_thrust_allocator_t<AllocatorType>,
+			AllocatorType>;
+
 	using array_type = std::conditional_t<
 			std::is_same<system_tag, bc::host_tag>::value,
 			thrust::host_vector<value_type, allocator_type>,
-			thrust::device_vector<value_type>>;
-	#else
+			thrust::device_vector<value_type, allocator_type>>;
+#else
+	using allocator_type = AllocatorType;
 	using array_type = std::vector<value_type, allocator_type>;
-	#endif
+#endif
 
+private:
 	using expression_template_type = Kernel_Array<bc::Shape<1>, value_type, system_tag>;
 	using const_expression_template_type = Kernel_Array<bc::Shape<1>, const value_type, system_tag>;
 
@@ -83,11 +89,12 @@ public:
 	*/
 	value_type* data() const {
 		//TODO internally fix handling of const_ptr type
-		return data_helper(&m_vector.front());
+		//Note: returning `const` data().get() also causes an internal error in thrust
+		return data_helper(const_cast<array_type&>(m_vector).data());
 	}
 
 	value_type* data() {
-		return data_helper(&m_vector.front());
+		return data_helper(m_vector.data());
 	}
 
 	void clear() {
