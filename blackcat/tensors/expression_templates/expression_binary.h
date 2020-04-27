@@ -71,21 +71,13 @@ public:
 		left(lv),
 		right(rv) {}
 
-
-	template<class=std::enable_if_t<
-		!expression_traits<Lv>::requires_greedy_evaluation::value &&
-		!expression_traits<Rv>::requires_greedy_evaluation::value>>
 	BCINLINE
-	auto operator [](int index) const {
+	auto operator [](bc::size_t index) const {
 		return Operation::operator()(left[index], right[index]);
 	}
 
-
-	template<class=std::enable_if_t<
-		!expression_traits<Lv>::requires_greedy_evaluation::value &&
-		!expression_traits<Rv>::requires_greedy_evaluation::value>>
 	BCINLINE
-	auto operator [](int index) {
+	auto operator [](bc::size_t index) {
 		return Operation::operator()(left[index], right[index]);
 	}
 
