@@ -80,7 +80,6 @@ public:
 	}
 
 	Tensor_Base& operator = (tensor_copy_type param) {
-		//From tensor_operations.h"
 		assert_valid(param);
 		evaluate(this->bi_expr(bc::oper::assign, param));
 		return *this;
