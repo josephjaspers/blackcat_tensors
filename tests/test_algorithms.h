@@ -72,9 +72,9 @@ int test_algorithms(int sz=128) {
 		b.get_stream().sync();
 
 		return bc::tensors::all(a == 5) && bc::tensors::all(b == 7);
-	)
+		)
 
-	//TEST algo copy
+		//TEST algo copy
 	BC_TEST_DEF(
 		vec a(sz);
 		std::vector<value_type, allocator_type> b(sz);
@@ -84,9 +84,7 @@ int test_algorithms(int sz=128) {
 			host_b.push_back(i);
 			dyn_b.push_back(i);
 		}
-
-
-		bc::utility::Utility<system_tag>::copy(b.data(), host_b.data(), sz);
+		bc::utility::Utility<system_tag>::HostToDevice(b.data(), host_b.data(), sz);
 		bc::copy(a.get_stream(), b.begin(), b.end(), a.cw_begin());
 		return bc::tensors::all(a.approx_equal(dyn_b));
 	)

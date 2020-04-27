@@ -111,7 +111,7 @@ using default_system_tag_t = BC_DEFAULT_SYSTEM_TAG;
 
 // Visual Studio
 #ifdef _MSC_VER 
-#define __PRETTY_FUNCTION__ __FUNCTION__
+#define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif
 
 #include <iostream>

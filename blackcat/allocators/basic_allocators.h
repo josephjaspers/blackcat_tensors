@@ -24,7 +24,12 @@ struct Basic_Allocator_Base
 	using value_type = ValueType;
 	using pointer = value_type*;
 	using const_pointer = value_type*;
+#ifndef _MSC_VER
+	using size_type = std::size_t; 
+#else
+	//Custom allocators with signed types causes runtime exception inside of MSVC
 	using size_type = int;
+#endif 
 	using reference = value_type&;
 	using const_reference = const value_type&;
 	using propagate_on_container_copy_assignment = std::false_type;

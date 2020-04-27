@@ -52,8 +52,8 @@ static std::string sz60_test_buffer() {
 			} else {                                                      \
 				bc::print(sz80_substring("test success: "#__VA_ARGS__));  \
 			}                                                             \
-		} catch (...) {                                                   \
-			bc::print(sz80_substring("TEST ERROR: "#__VA_ARGS__));        \
+		} catch (std::exception &e) {								      \
+			bc::print(sz80_substring("TEST ERROR: " + std::string(e.what()) + #__VA_ARGS__));        \
 			bc_test_num_errors++;                                         \
 		}                                                                 \
 	}
