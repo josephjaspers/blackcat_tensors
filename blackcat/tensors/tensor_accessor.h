@@ -23,9 +23,14 @@ template<int TensorDimension, class ExpressionTemplate>
 class Tensor_Accessor_Base;
 
 struct Scalar_Accessor {
-	auto operator [] (int index) const {
+	void operator [] (int index) const {
 		throw std::invalid_argument("[] not supported for scalars");
 	}
+
+	void operator () (int index) const {
+		throw std::invalid_argument("() not supported for scalars");
+	}
+
 };
 
 template<class ExpressionTemplate>

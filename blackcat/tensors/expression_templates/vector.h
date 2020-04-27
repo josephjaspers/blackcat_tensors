@@ -44,6 +44,7 @@ private:
 public:
 	using expression_template_array_type = std::true_type;
 
+	Vector()=default;
 	Vector(const array_type& vector): m_vector(vector) {}
 	Vector(array_type&& vector): m_vector(vector) {}
 	Vector(bc::Dim<1> dim): m_vector(dim[0]) {}

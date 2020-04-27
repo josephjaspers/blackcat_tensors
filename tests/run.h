@@ -1,6 +1,3 @@
-
-
-#include <memory>
 #include "test_accessors.h"
 #include "test_allocators.h"
 #include "test_common.h"
@@ -28,7 +25,7 @@ int test_all(int sz) {
 	errors += test_streams<scalar_type, allocator>(sz);
 	errors += test_algorithms<scalar_type, allocator>(sz);
 	errors += test_blas<scalar_type, allocator>(sz);
-	errors += test_neuralnetworks<scalar_type, allocator>(sz); 
+	errors += test_neuralnetworks<scalar_type, allocator>(sz);
 	return errors;
 }
 
@@ -55,4 +52,3 @@ int run(int sz=64) {
 
 }
 }
-
