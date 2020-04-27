@@ -30,7 +30,7 @@ private:
 	using array_type = std::conditional_t<
 			std::is_same<system_tag, bc::host_tag>::value,
 			thrust::host_vector<value_type, allocator_type>,
-			thrust::device_vector<value_type, allocator_type>>;
+			thrust::device_vector<value_type>>;
 	#else
 	using array_type = std::vector<value_type, allocator_type>;
 	#endif
@@ -74,22 +74,20 @@ public:
 		return m_vector.get_allocator();
 	}
 
+protected:
 	//TODO deprecate this requirement
 	void deallocate() {}
-
+public:
 	/*
 	* std::vector methods
 	*/
-
 	value_type* data() const {
-		//calling 'data' causes compile issues for thrust
-		//TODO fix the requirement of the cast.
-		//(internally not handling constness correctly),
-		return (value_type*)&m_vector.front();
+		//TODO internally fix handling of const_ptr type
+		return data_helper(&m_vector.front());
 	}
 
 	value_type* data() {
-		return &m_vector.front();
+		return data_helper(&m_vector.front());
 	}
 
 	void clear() {
@@ -149,6 +147,17 @@ public:
 	void shrink_to_fit() {
 		m_vector.shrink_to_fit();
 	}
+
+private:
+	static value_type* data_helper(const value_type* data) {
+		return (value_type*)data;
+	}
+
+#ifdef __CUDACC__
+	static value_type* data_helper(thrust::device_ptr<const value_type> data) {
+		return (value_type*)data.get();
+	}
+#endif
 };
 
 

@@ -50,7 +50,6 @@ public:
 	using parent_type::expression_template;
 
 	using Tensor_Accessor<ExpressionTemplate>::operator[];
-	using Tensor_Accessor<ExpressionTemplate>::operator();
 
 	Tensor_Base() {};
 	Tensor_Base(const expression_type&  param): parent_type(param) {}

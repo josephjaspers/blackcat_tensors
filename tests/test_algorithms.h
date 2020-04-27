@@ -77,15 +77,19 @@ int test_algorithms(int sz=128) {
 		//TEST algo copy
 	BC_TEST_DEF(
 		vec a(sz);
-		std::vector<value_type, allocator_type> b(sz);
+		bc::VecList<value_type, allocator_type> b(sz);
 		std::vector<value_type> host_b;
 		bc::VecList<value_type, allocator_type> dyn_b;
+
 		for (int i = 0; i < sz; ++i) {
 			host_b.push_back(i);
 			dyn_b.push_back(i);
 		}
+
+		auto begin = b.data();
+		auto end = b.data() + b.size();
 		bc::utility::Utility<system_tag>::HostToDevice(b.data(), host_b.data(), sz);
-		bc::copy(a.get_stream(), b.begin(), b.end(), a.cw_begin());
+		bc::copy(a.get_stream(), begin, end, a.cw_begin());
 		return bc::tensors::all(a.approx_equal(dyn_b));
 	)
 
@@ -100,7 +104,11 @@ int test_algorithms(int sz=128) {
 		}
 
 		bc::Cube<value_type> inputs(sz, 2, 2);
-		bc::copy(inputs.get_stream(), data.begin(), data.end(), inputs[0][0].cw_begin());
+
+		auto begin = data.data();
+		auto end = data.data() + data.size();
+
+		bc::copy(inputs.get_stream(), begin, end, inputs[0][0].cw_begin());
 		return bc::tensors::all(inputs[0][0].approx_equal(bc_b));
 	)
 
