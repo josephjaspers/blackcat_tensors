@@ -40,6 +40,11 @@ int test_accessors(int sz=128) {
 			x.print();
 			y.print();
 			s.print();
+
+			//test expression_templates print functions
+			(x+x).print();
+			(x*x).print();
+			(x*x).print_sparse();
 		};
 
 		//Get rid of unused variable warning

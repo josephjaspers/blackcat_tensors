@@ -46,7 +46,7 @@ public:
 	Expression_Base(ExpressionTemplate&& et):  ExpressionTemplate(std::move(et)) {}
 
 	//Expressions only support element-wise iteration
-	//Tensors support column and cwise iteration
+	//Tensors support column and element-wise iteration
 	BC_ITERATOR_DEF(cw_, cw_iterator_type, cw_begin, cw_end)
 	BC_ITERATOR_DEF(cw_reverse_, cw_reverse_iterator_type, cw_rbegin, cw_rend)
 	BC_FORWARD_ITER(cw_, begin, this->expression_template())
