@@ -126,7 +126,7 @@ std::string to_string(const Tensor& tensor, features f, bc::traits::Integer<1>)
 }
 
 template<class Tensor>
-std::string to_string(const Tensor& tensor,  features f, bc::traits::Integer<0>)
+std::string to_string(const Tensor& tensor, features f, bc::traits::Integer<0>)
 {
 	std::string value = format_value(tensor.data()[0], f);
 	return f.pretty

@@ -22,7 +22,8 @@ struct Tensor_Base;
 template<int TensorDimension, class ExpressionTemplate>
 class Tensor_Accessor_Base;
 
-struct Scalar_Accessor {
+struct Scalar_Accessor
+{
 	void operator [] (int index) const {
 		throw std::invalid_argument("[] not supported for scalars");
 	}
@@ -30,7 +31,6 @@ struct Scalar_Accessor {
 	void operator () (int index) const {
 		throw std::invalid_argument("() not supported for scalars");
 	}
-
 };
 
 template<class ExpressionTemplate>
@@ -50,28 +50,21 @@ class Tensor_Accessor_Base
 	const Derived& derived() const { return static_cast<const Derived&>(*this); }
 public:
 
-	auto operator [](bc::size_t i) {
-		return slice(i);
-	}
-
 	const auto operator [](bc::size_t i) const {
 		return slice(i);
 	}
 
-	//enables syntax: `tensor[{start, end}]`
-	auto operator [](bc::Dim<2> range) {
-		return slice(range[0], range[1]);
+	auto operator [](bc::size_t i) {
+		return slice(i);
 	}
 
 	const auto operator [](bc::Dim<2> range) const {
 		return slice(range[0], range[1]);
 	}
 
-	auto slice(bc::size_t i)
-	{
-		BC_ASSERT(i >= 0 && i < derived().outer_dim(),
-			"slice index must be between 0 and outer_dim()");
-		return make_tensor(exprs::make_slice(derived(), i));
+	//enables syntax: `tensor[{start, end}]`
+	auto operator [](bc::Dim<2> range) {
+		return slice(range[0], range[1]);
 	}
 
 	auto slice(bc::size_t i) const {
@@ -80,13 +73,11 @@ public:
 		return make_tensor(exprs::make_slice(derived(), i));
 	}
 
-	auto slice(bc::size_t from, bc::size_t to)
+	auto slice(bc::size_t i)
 	{
-		BC_ASSERT(from >= 0 && to <= derived().outer_dim(),
-			"slice `from` must be between 0 and outer_dim()");
-		BC_ASSERT(to > from && to <= derived().outer_dim(),
-			"slice `to` must be between `from` and outer_dim()");
-		return make_tensor(exprs::make_ranged_slice(derived(), from, to));
+		BC_ASSERT(i >= 0 && i < derived().outer_dim(),
+			"slice index must be between 0 and outer_dim()");
+		return make_tensor(exprs::make_slice(derived(), i));
 	}
 
 	auto slice(bc::size_t from, bc::size_t to) const
@@ -98,11 +89,13 @@ public:
 		return make_tensor(exprs::make_ranged_slice(derived(), from, to));
 	}
 
-	auto scalar(bc::size_t i)
+	auto slice(bc::size_t from, bc::size_t to)
 	{
-		BC_ASSERT(i >= 0 && i < derived().size(),
-			"Scalar index must be between 0 and size()");
-		return make_tensor(exprs::make_scalar(derived(), i));
+		BC_ASSERT(from >= 0 && to <= derived().outer_dim(),
+			"slice `from` must be between 0 and outer_dim()");
+		BC_ASSERT(to > from && to <= derived().outer_dim(),
+			"slice `to` must be between `from` and outer_dim()");
+		return make_tensor(exprs::make_ranged_slice(derived(), from, to));
 	}
 
 	auto scalar(bc::size_t i) const
@@ -112,13 +105,11 @@ public:
 		return make_tensor(exprs::make_scalar(derived(), i));
 	}
 
-	auto diagnol(bc::size_t index = 0)
+	auto scalar(bc::size_t i)
 	{
-		static_assert(tensor_dim  == 2,
-			"diagnol method is only available to matrices");
-		BC_ASSERT(index > -derived().rows() && index < derived().rows(),
-			"diagnol `index` must be -rows() and rows())");
-		return make_tensor(exprs::make_diagnol(derived(), index));
+		BC_ASSERT(i >= 0 && i < derived().size(),
+			"Scalar index must be between 0 and size()");
+		return make_tensor(exprs::make_scalar(derived(), i));
 	}
 
 	auto diagnol(bc::size_t index = 0) const
@@ -130,10 +121,13 @@ public:
 		return make_tensor(exprs::make_diagnol(derived(), index));
 	}
 
-	//returns a copy of the tensor without actually copying the elements
-	auto shallow_copy()
+	auto diagnol(bc::size_t index = 0)
 	{
-		return make_tensor(exprs::make_view(derived(), derived().get_shape()));
+		static_assert(tensor_dim  == 2,
+			"diagnol method is only available to matrices");
+		BC_ASSERT(index > -derived().rows() && index < derived().rows(),
+			"diagnol `index` must be -rows() and rows())");
+		return make_tensor(exprs::make_diagnol(derived(), index));
 	}
 
 	auto shallow_copy() const
@@ -141,11 +135,10 @@ public:
 		return make_tensor(exprs::make_view(derived(), derived().get_shape()));
 	}
 
-	auto col(bc::size_t i)
+	//returns a copy of the tensor without actually copying the elements
+	auto shallow_copy()
 	{
-		static_assert(tensor_dim == 2,
-			"MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
-		return slice(i);
+		return make_tensor(exprs::make_view(derived(), derived().get_shape()));
 	}
 
 	auto col(bc::size_t i) const
@@ -155,13 +148,11 @@ public:
 		return slice(i);
 	}
 
-	auto row(bc::size_t index)
+	auto col(bc::size_t i)
 	{
 		static_assert(tensor_dim == 2,
-			"MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
-		BC_ASSERT(index >= 0 && index < derived().rows(),
-			"Row index must be between 0 and rows()");
-		return make_tensor(exprs::make_row(derived(), index));
+			"MATRIX COL ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		return slice(i);
 	}
 
 	auto row(bc::size_t index) const
@@ -173,13 +164,13 @@ public:
 		return make_tensor(exprs::make_row(derived(), index));
 	}
 
-	auto subblock(Dim<tensor_dim> index, Dim<tensor_dim> shape)
+	auto row(bc::size_t index)
 	{
-		BC_ASSERT((index.reversed() + shape <= derived().inner_shape()).all(),
-			"Index + Shape must be less parent shape");
-		BC_ASSERT(((index>=0).all() && (shape>=0).all()),
-			"Shape and Index must be greater than 0");
-		return make_tensor(exprs::make_chunk(derived(), index, shape));
+		static_assert(tensor_dim == 2,
+			"MATRIX ROW ONLY AVAILABLE TO MATRICES OF ORDER 2");
+		BC_ASSERT(index >= 0 && index < derived().rows(),
+			"Row index must be between 0 and rows()");
+		return make_tensor(exprs::make_row(derived(), index));
 	}
 
 	auto subblock(Dim<tensor_dim> index, Dim<tensor_dim> shape) const
@@ -191,9 +182,13 @@ public:
 		return make_tensor(exprs::make_chunk(derived(), index, shape));
 	}
 
-	auto operator [] (
-			std::tuple<Dim<tensor_dim>, Dim<tensor_dim>> index_shape) {
-		return subblock(std::get<0>(index_shape), std::get<1>(index_shape));
+	auto subblock(Dim<tensor_dim> index, Dim<tensor_dim> shape)
+	{
+		BC_ASSERT((index.reversed() + shape <= derived().inner_shape()).all(),
+			"Index + Shape must be less parent shape");
+		BC_ASSERT(((index>=0).all() && (shape>=0).all()),
+			"Shape and Index must be greater than 0");
+		return make_tensor(exprs::make_chunk(derived(), index, shape));
 	}
 
 	auto operator [] (
@@ -201,20 +196,13 @@ public:
 		return subblock(std::get<0>(index_shape), std::get<1>(index_shape));
 	}
 
+	auto operator [] (
+			std::tuple<Dim<tensor_dim>, Dim<tensor_dim>> index_shape) {
+		return subblock(std::get<0>(index_shape), std::get<1>(index_shape));
+	}
+
 	      auto operator() (bc::size_t i)       { return scalar(i); }
 	const auto operator() (bc::size_t i) const { return scalar(i); }
-
-	template<int X>
-	auto reshaped(bc::Dim<X> shape)
-	{
-		static_assert(Derived::tensor_iterator_dim <= 1,
-			"Reshape is only available to continuous tensors");
-
-		BC_ASSERT(shape.size() == derived().size(),
-				"Reshape requires the new and old shape be same sizes");
-
-		return make_tensor(exprs::make_view(derived(), shape));
-	}
 
 	template<int X>
 	auto reshaped(bc::Dim<X> shape) const
@@ -228,9 +216,16 @@ public:
 		return make_tensor(exprs::make_view(derived(), shape));
 	}
 
-	template<class... Integers>
-	auto reshaped(Integers... ints) {
-		return reshaped(bc::dim(ints...));
+	template<int X>
+	auto reshaped(bc::Dim<X> shape)
+	{
+		static_assert(Derived::tensor_iterator_dim <= 1,
+			"Reshape is only available to continuous tensors");
+
+		BC_ASSERT(shape.size() == derived().size(),
+				"Reshape requires the new and old shape be same sizes");
+
+		return make_tensor(exprs::make_view(derived(), shape));
 	}
 
 	template<class... Integers>
@@ -238,11 +233,16 @@ public:
 		return reshaped(bc::dim(ints...));
 	}
 
-	auto flattened() {
-		return this->reshaped(derived().size());
+	template<class... Integers>
+	auto reshaped(Integers... ints) {
+		return reshaped(bc::dim(ints...));
 	}
 
 	const auto flattened() const {
+		return this->reshaped(derived().size());
+	}
+
+	auto flattened() {
 		return this->reshaped(derived().size());
 	}
 };

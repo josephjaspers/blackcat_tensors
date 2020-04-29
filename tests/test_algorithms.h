@@ -72,7 +72,7 @@ int test_algorithms(int sz=128) {
 		b.get_stream().sync();
 
 		return bc::tensors::all(a == 5) && bc::tensors::all(b == 7);
-		)
+	)
 
 		//TEST algo copy
 	BC_TEST_DEF(

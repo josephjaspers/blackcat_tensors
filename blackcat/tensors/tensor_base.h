@@ -96,9 +96,9 @@ public:
 	BC_ITERATOR_DEF(,nd_iterator_type, begin, end)
 	BC_ITERATOR_DEF(reverse_, nd_reverse_iterator_type, rbegin, rend)
 
-	#include "tensor_utility.h"
-	#include "tensor_iteralgos.h"
-	#include "tensor_operations.h"
+	#include "tensor_utility.inl"
+	#include "tensor_iteralgos.inl"
+	#include "tensor_operations.inl"
 
 public:
 	~Tensor_Base() {

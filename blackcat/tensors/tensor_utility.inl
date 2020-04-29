@@ -14,9 +14,10 @@
 		if (std::is_same<system_tag, typename Xpr::system_tag>::value) {
 			//Ensures it only compiles when true
 			bc::traits::constexpr_if<same_system::value>(
-					bc::traits::bind([](auto& self, const auto& rv){
-						self = rv;
-			}, *this, rv));
+				bc::traits::bind([](auto& self, const auto& rv)
+				{
+					self = rv;
+				}, *this, rv));
 		} else if (std::is_same<system_tag, device_tag>::value) {
 			copy_impl::HostToDevice(this->data(),
 					rv.data(),
@@ -88,38 +89,9 @@
 			));
 	}
 
-	std::string to_raw_string(int precision=8) const {
-		return this->to_string(precision, false, false);
-	}
-
-	void print(int precision=8, bool pretty=true, bool sparse=false) const {
-		std::cout << this->to_string(precision, pretty, sparse) << std::endl;
-	}
-
-	void print_sparse(int precision=8, bool pretty=true) const {
-		std::cout << this->to_string(precision, pretty, true) << std::endl;
-	}
-
-	void raw_print(int precision=0, bool sparse=false) const {
-		std::cout << this->to_string(precision, false, sparse) << std::endl;
-	}
-
-	void print_dims() const {
-		for (int i = 0; i < tensor_dim; ++i) {
-			std::cout << "[" << this->dim(i) << "]";
-		}
-		std::cout << std::endl;
-	}
-
-	void print_leading_dims() const {
-		for (int i = 0; i < tensor_dim; ++i) {
-			std::cout << "[" << this->leading_dim(i) << "]";
-		}
-		std::cout << std::endl;
-	}
-
-	friend std::ostream& operator << (
-			std::ostream& os,
-			const Tensor_Base& self) {
+	friend std::ostream& operator << (std::ostream& os, const Tensor_Base& self)
+	{
 		return os << self.to_string();
 	}
+
+#include "expression_utility.inl"

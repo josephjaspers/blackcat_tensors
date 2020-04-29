@@ -203,15 +203,6 @@ struct allocator_to_thrust_allocator<Thrust_Allocator_Forwarder<Vt, Allocator>> 
 template<class Allocator>
 using allocator_to_thrust_allocator_t = typename allocator_to_thrust_allocator<Allocator>::type;
 
-
-
-//template<class Vt, class Allocator>
-//struct Thrust_Allocator_Forwarder<Vt, Thrust_Allocator_Forwarder<Vt, Allocator>> {
-//	Thrust_Allocator_Forwarder() {
-//		static_assert(false, "Invalid type");
-//	}
-//};
-
 #endif
 
 }
