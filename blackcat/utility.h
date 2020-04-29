@@ -7,4 +7,5 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include "common.h"
+#include "type_traits.h"
 #include "utility/utility.h"
