@@ -53,13 +53,13 @@ public:
 	BC_FORWARD_ITER(cw_, end, this->expression_template())
 
 	template<int ADL=0>
-	std::string to_string() const
+	std::string to_string(int precision=5, bool pretty=true, bool sparse=false) const
 	{
 		using tensor_type = Tensor_Base<exprs::Array<
 			Shape<tensor_dim>,
 			value_type,
 			bc::Allocator<value_type, system_tag>>>;
-		return tensor_type(*this).to_string();
+		return tensor_type(*this).to_string(precision, pretty, sparse);
 	}
 
 	#include "expression_operations.inl"
