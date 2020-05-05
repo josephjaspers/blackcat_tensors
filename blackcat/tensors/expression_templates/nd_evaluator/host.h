@@ -20,64 +20,82 @@ namespace exprs {
 namespace evaluator {
 
 template<int Dimension>
-struct evaluator_impl {
+struct evaluator_impl
+{
 	template<class Expression, class... indexes>
-	static void impl(Expression& expression, indexes... indicies) {
+	static void impl(Expression& expression, indexes... indicies)
+	{
 		BC_omp_for__
 		for (int i = 0; i < expression.dim(Dimension-1); ++i) {
 			evaluator_impl<Dimension-1>::impl(expression, indicies..., i);
 		}
 	}
+
 	template<class Expression, class... indexes>
-	static void endpoint_call(Expression expression, indexes... indicies) {
+	static void endpoint_call(Expression expression, indexes... indicies)
+	{
 		BC_omp_for__
 		for (int i = 0; i < expression.dim(Dimension-1); ++i) {
 			evaluator_impl<Dimension-1>::impl(expression, indicies..., i);
 		}
 	}
 };
+
 template<>
-struct evaluator_impl<1> {
+struct evaluator_impl<1>
+{
 	template<class Expression, class... indexes>
-	static void impl(Expression& expression, indexes... indicies) {
+	static void impl(Expression& expression, indexes... indicies)
+	{
 		BC_omp_for__
 		for (int i = 0; i < expression.dim(0); ++i) {
 			expression(indicies..., i);
 		}
 	}
+
 	template<class Expression>
-	static void impl(Expression& expression) {
+	static void impl(Expression& expression)
+	{
 		BC_omp_for__
 		for (int i = 0; i < expression.size(); ++i) {
 			expression[i];
 		}
 	}
+
 	template<class Expression, class... indexes>
-	static void endpoint_call(Expression expression, indexes... indicies) {
+	static void endpoint_call(Expression expression, indexes... indicies)
+	{
 		BC_omp_for__
 		for (int i = 0; i < expression.dim(0); ++i) {
 			expression(indicies..., i);
 		}
 	}
+
 	template<class Expression>
-	static void endpoint_call(Expression expression) {
+	static void endpoint_call(Expression expression)
+	{
 		BC_omp_for__
 		for (int i = 0; i < expression.size(); ++i) {
 			expression[i];
 		}
 	}
 };
+
 template<>
-struct evaluator_impl<0> {
+struct evaluator_impl<0>
+{
 	template<class Expression>
-	static void impl(Expression& expression) {
+	static void impl(Expression& expression)
+	{
 		BC_omp_for__
 		for (int i = 0; i < expression.size(); ++i) {
 			expression[i];
 		}
 	}
+
 	template<class Expression>
-	static void endpoint_call(Expression expression) {
+	static void endpoint_call(Expression expression)
+	{
 		BC_omp_for__
 		for (int i = 0; i < expression.size(); ++i) {
 			expression[i];
@@ -89,17 +107,17 @@ template<class SystemTag>
 struct Evaluator;
 
 template<>
-struct Evaluator<host_tag> {
-
+struct Evaluator<host_tag>
+{
 	template<int Dimension, class Expression, class Stream>
-	static void nd_evaluate(Expression expression, Stream stream) {
+	static void nd_evaluate(Expression expression, Stream stream)
+	{
 		auto job = [=]() {
 			evaluator_impl<Dimension>::endpoint_call(expression);
 		};
+
 		stream.enqueue(job);
 	}
-
-
 };
 
 }

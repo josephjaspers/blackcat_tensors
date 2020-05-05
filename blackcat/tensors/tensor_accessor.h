@@ -13,6 +13,8 @@
 #ifndef BLACKCAT_TENSORS_TENSOR_ACCESSOR_H_
 #define BLACKCAT_TENSORS_TENSOR_ACCESSOR_H_
 
+#include "tensor_mask_proxy.h"
+
 namespace bc {
 namespace tensors {
 
@@ -66,6 +68,16 @@ public:
 	auto operator [](bc::Dim<2> range) {
 		return slice(range[0], range[1]);
 	}
+
+	template<class MaskExpression>
+	auto operator[](const Expression_Base<MaskExpression>& masked_expr)
+	{
+		BC_ASSERT(derived().get_shape() == masked_expr.get_shape(),
+			"Masks must have same shape as parent_shape");
+
+		return make_expression_mask(derived(), masked_expr);
+	}
+
 
 	auto slice(bc::size_t i) const {
 		BC_ASSERT(i >= 0 && i < derived().outer_dim(),

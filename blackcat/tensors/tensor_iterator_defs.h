@@ -1,24 +1,3 @@
-
-#define BC_FORWARD_ITER(suffix, iter, access)                      \
-	auto suffix##iter() const {                                \
-		return iterators::iter_##suffix##iter(access);     \
-	}                                                          \
-	auto suffix##iter() {                                      \
-		return iterators::iter_##suffix##iter(access);     \
-	}                                                          \
-	auto suffix##c##iter() const {                             \
-		return iterators::iter_##suffix##iter(access);     \
-	}                                                          \
-	auto suffix##r##iter() const {                             \
-		return iterators::iter_##suffix##r##iter(access);  \
-	}                                                          \
-	auto suffix##r##iter() {                                   \
-		return iterators::iter_##suffix##r##iter(access);  \
-	}                                                          \
-	auto suffix##cr##iter() const {                            \
-		return iterators::iter_##suffix##r##iter(access);  \
-	}
-
 #define BC_ITERATOR_DEF(suffix, iterator_name, begin_func, end_func)     \
                                                                          \
     template<class Tensor>                                               \
@@ -74,3 +53,23 @@ template<class... params> auto suffix##iter(params... ps) {              \
 template<class... params> auto suffix##const_iter(params... ps) const {  \
     return iterator_name<const self_type>(*this, ps...);                 \
 }
+
+#define BC_FORWARD_ITER(suffix, iter, access)                  \
+    auto suffix##iter() const {                                \
+        return iterators::iter_##suffix##iter(access);         \
+    }                                                          \
+    auto suffix##iter() {                                      \
+        return iterators::iter_##suffix##iter(access);         \
+    }                                                          \
+    auto suffix##c##iter() const {                             \
+        return iterators::iter_##suffix##iter(access);         \
+    }                                                          \
+    auto suffix##r##iter() const {                             \
+        return iterators::iter_##suffix##r##iter(access);      \
+    }                                                          \
+    auto suffix##r##iter() {                                   \
+        return iterators::iter_##suffix##r##iter(access);      \
+    }                                                          \
+    auto suffix##cr##iter() const {                            \
+        return iterators::iter_##suffix##r##iter(access);      \
+    }

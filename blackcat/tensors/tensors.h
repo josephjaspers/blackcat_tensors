@@ -11,7 +11,9 @@
 #define BLACKCAT_TENSOR_ALIASES_H_
 
 #include "common.h"
+#include "expression_base.h"
 #include "tensor_base.h"
+#include "tensor_mask_proxy.h"
 #include "../allocator.h"
 #include "tensor_static_functions.h"
 
@@ -61,7 +63,7 @@ using Cube = Tensor<3, ValueType, Allocator>;
 template<
 		class ValueType,
 		 class Allocator=tensors::detail::default_allocator<ValueType>>
-using VecList = bc::tensors::Tensor_Base<bc::tensors::exprs::Vector<ValueType, Allocator>>; 
+using VecList = bc::tensors::Tensor_Base<bc::tensors::exprs::Vector<ValueType, Allocator>>;
 
 } //end of ns BC
 

@@ -15,6 +15,7 @@
 
 #include "expression_unary.h"
 #include "expression_binary.h"
+#include "expression_mask.h"
 
 #include "function_transpose.h"
 #include "function_dot.h"

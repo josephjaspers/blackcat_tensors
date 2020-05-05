@@ -131,6 +131,14 @@ public:
 		m_vector.pop_back();
 	}
 
+	auto& back() {
+		return m_vector.back();
+	}
+
+	auto& front() {
+		return m_vector.front();
+	}
+
 	auto& at(bc::size_t index) const {
 		return m_vector.at(index);
 	}
