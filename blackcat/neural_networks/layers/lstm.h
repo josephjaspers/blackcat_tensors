@@ -311,7 +311,6 @@ public:
 	virtual
 	void set_learning_rate_hook(value_type lr) override final
 	{
-		parent_type::set_learning_rate(lr);
 		value_type batched_lr = this->get_batched_learning_rate();
 
 		auto optimizers = enumerate(
