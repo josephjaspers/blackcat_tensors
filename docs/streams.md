@@ -16,9 +16,9 @@ The stream used for any given expression is based upon the assignment operator o
 
 bc::Matrix<float> y, w, x;
 
-y.get_Stream().create();
-w.get_Stream().create();
-x.get_Stream().create();
+y.get_stream().create();
+w.get_stream().create();
+x.get_stream().create();
 
 y = w * x; //will use y's stream 
 ```
